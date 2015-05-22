@@ -1,5 +1,4 @@
-if ($.fullCalendar.Grid) {
-  $.fullCalendar.Grid.prototype.bindHandlers = function() {
+$.fullCalendar.Grid.prototype.bindHandlers = function() {
   var noEventClick = this.view.opt('noEventClick');
   var _this = this;
 
@@ -28,7 +27,8 @@ $.fullCalendar.Grid.prototype.renderSelection = function(range) {
 }
 
 var FC = $.fullCalendar;
-var agendaSelectAcrossWeek = FC.views.agenda.extend({
+var agendaSelectAcrossWeek
+agendaSelectAcrossWeek = FC.views.agenda.extend({
 
   initialize: function() {
     FC.views.agenda.prototype.initialize.apply(this);
@@ -69,5 +69,4 @@ var agendaSelectAcrossWeek = FC.views.agenda.extend({
 
 });
 
-FC.views.agendaSelectAcrossWeek = agendaSelectAcrossWeek;
-}
+$.fullCalendar.views.agendaSelectAcrossWeek = agendaSelectAcrossWeek;

@@ -8,7 +8,7 @@ angular.module('BBAdminServices').directive 'scheduleWeekdays', (uiCalendarConfi
     ]
 
     $scope.getCalendarEvents = (start, end) ->
-      events = $scope.$$childTail.scheduleCal.fullCalendar('clientEvents',
+      events = uiCalendarConfig.calendars.scheduleCal.fullCalendar('clientEvents',
         (e) ->
           (start.isAfter(e.start) || start.isSame(e.start)) &&
             (end.isBefore(e.end) || end.isSame(e.end)))
@@ -54,7 +54,7 @@ angular.module('BBAdminServices').directive 'scheduleWeekdays', (uiCalendarConfi
             $scope.addRange(event.start, event.end)
 
     $scope.render = () ->
-      $scope.$$childTail.scheduleCal.fullCalendar('render')
+      uiCalendarConfig.calendars.scheduleCal.fullCalendar('render')
 
 
   link = (scope, element, attrs, ngModel) ->
@@ -74,9 +74,9 @@ angular.module('BBAdminServices').directive 'scheduleWeekdays', (uiCalendarConfi
       ngModel.$render()
 
     ngModel.$render = () ->
-      if scope.$$childTail
-        scope.$$childTail.scheduleCal.fullCalendar('refetchEvents')
-        scope.$$childTail.scheduleCal.fullCalendar('unselect')
+      if uiCalendarConfig && uiCalendarConfig.calendars.scheduleCal
+        uiCalendarConfig.calendars.scheduleCal.fullCalendar('refetchEvents')
+        uiCalendarConfig.calendars.scheduleCal.fullCalendar('unselect')
 
   {
     controller: controller
