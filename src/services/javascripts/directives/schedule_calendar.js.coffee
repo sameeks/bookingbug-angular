@@ -2,9 +2,10 @@ angular.module('BBAdminServices').directive 'scheduleCalendar', (uiCalendarConfi
 
   controller = ($scope, $attrs) ->
 
+    $scope.calendarName = 'scheduleCal'
+
     $scope.eventSources = [
       events: (start, end, timezone, callback) ->
-        console.log 'events '
         callback($scope.getEvents())
     ]
 
@@ -20,29 +21,27 @@ angular.module('BBAdminServices').directive 'scheduleCalendar', (uiCalendarConfi
       calendar:
         editable: false
         selectable: true
-        defaultView: 'agendaWeek'
+        defaultView: 'agendaSelectAcrossWeek'
         header:
           left: 'today,prev,next'
           center: 'title'
-          right: 'month,agendaWeek'
+          right: 'month,agendaSelectAcrossWeek'
         selectHelper: false
         eventOverlap: false
         lazyFetching: false
         views:
-          agendaWeek:
+          agendaSelectAcrossWeek:
+            duration:
+              weeks: 1
             allDaySlot: false
             slotEventOverlap: false
             minTime: options.min_time || '00:00:00'
             maxTime: options.max_time || '24:00:00'
-            noEventClick: true
         select: (start, end, jsEvent, view) ->
-          console.log 'select'
           events = $scope.getCalendarEvents(start, end)
-          console.log 'events ', events
           if events.length > 0
             $scope.removeRange(start, end)
           else
-            console.log 'add range ', start, end
             $scope.addRange(start, end)
         eventResizeStop: (event, jsEvent, ui, view) ->
           $scope.addRange(event.start, event.end)
@@ -53,6 +52,8 @@ angular.module('BBAdminServices').directive 'scheduleCalendar', (uiCalendarConfi
               end: moment(event.end).subtract(delta)
             $scope.removeRange(orig.start, orig.end)
             $scope.addRange(event.start, event.end)
+        eventClick: (event, jsEvent, view) ->
+          $scope.removeRange(event.start, event.end)
 
     $scope.render = () ->
       uiCalendarConfig.calendars.scheduleCal.fullCalendar('render')
@@ -64,14 +65,10 @@ angular.module('BBAdminServices').directive 'scheduleCalendar', (uiCalendarConfi
       new ScheduleRules(ngModel.$viewValue)
 
     scope.getEvents = () ->
-      console.log 'getEvents'
-      x = scheduleRules().toEvents()
-      console.log x
-      x
+      scheduleRules().toEvents()
 
     scope.addRange = (start, end) ->
       ngModel.$setViewValue(scheduleRules().addRange(start, end))
-      console.log ngModel.$viewValue
       ngModel.$render()
 
     scope.removeRange = (start, end) ->
@@ -83,15 +80,9 @@ angular.module('BBAdminServices').directive 'scheduleCalendar', (uiCalendarConfi
       ngModel.$render()
 
     ngModel.$render = () ->
-      console.log 'render'
       if uiCalendarConfig && uiCalendarConfig.calendars.scheduleCal
-        console.log 'refetch events'
         uiCalendarConfig.calendars.scheduleCal.fullCalendar('refetchEvents')
         uiCalendarConfig.calendars.scheduleCal.fullCalendar('unselect')
-      else
-        console.log 'missing scheduleCal'
-
-    scope.calendar = uiCalendarConfig.calendars.scheduleCal
 
   {
     controller: controller
