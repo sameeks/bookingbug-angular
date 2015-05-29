@@ -19,16 +19,12 @@ $secondary-border-color     : #D5D5D5;
 
 #bb {
 
-  // font-family: 'Source Sans Pro', sans-serif;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: $font-size-base;
   color: $primary-text-color;
   background-color: $page-background-color;
   margin: 0; // remove default body margin
-
-  // Theme
-  @import "bb_light_theme";
 
   // Page Elements
   @import "buttons";
@@ -37,9 +33,6 @@ $secondary-border-color     : #D5D5D5;
   @import "helpers";
   @import "lists";
   @import "page";
-
-  // Components
-  @import "angular.rangeSlider";
 
   // Partials
   @import "basket";
@@ -55,4 +48,9 @@ $secondary-border-color     : #D5D5D5;
   @import "event";
   @import "time";
   @import "filters";
+
 }
+
+// THEME
+// Please note that this is *temporary* until we find a nice solution to build themes as a seperate css asset that allows us to utilise the scss mixins/vars provided by Bootstrap without reimporting it. Probably something akin to Bootswatch.
+@import "bb_light_theme";

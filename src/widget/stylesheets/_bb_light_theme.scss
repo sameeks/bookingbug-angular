@@ -1,3 +1,11 @@
+#bb {
+
+// font-family: 'Source Sans Pro', sans-serif;
+// font-weight: 400;
+// font-size: $font-size-base;
+// color: $primary-text-color;
+// background-color: $page-background-color;
+
 h1, h2, h3, h4, h5, h6 {
   padding: 0;
   margin: 0;
@@ -6,7 +14,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 // Alerts
-
 .alert {
   font-size: $font-size-base;
 }
@@ -16,8 +23,7 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: none;
 }
 
-// Breadcrumb
-
+// Breadcrumbs
 .breadcrumb {
   padding: 0px;
   list-style: none;
@@ -48,10 +54,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-// Form (see _form.scss)
-
 // Modals
-
 .modal-title {
   font-size: $font-size-h3;
 }
@@ -69,12 +72,7 @@ h1, h2, h3, h4, h5, h6 {
   border-top: none;
 }
 
-.move-booking-container {
-  min-height: 800px;
-}
-
 // Panels
-
 .panel {
   border-top: none;
   &:first-child {
@@ -107,15 +105,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 // Check boxes.
-
 .radio label, .checkbox label {
   font-weight: 400;
 }
 
-.glyphicon-trash:hover {
-  cursor: pointer;
-}
-
-.glyphicon-shopping-cart:hover {
-  cursor: pointer;
 }
