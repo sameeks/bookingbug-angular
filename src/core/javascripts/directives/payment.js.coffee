@@ -5,7 +5,7 @@ angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $h
       when 'button_form'
         getButtonFormTemplate(scope)
       when 'page'
-        """<a ng-click="decideNextPage()">{{label}}</a>"""
+        scope.decideNextPage()
       when 'location'
         """<a href='{{payment_link}}'>{{label}}</a>"""
       else ""
