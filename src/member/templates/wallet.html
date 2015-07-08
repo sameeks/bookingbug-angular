@@ -1,0 +1,51 @@
+<div class="bb-head">
+  <span id="wallet"> Your Wallet </span>
+</div>
+<div class="balance">
+  <div ng-if="wallet.amount == 0">
+    <span> You dont have any credit in your wallet. </span>
+  </div>
+  <div ng-if="wallet.amount > 0">
+    <span id="balance"> {{wallet.amount | currency }} </span>
+  </div>
+</div>
+
+
+<div ng-form class="form-inline">
+  <div ng-show="!show_topup_box">
+    <button type="button" class="bb-bookings-action" ng-click="show_topup_box = true">Top Up</button>
+  </div>
+  <div ng-show="show_topup_box" class="form-group">
+    <label for="amount">Amount:</label>
+    <div class=" input-group">
+      <input type="number" class="form-control input-sm" id="amount" name="amount" ng-model="amount" placeholder="Enter Top Up Amount">
+      <span class="input-group-btn">
+      <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!amount" ng-click="updateWallet(member, amount)">Top Up Wallet</button>
+    </span>
+    </div>
+  </div>
+</div>
+
+<div class="button-group">
+  <div class="row">
+    <div class="col-sm-offset-9 col-sm-3">
+       
+      <div ng-if="wallet.$has('new_payment')" class="bb-checkout-pay-button-div">
+        <div bb-payment-button 
+          class="btn btn-primary btn-block" 
+          bb="bb"
+          total="total"
+          wallet="wallet"
+          decide-next-page="decideNextPage"
+          value="Pay">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div> 
+
+<div ng-if="wallet.$has('logs')">
+  <div bb-wallet-logs wallet="wallet">
+  </div>
+</div>
