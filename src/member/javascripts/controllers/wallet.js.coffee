@@ -1,4 +1,4 @@
-angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log) ->
+angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log, $modal) ->
 
   $scope.getWalletForMember = (member) ->
     WalletService.getWalletForMember(member).then (wallet) ->
@@ -14,14 +14,36 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
   
   $scope.updateWallet = (member, amount) ->
     if member and amount
-      params = {amount: (amount * 100)}
+      params = {amount: amount}
       params.total_id = $scope.total.id if $scope.total
       param.deposit = $scope.deposit if $scope.deposit
       WalletService.updateWalletForMember(member, params).then (wallet) ->
-        console.log(wallet)
-        console.log(wallet.$has('new_payment'))
         $scope.wallet = wallet
-        # SHOULD RETURN A WALLET OBJECT WITH A PAYMENT LINK
-        # THEN USING THE LINK RENDER AN IFRAME TO PAY
       , (err) ->
         $log.error err.data
+
+  buildPaymentUrl = (wallet) ->
+    a = document.createElement('a')
+    a.href = wallet.$href("new_payment")
+    url = a.protocol + "//" + a.host + "/api/v1" + a.pathname + a.search
+    url
+
+  $scope.makePayment = (wallet) ->
+    modalInstance = $modal.open
+      title: "Make Payment"
+      templateUrl: "wallet_payment.html"
+      windowClass: "bbug"
+      controller: ($modalInstance, $scope) ->
+        $scope.controller = "MakePaymentModal"
+        $scope.wallet = wallet
+        $scope.url = buildPaymentUrl(wallet)
+        $scope.confirmPayment = () ->
+          $modalInstance.close(wallet)
+
+        $scope.cancel = () ->
+          $modalInstance.dismiss "cancel"
+
+    modalInstance.result.then (wallet) ->
+      $scope.wallet = wallet
+
+

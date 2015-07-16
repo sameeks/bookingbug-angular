@@ -81,6 +81,7 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
     payment_form[0].submit()
 
   $scope.submitAndSendMessage = (event) =>
+    console.log($scope)
     event.preventDefault()
     event.stopPropagation()
     payment_form = $scope.$eval('payment_form')

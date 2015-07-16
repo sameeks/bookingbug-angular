@@ -587,7 +587,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.decideNextPage = (route) ->
-
+    console.log("decideNextPage")
     if route
       if route == 'none'
         return
@@ -614,6 +614,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
       return $scope.showPage('payment')
+
+    # else if ($scope.bb.wallet && $scope.bb.payment_status == "pending")
+    #   return $scope.showPage('payment')
 
     else if ($scope.bb.company.$has('event_groups') && !$scope.bb.current_item.event_group && !$scope.bb.current_item.service && !$scope.bb.current_item.product && !$scope.bb.current_item.deal) or
             ($scope.bb.company.$has('events') && $scope.bb.current_item.event_group && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)

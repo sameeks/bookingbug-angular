@@ -31,14 +31,7 @@
     <div class="col-sm-offset-9 col-sm-3">
        
       <div ng-if="wallet.$has('new_payment')" class="bb-checkout-pay-button-div">
-        <div bb-payment-button 
-          class="btn btn-primary btn-block" 
-          bb="bb"
-          total="total"
-          wallet="wallet"
-          decide-next-page="decideNextPage"
-          value="Pay">
-        </div>
+        <button type="button" class="bb-bookings-action" ng-click="makePayment(wallet)">Pay</button>
       </div>
 
     </div>

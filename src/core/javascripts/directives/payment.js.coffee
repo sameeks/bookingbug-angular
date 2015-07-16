@@ -29,13 +29,13 @@ angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $h
         $(element).removeClass(c)
 
   linker = (scope, element, attributes) ->
-    if scope.wallet
+    scope.$watch 'total', () ->
       scope.bb.payment_status = "pending"
-      scope.bb.total = scope.total if scope.total
-      scope.link_type = scope.wallet.$link('new_payment').type
+      scope.bb.total = scope.total
+      scope.link_type = scope.total.$link('new_payment').type
       scope.label = attributes.value || "Make Payment"
-      scope.payment_link = scope.wallet.$href('new_payment')
-      url = scope.wallet.$href('new_payment')
+      scope.payment_link = scope.total.$href('new_payment')
+      url = scope.total.$href('new_payment')
       $q.when(getTemplate(scope.link_type, scope)).then (template) ->
         element.html(template).show()
         $compile(element.contents())(scope)
@@ -43,21 +43,6 @@ angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $h
       , (err) ->
         $log.warn err.data
         element.remove()
-    else
-      scope.$watch 'total', () ->
-        scope.bb.payment_status = "pending"
-        scope.bb.total = scope.total
-        scope.link_type = scope.total.$link('new_payment').type
-        scope.label = attributes.value || "Make Payment"
-        scope.payment_link = scope.total.$href('new_payment')
-        url = scope.total.$href('new_payment')
-        $q.when(getTemplate(scope.link_type, scope)).then (template) ->
-          element.html(template).show()
-          $compile(element.contents())(scope)
-          setClassAndValue(scope, element, attributes)
-        , (err) ->
-          $log.warn err.data
-          element.remove()
 
 
   return {

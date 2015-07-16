@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h3>Make Payment</h3>
+</div>
+<div class="modal-body">
+  <div bb-payment class="bb-payment">
+    <div id="bb-payment">
+      <iframe id="bb-widget" ng-src="{{url}}" width="100%"scrolling="no" frameborder="0"></iframe>
+    </div>
+    <script type="text/javascript">
+      iFrameResize([{log:true, checkOrigin:false}],['#bb-widget']);
+   </script> 
+  </div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  <button class="btn btn-primary btn-next" ng-click="confirmPayment()"><span>Close</span></button>
+</div>
