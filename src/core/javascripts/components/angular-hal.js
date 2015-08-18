@@ -340,7 +340,7 @@ angular
         .then(function(res){
 
           // copy out the auth token from the header if there was one and make sure the child commands use it
-          if (res.headers('auth-token') && res.status != 302){
+          if (res.headers('auth-token') && res.status != 304){
             options.auth_token = res.headers('Auth-Token')
             shared_header.set('auth_token', res.headers('Auth-Token'))
           }
