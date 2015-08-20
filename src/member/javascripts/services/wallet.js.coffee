@@ -15,7 +15,7 @@ angular.module("BB.Services").factory "WalletService", ($q, BBModel) ->
   getWalletLogs: (wallet) ->
     deferred = $q.defer() 
     if !wallet.$has('logs')
-      deferred.reject("No Deals found")
+      deferred.reject("No Payments found")
     else
       wallet.$get('logs').then (resource) ->
         resource.$get('logs').then (logs) ->
