@@ -488,9 +488,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     # @ready - means it's fully ready for checkout
     # @reserve_ready - means the question still need asking - but it can be reserved
     checkReady: ->
-      if ((@date && @time && @service) || @event || @product || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
+      if ((@date && @time && @service) || @event || @product || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
         @ready = true
-      if ((@date && @time && @service) || @event || @product || @deal || (@date && @service && @service.duration_unit == 'day'))  && (@asked_questions || !@has_questions || @reserve_without_questions)
+      if ((@date && @time && @service) || @event || @product || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))  && (@asked_questions || !@has_questions || @reserve_without_questions)
         @reserve_ready = true
 
     getPostData: ->
@@ -544,6 +544,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.status = @status if @status
       data.num_resources = parseInt(@num_resources) if @num_resources?
       data.product = @product
+      data.external_purchase = @external_purchase
       data.deal = @deal if @deal
       data.recipient = @recipient if @deal && @recipient
       data.recipient_mail = @recipient_mail if @deal && @recipient && @recipient_mail
@@ -622,6 +623,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       if @event_group && @event && title == "-"
         title = @event_group.name + " - " + @event.description
       title = @product.name if @product
+      title = @external_purchase.name if @external_purchase
       title = @deal.name if @deal
       return title
 
@@ -709,6 +711,12 @@ angular.module('BB.Models').factory "BasketItemModel",
     setProduct: (product) ->
       @product = product
       @book_link = @product if @product.$has('book')
+      @setPrice(product.price) if product.price
+
+    setExternalPurchase: (external_purchase) ->
+      @external_purchase = external_purchase
+      @book_link = @company
+      @setPrice(external_purchase.price) if external_purchase.price
 
     setDeal: (deal) ->
       @deal = deal
