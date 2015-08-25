@@ -10,7 +10,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
 
 # TODO Get the add/subtract functions to respect the current time range. Get the time range length to adjust if display mode is preset
 angular.module('BB.Controllers').controller 'TimeRangeList',
-($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService) ->
+($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, ErrorService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
  
@@ -92,8 +92,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
 
   setTimeRange = (selected_date, start_date) ->
-
-    console.log "set range", selected_date, start_date
     if start_date
       $scope.start_date = start_date
     else if $scope.day_of_week
@@ -116,7 +114,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
   # deprecated, please use bbSelectedDay to initialise the selected_day
   $scope.init = (options = {}) ->
-    console.log "init", options
     if options.selected_day?
       unless options.selected_day._isAMomementObject
         $scope.selected_day = moment(options.selected_day)
@@ -364,7 +361,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
       if !found_time
         current_item.requestedTimeUnavailable()
-        AlertService.add("danger", { msg: "The requested time slot is not available. Please choose a different time." })
+        AlertService.raise(ErrorService.getAlert('REQ_TIME_NOT_AVAIL'))
 
 
 
@@ -374,10 +371,10 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
   $scope.setReady = () ->
     if !$scope.bb.current_item.time
-      AlertService.add("danger", { msg: "You need to select a time slot" })
+      AlertService.raise(ErrorService.getAlert('TIME_SLOT_NOT_SELECTED'))
       return false
     else if $scope.bb.moving_booking && $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime)
-      AlertService.add("danger", { msg: "Your appointment is already booked for this time." })
+      AlertService.raise(ErrorService.getAlert('APPT_AT_SAME_TIME'))
       return false
     else if $scope.bb.moving_booking
       # set a 'default' person and resource if we need them, but haven't picked any in moving

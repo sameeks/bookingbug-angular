@@ -737,7 +737,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       basket.setSettings($scope.bb.basket.settings)
 
       $scope.setBasket(basket)
-      #$scope.setUsingBasket(true) Luke - removed Jack's change as we don't want to flag that we're using the basket unless bbMiniBasket has been invoked
       $scope.setBasketItem(basket.items[0])
       # check if item has been added to the basket
       if !$scope.bb.current_item
