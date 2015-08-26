@@ -445,10 +445,9 @@ angular.module('BB.Models').factory "BasketItemModel",
         else if @price && !@time.price
          @setPrice(@price)
         else if @time.price && !@price
-           @setPrice(@time.price)
+          @setPrice(@time.price)
         else
-           @setPrice(null)
-
+          @setPrice(null)
 
       @checkReady()
 
@@ -496,7 +495,6 @@ angular.module('BB.Models').factory "BasketItemModel",
         @reserve_ready = true
 
     getPostData: ->
-
       if @cloneAnswersItem
         for o_question in @cloneAnswersItem.item_details.questions
           for m_question in @item_details.questions
