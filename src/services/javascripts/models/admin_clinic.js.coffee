@@ -19,6 +19,10 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
         h[id] = true
         h
       , {})
+      @services = _.reduce(@service_ids, (h, id) ->
+        h[id] = true
+        h
+      , {})
       @uncovered = !@person_ids || @person_ids.length == 0
       if @uncovered
         @className = "clinic_uncovered" 
@@ -46,6 +50,9 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
       data.person_ids = []
       for id, en of @people
         data.person_ids.push(id) if en
+      data.service_ids = []
+      for id, en of @services
+        data.service_ids.push(id) if en
       data.address_id = @address.id if @address
       data.settings = @settings if @settings
       data
@@ -54,8 +61,11 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
       @person_ids = _.compact(_.map(@people, (present, person_id) ->
         person_id if present
       ))
-      @resource_ids = _.compact(_.map(@resources, (present, person_id) ->
-        person_id if present
+      @resource_ids = _.compact(_.map(@resources, (present, resource_id) ->
+        resource_id if present
+      ))
+      @service_ids = _.compact(_.map(@services, (present, service_id) ->
+        service_id if present
       ))
       @$put('self', {}, @).then (clinic) =>
         @updateModel(clinic)
