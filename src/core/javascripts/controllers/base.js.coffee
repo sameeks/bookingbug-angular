@@ -836,7 +836,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.basket.company_id = $scope.bb.company_id
     # were there stacked items - if so reset the stack items to the basket contents
     if $scope.bb.stacked_items
-      $scope.bb.setStackedItems(basket.items)
+      $scope.bb.setStackedItems(basket.timeItems())
 
 
   # clear the user and logout

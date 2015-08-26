@@ -13,6 +13,7 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
 
   alertService =
     add: (type, {title, msg, persist}) ->
+      persist = true if !persist?
       $rootScope.alerts = []
       alert = 
         type: type
