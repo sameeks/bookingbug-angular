@@ -146,6 +146,8 @@ angular.module('BB.Models').factory "BasketItemModel",
         @service_ref = defaults.service_ref
       if defaults.group
         @group = defaults.group
+      if defaults.clinic
+        @clinic = defaults.clinic
       if defaults.private_note
         @private_note = defaults.private_note
       if defaults.event_group
