@@ -530,6 +530,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         category.then (res) =>
           $scope.bb.item_defaults.category = new BBModel.Category(res)    
 
+      if $scope.bb.item_defaults.clinic
+        clinic = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/clinics/' + $scope.bb.item_defaults.clinic )
+        $scope.bb.default_setup_promises.push(clinic)
+        clinic.then (res) =>
+          $scope.bb.item_defaults.clinic = new BBModel.Clinic(res)
+
+
 
       if $scope.bb.item_defaults.duration
         $scope.bb.item_defaults.duration = parseInt($scope.bb.item_defaults.duration)
