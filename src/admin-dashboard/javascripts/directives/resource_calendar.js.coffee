@@ -125,12 +125,18 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
     $scope.pusherSubscribe = () =>
       if $scope.company
-        $scope.company.pusherSubscribe (res) =>
+        $scope.company.pusherSubscribe((res) =>
           if res.id?
             booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))
             if booking
               booking.$refetch().then () ->
                 uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+            else
+              $scope.company.$get('bookings', {id: res.id}).then (response) ->
+                booking = new BBModel.Admin.Booking(response)
+                BookingCollections.checkItems(booking)
+                uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+        , {encrypted: false})
 
     $scope.openDatePicker = ($event) ->
         $event.preventDefault()
