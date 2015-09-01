@@ -54,9 +54,10 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
           def.reject("Company has no settings")
       return def.promise
 
-    pusherSubscribe: (callback) =>
+    pusherSubscribe: (callback, options = {}) =>
       if Pusher? && !@pusher?
         @pusher = new Pusher 'c8d8cea659cc46060608',
+          encrypted: if options.hasOwnProperty('encrypted') then options.encrypted else true
           authEndpoint: @$link('pusher').href
           auth:
             headers:

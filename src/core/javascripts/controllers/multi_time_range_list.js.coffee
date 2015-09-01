@@ -303,7 +303,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       return $scope.start_date.format(month_year_format)
 
 
-  $scope.confirm = (route) ->
+  $scope.confirm = (route, options = {}) ->
     # first check all of the stacked items
     for item in $scope.bb.stacked_items
       if !item.time
@@ -353,7 +353,16 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       return
 
     $scope.notLoaded $scope
-    $scope.updateBasket().then ->
-      $scope.setLoaded $scope
-      $scope.decideNextPage(route)
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+    if options.do_not_route
+      return $scope.updateBasket()
+    else
+      $scope.updateBasket().then ->
+        $scope.setLoaded $scope
+        $scope.decideNextPage(route)
+      , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+
+  $scope.setReady = () ->
+    return $scope.confirm('', {do_not_route: true})
+

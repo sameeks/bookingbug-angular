@@ -12,7 +12,7 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
     'BookableItem', 'Category', 'Client', 'ClientDetails', 'Company',
     'CompanySettings', 'Day', 'Event', 'EventChain', 'EventGroup',
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
-    'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space',
+    'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
     'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
     'PrePaidBooking']
 
