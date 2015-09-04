@@ -125,38 +125,37 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
     $scope.pusherSubscribe = () =>
       if $scope.company
-        $interval () ->
-          $http.get($scope.bb.api_url + "/api/v1/audit/bookings/?id=#{$scope.company.id}&channel_id=#{$scope.company.numeric_widget_id}").then (res) ->
-            if res && res.data 
-              for id in res.data
-                console.log id
-                booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', id))
-                if booking
-                  booking.$refetch().then () ->
-                    booking.resourceId = booking.person_id
-                    uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
-                else
-                  $scope.company.$get('bookings', {id: id}).then (response) ->
-                    booking = new BBModel.Admin.Booking(response)
-                    BookingCollections.checkItems(booking)
-                    $timeout ->
-                      uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
-                    , 100
+    #    $interval () ->
+    #      $http.get($scope.bb.api_url + "/api/v1/audit/bookings/?id=#{$scope.company.id}&channel_id=#{$scope.company.numeric_widget_id}").then (res) ->
+    #        if res && res.data 
+    #          for id in res.data
+    #            console.log id
+    #            booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', id))
+    #            if booking
+    #              booking.$refetch().then () ->
+    #                booking.resourceId = booking.person_id
+    #                uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+    #            else
+    #              $scope.company.$get('bookings', {id: id}).then (response) ->
+    #                booking = new BBModel.Admin.Booking(response)
+    #                BookingCollections.checkItems(booking)
+    #                $timeout ->
+    #                  uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+    #                , 100
+    #     , 5000
 
-        , 5000
-
-  #      $scope.company.pusherSubscribe((res) =>
-  #        if res.id?
-  #          booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))
-  #          if booking
-  #            booking.$refetch().then () ->
-  #              uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
-  #          else
-  #            $scope.company.$get('bookings', {id: res.id}).then (response) ->
-  #              booking = new BBModel.Admin.Booking(response)
-  #              BookingCollections.checkItems(booking)
-  #              uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
-  #      , {encrypted: false})
+        $scope.company.pusherSubscribe((res) =>
+          if res.id?
+            booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))
+            if booking
+              booking.$refetch().then () ->
+                uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+            else
+              $scope.company.$get('bookings', {id: res.id}).then (response) ->
+                booking = new BBModel.Admin.Booking(response)
+                BookingCollections.checkItems(booking)
+                uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+        , {encrypted: false})
 
     $scope.openDatePicker = ($event) ->
         $event.preventDefault()
