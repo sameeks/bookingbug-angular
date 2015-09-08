@@ -12,7 +12,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload) ->
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
 
@@ -144,7 +144,14 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
         $scope.item.move_done = true
         $rootScope.$broadcast "booking:moved"
         $scope.decideNextPage(route)
-        AlertService.add("info", { msg: "Your booking has been moved to #{b.datetime.format('dddd Do MMMM [at] h.mma')}" })
+
+        # TODO remove whedn translate enabled by default
+        if SettingsService.isInternationalizatonEnabled()
+          $translate('MOVE_BOOKINGS_MSG', { datetime:b.datetime.format('dddd Do MMMM [at] h.mma') }).then (translated_text) ->
+            AlertService.add("info", { msg: translated_text })
+        else
+          AlertService.add("info", { msg: "Your booking has been moved to #{b.datetime.format('dddd Do MMMM [at] h.mma')}" })
+
        , (err) =>
         $scope.setLoaded $scope
         AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
