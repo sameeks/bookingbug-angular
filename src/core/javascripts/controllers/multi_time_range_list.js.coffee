@@ -229,6 +229,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
         setEnabledSlots()
         updateHideStatus()
         $rootScope.$broadcast "TimeRangeListStacked:loadFinished"
+        $scope.$broadcast "dataReloaded"
       else
         # raise error
 
