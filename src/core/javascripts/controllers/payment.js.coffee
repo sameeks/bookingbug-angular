@@ -25,11 +25,11 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
     element.find('iframe')[0].contentWindow.postMessage(payload, origin)
 
   linker = (scope, element, attributes) ->
+
     scope.payment_options = scope.$eval(attributes.bbPayment) or {}
 
     element.find('iframe').bind 'load', (event) =>
-      # url = scope.bb.total.$href('new_payment') if scope.bb.total and !scope.bb.wallet
-      url = scope.url if scope.url
+      url = scope.bb.total.$href('new_payment') if scope.bb && scope.bb.total && scope.bb.total.$href('new_payment')
       origin = getHost(url)
       sendLoadEvent(element, origin, scope)
       scope.$apply ->
@@ -44,17 +44,14 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
         if data
           switch data.type
             when "submitting"
-              console.log("submitting")
               scope.callNotLoaded()
             when "error"
-              console.log("error")
-              console.log(event.data.message)
               scope.callSetLoaded()
               error(scope, event.data.message)
             when "payment_complete"
-              console.log("payment_complete")
               scope.callSetLoaded()
               scope.paymentDone()
+
     , false
 
   return {
@@ -69,15 +66,13 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
 
   $scope.controller = "public.controllers.Payment"
 
-  # $scope.notLoaded $scope
+  $scope.notLoaded $scope
 
   $scope.bb.total = $scope.purchase if $scope.purchase
 
-  # $rootScope.connection_started.then =>
-  $scope.bb.total = $scope.total if $scope.total
-  $scope.url = $sce.trustAsResourceUrl($scope.bb.total.$href('new_payment')) if $scope.total
-  $scope.url = $sce.trustAsResourceUrl($scope.$parent.url) if $scope.$parent.url
-  # console.log($scope.url)
+  $rootScope.connection_started.then =>
+    $scope.bb.total = $scope.total if $scope.total
+    $scope.url = $sce.trustAsResourceUrl($scope.bb.total.$href('new_payment')) if $scope.bb && $scope.bb.total && $scope.bb.total.$href('new_payment')
   
   $scope.callNotLoaded = () =>
     $scope.notLoaded $scope

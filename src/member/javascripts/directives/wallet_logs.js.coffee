@@ -8,6 +8,13 @@ angular.module('BBMember').directive 'bbWalletLogs', ($rootScope) ->
     getWalletLogsForWallet = () ->
       scope.getWalletLogs(scope.wallet)
 
+    getWalletForMember = () ->
+      scope.getWalletForMember(scope.member)
+    
+    scope.$watch 'member', (member) ->
+      if member?
+        getWalletForMember()
+
     scope.$watch 'wallet', (wallet) ->
       if wallet?
         getWalletLogsForWallet()
@@ -17,5 +24,6 @@ angular.module('BBMember').directive 'bbWalletLogs', ($rootScope) ->
     controller: 'Wallet'
     templateUrl: 'wallet_logs.html'
     scope:
+      member: '='
       wallet: '='
   }

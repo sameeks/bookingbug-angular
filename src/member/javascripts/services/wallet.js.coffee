@@ -1,11 +1,11 @@
 angular.module("BB.Services").factory "WalletService", ($q, BBModel) ->
 
-  getWalletForMember: (member) ->
+  getWalletForMember: (member, params) ->
     deferred = $q.defer()
     if !member.$has("wallet")
-      deferred.reject("Member does not have an active wallet.")
+      deferred.reject("Wallets are not turned on.")
     else
-      member.$get("wallet").then (wallet) ->
+      member.$get("wallet", params).then (wallet) ->
         wallet = new BBModel.Member.Wallet(wallet)
         deferred.resolve(wallet)
       , (err) ->
@@ -29,9 +29,22 @@ angular.module("BB.Services").factory "WalletService", ($q, BBModel) ->
   updateWalletForMember: (member, params) ->
     deferred = $q.defer()
     if !member.$has("wallet")
-      deferred.reject("Member does not have an active wallet.")
+      deferred.reject("Wallets are not turned on.")
     else
       member.$put("wallet", {}, params).then (wallet) ->
+        wallet = new BBModel.Member.Wallet(wallet)
+        deferred.resolve(wallet)
+      , (err) ->
+        deferred.reject(err)
+    deferred.promise
+
+  createWalletForMember: (member) ->
+    deferred = $q.defer()
+    params = {}
+    if !member.$has("wallet")
+      deferred.reject("Wallets are not turned on.")
+    else
+      member.$post("wallet", {}, params).then (wallet) ->
         wallet = new BBModel.Member.Wallet(wallet)
         deferred.resolve(wallet)
       , (err) ->
