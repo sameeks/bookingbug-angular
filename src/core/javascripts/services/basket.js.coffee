@@ -1,4 +1,4 @@
-angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel, MutexService, LoginService, WalletService) ->
+angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel, MutexService) ->
 
   addItem: (company, params) ->
     deferred = $q.defer()

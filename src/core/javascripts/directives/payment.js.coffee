@@ -51,7 +51,6 @@ angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $h
     scope: {
       total: '='
       bb: '='
-      wallet: '='
       decideNextPage: '='
     }
     link: linker

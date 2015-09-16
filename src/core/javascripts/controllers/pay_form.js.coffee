@@ -80,7 +80,6 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
       'type': 'submitting',
       'message': referrer
     })
-    console.log(payload)
     parent.postMessage(payload, target_origin)
 
   submitPaymentForm = () =>
