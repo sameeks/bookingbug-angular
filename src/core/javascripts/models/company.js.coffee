@@ -7,10 +7,23 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
 
     constructor: (data) ->
       super(data)
-
       # instantiate each child company as a hal resource
+      # we'll set the @companies array to all companies - including grandchildren
+      # and we'll have an array called child_companies that contains only direct ancesstors
       if @companies
-        @companies = _.map @companies, (c) -> new BBModel.Company(halClient.$parse(c))
+        all_companies = []
+        @child_companies = []
+        for comp in @companies 
+          c = new BBModel.Company(halClient.$parse(comp))
+          @child_companies.push(c)
+          if c.companies
+            # if that company has it's own child companies
+            for child in c.companies
+              all_companies.push(child)
+          else
+            all_companies.push(c)
+        @companies = all_companies
+
 
     getCompanyByRef: (ref) ->
       defer = $q.defer()
