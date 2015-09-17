@@ -446,6 +446,8 @@ angular.module('BB.Models').factory "BasketItemModel",
          @setPrice(@price)
         else if @time.price && !@price
           @setPrice(@time.price)
+        else if @price && @time.price
+          @setPrice(@price)
         else
           @setPrice(null)
 
