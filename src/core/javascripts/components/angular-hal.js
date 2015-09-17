@@ -245,9 +245,13 @@ angular
         }));
 
         var linkHref = hrefLink(link, params);
-
         if(method === 'GET') {
-          if(embedded.has(linkHref)) return embedded.get(linkHref);
+          if (params) {
+            if (params.hasOwnProperty('no_cache')) {
+              options['no_cache'] = params['no_cache'];
+            }
+          }
+          if(embedded.has(linkHref) && (!options || !options.no_cache)) return embedded.get(linkHref);
           
           return embedded.set(linkHref, callService(method, linkHref, options, data));
         }

@@ -616,7 +616,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.decideNextPage = (route) ->
-
     if route
       if route == 'none'
         return
