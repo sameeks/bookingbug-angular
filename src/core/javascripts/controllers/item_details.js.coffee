@@ -147,10 +147,10 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
         # TODO remove whedn translate enabled by default
         if SettingsService.isInternationalizatonEnabled()
-          $translate('MOVE_BOOKINGS_MSG', { datetime:b.datetime.format('dddd Do MMMM [at] h.mma') }).then (translated_text) ->
+          $translate('MOVE_BOOKINGS_MSG', { datetime:b.datetime.format('dddd Do MMMM[,] h.mma') }).then (translated_text) ->
             AlertService.add("info", { msg: translated_text })
         else
-          AlertService.add("info", { msg: "Your booking has been moved to #{b.datetime.format('dddd Do MMMM [at] h.mma')}" })
+          AlertService.add("info", { msg: "Your booking has been moved to #{b.datetime.format('dddd Do MMMM[,] h.mma')}" })
 
        , (err) =>
         $scope.setLoaded $scope
