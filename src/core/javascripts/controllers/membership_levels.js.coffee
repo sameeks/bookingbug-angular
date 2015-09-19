@@ -3,7 +3,6 @@ angular.module('BB.Directives').directive 'bbMembershipLevels', ($rootScope) ->
   link = (scope, element, attrs) ->
 
     getMembershiplevels = () ->
-      console.log(scope)
       scope.getMembershiplevels()
 
     getMembershiplevels()
