@@ -1,9 +1,12 @@
 angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
-    $templateCache, $q, halClient, BBModel, $sessionStorage) ->
+    $templateCache, $q, halClient, BBModel, $sessionStorage, $window) ->
 
   controller = ($scope) ->
 
     $scope.login_form = {}
+
+    redirectTo = (destination) ->
+      $window.location.href = destination
 
     $scope.submit = (form) ->
       form['role'] = 'member'
@@ -15,7 +18,10 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
             $sessionStorage.setItem("login", $rootScope.member.$toStore())
             $sessionStorage.setItem("auth_token", auth_token)
             $scope.setClient($rootScope.member)
-            $scope.decideNextPage()
+            if $scope.bb.destination
+              redirectTo($scope.bb.destination)
+            else
+              $scope.decideNextPage()
         else if login.$has('member')
           login.$get('member').then (member) ->
             $rootScope.member = new BBModel.Client member
@@ -32,8 +38,11 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
       session_member = $sessionStorage.getItem("login")
       session_member = halClient.createResource(session_member)
       $rootScope.member = new BBModel.Client session_member
-      $scope.setClient($rootScope.member)
-      $scope.decideNextPage()
+      scope.setClient($rootScope.member)
+      if scope.bb.destination
+        redirectTo(scope.bb.destination)
+      else
+        scope.decideNextPage()
     else
       halClient.$get("#{scope.bb.api_url}/api/v1").then (root) ->
         root.$get("new_login").then (new_login) ->

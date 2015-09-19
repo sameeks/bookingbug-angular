@@ -305,6 +305,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.qudini_booking_id
       $scope.bb.qudini_booking_id = prms.qudini_booking_id
 
+    if prms.extra_setup.destination
+      $scope.bb.destination = prms.extra_setup.destination
+
 
     # this is used by the bbScrollTo directive so that we can account of
     # floating headers that might reside on sites where the widget is embedded

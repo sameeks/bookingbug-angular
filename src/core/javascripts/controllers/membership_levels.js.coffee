@@ -3,6 +3,7 @@ angular.module('BB.Directives').directive 'bbMembershipLevels', ($rootScope) ->
   link = (scope, element, attrs) ->
 
     getMembershiplevels = () ->
+      console.log(scope)
       scope.getMembershiplevels()
 
     getMembershiplevels()
@@ -10,15 +11,14 @@ angular.module('BB.Directives').directive 'bbMembershipLevels', ($rootScope) ->
   {
     link: link
     controller: 'MembershipLevels'
-    scope: true
   }
 
-angular.module('BB.Controllers').controller 'MembershipLevels', ($rootScope, MembershipLevelsService) ->
+angular.module('BB.Controllers').controller 'MembershipLevels', ($rootScope, MembershipLevelsService, $scope) ->
 
 
   $scope.getMembershiplevels = () ->
     if $scope.bb.company and $scope.bb.company.$has('member_levels')
-      MembershipLevelsService.getMembershiplevels($scope.bb.company).then (member_levels) ->
+      MembershipLevelsService.getMembershipLevels($scope.bb.company).then (member_levels) ->
         $scope.member_levels = member_levels
       , (err) ->
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
