@@ -1,5 +1,5 @@
 angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope,
-    MemberLoginService, $templateCache, $q) ->
+    MemberLoginService, $templateCache, $q, $sessionStorage, halClient) ->
 
   loginMemberController = ($scope, $modalInstance, company_id) ->
     $scope.title = 'Login'
@@ -111,8 +111,15 @@ angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope,
 
 
     if scope.memberEmail && scope.memberPassword
+      console.log("try login")
       tryLogin()
+    else if $sessionStorage.getItem("login")
+      console.log("session has login")
+      session_member = $sessionStorage.getItem("login")
+      console.log(session_member)
+      scope.member = session_member
     else
+      console.log("login modal")
       loginModal()
 
   {

@@ -33,8 +33,9 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
         $scope.items = $scope.companies
     $scope.setLoaded $scope
 
-  $scope.selectItem = (item, route) =>
+  $scope.selectItem = (item, route, params = {}) =>
     $scope.notLoaded $scope
+    console.log("company select item!!!!")
     prms = {company_id: item.id}
     $scope.initWidget(prms)
 
