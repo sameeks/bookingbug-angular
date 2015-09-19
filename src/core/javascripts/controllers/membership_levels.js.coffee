@@ -25,7 +25,7 @@ angular.module('BB.Controllers').controller 'MembershipLevels', ($rootScope, Mem
 
   $scope.selectMemberLevel = (level) ->
     if level and $scope.client
-      $scope.client.member_level_id = $scope.member_level.id
+      $scope.client.member_level_id = level.id
       $scope.decideNextPage()
 
 
