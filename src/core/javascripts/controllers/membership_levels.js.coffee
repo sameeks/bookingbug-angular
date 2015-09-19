@@ -24,8 +24,8 @@ angular.module('BB.Controllers').controller 'MembershipLevels', ($rootScope, Mem
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   $scope.selectMemberLevel = (level) ->
-    if level and $scope.client
-      $scope.client.member_level_id = level.id
+    if level and $scope.bb.client
+      $scope.bb.client.member_level_id = level.id
       $scope.decideNextPage()
 
 
