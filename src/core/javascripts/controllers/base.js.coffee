@@ -234,7 +234,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.app_id = 1
     $scope.bb.app_key = 1
     $scope.bb.clear_basket = true
-    console.log(prms)
     if prms.basket
       $scope.bb.clear_basket = false
     if prms.clear_basket == false
@@ -877,15 +876,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         affiliate_id: $scope.bb.affiliate_id
         clear_baskets: if $scope.bb.clear_basket then '1' else null
         clear_member: if $scope.bb.clear_member then '1' else null
-      console.log("scope in base Ctrl")
-      console.log($scope)
-      console.log("restore Basket params")
-      console.log(params)
       uri = new UriTemplate(href).fillFromObject(params)
       status = halClient.$get(uri, {"auth_token": auth_token, "no_cache": true})
       status.then (res) =>
-        console.log("status api response")
-        console.log(res)
         if res.$has('client')
           res.$get('client').then (client) =>
             $scope.client = new BBModel.Client(client)
@@ -897,20 +890,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         else
           if res.$has('baskets')
             res.$get('baskets').then (baskets) =>
-              console.log("baskets")
-              console.log(baskets)
               basket = _.find(baskets, (b) ->
-                console.log(b.company_id)
-                console.log($scope.bb.company_id)
-                console.log(parseInt(b.company_id) == $scope.bb.company_id)
                 parseInt(b.company_id) == $scope.bb.company_id)
-              console.log("basket after company id filter")
-              console.log(basket)
               if basket
                 basket = new BBModel.Basket(basket, $scope.bb)
                 basket.$get('items').then (items) ->
-                  console.log('items')
-                  console.log(items)
                   items = (new BBModel.BasketItem(i) for i in items)
                   basket.addItem(i) for i in items
                   $scope.setBasket(basket)
@@ -945,15 +929,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $rootScope.bb_currency = $scope.bb.company_settings.currency
         $scope.bb.currency = $scope.bb.company_settings.currency
         $scope.bb.has_prices = $scope.bb.company_settings.has_prices
-        console.log("sessionStorage in setUp Company")
-        console.log($sessionStorage)
-        console.log("set Company")
-        console.log("keep_basket")
-        console.log(keep_basket)
-        console.log("restore basket?")
-        console.log(!$scope.bb.basket || ($scope.bb.basket.company_id != $scope.bb.company_id && !keep_basket))
-        console.log(!$scope.bb.basket)
-        console.log($scope.bb)
         if !$scope.bb.basket || ($scope.bb.basket.company_id != $scope.bb.company_id && !keep_basket)
           restoreBasket().then () ->
             defer.resolve()

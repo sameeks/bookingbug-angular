@@ -177,7 +177,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
     deferred.promise
 
   empty: (bb) ->
-    console.log("empty basket")
     deferred = $q.defer()
     MutexService.getLock().then (mutex) ->
       bb.company.$del('basket').then (basket) ->
