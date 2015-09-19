@@ -52,7 +52,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     useParent:'='
   transclude: true
   controller: 'BBCtrl'
-  link: (scope, element, attrs) ->
+  link: (scope, element, attrs, controller, transclude) ->
     scope.client = attrs.member if attrs.member?
     evaluator = scope
     if scope.useParent && scope.$parent?
@@ -68,25 +68,32 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
         AppConfig['partial_url'] = init_params.partial_url
       else
         AppConfig['partial_url'] = scope.bb.partial_url
-    unless scope.has_content
-      if prms.custom_partial_url
-        appendCustomPartials(scope, element, prms).then (style) ->
-          $q.when(getTemplate()).then (template) ->
-            element.html(template).show()
-            $compile(element.contents())(scope)
-            element.append(style)
-            setupPusher(scope, element, prms) if prms.update_design
-      else if prms.template
-        renderTemplate(scope, element, prms.design_mode, prms.template)
+
+    transclude scope, (clone) =>
+      scope.has_content = clone.length > 0
+      if !scope.has_content
+        if prms.custom_partial_url
+          appendCustomPartials(scope, element, prms).then (style) ->
+            $q.when(getTemplate()).then (template) ->
+              element.html(template).show()
+              $compile(element.contents())(scope)
+              element.append(style)
+              setupPusher(scope, element, prms) if prms.update_design
+        else if prms.template
+          renderTemplate(scope, element, prms.design_mode, prms.template)
+        else
+          renderTemplate(scope, element, prms.design_mode)
+        scope.$on 'refreshPage', () ->
+          renderTemplate(scope, element, prms.design_mode)
+      else if prms.custom_partial_url
+        appendCustomPartials(scope, element, prms)
+        setupPusher(scope, element, prms) if prms.update_design
+        scope.$on 'refreshPage', () ->
+          scope.showPage scope.bb.current_page
       else
-        renderTemplate(scope, element, prms.design_mode)
-      scope.$on 'refreshPage', () ->
-        renderTemplate(scope, element, prms.design_mode)
-    else if prms.custom_partial_url
-      appendCustomPartials(scope, element, prms)
-      setupPusher(scope, element, prms) if prms.update_design
-      scope.$on 'refreshPage', () ->
-        scope.showPage scope.bb.current_page
+        element.html(clone).show()
+        element.append('<style widget_css scoped></style>') if prms.design_mode
+        $compile(element.contents())(scope)
 
 
 # a controller used for the main page contents - just in case we need one here
@@ -112,7 +119,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   AppConfig.uid = $scope.bb.uid
   $scope.qs = QueryStringService
 
-  $scope.has_content = $element[0].children.length != 0
   if $scope.apiUrl
     $scope.bb ||= {}
     $scope.bb.api_url = $scope.apiUrl
