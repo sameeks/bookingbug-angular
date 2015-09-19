@@ -311,6 +311,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.qudini_booking_id
       $scope.bb.qudini_booking_id = prms.qudini_booking_id
 
+    if prms.extra_setup.destination
+      $scope.bb.destination = prms.extra_setup.destination
+
 
     # this is used by the bbScrollTo directive so that we can account of
     # floating headers that might reside on sites where the widget is embedded
@@ -897,13 +900,14 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           if res.$has('baskets')
             res.$get('baskets').then (baskets) =>
               basket = _.find(baskets, (b) ->
-                b.company_id == $scope.bb.company_id)
+                parseInt(b.company_id) == $scope.bb.company_id)
               if basket
                 basket = new BBModel.Basket(basket, $scope.bb)
                 basket.$get('items').then (items) ->
                   items = (new BBModel.BasketItem(i) for i in items)
                   basket.addItem(i) for i in items
                   $scope.setBasket(basket)
+
                   promises = [].concat.apply([], (i.promises for i in items))
                   $q.all(promises).then () ->
                     if basket.items.length > 0
@@ -934,7 +938,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $rootScope.bb_currency = $scope.bb.company_settings.currency
         $scope.bb.currency = $scope.bb.company_settings.currency
         $scope.bb.has_prices = $scope.bb.company_settings.has_prices
-
         if !$scope.bb.basket || ($scope.bb.basket.company_id != $scope.bb.company_id && !keep_basket)
           restoreBasket().then () ->
             defer.resolve()
