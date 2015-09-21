@@ -17,14 +17,16 @@ angular.module('BB.Controllers').controller 'MembershipLevels', ($rootScope, Mem
 
   $scope.getMembershiplevels = () ->
     if $scope.bb.company and $scope.bb.company.$has('member_levels')
+      $scope.notLoaded $scope
       MembershipLevelsService.getMembershipLevels($scope.bb.company).then (member_levels) ->
-        $scope.member_levels = member_levels
+        $scope.setLoaded $scope
+        $scope.membership_levels = member_levels
       , (err) ->
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   $scope.selectMemberLevel = (level) ->
-    if level and $scope.bb.client
-      $scope.bb.client.member_level_id = level.id
+    if level and $scope.client
+      $scope.client.member_level_id = level.id
       $scope.decideNextPage()
 
 
