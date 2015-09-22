@@ -240,7 +240,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.clear_basket = false
     if $window.bb_setup || prms.client
       # if setup is defined - blank the member -a s we're probably setting it - unless specifically defined as false
-      prms.clear_member ||= true
+      prms.clear_member ||= true 
     $scope.bb.client_defaults = prms.client or {}
     
     if $scope.bb.client_defaults && $scope.bb.client_defaults.name
@@ -842,6 +842,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.basket = basket
     $scope.bb.basket.company_id = $scope.bb.company_id
     # were there stacked items - if so reset the stack items to the basket contents
+    console.log "sets basket"
     if $scope.bb.stacked_items
       $scope.bb.setStackedItems(basket.timeItems())
 
@@ -869,9 +870,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   restoreBasket = () ->
     restore_basket_defer = $q.defer()
     $scope.quickEmptybasket().then () ->
+      console.log "restoresbasket?"
       auth_token = $sessionStorage.getItem('auth_token')
       href = $scope.bb.api_url +
         '/api/v1/status{?company_id,affiliate_id,clear_baskets,clear_member}'
+      console.log $scope.bb.clear_basket
       params =
         company_id: $scope.bb.company_id
         affiliate_id: $scope.bb.affiliate_id
@@ -1097,11 +1100,19 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.setLoadedAndShowError = (scope, err, error_string) ->
     $log.warn(err, error_string)
+    # only the messages in this list that match messages from api will be displayed.
+    valid_api_messages = ["Sorry, it appears that this phone number already exists, please use the search option to find the customer",
+    "Sorry, it appears that this email already exists, please use the search option to find the customer",
+    "Sorry, it appears that this phone number already exists, please login or click on Forgot Password",
+    "Sorry, it appears that this email already exists, please login or click on Forgot Password"] 
+
     scope.setLoaded(scope)
     if err.status is 409
       AlertService.danger(ErrorService.getError('ITEM_NO_LONGER_AVAILABLE'))
     else if err.data and err.data.error is "Number of Bookings exceeds the maximum"
       AlertService.danger(ErrorService.getError('MAXIMUM_TICKETS'))
+    else if err.data and _.contains(valid_api_messages,err.data.error)
+      AlertService.danger({type: "error", title: "", persist: true, msg: err.data.error})
     else
       AlertService.danger(ErrorService.getError('GENERIC'))
 

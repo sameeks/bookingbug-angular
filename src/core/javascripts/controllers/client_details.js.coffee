@@ -61,7 +61,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       $scope.existing_member = false
       $scope.decideNextPage(route)
     , (err) ->
-      if err.data.error == "Please login" 
+      if err.data.error == "Sorry, it appears that this email already exists, please use the search option to find the customer" 
         $scope.existing_member = true
         AlertService.danger({msg: "You have already registered with this email address. Please login or reset your password using the Forgot Password link below."})
       $scope.setLoaded $scope
