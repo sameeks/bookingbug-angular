@@ -240,7 +240,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.clear_basket = false
     if $window.bb_setup || prms.client
       # if setup is defined - blank the member -a s we're probably setting it - unless specifically defined as false
-      prms.clear_member ||= true 
+      prms.clear_member ||= true
     $scope.bb.client_defaults = prms.client or {}
     
     if $scope.bb.client_defaults && $scope.bb.client_defaults.name
@@ -842,7 +842,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.basket = basket
     $scope.bb.basket.company_id = $scope.bb.company_id
     # were there stacked items - if so reset the stack items to the basket contents
-    console.log "sets basket"
     if $scope.bb.stacked_items
       $scope.bb.setStackedItems(basket.timeItems())
 
@@ -870,11 +869,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   restoreBasket = () ->
     restore_basket_defer = $q.defer()
     $scope.quickEmptybasket().then () ->
-      console.log "restoresbasket?"
       auth_token = $sessionStorage.getItem('auth_token')
       href = $scope.bb.api_url +
         '/api/v1/status{?company_id,affiliate_id,clear_baskets,clear_member}'
-      console.log $scope.bb.clear_basket
       params =
         company_id: $scope.bb.company_id
         affiliate_id: $scope.bb.affiliate_id
