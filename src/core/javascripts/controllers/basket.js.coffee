@@ -1,13 +1,11 @@
 'use strict';
 
-
-# TODO: Try and get all the baset logic into a service. The basket list
-# doesn't look like it's used anywhere.
 angular.module('BB.Directives').directive 'bbMiniBasket', () ->
   restrict: 'AE'
   replace: true
   scope : true
   controller : 'MiniBasket'
+
 
 
 angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, BasketService, $q) ->
@@ -25,8 +23,6 @@ angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, 
 
 
 
-
-
 angular.module('BB.Directives').directive 'bbBasketList', () ->
   restrict: 'AE'
   replace: true
@@ -34,11 +30,14 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
   controller : 'BasketList'
 
 
+
 angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, BasketService, $q, AlertService, ErrorService, FormDataStoreService, LoginService) ->
+
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
   $scope.items = $scope.bb.basket.items
   $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') && $scope.bb.company_settings.has_wallets && $scope.client.valid() && LoginService.isLoggedIn() && LoginService.member().id == $scope.client.id
+
 
   $scope.$watch 'basket', (newVal, oldVal) =>
     $scope.items = _.filter $scope.bb.basket.items, (item) -> !item.is_coupon
@@ -62,7 +61,6 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
       return false
 
 
-  
   $scope.applyCoupon = (coupon) =>
     AlertService.clear()
     $scope.notLoaded $scope
@@ -79,6 +77,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
       $scope.setLoaded $scope
+
 
   $scope.applyDeal = (deal_code) =>
     AlertService.clear()
@@ -100,6 +99,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
 
+
   $scope.removeDeal = (deal_code) =>
     params = {bb: $scope.bb, deal_code_id: deal_code.id }
     BasketService.removeDeal($scope.bb.company, params).then (basket) ->
@@ -115,6 +115,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
   
+
   $scope.topUpWallet = () ->
     $scope.decideNextPage("basket_wallet")
 
