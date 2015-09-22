@@ -1,11 +1,11 @@
 angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
-    $templateCache, $q, halClient, BBModel, $sessionStorage, $window) ->
+    $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService) ->
 
   controller = ($scope) ->
 
     $scope.login_form = {}
 
-    redirectTo = (destination) ->
+    $scope.redirectTo = (destination) ->
       $window.location.href = destination
 
     $scope.submit = (form) ->
@@ -19,7 +19,7 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
             $sessionStorage.setItem("auth_token", auth_token)
             $scope.setClient($rootScope.member)
             if $scope.bb.destination
-              redirectTo($scope.bb.destination)
+              $scope.redirectTo($scope.bb.destination)
             else
               $scope.decideNextPage()
         else if login.$has('member')
@@ -31,7 +31,8 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
             $scope.setClient($rootScope.member)
             $scope.decideNextPage()
       , (err) ->
-        $log.error(err)
+        AlertService.danger({msg: "Sorry, your email or password was not recognised. Please try again."})
+
 
   redirectTo = (destination) ->
     $window.location.href = destination
@@ -43,7 +44,7 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
       $rootScope.member = new BBModel.Client session_member
       scope.setClient($rootScope.member)
       if scope.bb.destination
-        redirectTo(scope.bb.destination)
+        scope.redirectTo(scope.bb.destination)
       else
         scope.decideNextPage()
     else
