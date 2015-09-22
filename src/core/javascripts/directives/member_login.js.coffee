@@ -33,6 +33,9 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
       , (err) ->
         $log.error(err)
 
+  redirectTo = (destination) ->
+    $window.location.href = destination
+
   link = (scope, element, attrs) ->
     if $sessionStorage.getItem("login")
       session_member = $sessionStorage.getItem("login")
