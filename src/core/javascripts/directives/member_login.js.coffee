@@ -13,7 +13,7 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
       $scope.company.$post('login', {}, form).then (login) ->
         if login.$has('members')
           login.$get('members').then (members) ->
-            $rootScope.member = new BBModel.Client members[0]
+            $rootScope.member = new BBModel.Member.Member members[0]
             auth_token = $rootScope.member.getOption('auth_token')
             $sessionStorage.setItem("login", $rootScope.member.$toStore())
             $sessionStorage.setItem("auth_token", auth_token)
@@ -24,7 +24,7 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
               $scope.decideNextPage()
         else if login.$has('member')
           login.$get('member').then (member) ->
-            $rootScope.member = new BBModel.Client member
+            $rootScope.member = new BBModel.Member.Member member
             auth_token = $rootScope.member.getOption('auth_token')
             $sessionStorage.setItem("login", $rootScope.member.$toStore())
             $sessionStorage.setItem("auth_token", auth_token)
@@ -41,7 +41,7 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
     if $sessionStorage.getItem("login")
       session_member = $sessionStorage.getItem("login")
       session_member = halClient.createResource(session_member)
-      $rootScope.member = new BBModel.Client session_member
+      $rootScope.member = new BBModel.Member.Member session_member
       scope.setClient($rootScope.member)
       if scope.bb.destination
         scope.redirectTo(scope.bb.destination)
