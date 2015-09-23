@@ -251,3 +251,8 @@ angular.module('BB.Services').factory "BB.Service.bookings", ($q, BBModel) ->
       deferred.reject(err)
 
     deferred.promise
+
+
+angular.module('BB.Services').factory "BB.Service.wallet", ($q, BBModel) ->
+  unwrap: (resource) ->
+    return new BBModel.Member.Wallet(resource)
