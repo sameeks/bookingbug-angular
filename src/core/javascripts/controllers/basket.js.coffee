@@ -35,12 +35,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
 
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
-  $scope.items = $scope.bb.basket.items
   $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') && $scope.bb.company_settings.has_wallets && $scope.client.valid() && LoginService.isLoggedIn() && LoginService.member().id == $scope.client.id
-
-
-  $scope.$watch 'basket', (newVal, oldVal) =>
-    $scope.items = _.filter $scope.bb.basket.items, (item) -> !item.is_coupon
 
 
   $scope.addAnother = (route) =>
