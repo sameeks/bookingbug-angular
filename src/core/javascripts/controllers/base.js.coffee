@@ -894,6 +894,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         if res.$has('member')
           res.$get('member').then (member) =>
             member = LoginService.setLogin(member)
+            $rootScope.member = member
             $scope.setClient(member)
         if $scope.bb.clear_basket
           restore_basket_defer.resolve()
