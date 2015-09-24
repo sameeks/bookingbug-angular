@@ -1,6 +1,11 @@
 angular.module('BBMember').directive 'bbWallet', ($rootScope) ->
+  scope:
+    apiUrl: '@'
+    member: '='
+  controller: 'Wallet'
+  templateUrl: 'wallet.html'
+  link: (scope, element, attrs) ->
 
-  link = (scope, element, attrs) ->
     $rootScope.bb ||= {}
     $rootScope.bb.api_url ||= scope.apiUrl
     $rootScope.bb.api_url ||= "http://www.bookingbug.com"
@@ -31,11 +36,3 @@ angular.module('BBMember').directive 'bbWallet', ($rootScope) ->
     scope.$on 'wallet_payment:finished_loading', (event) ->
       scope.loading = false
 
-  {
-    link: link
-    controller: 'Wallet'
-    templateUrl: 'wallet.html'
-    scope:
-      apiUrl: '@'
-      member: '='
-  }
