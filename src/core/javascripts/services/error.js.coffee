@@ -98,7 +98,22 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'Sorry, your topup failed.'
+    },
+    {
+      key: 'UPDATE_SUCCESS',
+      type: 'success',
+      title: '',
+      persist: true,
+      msg: 'Updated'
+    },
+    {
+      key: 'UPDATE_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Update failed, please try again'
     }
+
   ]
 
   getError: (key) ->

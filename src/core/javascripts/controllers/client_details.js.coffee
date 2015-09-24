@@ -131,3 +131,16 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
 
   $scope.recalc_question = () ->
     QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
+
+
+  $scope.updateClient = () =>
+    $scope.notLoaded $scope
+    $scope.existing_member = false
+
+    ClientService.create_or_update($scope.bb.company, $scope.client).then (client) =>
+      $scope.setLoaded $scope
+      $scope.setClient(client)
+      AlertService.raise(ErrorService.getAlert('UPDATE_SUCCESS'))
+    , (err) ->
+      AlertService.raise(ErrorService.getAlert('UPDATE_FAILED'))
+      $scope.setLoaded $scope
