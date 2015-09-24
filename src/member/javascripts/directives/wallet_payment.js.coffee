@@ -40,23 +40,6 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
       scope.getWalletForMember(scope.member, {})
 
 
-    scope.add = (value) ->
-      value = value or scope.amount_increment
-      scope.amount += value
-
-
-    scope.subtract = (value) ->
-      value = value or scope.amount_increment
-      scope.add(-value)
-
-
-    scope.isSubtractValid = (value) ->
-      return false if !scope.wallet
-      value = value or scope.amount_increment
-      new_amount = scope.amount - value 
-      return new_amount >= scope.wallet.min_amount
-
-
     scope.$watch 'member', (member) ->
       if member?
         getWalletForMember()

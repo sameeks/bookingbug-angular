@@ -122,4 +122,18 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
     $scope.$emit("wallet_payment:error", $scope.error_message)
 
 
-  
+  $scope.add = (value) ->
+    value = value or $scope.amount_increment
+    $scope.amount += value
+
+
+  $scope.subtract = (value) ->
+    value = value or $scope.amount_increment
+    $scope.add(-value)
+
+
+  $scope.isSubtractValid = (value) ->
+    return false if !$scope.wallet
+    value = value or $scope.amount_increment
+    new_amount = $scope.amount - value 
+    return new_amount >= $scope.wallet.min_amount
