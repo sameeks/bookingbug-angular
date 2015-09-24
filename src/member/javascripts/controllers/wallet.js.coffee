@@ -2,7 +2,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
   
   $scope.company_id = $scope.member.company_id if $scope.member
   $scope.show_wallet_logs = false
-  $scope.loading = true
+  $scope.notLoaded $scope
   $scope.error_message = false
   $scope.payment_success = false
 
@@ -13,43 +13,47 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
     else
       $scope.show_wallet_logs = true
 
+
   $scope.showTopUpBox = () ->
     if $scope.amount
       true
     else 
       $scope.show_topup_box
 
+
   $scope.getWalletForMember = (member, params) ->
-    $scope.loading = true
+    $scope.notLoaded $scope
     WalletService.getWalletForMember(member, params).then (wallet) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $scope.wallet = wallet
       $scope.wallet
     , (err) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $log.error err.data
 
-  $scope.getWalletLogs = (wallet) ->
-    $scope.loading = true
+
+  getWalletLogs = (wallet) ->
+    $scope.notLoaded $scope
     WalletService.getWalletLogs($scope.wallet).then (logs) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $scope.logs = logs
     , (err) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $log.error err.data
 
+
   $scope.createWalletForMember = (member) ->
-    $scope.loading = true
+    $scope.notLoaded $scope
     WalletService.createWalletForMember(member).then (wallet) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $scope.wallet = wallet
     , (err) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $log.error err.data
 
   
   $scope.updateWallet = (member, amount) ->
-    $scope.loading = true
+    $scope.notLoaded $scope
     $scope.payment_success = false
     $scope.error_message = false
     if member and amount
@@ -59,51 +63,58 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       param.deposit = $scope.deposit if $scope.deposit
       params.basket_total_price = $scope.basket.total_price if $scope.basket
       WalletService.updateWalletForMember(member, params).then (wallet) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $scope.wallet = wallet
       , (err) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $log.error err.data
 
+
   $scope.activateWallet = (member) ->
-    $scope.loading = true
+    $scope.notLoaded $scope
     if member
       params = {status: 1}
       params.wallet_id = $scope.wallet.id if $scope.wallet
       WalletService.updateWalletForMember(member, params).then (wallet) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $scope.wallet = wallet
       , (err) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $log.error err.date
 
+
   $scope.deactivateWallet = (member) ->
-    $scope.loading = true
+    $scope.notLoaded $scope
     if member
       params = {status: 0}
       params.wallet_id = $scope.wallet.id if $scope.wallet
       WalletService.updateWalletForMember(member, params).then (wallet) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $scope.wallet = wallet
       , (err) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $log.error err.date
   
+
   $scope.callNotLoaded = () =>
-    $scope.loading = true
+    $scope.notLoaded $scope
     $scope.$emit('wallet_payment:loading')
 
+
   $scope.callSetLoaded = () =>
-    $scope.loading = false
+    $scope.setLoaded $scope
     $scope.$emit('wallet_payment:finished_loading')
+
 
   $scope.walletPaymentDone = () ->
     params = {no_cache: true}
     $scope.getWalletForMember($scope.member, params).then (wallet) ->
       $scope.$emit("wallet_payment:success", wallet)
 
+
   $scope.basketWalletPaymentDone = () ->
     $scope.decideNextPage('checkout')
+
 
   $scope.error = (message) ->
     $scope.error_message = "Payment Failure: " + message

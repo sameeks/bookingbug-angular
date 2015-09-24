@@ -91,6 +91,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'The requested time slot is not available. Please choose a different time.'
+    },
+    {
+      key: 'TOPUP_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, your topup failed.'
     }
   ]
 
