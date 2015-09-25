@@ -35,7 +35,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
 
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
-  $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') && $scope.bb.company_settings.has_wallets && $scope.client.valid() && LoginService.isLoggedIn() && LoginService.member().id == $scope.client.id
+  $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') and $scope.bb.company_settings.has_wallets and $scope.client.valid() and LoginService.isLoggedIn() and LoginService.member().id == $scope.client.id and $scope.client.has_active_wallet
 
 
   $scope.addAnother = (route) =>
@@ -68,7 +68,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
       $scope.setBasket(basket)
       $scope.setLoaded $scope
     , (err) ->
-      if err && err.data && err.data.error
+      if err and err.data and err.data.error
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
       $scope.setLoaded $scope
@@ -90,7 +90,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
       $scope.items = $scope.bb.basket.items
       $scope.deal_code = null
     , (err) ->
-      if err && err.data && err.data.error
+      if err and err.data and err.data.error
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
 
@@ -106,7 +106,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
       $scope.setBasket(basket)
       $scope.items = $scope.bb.basket.items
     , (err) ->
-      if err && err.data && err.data.error
+      if err and err.data and err.data.error
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
   

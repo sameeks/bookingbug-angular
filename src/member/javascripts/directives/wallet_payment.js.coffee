@@ -40,23 +40,6 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
       scope.getWalletForMember(scope.member, {})
 
 
-    scope.add = (value) ->
-      value = value or scope.amount_increment
-      scope.amount += value
-
-
-    scope.subtract = (value) ->
-      value = value or scope.amount_increment
-      scope.add(-value)
-
-
-    scope.isSubtractValid = (value) ->
-      return false if !scope.wallet
-      value = value or scope.amount_increment
-      new_amount = scope.amount - value 
-      return new_amount >= scope.wallet.min_amount
-
-
     scope.$watch 'member', (member) ->
       if member?
         getWalletForMember()
@@ -68,7 +51,9 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
       if wallet
         scope.amount = wallet.min_amount if wallet.min_amount 
         if wallet.$has('new_payment')
+          scope.callNotLoaded()
           scope.wallet_payment_url = $sce.trustAsResourceUrl(scope.wallet.$href("new_payment"))
+          scope.show_payment_iframe = true
           element.find('iframe').bind 'load', (event) =>
             url = scope.wallet_payment_url if scope.wallet_payment_url
             origin = getHost(url)
@@ -90,11 +75,13 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
             when "error"
               scope.callSetLoaded()
               scope.error(data.message)
+              scope.show_payment_iframe = false
               AlertService.warning(ErrorService.getAlert('TOPUP_FAILED'))
             when "wallet_payment_complete"
               scope.walletPaymentDone()
             when 'basket_wallet_payment_complete'
-              # TODO how does it know to do this?????
               scope.callSetLoaded()
               scope.basketWalletPaymentDone()
     , false
+
+

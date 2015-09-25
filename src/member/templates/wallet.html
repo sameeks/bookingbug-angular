@@ -48,9 +48,9 @@
         <div ng-show="showTopUpBox()" class="form-group">
           <label for="amount">Amount:</label>
           <div class="input-group">
-            <input type="number" class="form-control input-sm" id="amount" name="amount" ng-model="amount" placeholder="Enter Top Up Amount">
+            <input type="number" class="form-control input-sm" id="amount" name="amount" ng-model="amount" placeholder="Enter Top Up Amount" bb-currency-field>
             <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!amount && ((amount * 100) < wallet.min_amount)" ng-click="updateWallet(member, amount)">Top Up Wallet</button>
+              <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!amount || (amount < wallet.min_amount)" ng-click="updateWallet(member, amount)">Top Up Wallet</button>
             </span>
           </div>
           <br>
