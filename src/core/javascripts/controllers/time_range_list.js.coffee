@@ -79,7 +79,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       setTimeRange(date)
     # selected day has been provided, use this to set the time
     else if $scope.selected_day
-      $scope.selected_day = $scope.current_item.requested_date if $scope.current_item.requested_date
       $scope.original_start_date = $scope.original_start_date or moment($scope.selected_day)
       setTimeRange($scope.selected_day)
     # set the time range as today, showing the current week
