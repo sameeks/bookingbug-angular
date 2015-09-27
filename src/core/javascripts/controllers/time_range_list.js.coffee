@@ -23,7 +23,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     'original_start_date'
     'start_at_week_start'
   ]
-
   # check to see if the user has changed the postcode and remove data if they have
   if currentPostcode isnt $scope.postcode
     $scope.selected_slot = null
@@ -75,10 +74,12 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       else
         setTimeRange($scope.last_selected_date)
     # the current item already has a date
-    else if $scope.bb.current_item.date
-      setTimeRange($scope.bb.current_item.date.date)
+    else if $scope.bb.current_item.date || $scope.bb.current_item.requested_date
+      date = if $scope.bb.current_item.date then $scope.bb.current_item.date.date else $scope.bb.current_item.requested_date
+      setTimeRange(date)
     # selected day has been provided, use this to set the time
     else if $scope.selected_day
+      $scope.selected_day = $scope.current_item.requested_date if $scope.current_item.requested_date
       $scope.original_start_date = $scope.original_start_date or moment($scope.selected_day)
       setTimeRange($scope.selected_day)
     # set the time range as today, showing the current week
@@ -92,6 +93,8 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
 
   setTimeRange = (selected_date, start_date) ->
+    console.log selected_date
+    console.log start_date
     if start_date
       $scope.start_date = start_date
     else if $scope.day_of_week
@@ -114,6 +117,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
   # deprecated, please use bbSelectedDay to initialise the selected_day
   $scope.init = (options = {}) ->
+    console.log "time rannge init?"
     if options.selected_day?
       unless options.selected_day._isAMomementObject
         $scope.selected_day = moment(options.selected_day)
@@ -257,7 +261,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.loadData = ->
    
     current_item = $scope.bb.current_item
-
     # has a service been selected?
     if current_item.service and !$scope.options.ignore_min_advance_datetime
 
