@@ -445,6 +445,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     $q.all(setup_promises).then () ->
       $q.all(setup_promises2).then () ->
+        console.log($scope.bb)
         if !$scope.bb.basket
           $scope.bb.basket ||= new BBModel.Basket(null, $scope.bb)
         if !$scope.client
@@ -454,6 +455,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         def_clear = $q.defer()
         clear_prom = def_clear.promise
         if !$scope.bb.current_item
+          console.log("clearBasketItem")
           clear_prom = $scope.clearBasketItem()
         else
           def_clear.resolve()
