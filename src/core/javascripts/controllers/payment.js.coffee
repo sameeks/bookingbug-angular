@@ -82,6 +82,7 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
 
   $scope.paymentDone = () ->
     $scope.bb.payment_status = "complete"
+    $scope.$emit('payment:complete')
     $scope.decideNextPage()
 
   $scope.error = (message) ->

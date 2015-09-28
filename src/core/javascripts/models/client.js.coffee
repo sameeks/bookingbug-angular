@@ -136,7 +136,8 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
       x.parent_client_id = @parent_client_id
       x.password = @password
       x.notifications = @notifications
-      x.membership_level_id = @member_level_id if @member_level_id
+      x.member_level_id = @member_level_id if @member_level_id
+      x.send_welcome_email = @send_welcome_email if @send_welcome_email
 
       if @mobile
         @remove_prefix()
