@@ -8,6 +8,7 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
     getPostData: () ->
       data = {}
       data.name = @name
+      data.repeat_rule = @repeat_rule
       data.start_time = @start_time
       data.end_time = @end_time
       data.resource_ids = []

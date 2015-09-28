@@ -92,7 +92,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           item.answer = search.answer
 
     $scope.item_details = details
-
+  $scope.$on 'currentItemUpdate', (service) ->
+    $scope.loadItem($scope.bb.current_item)
 
   $scope.recalc_price = ->
     qprice = $scope.item_details.questionPrice($scope.item.getQty())
