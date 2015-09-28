@@ -18,10 +18,10 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
             $sessionStorage.setItem("login", $rootScope.member.$toStore())
             $sessionStorage.setItem("auth_token", auth_token)
             $scope.setClient($rootScope.member)
-            # if $scope.bb.destination
-            #   $scope.redirectTo($scope.bb.destination)
-            # else
-            #   $scope.decideNextPage()
+            if $scope.bb.destination
+              $scope.redirectTo($scope.bb.destination)
+            else
+              $scope.decideNextPage()
         else if login.$has('member')
           login.$get('member').then (member) ->
             $rootScope.member = new BBModel.Member.Member member

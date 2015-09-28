@@ -144,7 +144,6 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
             @price_range.to = @price
 
           @ticket_prices = _.indexBy(tickets, 'name')
-          console.log(@ticket_prices) if @id == 135871
 
           def.resolve()
       def.promise
