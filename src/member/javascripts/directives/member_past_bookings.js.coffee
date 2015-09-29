@@ -8,6 +8,9 @@ angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope) ->
     getBookings = () ->
       scope.getPastBookings()
 
+    scope.$watch 'member', () ->
+      scope.getBookings() if !scope.past_bookings
+
     getBookings()
 
   {

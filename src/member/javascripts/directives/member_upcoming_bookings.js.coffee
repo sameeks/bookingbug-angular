@@ -12,6 +12,9 @@ angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope) ->
       scope.flushBookings()
       getBookings()
 
+    scope.$watch 'member', () ->
+      scope.getBookings() if !scope.upcoming_bookings
+
     getBookings()
 
   {
