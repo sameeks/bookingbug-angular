@@ -76,7 +76,6 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
               scope.callSetLoaded()
               scope.error(data.message)
               scope.show_payment_iframe = false
-              AlertService.warning(ErrorService.getAlert('TOPUP_FAILED'))
             when "wallet_payment_complete"
               scope.walletPaymentDone()
             when 'basket_wallet_payment_complete'
