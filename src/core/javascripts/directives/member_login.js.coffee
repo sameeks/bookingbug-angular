@@ -1,12 +1,40 @@
-angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
-    $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService) ->
-
-  controller = ($scope) ->
+angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, ErrorService) ->
+  restrict: 'A'
+  template: """
+<form name="login_form" ng-submit="submit(login_form)" sf-schema="schema"
+sf-form="form" sf-model="login_form" sf-options="{feedback: false}"
+ng-if="schema && form"></form>
+"""
+  controller: ($scope, $element, $attrs) ->
 
     $scope.login_form = {}
 
+    $rootScope.connection_started.then () ->
+
+      if $sessionStorage.getItem("login")
+        session_member = $sessionStorage.getItem("login")
+        session_member = halClient.createResource(session_member)
+        $rootScope.member = new BBModel.Member.Member session_member
+        $scope.setClient($rootScope.member)
+        if $scope.bb.destination
+          $scope.redirectTo($scope.bb.destination)
+        else
+          $scope.setLoaded $scope
+          $scope.decideNextPage()
+      else
+        halClient.$get("#{$scope.bb.api_url}/api/v1").then (root) ->
+          root.$get("new_login").then (new_login) ->
+            $scope.form = new_login.form
+            $scope.schema = new_login.schema
+          , (err) ->
+            console.log 'err ', err
+        , (err) ->
+          console.log 'err ', err
+
+
     $scope.redirectTo = (destination) ->
       $window.location.href = destination
+
 
     $scope.submit = (form) ->
       form['role'] = 'member'
@@ -31,41 +59,4 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope,
             $scope.setClient($rootScope.member)
             $scope.decideNextPage()
       , (err) ->
-        AlertService.danger({msg: "Sorry, your email or password was not recognised. Please try again."})
-
-
-  redirectTo = (destination) ->
-    $window.location.href = destination
-
-  link = (scope, element, attrs) ->
-    if $sessionStorage.getItem("login")
-      session_member = $sessionStorage.getItem("login")
-      session_member = halClient.createResource(session_member)
-      $rootScope.member = new BBModel.Member.Member session_member
-      scope.setClient($rootScope.member)
-      if scope.bb.destination
-        scope.redirectTo(scope.bb.destination)
-      else
-        scope.decideNextPage()
-    else
-      halClient.$get("#{scope.bb.api_url}/api/v1").then (root) ->
-        root.$get("new_login").then (new_login) ->
-          scope.form = new_login.form
-          scope.schema = new_login.schema
-        , (err) ->
-          console.log 'err ', err
-      , (err) ->
-        console.log 'err ', err
-
-  {
-    restrict: 'A'
-    link: link
-    template: """
-<form name="login_form" ng-submit="submit(login_form)" sf-schema="schema"
-  sf-form="form" sf-model="login_form" sf-options="{feedback: false}"
-  ng-if="schema && form"></form>
-"""
-    controller: controller
-  }
-
-
+        AlertService.raise(ErrorService.getAlert('LOGIN_FAILED'))

@@ -97,7 +97,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'Sorry, your topup failed.'
+      msg: 'Sorry, your topup failed. Please try again.'
     },
     {
       key: 'UPDATE_SUCCESS',
@@ -111,7 +111,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'Update failed, please try again'
+      msg: 'Update failed. Please try again'
     },
     {
       key: 'ALREADY_REGISTERED',
@@ -119,7 +119,14 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'You have already registered with this email address. Please login or reset your password.'
-    }    
+    },
+    {
+      key: 'LOGIN_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, your email or password was not recognised. Please try again.'
+    }   
   ]
 
   getError: (key) ->
