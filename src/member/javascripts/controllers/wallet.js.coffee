@@ -29,7 +29,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       $scope.wallet
     , (err) ->
       $scope.setLoaded $scope
-      $log.error err.data
+      $log.error err
 
 
   $scope.getWalletLogs = (wallet) ->
