@@ -27,6 +27,7 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
   linker = (scope, element, attributes) ->
 
     scope.payment_options = scope.$eval(attributes.bbPayment) or {}
+    scope.route_to_next_page = if !scope.payment_options.route_to_next_page then false else true
 
     element.find('iframe').bind 'load', (event) =>
       url = scope.bb.total.$href('new_payment') if scope.bb && scope.bb.total && scope.bb.total.$href('new_payment')
@@ -83,7 +84,7 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   $scope.paymentDone = () ->
     $scope.bb.payment_status = "complete"
     $scope.$emit('payment:complete')
-    $scope.decideNextPage()
+    $scope.decideNextPage() if scope.route_to_next_page
 
   $scope.error = (message) ->
     $log.warn("Payment Failure: " + message)
