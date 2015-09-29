@@ -8,7 +8,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
   link : (scope, element, attrs) ->
     if attrs.bbItemDetails
       item = scope.$eval(attrs.bbItemDetails)
-      $scope.item_from_param = item
+      scope.item_from_param = item
       scope.loadItem(item)
     return
 
