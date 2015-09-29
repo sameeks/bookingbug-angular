@@ -112,8 +112,14 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'Update failed, please try again'
-    }
-
+    },
+    {
+      key: 'ALREADY_REGISTERED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'You have already registered with this email address. Please login or reset your password.'
+    }    
   ]
 
   getError: (key) ->
