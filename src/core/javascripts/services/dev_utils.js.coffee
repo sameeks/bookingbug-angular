@@ -2,7 +2,7 @@ angular.module('BB').config ($logProvider, $injector) ->
     $logProvider.debugEnabled true
 
 angular.module('BB.Services').factory "DebugUtilsService",
-($rootScope, $location, $window, $log, BBModel) ->
+($rootScope, $location, $window, $log, BBModel, $bbug) ->
   # logs a scopes key names and values
   logObjectKeys = (obj, showValue) ->
     for key, value of obj
@@ -45,7 +45,7 @@ angular.module('BB.Services').factory "DebugUtilsService",
 
 
         # display the element, scope and controller for the selected element
-        $($window).on 'dblclick', (e)->
+        $bbug($window).on 'dblclick', (e)->
           scope = angular.element(e.target).scope();
           controller = scope.hasOwnProperty('controller')
           pscope = scope
