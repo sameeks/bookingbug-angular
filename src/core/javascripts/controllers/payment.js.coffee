@@ -27,7 +27,6 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
   linker = (scope, element, attributes) ->
 
     scope.payment_options = scope.$eval(attributes.bbPayment) or {}
-    debugger
     scope.route_to_next_page = if scope.payment_options.route_to_next_page? then false else true
 
     element.find('iframe').bind 'load', (event) =>
