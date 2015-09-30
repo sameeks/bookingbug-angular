@@ -87,8 +87,9 @@ angular.module('BB.Models').factory "BasketItemModel",
         if data.$has('event_chain')
           chain = data.$get('event_chain')
           @promises.push(chain)
-          chain.then (serv) =>
-            @setEventChain(new BBModel.EventChain(serv), data.questions)
+          if !data.$has('event') # onlt set the event chain if we don't have the full event details - which will also set the event chain
+            chain.then (serv) =>
+              @setEventChain(new BBModel.EventChain(serv), data.questions)
 
 
         if data.$has('resource')
@@ -320,7 +321,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       else
         @has_questions = false
 
-    setEvent: (event) ->
+    setEvent: (event, default_questions = null) ->
 
       @event.unselect() if @event
       @event = event
@@ -330,15 +331,15 @@ angular.module('BB.Models').factory "BasketItemModel",
       @setTime(event.time)
       @setDuration(event.duration)
       @book_link = event if event.$has('book')
+      @num_book = event.qty if event.qty
       prom = @event.getChain()
       @promises.push(prom)
       prom.then (chain) =>
-        @setEventChain(chain)
+        @setEventChain(chain, default_questions)
       prom = @event.getGroup()
       @promises.push(prom)
       prom.then (group) =>
         @setEventGroup(group)
-      @num_book = event.qty
       if @event.getSpacesLeft() <= 0 && !@company.settings
         @status = 8 if @company.getSettings().has_waitlists
       else if @event.getSpacesLeft() <= 0 && @company.settings && @company.settings.has_waitlists 

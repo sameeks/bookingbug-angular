@@ -1,6 +1,8 @@
 angular.module("BB.Services").factory "WalletService", ($q, BBModel) ->
 
   getWalletForMember: (member, params) ->
+    params ||= {}
+    params["no_cache"] = true
     deferred = $q.defer()
     if !member.$has("wallet")
       deferred.reject("Wallets are not turned on.")
