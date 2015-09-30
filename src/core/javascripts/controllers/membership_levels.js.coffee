@@ -1,4 +1,4 @@
-angular.module('BB.Directives').directive 'bbMembershipLevels', ($rootScope) ->
+angular.module('BB.Directives').directive 'bbMembershipLevels', ($rootScope, MembershipLevelsService) ->
   restrict: 'AE'
   replace: true
   scope : true
