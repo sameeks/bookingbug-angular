@@ -1,5 +1,6 @@
 
 angular.module('BB.Services').factory "ResourceService", ($q, BBModel) ->
+
   query: (company) ->
     deferred = $q.defer()
     if !company.$has('resources')

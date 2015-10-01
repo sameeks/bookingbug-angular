@@ -256,3 +256,25 @@ angular.module('BB.Services').factory "BB.Service.bookings", ($q, BBModel) ->
 angular.module('BB.Services').factory "BB.Service.wallet", ($q, BBModel) ->
   unwrap: (resource) ->
     return new BBModel.Member.Wallet(resource)
+
+
+angular.module('BB.Services').factory "BB.Service.product", ($q, BBModel) ->
+  unwrap: (resource) ->
+    return new BBModel.Product(resource)
+
+
+angular.module('BB.Services').factory "BB.Service.products", ($q, BBModel) ->
+  promise: true
+  unwrap: (resource) ->
+    deferred = $q.defer()
+    resource.$get('products').then (items) =>
+      models = []
+      for i in items
+        cat = new BBModel.Product(i)
+        cat.order ||= _i
+        models.push(cat)
+      deferred.resolve(models)
+    , (err) =>
+      deferred.reject(err)
+
+    deferred.promise
