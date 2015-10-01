@@ -66,6 +66,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
             for c in [1..ticket.qty]
               item = new BBModel.BasketItem()
               angular.extend(item, base_item)
+              delete item.id
               item.tickets = angular.copy(ticket)
               item.tickets.qty = 1
               $scope.bb.stackItem(item)
@@ -73,8 +74,10 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
             item = new BBModel.BasketItem()
             angular.extend(item, base_item)
             item.tickets = angular.copy(ticket)
+            delete item.id
             item.tickets.qty = ticket.qty
             $scope.bb.stackItem(item)
+
     # ok so we have them as stacked items
     # now push the stacked items to a basket
     if $scope.bb.stacked_items.length == 0
@@ -82,6 +85,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       return
 
     $scope.bb.pushStackToBasket()
+
     $scope.updateBasket().then () =>
       # basket has been saved
       $scope.setLoaded $scope
