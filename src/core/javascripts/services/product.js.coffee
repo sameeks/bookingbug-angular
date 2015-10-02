@@ -9,3 +9,20 @@ angular.module('BB.Services').factory "ProductService", ($q, $window, halClient,
     , (err) =>
       deferred.reject(err)
     deferred.promise
+
+
+  query: (company) ->
+    deferred = $q.defer()
+    if !company.$has('products')
+      deferred.reject("No products found")
+    else
+      company.$get('products').then (resource) =>
+        resource.$get('products').then (items) =>
+          resources = []
+          for i in items
+            resources.push(new BBModel.Product(i))
+          deferred.resolve(resources)
+      , (err) =>
+        deferred.reject(err)
+
+    deferred.promise

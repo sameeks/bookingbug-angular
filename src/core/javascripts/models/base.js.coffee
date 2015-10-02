@@ -14,7 +14,7 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
     'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
     'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
-    'PrePaidBooking', 'MembershipLevel']
+    'PrePaidBooking', 'MembershipLevel', 'Product']
 
   funcs = {}
   for model in models
