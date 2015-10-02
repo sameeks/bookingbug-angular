@@ -1,6 +1,10 @@
-
-'use strict';
-
+###**
+* @ngdoc object
+* @name BB.Models:EventModel
+*
+* @description
+* This is the event object returned by the API
+####**
 angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService) ->
 
 
