@@ -129,6 +129,10 @@ gulp.task('ngdocs', [], function () {
     html5Mode: false,
     editExample: true,
     sourceLink: true,
+    loadDefaults: {
+      angular: false,
+      angularAnimate: false
+    },
     title: "BookingBug SDK Docs",
     scripts: [
       'examples/booking-widget.js'
