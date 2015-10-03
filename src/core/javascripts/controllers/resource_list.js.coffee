@@ -1,6 +1,30 @@
 'use strict';
 
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbResources
+* @restrict AE
+* @scope true
+*
+* @description
+* Loads a list of resources for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @param {hash}  bbResources   A hash of options
+* @property {array} items An array of all resources
+* @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a services or person
+* @property {array} bookable_resources An array of Resources - used if the current_item has already selected a services or person
+* @property {resource} resource The currectly selected resource
+####
+
+
+
 angular.module('BB.Directives').directive 'bbResources', () ->
   restrict: 'AE'
   replace: true

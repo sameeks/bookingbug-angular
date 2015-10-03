@@ -1,5 +1,48 @@
 'use strict';
 
+
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbServices
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of services for the currently in scroe company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @param {hash}  bbServices   A hash of options
+* @property {array} items An array of all services
+* @property {array} filtered_items A filtered list according to a filter setting
+* @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a resource or person
+* @property {array} bookable_services An array of Services - used if the current_item has already selected a resource or person
+* @property {service} service The currectly selected service
+* @property {hash} filters A hash of filters
+* @example
+*  <example module="BB"> 
+*    <file name="index.html">
+*   <div bb-api-url='https://uk.bookingbug.com'>
+*   <div  bb-widget='{company_id:21}'>
+*     <div bb-services>
+*        <ul>
+*          <li ng-repeat='service in items'> {{service.name}}</li>
+*        </ul>
+*     </div>
+*     </div>
+*     </div>
+*   </file> 
+*  </example>
+* 
+####
+
+
 angular.module('BB.Directives').directive 'bbServices', () ->
   restrict: 'AE'
   replace: true
@@ -139,6 +182,17 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
           if item.id is $scope.service.id
             $scope.service = item
 
+
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbServices
+  * @description
+  * Select an item into the current booking journey and route on to the next page dpending on the current page control
+  *
+  * @param {object} item The Service or BookableItem to select
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectItem = (item, route) =>
     if $scope.routed
       return true
@@ -163,7 +217,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         $scope.booking_item.setService($scope.service)
         $scope.broadcastItemUpdate()
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbServices
+  * @description
+  * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
+  ###
   $scope.setReady = () =>
     if $scope.service
       $scope.booking_item.setService($scope.service)
@@ -211,6 +271,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       (!$scope.filters.custom_array_value or $scope.custom_array($scope.filters.custom_array_value)) and
       (!service.price or (service.price >= $scope.filters.price.min * 100 and service.price <= $scope.filters.price.max * 100 ))
 
+  ###**
+  * @ngdoc method
+  * @name resetFilters
+  * @methodOf BB.Directives:bbServices
+  * @description
+  * Clear the filters
+  ###
   $scope.resetFilters = () ->
     if $scope.options.clear_results
       $scope.show_custom_array = false

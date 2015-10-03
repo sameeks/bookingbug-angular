@@ -1,5 +1,28 @@
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:Company
+*
+* @description
+* Representation of an Company Object
+*
+* @constructor
+* @param {HALobject=} data A HAL object to initialise the company from
+* 
+* @property {string} name The company name
+* @property {string} description The company description
+* @property {string} country_code the Country code for thie company
+* @property {string} currency_code A CCY for this company
+* @property {string} reference A custom external reference for the company
+* @property {integer} id The company ID
+* @property {boolean} live If this company is set live
+* @property {array} companies An array of child companies if this is a parent company
+* @property {string} timezone The timezone for the business
+####
+
+
 # helpful functions about a company
 angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, halClient, AppConfig, $sessionStorage) ->
 
@@ -24,7 +47,15 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
             all_companies.push(c)
         @companies = all_companies
 
-
+    ###**
+    * @ngdoc method
+    * @name getCompanyByRef
+    * @methodOf BB.Models:Company
+    * @description
+    * Find a child company by reference
+    *
+    * @returns {promise} A promise for the child company
+    ###
     getCompanyByRef: (ref) ->
       defer = $q.defer()
       @$get('companies').then (companies) ->
@@ -38,6 +69,15 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
         defer.reject(err)
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name findChildCompany
+    * @methodOf BB.Models:Company
+    * @description
+    * Find a child company by id
+    *
+    * @returns {object} The child company 
+    ###
     findChildCompany: (id) ->
       return null if !@companies
       for c in @companies

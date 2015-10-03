@@ -127,7 +127,13 @@ gulp.task('cleandocs', function(cb) {
 gulp.task('ngdocs', [], function () {
   var options = {
     html5Mode: false,
-    title: "BookingBug API Docs"
+    editExample: true,
+    sourceLink: true,
+    title: "BookingBug SDK Docs",
+    scripts: [
+      'examples/booking-widget.js'
+    ]
+
   }
   return gulp.src('src/*/javascripts/**')
     .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
