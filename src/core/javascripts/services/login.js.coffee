@@ -54,7 +54,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
 
       
 
-  # check if we're loggeg in as a member - but not an admin
+  # check if we're logged in as a member - but not an admin
   isLoggedIn: ->
     @checkLogin()
     if $rootScope.member && (!$rootScope.user or $rootScope.user is undefined)
