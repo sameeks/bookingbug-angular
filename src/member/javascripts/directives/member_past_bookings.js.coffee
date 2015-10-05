@@ -1,6 +1,11 @@
 angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope) ->
+  templateUrl: 'member_past_bookings.html'
+  scope:
+    apiUrl: '@'
+    member: '='
+  controller: 'MemberBookings'
+  link: (scope, element, attrs) ->
 
-  link = (scope, element, attrs) ->
     $rootScope.bb ||= {}
     $rootScope.bb.api_url ||= scope.apiUrl
     $rootScope.bb.api_url ||= "http://www.bookingbug.com"
@@ -8,13 +13,7 @@ angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope) ->
     getBookings = () ->
       scope.getPastBookings()
 
-    getBookings()
+    scope.$watch 'member', () ->
+      scope.getBookings() if !scope.past_bookings
 
-  {
-    link: link
-    controller: 'MemberBookings'
-    templateUrl: 'member_past_bookings.html'
-    scope:
-      apiUrl: '@'
-      member: '='
-  }
+    getBookings()

@@ -1,13 +1,11 @@
 'use strict';
 
-
-# TODO: Try and get all the baset logic into a service. The basket list
-# doesn't look like it's used anywhere.
 angular.module('BB.Directives').directive 'bbMiniBasket', () ->
   restrict: 'AE'
   replace: true
   scope : true
   controller : 'MiniBasket'
+
 
 
 angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, BasketService, $q) ->
@@ -22,8 +20,6 @@ angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, 
       single
     else
       plural.replace("$0", $scope.bb.basket.length())
-
-
 
 
 
@@ -62,7 +58,6 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
       return false
 
 
-  
   $scope.applyCoupon = (coupon) =>
     AlertService.clear()
     $scope.notLoaded $scope
@@ -75,10 +70,11 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
       $scope.setBasket(basket)
       $scope.setLoaded $scope
     , (err) ->
-      if err && err.data && err.data.error
+      if err and err.data and err.data.error
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
       $scope.setLoaded $scope
+
 
   $scope.applyDeal = (deal_code) =>
     AlertService.clear()
@@ -96,9 +92,10 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
       $scope.items = $scope.bb.basket.items
       $scope.deal_code = null
     , (err) ->
-      if err && err.data && err.data.error
+      if err and err.data and err.data.error
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
+
 
   $scope.removeDeal = (deal_code) =>
     params = {bb: $scope.bb, deal_code_id: deal_code.id }
@@ -111,10 +108,11 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
       $scope.setBasket(basket)
       $scope.items = $scope.bb.basket.items
     , (err) ->
-      if err && err.data && err.data.error
+      if err and err.data and err.data.error
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
   
+
   $scope.topUpWallet = () ->
     $scope.decideNextPage("basket_wallet")
 

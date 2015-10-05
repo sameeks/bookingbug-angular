@@ -1,4 +1,5 @@
 angular.module('BB.Services').factory "EventService", ($q, BBModel) ->
+
   query: (company, params) ->
     deferred = $q.defer()
     if !company.$has('events')
@@ -16,7 +17,6 @@ angular.module('BB.Services').factory "EventService", ($q, BBModel) ->
       , (err) =>
         deferred.reject(err)
     deferred.promise
-
 
   summary: (company, params) ->
     deferred = $q.defer()

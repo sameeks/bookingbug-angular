@@ -66,6 +66,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
         AlertService.danger({msg: "You have already registered with this email address. Please login or reset your password using the Forgot Password link below."})
       $scope.setLoaded $scope
 
+
   $scope.clientLogin = () =>
     $scope.login_error = false
     if $scope.login
@@ -77,6 +78,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
         $scope.login_error = true
         $scope.setLoaded $scope
         AlertService.danger({msg: "Sorry, your email or password was not recognised. Please try again."})
+
 
   $scope.setReady = () =>
     $scope.client.setClientDetails($scope.client_details)
@@ -130,3 +132,5 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
 
   $scope.recalc_question = () ->
     QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
+
+

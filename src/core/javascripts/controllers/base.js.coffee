@@ -68,6 +68,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
         AppConfig['partial_url'] = init_params.partial_url
       else
         AppConfig['partial_url'] = scope.bb.partial_url
+
     transclude scope, (clone) =>
       scope.has_content = clone.length > 0
       if !scope.has_content
@@ -887,10 +888,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       status.then (res) =>
         if res.$has('client')
           res.$get('client').then (client) =>
-            $scope.client = new BBModel.Client(client)
+            $scope.client = new BBModel.Client(client) if !$scope.client or ($scope.client and !$scope.client.valid())
         if res.$has('member')
           res.$get('member').then (member) =>
-            LoginService.setLogin(member)
+            member = LoginService.setLogin(member)
+            $rootScope.member = member
+            $scope.setClient(member)
         if $scope.bb.clear_basket
           restore_basket_defer.resolve()
         else
@@ -904,6 +907,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
                   items = (new BBModel.BasketItem(i) for i in items)
                   basket.addItem(i) for i in items
                   $scope.setBasket(basket)
+
                   promises = [].concat.apply([], (i.promises for i in items))
                   $q.all(promises).then () ->
                     if basket.items.length > 0

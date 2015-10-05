@@ -32,4 +32,7 @@ angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope,
 <form sf-schema="schema" sf-form="form" sf-model="member"
   ng-submit="submit(member)" ng-hide="loading"></form>
     """
+    scope:
+      apiUrl: '@'
+      member: '='
   }
