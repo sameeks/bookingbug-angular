@@ -91,7 +91,42 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'The requested time slot is not available. Please choose a different time.'
-    }
+    },
+    {
+      key: 'TOPUP_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, your topup failed. Please try again.'
+    },
+    {
+      key: 'UPDATE_SUCCESS',
+      type: 'success',
+      title: '',
+      persist: true,
+      msg: 'Updated'
+    },
+    {
+      key: 'UPDATE_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Update failed. Please try again'
+    },
+    {
+      key: 'ALREADY_REGISTERED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'You have already registered with this email address. Please login or reset your password.'
+    },
+    {
+      key: 'LOGIN_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, your email or password was not recognised. Please try again.'
+    }   
   ]
 
   getError: (key) ->
