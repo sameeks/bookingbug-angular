@@ -75,8 +75,9 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       else
         setTimeRange($scope.last_selected_date)
     # the current item already has a date
-    else if $scope.bb.current_item.date
-      setTimeRange($scope.bb.current_item.date.date)
+    else if $scope.bb.current_item.date || $scope.bb.current_item.requested_date
+      date = if $scope.bb.current_item.date then $scope.bb.current_item.date.date else $scope.bb.current_item.requested_date
+      setTimeRange(date)
     # selected day has been provided, use this to set the time
     else if $scope.selected_day
       $scope.original_start_date = $scope.original_start_date or moment($scope.selected_day)

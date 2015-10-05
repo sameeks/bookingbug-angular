@@ -1,9 +1,36 @@
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:Address
+*
+* @description
+* Representation of an Address Object
+*
+* @property {string} address1 First line of the address 
+* @property {string} address2 Second line of the address 
+* @property {string} address3 Third line of the address 
+* @property {string} address4 Fourth line of the address 
+* @property {string} address5 Fifth line of the address 
+* @property {string} postcode The Postcode/Zipcode
+* @property {string} country The country
+####
+
+
 angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel) ->
 
   class Address extends BaseModel
 
+    ###**
+    * @ngdoc method
+    * @name addressSingleLine
+    * @methodOf BB.Models:Address
+    * @description
+    * Get a the address as a single comma sepeated line
+    *
+    * @returns {string} The returned address
+    ###
     addressSingleLine: ->
       str = ""
       str += @address1 if @address1
@@ -19,9 +46,27 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel) ->
       str += @postcode if @postcode
       str
 
+    ###**
+    * @ngdoc method
+    * @name hasAddress
+    * @methodOf BB.Models:Address
+    * @description
+    * Checks if this is considered a valid address
+    *
+    * @returns {boolean} If this is a valid address
+    ###
     hasAddress: ->
       return @address1 || @address2 || @postcode
 
+    ###**
+    * @ngdoc method
+    * @name addressCsvLine
+    * @methodOf BB.Models:Address
+    * @description
+    * Get all address fields as a single comma sepeated line - suitable for csv export
+    *
+    * @returns {string} The returned address
+    ###
     addressCsvLine: ->
       str = ""
       str += @address1 if @address1
@@ -39,6 +84,15 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel) ->
       str += @country if @country
       return str
 
+    ###**
+    * @ngdoc method
+    * @name addressMultiLine
+    * @methodOf BB.Models:Address
+    * @description
+    * Get a the address as multiple lines with line feeds
+    *
+    * @returns {string} The returned address
+    ###
     addressMultiLine: ->
       str = ""
       str += @address1 if @address1

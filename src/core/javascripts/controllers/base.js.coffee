@@ -96,6 +96,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
         $compile(element.contents())(scope)
 
 
+
 # a controller used for the main page contents - just in case we need one here
 angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
   $scope.controller = "public.controllers.bbContentController"
@@ -941,6 +942,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $rootScope.bb_currency = $scope.bb.company_settings.currency
         $scope.bb.currency = $scope.bb.company_settings.currency
         $scope.bb.has_prices = $scope.bb.company_settings.has_prices
+
         if !$scope.bb.basket || ($scope.bb.basket.company_id != $scope.bb.company_id && !keep_basket)
           restoreBasket().then () ->
             defer.resolve()
