@@ -302,7 +302,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.extra_setup          = prms.extra_setup  
       $scope.bb.starting_step_number = parseInt(prms.extra_setup.step) if prms.extra_setup.step
       $scope.bb.return_url           = prms.extra_setup.return_url if prms.extra_setup.return_url
-      $scope.bb.destination          = prms.extra_setup.destination
+      $scope.bb.destination          = prms.extra_setup.destination if prms.extra_setup.destination
 
     if prms.template
       $scope.bb.template = prms.template

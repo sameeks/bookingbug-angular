@@ -37,4 +37,3 @@ angular.module('BB.Services').factory "MemberService", ($q, halClient, $rootScop
     , (err) =>
       deferred.reject(err)
     deferred.promise
-
