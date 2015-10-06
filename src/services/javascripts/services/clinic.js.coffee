@@ -1,7 +1,6 @@
 angular.module('BBAdmin.Services').factory 'AdminClinicService',  ($q, BBModel, ClinicCollections, $window) ->
 
   query: (params) ->
-    console.log params
     company = params.company
     defer = $q.defer()
 
@@ -14,11 +13,8 @@ angular.module('BBAdmin.Services').factory 'AdminClinicService',  ($q, BBModel, 
     else
       existing = ClinicCollections.find(params)
       if existing
-        console.log "existng", params, existing
         defer.resolve(existing)
       else      
-        console.log "-------"
-
         company.$get('clinics', params).then (collection) ->
           collection.$get('clinics').then (clinics) ->
             models = (new BBModel.Admin.Clinic(s) for s in clinics)
