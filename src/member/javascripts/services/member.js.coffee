@@ -38,7 +38,6 @@ angular.module('BB.Services').factory "MemberService", ($q, halClient, $rootScop
       deferred.reject(err)
     deferred.promise
 
-
   # TODO complete member create method
   # createMember: (company, client) ->
   #   deferred = $q.defer()
