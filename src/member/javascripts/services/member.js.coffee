@@ -37,20 +37,3 @@ angular.module('BB.Services').factory "MemberService", ($q, halClient, $rootScop
     , (err) =>
       deferred.reject(err)
     deferred.promise
-
-  # TODO complete member create method
-  # createMember: (company, client) ->
-  #   deferred = $q.defer()
-    
-  #   if !company.$has('member')
-  #     deferred.reject("Cannot create new members for this company")
-  #   else
-  #     MutexService.getLock().then (mutex) ->
-  #       company.$post('member', {}, client.getPostData()).then (member) =>
-  #         deferred.resolve(new BBModel.Member.Member(member))
-  #         MutexService.unlock(mutex)
-  #       , (err) =>
-  #         deferred.reject(err)
-  #         MutexService.unlock(mutex)
-
-  #   deferred.promise

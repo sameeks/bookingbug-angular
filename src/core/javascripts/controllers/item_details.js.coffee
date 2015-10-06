@@ -8,7 +8,9 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
   link : (scope, element, attrs) ->
     if attrs.bbItemDetails
       item = scope.$eval(attrs.bbItemDetails)
-      $scope.item_from_param = item
+      scope.item_from_param = item
+      if scope.item_details
+        delete scope.item_details
       scope.loadItem(item)
     return
 
@@ -61,6 +63,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       $scope.recalc_price()
       $scope.setLoaded $scope
       $scope.$emit "item_details:loaded"
+
     else
       params = {company: $scope.bb.company, cItem: $scope.item}
       ItemDetailsService.query(params).then (details) ->

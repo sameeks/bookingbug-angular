@@ -1,10 +1,22 @@
 <div class="modal-header">
-    <h3>Confirm you want to cancel this booking.</h3>
+  <h1 class="modal-title">Cancel Booking</h1>
 </div>
+
 <div class="modal-body">
-    Booking: {{booking.full_describe}} - {{booking.describe}}
+  
+  <ul class="confirmation-summary">
+    <li class="row confirmation-summary-item">
+      <div class="col-xs-3">Booking</div>
+      <div class="col-xs-9">{{booking.full_describe}}</div>
+    </li>
+    <li class="row confirmation-summary-item">
+      <div class="col-xs-3">When</div>
+      <div class="col-xs-9">{{booking.datetime | datetime: "h:mma dddd Do MMMM" : false}}</div>
+    </li>
+  </ul>
+
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-next" ng-click="confirm_delete()"><span>Yes</span></button>
-    <button class="btn btn-warning" ng-click="cancel()">No</button>
+  <button class="btn btn-primary" ng-click="confirm_delete()"><span>Cancel Booking</span></button>
+  <button class="btn btn-link" ng-click="cancel()">Do not cancel</button>
 </div>
