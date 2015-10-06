@@ -70,7 +70,8 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
         AppConfig['partial_url'] = scope.bb.partial_url
 
     transclude scope, (clone) =>
-      scope.has_content = clone.length > 0
+      # if there's content or not whitespace  
+      scope.has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
       if !scope.has_content
         if prms.custom_partial_url
           appendCustomPartials(scope, element, prms).then (style) ->
