@@ -246,7 +246,7 @@ angular
 
         var linkHref = hrefLink(link, params);
         if(method === 'GET') {
-          if(embedded.has(linkHref) return embedded.get(linkHref);
+          if(embedded.has(linkHref)) return embedded.get(linkHref);
           
           return embedded.set(linkHref, callService(method, linkHref, options, data));
         }
