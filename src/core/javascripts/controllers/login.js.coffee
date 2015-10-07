@@ -6,7 +6,7 @@ angular.module('BB.Directives').directive 'bbLogin', () ->
   controller : 'Login'
 
 
-angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, LoginService, $q, ValidatorService, BBModel, $location) ->
+angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, LoginService, $q, ValidatorService, BBModel, $location, AlertService, ErrorService) ->
   $scope.controller = "public.controllers.Login"
   $scope.error = false
   $scope.password_updated = false
@@ -32,6 +32,7 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
       $scope.login_error = false
     , (err) =>
       $scope.login_error = err
+      AlertService.raise(ErrorService.getAlert('LOGIN_FAILED'))
 
   $scope.showEmailPasswordReset = () =>
     $scope.showPage('email_reset_password')
@@ -43,8 +44,10 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
     $scope.error = false
     LoginService.sendPasswordReset($scope.bb.company, {email: email, custom: true}).then () =>
       $scope.email_sent = true
+      AlertService.raise(ErrorService.getAlert('PASSWORD_RESET_REQ_SUCCESS'))
     , (err) =>
       $scope.error = err
+      AlertService.raise(ErrorService.getAlert('PASSWORD_RESET_REQ_FAILED'))
 
   $scope.updatePassword = (new_password, confirm_new_password) =>
     auth_token = $scope.member.getOption('auth_token')

@@ -90,7 +90,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'The requested time slot is not available. Please choose a different time.'
+      msg: 'Sorry, the requested time slot is not available. Please choose a different time.'
     },
     {
       key: 'TOPUP_FAILED',
@@ -126,7 +126,21 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'Sorry, your email or password was not recognised. Please try again.'
-    }   
+    },
+    {
+      key: 'PASSWORD_RESET_REQ_SUCCESS',
+      type: 'success',
+      title: '',
+      persist: true,
+      msg: 'We have sent you an email with instructions on how to reset your password.'
+    },
+    {
+      key: 'PASSWORD_RESET_REQ_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, we didn\'t find an account registered with that email.'
+    }  
   ]
 
   getError: (key) ->
