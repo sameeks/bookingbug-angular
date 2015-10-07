@@ -111,6 +111,10 @@ angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope, M
 
     if scope.memberEmail && scope.memberPassword
       tryLogin()
+    else if $sessionStorage.getItem("login")
+      session_member = $sessionStorage.getItem("login")
+      session_member = halClient.createResource(session_member)
+      scope.member = session_member
     else
       loginModal()
 
