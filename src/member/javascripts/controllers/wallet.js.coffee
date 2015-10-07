@@ -131,6 +131,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
   $scope.subtract = (value) ->
     value = value or $scope.amount_increment
     $scope.add(-value)
+    
 
 
   $scope.isSubtractValid = (value) ->
