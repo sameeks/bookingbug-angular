@@ -11,17 +11,13 @@ angular.module('BB.Services').factory 'ClinicService',  ($q, BBModel, $window) -
       , (err) ->
         defer.reject(err)
     else
-      existing = ClinicCollections.find(params)
-      if existing
-        defer.resolve(existing)
-      else      
-        company.$get('clinics', params).then (collection) ->
-          collection.$get('clinics').then (clinics) ->
-            clinics = (new BBModel.Clinic(s) for s in clinics)
-            defer.resolve(clinics)
-          , (err) ->
-            defer.reject(err)
+      company.$get('clinics', params).then (collection) ->
+        collection.$get('clinics').then (clinics) ->
+          clinics = (new BBModel.Clinic(s) for s in clinics)
+          defer.resolve(clinics)
         , (err) ->
           defer.reject(err)
+      , (err) ->
+        defer.reject(err)
     defer.promise
 
