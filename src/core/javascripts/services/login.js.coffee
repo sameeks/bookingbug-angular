@@ -107,6 +107,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     deferred.promise
   
   updatePassword: (member, params) ->
+    params.auth_token = member.getOption('auth_token')
     if member && params['new_password'] && params['confirm_new_password']
       deferred = $q.defer()
       member.$post('update_password', {}, params).then (login) =>
