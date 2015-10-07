@@ -65,6 +65,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
   $scope.cancelBooking = (booking) ->
     $scope.loading = true
     MemberBookingService.cancel($scope.member, booking).then () ->
+      $scope.$emit("cancel:success")
       if $scope.bookings
         $scope.bookings = $scope.bookings.filter (b) -> b.id != booking.id
       if $scope.removeBooking
