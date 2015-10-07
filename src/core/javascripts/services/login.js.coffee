@@ -84,16 +84,16 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
   logout: (options) ->
 
     $rootScope.member = null
-    $sessionStorage.removeItem("login")
-    $sessionStorage.removeItem('auth_token')
-    $sessionStorage.clear()
     deferred = $q.defer()
 
     options ||= {}
     options['root'] ||= ""
     url = options['root'] + "/api/v1/logout"
     halClient.$del(url, options, {}).then (logout) =>
-        deferred.resolve(true)
+      $sessionStorage.removeItem("login")
+      $sessionStorage.removeItem('auth_token')
+      $sessionStorage.clear()
+      deferred.resolve(true)
     , (err) =>
       deferred.reject(err)
     deferred.promise
@@ -107,6 +107,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     deferred.promise
   
   updatePassword: (member, params) ->
+    params.auth_token = member.getOption('auth_token')
     if member && params['new_password'] && params['confirm_new_password']
       deferred = $q.defer()
       member.$post('update_password', {}, params).then (login) =>
