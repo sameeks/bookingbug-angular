@@ -141,8 +141,12 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     switch type
       when 'days'
         setTimeRange($scope.selected_day.add(amount, 'days'))
-      when 'weeks', 'months'
+      when 'weeks'
         $scope.start_date.add(amount, type)
+        setTimeRange($scope.start_date)
+      when 'months'
+        # TODO make this advance to the next month
+        $scope.start_date.add(amount, type).startOf('month')
         setTimeRange($scope.start_date)
     $scope.loadData()
 
