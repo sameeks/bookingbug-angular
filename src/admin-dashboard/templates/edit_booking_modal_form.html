@@ -1,4 +1,5 @@
 <div class="modal-header">
+  <button type="button" class="close" ng-click="cancel()">&times;</button>
   <h3 class="modal-title">{{title}}</h3>
 </div>
 <form name="modal_form" ng-submit="submit(modal_form)">
@@ -12,6 +13,6 @@
       ng-click="cancelBooking($event)">Cancel Booking</button>
     <input type="submit" class="btn btn-primary" ng-disabled="loading"
     value="Save Booking">
-    <button class="btn btn-default" ng-click="cancel($event)">Dismiss</button>
+    <button class="btn btn-default" ng-click="cancel($event)">Do Not Cancel</button>
   </div>
 </form>
