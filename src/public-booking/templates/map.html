@@ -42,7 +42,7 @@
         <div ui-map-info-window="myInfoWindow" class="clearfix">
 
           <p><strong>{{currentMarker.company.name}}</strong></p>
-          <p>{{currentMarker.company.address | address_single_line}}</p>
+          <p ng-bind-html="currentMarker.company.address | address_multi_line"></p>
           <p><strong>Phone:</strong> {{currentMarker.company.address.phone | uk_local_number}}</p>
           <p>
             <span ng-if="currentMarker.company.extra.closing_time"><strong>{{currentMarker.company.extra.closing_time}}</strong></span>
@@ -65,7 +65,7 @@
             </div>
 
             <ul class="store-details" ng-click="openMarkerInfo(marker)">
-              <li>{{marker.company.address | address_single_line }}</li>
+              <li ng-bind-html="marker.company.address | address_multi_line"></li>
               <li><strong>Phone:</strong> {{marker.company.address.phone | uk_local_number}}</li>
               <li>
                 <span class="distance">{{roundNumberUp(marker.distance,1)}}mi</span>
