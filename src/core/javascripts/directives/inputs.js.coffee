@@ -277,7 +277,7 @@ app.directive "cardSecurityCode", ->
         element.attr('placeholder', "•••")
 
   return {
-    restrict: "C"
+    restrict: "AC"
     link: linker
     scope: {
       'cardType': '='
