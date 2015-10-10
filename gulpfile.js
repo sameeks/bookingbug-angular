@@ -16,7 +16,8 @@ var gulp = require('gulp'),
     streamqueue = require('streamqueue'),
     uglify = require('gulp-uglify'),
     gulpDocs = require('gulp-ngdocs'),
-    KarmaServer = require('karma').Server;
+    KarmaServer = require('karma').Server,
+    bower = require('gulp-bower');
 
 gulp.task('clean', function(cb) {
   del.sync(['release']);
@@ -155,7 +156,11 @@ gulp.task('docs', ['cleandocs','ngdocs'], function (cb) {
   })
 });
 
-gulp.task('dependencies', function() {
+gulp.task('bower', function() {
+  return bower();
+});
+
+gulp.task('dependencies', ['bower'], function() {
   return gulp.src(mainBowerFiles({filter: new RegExp('.js$')}))
     .pipe(concat('bookingbug-angular-dependencies.js'))
     .pipe(gulp.dest('release'));

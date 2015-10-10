@@ -35,7 +35,8 @@
     "jasmine-core": "^2.3.4",
     "karma-jasmine": "^0.3.6",
     "karma-chrome-launcher": "^0.2.1",
-    "karma-junit-reporter": "^0.3.7"
+    "karma-junit-reporter": "^0.3.7",
+    "gulp-bower": "0.0.10"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
