@@ -44,8 +44,8 @@ gulp.task('javascripts', function() {
         './src/*/directives/**/*', 
         './src/*/models/**/*', 
         './src/*/services/**/*', 
-        '!**/*_test.js.coffee'
-        '!./**/*~',]))
+        '!./src/**/*_test.js.coffee',
+        '!./**/*~']))
     // .pipe(filelog())
     .pipe(gulpif(/.*coffee$/, coffee().on('error', function (e) {
       gutil.log(e)
