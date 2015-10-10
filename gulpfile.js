@@ -1,21 +1,23 @@
-var gulp = require('gulp');
-    coffee = require('gulp-coffee');
-    concat = require('gulp-concat');
-    gulpif = require('gulp-if');
-    filelog = require('gulp-filelog');
-    gutil = require('gulp-util');
-    del = require('del');
-    connect = require('gulp-connect');
-    templateCache = require('gulp-angular-templatecache');
-    imagemin = require('gulp-imagemin');
-    rename = require('gulp-rename');
-    flatten = require('gulp-flatten');
-    sass = require('gulp-sass');
-    merge = require('merge-stream');
-    mainBowerFiles = require('main-bower-files');
-    streamqueue = require('streamqueue');
-    uglify = require('gulp-uglify');
-var gulpDocs = require('gulp-ngdocs');
+var gulp = require('gulp'),
+    coffee = require('gulp-coffee'),
+    concat = require('gulp-concat'),
+    gulpif = require('gulp-if'),
+    filelog = require('gulp-filelog'),
+    gutil = require('gulp-util'),
+    del = require('del'),
+    connect = require('gulp-connect'),
+    templateCache = require('gulp-angular-templatecache'),
+    imagemin = require('gulp-imagemin'),
+    rename = require('gulp-rename'),
+    flatten = require('gulp-flatten'),
+    sass = require('gulp-sass'),
+    merge = require('merge-stream'),
+    mainBowerFiles = require('main-bower-files'),
+    streamqueue = require('streamqueue'),
+    uglify = require('gulp-uglify'),
+    gulpDocs = require('gulp-ngdocs'),
+    KarmaServer = require('karma').Server,
+    bower = require('gulp-bower');
 
 gulp.task('clean', function(cb) {
   del.sync(['release']);
@@ -43,7 +45,8 @@ gulp.task('javascripts', function() {
         './src/*/directives/**/*', 
         './src/*/models/**/*', 
         './src/*/services/**/*', 
-        '!./**/*~',]))
+        '!./src/**/*_test.js.coffee',
+        '!./**/*~']))
     // .pipe(filelog())
     .pipe(gulpif(/.*coffee$/, coffee().on('error', function (e) {
       gutil.log(e)
@@ -151,5 +154,22 @@ gulp.task('docs', ['cleandocs','ngdocs'], function (cb) {
     root: ['docs'],
     port: 8000
   })
+});
+
+gulp.task('bower', function() {
+  return bower();
+});
+
+gulp.task('dependencies', ['bower'], function() {
+  return gulp.src(mainBowerFiles({filter: new RegExp('.js$')}))
+    .pipe(concat('bookingbug-angular-dependencies.js'))
+    .pipe(gulp.dest('release'));
+});
+
+gulp.task('test', ['dependencies'], function (done) {
+  new KarmaServer({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
 });
 

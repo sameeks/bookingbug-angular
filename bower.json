@@ -68,7 +68,7 @@
     "moment": "master",
     "momentjs": "~2.9.0",
     "fullcalendar": ">=2.4.0",
-    "angular-translate": "~2.7.0",
+    "angular-translate": "~2.6.1",
     "humanize-duration": "~2.8.0"
   }
 }
