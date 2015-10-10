@@ -4,3 +4,7 @@ node_js:
 before_script:
   - npm install -g gulp
 script: gulp test
+cache:
+  directories:
+    - node_modules
+    - bower_components
