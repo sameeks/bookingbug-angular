@@ -72,6 +72,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
           @item_defaults.event_group = match.event_group if match.event_group && match.event_group != "-"
           @item_defaults.person = decodeURIComponent(match.person) if match.person
           @item_defaults.resource = decodeURIComponent(match.resource) if match.resource
+          @item_defaults.resources = decodeURIComponent(match.resoures) if match.resources
           @item_defaults.date = match.date if match.date
           @item_defaults.time = match.time if match.time
           @route_matches = match
