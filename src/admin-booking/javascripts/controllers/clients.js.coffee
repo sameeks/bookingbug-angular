@@ -72,7 +72,13 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.no_clients = false
     $scope.search_error = false
     clientDef = $q.defer()
-    params = {company: $scope.bb.company, per_page: $scope.per_page, filter_by: $scope.search_text, filter_by_fields: filterByFields, order_by: orderBy, order_by_reverse: orderByReverse}
+    params =
+      company: $scope.bb.company
+      per_page: $scope.per_page
+      filter_by: if filterBy? then filterBy else $scope.search_text
+      filter_by_fields: filterByFields
+      order_by: orderBy
+      order_by_reverse: orderByReverse
     params.page = currentPage+1 if currentPage
     $rootScope.connection_started.then ->
       $scope.notLoaded $scope
