@@ -1,5 +1,19 @@
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:Affiliate
+*
+* @description
+* Representation of an Affiliate Object
+*
+* @property {integer} affiliate_id Id of the affiliated company
+* @property {string} reference The reference of the affiliated company
+* @property {integer} country_code Country code of the affiliated company
+####
+
+
 # helpful functions about a company
 angular.module('BB.Models').factory "AffiliateModel", ($q, BBModel, BaseModel) ->
 
@@ -9,6 +23,15 @@ angular.module('BB.Models').factory "AffiliateModel", ($q, BBModel, BaseModel) -
       super(data)
       @test = 1
 
+    ###**
+    * @ngdoc method
+    * @name getCompanyByRef
+    * @methodOf BB.Models:Affiliate
+    * @description
+    * Find a company in accordin to reference
+    *
+    * @returns {promise} A promise for the company reference
+    ###
     getCompanyByRef: (ref) ->
       defer = $q.defer()
       @$get('companies', {reference: ref}).then (company) ->
