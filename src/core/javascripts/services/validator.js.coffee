@@ -29,6 +29,8 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # international number 
   international_number = /^(\+)([\d \(\)]{9,19})$/
 
+  email_regex = /^$|^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+
   # alphanumeric
   alphanumeric = /^[a-zA-Z0-9]*$/
 
@@ -41,6 +43,9 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
 
   # Strict email check that also checks for the top domain level too part 1 of 2.
   # email_pattern: /^[a-z0-9!#$%&'*+=?^_\/`{|}~.-]+@.[a-z0-9!#$%&'*+=?^_`{|}~.-]+[.]{1}[a-z0-9-]{2,20}$/i
+
+  getEmailPattern: () ->
+    return email_regex
 
   getUKPostcodePattern: () ->
     return uk_postcode_regex_lenient

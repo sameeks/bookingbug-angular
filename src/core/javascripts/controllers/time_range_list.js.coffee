@@ -142,7 +142,11 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       when 'days'
         setTimeRange($scope.selected_day.add(amount, 'days'))
       when 'weeks'
-        $scope.start_date.add(amount, 'weeks')
+        $scope.start_date.add(amount, type)
+        setTimeRange($scope.start_date)
+      when 'months'
+        # TODO make this advance to the next month
+        $scope.start_date.add(amount, type).startOf('month')
         setTimeRange($scope.start_date)
     $scope.loadData()
 
@@ -289,6 +293,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       loc = ",,,," + $scope.bb.postcode + "," if $scope.bb.postcode
       promise = TimeService.query(
         company: $scope.bb.company
+        resource_ids: $scope.bb.item_defaults.resources
         cItem: $scope.data_source
         date: date
         client: $scope.client
