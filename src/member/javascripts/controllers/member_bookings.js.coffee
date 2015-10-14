@@ -3,11 +3,13 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
 
   $scope.loading = true
 
+
   $scope.getUpcomingBookings = () ->
     params =
       start_date: moment().format('YYYY-MM-DD')
     $scope.getBookings(params).then (bookings) ->
       $scope.upcoming_bookings = bookings
+
 
   $scope.getPastBookings = (num, type) ->
     date = moment().subtract(num, type)
@@ -17,10 +19,12 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
     $scope.getBookings(params).then (bookings) ->
       $scope.past_bookings = bookings
 
+
   $scope.flushBookings = () ->
     params =
       start_date: moment().format('YYYY-MM-DD')
     MemberBookingService.flush($scope.member, params)
+
 
   $scope.edit = (booking) ->
     booking.getAnswersPromise().then (answers) ->
@@ -31,6 +35,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
         title: 'Booking Details'
         templateUrl: 'edit_booking_modal_form.html'
         windowClass: 'member_edit_booking_form'
+
 
   $scope.cancel = (booking) ->
     modalInstance = $modal.open
@@ -51,6 +56,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
     modalInstance.result.then (booking) ->
       $scope.cancelBooking(booking)
 
+
   $scope.getBookings = (params) ->
     $scope.loading = true
     defer = $q.defer()
@@ -62,6 +68,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
       $scope.loading = false
     defer.promise
 
+
   $scope.cancelBooking = (booking) ->
     $scope.loading = true
     MemberBookingService.cancel($scope.member, booking).then () ->
@@ -71,6 +78,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
       if $scope.removeBooking
         $scope.removeBooking(booking)
       $scope.loading = false
+
 
   $scope.getPrePaidBookings = (params) ->
     $scope.loading = true

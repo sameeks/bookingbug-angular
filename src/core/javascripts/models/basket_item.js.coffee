@@ -297,7 +297,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @setPrice(@price)
       else
         @setPrice(@base_price)
-      if @event_chain.isSingleBooking()
+      if @event_chain.isSingleBooking() # i.e. does not have tickets sets and max bookings is 1
         # if you can only book one ticket - just use that
         @tickets = {name: "Admittance", max: 1, type: "normal", price: @base_price}
         @tickets.pre_paid_booking_id = @pre_paid_booking_id
@@ -513,7 +513,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         data.time = @time.time
         if @time.event_id
           data.event_id = @time.event_id
-        else if @time.event_ids
+        else if @time.event_ids # what's this about?
           data.event_ids = @time.event_ids
       else if @date and @date.event_id
         data.event_id = @date.event_id
@@ -535,6 +535,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.length = @length
       if @event
         data.event_id = @event.id
+        # when can events have a prepaid booking id?
         if @event.pre_paid_booking_id?
           data.pre_paid_booking_id = @event.pre_paid_booking_id
         else if @tickets && @tickets.pre_paid_booking_id?
@@ -697,6 +698,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     totalPrice: =>
       if @tickets && @tickets.pre_paid_booking_id
         return 0
+      if @pre_paid_booking_id
+        return 0
       if @discount_price?
         return @discount_price + @questionPrice()
       pr = @total_price
@@ -704,7 +707,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       pr = 0      if !angular.isNumber(pr)
       return pr + @questionPrice()
 
-    # price not including discounts
+    # price excluding discounts
     fullPrice: =>
       pr = @base_price
       pr ||= @total_price
@@ -731,10 +734,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     # various status tests
 
     hasPrice: () ->
-      if @price
-        true
-      else
-        false
+      return @price?
+
 
     getAttachment: () ->
       return @attachment if @attachment
@@ -742,3 +743,21 @@ angular.module('BB.Models').factory "BasketItemModel",
         @_data.$get('attachment').then (att) =>
           @attachment = att
           @attachment
+
+
+    setPrepaidBooking: (prepaid_booking) ->
+      @prepaid_booking     = prepaid_booking
+      @pre_paid_booking_id = prepaid_booking.id
+
+
+    hasPrepaidBooking: () ->
+      return @pre_paid_booking_id?  
+
+
+    getEventId: () ->
+      if @time and @time.event_id
+        return @time.event_id
+      else if @date and @date.event_id
+        return @date.event_id
+      else if @event
+        return @event.id

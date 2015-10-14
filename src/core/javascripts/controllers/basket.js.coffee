@@ -31,11 +31,38 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
 
 
 
-angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, BasketService, $q, AlertService, ErrorService, FormDataStoreService, LoginService) ->
+angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $attrs, $rootScope, BasketService, $q, AlertService, ErrorService, FormDataStoreService, LoginService) ->
 
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
   $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') and $scope.bb.company_settings.has_wallets and $scope.client.valid() and LoginService.isLoggedIn() and LoginService.member().id == $scope.client.id and $scope.client.has_active_wallet
+
+  $scope.basket_options = $scope.$eval($attrs.bbBasketList) or {}
+
+  
+  $rootScope.connection_started.then ->
+
+    if $scope.client.$has('pre_paid_bookings')
+
+      $scope.notLoaded $scope
+      promises = []
+
+      for basket_item in $scope.bb.basket.timeItems()
+        params = {event_id: basket_item.getEventId()}
+        promises.push($scope.client.getPrePaidBookingsPromise(params))
+
+      $q.all(promises).then (result) ->
+
+        for basket_item, index in $scope.bb.basket.timeItems()
+          prepaid_bookings = result[index]
+
+          if $scope.basket_options.auto_use_prepaid_bookings and prepaid_bookings.length > 0
+            basket_item.setPrepaidBooking(prepaid_bookings[0]) 
+
+        $scope.setLoaded $scope
+        
+      , (err) ->
+        $scope.setLoaded $scope
 
 
   $scope.addAnother = (route) =>

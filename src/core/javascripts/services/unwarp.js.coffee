@@ -278,3 +278,23 @@ angular.module('BB.Services').factory "BB.Service.products", ($q, BBModel) ->
       deferred.reject(err)
 
     deferred.promise
+
+
+angular.module('BB.Services').factory "BB.Service.pre_paid_booking", ($q, BBModel) ->
+  unwrap: (resource) ->
+    return new BBModel.PrePaidBooking(resource)
+
+
+angular.module('BB.Services').factory "BB.Service.pre_paid_bookings", ($q, BBModel) ->
+  promise: true
+  unwrap: (resource) ->
+    deferred = $q.defer()
+    resource.$get('pre_paid_bookings').then (items) =>
+      models = []
+      for i in items
+        models.push(new BBModel.PrePaidBooking(i))
+      deferred.resolve(models)
+    , (err) =>
+      deferred.reject(err)
+
+    deferred.promise

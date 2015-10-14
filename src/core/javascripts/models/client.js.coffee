@@ -47,6 +47,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
       @country = values.country if values.country
       @default_answers = values.answers if values.answers
 
+
     pre_fill_answers: (details) ->
       return if !@default_answers
       for q in details.questions
@@ -183,6 +184,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
         @mobile.replace pref_arr[0], ""
         @mobile_prefix = pref_arr[0]
 
+
     getPrePaidBookingsPromise: (params) ->
       defer = $q.defer()
       if @$has('pre_paid_bookings')
@@ -193,8 +195,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
             defer.reject(err)
         , (err) ->
           defer.reject(err)
+      # return empty array if there are no prepaid bookings
       else
         defer.resolve([])
-#        defer.reject('missing pre_paid_bookings link')
       defer.promise
-

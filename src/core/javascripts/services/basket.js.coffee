@@ -1,5 +1,6 @@
 angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel, MutexService) ->
 
+
   addItem: (company, params) ->
     deferred = $q.defer()
     lnk = params.item.book_link
@@ -60,9 +61,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
     deferred.promise
 
 
-  
-
-
   # add several items at onece - params should have an array of items:
   updateBasket: (company, params) ->
     deferred = $q.defer()
@@ -107,12 +105,14 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
     deferred.promise 
 
 
-  checkPrePaid: (company, event, pre_paid_bookings) ->
+  checkPrePaid: (item, pre_paid_bookings) ->
     valid_pre_paid = null
     for booking in pre_paid_bookings
-      if booking.checkValidity(event)
+      if booking.checkValidity(item)
         valid_pre_paid = booking
+        break
     valid_pre_paid
+
 
   query: (company, params) ->
     deferred = $q.defer()
@@ -128,6 +128,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
       , (err) ->
         deferred.reject(err)
     deferred.promise
+
 
   deleteItem: (item, company, params) ->
     params = {} if !params
@@ -151,6 +152,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         deferred.reject(err)
 
     deferred.promise
+
 
   checkout: (company, basket, params) ->
     deferred = $q.defer()
@@ -176,6 +178,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         deferred.reject(err)
     deferred.promise
 
+
   empty: (bb) ->
     deferred = $q.defer()
     MutexService.getLock().then (mutex) ->
@@ -189,6 +192,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
       MutexService.unlock(mutex)
       deferred.reject(err)
     deferred.promise
+
 
   memberCheckout: (basket, params) ->
     deferred = $q.defer()
@@ -209,6 +213,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         deferred.reject(err)
     deferred.promise
   
+
   applyDeal: (company, params) ->
     deferred = $q.defer()
 
@@ -235,6 +240,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         MutexService.unlock(mutex)
         deferred.reject(err)
     deferred.promise
+
 
   removeDeal: (company, params) ->
     params = {} if !params

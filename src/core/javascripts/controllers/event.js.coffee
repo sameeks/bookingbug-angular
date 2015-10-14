@@ -23,9 +23,13 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
   $scope.init = (comp) ->
     $scope.event = $scope.bb.current_item.event
-    promises = [$scope.current_item.event_group.getImagesPromise(), $scope.event.prepEvent()]
-    if $scope.client
-      promises.push $scope.getPrePaidsForEvent($scope.client, $scope.event)
+
+    promises = [
+      $scope.current_item.event_group.getImagesPromise(),
+      $scope.event.prepEvent()
+    ]
+
+    promises.push $scope.getPrePaidsForEvent($scope.client, $scope.event) if $scope.client
 
     $q.all(promises).then (result) ->
       if result[0] and result[0].length > 0
@@ -122,6 +126,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     }
 
     return $scope.updateBasket()
+
 
   $scope.getPrePaidsForEvent = (client, event) ->
     defer = $q.defer()
