@@ -761,3 +761,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         return @date.event_id
       else if @event
         return @event.id
+
+
+    isExternalPurchase: () ->
+      return @external_purchase?  
