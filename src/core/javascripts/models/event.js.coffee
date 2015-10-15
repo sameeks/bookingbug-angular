@@ -11,11 +11,13 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
 
   class Event extends BaseModel
+    
     constructor: (data) ->
       super(data)
       @getDate()
       @time = new BBModel.TimeSlot(time: DateTimeUlititiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
+
 
     getGroup: () ->
       defer = $q.defer()
@@ -31,6 +33,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
         defer.reject("No event group")
       defer.promise
 
+
     getChain: () ->
       defer = $q.defer()
       if @chain
@@ -44,14 +47,17 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           defer.reject("No event chain")
       defer.promise
 
+
     getDate: () ->
       return @date if @date
       @date = moment(@_data.datetime)
       return @date
 
+
     dateString: (str) ->
       date = @date()
       if date then date.format(str)
+
 
     getDuration: () ->
       defer = new $q.defer()
@@ -63,19 +69,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           defer.resolve(@duration)
       defer.promise
 
-    printDuration: () ->
-      if @duration < 60
-        @duration + " mins"
-      else
-        h = Math.round(@duration / 60)
-        m = @duration % 60
-        if m == 0
-          h + " hours"
-        else
-          h + " hours " + m + " mins"
 
     getDescription: () ->
       @getChain().description
+
 
     getColour: () ->
       if @getGroup()
@@ -83,8 +80,6 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       else
         return "#FFFFFF"
 
-    getPerson: () ->
-      @getChain().person_name
 
     getPounds: () ->
       if @chain
@@ -97,8 +92,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       if @chain
         (@getPrice() % 1).toFixed(2)[-2..-1]
 
+
     getNumBooked: () ->
       @spaces_blocked + @spaces_booked + @spaces_reserved + @spaces_held
+
 
     # get the number of spaces left (possibly limited by a specific ticket pool)
     getSpacesLeft: (pool = null) ->
@@ -106,11 +103,14 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
         return @ticket_spaces[pool].left
       return @num_spaces - @getNumBooked()
 
+
     hasSpace: () ->
       (@getSpacesLeft() > 0)
 
+
     hasWaitlistSpace: () ->
       (@getSpacesLeft() <= 0 && @getChain().waitlength > @spaces_wait)
+
 
     getRemainingDescription: () ->
       left = @getSpacesLeft()
@@ -120,8 +120,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
         return "Join Waitlist"
       return ""
 
+
     select: ->
       @selected = true
+
 
     unselect: ->
       delete @selected if @selected
@@ -153,6 +155,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
           def.resolve()
       def.promise
+
 
     updatePrice: () ->
       for ticket in @tickets
