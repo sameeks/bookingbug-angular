@@ -31,6 +31,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
       extra.resource_id = prms.cItem.resource.id if prms.cItem.resource && !prms.cItem.anyResource() && !item_link.event_id  && !extra.event_id
       extra.end_date = prms.end_date.toISODate() if prms.end_date
       extra.duration = prms.duration
+      extra.resource_ids = prms.resource_ids
       extra.num_resources = prms.num_resources
 
       # if we have an event - the the company link - so we don't add inb extra params

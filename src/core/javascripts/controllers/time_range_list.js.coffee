@@ -293,6 +293,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       loc = ",,,," + $scope.bb.postcode + "," if $scope.bb.postcode
       promise = TimeService.query(
         company: $scope.bb.company
+        resource_ids: $scope.bb.item_defaults.resources
         cItem: $scope.data_source
         date: date
         client: $scope.client
