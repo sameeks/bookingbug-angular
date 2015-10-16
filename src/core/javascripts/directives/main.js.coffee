@@ -105,8 +105,13 @@ app.directive 'bbForm', ($bbug, $window, SettingsService) ->
   require: '^form'
   link: (scope, elem, attrs, ctrls) ->
 
+    form_controller = ctrls
+
     # set up event handler on the form element
     elem.on "submit", ->
+
+      form_controller.submitted = true
+
       invalid_form_group = elem.find('.has-error:first')
       
       if invalid_form_group && invalid_form_group.length > 0
