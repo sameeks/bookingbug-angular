@@ -112,6 +112,13 @@ app.directive 'bbForm', ($bbug, $window, SettingsService) ->
 
       form_controller.submitted = true
 
+      # mark nested forms as submitted too
+      for property of form_controller
+        if form_controller[property].hasOwnProperty('$valid')
+          form_controller[property].submitted = true
+
+      scope.$apply()
+
       invalid_form_group = elem.find('.has-error:first')
       
       if invalid_form_group && invalid_form_group.length > 0
