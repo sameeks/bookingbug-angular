@@ -629,7 +629,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return
       else
         if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          $scope.showPage('payment_complete')
+          $scope.showPage('confirmation')
         else
           return $scope.showPage(route)
           
@@ -646,7 +646,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')
     else if $scope.bb.total && $scope.bb.payment_status == "complete"
-      return $scope.showPage('payment_complete')
+      return $scope.showPage('confirmation')
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
       return $scope.showPage('payment')
@@ -704,7 +704,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
     #   return $scope.showPage('payment')
     else if $scope.bb.payment_status == "complete"
-      return $scope.showPage('payment_complete')
+      return $scope.showPage('confirmation')
 
 
   $scope.showCheckout = ->
