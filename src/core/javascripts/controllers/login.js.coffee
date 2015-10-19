@@ -54,7 +54,7 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
 
 
   $scope.updatePassword = (new_password, confirm_new_password) ->
-    
+    AlertService.clear()
     $scope.password_error = false
     $scope.error = false
     if $rootScope.member and new_password and confirm_new_password and (new_password is confirm_new_password)
