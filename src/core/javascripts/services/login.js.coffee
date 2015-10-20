@@ -89,6 +89,11 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     options ||= {}
     options['root'] ||= ""
     url = options['root'] + "/api/v1/logout"
+
+    $sessionStorage.removeItem("login")
+    $sessionStorage.removeItem('auth_token')
+    $sessionStorage.clear()
+    
     halClient.$del(url, options, {}).then (logout) =>
       $sessionStorage.removeItem("login")
       $sessionStorage.removeItem('auth_token')
