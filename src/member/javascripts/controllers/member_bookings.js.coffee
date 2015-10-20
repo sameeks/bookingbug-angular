@@ -2,11 +2,13 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
   $scope.loading = true
 
+
   $scope.getUpcomingBookings = () ->
     params =
       start_date: moment().format('YYYY-MM-DD')
-    $scope.getBookings(params).then (bookings) ->
+    getBookings(params).then (bookings) ->
       $scope.upcoming_bookings = bookings
+
 
   $scope.getPastBookings = (num, type) ->
     # default to year in the past if no amount is specified
@@ -17,7 +19,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     params =
       start_date: date.format('YYYY-MM-DD')
       end_date: moment().format('YYYY-MM-DD')
-    $scope.getBookings(params).then (bookings) ->
+    getBookings(params).then (bookings) ->
 
       $scope.past_bookings = _.chain(bookings)
         .filter((b) -> b.datetime.isBefore(moment()))
@@ -29,6 +31,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       start_date: moment().format('YYYY-MM-DD')
     MemberBookingService.flush($scope.member, params)
 
+
   $scope.edit = (booking) ->
     booking.getAnswersPromise().then (answers) ->
       for answer in answers.answers
@@ -38,6 +41,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
         title: 'Booking Details'
         templateUrl: 'edit_booking_modal_form.html'
         windowClass: 'member_edit_booking_form'
+
 
   $scope.cancel = (booking) ->
     modalInstance = $modal.open
@@ -58,7 +62,8 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     modalInstance.result.then (booking) ->
       $scope.cancelBooking(booking)
 
-  $scope.getBookings = (params) ->
+
+  getBookings = (params) ->
     $scope.loading = true
     defer = $q.defer()
     MemberBookingService.query($scope.member, params).then (bookings) ->
@@ -69,14 +74,23 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       $scope.loading = false
     defer.promise
 
+
   $scope.cancelBooking = (booking) ->
     $scope.loading = true
     MemberBookingService.cancel($scope.member, booking).then () ->
-      if $scope.bookings
-        $scope.bookings = $scope.bookings.filter (b) -> b.id != booking.id
-      if $scope.removeBooking
-        $scope.removeBooking(booking)
+      
+      $scope.$emit("cancel:success")
+
+      removeBooking = (booking, bookings) ->
+        return bookings.filter (b) -> b.id != booking.id
+
+      $scope.past_bookings = removeBooking(booking, $scope.past_bookings) if $scope.past_bookings
+      $scope.upcoming_bookings = removeBooking(booking, $scope.upcoming_bookings) if $scope.upcoming_bookings
+
+      # does a removeBooking method exist in the scope chain?
+      $scope.removeBooking(booking) if $scope.removeBooking
       $scope.loading = false
+
 
   $scope.getPrePaidBookings = (params) ->
     $scope.loading = true
