@@ -76,11 +76,18 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
     # Reset the basket to the last item whereas the curren_item is not complete and should not be in the basket and that way, we can proceed to checkout instead of hard-coding it on the html page.
     $scope.setReadyToCheckout(true)
     if $scope.bb.basket.items.length > 0
-      $scope.decideNextPage(route)
+      if $scope.$parent.$has_page_control
+        return true
+      else
+        $scope.decideNextPage(route)
     else
       AlertService.clear()
       AlertService.add('info',ErrorService.getError('EMPTY_BASKET_FOR_CHECKOUT'))
       return false
+
+
+  $scope.setReady = () ->
+    return $scope.checkout()
 
 
   $scope.applyCoupon = (coupon) =>
