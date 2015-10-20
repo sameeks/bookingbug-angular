@@ -40,11 +40,16 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
         # colorThief = new ColorThief()
         # colorThief.getColor image.url
 
+      # if a default number of tickets is provided, set only the first ticket type to that default
+      $scope.event.tickets[0].qty = if $scope.event_options.default_num_tickets then $scope.event_options.default_num_tickets else 0
 
-      for ticket in $scope.event.tickets
-        ticket.qty = if $scope.event_options.default_num_tickets then $scope.event_options.default_num_tickets else 0
+      # for multiple ticket types (adult entry/child entry etc), default all to zero except for the first ticket type
+      if $scope.event.tickets.length > 1
+        for ticket in $scope.event.tickets.slice(1)
+          ticket.qty = 0
 
-      $scope.selectTickets() if $scope.event_options.default_num_tickets and $scope.event_options.auto_select_tickets and $scope.event.tickets.length is 1
+      # lock the ticket number dropdown box if only 1 ticket is available to puchase at a time (one-on-one training etc)
+      $scope.selectTickets() if $scope.event_options.default_num_tickets and $scope.event_options.auto_select_tickets and $scope.event.tickets.length is 1 and $scope.event.tickets[0].max_num_bookings is 1
       
       $scope.tickets = $scope.event.tickets
       $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
