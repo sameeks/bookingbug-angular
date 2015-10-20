@@ -6,7 +6,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
   $scope.getUpcomingBookings = () ->
     params =
       start_date: moment().format('YYYY-MM-DD')
-    $scope.getBookings(params).then (bookings) ->
+    getBookings(params).then (bookings) ->
       $scope.upcoming_bookings = bookings
 
 
@@ -19,13 +19,12 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     params =
       start_date: date.format('YYYY-MM-DD')
       end_date: moment().format('YYYY-MM-DD')
-    $scope.getBookings(params).then (bookings) ->
+    getBookings(params).then (bookings) ->
 
       $scope.past_bookings = _.chain(bookings)
         .filter((b) -> b.datetime.isBefore(moment()))
         .sortBy((b) -> -b.datetime.unix())
         .value()
-
 
   $scope.flushBookings = () ->
     params =
@@ -64,7 +63,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       $scope.cancelBooking(booking)
 
 
-  $scope.getBookings = (params) ->
+  getBookings = (params) ->
     $scope.loading = true
     defer = $q.defer()
     MemberBookingService.query($scope.member, params).then (bookings) ->
@@ -79,11 +78,17 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
   $scope.cancelBooking = (booking) ->
     $scope.loading = true
     MemberBookingService.cancel($scope.member, booking).then () ->
+      
       $scope.$emit("cancel:success")
-      if $scope.bookings
-        $scope.bookings = $scope.bookings.filter (b) -> b.id != booking.id
-      if $scope.removeBooking
-        $scope.removeBooking(booking)
+
+      removeBooking = (booking, bookings) ->
+        return bookings.filter (b) -> b.id != booking.id
+
+      $scope.past_bookings = removeBooking(booking, $scope.past_bookings) if $scope.past_bookings
+      $scope.upcoming_bookings = removeBooking(booking, $scope.upcoming_bookings) if $scope.upcoming_bookings
+
+      # does a removeBooking method exist in the scope chain?
+      $scope.removeBooking(booking) if $scope.removeBooking
       $scope.loading = false
 
 

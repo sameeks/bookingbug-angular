@@ -18,7 +18,8 @@ angular.module('BBMember').directive 'bbMemberPrePaidBookings', ($rootScope) ->
 
 
     scope.$watch 'member', () ->
-      scope.getBookings() if !scope.pre_paid_bookings
+      getBookings() if !scope.pre_paid_bookings
 
 
-    getBookings()
+    $rootScope.connection_started.then () ->
+      getBookings()
