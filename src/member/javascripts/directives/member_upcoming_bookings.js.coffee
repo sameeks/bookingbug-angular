@@ -18,6 +18,7 @@ angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope) ->
       getBookings()
 
     scope.$watch 'member', () ->
-      scope.getBookings() if !scope.upcoming_bookings
+      getBookings() if !scope.upcoming_bookings
 
-    getBookings()
+    $rootScope.connection_started.then () ->
+      getBookings
