@@ -9,12 +9,20 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       $scope.upcoming_bookings = bookings
 
   $scope.getPastBookings = (num, type) ->
-    date = moment().subtract(num, type)
+    # default to year in the past if no amount is specified
+    if num and type
+      date = moment().subtract(num, type)
+    else
+      date = moment().subtract(1, 'year')
     params =
       start_date: date.format('YYYY-MM-DD')
       end_date: moment().format('YYYY-MM-DD')
     $scope.getBookings(params).then (bookings) ->
-      $scope.past_bookings = bookings
+
+      $scope.past_bookings = _.chain(bookings)
+        .filter((b) -> b.datetime.isBefore(moment()))
+        .sortBy((b) -> -b.datetime.unix())
+        .value()
 
   $scope.flushBookings = () ->
     params =
