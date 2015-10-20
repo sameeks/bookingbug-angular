@@ -172,4 +172,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
       for item in @items
         return true if item.isWaitlist()
       return false
-      
+
+
+    hasExternalPurchase : ->
+      for item in @items
+        return true if item.isExternalPurchase()
+      return false
+
