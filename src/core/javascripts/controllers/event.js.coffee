@@ -1,5 +1,26 @@
 'use strict'
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbEvent
+* @restrict AE
+* @scope true
+*
+* @description
+* Loads a list of event for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {integer} total_entries The total entries of the event
+* @property {array} events The events array
+* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
+####
+
 angular.module('BB.Directives').directive 'bbEvent', () ->
   restrict: 'AE'
   replace: true
@@ -52,7 +73,13 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name selectTickets
+  * @methodOf BB.Directives:bbEvent
+  * @description
+  * Process the selected tickets - this may mean adding multiple basket items - add them all to the basket
+  ###
   $scope.selectTickets = () ->
     # process the selected tickets - this may mean adding multiple basket items - add them all to the basket
     $scope.notLoaded $scope
@@ -99,6 +126,16 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbEvent
+  * @description
+  * Select an item event in according of item and route parameter
+  *
+  * @param {array} item The Event or BookableItem to select
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectItem = (item, route) =>
     if $scope.$parent.$has_page_control
       $scope.event = item
@@ -110,6 +147,13 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       return true
 
 
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbEvent
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = () =>
     $scope.bb.event_details = {
       name         : $scope.event.chain.name,
@@ -123,6 +167,16 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
     return $scope.updateBasket()
 
+  ###**
+  * @ngdoc method
+  * @name getPrePaidsForEvent
+  * @methodOf BB.Directives:bbEvent
+  * @description
+  * Get pre paids for event in according of client and event parameter
+  *
+  * @param {array} client The client 
+  * @param {array} event The event
+  ###
   $scope.getPrePaidsForEvent = (client, event) ->
     defer = $q.defer()
     params = {event_id: event.id}

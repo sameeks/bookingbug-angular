@@ -1,4 +1,5 @@
-angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService) ->
+angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
+    MemberBookingService, $q, ModalForm, MemberPrePaidBookingService) ->
 
   $scope.loading = true
 

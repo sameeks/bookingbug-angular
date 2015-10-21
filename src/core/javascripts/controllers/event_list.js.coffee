@@ -1,5 +1,29 @@
 'use strict'
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbEvents
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of events for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @param {hash}  bbEvents A hash of options
+* @property {integer} total_entries The event total entries
+* @property {array} events The events array
+
+####
+
+
 angular.module('BB.Directives').directive 'bbEvents', () ->
   restrict: 'AE'
   replace: true
@@ -112,7 +136,13 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name loadEventSummary
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Load event summary
+  ###
   $scope.loadEventSummary = () ->
     deferred = $q.defer()
     current_event = $scope.current_item.event
@@ -161,7 +191,15 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     return deferred.promise
  
 
-
+  ###**
+  * @ngdoc method
+  * @name loadEventSummary
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Load event chain data in according of comp parameter
+  *
+  * @param {array} comp The company 
+  ###
   $scope.loadEventChainData = (comp) ->
     deferred = $q.defer()
 
@@ -180,7 +218,15 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     return deferred.promise
     
-
+  ###**
+  * @ngdoc method
+  * @name loadEventData
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Load event data. De-select the event chain if there's one already picked - as it's hiding other events in the same group
+  *
+  * @param {array} comp The company parameter
+  ###
   $scope.loadEventData = (comp) ->
     deferred = $q.defer()
 
@@ -264,7 +310,13 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     , (err) ->  deferred.reject()
     return deferred.promise
 
-
+  ###**
+  * @ngdoc method
+  * @name isFullyBooked
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Verify if the items from event list are be fully booked
+  ###
   isFullyBooked = () ->
     full_events = []
     for item in $scope.items
@@ -272,6 +324,15 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     $scope.fully_booked = true if full_events.length == $scope.items.length
 
 
+  ###**
+  * @ngdoc method
+  * @name showDay
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Display days of the event list
+  *
+  * @param {date} day The day of the event
+  ###
   $scope.showDay = (day) ->
     return if !day or (day and !day.data)
 
@@ -307,7 +368,16 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.end_date = moment(new_val)
       $scope.loadEventData()
 
-
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Select an item into the current event list in according of item and route parameters
+  *
+  * @param {array} item The Event or BookableItem to select
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectItem = (item, route) =>
     return false unless (item.getSpacesLeft() <= 0 && $scope.bb.company.settings.has_waitlists) || item.hasSpace()
     $scope.notLoaded $scope
@@ -325,13 +395,27 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
       return true
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
+  ###
   $scope.setReady = () ->
     return false if !$scope.event 
     $scope.bb.current_item.setEvent($scope.event)
     return true
 
-
+  ###**
+  * @ngdoc method
+  * @name filterEvents
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Filter events from the event list in according of item parameter
+  *
+  * @param {array} item The Event or BookableItem to select
+  ###
   $scope.filterEvents = (item) ->
     result = (item.date.isSame(moment($scope.filters.date), 'day') or !$scope.filters.date?) and
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and 
@@ -366,12 +450,24 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
           result = result and filter
     return result
 
-
+  ###**
+  * @ngdoc method
+  * @name filterDateChanged
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Filtering data exchanged from the list of events
+  ###
   $scope.filterDateChanged = () ->
     $scope.filterChanged()
     $scope.showDay(moment($scope.filters.date))
 
-
+  ###**
+  * @ngdoc method
+  * @name resetFilters
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Reset the filters 
+  ###
   $scope.resetFilters = () ->
     $scope.filters = {}
     $scope.dynamic_filters.values = {} if $scope.has_company_questions
@@ -393,7 +489,13 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   sort = () ->
    # TODO allow sorting by price/date (default)
 
-
+  ###**
+  * @ngdoc method
+  * @name filterChanged
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Change filter of the event list
+  ###
   $scope.filterChanged = () ->
     if $scope.items
       $scope.filtered_items = $filter('filter')($scope.items, $scope.filterEvents)
@@ -401,7 +503,13 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.filter_active = $scope.filtered_items.length != $scope.items.length
       PaginationService.update($scope.pagination, $scope.filtered_items.length)
 
-
+  ###**
+  * @ngdoc method
+  * @name pageChanged
+  * @methodOf BB.Directives:bbEvents
+  * @description
+  * Change page of the event list
+  ###
   $scope.pageChanged = () ->
     PaginationService.update($scope.pagination, $scope.filtered_items.length)
     $rootScope.$broadcast "page:changed"

@@ -1,5 +1,24 @@
 'use strict';
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbMiniBasket
+* @restrict AE
+* @scope true
+*
+* @description
+* Loads a list of mini basket for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {boolean} setUsingBasket Set using basket  or not
+####
+
+
 angular.module('BB.Directives').directive 'bbMiniBasket', () ->
   restrict: 'AE'
   replace: true
@@ -13,6 +32,17 @@ angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, 
   $scope.setUsingBasket(true)
   $rootScope.connection_started.then () =>
 
+  ###**
+  * @ngdoc method
+  * @name basketDescribe
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Basked describe in according of basket length 
+  *
+  * @param {string} nothing Nothing to describe
+  * @param {string} single The single describe
+  * @param {string} plural The plural describe
+  ###
   $scope.basketDescribe = (nothing, single, plural) =>
     if !$scope.bb.basket || $scope.bb.basket.length() == 0
       nothing
@@ -116,7 +146,13 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
   $scope.topUpWallet = () ->
     $scope.decideNextPage("basket_wallet")
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = ->
     if $scope.bb.basket.items.length > 0
       $scope.setReadyToCheckout(true)

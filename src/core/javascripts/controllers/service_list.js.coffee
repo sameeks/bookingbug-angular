@@ -10,7 +10,7 @@
 *
 * @description
 *
-* Loads a list of services for the currently in scroe company
+* Loads a list of services for the currently in scope company
 *
 * <pre>
 * restrict: 'AE'
@@ -18,7 +18,7 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbServices   A hash of options
+* @param {hash}  bbServices A hash of options
 * @property {array} items An array of all services
 * @property {array} filtered_items A filtered list according to a filter setting
 * @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a resource or person
@@ -233,6 +233,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
     else
       return false
 
+  ###**
+  * @ngdoc method
+  * @name errorModal
+  * @methodOf BB.Directives:bbServices
+  * @description
+  * Display error message in modal
+  ###
   $scope.errorModal = () ->
     error_modal = $modal.open
       templateUrl: $scope.getPartial('_error_modal')
@@ -241,6 +248,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         $scope.ok = () ->
           $modalInstance.close()
 
+  ###**
+  * @ngdoc method
+  * @name filterFunction
+  * @methodOf BB.Directives:bbServices
+  * @description
+  * Filter service
+  ###
   $scope.filterFunction = (service) ->
     if !service
       return false
@@ -288,6 +302,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
     $scope.filters.custom_array_value = null
     $scope.filterChanged()
 
+  ###**
+  * @ngdoc method
+  * @name filterChanged
+  * @methodOf BB.Directives:bbServices
+  * @description
+  * Filter changed
+  ###
   $scope.filterChanged = () ->
     $scope.filtered_items = $filter('filter')($scope.items, $scope.filterFunction);
 

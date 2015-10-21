@@ -8,7 +8,7 @@
 * @description
 * Representation of an Affiliate Object
 *
-* @property {integer} affiliate_id Id of the affiliated company
+* @property {string} affiliate_id Id of the affiliated company
 * @property {string} reference The reference of the affiliated company
 * @property {integer} country_code Country code of the affiliated company
 ####
@@ -29,6 +29,8 @@ angular.module('BB.Models').factory "AffiliateModel", ($q, BBModel, BaseModel) -
     * @methodOf BB.Models:Affiliate
     * @description
     * Find a company in accordin to reference
+    *
+    * @param {string} ref A reference to find a company based on it
     *
     * @returns {promise} A promise for the company reference
     ###

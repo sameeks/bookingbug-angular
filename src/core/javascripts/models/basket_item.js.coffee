@@ -141,9 +141,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setDefaults
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set defaults settings in according of default parameter
+    * Set the default settings
     *
-    * @returns {object} Defaults settings
+    * @returns {object} Default settings
     ###
     # bookable slot based functions
     setDefaults: (defaults) ->
@@ -186,9 +186,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name storeDefaults
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set the defaults store in according of default parameter
+    * Store the default settings by attaching them to the current context
     *
-    * @returns {array} Defaults store
+    * @returns {array} defaults variable
     ###
     storeDefaults: (defaults) ->
       @defaults = defaults
@@ -198,7 +198,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name defaultService
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set the default service
+    * Return the default service if existent
     *
     * @returns {array} Default service
     ###
@@ -213,8 +213,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @methodOf BB.Models:BasketItem
     * @description
     * Delete requested time and date if these are unavailable
-    *
-    * @returns {date} Request time
     ###
     # if it turned out that a requested date or time was unavailablem, we'll have to clear it
     requestedTimeUnavailable: ->
@@ -226,9 +224,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setSlot
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set slot in according of slot parameter
+    * Set the current slot based on the passed parameter
     *
-    * @returns {array} Available slot
+    * @param {object} slot A hash representing a slot object
+    * @returns {array} The available slot
     ###
     setSlot: (slot) ->
       @date = new BBModel.Day({date: slot.datetime.toISODate(), spaces: 1})
@@ -241,9 +240,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setCompany
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set company in according of company parameter
-    *
-    * @returns {array} The returned company
+    * Set the current company based on the passed parameter
+    * @param {object} company a hash representing a company object
     ###
     setCompany: (company) ->
       @company = company
@@ -256,8 +254,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @methodOf BB.Models:BasketItem
     * @description
     * Clear existing item
-    *
-    * @returns {array} Newly array without item deleted
     ###
     clearExistingItem: () ->
       if @$has('self') &&  @event_id
@@ -266,16 +262,14 @@ angular.module('BB.Models').factory "BasketItemModel",
         prom.then () ->
 
       delete @earliest_time
-      delete @event_id  # when changing the service - we ahve to clear any pre-set event
+      delete @event_id  # when changing the service - we have to clear any pre-set event
 
     ###**
     * @ngdoc method
     * @name setItem
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set item in according to item type parameter
-    *
-    * @returns {array} The returned set item
+    * Set the current item based on the item object passed as parameter
     ###
     setItem: (item) ->
       return if !item
@@ -368,9 +362,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setEventGroup
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set event group in according of event_group parameter
+    * Set event group based on the event_group param
     *
-    * @returns {array} Newly array list new event group added
+    * @param {object} event_group a hash
     ###
     setEventGroup: (event_group) ->
       if @event_group
@@ -434,9 +428,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setEvent
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set event in according of event parameter
+    * Set event according to event parameter
     *
-    * @returns {array} Newly array with event added
+    * @param {object} event A hash representing an event object
     ###
     setEvent: (event) ->
 
@@ -467,9 +461,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setCategory
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set category in according of cat parameter
+    * Set category according to cat parameter
     *
-    * @returns {object} The returned set category
+    * @param {object} cat A hash representing a category object
     ###
     # if someone sets a category - we may then later restrict the service list by category
     setCategory: (cat) ->
@@ -480,9 +474,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setPerson
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set person in according of per, if set_selected is true
+    * Set person according to per parameter
     *
-    * @returns {object} The returned set person for basket item
+    * @param {object} per A hash representing a person object
+    * @param {boolean} set_selected Set selected flag
     ###
     setPerson: (per, set_selected = true) ->
       if set_selected && @earliest_time
@@ -849,9 +844,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name getStep
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get step
+    * Build a temp object with current step variables
     *
-    * @returns {object} The returned temp
+    * @returns {object} Temp hash
     ###
     getStep: ->
       temp = {}
@@ -875,7 +870,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name loadStep
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set load step in according of step parameter
+    * Build current step variables based on a hash object passed as parameter
+    *
+    * @param {object} step Hash object representing a step
     *
     * @returns {object} The returned load step
     ###
