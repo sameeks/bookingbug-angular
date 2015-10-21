@@ -44,8 +44,6 @@ app.directive 'bbWaitFor', ($compile) ->
     return
 
 
-# bbScrollTo
-# Allows you to scroll to a specific element
 app.directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, SettingsService) ->
   transclude: false,
   restrict: 'A',
@@ -105,20 +103,8 @@ app.directive 'bbForm', ($bbug, $window, SettingsService) ->
   require: '^form'
   link: (scope, elem, attrs, ctrls) ->
 
-    form_controller = ctrls
-
     # set up event handler on the form element
     elem.on "submit", ->
-
-      form_controller.submitted = true
-
-      # mark nested forms as submitted too
-      for property of form_controller
-        if form_controller[property].hasOwnProperty('$valid')
-          form_controller[property].submitted = true
-
-      scope.$apply()
-
       invalid_form_group = elem.find('.has-error:first')
       
       if invalid_form_group && invalid_form_group.length > 0
@@ -195,19 +181,3 @@ angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
               $scope.questions[question.id] = {question: question, item: item}
 
       $scope.has_questions = _.pluck($scope.questions, 'question').length > 0
-
-
-
-angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
-  restrict: 'A'
-  scope: true
-  link: (scope, elem, attrs) ->
-
-    # watch modal height to ensure it does not exceed window height
-    deregisterWatcher = scope.$watch ->
-      height = elem.height()
-      modal_padding = 200
-      if height > $bbug(window).height()
-        new_height = $(window).height() - modal_padding
-        elem.attr( 'style', 'height: ' + (new_height) + 'px; overflow-y: scroll;' )
-        deregisterWatcher()

@@ -99,6 +99,15 @@ angular.module('BB.Controllers').controller 'ResourceList',
       else
         $scope.setLoaded $scope
 
+  ###**
+  * @ngdoc method
+  * @name getItemFromResource
+  * @methodOf BB.Directives:bbResources
+  * @description
+  * Get item from resource in according of resource parameter
+  *
+  * @param {object} resource The resource 
+  ###
   getItemFromResource = (resource) =>
     if (resource instanceof  ResourceModel)
       if $scope.bookable_items
@@ -107,6 +116,17 @@ angular.module('BB.Controllers').controller 'ResourceList',
             return item
     return resource
 
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbResources
+  * @description
+  * Select an item into the current booking journey and route on to the next page dpending on the current page control
+  *
+  * @param {array} item The Service or BookableItem to select
+  * @param {string=} route A specific route to load
+  * @param {string=} skip_step The skip_step has been set to false
+  ###
   $scope.selectItem = (item, route, skip_step = false) =>
     if $scope.$parent.$has_page_control
       $scope.resource = item
@@ -129,8 +149,14 @@ angular.module('BB.Controllers').controller 'ResourceList',
   $scope.$on "currentItemUpdate", (event) ->
     loadData()
 
-
-   $scope.setReady = () =>
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbResources
+  * @description
+  * Set this page section as ready
+  ###
+  $scope.setReady = () =>
     if $scope.resource
       $scope.bb.current_item.setResource(getItemFromResource($scope.resource))
       return true

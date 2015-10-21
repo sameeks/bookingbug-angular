@@ -1,5 +1,22 @@
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:ItemDetails
+*
+* @description
+* Representation of an ItemDetails Object
+*
+* @property {string} self The self
+* @property {array} questions The questions
+* @property {array} survey_questions The survey questions
+* @property {string} hasQuestions Has questions about the item details
+* @property {string} hasSurveyQuestions Has survey questions about the item details
+* @property {string} checkConditionalQuestions Check conditional questions about the item details
+####
+
+
 angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel, $bbug, QuestionService) ->
 
   class ItemDetails extends BaseModel
@@ -21,6 +38,15 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
       @hasSurveyQuestions = (@survey_questions.length > 0)
 
 
+    ###**
+    * @ngdoc method
+    * @name questionPrice
+    * @methodOf BB.Models:ItemDetails
+    * @description
+    * Get question about price in according of quantity
+    *
+    * @returns {integer} The returned price
+    ###
     questionPrice: (qty) ->
       qty ||= 1
       @checkConditionalQuestions()
@@ -29,16 +55,42 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
         price += q.selectedPriceQty(qty)
       price
 
+    ###**
+    * @ngdoc method
+    * @name checkConditionalQuestions
+    * @methodOf BB.Models:ItemDetails
+    * @description
+    * Checks if exist conditional questions 
+    *
+    * @returns {boolean} The returned existing conditional questions
+    ###
     checkConditionalQuestions: () ->
       QuestionService.checkConditionalQuestions(@questions)
 
-
+    ###**
+    * @ngdoc method
+    * @name getPostData
+    * @methodOf BB.Models:ItemDetails
+    * @description
+    * Get data 
+    *
+    * @returns {array} The returned data
+    ###
     getPostData: ->
       data = []
       for q in @questions
         data.push(q.getPostData()) if q.currentlyShown
       data
 
+    ###**
+    * @ngdoc method
+    * @name setAnswers
+    * @methodOf BB.Models:ItemDetails
+    * @description
+    * Load the answers from an answer set - probably from loading an existing basket item
+    *
+    * @returns {object} The returned answers set
+    ###
     # load the answers from an answer set - probably from loading an existing basket item
     setAnswers: (answers) ->
       # turn answers into a hash
@@ -51,5 +103,14 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
           q.answer = ahash[q.id].answer
       @checkConditionalQuestions()    
 
+    ###**
+    * @ngdoc method
+    * @name getQuestion
+    * @methodOf BB.Models:ItemDetails
+    * @description
+    * Get question about item details by id
+    *
+    * @returns {object} The returned question
+    ###
     getQuestion: (id) ->
       _.findWhere(@questions, {id: id})

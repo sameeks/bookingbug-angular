@@ -1,9 +1,46 @@
 'use strict';
 
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbWidget
+* @restrict A
+* @scope 
+*   client: '=?'
+*   apiUrl: '@?'
+*   useParent:'='
+* @description
+*
+* Loads a list of widgets for the currently in scope company
+*
+* <pre>
+* restrict: 'A'
+* scope:
+*   client: '=?'
+*   apiUrl: '@?'
+*   useParent:'='
+* transclude: true
+* </pre>
+*
+* @param {hash} bbWidget A hash of options
+* @property {string} pusher The pusher
+* @property {string} pusher_channel The pusher channel
+* @property {string} init_params Initialization of basic parameters
+####
+
+
 angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     $templateCache, $compile, $q, AppConfig, $timeout, $bbug) ->
 
+  ###**
+  * @ngdoc method
+  * @name getTemplate
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Get template
+  *
+  * @param {object} template The template
+  ###
   getTemplate = (template) ->
     partial = if template then template else 'main'
     fromTemplateCache = $templateCache.get(partial)
@@ -14,11 +51,29 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
       $http.get(src, {cache: $templateCache}).then (response) ->
         response.data
 
+  ###**
+  * @ngdoc method
+  * @name updatePartials
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Update partials
+  *
+  * @param {object} prms The parameter
+  ###
   updatePartials = (scope, element, prms) ->
     $bbug(i).remove() for i in element.children() when $bbug(i).hasClass('custom_partial')
     appendCustomPartials(scope, element, prms).then () ->
       scope.$broadcast('refreshPage')
 
+  ###**
+  * @ngdoc method
+  * @name setupPusher
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Push setup
+  *
+  * @param {object} prms The parameter
+  ###
   setupPusher = (scope, element, prms) ->
     $timeout () ->
       scope.pusher = new Pusher('c8d8cea659cc46060608')
@@ -26,6 +81,15 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
       scope.pusher_channel.bind 'update', (data) ->
         updatePartials(scope, element, prms)
 
+  ###**
+  * @ngdoc method
+  * @name appendCustomPartials
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Appent custom partials
+  *
+  * @param {object} prms The parameter
+  ###
   appendCustomPartials = (scope, element, prms) ->
     defer = $q.defer()
     $http.get(prms.custom_partial_url).then (custom_templates) ->
@@ -39,6 +103,16 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
         defer.resolve(style)
     defer.promise
 
+  ###**
+  * @ngdoc method
+  * @name renderTemplate
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Render template
+  *
+  * @param {object} design_mode The design mode
+  * @param {object} template The template
+  ###
   renderTemplate = (scope, element, design_mode, template) ->
     $q.when(getTemplate(template)).then (template) ->
       element.html(template).show()
@@ -629,7 +703,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return
       else
         if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          $scope.showPage('confirmation')
+          $scope.showPage('payment_complete')
         else
           return $scope.showPage(route)
           
@@ -646,7 +720,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')
     else if $scope.bb.total && $scope.bb.payment_status == "complete"
-      return $scope.showPage('confirmation')
+      return $scope.showPage('payment_complete')
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
       return $scope.showPage('payment')
@@ -704,7 +778,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
     #   return $scope.showPage('payment')
     else if $scope.bb.payment_status == "complete"
-      return $scope.showPage('confirmation')
+      return $scope.showPage('payment_complete')
 
 
   $scope.showCheckout = ->

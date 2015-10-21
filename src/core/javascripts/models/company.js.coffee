@@ -15,7 +15,6 @@
 * @property {string} description The company description
 * @property {string} country_code the Country code for thie company
 * @property {string} currency_code A CCY for this company
-* @property {string} reference A custom external reference for the company
 * @property {integer} id The company ID
 * @property {boolean} live If this company is set live
 * @property {array} companies An array of child companies if this is a parent company
@@ -94,6 +93,15 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
             return c
       return null      
 
+    ###**
+    * @ngdoc method
+    * @name getSettings
+    * @methodOf BB.Models:Company
+    * @description
+    * Get settings company
+    *
+    * @returns {promise} A promise for settings company
+    ###
     getSettings: () ->
       def = $q.defer()
       if @settings
@@ -107,6 +115,15 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
           def.reject("Company has no settings")
       return def.promise
 
+    ###**
+    * @ngdoc method
+    * @name pusherSubscribe
+    * @methodOf BB.Models:Company
+    * @description
+    * Push subscribe for company
+    *
+    * @returns {object} Subscriber company
+    ###
     pusherSubscribe: (callback, options = {}) =>
       if Pusher? && !@pusher?
         @pusher = new Pusher 'c8d8cea659cc46060608',

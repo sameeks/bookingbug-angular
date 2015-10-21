@@ -1,5 +1,24 @@
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:Service
+*
+* @description
+* Representation of an Service Object
+*
+* @property {integer} id Id of the service
+* @property {string} name The name of service
+* @property {date} duration Duration of the service
+* @property {float} prices The prices of the service
+* @property {integer} detail_group_id The detail group id
+* @property {date} booking_time_step The time step of the booking
+* @property {integer} min_bookings The minimum number of bookings
+* @property {integer} max_booings The maximum number of bookings
+###
+
+
 angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
 
   class Service extends BaseModel
@@ -18,13 +37,29 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
       @min_advance_datetime = moment().add(@min_advance_period, 'seconds')
       @max_advance_datetime = moment().add(@max_advance_period, 'seconds')
 
-
+    ###**
+    * @ngdoc method
+    * @name getPriceByDuration
+    * @methodOf BB.Models:Service
+    * @description
+    * Get price by duration in function of duration
+    *
+    * @returns {object} The returning price by duration 
+    ###
     getPriceByDuration: (dur) ->
       for d,i in @durations
         return @prices[i] if d == dur
       # return price
 
-
+    ###**
+    * @ngdoc method
+    * @name getCategoryPromise
+    * @methodOf BB.Models:Service
+    * @description
+    * Get category promise
+    *
+    * @returns {object} The returning category promise 
+    ###
     getCategoryPromise: () =>
       return null if !@$has('category')
       prom = @$get('category')
@@ -32,7 +67,15 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
         @category = new BBModel.Category(cat)
       prom
 
-
+    ###**
+    * @ngdoc method
+    * @name days_array
+    * @methodOf BB.Models:Service
+    * @description
+    * Put days in array
+    *
+    * @returns {array} The returning days array 
+    ###
     days_array: () =>
       arr = []
       for x in [@min_bookings..@max_bookings]

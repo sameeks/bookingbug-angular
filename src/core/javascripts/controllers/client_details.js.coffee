@@ -1,3 +1,40 @@
+###**
+* @ngdoc directive
+* @name BB.Directives:bbClientDetails
+* @restrict AE
+* @scope true
+*
+* @description
+* Loads a list of client details for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {array} questions Questions of the client
+* @property {integer} company_id The company id of the client company
+* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
+* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @example
+*  <example module="BB"> 
+*    <file name="index.html">
+*   <div bb-api-url='https://uk.bookingbug.com'>
+*   <div  bb-widget='{company_id:21}'>
+*     <div bb-client-details>
+*        <p>company_id: {{client_details.company_id}}</p>
+*        <p>offer_login: {{client_details.offer_login}}</p>
+*        <p>ask_address: {{client_details.ask_address}}</p>
+*        <p>no_phone: {{client_details.no_phone}}</p>
+*      </div>
+*     </div>
+*     </div>
+*   </file> 
+*  </example>
+* 
+####
+
 
 angular.module('BB.Directives').directive 'bbClientDetails', () ->
   restrict: 'AE'
@@ -44,7 +81,16 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
     if !$scope.client.valid() && LoginService.isLoggedIn()
       $scope.setClient(new BBModel.Client(LoginService.member()._data))
 
-
+  ###**
+  * @ngdoc method
+  * @name validateClient
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * Validate the client
+  *
+  * @param {object} client_form The client form
+  * @param {string=} route A specific route to load
+  ###
   $scope.validateClient = (client_form, route) =>
     $scope.notLoaded $scope
     $scope.existing_member = false
@@ -66,7 +112,13 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
         AlertService.danger({msg: "You have already registered with this email address. Please login or reset your password using the Forgot Password link below."})
       $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name clientLogin
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * Client login
+  ###
   $scope.clientLogin = () =>
     $scope.login_error = false
     if $scope.login
@@ -79,7 +131,13 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
         $scope.setLoaded $scope
         AlertService.danger({msg: "Sorry, your email or password was not recognised. Please try again."})
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
+  ###
   $scope.setReady = () =>
     $scope.client.setClientDetails($scope.client_details)
 
@@ -94,7 +152,13 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
     , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     return prom
 
-
+  ###**
+  * @ngdoc method
+  * @name clientSearch
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * Client search
+  ###
   $scope.clientSearch = () ->
     if $scope.client? && $scope.client.email? && $scope.client.email != ""
       $scope.notLoaded $scope
@@ -109,7 +173,15 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       $scope.setClient({})
       $scope.client = {}
 
-
+  ###**
+  * @ngdoc method
+  * @name switchNumber
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * Switch number
+  *
+  * @param {array} to Switch number to mobile
+  ###
   $scope.switchNumber = (to) ->
     $scope.no_mobile = !$scope.no_mobile
     if to == 'mobile'
@@ -119,17 +191,40 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       $scope.bb.basket.setSettings({send_sms_reminder: false})
       $scope.client.mobile = null
 
-
+  ###**
+  * @ngdoc method
+  * @name getQuestion
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * Get question by id
+  *
+  * @param {integer} id The id question
+  ###
   $scope.getQuestion = (id) ->
     for question in $scope.client_details.questions
       return question if question.id == id
 
     return null
 
+  ###**
+  * @ngdoc method
+  * @name useClient
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * Use client by client
+  *
+  * @param {array} client The client
+  ###
   $scope.useClient = (client) ->
     $scope.setClient(client)
     
-
+  ###**
+  * @ngdoc method
+  * @name recalc_question
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * Recalculate question
+  ###
   $scope.recalc_question = () ->
     QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
 

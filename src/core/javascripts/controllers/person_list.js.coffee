@@ -1,6 +1,29 @@
 'use strict';
 
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbPeople
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of peoples for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {array} items The items of the person list
+* @property {array} bookable_people The bookable people from the person list
+* @property {array} bookable_items The bookable items from the person list
+* @property {array} booking_item The booking item from the person list
+####
+
+
 angular.module('BB.Directives').directive 'bbPeople', () ->
   restrict: 'AE'
   replace: true
@@ -86,6 +109,15 @@ angular.module('BB.Controllers').controller 'PersonList',
     , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
+  ###**
+  * @ngdoc method
+  * @name setPerson
+  * @methodOf BB.Directives:bbPeople
+  * @description
+  * Storing the person property in the form store
+  *
+  * @param {array} people The people 
+  ###
   # we're storing the person property in the form store but the angular select
   # menu has to have a reference to the same object memory address for it to
   # appear as selected as it's ng-model property is a Person object.
@@ -96,7 +128,15 @@ angular.module('BB.Controllers').controller 'PersonList',
           if person.id is $scope.person.id
             $scope.person = person
 
-
+  ###**
+  * @ngdoc method
+  * @name getItemFromPerson
+  * @methodOf BB.Directives:bbPeople
+  * @description
+  * Get item from person
+  *
+  * @param {array} person The person
+  ###
   getItemFromPerson = (person) =>
     if (person instanceof  PersonModel)
       if $scope.bookable_items
@@ -105,7 +145,16 @@ angular.module('BB.Controllers').controller 'PersonList',
             return item
     return person
 
-
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbPeople
+  * @description
+  * Select an item into the current person list in according of item and route parameters
+  *
+  * @param {array} item Selected item from the list of current people
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectItem = (item, route) =>
     if $scope.$parent.$has_page_control
       $scope.person = item
@@ -115,7 +164,16 @@ angular.module('BB.Controllers').controller 'PersonList',
       $scope.decideNextPage(route)
       return true
 
-
+   ###**
+  * @ngdoc method
+  * @name selectAndRoute
+  * @methodOf BB.Directives:bbPeople
+  * @description
+  * Select and route person from list in according of item and route parameters
+  *
+  * @param {array} item Selected item from the list of current people
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectAndRoute = (item, route) =>
    $scope.booking_item.setPerson(getItemFromPerson(item))
    $scope.decideNextPage(route)
@@ -135,7 +193,13 @@ angular.module('BB.Controllers').controller 'PersonList',
   $scope.$on "currentItemUpdate", (event) ->
     loadData()
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbPeople
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = () =>
     if $scope.person
       $scope.booking_item.setPerson(getItemFromPerson($scope.person))

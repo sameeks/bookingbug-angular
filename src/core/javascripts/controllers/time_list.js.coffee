@@ -1,5 +1,31 @@
 'use strict';
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbTimes
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of times for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @param {hash}  bbTimes A hash of options
+* @property {array} selected_day The selected day
+* @property {date} selected_date The selected date
+* @property {array} data_source The data source
+* @property {array} item_link_source The item link source
+* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+####
+
+
 angular.module('BB.Directives').directive 'bbTimes', () ->
   restrict: 'AE'
   replace: true
@@ -17,23 +43,55 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
     $scope.loadDay()
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name setDate
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Set a date of time list
+  *
+  * @param {date} date The date of time list
+  ###
   # set a date
   $scope.setDate = (date) =>
     day = new BBModel.Day({date: date, spaces: 1})
     $scope.setDay(day)
 
-
+  ###**
+  * @ngdoc method
+  * @name setDay
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Set based on a day model
+  *
+  * @param {object} dayItem The dayItem
+  ###
   # set based on a day model
   $scope.setDay = (dayItem) =>
     $scope.selected_day  = dayItem
     $scope.selected_date = dayItem.date
 
-
+  ###**
+  * @ngdoc method
+  * @name setDataSource
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Set data source model of time list
+  *
+  * @param {object} source The source
+  ###
   $scope.setDataSource = (source) =>
     $scope.data_source = source
 
-
+  ###**
+  * @ngdoc method
+  * @name setItemLinkSource
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Set item link source model
+  *
+  * @param {object} source The source
+  ###
   $scope.setItemLinkSource = (source) =>
     $scope.item_link_source = source
 
@@ -47,14 +105,31 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadDay()
 
-
+  ###**
+  * @ngdoc method
+  * @name format_date
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Format data source date of the time list
+  *
+  * @param {date} fmt The format data
+  ###
   # format data source date
   # This method is deprecated, use datetime filter instead, e.g. moment() | datetime:'dd/mm/yy'
   $scope.format_date = (fmt) =>
     if $scope.data_source.date
       return $scope.data_source.date.date.format(fmt)
 
-
+  ###**
+  * @ngdoc method
+  * @name selectSlot
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Select the slot from time list in according of slot and route parameters
+  *
+  * @param {date} slot The slot
+  * @param {string=} A specific route to load
+  ###
   $scope.selectSlot = (slot, route) =>
     if slot && slot.availability() > 0
       # if this time cal was also for a specific item source (i.e.a person or resoure- make sure we've selected it)
@@ -73,7 +148,15 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         else
           $scope.decideNextPage(route)
 
-
+  ###**
+  * @ngdoc method
+  * @name highlightSlot
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * The highlight slot from time list 
+  *
+  * @param {date} slot The slot 
+  ###
   $scope.highlightSlot = (slot) =>
     if slot && slot.availability() > 0
       if $scope.selected_day
@@ -83,14 +166,31 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
       # tell any accordian groups to update
       $scope.$broadcast 'slotChanged'
 
-
+  ###**
+  * @ngdoc method
+  * @name status
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Check the status of the slot to see if it has been selected
+  *
+  * @param {date} slot The slot
+  ###
   # check the status of the slot to see if it has been selected
   $scope.status = (slot) ->
     return if !slot
     status = slot.status()
     return status
 
-
+  ###**
+  * @ngdoc method
+  * @name add
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Add unit of time to the selected day
+  *
+  * @param {date} type The type
+  * @param {date} amount The amount
+  ###
   # add unit of time to the selected day
   # deprecated, use bbDate directive instead
   $scope.add = (type, amount) =>
@@ -100,13 +200,29 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
     $scope.loadDay()
     $scope.$broadcast('dateChanged', newdate)
 
-
+  ###**
+  * @ngdoc method
+  * @name subtract
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Subtract unit of time to the selected day
+  *
+  * @param {date} type The type
+  * @param {date} amount The amount
+  ###
   # subtract unit of time to the selected day
   # deprecated, use bbDate directive instead
   $scope.subtract = (type, amount) =>
     $scope.add(type, -amount)
 
 
+  ###**
+  * @ngdoc method
+  * @name loadDay
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Load day
+  ###
   $scope.loadDay = () =>
 
     if $scope.data_source && $scope.data_source.days_link  || $scope.item_link_source
@@ -156,11 +272,25 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
     else
       $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name padTimes
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Pad Times in according of times parameter
+  *
+  * @param {date} times The times
+  ###
   $scope.padTimes = (times) =>
     $scope.add_padding = times
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbTimes
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = () =>
     if !$scope.data_source.time
       AlertService.clear()

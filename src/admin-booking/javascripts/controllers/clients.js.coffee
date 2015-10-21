@@ -7,7 +7,7 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   controller : 'adminBookingClients'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService) ->
   
   $scope.validator = ValidatorService
   $scope.clientDef = $q.defer()
@@ -15,22 +15,21 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
   $scope.per_page = 20
   $scope.total_entries = 0
   $scope.clients = []
-  $scope.search_clients = false
+  $scope.searchClients = false
   $scope.newClient = false
   $scope.no_clients = false
   $scope.search_error = false
-  $scope.search_text = null
 
 
   $scope.showSearch = () =>
-    $scope.search_clients = true
+    $scope.searchClients = true
     $scope.newClient = false
   
 
   $scope.showClientForm = () =>
     $scope.search_error = false
     $scope.no_clients = false
-    $scope.search_clients = false
+    $scope.searchClients = false
     $scope.newClient = true
     # clear the client if one has already been selected
     $scope.clearClient()
@@ -43,9 +42,8 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.client.setValid(true)
     $scope.decideNextPage(route)
 
-
-  $scope.checkSearch = () =>
-    if $scope.search_text and $scope.search_text.length >= 3
+  $scope.checkSearch = (search) =>
+    if search.length >= 3
       $scope.search_error = false
       return true
     else
@@ -72,13 +70,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.no_clients = false
     $scope.search_error = false
     clientDef = $q.defer()
-    params =
-      company: $scope.bb.company
-      per_page: $scope.per_page
-      filter_by: if filterBy? then filterBy else $scope.search_text
-      filter_by_fields: filterByFields
-      order_by: orderBy
-      order_by_reverse: orderByReverse
+    params = {company: $scope.bb.company, per_page: $scope.per_page, filter_by: filterBy, filter_by_fields: filterByFields, order_by: orderBy, order_by_reverse: orderByReverse}
     params.page = currentPage+1 if currentPage
     $rootScope.connection_started.then ->
       $scope.notLoaded $scope

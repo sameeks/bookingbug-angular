@@ -1,5 +1,31 @@
 'use strict'
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbTimeSlots
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of time slots for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {array} booking_item The booking item 
+* @property {date} start_date The start date
+* @property {date} end_date The end date
+* @property {array} slots The slots
+* @property {object} validator The validator service - see {@link BB.Services:Validator validator Service}
+* 
+####
+
+
 angular.module('BB.Directives').directive 'bbTimeSlots', () ->
   restrict: 'AE'
   replace: true
@@ -39,7 +65,16 @@ angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
   setItem = (slot) ->
     $scope.booking_item.setSlot(slot)
 
-  
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbTimeSlots
+  * @description
+  * Select an item into the current booking journey and route on to the next page dpending on the current page control
+  *
+  * @param {object} slot The slot from list
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectItem = (slot, route) ->
     if $scope.$parent.$has_page_control
       setItem(slot)

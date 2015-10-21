@@ -41,18 +41,10 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
           date_format = 'MM/DD/YYYY' 
           date_format_2 = 'MM/dd/yyyy'
 
-
         scope.$watch attrs.bbQuestion, (question) ->
           if question
             html = ''
             lastName = ''
-            placeholder = ''
-
-            if attrs.defaultPlaceholder?
-              if question.detail_type is "text_area" | question.detail_type is "text_field"
-                placeholder = question.default if question.default
-                if question.answer == question.default
-                  question.answer = ""
             
             scope.recalc = () =>
               if angular.isDefined(scope.recalc_price)
@@ -72,7 +64,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
               html += "</select>"
 
             else if question.detail_type is "text_area"
-              html = "<textarea placeholder='#{placeholder}' ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' rows=3 class='form-question form-control'>#{question['answer']}</textarea>"
+              html = "<textarea ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' rows=3 class='form-question form-control'>#{question['answer']}</textarea>"
 
             else if question.detail_type is "radio"
               html = '<div class="radio-group">'
@@ -102,7 +94,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
                 </div>"
 
             else
-              html = "<input type='text' placeholder='#{placeholder}'  ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' class='form-question form-control'/>"
+              html = "<input type='text' ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' class='form-question form-control'/>"
 
             if html
               e = $compile(html) scope, (cloned, scope) =>
@@ -285,7 +277,7 @@ app.directive "cardSecurityCode", ->
         element.attr('placeholder', "•••")
 
   return {
-    restrict: "AC"
+    restrict: "C"
     link: linker
     scope: {
       'cardType': '='
@@ -409,7 +401,6 @@ app.directive "bbMatchInput", ->
       compare(ctrl.$viewValue)
 
     compare = (value) ->
-      ctrl.$setValidity 'match', scope.val_1 == value
-      value
+      ctrl.$setValidity 'match', scope.val_1 is value
 
     ctrl.$parsers.push compare
