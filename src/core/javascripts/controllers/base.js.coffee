@@ -578,6 +578,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.showPage = (route, dont_record_page) =>
+
     $scope.bb.updateRoute(route)
     $scope.jumped = false
 
@@ -702,7 +703,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return $scope.showPage('basket')
     else if $scope.bb.moving_booking && $scope.bb.basket.readyToCheckout()
       return $scope.showPage('purchase')
-    else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null)
+    else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null && !$scope.bb.basket.waiting_for_checkout)
       return if $scope.setPageRoute($rootScope.Route.Checkout)
       return $scope.showPage('checkout')
     # else if ($scope.bb.total && $scope.bb.payment_status == "pending")

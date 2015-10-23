@@ -109,3 +109,9 @@ window.bookingbug =
            .get('LoginService').logout(logout_opts)
     window.location.reload() if options.reload
 
+
+moment.locale('en', {
+    longDateFormat : {
+        LLLL : "dddd Do MMMM[,] h.mma"
+    }
+  })
