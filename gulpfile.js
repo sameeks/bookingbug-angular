@@ -137,8 +137,12 @@ gulp.task('ngdocs', [], function () {
       angularAnimate: false
     },
     title: "BookingBug SDK Docs",
+    image: "http://uk.bookingbug.com/assets/logo.png",
     scripts: [
       'examples/booking-widget.js'
+    ],
+    styles: [
+      'src/ngdocs/bb.css'
     ]
 
   }
