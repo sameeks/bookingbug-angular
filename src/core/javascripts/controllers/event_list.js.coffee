@@ -388,6 +388,8 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.setLoaded $scope
       return false
     else
+      if $scope.bb.moving_purchase
+        i.setEvent(item) for i in $scope.bb.basket.items
       $scope.bb.current_item.setEvent(item)
       $scope.bb.current_item.ready = false
       $q.all($scope.bb.current_item.promises).then () ->

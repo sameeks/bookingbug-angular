@@ -161,6 +161,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
       data.qudini_booking_id = params.bb.qudini_booking_id if params.bb.qudini_booking_id
       data.no_notifications = params.bb.no_notifications  if params.bb.no_notifications
       data.affiliate_id = $rootScope.affiliate_id
+      basket.waiting_for_checkout = true
       MutexService.getLock().then (mutex) ->
         basket.$post('checkout', params, data).then (total) ->
           MutexService.unlock(mutex)
@@ -168,10 +169,13 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
           tot = new BBModel.Purchase.Total(total)
           $rootScope.$broadcast('newCheckout', tot)
           basket.clear()
+          basket.waiting_for_checkout = false
           deferred.resolve(tot)
         , (err) ->
+          basket.waiting_for_checkout = false
           deferred.reject(err)
       , (err) ->
+        basket.waiting_for_checkout = false
         MutexService.unlock(mutex)
         deferred.reject(err)
     deferred.promise

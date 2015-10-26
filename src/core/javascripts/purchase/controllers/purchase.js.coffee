@@ -205,6 +205,10 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
         else
           $scope.bb.moving_booking = $scope.purchase
 
+        if _.every(_.map($scope.bookings, (b) -> b.event_id),
+                   (event_id) -> event_id == $scope.bookings[0].event_id)
+          $scope.bb.moving_purchase = $scope.purchase
+
         $scope.quickEmptybasket()
         for booking in $scope.bookings
           new_item = new BBModel.BasketItem(booking, $scope.bb)
