@@ -174,20 +174,28 @@
                   <ul>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
                       <span class="bb-icon icon-calendar"></span>
-                      <span class="hidden-xs">{{item.date.format('dddd ')}}</span><span class="truncate-xs">{{item.date.format('Do MMMM YYYY')}}</span>
+                      <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date.format('dddd ')}}</span><span class="truncate-xs hidden-md hidden-lg">{{item.date.format('Do MMMM ')}}</span>
+                      <span class="truncate-xs hidden-xs hidden-sm">{{item.date.format('Do MMM ')}}</span>
+                      <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date.format('YYYY')}}</span>
                     </li>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
                       <span class="glyphicon glyphicon-time" aria-hidden="true"></span> 
-                      <span ng-bind="item.date.format('h[:]mma')"></span>&ndash;<span ng-bind="item.end_datetime.format('h[:]mma')"></span>
+                      <span ng-bind="item.date.format('h[:]mma')"></span>
+                      <span ng-class="{'hidden-sm':$root.tiles, 'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}">&ndash;</span>
+                      <span ng-class="{'hidden-sm':$root.tiles, 'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}" ng-bind="item.end_datetime.format('h[:]mma')"></span>
                     </li>
-                    <li class="hidden-xs truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
+                    <li class="hidden-xs truncate-xs" ng-class="{'col-sm-4':!$root.tiles, 'hidden-sm':$root.tiles, 'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">
                       <span class="glyphicon glyphicon-hourglass"></span>
                       <span ng-bind="item.duration | time_period"></span>
                     </li>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
                       <span ng-if="spaces_left > 0" class="glyphicon glyphicon-user" aria-hidden="true"></span>
                       <span ng-if="spaces_left < 1" class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
-                        <span><span ng-if="spaces_left > 0" ng-bind="spaces_left"></span><span ng-if="spaces_left < 1" ng-bind="'No'"></span> space<span ng-if="spaces_left > 1 || spaces_left < 1" ng-bind="'s'"></span> left</span>
+                      <span>
+                        <span ng-if="spaces_left > 0" ng-bind="spaces_left"></span>
+                        <span ng-if="spaces_left < 1" ng-bind="'No'"></span> space
+                        <span ng-if="spaces_left > 1 || spaces_left < 1" ng-bind="'s'"></span>
+                        <span ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}">left</span>
                       </span>
                     </li>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
@@ -197,10 +205,13 @@
                         <span ng-show="item.price_range && (item.price_range.from == item.price_range.to)">{{item.price_range.from | ipretty_price}}</span>
                       </span>
                     </li>
-                    <li class="hidden-xs truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
+                    <li class="hidden-xs truncate-xs " ng-class="{'col-sm-4':!$root.tiles, 'col-sm-12':$root.tiles}">
                       <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                       <span>
                         {{bb.current_item.company.name}}
+                      </span>
+                      <span ng-if="$root.tiles">
+                        {{bb.current_item.company.getAddress().address4}}
                       </span>
                     </li>
                   </ul>
