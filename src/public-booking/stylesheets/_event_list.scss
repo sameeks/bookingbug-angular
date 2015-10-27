@@ -37,11 +37,6 @@
     }
   }
 
-  .bb-filter-summary {
-    border-top: none;
-    padding: 10px 0;
-    margin-bottom: 0;
-  }
 
   .bb-month-picker {
     @include make-row();
@@ -180,7 +175,6 @@
       margin: 10px 0;
       h3 {
         margin: 0;
-        color: #000;
       }
     }
 
@@ -293,131 +287,11 @@
   }
 
   .bb-filter-summary {
+    margin-bottom: 0;
+    border-top: none;
+    padding: 10px 0;
     font-size: 1.125em;
     line-height: 30px;
-    padding: 10px 0;
-    .panel-body {
-      padding: 0;
-    }
-    span {
-      margin-left: 5px;
-      .btn-icon {
-        font-size: 1.25em;
-        margin-left: 5px;
-        &[disabled] {
-          color: #000;
-        }
-      }
-    }
-    
-  }
-
-
-  .event-img {
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    background-size: cover;
-    background-position: center;
-    min-height: 150px;
-    padding: 5px;
-  }
-
-  time.icon
-  {
-    font-size: 1em; /* change icon size */
-    // @media(max-width:$screen-xs-max) {
-    //   font-size: 0.875em;
-    // }
-    display: block;
-    position: relative;
-    width: 7em;
-    height: 7em;
-    color: white;
-    margin: 20px auto;
-    border-radius: 20em;
-
-    *
-    {
-      display: block;
-      width: 100%;
-      font-size: 1em;
-      font-weight: bold;
-      font-style: normal;
-      text-align: center;
-      opacity: 1;
-    }
-
-    em
-    {
-      position: absolute;
-      top: 1.5em;
-      padding: 0.4em 0;
-      font-size: 0.75em;
-    }
-
-    strong
-    {
-      position: absolute;
-      font-size: 0.8em;
-      bottom: 1.6em;
-    }
-
-    span
-    {
-      position: absolute;
-      top: 0.7em;
-      width: 100%;
-      font-size: 2.75em;
-      letter-spacing: -0.025em;
-    }
-
-
-    .time {
-      padding-top: 19px;
-      opacity: 0;
-      transition: opacity .125s ease-in-out;
-      -moz-transition: opacity .125s ease-in-out;
-      -webkit-transition: opacity .125s ease-in-out;
-    }
-
-    &:hover, &:focus {
-      .time {
-        opacity: 1;
-      }
-    }
-
-    &:hover, &:focus {
-      .date {
-        opacity: 0;
-        transition: opacity .125s ease-in-out;
-        -moz-transition: opacity .125s ease-in-out;
-        -webkit-transition: opacity .125s ease-in-out;
-      }
-    }
-    &[ng-click] {
-      cursor: pointer;
-    }
-
-    .date {
-      padding-top: 18px;
-    }
-  }
-
-  .event-img time  {
-    background-color: rgba(83,86,90,0.6);
-    transition: background-color .5s ease-in-out;
-    -moz-transition: background-color .5s ease-in-out;
-    -webkit-transition: background-color .5s ease-in-out;
-  }
-
-  .event-img:hover time {
-    background-color: rgba(83,86,90,0.9);
-  }
-
-  .bb-filter-summary {
-    font-size: 1.125em;
-    line-height: 30px;
-    padding: 10px 0;
     .panel-body {
       padding: 0;
     }
@@ -495,7 +369,7 @@
 
 
     .time {
-      padding-top: 19px;
+      padding-top: 4px;
       opacity: 0;
       transition: opacity .125s ease-in-out;
       -moz-transition: opacity .125s ease-in-out;
@@ -521,7 +395,7 @@
     }
 
     .date {
-      padding-top: 18px;
+      padding-top: 3px;
     }
   }
 
@@ -535,6 +409,7 @@
   .event-img:hover time {
     background-color: rgba(83,86,90,0.9);
   }
+
   // .fully-booked time.icon {
   //     background-color: #ccc;
   // }
