@@ -66,8 +66,10 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     answer: (q) ->
       if @answers
         for a in @answers
-          if a.name == q
+          if a.name && a.name == q
             return a.answer
+          if a.question_text && a.question_text == q
+            return a.value
       return null
 
 
