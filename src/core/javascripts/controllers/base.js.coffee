@@ -1011,9 +1011,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.allSteps[$scope.bb.current_step-1].active = true
 
 
-  $scope.loadPreviousStep = () ->
-    previousStep = $scope.bb.current_step - 1
-    $scope.loadStep(previousStep)
+  $scope.loadPreviousStep = (number_of_steps_to_go_back) ->
+    number_of_steps_to_go_back = number_of_steps_to_go_back or 1
+    step = $scope.bb.current_step - number_of_steps_to_go_back
+    $scope.loadStep(step)
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps
