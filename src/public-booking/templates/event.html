@@ -382,24 +382,6 @@
                 </div>
               </div>
 
-              <div class="coupons">
-                <div ng-form class="form-inline">
-                  <div ng-show="!show_coupon_box">
-                    <button type="button" class="btn btn-link" ng-click="show_coupon_box = true">Have a promotion code or a myWaitrose card?</button>
-                  </div>
-                  <div my-waitrose-code ng-show="show_coupon_box && !bb.basket.hasCoupon()" class="form-group">
-                    <label for="coupon_code">Apply promotion code or myWaitrose discount:</label>
-                    <div class=" input-group">
-                      <input type="text" class="form-control input-sm" id="coupon_code" name="coupon_code" ng-model="coupon_code" placeholder="Enter your promotion code or myWaitrose card number">
-                      <span class="input-group-btn">
-                      <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!coupon_code" ng-click="validateWaitroseCode()">Apply</button>
-                    </span>
-                    </div>
-                  </div>
-                </div>
-                <button ng-show="bb.basket.hasCoupon()" type="button" class="btn btn-link btn-red" ng-click="removeWaitroseCode()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove discount</button>
-              </div>
-
             </div>
           </div>
 
@@ -412,7 +394,7 @@
             <div class="col-sm-4 hidden-xs">&nbsp;</div>
             <div class="col-sm-5">
               <label>
-                <input type="checkbox" required ng-model="tandc" id="tandc" name="tandc" /> I agree to the <a href="http://www.waitrose.com/content/waitrose/en/home/inspiration/waitrose_cookery_school/about_us/ts_and_cs.html?wtrint=1-Content-_-2-Inspiration-_-3-about_us-_-4--_-5-texlink-_-6-tsandcs" target="_blank">terms and conditions</a>.
+                <input type="checkbox" required ng-model="tandc" id="tandc" name="tandc" /> I agree to the <a href="#" target="_blank">terms and conditions</a>.
               </label>
             </div>
             <div class="col-sm-3 messages">
