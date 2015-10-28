@@ -81,7 +81,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
 
 
     # the amount due now - taking account of any wait list items and if member has a wallet
-    dueTotal: () ->
+    dueTotal: ->
       total = @totalPrice()
       for item in @items
         total -= item.price if item.isWaitlist()
