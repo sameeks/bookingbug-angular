@@ -31,7 +31,6 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
       @repeat_rule.properties = vals
       return @repeat_rule
 
-   
 
     getPostData: () ->
       data = {}

@@ -42,13 +42,16 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
     getAnswersPromise: () =>
       defer = $q.defer()
-      defer.resolve(@answers) if @answers
-      if @_data.$has('answers')
-        @_data.$get('answers').then (answers) =>
-          @answers = (new BBModel.Answer(a) for a in answers)
-          defer.resolve(@answers)
+      if @answers?
+        defer.resolve(@answers) 
       else
-        defer.resolve([])
+        @answers = []
+        if @_data.$has('answers')
+          @_data.$get('answers').then (answers) =>
+            @answers = (new BBModel.Answer(a) for a in answers)
+            defer.resolve(@answers)
+        else
+          defer.resolve([])
       defer.promise
 
     getSurveyAnswersPromise: () =>
@@ -64,10 +67,14 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
 
     answer: (q) ->
-      if @answers
+      if @answers?
         for a in @answers
-          if a.name == q
+          if a.name && a.name == q
             return a.answer
+          if a.question_text && a.question_text == q
+            return a.value
+      else
+        @getAnswersPromise()
       return null
 
 
