@@ -574,6 +574,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.showPage = (route, dont_record_page) =>
+
     $scope.bb.updateRoute(route)
     $scope.jumped = false
 
@@ -629,7 +630,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return
       else
         if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          $scope.showPage('payment_complete')
+          $scope.showPage('confirmation')
         else
           return $scope.showPage(route)
           
@@ -646,7 +647,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')
     else if $scope.bb.total && $scope.bb.payment_status == "complete"
-      return $scope.showPage('payment_complete')
+      return $scope.showPage('confirmation')
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
       return $scope.showPage('payment')
@@ -698,13 +699,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return $scope.showPage('basket')
     else if $scope.bb.moving_booking && $scope.bb.basket.readyToCheckout()
       return $scope.showPage('purchase')
-    else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null)
+    else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null && !$scope.bb.basket.waiting_for_checkout)
       return if $scope.setPageRoute($rootScope.Route.Checkout)
       return $scope.showPage('checkout')
     # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
     #   return $scope.showPage('payment')
     else if $scope.bb.payment_status == "complete"
-      return $scope.showPage('payment_complete')
+      return $scope.showPage('confirmation')
 
 
   $scope.showCheckout = ->
@@ -1010,9 +1011,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.allSteps[$scope.bb.current_step-1].active = true
 
 
-  $scope.loadPreviousStep = () ->
-    previousStep = $scope.bb.current_step - 1
-    $scope.loadStep(previousStep)
+  $scope.loadPreviousStep = (number_of_steps_to_go_back) ->
+    number_of_steps_to_go_back = number_of_steps_to_go_back or 1
+    step = $scope.bb.current_step - number_of_steps_to_go_back
+    $scope.loadStep(step)
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps

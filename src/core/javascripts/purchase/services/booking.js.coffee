@@ -13,7 +13,9 @@ angular.module('BB.Services').factory "PurchaseBookingService", ($q, halClient, 
 
   addSurveyAnswersToBooking: (booking) ->
     deferred = $q.defer()
-    data = booking.getPostData()
+    data = booking.getPostData() 
+    data.notify = false
+    data.notify_admin = false
     booking.$put('self', {}, data).then (booking) =>
       deferred.resolve(new BBModel.Purchase.Booking(booking))
     , (err) =>

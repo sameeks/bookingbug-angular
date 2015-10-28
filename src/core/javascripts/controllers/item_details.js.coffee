@@ -9,13 +9,12 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
     if attrs.bbItemDetails
       item = scope.$eval(attrs.bbItemDetails)
       scope.item_from_param = item
-      if scope.item_details
-        delete scope.item_details
+      delete scope.item_details if scope.item_details
       scope.loadItem(item)
     return
 
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService) ->
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService, PurchaseService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
 
@@ -50,6 +49,10 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
 
   $scope.loadItem = (item) ->
+
+    # return if we don't have a service
+    return false if !item.service?
+
     confirming = true
     $scope.item = item
     $scope.item.private_note = $scope.bb.private_note if $scope.bb.private_note
@@ -97,6 +100,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           item.answer = search.answer
     $scope.item_details = details
 
+
   $scope.$on 'currentItemUpdate', (service) ->
     if $scope.item_from_param
       $scope.loadItem($scope.item_from_param)
@@ -114,6 +118,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     # we need to validate the question information has been correctly entered here
     if $scope.bb.moving_booking
       return $scope.confirm_move(form, route)
+
+    return true if !$scope.has_page_control
 
     $scope.item.setAskedQuestions()
     if $scope.item.ready
@@ -142,28 +148,39 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     $scope.item.setAskedQuestions()
     if $scope.item.ready
       $scope.notLoaded $scope
-      PurchaseBookingService.update($scope.item).then (booking) ->
-        b = new BBModel.Purchase.Booking(booking)
-	
-        if $scope.bb.purchase
-          for oldb, _i in $scope.bb.purchase.bookings
-            $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
-	    
-        $scope.setLoaded $scope
-        $scope.item.move_done = true
-        $rootScope.$broadcast "booking:moved"
-        $scope.decideNextPage(route)
+      if $scope.bb.moving_purchase
+        params =
+          purchase: $scope.bb.moving_purchase
+          bookings: $scope.bb.basket.items
+        PurchaseService.update(params).then (purchase) ->
+          $scope.purchase = purchase
+          $scope.setLoaded $scope
+          $scope.item.move_done = true
+          $rootScope.$broadcast "booking:moved"
+          $scope.decideNextPage(route)
+      else
+        PurchaseBookingService.update($scope.item).then (booking) ->
+          b = new BBModel.Purchase.Booking(booking)
+    
+          if $scope.bb.purchase
+            for oldb, _i in $scope.bb.purchase.bookings
+              $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
+        
+          $scope.setLoaded $scope
+          $scope.item.move_done = true
+          $rootScope.$broadcast "booking:moved"
+          $scope.decideNextPage(route)
 
-        # TODO remove whedn translate enabled by default
-        if SettingsService.isInternationalizatonEnabled()
-          $translate('MOVE_BOOKINGS_MSG', { datetime:b.datetime.format('dddd Do MMMM[,] h.mma') }).then (translated_text) ->
-            AlertService.add("info", { msg: translated_text })
-        else
-          AlertService.add("info", { msg: "Your booking has been moved to #{b.datetime.format('dddd Do MMMM[,] h.mma')}" })
+          # TODO remove whedn translate enabled by default
+          if SettingsService.isInternationalizatonEnabled()
+            $translate('MOVE_BOOKINGS_MSG', { datetime:b.datetime.format('LLLL') }).then (translated_text) ->
+              AlertService.add("info", { msg: translated_text })
+          else
+            AlertService.add("info", { msg: "Your booking has been moved to #{b.datetime.format('LLLL')}" })
 
-       , (err) =>
-        $scope.setLoaded $scope
-        AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
+         , (err) =>
+          $scope.setLoaded $scope
+          AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
     else
       $scope.decideNextPage(route)
 
