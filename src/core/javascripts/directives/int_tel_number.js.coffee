@@ -3,7 +3,7 @@ app = angular.module 'BB.Directives'
 # International Telephone Input directive
 # http://www.tooorangey.co.uk/posts/that-international-telephone-input-umbraco-7-property-editor/
 # https://github.com/Bluefieldscom/intl-tel-input
-app.directive "bbIntTelNumber", ->
+app.directive "bbIntTelNumber", ($parse) ->
   restrict: "A"
   require: "ngModel"
 
@@ -27,13 +27,11 @@ app.directive "bbIntTelNumber", ->
       str
 
 
-    getPrefix = () ->
-      prefix = element.intlTelInput("getExtension")
-      console.log prefix
+    parse = (value) ->
+      prefix = element.intlTelInput("getSelectedCountryData").dialCode
+      getter = $parse(attrs.ngModel + '_prefix')
+      getter.assign(scope, prefix)
+      value
 
-    ctrl.$formatters.push convertNumber
-    ctrl.$parsers.push getPrefix
-
-
-    scope.getPrefix = () ->
-      getPrefix()
+    ctrl.$formatters.push format
+    ctrl.$parsers.push parse
