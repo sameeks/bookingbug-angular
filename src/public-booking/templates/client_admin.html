@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div ng-if="searchClients">
+    <div ng-show="!newClient">
       <div ng-form="client_search_form" class="form-horizontal">
         <label for="search" class="col-xs-offset-4 col-xs-8"><p>Search by Name or Email</p></label>
         <form ng-submit="getClients(null, searchText)">
@@ -70,7 +70,7 @@
 
     </div>
     
-    <div ng-if="newClient">
+    <div ng-show="newClient">
       <div ng-form name="client_form" class="form-horizontal" role="form" novalidate>
         <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
           <label for="first_name" class="control-label col-sm-4">First Name:</label>
