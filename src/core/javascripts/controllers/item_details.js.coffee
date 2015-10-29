@@ -35,8 +35,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
     if attrs.bbItemDetails
       item = scope.$eval(attrs.bbItemDetails)
       scope.item_from_param = item
-      if scope.item_details
-        delete scope.item_details
+      delete scope.item_details if scope.item_details
       scope.loadItem(item)
     return
 
@@ -76,6 +75,10 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
 
   $scope.loadItem = (item) ->
+
+    # return if we don't have a service
+    return false if !item.service?
+
     confirming = true
     $scope.item = item
     $scope.item.private_note = $scope.bb.private_note if $scope.bb.private_note
@@ -121,6 +124,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
         if search
           item.answer = search.answer
     $scope.item_details = details
+
 
   $scope.$on 'currentItemUpdate', (service) ->
     if $scope.item_from_param

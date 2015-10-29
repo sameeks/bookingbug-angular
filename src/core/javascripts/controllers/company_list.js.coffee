@@ -34,8 +34,15 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
     $scope.setLoaded $scope
 
   $scope.selectItem = (item, route) =>
+
+    # if company id is passed in, set the company id to this number
+    if angular.isNumber(item)
+      company_id = item
+    else
+      company_id = item.id
+
     $scope.notLoaded $scope
-    prms = {company_id: item.id}
+    prms = {company_id: company_id}
     $scope.initWidget(prms)
 
   # TODO move this into a mothercare js file

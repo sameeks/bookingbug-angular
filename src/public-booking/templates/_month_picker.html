@@ -1,4 +1,4 @@
-<div slick init-onload="true" data="months" slides-to-show="{{slidesToShow}}" current-index="index" infinite="false" prev-arrow=".month-prev" next-arrow=".month-next">
+<div slick init-onload="true" data="months" on-init="slickOnInit()" on-set-position="slickOnInit()" slides-to-show="3" current-index="index" infinite="false" prev-arrow=".month-prev" next-arrow=".month-next" responsive="[{breakpoint: 1200, settings: {slidesToShow: 2}}, {breakpoint: 992, settings: {slidesToShow: 1}}]">
 
   <div class="bb-month" ng-repeat="month in months" ng-class="{'hidden-xs': month.selected}">
     <table>
@@ -19,7 +19,8 @@
                        'past': day.past,
                        'disabled': day.disabled
                       }" 
-              ng-click="showDay(day)" 
+              ng-click="showDay(day)"
+              ng-if="!refreshing"
               ng-disabled="day.disabled || day.past">
             <div class="circle">{{day.date.date()}}</div>
           </td>
