@@ -25,6 +25,19 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     , (err) =>
       deferred.reject(err)
     deferred.promise
+
+  FBLogin: (prms) ->
+    deferred = $q.defer()
+    company.$post('facebook_login', {}, params).then (login) =>
+      login.$get('member').then (member) =>
+        @setLogin(member)
+        deferred.resolve(member);
+      , (err) =>
+        deferred.reject(err)
+    , (err) =>
+      deferred.reject(err)
+    deferred.promise
+
   
   companyQuery: (id) =>
     if id
