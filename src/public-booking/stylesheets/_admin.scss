@@ -1,16 +1,20 @@
 .bb-admin-client {
+
+  .page-intro {
+    text-align: center;
+  }
+
   text-align: left;
 
   .bb-button-headers {
     margin-bottom: 70px;
-  }
-
-  .form-control {
-    border-radius: 0px;
-  }
-
-  .input-lg {
-    border-radius: 0px;
+    border-bottom: 1px solid #999;
+    button {
+      border-color: #bbb;
+      border-radius: 15px;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;  
+    }
   }
 
   tfoot {
