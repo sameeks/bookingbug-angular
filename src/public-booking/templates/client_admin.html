@@ -37,35 +37,26 @@
 
       <br clear='all'/>
       <div ng-if="clients">
-
-        <div class="panel">
-          <div class="panel-body hidden-xs row treatment-table-headers">
-            <div class="col-sm-4">Name</div>
-            <div class="col-sm-4">Email</div>
-            <div class="col-sm-2">Phone</div>
-            <div class="col-sm-2"></div>
-          </div>
-        </div>
-
-        <div class="panel panel-default" ng-repeat="client in clients">
-
-          <div class="panel-body row vertical-row-align">
-            <div class="col-sm-4">
-              <h4>{{client.name}}</h4>
-            </div>
-            <div class="col-sm-4">
-              <span class="visible-xs-inline">Email: </span>{{client.email}}
-            </div>
-            <div class="col-sm-2">
-              <span class="visible-xs-inline">Phone: </span>{{client.phone}}
-            </div>
-            <div class="col-sm-2 field-action">
-              <button class="btn btn-primary btn-block" ng-click="selectClient(client)"> Select </button>
-            </div>
-          </div>
-
-        </div>
-
+        <h2 class="section-title">Results</h2>
+        <table tr-ng-grid="" items="clients" enable-filtering="false" enable-sorting="true" order-by="name" page-items="10" selection-mode="0">
+          <thead>
+            <tr>
+              <th field-name="name" enable-filtering="false" enable-sorting="true"></th>
+              <th field-name="email" enable-filtering="false" enable-sorting="true"></th>
+              <th field-name="address" enable-filtering="false" enable-sorting="false"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td field-name="name" ng-bind="gridItem.name"></td>
+              <td field-name="email" ng-bind="gridItem.email"></td>
+              <td field-name="address" ng-bind-html="gridItem | address_multi_line"></td>
+              <td>
+                <button class="btn btn-primary btn-block" ng-click="selectClient(gridItem)">Select</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
     </div>
