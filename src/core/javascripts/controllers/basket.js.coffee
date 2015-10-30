@@ -63,7 +63,8 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
           if $scope.basket_options.auto_use_prepaid_bookings and prepaid_bookings.length > 0
             basket_item.setPrepaidBooking(prepaid_bookings[0]) 
 
-        $scope.setLoaded $scope
+        $scope.updateBasket().then () ->
+          $scope.setLoaded $scope
         
       , (err) ->
         $scope.setLoaded $scope
