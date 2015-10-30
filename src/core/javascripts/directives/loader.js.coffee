@@ -97,4 +97,29 @@ app.directive 'bbLoader', ($rootScope, $compile, PathSvc, TemplateSvc) ->
 
 
 
+# Loading Spinner Directive
+
+# Example usage;
+# <div bb-loading-spinner>
+
+app.directive 'bbLoadingSpinner', ($compile) ->
+
+  transclude: true
+
+  link: (scope, element, attrs, controller, transclude) ->
+
+    loadingScopes = {}
+    scope.isLoading = false
+
+    scope.$on 'isLoading', (event, isLoading) ->
+      event.stopPropagation()
+      loadingScopes[event.targetScope.$id] = isLoading
+      scope.isLoading = _.every(_.values(loadingScopes))
+
+  template: """
+<div ng-show="isLoading" class="loader-wrapper">
+  <div class="loader"></div>
+</div>
+<div ng-transclude></div>
+"""
 
