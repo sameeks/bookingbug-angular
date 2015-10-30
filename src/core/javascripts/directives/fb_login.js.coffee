@@ -1,26 +1,27 @@
-angular.module("BB.Directives").directive "bbFbLogin", (LoginService) ->
+angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope) ->
   restrict: 'A'
   scope: true
   link: (scope, element, attrs) ->
     scope.loginRequired = false
-
-    checkLoginState()
+    
+    $rootScope.connection_started.then ->
+      checkLoginState()
  
     statusChangeCallback = (response) ->
-      console.log 'statusChangeCallback'
-      console.log response
       if response.status == 'connected'
-        # Logged into your app and Facebook.
+        params = {}
+        params.access_token = response.authResponse.accessToken
+        params.fb_user_id = response.authResponse.userID
         fb_user = getFBUser()
         console.log("Logged into Facebook and BB FB App")
         console.log("Now need to call BB API and Login / CREATE member and Login then store the secret access Token")
-        LoginService.FBLogin(fb_user).then (member) ->
+        LoginService.FBLogin(scope.bb.company, params).then (member) ->
           scope.member = member
-          # if $scope.bb.destination
-          #   $scope.redirectTo($scope.bb.destination)
-          # else
-          #   $scope.setLoaded $scope
-          #   $scope.decideNextPage()
+          if $scope.bb.destination
+            $scope.redirectTo($scope.bb.destination)
+          else
+            $scope.setLoaded $scope
+            $scope.decideNextPage()
         , (err) ->
           console.log(err)
       else if response.status == 'not_authorized'
@@ -45,16 +46,19 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService) ->
       FB.login ((response) ->
         console.log(response)
         if response.status == 'connected'
+          params = {}
+          params.access_token = response.authResponse.accessToken
+          params.fb_user_id = response.authResponse.userID
           console.log("Logged into Facebook and BB FB App")
           console.log("Now need to call BB API and Login / CREATE member and Login then store the secret access Token")
           fb_user = getFBUser()
-          LoginService.FBLogin(fb_user).then (member) ->
+          LoginService.FBLogin(scope.bb.company, params).then (member) ->
             scope.member = member
-            # if $scope.bb.destination
-            #   $scope.redirectTo($scope.bb.destination)
-            # else
-            #   $scope.setLoaded $scope
-            #   $scope.decideNextPage()
+            if $scope.bb.destination
+              $scope.redirectTo($scope.bb.destination)
+            else
+              $scope.setLoaded $scope
+              $scope.decideNextPage()
           , (err) ->
             console.log(err)
         else if response.status == 'not_authorized'
@@ -67,4 +71,5 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService) ->
     getFBUser = ->
       FB.api '/me', (response) ->
         return response
+
   
