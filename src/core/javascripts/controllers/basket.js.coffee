@@ -42,9 +42,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
   
   $rootScope.connection_started.then ->
 
-    
     $scope.bb.basket.setClient($scope.client) if $scope.client
-
 
     if $scope.client.$has('pre_paid_bookings')
 
