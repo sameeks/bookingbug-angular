@@ -1,5 +1,32 @@
 'use strict';
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbMultiServiceSelect
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of multi service selected for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* scope: true
+* </pre>
+*
+* @param {hash}  bbMultiServiceSelect A hash of options
+* @property {object} options The options of service
+* @property {object} max_services The max services
+* @property {boolean} ordered_categories Verify if categories are ordered or not
+* @property {array} services The services
+* @property {array} company The company
+* @property {array} items An array of items service
+* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+####
+
+
 angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   restrict: 'AE'
   scope : true
@@ -75,7 +102,13 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name checkItemDefaults
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Check item defaults
+  ###
   checkItemDefaults = () ->
     return if !$scope.bb.item_defaults.service
     for service in $scope.items
@@ -83,7 +116,15 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
         $scope.addItem(service)
         return
 
-
+  ###**
+  * @ngdoc method
+  * @name initialiseCategories
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Initialize the categories in according of categories parameter
+  *
+  * @param {array} categories The categories of service
+  ###
   initialiseCategories = (categories) ->
 
     # extract order from category name if we're using ordered categories
@@ -146,7 +187,16 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
         $scope.selected_category = $scope.categories[$scope.categories.length - 1]
         $scope.selected_category_name = $scope.selected_category.name
 
-
+  ###**
+  * @ngdoc method
+  * @name changeCategory
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Change category in according of category name and services parameres
+  *
+  * @param {string} category_name The category name
+  * @param {array} services The services array
+  ###
   $scope.changeCategory = (category_name, services) ->
 
     if category_name and services
@@ -157,12 +207,27 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       $scope.selected_category_name = $scope.selected_category.name
       $rootScope.$broadcast "multi_service_select:category_changed"
 
-
+  ###**
+  * @ngdoc method
+  * @name changeCategoryName
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Change the category name
+  ###
   $scope.changeCategoryName = () ->
       $scope.selected_category_name = $scope.selected_category.name
       $rootScope.$broadcast "multi_service_select:category_changed"
 
-
+  ###**
+  * @ngdoc method
+  * @name addItem
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Add item in according of item and duration parameters
+  *
+  * @param {array} item The item that been added
+  * @param {date} duration The duration
+  ###
   $scope.addItem = (item, duration) ->
     if $scope.bb.stacked_items.length < $scope.options.max_services
       $scope.bb.clearStackedItemsDateTime() # clear any selected date/time as the selection has changed
@@ -180,7 +245,16 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
         i.popover = "Sorry, you can only book a maximum of #{$scope.options.max_services} treatments"
         i.popoverText = i.popover
 
-
+  ###**
+  * @ngdoc method
+  * @name removeItem
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Remove item in according of item and options parameters
+  *
+  * @params {array} item The item that been removed
+  * @params {array} options The options remove
+  ###
   $scope.removeItem = (item, options) ->
     item.selected = false
 
@@ -196,11 +270,25 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
         i.selected = false
         break
 
-
+  ###**
+  * @ngdoc method
+  * @name removeStackedItem
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Removed stacked item whose type is 'BasketItem'
+  *
+  * @params {array} item The item that been removed
+  ###
   $scope.removeStackedItem = (item) ->
     $scope.removeItem(item, {type: 'BasketItem'})
 
-
+  ###**
+  * @ngdoc method
+  * @name nextStep
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Next step to selected an basket item, if basket item is not selected she display an error message
+  ###
   $scope.nextStep = () ->
     if $scope.bb.stacked_items.length > 1
       $scope.decideNextPage()
@@ -213,11 +301,23 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       AlertService.clear()
       AlertService.add("danger", { msg: "You need to select at least one treatment to continue" })
 
-
+  ###**
+  * @ngdoc method
+  * @name addService
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Add service which add a new item
+  ###
   $scope.addService = () ->
     $rootScope.$broadcast "multi_service_select:add_item"
 
-
+   ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = () ->
     if $scope.bb.stacked_items.length > 1
       return true
@@ -231,7 +331,15 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       AlertService.add("danger", { msg: "You need to select at least one treatment to continue" })
       return false
 
-
+  ###**
+  * @ngdoc method
+  * @name selectDuration
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Select duration in according of service parameter and display the modal
+  *
+  * @params {object} service The service 
+  ###
   $scope.selectDuration = (service) ->
 
     if service.durations.length is 1

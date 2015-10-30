@@ -1,6 +1,32 @@
 'use strict';
 
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbPackagePicker
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of package pickers for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {date} sel_date The sel date
+* @property {date} selected_date The selected date
+* @property {boolean} picked_time The picked time
+* @property {array} timeSlots The time slots
+* @property {boolean} data_valid The valid data
+####
+
+
+
+
 angular.module('BB.Directives').directive 'bbPackagePicker', () ->
   restrict: 'AE'
   replace: true
@@ -20,7 +46,13 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
     $scope.loadDay()
 #    $scope.$broadcast('dateChanged', moment(newv));
 
-
+  ###**
+  * @ngdoc method
+  * @name loadDay
+  * @methodOf BB.Directives:bbPackagePicker
+  * @description
+  * Load day
+  ###
   $scope.loadDay = () =>
     $scope.timeSlots = []
     $scope.notLoaded $scope
@@ -65,6 +97,16 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
           latest = next_latest
     , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
+  ###**
+  * @ngdoc method
+  * @name selectSlot
+  * @methodOf BB.Directives:bbPackagePicker
+  * @description
+  * Select slot in according of sel_item and slot parameters
+  *
+  * @param {array} sel_item The sel item
+  * @param {object} slot The slot 
+  ###
   $scope.selectSlot = (sel_item, slot) =>
 
     for item, count in $scope.stackedItems
@@ -100,7 +142,17 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
               next = slot.time + item.service.duration
     $scope.picked_time = true
 
-
+  ###**
+  * @ngdoc method
+  * @name hasAvailability
+  * @methodOf BB.Directives:bbPackagePicker
+  * @description
+  * Checks if picker have the start time and the end time available
+  *
+  * @param {object} slots The slots of the package picker
+  * @param {date} start_time The start time of the picker
+  * @param {date} end_time The end time of the picker
+  ###
   # helper function to determine if there's availability between given times,
   # returns true immediately if a time a slot is found with availability
   $scope.hasAvailability = (slots, start_time, end_time) =>

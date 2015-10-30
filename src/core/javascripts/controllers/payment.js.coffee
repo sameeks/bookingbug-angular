@@ -1,5 +1,25 @@
 'use strict'
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbPayment
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of payments for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {array} total The total of payment 
+####
+
+
 angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService) ->
 
   error = (scope, message) ->
@@ -74,12 +94,33 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
     $scope.bb.total = $scope.total if $scope.total
     $scope.url = $sce.trustAsResourceUrl($scope.bb.total.$href('new_payment')) if $scope.bb && $scope.bb.total && $scope.bb.total.$href('new_payment')
   
+  ###**
+  * @ngdoc method
+  * @name callNotLoaded
+  * @methodOf BB.Directives:bbPayment
+  * @description
+  * Call not loaded
+  ###
   $scope.callNotLoaded = () =>
     $scope.notLoaded $scope
 
+  ###**
+  * @ngdoc method
+  * @name callSetLoaded
+  * @methodOf BB.Directives:bbPayment
+  * @description
+  * Call set loaded
+  ###
   $scope.callSetLoaded = () =>
     $scope.setLoaded $scope
 
+   ###**
+  * @ngdoc method
+  * @name paymentDone
+  * @methodOf BB.Directives:bbPayment
+  * @description
+  * Payment done
+  ###
   $scope.paymentDone = () ->
     $scope.bb.payment_status = "complete"
     $scope.decideNextPage()
