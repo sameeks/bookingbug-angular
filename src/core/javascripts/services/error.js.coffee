@@ -154,8 +154,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'Sorry, we couldn\'t update your password. Plese try again.'
-    }
-    ,
+    },
     {
       key: 'PASSWORD_MISMATCH',
       type: 'warning',

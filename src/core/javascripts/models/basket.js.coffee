@@ -30,6 +30,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     clearItem: (item) ->
       @items = @items.filter (i) -> i isnt item
 
+
     # should we try to checkout ?
     readyToCheckout: ->
       if @items.length > 0
@@ -41,8 +42,23 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     timeItems: ->
       titems = []
       for i in @items
-        titems.push(i) if !i.is_coupon #and !i.ready
+        titems.push(i) if !i.is_coupon and !i.isExternalPurchase()
       titems
+
+
+    basketItems: ->
+      bitems = []
+      for i in @items
+        bitems.push(i) if !i.is_coupon
+      bitems
+
+
+    externalPurchaseItems: ->
+      eitems = []
+      for i in @items
+        eitems.push(i) if i.isExternalPurchase()
+      eitems
+
 
     couponItems: ->
       citems = []
@@ -80,15 +96,11 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
       return post
 
 
-    # the amount due now - taking account of any wait list items and if member has a wallet
+    # the amount due now - taking account of any wait list items
     dueTotal: ->
       total = @totalPrice()
       for item in @items
         total -= item.price if item.isWaitlist()
-      if @client and @client.$has('wallet')
-        if @client.has_active_wallet
-          if @client.wallet_amount >= total
-            return 0
       total = 0 if total < 0
       total
 

@@ -61,7 +61,7 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
             scope.$apply ->
               scope.callSetLoaded()
 
-
+    # TODO update API to only respond with single message for wallet pay complete
     $window.addEventListener 'message', (event) =>
       if angular.isObject(event.data)
         data = event.data
