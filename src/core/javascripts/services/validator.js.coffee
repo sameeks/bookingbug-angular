@@ -99,7 +99,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   getUKPostcodePattern: () ->
     return uk_postcode_regex_lenient
 
-   ###**
+  ###**
     * @ngdoc method
     * @name getNumberOnlyPattern
     * @methodOf BB.Services:Validator
@@ -161,7 +161,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
     return uk_landline_regex_strict if strict
     return uk_landline_regex_lenient
 
-   ###**
+  ###**
     * @ngdoc method
     * @name getIntPhonePattern
     * @methodOf BB.Services:Validator
