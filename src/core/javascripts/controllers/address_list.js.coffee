@@ -1,5 +1,34 @@
 ## Address List
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbAddresses
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of addresses for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {boolean} manual_postcode_entry The manual postcode entry of the address
+* @property {string} address1 The first address of the client
+* @property {string} address2 The second address of the client
+* @property {string} address3 The third address of the client
+* @property {string} address4 The fourth address of the client
+* @property {string} address5 The fifth address of the client
+* @property {boolean} show_complete_address Display complete address of the client
+* @property {boolean} postcode_submitted Postcode of the client has been submitted
+* @property {string} findByPostcode Find address by postcode
+* @property {string} setLoaded Set loaded address list
+* @property {string} notLoaded Address list not loaded
+####
+
 angular.module('BB.Directives').directive 'bbAddresses', () ->
   restrict: 'AE'
   replace: true
@@ -37,7 +66,13 @@ angular.module('BB.Controllers').controller 'AddressList',
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-
+  ###**
+  * @ngdoc method
+  * @name findByPostcode
+  * @methodOf BB.Directives:bbAddresses
+  * @description
+  * Make a request for a list of addresses. They come as seperate list of objects containing addresses and monikers, which are converted into a single list of objects containing both properties.
+  ###
   # make a request for a list of addresses. They come as seperate list of
   # objects containing addresses and monikers, which are converted into a single
   # list of objects containing both properties.
@@ -83,7 +118,13 @@ angular.module('BB.Controllers').controller 'AddressList',
       $scope.postcode_submitted = true
       $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name showCompleteAddress
+  * @methodOf BB.Directives:bbAddresses
+  * @description
+  * Show complete address
+  ###
   $scope.showCompleteAddress = () ->
       $scope.show_complete_address = true
       $scope.postcode_submitted = false
@@ -185,7 +226,15 @@ angular.module('BB.Controllers').controller 'AddressList',
             $scope.postcode_submitted = false
             $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name setManualPostcodeEntry
+  * @methodOf BB.Directives:bbAddresses
+  * @description
+  * Set manual postcode entry
+  *
+  * @param {string} value The value of postcode
+  ###
   $scope.setManualPostcodeEntry = (value) ->
     $scope.manual_postcode_entry = value
     

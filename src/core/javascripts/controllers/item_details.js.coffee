@@ -1,5 +1,31 @@
 'use strict';
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbItemDetails
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of item details for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {array} item An array of all item details
+* @property {array} product The product
+* @property {array} booking The booking
+* @property {array} upload_progress The item upload progress
+* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
+* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+####
+
+
 angular.module('BB.Directives').directive 'bbItemDetails', () ->
   restrict: 'AE'
   replace: true
@@ -47,7 +73,15 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     $scope.loadItem($scope.bb.current_item) if !confirming
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name loadItem
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Load item in according of item parameter
+  *
+  * @param {array} item The item loaded
+  ###
   $scope.loadItem = (item) ->
 
     # return if we don't have a service
@@ -80,6 +114,15 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     
 
+  ###**
+  * @ngdoc method
+  * @name setItemDetails
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Set item details in according of details parameter
+  *
+  * @param {array} details The details parameter
+  ###
   # compare the questions stored in the data store to the new questions and if
   # any of them match then copy the answer value. we're doing it like this as
   # the amount of questions can change based on selections made earlier in the
@@ -107,12 +150,29 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     else
       $scope.loadItem($scope.bb.current_item)
 
+  ###**
+  * @ngdoc method
+  * @name recalc_price
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Recalculate item price in function of quantity
+  ###
   $scope.recalc_price = ->
     qprice = $scope.item_details.questionPrice($scope.item.getQty())
     bprice = $scope.item.base_price
     $scope.item.setPrice(qprice + bprice)
 
 
+  ###**
+  * @ngdoc method
+  * @name confirm
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Confirm the question
+  *
+  * @param {object} form The form where question are introduced
+  * @param {string=} route A specific route to load
+  ###
   $scope.confirm = (form, route) ->
     return if !ValidatorService.validateForm(form)
     # we need to validate the question information has been correctly entered here
@@ -132,7 +192,13 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     else
       $scope.decideNextPage(route)
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
+  ###
   $scope.setReady = () =>
     $scope.item.setAskedQuestions()
     if $scope.item.ready and !$scope.suppress_basket_update
@@ -140,7 +206,15 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     else
       return true
 
-
+  ###**
+  * @ngdoc method
+  * @name confirm_move
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Confirm move question information has been correctly entered here
+  *
+  * @param {string=} route A specific route to load
+  ###
   $scope.confirm_move = (route) ->
     confirming = true
     $scope.item ||= $scope.bb.current_item
@@ -184,21 +258,41 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     else
       $scope.decideNextPage(route)
 
-
+  ###**
+  * @ngdoc method
+  * @name openTermsAndConditions
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Display terms and conditions view
+  ###
   $scope.openTermsAndConditions = () ->
     modalInstance = $modal.open(
       templateUrl: $scope.getPartial "terms_and_conditions"
       scope: $scope
     )
 
-
+  ###**
+  * @ngdoc method
+  * @name getQuestion
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Get question by id
+  *
+  * @param {integer} id The id of the question
+  ###
   $scope.getQuestion = (id) ->
     for question in $scope.item_details.questions
       return question if question.id == id
 
     return null
 
-
+  ###**
+  * @ngdoc method
+  * @name updateItem
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Update item
+  ###
   $scope.updateItem = () ->
     $scope.item.setAskedQuestions()
     if $scope.item.ready
@@ -219,11 +313,26 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
        , (err) =>
         $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name editItem
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Edit item
+  ###
   $scope.editItem = () ->
     $scope.item_details_updated = false
 
-
+  ###**
+  * @ngdoc method
+  * @name onFileSelect
+  * @methodOf BB.Directives:bbItemDetails
+  * @description
+  * Select file to upload in according of item, $file and existing parameters
+  *
+  * @param {array} item The item for uploading
+  * @param {boolean} existing Checks if file item exist or not
+  ###
   $scope.onFileSelect = (item, $file, existing) ->
     $scope.upload_progress = 0
     file = $file

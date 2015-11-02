@@ -94,6 +94,15 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
             return c
       return null      
 
+    ###**
+    * @ngdoc method
+    * @name getSettings
+    * @methodOf BB.Models:Company
+    * @description
+    * Get settings company
+    *
+    * @returns {promise} A promise for settings company
+    ###
     getSettings: () ->
       def = $q.defer()
       if @settings
@@ -107,6 +116,15 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
           def.reject("Company has no settings")
       return def.promise
 
+    ###**
+    * @ngdoc method
+    * @name pusherSubscribe
+    * @methodOf BB.Models:Company
+    * @description
+    * Push subscribe for company
+    *
+    * @returns {object} Subscriber company
+    ###
     pusherSubscribe: (callback, options = {}) =>
       if Pusher? && !@pusher?
         @pusher = new Pusher 'c8d8cea659cc46060608',

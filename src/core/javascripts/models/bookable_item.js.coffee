@@ -1,5 +1,20 @@
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:BookableItem
+*
+* @description
+* Representation of an BookableItem Object
+*
+* @property {string} name Property name display "-Waiting-"
+* @property {string} ready The ready
+* @property {string} promise The promise
+* @property {string} item Bookable item
+####
+
+
 angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel) ->
 
   class BookableItem extends BaseModel

@@ -1,5 +1,29 @@
 'use strict';
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbEventGroups
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of event groups for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {integer} total_entries The event total entries
+* @property {array} events The events array
+* @property {hash} filters A hash of filters
+* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
+####
+
+
 angular.module('BB.Directives').directive 'bbEventGroups', () ->
   restrict: 'AE'
   replace: true
@@ -80,7 +104,15 @@ angular.module('BB.Controllers').controller 'EventGroupList',
 
 
 
-
+  ###**
+  * @ngdoc method
+  * @name setEventGroupItem
+  * @methodOf BB.Directives:bbEventGroups
+  * @description
+  * Set event group item in accroding of items parameter
+  *
+  * @param {array} items Items of event group
+  ###
   # set the event_group item so the correct item is displayed in the dropdown menu.
   # without doing this the menu will default to 'please select'
   setEventGroupItem = (items) ->
@@ -90,7 +122,16 @@ angular.module('BB.Controllers').controller 'EventGroupList',
           if item.id is $scope.event_group.id
             $scope.event_group = item
 
-
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbEventGroups
+  * @description
+  * Select an item from event group in according of item and route parameters
+  *
+  * @param {array} item The event group or BookableItem to select
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectItem = (item, route) =>
     if $scope.$parent.$has_page_control
       $scope.event_group = item
@@ -107,7 +148,13 @@ angular.module('BB.Controllers').controller 'EventGroupList',
         $scope.booking_item.setEventGroup($scope.event_group)
         $scope.broadcastItemUpdate()
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbEventGroups
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = () =>
     if $scope.event_group
       $scope.booking_item.setEventGroup($scope.event_group)
