@@ -523,7 +523,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         AlertService.raise(ErrorService.getAlert('REQ_TIME_NOT_AVAIL'))
 
 
-   ###**
+  ###**
   * @ngdoc method
   * @name padTimes
   * @methodOf BB.Directives:bbTimeRanges
@@ -535,7 +535,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.padTimes = (times) ->
     $scope.add_padding = times
 
-   ###**
+  ###**
   * @ngdoc method
   * @name setReady
   * @methodOf BB.Directives:bbTimeRanges

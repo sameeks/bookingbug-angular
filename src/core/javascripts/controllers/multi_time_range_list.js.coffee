@@ -160,7 +160,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   $scope.subtract = (amount, type) ->
     $scope.add(-amount, type)
 
-   ###**
+  ###**
   * @ngdoc method
   * @name isSubtractValid
   * @methodOf BB.Directives:bbTimeRangeStacked
@@ -369,7 +369,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       time_slot.selected = stacked_item.self is $scope.bb.stacked_items[0].self
 
 
-   ###**
+  ###**
   * @ngdoc method
   * @name setEnabledSlots
   * @methodOf BB.Directives:bbTimeRangeStacked

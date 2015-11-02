@@ -167,7 +167,7 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
     $scope.current_date.year()
     $scope.type = "week"
 
-   ###**
+  ###**
   * @ngdoc method
   * @name add
   * @methodOf BB.Directives:bbMonthAvailability

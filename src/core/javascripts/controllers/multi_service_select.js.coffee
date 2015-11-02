@@ -311,7 +311,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
   $scope.addService = () ->
     $rootScope.$broadcast "multi_service_select:add_item"
 
-   ###**
+  ###**
   * @ngdoc method
   * @name setReady
   * @methodOf BB.Directives:bbMultiServiceSelect

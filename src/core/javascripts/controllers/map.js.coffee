@@ -1,4 +1,3 @@
-
 'use strict';
 
 
@@ -286,7 +285,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     # need to call apply to update bindings as geocode callback is outside angular library
     $rootScope.$apply()
 
-   ###**
+  ###**
   * @ngdoc method
   * @name validateAddress
   * @methodOf BB.Directives:bbMap
@@ -426,7 +425,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   $scope.roundNumberUp = (num, places) ->
     Math.round(num * Math.pow(10, places)) / Math.pow(10, places);
 
-   ###**
+  ###**
   * @ngdoc method
   * @name geolocate
   * @methodOf BB.Directives:bbMap

@@ -60,7 +60,7 @@ angular.module('BB.Controllers').controller 'ProductList', ($scope,
         $scope.products = products
         $scope.setLoaded $scope
 
-   ###**
+  ###**
   * @ngdoc method
   * @name selectItem
   * @methodOf BB.Directives:bbProductList

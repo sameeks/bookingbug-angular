@@ -462,7 +462,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     $scope.filterChanged()
     $scope.showDay(moment($scope.filters.date))
 
-   ###**
+  ###**
   * @ngdoc method
   * @name resetFilters
   * @methodOf BB.Directives:bbEvents

@@ -114,7 +114,7 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   $scope.callSetLoaded = () =>
     $scope.setLoaded $scope
 
-   ###**
+  ###**
   * @ngdoc method
   * @name paymentDone
   * @methodOf BB.Directives:bbPayment

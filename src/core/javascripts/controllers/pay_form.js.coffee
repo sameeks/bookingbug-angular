@@ -25,7 +25,7 @@
 angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout, $sce, $http, $compile, $document, $location, SettingsService) ->
 
 
-   ###**
+  ###**
   * @ngdoc method
   * @name applyCustomPartials
   * @methodOf BB.Directives:bbPayForm

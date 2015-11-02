@@ -34,7 +34,7 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService) ->
 
     ready_list
 
-   ###**
+  ###**
   * @ngdoc method
   * @name checkReady
   * @methodOf BB.Directives:bbPage
