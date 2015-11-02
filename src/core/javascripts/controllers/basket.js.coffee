@@ -1,5 +1,24 @@
 'use strict';
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbMiniBasket
+* @restrict AE
+* @scope true
+*
+* @description
+* Loads a list of mini basket for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {boolean} setUsingBasket Set using basket  or not
+####
+
+
 angular.module('BB.Directives').directive 'bbMiniBasket', () ->
   restrict: 'AE'
   replace: true
@@ -13,6 +32,17 @@ angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, 
   $scope.setUsingBasket(true)
   $rootScope.connection_started.then () =>
 
+  ###**
+  * @ngdoc method
+  * @name basketDescribe
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Basked describe in according of basket length 
+  *
+  * @param {string} nothing Nothing to describe
+  * @param {string} single The single describe
+  * @param {string} plural The plural describe
+  ###
   $scope.basketDescribe = (nothing, single, plural) =>
     if !$scope.bb.basket || $scope.bb.basket.length() == 0
       nothing
@@ -44,7 +74,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
 
     $scope.bb.basket.setClient($scope.client) if $scope.client
 
-    if $scope.client.$has('pre_paid_bookings')
+    if $scope.client.$has('pre_paid_bookings') and $scope.bb.basket.timeItems()
 
       $scope.notLoaded $scope
       promises = []
@@ -67,14 +97,30 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
       , (err) ->
         $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name addAnother
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Add another basket item in acording of route parameter
+  *
+  * @param {string} route A route of the added another item
+  ###
   $scope.addAnother = (route) =>
     $scope.clearBasketItem()
     $scope.bb.emptyStackedItems()
     $scope.bb.current_item.setCompany($scope.bb.company)
     $scope.restart()
 
-
+  ###**
+  * @ngdoc method
+  * @name checkout
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Reset the basket to the last item whereas the curren_item is not complete and should not be in the basket and that way, we can proceed to checkout instead of hard-coding it on the html page.
+  *
+  * @param {string} route A route of the added another item
+  ###
   $scope.checkout = (route) =>
 
     if $scope.bb.basket.items.length > 0
@@ -88,11 +134,25 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
       AlertService.add 'info', ErrorService.getError('EMPTY_BASKET_FOR_CHECKOUT')
       return false
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = () ->
     return $scope.checkout()
 
-
+  ###**
+  * @ngdoc method
+  * @name applyCoupon
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Apply the coupon of basket item in according of coupon parameter
+  *
+  * @param {string} coupon The applied coupon
+  ###
   $scope.applyCoupon = (coupon) =>
     AlertService.clear()
     $scope.notLoaded $scope
@@ -110,7 +170,15 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
         AlertService.add("danger", { msg: err.data.error })
       $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name applyDeal
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Apply the coupon of basket item in according of deal code parameter
+  *
+  * @param {string} deal code The deal code
+  ###
   $scope.applyDeal = (deal_code) =>
     AlertService.clear()
     if $scope.client
@@ -131,7 +199,15 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
 
-
+  ###**
+  * @ngdoc method
+  * @name removeDeal
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Remove the deal in according of deal code parameter
+  *
+  * @param {string} deal code The deal code
+  ###
   $scope.removeDeal = (deal_code) =>
     params = {bb: $scope.bb, deal_code_id: deal_code.id }
     BasketService.removeDeal($scope.bb.company, params).then (basket) ->
