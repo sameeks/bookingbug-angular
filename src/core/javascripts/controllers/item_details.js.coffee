@@ -23,7 +23,7 @@
 * @property {array} upload_progress The item upload progress
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-####
+###
 
 
 angular.module('BB.Directives').directive 'bbItemDetails', () ->

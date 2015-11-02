@@ -16,7 +16,7 @@
 * @property {string} alphanumeric The alphanumeric
 * @property {string} alpha The letters and spaces
 * @property {integer} us_phone_number The Us phone number
-####
+###
 
 
 angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, ErrorService, BBModel, $q, $bbug) ->
@@ -87,7 +87,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
     * @returns {string} The returned the UK postcode regex lenient
   ###
 
-   ###**
+  ###**
     * @ngdoc method
     * @name getUKPostcodePattern
     * @methodOf BB.Services:Validator
