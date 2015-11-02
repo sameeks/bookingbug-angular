@@ -65,7 +65,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # Strict email check that also checks for the top domain level too part 1 of 2.
   # email_pattern: /^[a-z0-9!#$%&'*+=?^_\/`{|}~.-]+@.[a-z0-9!#$%&'*+=?^_`{|}~.-]+[.]{1}[a-z0-9-]{2,20}$/i
 
-   ###**
+  ###**
     * @ngdoc method
     * @name getEmailPattern
     * @methodOf BB.Services:Validator
