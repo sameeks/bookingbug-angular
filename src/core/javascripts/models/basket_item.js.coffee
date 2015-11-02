@@ -16,7 +16,7 @@
 * @property {date} datetime Date and time of the event
 * @property {integer} status Status of the items
 *
-####
+###
 
 
 angular.module('BB.Models').factory "BasketItemModel",
