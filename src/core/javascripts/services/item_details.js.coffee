@@ -24,5 +24,5 @@ angular.module('BB.Services').factory "ItemDetailsService",  ($q, BBModel) ->
       , (err) =>
         deferred.reject(err)
     else
-      deferred.reject("No service link found")
+      deferred.resolve()
     deferred.promise
