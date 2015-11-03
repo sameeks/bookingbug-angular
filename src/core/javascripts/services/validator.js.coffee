@@ -16,7 +16,7 @@
 * @property {string} alphanumeric The alphanumeric
 * @property {string} alpha The letters and spaces
 * @property {integer} us_phone_number The Us phone number
-####
+###
 
 
 angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, ErrorService, BBModel, $q, $bbug) ->
@@ -65,7 +65,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # Strict email check that also checks for the top domain level too part 1 of 2.
   # email_pattern: /^[a-z0-9!#$%&'*+=?^_\/`{|}~.-]+@.[a-z0-9!#$%&'*+=?^_`{|}~.-]+[.]{1}[a-z0-9-]{2,20}$/i
 
-   ###**
+  ###**
     * @ngdoc method
     * @name getEmailPattern
     * @methodOf BB.Services:Validator
@@ -87,7 +87,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
     * @returns {string} The returned the UK postcode regex lenient
   ###
 
-   ###**
+  ###**
     * @ngdoc method
     * @name getUKPostcodePattern
     * @methodOf BB.Services:Validator
@@ -99,7 +99,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   getUKPostcodePattern: () ->
     return uk_postcode_regex_lenient
 
-   ###**
+  ###**
     * @ngdoc method
     * @name getNumberOnlyPattern
     * @methodOf BB.Services:Validator
@@ -161,7 +161,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
     return uk_landline_regex_strict if strict
     return uk_landline_regex_lenient
 
-   ###**
+  ###**
     * @ngdoc method
     * @name getIntPhonePattern
     * @methodOf BB.Services:Validator

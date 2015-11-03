@@ -16,7 +16,7 @@
 * @property {date} datetime Date and time of the event
 * @property {integer} status Status of the items
 *
-####
+###
 
 
 angular.module('BB.Models').factory "BasketItemModel",
@@ -473,7 +473,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     setCategory: (cat) ->
       @category = cat
 
-     ###**
+    ###**
     * @ngdoc method
     * @name setPerson
     * @methodOf BB.Models:BasketItem
@@ -481,15 +481,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     * Set person according to per parameter
     *
     * @param {object} per A hash representing a person object
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    * @param {boolean} set_selected Set selected flag
-=======
+
     * @param {boolean} set_selected The returned set resource for basket item
->>>>>>> Stashed changes
-=======
-    * @param {boolean} set_selected The returned set resource for basket item
->>>>>>> Stashed changes
     ###
     setPerson: (per, set_selected = true) ->
       if set_selected && @earliest_time

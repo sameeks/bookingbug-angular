@@ -369,6 +369,8 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       localBounds.extend(marker.position)
       index += 1
 
+    $scope.$emit 'map:shown_markers_updated', $scope.shownMarkers
+    
     google.maps.event.trigger($scope.myMap, 'resize')
     $scope.myMap.fitBounds(localBounds)
 

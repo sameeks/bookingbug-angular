@@ -23,7 +23,7 @@
 * @property {array} upload_progress The item upload progress
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-####
+###
 
 
 angular.module('BB.Directives').directive 'bbItemDetails', () ->
@@ -64,7 +64,6 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     'mobile'
   ])
 
-  $scope.notLoaded $scope
   $scope.validator = ValidatorService
   confirming = false
 
@@ -84,8 +83,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   ###
   $scope.loadItem = (item) ->
 
-    # return if we don't have a service
-    return false if !item.service?
+    $scope.notLoaded $scope
 
     confirming = true
     $scope.item = item
@@ -102,15 +100,18 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       $scope.$emit "item_details:loaded"
 
     else
+      
       params = {company: $scope.bb.company, cItem: $scope.item}
       ItemDetailsService.query(params).then (details) ->
-        setItemDetails details
-        $scope.item.item_details = $scope.item_details
-        QuestionService.addDynamicAnswersByName($scope.item_details.questions)
-        QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
-        $scope.recalc_price()
+        if details
+          setItemDetails details
+          $scope.item.item_details = $scope.item_details
+          QuestionService.addDynamicAnswersByName($scope.item_details.questions)
+          QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
+          $scope.recalc_price()
+          $scope.$emit "item_details:loaded"
         $scope.setLoaded $scope
-        $scope.$emit "item_details:loaded"
+        
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     
 
