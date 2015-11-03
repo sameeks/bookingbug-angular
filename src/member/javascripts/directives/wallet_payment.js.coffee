@@ -5,12 +5,11 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
   replace: true
   link: (scope, element, attrs) ->
 
-    scope.options = scope.$eval(attrs.bbWalletPayment) or {}
+    one_pound = 100
+    scope.wallet_payment_options = scope.$eval(attrs.bbWalletPayment) or {}
     scope.member ||= $rootScope.member if $rootScope.member
-    scope.member ||= scope.options.member if scope.options.member
-    scope.amount = scope.options.amount if scope.options.amount
-    scope.amount_increment = scope.options.amount_increment or 0
-
+    scope.member ||= scope.wallet_payment_options.member if scope.wallet_payment_options.member
+    scope.amount_increment = scope.wallet_payment_options.amount_increment or one_pound
 
     getHost = (url) ->
       a = document.createElement('a')
@@ -23,7 +22,7 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
       if $location.port()
         referrer += ":" + $location.port()
       
-      custom_stylesheet = if scope.options.custom_stylesheet then scope.options.custom_stylesheet else null
+      custom_stylesheet = if scope.wallet_payment_options.custom_stylesheet then scope.wallet_payment_options.custom_stylesheet else null
       custom_partial_url = if scope.bb and scope.bb.custom_partial_url then scope.bb.custom_partial_url else null
 
       payload = JSON.stringify({
@@ -43,23 +42,32 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
     scope.$watch 'member', (member) ->
       if member?
         getWalletForMember()
-      if scope.amount
-        getWalletForMember()
 
 
     scope.$watch 'wallet', (wallet) ->
-      if wallet
-        scope.amount = wallet.min_amount if wallet.min_amount 
-        if wallet.$has('new_payment')
-          scope.callNotLoaded()
-          scope.wallet_payment_url = $sce.trustAsResourceUrl(scope.wallet.$href("new_payment"))
-          scope.show_payment_iframe = true
-          element.find('iframe').bind 'load', (event) =>
-            url = scope.wallet_payment_url if scope.wallet_payment_url
-            origin = getHost(url)
-            sendLoadEvent(element, origin, scope)
-            scope.$apply ->
-              scope.callSetLoaded()
+      
+      if wallet and !scope.amount
+        if scope.wallet_payment_options.basket_topup and scope.bb.basket.dueTotal() > wallet.amount
+          amount = Math.ceil(scope.bb.basket.dueTotal() / scope.amount_increment ) * scope.amount_increment
+          scope.amount = if amount > wallet.min_amount then amount else wallet.min_amount
+          scope.min_amount = scope.amount
+        else if wallet.min_amount
+          scope.amount     = if scope.wallet_payment_options.amount and scope.wallet_payment_options.amount > wallet.min_amount then scope.wallet_payment_options.amount else walllet.min_amount
+          scope.min_amount = walllet.min_amount
+        else
+          scope.min_amount = 0
+          scope.amount = scope.wallet_payment_options.amount if scope.wallet_payment_options.amount
+
+      if wallet and wallet.$has('new_payment')
+        scope.callNotLoaded()
+        scope.wallet_payment_url = $sce.trustAsResourceUrl(scope.wallet.$href("new_payment"))
+        scope.show_payment_iframe = true
+        element.find('iframe').bind 'load', (event) =>
+          url = scope.wallet_payment_url if scope.wallet_payment_url
+          origin = getHost(url)
+          sendLoadEvent(element, origin, scope)
+          scope.$apply ->
+            scope.callSetLoaded()
 
     # TODO update API to only respond with single message for wallet pay complete
     $window.addEventListener 'message', (event) =>
