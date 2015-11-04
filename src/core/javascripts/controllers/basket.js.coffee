@@ -74,7 +74,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
 
     $scope.bb.basket.setClient($scope.client) if $scope.client
 
-    if $scope.client.$has('pre_paid_bookings') and $scope.bb.basket.timeItems()
+    if $scope.client.$has('pre_paid_bookings') and $scope.bb.basket.timeItems().length > 0
 
       $scope.notLoaded $scope
       promises = []
