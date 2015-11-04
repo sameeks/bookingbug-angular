@@ -161,11 +161,9 @@ app.directive 'bbCurrencyField', ($filter) ->
   link: (scope, element, attrs, ctrl) ->
 
     convertToCurrency = (value) ->
-      console.log "convertToCurrency", value
       value / 100
 
     convertToInteger = (value) ->
-      console.log "convertToInteger", value
       value * 100
 
     ctrl.$formatters.push(convertToCurrency)

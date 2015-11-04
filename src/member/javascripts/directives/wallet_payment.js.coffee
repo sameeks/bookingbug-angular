@@ -52,8 +52,8 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
           scope.amount = if amount > wallet.min_amount then amount else wallet.min_amount
           scope.min_amount = scope.amount
         else if wallet.min_amount
-          scope.amount     = if scope.wallet_payment_options.amount and scope.wallet_payment_options.amount > wallet.min_amount then scope.wallet_payment_options.amount else walllet.min_amount
-          scope.min_amount = walllet.min_amount
+          scope.amount     = if scope.wallet_payment_options.amount and scope.wallet_payment_options.amount > wallet.min_amount then scope.wallet_payment_options.amount else wallet.min_amount
+          scope.min_amount = wallet.min_amount
         else
           scope.min_amount = 0
           scope.amount = scope.wallet_payment_options.amount if scope.wallet_payment_options.amount
