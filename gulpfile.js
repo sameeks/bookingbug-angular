@@ -11,6 +11,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     flatten = require('gulp-flatten'),
     sass = require('gulp-sass'),
+    autoprefixer = require('gulp-autoprefixer'),
     merge = require('merge-stream'),
     mainBowerFiles = require('main-bower-files'),
     streamqueue = require('streamqueue'),
@@ -36,15 +37,15 @@ gulp.task('javascripts', function() {
         './bower_components/lodash/dist/lodash.js',
         './bower_components/angular-google-maps/dist/angular-google-maps.js',
         './bower_components/webshim/js-webshim/dev/polyfiller.js',
-        './src/javascripts/core/main.js.coffee', 
-        './src/*/javascripts/main.js.coffee', 
-        './src/*/main.js.coffee', 
-        './src/core/javascripts/services/widget.js.coffee', 
-        './src/core/javascripts/collections/base.js.coffee', 
-        './src/*/javascripts/**/*', 
-        './src/*/directives/**/*', 
-        './src/*/models/**/*', 
-        './src/*/services/**/*', 
+        './src/javascripts/core/main.js.coffee',
+        './src/*/javascripts/main.js.coffee',
+        './src/*/main.js.coffee',
+        './src/core/javascripts/services/widget.js.coffee',
+        './src/core/javascripts/collections/base.js.coffee',
+        './src/*/javascripts/**/*',
+        './src/*/directives/**/*',
+        './src/*/models/**/*',
+        './src/*/services/**/*',
         '!./src/**/*_test.js.coffee',
         '!./**/*~']))
     // .pipe(filelog())
@@ -77,6 +78,7 @@ gulp.task('stylesheets', function() {
   css_stream = gulp.src(mainBowerFiles({filter: new RegExp('.css$')}))
   sass_stream = gulp.src('src/*/stylesheets/main.scss')
     .pipe(sass({errLogToConsole: true}))
+    .pipe(autoprefixer('last 20 versions', '> 1%', 'ie 9', 'ie 8'))
     .pipe(flatten())
   streamqueue({objectMode: true}, css_stream, sass_stream)
     .pipe(concat('bookingbug-angular.css'))
@@ -86,6 +88,7 @@ gulp.task('stylesheets', function() {
 gulp.task('widget', function() {
   gulp.src('src/widget/stylesheets/main.scss')
     .pipe(sass({errLogToConsole: true}))
+    .pipe(autoprefixer('last 20 versions', '> 1%', 'ie 9', 'ie 8'))
     .pipe(flatten())
     .pipe(concat('bookingbug-widget.css'))
     .pipe(gulp.dest('release'));
@@ -94,6 +97,7 @@ gulp.task('widget', function() {
 gulp.task('theme', function() {
   gulp.src('src/*/stylesheets/bb_light_theme.scss')
     .pipe(sass({errLogToConsole: true}))
+    .pipe(autoprefixer('last 20 versions', '> 1%', 'ie 9', 'ie 8'))
     .pipe(flatten())
     .pipe(concat('bb-theme.css'))
     .pipe(gulp.dest('release'));
@@ -174,4 +178,3 @@ gulp.task('test', ['dependencies'], function (done) {
     singleRun: true
   }, done).start();
 });
-
