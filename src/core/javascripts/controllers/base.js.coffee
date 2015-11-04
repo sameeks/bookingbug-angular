@@ -185,7 +185,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate) ->
+    SettingsService, UriTemplate, $anchorScroll) ->
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -1277,3 +1277,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.isMemberLoggedIn = () ->
     return LoginService.isLoggedIn()
+
+
+  $scope.scrollTo = (id) ->
+    $location.hash(id)
+    $anchorScroll()
