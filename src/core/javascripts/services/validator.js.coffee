@@ -1,3 +1,24 @@
+###**
+* @ngdoc service
+* @name BB.Services:Validator
+*
+* @description
+* Representation of an Validator Object
+*
+* @property {string} uk_postcode_regex The UK postcode regex
+* @property {string} uk_postcode_regex_lenient The UK postcode regex (lenient)
+* @property {string} number_only_regex The number only regex
+* @property {integer} uk_mobile_regex_strict The UK mobile regex (strict)
+* @property {integer} mobile_regex_lenient Mobile number regex (lenient)
+* @property {integer} uk_landline_regex_strict The UK landline regex (strict)
+* @property {integer} uk_landline_regex_lenient The UK landline regex (lenient)
+* @property {integer} international_number The international number
+* @property {string} alphanumeric The alphanumeric
+* @property {string} alpha The letters and spaces
+* @property {integer} us_phone_number The Us phone number
+###
+
+
 angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, ErrorService, BBModel, $q, $bbug) ->
 
   # Use http://regex101.com/ to test patterns
@@ -44,39 +65,138 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # Strict email check that also checks for the top domain level too part 1 of 2.
   # email_pattern: /^[a-z0-9!#$%&'*+=?^_\/`{|}~.-]+@.[a-z0-9!#$%&'*+=?^_`{|}~.-]+[.]{1}[a-z0-9-]{2,20}$/i
 
+  ###**
+    * @ngdoc method
+    * @name getEmailPattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the email pattern
+    *
+    * @returns {string} The returned the email pattern
+  ###
   getEmailPattern: () ->
     return email_regex
 
+  ###**
+    * @ngdoc method
+    * @name getUKPostcodePattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the UK postcode pattern
+    *
+    * @returns {string} The returned the UK postcode regex lenient
+  ###
+
+  ###**
+    * @ngdoc method
+    * @name getUKPostcodePattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the UK postcode patternt
+    *
+    * @returns {integer} Return the UK postcode pattern
+  ###
   getUKPostcodePattern: () ->
     return uk_postcode_regex_lenient
 
+  ###**
+    * @ngdoc method
+    * @name getNumberOnlyPattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the number only pattern
+    *
+    * @returns {integer} Return the number only regex
+  ###
   getNumberOnlyPattern: () ->
     return number_only_regex
 
+  ###**
+    * @ngdoc method
+    * @name getAlphaNumbericPattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the alphanumeric pattern
+    *
+    * @returns {string} The returned the alphanumeric regex
+  ###
   getAlphaNumbericPattern: () ->
     return alphanumeric
 
+  ###**
+    * @ngdoc method
+    * @name getUKMobilePattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the UK mobile pattern if strict is equals with false
+    *
+    * @returns {integer} The returned the UK mobile regixt strict if this is strict else return mobile_regex_lenient
+  ###
   getUKMobilePattern: (strict = false) ->
     return uk_mobile_regex_strict if strict
     return mobile_regex_lenient
 
+  ###**
+    * @ngdoc method
+    * @name getMobilePattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the mobile pattern
+    *
+    * @returns {integer} The returned the mobile regex lenient
+  ###
   getMobilePattern: () ->
     return mobile_regex_lenient
 
+  ###**
+    * @ngdoc method
+    * @name getUKLandlinePattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the UK landline patternt if strict is equals with false
+    *
+    * @returns {integer} The returned the UK landline regex strict if this is strict else return UK landline regex lenient
+  ###
   getUKLandlinePattern: (strict = false) ->
     return uk_landline_regex_strict if strict
     return uk_landline_regex_lenient
 
+  ###**
+    * @ngdoc method
+    * @name getIntPhonePattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the international number
+    *
+    * @returns {integer} The returned the international number
+  ###
   getIntPhonePattern: () ->
     return international_number
 
+  ###**
+    * @ngdoc method
+    * @name getGeocodeResult
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the geocode result
+    *
+    * @returns {string} The returned geocode result
+  ###
   getGeocodeResult: () ->
     return geocode_result if geocode_result
 
   # Strict email check that also checks for the top domain level too part 2 of 2.
   # getEmailPatten: () ->
   #   return email_pattern
-
+  ###**
+    * @ngdoc method
+    * @name validatePostcode
+    * @methodOf BB.Services:Validator
+    * @description
+    * Validate the postcode in according with form and prm parameters
+    *
+    * @returns {promise} A promise for valid postocde
+  ###
   validatePostcode: (form, prms) ->
     AlertService.clear()
     return false if !form || !form.postcode
@@ -107,7 +227,15 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
           deferred.reject(false)
       deferred.promise
 
-
+  ###**
+    * @ngdoc method
+    * @name validateForm
+    * @methodOf BB.Services:Validator
+    * @description
+    * Validate the form in according with form parameter
+    *
+    * @returns {boolean} Checks if this is valid or not
+  ###
   validateForm: (form) ->
     return false if !form
     form.submitted = true
@@ -122,13 +250,29 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
     else
       return true
 
-
+   ###**
+    * @ngdoc method
+    * @name resetForm
+    * @methodOf BB.Services:Validator
+    * @description
+    * Reset the form in according with form parameter
+    *
+    * @returns {boolean} Checks if this is reset or not
+  ###
   resetForm: (form) ->
     if form
       form.submitted = false
       form.$setPristine()
 
-
+  ###**
+    * @ngdoc method
+    * @name resetForms
+    * @methodOf BB.Services:Validator
+    * @description
+    * Reset the forms in according with forms parameter
+    *
+    * @returns {boolean} Checks if this is reset or not
+  ###
   resetForms: (forms) ->
     if forms && $bbug.isArray(forms)
       for form in forms

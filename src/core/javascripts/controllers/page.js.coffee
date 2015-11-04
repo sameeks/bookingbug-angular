@@ -34,7 +34,13 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService) ->
 
     ready_list
 
-
+  ###**
+  * @ngdoc method
+  * @name checkReady
+  * @methodOf BB.Directives:bbPage
+  * @description
+  * Check the page ready
+  ###
   $scope.checkReady = () ->
     ready_list = isScopeReady($scope)
     checkread = $q.defer()
@@ -60,13 +66,39 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService) ->
     , (err) ->  $scope.setLoaded $scope
     return true
 
-
+  ###**
+  * @ngdoc method
+  * @name routeReady
+  * @methodOf BB.Directives:bbPage
+  * @description
+  * Check the page route ready
+  *
+  * @param {string=} route A specific route to load
+  ###
   $scope.routeReady = (route) ->
     if !$scope.$checkingReady
       $scope.decideNextPage(route)
     else
       $scope.$checkingReady.then () =>
         $scope.decideNextPage(route)
+
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbPage
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of page for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+####
 
 
 angular.module('BB.Directives').directive 'bbPage', () ->

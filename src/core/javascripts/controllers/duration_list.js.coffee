@@ -1,5 +1,27 @@
 'use strict';
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbDurations
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of durations for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {array} duration The duration list
+* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+####
+
+
 angular.module('BB.Directives').directive 'bbDurations', () ->
   restrict: 'AE'
   replace: true
@@ -52,7 +74,16 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope
 
     $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbDurations
+  * @description
+  * Select duration of the list in according of dur and route parameter
+  *
+  * @param {object} dur The duration list
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectDuration = (dur, route) =>
     if $scope.$parent.$has_page_control
       $scope.duration = dur
@@ -62,11 +93,24 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope
       $scope.decideNextPage(route)
       return true
 
+  ###**
+  * @ngdoc method
+  * @name durationChanged
+  * @methodOf BB.Directives:bbDurations
+  * @description
+  * Change the list duration and update item
+  ###
   $scope.durationChanged = () =>
     $scope.bb.current_item.setDuration($scope.duration.value)
     $scope.broadcastItemUpdate()
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbDurations
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = () =>
     if $scope.duration
       $scope.bb.current_item.setDuration($scope.duration.value)

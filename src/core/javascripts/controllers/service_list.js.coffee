@@ -233,6 +233,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
     else
       return false
 
+  ###**
+  * @ngdoc method
+  * @name errorModal
+  * @methodOf BB.Directives:bbServices
+  * @description
+  * Display error message in modal
+  ###
   $scope.errorModal = () ->
     error_modal = $modal.open
       templateUrl: $scope.getPartial('_error_modal')
@@ -241,6 +248,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         $scope.ok = () ->
           $modalInstance.close()
 
+  ###**
+  * @ngdoc method
+  * @name filterFunction
+  * @methodOf BB.Directives:bbServices
+  * @description
+  * Filter service
+  ###
   $scope.filterFunction = (service) ->
     if !service
       return false
@@ -288,6 +302,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
     $scope.filters.custom_array_value = null
     $scope.filterChanged()
 
+  ###**
+  * @ngdoc method
+  * @name filterChanged
+  * @methodOf BB.Directives:bbServices
+  * @description
+  * Filter changed
+  ###
   $scope.filterChanged = () ->
     $scope.filtered_items = $filter('filter')($scope.items, $scope.filterFunction);
 

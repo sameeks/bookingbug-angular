@@ -133,6 +133,11 @@ app.filter 'icurrency', ($window, $rootScope) ->
     $window.accounting.formatMoney(number, currency[currencyCode], 2, thousand, decimal, format)
 
 
+app.filter 'raw_currency', () ->
+  (number) =>
+    number / 100.0
+
+
 app.filter 'pretty_price', ($filter) ->
   (price, symbol) ->
     return $filter('ipretty_price')(price, symbol)
@@ -211,7 +216,7 @@ app.filter 'twelve_hour_time', ($window) ->
     time += suffix
     return time
 
-
+# TODO refactor to use time_period
 app.filter 'time_period_from_seconds', ->
   (v) ->
     val = parseInt(v)
@@ -304,7 +309,7 @@ app.filter "datetime", ->
     result = datetime.format(format)
 
     # if the dates time zone is different to the users, show the timezone too
-    if datetime.zone() != new Date().getTimezoneOffset() && show_timezone
+    if datetime.utcOffset() != new Date().getTimezoneOffset() && show_timezone
       if datetime._z
         result += datetime.format(" z") 
       else

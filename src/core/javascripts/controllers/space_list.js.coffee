@@ -1,5 +1,27 @@
 'use strict';
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbSpaces
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of spaces for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @property {array} items An array of all services
+* @property {space} space The currectly selected space
+###
+
+
 angular.module('BB.Directives').directive 'bbSpaces', () ->
   restrict: 'AE'
   replace: true
@@ -28,6 +50,16 @@ angular.module('BB.Controllers').controller 'SpaceList',
         $scope.listLoaded = true
     , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbSpaces
+  * @description
+  * Select the current item in according of item and route parameters
+  *
+  * @param {array} item The Space or BookableItem to select
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectItem = (item, route) =>
     $scope.currentItem.setService(item)
     $scope.decide_next_page(route)

@@ -1,5 +1,37 @@
 'use strict';
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbAccordianRangeGroup
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of accordian range group for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @param {hash} bbAccordianRangeGroup  A hash of options
+* @property {boolean} collaspe_when_time_selected Collapse when time is selected
+* @property {string} setRange Set time range for start and end
+* @property {string} start_time The start time
+* @property {string} end_time The end time
+* @property {array} accordian_slots The accordian slots
+* @property {boolean} is_open Time is open
+* @property {boolean} has_availability Group has have availability
+* @property {boolean} is_selected Group is selected
+* @property {string} source_slots Source of slots
+* @property {boolean} selected_slot Range group selected slot
+* @property {boolean} hideHeading Range group hide heading
+####
+
+
 angular.module('BB.Directives').directive 'bbAccordianRangeGroup', () ->
   restrict: 'AE'
   replace: true
@@ -20,17 +52,44 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   $rootScope.connection_started.then ->
     $scope.init($scope.options.range[0], $scope.options.range[1], $scope.options) if $scope.options and $scope.options.range
 
-
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbAccordianRangeGroup
+  * @description
+  * Set form data store by id
+  *
+  * @param {object} id Id that sets store form data
+  ###
   # store the form data for the following scope properties
   $scope.setFormDataStoreId = (id) ->
     FormDataStoreService.init ('AccordianRangeGroup'+id), $scope, []
 
-
+  ###**
+  * @ngdoc method
+  * @name init
+  * @methodOf BB.Directives:bbAccordianRangeGroup
+  * @description
+  * Initialization of start time, end time and options
+  *
+  * @param {date} start_time The start time of the range group
+  * @param {date} end_time The end time of the range group
+  * @param {object} options The options of the range group
+  ###
   $scope.init = (start_time, end_time, options) ->
     $scope.setRange(start_time, end_time)
     $scope.collaspe_when_time_selected = if options && !options.collaspe_when_time_selected then false else true
 
-
+  ###**
+  * @ngdoc method
+  * @name setRange
+  * @methodOf BB.Directives:bbAccordianRangeGroup
+  * @description
+  * Set range of start time and end time
+  *
+  * @param {date} start_time The start time of the range group
+  * @param {date} end_time The end time of the range group
+  ###
   $scope.setRange = (start_time, end_time) ->
     if !$scope.options
       $scope.options = $scope.$eval($attrs.bbAccordianRangeGroup) or {}
@@ -38,7 +97,13 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
     $scope.end_time   = end_time
     setData()
 
-
+  ###**
+  * @ngdoc method
+  * @name setData
+  * @methodOf BB.Directives:bbAccordianRangeGroup
+  * @description
+  * Set this data as ready
+  ###
   setData = () ->
     $scope.accordian_slots = []
     $scope.is_open = $scope.is_open or false
@@ -63,7 +128,16 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
 
       updateAvailability()
 
-
+  ###**
+  * @ngdoc method
+  * @name updateAvailability
+  * @methodOf BB.Directives:bbAccordianRangeGroup
+  * @description
+  * Update availability of the slot
+  *
+  * @param {date} day The day of range group
+  * @param {string} slot The slot of range group
+  ###
   updateAvailability = (day, slot) ->   
     $scope.selected_slot = null
     $scope.has_availability = hasAvailability() if $scope.accordian_slots
@@ -85,7 +159,13 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
       $scope.is_selected = false
       $scope.is_open = false if $scope.collaspe_when_time_selected      
 
-
+  ###**
+  * @ngdoc method
+  * @name hasAvailability
+  * @methodOf BB.Directives:bbAccordianRangeGroup
+  * @description
+  * Verify if availability of accordian slots have a slot
+  ###
   hasAvailability = ->
     return false if !$scope.accordian_slots
     for slot in $scope.accordian_slots

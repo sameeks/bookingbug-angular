@@ -1,5 +1,36 @@
 'use strict';
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbTimeRangeStacked
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of time range stacked for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @param {hash}  bbTimeRangeStacked A hash of options
+* @property {date} start_date The start date of time range list
+* @property {date} end_date The end date of time range list
+* @property {integer} available_times The available times of range list
+* @property {object} day_of_week The day of week
+* @property {object} selected_day The selected day from the multi time range list
+* @property {object} original_start_date The original start date of range list
+* @property {object} start_at_week_start The start at week start of range list
+* @property {object} selected_slot The selected slot from multi time range list
+* @property {object} selected_date The selected date from multi time range list
+* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+####
+
+
 angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
   restrict: 'AE'
   replace: true
@@ -68,7 +99,16 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
 
   , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name setTimeRange
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Set time range in according of selected_date 
+  *
+  * @param {date} selected_date The selected date from multi time range list
+  * @param {date} start_date The start date of range list
+  ###
   setTimeRange = (selected_date, start_date) ->
     if start_date
       $scope.start_date = start_date
@@ -87,7 +127,16 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
     
     isSubtractValid()
 
-
+  ###**
+  * @ngdoc method
+  * @name add
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Add date
+  *
+  * @param {object} amount The selected amount
+  * @param {array} type The start type
+  ###
   $scope.add = (amount, type) ->
     $scope.selected_day = moment($scope.selected_date)
     switch type
@@ -98,11 +147,26 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
         setTimeRange($scope.start_date)
     $scope.loadData()
 
-
+  ###**
+  * @ngdoc method
+  * @name subtract
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Subtract in according of amount and type parameters
+  *
+  * @param {object} amount The selected amount
+  * @param {object} type The start type
+  ###
   $scope.subtract = (amount, type) ->
     $scope.add(-amount, type)
 
-
+  ###**
+  * @ngdoc method
+  * @name isSubtractValid
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Verify if the subtract is valid or not
+  ###
   isSubtractValid = () ->
     $scope.is_subtract_valid = true
 
@@ -117,26 +181,54 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
     else
       $scope.subtract_string = "Prev"
  
-
+  ###**
+  * @ngdoc method
+  * @name selectedDateChanged
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Called on datepicker date change
+  ###
   # called on datepicker date change
   $scope.selectedDateChanged = () ->
     setTimeRange(moment($scope.selected_date))
     $scope.selected_slot = null
     $scope.loadData()
 
-
+  ###**
+  * @ngdoc method
+  * @name updateHideStatus
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Update the hidden status
+  ###
   updateHideStatus = () ->
     for key, day of $scope.days
       $scope.days[key].hide = !day.date.isSame($scope.selected_day,'day')
 
 
+  ###**
+  * @ngdoc method
+  * @name isPast
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Calculate if the current earliest date is in the past - in which case we. Might want to disable going backwards
+  ###
   # calculate if the current earliest date is in the past - in which case we
   # might want to disable going backwards
   $scope.isPast = () ->
     return true if !$scope.start_date
     return moment().isAfter($scope.start_date)
 
-
+  ###**
+  * @ngdoc method
+  * @name status
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Check the status of the slot to see if it has been selected
+  *
+  * @param {date} day The day
+  * @param {object} slot The slot of day in multi time range list
+  ###
   # check the status of the slot to see if it has been selected
   # NOTE: This is very costly to call from a view, please consider using ng-class
   # to access the status
@@ -146,7 +238,16 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
     status = slot.status()
     return status
 
-
+  ###**
+  * @ngdoc method
+  * @name highlightSlot
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Check the highlight slot
+  *
+  * @param {date} day The day
+  * @param {object} slot The slot of day in multi time range list
+  ###
   $scope.highlightSlot = (day, slot) ->
 
     if day and slot and slot.availability() > 0
@@ -172,7 +273,13 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       updateHideStatus()
       $rootScope.$broadcast "time:selected"
 
-
+  ###**
+  * @ngdoc method
+  * @name loadData
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Load the time data
+  ###
   # load the time data
   $scope.loadData = ->
 
@@ -237,7 +344,16 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name spliceExistingDateTimes
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Splice existing date and times
+  *
+  * @param {array} stacked_item The stacked item
+  * @param {object} slots The slots of stacked_item from the multi_time_range_list
+  ###
   spliceExistingDateTimes = (stacked_item, slots) ->
 
     return if !stacked_item.datetime and !stacked_item.date 
@@ -253,7 +369,13 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       time_slot.selected = stacked_item.self is $scope.bb.stacked_items[0].self
 
 
-
+  ###**
+  * @ngdoc method
+  * @name setEnabledSlots
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Set the enabled slots
+  ###
   setEnabledSlots = () ->
 
     for day, day_data of $scope.days
@@ -292,7 +414,17 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
         for time, slot of $scope.bb.stacked_items[0].slots[day]
           day_data.slots[slot.time] = slot
 
-
+  ###**
+  * @ngdoc method
+  * @name pretty_month_title
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Display pretty month title in according of month format and year format parameters
+  *
+  * @param {date} month_format The month format
+  * @param {date} year_format The year format
+  * @param {string} separator The separator is '-'
+  ###
   $scope.pretty_month_title = (month_format, year_format, seperator = '-') ->
     return if !$scope.start_date
     month_year_format = month_format + ' ' + year_format
@@ -303,7 +435,16 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
     else
       return $scope.start_date.format(month_year_format)
 
-
+  ###**
+  * @ngdoc method
+  * @name confirm
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Confirm the time range stacked
+  *
+  * @param {string =} route A specific route to load
+  * @param {object} options The options
+  ###
   $scope.confirm = (route, options = {}) ->
     # first check all of the stacked items
     for item in $scope.bb.stacked_items
@@ -363,7 +504,13 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
         $scope.decideNextPage(route)
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = () ->
     return $scope.confirm('', {do_not_route: true})
 
