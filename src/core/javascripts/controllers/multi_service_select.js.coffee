@@ -152,6 +152,8 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
     $scope.categories = []
     for category_id, services of categories
 
+      category = {}
+
       # group services by their subcategory
       grouped_sub_categories = []
       if sub_categories
@@ -163,16 +165,16 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
 
           # only add the sub category if it has some services
           grouped_sub_categories.push(grouped_sub_category) if grouped_sub_category.services.length > 0
+        category.sub_categories = grouped_sub_categories
+      else
+        category.services = services
 
       # get the name and description
       category_details = {name: $scope.all_categories[category_id].name, description: $scope.all_categories[category_id].description} if $scope.all_categories[category_id]
 
       # set the category
-      category = {
-        name           : category_details.name 
-        description    : category_details.description 
-        sub_categories : grouped_sub_categories
-        }
+      category.name = category_details.name 
+      category.description = category_details.description 
       
       # get the order if instruccted
       category.order = $scope.all_categories[category_id].order if $scope.options.ordered_categories
