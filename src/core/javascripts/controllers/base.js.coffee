@@ -237,6 +237,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     Checkout: 11
     Slot: 12
     Event: 13
+    Login: 14
   $scope.Route = $rootScope.Route 
 
 
@@ -379,6 +380,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.i18n
       SettingsService.enableInternationalizaton()
       
+    if prms.login_required
+      $scope.bb.login_required = true
 
     if prms.private_note
       $scope.bb.private_note = prms.private_note
