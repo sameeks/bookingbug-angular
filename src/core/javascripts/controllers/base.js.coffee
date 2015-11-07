@@ -29,7 +29,7 @@
 
 
 angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
-    $templateCache, $compile, $q, AppConfig, $timeout, $bbug) ->
+    $templateCache, $compile, $q, AppConfig, $timeout, $bbug,$rootScope) ->
 
   ###**
   * @ngdoc method
@@ -44,7 +44,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     partial = if template then template else 'main'
     fromTemplateCache = $templateCache.get(partial)
     if fromTemplateCache
-      fromTemplateCache
+      fromTemplateCache 
     else
       src = PathSvc.directivePartial(partial).$$unwrapTrustedValue()
       $http.get(src, {cache: $templateCache}).then (response) ->
@@ -132,42 +132,43 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
       evaluator = scope.$parent
     init_params = evaluator.$eval( attrs.bbWidget )
     scope.initWidget(init_params)
-    prms = scope.bb
-    if prms.custom_partial_url
-      prms.design_id = prms.custom_partial_url.match(/^.*\/(.*?)$/)[1]
-      $bbug("[ng-app='BB']").append("<div id='widget_#{prms.design_id}'></div>")
-    if scope.bb.partial_url
-      if init_params.partial_url
-        AppConfig['partial_url'] = init_params.partial_url
-      else
-        AppConfig['partial_url'] = scope.bb.partial_url
-
-    transclude scope, (clone) =>
-      # if there's content or not whitespace  
-      scope.has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
-      if !scope.has_content
-        if prms.custom_partial_url
-          appendCustomPartials(scope, element, prms).then (style) ->
-            $q.when(getTemplate()).then (template) ->
-              element.html(template).show()
-              $compile(element.contents())(scope)
-              element.append(style)
-              setupPusher(scope, element, prms) if prms.update_design
-        else if prms.template
-          renderTemplate(scope, element, prms.design_mode, prms.template)
+    $rootScope.widget_started.then () =>
+      prms = scope.bb
+      if prms.custom_partial_url
+        prms.design_id = prms.custom_partial_url.match(/^.*\/(.*?)$/)[1]
+        $bbug("[ng-app='BB']").append("<div id='widget_#{prms.design_id}'></div>")
+      if scope.bb.partial_url
+        if init_params.partial_url
+          AppConfig['partial_url'] = init_params.partial_url
         else
-          renderTemplate(scope, element, prms.design_mode)
-        scope.$on 'refreshPage', () ->
-          renderTemplate(scope, element, prms.design_mode)
-      else if prms.custom_partial_url
-        appendCustomPartials(scope, element, prms)
-        setupPusher(scope, element, prms) if prms.update_design
-        scope.$on 'refreshPage', () ->
-          scope.showPage scope.bb.current_page
-      else
-        element.html(clone).show()
-        element.append('<style widget_css scoped></style>') if prms.design_mode
-        $compile(element.contents())(scope)
+          AppConfig['partial_url'] = scope.bb.partial_url
+
+      transclude scope, (clone) =>
+        # if there's content or not whitespace  
+        scope.has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+        if !scope.has_content
+          if prms.custom_partial_url
+            appendCustomPartials(scope, element, prms).then (style) ->
+              $q.when(getTemplate()).then (template) ->
+                element.html(template).show()
+                $compile(element.contents())(scope)
+                element.append(style)
+                setupPusher(scope, element, prms) if prms.update_design
+          else if prms.template
+            renderTemplate(scope, element, prms.design_mode, prms.template)
+          else
+            renderTemplate(scope, element, prms.design_mode)
+          scope.$on 'refreshPage', () ->
+            renderTemplate(scope, element, prms.design_mode)
+        else if prms.custom_partial_url
+          appendCustomPartials(scope, element, prms)
+          setupPusher(scope, element, prms) if prms.update_design
+          scope.$on 'refreshPage', () ->
+            scope.showPage scope.bb.current_page
+        else
+          element.html(clone).show()
+          element.append('<style widget_css scoped></style>') if prms.design_mode
+          $compile(element.contents())(scope)
 
 
 
@@ -712,13 +713,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           
     # do we have a pre-set route...
     if $scope.bb.nextSteps && $scope.bb.current_page && $scope.bb.nextSteps[$scope.bb.current_page] && !$scope.bb.routeSteps
-      # if  $scope.bb.current_page == "client_admin"
-      #   asfasfsf
       return $scope.showPage($scope.bb.nextSteps[$scope.bb.current_page])
     if !$scope.client.valid() && LoginService.isLoggedIn()
       # make sure we set the client to the currently logged in member
       # we should also jsut check the logged in member is  a member of the company they are currently booking with
       $scope.client = new BBModel.Client(LoginService.member()._data)
+
     if ($scope.bb.company && $scope.bb.company.companies) || (!$scope.bb.company && $scope.affiliate)
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')
