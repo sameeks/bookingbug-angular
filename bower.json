@@ -18,7 +18,7 @@
     "jquery": "~1.11.2",
     "jquery-ui": "~1.11.2",
     "moment": "https://github.com/BookingBug/moment.git#master",
-    "moment-timezone": "~0.2.5",
+    "moment-timezone": "~0.4.1",
     "accounting": "~0.3.2",
     "angular": "~1.2.25",
     "angular-mocks": "~1.2.25",
@@ -34,7 +34,7 @@
     "angular-animate": "~1.2.6",
     "angular-cache": "~3.2.5",
     "angular-ui-sortable": "~0.13.1",
-    "angular-spectrum-colorpicker": "~1.3.4",
+    "angular-spectrum-colorpicker": "~1.4.2",
     "angular-dragdrop": "~1.0.11",
     "bootstrap-sass-official": "~3.3.1",
     "fontawesome": "~4.2.0",
@@ -69,6 +69,7 @@
     "momentjs": "~2.9.0",
     "fullcalendar": ">=2.4.0",
     "angular-translate": "~2.6.1",
-    "humanize-duration": "~2.8.0"
+    "humanize-duration": "~2.8.0",
+    "spectrum": "1.7.0"
   }
 }
