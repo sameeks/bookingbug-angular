@@ -29,7 +29,7 @@
 
 
 angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
-    $templateCache, $compile, $q, AppConfig, $timeout, $bbug) ->
+    $templateCache, $compile, $q, AppConfig, $timeout, $bbug,$rootScope) ->
 
   ###**
   * @ngdoc method
@@ -44,7 +44,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     partial = if template then template else 'main'
     fromTemplateCache = $templateCache.get(partial)
     if fromTemplateCache
-      fromTemplateCache
+      fromTemplateCache 
     else
       src = PathSvc.directivePartial(partial).$$unwrapTrustedValue()
       $http.get(src, {cache: $templateCache}).then (response) ->
@@ -132,42 +132,43 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
       evaluator = scope.$parent
     init_params = evaluator.$eval( attrs.bbWidget )
     scope.initWidget(init_params)
-    prms = scope.bb
-    if prms.custom_partial_url
-      prms.design_id = prms.custom_partial_url.match(/^.*\/(.*?)$/)[1]
-      $bbug("[ng-app='BB']").append("<div id='widget_#{prms.design_id}'></div>")
-    if scope.bb.partial_url
-      if init_params.partial_url
-        AppConfig['partial_url'] = init_params.partial_url
-      else
-        AppConfig['partial_url'] = scope.bb.partial_url
-
-    transclude scope, (clone) =>
-      # if there's content or not whitespace  
-      scope.has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
-      if !scope.has_content
-        if prms.custom_partial_url
-          appendCustomPartials(scope, element, prms).then (style) ->
-            $q.when(getTemplate()).then (template) ->
-              element.html(template).show()
-              $compile(element.contents())(scope)
-              element.append(style)
-              setupPusher(scope, element, prms) if prms.update_design
-        else if prms.template
-          renderTemplate(scope, element, prms.design_mode, prms.template)
+    $rootScope.widget_started.then () =>
+      prms = scope.bb
+      if prms.custom_partial_url
+        prms.design_id = prms.custom_partial_url.match(/^.*\/(.*?)$/)[1]
+        $bbug("[ng-app='BB']").append("<div id='widget_#{prms.design_id}'></div>")
+      if scope.bb.partial_url
+        if init_params.partial_url
+          AppConfig['partial_url'] = init_params.partial_url
         else
-          renderTemplate(scope, element, prms.design_mode)
-        scope.$on 'refreshPage', () ->
-          renderTemplate(scope, element, prms.design_mode)
-      else if prms.custom_partial_url
-        appendCustomPartials(scope, element, prms)
-        setupPusher(scope, element, prms) if prms.update_design
-        scope.$on 'refreshPage', () ->
-          scope.showPage scope.bb.current_page
-      else
-        element.html(clone).show()
-        element.append('<style widget_css scoped></style>') if prms.design_mode
-        $compile(element.contents())(scope)
+          AppConfig['partial_url'] = scope.bb.partial_url
+
+      transclude scope, (clone) =>
+        # if there's content or not whitespace  
+        scope.has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+        if !scope.has_content
+          if prms.custom_partial_url
+            appendCustomPartials(scope, element, prms).then (style) ->
+              $q.when(getTemplate()).then (template) ->
+                element.html(template).show()
+                $compile(element.contents())(scope)
+                element.append(style)
+                setupPusher(scope, element, prms) if prms.update_design
+          else if prms.template
+            renderTemplate(scope, element, prms.design_mode, prms.template)
+          else
+            renderTemplate(scope, element, prms.design_mode)
+          scope.$on 'refreshPage', () ->
+            renderTemplate(scope, element, prms.design_mode)
+        else if prms.custom_partial_url
+          appendCustomPartials(scope, element, prms)
+          setupPusher(scope, element, prms) if prms.update_design
+          scope.$on 'refreshPage', () ->
+            scope.showPage scope.bb.current_page
+        else
+          element.html(clone).show()
+          element.append('<style widget_css scoped></style>') if prms.design_mode
+          $compile(element.contents())(scope)
 
 
 
@@ -193,6 +194,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.bb = new BBWidget()
   AppConfig.uid = $scope.bb.uid
   $scope.qs = QueryStringService
+  $scope.company_api_path = '/api/v1/company/{company_id}{?embed,category_id}'
+  $scope.company_admin_api_path = '/api/v1/admin/{company_id}/company{?embed,category_id}'
 
   if $scope.apiUrl
     $scope.bb ||= {}
@@ -439,6 +442,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           , (err) ->
             comp_p.reject(err)
 
+
     # load the company
 
     if company_id
@@ -452,8 +456,26 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         else
           comp_category_id = $scope.bb.item_defaults.category
 
-      comp_url = new UriTemplate($scope.bb.api_url + '/api/v1/company/{company_id}{?embed,category_id}').fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-      comp_promise = halClient.$get(comp_url)
+      comp_def = $q.defer()
+      comp_promise = comp_def.promise
+      if $scope.bb.isAdmin
+        comp_url = new UriTemplate($scope.bb.api_url + $scope.company_admin_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
+        halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+          comp_def.resolve(company)
+        , (err) ->
+          # try non admin if admin failed
+          comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
+          halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+            comp_def.resolve(company)
+          , (err) ->
+            comp_def.reject(err)
+
+      else
+        comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
+        halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+          comp_def.resolve(company)
+        , (err) ->
+          comp_def.reject(err)
 
       setup_promises.push(comp_promise)
       comp_promise.then (company) =>
@@ -558,6 +580,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
 
+
+
   setupDefaults = (company_id) =>
     def = $q.defer()
 
@@ -571,46 +595,78 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           $scope.bb.item_defaults[k] = QueryStringService(v)
 
       if $scope.bb.item_defaults.resource
-        resource = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/resources/' + $scope.bb.item_defaults.resource )
+        if $scope.bb.isAdmin
+          resource = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/resources/' + $scope.bb.item_defaults.resource )
+        else
+          resource = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/resources/' + $scope.bb.item_defaults.resource )
         $scope.bb.default_setup_promises.push(resource)
         resource.then (res) =>
           $scope.bb.item_defaults.resource = new BBModel.Resource(res)
 
       if $scope.bb.item_defaults.person
-        person = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/people/' + $scope.bb.item_defaults.person )
+        if $scope.bb.isAdmin
+          person = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/people/' + $scope.bb.item_defaults.person )
+        else
+          person = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/people/' + $scope.bb.item_defaults.person )
         $scope.bb.default_setup_promises.push(person)
         person.then (res) =>
           $scope.bb.item_defaults.person = new BBModel.Person(res)
 
+
       if $scope.bb.item_defaults.person_ref
-        person = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/people/find_by_ref/' + $scope.bb.item_defaults.person_ref)
+        if $scope.bb.isAdmin
+          person = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/people/find_by_ref/' + $scope.bb.item_defaults.person_ref )
+        else
+          person = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/people/find_by_ref/' + $scope.bb.item_defaults.person_ref)
+
         $scope.bb.default_setup_promises.push(person)
         person.then (res) =>
           $scope.bb.item_defaults.person = new BBModel.Person(res)
 
       if $scope.bb.item_defaults.service
-        service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/services/' + $scope.bb.item_defaults.service )
+        if $scope.bb.isAdmin
+          service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services/' + $scope.bb.item_defaults.service )
+        else
+          service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/services/' + $scope.bb.item_defaults.service )
         $scope.bb.default_setup_promises.push(service)
         service.then (res) =>
           $scope.bb.item_defaults.service = new BBModel.Service(res)
 
       if $scope.bb.item_defaults.service_ref
-        service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/services?api_ref=' + $scope.bb.item_defaults.service_ref )
+        if $scope.bb.isAdmin
+          service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services?api_ref=' + $scope.bb.item_defaults.service_ref )
+        else
+          service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/services?api_ref=' + $scope.bb.item_defaults.service_ref )
         $scope.bb.default_setup_promises.push(service)
         service.then (res) =>
           $scope.bb.item_defaults.service = new BBModel.Service(res)
 
       if $scope.bb.item_defaults.event_group
-        event_group = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/event_groups/' + $scope.bb.item_defaults.event_group )
+        if $scope.bb.isAdmin
+          event_group = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/event_groups/' + $scope.bb.item_defaults.event_group )
+        else
+          event_group = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/event_groups/' + $scope.bb.item_defaults.event_group )
         $scope.bb.default_setup_promises.push(event_group)
         event_group.then (res) =>
           $scope.bb.item_defaults.event_group = new BBModel.EventGroup(res)
 
       if $scope.bb.item_defaults.event
-        event = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/events/' + $scope.bb.item_defaults.event )
+        if $scope.bb.isAdmin
+          event = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/events/' + $scope.bb.item_defaults.event )
+        else
+          event = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/events/' + $scope.bb.item_defaults.event )
         $scope.bb.default_setup_promises.push(event)
         event.then (res) =>
           $scope.bb.item_defaults.event = new BBModel.Event(res)
+
+      if $scope.bb.item_defaults.event_chain
+        if $scope.bb.isAdmin
+          event_chain = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/event_chains/' + $scope.bb.item_defaults.event_chain )
+        else
+          event_chain = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/event_chains/' + $scope.bb.item_defaults.event_chain )
+        $scope.bb.default_setup_promises.push(event_chain)
+        event_chain.then (res) =>
+          $scope.bb.item_defaults.event_chain = new BBModel.EventChain(res)
 
       if $scope.bb.item_defaults.category
         category = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/categories/' + $scope.bb.item_defaults.category )
@@ -716,13 +772,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           
     # do we have a pre-set route...
     if $scope.bb.nextSteps && $scope.bb.current_page && $scope.bb.nextSteps[$scope.bb.current_page] && !$scope.bb.routeSteps
-      # if  $scope.bb.current_page == "client_admin"
-      #   asfasfsf
       return $scope.showPage($scope.bb.nextSteps[$scope.bb.current_page])
     if !$scope.client.valid() && LoginService.isLoggedIn()
       # make sure we set the client to the currently logged in member
       # we should also jsut check the logged in member is  a member of the company they are currently booking with
       $scope.client = new BBModel.Client(LoginService.member()._data)
+
     if ($scope.bb.company && $scope.bb.company.companies) || (!$scope.bb.company && $scope.affiliate)
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')

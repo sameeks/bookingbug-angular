@@ -58,7 +58,6 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
         $scope.items = newval
         initialise()
 
-
   initialise = () ->
 
     return if !$scope.items or !$scope.company
@@ -150,6 +149,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
 
     # build the catagories array
     $scope.categories = []
+
     for category_id, services of categories
 
       category = {}
@@ -177,7 +177,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       category.description = category_details.description 
       
       # get the order if instruccted
-      category.order = $scope.all_categories[category_id].order if $scope.options.ordered_categories
+      category.order = $scope.all_categories[category_id].order if $scope.options.ordered_categories && $scope.all_categories[category_id]
 
       $scope.categories.push(category)
 
