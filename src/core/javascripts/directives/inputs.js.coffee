@@ -209,7 +209,7 @@ app.directive "ngMax", ->
 app.directive "creditCardNumber", ->
 
   getCardType = (ccnumber) ->
-    return '' unless ccnumber
+    return 'a' unless ccnumber
     ccnumber = ccnumber.toString().replace(/\s+/g, '')
     if /^(34)|^(37)/.test(ccnumber)
       return "american_express"
