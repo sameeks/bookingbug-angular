@@ -389,7 +389,7 @@
       </div>
 
       <div ng-show="selected_tickets">
-        <div ng-form name="terms_and_conditons_form" id="terms_and_conditons_form" role="form" novalidate>
+        <div ng-if="!bb.isAdmin" ng-form name="terms_and_conditons_form" id="terms_and_conditons_form" role="form" novalidate>
           <div class="form-group check" ng-class="{'has-error': terms_and_conditons_form.tandc.$invalid && booking_form.submitted}">
             <div class="col-sm-4 hidden-xs">&nbsp;</div>
             <div class="col-sm-5">
