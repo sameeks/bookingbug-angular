@@ -121,7 +121,6 @@ gulp.task('assets', ['clean', 'javascripts', 'images', 'stylesheets','fonts', 't
 
 gulp.task('default', ['assets', 'watch', 'webserver']);
 
-
 gulp.task('cleandocs', function(cb) {
   del.sync(['docs']);
   cb()
@@ -132,6 +131,10 @@ gulp.task('ngdocs', [], function () {
     html5Mode: false,
     editExample: true,
     sourceLink: true,
+    image: "custom-template/logo.png",
+    imageLink: "custom-template/logo.png",
+    navTemplate: 'custom-template/custom-head.html',
+    styles: "custom-template/custom-style.css",
     loadDefaults: {
       angular: false,
       angularAnimate: false
@@ -140,7 +143,6 @@ gulp.task('ngdocs', [], function () {
     scripts: [
       'examples/booking-widget.js'
     ]
-
   }
   return gulp.src('src/*/javascripts/**')
     .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))

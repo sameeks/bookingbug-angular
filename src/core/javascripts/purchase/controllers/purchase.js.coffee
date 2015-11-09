@@ -7,7 +7,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     scope.init(scope.$eval( attrs.bbPurchase ))
     return
 
-angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage) ->
+angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, ErrorService, LoginService, $window, $upload, ServiceService, $sessionStorage) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -27,7 +27,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     if $scope.fail_msg
       AlertService.danger({msg:$scope.fail_msg})
     else
-      AlertService.danger({msg:"Sorry, something went wrong"})
+      AlertService.danger(ErrorService.getAlert('GENERIC'))
 
 
   $scope.init = (options) ->
@@ -36,7 +36,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     $scope.notLoaded $scope
     $scope.move_route = options.move_route if options.move_route
     $scope.move_all = options.move_all if options.move_all
-    $scope.requireLogin({redirect: options.login_redirect}) if options.login_redirect
     $scope.fail_msg = options.fail_msg if options.fail_msg
  
     # is there a purchase total already in scope?
@@ -102,8 +101,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
               $scope.messages = messages
           , (err) ->
             $scope.setLoaded $scope
-            if err && err.status == 401 && $scope.login_action
+            if err && err.status == 401
               if LoginService.isLoggedIn()
+                # TODO don't show fail message, display message that says you're logged in as someone else and offer switch user function (logout and show login)
                 failMsg()
               else
                 loginRequired()
@@ -126,19 +126,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     $scope.waitlist_bookings = (booking for booking in bookings when (booking.on_waitlist && booking.settings.sent_waitlist == 1))
 
 
-  $scope.requireLogin = (action) =>
-    if _.isString action.redirect
-      if action.redirect.indexOf('?') is -1
-        div = '?'
-      else
-        div = '&'
-      action.redirect += (div + 'ref=' + encodeURIComponent(QueryStringService('ref')))
-    $scope.login_action = action
-
-
   loginRequired = () =>
-    if $scope.login_action.redirect
-      window.location = $scope.login_action.redirect
+    if !$scope.bb.login_required
+      window.location = window.location.href + "&login=true"
 
 
   getCompanyID = () ->

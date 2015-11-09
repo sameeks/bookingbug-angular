@@ -1,5 +1,39 @@
-
 'use strict';
+
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbMap
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of maps for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @param {hash}  bbMap A hash of options
+* @property {object} mapLoaded The map has been loaded
+* @property {object} mapReady The maps has been ready
+* @property {object} map_init The initialization the map
+* @property {object} numSearchResults The number of search results
+* @property {object} range_limit The range limit
+* @property {boolean} showAllMarkers Display or not all markers
+* @property {array} mapMarkers The map markers
+* @property {array} shownMarkers Display the markers
+* @property {integer} numberedPin The numbered pin
+* @property {integer} defaultPin The default pin
+* @proeprty {boolean} hide_not_live_stores Hide or not the live stores
+* @property {object} address The address
+* @property {object} error_msg The error message
+* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+####
+
 
 angular.module('BB.Directives').directive 'bbMap', () ->
   restrict: 'AE'
@@ -108,7 +142,13 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     if options
       $scope.hide_not_live_stores = options.hide_not_live_stores
 
-
+  ###**
+  * @ngdoc method
+  * @name checkDataStore
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * If the user has clicked back to the map then display it.
+  ###
   # if the user has clicked back to the map then display it.
   checkDataStore = ->
     if $scope.selectedStore
@@ -123,7 +163,13 @@ angular.module('BB.Controllers').controller 'MapCtrl',
             google.maps.event.trigger(marker, 'click');
       )
 
-
+  ###**
+  * @ngdoc method
+  * @name title
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Create title for the map selection step
+  ###
   # create title for the map selection step
   $scope.title = ->
     ci = $scope.bb.current_item
@@ -134,7 +180,15 @@ angular.module('BB.Controllers').controller 'MapCtrl',
 
     return p1 + ' - ' + $scope.$eval('getCurrentStepTitle()')
 
-
+  ###**
+  * @ngdoc method
+  * @name searchAddress
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Search address in according of prms parameter
+  *
+  * @param {object} prms The parameters of the address
+  ###
   $scope.searchAddress = (prms) ->
 
     # if a reverse geocode has been performed and the address 
@@ -173,7 +227,15 @@ angular.module('BB.Controllers').controller 'MapCtrl',
 
     $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name searchPlaces
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Search places in according of prms parameter
+  *
+  * @param {object} prms The parameters of the places
+  ###
   searchPlaces = (prms) ->
     
     req = {
@@ -192,7 +254,15 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       else
         searchFailed()
 
-
+  ###**
+  * @ngdoc method
+  * @name searchSuccess
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Search has been succeeded, and return 
+  *
+  * @param {object} result The result of the search
+  ###
   searchSuccess = (result) ->
     AlertService.clear()
     $scope.search_failed = false
@@ -202,14 +272,28 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     $scope.showClosestMarkers $scope.loc
     $rootScope.$broadcast "map:search_success"
 
-
+  ###**
+  * @ngdoc method
+  * @name searchFailed
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Search failed and displayed an error
+  ###
   searchFailed = () ->
     $scope.search_failed = true
     AlertService.danger(ErrorService.getError('LOCATION_NOT_FOUND'))
     # need to call apply to update bindings as geocode callback is outside angular library
     $rootScope.$apply()
 
-
+  ###**
+  * @ngdoc method
+  * @name validateAddress
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Validate the address using form
+  *
+  * @param {object} form The form where address has been validate
+  ###
   $scope.validateAddress = (form) ->
     return false if !form
     if form.$error.required
@@ -219,7 +303,15 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     else
       return true
 
-
+  ###**
+  * @ngdoc method
+  * @name showClosestMarkers
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Display the closest markers
+  *
+  * @param {array} latlong Using for determinate the closest markers
+  ###
   $scope.showClosestMarkers = (latlong) ->
     pi = Math.PI;
     R = 6371  #equatorial radius
@@ -277,15 +369,34 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       localBounds.extend(marker.position)
       index += 1
 
+    $scope.$emit 'map:shown_markers_updated', $scope.shownMarkers
+    
     google.maps.event.trigger($scope.myMap, 'resize')
     $scope.myMap.fitBounds(localBounds)
 
-
+  ###**
+  * @ngdoc method
+  * @name openMarkerInfo
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Display marker information on the map
+  *
+  * @param {object} marker The marker
+  ###
   $scope.openMarkerInfo = (marker) ->
     $scope.currentMarker = marker
     $scope.myInfoWindow.open($scope.myMap, marker)
 
-
+  ###**
+  * @ngdoc method
+  * @name selectItem
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Select an item from map
+  *
+  * @param {array} item The Map or BookableItem to select
+  * @param {string=} route A specific route to load
+  ###
   $scope.selectItem = (item, route) ->
     return if !$scope.$debounce(1000)
 
@@ -303,11 +414,26 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     $scope.selectedStore = item;
     $scope.initWidget({company_id:item.id, first_page: route})
 
-
+  ###**
+  * @ngdoc method
+  * @name roundNumberUp
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Calculate the round number up 
+  *
+  * @param {integer} num The number of places
+  * @param {object} places The places
+  ###
   $scope.roundNumberUp = (num, places) ->
     Math.round(num * Math.pow(10, places)) / Math.pow(10, places);
 
-
+  ###**
+  * @ngdoc method
+  * @name geolocate
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Get geolocation information
+  ###
   $scope.geolocate = () ->
     return false if !navigator.geolocation || ($scope.reverse_geocode_address && $scope.reverse_geocode_address == $scope.address)
 
@@ -318,7 +444,15 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       options = {timeout: 5000, maximumAge: 3600000}
       navigator.geolocation.getCurrentPosition(reverseGeocode, geolocateFail, options)
 
-
+  ###**
+  * @ngdoc method
+  * @name geolocateFail
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Geolocation fail and display an error message
+  *
+  * @param {object} error The error 
+  ###
   geolocateFail = (error) ->
     switch error.code
       # if the geocode failed because the position was unavailable or the request timed out, raise an alert
@@ -328,7 +462,15 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       else
         return $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name reverseGeocode
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Reverse geocode in according of position parameter
+  *
+  * @param {object} positon The postion get latitude and longitude from google maps api
+  ###
   reverseGeocode = (position) ->
     lat    = parseFloat(position.coords.latitude)
     long   = parseFloat(position.coords.longitude)
@@ -345,6 +487,13 @@ angular.module('BB.Controllers').controller 'MapCtrl',
         searchSuccess($scope.geocoder_result)
       $scope.setLoaded $scope
 
+  ###**
+  * @ngdoc method
+  * @name increaseRange
+  * @methodOf BB.Directives:bbMap
+  * @description
+  * Increase range, the range limit is infinity
+  ###
   $scope.increaseRange = () ->
     $scope.range_limit = Infinity
     $scope.searchAddress($scope.search_prms)

@@ -66,9 +66,18 @@ angular
 
 })
 .factory('halClient', [
-  '$http', '$q', 'data_cache', 'shared_header', 'UriTemplate', function(
-    $http, $q, data_cache, shared_header, UriTemplate
+  '$http', '$q', 'data_cache', 'shared_header', 'UriTemplate', '$cookies', '$sessionStorage', function(
+    $http, $q, data_cache, shared_header, UriTemplate, $cookies, $sessionStorage
   ){
+
+
+    if ($cookies['Auth-Token']){
+      $sessionStorage.setItem('auth_token', $cookies['Auth-Token'])
+    }
+    if ($sessionStorage.getItem('auth_token'))
+      shared_header.set('auth_token', $sessionStorage.getItem('auth_token'))
+
+
     return {
       setCache: function(cache) {
         data_cache = cache
@@ -108,7 +117,9 @@ angular
         return parseHal(data)
       }//parse
     };
-  
+
+
+
     function BaseResource(href, options, data){
       if(!options) options = {};
       var links = {};

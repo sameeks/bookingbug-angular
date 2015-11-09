@@ -1,6 +1,32 @@
 'use strict';
 
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbCheckout
+* @restrict AE
+* @scope true
+*
+* @description
+* Loads a list of checkouts for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @param {hash}  bbCheckout   A hash of options
+* @property {string} loadingTotal The loading total
+* @property {string} skipThisStep The skip this step
+* @property {string} decideNextPage The decide next page
+* @property {boolean} checkoutSuccess The checkout success
+* @property {string} setLoaded The set loaded
+* @property {string} setLoadedAndShowError The set loaded and show error
+* @property {boolean} checkoutFailed The checkout failed
+####
+
+
 angular.module('BB.Directives').directive 'bbCheckout', () ->
   restrict: 'AE'
   replace: true
@@ -44,6 +70,14 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
   , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
+  ###**
+  * @ngdoc method
+  * @name print
+  * @methodOf BB.Directives:bbCheckout
+  * @description
+  * Print booking details using print_purchase.html template
+  *
+  ###
   # Deprecated - use window.print or $scope.printElement
   # Print booking details using print_purchase.html template
   $scope.print = () =>
@@ -51,7 +85,16 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
                 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0')
     return true
 
-
+  ###**
+  * @ngdoc method
+  * @name printElement
+  * @methodOf BB.Directives:bbCheckout
+  * @description
+  * Print by creating popup containing the contents of the specified element
+  *
+  * @param {integer} id The id of the specified element
+  * @param {string} stylesheet The stylesheet of popup
+  ###
   # Print by creating popup containing the contents of the specified element
   # TODO move print methods to a service
   $scope.printElement = (id, stylesheet) ->

@@ -1,5 +1,32 @@
 'use strict';
 
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbTimeRanges
+* @restrict AE
+* @scope true
+*
+* @description
+*
+* Loads a list of time rangers for the currently in scope company
+*
+* <pre>
+* restrict: 'AE'
+* replace: true
+* scope: true
+* </pre>
+*
+* @param {hash}  bbTimeRanges A hash of options
+* @property {string} selected_slot The selected slot
+* @property {date} selected_date The selected date
+* @property {string} postcode The postcode
+* @property {date} original_start_date The original start date
+* @property {date} start_at_week_start The start at week start
+* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+####
+
+
 angular.module('BB.Directives').directive 'bbTimeRanges', () ->
   restrict: 'AE'
   replace: true
@@ -91,7 +118,16 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
   , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-
+  ###**
+  * @ngdoc method
+  * @name setTimeRange
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Set time range in according of selected date and start date parameters
+  *
+  * @param {date} selected_date The selected date
+  * @param {date} start_date The start date
+  ###
   setTimeRange = (selected_date, start_date) ->
     if start_date
       $scope.start_date = start_date
@@ -119,11 +155,27 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       unless options.selected_day._isAMomementObject
         $scope.selected_day = moment(options.selected_day)
 
-
+  ###**
+  * @ngdoc method
+  * @name moment
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Add to moment date in according of date parameter
+  *
+  * @param {date} date The date
+  ###
   $scope.moment = (date) ->
     moment(date)
 
-
+  ###**
+  * @ngdoc method
+  * @name setDataSource
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Set data source in according of source parameter
+  *
+  * @param {array} source The source of data
+  ###
   $scope.setDataSource = (source) ->
     $scope.data_source = source
 
@@ -132,7 +184,16 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadData()
 
-
+  ###**
+  * @ngdoc method
+  * @name add
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Add new time range in according of type and amount parameters
+  *
+  * @param {object} type The type
+  * @param {object} amount The amount of the days
+  ###
   $scope.add = (type, amount) ->
     if amount > 0
       $element.removeClass('subtract')
@@ -150,19 +211,45 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         setTimeRange($scope.start_date)
     $scope.loadData()
 
-
+  ###**
+  * @ngdoc method
+  * @name subtract
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Substract amount
+  *
+  * @param {object} type The type
+  * @param {object} amount The amount of the days
+  ###
   $scope.subtract = (type, amount) ->
     $element.removeClass('add')  
     $element.addClass('subtract')
     $scope.add(type, -amount)
 
+  ###**
+  * @ngdoc method
+  * @name isSubtractValid
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Deprecated due to performance issues, use $scope.is_subtract_valid and $scope.subtract_length instead
+  *
+  * @param {object} type The type
+  * @param {object} amount The amount of the days
+  ###
   # deprecated due to performance issues, use $scope.is_subtract_valid and $scope.subtract_length instead
   $scope.isSubtractValid = (type, amount) ->
     return true if !$scope.start_date || $scope.isAdmin()
     date = $scope.start_date.clone().subtract(amount, type)
     return !date.isBefore(moment(), 'day')
 
-
+  ###**
+  * @ngdoc method
+  * @name isSubtractValid
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Verify if substraction is valid
+  *
+  ###
   isSubtractValid = () ->
     $scope.is_subtract_valid = true
 
@@ -177,26 +264,57 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     else
       $scope.subtract_string = "Prev"
  
-
+  ###**
+  * @ngdoc method
+  * @name selectedDateChanged
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Select date change
+  *
+  ###
   # called on datepicker date change
   $scope.selectedDateChanged = () ->
     setTimeRange(moment($scope.selected_date))
     $scope.selected_slot = null
     $scope.loadData()
 
-
+  ###**
+  * @ngdoc method
+  * @name updateHideStatus
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Update the hidden status
+  *
+  ###
   $scope.updateHideStatus = () ->
     for day in $scope.days
       day.hide = !day.date.isSame($scope.selected_day,'day')
 
 
+  ###**
+  * @ngdoc method
+  * @name isPast
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Calculate if the current earliest date is in the past - in which case we might want to disable going backwards
+  *
+  ###
   # calculate if the current earliest date is in the past - in which case we
   # might want to disable going backwards
   $scope.isPast = () ->
     return true if !$scope.start_date
     return moment().isAfter($scope.start_date)
 
-
+  ###**
+  * @ngdoc method
+  * @name status
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Check the status of the slot to see if it has been selected
+  *
+  * @param {date} day The day
+  * @param {array} slot The slot
+  ###
   # check the status of the slot to see if it has been selected
   # NOTE: This is very costly to call from a view, please consider using ng-class
   # to access the status
@@ -212,7 +330,17 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     #   return status = 'selected'
     # return status
 
-
+  ###**
+  * @ngdoc method
+  * @name selectSlot
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Called when user selects a time slot use this when you want to route to the next step as a slot is selected
+  *
+  * @param {date} day The day
+  * @param {array} slot The slot
+  * @param {string=} route A route of the selected slot
+  ###
   # called when user selects a time slot
   # use this when you want to route to the next step as a slot is selected
   $scope.selectSlot = (day, slot, route) ->
@@ -232,7 +360,16 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       else
         $scope.decideNextPage(route)
 
-
+  ###**
+  * @ngdoc method
+  * @name highlightSlot
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Called when user selects a time slot use this when you just want to hightlight the the slot and not progress to the next step
+  *
+  * @param {date} day The day
+  * @param {array} slot The slot
+  ###
   # called when user selects a time slot
   # use this when you just want to hightlight the the slot and not progress to the next step
   $scope.highlightSlot = (day, slot) ->
@@ -257,7 +394,14 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       # broadcast message to the accordian range groups
       $scope.$broadcast 'slotChanged', day, slot
 
-
+  ###**
+  * @ngdoc method
+  * @name loadData
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Load the time data
+  *
+  ###
   # load the time data
   $scope.loadData = ->
    
@@ -343,7 +487,16 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     else
       $scope.setLoaded $scope
 
-
+  ###**
+  * @ngdoc method
+  * @name checkRequestedTime
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Check requested time
+  *
+  * @param {date} day The day
+  * @param {date} time_losts The time slots
+  ###
   checkRequestedTime = (day, time_slots) ->
 
     current_item = $scope.bb.current_item
@@ -370,11 +523,25 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         AlertService.raise(ErrorService.getAlert('REQ_TIME_NOT_AVAIL'))
 
 
-
+  ###**
+  * @ngdoc method
+  * @name padTimes
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * The pad time
+  *
+  * @param {date} times The times
+  ###
   $scope.padTimes = (times) ->
     $scope.add_padding = times
 
-
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Set this page section as ready
+  ###
   $scope.setReady = () ->
     if !$scope.bb.current_item.time
       AlertService.raise(ErrorService.getAlert('TIME_SLOT_NOT_SELECTED'))
@@ -395,19 +562,53 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       else
         return true
 
-
+  ###**
+  * @ngdoc method
+  * @name format_date
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Format the date in according of fmt parameter
+  *
+  * @param {date} fmt The format of date 
+  ###
   $scope.format_date = (fmt) ->
     $scope.start_date.format(fmt) if $scope.start_date
 
-
+  ###**
+  * @ngdoc method
+  * @name format_start_date
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Format the start date in according of fmt parameter
+  *
+  * @param {date} fmt The format of start date 
+  ###
   $scope.format_start_date = (fmt) ->
     $scope.format_date(fmt)
 
-
+  ###**
+  * @ngdoc method
+  * @name format_end_date
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Format the end date in according of fmt parameter
+  *
+  * @param {date} fmt The format of end date 
+  ###
   $scope.format_end_date = (fmt) ->
     $scope.end_date.format(fmt) if $scope.end_date
 
-
+  ###**
+  * @ngdoc method
+  * @name pretty_month_title
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Format the month title in according of month formant, year format and separator parameters
+  *
+  * @param {date} month_format The month format
+  * @param {date} year_format The year format
+  * @param {object} separator The separator of month and year format
+  ###
   $scope.pretty_month_title = (month_format, year_format, seperator = '-') ->
     month_year_format = month_format + ' ' + year_format
     if $scope.start_date && $scope.end_date && $scope.end_date.isAfter($scope.start_date, 'month')
@@ -417,7 +618,13 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     else
       return $scope.format_start_date(month_year_format)
 
-
+  ###**
+  * @ngdoc method
+  * @name selectEarliestTimeSlot
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Select earliest time slot
+  ###
   $scope.selectEarliestTimeSlot = () ->
     day  = _.find($scope.days, (day) -> day.date.isSame($scope.bb.current_item.earliest_time_slot.date, 'day'))
     slot = _.find(day.slots, (slot) -> slot.time is $scope.bb.current_item.earliest_time_slot.time)
