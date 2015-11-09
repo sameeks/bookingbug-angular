@@ -3,9 +3,9 @@
   <div bb-include="_service_item_aggregate">
   </div>
 
-  <div class="bb-subcontent">
+  <form name="booking_form" class="form-horizontal" role="form" bb-form>
 
-    <form name="booking_form" class="form-horizontal" ng-submit="validator.validateForm(booking_form)" role="form" bb-raise-alert-when-invalid>
+    <div class="bb-subcontent">
 
       <div bb-custom-booking-text class="bb-message-node">
         <div ng-repeat="msg in messages" ng-bind-html="msg"></div>
@@ -51,20 +51,22 @@
          </span>
       </div>
       
-    </form>
+    
 
-  </div>
+    </div>
 
-  <div class="bb-step-navigation">
-    <div class="row">
-      <div class="col-sm-9 col-sm-push-3 text-right">
-        <button type="submit" class="btn btn-primary pull-right" ng-click="confirm(booking_form)">Book</button>
-      </div>
-      <div class="col-sm-3 col-sm-pull-9">
-        <button type="button" class="btn btn-default pull-left" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+    <div class="bb-step-navigation">
+      <div class="row">
+        <div class="col-sm-9 col-sm-push-3 text-right">
+          <button type="submit" class="btn btn-primary pull-right" ng-click="confirm(booking_form)">Book</button>
+        </div>
+        <div class="col-sm-3 col-sm-pull-9">
+          <button type="button" class="btn btn-default pull-left" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+        </div>
       </div>
     </div>
-  </div>
+
+  </form>
 
 
 </div>
