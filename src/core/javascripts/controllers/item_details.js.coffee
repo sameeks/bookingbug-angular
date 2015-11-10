@@ -180,9 +180,11 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     if $scope.bb.moving_booking
       return $scope.confirm_move(form, route)
 
-    return true if !$scope.has_page_control
-
     $scope.item.setAskedQuestions()
+
+    return true if $scope.$parent.$has_page_control
+
+   
     if $scope.item.ready
       $scope.notLoaded $scope
       $scope.addItemToBasket().then () ->
