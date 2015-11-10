@@ -197,7 +197,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
         reference: @reference
       post.is_admin = @is_admin
       post.parent_client_id = @parent_client_id
-      post.take_from_wallet = @take_from_wallet?
+      post.take_from_wallet = @take_from_wallet
       post.items = []
       for item in @items
         post.items.push(item.getPostData())
