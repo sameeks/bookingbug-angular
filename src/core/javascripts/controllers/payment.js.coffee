@@ -20,7 +20,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService) ->
+angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService, ErrorService, AlertService) ->
 
   error = (scope, message) ->
     scope.error(message)
@@ -69,6 +69,16 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
             when "error"
               scope.callSetLoaded()
               error(scope, event.data.message)
+              AlertService.raise(ErrorService.getAlert('PAYMENT_FAILED'))
+              #element.find('#bb-payment').attr(element.find('#bb-payment').attr('src'))
+              # $('iframe').attr('src', $('iframe').attr('src'));
+              # document.getElementsByTagName('iframe')[0].src=document.getElementsByTagName('iframe')[0].src
+              document.getElementById('bb-payment').src += ''
+
+              # var iframe = document.getElementById('youriframe');
+              # iframe.src = iframe.src;
+
+              # angular.element('')
             when "payment_complete"
               scope.callSetLoaded()
               scope.paymentDone()

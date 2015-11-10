@@ -161,6 +161,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'Your passwords don\'t match each other.'
+    },
+    {
+      key: 'PAYMENT_FAILED',
+      type: 'danger',
+      title: '',
+      persist: true,
+      msg: 'We were unable to take payment. Please contact your card issuer or try again using a different card'
     }
   ]
 
