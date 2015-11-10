@@ -451,14 +451,14 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
 
     ###**
     * @ngdoc method
-    * @name setTakeFromWallet
+    * @name useWallet
     * @methodOf BB.Models:Basket
     * @description
     * Indicates if a wallet should be used for payment
     *
     * @returns {boolean} true or false
     ### 
-    setTakeFromWallet : (value, client) ->
+    useWallet : (value, client) ->
       if client and client.$has('wallet') and value
         @take_from_wallet = true
         return true
