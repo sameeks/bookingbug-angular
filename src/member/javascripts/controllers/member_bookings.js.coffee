@@ -41,7 +41,10 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
         title: 'Booking Details'
         templateUrl: 'edit_booking_modal_form.html'
         windowClass: 'member_edit_booking_form'
+        success: updateBookings
 
+  updateBookings = () ->
+    $scope.getUpcomingBookings()
 
   $scope.cancel = (booking) ->
     modalInstance = $modal.open
