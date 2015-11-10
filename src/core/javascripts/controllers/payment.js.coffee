@@ -71,7 +71,6 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
               scope.callNotLoaded()
             when "error"
               scope.callNotLoaded()
-              error(scope, event.data.message)
               AlertService.raise(ErrorService.getAlert('PAYMENT_FAILED'))
               # reload the payment iframe
               document.getElementsByTagName("iframe")[0].src += ''
