@@ -42,7 +42,10 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
       'custom_stylesheet' : custom_stylesheet,
       'scroll_offset'     : SettingsService.getScrollOffset()
     })
+
     element.find('iframe')[0].contentWindow.postMessage(payload, origin)
+
+
 
   linker = (scope, element, attributes) ->
 
@@ -67,18 +70,11 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
             when "submitting"
               scope.callNotLoaded()
             when "error"
-              scope.callSetLoaded()
+              scope.callNotLoaded()
               error(scope, event.data.message)
               AlertService.raise(ErrorService.getAlert('PAYMENT_FAILED'))
-              #element.find('#bb-payment').attr(element.find('#bb-payment').attr('src'))
-              # $('iframe').attr('src', $('iframe').attr('src'));
-              # document.getElementsByTagName('iframe')[0].src=document.getElementsByTagName('iframe')[0].src
-              document.getElementById('bb-payment').src += ''
-
-              # var iframe = document.getElementById('youriframe');
-              # iframe.src = iframe.src;
-
-              # angular.element('')
+              # reload the payment iframe
+              document.getElementsByTagName("iframe")[0].src += ''
             when "payment_complete"
               scope.callSetLoaded()
               scope.paymentDone()
