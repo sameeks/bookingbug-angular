@@ -81,9 +81,10 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
             when "submitting"
               scope.callNotLoaded()
             when "error"
-              scope.callSetLoaded()
-              scope.error(data.message)
-              scope.show_payment_iframe = false
+              scope.callNotLoaded()
+              AlertService.raise(ErrorService.getAlert('PAYMENT_FAILED'))
+              # reload the payment iframe
+              document.getElementsByTagName("iframe")[0].src += ''
             when "wallet_payment_complete"
               scope.walletPaymentDone()
             when 'basket_wallet_payment_complete'
