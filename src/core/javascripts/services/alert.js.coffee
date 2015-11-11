@@ -145,6 +145,8 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     *
     * @returns {array} The returned raise alert
     ###
-    raise: (alert) ->
-     return if !alert
-     @add(alert.type, {title: alert.title, msg: alert.msg, persist: alert.persist})
+    raise: (key) ->
+      return if !key
+      alert = ErrorService.getAlert(key)
+      if alert
+        @add(alert.type, {title: alert.title, msg: alert.msg, persist: alert.persist})
