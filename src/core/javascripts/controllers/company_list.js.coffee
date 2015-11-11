@@ -14,8 +14,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
     else if $rootScope.parent_id
       $scope.initWidget({company_id:$rootScope.parent_id, first_page: $scope.bb.current_page})
       return
-
-    if $scope.bb.company
+    else
       $scope.init($scope.bb.company)
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 

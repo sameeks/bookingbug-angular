@@ -146,11 +146,11 @@
 			<div class="bb-step-navigation">
 				<div class="row">
 					<div class="col-sm-9 col-sm-push-3 text-right">
-						<div ng-if="bb.company.$has('events')">
-							<button type="button" class="btn btn-primary" ng-click="addAnother('event_list')">Add another item</button>
+						<div ng-if="bb.company.$has('events') && !bb.isAdmin">
+							<button type="button" class="btn btn-primary" ng-click="addAnother('event_list')">Add another event</button>
 						</div>
-						<div ng-if="bb.company.$has('services')">
-							<button type="button" class="btn btn-primary" ng-click="addAnother('service_list')">Add another item</button>
+						<div ng-if="bb.company.$has('services') && !bb.isAdmin">
+							<button type="button" class="btn btn-primary" ng-click="addAnother('service_list')">Add another service</button>
 						</div>
 						<button type="button" class="btn btn-primary" ng-click="checkout('checkout')">Checkout</button>
 					</div>
