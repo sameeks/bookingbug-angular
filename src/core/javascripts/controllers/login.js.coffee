@@ -33,7 +33,7 @@ angular.module('BB.Directives').directive 'bbLogin', () ->
   controller : 'Login'
 
 
-angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, LoginService, $q, ValidatorService, BBModel, $location, AlertService, ErrorService) ->
+angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, LoginService, $q, ValidatorService, BBModel, $location, AlertService) ->
   $scope.controller = "public.controllers.Login"
   $scope.error = false
   $scope.password_updated = false
@@ -78,7 +78,7 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
       $scope.login_error = false
     , (err) =>
       $scope.login_error = err
-      AlertService.raise(ErrorService.getAlert('LOGIN_FAILED'))
+      AlertService.raise('LOGIN_FAILED')
 
   ###**
   * @ngdoc method
@@ -113,10 +113,10 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
     $scope.error = false
     LoginService.sendPasswordReset($scope.bb.company, {email: email, custom: true}).then () ->
       $scope.email_sent = true
-      AlertService.raise(ErrorService.getAlert('PASSWORD_RESET_REQ_SUCCESS'))
+      AlertService.raise('PASSWORD_RESET_REQ_SUCCESS')
     , (err) =>
       $scope.error = err
-      AlertService.raise(ErrorService.getAlert('PASSWORD_RESET_REQ_FAILED'))
+      AlertService.raise('PASSWORD_RESET_REQ_FAILED')
 
   ###**
   * @ngdoc method
@@ -137,11 +137,11 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
         if member
           $scope.password_updated = true
           $scope.setClient(member)
-          AlertService.raise(ErrorService.getAlert('PASSWORD_RESET_SUCESS'))
+          AlertService.raise('PASSWORD_RESET_SUCESS')
           $rootScope.$emit "login:password_reset"
       , (err) =>
         $scope.error = err
-        AlertService.raise(ErrorService.getAlert('PASSWORD_RESET_FAILED'))
+        AlertService.raise('PASSWORD_RESET_FAILED')
     else
       $scope.password_error = true
-      AlertService.raise(ErrorService.getAlert('PASSWORD_MISMATCH'))
+      AlertService.raise('PASSWORD_MISMATCH')
