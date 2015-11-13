@@ -1035,7 +1035,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           if res.$has('baskets')
             res.$get('baskets').then (baskets) =>
               basket = _.find(baskets, (b) ->
-                b.company_id == $scope.bb.company_id)
+                parseInt(b.company_id) == $scope.bb.company_id)
               if basket
                 basket = new BBModel.Basket(basket, $scope.bb)
                 basket.$get('items').then (items) ->
