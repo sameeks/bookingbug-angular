@@ -23,6 +23,15 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
       unless @queuing_disabled
         @setCurrentCustomer()
 
+    ###**
+    * @ngdoc method
+    * @name setCurrentCustomer
+    * @methodOf BB.Models:AdminPerson
+    * @description
+    * Set current customer
+    *
+    * @returns {Promise} Returns a promise that rezolve the current customer
+    ###
     setCurrentCustomer: () ->
       defer = $q.defer()
       if @$has('queuer')
@@ -35,6 +44,16 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
         defer.resolve()
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name setAttendance
+    * @methodOf BB.Models:AdminPerson
+    * @param {string} status The status of attendance
+    * @description
+    * Set attendance in according of the status parameter
+    *
+    * @returns {Promise} Returns a promise that rezolve the attendance
+    ###
     setAttendance: (status) ->
       defer = $q.defer()
       @$put('attendance', {}, {status: status}).then  (p) =>
@@ -44,6 +63,15 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
         defer.reject(err)
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name finishServing
+    * @methodOf BB.Models:AdminPerson
+    * @description
+    * Finish serving
+    *
+    * @returns {Promise} Returns a promise that rezolve the finish serving
+    ###
     finishServing: () ->
       defer = $q.defer()
       if @$has('finish_serving')
@@ -58,6 +86,17 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
         defer.reject('finish_serving link not available')
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name isAvailable
+    * @methodOf BB.Models:AdminPerson
+    * @param {date=} start The start date format of the availability schedule
+    * @param {date=} end The end date format of the availability schedule
+    * @description
+    * Look up a schedule for a time range to see if this available.
+    *
+    * @returns {string} Returns yes if schedule is available or not. 
+    ###
     # look up a schedule for a time range to see if this available
     # currently just checks the date - but chould really check the time too
     isAvailable: (start, end) ->
@@ -77,6 +116,16 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
 
       return @availability[str] == "Yes" 
 
+    ###**
+    * @ngdoc method
+    * @name startServing
+    * @methodOf BB.Models:AdminPerson
+    * @param {string=} queuer The queuer of the company.
+    * @description
+    * Start serving in according of the queuer parameter
+    *
+    * @returns {Promise} Returns a promise that rezolve the start serving link 
+    ###
     startServing: (queuer) ->
       defer = $q.defer()
       if @$has('start_serving')
@@ -93,6 +142,15 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
         defer.reject('start_serving link not available')
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getQueuers
+    * @methodOf BB.Models:AdminPerson
+    * @description
+    * Get the queuers
+    *
+    * @returns {Promise} Returns a promise that rezolve the queuer links 
+    ###
     getQueuers: () ->
       defer = $q.defer()
       if @$has('queuers')
@@ -110,6 +168,15 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
         defer.reject('queuers link not available')
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getPostData
+    * @methodOf BB.Models:AdminPerson
+    * @description
+    * Get post data
+    *
+    * @returns {array} Returns data 
+    ###
     getPostData: () ->
       data = {}
       data.id = @id
@@ -118,7 +185,16 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
       data.description = @description
       data
 
- 
+    ###**
+    * @ngdoc method
+    * @name update
+    * @methodOf BB.Models:AdminPerson
+    * @param {object} data The company data
+    * @description
+    * Update the data in according of the data parameter
+    *
+    * @returns {array} Returns the updated array 
+    ###
     $update: (data) -> 
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
