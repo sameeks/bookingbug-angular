@@ -1028,8 +1028,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
             $scope.client = new BBModel.Client(client) if !$scope.client or ($scope.client and !$scope.client.valid())
         if res.$has('member')
           res.$get('member').then (member) =>
-            # HACK check if client_type is member
-            if member.client_type is 'Member'
+            # HACK check if client_type is not contact
+            if member.client_type != 'Contact'
               member = LoginService.setLogin(member)
               $rootScope.member = member
               $scope.setClient(member)
