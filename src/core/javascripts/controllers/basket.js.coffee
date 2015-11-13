@@ -60,11 +60,7 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
   controller : 'BasketList'
 
 
-<<<<<<< HEAD
-angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $rootScope, BasketService, $q, AlertService, ErrorService, FormDataStoreService, LoginService) ->
-=======
-angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
->>>>>>> d79dea5b1827416a6f47aa874ee4ae9089a87646
+angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
   $scope.items = $scope.bb.basket.items
@@ -215,3 +211,4 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
     else
       AlertService.raise('EMPTY_BASKET_FOR_CHECKOUT')
       return false
+      
