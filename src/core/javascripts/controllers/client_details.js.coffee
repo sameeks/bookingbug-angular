@@ -106,11 +106,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       $scope.client.setValid(true) if $scope.bb.isAdmin
       $scope.existing_member = false
       $scope.decideNextPage(route)
-    , (err) ->
-      if err.data.error == "Please Login" 
-        $scope.existing_member = true
-        AlertService.danger({msg: "You have already registered with this email address. Please login or reset your password using the Forgot Password link below."})
-      $scope.setLoaded $scope
+    , (err) -> handleError()
 
   ###**
   * @ngdoc method
@@ -148,8 +144,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       if client.waitingQuestions
         client.gotQuestions.then () ->
           $scope.client_details = client.client_details
-     
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> handleError(err)
     return prom
 
   ###**
@@ -229,3 +224,8 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
     QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
 
 
+  handleError = (error) ->
+    if error.data.error == "Please Login" 
+      $scope.existing_member = true
+      AlertService.raise('ALREADY_REGISTERED')
+    $scope.setLoaded $scope

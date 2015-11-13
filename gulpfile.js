@@ -17,7 +17,7 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     gulpDocs = require('gulp-ngdocs'),
     KarmaServer = require('karma').Server,
-    bower = require('gulp-bower');
+    bower = require('gulp-bower'),
     argv = require('yargs').argv;
 
 gulp.task('clean', function(cb) {

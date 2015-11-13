@@ -60,7 +60,11 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
   controller : 'BasketList'
 
 
+<<<<<<< HEAD
 angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $rootScope, BasketService, $q, AlertService, ErrorService, FormDataStoreService, LoginService) ->
+=======
+angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
+>>>>>>> d79dea5b1827416a6f47aa874ee4ae9089a87646
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
   $scope.items = $scope.bb.basket.items
@@ -105,7 +109,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
       $scope.decideNextPage(route)
     else
       AlertService.clear()
-      AlertService.add('info',ErrorService.getError('EMPTY_BASKET_FOR_CHECKOUT'))
+      AlertService.raise('EMPTY_BASKET_FOR_CHECKOUT')
       return false
 
   ###**
@@ -203,11 +207,11 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   ###
   $scope.setReady = ->    
     if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()     
-      AlertService.raise ErrorService.getError 'GIFT_CERTIFICATE_REQUIRED'
+      AlertService.raise('GIFT_CERTIFICATE_REQUIRED')
       return false   
     if $scope.bb.basket.items.length > 0
       $scope.setReadyToCheckout(true)
       return true
     else
-      AlertService.add 'info', ErrorService.getError('EMPTY_BASKET_FOR_CHECKOUT')
-      return false      
+      AlertService.raise('EMPTY_BASKET_FOR_CHECKOUT')
+      return false

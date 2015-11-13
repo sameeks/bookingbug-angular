@@ -42,7 +42,7 @@ angular.module('BB.Directives').directive 'bbMap', () ->
   controller : 'MapCtrl'
 
 angular.module('BB.Controllers').controller 'MapCtrl',
-($scope, $element, $attrs, $rootScope, AlertService, ErrorService, FormDataStoreService, $q, $window, $timeout) ->
+($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, $q, $window, $timeout) ->
 
   $scope.controller = "public.controllers.MapCtrl"
 
@@ -281,7 +281,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   ###
   searchFailed = () ->
     $scope.search_failed = true
-    AlertService.danger(ErrorService.getError('LOCATION_NOT_FOUND'))
+    AlertService.raise('LOCATION_NOT_FOUND')
     # need to call apply to update bindings as geocode callback is outside angular library
     $rootScope.$apply()
 
@@ -298,7 +298,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     return false if !form
     if form.$error.required
       AlertService.clear()
-      AlertService.danger(ErrorService.getError('MISSING_LOCATION'))
+      AlertService.raise('MISSING_LOCATION')
       return false
     else
       return true
@@ -458,7 +458,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       # if the geocode failed because the position was unavailable or the request timed out, raise an alert
       when 2, 3 
         $scope.setLoaded $scope
-        AlertService.danger(ErrorService.getError('GEOLOCATION_ERROR'))
+        AlertService.raise('GEOLOCATION_ERROR')
       else
         return $scope.setLoaded $scope
 

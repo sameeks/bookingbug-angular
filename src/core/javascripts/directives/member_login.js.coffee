@@ -1,4 +1,4 @@
-angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, ErrorService) ->
+angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService) ->
   restrict: 'A'
   template: """
 <form name="login_form" ng-submit="submit(login_form)" sf-schema="schema"
@@ -59,4 +59,4 @@ ng-if="schema && form"></form>
             $scope.setClient($rootScope.member)
             $scope.decideNextPage()
       , (err) ->
-        AlertService.raise(ErrorService.getAlert('LOGIN_FAILED'))
+        AlertService.raise('LOGIN_FAILED')

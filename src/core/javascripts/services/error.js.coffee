@@ -62,14 +62,14 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'There are no items in the basket to proceed to checkout.'
+      msg: 'You need to add some items to the basket before you can checkout.'
     },
     {
       key: 'MAXIMUM_TICKETS',
       type: 'warning', 
       title: '',
       persist: true,
-      msg: 'Unfortunately, the maximum number of tickets per person has been reached.'
+      msg: 'Sorry, the maximum number of tickets per person has been reached.'
     },
     {
       key: 'GIFT_CERTIFICATE_REQUIRED',
@@ -132,7 +132,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'Sorry, your email or password was not recognised. Please try again.'
+      msg: 'Sorry, your email or password was not recognised. Please try again or reset your password.'
     },
     {
       key: 'PASSWORD_RESET_REQ_SUCCESS',
@@ -168,7 +168,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'Your passwords don\'t match each other.'
+      msg: 'Your passwords don\'t match'
     }
   ]
 

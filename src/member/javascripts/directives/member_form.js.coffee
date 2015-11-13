@@ -1,4 +1,4 @@
-angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, MemberLoginService,MemberBookingService, AlertService, ErrorService) ->
+angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, MemberLoginService,MemberBookingService, AlertService) ->
     template: """
 <form sf-schema="schema" sf-form="form" sf-model="member"
   ng-submit="submit(member)" ng-hide="loading"></form>
@@ -27,7 +27,7 @@ angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, Me
         $scope.loading = true
         $scope.member.$put('self', {}, form).then (member) ->
           $scope.loading = false
-          AlertService.raise(ErrorService.getAlert('UPDATE_SUCCESS'))
+          AlertService.raise('UPDATE_SUCCESS')
         , (err) ->
           $scope.loading = false
-          AlertService.raise(ErrorService.getAlert('UPDATE_FAILED'))
+          AlertService.raise('UPDATE_FAILED')
