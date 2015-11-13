@@ -1021,7 +1021,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     setSrcBooking: (booking) ->
       @srcBooking = booking
       # convert duration from seconds to minutes
-      @duration = booking.duration / 60
+      @duration = booking.duration
 
     ###**
     * @ngdoc method

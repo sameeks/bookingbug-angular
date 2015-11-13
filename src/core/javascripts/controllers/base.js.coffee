@@ -1028,9 +1028,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
             $scope.client = new BBModel.Client(client) if !$scope.client or ($scope.client and !$scope.client.valid())
         if res.$has('member')
           res.$get('member').then (member) =>
-            member = LoginService.setLogin(member)
-            $rootScope.member = member
-            $scope.setClient(member)
+            # HACK check if client_type is member
+            if member.client_type is 'Member'
+              member = LoginService.setLogin(member)
+              $rootScope.member = member
+              $scope.setClient(member)
         if $scope.bb.clear_basket
           restore_basket_defer.resolve()
         else

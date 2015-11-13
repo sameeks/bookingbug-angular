@@ -131,7 +131,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
         $scope.decideNextPage(route)
     else
       AlertService.clear()
-      AlertService.add 'info', ErrorService.getError('EMPTY_BASKET_FOR_CHECKOUT')
+      AlertService.raise('EMPTY_BASKET_FOR_CHECKOUT')
       return false
 
   ###**
