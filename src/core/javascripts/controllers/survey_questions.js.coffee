@@ -251,7 +251,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
     LoginService.memberQuery(params).then (member) =>
       $scope.member = member
 
-   ###**
+  ###**
   * @ngdoc method
   * @name setPurchaseCompany
   * @methodOf BB.Directives:bbSurveyQuestions

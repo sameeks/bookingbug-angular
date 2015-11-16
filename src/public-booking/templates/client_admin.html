@@ -1,21 +1,36 @@
-<div bb-admin-booking-clients ng-init="per_page=5000">
-  <div tabset>
-    <div tab heading="Search for a client">
+<div bb-admin-booking-clients ng-init="per_page=50" class="bb-admin-client">
+
+    <div class="page-intro">
+      <h2 class="section-title">Client details</h2>
+      <p>Search for client or enter client details</p>
+    </div>
+
+    <div class="bb-button-headers">
+      <div class="row">
+        <div class="col-xs-6">
+          <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="showSearch()">Search for a client</button>
+        </div>
+        <div class="col-xs-6">
+          <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="showClientForm()">Enter Client Details</button>
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="!newClient">
       <div ng-form="client_search_form" class="form-horizontal">
-        <label for="search" class="control-label col-sm-4">Search by Name or URL</label>
+        <label for="search" class="col-xs-offset-4 col-xs-8"><p>Search by Name or Email</p></label>
         <form ng-submit="getClients(null, searchText)">
-          <div class="col-sm-5">
-            <div class="input-group">
-              <input type="search" name="search" id"search" ng-model="searchText" class="form-control"/>
-              <span class="input-group-btn">
-                <button type="submit" class="btn btn-primary" bb-debounce>Search</button>
-              </span>
-            </div>
+          <div class="col-xs-offset-2 col-xs-8 input-group input-group-lg">
+            <input type="search" name="search" id"search" ng-model="searchText" class="form-control"/> 
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-primary input-lg" bb-debounce>Search</button>
+            </span>
           </div>
         </form>
-         <div class="col-sm-offset-4 messages">
+         <div class="col-sm-offset-2 messages">
           <div class="error-message" ng-show="search_error">
-            Sorry, your search must be more than 3 characters long. Please try again.
+            Sorry, your search must be more than 3 characters long.<br/>
+            Please try again.
           </div>          
          </div>
        </div>
@@ -35,7 +50,7 @@
             <tr>
               <td field-name="name" ng-bind="gridItem.name"></td>
               <td field-name="email" ng-bind="gridItem.email"></td>
-              <td field-name="address" ng-bind="gridItem.addressSingleLine()"></td>
+              <td field-name="address" ng-bind-html="gridItem | address_multi_line"></td>
               <td>
                 <button class="btn btn-primary btn-block" ng-click="selectClient(gridItem)">Select</button>
               </td>
@@ -43,14 +58,89 @@
           </tbody>
         </table>
       </div>
-       <div class="row step-navigation">
-        <div class="col-sm-2 back">
-          <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()">Back</button>
+
+    </div>
+    
+    <div ng-show="newClient">
+      <div ng-form name="client_form" class="form-horizontal" role="form" novalidate>
+        <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
+          <label for="first_name" class="control-label col-sm-4">First Name:</label>
+          <div class="col-sm-5">
+            <input type="text" name="first_name" id"first_name" required ng-model="client.first_name" class="form-control"/>
+          </div>
+          <div class="col-sm-offset-4 messages">
+            <div class="error-message" ng-show="client_form.first_name.$invalid && client_form.submitted">
+              Please enter the clients first name
+            </div>          
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
+          <label for="last_name" class="control-label col-sm-4">Last Name:</label>
+          <div class="col-sm-5">
+            <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
+          </div>
+          <div class="col-sm-offset-4 messages">
+            <div class="error-message" ng-show="client_form.last_name.$invalid && client_form.submitted">
+              Please enter the clients last name
+            </div>          
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
+          <label for="email" class="control-label col-sm-4">E-mail:</label>
+          <div class="col-sm-5">
+            <input type="email" name="email" id="email" required ng-model="client.email" class="form-control"/>
+          </div>
+          <div class="col-sm-offset-4 messages">
+            <div class="error-message" ng-show="client_form.email.$invalid && client_form.submitted">
+              Please enter a valid email address
+            </div>          
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
+          <label for="mobile" class="control-label col-sm-4">Phone:</label>
+          <div class="col-sm-5">
+            <input type="text" name="mobile" id="mobile" required ng-model="client.mobile" class="form-control"/>
+          </div>
+          <div class="col-sm-offset-4 messages">
+            <div class="error-message" ng-show="client_form.mobile.$invalid && client_form.submitted">
+              Please enter a valid phone number
+            </div>          
+          </div>
+        </div>
+
+        <div bb-client-details ng-show="client_details.hasQuestions">
+
+<!--           <div class="form-group" ng-repeat="question in client_details.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{ 'check': question.detail_type == 'check', 'has-error': client_form['q' + question.id].$invalid && client_form.submitted}"> -->
+<!--           <div class="form-group" ng-repeat="question in client_details.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{ 'check': question.detail_type == 'check', 'has-error': question.required && client_form.submitted}">
+            <label ng-hide="question.detail_type == 'check'" for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-show="question.required">*</span></label>
+            <div ng-show="question.detail_type == 'check'" class="col-sm-4 hidden-xs">&nbsp;</div>
+            <div class="col-sm-5">
+              <input bb-question="question"/>
+            </div>
+            <div class="col-sm-offset-4 messages">
+              <div class="error-message" ng-show="question.required && client_form.submitted">
+                This field is required
+              </div>
+            </div>
+          </div>   
+ -->
+        </div>
+
+      </div><!--client_form-->
+
+      <div class="bb-step-navigation">
+        <div class="row">
+          <div class="pull-right col-sm-push-2 forward">
+            <button type="submit" class="btn btn-primary" ng-click="validator.validateForm(client_form) && createClient()" bb-debounce>Create Client</button>
+          </div>
+          <div class="col-sm-2 col-sm-pull-10 back">
+          </div>
         </div>
       </div> 
+
+    </div>
+
   </div>
-  <div tab heading="New client">
-    <div bb-include="client"></div>
-  </div>
-  </div>
-</div>

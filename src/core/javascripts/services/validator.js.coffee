@@ -19,7 +19,7 @@
 ###
 
 
-angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, ErrorService, BBModel, $q, $bbug) ->
+angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, BBModel, $q, $bbug) ->
 
   # Use http://regex101.com/ to test patterns
 
@@ -201,10 +201,10 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
     AlertService.clear()
     return false if !form || !form.postcode
     if form.$error.required
-      AlertService.danger(ErrorService.getError('MISSING_POSTCODE'))
+      AlertService.raise('MISSING_POSTCODE')
       return false
     else if form.$error.pattern
-      AlertService.danger(ErrorService.getError('INVALID_POSTCODE'))
+      AlertService.raise('INVALID_POSTCODE')
       return false
     else
       deferred = $q.defer()
@@ -222,7 +222,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
           geocode_result = results[0]
           deferred.resolve(true)
         else
-          AlertService.danger(ErrorService.getError('INVALID_POSTCODE'))
+          AlertService.raise('INVALID_POSTCODE')
           $rootScope.$apply()
           deferred.reject(false)
       deferred.promise

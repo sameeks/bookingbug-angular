@@ -17,7 +17,8 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     gulpDocs = require('gulp-ngdocs'),
     KarmaServer = require('karma').Server,
-    bower = require('gulp-bower');
+    bower = require('gulp-bower'),
+    argv = require('yargs').argv;
 
 gulp.task('clean', function(cb) {
   del.sync(['release']);
@@ -57,7 +58,8 @@ gulp.task('javascripts', function() {
     .pipe(templateCache({module: 'BB'}))
   streamqueue({objectMode: true}, javascripts, templates)
     .pipe(concat('bookingbug-angular.js'))
-    .pipe(uglify({mangle: false})).on('error', gutil.log)
+    .pipe(gulpif(argv.env != 'development' && argv.env != 'dev',
+            uglify({mangle: false}))).on('error', gutil.log)
     .pipe(gulp.dest('release'));
 });
 

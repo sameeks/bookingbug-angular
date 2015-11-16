@@ -37,7 +37,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
 
 # TODO Get the add/subtract functions to respect the current time range. Get the time range length to adjust if display mode is preset
 angular.module('BB.Controllers').controller 'TimeRangeList',
-($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, ErrorService) ->
+($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
  
@@ -520,7 +520,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
       if !found_time
         current_item.requestedTimeUnavailable()
-        AlertService.raise(ErrorService.getAlert('REQ_TIME_NOT_AVAIL'))
+        AlertService.raise('REQ_TIME_NOT_AVAIL')
 
 
   ###**
@@ -544,10 +544,10 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   ###
   $scope.setReady = () ->
     if !$scope.bb.current_item.time
-      AlertService.raise(ErrorService.getAlert('TIME_SLOT_NOT_SELECTED'))
+      AlertService.raise('TIME_SLOT_NOT_SELECTED')
       return false
     else if $scope.bb.moving_booking && $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime)
-      AlertService.raise(ErrorService.getAlert('APPT_AT_SAME_TIME'))
+      AlertService.raise('APPT_AT_SAME_TIME')
       return false
     else if $scope.bb.moving_booking
       # set a 'default' person and resource if we need them, but haven't picked any in moving

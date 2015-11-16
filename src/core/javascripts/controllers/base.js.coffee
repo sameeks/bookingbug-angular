@@ -652,7 +652,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
       if $scope.bb.item_defaults.event
         if $scope.bb.isAdmin
-          event = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/events/' + $scope.bb.item_defaults.event )
+          event = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/event_chains/' + $scope.bb.item_defaults.event_chain + '/events/' + $scope.bb.item_defaults.event )
         else
           event = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/events/' + $scope.bb.item_defaults.event )
         $scope.bb.default_setup_promises.push(event)
@@ -1028,9 +1028,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
             $scope.client = new BBModel.Client(client) if !$scope.client or ($scope.client and !$scope.client.valid())
         if res.$has('member')
           res.$get('member').then (member) =>
-            member = LoginService.setLogin(member)
-            $rootScope.member = member
-            $scope.setClient(member)
+            # HACK check if client_type is not contact
+            if member.client_type != 'Contact'
+              member = LoginService.setLogin(member)
+              $rootScope.member = member
+              $scope.setClient(member)
         if $scope.bb.clear_basket
           restore_basket_defer.resolve()
         else

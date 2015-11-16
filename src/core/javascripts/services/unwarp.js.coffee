@@ -298,3 +298,12 @@ angular.module('BB.Services').factory "BB.Service.pre_paid_bookings", ($q, BBMod
       deferred.reject(err)
 
     deferred.promise
+
+
+angular.module('BB.Services').factory "BB.Service.external_purchases", ($q, BBModel) ->
+  promise: false
+  unwrap: (items) ->
+    models = []
+    for i in items
+      models.push(new BBModel.ExternalPurchase(i))
+    return models

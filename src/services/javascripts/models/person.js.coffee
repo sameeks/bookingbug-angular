@@ -1,6 +1,20 @@
 'use strict';
 
-angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel, PersonModel) ->
+###**
+* @ngdoc service
+* @name BB.Models:AdminPerson
+*
+* @description
+* Representation of an Person Object
+*
+* @property {integer} id Person id
+* @property {string} name Person name
+* @property {boolean} deleted Verify if person is deleted or not
+* @property {boolean} disabled Verify if person is disabled or not
+* @property {integer} order The person order
+####
+
+angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel, PersonModel, AdminPersonService) ->
 
   class Admin_Person extends PersonModel
 
@@ -109,3 +123,33 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
         @constructor(res) 
+
+
+    ###**
+    * @ngdoc method
+    * @name query
+    * @param {Company} company The company model.
+    * @param {integer=} page Specifies particular page of paginated response.
+    * @param {integer=} per_page Number of items per page of paginated response.
+    * @param {string=} filter_by_fields Comma separated list of field, value pairs to filter results by.
+    * @param {string=} order_by Specifies field to order results by.
+    * @param {boolean=} order_by_reverse Reverses the ordered results if true.
+    * @methodOf BB.Models:AdminPerson
+    * @description
+    * Gets a filtered collection of people.
+    *
+    * @returns {Promise} Returns a promise that resolves to the filtered collection of people.
+    ###
+    @query: (company, page, per_page, filter_by_fields, order_by, order_by_reverse) ->
+      AdminPersonService.query
+        company: company
+        page: page
+        per_page: per_page
+        filter_by_fields: filter_by_fields
+        order_by: order_by
+        order_by_reverse: order_by_reverse
+
+
+angular.module('BB.Models').factory 'AdminPerson', ($injector) ->
+  $injector.get('Admin.PersonModel')
+
