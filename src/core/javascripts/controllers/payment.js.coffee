@@ -20,7 +20,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService, ErrorService, AlertService) ->
+angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService, AlertService) ->
 
   error = (scope, message) ->
     scope.error(message)
@@ -71,7 +71,7 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
               scope.callNotLoaded()
             when "error"
               scope.callNotLoaded()
-              AlertService.raise(ErrorService.getAlert('PAYMENT_FAILED'))
+              AlertService.raise('PAYMENT_FAILED')
               # reload the payment iframe
               document.getElementsByTagName("iframe")[0].src += ''
             when "payment_complete"

@@ -1,4 +1,4 @@
-angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log, $modal, $rootScope, AlertService, ErrorService) ->
+angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log, $modal, $rootScope, AlertService) ->
   
   $scope.company_id = $scope.member.company_id if $scope.member
   $scope.show_wallet_logs = false
@@ -120,7 +120,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
     $scope.error_message = "Payment Failure: " + message
     $log.warn("Payment Failure: " + message)
     $scope.$emit("wallet_payment:error", $scope.error_message)
-    AlertService.warning(ErrorService.getAlert('TOPUP_FAILED'))
+    AlertService.warning('TOPUP_FAILED')
 
 
   $scope.add = (value) ->
