@@ -168,6 +168,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'We were unable to take payment. Please contact your card issuer or try again using a different card'
+    },
+    {
+      key: 'ACCOUNT_DISABLED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: "Your account appears to be disabled. Please contact the business you're booking with if the problem persists."
     }
   ]
 
