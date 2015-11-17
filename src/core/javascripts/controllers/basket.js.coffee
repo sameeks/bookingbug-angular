@@ -156,9 +156,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
         item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
-      $scope.items = $scope.bb.basket.items
-      console.log "$scope.deal_code => " + $scope.deal_code
-      console.log "$scope.bb.basket.hasDeal() => " + $scope.bb.basket.hasDeal()
+      $scope.items = $scope.bb.basket.items     
       $scope.deal_code = null
     , (err) ->
       if err and err.data and err.data.error
