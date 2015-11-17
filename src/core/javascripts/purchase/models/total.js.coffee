@@ -1,5 +1,20 @@
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:PurchaseTotal
+*
+* @description
+* Representation of an Purchase Total Object
+*
+* @property {integer} total_price The total price
+* @property {integer} price The booking price
+* @property {integer} paid Booking paid
+* @property {integer} id The purchase id
+####
+
+
 angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel, BaseModel, $sce) ->
 
 
@@ -10,6 +25,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         @items = items
       @getClient().then (client) =>
         @client = client
+
 
     id: ->
       @get('id')
@@ -23,6 +39,15 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     gcalLink: ->
       @_data.$href('gcal')
 
+    ###**
+    * @ngdoc method
+    * @name getItems
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Get items for purchase
+    *
+    * @returns {Promise} Returns a promise that resolve the purchase items
+    ###
     getItems: =>
       defer = $q.defer()
       defer.resolve(@items) if @items
@@ -37,6 +62,15 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve(items)
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getBookingsPromise
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Get bookings promise
+    *
+    * @returns {Promise} Returns a promise that resolve the bookings promise
+    ###
     getBookingsPromise: =>
       defer = $q.defer()
       defer.resolve(@bookings) if @bookings
@@ -49,6 +83,15 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getCourseBookingsPromise
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Get course bookings promise
+    *
+    * @returns {Promise} Returns a promise that resolve the course bookings promise
+    ###
     getCourseBookingsPromise: =>
       defer = $q.defer()
       defer.resolve(@course_bookings) if @course_bookings
@@ -61,6 +104,15 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getPackages
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Get packages
+    *
+    * @returns {Promise} Returns a promise that resolve the packages
+    ###
     getPackages: =>
       defer = $q.defer()
       defer.resolve(@packages) if @packages
@@ -72,6 +124,15 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getProducts
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Get products
+    *
+    * @returns {Promise} Returns a promise that resolve the products
+    ###
     getProducts: =>
       defer = $q.defer()
       defer.resolve(@products) if @products
@@ -83,6 +144,15 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getDeals
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Get deals
+    *
+    * @returns {Promise} Returns a promise that resolve the deals
+    ###
     getDeals: =>
       defer = $q.defer()
       defer.resolve(@deals) if @deals
@@ -94,6 +164,17 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getMessages
+    * @methodOf BB.Models:PurchaseTotal
+    * @param {string} booking_texts The texts of the booking
+    * @param {array} msg_type The type of the messages
+    * @description
+    * Get messages in according of the booking_texts and msg_type parameters
+    *
+    * @returns {Promise} Returns a promise that resolve the messages
+    ###
     getMessages: (booking_texts, msg_type) =>
       defer = $q.defer()
       booking_texts = (bt for bt in booking_texts when bt.message_type == msg_type)
@@ -111,6 +192,15 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
           defer.resolve(msgs)
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getClient
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Get the client
+    *
+    * @returns {Promise} Returns a promise that resolve the client
+    ###
     getClient: =>
       defer = $q.defer()
       if @_data.$has('client')
@@ -121,6 +211,15 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.reject('No client')
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getConfirmMessages
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Get the confirm messages
+    *
+    * @returns {Promise} Returns a promise that resolve the message confirmation
+    ###
     getConfirmMessages: () =>
       defer = $q.defer()
       if @_data.$has('confirm_messages')
@@ -131,20 +230,56 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.reject('no messages')
       defer.promise
       
+    ###**
+    * @ngdoc method
+    * @name printed_total_price
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Print the total price
+    *
+    * @returns {integer} Returns the total price
+    ###
     printed_total_price: () ->
       return "£" + parseInt(@total_price) if parseFloat(@total_price) % 1 == 0
       return $window.sprintf("£%.2f", parseFloat(@total_price))
 
+    ###**
+    * @ngdoc method
+    * @name newPaymentUrl
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * New payment url
+    *
+    * @returns {string} Returns the new payment url
+    ###
     newPaymentUrl: () ->
       if @_data.$has('new_payment')
         $sce.trustAsResourceUrl(@_data.$href('new_payment'))
 
+    ###**
+    * @ngdoc method
+    * @name totalDuration
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Total duration of the booking
+    *
+    * @returns {date} Returns the duration
+    ###
     totalDuration: () ->
       duration = 0
       for item in @items
         duration += item.duration if item.duration
       return duration
 
+    ###**
+    * @ngdoc method
+    * @name containsWaitlistItems
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Verify if wait list contains items
+    *
+    * @returns {boolean} Returns true or false
+    ###
     containsWaitlistItems: () ->
       waitlist = []
       for item in @items

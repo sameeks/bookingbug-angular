@@ -1,6 +1,16 @@
 
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:AdminUser
+*
+* @description
+* Representation of an User Object
+####
+
+
 angular.module('BB.Models').factory "Admin.UserModel", ($q, BBModel, BaseModel) ->
 
   class Admin_User extends BaseModel

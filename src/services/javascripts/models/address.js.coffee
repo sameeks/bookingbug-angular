@@ -38,3 +38,25 @@ angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseMode
       @dists ||= []
       @dists[address] ||= Math.round(Math.random() * 50, 0)
       return @dists[address]
+
+    ###**
+    * @ngdoc method
+    * @name query
+    * @param {Company} company The company model.
+    * @param {integer=} page Specifies particular page of paginated response.
+    * @param {integer=} per_page Number of items per page of paginated response.
+    * @param {string=} filter_by_fields Comma separated list of field, value pairs to filter results by.
+    * @methodOf BB.Models:AdminAddress
+    * @description
+    * Gets a filtered collection of addresses.
+    *
+    * @returns {Promise} Returns a promise that resolves to the filtered collection of addresses.
+    ###
+    @query: (company, page, per_page) ->
+      AdminAddressService.query
+        company: company
+        page: page
+        per_page: per_page
+
+angular.module('BB.Models').factory 'AdminAddress', ($injector) ->
+  $injector.get('Admin.AddressModel')

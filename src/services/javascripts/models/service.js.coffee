@@ -23,3 +23,28 @@ angular.module('BB.Models').factory "Admin.ServiceModel", ($q, BBModel, ServiceM
 
 
   class Admin_Service extends ServiceModel
+
+# 	###**
+# 	* @ngdoc method
+# 	* @name query
+# 	* @param {Company} company The company model.
+# 	* @param {integer=} company_id The company id
+# 	* @param {integer=} page Specifies particular page of paginated response.
+# 	* @param {integer=} per_page Number of items per page of paginated response.
+# 	* @param {string =} api_ref The service api reference
+# 		* @methodOf BB.Models:AdminSchedule
+# 	* @description
+# 	* Gets a filtered collection of schedules.
+# 	*
+# 	* @returns {Promise} Returns a promise that resolves to the filtered collection of schedules.
+# 	###
+# 	@query: (company, company_id, page, per_page, api_ref) ->
+# 	   AdminServiceService.query
+# 	    company: company
+# 	    company_id: company_id
+# 	    page: page
+# 	    per_page: per_page
+# 			api_ref: api_ref
+
+# angular.module('BB.Models').factory 'AdminService', ($injector) ->
+#   $injector.get('Admin.ServiceModel')

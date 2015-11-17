@@ -1,3 +1,20 @@
+###**
+* @ngdoc service
+* @name BB.Services:AddressList
+*
+* @description
+* Representation of an Address List Object
+*
+* @property {string} address1 First line of the address 
+* @property {string} address2 Second line of the address 
+* @property {string} address3 Third line of the address 
+* @property {string} address4 Fourth line of the address 
+* @property {string} address5 Fifth line of the address 
+* @property {string} postcode The Postcode/Zipcode
+* @property {string} country The country
+####
+
+
 angular.module('BB.Services').factory "AddressListService", ($q, $window, halClient, UriTemplate) ->
  query: (prms) ->
 
@@ -10,6 +27,16 @@ angular.module('BB.Services').factory "AddressListService", ($q, $window, halCli
       deferred.reject(err)
     deferred.promise
 
+ ###**
+ * @ngdoc method
+ * @name getAddress
+ * @methodOf BB.Services:AddressList
+ * @param {array} prms The address parameters
+ * @description
+ * Get the address in according of the prms parameter
+ *
+ * @returns {Promise} Returns a promise which resolve the getting address
+ ###
  getAddress: (prms) ->
    deferred = $q.defer()
    href = "/api/v1/company/{company_id}/addresses/address/{id}"

@@ -1,5 +1,18 @@
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:PurchaseBooking
+*
+* @description
+* Representation of an Purchase Booking Object
+*
+* @property {integer} price The booking price
+* @property {integer} paid Booking paid
+####
+
+
 angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBModel, BaseModel, $bbug) ->
 
 
@@ -15,8 +28,15 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
       @end_datetime = moment.parseZone(@end_datetime)
       @end_datetime.tz(@time_zone) if @time_zone
  
- 
-
+    ###**
+    * @ngdoc method
+    * @name getGroup
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Get group
+    *
+    * @returns {object} Returns the group
+    ###
     getGroup: () ->
       return @group if @group
       if @_data.$has('event_groups')
@@ -24,14 +44,30 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           @group = group
           @group
 
-
+    ###**
+    * @ngdoc method
+    * @name getColour
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Get colour
+    *
+    * @returns {string} Returns the colour
+    ###
     getColour: () ->
       if @getGroup()
         return @getGroup().colour
       else
         return "#FFFFFF"
 
-
+    ###**
+    * @ngdoc method
+    * @name getCompany
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Get company
+    *
+    * @returns {object} Returns the company
+    ###
     getCompany: () ->
       return @company if @company
       if @$has('company')
@@ -40,6 +76,15 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           @company
 
 
+    ###**
+    * @ngdoc method
+    * @name getAnswersPromise
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Get answers promise
+    *
+    * @returns {Promise} Returns a promise that resolve the answers promises
+    ###
     getAnswersPromise: () =>
       defer = $q.defer()
       if @answers?
@@ -54,6 +99,15 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           defer.resolve([])
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getSurveyAnswersPromise
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Get survey answers promise
+    *
+    * @returns {Promise} Returns a promise that resolve the survey answers promises
+    ###
     getSurveyAnswersPromise: () =>
       defer = $q.defer()
       defer.resolve(@survey_answers) if @survey_answers
@@ -65,7 +119,16 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
         defer.resolve([])
       defer.promise
 
-
+    ###**
+    * @ngdoc method
+    * @name answer
+    * @methodOf BB.Models:PurchaseBooking
+    * @param {string} q The question answer
+    * @description
+    * Get the answer
+    *
+    * @returns {string} Returns the answer or not
+    ###
     answer: (q) ->
       if @answers?
         for a in @answers
@@ -77,7 +140,15 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
         @getAnswersPromise()
       return null
 
-
+    ###**
+    * @ngdoc method
+    * @name getPostData
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Get post data
+    *
+    * @returns {array} Returns data
+    ###
     getPostData: () ->
       data = {}
 
@@ -126,25 +197,67 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
       return data
 
+    ###**
+    * @ngdoc method
+    * @name checkReady
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Check if booking is ready to purchase or not
+    *
+    * @returns {boolean} Returns true or false
+    ###
     checkReady: ->
       if (@datetime && @id && @purchase_ref)
         @ready = true
 
-
+    ###**
+    * @ngdoc method
+    * @name printed_price
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Print price for the booking
+    *
+    * @returns {integer} Returns the price of the booking
+    ###
     printed_price: () ->
       return "£" + parseInt(@price) if parseFloat(@price) % 1 == 0
       return $window.sprintf("£%.2f", parseFloat(@price))
 
-
+    ###**
+    * @ngdoc method
+    * @name getDateString
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Get the date in string format
+    *
+    * @returns {string} Returns the date
+    ###
     getDateString: () ->
       @datetime.toISODate()
 
 
+    ###**
+    * @ngdoc method
+    * @name getTimeInMins
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Get the time in minutes
+    *
+    * @returns {date} Returns the time of day in total minutes
+    ###
     # return the time of day in total minutes
     getTimeInMins: () ->
       (@datetime.hour() * 60) + @.datetime.minute()
 
-
+    ###**
+    * @ngdoc method
+    * @name getAttachments
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Get the booking attachments
+    *
+    * @returns {object} Returns booking attachments
+    ###
     getAttachments: () ->
       return @attachments if @attachments
       if @$has('attachments')

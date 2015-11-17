@@ -1,5 +1,18 @@
 'use strict';
 
+
+###**
+* @ngdoc service
+* @name BB.Models:AdminSlot
+*
+* @description
+* Representation of an Slot Object
+*
+* @property {integer} total_entires The total entires of slot
+* @property {array} slots An array with slots
+###
+
+
 angular.module('BB.Models').factory "Admin.SlotModel", ($q, BBModel, BaseModel, TimeSlotModel) ->
 
   class Admin_Slot extends TimeSlotModel

@@ -225,7 +225,6 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
         order_by: order_by
         order_by_reverse: order_by_reverse
 
-
 angular.module('BB.Models').factory 'AdminPerson', ($injector) ->
   $injector.get('Admin.PersonModel')
 

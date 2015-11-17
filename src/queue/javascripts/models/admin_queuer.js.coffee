@@ -1,5 +1,13 @@
 'use strict'
 
+###**
+* @ngdoc service
+* @name BB.Models:AdminQueuer
+*
+* @description
+* Representation of an Queuer Object
+####
+
 angular.module('BB.Models').factory "Admin.QueuerModel", ($q, BBModel, BaseModel) ->
 
   class Admin_Queuer extends BaseModel
@@ -10,13 +18,30 @@ angular.module('BB.Models').factory "Admin.QueuerModel", ($q, BBModel, BaseModel
       @due = moment.parseZone(@due)
       @end = moment(@start).add(@duration, 'minutes')
 
-
+    ###**
+    * @ngdoc method
+    * @name remaining
+    * @methodOf BB.Models:AdminQueuer
+    * @description
+    * Get the remaining 
+    *
+    * @returns {object} Returns the remaining
+    ###
     remaining: () ->
       d = @due.diff(moment.utc(), 'seconds')
       @remaining_signed = Math.abs(d);
       @remaining_unsigned = d
 
-
+    ###**
+    * @ngdoc method
+    * @name startServing
+    * @methodOf BB.Models:AdminQueuer
+    * @param {object} person The person who start serving
+    * @description
+    * Start serving in according of the person parameter
+    *
+    * @returns {Promise} Returns a promise which resolve the start serving
+    ###
     startServing: (person) ->
       defer = $q.defer()
       if @$has('start_serving')
@@ -31,6 +56,15 @@ angular.module('BB.Models').factory "Admin.QueuerModel", ($q, BBModel, BaseModel
         defer.reject('start_serving link not available')
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name finishServing
+    * @methodOf BB.Models:AdminQueuer
+    * @description
+    * Finish serving
+    *
+    * @returns {Promise} Returns a promise which resolve the finish serving
+    ###
     finishServing: () ->
       defer = $q.defer()
       if @$has('finish_serving')
@@ -43,6 +77,16 @@ angular.module('BB.Models').factory "Admin.QueuerModel", ($q, BBModel, BaseModel
         defer.reject('finish_serving link not available')
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name extendAppointment
+    * @methodOf BB.Models:AdminQueuer
+    * @param {integer} minutes The duration in minutes
+    * @description
+    * Extend appointment in according of the minutes parameter
+    *
+    * @returns {Promise} Returns a promise which resolve the extended appointment
+    ###
     extendAppointment: (minutes) ->
       defer = $q.defer()
       if @end.isBefore(moment())
