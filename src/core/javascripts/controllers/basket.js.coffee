@@ -60,11 +60,15 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
   controller : 'BasketList'
 
 
-angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
+angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
   $scope.items = $scope.bb.basket.items
   $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') && $scope.bb.company_settings.has_wallets && $scope.client.valid() && LoginService.isLoggedIn() && LoginService.member().id == $scope.client.id
+
+  # bb.basket.options - added 10-11-2015 @16:19
+  # For ex. bb-basket-list="{requires_deal: true}" 
+  $scope.bb.basket.setSettings($scope.$eval $attrs.bbBasketList or {})
 
   $scope.$watch 'basket', (newVal, oldVal) =>
     $scope.items = _.filter $scope.bb.basket.items, (item) -> !item.is_coupon
@@ -152,7 +156,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
         item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
-      $scope.items = $scope.bb.basket.items
+      $scope.items = $scope.bb.basket.items     
       $scope.deal_code = null
     , (err) ->
       if err and err.data and err.data.error
@@ -195,9 +199,14 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope,  $rootScope, 
   * @description
   * Set this page section as ready
   ###
-  $scope.setReady = ->
+  $scope.setReady = ->    
+    if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()     
+      AlertService.raise('GIFT_CERTIFICATE_REQUIRED')
+      return false   
     if $scope.bb.basket.items.length > 0
       $scope.setReadyToCheckout(true)
+      return true
     else
       AlertService.raise('EMPTY_BASKET_FOR_CHECKOUT')
+      return false
       
