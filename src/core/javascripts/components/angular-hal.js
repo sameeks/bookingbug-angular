@@ -249,6 +249,11 @@ angular
       }//hrefLink
 
       function callLink(method, link, params, data) {
+
+        if (params == null) {
+          params = {};
+        }
+          
         if(angular.isArray(link)) return $q.all(link.map(function(link){
           if(method !== 'GET') throw 'method is not supported for arrays';
 
@@ -257,9 +262,11 @@ angular
 
         var linkHref = hrefLink(link, params);
         if(method === 'GET') {
-          if(embedded.has(linkHref)) return embedded.get(linkHref);
-          
-          return embedded.set(linkHref, callService(method, linkHref, options, data));
+          if(embedded.has(linkHref) && !params['no_cache']) {
+            return embedded.get(linkHref);
+          } else {
+            return embedded.set(linkHref, callService(method, linkHref, options, data));
+          }
         }
         else {
           return callService(method, linkHref, options, data);  
