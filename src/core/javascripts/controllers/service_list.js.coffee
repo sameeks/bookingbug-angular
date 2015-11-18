@@ -71,6 +71,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   $scope.booking_item = $scope.$eval($attrs.bbItem) if $attrs.bbItem
   $scope.show_all = true if $attrs.bbShowAll or $scope.options.show_all 
   $scope.allowSinglePick = true if $scope.options.allow_single_pick
+  $scope.hide_disabled = true if $scope.options.hide_disabled
   $scope.price_options = {min: 0, max: 100}
 
   $rootScope.connection_started.then () =>
@@ -96,6 +97,10 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
     ppromise = comp.getServicesPromise()
     @skipped = false
     ppromise.then (items) =>
+      if $scope.hide_disabled
+        # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
+        items = items.filter (x) -> !x.disabled && !x.deleted
+
       # not all service lists need filtering. check for attribute first
       filterItems = if $attrs.filterServices is 'false' then false else true
 
