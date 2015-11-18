@@ -72,6 +72,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: 'Sorry, the maximum number of tickets per person has been reached.'
     },
     {
+      key: 'GIFT_CERTIFICATE_REQUIRED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'A valid Gift Certificate is required to proceed with this booking'
+    },
+    {
       key: 'TIME_SLOT_NOT_SELECTED',
       type: 'warning', 
       title: '',

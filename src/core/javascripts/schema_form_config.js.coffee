@@ -53,3 +53,14 @@ angular.module('schemaForm').config (schemaFormProvider,
     'price'
     'price_form.html'
   )
+
+  schemaFormDecoratorsProvider.addMapping(
+    'bootstrapDecorator'
+    'date'
+    'date_form.html'
+  )
+
+  schemaFormDecoratorsProvider.createDirective(
+    'date'
+    'date_form.html'
+  )

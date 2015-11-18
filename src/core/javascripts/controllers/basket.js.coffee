@@ -61,13 +61,15 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
 
 
 
-angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $attrs, $rootScope, BasketService, $q, AlertService, ErrorService, FormDataStoreService, LoginService) ->
+angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $attrs, $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
 
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
   $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') and $scope.bb.company_settings.has_wallets and $scope.client.valid() and LoginService.isLoggedIn() and LoginService.member().id == $scope.client.id and $scope.client.has_active_wallet
 
-  $scope.basket_options = $scope.$eval($attrs.bbBasketList) or {}
+  # bb.basket.options - added 10-11-2015 @16:19
+  # For ex. bb-basket-list="{requires_deal: true}" 
+  $scope.bb.basket.setSettings($scope.$eval $attrs.bbBasketList or {})
 
   
   $rootScope.connection_started.then ->
@@ -123,6 +125,11 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
   ###
   $scope.checkout = (route) =>
 
+
+    if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()     
+      AlertService.raise('GIFT_CERTIFICATE_REQUIRED')
+      return false
+      
     if $scope.bb.basket.items.length > 0
       $scope.setReadyToCheckout(true)
       if $scope.$parent.$has_page_control
@@ -130,9 +137,9 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
       else
         $scope.decideNextPage(route)
     else
-      AlertService.clear()
       AlertService.raise('EMPTY_BASKET_FOR_CHECKOUT')
       return false
+
 
   ###**
   * @ngdoc method
@@ -226,7 +233,6 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
 
   $scope.topUpWallet = () ->
     $scope.decideNextPage("basket_wallet")
-
 
 
       
