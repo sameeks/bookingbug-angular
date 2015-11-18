@@ -88,7 +88,6 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
             when "wallet_payment_complete"
               scope.walletPaymentDone()
             when 'basket_wallet_payment_complete'
-              scope.callSetLoaded()
               scope.basketWalletPaymentDone()
     , false
 

@@ -113,6 +113,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
 
 
   $scope.basketWalletPaymentDone = () ->
+    scope.callSetLoaded()
     $scope.decideNextPage('checkout')
 
 
