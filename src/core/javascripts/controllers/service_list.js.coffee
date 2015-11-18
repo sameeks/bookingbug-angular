@@ -100,7 +100,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       if $scope.hide_disabled
         # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
         items = items.filter (x) -> !x.disabled && !x.deleted
-
+      
       # not all service lists need filtering. check for attribute first
       filterItems = if $attrs.filterServices is 'false' then false else true
 
@@ -158,7 +158,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
           items = items.filter (x) -> x.api_ref == $scope.booking_item.service_ref
         if $scope.booking_item.group
           items = items.filter (x) -> !x.group_id || x.group_id == $scope.booking_item.group
+
+        if $scope.hide_disabled
+          # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
+          items = items.filter (x) -> !x.item? || (!x.item.disabled && !x.item.deleted)
+
         services = (i.item for i in items when i.item?)
+
         
         $scope.bookable_services = services
         $scope.bookable_items = items
