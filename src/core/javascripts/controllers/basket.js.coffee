@@ -90,7 +90,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
         for basket_item, index in $scope.bb.basket.timeItems()
           prepaid_bookings = result[index]
 
-          if $scope.basket_options.auto_use_prepaid_bookings and prepaid_bookings.length > 0
+          if $scope.bb.basket.settings.auto_use_prepaid_bookings and prepaid_bookings.length > 0
             basket_item.setPrepaidBooking(prepaid_bookings[0]) 
 
         $scope.updateBasket().then () ->
