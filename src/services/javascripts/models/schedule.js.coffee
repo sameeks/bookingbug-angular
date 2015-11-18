@@ -57,7 +57,7 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
     * @returns {Promise} Returns a promise that resolves to the filtered collection of schedules.
     ###
     @query: (company, company_id, page, per_page, start_date, end_date) ->
-       AdminScheduleService.query
+      AdminScheduleService.query
         company: company
         company_id: company_id
         page: page
@@ -77,7 +77,7 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
     * @returns {Promise} Returns a promise that resolves to the filtered collection of schedules.
     ###
     @delete: (company, id) ->
-       AdminScheduleService.delete
+      AdminScheduleService.delete
         company: company
         id: id
 
@@ -96,10 +96,10 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
     * @returns {Promise} Returns a promise that resolves to the filtered collection of schedules.
     ###
     @update: (company, page, per_page) ->
-     AdminScheduleService.update
-      company: company
-      page: page
-      per_page: per_page
+      AdminScheduleService.update
+        company: company
+        page: page
+        per_page: per_page
 
 angular.module('BB.Models').factory 'AdminSchedule', ($injector) ->
   $injector.get('Admin.ScheduleModel')

@@ -14,9 +14,8 @@
 * @property {string} country The country
 ####
 
-
 angular.module('BB.Services').factory "AddressListService", ($q, $window, halClient, UriTemplate) ->
- query: (prms) ->
+  query: (prms) ->
 
     deferred = $q.defer()
     href = "/api/v1/company/{company_id}/addresses/{post_code}"
@@ -27,22 +26,22 @@ angular.module('BB.Services').factory "AddressListService", ($q, $window, halCli
       deferred.reject(err)
     deferred.promise
 
- ###**
- * @ngdoc method
- * @name getAddress
- * @methodOf BB.Services:AddressList
- * @param {array} prms The address parameters
- * @description
- * Get the address in according of the prms parameter
- *
- * @returns {Promise} Returns a promise which resolve the getting address
- ###
- getAddress: (prms) ->
-   deferred = $q.defer()
-   href = "/api/v1/company/{company_id}/addresses/address/{id}"
-   uri = new UriTemplate(href).fillFromObject({company_id: prms.company.id, id: prms.id})
-   halClient.$get(uri, {}).then (customerAddress) ->
+  ###**
+  * @ngdoc method
+  * @name getAddress
+  * @methodOf BB.Services:AddressList
+  * @param {array} prms The address parameters
+  * @description
+  * Get the address in according of the prms parameter
+  *
+  * @returns {Promise} Returns a promise which resolve the getting address
+  ###
+  getAddress: (prms) ->
+    deferred = $q.defer()
+    href = "/api/v1/company/{company_id}/addresses/address/{id}"
+    uri = new UriTemplate(href).fillFromObject({company_id: prms.company.id, id: prms.id})
+    halClient.$get(uri, {}).then (customerAddress) ->
      deferred.resolve(customerAddress)
-   , (err) =>
-     deferred.reject(err)
-   deferred.promise
+    , (err) =>
+    deferred.reject(err)
+    deferred.promise

@@ -20,3 +20,26 @@ angular.module('BB.Models').factory "Admin.EventGroupModel", ($q, BBModel, BaseM
     constructor: (data) ->
       super(data)
 
+    ###**
+    * @ngdoc method
+    * @name query
+    * @param {Company} company The company model.
+    * @param {integer=} company_id Id of the company that use this event group.
+    * @param {integer=} page Specifies particular page of paginated response.
+    * @param {integer=} per_page Number of items per page of paginated response.
+    * @methodOf BB.Models:AdminEventGroup
+    * @description
+    * Gets a filtered collection of events group.
+    *
+    * @returns {Promise} Returns a promise that resolves to the filtered collection of events group.
+    ###
+    @query: (company, company_id, page, per_page) ->
+      AdminEventChainService.query
+        company: company
+        company_id: company_id
+        page: page
+        per_page: per_page
+
+angular.module('BB.Models').factory 'AdminEventGroup', ($injector) ->
+  $injector.get('Admin.EventGroupModel')
+

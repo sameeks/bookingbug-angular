@@ -129,3 +129,54 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
 
     canMove: () ->
       return @canCancel()
+
+    ###**
+    * @ngdoc method
+    * @name query
+    * @param {Company} company The company model.
+    * @param {integer=} company_id The id of company that use the booking.
+    * @param {integer=} member_id The member id what use the booking.
+    * @param {date=} start_date Booking start date.
+    * @param {date=} end_date Booking end date.
+    * @param {array} include_cancelled An array with booking list what include cancelled booking.
+    * @param {integer=} page Specifies particular page of paginated response.
+    * @param {integer=} per_page Number of items per page of paginated response.
+    * @methodOf BB.Models:MemberBooking
+    * @description
+    * Gets a filtered collection of bookings.
+    *
+    * @returns {Promise} Returns a promise that resolves to the filtered collection of bookings.
+    ###
+    @query: (company, company_id, member_id, start_date, end_date, include_cancelled, page, per_page) ->
+      MemberBookingService.query
+        company: company
+        company_id: company_id
+        member_id: member_id
+        start_date: start_date
+        end_date: end_date
+        include_cancelled: include_cancelled
+        page: page
+        per_page: per_page
+
+    ###**
+    * @ngdoc method
+    * @name update
+    * @param {Company} company The company model.
+    * @param {integer=} company_id The id of company that use the booking.
+    * @param {integer=} member_id The member id what use the booking.
+    * @param {integer=} id The booking id.
+    * @methodOf BB.Models:MemberBooking
+    * @description
+    * Update a filtered collection of bookings.
+    *
+    * @returns {Promise} Returns a promise that resolves to the filtered collection of updated bookings.
+    ###
+    @update: (company, company_id, member_id, id) ->
+      MemberBookingService.update
+        company: company
+        company_id: company_id
+        member_id: member_id
+        id: id
+
+angular.module('BB.Models'). factory 'MemberBooking', ($injector) ->
+  $injector.get('Member.BookingModel')

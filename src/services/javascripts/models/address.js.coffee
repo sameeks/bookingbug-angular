@@ -45,7 +45,6 @@ angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseMode
     * @param {Company} company The company model.
     * @param {integer=} page Specifies particular page of paginated response.
     * @param {integer=} per_page Number of items per page of paginated response.
-    * @param {string=} filter_by_fields Comma separated list of field, value pairs to filter results by.
     * @methodOf BB.Models:AdminAddress
     * @description
     * Gets a filtered collection of addresses.
