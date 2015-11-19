@@ -81,7 +81,7 @@ angular.module('BB.Controllers').controller 'PersonList',
       promises = []
       for i in items
         promises.push(i.promise)
-
+        
       $q.all(promises).then (res) =>
         people = []
         for i in items
