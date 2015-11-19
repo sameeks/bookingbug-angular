@@ -15,6 +15,3 @@ angular.module('BBMember').directive 'bbMemberPurchases', ($rootScope) ->
 
     scope.$watch 'member', () ->
       getPurchases()
-
-    # $rootScope.connection_started.then () ->
-    #   getPurchases()
