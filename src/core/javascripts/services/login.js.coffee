@@ -120,7 +120,6 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     deferred.promise
 
   FBLogout: (options) ->
-    FB.logout()
     $fakeStorage.removeItem("fb_user")
     @logout(options)
       

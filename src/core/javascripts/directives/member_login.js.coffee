@@ -59,4 +59,7 @@ ng-if="schema && form"></form>
             $scope.setClient($rootScope.member)
             $scope.decideNextPage()
       , (err) ->
-        AlertService.raise('LOGIN_FAILED')
+        if err.data.error == "Account has been disabled"
+          AlertService.raise('ACCOUNT_DISABLED')
+        else
+          AlertService.raise('LOGIN_FAILED')
