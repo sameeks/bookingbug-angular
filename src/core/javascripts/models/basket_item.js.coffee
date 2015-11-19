@@ -138,6 +138,8 @@ angular.module('BB.Models').factory "BasketItemModel",
           data.$get('deal').then (deal) =>
             @setDeal(new BBModel.Deal(deal))
 
+        @clinic_id = data.clinic_id if data.clinic_id
+
     ###**
     * @ngdoc method
     * @name setDefaults
@@ -175,6 +177,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @group = defaults.group
       if defaults.clinic
         @clinic = defaults.clinic
+        @clinic_id = defaults.clinic.id
       if defaults.private_note
         @private_note = defaults.private_note
       if defaults.event_group
@@ -821,6 +824,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.private_note = @private_note if @private_note
       if @available_slot
         data.available_slot = @available_slot
+      data.clinic_id = @clinic_id if @clinic_id
       return data
 
     ###**
