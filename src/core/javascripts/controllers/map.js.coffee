@@ -460,7 +460,8 @@ angular.module('BB.Controllers').controller 'MapCtrl',
         $scope.setLoaded $scope
         AlertService.raise('GEOLOCATION_ERROR')
       else
-        return $scope.setLoaded $scope
+        $scope.setLoaded $scope
+    $scope.$apply()
 
   ###**
   * @ngdoc method

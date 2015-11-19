@@ -806,7 +806,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return if $scope.setPageRoute($rootScope.Route.Duration)
       return $scope.showPage('duration_list')
     else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.date && !$scope.bb.current_item.event? && !$scope.bb.current_item.deal)
-      if $scope.bb.company.$has('slots')
+      if $scope.bb.company.$has('availability_slots')
         return if $scope.setPageRoute($rootScope.Route.Slot)
         return $scope.showPage('slot_list')
       else

@@ -1,4 +1,4 @@
-angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope, AlertService, ErrorService, $window) ->
+angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope, AlertService, $window) ->
   restrict: 'A'
   scope: true
   link: (scope, element, attrs) ->
@@ -34,7 +34,7 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
           scope.setLoaded scope
           scope.decideNextPage()
       , (err) ->
-        AlertService.raise(ErrorService.getAlert('LOGIN_FAILED'))
+        AlertService.raise('LOGIN_FAILED')
 
     redirectTo = (destination) ->
       $window.location.href = destination
@@ -46,9 +46,9 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
           params.access_token = response.authResponse.accessToken
           loginToBBWithFBUser(params)
         else if response.status == 'not_authorized'
-          AlertService.raise(ErrorService.getAlert('LOGIN_FAILED'))
+          AlertService.raise('LOGIN_FAILED')
         else
-          AlertService.raise(ErrorService.getAlert('LOGIN_FAILED'))
+          AlertService.raise('LOGIN_FAILED')
         return
       ), scope: 'public_profile,email'
 

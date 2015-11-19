@@ -1,4 +1,4 @@
-angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, $window, $location, SettingsService, AlertService, ErrorService) ->
+angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, $window, $location, SettingsService, AlertService) ->
   restrict: 'A'
   controller: 'Wallet'
   scope: true
@@ -82,13 +82,12 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
               scope.callNotLoaded()
             when "error"
               scope.callNotLoaded()
-              AlertService.raise(ErrorService.getAlert('PAYMENT_FAILED'))
+              AlertService.raise('PAYMENT_FAILED')
               # reload the payment iframe
               document.getElementsByTagName("iframe")[0].src += ''
             when "wallet_payment_complete"
               scope.walletPaymentDone()
             when 'basket_wallet_payment_complete'
-              scope.callSetLoaded()
               scope.basketWalletPaymentDone()
     , false
 
