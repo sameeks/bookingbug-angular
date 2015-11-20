@@ -1,9 +1,11 @@
 
-angular.module('BB.Directives').directive 'bbMonthPicker', () ->
+angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc) ->
   restrict: 'AE'
   replace: true
   scope : true
   require : '^bbEvents'
+  templateUrl : (element, attrs) ->
+    PathSvc.directivePartial "_month_picker"
   link : (scope, el, attrs) ->
 
     scope.picker_settings = scope.$eval(attrs.bbMonthPicker) or {}
@@ -109,13 +111,11 @@ angular.module('BB.Directives').directive 'bbMonthPicker', () ->
 
 
 
-angular.module('BB.Directives').directive 'bbSlick', ($rootScope, $timeout, $bbug, PathSvc, $compile, $templateCache, $window) ->
+angular.module('BB.Directives').directive 'bbSlick', ($rootScope, $timeout, $bbug, $compile, $templateCache, $window) ->
   restrict: 'A'
   replace: true
   scope : true
   require : '^bbMonthPicker'
-  templateUrl : (element, attrs) ->
-    PathSvc.directivePartial "_month_picker"
   controller : ($scope, $element, $attrs) ->
 
     $scope.slickOnInit = () ->

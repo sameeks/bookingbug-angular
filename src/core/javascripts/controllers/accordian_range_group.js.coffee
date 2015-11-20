@@ -121,10 +121,10 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
 
       if angular.isArray($scope.source_slots)
         for slot in $scope.source_slots
-          $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time
+          $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time && slot.avail == 1
       else
         for key, slot of $scope.source_slots
-          $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time
+          $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time && slot.avail == 1
 
       updateAvailability()
 
