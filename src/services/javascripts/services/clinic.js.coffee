@@ -39,9 +39,9 @@ angular.module('BBAdmin.Services').factory 'AdminClinicService',  ($q, BBModel, 
 
     deferred.promise
 
-  delete: (clinic) ->
+  cancel: (clinic) ->
     deferred = $q.defer()
-    clinic.$del('self').then  (clinic) =>
+    clinic.$post('cancel', clinic).then  (clinic) =>
       clinic = new BBModel.Admin.Clinic(clinic)
       ClinicCollections.deleteItems(clinic)
       deferred.resolve(clinic)
