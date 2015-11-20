@@ -1,26 +1,30 @@
 angular.module('ngStorage', [])
 .factory('$fakeStorage', [
-  function(){
+  '$cookies',
+  function($cookies){
     function FakeStorage() {};
     FakeStorage.prototype.setItem = function (key, value) {
-      this[key] = value;
+      $cookies[key] = value;
     };
-    FakeStorage.prototype.getItem = function (key) {
-      return typeof this[key] == 'undefined' ? null : this[key];
+    FakeStorage.prototype.getFakeItem = function (key) {
+      var test;
+      test = typeof $cookies[key] == 'undefined' ? null : $cookies[key];
+      console.log(test);
+      return test;
     }
     FakeStorage.prototype.removeItem = function (key) {
-      this[key] = undefined;
+      $cookies[key] = undefined;
     };
     FakeStorage.prototype.clear = function(){
-      for (var key in this) {
-        if( this.hasOwnProperty(key) )
+      for (var key in $cookies) {
+        if( $cookies.hasOwnProperty(key) )
         {
-          this.removeItem(key);
+          $cookies.removeItem(key);
         }
       }
     };
     FakeStorage.prototype.key = function(index){
-      return Object.keys(this)[index];
+      return Object.keys($cookies)[index];
     };
     return new FakeStorage();
   }
@@ -30,6 +34,7 @@ angular.module('ngStorage', [])
   function($window, $fakeStorage) {
     function isStorageSupported(storageName) 
     {
+      console.log("isStorageSupported")
       var testKey = 'test',
         storage = $window[storageName];
       try
@@ -43,7 +48,8 @@ angular.module('ngStorage', [])
         return false;
       }
     }
-    var storage = isStorageSupported('localStorage') ? $window.localStorage : $fakeStorage;
+    var storage = isStorageSupported('localStorage') ? window.localStorage : $fakeStorage;
+    console.log("locatorage supported:", isStorageSupported('localStorage'));
     return {
       setItem: function(key, value) {
         storage.setItem(key, value);
@@ -87,27 +93,35 @@ angular.module('ngStorage', [])
         return false;
       }
     }
-    var storage = isStorageSupported('sessionStorage') ? $window.sessionStorage : $fakeStorage;
+    var storage = isStorageSupported('sessionStorage') ? $fakeStorage : $fakeStorage;
+    console.log("sessionStorage supported:", isStorageSupported('sessionStorage'));
     return {
       setItem: function(key, value) {
+        console.log("1");
         storage.setItem(key, value);
       },
       getItem: function(key, defaultValue) {
-        return storage.getItem(key) || defaultValue;
+        console.log("2");
+        return storage.getFakeItem(key) || defaultValue;
       },
       setObject: function(key, value) {
+        console.log("3");
         storage.setItem(key, JSON.stringify(value));
       },
       getObject: function(key) {
+        console.log("4");
         return JSON.parse(storage.getItem(key) || '{}');
       },
       removeItem: function(key){
+        console.log("5");
         storage.removeItem(key);
       },
       clear: function() {
+        console.log("6");
         storage.clear();
       },
       key: function(index){
+        console.log("7");
         storage.key(index);
       }
     }
