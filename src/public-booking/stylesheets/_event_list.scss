@@ -43,27 +43,23 @@
     margin-top: 10px;
     overflow: hidden;
 
-    .bb-month-nav-prev,
+   .bb-month-nav-prev,
     .bb-month-nav-next,{
-      padding-top: 117px;
-      @include make-xs-column(2);
+      @media(min-width:$screen-xs-max){
+      padding-top: 107px;
+      }
+      @include make-sm-column(2);
       @include make-md-column(1);
     }
 
-    .bb-month-nav-prev {
-      text-align: right;
-    }
-
-    .bb-month-nav-next {
-      text-align: left;
-    }
-
     .bb-months {
-      @include make-xs-column(8);
+      @include make-xs-column(12);
+      @include make-sm-column(8);
       @include make-md-column(10);
     }
 
     .bb-month {
+      outline: none;
       table {
         margin: 0 auto;
       }
