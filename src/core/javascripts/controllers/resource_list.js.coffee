@@ -46,14 +46,17 @@ angular.module('BB.Controllers').controller 'ResourceList',
     loadData()
 
   loadData = () =>
+    console.log "here", $scope.options
     # do nothing if nothing has changed
-    unless ($scope.bb.steps && $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
-      if !$scope.bb.current_item.service || $scope.bb.current_item.service == $scope.change_watch_item
-        # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
-        if !$scope.bb.current_item.service
-          $scope.setLoaded $scope
-        return
+    if $scope.options.wait_for_service
+      unless ($scope.bb.steps && $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
+        if !$scope.bb.current_item.service || $scope.bb.current_item.service == $scope.change_watch_item
+          # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
+          if !$scope.bb.current_item.service
+            $scope.setLoaded $scope
+          return
 
+    console.log " ..."
     $scope.change_watch_item = $scope.bb.current_item.service
     $scope.notLoaded $scope
 

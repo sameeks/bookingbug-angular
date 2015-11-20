@@ -37,7 +37,7 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
 
 
 angular.module('BB.Controllers').controller 'PersonList',
-($scope,  $rootScope, PageControllerService, PersonService, ItemService, $q, BBModel, PersonModel, FormDataStoreService) ->
+($scope, $attrs, $rootScope, PageControllerService, PersonService, ItemService, $q, BBModel, PersonModel, FormDataStoreService) ->
 
   $scope.controller = "public.controllers.PersonList"
 
@@ -48,17 +48,20 @@ angular.module('BB.Controllers').controller 'PersonList',
     loadData()
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
+  $scope.options = $scope.$eval($attrs.bbServices) or {}
+
 
   loadData = () ->
     $scope.booking_item ||= $scope.bb.current_item
     bi = $scope.booking_item
 
     # do nothing if nothing has changed
-    if !bi.service || bi.service == $scope.change_watch_item
-      # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
-      if !bi.service
-        $scope.setLoaded $scope
-      return
+    if $scope.options.wait_for_service
+      if !bi.service || bi.service == $scope.change_watch_item
+        # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
+        if !bi.service
+          $scope.setLoaded $scope
+        return
 
     $scope.change_watch_item = bi.service
     $scope.notLoaded $scope
