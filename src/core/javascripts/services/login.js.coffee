@@ -1,5 +1,5 @@
 
-angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope, BBModel, $sessionStorage, $fakeStorage) ->
+angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope, BBModel, $sessionStorage) ->
   companyLogin: (company, params, form) ->
     deferred = $q.defer()
     company.$post('login', params, form).then (login) =>
@@ -31,7 +31,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     company.$post('facebook_login', {}, prms).then (login) =>
       login.$get('member').then (member) =>
         member = new BBModel.Member.Member(member)
-        $fakeStorage.setItem("fb_user", true)
+        $sessionStorage.setItem("fb_user", true)
         @setLogin(member)
         deferred.resolve(member);
       , (err) =>
@@ -120,7 +120,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     deferred.promise
 
   FBLogout: (options) ->
-    $fakeStorage.removeItem("fb_user")
+    $sessionStorage.removeItem("fb_user")
     @logout(options)
       
 
