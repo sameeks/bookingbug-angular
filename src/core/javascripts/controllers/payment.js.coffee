@@ -70,6 +70,7 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
             when "submitting"
               scope.callNotLoaded()
             when "error"
+              scope.$emit "payment:failed"
               scope.callNotLoaded()
               AlertService.raise('PAYMENT_FAILED')
               # reload the payment iframe
