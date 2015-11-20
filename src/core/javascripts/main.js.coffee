@@ -18,7 +18,6 @@ app = angular.module('BB', [
   'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
   'angularFileUpload',
   'schemaForm',
-  'ngStorage',
   'uiGmapgoogle-maps',
   'angular.filter',
   'ui-rangeSlider',
