@@ -197,6 +197,28 @@ angular.module('BB.Models').factory "BasketItemModel",
     storeDefaults: (defaults) ->
       @defaults = defaults
 
+
+
+    ###**
+    * @ngdoc method
+    * @name canLoadItem
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * See if this item is read to have a specific object type loads - i.e. services, resources, or people
+    * @param {object} company a hash representing a company object
+    *
+    * @returns {boolean}
+    ###
+    canLoadItem: (item) ->
+      if @service && @item != 'service'
+        return true # we have a service and we want something else
+      else if @resource && !@anyResource() && item != 'resource'
+        return true # we have a resource and we want something else
+      else if @person && !@anyPerson() && item != 'person'
+        return true # we have a person and we want something else
+      else
+        return false
+
     ###**
     * @ngdoc method
     * @name defaultService

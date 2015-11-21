@@ -37,7 +37,7 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
 
 
 angular.module('BB.Controllers').controller 'PersonList',
-($scope, $attrs, $rootScope, PageControllerService, PersonService, ItemService, $q, BBModel, PersonModel, FormDataStoreService) ->
+($scope, $attrs, $rootScope, PageControllerService, $q, BBModel, PersonModel, FormDataStoreService) ->
 
   $scope.controller = "public.controllers.PersonList"
 
@@ -66,51 +66,54 @@ angular.module('BB.Controllers').controller 'PersonList',
     $scope.change_watch_item = bi.service
     $scope.notLoaded $scope
 
-    ppromise = PersonService.query($scope.bb.company)
+    ppromise = BBModel.Person.$query($scope.bb.company)
     ppromise.then (people) ->
       if bi.group # check they're part of any currently selected group
         people = people.filter (x) -> !x.group_id || x.group_id == bi.group
       $scope.all_people = people
 
-    ItemService.query(
-      company: $scope.bb.company
-      cItem: bi
-      wait: ppromise
-      item: 'person'
-    ).then (items) ->
-      if bi.group # check they're part of any currently selected group
-        items = items.filter (x) -> !x.group_id || x.group_id == bi.group
+    if $scope.bb.current_item && $scope.bb.current_item.canLoadItem("person")
+      BBModel.BookableItem.$query(
+        company: $scope.bb.company
+        cItem: bi
+        wait: ppromise
+        item: 'person'
+      ).then (items) ->
+        if bi.group # check they're part of any currently selected group
+          items = items.filter (x) -> !x.group_id || x.group_id == bi.group
 
-      promises = []
-      for i in items
-        promises.push(i.promise)
-
-      $q.all(promises).then (res) =>
-        people = []
+        promises = []
         for i in items
-          people.push(i.item)
-          if bi && bi.person && bi.person.self == i.item.self
-            $scope.person = i.item
-            $scope.selected_bookable_items = [i]
-          if bi && bi.selected_person && bi.selected_person.item.self == i.item.self
-            bi.selected_person = i
+          promises.push(i.promise)
 
-        # if there's only 1 person and combine resources/staff has been turned on, auto select the person
-        if (items.length == 1 && $scope.bb.company.settings && $scope.bb.company.settings.merge_people)
-          if !$scope.selectItem(items[0], $scope.nextRoute )
+        $q.all(promises).then (res) =>
+          people = []
+          for i in items
+            people.push(i.item)
+            if bi && bi.person && bi.person.self == i.item.self
+              $scope.person = i.item
+              $scope.selected_bookable_items = [i]
+            if bi && bi.selected_person && bi.selected_person.item.self == i.item.self
+              bi.selected_person = i
+
+          # if there's only 1 person and combine resources/staff has been turned on, auto select the person
+          if (items.length == 1 && $scope.bb.company.settings && $scope.bb.company.settings.merge_people)
+            if !$scope.selectItem(items[0], $scope.nextRoute )
+              setPerson people
+              $scope.bookable_items = items
+              $scope.selected_bookable_items = items
+            else
+              $scope.skipThisStep()
+          else
             setPerson people
             $scope.bookable_items = items
-            $scope.selected_bookable_items = items
-          else
-            $scope.skipThisStep()
-        else
-          setPerson people
-          $scope.bookable_items = items
-          if !$scope.selected_bookable_items
-            $scope.selected_bookable_items = items
+            if !$scope.selected_bookable_items
+              $scope.selected_bookable_items = items
+          $scope.setLoaded $scope
+      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    else
+      ppromise['finally'] ->
         $scope.setLoaded $scope
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
 
   ###**
   * @ngdoc method

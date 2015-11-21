@@ -15,7 +15,7 @@
 ####
 
 
-angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel, ItemService) ->
 
   class BookableItem extends BaseModel
 
@@ -58,3 +58,5 @@ angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel
           else
             @ready.resolve()
 
+    @$query: (params) ->
+      ItemService.query(params)

@@ -16,8 +16,12 @@
 ####
 
 
-angular.module('BB.Models').factory "PersonModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "PersonModel", ($q, BBModel, BaseModel, PersonService) ->
 
   class Person extends BaseModel
 
+
+
+    @$query: (company) ->
+      PersonService.query(company)
 

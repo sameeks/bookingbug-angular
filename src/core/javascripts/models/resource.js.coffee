@@ -18,8 +18,11 @@
 ####
 
 
-angular.module('BB.Models').factory "ResourceModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "ResourceModel", ($q, BBModel, BaseModel, ResourceService) ->
 
   class Resource extends BaseModel
 
+
+    @$query: (company) ->
+      ResourceService.query(company)
 

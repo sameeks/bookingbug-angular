@@ -23,30 +23,26 @@
 * @property {resource} resource The currectly selected resource
 ####
 
-
-
 angular.module('BB.Directives').directive 'bbResources', () ->
   restrict: 'AE'
   replace: true
   scope : true
   controller : 'ResourceList'
-
+  link : (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbResources) or {}
+    scope.wait_for_service = attrs.wait_for_service if attrs.wait_for_service
+    scope.directives = "public.ResourceList"
 
 angular.module('BB.Controllers').controller 'ResourceList',
-($scope,  $rootScope, $attrs, PageControllerService, ResourceService, ItemService, $q, BBModel, ResourceModel) ->
-  $scope.controller = "public.controllers.ResourceList"
+($scope,  $rootScope, $attrs, PageControllerService, $q, BBModel, ResourceModel) ->
   $scope.notLoaded $scope
 
   angular.extend(this, new PageControllerService($scope, $q))
-
-
-  $scope.options = $scope.$eval($attrs.bbResources) or {}
 
   $rootScope.connection_started.then () =>
     loadData()
 
   loadData = () =>
-    console.log "here", $scope.options
     # do nothing if nothing has changed
     if $scope.options.wait_for_service
       unless ($scope.bb.steps && $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
@@ -56,51 +52,57 @@ angular.module('BB.Controllers').controller 'ResourceList',
             $scope.setLoaded $scope
           return
 
-    console.log " ..."
     $scope.change_watch_item = $scope.bb.current_item.service
     $scope.notLoaded $scope
 
-    rpromise = ResourceService.query($scope.bb.company)
+    rpromise = BBModel.Resource.$query($scope.bb.company)
     rpromise.then (resources) =>
       if $scope.bb.current_item.group  # check they're part of any currently selected group
         resources = resources.filter (x) -> !x.group_id || x.group_id == $scope.bb.current_item.group
       $scope.all_resources = resources
 
-    params =
-      company: $scope.bb.company
-      cItem: $scope.bb.current_item
-      wait: rpromise
-      item: 'resource'
-    ItemService.query(params).then (items) =>
-      promises = []
-      if $scope.bb.current_item.group # check they're part of any currently selected group
-        items = items.filter (x) -> !x.group_id || x.group_id == $scope.bb.current_item.group
+    if $scope.bb.current_item && $scope.bb.current_item.canLoadItem("resource")
+      console.log $scope.bb.current_item
+      params =
+        company: $scope.bb.company
+        cItem: $scope.bb.current_item
+        wait: rpromise
+        item: 'resource'
 
-      for i in items
-        promises.push(i.promise)
+      BBModel.BookableItem.$query(params).then (items) =>
+        promises = []
+        if $scope.bb.current_item.group # check they're part of any currently selected group
+          items = items.filter (x) -> !x.group_id || x.group_id == $scope.bb.current_item.group
 
-      $q.all(promises).then (res) =>
-        resources = []
         for i in items
-          resources.push(i.item)
-          if $scope.bb.current_item && $scope.bb.current_item.resource && $scope.bb.current_item.resource.self == i.item.self
-            $scope.resource = i.item
+          promises.push(i.promise)
 
-        if resources.length == 1
-          if !$scope.selectItem(items[0].item, $scope.nextRoute, true)
+        $q.all(promises).then (res) =>
+          resources = []
+          for i in items
+            resources.push(i.item)
+            if $scope.bb.current_item && $scope.bb.current_item.resource && $scope.bb.current_item.resource.self == i.item.self
+              $scope.resource = i.item
+
+          if resources.length == 1
+            if !$scope.selectItem(items[0].item, $scope.nextRoute, true)
+              $scope.bookable_resources = resources
+              $scope.bookable_items = items
+          else
             $scope.bookable_resources = resources
             $scope.bookable_items = items
-        else
-          $scope.bookable_resources = resources
-          $scope.bookable_items = items
-        $scope.setLoaded $scope
+          $scope.setLoaded $scope
+        , (err) ->
+          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
       , (err) ->
-        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-    , (err) ->
-      unless err == "No service link found" and (($scope.bb.steps and $scope.bb.steps[0].page == 'resource_list') or $scope.options.resource_first)
-        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-      else
+        unless err == "No service link found" and (($scope.bb.steps and $scope.bb.steps[0].page == 'resource_list') or $scope.options.resource_first)
+          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        else
+          $scope.setLoaded $scope
+    else
+      rpromise['finally'] ->
         $scope.setLoaded $scope
+
 
   ###**
   * @ngdoc method

@@ -49,7 +49,7 @@ angular.module('BB.Directives').directive 'bbServices', () ->
   scope : true
   controller : 'ServiceList'
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, ItemService, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService) ->
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService) ->
 
   $scope.controller = "public.controllers.ServiceList"
 
@@ -94,7 +94,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
     if $scope.service && $scope.service.company_id != $scope.bb.company.id
       $scope.service = null
 
-    ppromise = comp.getServicesPromise()
+    ppromise = comp.$getServices()
     @skipped = false
     ppromise.then (items) =>
       if $scope.hide_disabled
@@ -149,11 +149,9 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         $scope.bookable_services = $scope.items
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-    if ($scope.booking_item.person && !$scope.booking_item.anyPerson()) ||
-       ($scope.booking_item.resource && !$scope.booking_item.anyResource())
-
+    if $scope.booking_item.canLoadItem("service")
       # if we've already picked a service or a resource - get a more limited service selection
-      ItemService.query({company: $scope.bb.company, cItem: $scope.booking_item, wait: ppromise, item: 'service'}).then (items) =>
+      BBModel.BookableItem.$query({company: $scope.bb.company, cItem: $scope.booking_item, wait: ppromise, item: 'service'}).then (items) =>
         if $scope.booking_item.service_ref
           items = items.filter (x) -> x.api_ref == $scope.booking_item.service_ref
         if $scope.booking_item.group

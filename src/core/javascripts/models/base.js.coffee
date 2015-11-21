@@ -7,6 +7,9 @@
 
 angular.module('BB.Models').service "BBModel", ($q, $injector) ->
 
+
+angular.module('BB.Models').run ($q, $injector, BBModel) ->
+
   # the top level models
   models = ['Address', 'Answer', 'Affiliate', 'Basket', 'BasketItem',
     'BookableItem', 'Category', 'Client', 'ClientDetails', 'Company',
@@ -16,44 +19,30 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
     'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
     'PrePaidBooking']
 
-  funcs = {}
   for model in models
-    do (model) =>  
-      funcs[model] = (p1, p2) => 
-        new ($injector.get(model + "Model"))(p1, p2)
-
+    BBModel[model] = $injector.get(model + "Model")
 
   # purchase models
   purchase_models = ['Booking', 'Total', 'CourseBooking']
   pfuncs = {}
   for model in purchase_models
-    do (model) =>  
-      pfuncs[model] = (init) => 
-        new ($injector.get("Purchase." + model + "Model"))(init)
-  funcs['Purchase'] = pfuncs
+    pfuncs[model] = $injector.get("Purchase." + model + "Model")
+  BBModel['Purchase'] = pfuncs
 
   # member models
-  member_models = ['Member', 'Booking', 'PrePaidBooking', 'Wallet', 'WalletLog']
-  mfuncs = {}
-  for model in member_models
-    do (model) =>  
-      mfuncs[model] = (init) => 
-        new ($injector.get("Member." + model + "Model"))(init)
-  funcs['Member'] = mfuncs
+#  member_models = ['Member', 'Booking', 'PrePaidBooking', 'Wallet', 'WalletLog']
+#  mfuncs = {}
+#  for model in member_models
+#    mfuncs[model] = $injector.get("Member." + model + "Model")
+#  BBModel['Member'] = mfuncs
 
   # admin models
-  admin_models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
-    'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup', 'Event', 'Queuer', 'ClientQueue', 'Clinic']
-  afuncs = {}
-  for model in admin_models
-    do (model) =>  
-      afuncs[model] = (init) => 
-        new ($injector.get("Admin." + model + "Model"))(init)
-  funcs['Admin'] = afuncs
-
-
-
-  funcs
+#  admin_models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
+#    'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup', 'Event', 'Queuer', 'ClientQueue', 'Clinic']
+#  afuncs = {}
+#  for model in admin_models
+#    afuncs[model] = $injector.get("Admin." + model + "Model")
+#  BBModel['Admin'] = afuncs
 
 
 
@@ -75,7 +64,8 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
         @_data = data
       if data
         for n,m of data
-          @[n] = m
+          if typeof(m) != 'function'
+            @[n] = m
       if @_data && @_data.$href
         @self = @_data.$href("self")
         # append get functions for all links...
@@ -90,8 +80,8 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
           do (link, obj, name) =>
             if !@[name]
               @[name] = () -> @$buildOject(link)
-            if !@[name + "Promise"]
-              @[name + "Promise"] = () -> @$buildOjectPromise(link)
+            if !@["$" + name]
+              @["$" + name] = () -> @$buildOjectPromise(link)
 
 
     _snakeToCamel: (s) ->
