@@ -207,7 +207,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * See if this item is read to have a specific object type loads - i.e. services, resources, or people
     * @param {object} company a hash representing a company object
     *
-    * @returns {boolean}
+    * @returns {boolean} if this item can be loaded
     ###
     canLoadItem: (item) ->
       if @service && @item != 'service'

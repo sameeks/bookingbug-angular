@@ -17,10 +17,30 @@
 * scope: true
 * </pre>
 *
-* @property {array} items The items of the person list
+* @param {hash}  bbPeople   A hash of options
+* @param {object}  bbItem   A specific basket item to reference
+* @param {boolean}  waitForService   Wait for a the service to be loaded before loading People
+* @param {boolean}  hideDisabled   In an admin widget, disabled resources are shown by default, you can choose to hide disabled resources
+* @property {array} booking_item The current basket item being referred to
+* @property {array} all_people An array of all people
 * @property {array} bookable_people The bookable people from the person list
 * @property {array} bookable_items The bookable items from the person list
 * @property {array} booking_item The booking item from the person list
+* @example
+*  <example module="BB"> 
+*    <file name="index.html">
+*   <div bb-api-url='https://dev01.bookingbug.com'>
+*   <div  bb-widget='{company_id:37167}'>
+*     <div bb-people>
+*        <ul>
+*          <li ng-repeat='person in all_people'> {{person.name}}</li>
+*        </ul>
+*     </div>
+*     </div>
+*     </div>
+*   </file> 
+*  </example>
+* 
 ####
 
 
@@ -32,21 +52,22 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
   link : (scope, element, attrs) ->
     if attrs.bbItem
       scope.booking_item = scope.$eval( attrs.bbItem )
-    return
-
-
+    scope.options = scope.$eval(attrs.bbPeople) or {}
+    scope.options.hide_disabled = attrs.hideDisabled if attrs.hideDisabled
+    scope.options.wait_for_service = attrs.waitForService if attrs.waitForService
+    scope.directives = "public.PersonList"
 
 angular.module('BB.Controllers').controller 'PersonList',
-($scope, $attrs, $rootScope, PageControllerService, $q, BBModel, PersonModel, FormDataStoreService) ->
+($scope, $attrs, $rootScope, PageControllerService, $q, BBModel, PersonModel, FormDataStoreService, LoadingService) ->
 
   $scope.controller = "public.controllers.PersonList"
 
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
   angular.extend(this, new PageControllerService($scope, $q))
 
   $rootScope.connection_started.then ->
     loadData()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.options = $scope.$eval($attrs.bbServices) or {}
 
@@ -60,19 +81,22 @@ angular.module('BB.Controllers').controller 'PersonList',
       if !bi.service || bi.service == $scope.change_watch_item
         # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
         if !bi.service
-          $scope.setLoaded $scope
+          loader.setLoaded()
         return
 
     $scope.change_watch_item = bi.service
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     ppromise = BBModel.Person.$query($scope.bb.company)
     ppromise.then (people) ->
       if bi.group # check they're part of any currently selected group
         people = people.filter (x) -> !x.group_id || x.group_id == bi.group
+      if $scope.options.hide_disabled
+        # this might happen to ahve been an admin api call which would include disabled people - and we migth to hide them
+        people = people.filter (x) -> !x.disabled && !x.deleted
       $scope.all_people = people
 
-    if $scope.bb.current_item && $scope.bb.current_item.canLoadItem("person")
+    if $scope.booking_item && $scope.booking_item.canLoadItem("person")
       BBModel.BookableItem.$query(
         company: $scope.bb.company
         cItem: bi
@@ -88,6 +112,9 @@ angular.module('BB.Controllers').controller 'PersonList',
 
         $q.all(promises).then (res) =>
           people = []
+          if $scope.options.hide_disabled
+            # this might happen to ahve been an admin api call which would include disabled people - and we migth to hide them
+            items = items.filter (x) -> !x.item? || (!x.item.disabled && !x.item.deleted)
           for i in items
             people.push(i.item)
             if bi && bi.person && bi.person.self == i.item.self
@@ -109,11 +136,11 @@ angular.module('BB.Controllers').controller 'PersonList',
             $scope.bookable_items = items
             if !$scope.selected_bookable_items
               $scope.selected_bookable_items = items
-          $scope.setLoaded $scope
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+          loader.setLoaded()
+      , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
       ppromise['finally'] ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
   ###**
   * @ngdoc method

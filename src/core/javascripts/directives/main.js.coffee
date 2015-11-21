@@ -18,11 +18,11 @@ app.directive 'bbContent', ($compile) ->
     $compile(element)(scope)
 
 
-app.directive 'bbLoading', ($compile) ->
+app.directive 'bbLoading', ($compile, LoadingService) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
-    scope.scopeLoaded = scope.areScopesLoaded(scope)
+    scope.scopeLoaded = LoadingService.areScopesLoaded(scope)
     element.attr('ng-hide',"scopeLoaded")
     element.attr('bb-loading',null)
     $compile(element)(scope)

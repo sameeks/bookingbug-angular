@@ -186,7 +186,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate) ->
+    SettingsService, UriTemplate, LoadingService) ->
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -1219,66 +1219,21 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   # TODO: Get rid of these 'scope loading' methods when they are no longer
   # called from the scopes
   $scope.setLoaded = (cscope) ->
-    cscope.$emit 'hide:loader', cscope
-    # set the scope loaded to true...
-    cscope.isLoaded = true
-    # then walk up the scope chain looking for the 'loading' scope...
-    loadingFinished = true;
-
-    while cscope
-      if cscope.hasOwnProperty('scopeLoaded')
-        # then check all the scope objects looking to see if any scopes are
-        # still loading
-        if $scope.areScopesLoaded(cscope)
-          cscope.scopeLoaded = true
-        else
-          loadingFinished = false
-      cscope = cscope.$parent
-
-    if loadingFinished
-      $rootScope.$broadcast 'loading:finished'
-    return
+    LoadingService.setLoaded(cscope)
 
 
   $scope.setLoadedAndShowError = (scope, err, error_string) ->
-    $log.warn(err, error_string)
-    scope.setLoaded(scope)
-    if err.status is 409
-      AlertService.danger(ErrorService.getError('ITEM_NO_LONGER_AVAILABLE'))
-    else if err.data and err.data.error is "Number of Bookings exceeds the maximum"
-      AlertService.danger(ErrorService.getError('MAXIMUM_TICKETS'))
-    else
-      AlertService.danger(ErrorService.getError('GENERIC'))
+    LoadingService.setLoadedAndShowError(scope, err, error_string)
 
 
   # go around schild scopes - return false if *any* child scope is marked as
   # isLoaded = false
   $scope.areScopesLoaded = (cscope) ->
-    if cscope.hasOwnProperty('isLoaded') && !cscope.isLoaded
-      false
-    else
-      child = cscope.$$childHead
-      while (child)
-        return false if !$scope.areScopesLoaded(child)
-        child = child.$$nextSibling
-      true
+    LoadingService.areScopesLoaded(cscope)
 
   #set scope not loaded...
   $scope.notLoaded = (cscope) ->
-    $scope.$emit 'show:loader', $scope
-    cscope.isLoaded = false
-    # then look through all the scopes for the 'loading' scope, which is the
-    # scope which has a 'scopeLoaded' property and set it to false, which makes
-    # the ladoing gif show;
-    while cscope
-      if cscope.hasOwnProperty('scopeLoaded')
-        cscope.scopeLoaded = false
-      cscope = cscope.$parent
-    return
-
-
-
-
+    LoadingService.notLoaded(cscope)
 
 
   $scope.broadcastItemUpdate = () =>

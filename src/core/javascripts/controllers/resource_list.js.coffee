@@ -17,10 +17,29 @@
 * </pre>
 *
 * @param {hash}  bbResources   A hash of options
-* @property {array} items An array of all resources
+* @param {object}  bbItem   A specific basket item to reference
+* @param {boolean}  waitForService   Wait for a the service to be loaded before loading Resources
+* @param {boolean}  hideDisabled   In an admin widget, disabled resources are shown by default, you can choose to hide disabled resources
+* @property {array} booking_item The current basket item being referred to
+* @property {array} all_resources An array of all resources
 * @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a services or person
 * @property {array} bookable_resources An array of Resources - used if the current_item has already selected a services or person
 * @property {resource} resource The currectly selected resource
+* @example
+*  <example module="BB"> 
+*    <file name="index.html">
+*   <div bb-api-url='https://dev01.bookingbug.com'>
+*   <div  bb-widget='{company_id:37167}'>
+*     <div bb-resources>
+*        <ul>
+*          <li ng-repeat='resource in all_resources'> {{resource.name}}</li>
+*        </ul>
+*     </div>
+*     </div>
+*     </div>
+*   </file> 
+*  </example>
+* 
 ####
 
 angular.module('BB.Directives').directive 'bbResources', () ->
@@ -29,13 +48,17 @@ angular.module('BB.Directives').directive 'bbResources', () ->
   scope : true
   controller : 'ResourceList'
   link : (scope, element, attrs) ->
+    if attrs.bbItem
+      scope.booking_item = scope.$eval( attrs.bbItem )
     scope.options = scope.$eval(attrs.bbResources) or {}
-    scope.wait_for_service = attrs.wait_for_service if attrs.wait_for_service
+    scope.options.wait_for_service = attrs.waitForService if attrs.waitForService
+    scope.options.hide_disabled = attrs.hideDisabled if attrs.hideDisabled
     scope.directives = "public.ResourceList"
 
 angular.module('BB.Controllers').controller 'ResourceList',
-($scope,  $rootScope, $attrs, PageControllerService, $q, BBModel, ResourceModel) ->
-  $scope.notLoaded $scope
+($scope,  $rootScope, $attrs, PageControllerService, $q, BBModel, ResourceModel, LoadingService) ->
+  loader = LoadingService.$loader($scope).notLoaded()
+
 
   angular.extend(this, new PageControllerService($scope, $q))
 
@@ -43,45 +66,52 @@ angular.module('BB.Controllers').controller 'ResourceList',
     loadData()
 
   loadData = () =>
+    $scope.booking_item ||= $scope.bb.current_item
     # do nothing if nothing has changed
     if $scope.options.wait_for_service
       unless ($scope.bb.steps && $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
-        if !$scope.bb.current_item.service || $scope.bb.current_item.service == $scope.change_watch_item
+        if !$scope.booking_item.service || $scope.booking_item.service == $scope.change_watch_item
           # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
-          if !$scope.bb.current_item.service
-            $scope.setLoaded $scope
+          if !$scope.booking_item.service
+            loader.setLoaded()
           return
 
-    $scope.change_watch_item = $scope.bb.current_item.service
-    $scope.notLoaded $scope
+    $scope.change_watch_item = $scope.booking_item.service
+    loader.notLoaded()
 
     rpromise = BBModel.Resource.$query($scope.bb.company)
     rpromise.then (resources) =>
-      if $scope.bb.current_item.group  # check they're part of any currently selected group
-        resources = resources.filter (x) -> !x.group_id || x.group_id == $scope.bb.current_item.group
+      if $scope.booking_item.group  # check they're part of any currently selected group
+        resources = resources.filter (x) -> !x.group_id || x.group_id == $scope.booking_item.group
+      if $scope.options.hide_disabled
+        # this might happen to ahve been an admin api call which would include disabled resources - and we migth to hide them
+        resources = resources.filter (x) -> !x.disabled && !x.deleted
       $scope.all_resources = resources
 
-    if $scope.bb.current_item && $scope.bb.current_item.canLoadItem("resource")
-      console.log $scope.bb.current_item
+    if $scope.booking_item && $scope.booking_item.canLoadItem("resource")
       params =
         company: $scope.bb.company
-        cItem: $scope.bb.current_item
+        cItem: $scope.booking_item
         wait: rpromise
         item: 'resource'
 
       BBModel.BookableItem.$query(params).then (items) =>
         promises = []
-        if $scope.bb.current_item.group # check they're part of any currently selected group
-          items = items.filter (x) -> !x.group_id || x.group_id == $scope.bb.current_item.group
+        if $scope.booking_item.group # check they're part of any currently selected group
+          items = items.filter (x) -> !x.group_id || x.group_id == $scope.booking_item.group
 
         for i in items
           promises.push(i.promise)
 
         $q.all(promises).then (res) =>
           resources = []
+          if $scope.options.hide_disabled
+            # this might happen to ahve been an admin api call which would include disabled resources - and we migth to hide them
+            items = items.filter (x) -> !x.item? || (!x.item.disabled && !x.item.deleted)
+
           for i in items
             resources.push(i.item)
-            if $scope.bb.current_item && $scope.bb.current_item.resource && $scope.bb.current_item.resource.self == i.item.self
+            if $scope.booking_item && $scope.booking_item.resource && $scope.booking_item.resource.self == i.item.self
               $scope.resource = i.item
 
           if resources.length == 1
@@ -91,17 +121,17 @@ angular.module('BB.Controllers').controller 'ResourceList',
           else
             $scope.bookable_resources = resources
             $scope.bookable_items = items
-          $scope.setLoaded $scope
+          loader.setLoaded()
         , (err) ->
-          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+          loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       , (err) ->
         unless err == "No service link found" and (($scope.bb.steps and $scope.bb.steps[0].page == 'resource_list') or $scope.options.resource_first)
-          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+          loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
         else
-          $scope.setLoaded $scope
+          loader.setLoaded()
     else
       rpromise['finally'] ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
 
   ###**
@@ -137,7 +167,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
       $scope.resource = item
       return false
     else
-      $scope.bb.current_item.setResource(getItemFromResource(item))
+      $scope.booking_item.setResource(getItemFromResource(item))
       if skip_step
         $scope.skipThisStep()
       $scope.decideNextPage(route)
@@ -145,10 +175,10 @@ angular.module('BB.Controllers').controller 'ResourceList',
 
   $scope.$watch 'resource',(newval, oldval) =>
     if $scope.resource
-      $scope.bb.current_item.setResource(getItemFromResource($scope.resource))
+      $scope.booking_item.setResource(getItemFromResource($scope.resource))
       $scope.broadcastItemUpdate()
     else if newval != oldval
-      $scope.bb.current_item.setResource(null)
+      $scope.booking_item.setResource(null)
       $scope.broadcastItemUpdate()
 
   $scope.$on "currentItemUpdate", (event) ->
@@ -163,9 +193,9 @@ angular.module('BB.Controllers').controller 'ResourceList',
     ###
    $scope.setReady = () =>
     if $scope.resource
-      $scope.bb.current_item.setResource(getItemFromResource($scope.resource))
+      $scope.booking_item.setResource(getItemFromResource($scope.resource))
       return true
     else
-      $scope.bb.current_item.setResource(null)
+      $scope.booking_item.setResource(null)
       return true
 
