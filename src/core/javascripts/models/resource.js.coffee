@@ -8,11 +8,11 @@
 * @description
 * Representation of an Resource Object
 *
-* @property {integer} total_entries The total entries
-* @property {array} resources An array with resources elements
 * @property {integer} id The resources id
-* @property {string} name Name of resources
-* @propertu {string} type Type of resources
+* @property {string} name Name of the resource
+* @property {string} description Description of the resource
+* @property {string} type Type of the resource
+* @property {hash} extra Any extra custom business information
 * @property {boolean} deleted Verify if resources is deleted or not
 * @property {boolean} disabled Verify if resources is disabled or not
 ####
@@ -23,6 +23,15 @@ angular.module('BB.Models').factory "ResourceModel", ($q, BBModel, BaseModel, Re
   class Resource extends BaseModel
 
 
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Resource
+    * @description
+    * Static function that loads an array of resources from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
     @$query: (company) ->
       ResourceService.query(company)
 

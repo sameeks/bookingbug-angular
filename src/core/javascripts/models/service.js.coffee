@@ -19,7 +19,7 @@
 ###
 
 
-angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, ServiceService) ->
 
   class Service extends BaseModel
 
@@ -83,3 +83,17 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
         str += "s" if x > 1
         arr.push({name: str, val: x})
       arr
+
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Service
+    * @description
+    * Static function that loads an array of services from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (company) ->
+      ServiceService.query(company)
+
