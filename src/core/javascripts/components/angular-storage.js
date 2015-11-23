@@ -44,7 +44,7 @@ angular.module('ngStorage', [])
         return false;
       }
     }
-    var storage = isStorageSupported('localStorage') ? window.localStorage : $fakeStorage;
+    var storage = isStorageSupported('localStorage') ? $window.localStorage : $fakeStorage;
     return {
       setItem: function(key, value) {
         storage.setItem(key, value);
@@ -88,7 +88,7 @@ angular.module('ngStorage', [])
         return false;
       }
     }
-    var storage = isStorageSupported('sessionStorage') ? $fakeStorage : $fakeStorage;
+    var storage = isStorageSupported('sessionStorage') ? $window.sessionStorage : $fakeStorage;
     return {
       setItem: function(key, value) {
         storage.setItem(key, value);
