@@ -42,10 +42,10 @@ angular
 
       return {
 
-        set: function(key, val)
+        set: function(key, val, store)
         {
           // also store this in the session store
-          sessionStorage.setItem(key, val)
+          store.setItem(key, val)
           data[key] = val
           return val
         },
@@ -75,7 +75,7 @@ angular
       $sessionStorage.setItem('auth_token', $cookies['Auth-Token'])
     }
     if ($sessionStorage.getItem('auth_token'))
-      shared_header.set('auth_token', $sessionStorage.getItem('auth_token'))
+      shared_header.set('auth_token', $sessionStorage.getItem('auth_token'), $sessionStorage)
 
 
     return {
@@ -334,11 +334,11 @@ angular
         , 'Content-Type': 'application/json'
         , 'Accept': 'application/hal+json,application/json'
       }
-      if (options.app_id) shared_header.set('app_id', options.app_id);
-      if (options.app_key) shared_header.set('app_key', options.app_key);
+      if (options.app_id) shared_header.set('app_id', options.app_id, $sessionStorage);
+      if (options.app_key) shared_header.set('app_key', options.app_key, $sessionStorage);
       if (options.auth_token) {
-        sessionStorage.setItem('auth_token', options.auth_token);
-        shared_header.set('auth_token', options.auth_token);
+        $sessionStorage.setItem('auth_token', options.auth_token);
+        shared_header.set('auth_token', options.auth_token, $sessionStorage);
       }
 
       if (shared_header.has('app_id')) headers['App-Id'] = shared_header.get('app_id');
@@ -359,7 +359,7 @@ angular
           // copy out the auth token from the header if there was one and make sure the child commands use it
           if (res.headers('auth-token') && res.status != 304){
             options.auth_token = res.headers('Auth-Token')
-            shared_header.set('auth_token', res.headers('Auth-Token'))
+            shared_header.set('auth_token', res.headers('Auth-Token'), $sessionStorage)
           }
           switch(res.status){
             case 200:

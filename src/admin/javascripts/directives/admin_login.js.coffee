@@ -57,7 +57,6 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
 
 
   link = (scope, element, attrs) ->
-    console.log 'admin login link'
     $rootScope.bb ||= {}
     $rootScope.bb.api_url ||= scope.apiUrl
     $rootScope.bb.api_url ||= "http://www.bookingbug.com"

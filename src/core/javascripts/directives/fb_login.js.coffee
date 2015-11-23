@@ -18,7 +18,6 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
       return
 
     checkLoginState = () ->
-      console.log("FBLogin - checkLoginState")
       FB.getLoginStatus (response) ->
         statusChangeCallback response
         return
