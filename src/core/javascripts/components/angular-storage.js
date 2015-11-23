@@ -6,7 +6,7 @@ angular.module('ngStorage', [])
     FakeStorage.prototype.setItem = function (key, value) {
       $cookies[key] = value;
     };
-    FakeStorage.prototype.getFakeItem = function (key) {
+    FakeStorage.prototype.getItem = function (key) {
       return typeof $cookies[key] == 'undefined' ? null : $cookies[key];
     }
     FakeStorage.prototype.removeItem = function (key) {
@@ -94,7 +94,7 @@ angular.module('ngStorage', [])
         storage.setItem(key, value);
       },
       getItem: function(key, defaultValue) {
-        return storage.getFakeItem(key) || defaultValue;
+        return storage.getItem(key) || defaultValue;
       },
       setObject: function(key, value) {
         storage.setItem(key, JSON.stringify(value));
