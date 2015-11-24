@@ -15,7 +15,7 @@
 ####
 
 
-angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel, BaseModel, PurchaseTotalService) ->
 
   class PurchaseTotal extends BaseModel
 
@@ -79,4 +79,14 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel, BaseMode
     id: ->
       @get('id')
 
-
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Static function that loads an array of total purchase from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (prms) ->
+      PurchaseTotalService.query(prms)

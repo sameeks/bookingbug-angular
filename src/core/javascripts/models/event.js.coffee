@@ -14,7 +14,7 @@
 ####
 
 
-angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService) ->
+angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService, EventService) ->
 
 
   class Event extends BaseModel
@@ -355,4 +355,16 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           ticket.price = 0
         else
           ticket.price = ticket.old_price
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Event
+    * @description
+    * Static function that loads an array of event from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (company, params) ->
+      EventService.query(company, params)
 

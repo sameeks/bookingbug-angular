@@ -12,7 +12,7 @@
 * @property {date} date Second The date
 ####
 
-angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayService) ->
 
   class Day extends BaseModel
 
@@ -63,3 +63,15 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel) ->
       if @spaces == 0
         str += " not-avail"
       str
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Day
+    * @description
+    * Static function that loads an array of day from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (prms) ->
+      DayService.query(prms)

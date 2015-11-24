@@ -22,7 +22,7 @@
 ####
 
 
-angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, EventChainService) ->
 
   class EventChain extends BaseModel
     name: () ->
@@ -99,3 +99,15 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
       if @tickets
         for @ticket in @tickets
           @ticket.max_spaces = @spaces
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:EventChain
+    * @description
+    * Static function that loads an array of event chain from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (company, params) ->
+      EventChainService(company, params)

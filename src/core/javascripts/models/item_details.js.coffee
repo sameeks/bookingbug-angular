@@ -17,7 +17,7 @@
 ####
 
 
-angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel, $bbug, QuestionService) ->
+angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel, $bbug, QuestionService, ItemDetailsService) ->
 
   class ItemDetails extends BaseModel
 
@@ -113,3 +113,15 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     ###
     getQuestion: (id) ->
       _.findWhere(@questions, {id: id})
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:ItemDetails
+    * @description
+    * Static function that loads an array of item details from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (prms) ->
+      ItemDetailsService.query(prms)

@@ -23,7 +23,7 @@
 ###
 
 
-angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, BaseModel, TimeSlotService) ->
 
   class TimeSlot extends BaseModel
 
@@ -201,3 +201,15 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
       return "disabled" if @disabled
       return "enabled" if @availability() > 0
       return "disabled"
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:TimeSlot
+    * @description
+    * Static function that loads an array of time slot from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (params) ->
+      TimeSlotService.query(params)

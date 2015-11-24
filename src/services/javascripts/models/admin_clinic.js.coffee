@@ -24,7 +24,7 @@
 ####
 
 
-angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel, ClinicModel) ->
+angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel, ClinicModel, AdminClinicService) ->
 
   class Admin_Clinic extends ClinicModel
  
@@ -115,3 +115,59 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
         @setTimes()
         @setResourcesAndPeople()
 
+    ###**
+    * @ngdoc method
+    * @name query
+    * @param {Company} company The company model.
+    * @param {integer=} page Specifies particular page of paginated response.
+    * @param {integer=} per_page Number of items per page of paginated response.
+    * @methodOf BB.Models:AdminClinic
+    * @description
+    * Gets a filtered collection of clinic.
+    *
+    * @returns {Promise} Returns a promise that resolves to the filtered collection of clinic.
+    ###
+    @query: (company, page, per_page) ->
+      AdminClinicService.query
+        company: company
+        page: page
+        per_page: per_page
+
+    ###**
+    * @ngdoc method
+    * @name create
+    * @param {Company} company The company model.
+    * @param {integer=} page Specifies particular page of paginated response.
+    * @param {integer=} per_page Number of items per page of paginated response.
+    * @methodOf BB.Models:AdminClinic
+    * @description
+    * Create a filtered collection of clinic.
+    *
+    * @returns {Promise} Returns a promise that resolves to the filtered collection of clinic.
+    ###
+    @create: (company, page, per_page) ->
+      AdminClinicService.create
+        company: company
+        page: page
+        per_page: per_page
+
+    ###**
+    * @ngdoc method
+    * @name update
+    * @param {Company} company The company model.
+    * @param {integer=} page Specifies particular page of paginated response.
+    * @param {integer=} per_page Number of items per page of paginated response.
+    * @methodOf BB.Models:AdminClinic
+    * @description
+    * Update a filtered collection of clinic.
+    *
+    * @returns {Promise} Returns a promise that resolves to the filtered collection of clinic.
+    ###
+    @update: (company, page, per_page) ->
+      AdminClinicService.update
+        company: company
+        page: page
+        per_page: per_page
+
+angular.module('BB.Models').factory 'AdminClinic', ($injector) ->
+  $injector.get('Admin.ClinicModel')

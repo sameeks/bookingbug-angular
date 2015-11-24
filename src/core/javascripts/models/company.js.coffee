@@ -24,7 +24,7 @@
 
 
 # helpful functions about a company
-angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, halClient, AppConfig, $sessionStorage) ->
+angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, halClient, AppConfig, $sessionStorage, CompanyService) ->
 
   class Company extends BaseModel
 
@@ -142,3 +142,14 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
           @pusher_channel.bind 'cancellation', callback
           @pusher_channel.bind 'updating', callback
 
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Company
+    * @description
+    * Static function that loads an array of company from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (company_id, options) ->
+      CompanyService.query(company_id, options)

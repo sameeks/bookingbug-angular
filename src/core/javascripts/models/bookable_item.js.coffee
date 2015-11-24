@@ -58,5 +58,14 @@ angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel
           else
             @ready.resolve()
 
-    @$query: (params) ->
-      ItemService.query(params)
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:BookableItem
+    * @description
+    * Static function that loads an array of bookable items from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (prms) ->
+      ItemService.query(prms)

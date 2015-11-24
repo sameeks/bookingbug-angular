@@ -13,7 +13,7 @@
 ####
 
 
-angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseModel, ClientDetailsService) ->
 
   class ClientDetails extends BaseModel
 
@@ -61,3 +61,15 @@ angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseMode
       for q in @questions
         if ahash[q.id]  # if we have answer for it
           q.answer = ahash[q.id].answer
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:ClientDetails
+    * @description
+    * Static function that loads an array of client details from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (company) ->
+      ClientDetailsService.query(company)

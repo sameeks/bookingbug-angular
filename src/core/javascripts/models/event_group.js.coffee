@@ -8,15 +8,27 @@
 * @description
 * Representation of an EventGroup Object
 *
-* @property {integer} total_entries The total of entries in  event groupst
+* @property {integer} total_entries The total of entries in  event groups
 * @property {array} event_chains An array with items of the event  
 ####
 
 
-angular.module('BB.Models').factory "EventGroupModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "EventGroupModel", ($q, BBModel, BaseModel, EventGroupService) ->
   class EventGroup extends BaseModel
     name: () ->
       @_data.name
 
     colour: () ->
       @_data.colour
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:EventGroup
+    * @description
+    * Static function that loads an array of event group from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (company, params) ->
+      EventGroupService.query(company,params)

@@ -18,7 +18,7 @@
 ####
 
 
-angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, AddressListService) ->
 
   class Address extends BaseModel
 
@@ -107,3 +107,15 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel) ->
       str += "<br/>" if @postcode && str.length > 0
       str += @postcode if @postcode
       str
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Address
+    * @description
+    * Static function that loads an array of addresses from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (prms) ->
+      AddressListService.query(prms)

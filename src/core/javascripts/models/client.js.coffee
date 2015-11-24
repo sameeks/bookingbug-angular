@@ -26,7 +26,7 @@
 ####
 
 
-angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, LocaleService) ->
+angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, LocaleService, ClientService) ->
 
   class Client extends BaseModel
 
@@ -123,7 +123,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name addressSingleLine
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Get the address and postcode of the client
     *
@@ -147,7 +147,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name hasAddress
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Checks if this is considered a valid address
     *
@@ -159,7 +159,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name addressCsvLine
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Get all address fields, postcode and country for CSV file
     *
@@ -185,7 +185,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name addressMultiLine
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Get address several lines separated by line breaks
     *
@@ -209,7 +209,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name getPostData
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Build an array with details of the client
     *
@@ -251,7 +251,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name valid
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Checks if this is considered a valid email
     *
@@ -267,7 +267,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name setValid
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Set valid client, according of val
     *
@@ -279,7 +279,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name hasServerId
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Checks if this has a id
     *
@@ -291,7 +291,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name setAskedQuestions
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Set asked questions of the client
     *
@@ -303,7 +303,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name fullMobile
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Full mobile phone number of the client 
     *
@@ -317,7 +317,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name remove_prefix
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Remove prefix from mobile number of the client
     *
@@ -332,7 +332,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name getPrePaidBookingsPromise
-    * @methodOf BB.Models:Address
+    * @methodOf BB.Models:Client
     * @description
     * Get pre paid bookings promise of the client
     *
@@ -350,6 +350,17 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
           defer.reject(err)
       else
         defer.resolve([])
-#        defer.reject('missing pre_paid_bookings link')
+        #defer.reject('missing pre_paid_bookings link')
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name query_by_email
+    * @methodOf BB.Models:Client
+    * @description
+    * Static function that loads an array of clients querying by email address from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @query_by_email: (company, email) ->
+      ClientService.query(company, email)

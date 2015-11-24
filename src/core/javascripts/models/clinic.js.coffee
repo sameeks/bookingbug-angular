@@ -27,7 +27,7 @@
 ####
 
 
-angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, ClinicService) ->
 
   class Clinic extends BaseModel
 
@@ -84,3 +84,15 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel) ->
         @end_time = moment(@end_time)
         @end = @end_time
       @title = @name
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Clinic
+    * @description
+    * Static function that loads an array of clinic from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (params) ->
+      ClinicService.query(params)

@@ -15,7 +15,7 @@
 ####
 
 
-angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, BasketService) ->
 
   class Basket extends BaseModel
     constructor: (data, scope) ->
@@ -419,3 +419,14 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
         return true if item.isWaitlist()
       return false
       
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Basket
+    * @description
+    * Static function that loads an array of basket from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (company,params) ->
+      BasketService.query(company, params)

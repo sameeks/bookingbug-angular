@@ -13,7 +13,7 @@
 ###
 
 
-angular.module('BB.Models').factory "SlotModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "SlotModel", ($q, BBModel, BaseModel, SlotService) ->
 
   class Slot extends BaseModel
 
@@ -21,4 +21,14 @@ angular.module('BB.Models').factory "SlotModel", ($q, BBModel, BaseModel) ->
       super(data)
       @datetime = moment(data.datetime)
 
-   
+   ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Slot
+    * @description
+    * Static function that loads an array of slot from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+   @$query: (company, params) ->
+   	SlotService.query(company, params)
