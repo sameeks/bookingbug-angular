@@ -6,6 +6,7 @@ angular.module("BBMember").controller "MemberPurchases", ($scope, $q, MemberPurc
     $scope.loading = true
     defer = $q.defer()
     MemberPurchaseService.query($scope.member, {}).then (purchases) ->
+      console.log(purchases)
       $scope.purchases = purchases
       $scope.loading = false
       defer.resolve(purchases)

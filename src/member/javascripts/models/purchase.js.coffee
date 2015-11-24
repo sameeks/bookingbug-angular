@@ -1,4 +1,4 @@
-angular.module("BB.Models").factory "Member.PurchaseModel", (BBModel, BaseModel) ->
+angular.module("BB.Models").factory "Member.PurchaseModel", (BBModel, BaseModel, $q) ->
 
   class Member_Purchase extends BaseModel
     constructor: (data) ->
@@ -8,7 +8,9 @@ angular.module("BB.Models").factory "Member.PurchaseModel", (BBModel, BaseModel)
       @created_at.tz(@time_zone) if @time_zone
 
     getItems: ->
+      deferred = $q.defer()
       @_data.$get('purchase_items').then (items) ->
         @items = for item in items
           new BBModel.Member.PurchaseItem(item)
-        return @items
+        deferred.resolve(@items)
+      deferred.promise
