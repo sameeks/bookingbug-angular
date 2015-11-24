@@ -1,14 +1,16 @@
 <div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
 <div ng-hide="loading" class="bb-past clearfix">
   <div class="bb-head">
-    <span id="your_bookings">Your past appointments:</span>
+    <span id="your_bookings">Past Bookings</span>
   </div>
   <div id="bookings">
-    <div ng-if="past_bookings.length == 0">
-      <h3>You don't currently have any past appointments.</h3>
+
+    <div ng-show="past_bookings.length == 0">
+      <h3>You don't currently have any past bookings.</h3>
     </div>
+
     <div ng-repeat="booking in past_bookings | filter:{deleted: false} |
-      orderBy: 'datetime.unix()' " class="booking-row">
+      orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
       <div class="type col-sm-1">
         <div style="background-color:{{booking.getColour()}}"></div>
       </div>
@@ -24,10 +26,12 @@
           Cancel
         </button>
       </div>
-      <pagination total-items="pagination.num_items"
-        ng-model="pagination.current_page" items-per-page="pagination.page_size"
-        max-size="pagination.max_size" boundary-links="true" rotate="false"
-        num-pages="pagination.num_pages" ng-show="past_bookings"></pagination>
     </div>
+
+    <pagination total-items="pagination.num_items"
+      ng-model="pagination.current_page" items-per-page="pagination.page_size"
+      max-size="pagination.max_size" boundary-links="true" rotate="false"
+      num-pages="pagination.num_pages" ng-show="past_bookings && past_bookings.length > 10"></pagination>
+
   </div>
 </div>

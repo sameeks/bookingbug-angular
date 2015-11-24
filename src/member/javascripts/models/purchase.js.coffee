@@ -1,6 +1,7 @@
 angular.module("BB.Models").factory "Member.PurchaseModel", (BBModel, BaseModel, $q) ->
 
   class Member_Purchase extends BaseModel
+    
     constructor: (data) ->
       super(data)
 

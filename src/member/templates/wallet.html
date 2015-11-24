@@ -1,13 +1,13 @@
 <div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
 <div ng-hide="loading">
-  <div ng-if="amount"class="bb-head">
+  <div ng-show="amount"class="bb-head">
     <span id="wallet"> Your Wallet </span>
   </div>
   <div class="wallet-balance">
-    <div ng-if="wallet.amount == 0">
+    <div ng-show="wallet.amount == 0">
       <span>Balance: </span><span> You dont have any credit in your wallet. </span>
     </div>
-    <div ng-if="wallet.amount > 0">
+    <div ng-show="wallet.amount > 0">
       <span>Balance: </span> <span id="balance"> {{wallet.amount | icurrency:wallet.wallet_currency }} </span>
     </div>
   </div>
@@ -21,14 +21,6 @@
     </div>
   </div>
   </br>
-
-  <div ng-if="error_message" class="alerts">
-    <p class="error_message" ng-bind-html="error_message"></p>
-  </div>
-
-  <div ng-if="payment_success" class="alerts">
-    <p class="success_message"> You have successfully topped up your wallet! Your new balance is {{wallet.amount | icurrency:wallet.wallet_currency}}</p>
-  </div>
 
   <div>
     <button type="button" class="bb-bookings-action" ng-click="(show_topup_box = true);(show_wallet_logs = false);(error_message = false)">Top Up</button>

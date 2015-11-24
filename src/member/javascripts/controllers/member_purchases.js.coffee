@@ -6,11 +6,13 @@ angular.module("BBMember").controller "MemberPurchases", ($scope, $q, MemberPurc
     $scope.loading = true
     defer = $q.defer()
     MemberPurchaseService.query($scope.member, {}).then (purchases) ->
-      console.log(purchases)
       $scope.purchases = purchases
       $scope.loading = false
       defer.resolve(purchases)
     , (err) ->
       $log.error err.data
       $scope.loading = false
-      defer.promise
+      defer.reject([])
+    
+    return defer.promise
+    

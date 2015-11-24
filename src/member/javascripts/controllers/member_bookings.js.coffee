@@ -4,13 +4,24 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
 
   $scope.getUpcomingBookings = () ->
+
+    defer = $q.defer()
+
     params =
       start_date: moment().format('YYYY-MM-DD')
-    getBookings(params).then (bookings) ->
-      $scope.upcoming_bookings = bookings
+    getBookings(params).then (upcoming_bookings) ->
+      $scope.upcoming_bookings = upcoming_bookings
+      defer.resolve(upcoming_bookings)
+    , (err) ->
+      defer.reject([])
+
+    return defer.promise
 
 
   $scope.getPastBookings = (num, type) ->
+
+    defer = $q.defer()
+
     # default to year in the past if no amount is specified
     if num and type
       date = moment().subtract(num, type)
@@ -19,12 +30,19 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     params =
       start_date: date.format('YYYY-MM-DD')
       end_date: moment().format('YYYY-MM-DD')
-    getBookings(params).then (bookings) ->
+    getBookings(params).then (past_bookings) ->
 
-      $scope.past_bookings = _.chain(bookings)
+      $scope.past_bookings = _.chain(past_bookings)
         .filter((b) -> b.datetime.isBefore(moment()))
         .sortBy((b) -> -b.datetime.unix())
         .value()
+
+      defer.resolve(past_bookings)
+    , (err) ->
+      defer.reject([])
+
+    return defer.promise
+
 
   $scope.flushBookings = () ->
     params =
@@ -43,8 +61,10 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
         windowClass: 'member_edit_booking_form'
         success: updateBookings
 
+
   updateBookings = () ->
     $scope.getUpcomingBookings()
+
 
   $scope.cancel = (booking) ->
     modalInstance = $modal.open
@@ -75,7 +95,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     , (err) ->
       $log.error err.data
       $scope.loading = false
-    defer.promise
+    return defer.promise
 
 
   $scope.cancelBooking = (booking) ->
@@ -96,13 +116,17 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
 
   $scope.getPrePaidBookings = (params) ->
+    
     $scope.loading = true
     defer = $q.defer()
+
     MemberPrePaidBookingService.query($scope.member, params).then (bookings) ->
       $scope.loading = false
       $scope.pre_paid_bookings = bookings
       defer.resolve(bookings)
     , (err) ->
+      defer.reject([])
       $log.error err.data
       $scope.loading = false
-    defer.promise
+
+    return defer.promise
