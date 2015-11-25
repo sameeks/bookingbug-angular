@@ -1,29 +1,21 @@
-angular.module('BBMember').directive 'bbWalletLogs', ($rootScope) ->
+angular.module('BBMember').directive 'bbWalletLogs', ($rootScope, PaginationService) ->
+  templateUrl: 'wallet_logs.html'
+  scope: true
+  controller: 'Wallet'
+  link: (scope, element, attrs) ->
 
-  link = (scope, element, attrs) ->
-    $rootScope.bb ||= {}
-    $rootScope.bb.api_url ||= scope.apiUrl
-    $rootScope.bb.api_url ||= "http://www.bookingbug.com"
+    scope.member = scope.$eval(attrs.member)
+    scope.member ||= $rootScope.member if $rootScope.member
 
-    getWalletLogsForWallet = () ->
-      scope.getWalletLogs(scope.wallet)
-
-    getWalletForMember = () ->
-      scope.getWalletForMember(scope.member)
+    scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
     
-    scope.$watch 'member', (member) ->
-      if member?
-        getWalletForMember()
-
+    # watch for any updates to the wallet to ensure the log is up to date,
+    # i.e. when the wallet is topped up
     scope.$watch 'wallet', (wallet) ->
       if wallet?
-        getWalletLogsForWallet()
+        scope.getWalletLogs(wallet).then (logs) ->
+          PaginationService.update(scope.pagination, logs.length)
 
-  {
-    link: link
-    controller: 'Wallet'
-    templateUrl: 'wallet_logs.html'
-    scope:
-      member: '='
-      wallet: '='
-  }
+
+    $rootScope.connection_started.then () ->
+      scope.getWalletForMember(scope.member) if scope.member

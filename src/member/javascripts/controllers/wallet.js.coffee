@@ -1,45 +1,29 @@
 angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log, $modal, $rootScope, AlertService) ->
   
-  $scope.company_id = $scope.member.company_id if $scope.member
-  $scope.show_wallet_logs = false
-  $scope.notLoaded $scope
-  $scope.error_message = false
-  $scope.payment_success = false
-
-
-  $scope.toggleWalletPaymentLogs = () ->
-    if $scope.show_wallet_logs 
-      $scope.show_wallet_logs = false
-    else
-      $scope.show_wallet_logs = true
-
-
-  $scope.showTopUpBox = () ->
-    if $scope.amount
-      true
-    else 
-      $scope.show_topup_box
-
 
   $scope.getWalletForMember = (member, params) ->
     $scope.notLoaded $scope
     WalletService.getWalletForMember(member, params).then (wallet) ->
       $scope.setLoaded $scope
       $scope.wallet = wallet
-      $scope.wallet
     , (err) ->
       $scope.setLoaded $scope
       $log.error err
 
 
   $scope.getWalletLogs = (wallet) ->
+    defer = $q.defer()
     $scope.notLoaded $scope
     WalletService.getWalletLogs($scope.wallet).then (logs) ->
+      logs = _.sortBy(logs, (log) -> -moment(log.created_at).unix())
       $scope.setLoaded $scope
       $scope.logs = logs
+      defer.resolve(logs)
     , (err) ->
       $scope.setLoaded $scope
       $log.error err.data
+      defer.reject([])
+    return defer.promise
 
 
   $scope.createWalletForMember = (member) ->
@@ -54,8 +38,6 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
   
   $scope.updateWallet = (member, amount) ->
     $scope.notLoaded $scope
-    $scope.payment_success = false
-    $scope.error_message = false
     if member and amount
       params = {amount: amount}
       params.wallet_id = $scope.wallet.id if $scope.wallet
@@ -96,30 +78,21 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
         $log.error err.date
   
 
-  $scope.callNotLoaded = () =>
-    $scope.notLoaded $scope
-    $scope.$emit('wallet_payment:loading')
-
-
-  $scope.callSetLoaded = () =>
-    $scope.setLoaded $scope
-    $scope.$emit('wallet_payment:finished_loading')
-
-
   $scope.walletPaymentDone = () ->
     $scope.getWalletForMember($scope.member).then (wallet) ->
-      $scope.$emit("wallet:topped_up", wallet)
+      $scope.wallet = wallet
+      AlertService.raise('TOPUP_SUCCESS')
+      $scope.$emit("wallet:topped_up")
+      
 
-
+  # TODO don't route to next page automatically, first alert user 
+  # topup was successful then show the 'next' button
   $scope.basketWalletPaymentDone = () ->
-    scope.callSetLoaded()
+    $scope.callSetLoaded()
     $scope.decideNextPage('checkout')
 
 
   $scope.error = (message) ->
-    $scope.error_message = "Payment Failure: " + message
-    $log.warn("Payment Failure: " + message)
-    $scope.$emit("wallet_payment:error", $scope.error_message)
     AlertService.warning('TOPUP_FAILED')
 
 
@@ -132,7 +105,6 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
     value = value or $scope.amount_increment
     $scope.add(-value)
     
-
 
   $scope.isSubtractValid = (value) ->
     return false if !$scope.wallet

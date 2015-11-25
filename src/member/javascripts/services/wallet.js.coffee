@@ -15,11 +15,12 @@ angular.module("BB.Services").factory "WalletService", ($q, BBModel) ->
     deferred.promise
 
   getWalletLogs: (wallet) ->
+    params = {no_cache: true}
     deferred = $q.defer() 
     if !wallet.$has('logs')
-      deferred.reject("No Payments found")
+      deferred.reject("No wallet transactions found")
     else
-      wallet.$get('logs').then (resource) ->
+      wallet.$get('logs', params).then (resource) ->
         resource.$get('logs').then (logs) ->
           logs = (new BBModel.Member.WalletLog(log) for log in logs)
           deferred.resolve(logs)

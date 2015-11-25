@@ -59,7 +59,7 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
           scope.amount = scope.wallet_payment_options.amount if scope.wallet_payment_options.amount
 
       if wallet and wallet.$has('new_payment')
-        scope.callNotLoaded()
+        scope.notLoaded scope
         scope.wallet_payment_url = $sce.trustAsResourceUrl(scope.wallet.$href("new_payment"))
         scope.show_payment_iframe = true
         element.find('iframe').bind 'load', (event) =>
@@ -67,7 +67,7 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
           origin = getHost(url)
           sendLoadEvent(element, origin, scope)
           scope.$apply ->
-            scope.callSetLoaded()
+            scope.setLoaded scope
 
     # TODO update API to only respond with single message for wallet pay complete
     $window.addEventListener 'message', (event) =>
@@ -79,16 +79,18 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
         if data
           switch data.type
             when "submitting"
-              scope.callNotLoaded()
+              scope.notLoaded scope
             when "error"
-              scope.$emit "payment:failed"
-              scope.callNotLoaded()
+              scope.$emit "wallet:topup_failed"
+              scope.notLoaded scope
               AlertService.raise('PAYMENT_FAILED')
               # reload the payment iframe
               document.getElementsByTagName("iframe")[0].src += ''
             when "wallet_payment_complete"
+              scope.show_payment_iframe = false
               scope.walletPaymentDone()
             when 'basket_wallet_payment_complete'
+              scope.show_payment_iframe = false
               scope.basketWalletPaymentDone()
     , false
 
