@@ -1,5 +1,4 @@
-<div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
-<div ng-hide="loading" class="bb-past clearfix">
+<div>
   <div class="bb-head">
     <span id="your_bookings">Your Purchases</span>
   </div>
@@ -21,8 +20,8 @@
     </div>
 
     
-    <div ng-repeat="purchase in purchases | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" class="booking-row">
-      <div class="type col-sm-2">
+    <div ng-repeat="purchase in purchases | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
+      <div>
         {{purchase.id}}
       </div>
       <div>
