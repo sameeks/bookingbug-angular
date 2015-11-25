@@ -107,9 +107,8 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
 
 
   $scope.walletPaymentDone = () ->
-    params = {no_cache: true}
-    $scope.getWalletForMember($scope.member, params).then (wallet) ->
-      $scope.$emit("wallet_payment:success", wallet)
+    $scope.getWalletForMember($scope.member).then (wallet) ->
+      $scope.$emit("wallet:topped_up", wallet)
 
 
   $scope.basketWalletPaymentDone = () ->
