@@ -5,3 +5,6 @@ angular.module("BB.Models").factory "Member.WalletLogModel", ($q, BBModel, BaseM
       super(data)
 
       @created_at = moment(@created_at)
+
+      # HACK - if payment amount is less than zero, API returns it as zero!
+      @payment_amount = parseFloat(@amount) * 100
