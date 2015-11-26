@@ -85,7 +85,8 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     $scope.notLoaded $scope
 
     # has the event group been manually set (i.e. in the step before)
-    $scope.event_group_manually_set = if !$scope.event_group_manually_set? and $scope.current_item.event_group? then true else false
+    if !$scope.event_group_manually_set and !$scope.current_item.event_group?
+      $scope.event_group_manually_set = if !$scope.event_group_manually_set? and $scope.current_item.event_group? then true else false
 
     # clear current item unless in summary mode
     if $scope.current_item.event and $scope.mode != 0
