@@ -10,13 +10,15 @@ angular.module('ngStorage', [])
       return typeof $cookies[key] == 'undefined' ? null : $cookies[key];
     }
     FakeStorage.prototype.removeItem = function (key) {
-      $cookies[key] = undefined;
+      if ($cookies[key]){
+        delete $cookies[key];
+      }
     };
     FakeStorage.prototype.clear = function(){
       for (var key in $cookies) {
         if( $cookies.hasOwnProperty(key) )
         {
-          $cookies.removeItem(key);
+          delete $cookies[key];
         }
       }
     };
