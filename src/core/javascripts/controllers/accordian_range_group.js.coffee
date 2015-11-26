@@ -41,6 +41,7 @@ angular.module('BB.Directives').directive 'bbAccordianRangeGroup', () ->
   link: (scope, element, attrs, ctrl) ->
     scope.options = scope.$eval(attrs.bbAccordianRangeGroup) or {}
     scope.options.using_stacked_items = ctrl?
+    scope.directives = "public.AccordianRangeGroup"
 
 
 angular.module('BB.Controllers').controller 'AccordianRangeGroup',

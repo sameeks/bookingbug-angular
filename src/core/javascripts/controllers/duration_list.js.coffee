@@ -27,6 +27,9 @@ angular.module('BB.Directives').directive 'bbDurations', () ->
   replace: true
   scope : true
   controller : 'DurationList'
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbDurations) or {}
+    scope.directives = "public.DurationList"
 
 
 angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope, PageControllerService, $q, $attrs, AlertService) ->

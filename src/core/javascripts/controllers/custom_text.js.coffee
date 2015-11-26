@@ -28,6 +28,9 @@ angular.module('BB.Directives').directive 'bbCustomBookingText', () ->
   replace: true
   scope : true
   controller : 'CustomBookingText'
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbCustomBookingText) or {}
+    scope.directives = "public.CustomBookingText"
 
 
 angular.module('BB.Controllers').controller 'CustomBookingText', ($scope,  $rootScope, CustomTextService, $q) ->

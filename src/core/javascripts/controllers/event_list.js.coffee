@@ -29,12 +29,10 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
   replace: true
   scope : true
   controller : 'EventList'
-
   link : (scope, element, attrs) ->
     scope.summary = attrs.summary?
-
-    options = scope.$eval attrs.bbEvents or {}
-
+    scope.options = scope.$eval(attrs.bbEvents) or {}
+    scope.directives="public.EventList"
     # set the mode
     # 0 = Event summary (gets year summary and loads events a day at a time)
     # 1 = Next 100 events (gets next 100 events)
@@ -44,7 +42,7 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService) ->
+angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q, PageControllerService, FormDataStoreService, $filter, PaginationService, BBModel, EventChainModel, EventModel) ->
   $scope.controller = "public.controllers.EventList"
   $scope.notLoaded $scope
   angular.extend(this, new PageControllerService($scope, $q))
@@ -71,7 +69,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         $scope.decideNextPage()
         return
       else if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
-        $scope.bb.company.getParentPromise().then (parent) ->
+        $scope.bb.company.getParent().then (parent) ->
           $scope.company_parent = parent
           $scope.initialise()
         , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -98,16 +96,16 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     # company question promise
     if $scope.bb.company.$has('company_questions')
-      promises.push($scope.bb.company.getCompanyQuestionsPromise())
+      promises.push($scope.bb.company.getCompanyQuestions())
     else if $scope.company_parent? && $scope.company_parent.$has('company_questions')
-      promises.push($scope.company_parent.getCompanyQuestionsPromise())
+      promises.push($scope.company_parent.getCompanyQuestions())
     else
       promises.push($q.when([]))
       $scope.has_company_questions = false
 
     # event group promise
     if !$scope.current_item.event_group
-      promises.push($scope.bb.company.getEventGroupsPromise())
+      promises.push($scope.bb.company.getEventGroups())
     else
       promises.push($q.when([]))
 
@@ -211,7 +209,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
       params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
 
-      EventChainService.query(comp, params).then (events) ->
+      BBModel.EventChain.$query(comp, params).then (events) ->
         $scope.setLoaded $scope
         deferred.resolve($scope.items)
       , (err) ->  deferred.reject()
@@ -246,7 +244,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     chains = $scope.loadEventChainData(comp)
     $scope.events = {}
 
-    EventService.query(comp, params).then (events) ->
+    BBModel.Event.$query(comp, params).then (events) ->
 
       events = _.groupBy events, (event) -> event.date.toISODate()
       for key, value of events

@@ -41,8 +41,11 @@ angular.module('BB.Directives').directive 'bbClientDetails', () ->
   replace: true
   scope : true
   controller : 'ClientDetails'
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbClientDetails) or {}
+    scope.directives = "public.ClientDetails"
 
-angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScope, ClientDetailsService, ClientService, LoginService, BBModel, ValidatorService, QuestionService, AlertService) ->
+angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScope, ClientDetailsModel, ClientModel, LoginService, BBModel, ValidatorService, QuestionService, AlertService) ->
   $scope.controller = "public.controllers.ClientDetails"
   $scope.notLoaded $scope
   $scope.validator = ValidatorService
@@ -57,7 +60,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       $scope.setClient(new BBModel.Client(LoginService.member()._data))
 
     if LoginService.isLoggedIn() && LoginService.member().$has("child_clients") && LoginService.member()
-      LoginService.member().getChildClientsPromise().then (children) =>
+      LoginService.member().getChildClients().then (children) =>
         $scope.bb.parent_client = new BBModel.Client(LoginService.member()._data)
         $scope.bb.child_clients = children
         $scope.bb.basket.parent_client_id = $scope.bb.parent_client.id
@@ -67,7 +70,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
       $scope.setLoaded $scope
     else 
-      ClientDetailsService.query($scope.bb.company).then (details) =>
+      BBModel.ClientDetails.$query($scope.bb.company).then (details) =>
         $scope.client_details = details
         $scope.client.pre_fill_answers($scope.client_details) if $scope.client
         QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
@@ -100,7 +103,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       $scope.client.parent_client_id = $scope.bb.parent_client.id
     $scope.client.setClientDetails($scope.client_details)
 
-    ClientService.create_or_update($scope.bb.company, $scope.client).then (client) =>
+    BBModel.Client.create_or_update($scope.bb.company, $scope.client).then (client) =>
       $scope.setLoaded $scope
       $scope.setClient(client)
       $scope.client.setValid(true) if $scope.bb.isAdmin

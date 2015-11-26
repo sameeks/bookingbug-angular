@@ -30,6 +30,8 @@ angular.module('BB.Directives').directive 'bbEventGroups', () ->
   scope : true
   controller : 'EventGroupList'
   link : (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbEventGroups) or {}
+    scope.directives="public.EventGroupList"
     if attrs.bbItem
       scope.booking_item = scope.$eval( attrs.bbItem )
     if attrs.bbShowAll
@@ -38,7 +40,7 @@ angular.module('BB.Directives').directive 'bbEventGroups', () ->
 
 
 angular.module('BB.Controllers').controller 'EventGroupList',
-($scope,  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
+($scope,  $rootScope, $q, $attrs, FormDataStoreService, ValidatorService,
   PageControllerService, halClient) ->
 
   $scope.controller = "public.controllers.EventGroupList"
@@ -58,7 +60,7 @@ angular.module('BB.Controllers').controller 'EventGroupList',
 
   $scope.init = (comp) ->
     $scope.booking_item ||= $scope.bb.current_item
-    ppromise = comp.getEventGroupsPromise()
+    ppromise = comp.getEventGroups()
 
     ppromise.then (items) ->
       # not all service lists need filtering. check for attribute first

@@ -34,10 +34,12 @@ angular.module('BB.Directives').directive 'bbAddresses', () ->
   replace: true
   scope : true
   controller : 'AddressList'
-
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbAddresses) or {}
+    scope.directives =  "public.AddressList"
 
 angular.module('BB.Controllers').controller 'AddressList',
-($scope,  $rootScope, $filter, $sniffer, AddressListService, FormDataStoreService) ->
+($scope,  $rootScope, $filter, $sniffer, BBModel, AddressModel, FormDataStoreService) ->
 
   $scope.controller = "public.controllers.AddressList"
   $scope.manual_postcode_entry = false
@@ -80,8 +82,8 @@ angular.module('BB.Controllers').controller 'AddressList',
     $scope.postcode_submitted = true
     return if !$scope.bb.postcode
 
-    $scope.notLoaded($scope)
-    AddressListService.query(
+    $scope.notLoaded $scope
+    BBModel.AddressList.$query(
       company: $scope.bb.company
       post_code: $scope.bb.postcode
     )
@@ -130,7 +132,7 @@ angular.module('BB.Controllers').controller 'AddressList',
       $scope.postcode_submitted = false
 
       if $scope.bb.address && $scope.bb.address.moniker
-        $scope.notLoaded($scope)
+        $scope.notLoaded $scope
         AddressListService.getAddress(
           company : $scope.bb.company,
           id : $scope.bb.address.moniker
@@ -219,7 +221,7 @@ angular.module('BB.Controllers').controller 'AddressList',
             $scope.bb.address3 = address.addressLine3
           $scope.bb.address4 = address.town
           $scope.bb.address5 = address.county if address.county?
-          $scope.setLoaded($scope)
+          $scope.setLoaded $scope
           return
         ,(err) ->
             $scope.show_complete_address = true

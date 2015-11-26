@@ -32,6 +32,8 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
   scope : true
   controller : 'ItemDetails'
   link : (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbItemDetails) or {}
+    scope.directives = "public.ItemDetails"
     if attrs.bbItemDetails
       item = scope.$eval(attrs.bbItemDetails)
       scope.item_from_param = item
@@ -40,7 +42,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService, PurchaseService) ->
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsModel, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService, PurchaseService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
 
@@ -102,7 +104,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     else
       
       params = {company: $scope.bb.company, cItem: $scope.item}
-      ItemDetailsService.query(params).then (details) ->
+      BBModel.ItemDetails.$query(params).then (details) ->
         if details
           setItemDetails details
           $scope.item.item_details = $scope.item_details

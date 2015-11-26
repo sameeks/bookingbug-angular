@@ -32,9 +32,11 @@ angular.module('BB.Directives').directive 'bbCheckout', () ->
   replace: true
   scope : true
   controller : 'Checkout'
+  link: (scope, element, attrs) ->
+    scope.directives = "public.Checkout"
 
 
-angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $attrs, BasketService, $q, $location, $window, $bbug, FormDataStoreService, $timeout) ->
+angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $attrs, BBModel, BasketModel, $q, $location, $window, $bbug, FormDataStoreService, $timeout) ->
   $scope.controller = "public.controllers.Checkout"
   $scope.notLoaded $scope
 
@@ -46,7 +48,7 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
   $rootScope.connection_started.then =>
     $scope.bb.basket.setClient($scope.client)
     $scope.bb.no_notifications = $scope.options.no_notifications if $scope.options.no_notifications
-    $scope.loadingTotal = BasketService.checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
+    $scope.loadingTotal = BBModel.Basket.checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
     $scope.loadingTotal.then (total) =>
       $scope.total = total
    

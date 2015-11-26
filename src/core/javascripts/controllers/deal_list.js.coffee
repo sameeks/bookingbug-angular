@@ -28,8 +28,11 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
   replace: true
   scope : true
   controller : 'DealList'
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbDeals)
+    scope.directives = "public.DealList"
 
-angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, DealService, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal) ->
+angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, DealModel, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
@@ -41,7 +44,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
   init = () ->
     $scope.notLoaded $scope
     if !$scope.deals
-      deal_promise = DealService.query($scope.bb.company)
+      deal_promise = BBModel.Deal.$query($scope.bb.company)
       deal_promise.then (deals) ->
         $scope.deals = deals
         $scope.setLoaded $scope

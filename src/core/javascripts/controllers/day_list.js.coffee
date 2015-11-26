@@ -29,8 +29,11 @@ angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
   replace: true
   scope : true
   controller : 'DayList'
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbMonthAvailability) or {} 
+    scope.directives = "public.DayList"
 
-angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q, DayService, AlertService) ->
+angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q, BBModel, DayModel, AlertService) ->
   $scope.controller = "public.controllers.DayList"
   $scope.notLoaded $scope
 
@@ -235,7 +238,7 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
     $scope.end_date = moment(edate).add(-1, 'days')
 
     if $scope.data_source
-      DayService.query({company: $scope.bb.company, cItem: $scope.data_source, 'month':date.format("MMYY"), client: $scope.client }).then (days) =>
+      BBModel.Day.$query({company: $scope.bb.company, cItem: $scope.data_source, 'month':date.format("MMYY"), client: $scope.client }).then (days) =>
         $scope.days = days
         for day in days
           $scope.day_data[day.string_date] = day
@@ -265,7 +268,7 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
     edate = moment(date).add(7, 'days')
     $scope.end_date = moment(edate).add(-1, 'days')
     if $scope.data_source
-      DayService.query({company: $scope.bb.company, cItem: $scope.data_source, date: date.toISODate(), edate: edate.toISODate(), client: $scope.client  }).then (days) =>
+      BBModel.Day.$query({company: $scope.bb.company, cItem: $scope.data_source, date: date.toISODate(), edate: edate.toISODate(), client: $scope.client  }).then (days) =>
         $scope.days = days
         for day in days
           $scope.day_data[day.string_date] = day

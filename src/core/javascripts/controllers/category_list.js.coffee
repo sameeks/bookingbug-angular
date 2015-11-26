@@ -41,10 +41,13 @@ angular.module('BB.Directives').directive 'bbCategories', () ->
   replace: true
   scope : true
   controller : 'CategoryList'
+  link: (scope, element, attrs) ->
+    scope.options = $scope.$eval(attrs.bbCategories) or {}
+    scope.directives = "public.CategoryList"
 
 
 angular.module('BB.Controllers').controller 'CategoryList',
-($scope,  $rootScope, CategoryService, $q, PageControllerService) ->
+($scope,  $rootScope, BBModel, CategoryModel, $q, PageControllerService) ->
   $scope.controller = "public.controllers.CategoryList"
   $scope.notLoaded $scope
 
@@ -56,7 +59,7 @@ angular.module('BB.Controllers').controller 'CategoryList',
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
-    CategoryService.query(comp).then (items) =>
+    BBModel.Category.$query(comp).then (items) =>
       $scope.items = items
       if (items.length == 1)
         $scope.skipThisStep()

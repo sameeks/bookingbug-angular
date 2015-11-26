@@ -19,10 +19,7 @@
 * </pre>
 *
 * @param {hash}  bbServices   A hash of options
-* @param {boolean}  allowSinglePick   By default if there is only one service, it will be selected and routed, however you can force with directive to stop and show even if there is only a single service
-* @param {boolean}  hideDisabled   IN an admin widget, disabled services are shown by default, you can choose to hide disabled services
-* @param {boolean}  bbShowAll   Show all services even if the current basket item pre-selects a service or category
-* @property {array} all_services An array of all services
+* @property {array} items An array of all services
 * @property {array} filtered_items A filtered list according to a filter setting
 * @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a resource or person
 * @property {array} bookable_services An array of Services - used if the current_item has already selected a resource or person
@@ -31,11 +28,11 @@
 * @example
 *  <example module="BB"> 
 *    <file name="index.html">
-*   <div bb-api-url='https://dev01.bookingbug.com'>
-*   <div  bb-widget='{company_id:37167}'>
+*   <div bb-api-url='https://uk.bookingbug.com'>
+*   <div  bb-widget='{company_id:21}'>
 *     <div bb-services>
 *        <ul>
-*          <li ng-repeat='service in all_services'> {{service.name}}</li>
+*          <li ng-repeat='service in items'> {{service.name}}</li>
 *        </ul>
 *     </div>
 *     </div>
@@ -51,33 +48,36 @@ angular.module('BB.Directives').directive 'bbServices', () ->
   replace: true
   scope : true
   controller : 'ServiceList'
-  link : (scope, element, attrs) ->
-    if attrs.bbItem
-      scope.booking_item = scope.$eval( attrs.bbItem )
-    scope.options = scope.$eval(attrs.bbServices) or {}
-    scope.options.show_all = attrs.bbShowAll if attrs.bbShowAll
-    scope.options.allow_single_pick = attrs.allowSinglePick if attrs.allowSinglePick
-    scope.options.hide_disabled = attrs.hideDisabled if attrs.hideDisabled
-    scope.directives = "public.ServiceList"
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService, LoadingService) ->
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService) ->
+
+  $scope.controller = "public.controllers.ServiceList"
 
   FormDataStoreService.init 'ServiceList', $scope, [
     'service'
   ]
 
-  loader = LoadingService.$loader($scope).notLoaded()
+  $scope.notLoaded $scope
+
   angular.extend(this, new PageControllerService($scope, $q))
 
   $scope.validator = ValidatorService
+
   $scope.filters = {category_name: null, service_name: null, price: { min: 0, max: 100}, custom_array_value: null}
   $scope.show_custom_array = false
+
+  $scope.options = $scope.$eval($attrs.bbServices) or {}
+
+  $scope.booking_item = $scope.$eval($attrs.bbItem) if $attrs.bbItem
+  $scope.show_all = true if $attrs.bbShowAll or $scope.options.show_all 
+  $scope.allowSinglePick = true if $scope.options.allow_single_pick
+  $scope.hide_disabled = true if $scope.options.hide_disabled
   $scope.price_options = {min: 0, max: 100}
 
   $rootScope.connection_started.then () =>
     if $scope.bb.company
       $scope.init($scope.bb.company)
-  , (err) -> loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
   $scope.init = (comp) ->
@@ -97,7 +97,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
     ppromise = comp.$getServices()
     @skipped = false
     ppromise.then (items) =>
-      if $scope.options.hide_disabled
+      if $scope.hide_disabled
         # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
         items = items.filter (x) -> !x.disabled && !x.deleted
       
@@ -105,9 +105,9 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       filterItems = if $attrs.filterServices is 'false' then false else true
 
       if filterItems
-        if $scope.booking_item.service_ref && !$scope.options.show_all
+        if $scope.booking_item.service_ref && !$scope.show_all
           items = items.filter (x) -> x.api_ref is $scope.booking_item.service_ref
-        else if $scope.booking_item.category && !$scope.options.show_all
+        else if $scope.booking_item.category && !$scope.show_all
           # if we've selected a category for the current item - limit the list
           # of services to ones that are relevant
           items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.booking_item.category.self
@@ -118,7 +118,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
       # if there's only one service and single pick hasn't been enabled, 
       # automatically select the service.
-      if (items.length is 1 && !$scope.options.allow_single_pick)
+      if (items.length is 1 && !$scope.allowSinglePick)
         if !$scope.selectItem(items[0], $scope.nextRoute )
           setServiceItem items
         else if !@skipped
@@ -142,12 +142,12 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
             item.selected = true
             $scope.booking_item.setService($scope.service)
 
-      loader.setLoaded()
+      $scope.setLoaded $scope
 
       if $scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))
         # the "bookable services" are the service unless we've pre-selected something!
         $scope.bookable_services = $scope.items
-    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     if $scope.booking_item.canLoadItem("service")
       # if we've already picked a service or a resource - get a more limited service selection
@@ -157,7 +157,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         if $scope.booking_item.group
           items = items.filter (x) -> !x.group_id || x.group_id == $scope.booking_item.group
 
-        if $scope.options.hide_disabled
+        if $scope.hide_disabled
           # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
           items = items.filter (x) -> !x.item? || (!x.item.disabled && !x.item.deleted)
 
@@ -167,7 +167,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         $scope.bookable_services = services
         $scope.bookable_items = items
         
-        if services.length is 1 and !$scope.options.allow_single_pick
+        if services.length is 1 and !$scope.allowSinglePick
           if !$scope.selectItem(services[0], $scope.nextRoute )
             setServiceItem services
           else if !@skipped
@@ -177,9 +177,9 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
           # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages. 
           setServiceItem services
         
-        loader.setLoaded()
+        $scope.setLoaded($scope)
       , (err) ->  
-        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
   
   # set the service item so the correct item is displayed in the dropdown menu.
   # without doing this the menu will default to 'please select'
@@ -320,6 +320,3 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   ###
   $scope.filterChanged = () ->
     $scope.filtered_items = $filter('filter')($scope.items, $scope.filterFunction);
-
-
-

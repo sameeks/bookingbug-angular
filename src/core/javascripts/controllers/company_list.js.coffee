@@ -100,6 +100,9 @@ angular.module('BB.Directives').directive 'bbCompanies', () ->
   replace: true
   scope : true
   controller : 'CompanyList'
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbCompanies) or {}
+    scope.directives = "public.CompanyList"
 
 angular.module('BB.Controllers').controller 'CompanyList', CompanyListBase
 
@@ -129,7 +132,7 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   ###
   $scope.searchPostcode = (form, prms) =>
 
-    $scope.notLoaded($scope)
+    $scope.notLoaded $scope
 
     promise = ValidatorService.validatePostcode(form, prms)
     if promise
@@ -139,9 +142,9 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
         loc = ValidatorService.getGeocodeResult().geometry.location
         $scope.selectItem($scope.getNearestCompany({center: loc}))
       ,(err) ->
-        $scope.setLoaded($scope)
+        $scope.setLoaded $scope 
     else
-      $scope.setLoaded($scope)
+      $scope.setLoaded $scope 
 
   ###**
   * @ngdoc method

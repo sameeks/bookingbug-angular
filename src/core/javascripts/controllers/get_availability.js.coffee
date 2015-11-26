@@ -28,6 +28,8 @@ angular.module('BB.Directives').directive 'bbGetAvailability', () ->
   scope : true
   controller : 'GetAvailability'
   link : (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbGetAvailability) or {}
+    scope.directives = "public.GetAvailability"
     if attrs.bbGetAvailability
       scope.loadAvailability(scope.$eval( attrs.bbGetAvailability ) )
     return

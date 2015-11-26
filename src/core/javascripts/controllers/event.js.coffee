@@ -27,6 +27,8 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
   replace: true
   scope : true
   controller : 'Event'
+  link (scope, element, attrs) ->
+    scope.directives = "public.Event"
 
 
 angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService) ->
@@ -45,7 +47,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
   $scope.init = (comp) ->
     $scope.event = $scope.bb.current_item.event
-    promises = [$scope.current_item.event_group.getImagesPromise(), $scope.event.prepEvent()]
+    promises = [$scope.current_item.event_group.getImages(), $scope.event.prepEvent()]
     if $scope.client
       promises.push $scope.getPrePaidsForEvent($scope.client, $scope.event)
 
@@ -184,7 +186,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   $scope.getPrePaidsForEvent = (client, event) ->
     defer = $q.defer()
     params = {event_id: event.id}
-    client.getPrePaidBookingsPromise(params).then (prepaids) ->
+    client.getPrePaidBookings(params).then (prepaids) ->
       $scope.pre_paid_bookings = prepaids
       defer.resolve(prepaids)
     , (err) ->

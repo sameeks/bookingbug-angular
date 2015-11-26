@@ -24,10 +24,12 @@ angular.module('BB.Directives').directive 'bbMiniBasket', () ->
   replace: true
   scope : true
   controller : 'MiniBasket'
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbMiniBasket) or {}
+    scope.directives = "pubic.MiniBasket"
 
 
-
-angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, BasketService, $q) ->
+angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, BBModel, BasketModel, $q) ->
   $scope.controller = "public.controllers.MiniBasket"
   $scope.setUsingBasket(true)
   $rootScope.connection_started.then () =>
@@ -94,7 +96,8 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   * @name checkout
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Reset the basket to the last item whereas the curren_item is not complete and should not be in the basket and that way, we can proceed to checkout instead of hard-coding it on the html page.
+  * Reset the basket to the last item whereas the curren_item is not complete and should not be in the basket and that way,
+  * we can proceed to checkout instead of hard-coding it on the html page.
   *
   * @param {string} route A route of the added another item
   ###
