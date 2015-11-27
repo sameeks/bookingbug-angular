@@ -1,6 +1,8 @@
 angular.module('BB.Services').factory "MemberPurchaseService", ($q, $rootScope, BBModel) ->
 
   query: (member, params) ->
+    params ||= {}
+    params["no_cache"] = true
     deferred = $q.defer()
     if !member.$has('purchase_totals')
       deferred.reject("member does not have any purchases")
