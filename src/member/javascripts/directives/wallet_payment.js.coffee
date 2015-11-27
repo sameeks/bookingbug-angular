@@ -47,10 +47,17 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
     scope.$watch 'wallet', (wallet) ->
       
       if wallet and !scope.amount
-        if scope.wallet_payment_options.basket_topup and scope.bb.basket.dueTotal() > wallet.amount
-          amount = Math.ceil(scope.bb.basket.dueTotal() / scope.amount_increment ) * scope.amount_increment
-          scope.amount = if amount > wallet.min_amount then amount else wallet.min_amount
+        if scope.wallet_payment_options.basket_topup
+
+          amount_due = scope.bb.basket.dueTotal() - wallet.amount
+          
+          if amount_due > wallet.min_amount
+            scope.amount = Math.ceil(amount_due / scope.amount_increment ) * scope.amount_increment
+          else
+            scope.amount = wallet.min_amount
+
           scope.min_amount = scope.amount
+
         else if wallet.min_amount
           scope.amount     = if scope.wallet_payment_options.amount and scope.wallet_payment_options.amount > wallet.min_amount then scope.wallet_payment_options.amount else wallet.min_amount
           scope.min_amount = wallet.min_amount
