@@ -30,6 +30,7 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
 
 
 angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService) ->
+  
   $scope.controller = "public.controllers.Event"
   $scope.notLoaded $scope
   angular.extend(this, new PageControllerService($scope, $q))
@@ -38,46 +39,38 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   $scope.event_options = $scope.$eval($attrs.bbEvent) or {}
 
   $rootScope.connection_started.then ->
-    if $scope.bb.company
-      $scope.init($scope.bb.company)
+    init($scope.bb.company) if $scope.bb.company
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-  $scope.init = (comp) ->
+  init = (comp) ->
     $scope.event = $scope.bb.current_item.event
-    promises = [$scope.current_item.event_group.getImagesPromise(), $scope.event.prepEvent()]
-    if $scope.client
-      promises.push $scope.getPrePaidsForEvent($scope.client, $scope.event)
+
+    promises = [
+      $scope.current_item.event_group.getImagesPromise(),
+      $scope.event.prepEvent()
+    ]
+
+    promises.push $scope.getPrePaidsForEvent($scope.client, $scope.event) if $scope.client
 
     $q.all(promises).then (result) ->
-      if result[0] and result[0].length > 0
-        image = result[0][0]
-        image.background_css = {'background-image': 'url(' + image.url + ')'}
-        $scope.event.image = image
-        # TODO pick most promiment image
-        # colorThief = new ColorThief()
-        # colorThief.getColor image.url
 
-      # if a default number of tickets is provided, set only the first ticket type to that default
-      $scope.event.tickets[0].qty = if $scope.event_options.default_num_tickets then $scope.event_options.default_num_tickets else 0
+      images   = result[0] if result[0] and result[0].length > 0
+      event    = result[1]
+      prepaids = result[2] if result[2] and result[2].length > 0
 
-      # for multiple ticket types (adult entry/child entry etc), default all to zero except for the first ticket type
-      if $scope.event.tickets.length > 1
-        for ticket in $scope.event.tickets.slice(1)
-          ticket.qty = 0
+      $scope.event = event
 
-      # lock the ticket number dropdown box if only 1 ticket is available to puchase at a time (one-on-one training etc)
-      $scope.selectTickets() if $scope.event_options.default_num_tickets and $scope.event_options.auto_select_tickets and $scope.event.tickets.length is 1 and $scope.event.tickets[0].max_num_bookings is 1
-      
-      $scope.tickets = $scope.event.tickets
-      $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
-      $scope.stopTicketWatch = $scope.$watch 'tickets', (tickets, oldtickets) ->
-        $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
-        $scope.event.updatePrice()
-      , true
+      initImage(images) if images
+
+      initTickets()
+
+      $scope.$broadcast "bbEvent:initialised"
+
       $scope.setLoaded $scope
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
 
   ###**
   * @ngdoc method
@@ -131,6 +124,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       , true
     , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
+
   ###**
   * @ngdoc method
   * @name selectItem
@@ -171,6 +165,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
     return $scope.updateBasket()
 
+
   ###**
   * @ngdoc method
   * @name getPrePaidsForEvent
@@ -191,3 +186,33 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       defer.reject(err)
     defer.promise
 
+
+
+  initImage = (images) ->
+    image = images[0]
+    if image 
+      image.background_css = {'background-image': 'url(' + image.url + ')'}
+      $scope.event.image = image
+      # TODO pick most promiment image
+      # colorThief = new ColorThief()
+      # colorThief.getColor image.url
+
+
+  initTickets = () ->
+    # if a default number of tickets is provided, set only the first ticket type to that default
+    $scope.event.tickets[0].qty = if $scope.event_options.default_num_tickets then $scope.event_options.default_num_tickets else 0
+
+    # for multiple ticket types (adult entry/child entry etc), default all to zero except for the first ticket type
+    if $scope.event.tickets.length > 1
+      for ticket in $scope.event.tickets.slice(1)
+        ticket.qty = 0
+
+    # lock the ticket number dropdown box if only 1 ticket is available to puchase at a time (one-on-one training etc)
+    $scope.selectTickets() if $scope.event_options.default_num_tickets and $scope.event_options.auto_select_tickets and $scope.event.tickets.length is 1 and $scope.event.tickets[0].max_num_bookings is 1
+    
+    $scope.tickets = $scope.event.tickets
+    $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
+    $scope.stopTicketWatch = $scope.$watch 'tickets', (tickets, oldtickets) ->
+      $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
+      $scope.event.updatePrice()
+    , true    

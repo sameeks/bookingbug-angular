@@ -337,7 +337,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
           @ticket_prices = _.indexBy(tickets, 'name')
 
-          def.resolve()
+          def.resolve(@)
       def.promise
 
     ###**
