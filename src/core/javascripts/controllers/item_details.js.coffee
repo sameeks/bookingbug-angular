@@ -97,7 +97,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
       $scope.recalc_price()
       $scope.setLoaded $scope
-      $scope.$emit "item_details:loaded"
+      $scope.$emit "item_details:loaded", $scope.item_details
 
     else
       
@@ -109,7 +109,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           QuestionService.addDynamicAnswersByName($scope.item_details.questions)
           QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
           $scope.recalc_price()
-          $scope.$emit "item_details:loaded"
+          $scope.$emit "item_details:loaded", $scope.item_details
         $scope.setLoaded $scope
         
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -144,7 +144,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           item.answer = search.answer
     $scope.item_details = details
 
-
+  # TODO document listener
   $scope.$on 'currentItemUpdate', (service) ->
     if $scope.item_from_param
       $scope.loadItem($scope.item_from_param)
