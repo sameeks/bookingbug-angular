@@ -235,7 +235,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
-          $scope.showMessage($scope.bb.purchase.bookings[0].datetime)
+          $scope.showMoveMessage($scope.bb.purchase.bookings[0].datetime)
 
         , (err) ->
            $scope.setLoaded $scope
@@ -252,14 +252,14 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
-          $scope.showMessage(b.datetime)
+          $scope.showMoveMessage(b.datetime)
          , (err) =>
           $scope.setLoaded $scope
           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
     else
       $scope.decideNextPage(route)
 
-  $scope.showMessage = (datetime) ->
+  $scope.showMoveMessage = (datetime) ->
     # TODO remove whedn translate enabled by default
     if SettingsService.isInternationalizatonEnabled()
       $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
