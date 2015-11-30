@@ -235,6 +235,11 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
+          $scope.showMoveMessage($scope.bb.purchase.bookings[0].datetime)
+
+        , (err) ->
+           $scope.setLoaded $scope
+           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
       else
         PurchaseBookingService.update($scope.item).then (booking) ->
           b = new BBModel.Purchase.Booking(booking)
@@ -247,19 +252,21 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
-
-          # TODO remove whedn translate enabled by default
-          if SettingsService.isInternationalizatonEnabled()
-            $translate('MOVE_BOOKINGS_MSG', { datetime:b.datetime.format('LLLL') }).then (translated_text) ->
-              AlertService.add("info", { msg: translated_text })
-          else
-            AlertService.add("info", { msg: "Your booking has been moved to #{b.datetime.format('LLLL')}" })
-
+          $scope.showMoveMessage(b.datetime)
          , (err) =>
           $scope.setLoaded $scope
           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
     else
       $scope.decideNextPage(route)
+
+  $scope.showMoveMessage = (datetime) ->
+    # TODO remove whedn translate enabled by default
+    if SettingsService.isInternationalizatonEnabled()
+      $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
+        AlertService.add("info", { msg: translated_text })
+    else
+      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
+
 
   ###**
   * @ngdoc method
