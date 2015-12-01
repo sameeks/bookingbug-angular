@@ -65,26 +65,16 @@
 
           <div ng-form name="client_form" class="form-horizontal" role="form" novalidate>
             <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && (client_form.first_name.$dirty || booking_form.submitted)}">
-              <label for="first_name" class="control-label col-sm-4">First Name*:</label>
+              <label for="first_name" class="control-label col-sm-4">First Name:</label>
               <div class="col-sm-5">
-                <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" />
-              </div>
-              <div class="col-sm-3 messages">
-                <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted">
-                  Please enter your first name
-                </div>
+                <input type="text" name="first_name" id="first_name"  ng-model="client.first_name" class="form-control" />
               </div>
             </div>
 
             <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (client_form.last_name.$dirty|| booking_form.submitted)}">
-              <label for="last_name" class="control-label col-sm-4">Last Name*:</label>
+              <label for="last_name" class="control-label col-sm-4">Last Name:</label>
               <div class="col-sm-5">
-                <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" />
-              </div>
-              <div class="col-sm-3 messages">
-                <div class="error-message" ng-show="client_form.last_name.$invalid && booking_form.submitted">
-                  Please enter your last name
-                </div>
+                <input type="text" name="last_name" id="last_name" ng-model="client.last_name" class="form-control" />
               </div>
             </div>
 
@@ -100,15 +90,10 @@
               </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && ((client_form.mobile.$dirty && !client_form.mobile.$focused) || booking_form.submitted)}">
-              <label for="mobile" class="control-label col-sm-4">Mobile:</label>
+            <div class="form-group" ng-class="{'has-error': client_form.phone.$invalid && ((client_form.phone.$dirty && !client_form.phone.$focused) || booking_form.submitted)}">
+              <label for="phone" class="control-label col-sm-4">Phone:</label>
               <div class="col-sm-5">
-                <input type="tel" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern(true)" ng-model="client.mobile" class="form-control"/>
-              </div>
-              <div class="col-sm-3 messages">
-                <div class="error-message" ng-show="client_form.mobile.$dirty && client_form.email.$invalid && booking_form.submitted">
-                  Please enter a valid mobile number
-                </div>
+                <input type="tel" name="phone" id="phone" ng-model="client.phone" class="form-control"/>
               </div>
             </div>
 
@@ -116,11 +101,6 @@
               <label for="address1" class="control-label col-sm-4">Address:</label>
               <div class="col-sm-5">
                 <input type="text" name="address1" id="address1" ng-model="client.address1" class="form-control"/>
-              </div>
-              <div class="col-sm-3 messages">
-                <div class="error-message" ng-show="client_form.address1.$invalid && booking_form.submitted">
-                  Please enter your address
-                </div>
               </div>
             </div>
 
@@ -135,11 +115,6 @@
               <label for="address3" class="control-label col-sm-4">Town:</label>
               <div class="col-sm-5">
                 <input type="text" name="address3" id="address3" ng-model="client.address3" class="form-control"/>
-              </div>
-              <div class="col-sm-3 messages">
-                <div class="error-message" ng-show="client_form.address3.$invalid && booking_form.submitted">
-                  Please enter your town
-                </div>
               </div>
             </div>
 
@@ -199,30 +174,20 @@
                   <div class="form-group" ng-class="{'has-error': (!$first || !use_my_details) && client_ticket_form.attendee_first_name.$invalid && (client_ticket_form.attendee_first_name.$dirty || booking_form.submitted)}">
                     <label for="attendee_first_name" class="control-label col-sm-4">First Name*:</label>
                     <div ng-if="use_my_details && $first"  class="col-sm-5">
-                      <input disabled type="text" ng-model="client.first_name" name="attendee_first_name" required class="form-control" />
+                      <input disabled type="text" ng-model="client.first_name" name="attendee_first_name" class="form-control" />
                     </div>
                     <div ng-if="!use_my_details || !$first" class="col-sm-5">
-                      <input type="text" ng-model="item.first_name" name="attendee_first_name" required class="form-control" />
-                    </div>
-                    <div class="col-sm-3 messages">
-                      <div class="error-message" ng-show="(!$first || !use_my_details) && client_ticket_form.attendee_first_name.$invalid && booking_form.submitted">
-                        Please enter attendee’s first name
-                      </div>
+                      <input type="text" ng-model="item.first_name" name="attendee_first_name" class="form-control" />
                     </div>
                   </div>
 
                   <div class="form-group" ng-class="{'has-error': (!$first || !use_my_details) && client_ticket_form.attendee_last_name.$invalid && (client_ticket_form.attendee_last_name.$dirty|| booking_form.submitted)}">
                     <label for="attendee_last_name" class="control-label col-sm-4">Last Name*:</label>
                     <div ng-if="use_my_details && $first" class="col-sm-5">
-                      <input disabled type="text" ng-model="client.last_name" name="attendee_last_name" required class="form-control" />
+                      <input disabled type="text" ng-model="client.last_name" name="attendee_last_name" class="form-control" />
                     </div>
                     <div ng-if="!use_my_details || !$first" class="col-sm-5">
-                      <input type="text" ng-model="item.last_name" name="attendee_last_name" required class="form-control" />
-                    </div>
-                    <div class="col-sm-3 messages">
-                      <div class="error-message" ng-show="(!$first || !use_my_details) && client_ticket_form.attendee_last_name.$invalid && booking_form.submitted">
-                        Please enter attendee’s last name
-                      </div>
+                      <input type="text" ng-model="item.last_name" name="attendee_last_name" class="form-control" />
                     </div>
                   </div>
 
