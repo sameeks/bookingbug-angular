@@ -30,6 +30,7 @@ angular.module('BB.Directives').directive 'bbProductList', () ->
   scope : true
   controller : 'ProductList'
   link : (scope, element, attrs) ->
+    scope.directives = "public.ProductList"
     if attrs.bbItem
       scope.booking_item = scope.$eval( attrs.bbItem )
     if attrs.bbShowAll
@@ -37,7 +38,7 @@ angular.module('BB.Directives').directive 'bbProductList', () ->
     return
 
 angular.module('BB.Controllers').controller 'ProductList', ($scope,
-    $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
+    $rootScope, $q, $attrs, FormDataStoreService, ValidatorService,
     PageControllerService, halClient) ->
 
   $scope.controller = "public.controllers.ProductList"

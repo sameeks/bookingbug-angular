@@ -32,7 +32,8 @@ angular.module('BB.Directives').directive 'bbPackagePicker', () ->
   replace: true
   scope : true
   controller : 'PackagePicker'
-
+  link: (scope, element, attrs) ->
+    scope.directives = "public.PackagePicker"
 
 angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScope, $q, TimeService, BBModel) ->
   $scope.controller = "public.controllers.PackagePicker"

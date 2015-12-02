@@ -29,7 +29,7 @@ angular.module('BB.Directives').directive 'bbSpaces', () ->
   controller : 'SpaceList'
 
 angular.module('BB.Controllers').controller 'SpaceList',
-($scope,  $rootScope, ServiceService, SpaceService, $q) ->
+($scope,  $rootScope, ServiceService, SpaceModel, BBModel, $q) ->
   $scope.controller = "public.controllers.SpaceList"
   $rootScope.connection_started.then =>
     if $scope.bb.company
@@ -37,7 +37,7 @@ angular.module('BB.Controllers').controller 'SpaceList',
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
-    SpaceService.query(comp).then (items) =>
+    BBModel.Space.$query(comp).then (items) =>
       if $scope.currentItem.category
         # if we've selected a category for the current item - limit the list of servcies to ones that are relevant
         items = items.filter (x) -> x.$has('category') && x.$href('category') == $scope.currentItem.category.self

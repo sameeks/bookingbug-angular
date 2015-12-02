@@ -1,3 +1,11 @@
+###**
+* @ngdoc service
+* @name BB.Models:Member
+*
+* @description
+* Representation of an Member Object
+####
+
 angular.module('BB.Models').factory "Member.MemberModel", ($q, BBModel,
     BaseModel, ClientModel) ->
 

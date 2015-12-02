@@ -33,6 +33,9 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
   scope : true
   priority: 1
   controller : 'TimeRangeList'
+  link: (scope, element, attrs) ->
+    # read initialisation attributes
+    scope.options = scope.$eval(attrs.bbTimeRanges) or  {}
 
 
 # TODO Get the add/subtract functions to respect the current time range. Get the time range length to adjust if display mode is preset
@@ -68,9 +71,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
 
   $rootScope.connection_started.then ->
-
-    # read initialisation attributes
-    $scope.options = $scope.$eval($attrs.bbTimeRanges) or {}
 
     if $attrs.bbTimeRangeLength?
       $scope.time_range_length = $scope.$eval($attrs.bbTimeRangeLength)

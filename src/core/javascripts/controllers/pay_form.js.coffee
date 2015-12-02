@@ -77,7 +77,7 @@ angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout, $sce,
       
 
   linker = (scope, element, attributes) ->
-
+    scope.directives ="public.PayForm"
     $window.addEventListener 'message', (event) =>
       if angular.isObject(event.data)
         data = event.data

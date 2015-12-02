@@ -26,6 +26,8 @@ angular.module('BB.Directives').directive 'bbPurchaseTotal', () ->
   replace: true
   scope : true
   controller : 'PurchaseTotal'
+  link: (scope, element, attrs) ->
+    scope.directives = "public.PurchaseTotal"
 
 
 angular.module('BB.Controllers').controller 'PurchaseTotal',

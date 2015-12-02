@@ -31,22 +31,24 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   restrict: 'AE'
   scope : true
   controller : 'MultiServiceSelect'
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbMultiServiceSelect) or {}
+    scope.directives = "public.MultiServiceSelect"
 
 angular.module('BB.Controllers').controller 'MultiServiceSelect',
-($scope, $rootScope, $q, $attrs, BBModel, AlertService, CategoryService, FormDataStoreService, $modal) ->
+($scope, $rootScope, $q, $attrs, BBModel, AlertService, CategoryModel, FormDataStoreService, $modal) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selected_category_name'
   ]
 
-  $scope.options                    = $scope.$eval($attrs.bbMultiServiceSelect) or {}
   $scope.options.max_services       = $scope.options.max_services or Infinity
   $scope.options.ordered_categories = $scope.options.ordered_categories or false
   $scope.options.services           = $scope.options.services or 'items'
 
   $rootScope.connection_started.then ->
     if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
-      $scope.bb.company.getParentPromise().then (parent) ->
+      $scope.bb.company.getParent().then (parent) ->
         $scope.company = parent
         initialise()
     else
@@ -66,10 +68,10 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
 
     promises = []
 
-    promises.push(CategoryService.query($scope.bb.company))
+    promises.push(BBModel.Category.$query($scope.bb.company))
 
     # company question promise
-    promises.push($scope.company.getCompanyQuestionsPromise()) if $scope.company.$has('company_questions')
+    promises.push($scope.company.getCompanyQuestions()) if $scope.company.$has('company_questions')
     
     $q.all(promises).then (result) ->
 

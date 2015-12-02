@@ -35,7 +35,11 @@ angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller : 'TimeRangeListStackedController',
+  controller : 'TimeRangeListStacked',
+  link: (scope, element, attrs) ->
+    # read initialisation attributes
+    scope.options = scope.$eval(attrs.bbTimeRangeStacked) or {}
+    scope.directives = "public.TimeRangeListStacked"
 
 
 angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, DateTimeUlititiesService) ->
@@ -53,9 +57,6 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   $scope.available_times = 0
 
   $rootScope.connection_started.then ->
-
-    # read initialisation attributes
-    $scope.options = $scope.$eval($attrs.bbTimeRangeStacked) or {}
 
     if !$scope.time_range_length
       if $attrs.bbTimeRangeLength?
@@ -479,7 +480,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       prom = PurchaseService.update({purchase: $scope.bb.moving_booking, bookings: $scope.bb.basket.items})
 
       prom.then  (purchase) ->
-        purchase.getBookingsPromise().then (bookings) ->
+        purchase.getBookings().then (bookings) ->
           for booking in bookings
             # update bookings
             if $scope.bookings

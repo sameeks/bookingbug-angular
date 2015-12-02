@@ -17,7 +17,6 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbTimes A hash of options
 * @property {array} selected_day The selected day
 * @property {date} selected_date The selected date
 * @property {array} data_source The data source
@@ -31,13 +30,14 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   replace: true
   scope : true
   controller : 'TimeList'
+  link: (scope, element, attrs) ->
+    scope.directives = "public.TimeList"
 
 angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel) ->
   $scope.controller = "public.controllers.TimeList"
   $scope.notLoaded $scope
 
   $scope.data_source = $scope.bb.current_item if !$scope.data_source
-  $scope.options = $scope.$eval($attrs.bbTimes) or {}
 
   $rootScope.connection_started.then =>
     $scope.loadDay()

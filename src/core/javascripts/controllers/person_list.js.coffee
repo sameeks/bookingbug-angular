@@ -30,6 +30,9 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
   scope : true
   controller : 'PersonList'
   link : (scope, element, attrs) ->
+    scope.options = scope.eval(attrs.bbServices) or {}
+    scope.directives="public.PersonList"
+    
     if attrs.bbItem
       scope.booking_item = scope.$eval( attrs.bbItem )
     return
@@ -47,9 +50,6 @@ angular.module('BB.Controllers').controller 'PersonList',
   $rootScope.connection_started.then ->
     loadData()
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
-  $scope.options = $scope.$eval($attrs.bbServices) or {}
-
 
   loadData = () ->
     $scope.booking_item ||= $scope.bb.current_item

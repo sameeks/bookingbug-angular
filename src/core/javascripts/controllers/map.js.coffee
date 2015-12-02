@@ -40,6 +40,9 @@ angular.module('BB.Directives').directive 'bbMap', () ->
   replace: true
   scope : true
   controller : 'MapCtrl'
+  link:(scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbMap) or {}
+    scope.directives = "public.MapCtrl"
 
 angular.module('BB.Controllers').controller 'MapCtrl',
 ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, $q, $window, $timeout) ->
@@ -51,9 +54,6 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     'selectedStore'
     'search_prms'
   ]
-
-  # init vars
-  options = $scope.$eval($attrs.bbMap) or {}
   
   map_ready_def               = $q.defer()
   $scope.mapLoaded            = $q.defer()

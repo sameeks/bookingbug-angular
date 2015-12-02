@@ -16,7 +16,7 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbResources   A hash of options
+* @param {hash}  bbResources A hash of options
 * @property {array} items An array of all resources
 * @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a services or person
 * @property {array} bookable_resources An array of Resources - used if the current_item has already selected a services or person

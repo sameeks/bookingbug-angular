@@ -106,6 +106,8 @@ angular.module('BB.Directives').directive 'bbPage', () ->
   replace: true
   scope : true
   controller : 'PageController'
+  link: (scope, element, attrs) ->
+    scope.directives = "public.Page"
 
 
 angular.module('BB.Controllers').controller 'PageController', BBBasicPageCtrl

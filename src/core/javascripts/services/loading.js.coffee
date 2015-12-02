@@ -1,3 +1,14 @@
+
+
+###**
+* @ngdoc service
+* @name BB.Services:Loading
+*
+* @description
+* Representation of an Loading Object
+###
+
+
 angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $rootScope, AlertService) ->
 
   # create a trackable loader - this in theory allows multiple trackable loading objects in a scope - meaning we're not tied to a per-scope faction
@@ -16,7 +27,16 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
     }
     return item
 
-
+  ###**
+  * @ngdoc method
+  * @name setLoaded
+  * @methodOf BB.Services:Loading
+  * @param {array} cscope The cscope 
+  * @description
+  * Set loaded in according of the cscope parameter
+  *
+  * @returns {Promise} Returned a promise
+  ###
   # called from the scopes
   setLoaded: (cscope) ->
     cscope.$emit 'hide:loader', cscope
@@ -39,7 +59,18 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
       $rootScope.$broadcast 'loading:finished'
     return
 
-
+  ###**
+  * @ngdoc method
+  * @name setLoadedAndShowError
+  * @methodOf BB.Services:Loading
+  * @param {object} scope The scope
+  * @param {object} err The error message
+  * @param {string} error_string  The error string
+  * @description
+  * Set set loaded and show error in according of the scope, err and error_string parameters
+  *
+  * @returns {Promise} Returned a promise
+  ###
   setLoadedAndShowError: (scope, err, error_string) ->
     $log.warn(err, error_string)
     scope.setLoaded(scope)
@@ -50,7 +81,16 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
     else
       AlertService.danger(ErrorService.getError('GENERIC'))
 
-
+  ###**
+  * @ngdoc method
+  * @name areScopesLoaded
+  * @methodOf BB.Services:Loading
+  * @param {array} cscope The cscope 
+  * @description
+  * Verify if the scope are loaded or not, in according of the cscope parameter
+  *
+  * @returns {boolean} Returns false of true
+  ###
   # go around schild scopes - return false if *any* child scope is marked as
   # isLoaded = false
   areScopesLoaded: (cscope) ->
@@ -63,6 +103,16 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
         child = child.$$nextSibling
       true
 
+  ###**
+  * @ngdoc method
+  * @name notLoaded
+  * @methodOf BB.Services:Loading
+  * @param {array} cscope The cscope 
+  * @description
+  * Set scope not loaded
+  *
+  * @returns {object} Returns the scope not loaded
+  ###
   #set scope not loaded...
   notLoaded: (cscope) ->
     cscope.$emit 'show:loader', cscope

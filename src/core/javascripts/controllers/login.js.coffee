@@ -31,6 +31,8 @@ angular.module('BB.Directives').directive 'bbLogin', () ->
   replace: true
   scope : true
   controller : 'Login'
+  link:(scope, element, attrs) ->
+    scope.directives = "public.Login"
 
 
 angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, LoginService, $q, ValidatorService, BBModel, $location, AlertService) ->
