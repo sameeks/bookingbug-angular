@@ -61,7 +61,7 @@ angular.module('BB.Services').factory "PurchaseService", ($q, halClient, BBModel
     defer.promise
 
 
-  delete_all: (purchase) ->
+  deleteAll: (purchase) ->
 
     defer = $q.defer()
 

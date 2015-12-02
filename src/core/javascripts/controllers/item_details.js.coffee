@@ -260,7 +260,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       $scope.decideNextPage(route)
 
   $scope.showMoveMessage = (datetime) ->
-    # TODO remove whedn translate enabled by default
+    # TODO remove whem translate enabled by default
     if SettingsService.isInternationalizatonEnabled()
       $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
         AlertService.add("info", { msg: translated_text })

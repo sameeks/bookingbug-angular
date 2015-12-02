@@ -116,6 +116,8 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
         data.email = @email
       if @email_admin?
         data.email_admin = @email_admin
+      data.first_name = @first_name if @first_name
+      data.last_name = @last_name if @last_name
 
       formatted_survey_answers = []
       if @survey_questions
@@ -152,9 +154,14 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           @attachments = atts.attachments
           @attachments
 
+
     canCancel: () ->
       return moment(@min_cancellation_time).isAfter(moment())
+
 
     canMove: () ->
       return @canCancel()  
 
+
+    getAttendeeName: () ->
+      return "#{@first_name} #{@last_name}"

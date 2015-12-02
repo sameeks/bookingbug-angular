@@ -169,6 +169,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'Your passwords don\'t match'
+    },
+    {
+      key: 'ATTENDEES_CHANGED',
+      type: 'info',
+      title: '',
+      persist: true,
+      msg: 'Your booking has been successfully updated'
     }
   ]
 
