@@ -1168,7 +1168,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         step_to_load = last_step.number
         step_count++
 
-    $scope.loadStep(step_to_load)
+    $scope.loadStep(step_to_load) if step_to_load
 
 
   $scope.loadStepByPageName = (page_name) ->
