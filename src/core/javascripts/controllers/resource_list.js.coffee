@@ -47,9 +47,9 @@ angular.module('BB.Controllers').controller 'ResourceList',
 
   loadData = () =>
     # do nothing if nothing has changed
-    unless ($scope.bb.steps && $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
-      if !$scope.bb.current_item.service || $scope.bb.current_item.service == $scope.change_watch_item
-        # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
+    unless ($scope.bb.steps and $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
+      if !$scope.bb.current_item.service or $scope.bb.current_item.service == $scope.change_watch_item
+        # if there's no service - we have to wait for one to be set - so we're done loading for now!
         if !$scope.bb.current_item.service
           $scope.setLoaded $scope
         return
@@ -60,7 +60,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
     rpromise = ResourceService.query($scope.bb.company)
     rpromise.then (resources) =>
       if $scope.bb.current_item.group  # check they're part of any currently selected group
-        resources = resources.filter (x) -> !x.group_id || x.group_id == $scope.bb.current_item.group
+        resources = resources.filter (x) -> !x.group_id or x.group_id is $scope.bb.current_item.group
       $scope.all_resources = resources
 
     params =
@@ -71,7 +71,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
     ItemService.query(params).then (items) =>
       promises = []
       if $scope.bb.current_item.group # check they're part of any currently selected group
-        items = items.filter (x) -> !x.group_id || x.group_id == $scope.bb.current_item.group
+        items = items.filter (x) -> !x.group_id or x.group_id is $scope.bb.current_item.group
 
       for i in items
         promises.push(i.promise)
@@ -80,11 +80,13 @@ angular.module('BB.Controllers').controller 'ResourceList',
         resources = []
         for i in items
           resources.push(i.item)
-          if $scope.bb.current_item && $scope.bb.current_item.resource && $scope.bb.current_item.resource.self == i.item.self
+          if $scope.bb.current_item and $scope.bb.current_item.resource and $scope.bb.current_item.resource.self == i.item.self
             $scope.resource = i.item
 
-        if resources.length == 1
-          if !$scope.selectItem(items[0].item, $scope.nextRoute, true)
+      # if there's only one resource and single pick hasn't been enabled, 
+      # automatically select the resource.
+        if resources.length is 1 and !$scope.options.allow_single_pick
+          if !$scope.selectItem(items[0].item, $scope.nextRoute, {skip_step: true})
             $scope.bookable_resources = resources
             $scope.bookable_items = items
         else
@@ -94,7 +96,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
       , (err) ->
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     , (err) ->
-      unless err == "No service link found" and (($scope.bb.steps and $scope.bb.steps[0].page == 'resource_list') or $scope.options.resource_first)
+      unless err is "No service link found" and (($scope.bb.steps and $scope.bb.steps[0].page is 'resource_list') or $scope.options.resource_first)
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
       else
         $scope.setLoaded $scope
@@ -127,14 +129,13 @@ angular.module('BB.Controllers').controller 'ResourceList',
   * @param {string=} route A specific route to load
   * @param {string=} skip_step The skip_step has been set to false
   ###
-  $scope.selectItem = (item, route, skip_step = false) =>
+  $scope.selectItem = (item, route, options={}) =>
     if $scope.$parent.$has_page_control
       $scope.resource = item
       return false
     else
       $scope.bb.current_item.setResource(getItemFromResource(item))
-      if skip_step
-        $scope.skipThisStep()
+      $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       return true
 

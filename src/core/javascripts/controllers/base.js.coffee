@@ -1144,10 +1144,32 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.allSteps[$scope.bb.current_step-1].active = true
 
 
-  $scope.loadPreviousStep = (number_of_steps_to_go_back) ->
-    number_of_steps_to_go_back = number_of_steps_to_go_back or 1
-    step = $scope.bb.current_step - number_of_steps_to_go_back
-    $scope.loadStep(step)
+  ###**
+  * @ngdoc method
+  * @name loadPreviousStep
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Loads the previous unskipped step
+  *
+  * @param {object} steps_to_go_back The number of steps to go back
+  ###
+  $scope.loadPreviousStep = (steps_to_go_back) ->
+
+    steps_to_go_back = steps_to_go_back or 1
+
+    past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
+
+    # find the last unskipped step and load that (whilst respecting
+    # the number of steps to go back)
+    step_count = 0
+    while step_count < steps_to_go_back
+      last_step = past_steps.pop()
+      if !last_step.skipped
+        step_to_load = last_step.number
+        step_count++
+
+    $scope.loadStep(step_to_load)
+
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps
@@ -1172,12 +1194,15 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.setBasicRoute(routes)
 
 
-  # record the page right now
-  # this look s the a record breadcrumb step path - and also helps keep updated passed and current steps
-
-
+  ###**
+  * @ngdoc method
+  * @name skipThisStep
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Marks the current step as skipped
+  ###
   $scope.skipThisStep = () ->
-    $scope.bb.current_step -= 1
+    $scope.bb.steps[$scope.bb.steps.length - 1].skipped = true
 
 
   #############################################################
