@@ -95,7 +95,6 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       $scope.service = null
 
     ppromise = comp.getServicesPromise()
-    @skipped = false
     ppromise.then (items) =>
       if $scope.hide_disabled
         # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
@@ -118,12 +117,9 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
       # if there's only one service and single pick hasn't been enabled, 
       # automatically select the service.
-      if (items.length is 1 && !$scope.allowSinglePick)
-        if !$scope.selectItem(items[0], $scope.nextRoute )
+      if (items.length is 1 and !$scope.allowSinglePick)
+        if !$scope.selectItem(items[0], $scope.nextRoute, {skip_step: true})
           setServiceItem items
-        else if !@skipped
-          $scope.skipThisStep()
-          @skipped = true          
       else
         setServiceItem items
 
@@ -170,11 +166,8 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         $scope.bookable_items = items
         
         if services.length is 1 and !$scope.allowSinglePick
-          if !$scope.selectItem(services[0], $scope.nextRoute )
+          if !$scope.selectItem(services[0], $scope.nextRoute, {skip_step: true})
             setServiceItem services
-          else if !@skipped
-            $scope.skipThisStep()
-            @skipped = true  
         else
           # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages. 
           setServiceItem services
@@ -182,6 +175,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         $scope.setLoaded($scope)
       , (err) ->  
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  
   
   # set the service item so the correct item is displayed in the dropdown menu.
   # without doing this the menu will default to 'please select'
@@ -204,7 +198,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   * @param {object} item The Service or BookableItem to select
   * @param {string=} route A specific route to load
   ###
-  $scope.selectItem = (item, route) =>
+  $scope.selectItem = (item, route, options={}) =>
     if $scope.routed
       return true
 
@@ -213,10 +207,12 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       return false
     else if item.is_event_group
       $scope.booking_item.setEventGroup(item)
+      $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       $scope.routed = true
     else
       $scope.booking_item.setService(item)
+      $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       $scope.routed = true
       return true
