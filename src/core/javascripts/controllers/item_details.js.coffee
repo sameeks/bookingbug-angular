@@ -145,7 +145,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     $scope.item_details = details
 
   # TODO document listener
-  $scope.$on 'currentItemUpdate', (service) ->
+  $scope.$on 'currentItemUpdate', (event) ->
     if $scope.item_from_param
       $scope.loadItem($scope.item_from_param)
     else
