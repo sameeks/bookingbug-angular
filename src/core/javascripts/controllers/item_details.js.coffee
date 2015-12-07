@@ -70,7 +70,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
   $rootScope.connection_started.then () ->
     $scope.loadItem($scope.bb.current_item) if !confirming
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
