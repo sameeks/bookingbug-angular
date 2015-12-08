@@ -1123,7 +1123,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.loadStep = (step) ->
     return if step == $scope.bb.current_step
     $scope.bb.calculatePercentageComplete(step)
-    # so actually use the data from the "next"page if there is one - but show the correct page
+    # so actually use the data from the "next" page if there is one - but show the correct page
     # this means we load the completed data from that page
     # if there isn't a next page - then try the select one
     st = $scope.bb.steps[step]
