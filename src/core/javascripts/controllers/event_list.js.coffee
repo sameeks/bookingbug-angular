@@ -82,6 +82,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   
 
   $scope.initialise = () ->
+    
     $scope.notLoaded $scope
 
     # has the event group been manually set (i.e. in the step before)
@@ -124,15 +125,25 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     else
       promises.push($q.when([]))
 
+
     $q.all(promises).then (result) ->
       company_questions = result[0]
       event_groups      = result[1]
       event_summary     = result[2]
-      event_data        = result[3]
+      event_data        = result[3]     
+
 
       $scope.has_company_questions = company_questions? && company_questions.length > 0
-      buildDynamicFilters(company_questions) if company_questions
-      $scope.event_groups = _.indexBy(event_groups, 'id') if event_groups
+      buildDynamicFilters(company_questions) if company_questions      
+      $scope.event_groups = event_groups
+
+     
+      # Add group prop so we don't have to call item.getGroup() - which is a $http request - from the view
+      event_groups_collection = _.indexBy(event_groups, 'id')
+      for item in $scope.items
+        item.group = event_groups_collection[item.service_id]      
+
+      # Remove loading icon
       $scope.setLoaded $scope
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -248,14 +259,21 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     $scope.events = {}
 
     EventService.query(comp, params).then (events) ->
+     
+      # Flatten events array
+      $scope.items = _.flatten(events)
+     
+      # Add spaces_left prop - so we don't need to use ng-init="spaces_left = getSpacesLeft()" in the html template      
+      for item in $scope.items
+        item.spaces_left = item.num_spaces - item.getNumBooked()
 
-      events = _.groupBy events, (event) -> event.date.toISODate()
-      for key, value of events
-        $scope.events[key] = value
-
-      $scope.items = _.flatten(_.toArray($scope.events))
+      # Add address prop from the company to the item
+      $scope.bb.company.getAddressPromise().then (address) ->
+        for item in $scope.items
+          item.address = address              
       
-      chains.then () ->
+      chains.then () ->      
+
         # get more event details
         for item in $scope.items
           item.prepEvent()
@@ -295,7 +313,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
           #   $scope.showDay($scope.item_dates[0].date)
 
         # determine if all events are fully booked
-        isFullyBooked()
+        $scope.isFullyBooked()
 
         $scope.filtered_items = $scope.items
 
@@ -318,11 +336,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @description
   * Verify if the items from event list are be fully booked
   ###
-  isFullyBooked = () ->
+  $scope.isFullyBooked = () ->
     full_events = []
     for item in $scope.items
       full_events.push(item) if item.num_spaces == item.spaces_booked
-    $scope.fully_booked = true if full_events.length == $scope.items.length
+    return $scope.fully_booked = true if full_events.length == $scope.items.length
 
   ###**
   * @ngdoc method
@@ -418,15 +436,15 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   *
   * @param {array} item The Event or BookableItem to select
   ###
-  $scope.filterEvents = (item) ->
+  $scope.filterEvents = (item) ->  
     result = (item.date.isSame(moment($scope.filters.date), 'day') or !$scope.filters.date?) and
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and 
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
       (($scope.filters.hide_sold_out_events and item.getSpacesLeft() != 0) or !$scope.filters.hide_sold_out_events) and
       filterEventsWithDynamicFilters(item)
-    return result
+    return result  
 
-
+  # I had to put this into $scope so that MultiEventList controller (which extends this controller) could overwrite $scope.filterEvents
   filterEventsWithDynamicFilters = (item) ->
 
     return true if !$scope.has_company_questions or !$scope.dynamic_filters
