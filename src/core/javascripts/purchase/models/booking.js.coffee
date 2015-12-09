@@ -79,6 +79,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
 
     getPostData: () ->
+
       data = {}
 
       data.attended = @attended
@@ -90,8 +91,16 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
       data.describe = @describe
       data.duration = @duration
       data.end_datetime = @end_datetime
-      data.event_id = @event.id if @event
-      data.event_id = @time.event_id if @time && @time.event_id
+
+      # is the booking being moved (i.e. new time/new event) or are we just updating 
+      # the existing booking
+      if @time and @time.event_id and !@isEvent()
+        data.event_id = @time.event_id
+      else if @event
+        data.event_id = @event.id
+      else 
+        data.event_id = @slot_id
+
       data.full_describe = @full_describe
       data.id = @id
       data.min_cancellation_time =  @min_cancellation_time
@@ -116,6 +125,8 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
         data.email = @email
       if @email_admin?
         data.email_admin = @email_admin
+      data.first_name = @first_name if @first_name
+      data.last_name = @last_name if @last_name
 
       formatted_survey_answers = []
       if @survey_questions
@@ -152,9 +163,18 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           @attachments = atts.attachments
           @attachments
 
+
     canCancel: () ->
       return moment(@min_cancellation_time).isAfter(moment())
+
 
     canMove: () ->
       return @canCancel()  
 
+
+    getAttendeeName: () ->
+      return "#{@first_name} #{@last_name}"
+
+
+    isEvent: () ->
+      return @event_chain?

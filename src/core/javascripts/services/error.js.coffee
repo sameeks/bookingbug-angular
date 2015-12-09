@@ -97,7 +97,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'Sorry, the requested time slot is not available. Please choose a different time.'
+      msg: 'The requested time slot is not available. Please choose a different time.'
     },
     {
       key: 'TOPUP_SUCCESS',
@@ -167,14 +167,21 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'Sorry, we couldn\'t update your password. Plese try again.'
+      msg: 'Sorry, we couldn\'t update your password. Please try again.'
     },
     {
       key: 'PASSWORD_MISMATCH',
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'Your passwords don\'t match each other.'
+      msg: 'Your passwords don\'t match'
+    },
+    {
+      key: 'ATTENDEES_CHANGED',
+      type: 'info',
+      title: '',
+      persist: true,
+      msg: 'Your booking has been successfully updated'
     },
     {
       key: 'PAYMENT_FAILED',

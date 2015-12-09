@@ -70,7 +70,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
   $rootScope.connection_started.then () ->
     $scope.loadItem($scope.bb.current_item) if !confirming
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -97,7 +97,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
       $scope.recalc_price()
       $scope.setLoaded $scope
-      $scope.$emit "item_details:loaded"
+      $scope.$emit "item_details:loaded", $scope.item_details
 
     else
       
@@ -109,7 +109,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           QuestionService.addDynamicAnswersByName($scope.item_details.questions)
           QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
           $scope.recalc_price()
-          $scope.$emit "item_details:loaded"
+          $scope.$emit "item_details:loaded", $scope.item_details
         $scope.setLoaded $scope
         
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -144,8 +144,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           item.answer = search.answer
     $scope.item_details = details
 
-
-  $scope.$on 'currentItemUpdate', (service) ->
+  # TODO document listener
+  $scope.$on 'currentItemUpdate', (event) ->
     if $scope.item_from_param
       $scope.loadItem($scope.item_from_param)
     else
@@ -235,6 +235,11 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
+          $scope.showMoveMessage($scope.bb.purchase.bookings[0].datetime)
+
+        , (err) ->
+           $scope.setLoaded $scope
+           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
       else
         PurchaseBookingService.update($scope.item).then (booking) ->
           b = new BBModel.Purchase.Booking(booking)
@@ -247,19 +252,21 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
-
-          # TODO remove whedn translate enabled by default
-          if SettingsService.isInternationalizatonEnabled()
-            $translate('MOVE_BOOKINGS_MSG', { datetime:b.datetime.format('LLLL') }).then (translated_text) ->
-              AlertService.add("info", { msg: translated_text })
-          else
-            AlertService.add("info", { msg: "Your booking has been moved to #{b.datetime.format('LLLL')}" })
-
+          $scope.showMoveMessage(b.datetime)
          , (err) =>
           $scope.setLoaded $scope
           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
     else
       $scope.decideNextPage(route)
+
+  $scope.showMoveMessage = (datetime) ->
+    # TODO remove whem translate enabled by default
+    if SettingsService.isInternationalizatonEnabled()
+      $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
+        AlertService.add("info", { msg: translated_text })
+    else
+      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
+
 
   ###**
   * @ngdoc method
