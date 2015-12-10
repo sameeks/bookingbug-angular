@@ -1,0 +1,17 @@
+<div>
+  <h4>Wallet Purchase Bands</h4>
+  <table class="table table-bordered">
+    <thead>
+    </thead>
+    <tbody>
+      <tr ng-repeat="band in bands">
+        <td class="text-left">
+          {{band.actual_amount | icurrency }} for {{band.wallet_amount | icurrency }}
+        </td>
+        <td class="text-center">
+          <button ng-click="purchaseBand(band)"> Buy </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
