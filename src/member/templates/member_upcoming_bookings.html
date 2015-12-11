@@ -1,22 +1,15 @@
 <div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
 <div ng-hide="loading" class="bb-upcoming clearfix">
-  <div class="bb-head">
-    <span id="your_bookings">Your upcoming bookings</span>
-  </div>
   <div id="bookings">
     <div ng-show="upcoming_bookings.length == 0">
       <h3>You don't currently have any upcoming bookings.</h3>
     </div>
     <div ng-repeat="booking in upcoming_bookings | filter:{deleted: false} | orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" class="booking-row">
-      <div class="type">
-        <div style="background-color:{{booking.getColour()}}"></div>
-      </div>
       <div class="datetime">
         <div>{{booking.datetime.format('Do MMM YYYY HH:mm')}}</div>
       </div>
       <div class="describe">
         <div class="detail">{{booking.full_describe}}</div>
-        <div class="resource">{{booking.resource}}</div>
       </div>
       <div class="bb-bookings-action">
         <button ng-click="cancel(booking)" class="btn btn-danger bb-push">Cancel</button>
