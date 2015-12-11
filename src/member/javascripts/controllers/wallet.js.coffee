@@ -2,16 +2,20 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
   
 
   $scope.getWalletForMember = (member, params) ->
+    defer = $q.defer()
     $scope.notLoaded $scope
     WalletService.getWalletForMember(member, params).then (wallet) ->
       $scope.setLoaded $scope
       $scope.wallet = wallet
+      updateClient(wallet)
+      defer.resolve()
     , (err) ->
       $scope.setLoaded $scope
-      $log.error err
+      defer.reject()
+    return defer.promise
 
 
-  $scope.getWalletLogs = (wallet) ->
+  $scope.getWalletLogs = () ->
     defer = $q.defer()
     $scope.notLoaded $scope
     WalletService.getWalletLogs($scope.wallet).then (logs) ->
@@ -47,6 +51,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       WalletService.updateWalletForMember(member, params).then (wallet) ->
         $scope.setLoaded $scope
         $scope.wallet = wallet
+        $rootScope.$broadcast("wallet:updated", wallet)
       , (err) ->
         $scope.setLoaded $scope
         $log.error err.data
@@ -79,14 +84,13 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
   
 
   $scope.walletPaymentDone = () ->
-    $scope.getWalletForMember($scope.member).then (wallet) ->
-      $scope.wallet = wallet
+    $scope.getWalletForMember($scope.member).then () ->
       AlertService.raise('TOPUP_SUCCESS')
-      $scope.$emit("wallet:topped_up")
+      $rootScope.$broadcast("wallet:topped_up", wallet)
       
 
   # TODO don't route to next page automatically, first alert user 
-  # topup was successful then show the 'next' button
+  # topup was successful and show new wallet balance + the 'next' button
   $scope.basketWalletPaymentDone = () ->
     $scope.callSetLoaded()
     $scope.decideNextPage('checkout')
@@ -111,3 +115,8 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
     value = value or $scope.amount_increment
     new_amount = $scope.amount - value 
     return new_amount >= $scope.wallet.min_amount
+
+
+  updateClient = (wallet) ->
+    if $scope.member.self is $scope.client.self
+      $scope.client.wallet_amount = wallet.amount

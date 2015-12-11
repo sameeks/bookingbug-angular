@@ -3,10 +3,12 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
   controller: 'Wallet'
   scope: true
   replace: true
-  link: (scope, element, attrs) ->
+  require: '^?bbWallet'
+  link: (scope, element, attrs, ctrl) ->
 
     one_pound = 100
     scope.wallet_payment_options = scope.$eval(attrs.bbWalletPayment) or {}
+    scope.member = scope.$eval(attrs.member)
     scope.member ||= $rootScope.member if $rootScope.member
     scope.member ||= scope.wallet_payment_options.member if scope.wallet_payment_options.member
     scope.amount_increment = scope.wallet_payment_options.amount_increment or one_pound
@@ -35,39 +37,46 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
       element.find('iframe')[0].contentWindow.postMessage(payload, origin)
 
 
-    getWalletForMember = () ->
-      scope.getWalletForMember(scope.member, {})
+    calculateAmount = () ->
+      # if this is a basket topup, use either the amount due or the min topup amount, whichever is greatest
+      if scope.wallet_payment_options.basket_topup
 
-
-    scope.$watch 'member', (member) ->
-      if member?
-        getWalletForMember()
-
-
-    scope.$watch 'wallet', (wallet) ->
-      
-      if wallet and !scope.amount
-        if scope.wallet_payment_options.basket_topup
-
-          amount_due = scope.bb.basket.dueTotal() - wallet.amount
-          
-          if amount_due > wallet.min_amount
-            scope.amount = Math.ceil(amount_due / scope.amount_increment ) * scope.amount_increment
-          else
-            scope.amount = wallet.min_amount
-
-          scope.min_amount = scope.amount
-
-        else if wallet.min_amount
-          scope.amount     = if scope.wallet_payment_options.amount and scope.wallet_payment_options.amount > wallet.min_amount then scope.wallet_payment_options.amount else wallet.min_amount
-          scope.min_amount = wallet.min_amount
+        amount_due = scope.bb.basket.dueTotal() - scope.wallet.amount
+        
+        if amount_due > scope.wallet.min_amount
+          scope.amount = Math.ceil(amount_due / scope.amount_increment ) * scope.amount_increment
         else
-          scope.min_amount = 0
-          scope.amount = scope.wallet_payment_options.amount if scope.wallet_payment_options.amount
+          scope.amount = scope.wallet.min_amount
 
-      if wallet and wallet.$has('new_payment')
+        scope.min_amount = scope.amount
+
+      else if scope.wallet.min_amount
+        scope.amount     = if scope.wallet_payment_options.amount and scope.wallet_payment_options.amount > scope.wallet.min_amount then scope.wallet_payment_options.amount else scope.wallet.min_amount
+        scope.min_amount = scope.wallet.min_amount
+      else
+        scope.min_amount = 0
+        scope.amount = scope.wallet_payment_options.amount if scope.wallet_payment_options.amount
+
+
+    # wait for wallet to be loaded by bbWallet or by self
+    $rootScope.connection_started.then () ->
+      if ctrl
+        deregisterWatch = scope.$watch 'wallet', () ->
+          if scope.wallet
+            calculateAmount()
+            deregisterWatch()
+      else 
+        scope.getWalletForMember(scope.member).then () ->
+          calculateAmount()
+
+
+    # listen to when the wallet is updated
+    scope.$on 'wallet:updated', (event, wallet) ->
+     
+      # load iframe using payment link
+      if wallet.$has('new_payment')
         scope.notLoaded scope
-        scope.wallet_payment_url = $sce.trustAsResourceUrl(scope.wallet.$href("new_payment"))
+        scope.wallet_payment_url = $sce.trustAsResourceUrl(wallet.$href("new_payment"))
         scope.show_payment_iframe = true
         element.find('iframe').bind 'load', (event) =>
           url = scope.wallet_payment_url if scope.wallet_payment_url
@@ -76,9 +85,8 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
           scope.$apply ->
             scope.setLoaded scope
 
-    # TODO update API to only respond with single message for wallet pay complete
-    # scope.wallet_payment_options.basket_topup
-    # API now raises payment_complete postMessage
+
+    # register iframe message listener
     $window.addEventListener 'message', (event) =>
       if angular.isObject(event.data)
         data = event.data
@@ -90,17 +98,16 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
             when "submitting"
               scope.notLoaded scope
             when "error"
-              scope.$emit "wallet:topup_failed"
+              $rootScope.$broadcast "wallet:topup_failed"
               scope.notLoaded scope
-              AlertService.raise('PAYMENT_FAILED')
               # reload the payment iframe
               document.getElementsByTagName("iframe")[0].src += ''
-            when "wallet_payment_complete"
+              AlertService.raise('PAYMENT_FAILED')
+            when "payment_complete", "wallet_payment_complete", "basket_wallet_payment_complete"
               scope.show_payment_iframe = false
-              scope.walletPaymentDone()
-            when 'basket_wallet_payment_complete'
-              scope.show_payment_iframe = false
-              scope.basketWalletPaymentDone()
+              if scope.wallet_payment_options.basket_topup
+                scope.basketWalletPaymentDone()
+              else
+                scope.walletPaymentDone()
     , false
-
 

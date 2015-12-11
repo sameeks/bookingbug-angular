@@ -5,6 +5,7 @@
       <tr>
         <th>Action</th>
         <th>Amount</th>
+        <th>Balance</th>
         <th>Changed By</th>
         <th>Date and Time</th>
       </tr>
@@ -16,6 +17,9 @@
         </td>
         <td class="text-right">
           {{log.payment_amount | currency}}
+        </td>
+        <td class="text-right">
+          {{log.new_wallet_amount | currency}}
         </td>
         <td class="text-center">
           {{log.who_made_the_change}}

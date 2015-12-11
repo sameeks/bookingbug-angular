@@ -10,10 +10,17 @@ angular.module('BBMember').directive 'bbWallet', ($rootScope) ->
     scope.show_wallet_logs = true
     scope.show_topup_box   = false
     
+
     $rootScope.connection_started.then () ->
       scope.getWalletForMember(scope.member) if scope.member
 
 
-    scope.$on 'wallet:topped_up', (event) ->
+    scope.$on 'wallet:topped_up', (event, wallet) ->
+      scope.wallet           = wallet
       scope.show_topup_box   = false
       scope.show_wallet_logs = true
+
+
+    scope.$on "booking:cancelled", (event) ->
+      scope.getWalletForMember(scope.member) if scope.member
+
