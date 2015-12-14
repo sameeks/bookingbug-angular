@@ -108,7 +108,6 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     # event group promise
     if !$scope.current_item.event_group
-      console.log($scope.bb.company)
       promises.push($scope.bb.company.getEventGroupsPromise())
     else
       promises.push($q.when([]))
