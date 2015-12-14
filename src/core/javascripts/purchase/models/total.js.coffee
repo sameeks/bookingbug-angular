@@ -130,7 +130,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
           @member = new BBModel.Member.Member(member)
           defer.resolve(@member)
       else
-        defer.reject('No client')
+        defer.reject('No member')
       defer.promise
 
     getConfirmMessages: () =>
