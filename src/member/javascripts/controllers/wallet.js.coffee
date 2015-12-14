@@ -52,7 +52,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
   
   $scope.updateWallet = (member, amount, band = null) ->
     $scope.notLoaded $scope
-    if member and amount
+    if member
       params = {}
       params.amount = amount if amount > 0
       params.wallet_id = $scope.wallet.id if $scope.wallet
