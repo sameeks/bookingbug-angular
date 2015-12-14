@@ -1,9 +1,6 @@
 <div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
 <div ng-hide="loading" class="bb-past clearfix">
-  <div class="bb-head">
-    <span id="your_bookings">Past Bookings</span>
-  </div>
-  <div id="bookings">
+  <div>
 
     <div ng-show="past_bookings.length == 0">
       <h3>You don't currently have any past bookings.</h3>
@@ -11,20 +8,11 @@
 
     <div ng-repeat="booking in past_bookings | filter:{deleted: false} |
       orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
-      <div class="type col-sm-1">
-        <div style="background-color:{{booking.getColour()}}"></div>
-      </div>
       <div class="datetime col-sm-5">
-        <div>{{booking.datetime.format('Do MMM YYYY HH:mm')}}</div>
+        <div>{{booking.datetime | datetime:'Do MMM YYYY HH:mm':false}}</div>
       </div>
       <div class="describe col-sm-5">
         <div class="detail">{{booking.full_describe}}</div>
-        <div class="resource">{{booking.resource}}</div>
-      </div>
-      <div class="bb-bookings-action col-sm-1">
-        <button ng-click="cancel(booking)" class="btn btn-danger bb-push">
-          Cancel
-        </button>
       </div>
     </div>
 

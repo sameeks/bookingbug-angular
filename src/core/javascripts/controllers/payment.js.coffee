@@ -50,7 +50,7 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
   linker = (scope, element, attributes) ->
 
     scope.payment_options = scope.$eval(attributes.bbPayment) or {}
-    scope.route_to_next_page = if scope.payment_options.route_to_next_page? then false else true
+    scope.route_to_next_page = if scope.payment_options.route_to_next_page? then scope.payment_options.route_to_next_page else true
 
     element.find('iframe').bind 'load', (event) =>
       url = scope.bb.total.$href('new_payment') if scope.bb && scope.bb.total && scope.bb.total.$href('new_payment')

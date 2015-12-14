@@ -27,7 +27,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     if $scope.fail_msg
       AlertService.danger({msg:$scope.fail_msg})
     else
-      AlertService.danger('GENERIC')
+      AlertService.raise('GENERIC')
 
 
   $scope.init = (options) ->
@@ -183,7 +183,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
   # potentially move all of the items in booking - move the whole lot to a basket
-  $scope.moveAll = ( route, options = {}) ->
+  $scope.moveAll = (route, options = {}) ->
     route ||= $scope.move_route
     $scope.notLoaded $scope
     $scope.initWidget({company_id: $scope.bookings[0].company_id, no_route: true})
@@ -239,8 +239,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-
-
   # delete a single booking
   $scope.delete = (booking) ->
     modalInstance = $modal.open
@@ -256,7 +254,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
   # delete all bookings assoicated to the purchase
-  $scope.delete_all = () ->
+  $scope.deleteAll = () ->
     modalInstance = $modal.open
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDeleteAll
@@ -264,7 +262,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
         purchase: ->
           $scope.purchase
     modalInstance.result.then (purchase) ->
-      PurchaseService.delete_all(purchase).then (purchase) ->
+      PurchaseService.deleteAll(purchase).then (purchase) ->
         $scope.purchase = purchase
         $scope.bookings = []
         $rootScope.$broadcast "booking:cancelled"
@@ -302,14 +300,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       $scope.upload_progress = 100
       if data && data.attachments && booking
         booking.attachments = data.attachments
-    #.error(...)
-    #.then(success, error, progress); 
-    #.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
-
-    # alternative way of uploading, send the file binary with the file's content-type.
-    #   Could be used to upload files to CouchDB, imgur, etc... html5 FileReader is needed. 
-    #   It could also be used to monitor the progress of a normal http post/put request with large data*/
-    # $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
 
 
   $scope.createBasketItem = (booking) ->
@@ -321,12 +311,20 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   $scope.checkAnswer = (answer) ->
     typeof answer.value == 'boolean' || typeof answer.value == 'string' || typeof answer.value == "number"
 
+
+  $scope.changeAttendees = (route) ->
+    $scope.moveAll(route)
+
+
+
+
+
 # Simple modal controller for handling the 'delete' modal
 ModalDelete = ($scope,  $rootScope, $modalInstance, booking) ->
   $scope.controller = "ModalDelete"
   $scope.booking = booking
 
-  $scope.confirm_delete = () ->
+  $scope.confirmDelete = () ->
     $modalInstance.close(booking)
 
   $scope.cancel = ->
@@ -337,7 +335,7 @@ ModalDeleteAll = ($scope,  $rootScope, $modalInstance, purchase) ->
   $scope.controller = "ModalDeleteAll"
   $scope.purchase = purchase
 
-  $scope.confirm_delete = () ->
+  $scope.confirmDelete = () ->
     $modalInstance.close(purchase)
 
   $scope.cancel = ->
