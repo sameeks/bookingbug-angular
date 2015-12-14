@@ -87,6 +87,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
     $scope.getWalletForMember($scope.member).then () ->
       AlertService.raise('TOPUP_SUCCESS')
       $rootScope.$broadcast("wallet:topped_up", wallet)
+      $scope.wallet_topped_up = true
       
 
   # TODO don't route to next page automatically, first alert user 
