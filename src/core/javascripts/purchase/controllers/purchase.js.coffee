@@ -27,7 +27,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     if $scope.fail_msg
       AlertService.danger({msg:$scope.fail_msg})
     else
-      AlertService.danger('GENERIC')
+      AlertService.raise('GENERIC')
 
 
   $scope.init = (options) ->
