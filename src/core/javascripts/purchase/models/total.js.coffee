@@ -10,6 +10,8 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         @items = items
       @getClient().then (client) =>
         @client = client
+      @getMember().then (member) =>
+        @member = member
 
     id: ->
       @get('id')
@@ -119,6 +121,16 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
           defer.resolve(@client)
       else
         defer.reject('No client')
+      defer.promise
+
+    getMember: =>
+      defer = $q.defer()
+      if @_data.$has('member')
+        @_data.$get('member').then (member) =>
+          @member = new BBModel.Member.Member(member)
+          defer.resolve(@member)
+      else
+        defer.reject('No member')
       defer.promise
 
     getConfirmMessages: () =>

@@ -1,0 +1,11 @@
+<div bb-membership-levels>
+  <div>
+    <h2 class="booking-form-header">Membership Types</h2>
+  </div>
+  <div>
+    <div class="form-group" ng-repeat="level in membership_level">
+      <span ng-if="level.name">{{level.name}}</span>
+      <button class="btn btn-primary btn-block" ng-click="selectLevel(level)">Select</button>
+    </div>
+  </div>
+</div>

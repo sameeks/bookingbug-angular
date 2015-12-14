@@ -155,6 +155,22 @@ app.directive "bbFocus", [->
 ]
 
 
+app.directive 'bbCurrencyField', ($filter) ->
+  restrict: 'A',
+  require: 'ngModel',
+  link: (scope, element, attrs, ctrl) ->
+
+    convertToCurrency = (value) ->
+      value / 100
+
+    convertToInteger = (value) ->
+      value * 100
+
+    ctrl.$formatters.push(convertToCurrency)
+    ctrl.$parsers.push(convertToInteger)
+
+
+
 # Min/Max directives for use with number inputs
 # Although angular provides min/max directives when using a HTML number input, the control does not validate if the field is actually a number
 # so we have to use a text input with a ng-pattern that only allows numbers.
@@ -167,18 +183,11 @@ app.directive "ngMin", ->
   restrict: "A"
   require: "ngModel"
   link: (scope, elem, attr, ctrl) ->
-    scope.$watch attr.ngMin, ->
-      ctrl.$setViewValue ctrl.$viewValue
-      return
 
     minValidator = (value) ->
       min = scope.$eval(attr.ngMin) or 0
-      if not isEmpty(value) and value < min
-        ctrl.$setValidity "ngMin", false
-        `undefined`
-      else
-        ctrl.$setValidity "ngMin", true
-        value
+      ctrl.$setValidity "ngMin", isEmpty(value) or value >= min
+      value
 
     ctrl.$parsers.push minValidator
     ctrl.$formatters.push minValidator
@@ -188,18 +197,11 @@ app.directive "ngMax", ->
   restrict: "A"
   require: "ngModel"
   link: (scope, elem, attr, ctrl) ->
-    scope.$watch attr.ngMax, ->
-      ctrl.$setViewValue ctrl.$viewValue
-      return
 
     maxValidator = (value) ->
       max = scope.$eval(attr.ngMax) # or Infinity
-      if not isEmpty(value) and value > max
-        ctrl.$setValidity "ngMax", false
-        `undefined`
-      else
-        ctrl.$setValidity "ngMax", true
-        value
+      ctrl.$setValidity "ngMax", isEmpty(value) or value <= max
+      value
 
     ctrl.$parsers.push maxValidator
     ctrl.$formatters.push maxValidator

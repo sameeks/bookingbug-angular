@@ -18,6 +18,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
 
   class Event extends BaseModel
+    
     constructor: (data) ->
       super(data)
       @getDate()
@@ -115,25 +116,6 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           defer.resolve(@duration)
       defer.promise
 
-    ###**
-    * @ngdoc method
-    * @name printDuration
-    * @methodOf BB.Models:Event
-    * @description
-    * Display duration of the event
-    *
-    * @returns {date} The returned printed duration
-    ### 
-    printDuration: () ->
-      if @duration < 60
-        @duration + " mins"
-      else
-        h = Math.round(@duration / 60)
-        m = @duration % 60
-        if m == 0
-          h + " hours"
-        else
-          h + " hours " + m + " mins"
 
     ###**
     * @ngdoc method
@@ -162,17 +144,6 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       else
         return "#FFFFFF"
 
-    ###**
-    * @ngdoc method
-    * @name getPerson
-    * @methodOf BB.Models:Event
-    * @description
-    * Get the person name
-    *
-    * @returns {object} The returned person
-    ###
-    getPerson: () ->
-      @getChain().person_name
 
     ###**
     * @ngdoc method
@@ -291,6 +262,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     ###  
     select: ->
       @selected = true
+
 
     ###**
     * @ngdoc method

@@ -7,7 +7,7 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   controller : 'adminBookingClients'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService, $log) ->
   
   $scope.validator = ValidatorService
   $scope.clientDef = $q.defer()
@@ -95,6 +95,6 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
  
 
   $scope.edit = (item) ->
-    console.log item
+    $log.info("not implemented")
 
     

@@ -186,7 +186,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate) ->
+    SettingsService, UriTemplate, $anchorScroll) ->
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -327,6 +327,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       # if setup is defined - blank the member -a s we're probably setting it - unless specifically defined as false
       prms.clear_member ||= true
     $scope.bb.client_defaults = prms.client or {}
+
+    if prms.client_defaults
+      if prms.client_defaults.membership_ref
+        $scope.bb.client_defaults.membership_ref = prms.client_defaults.membership_ref
     
     if $scope.bb.client_defaults && $scope.bb.client_defaults.name
       match = $scope.bb.client_defaults.name.match(/^(\S+)(?:\s(\S+))?/)
@@ -376,6 +380,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.extra_setup          = prms.extra_setup  
       $scope.bb.starting_step_number = parseInt(prms.extra_setup.step) if prms.extra_setup.step
       $scope.bb.return_url           = prms.extra_setup.return_url if prms.extra_setup.return_url
+      $scope.bb.destination          = prms.extra_setup.destination if prms.extra_setup.destination
 
     if prms.template
       $scope.bb.template = prms.template
@@ -391,7 +396,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     if prms.qudini_booking_id
       $scope.bb.qudini_booking_id = prms.qudini_booking_id
-
 
     # this is used by the bbScrollTo directive so that we can account of
     # floating headers that might reside on sites where the widget is embedded
@@ -1358,3 +1362,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.isMemberLoggedIn = () ->
     return LoginService.isLoggedIn()
+
+
+  $scope.scrollTo = (id) ->
+    $location.hash(id)
+    $anchorScroll()

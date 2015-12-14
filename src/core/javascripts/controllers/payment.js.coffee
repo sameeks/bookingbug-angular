@@ -20,7 +20,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService) ->
+angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService, AlertService) ->
 
   error = (scope, message) ->
     scope.error(message)
@@ -42,11 +42,15 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
       'custom_stylesheet' : custom_stylesheet,
       'scroll_offset'     : SettingsService.getScrollOffset()
     })
+
     element.find('iframe')[0].contentWindow.postMessage(payload, origin)
+
+
 
   linker = (scope, element, attributes) ->
 
     scope.payment_options = scope.$eval(attributes.bbPayment) or {}
+    scope.route_to_next_page = if scope.payment_options.route_to_next_page? then scope.payment_options.route_to_next_page else true
 
     element.find('iframe').bind 'load', (event) =>
       url = scope.bb.total.$href('new_payment') if scope.bb && scope.bb.total && scope.bb.total.$href('new_payment')
@@ -66,8 +70,11 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
             when "submitting"
               scope.callNotLoaded()
             when "error"
-              scope.callSetLoaded()
-              error(scope, event.data.message)
+              scope.$emit "payment:failed"
+              scope.callNotLoaded()
+              AlertService.raise('PAYMENT_FAILED')
+              # reload the payment iframe
+              document.getElementsByTagName("iframe")[0].src += ''
             when "payment_complete"
               scope.callSetLoaded()
               scope.paymentDone()
@@ -123,7 +130,8 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   ###
   $scope.paymentDone = () ->
     $scope.bb.payment_status = "complete"
-    $scope.decideNextPage()
+    $scope.$emit('payment:complete')
+    $scope.decideNextPage() if $scope.route_to_next_page
 
   $scope.error = (message) ->
     $log.warn("Payment Failure: " + message)

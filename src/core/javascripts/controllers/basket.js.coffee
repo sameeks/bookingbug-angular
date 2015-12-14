@@ -60,19 +60,44 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
   controller : 'BasketList'
 
 
-angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
+
+angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $attrs, $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
+
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
-  $scope.items = $scope.bb.basket.items
-  $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') && $scope.bb.company_settings.has_wallets && $scope.client.valid() && LoginService.isLoggedIn() && LoginService.member().id == $scope.client.id
+  $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') and $scope.bb.company_settings.has_wallets and $scope.client.valid() and LoginService.isLoggedIn() and LoginService.member().id == $scope.client.id and $scope.client.has_active_wallet
 
   # bb.basket.options - added 10-11-2015 @16:19
   # For ex. bb-basket-list="{requires_deal: true}" 
   $scope.bb.basket.setSettings($scope.$eval $attrs.bbBasketList or {})
 
-  $scope.$watch 'basket', (newVal, oldVal) =>
-    $scope.items = _.filter $scope.bb.basket.items, (item) -> !item.is_coupon
+  
+  $rootScope.connection_started.then ->
 
+    $scope.bb.basket.setClient($scope.client) if $scope.client
+
+    if $scope.client.$has('pre_paid_bookings') and $scope.bb.basket.timeItems().length > 0
+
+      $scope.notLoaded $scope
+      promises = []
+
+      for basket_item in $scope.bb.basket.timeItems()
+        params = {event_id: basket_item.getEventId()}
+        promises.push($scope.client.getPrePaidBookingsPromise(params))
+
+      $q.all(promises).then (result) ->
+
+        for basket_item, index in $scope.bb.basket.timeItems()
+          prepaid_bookings = result[index]
+
+          if $scope.bb.basket.settings and $scope.bb.basket.settings.auto_use_prepaid_bookings and prepaid_bookings.length > 0
+            basket_item.setPrepaidBooking(prepaid_bookings[0]) 
+
+        $scope.updateBasket().then () ->
+          $scope.setLoaded $scope
+        
+      , (err) ->
+        $scope.setLoaded $scope
 
   ###**
   * @ngdoc method
@@ -99,14 +124,32 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   * @param {string} route A route of the added another item
   ###
   $scope.checkout = (route) =>
-    # Reset the basket to the last item whereas the curren_item is not complete and should not be in the basket and that way, we can proceed to checkout instead of hard-coding it on the html page.
-    $scope.setReadyToCheckout(true)
+
+
+    if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()     
+      AlertService.raise('GIFT_CERTIFICATE_REQUIRED')
+      return false
+      
     if $scope.bb.basket.items.length > 0
-      $scope.decideNextPage(route)
+      $scope.setReadyToCheckout(true)
+      if $scope.$parent.$has_page_control
+        return true
+      else
+        $scope.decideNextPage(route)
     else
-      AlertService.clear()
       AlertService.raise('EMPTY_BASKET_FOR_CHECKOUT')
       return false
+
+
+  ###**
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbMiniBasket
+  * @description
+  * Set this page section as ready
+  ###
+  $scope.setReady = () ->
+    return $scope.checkout()
 
   ###**
   * @ngdoc method
@@ -156,7 +199,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
         item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
-      $scope.items = $scope.bb.basket.items     
+      $scope.items = $scope.bb.basket.items
       $scope.deal_code = null
     , (err) ->
       if err and err.data and err.data.error
@@ -192,21 +235,4 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
     $scope.decideNextPage("basket_wallet")
 
 
-  ###**
-  * @ngdoc method
-  * @name setReady
-  * @methodOf BB.Directives:bbMiniBasket
-  * @description
-  * Set this page section as ready
-  ###
-  $scope.setReady = ->    
-    if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()     
-      AlertService.raise('GIFT_CERTIFICATE_REQUIRED')
-      return false   
-    if $scope.bb.basket.items.length > 0
-      $scope.setReadyToCheckout(true)
-      return true
-    else
-      AlertService.raise('EMPTY_BASKET_FOR_CHECKOUT')
-      return false
       

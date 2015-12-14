@@ -459,17 +459,3 @@ app.directive 'bbBookingExport', ($compile) ->
         <a class='image img_gcal' title='Add this booking to Google Calendar' href='#{purchase_total.gcalLink()}' target='_blank'><img src='//images.bookingbug.com/widget/gcal.png' border='0'></a>
       "
 
-
-app.directive 'bbCurrencyField', ($filter) ->
-  restrict: 'A',
-  require: 'ngModel',
-  link: (scope, element, attrs, ctrl) ->
-
-    convertToCurrency = (value) ->
-      value / 100
-
-    convertToInteger = (value) ->
-      value * 100
-
-    ctrl.$formatters.push(convertToCurrency)
-    ctrl.$parsers.push(convertToInteger)
