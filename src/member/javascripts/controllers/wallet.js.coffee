@@ -8,7 +8,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       $scope.setLoaded $scope
       $scope.wallet = wallet
       updateClient(wallet)
-      defer.resolve()
+      defer.resolve(wallet)
     , (err) ->
       $scope.setLoaded $scope
       defer.reject()
@@ -67,7 +67,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       WalletService.updateWalletForMember(member, params).then (wallet) ->
         $scope.setLoaded $scope
         $scope.wallet = wallet
-        $rootScope.$broadcast("wallet:updated", wallet)
+        $rootScope.$broadcast("wallet:updated", wallet, band)
       , (err) ->
         $scope.setLoaded $scope
         $log.error err.data
@@ -103,7 +103,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
     $scope.updateWallet($scope.member, 0, band)
 
   $scope.walletPaymentDone = () ->
-    $scope.getWalletForMember($scope.member).then () ->
+    $scope.getWalletForMember($scope.member).then (wallet) ->
       AlertService.raise('TOPUP_SUCCESS')
       $rootScope.$broadcast("wallet:topped_up", wallet)
       $scope.wallet_topped_up = true
