@@ -39,6 +39,7 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
 
     calculateAmount = () ->
       # if this is a basket topup, use either the amount due or the min topup amount, whichever is greatest
+
       if scope.wallet_payment_options.basket_topup
 
         amount_due = scope.bb.basket.dueTotal() - scope.wallet.amount
@@ -71,11 +72,13 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
 
 
     # listen to when the wallet is updated
-    scope.$on 'wallet:updated', (event, wallet) ->
+    scope.$on 'wallet:updated', (event, wallet, band = null) ->
      
       # load iframe using payment link
       if wallet.$has('new_payment')
         scope.notLoaded scope
+        if band
+          scope.amount = band.actual_amount
         scope.wallet_payment_url = $sce.trustAsResourceUrl(wallet.$href("new_payment"))
         scope.show_payment_iframe = true
         element.find('iframe').bind 'load', (event) =>

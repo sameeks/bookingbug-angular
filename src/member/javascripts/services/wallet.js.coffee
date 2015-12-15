@@ -29,6 +29,19 @@ angular.module("BB.Services").factory "WalletService", ($q, BBModel) ->
 
     deferred.promise
 
+  getWalletPurchaseBandsForWallet: (wallet) ->
+    deferred = $q.defer()
+    if !wallet.$has('purchase_bands')
+      deferred.reject("No Purchase Bands")
+    else
+      wallet.$get("purchase_bands", {}).then (resource) ->
+        resource.$get("purchase_bands").then (bands) ->
+          bands = (new BBModel.Member.WalletPurchaseBand(band) for band in bands)
+          deferred.resolve(bands) 
+      , (err) -> 
+        deferred.reject(err)
+    deferred.promise
+
   updateWalletForMember: (member, params) ->
     deferred = $q.defer()
     if !member.$has("wallet")

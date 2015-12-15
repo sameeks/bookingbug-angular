@@ -8,7 +8,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       $scope.setLoaded $scope
       $scope.wallet = wallet
       updateClient(wallet)
-      defer.resolve()
+      defer.resolve(wallet)
     , (err) ->
       $scope.setLoaded $scope
       defer.reject()
@@ -29,6 +29,20 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       defer.reject([])
     return defer.promise
 
+  $scope.getWalletPurchaseBandsForWallet = (wallet) ->
+    defer = $q.defer()
+    $scope.notLoaded $scope
+    WalletService.getWalletPurchaseBandsForWallet(wallet).then (bands) ->
+      $scope.bands = bands
+      $scope.setLoaded $scope
+      defer.resolve(bands)
+    , (err) ->
+      $scope.setLoaded $scope
+      $log.error err.data
+      defer.reject([])
+    return defer.promise
+
+
 
   $scope.createWalletForMember = (member) ->
     $scope.notLoaded $scope
@@ -40,18 +54,20 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       $log.error err.data
 
   
-  $scope.updateWallet = (member, amount) ->
+  $scope.updateWallet = (member, amount, band = null) ->
     $scope.notLoaded $scope
-    if member and amount
-      params = {amount: amount}
+    if member
+      params = {}
+      params.amount = amount if amount > 0
       params.wallet_id = $scope.wallet.id if $scope.wallet
       params.total_id = $scope.total.id if $scope.total
-      param.deposit = $scope.deposit if $scope.deposit
+      params.deposit = $scope.deposit if $scope.deposit
       params.basket_total_price = $scope.basket.total_price if $scope.basket
+      params.band_id = band.id if band
       WalletService.updateWalletForMember(member, params).then (wallet) ->
         $scope.setLoaded $scope
         $scope.wallet = wallet
-        $rootScope.$broadcast("wallet:updated", wallet)
+        $rootScope.$broadcast("wallet:updated", wallet, band)
       , (err) ->
         $scope.setLoaded $scope
         $log.error err.data
@@ -82,9 +98,12 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
         $scope.setLoaded $scope
         $log.error err.date
   
+  $scope.purchaseBand = (band) ->
+    $scope.selected_band = band
+    $scope.updateWallet($scope.member, 0, band)
 
   $scope.walletPaymentDone = () ->
-    $scope.getWalletForMember($scope.member).then () ->
+    $scope.getWalletForMember($scope.member).then (wallet) ->
       AlertService.raise('TOPUP_SUCCESS')
       $rootScope.$broadcast("wallet:topped_up", wallet)
       $scope.wallet_topped_up = true
