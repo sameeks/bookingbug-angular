@@ -17,10 +17,30 @@
 * scope: true
 * </pre>
 *
-* @property {array} items The items of the person list
+* @param {hash}  bbPeople   A hash of options
+* @param {object}  bbItem   A specific basket item to reference
+* @param {boolean}  waitForService   Wait for a the service to be loaded before loading People
+* @param {boolean}  hideDisabled   In an admin widget, disabled resources are shown by default, you can choose to hide disabled resources
+* @property {array} booking_item The current basket item being referred to
+* @property {array} all_people An array of all people
 * @property {array} bookable_people The bookable people from the person list
 * @property {array} bookable_items The bookable items from the person list
 * @property {array} booking_item The booking item from the person list
+* @example
+*  <example module="BB"> 
+*    <file name="index.html">
+*   <div bb-api-url='https://dev01.bookingbug.com'>
+*   <div  bb-widget='{company_id:37167}'>
+*     <div bb-people>
+*        <ul>
+*          <li ng-repeat='person in all_people'> {{person.name}}</li>
+*        </ul>
+*     </div>
+*     </div>
+*     </div>
+*   </file> 
+*  </example>
+* 
 ####
 
 

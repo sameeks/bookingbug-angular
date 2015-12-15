@@ -48,7 +48,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
 
   $rootScope.connection_started.then ->
     if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
-      $scope.bb.company.getParent().then (parent) ->
+      $scope.bb.company.$getParent().then (parent) ->
         $scope.company = parent
         initialise()
     else
@@ -71,7 +71,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
     promises.push(BBModel.Category.$query($scope.bb.company))
 
     # company question promise
-    promises.push($scope.company.getCompanyQuestions()) if $scope.company.$has('company_questions')
+    promises.push($scope.company.$getCompanyQuestions()) if $scope.company.$has('company_questions')
     
     $q.all(promises).then (result) ->
 

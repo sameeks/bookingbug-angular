@@ -480,7 +480,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       prom = PurchaseService.update({purchase: $scope.bb.moving_booking, bookings: $scope.bb.basket.items})
 
       prom.then  (purchase) ->
-        purchase.getBookings().then (bookings) ->
+        purchase.$getBookings().then (bookings) ->
           for booking in bookings
             # update bookings
             if $scope.bookings

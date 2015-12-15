@@ -69,7 +69,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q
         $scope.decideNextPage()
         return
       else if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
-        $scope.bb.company.getParent().then (parent) ->
+        $scope.bb.company.$getParent().then (parent) ->
           $scope.company_parent = parent
           $scope.initialise()
         , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -96,16 +96,16 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q
 
     # company question promise
     if $scope.bb.company.$has('company_questions')
-      promises.push($scope.bb.company.getCompanyQuestions())
+      promises.push($scope.bb.company.$getCompanyQuestions())
     else if $scope.company_parent? && $scope.company_parent.$has('company_questions')
-      promises.push($scope.company_parent.getCompanyQuestions())
+      promises.push($scope.company_parent.$getCompanyQuestions())
     else
       promises.push($q.when([]))
       $scope.has_company_questions = false
 
     # event group promise
     if !$scope.current_item.event_group
-      promises.push($scope.bb.company.getEventGroups())
+      promises.push($scope.bb.company.$getEventGroups())
     else
       promises.push($q.when([]))
 

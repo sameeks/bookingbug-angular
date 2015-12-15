@@ -60,7 +60,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       $scope.setClient(new BBModel.Client(LoginService.member()._data))
 
     if LoginService.isLoggedIn() && LoginService.member().$has("child_clients") && LoginService.member()
-      LoginService.member().getChildClients().then (children) =>
+      LoginService.member().$getChildClients().then (children) =>
         $scope.bb.parent_client = new BBModel.Client(LoginService.member()._data)
         $scope.bb.child_clients = children
         $scope.bb.basket.parent_client_id = $scope.bb.parent_client.id

@@ -138,14 +138,14 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
             $scope.bb.purchase = purchase
             $scope.price = !($scope.purchase.price == 0)
 
-            $scope.purchase.getBookings().then (bookings) ->
+            $scope.purchase.$getBookings().then (bookings) ->
               $scope.bookings = bookings
               $scope.setLoaded $scope
               checkIfMoveBooking(bookings)
               checkIfWaitlistBookings(bookings)
 
               for booking in $scope.bookings
-                booking.getAnswers().then (answers) ->
+                booking.$getAnswers().then (answers) ->
                   booking.answers = answers
             , (err) ->
               $scope.setLoaded $scope

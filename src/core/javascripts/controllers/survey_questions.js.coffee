@@ -100,7 +100,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
         booking.$get("survey_questions", params).then (details) =>
           item_details = new BBModel.ItemDetails(details)
           booking.survey_questions = item_details.survey_questions
-          booking.getSurveyAnswers().then (answers) =>
+          booking.$getSurveyAnswers().then (answers) =>
             booking.survey_answers = answers
             for question in booking.survey_questions
               if booking.survey_answers

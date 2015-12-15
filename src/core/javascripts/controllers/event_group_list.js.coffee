@@ -60,7 +60,7 @@ angular.module('BB.Controllers').controller 'EventGroupList',
 
   $scope.init = (comp) ->
     $scope.booking_item ||= $scope.bb.current_item
-    ppromise = comp.getEventGroups()
+    ppromise = comp.$getEventGroups()
 
     ppromise.then (items) ->
       # not all service lists need filtering. check for attribute first

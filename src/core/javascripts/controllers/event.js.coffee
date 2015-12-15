@@ -47,7 +47,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
   $scope.init = (comp) ->
     $scope.event = $scope.bb.current_item.event
-    promises = [$scope.current_item.event_group.getImages(), $scope.event.prepEvent()]
+    promises = [$scope.current_item.event_group.$getImages(), $scope.event.prepEvent()]
     if $scope.client
       promises.push $scope.getPrePaidsForEvent($scope.client, $scope.event)
 
