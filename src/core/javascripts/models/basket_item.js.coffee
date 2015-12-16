@@ -560,12 +560,12 @@ angular.module('BB.Models').factory "BasketItemModel",
       @duration = dur
       if @service
         @base_price = @service.getPriceByDuration(dur)
-      if @time && @time.price
+      else if @time && @time.price
         @base_price = @time.price
-      if @price && (@price != @base_price) 
-        @setPrice(@price)
-      else 
-         @setPrice(@base_price)
+      else if @price
+        @base_price = @price
+
+      @setPrice(@base_price)
 
     ###**
     * @ngdoc method
