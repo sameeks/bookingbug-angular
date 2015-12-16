@@ -352,11 +352,15 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @param {date} day The day of the event
   ###
   $scope.showDay = (day) ->
-    return if !day or (day and !day.data)
+    return if !day or (day and !day.data and !day._d)    
 
     $scope.selected_day.selected = false if $scope.selected_day
 
-    date = day.date
+    # The value of "day" from filterDateChanged is a Moment object
+    # whereas the value of "day" when this method is called by
+    # bbMonthPicker is an Object with a date key with a Moment object value   
+    if day.data then date = day.date else date = day   
+
     # unselect the event if it's not on the day being selected
     delete $scope.event if $scope.event and !$scope.selected_date.isSame(date, 'day')
 
@@ -477,9 +481,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @description
   * Filtering data exchanged from the list of events
   ###
-  $scope.filterDateChanged = () ->
-    $scope.filterChanged()
-    $scope.showDay(moment($scope.filters.date))
+  $scope.filterDateChanged = (options = {reset: false}) ->    
+    if $scope.selected_day and $scope.filters.date
+      if $scope.selected_day.data then selected_day = $scope.selected_day.date else selected_day = $scope.selected_day
+      return false if selected_day.isSame($scope.filters.date, 'day') and options.reset == false
+    $scope.showDay(moment($scope.filters.date))    
 
   ###**
   * @ngdoc method
