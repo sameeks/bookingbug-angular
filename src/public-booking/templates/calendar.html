@@ -36,14 +36,19 @@
     <ul class="week row">
 
       <li class="day navigation hidden-xs">
-        <button type="button" class="btn btn-icon" ng-click="subtract('days', subtract_length)" ng-disabled="!is_subtract_valid || !isLoaded">
+        <button type="button" class="btn btn-icon visible-xs" ng-click="subtract('days', 1)" ng-disabled="!is_subtract_valid || !isLoaded">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
+        <button type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
+        <button type="button" class="btn btn-icon visible-md visible-lg" ng-click="subtract('days', 7)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
         <span ng-show="!is_subtract_valid || !isLoaded">&nbsp;</span>
       </li>
 
-      <li class="day" ng-repeat="day in days" ng-class="{'hidden-xs': day.hide, 'past': day.date.isBefore(moment(),'day')}">
-
+      <li class="day cal-col-{{$index + 1}}" ng-repeat="day in days" ng-class="{'past': day.date.isBefore(moment(),'day')}">
         <div class="day-header row">
           <span class="col-xs-2 previous visible-xs">
             <button type="button" class="btn btn-icon" ng-click="subtract('days', 1)" ng-disabled="day.date.isSame(moment(),'day') || !isLoaded">
@@ -52,10 +57,16 @@
           </span>
           <h3 class="day-heading col-xs-8 col-sm-12">
             <span class="visible-xs">{{day.date | datetime: "ddd":false}} <strong>{{day.date | datetime: "D":false}} </strong>{{day.date | datetime: "MMM":false}}</span>
-            <span class="hidden-xs">{{day.date | datetime: "ddd":false}} <strong>{{day.date | datetime: "D":false}} </strong></span> 
+            <span class="hidden-xs">{{day.date | datetime: "ddd":false}} <strong>{{day.date | datetime: "D":false}} </strong></span>
           </h3>
           <span class="col-xs-2 next visible-xs">
-            <button type="button" class="btn btn-icon" ng-click="add('days', 1)" ng-disabled="!isLoaded">
+            <button type="button" class="btn btn-icon visible-xs" ng-click="add('days', 1)" ng-disabled="!isLoaded">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+            <button type="button" class="btn btn-icon visible-sm" ng-click="add('days', 5)" ng-disabled="!isLoaded">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+            <button type="button" class="btn btn-icon visible-md visible-lg" ng-click="add('days', 7)" ng-disabled="!isLoaded">
               <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
           </span>
@@ -158,7 +169,7 @@
   <div class="bb-step-navigation">
     <div class="row">
       <div class="col-sm-offset-8 col-sm-2 col-sm-push-2 text-right">
-        <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time"> 
+        <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time">
           <span ng-if="!bb.moving_booking">Continue</span>
           <span ng-if="bb.moving_booking">Move booking</span>
         </button>
@@ -167,5 +178,5 @@
         <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-if="!bb.moving_booking">Back</button>
       </div>
     </div>
-  </div>  
+  </div>
 </div>
