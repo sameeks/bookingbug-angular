@@ -337,7 +337,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       $scope.purchase = purchase
       $scope.total = $scope.purchase
       $scope.bb.purchase = purchase
-      $scope.purchase.getBookings().then (bookings) ->
+      $scope.purchase.$getBookings().then (bookings) ->
         $scope.bookings = bookings
         $scope.waitlist_bookings = (booking for booking in $scope.bookings when (booking.on_waitlist && booking.settings.sent_waitlist == 1))
         if $scope.purchase.$has('new_payment') && $scope.purchase.due_now > 0

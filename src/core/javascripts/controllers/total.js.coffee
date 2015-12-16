@@ -17,6 +17,7 @@
 * scope: true
 * </pre>
 *
+* @param {hash}  bbTotal A hash of options
 * @property {array} payment_status The payment status
 * @property {array} total The total
 ####

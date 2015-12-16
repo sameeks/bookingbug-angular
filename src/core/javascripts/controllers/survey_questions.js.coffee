@@ -85,7 +85,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
       $scope.purchase.$get('client').then (client) =>
         $scope.setClient(new BBModel.Client(client))
 
-    $scope.purchase.getBookings().then (bookings) =>
+    $scope.purchase.$getBookings().then (bookings) =>
       params = {}
       $scope.bookings = bookings
       for booking in $scope.bookings

@@ -186,7 +186,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   $scope.getPrePaidsForEvent = (client, event) ->
     defer = $q.defer()
     params = {event_id: event.id}
-    client.getPrePaidBookings(params).then (prepaids) ->
+    client.$getPrePaidBookings(params).then (prepaids) ->
       $scope.pre_paid_bookings = prepaids
       defer.resolve(prepaids)
     , (err) ->

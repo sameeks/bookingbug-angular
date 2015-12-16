@@ -17,6 +17,7 @@
 * scope: true
 * </pre>
 *
+* @param {hash}  bbTimes A hash of options
 * @property {array} selected_day The selected day
 * @property {date} selected_date The selected date
 * @property {array} data_source The data source
