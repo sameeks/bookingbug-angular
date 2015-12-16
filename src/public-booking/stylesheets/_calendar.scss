@@ -160,12 +160,6 @@
   }
 
 // calendar hidden column functionality
-.cal-col-2, .cal-col-3, .cal-col-4, .cal-col-5{
-  @media (max-width: 768px) {
-    display: none;
-  }
-}
-
 @media (max-width: $screen-md-max) {
   .cal-col-6, .cal-col-7{
     display: none;
@@ -174,15 +168,12 @@
     width: 17.99%;
   }
 }
-@media (max-width: $screen-sm-max) {
-  .panel-default[disabled] .panel-title{
-    margin-bottom: 3px !important;
-    margin-top: 12px !important;
-  }
-}
 @media (max-width: $screen-xs-max) {
   .cal-col-1{
     width: 100%;
+  }
+  .cal-col-2, .cal-col-3, .cal-col-4, .cal-col-5{
+    display: none;
   }
 }
   // actions
