@@ -108,7 +108,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
       $scope.client.setValid(true) if $scope.bb.isAdmin
       $scope.existing_member = false
       $scope.decideNextPage(route)
-    , (err) -> handleError()
+    , (err) -> handleError(err)
 
   ###**
   * @ngdoc method
