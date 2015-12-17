@@ -130,7 +130,7 @@
         color: #FFF;
 
         .circle {
-          background-color: #AAA;
+          background-color: rgb(11, 87, 162);
           border: none;
           border-radius: 50%;
           padding: 6px 5px;
@@ -139,7 +139,7 @@
           text-align: center;
 
           &:hover {
-            background-color: $jessops-blue;
+            background-color: rgb(151, 186, 219);
           }
         }
       }
@@ -156,11 +156,11 @@
       
       &.selected.available {
         .circle {
-          background-color: $jessops-blue;
+          background-color: rgb(25, 169, 115);
         }
       }       
     }
-    
+
     th {
       margin: 0;
       text-align: center;
