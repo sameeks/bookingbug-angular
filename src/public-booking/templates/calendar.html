@@ -32,17 +32,17 @@
         </span>
       </div>
     </div>
-
+  <div class="cal-custom">
     <ul class="week row">
 
       <li class="day navigation hidden-xs">
         <button type="button" class="btn btn-icon visible-xs" ng-click="subtract('days', 1)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
-        <button type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
+        <button type="button" class="btn btn-icon visible-sm visible-md" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
-        <button type="button" class="btn btn-icon visible-md visible-lg" ng-click="subtract('days', 7)" ng-disabled="!is_subtract_valid || !isLoaded">
+        <button type="button" class="btn btn-icon visible-lg" ng-click="subtract('days', 7)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
         <span ng-show="!is_subtract_valid || !isLoaded">&nbsp;</span>
@@ -63,11 +63,6 @@
             <button type="button" class="btn btn-icon visible-xs" ng-click="add('days', 1)" ng-disabled="!isLoaded">
               <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
-            <button type="button" class="btn btn-icon visible-sm" ng-click="add('days', 5)" ng-disabled="!isLoaded">
-              <span class="glyphicon glyphicon-chevron-right"></span>
-            </button>
-            <button type="button" class="btn btn-icon visible-md visible-lg" ng-click="add('days', 7)" ng-disabled="!isLoaded">
-              <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
           </span>
         </div>
@@ -157,25 +152,28 @@
       </li>
 
       <li class="day navigation hidden-xs">
-        <button type="button" class="btn btn-icon" ng-disabled="!isLoaded" ng-click="add('weeks', 1)">
+        <button type="button" class="btn btn-icon visible-sm visible-md" ng-click="add('days', 5)" ng-disabled="!isLoaded">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+        <button type="button" class="btn btn-icon visible-lg" ng-click="add('days', 7)" ng-disabled="!isLoaded">
           <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
       </li>
-
     </ul>
+  </div>
 
   </div>
 
   <div class="bb-step-navigation">
     <div class="row">
       <div class="col-sm-offset-8 col-sm-2 col-sm-push-2 text-right">
-        <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time">
+        <button type="button" class="btn btn-primary btn-block" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time">
           <span ng-if="!bb.moving_booking">Continue</span>
           <span ng-if="bb.moving_booking">Move booking</span>
         </button>
       </div>
       <div class="col-sm-2 col-sm-pull-10 text-left">
-        <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-if="!bb.moving_booking">Back</button>
+        <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="loadPreviousStep()" ng-if="!bb.moving_booking">Back</button>
       </div>
     </div>
   </div>
