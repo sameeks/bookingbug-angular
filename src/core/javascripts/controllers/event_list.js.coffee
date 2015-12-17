@@ -44,7 +44,7 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService, BBModel, $timeout) ->
+angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService, $timeout) ->
   $scope.controller = "public.controllers.EventList"
   $scope.notLoaded $scope
   angular.extend(this, new PageControllerService($scope, $q))
