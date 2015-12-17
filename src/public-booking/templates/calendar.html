@@ -39,7 +39,10 @@
         <button type="button" class="btn btn-icon visible-xs" ng-click="subtract('days', 1)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
-        <button type="button" class="btn btn-icon visible-sm visible-md" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
+        <button type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 3)" ng-disabled="!is_subtract_valid || !isLoaded">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
+        <button type="button" class="btn btn-icon visible-md" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
         <button type="button" class="btn btn-icon visible-lg" ng-click="subtract('days', 7)" ng-disabled="!is_subtract_valid || !isLoaded">
@@ -152,7 +155,10 @@
       </li>
 
       <li class="day navigation hidden-xs">
-        <button type="button" class="btn btn-icon visible-sm visible-md" ng-click="add('days', 5)" ng-disabled="!isLoaded">
+        <button type="button" class="btn btn-icon visible-sm" ng-click="add('days', 3)" ng-disabled="!isLoaded">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+        <button type="button" class="btn btn-icon visible-md" ng-click="add('days', 5)" ng-disabled="!isLoaded">
           <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
         <button type="button" class="btn btn-icon visible-lg" ng-click="add('days', 7)" ng-disabled="!isLoaded">

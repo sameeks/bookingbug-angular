@@ -168,6 +168,14 @@
     width: 17.99%;
   }
 }
+@media (max-width: $screen-sm-max) {
+  .cal-col-6, .cal-col-7, .cal-col-4, .cal-col-5{
+    display: none;
+  }
+  .cal-col-1, .cal-col-2, .cal-col-3{
+    width: 29.98%;
+  }
+}
 @media (max-width: $screen-xs-max) {
   .cal-col-1{
     width: 100%;
