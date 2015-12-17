@@ -25,6 +25,21 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     , (err) =>
       deferred.reject(err)
     deferred.promise
+
+  FBLogin: (company, prms) ->
+    deferred = $q.defer()
+    company.$post('facebook_login', {}, prms).then (login) =>
+      login.$get('member').then (member) =>
+        member = new BBModel.Member.Member(member)
+        $sessionStorage.setItem("fb_user", true)
+        @setLogin(member)
+        deferred.resolve(member);
+      , (err) =>
+        deferred.reject(err)
+    , (err) =>
+      deferred.reject(err)
+    deferred.promise
+
   
   companyQuery: (id) =>
     if id
@@ -104,6 +119,11 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
       deferred.reject(err)
     deferred.promise
 
+  FBLogout: (options) ->
+    $sessionStorage.removeItem("fb_user")
+    @logout(options)
+      
+
   sendPasswordReset: (company, params) ->
     deferred = $q.defer()
     company.$post('email_password_reset', {}, params).then () =>
@@ -112,6 +132,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
       deferred.reject(err)
     deferred.promise
   
+
   updatePassword: (member, params) ->
     params.auth_token = member.getOption('auth_token')
     if member && params['new_password'] && params['confirm_new_password']

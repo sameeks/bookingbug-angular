@@ -1,17 +1,14 @@
-<div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
-<div ng-hide="loading">
-  <div ng-if="amount"class="bb-head">
-    <span id="wallet"> Your Wallet </span>
-  </div>
+<div>
+
   <div class="wallet-balance">
-    <div ng-if="wallet.amount == 0">
-      <span>Balance: </span><span> You dont have any credit in your wallet. </span>
+    <div ng-show="wallet.amount == 0">
+      <span>Balance: </span><span>You dont have any credit in your wallet.</span>
     </div>
-    <div ng-if="wallet.amount > 0">
-      <span>Balance: </span> <span id="balance"> {{wallet.amount | icurrency:wallet.wallet_currency }} </span>
+    <div ng-show="wallet.amount > 0">
+      <span>Balance: </span> <span id="balance"> {{wallet.amount | currency}} </span>
     </div>
   </div>
-  </hr>
+
   <div class="wallet-status">
     <div ng-hide="wallet.active">
       <span>Status:</span><span><b> Your wallet is not active.</b></span> <span><button ng-click="activateWallet(member)"> Activate </button></span>
@@ -20,32 +17,26 @@
       <span>Status:</span><span id="status"><b> Active </b></span>
     </div>
   </div>
-  </br>
 
-  <div ng-if="error_message" class="alerts">
-    <p class="error_message" ng-bind-html="error_message"></p>
-  </div>
-
-  <div ng-if="payment_success" class="alerts">
-    <p class="success_message"> You have successfully topped up your wallet! Your new balance is {{wallet.amount | icurrency:wallet.wallet_currency}}</p>
-  </div>
 
   <div>
-    <button type="button" class="bb-bookings-action" ng-click="(show_topup_box = true);(show_wallet_logs = false);(error_message = false)">Top Up</button>
+    <button type="button" class="btn btn-primary" ng-click="(show_topup_box = true);(show_wallet_logs = false);">Top Up</button>
   </div>
+
   <br>
-  <div ng-if="wallet.$has('logs')">
-    <button ng-click="toggleWalletPaymentLogs();(show_topup_box = true)"> Wallet Payments </button>
-     <div ng-if="show_wallet_logs">
-      <div bb-wallet-logs wallet="wallet"></div>
+
+  <div ng-show="wallet.$has('logs')">
+     <div ng-show="show_wallet_logs">
+      <div bb-wallet-logs></div>
     </div>
   </div>
 
-  <div ng-if="!show_wallet_logs && !error_message" bb-wallet-payment>
+  <div ng-if="show_topup_box && !show_wallet_logs" bb-wallet-payment>
 
     <div class="bb-content">
+
       <div ng-form class="form-inline">
-        <div ng-show="showTopUpBox()" class="form-group">
+        <div class="form-group">
           <label for="amount">Amount:</label>
           <div class="input-group">
             <input type="number" class="form-control input-sm" id="amount" name="amount" ng-model="amount" placeholder="Enter Top Up Amount" bb-currency-field>
@@ -58,17 +49,23 @@
         </div>
       </div>
 
-      <div ng-if="wallet.$has('new_payment')" class="bb-payment">
-        <div class="bb-head">
-          <h3> Make Payment </h3>
-        </div>
-        <div id="bb-payment">
-          <iframe id="bb-widget" ng-src="{{wallet_payment_url}}" width="100%"scrolling="no" frameborder="0"></iframe>
-        </div>
-        <script type="text/javascript">
-          iFrameResize([{log:true, checkOrigin:false}],['#bb-widget']);
-       </script> 
+      <!-- BANDS STUFF GOES HERE -->
+      <div bb-wallet-purchase-bands>
       </div>
+
+      <div ng-show="show_payment_iframe" class="bb-payment">
+        <div class="bb-head">
+          <h3>Make Payment</h3>
+          <p>Topup wallet by {{amount | currency}}</p>
+        </div>
+
+        <iframe id="bb-payment" ng-src="{{wallet_payment_url}}" width="100%" scrolling="no" frameborder="0"></iframe>
+        <script type="text/javascript">
+          iFrameResize({log:false, checkOrigin:false, enablePublicMethods:true}, '#bb-payment');
+        </script>
+
+      </div>
+
     </div>
   </div>
 

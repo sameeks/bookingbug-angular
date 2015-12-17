@@ -98,8 +98,23 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     timeItems: ->
       titems = []
       for i in @items
-        titems.push(i) if !i.is_coupon #and !i.ready
+        titems.push(i) if !i.is_coupon and !i.isExternalPurchase()
       titems
+
+
+    basketItems: ->
+      bitems = []
+      for i in @items
+        bitems.push(i) if !i.is_coupon
+      bitems
+
+
+    externalPurchaseItems: ->
+      eitems = []
+      for i in @items
+        eitems.push(i) if i.isExternalPurchase()
+      eitems
+
 
     ###**
     * @ngdoc method
@@ -182,6 +197,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
         reference: @reference
       post.is_admin = @is_admin
       post.parent_client_id = @parent_client_id
+      post.take_from_wallet = @take_from_wallet
       post.items = []
       for item in @items
         post.items.push(item.getPostData())
@@ -410,7 +426,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * @name hasWaitlistItem
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if there is an item in the items array that's on the wait list
+    * Checks if the basket contains an wait list event
     *
     * @returns {boolean} true or false
     ### 
@@ -418,4 +434,34 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
       for item in @items
         return true if item.isWaitlist()
       return false
-      
+
+    ###**
+    * @ngdoc method
+    * @name hasExternalPurchase
+    * @methodOf BB.Models:Basket
+    * @description
+    * Checks if the basket contains an external purchase
+    *
+    * @returns {boolean} true or false
+    ### 
+    hasExternalPurchase : ->
+      for item in @items
+        return true if item.isExternalPurchase()
+      return false
+
+    ###**
+    * @ngdoc method
+    * @name useWallet
+    * @methodOf BB.Models:Basket
+    * @description
+    * Indicates if a wallet should be used for payment
+    *
+    * @returns {boolean} true or false
+    ### 
+    useWallet : (value, client) ->
+      if client and client.$has('wallet') and value
+        @take_from_wallet = true
+        return true
+      else
+        @take_from_wallet = false
+        return false

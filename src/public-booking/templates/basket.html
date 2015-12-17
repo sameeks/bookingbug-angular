@@ -1,4 +1,4 @@
-<div bb-basket-list ng-init="checkStepTitle('Check Your Basket')" class="bb-basket">
+<div bb-basket-list class="bb-basket">
 	<div class="row">
 
 
@@ -19,7 +19,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="item in items" ng-class="{'last-item': $last}">
+						<tr ng-repeat="item in bb.basket.basketItems()" ng-class="{'last-item': $last}">
 							<td>
 								<p>
 									{{item.describe()}}
@@ -30,7 +30,6 @@
 									<br/>
 									<small ng-if="item.recipient"> Recipient: {{ item.recipient }} </small>
 								</p>
-								<p></p>
 							</td>
 							<td class="text-right">
 								{{ item.total_price | currency }}

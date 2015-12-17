@@ -1,114 +1,142 @@
-angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log, $modal, $rootScope) ->
+angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log, $modal, $rootScope, AlertService) ->
   
-  $scope.company_id = $scope.member.company_id if $scope.member
-  $scope.show_wallet_logs = false
-  $scope.loading = true
-  $scope.error_message = false
-  $scope.payment_success = false
-
-
-  $scope.toggleWalletPaymentLogs = () ->
-    if $scope.show_wallet_logs 
-      $scope.show_wallet_logs = false
-    else
-      $scope.show_wallet_logs = true
-
-  $scope.showTopUpBox = () ->
-    if $scope.amount
-      true
-    else 
-      $scope.show_topup_box
 
   $scope.getWalletForMember = (member, params) ->
-    $scope.loading = true
+    defer = $q.defer()
+    $scope.notLoaded $scope
     WalletService.getWalletForMember(member, params).then (wallet) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $scope.wallet = wallet
-      $scope.wallet
+      updateClient(wallet)
+      defer.resolve(wallet)
     , (err) ->
-      $scope.loading = false
-      $log.error err.data
+      $scope.setLoaded $scope
+      defer.reject()
+    return defer.promise
 
-  $scope.getWalletLogs = (wallet) ->
-    $scope.loading = true
+
+  $scope.getWalletLogs = () ->
+    defer = $q.defer()
+    $scope.notLoaded $scope
     WalletService.getWalletLogs($scope.wallet).then (logs) ->
-      $scope.loading = false
+      logs = _.sortBy(logs, (log) -> -moment(log.created_at).unix())
+      $scope.setLoaded $scope
       $scope.logs = logs
+      defer.resolve(logs)
     , (err) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $log.error err.data
+      defer.reject([])
+    return defer.promise
+
+  $scope.getWalletPurchaseBandsForWallet = (wallet) ->
+    defer = $q.defer()
+    $scope.notLoaded $scope
+    WalletService.getWalletPurchaseBandsForWallet(wallet).then (bands) ->
+      $scope.bands = bands
+      $scope.setLoaded $scope
+      defer.resolve(bands)
+    , (err) ->
+      $scope.setLoaded $scope
+      $log.error err.data
+      defer.reject([])
+    return defer.promise
+
+
 
   $scope.createWalletForMember = (member) ->
-    $scope.loading = true
+    $scope.notLoaded $scope
     WalletService.createWalletForMember(member).then (wallet) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $scope.wallet = wallet
     , (err) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       $log.error err.data
 
   
-  $scope.updateWallet = (member, amount) ->
-    $scope.loading = true
-    $scope.payment_success = false
-    $scope.error_message = false
-    if member and amount
-      params = {amount: amount}
+  $scope.updateWallet = (member, amount, band = null) ->
+    $scope.notLoaded $scope
+    if member
+      params = {}
+      params.amount = amount if amount > 0
       params.wallet_id = $scope.wallet.id if $scope.wallet
       params.total_id = $scope.total.id if $scope.total
-      param.deposit = $scope.deposit if $scope.deposit
+      params.deposit = $scope.deposit if $scope.deposit
       params.basket_total_price = $scope.basket.total_price if $scope.basket
+      params.band_id = band.id if band
       WalletService.updateWalletForMember(member, params).then (wallet) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $scope.wallet = wallet
+        $rootScope.$broadcast("wallet:updated", wallet, band)
       , (err) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $log.error err.data
 
+
   $scope.activateWallet = (member) ->
-    $scope.loading = true
+    $scope.notLoaded $scope
     if member
       params = {status: 1}
       params.wallet_id = $scope.wallet.id if $scope.wallet
       WalletService.updateWalletForMember(member, params).then (wallet) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $scope.wallet = wallet
       , (err) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $log.error err.date
 
+
   $scope.deactivateWallet = (member) ->
-    $scope.loading = true
+    $scope.notLoaded $scope
     if member
       params = {status: 0}
       params.wallet_id = $scope.wallet.id if $scope.wallet
       WalletService.updateWalletForMember(member, params).then (wallet) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $scope.wallet = wallet
       , (err) ->
-        $scope.loading = false
+        $scope.setLoaded $scope
         $log.error err.date
   
-  $scope.callNotLoaded = () =>
-    $scope.loading = true
-    $scope.$emit('wallet_payment:loading')
-
-  $scope.callSetLoaded = () =>
-    $scope.loading = false
-    $scope.$emit('wallet_payment:finished_loading')
+  $scope.purchaseBand = (band) ->
+    $scope.selected_band = band
+    $scope.updateWallet($scope.member, 0, band)
 
   $scope.walletPaymentDone = () ->
-    params = {no_cache: true}
-    $scope.getWalletForMember($scope.member, params).then (wallet) ->
-      $scope.$emit("wallet_payment:success", wallet)
+    $scope.getWalletForMember($scope.member).then (wallet) ->
+      AlertService.raise('TOPUP_SUCCESS')
+      $rootScope.$broadcast("wallet:topped_up", wallet)
+      $scope.wallet_topped_up = true
+      
 
+  # TODO don't route to next page automatically, first alert user 
+  # topup was successful and show new wallet balance + the 'next' button
   $scope.basketWalletPaymentDone = () ->
+    $scope.callSetLoaded()
     $scope.decideNextPage('checkout')
 
+
   $scope.error = (message) ->
-    $scope.error_message = "Payment Failure: " + message
-    $log.warn("Payment Failure: " + message)
-    $scope.$emit("wallet_payment:error", $scope.error_message)
+    AlertService.warning('TOPUP_FAILED')
 
 
-  
+  $scope.add = (value) ->
+    value = value or $scope.amount_increment
+    $scope.amount += value
+
+
+  $scope.subtract = (value) ->
+    value = value or $scope.amount_increment
+    $scope.add(-value)
+    
+
+  $scope.isSubtractValid = (value) ->
+    return false if !$scope.wallet
+    value = value or $scope.amount_increment
+    new_amount = $scope.amount - value 
+    return new_amount >= $scope.wallet.min_amount
+
+
+  updateClient = (wallet) ->
+    if $scope.member.self is $scope.client.self
+      $scope.client.wallet_amount = wallet.amount

@@ -63,7 +63,7 @@ angular.module('BB.Services').factory 'QuestionService', ($window, QueryStringSe
       _.each questions, (question) ->
         name = convertToSnakeCase(question.name)
         _.each keys, (key) ->
-          if name.indexOf(key) >= 0
+          if name.indexOf("_#{key}") >= 0 or name.indexOf("_#{key}_") >= 0 or name.indexOf("#{key}_") >= 0
             if defaults[key] and !question.answer
               question.answer = defaults[key]
               delete defaults[key]

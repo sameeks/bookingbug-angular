@@ -14,7 +14,7 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
     'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
     'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
-    'PrePaidBooking']
+    'PrePaidBooking', 'MembershipLevel', 'Product', 'EventCollection', 'ExternalPurchase']
 
   funcs = {}
   for model in models
@@ -33,7 +33,7 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
   funcs['Purchase'] = pfuncs
 
   # member models
-  member_models = ['Member', 'Booking', 'PrePaidBooking', 'Wallet', 'WalletLog']
+  member_models = ['Member', 'Booking', 'PrePaidBooking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand']
   mfuncs = {}
   for model in member_models
     do (model) =>  
