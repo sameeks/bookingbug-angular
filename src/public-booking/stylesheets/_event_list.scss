@@ -1,4 +1,4 @@
-#bb-event-list, [bb-events] {
+#bb-event-list, [bb-events], [bb-multi-company-events] {
 
   .date-chooser-heading {
     margin-bottom: 30px;
@@ -52,6 +52,14 @@
       @include make-md-column(1);
     }
 
+    .bb-month-nav-prev {
+      text-align: right;
+    }
+
+    .bb-month-nav-next {
+      text-align: left;
+    }
+
     .bb-months {
       @include make-xs-column(12);
       @include make-sm-column(8);
@@ -74,46 +82,8 @@
     }
 
 
-    // td {
-      
-    //   text-align: center;
-    //   padding: 1px;
-    //   height: 36px;
-    //   width: 36px;
-    //   font-family: Arial, sans-serif;    
-
-    //   &.past, &.disabled {
-    //     color: #AAA;
-    //   }
-
-    //   &.available {
-    //     cursor: pointer;
-    //     color: #FFF;
-
-    //     .circle {
-    //       background-color: rgb(11, 87, 162);
-    //       border: none;
-    //       border-radius: 50%;
-    //       padding: 6px 5px;
-    //       height: 30px;
-    //       width: 30px;
-    //       text-align: center;
-
-    //       &:hover {
-    //         background-color: rgb(151, 186, 219);
-    //       }
-    //     }
-    //   }
-    //   &.selected.available {
-    //     .circle {
-    //       background-color: rgb(25, 169, 115);
-    //     }
-    //   }     
-
-    // }
-
     td {
-    
+      
       text-align: center;
       padding: 1px;
       height: 36px;
@@ -150,10 +120,9 @@
         .circle{
           background-color: transparent;
           color: #AAA;
-          cursor: auto;           
+          cursor: auto;         
         }
       }
-      
       &.selected.available {
         .circle {
           background-color: rgb(25, 169, 115);
@@ -198,7 +167,7 @@
     }
 
     .panel-body {
-      padding: 20px 0;
+      padding: 20px;
     }
 
     .event-title {
@@ -356,8 +325,8 @@
     // }
     display: block;
     position: relative;
-    width: 7em;
-    height: 7em;
+    width: 7.5em;
+    height: 7.5em;
     color: white;
     margin: 20px auto;
     border-radius: 20em;

@@ -353,7 +353,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   ###
   $scope.showDay = (day) ->
    
-    return if !day || day.data and (day.data.spaces == 0 || day.disabled || !day.available)
+    return if !day || day.data and (day.data.spaces == 0 || day.disabled || !day.available) || (!day.data and !day._d)
     
     # The value of "day" from filterDateChanged is a Moment object
     # whereas the value of "day" when this method is called by
