@@ -14,4 +14,4 @@ angular.module("BB.Directives").directive "bbWalletPurchaseBands", ($rootScope) 
             deregisterWatch()
       else 
         scope.getWalletForMember(scope.member).then () ->
-          getWalletLogs()
+          getWalletPurchaseBandsForWallet(scope.wallet)
