@@ -16,7 +16,7 @@
 * restrict: 'A'
 * scope:
 *   client: '=?'
-*   apiUrl: $
+*   apiUrl: '@?'
 *   useParent:'='
 * transclude: true
 * </pre>
@@ -1370,5 +1370,4 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.redirectTo = (url) ->
-    debugger
     $window.location.href = url
