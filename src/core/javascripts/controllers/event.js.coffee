@@ -29,7 +29,7 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
   controller : 'Event'
 
 
-angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService) ->
+angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService, FormDataStoreService) ->
   
   $scope.controller = "public.controllers.Event"
   $scope.notLoaded $scope
@@ -38,12 +38,21 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   $scope.validator = ValidatorService
   $scope.event_options = $scope.$eval($attrs.bbEvent) or {}
 
+  FormDataStoreService.init 'ItemDetails', $scope, [
+    'tickets',
+    'selected_tickets'
+  ]
+
   $rootScope.connection_started.then ->
     init($scope.bb.company) if $scope.bb.company
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
   init = (comp) ->
+
+    debugger
+    delete $scope.selected_tickets if !$scope.bb.basket.hasTimeItems()
+
     $scope.event = $scope.bb.current_item.event
 
     promises = [
@@ -122,7 +131,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
         item.tickets.price = item.totalPrice()
       , true
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
   ###**
@@ -136,6 +145,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route) =>
+    debugger
     if $scope.$parent.$has_page_control
       $scope.event = item
       return false
@@ -153,6 +163,8 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * Set this page section as ready
   ###
   $scope.setReady = () =>
+    debugger
+
     $scope.bb.event_details = {
       name         : $scope.event.chain.name,
       image        : $scope.event.image,
@@ -163,7 +175,10 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       tickets      : $scope.event.tickets
     }
 
-    return $scope.updateBasket()
+    if $scope.event_options.suppress_basket_update
+      return true
+    else
+      return $scope.updateBasket()
 
 
   ###**

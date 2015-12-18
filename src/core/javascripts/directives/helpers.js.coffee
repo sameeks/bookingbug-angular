@@ -326,16 +326,19 @@ app.directive 'bbCommPref', () ->
 
 
 # bbCountTicketTypes
-# returns the number of tickets purchased grouped by name
+# returns the number of tickets selected, grouped by name
 app.directive 'bbCountTicketTypes', () ->
   restrict: 'A'
+  scope: false
   link: (scope, element, attrs) ->
+    debugger
     items = scope.$eval(attrs.bbCountTicketTypes)
     counts = []
     for item in items
       if item.tickets
         if counts[item.tickets.name] then counts[item.tickets.name] += 1 else counts[item.tickets.name] = 1
         item.number = counts[item.tickets.name]
+    console.log "ticket count", counts
 
 
 # bbCapitaliseFirstLetter

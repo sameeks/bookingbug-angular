@@ -31,9 +31,9 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
   controller : 'EventList'
 
   link : (scope, element, attrs) ->
+    
     scope.summary = attrs.summary?
-
-    options = scope.$eval attrs.bbEvents or {}
+    options = scope.$eval(attrs.bbEvents) or {}
 
     # set the mode
     # 0 = Event summary (gets year summary and loads events a day at a time)
@@ -45,6 +45,7 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
 
 
 angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService) ->
+  
   $scope.controller = "public.controllers.EventList"
   $scope.notLoaded $scope
   angular.extend(this, new PageControllerService($scope, $q))
@@ -88,8 +89,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     if !$scope.event_group_manually_set and !$scope.current_item.event_group?
       $scope.event_group_manually_set = if !$scope.event_group_manually_set? and $scope.current_item.event_group? then true else false
 
+    console.log "envet list init #{$scope.bb.current_item.event} mode: #{$scope.mode}"
+    
     # clear current item unless in summary mode
-    if $scope.current_item.event and $scope.mode != 0
+    if $scope.bb.current_item.event #and $scope.mode != 0
+      console.log "clear basket item and basket"
       event_group = $scope.current_item.event_group
       $scope.clearBasketItem()
       $scope.emptyBasket()
@@ -107,7 +111,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.has_company_questions = false
 
     # event group promise
-    if !$scope.current_item.event_group
+    if !$scope.current_item.event_group and $scope.bb.company.$has('event_groups')
       promises.push($scope.bb.company.getEventGroupsPromise())
     else
       promises.push($q.when([]))

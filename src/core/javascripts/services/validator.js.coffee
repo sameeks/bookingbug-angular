@@ -239,6 +239,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   validateForm: (form) ->
     return false if !form
     form.submitted = true
+    $rootScope.$broadcast "form:validated", form
     if form.$invalid and form.raise_alerts and form.alert
       AlertService.danger(form.alert)
       return false

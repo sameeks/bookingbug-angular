@@ -5,7 +5,7 @@
 * @scope true
 *
 * @description
-* Loads a summary of the booking and handles Client and BasketItem submission to the API
+* Loads a summary of the booking
 *
 * 
 ####
@@ -23,7 +23,8 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Clie
 
 
   $rootScope.connection_started.then =>
-    $scope.item = $scope.bb.current_item
+    $scope.item  = $scope.bb.current_item
+    $scope.items = $scope.bb.basket.timeItems()
 
   
   ###**
@@ -39,8 +40,12 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Clie
 
     promises = [
       ClientService.create_or_update($scope.bb.company, $scope.client),
-      $scope.addItemToBasket()
     ]
+
+    if $scope.bb.current_item.service
+      promises.push($scope.addItemToBasket())
+    else if $scope.bb.current_item.event
+      promises.push($scope.updateBasket())
 
     $q.all(promises).then (result) ->
       client = result[0]
@@ -51,8 +56,6 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Clie
           $scope.client_details = client.client_details
 
       $scope.setLoaded $scope
-
       $scope.decideNextPage()
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
