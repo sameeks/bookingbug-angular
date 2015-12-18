@@ -6,6 +6,9 @@ angular.module("BB.Directives").directive "bbWalletPurchaseBands", ($rootScope) 
   require: '^?bbWallet'
   link: (scope, attr, elem, ctrl) ->
 
+    scope.member = scope.$eval(attr.member)
+    scope.member ||= $rootScope.member if $rootScope.member
+
     $rootScope.connection_started.then () ->
       if ctrl
         deregisterWatch = scope.$watch 'wallet', () ->

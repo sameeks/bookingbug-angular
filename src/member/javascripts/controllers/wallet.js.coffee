@@ -39,9 +39,8 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
     , (err) ->
       $scope.setLoaded $scope
       $log.error err.data
-      defer.reject([])
+      defer.resolve([])
     return defer.promise
-
 
 
   $scope.createWalletForMember = (member) ->
