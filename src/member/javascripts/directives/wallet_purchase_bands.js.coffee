@@ -10,8 +10,8 @@ angular.module("BB.Directives").directive "bbWalletPurchaseBands", ($rootScope) 
       if ctrl
         deregisterWatch = scope.$watch 'wallet', () ->
           if scope.wallet
-            getWalletPurchaseBandsForWallet(scope.wallet)
+            scope.getWalletPurchaseBandsForWallet(scope.wallet)
             deregisterWatch()
       else 
         scope.getWalletForMember(scope.member).then () ->
-          getWalletPurchaseBandsForWallet(scope.wallet)
+          scope.getWalletPurchaseBandsForWallet(scope.wallet)
