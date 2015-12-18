@@ -97,9 +97,11 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
         $scope.setLoaded $scope
         $log.error err.date
   
+
   $scope.purchaseBand = (band) ->
     $scope.selected_band = band
-    $scope.updateWallet($scope.member, 0, band)
+    $scope.updateWallet($scope.member, band.wallet_amount, band)
+
 
   $scope.walletPaymentDone = () ->
     $scope.getWalletForMember($scope.member).then (wallet) ->
