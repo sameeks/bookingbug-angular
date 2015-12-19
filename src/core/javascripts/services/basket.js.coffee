@@ -93,8 +93,10 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
             promises = promises.concat item.promises
           if promises.length > 0
             $q.all(promises).then () ->
+              $rootScope.$broadcast "basket:updated", mbasket
               deferred.resolve(mbasket)
           else
+            $rootScope.$broadcast "basket:updated", mbasket
             deferred.resolve(mbasket)
         , (err) ->
           deferred.reject(err)

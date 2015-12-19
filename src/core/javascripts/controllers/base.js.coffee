@@ -925,10 +925,18 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.emptyBasket = ->
     return if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
+
+    defer = $q.defer()
+
     BasketService.empty($scope.bb).then (basket) ->
       if $scope.bb.current_item.id
         delete $scope.bb.current_item.id 
       $scope.setBasket(basket)
+      defer.resolve()
+    , (err) ->
+      defer.reject()
+
+    return defer.promise
 
   $scope.deleteBasketItem = (item) ->
     BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->

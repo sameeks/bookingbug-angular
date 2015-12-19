@@ -89,13 +89,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     if !$scope.event_group_manually_set and !$scope.current_item.event_group?
       $scope.event_group_manually_set = if !$scope.event_group_manually_set? and $scope.current_item.event_group? then true else false
 
-    console.log "envet list init #{$scope.bb.current_item.event} mode: #{$scope.mode}"
-    
-    # clear current item unless in summary mode
-    if $scope.bb.current_item.event #and $scope.mode != 0
-      console.log "clear basket item and basket"
+    # clear current item
+    if $scope.bb.current_item.event
       event_group = $scope.current_item.event_group
       $scope.clearBasketItem()
+      # TODO only remove the basket items added in this session
       $scope.emptyBasket()
       $scope.current_item.setEventGroup(event_group) if $scope.event_group_manually_set
 
@@ -409,9 +407,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
   ###
   $scope.setReady = () ->
-    return false if !$scope.event 
+    return false if !$scope.event
     $scope.bb.current_item.setEvent($scope.event)
     return true
+
 
   ###**
   * @ngdoc method
@@ -494,6 +493,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
   sort = () ->
    # TODO allow sorting by price/date (default)
+
 
   ###**
   * @ngdoc method
