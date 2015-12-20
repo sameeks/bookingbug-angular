@@ -32,10 +32,6 @@ ng-if="schema && form"></form>
           console.log 'err ', err
 
 
-    $scope.redirectTo = (destination) ->
-      $window.location.href = destination
-
-
     $scope.submit = (form) ->
       form['role'] = 'member'
       $scope.company.$post('login', {}, form).then (login) ->

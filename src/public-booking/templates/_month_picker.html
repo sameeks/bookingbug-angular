@@ -40,7 +40,7 @@
             <tr ng-repeat="week in month.weeks">
               <td ng-repeat="day in week.days" 
                 ng-class="{'available': day.available, 
-                           'selected': day.selected,
+                           'selected': day.selected || day.date.isSame(selected_date, 'day'),
                            'today': day.today,
                            'past': day.past,
                            'disabled': day.disabled

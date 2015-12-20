@@ -44,7 +44,7 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService) ->
+angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService, $timeout) ->
   
   $scope.controller = "public.controllers.EventList"
   $scope.notLoaded $scope
@@ -82,6 +82,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   
 
   $scope.initialise = () ->
+    
     $scope.notLoaded $scope
 
     # has the event group been manually set (i.e. in the step before)
@@ -125,15 +126,25 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     else
       promises.push($q.when([]))
 
+
     $q.all(promises).then (result) ->
       company_questions = result[0]
       event_groups      = result[1]
       event_summary     = result[2]
-      event_data        = result[3]
+      event_data        = result[3]     
+
 
       $scope.has_company_questions = company_questions? && company_questions.length > 0
-      buildDynamicFilters(company_questions) if company_questions
-      $scope.event_groups = _.indexBy(event_groups, 'id') if event_groups
+      buildDynamicFilters(company_questions) if company_questions      
+      $scope.event_groups = event_groups
+
+     
+      # Add group prop so we don't have to call item.getGroup() - which is a $http request - from the view
+      event_groups_collection = _.indexBy(event_groups, 'id')
+      for item in $scope.items
+        item.group = event_groups_collection[item.service_id]      
+
+      # Remove loading icon
       $scope.setLoaded $scope
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -249,14 +260,21 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     $scope.events = {}
 
     EventService.query(comp, params).then (events) ->
+     
+      # Flatten events array
+      $scope.items = _.flatten(events)
+     
+      # Add spaces_left prop - so we don't need to use ng-init="spaces_left = getSpacesLeft()" in the html template      
+      for item in $scope.items
+        item.spaces_left = item.num_spaces - item.getNumBooked()
 
-      events = _.groupBy events, (event) -> event.date.toISODate()
-      for key, value of events
-        $scope.events[key] = value
-
-      $scope.items = _.flatten(_.toArray($scope.events))
+      # Add address prop from the company to the item
+      $scope.bb.company.getAddressPromise().then (address) ->
+        for item in $scope.items
+          item.address = address              
       
-      chains.then () ->
+      chains.then () ->      
+
         # get more event details
         for item in $scope.items
           item.prepEvent()
@@ -296,7 +314,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
           #   $scope.showDay($scope.item_dates[0].date)
 
         # determine if all events are fully booked
-        isFullyBooked()
+        $scope.isFullyBooked()
 
         $scope.filtered_items = $scope.items
 
@@ -319,11 +337,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @description
   * Verify if the items from event list are be fully booked
   ###
-  isFullyBooked = () ->
+  $scope.isFullyBooked = () ->
     full_events = []
     for item in $scope.items
       full_events.push(item) if item.num_spaces == item.spaces_booked
-    $scope.fully_booked = true if full_events.length == $scope.items.length
+    return $scope.fully_booked = true if full_events.length == $scope.items.length
 
   ###**
   * @ngdoc method
@@ -335,11 +353,16 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @param {date} day The day of the event
   ###
   $scope.showDay = (day) ->
-    return if !day or (day and !day.data)
+   
+    return if !day || day.data and (day.data.spaces == 0 || day.disabled || !day.available) || (!day.data and !day._d)
+    
+    # The value of "day" from filterDateChanged is a Moment object
+    # whereas the value of "day" when this method is called by
+    # bbMonthPicker is an Object with a date key with a Moment object value   
+    date = if moment.isMoment(day) then day else day.date
 
     $scope.selected_day.selected = false if $scope.selected_day
 
-    date = day.date
     # unselect the event if it's not on the day being selected
     delete $scope.event if $scope.event and !$scope.selected_date.isSame(date, 'day')
 
@@ -348,13 +371,13 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.start_date = moment(date)
       $scope.end_date = moment(date)
       $scope.loadEventData()
-    else
+    else     
       new_date = date if !$scope.selected_date or !date.isSame($scope.selected_date, 'day')
 
     if new_date
       $scope.selected_date = new_date
       $scope.filters.date  = new_date.toDate()
-      $scope.selected_day = day
+      $scope.selected_day  = if moment.isMoment(day) then {date: new_date} else day      
       $scope.selected_day.selected = true
     else
       delete $scope.selected_date
@@ -420,15 +443,15 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   *
   * @param {array} item The Event or BookableItem to select
   ###
-  $scope.filterEvents = (item) ->
+  $scope.filterEvents = (item) ->  
     result = (item.date.isSame(moment($scope.filters.date), 'day') or !$scope.filters.date?) and
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and 
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
       (($scope.filters.hide_sold_out_events and item.getSpacesLeft() != 0) or !$scope.filters.hide_sold_out_events) and
       filterEventsWithDynamicFilters(item)
-    return result
+    return result  
 
-
+  # I had to put this into $scope so that MultiEventList controller (which extends this controller) could overwrite $scope.filterEvents
   filterEventsWithDynamicFilters = (item) ->
 
     return true if !$scope.has_company_questions or !$scope.dynamic_filters
@@ -461,9 +484,14 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @description
   * Filtering data exchanged from the list of events
   ###
-  $scope.filterDateChanged = () ->
-    $scope.filterChanged()
-    $scope.showDay(moment($scope.filters.date))
+  $scope.filterDateChanged = (options = {reset: false}) ->   
+    if $scope.filters.date     
+      $scope.showDay(moment($scope.filters.date))    
+      if options.reset == true || !$scope.selected_date?
+        $timeout () ->
+          delete $scope.filters.date 
+        , 250      
+        
 
   ###**
   * @ngdoc method

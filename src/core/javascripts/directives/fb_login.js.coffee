@@ -2,10 +2,10 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
   restrict: 'A'
   scope: true
   link: (scope, element, attrs) ->
-    
+
     $rootScope.connection_started.then ->
       checkLoginState()
- 
+
     statusChangeCallback = (response) ->
       if response.status == 'connected'
         params = {}
@@ -35,8 +35,6 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
       , (err) ->
         AlertService.raise('LOGIN_FAILED')
 
-    redirectTo = (destination) ->
-      $window.location.href = destination
 
     scope.loginFB = () ->
       FB.login ((response) ->
@@ -50,5 +48,3 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
           AlertService.raise('LOGIN_FAILED')
         return
       ), scope: 'public_profile,email'
-
-  
