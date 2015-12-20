@@ -121,6 +121,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       promises.push($q.when([]))
 
     # event data promise
+    # TODO - always load some event data?
     if $scope.mode is 1 or $scope.mode is 2
       promises.push($scope.loadEventData()) 
     else
@@ -141,8 +142,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
      
       # Add group prop so we don't have to call item.getGroup() - which is a $http request - from the view
       event_groups_collection = _.indexBy(event_groups, 'id')
-      for item in $scope.items
-        item.group = event_groups_collection[item.service_id]      
+      if $scope.items
+        for item in $scope.items
+          item.group = event_groups_collection[item.service_id]      
 
       # Remove loading icon
       $scope.setLoaded $scope
@@ -224,9 +226,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
       params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
 
-      EventChainService.query(comp, params).then (events) ->
+      EventChainService.query(comp, params).then (event_chains) ->
         $scope.setLoaded $scope
-        deferred.resolve($scope.items)
+        deferred.resolve(event_chains)
       , (err) ->  deferred.reject()
 
     return deferred.promise
@@ -273,6 +275,8 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         for item in $scope.items
           item.address = address              
       
+      # TODO make this behave like the frame timetable
+      # get all data then process events
       chains.then () ->      
 
         # get more event details
