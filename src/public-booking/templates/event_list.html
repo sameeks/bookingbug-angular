@@ -44,6 +44,11 @@
             <label class="sr-only" for="date">Date</label>
             <div class="input-group date-picker">
               <!-- date format: http://docs.angularjs.org/api/ng.filter:date" -->
+              <span class="input-group-btn" ng-click="filterDateChanged({reset:true})">
+                <button class="btn btn-default" type="submit" title="Reset Date">
+                   <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </span>
               <input type="text" ng-model="filters.date" class="form-control"
                 bb-datepicker-popup="DD/MM/YYYY"
                 datepicker-popup="dd/MM/yyyy"

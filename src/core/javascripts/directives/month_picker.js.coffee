@@ -3,7 +3,7 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc) ->
   restrict: 'AE'
   replace: true
   scope : true
-  require : '^bbEvents'
+  require : ['^?bbEvents', '^?bbMultiCompanyEvents']
   templateUrl : (element, attrs) ->
     PathSvc.directivePartial "_month_picker"
   link : (scope, el, attrs) ->
