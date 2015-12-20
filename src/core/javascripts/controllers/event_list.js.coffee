@@ -53,7 +53,6 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.start_date = moment()
   $scope.end_date = moment().add(1, 'year')
   $scope.filters = {}
-  $scope.price_options = [0,1000,2500,5000]
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   $scope.events = {}
   $scope.fully_booked = false
