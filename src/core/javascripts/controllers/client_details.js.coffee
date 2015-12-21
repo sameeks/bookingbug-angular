@@ -238,4 +238,6 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
     if error.data.error == "Please Login"
       $scope.existing_member = true
       AlertService.raise('ALREADY_REGISTERED')
+    else if error.data.error == "Invalid Password"
+      AlertService.raise('PASSWORD_INVALID')
     $scope.setLoaded $scope
