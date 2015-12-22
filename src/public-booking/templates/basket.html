@@ -24,7 +24,7 @@
 								<p>
 									{{item.describe()}}
 									<br/>
-									<small>{{item.date.date | datetime: "h:mma dddd Do MMMM":false}}</small>
+                  <small>{{item.time.time_12}} {{item.date.date | datetime: "dddd Do MMMM":false}}</small>
 									<br/>
 									<small>{{item.resource.getAddress() | address_single_line }}</small>
 									<br/>
