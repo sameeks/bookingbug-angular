@@ -31,9 +31,9 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
   controller : 'EventList'
 
   link : (scope, element, attrs) ->
+    
     scope.summary = attrs.summary?
-
-    options = scope.$eval attrs.bbEvents or {}
+    options = scope.$eval(attrs.bbEvents) or {}
 
     # set the mode
     # 0 = Event summary (gets year summary and loads events a day at a time)
@@ -45,6 +45,7 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
 
 
 angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService, $timeout) ->
+  
   $scope.controller = "public.controllers.EventList"
   $scope.notLoaded $scope
   angular.extend(this, new PageControllerService($scope, $q))
@@ -52,7 +53,6 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.start_date = moment()
   $scope.end_date = moment().add(1, 'year')
   $scope.filters = {}
-  $scope.price_options = [0,1000,2500,5000]
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   $scope.events = {}
   $scope.fully_booked = false
@@ -89,10 +89,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     if !$scope.event_group_manually_set and !$scope.current_item.event_group?
       $scope.event_group_manually_set = if !$scope.event_group_manually_set? and $scope.current_item.event_group? then true else false
 
-    # clear current item unless in summary mode
-    if $scope.current_item.event and $scope.mode != 0
+    # clear current item
+    if $scope.bb.current_item.event
       event_group = $scope.current_item.event_group
       $scope.clearBasketItem()
+      # TODO only remove the basket items added in this session
       $scope.emptyBasket()
       $scope.current_item.setEventGroup(event_group) if $scope.event_group_manually_set
 
@@ -108,7 +109,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.has_company_questions = false
 
     # event group promise
-    if !$scope.current_item.event_group
+    if !$scope.current_item.event_group and $scope.bb.company.$has('event_groups')
       promises.push($scope.bb.company.getEventGroupsPromise())
     else
       promises.push($q.when([]))
@@ -120,6 +121,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       promises.push($q.when([]))
 
     # event data promise
+    # TODO - always load some event data?
     if $scope.mode is 1 or $scope.mode is 2
       promises.push($scope.loadEventData()) 
     else
@@ -140,8 +142,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
      
       # Add group prop so we don't have to call item.getGroup() - which is a $http request - from the view
       event_groups_collection = _.indexBy(event_groups, 'id')
-      for item in $scope.items
-        item.group = event_groups_collection[item.service_id]      
+      if $scope.items
+        for item in $scope.items
+          item.group = event_groups_collection[item.service_id]      
 
       # Remove loading icon
       $scope.setLoaded $scope
@@ -223,9 +226,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
       params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
 
-      EventChainService.query(comp, params).then (events) ->
+      EventChainService.query(comp, params).then (event_chains) ->
         $scope.setLoaded $scope
-        deferred.resolve($scope.items)
+        deferred.resolve(event_chains)
       , (err) ->  deferred.reject()
 
     return deferred.promise
@@ -272,6 +275,8 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         for item in $scope.items
           item.address = address              
       
+      # TODO make this behave like the frame timetable
+      # get all data then process events
       chains.then () ->      
 
         # get more event details
@@ -428,9 +433,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
   ###
   $scope.setReady = () ->
-    return false if !$scope.event 
+    return false if !$scope.event
     $scope.bb.current_item.setEvent($scope.event)
     return true
+
 
   ###**
   * @ngdoc method
@@ -518,6 +524,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
   sort = () ->
    # TODO allow sorting by price/date (default)
+
 
   ###**
   * @ngdoc method

@@ -101,7 +101,30 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
         titems.push(i) if !i.is_coupon and !i.isExternalPurchase()
       titems
 
+    ###**
+    * @ngdoc method
+    * @name hasTimeItems
+    * @methodOf BB.Models:Basket
+    * @description
+    * Build an array of time items(all items that are not coupons)
+    *
+    * @returns {array} the newly build array of items
+    ###
+    hasTimeItems: ->
+      for i in @items
+        return true if !i.is_coupon and !i.isExternalPurchase()
+      return false
 
+
+    ###**
+    * @ngdoc method
+    * @name basketItems
+    * @methodOf BB.Models:Basket
+    * @description
+    * Gets all BasketItem's that are not coupons
+    *
+    * @returns {array} array of basket items
+    ###
     basketItems: ->
       bitems = []
       for i in @items
@@ -109,6 +132,15 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
       bitems
 
 
+    ###**
+    * @ngdoc method
+    * @name externalPurchaseItems
+    * @methodOf BB.Models:Basket
+    * @description
+    * Gets all external purchases in the basket
+    *
+    * @returns {array} array of external purchases
+    ###
     externalPurchaseItems: ->
       eitems = []
       for i in @items

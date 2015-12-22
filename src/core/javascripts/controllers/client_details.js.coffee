@@ -49,7 +49,9 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   $scope.existing_member = false
   $scope.login_error = false
 
-  $scope.suppress_client_create = $attrs.bbSuppressCreate?
+
+  options = $scope.$eval($attrs.bbClientDetails) or {}
+  $scope.suppress_client_create = $attrs.bbSuppressCreate? or options.suppress_client_create
 
   $rootScope.connection_started.then =>
 
