@@ -115,3 +115,8 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
         @setTimes()
         @setResourcesAndPeople()
 
+    $update: (data) ->
+      data ||= @
+      @$put('self', {}, data).then (res) =>
+        @constructor(res)
+
