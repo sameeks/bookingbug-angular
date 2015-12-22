@@ -5,7 +5,7 @@
     </button>
   </div>
    <div class="bb-months">
-   <div slick init-onload="true" data="months" on-init="slickOnInit()" on-set-position="slickOnInit()" slides-to-show="{{months.length >= 3 ? 3 : months.length}}" current-index="index" infinite="false" prev-arrow=".month-prev" next-arrow=".month-next" responsive="[{breakpoint: 1200, settings: {slidesToShow: months.length >= 2 ? 2 : months.length}}, {breakpoint: 992, settings: {slidesToShow: 1}}]">
+   <div slick init-onload="true" data="months" on-init="slickOnInit()" on-set-position="slickOnInit()" slides-to-show="{{months.length >= 3? 3 : months.length}}" current-index="index" infinite="false" prev-arrow=".month-prev" next-arrow=".month-next" responsive="[{breakpoint: 1200, settings: {slidesToShow: months.length >= 2? 2 : months.length}}, {breakpoint: 992, settings: {slidesToShow: 1}}]">
 
       <div class="bb-month" ng-repeat="month in months" ng-class="{'hidden-xs': month.selected}">
         <table>
