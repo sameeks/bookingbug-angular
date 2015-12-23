@@ -78,6 +78,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
       false
 
   setLogin: (member) ->
+    console.log "setLogin"
     auth_token = member.getOption('auth_token')
     member = new BBModel.Member.Member(member)
     $sessionStorage.setItem("login", member.$toStore())

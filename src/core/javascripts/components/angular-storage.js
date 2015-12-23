@@ -93,6 +93,7 @@ angular.module('ngStorage', [])
     var storage = isStorageSupported('sessionStorage') ? $window.sessionStorage : $fakeStorage;
     return {
       setItem: function(key, value) {
+        console.log("$sessionStorage setItem", key, value);
         storage.setItem(key, value);
       },
       getItem: function(key, defaultValue) {

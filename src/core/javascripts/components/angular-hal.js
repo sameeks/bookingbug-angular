@@ -72,9 +72,11 @@ angular
 
 
     if ($cookies['Auth-Token']){
+      console.log("angularhal set auth token 11");
       $sessionStorage.setItem('auth_token', $cookies['Auth-Token'])
     }
     if ($sessionStorage.getItem('auth_token'))
+      console.log("angularhal set auth token 22", $sessionStorage.getItem('auth_token'));
       shared_header.set('auth_token', $sessionStorage.getItem('auth_token'), $sessionStorage)
 
 
@@ -337,13 +339,15 @@ angular
       if (options.app_id) shared_header.set('app_id', options.app_id, $sessionStorage);
       if (options.app_key) shared_header.set('app_key', options.app_key, $sessionStorage);
       if (options.auth_token) {
+        console.log("angularhal set auth token 3333", options.auth_token);
         $sessionStorage.setItem('auth_token', options.auth_token);
         shared_header.set('auth_token', options.auth_token, $sessionStorage);
       }
 
       if (shared_header.has('app_id')) headers['App-Id'] = shared_header.get('app_id');
       if (shared_header.has('app_key')) headers['App-Key'] = shared_header.get('app_key');
-      if (shared_header.has('auth_token')) headers['Auth-Token'] = shared_header.get('auth_token');
+      // THIS HAS AN AUTH TOKEN STILL DESPITE BEING CLEARED, GRRRRRRRR
+      if ($sessionStorage.getItem('auth_token')) headers['Auth-Token'] = $sessionStorage.getItem('auth_token');
 
       if (options.bypass_auth) headers['Bypass-Auth'] = options.bypass_auth;
 
