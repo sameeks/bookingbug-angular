@@ -140,7 +140,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.event_groups = event_groups
 
      
-      # Add group prop so we don't have to call item.getGroup() - which is a $http request - from the view
+      # Add EventGroup to Event so we don't have to make network requests using item.getGroup() from the view
       event_groups_collection = _.indexBy(event_groups, 'id')
       if $scope.items
         for item in $scope.items
@@ -268,7 +268,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
      
       # Add spaces_left prop - so we don't need to use ng-init="spaces_left = getSpacesLeft()" in the html template      
       for item in $scope.items
-        item.spaces_left = item.num_spaces - item.getNumBooked()
+        item.spaces_left = item.getSpacesLeft()
 
       # Add address prop from the company to the item
       $scope.bb.company.getAddressPromise().then (address) ->
@@ -453,9 +453,8 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
       (($scope.filters.hide_sold_out_events and item.getSpacesLeft() != 0) or !$scope.filters.hide_sold_out_events) and
       filterEventsWithDynamicFilters(item)
-    return result  
-
-  # I had to put this into $scope so that MultiEventList controller (which extends this controller) could overwrite $scope.filterEvents
+    return result
+ 
   filterEventsWithDynamicFilters = (item) ->
 
     return true if !$scope.has_company_questions or !$scope.dynamic_filters
