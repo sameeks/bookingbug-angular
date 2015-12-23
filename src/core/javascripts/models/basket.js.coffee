@@ -430,3 +430,6 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     ###
     @$query: (company,params) ->
       BasketService.query(company, params)
+
+    $checkout: (company,basket,params) ->
+      BasketService.checkout(company,basket,params)

@@ -103,7 +103,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       $scope.client.parent_client_id = $scope.bb.parent_client.id
     $scope.client.setClientDetails($scope.client_details)
 
-    BBModel.Client.create_or_update($scope.bb.company, $scope.client).then (client) =>
+    BBModel.Client.$create_or_update($scope.bb.company, $scope.client).then (client) =>
       $scope.setLoaded $scope
       $scope.setClient(client)
       $scope.client.setValid(true) if $scope.bb.isAdmin

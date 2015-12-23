@@ -132,7 +132,7 @@ angular.module('BB.Controllers').controller 'AddressList',
       $scope.postcode_submitted = false
 
       if $scope.bb.address && $scope.bb.address.moniker
-        $scope.notLoaded $scope
+        $scope.notLoaded($scope)
         AddressListService.getAddress(
           company : $scope.bb.company,
           id : $scope.bb.address.moniker
