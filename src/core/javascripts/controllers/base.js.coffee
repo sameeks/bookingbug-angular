@@ -1039,7 +1039,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
             # HACK check if client_type is not contact
             if member.client_type != 'Contact'
               member = LoginService.setLogin(member)
-              $rootScope.member = member
               $scope.setClient(member)
         if $scope.bb.clear_basket
           restore_basket_defer.resolve()
