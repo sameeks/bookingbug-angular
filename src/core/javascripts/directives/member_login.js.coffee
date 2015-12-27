@@ -11,8 +11,6 @@ ng-if="schema && form"></form>
 
     $rootScope.connection_started.then () ->
 
-      $sessionStorage.removeItem("auth_token")
-
       if $sessionStorage.getItem("login")
         session_member = $sessionStorage.getItem("login")
         session_member = halClient.createResource(session_member)
@@ -35,10 +33,8 @@ ng-if="schema && form"></form>
 
 
     $scope.submit = (form) ->
-      form['role'] = 'member'
 
-      # clear session storage to ensure no auth-token
-      $sessionStorage.clear()
+      form['role'] = 'member'
 
       $scope.company.$post('login', {}, form).then (login) ->
         if login.$has('members')
