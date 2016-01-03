@@ -2,13 +2,13 @@
 
   <div class="page-summary">
     <p>Select a date and time for your {{bb.current_item.service.name}} appointment.</p>
-    <div bb-include="_service_item_aggregate">
+    <div bb-include="_basket_item_summary">
     </div>
   </div>
 
 <!--   <div bb-people></div> -->
 
-  <div bb-time-ranges class="calendar" ng-init="init({selected_day: today})">
+  <div bb-time-ranges="{selected_day: today}" class="calendar" ng-show="days">
 
     <div class="month-header hidden-xs">
       <h2 class="month-heading">{{pretty_month_title('MMMM', 'YYYY')}}</h2>
