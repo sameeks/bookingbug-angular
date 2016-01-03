@@ -32,12 +32,14 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbAccordianRangeGroup', () ->
+angular.module('BB.Directives').directive 'bbAccordianRangeGroup', (PathSvc) ->
   restrict: 'AE'
-  replace: true
+  replace: false
   scope: true
   require: '^?bbTimeRangeStacked'
   controller: 'AccordianRangeGroup'
+  templateUrl : (element, attrs) ->
+    PathSvc.directivePartial "_accordian_range_group"
   link: (scope, element, attrs, ctrl) ->
     scope.options = scope.$eval(attrs.bbAccordianRangeGroup) or {}
     scope.options.using_stacked_items = ctrl?

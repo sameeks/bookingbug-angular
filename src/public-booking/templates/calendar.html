@@ -77,75 +77,14 @@
 
             <!-- MORNING TIME RANGE -->
             <div bb-accordian-range-group="{range: [0, 720], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
-              <div accordion-group is-open="is_open" ng-disabled="!has_availability && !is_selected" ng-class="{'expanded': is_open, 'selected': is_selected}">
-
-                <div accordion-heading>
-                  <div class="accordian-header">
-                    <span class="period-label">
-                      <span ng-show="has_availability && !is_open">+</span>
-                      <span ng-show="has_availability && is_open">-</span>
-                      Morning
-                    </span>
-                    <span ng-hide="is_selected || (is_open && has_availability)">{{accordian_slots.length}} available</span>
-                    <span class="selected-time" ng-show="is_selected && !is_open">{{selected_slot.time_12}}</span>
-                  </div>
-                </div>
-
-                <ul class="time-slots" ng-if="has_availability">
-                  <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(day, slot)" ng-repeat="slot in accordian_slots">
-                    <span>{{slot.time_12}}</span>
-                  </li>
-                </ul>
-
-              </div>
             </div>
 
             <!-- AFTERNOON TIME RANGE -->
             <div bb-accordian-range-group="{range: [720, 1020], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
-              <div accordion-group is-open="is_open" ng-disabled="!has_availability && !is_selected" ng-class="{'expanded': is_open, 'selected': is_selected}">
-
-                <div accordion-heading>
-                  <div class="accordian-header">
-                      <span class="period-label">
-                      <span ng-show="has_availability && !is_open">+</span>
-                      <span ng-show="has_availability && is_open">-</span>
-                      Afternoon
-                    </span>
-                    <span ng-hide="is_selected || (is_open && has_availability)">{{accordian_slots.length}} available</span>
-                    <span class="selected-time" ng-show="is_selected && !is_open">{{selected_slot.time_12}}</span>
-                  </div>
-                </div>
-
-                <ul class="time-slots">
-                  <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(day, slot)" ng-repeat="slot in accordian_slots">
-                    <span>{{slot.time_12}}</span>
-                  </li>
-                </ul>
-              </div>
             </div>
 
             <!-- EVENING TIME RANGE -->
-            <div bb-accordian-range-group="{range: [1020, 1440], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index); setRange(1020, 1440)" class="accordian-group">
-              <div accordion-group is-open="is_open" ng-disabled="!has_availability && !is_selected" ng-class="{'expanded': is_open, 'selected': is_selected}">
-
-                <div accordion-heading>
-                  <div class="accordian-header">
-                    <span class="period-label">
-                      <span ng-show="has_availability && !is_open">+</span>
-                      <span ng-show="has_availability && is_open">-</span>
-                      Evening
-                    </span>
-                    <span ng-hide="is_selected || (is_open && has_availability)">{{accordian_slots.length}} available</span>
-                    <span class="selected-time" ng-show="is_selected && !is_open">{{selected_slot.time_12}}</span>
-                  </div>
-                </div>
-
-                <ul class="time-slots">
-                  <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(day, slot)" ng-repeat="slot in accordian_slots">
-                    <span>{{slot.time_12}}</span>
-                  </li>
-                </ul>
-              </div>
+            <div bb-accordian-range-group="{range: [1020, 1440], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
           </div>
