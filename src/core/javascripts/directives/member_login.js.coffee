@@ -33,7 +33,9 @@ ng-if="schema && form"></form>
 
 
     $scope.submit = (form) ->
+
       form['role'] = 'member'
+
       $scope.company.$post('login', {}, form).then (login) ->
         if login.$has('members')
           login.$get('members').then (members) ->

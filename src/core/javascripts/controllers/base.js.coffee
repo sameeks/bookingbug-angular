@@ -338,15 +338,14 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.client_defaults.first_name =  match[1]
         $scope.bb.client_defaults.last_name = match[2] if match[2]?
 
-    if prms.clear_member
+    if prms.clear_member      
       $scope.bb.clear_member = prms.clear_member
-      $sessionStorage.removeItem("login")
+      $sessionStorage.removeItem('login')
 
     if prms.app_id
       $scope.bb.app_id = prms.app_id
     if prms.app_key
       $scope.bb.app_key = prms.app_key
-
 
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
@@ -458,27 +457,30 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
       comp_def = $q.defer()
       comp_promise = comp_def.promise
+      options = {}
+      options.auth_token = $sessionStorage.getItem('auth_token') if $sessionStorage.getItem('auth_token')
       if $scope.bb.isAdmin
         comp_url = new UriTemplate($scope.bb.api_url + $scope.company_admin_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-        halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+        halClient.$get(comp_url, options).then (company) ->
           comp_def.resolve(company)
         , (err) ->
           # try non admin if admin failed
           comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-          halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+          halClient.$get(comp_url, options).then (company) ->
             comp_def.resolve(company)
           , (err) ->
             comp_def.reject(err)
 
       else
         comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-        halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+        halClient.$get(comp_url, options).then (company) ->
           comp_def.resolve(company)
         , (err) ->
           comp_def.reject(err)
 
       setup_promises.push(comp_promise)
       comp_promise.then (company) =>
+
         if $scope.bb.$wait_for_routing
           setup_promises2.push($scope.bb.$wait_for_routing.promise)
         comp = new BBModel.Company(company)
