@@ -358,7 +358,7 @@ angular
         .then(function(res){
 
           // copy out the auth token from the header if the response is new resource
-          // Note: we don't want to copy the auth token from 200 success responses as the auth token from cached responses could get saved 
+          // Note: we only take the auth token from created responses as at the app layer, success responses might be cached results, thus we don't want to use the auth token from these 
           if (res.headers('auth-token') && res.status == 201){
             options.auth_token = res.headers('Auth-Token')
             shared_header.set('auth_token', res.headers('Auth-Token'), $sessionStorage)
