@@ -813,7 +813,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.showPage('slot_list')
       else
         return if $scope.setPageRoute($rootScope.Route.Date)
-        return $scope.showPage('day')
+        return $scope.showPage('calendar')
     else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.time && !$scope.bb.current_item.event? && (!$scope.bb.current_item.service || $scope.bb.current_item.service.duration_unit != 'day') && !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Time)
       return $scope.showPage('time')

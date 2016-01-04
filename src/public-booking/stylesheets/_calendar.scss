@@ -69,7 +69,7 @@
     .panel {
       border-radius: 0;
       margin: 0;
-      border: none;  
+      border: none;
       border-bottom: 1px rgb(221, 221, 221) solid;
       box-shadow: none;
     }
@@ -104,18 +104,19 @@
 
   .panel-title {
     font-size: inherit;
+    padding-bottom: 0;
   }
 
   .period-label {
     display: block;
     text-transform: uppercase;
     margin-bottom: 10px;
-    font-size: $font-size-small; 
+    font-size: $font-size-small;
     // font-size: 0.9rem;
   }
 
   // .selected-time {
-  //   font-size: 12px; 
+  //   font-size: 12px;
   //   font-size: 1.2rem;
   // }
 
@@ -127,6 +128,12 @@
       background-color: #333;
       color: #FFF;
     }
+  }
+
+  .period-label-icon {
+    width: 10px;
+    text-align: center;
+    display: inline-block;
   }
 
   // expanded or selected panel
@@ -141,7 +148,7 @@
 
   .panel-default.expanded > .panel-heading {
     padding-bottom: 5px;
-  } 
+  }
 
   // disabled panel
   .panel-default[disabled], .panel[disabled].expanded {
@@ -159,6 +166,32 @@
     }
   }
 
+// calendar hidden column functionality
+@media (max-width: $screen-md-max) {
+  .cal-col-6, .cal-col-7{
+    display: none;
+  }
+  .cal-col-1, .cal-col-2, .cal-col-3, .cal-col-4, .cal-col-5{
+    width: 17.99%;
+  }
+}
+@media (max-width: $screen-sm-max) {
+  .cal-col-6, .cal-col-7, .cal-col-4, .cal-col-5{
+    display: none;
+  }
+  .cal-col-1, .cal-col-2, .cal-col-3{
+    width: 29.98%;
+  }
+}
+@media (max-width: $screen-xs-max) {
+  .cal-col-1{
+    width: 100%;
+    padding: 0;
+  }
+  .cal-col-2, .cal-col-3, .cal-col-4, .cal-col-5{
+    display: none;
+  }
+}
   // actions
 
   .actions {
@@ -169,4 +202,3 @@
   }
 
 }
-
