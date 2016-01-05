@@ -12,9 +12,11 @@ angular.module('BBAdmin.Services').factory 'AdminClinicService',  ($q, BBModel, 
         defer.reject(err)
     else
       existing = ClinicCollections.find(params)
-      if existing
+      if existing && !params.skip_cache
         defer.resolve(existing)
-      else      
+      else
+        if existing && params.skip_cache
+          ClinicCollections.delete(existing)
         company.$get('clinics', params).then (collection) ->
           collection.$get('clinics').then (clinics) ->
             models = (new BBModel.Admin.Clinic(s) for s in clinics)
