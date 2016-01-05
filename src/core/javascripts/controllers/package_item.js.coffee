@@ -57,6 +57,7 @@ angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, 
     $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   $scope.init = (company) ->
+    $scope.booking_item ||= $scope.bb.current_item
     PackageItemService.query(company).then (package_item) ->
       $scope.packages = package_item
 

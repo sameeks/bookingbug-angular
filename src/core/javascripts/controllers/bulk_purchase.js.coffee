@@ -55,6 +55,7 @@ angular.module('BB.Controllers').controller 'BulkPurchase', ($scope, $rootScope,
     $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   $scope.init = (company) ->
+    $scope.booking_item ||= $scope.bb.current_item
     BulkPurchaseService.query(company).then (bulk_purchase) ->
       $scope.bulk_purchases = bulk_purchase
 
