@@ -2,7 +2,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller: ($scope, $rootScope, $q, PurchaseService, BBModel, AlertService, ValidatorService) ->
+  controller: ($scope, $rootScope, $q, PurchaseService, BBModel, AlertService, ValidatorService, ClientService) ->
 
     $scope.validator = ValidatorService
 
@@ -21,6 +21,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
       params =
         purchase: $scope.bb.moving_purchase
         bookings: $scope.bb.basket.items
+        notify: true
       PurchaseService.update(params).then (purchase) ->
         $scope.bb.purchase = purchase
         $scope.setLoaded $scope
@@ -31,6 +32,17 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
         deferred.reject()
 
       return deferred.promise
+
+
+    ###**
+    * @ngdoc method
+    * @name markItemAsChanged
+    * @methodOf BB.Directives:bbAttendees
+    * @description
+    * Call this when an attendee is changed
+    ###
+    $scope.markItemAsChanged = (item) ->
+      item.attendee_changed = true
 
 
 
@@ -44,16 +56,44 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
     $scope.changeAttendees = () ->
 
       return false if !$scope.bb.current_item.ready or !$scope.bb.moving_purchase
+
+      deferred = $q.defer()
       
       $scope.notLoaded $scope
 
-      if $scope.$parent.$has_page_control
-        return updateBooking()
-      else
+      client_promises = []
+
+      for item in $scope.items
+
+        if item.attendee_changed
+
+          client = new BBModel.Client()
+          client.first_name = item.first_name
+          client.last_name  = item.last_name
+          
+          client_promises.push(ClientService.create_or_update($scope.bb.company, client))
+
+        else
+
+          client_promises.push($q.when([]))
+
+
+      $q.all(client_promises).then (result) ->
+
+        for item, index in $scope.items
+          if result[index] and result[index].id
+            item.client_id = result[index].id
+
         updateBooking().then () ->
-          $scope.decideNextPage('purchase')
-          AlertService.raise('ATTENDEES_CHANGED')
+          if $scope.$parent.$has_page_control
+            deferred.resolve()
+          else
+            $scope.decideNextPage('purchase')
+            AlertService.raise('ATTENDEES_CHANGED')
+            deferred.resolve()
         , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+      return deferred.promise
         
 
 
