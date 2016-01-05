@@ -44,8 +44,6 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Clie
 
     if $scope.bb.current_item.service
       promises.push($scope.addItemToBasket())
-    else if $scope.bb.current_item.event
-      promises.push($scope.updateBasket())
 
     $q.all(promises).then (result) ->
       client = result[0]
