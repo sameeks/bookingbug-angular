@@ -51,6 +51,8 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   international_number = /^(\+)([\d \(\)]{9,19})$/
 
   email_regex = /^$|^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+  # password requires minimum of 7 characters and 1 number 
+  standard_password = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
   # alphanumeric
   alphanumeric = /^[a-zA-Z0-9]*$/
@@ -76,6 +78,18 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   ###
   getEmailPattern: () ->
     return email_regex
+
+  ###**
+    * @ngdoc method
+    * @name getStandardPassword
+    * @methodOf BB.Services:Validator
+    * @description
+    * Get the email pattern
+    *
+    * @returns {string} Returns Password must contain at least 7 characters and 1 number password pattern
+  ###
+  getStandardPassword: () ->
+    return standard_password
 
   ###**
     * @ngdoc method
