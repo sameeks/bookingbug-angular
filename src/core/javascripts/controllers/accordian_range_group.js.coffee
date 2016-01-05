@@ -81,6 +81,7 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   $scope.init = (start_time, end_time, options) ->
     $scope.setRange(start_time, end_time)
     $scope.collaspe_when_time_selected = if options && !options.collaspe_when_time_selected then false else true
+    $scope.heading = if options.heading then options.heading
 
   ###**
   * @ngdoc method
