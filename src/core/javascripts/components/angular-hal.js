@@ -70,10 +70,10 @@ angular
     $http, $q, data_cache, shared_header, UriTemplate, $cookies, $sessionStorage
   ){
 
-
     if ($cookies['Auth-Token']){
       $sessionStorage.setItem('auth_token', $cookies['Auth-Token'])
     }
+
     if ($sessionStorage.getItem('auth_token'))
       shared_header.set('auth_token', $sessionStorage.getItem('auth_token'), $sessionStorage)
 
@@ -343,6 +343,7 @@ angular
 
       if (shared_header.has('app_id')) headers['App-Id'] = shared_header.get('app_id');
       if (shared_header.has('app_key')) headers['App-Key'] = shared_header.get('app_key');
+
       if (shared_header.has('auth_token')) headers['Auth-Token'] = shared_header.get('auth_token');
 
       if (options.bypass_auth) headers['Bypass-Auth'] = options.bypass_auth;
@@ -356,8 +357,9 @@ angular
         })
         .then(function(res){
 
-          // copy out the auth token from the header if there was one and make sure the child commands use it
-          if (res.headers('auth-token') && res.status != 304){
+          // copy out the auth token from the header if the response is new resource
+          // Note: we only take the auth token from created responses as at the app layer, success responses might be cached results, thus we don't want to use the auth token from these 
+          if (res.headers('auth-token') && res.status == 201){
             options.auth_token = res.headers('Auth-Token')
             shared_header.set('auth_token', res.headers('Auth-Token'), $sessionStorage)
           }

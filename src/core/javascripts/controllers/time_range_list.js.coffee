@@ -40,7 +40,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
- 
+
   # store the form data for the following scope properties
   currentPostcode = $scope.bb.postcode
 
@@ -81,7 +81,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     if $attrs.bbDayOfWeek? or ($scope.options and $scope.options.day_of_week)
       $scope.day_of_week = if $attrs.bbDayOfWeek? then $scope.$eval($attrs.bbDayOfWeek) else $scope.options.day_of_week
- 
+
     if $attrs.bbSelectedDay? or ($scope.options and $scope.options.selected_day)
       selected_day        = if $attrs.bbSelectedDay? then moment($scope.$eval($attrs.bbSelectedDay)) else moment($scope.options.selected_day)
       $scope.selected_day = selected_day if moment.isMoment(selected_day)
@@ -96,7 +96,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       if $scope.original_start_date
         diff = $scope.last_selected_date.diff($scope.original_start_date, 'days')
         diff = diff % $scope.time_range_length
-        diff = if diff is 0 then diff else diff + 1 
+        diff = if diff is 0 then diff else diff + 1
         start_date = $scope.last_selected_date.clone().subtract(diff, 'days')
         setTimeRange($scope.last_selected_date, start_date)
       else
@@ -143,7 +143,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     # to be saved as a variable as functions cannot be passed into the
     # AngluarUI date picker
     $scope.selected_date = $scope.selected_day.toDate()
-    
+
     isSubtractValid()
 
     return
@@ -222,7 +222,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {object} amount The amount of the days
   ###
   $scope.subtract = (type, amount) ->
-    $element.removeClass('add')  
+    $element.removeClass('add')
     $element.addClass('subtract')
     $scope.add(type, -amount)
 
@@ -263,7 +263,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       $scope.subtract_string = "Prev day"
     else
       $scope.subtract_string = "Prev"
- 
+
   ###**
   * @ngdoc method
   * @name selectedDateChanged
@@ -277,19 +277,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     setTimeRange(moment($scope.selected_date))
     $scope.selected_slot = null
     $scope.loadData()
-
-  ###**
-  * @ngdoc method
-  * @name updateHideStatus
-  * @methodOf BB.Directives:bbTimeRanges
-  * @description
-  * Update the hidden status
-  *
-  ###
-  $scope.updateHideStatus = () ->
-    for day in $scope.days
-      day.hide = !day.date.isSame($scope.selected_day,'day')
-
 
   ###**
   * @ngdoc method
@@ -389,7 +376,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       if $scope.bb.current_item.earliest_time_slot and $scope.bb.current_item.earliest_time_slot.selected and (!$scope.bb.current_item.earliest_time_slot.date.isSame(day.date, 'day') or $scope.bb.current_item.earliest_time_slot.time != slot.time)
         $scope.bb.current_item.earliest_time_slot.selected = false
 
-      $scope.updateHideStatus()
+
       $rootScope.$broadcast "time:selected"
       # broadcast message to the accordian range groups
       $scope.$broadcast 'slotChanged', day, slot
@@ -404,7 +391,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   ###
   # load the time data
   $scope.loadData = ->
-   
+
     current_item = $scope.bb.current_item
 
     # has a service been selected?
@@ -419,13 +406,13 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     date = $scope.start_date
     edate = moment(date).add($scope.time_range_length, 'days')
     $scope.end_date = moment(edate).add(-1, 'days')
- 
+
     AlertService.clear()
     # We may not want the current item duration to be the duration we query by
     # If min_duration is set, pass that into the api, else pass in the duration
     duration = $scope.bb.current_item.duration
     if $scope.bb.current_item.min_duration
-      duration = $scope.bb.current_item.min_duration    
+      duration = $scope.bb.current_item.min_duration
 
     loc = null
     if $scope.bb.postcode
@@ -482,7 +469,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
           checkRequestedTime(day, time_slots)
 
-        $scope.updateHideStatus()
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     else
       $scope.setLoaded $scope
@@ -569,7 +555,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @description
   * Format the date in according of fmt parameter
   *
-  * @param {date} fmt The format of date 
+  * @param {date} fmt The format of date
   ###
   $scope.format_date = (fmt) ->
     $scope.start_date.format(fmt) if $scope.start_date
@@ -581,7 +567,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @description
   * Format the start date in according of fmt parameter
   *
-  * @param {date} fmt The format of start date 
+  * @param {date} fmt The format of start date
   ###
   $scope.format_start_date = (fmt) ->
     $scope.format_date(fmt)
@@ -593,7 +579,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @description
   * Format the end date in according of fmt parameter
   *
-  * @param {date} fmt The format of end date 
+  * @param {date} fmt The format of end date
   ###
   $scope.format_end_date = (fmt) ->
     $scope.end_date.format(fmt) if $scope.end_date
@@ -632,4 +618,3 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     if day and slot
       $scope.bb.current_item.earliest_time_slot.selected = true
       $scope.highlightSlot(day, slot)
-

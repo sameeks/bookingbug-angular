@@ -90,3 +90,7 @@ class window.BaseCollections
     for col in @collections
       if jprms == col.jparams
         return col    
+
+  delete: (col) ->
+    @collections = _.without(@collections, col)
+

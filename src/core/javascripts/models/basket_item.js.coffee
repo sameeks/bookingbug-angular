@@ -1217,15 +1217,41 @@ angular.module('BB.Models').factory "BasketItemModel",
           @attachment
 
 
+    ###**
+    * @ngdoc method
+    * @name setPrepaidBooking
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Apply a prepaid booking
+    *
+    ###
     setPrepaidBooking: (prepaid_booking) ->
       @prepaid_booking     = prepaid_booking
       @pre_paid_booking_id = prepaid_booking.id
 
 
+    ###**
+    * @ngdoc method
+    * @name hasPrepaidBooking
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Indicates if the basket item has a prepaid booking applied
+    *
+    * @returns {boolean} boolean indicating if the BasketItem has a prepaid booking  
+    ###
     hasPrepaidBooking: () ->
       return @pre_paid_booking_id?  
 
 
+    ###**
+    * @ngdoc method
+    * @name getEventId
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Get the event id for the BasketItem
+    *
+    * @returns {string} The Event ID
+    ###
     getEventId: () ->
       if @time and @time.event_id
         return @time.event_id
@@ -1235,5 +1261,30 @@ angular.module('BB.Models').factory "BasketItemModel",
         return @event.id
 
 
+    ###**
+    * @ngdoc method
+    * @name isExternalPurchase
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Indicates if the BasketItem is an external purchase
+    *
+    * @returns {boolean}
+    ###
     isExternalPurchase: () ->
       return @external_purchase?  
+
+
+    ###**
+    * @ngdoc method
+    * @name getName
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Returns the name
+    *
+    * @returns {String}
+    ###
+    getName: (client) ->
+      if @first_name
+        return "#{@first_name} #{@last_name}"
+      else if client
+        return client.getName()

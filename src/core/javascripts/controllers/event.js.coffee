@@ -29,7 +29,7 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
   controller : 'Event'
 
 
-angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService) ->
+angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService, FormDataStoreService) ->
   
   $scope.controller = "public.controllers.Event"
   $scope.notLoaded $scope
@@ -38,13 +38,24 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   $scope.validator = ValidatorService
   $scope.event_options = $scope.$eval($attrs.bbEvent) or {}
 
+  FormDataStoreService.init 'ItemDetails', $scope, [
+    'selected_tickets',
+    'event_options'
+  ]
+
   $rootScope.connection_started.then ->
     init($scope.bb.company) if $scope.bb.company
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
   init = (comp) ->
+
+    # clear selected tickets if there are no stacked items (i.e. because a new event has been selected)
+    delete $scope.selected_tickets if $scope.bb.stacked_items and $scope.bb.stacked_items.length is 0
+
     $scope.event = $scope.bb.current_item.event
+
+    $scope.event_options.use_my_details = if !$scope.event_options.use_my_details? then true else $scope.event_options.use_my_details
 
     promises = [
       $scope.current_item.event_group.getImagesPromise(),
@@ -77,13 +88,13 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * @name selectTickets
   * @methodOf BB.Directives:bbEvent
   * @description
-  * Process the selected tickets - this may mean adding multiple basket items - add them all to the basket
+  * Processes the selected tickets and adds them to the basket
   ###
   $scope.selectTickets = () ->
     # process the selected tickets - this may mean adding multiple basket items - add them all to the basket
     $scope.notLoaded $scope
     $scope.bb.emptyStackedItems()
-    #$scope.setBasket(new BBModel.Basket(null, $scope.bb)) # we might already have a basket!!
+    # NOTE: basket is not cleared here as we might already have one!
     base_item = $scope.current_item
     for ticket in $scope.event.tickets
       if ticket.qty
@@ -122,7 +133,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
         item.tickets.price = item.totalPrice()
       , true
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
   ###**
@@ -153,6 +164,9 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * Set this page section as ready
   ###
   $scope.setReady = () =>
+
+    $scope.bb.current_item.setEvent($scope.event)
+
     $scope.bb.event_details = {
       name         : $scope.event.chain.name,
       image        : $scope.event.image,
@@ -163,7 +177,10 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       tickets      : $scope.event.tickets
     }
 
-    return $scope.updateBasket()
+    if $scope.event_options.suppress_basket_update
+      return true
+    else
+      return $scope.updateBasket()
 
 
   ###**
@@ -199,6 +216,10 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
 
   initTickets = () ->
+
+    # no need to init tickets if some have been selected already 
+    return if $scope.selected_tickets
+
     # if a default number of tickets is provided, set only the first ticket type to that default
     $scope.event.tickets[0].qty = if $scope.event_options.default_num_tickets then $scope.event_options.default_num_tickets else 0
 

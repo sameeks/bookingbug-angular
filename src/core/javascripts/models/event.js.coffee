@@ -24,6 +24,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       @getDate()
       @time = new BBModel.TimeSlot(time: DateTimeUlititiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
+      @date_unix = @date.unix()
 
     ###**
     * @ngdoc method

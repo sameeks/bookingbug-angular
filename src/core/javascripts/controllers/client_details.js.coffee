@@ -18,7 +18,7 @@
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -30,9 +30,9 @@
 *      </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
-* 
+*
 ####
 
 
@@ -49,7 +49,9 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   $scope.existing_member = false
   $scope.login_error = false
 
-  $scope.suppress_client_create = $attrs.bbSuppressCreate?
+
+  options = $scope.$eval($attrs.bbClientDetails) or {}
+  $scope.suppress_client_create = $attrs.bbSuppressCreate? or options.suppress_client_create
 
   $rootScope.connection_started.then =>
 
@@ -68,7 +70,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
       $scope.client_details = $scope.client.client_details
       QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
       $scope.setLoaded $scope
-    else 
+    else
       ClientDetailsService.query($scope.bb.company).then (details) =>
         $scope.client_details = details
         $scope.client.pre_fill_answers($scope.client_details) if $scope.client
@@ -108,7 +110,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
       $scope.client.setValid(true) if $scope.bb.isAdmin
       $scope.existing_member = false
       $scope.decideNextPage(route)
-    , (err) -> handleError()
+    , (err) -> handleError(err)
 
   ###**
   * @ngdoc method
@@ -127,7 +129,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
       , (err) ->
         $scope.login_error = true
         $scope.setLoaded $scope
-        AlertService.danger({msg: "Sorry, your email or password was not recognised. Please try again."})
+        AlertService.raise('LOGIN_FAILED');
 
   ###**
   * @ngdoc method
@@ -220,7 +222,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   ###
   $scope.useClient = (client) ->
     $scope.setClient(client)
-    
+
   ###**
   * @ngdoc method
   * @name recalc_question
@@ -233,7 +235,9 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
 
 
   handleError = (error) ->
-    if error.data.error == "Please Login" 
+    if error.data.error == "Please Login"
       $scope.existing_member = true
       AlertService.raise('ALREADY_REGISTERED')
+    else if error.data.error == "Invalid Password"
+      AlertService.raise('PASSWORD_INVALID')
     $scope.setLoaded $scope

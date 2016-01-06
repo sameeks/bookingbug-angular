@@ -326,16 +326,31 @@ app.directive 'bbCommPref', () ->
 
 
 # bbCountTicketTypes
-# returns the number of tickets purchased grouped by name
-app.directive 'bbCountTicketTypes', () ->
+# returns the number of tickets selected, grouped by name
+app.directive 'bbCountTicketTypes', ($rootScope) ->
   restrict: 'A'
+  scope: false
   link: (scope, element, attrs) ->
-    items = scope.$eval(attrs.bbCountTicketTypes)
-    counts = []
-    for item in items
-      if item.tickets
-        if counts[item.tickets.name] then counts[item.tickets.name] += 1 else counts[item.tickets.name] = 1
-        item.number = counts[item.tickets.name]
+
+
+    $rootScope.connection_started.then () ->
+      countTicketTypes()
+
+
+    scope.$on "basket:updated", (event, basket) ->
+      countTicketTypes()
+
+
+    countTicketTypes = (items) ->
+
+      items = scope.bb.basket.timeItems()
+
+      counts = []
+      for item in items
+        if item.tickets
+          if counts[item.tickets.name] then counts[item.tickets.name] += item.tickets.qty else counts[item.tickets.name] = item.tickets.qty
+          item.number = counts[item.tickets.name]
+      scope.counts = counts
 
 
 # bbCapitaliseFirstLetter
