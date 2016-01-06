@@ -128,12 +128,7 @@
             <div class="form-group" ng-class="{'has-error': client_form.postcode.$invalid && ((client_form.postcode.$dirty && !client_form.postcode.$focused) || booking_form.submitted)}">
               <label for="postcode" class="control-label col-sm-4">Postcode:</label>
               <div class="col-sm-5">
-                <input type="text" name="postcode" id="postcode" ng-pattern="validator.getUKPostcodePattern()" ng-model="client.postcode" class="form-control" onBlur="javascript:this.value=this.value.toUpperCase()" style="text-transform:uppercase"/>
-              </div>
-              <div class="col-sm-3 messages">
-                <div class="error-message" ng-show="client_form.postcode.$invalid && booking_form.submitted">
-                  Please enter a valid postcode
-                </div>
+                <input type="text" name="postcode" id="postcode" ng-model="client.postcode" class="form-control" onBlur="javascript:this.value=this.value.toUpperCase()" style="text-transform:uppercase"/>
               </div>
             </div>
 
