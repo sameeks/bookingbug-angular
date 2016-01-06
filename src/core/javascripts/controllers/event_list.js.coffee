@@ -31,7 +31,7 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
   controller : 'EventList'
   link : (scope, element, attrs) ->
     scope.summary = attrs.summary?
-    scope.options = scope.$eval(attrs.bbEvents) or {}
+    options = scope.$eval(attrs.bbEvents) or {}
     scope.directives="public.EventList"
     # set the mode
     # 0 = Event summary (gets year summary and loads events a day at a time)
@@ -42,9 +42,9 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q, PageControllerService, FormDataStoreService, $filter, PaginationService, BBModel, EventChainModel, EventModel) ->
+angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q, BBModel, PageControllerService, FormDataStoreService, $filter, PaginationService, EventService) ->
   $scope.controller = "public.controllers.EventList"
-  $scope.notLoaded $scope
+  $scope.notLoaded($scope)
   angular.extend(this, new PageControllerService($scope, $q))
   $scope.pick = {}
   $scope.start_date = moment()
@@ -80,7 +80,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q
   
 
   $scope.initialise = () ->
-    $scope.notLoaded $scope
+    $scope.notLoaded($scope)
 
     # has the event group been manually set (i.e. in the step before)
     $scope.event_group_manually_set = if !$scope.event_group_manually_set? and $scope.current_item.event_group? then true else false
@@ -130,7 +130,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q
       $scope.has_company_questions = company_questions? && company_questions.length > 0
       buildDynamicFilters(company_questions) if company_questions
       $scope.event_groups = _.indexBy(event_groups, 'id') if event_groups
-      $scope.setLoaded $scope
+      $scope.setLoaded($scope)
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -204,7 +204,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q
     if $scope.bb.item_defaults.event_chain
       deferred.resolve([])
     else
-      $scope.notLoaded $scope
+      $scope.notLoaded($scope)
       comp ||= $scope.bb.company 
 
       params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
@@ -230,7 +230,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q
 
     current_event = $scope.current_item.event
 
-    $scope.notLoaded $scope
+    $scope.notLoaded($scope)
     comp ||= $scope.bb.company 
 
     # de-select the event chain if there's one already picked - as it's hiding other events in the same group
@@ -302,7 +302,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q
         # update the paging
         PaginationService.update($scope.pagination, $scope.filtered_items.length)
 
-        $scope.setLoaded $scope
+        $scope.setLoaded($scope)
         deferred.resolve($scope.items)
       , (err) ->  deferred.reject()
     , (err) ->  deferred.reject()
@@ -377,12 +377,12 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, $q
   ###
   $scope.selectItem = (item, route) =>
     return false unless (item.getSpacesLeft() <= 0 && $scope.bb.company.settings.has_waitlists) || item.hasSpace()
-    $scope.notLoaded $scope
+    $scope.notLoaded($scope)
     if $scope.$parent.$has_page_control
       $scope.event.unselect() if $scope.event
       $scope.event = item
       $scope.event.select()
-      $scope.setLoaded $scope
+      $scope.setLoaded($scope)
       return false
     else
       if $scope.bb.moving_purchase

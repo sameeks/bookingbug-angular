@@ -362,8 +362,8 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     *
     * @returns {promise} A returned promise
     ###
-    @query_by_email: (company, email) ->
-      ClientService.query(company, email)
+    @$query_by_email: (company, email) ->
+      ClientService.query_by_email(company, email)
 
     $create_or_update: (company, client) ->
       ClientService.create_or_update(company, client)

@@ -110,4 +110,4 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
     * @returns {promise} A returned promise
     ###
     @$query: (company, params) ->
-      EventChainService(company, params)
+      EventChainService.query(company, params)
