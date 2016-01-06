@@ -142,6 +142,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: 'Sorry, your email or password was not recognised. Please try again or reset your password.'
     },
     {
+      key: 'PASSWORD_INVALID',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, your chosen password is invalid'
+    },
+    {
       key: 'PASSWORD_RESET_REQ_SUCCESS',
       type: 'success',
       title: '',
