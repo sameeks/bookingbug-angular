@@ -128,7 +128,7 @@
             <div class="form-group" ng-class="{'has-error': client_form.postcode.$invalid && ((client_form.postcode.$dirty && !client_form.postcode.$focused) || booking_form.submitted)}">
               <label for="postcode" class="control-label col-sm-4">Postcode:</label>
               <div class="col-sm-5">
-                <input type="text" name="postcode" id="postcode" ng-model="client.postcode" class="form-control" onBlur="javascript:this.value=this.value.toUpperCase()" style="text-transform:uppercase"/>
+                <input type="text" name="postcode" id="postcode" ng-model="client.postcode" class="form-control"/>
               </div>
             </div>
 
