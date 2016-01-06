@@ -230,12 +230,15 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           purchase: $scope.bb.moving_purchase
           bookings: $scope.bb.basket.items
         PurchaseService.update(params).then (purchase) ->
-          $scope.purchase = purchase
-          $scope.setLoaded $scope
-          $scope.item.move_done = true
-          $rootScope.$broadcast "booking:moved"
-          $scope.decideNextPage(route)
-          $scope.showMoveMessage($scope.bb.purchase.bookings[0].datetime)
+          $scope.bb.purchase = purchase
+          $scope.bb.purchase.getBookingsPromise().then (bookings)->
+            $scope.purchase = purchase
+            $scope.setLoaded $scope
+            $scope.item.move_done = true
+            $rootScope.$broadcast "booking:moved"
+            $scope.decideNextPage(route)
+            $scope.showMoveMessage(bookings[0].datetime)
+
 
         , (err) ->
            $scope.setLoaded $scope
