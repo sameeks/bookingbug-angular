@@ -243,6 +243,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @param {array} comp The company parameter
   ###
   $scope.loadEventData = (comp) ->
+
+    delete $scope.items if $scope.mode is 0
+
     deferred = $q.defer()
 
     current_event = $scope.current_item.event
