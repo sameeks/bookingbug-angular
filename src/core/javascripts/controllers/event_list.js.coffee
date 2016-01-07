@@ -420,6 +420,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       return false
     else
       if $scope.bb.moving_purchase
+        $scope.bb.current_item.waiting_for_checkout = true
         i.setEvent(item) for i in $scope.bb.basket.items
       $scope.bb.current_item.setEvent(item)
       $scope.bb.current_item.ready = false
