@@ -15,8 +15,9 @@ angular.module('BBAdmin.Services').factory 'AdminClinicService',  ($q, BBModel, 
       if existing && !params.skip_cache
         defer.resolve(existing)
       else
-        if existing && params.skip_cache
-          ClinicCollections.delete(existing)
+        if params.skip_cache
+          ClinicCollections.delete(existing) if existing
+          company.$flush('clinics', params)
         company.$get('clinics', params).then (collection) ->
           collection.$get('clinics').then (clinics) ->
             models = (new BBModel.Admin.Clinic(s) for s in clinics)

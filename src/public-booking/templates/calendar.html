@@ -76,15 +76,15 @@
           <div accordion close-others="false">
 
             <!-- MORNING TIME RANGE -->
-            <div bb-accordian-range-group="{range: [0, 720], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
             <!-- AFTERNOON TIME RANGE -->
-            <div bb-accordian-range-group="{range: [720, 1020], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
             <!-- EVENING TIME RANGE -->
-            <div bb-accordian-range-group="{range: [1020, 1440], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
           </div>

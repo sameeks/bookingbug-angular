@@ -1,11 +1,11 @@
-angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $http, $templateCache, $q, $log) ->
+angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $http, $templateCache, $q, $log, TemplateSvc) ->
 
   getTemplate = (type, scope) ->
     switch type
       when 'button_form'
         getButtonFormTemplate(scope)
       when 'page'
-        """<a ng-click="decideNextPage()">{{label}}</a>"""
+        TemplateSvc.get("payment.html")
       when 'location'
         """<a href='{{payment_link}}'>{{label}}</a>"""
       else ""
