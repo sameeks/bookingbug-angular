@@ -6,11 +6,11 @@
 			<div class="bb-subcontent">
 
 				<h2 class="bb-section-title">Your basket</h2>
-				<div class="bb-empty-basket-full-screen" ng-hide="items">
+				<div class="bb-empty-basket-full-screen" ng-hide="bb.basket.items">
 					<h3>There are no items in the basket</h3>
 					<p>Please press the add another item button if you wish to add a product or service.</p>
 				</div>
-				<table class="table table-bordered" ng-show="items">
+				<table class="table table-bordered" ng-show="bb.basket.items">
 					<thead>
 						<tr>
 							<th>Item</th>
