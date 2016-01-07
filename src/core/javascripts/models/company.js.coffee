@@ -149,7 +149,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     *
     * @returns {object} Pusher channel
     ###
-    getPusherChannel: (model) =>
+    getPusherChannel: (model, options = {}) =>
       unless @pusher
         @pusher = new Pusher 'c8d8cea659cc46060608',
           encrypted: if options.hasOwnProperty('encrypted') then options.encrypted else true
