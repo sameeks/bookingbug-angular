@@ -159,11 +159,12 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
               'App-Id' : AppConfig.appId
               'App-Key' : AppConfig.appKey
               'Auth-Token' : $sessionStorage.getItem('auth_token')
-      channelName = "private-c#{@id}-w#{@numeric_widget_id}"
-      channelName = channelName + "-" + model if model
-      if @pusher.channel(channelName)
-        @pusher.channel(channelName)
-      else
-        @pusher.subscribe(channelName)
-        @pusher.channel(channelName)
+      if @$has(model)
+        channelName = @$href(model)
+        channelName = channelName.replace(/https?:\/\//,'').replace(/\//g,'-').replace(/:/g,'_')
+        if @pusher.channel(channelName)
+          @pusher.channel(channelName)
+        else
+          @pusher.subscribe(channelName)
+          @pusher.channel(channelName)
 
