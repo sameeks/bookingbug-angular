@@ -542,7 +542,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     $rootScope.$broadcast "page:changed"
 
 
-  # TODO load more events when end of initial collection is reached/next collection is requested
+  # TODO load more events when end of initial collection is reached/next collection is requested/data is loaded when no event data is present
   # $scope.$on 'month_picker:month_changed', (event, month, last_month_shown) ->
   #   return if !$scope.items or $scope.mode is 0
   #   last_event = _.last($scope.items).date

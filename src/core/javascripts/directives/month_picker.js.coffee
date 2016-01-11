@@ -73,10 +73,6 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
 
       $scope.months = months
 
-      $scope.selectMonthByDate($scope.selected_day.date) if $scope.selected_day?
-
-      $scope.selected_month = $scope.selected_month or $scope.months[0]
-
       $scope.slick_config =
         nextArrow: ".month-next",
         prevArrow: ".month-prev",
@@ -90,26 +86,10 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
         event:
           init: (event, slick) ->
             $timeout ->
-              slick.slickGoTo($scope.selected_month.index) if $scope.selected_day
-
-
-    $scope.selectMonth = (month) ->
-      $scope.selected_month = month
-      $scope.$emit 'month_picker:month_changed', $scope.selected_month
-
-
-    $scope.selectMonthByDate = (date) ->
-
-      return if !moment.isMoment(date)
-
-      # get the month number from the date 
-      month = date.month()
-
-      # return if the month is already selected
-      return if $scope.selected_month and $scope.selected_month.start_date.month() is month
-
-      for m in $scope.months
-        $scope.selectMonth(m) if m.start_date.month() == month
+              # scroll to the selected month
+              if $scope.selected_day?
+                for m in $scope.months
+                  slick.slickGoTo(m.index) if m.start_date.month() is $scope.selected_day.date.month()
 
       
     # listen to date changes from the date filter and clear the selected day
@@ -119,15 +99,13 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
       
     $scope.toggleDay = (day, month) ->
 
-      return if !day || day.data and (day.data.spaces == 0 || day.disabled || !day.available) || (!day.data and !day._d)
+      return if !day || day.data and (day.data.spaces == 0 or day.disabled or !day.available) or (!day.data and !day._d)
 
       $scope.selected_day.selected = false if $scope.selected_day
       
       day.selected = true
       $scope.selected_day = day
-
-      $scope.selected_month = month
-      
+     
       # TODO refactor to call showDay via controller
       $scope.showDay(day.date)
 
