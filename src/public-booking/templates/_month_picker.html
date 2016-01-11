@@ -1,11 +1,11 @@
-<div class="bb-month-picker" bb-slick>
+<div class="bb-month-picker">
   <div class="bb-month-nav-prev hidden-xs">
     <button type="button" class="btn btn-icon btn-xl month-prev">
       <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">Previous</span>
     </button>
   </div>
-   <div class="bb-months">
-   <div slick init-onload="true" data="months" on-init="slickOnInit()" on-set-position="slickOnInit()" slides-to-show="{{months.length >= 3? 3 : months.length}}" current-index="index" infinite="false" prev-arrow=".month-prev" next-arrow=".month-next" responsive="[{breakpoint: 1200, settings: {slidesToShow: months.length >= 2? 2 : months.length}}, {breakpoint: 992, settings: {slidesToShow: 1}}]">
+  <div class="bb-months">
+    <div slick data="months" ng-if="months" settings="slick_config">
 
       <div class="bb-month" ng-repeat="month in months" ng-class="{'hidden-xs': month.selected}">
         <table>
@@ -40,12 +40,12 @@
             <tr ng-repeat="week in month.weeks">
               <td ng-repeat="day in week.days" 
                 ng-class="{'available': day.available, 
-                           'selected': day.selected || day.date.isSame(selected_date, 'day'),
+                           'selected': day.selected,
                            'today': day.today,
                            'past': day.past,
                            'disabled': day.disabled
                           }" 
-                  ng-click="showDay(day)"
+                  ng-click="toggleDay(day, month)"
                   ng-if="!refreshing"
                   ng-disabled="day.disabled || day.past">
                 <div class="circle">{{day.date.date()}}</div>
