@@ -46,7 +46,6 @@
                            'disabled': day.disabled
                           }" 
                   ng-click="toggleDay(day)"
-                  ng-if="!refreshing"
                   ng-disabled="day.disabled || day.past">
                 <div class="circle">{{day.date.date()}}</div>
               </td>
