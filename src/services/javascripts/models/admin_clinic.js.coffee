@@ -77,6 +77,7 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
       data.start_time = @start_time
       data.end_time = @end_time
       data.resource_ids = []
+      data.update_all_for_repeat = @update_all_for_repeat
       for id, en of @resources
         data.resource_ids.push(id) if en
       data.person_ids = []
