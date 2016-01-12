@@ -70,7 +70,7 @@ angular
     $http, $q, data_cache, shared_header, UriTemplate, $cookies, $sessionStorage
   ){
 
-    if ($cookies['Auth-Token']){
+    if ($cookies['Auth-Token'] && !$sessionStorage.getItem('auth_token')){
       $sessionStorage.setItem('auth_token', $cookies['Auth-Token'])
     }
 

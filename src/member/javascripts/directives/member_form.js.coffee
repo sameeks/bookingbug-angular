@@ -32,6 +32,7 @@ angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, Me
       $scope.submit = (form) ->
         $scope.loading = true
         $scope.member.$put('self', {}, form).then (member) ->
+          $rootScope.member = member
           $scope.loading = false
           AlertService.raise('UPDATE_SUCCESS')
         , (err) ->
