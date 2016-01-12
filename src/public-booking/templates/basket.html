@@ -24,7 +24,7 @@
 								<p>
 									{{item.describe()}}
 									<br/>
-                  <small>{{item.time.time_12}} {{item.date.date | datetime: "dddd Do MMMM":false}}</small>
+                  <small>{{item.time.time_12}} {{item.date.date | datetime: "dddd Do MMMM"}}</small>
 									<br/>
 									<small>{{item.resource.getAddress() | address_single_line }}</small>
 									<br/>
@@ -50,7 +50,7 @@
 							<td>
 								<p>
 									{{deal_code.description}}
-									<br/> 
+									<br/>
 								</p>
 								<p></p>
 							</td>
@@ -67,14 +67,14 @@
 							<th class="text-right">{{basket.fullPrice() | currency }}</th>
 							<th>&nbsp;</th>
 						</tr>
-						
+
 						<tr data-ng-if="basket.questionPrice()">
 							<th class="text-right">Booking Fee</th>
 							<th class="text-right">{{basket.questionPrice() | currency}}</th>
 							<th>&nbsp;</th>
 						</tr>
-						
-						
+
+
 						<tr data-ng-if="basket.hasDeal()">
 							<th class="text-right">Total Gift Certificates</th>
 							<th class="text-right">{{basket.totalDeals() | currency }}</th>
@@ -158,7 +158,7 @@
 						<button type="button" class="btn btn-default" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span>Back</span></button>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</div>
 
 	</div>
