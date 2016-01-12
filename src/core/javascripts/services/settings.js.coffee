@@ -1,7 +1,7 @@
 angular.module('BB.Services').factory 'SettingsService', () ->
-
   i18n = false
   scroll_offset = 0
+  country_code = ""
 
   enableInternationalizaton: () ->
     i18n = true
@@ -14,3 +14,9 @@ angular.module('BB.Services').factory 'SettingsService', () ->
 
   getScrollOffset: () ->
     return scroll_offset
+
+  setCountryCode: (value) ->
+    country_code = value
+
+  getCountryCode: () ->
+    return country_code

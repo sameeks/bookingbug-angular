@@ -19,7 +19,7 @@
 ###
 
 
-angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, BBModel, $q, $bbug) ->
+angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, SettingsService, BBModel, $q, $bbug) ->
 
   # Use http://regex101.com/ to test patterns
 
@@ -27,7 +27,8 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # http://regexlib.com/REDetails.aspx?regexp_id=260
   # uk_postcode_regex = /^([A-PR-UWYZ0-9][A-HK-Y0-9][AEHMNPRTVXY0-9]?[ABEHMNPRVWXY0-9]? {1,2}[0-9][ABD-HJLN-UW-Z]{2}|GIR 0AA)$/i
   uk_postcode_regex = /^(((([A-PR-UWYZ][0-9][0-9A-HJKS-UW]?)|([A-PR-UWYZ][A-HK-Y][0-9][0-9ABEHMNPRV-Y]?))\s{0,1}[0-9]([ABD-HJLNP-UW-Z]{2}))|(GIR\s{0,2}0AA))$/i
-
+  # US postcode regex used for getMailingPattern
+  us_postcode_regex = /^\d{5}(?:[-\s]\d{4})?$/
   # UK postcode regex (lenient) - this checks for a postcode like string
   # https://gist.github.com/simonwhitaker/5748487
   uk_postcode_regex_lenient = /^[A-Z]{1,2}[0-9][0-9A-Z]?\s*[0-9][A-Z]{2}$/i
@@ -47,11 +48,11 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # UK landline regex (lenient)
   uk_landline_regex_lenient = /^(0|\+)([\d \(\)]{9,19})$/
 
-  # international number 
+  # international number
   international_number = /^(\+)([\d \(\)]{9,19})$/
 
   email_regex = /^$|^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
-  # password requires minimum of 7 characters and 1 number 
+  # password requires minimum of 7 characters and 1 number
   standard_password = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
   # alphanumeric
@@ -112,6 +113,12 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   ###
   getUKPostcodePattern: () ->
     return uk_postcode_regex_lenient
+  getMailingPattern: () ->
+    cc = SettingsService.getCountryCode()
+    if cc = "us"
+      return us_postcode_regex
+    else
+      return uk_postcode_regex_lenient
 
   ###**
     * @ngdoc method
@@ -258,9 +265,9 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
       AlertService.danger(form.alert)
       return false
     else if form.$invalid and form.raise_alerts
-      AlertService.danger(ErrorService.getError('FORM_INVALID')) 
+      AlertService.danger(ErrorService.getError('FORM_INVALID'))
       return false
-    else if form.$invalid 
+    else if form.$invalid
       return false
     else
       return true
