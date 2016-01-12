@@ -22,9 +22,9 @@ app = angular.module('BB', [
   'angular.filter',
   'ui-rangeSlider',
   'ngCookies',
-  'slick',
   'pascalprecht.translate',
-  'vcRecaptcha'
+  'vcRecaptcha',
+  'slickCarousel'
 ]);
 
 
