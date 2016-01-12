@@ -27,20 +27,14 @@ angular.module('BB.Models').factory "Admin.ServiceModel", ($q, BBModel, ServiceM
     ###**
     * @ngdoc method
     * @name query
-    * @param {Company} company The company model.
-    * @param {integer=} page Specifies particular page of paginated response.
-    * @param {integer=} per_page Number of items per page of paginated response.
     * @methodOf BB.Models:AdminService
     * @description
-    * Gets a filtered collection of services.
+    * Static function that loads an array of services from a company object
     *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of services.
+    * @returns {Promise} A returned promise
     ###
-    @query: (company, page, per_page) ->
-    	AdminServiceService.query
-    		company: company
-    		page: page
-    		per_page: per_page
+    @$query: (params) ->
+        AdminServiceService.query(params)
 
 angular.module('BB.Models').factory 'AdminService', ($injector) ->
   $injector.get('Admin.ServiceModel')

@@ -38,24 +38,14 @@ angular.module('BB.Models').factory "Member.PrePaidBookingModel", ($q, BBModel, 
     ###**
     * @ngdoc method
     * @name query
-    * @param {Company} company The company model.
-    * @param {integer=} company_id The company id.
-    * @param {integer=} member_id The id of member that use pre paid the booking.
-    * @param {array} include_invalid An array with booking list that include invalid booking.
-    * @param {integer=} event_id The event id
     * @methodOf BB.Models:MemberPrePaidBooking
     * @description
-    * Gets a filtered collection of pre paid bookings.
+    * Static function that loads an array of pre paid bookings from a company object
     *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of pre paid bookings.
+    * @returns {Promise} A returned promise
     ###
-    @query: (company, company_id, member_id, include_invalid, event_id) ->
-      MemberPrePaidBookingService.query
-        company: company
-        company_id: company_id
-        member_id: member_id
-        include_invalid: include_invalid
-        event_id: event_id
+    @$query:(member, params) ->
+      MemberPrePaidBookingService.query(member, params)
 
 angular.module('BB.Models').factory 'MemberPrePaidBooking', ($injector) ->
   $injector.get('Member.PrePaidBookingModel')

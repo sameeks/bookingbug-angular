@@ -10,7 +10,7 @@
 ####
 
 
-angular.module('BB.Models').factory "Admin.AdministratorModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "Admin.AdministratorModel", ($q, BBModel, BaseModel, AdminAdministratorService) ->
 
   class Admin_Administrator extends BaseModel
 
@@ -20,20 +20,14 @@ angular.module('BB.Models').factory "Admin.AdministratorModel", ($q, BBModel, Ba
     ###**
     * @ngdoc method
     * @name query
-    * @param {Company} company The company model.
-    * @param {integer=} page Specifies particular page of paginated response.
-    * @param {integer=} per_page Number of items per page of paginated response.
     * @methodOf BB.Models:AdminAdministrator
     * @description
-    * Gets a filtered collection of people.
+    * Static function that loads an array of administrators from a company object
     *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of people.
+    * @returns {Promise} A returned promise
     ###
-    @query: (company, page, per_page) ->
-      AdminPersonService.query
-        company: company
-        page: page
-        per_page: per_page
+    @$query: (params) ->
+      AdminAdministratorService.query(params)
 
 angular.module('BB.Models').factory 'AdminAdministrator', ($injector) ->
   $injector.get('Admin.AdministratorModel')

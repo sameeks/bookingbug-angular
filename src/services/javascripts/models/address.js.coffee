@@ -42,20 +42,14 @@ angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseMode
     ###**
     * @ngdoc method
     * @name query
-    * @param {Company} company The company model.
-    * @param {integer=} page Specifies particular page of paginated response.
-    * @param {integer=} per_page Number of items per page of paginated response.
     * @methodOf BB.Models:AdminAddress
     * @description
-    * Gets a filtered collection of addresses.
+    * Static function that loads an array of addresses service from a company object
     *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of addresses.
+    * @returns {Promise} A returned promise
     ###
-    @query: (company, page, per_page) ->
-      AdminAddressService.query
-        company: company
-        page: page
-        per_page: per_page
+    @query: (params) ->
+      AdminAddressService.query(params)
 
 angular.module('BB.Models').factory 'AdminAddress', ($injector) ->
   $injector.get('Admin.AddressModel')

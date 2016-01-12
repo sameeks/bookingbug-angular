@@ -118,56 +118,38 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
     ###**
     * @ngdoc method
     * @name query
-    * @param {Company} company The company model.
-    * @param {integer=} page Specifies particular page of paginated response.
-    * @param {integer=} per_page Number of items per page of paginated response.
     * @methodOf BB.Models:AdminClinic
     * @description
-    * Gets a filtered collection of clinic.
+    * Static function that loads an array of clinics from a company object
     *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of clinic.
+    * @returns {Promise} A returned promise
     ###
-    @query: (company, page, per_page) ->
-      AdminClinicService.query
-        company: company
-        page: page
-        per_page: per_page
+    @$query: (params) ->
+      AdminClinicService.query(params)
 
     ###**
     * @ngdoc method
     * @name create
-    * @param {Company} company The company model.
-    * @param {integer=} page Specifies particular page of paginated response.
-    * @param {integer=} per_page Number of items per page of paginated response.
     * @methodOf BB.Models:AdminClinic
     * @description
-    * Create a filtered collection of clinic.
+    * Static function that create an array of clinics from a company object
     *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of clinic.
+    * @returns {Promise} A returned promise
     ###
-    @create: (company, page, per_page) ->
-      AdminClinicService.create
-        company: company
-        page: page
-        per_page: per_page
+    @$create: (prms, clinic) ->
+      AdminClinicService.create(prms, clinic)
 
     ###**
     * @ngdoc method
     * @name update
-    * @param {Company} company The company model.
-    * @param {integer=} page Specifies particular page of paginated response.
-    * @param {integer=} per_page Number of items per page of paginated response.
     * @methodOf BB.Models:AdminClinic
     * @description
-    * Update a filtered collection of clinic.
+    * Static function that updates an array of clinics from a company object
     *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of clinic.
+    * @returns {Promise} A returned promise
     ###
-    @update: (company, page, per_page) ->
-      AdminClinicService.update
-        company: company
-        page: page
-        per_page: per_page
+    @$update: (clinic) ->
+      AdminClinicService.update(clinic)
 
 angular.module('BB.Models').factory 'AdminClinic', ($injector) ->
   $injector.get('Admin.ClinicModel')

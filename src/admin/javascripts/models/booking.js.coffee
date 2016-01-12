@@ -167,34 +167,14 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
     ###**
     * @ngdoc method
     * @name query
-    * @param {Company} company The company model.
-    * @param {integer=} slot_id The booking slot id.
-    * @param {date=} start_date Booking start date.
-    * @param {date=} end_date Booking end date.
-    * @param {integer=} service_id The service id.
-    * @param {integer=} resource_id The resource id.
-    * @param {integer=} person_id The person id.
-    * @param {integer=} page Specifies particular page of paginated response.
-    * @param {integer=} per_page Number of items per page of paginated response.
-    * @param {array} include_cancelled An array with booking list what include cancelled booking.
     * @methodOf BB.Models:AdminBooking
     * @description
-    * Gets a filtered collection of bookings.
+    * Static function that loads an array of bookings from a company object
     *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of bookings.
+    * @returns {Promise} A returned promise
     ###
-    @query: (company, slot_id, start_date, end_date, service_id, resource_id, person_id, page, per_page, include_cancelled) ->
-      AdminBookingService.query
-        company: company
-        slot_id:slot_id
-        start_date:start_date
-        end_date: end_date
-        service_id: service_id
-        resource_id: resource_id
-        person_id: person_id
-        page: page
-        per_page: per_page
-        include_cancelled: include_cancelled
+    @$query: (prms) ->
+      AdminBookingService.query(prms)
 
 angular.module('BB.Models').factory 'AdminBooking', ($injector) ->
   $injector.get('Admin.BookingModel')
