@@ -23,5 +23,5 @@ angular.module('BB.Models').factory "CategoryModel", ($q, BBModel, BaseModel, Ca
     *
     * @returns {promise} A returned promise
     ###
-  	# @$query: (company) ->
-    #   CategoryService.query(company)
+  	 @$query: (company) ->
+       CategoryService.query(company)

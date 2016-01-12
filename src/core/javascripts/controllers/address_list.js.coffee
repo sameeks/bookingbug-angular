@@ -39,7 +39,7 @@ angular.module('BB.Directives').directive 'bbAddresses', () ->
     scope.directives =  "public.AddressList"
 
 angular.module('BB.Controllers').controller 'AddressList',
-($scope,  $rootScope, $filter, $sniffer, BBModel, AddressModel, FormDataStoreService) ->
+($scope,  $rootScope, $filter, $sniffer, BBModel, FormDataStoreService) ->
 
   $scope.controller = "public.controllers.AddressList"
   $scope.manual_postcode_entry = false
@@ -81,9 +81,8 @@ angular.module('BB.Controllers').controller 'AddressList',
   $scope.findByPostcode = () ->
     $scope.postcode_submitted = true
     return if !$scope.bb.postcode
-
-    $scope.notLoaded $scope
-    BBModel.AddressList.$query(
+    $scope.notLoaded($scope)
+    BBModel.Address.$query(
       company: $scope.bb.company
       post_code: $scope.bb.postcode
     )
@@ -98,7 +97,6 @@ angular.module('BB.Controllers').controller 'AddressList',
           address : response.partialAddress
           moniker : response.moniker
         }]
-
       #  there is a bug in IE where it can't display a single option if the
       #  select menu is set to display more than one i.e. <select size="3">, so
       #  we add a blank
@@ -113,12 +111,12 @@ angular.module('BB.Controllers').controller 'AddressList',
       # the select control this is bound to
       $scope.bb.address = addressArr[0]
       $scope.client.address = addressArr[0]
-      $scope.setLoaded $scope
+      $scope.setLoaded($scope)
       return
     ,(err) ->
       $scope.show_complete_address = true
       $scope.postcode_submitted = true
-      $scope.setLoaded $scope
+      $scope.setLoaded($scope)
 
   ###**
   * @ngdoc method
@@ -221,7 +219,7 @@ angular.module('BB.Controllers').controller 'AddressList',
             $scope.bb.address3 = address.addressLine3
           $scope.bb.address4 = address.town
           $scope.bb.address5 = address.county if address.county?
-          $scope.setLoaded $scope
+          $scope.setLoaded($scope)
           return
         ,(err) ->
             $scope.show_complete_address = true

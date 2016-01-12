@@ -27,17 +27,16 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
   replace: true
   scope : true
   controller : 'Event'
-  link (scope, element, attrs) ->
+  link: (scope, element, attrs) ->
+    scope.options = scope.$eval(attrs.bbEvent) or {}
     scope.directives = "public.Event"
-
 
 angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService) ->
   $scope.controller = "public.controllers.Event"
-  $scope.notLoaded $scope
+  $scope.notLoaded($scope)
   angular.extend(this, new PageControllerService($scope, $q))
 
   $scope.validator = ValidatorService
-  $scope.event_options = $scope.$eval($attrs.bbEvent) or {}
 
   $rootScope.connection_started.then ->
     if $scope.bb.company
@@ -77,7 +76,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
         $scope.event.updatePrice()
       , true
-      $scope.setLoaded $scope
+      $scope.setLoaded($scope)
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -90,7 +89,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   ###
   $scope.selectTickets = () ->
     # process the selected tickets - this may mean adding multiple basket items - add them all to the basket
-    $scope.notLoaded $scope
+    $scope.notLoaded($scope)
     $scope.bb.emptyStackedItems()
     #$scope.setBasket(new BBModel.Basket(null, $scope.bb)) # we might already have a basket!!
     base_item = $scope.current_item
@@ -116,14 +115,14 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     # ok so we have them as stacked items
     # now push the stacked items to a basket
     if $scope.bb.stacked_items.length == 0
-      $scope.setLoaded $scope
+      $scope.setLoaded($scope)
       return
 
     $scope.bb.pushStackToBasket()
 
     $scope.updateBasket().then () =>
       # basket has been saved
-      $scope.setLoaded $scope
+      $scope.setLoaded($scope)
       $scope.selected_tickets = true
       $scope.stopTicketWatch()
       $scope.tickets = (item.tickets for item in $scope.bb.basket.items)

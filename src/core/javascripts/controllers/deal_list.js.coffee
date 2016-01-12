@@ -32,7 +32,7 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
     scope.options = scope.$eval(attrs.bbDeals)
     scope.directives = "public.DealList"
 
-angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, DealModel, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal) ->
+angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
@@ -42,12 +42,13 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   init = () ->
-    $scope.notLoaded $scope
+    $scope.notLoaded($scope)
+    
     if !$scope.deals
       deal_promise = BBModel.Deal.$query($scope.bb.company)
       deal_promise.then (deals) ->
         $scope.deals = deals
-        $scope.setLoaded $scope
+        $scope.setLoaded($scope)
 
   ###**
   * @ngdoc method
@@ -72,17 +73,17 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
             iitem
 
       modalInstance.result.then (item) ->
-        $scope.notLoaded $scope
+        $scope.notLoaded($scope)
         $scope.setBasketItem item
         $scope.addItemToBasket().then ->
-          $scope.setLoaded $scope
+          $scope.setLoaded($scope)
         , (err) ->
           $scope.setLoadedAndShowError $scope, err, 'Sorry, something went wrong'
     else
-      $scope.notLoaded $scope
+      $scope.notLoaded($scope)
       $scope.setBasketItem iitem
       $scope.addItemToBasket().then ->
-        $scope.setLoaded $scope
+        $scope.setLoaded($scope)
       , (err) ->
         $scope.setLoadedAndShowError $scope, err, 'Sorry, something went wrong'
 
