@@ -20,7 +20,8 @@
   ],
   "dependencies": {
     "bookingbug-angular-core": "master",
-    "angular-recaptcha": "~2.2.3"
+    "angular-recaptcha": "~2.2.3",
+    "angular-slick-carousel": "~3.1.4"
   },
   "resolutions": {
     "angular": "1.2.28"

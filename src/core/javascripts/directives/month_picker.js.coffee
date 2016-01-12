@@ -97,15 +97,17 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
       $scope.selected_day.selected = false if $scope.selected_day
 
       
-    $scope.toggleDay = (day, month) ->
+    $scope.toggleDay = (day) ->
 
       return if !day || day.data and (day.data.spaces == 0 or day.disabled or !day.available) or (!day.data and !day._d)
 
       $scope.selected_day.selected = false if $scope.selected_day
-      
-      day.selected = true
-      $scope.selected_day = day
-     
+
+      if !$scope.selected_day or ($scope.selected_day and !day.date.isSame($scope.selected_day.date, 'day'))
+
+        day.selected = true
+        $scope.selected_day = day
+       
       # TODO refactor to call showDay via controller
       $scope.showDay(day.date)
 
