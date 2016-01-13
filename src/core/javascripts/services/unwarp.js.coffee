@@ -65,6 +65,46 @@ angular.module('BB.Services').factory "BB.Service.services", ($q, BBModel) ->
 
     deferred.promise
 
+angular.module('BB.Services').factory "BB.Service.package_item", ($q, BBModel) ->
+  unwrap: (package_item) ->
+    return new BBModel.PackageItem(package_item)
+
+
+angular.module('BB.Services').factory "BB.Service.package_items", ($q, BBModel) ->
+  promise: true
+  unwrap: (package_item) ->
+    deferred = $q.defer()
+    package_item.$get('bulk_purchases').then (package_items) =>
+      models = []
+      for i in package_items
+        models.push(new BBModel.PackageItem(i))
+      deferred.resolve(models)
+    , (err) =>
+      deferred.reject(err)
+
+    deferred.promise
+
+
+angular.module('BB.Services').factory "BB.Service.bulk_purchase", ($q, BBModel) ->
+  unwrap: (bulk_purchase) ->
+    return new BBModel.BulkPurchase(bulk_purchase)
+
+
+angular.module('BB.Services').factory "BB.Service.bulk_purchases", ($q, BBModel) ->
+  promise: true
+  unwrap: (bulk_purchase) ->
+    deferred = $q.defer()
+    bulk_purchase.$get('bulk_purchases').then (bulk_purchases) =>
+      models = []
+      for i in bulk_purchases
+        models.push(new BBModel.BulkPurchase(i))
+      deferred.resolve(models)
+    , (err) =>
+      deferred.reject(err)
+
+    deferred.promise
+
+
 
 angular.module('BB.Services').factory "BB.Service.event_group", ($q, BBModel) ->
   unwrap: (resource) ->
