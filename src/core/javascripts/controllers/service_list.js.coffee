@@ -99,7 +99,12 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       if $scope.hide_disabled
         # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
         items = items.filter (x) -> !x.disabled && !x.deleted
-      
+
+      for item in items
+        if item.listed_durations && item.listed_durations.length == 1
+          item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
+        else
+          item.display_name = item.name
       # not all service lists need filtering. check for attribute first
       filterItems = if $attrs.filterServices is 'false' then false else true
 
