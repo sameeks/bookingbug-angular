@@ -48,16 +48,14 @@ angular.module('BB.Controllers').controller 'BulkPurchase', ($scope, $rootScope,
 
   $scope.controller = "public.controllers.BulkPurchase"
 
-  $rootScope.connection_started.then ->
-    if $scope.bb.company
-      $scope.init($scope.bb.company)
-  , (err) ->
-    $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  $rootScope.connection_started.then ->   
+    $scope.init($scope.bb.company) if $scope.bb.company
 
   $scope.init = (company) ->
     $scope.booking_item ||= $scope.bb.current_item
-    BulkPurchaseService.query(company).then (bulk_purchase) ->
-      $scope.bulk_purchases = bulk_purchase
+    BulkPurchaseService.query(company).then (bulk_purchases) ->
+      $scope.bulk_purchases = bulk_purchases
+
 
   ###**
   * @ngdoc method
@@ -69,7 +67,6 @@ angular.module('BB.Controllers').controller 'BulkPurchase', ($scope, $rootScope,
   * @param {object} package Bulk_purchase or BookableItem to select
   * @param {string=} route A specific route to load
   ###
-
   $scope.selectItem = (item, route) ->
     if $scope.$parent.$has_page_control
       $scope.bulk_purchase = item
@@ -79,6 +76,7 @@ angular.module('BB.Controllers').controller 'BulkPurchase', ($scope, $rootScope,
       $scope.decideNextPage(route)
       true
 
+
   ###**
   * @ngdoc method
   * @name setReady
@@ -86,7 +84,6 @@ angular.module('BB.Controllers').controller 'BulkPurchase', ($scope, $rootScope,
   * @description
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
   ###
-
   $scope.setReady = () =>
     if $scope.bulk_purchase
       $scope.booking_item.setBulkPurchase($scope.bulk_purchase)
