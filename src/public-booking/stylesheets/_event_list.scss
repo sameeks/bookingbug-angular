@@ -113,11 +113,9 @@
           }
         }
       }
-      &.available.disabled{
-        cursor: auto;
-      }
       &.disabled.available{
-        .circle{
+        cursor: auto;
+	.circle{
           background-color: transparent;
           color: #AAA;
           cursor: auto;         

@@ -7,7 +7,7 @@
         <div class="input-row selectbox">
           <label>Pick a Service</label>
           <span class="no-border">
-            <select id="enquiry-type" ng-model="service" ng-options="s.name for s in bookable_services">
+            <select id="enquiry-type" ng-model="service" ng-options="s.display_name for s in bookable_services">
               <option value="">-- pick a service --</option>
             </select>
           </span>

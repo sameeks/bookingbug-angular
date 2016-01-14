@@ -57,10 +57,11 @@
     "pusher-angular": "~0.1.4",
     "pusher": "~2.2.4",
     "angulartics": "~0.17.2",
-    "angular-slick": "~0.2.1",
     "angular-translate-storage-cookie": "~2.6.1",
     "uri-templates": "~0.1.5",
-    "angular-recaptcha": "~2.2.3"
+    "angular-recaptcha": "~2.2.3",
+    "angular-slick-carousel": "~3.1.4", 
+    "lodash": "3.10.1"
   },
   "resolutions": {
     "angular": "~1.2.25",
