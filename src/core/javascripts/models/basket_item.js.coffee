@@ -1159,20 +1159,37 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setProduct
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set product in according of product parameter
+    * Apply a product to the BasketItem
     *
-    * @returns {array} The returned product
     ###
     setProduct: (product) ->
       @product = product
       @book_link = @product if @product.$has('book')
       @setPrice(product.price) if product.price
 
+
+    ###**
+    * @ngdoc method
+    * @name setPackageItem
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Apply a package to the BasketItem
+    *
+    ###
     setPackageItem: (package_item) ->
       @package_item = package_item
       @book_link = @package_item if @package_item.$has('book')
       @setPrice(package_item.price) if package_item.price
 
+
+    ###**
+    * @ngdoc method
+    * @name setBulkPurchase
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Apply a bulk purchase to the BasketItem
+    *
+    ###
     setBulkPurchase: (bulk_purchase) ->
       @bulk_purchase = bulk_purchase
       @book_link = @bulk_purchase if @bulk_purchase.$has('book')
@@ -1183,9 +1200,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setExternalPurchase
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set external purchase in according of external_purchase product
+    * Apply an external purchase to the BasketItem
     *
-    * @returns {object} The returned external purchase
     ###
     setExternalPurchase: (external_purchase) ->
       @external_purchase = external_purchase
@@ -1197,26 +1213,23 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setDeal
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set deal of the basket item, in according of deal parameter
+    * Apply a deal on to BasketItem
     *
-    * @returns {object} The returned deal
     ###
     setDeal: (deal) ->
       @deal = deal
       @book_link = @deal if @deal.$has('book')
       @setPrice(deal.price) if deal.price
 
-    ####################
-    # various status tests
 
     ###**
     * @ngdoc method
     * @name hasPrice
     * @methodOf BB.Models:BasketItem
     * @description
-    * Checks if price is valid or not
+    * Checks if the BasketItem has a price
     *
-    * @returns {boolean} If this is a valid price
+    * @returns {boolean}
     ###
     hasPrice: () ->
       return @price?
@@ -1229,7 +1242,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @description
     * Get attachment of the basket item
     *
-    * @returns {object} The returned attachment
+    * @returns {object} The attachment
     ###
     getAttachment: () ->
       return @attachment if @attachment
@@ -1244,7 +1257,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setPrepaidBooking
     * @methodOf BB.Models:BasketItem
     * @description
-    * Apply a prepaid booking
+    * Apply a prepaid booking to BasketItem
     *
     ###
     setPrepaidBooking: (prepaid_booking) ->
