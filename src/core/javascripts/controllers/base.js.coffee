@@ -1189,15 +1189,14 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         step_to_load = last_step.number
         break
 
-    # Remove pages from browser history!
+    # Remove pages from browser history (sync browser history with routing)
     if step_to_load
       pages_to_remove_from_history = ($scope.bb.current_step - step_to_load)
       if caller == "locationChangeStart"
-        # ======================================================================
-        # If loadPreviousStep was called by using browser back button, then we
-        # need to reduce the number of steps to remove from the history by ONE
-        # because the browser itself would have already removed ONE step =)
-        # ======================================================================
+        # Reduce number of pages to remove from browser history by one if this
+        # method was triggered by Angular's $locationChangeStart broadcast
+        # In this instance we can assume that the browser back button was used
+        # and one page has already been removed from the history by the browser
         pages_to_remove_from_history--
 
       if pages_to_remove_from_history and pages_to_remove_from_history > 0
