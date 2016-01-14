@@ -218,8 +218,8 @@ angular.module('BB.Directives').directive('bbBackgroundImage', () ->
   return{
     restrict: 'A'
     scope: true
-    link: (scope, el, attrs) ->
-      return if attrs.bbBackgroundImage == ""
+    link: (scope, el, attrs) ->     
+      return if !attrs.bbBackgroundImage or attrs.bbBackgroundImage == ""
       killWatch = scope.$watch attrs.bbBackgroundImage, (new_val, old_val) ->       
         if new_val          
           killWatch()
