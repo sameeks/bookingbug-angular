@@ -16,7 +16,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   setPurchaseCompany = (company) ->
     $scope.bb.company_id = company.id
     $scope.bb.company = new BBModel.Company(company)
-    $scope.company = $scope.bb.company 
+    $scope.company = $scope.bb.company
     $scope.bb.item_defaults.company = $scope.bb.company
     if company.settings
       $scope.bb.item_defaults.merge_resources = true if company.settings.merge_resources
@@ -32,12 +32,12 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
   $scope.init = (options) ->
     options = {} if !options
-    
+
     $scope.notLoaded $scope
     $scope.move_route = options.move_route if options.move_route
     $scope.move_all = options.move_all if options.move_all
     $scope.fail_msg = options.fail_msg if options.fail_msg
- 
+
     # is there a purchase total already in scope?
     if $scope.bb.total
       $scope.load($scope.bb.total.long_id)
@@ -82,6 +82,12 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
             $scope.purchase.getBookingsPromise().then (bookings) ->
               $scope.bookings = bookings
+
+              bookings[0].getCompanyPromise().then (company) ->
+                $scope.purchase.bookings[0].company = company
+                company.getAddressPromise().then (address) ->
+                  $scope.purchase.bookings[0].company.address = address
+
               $scope.setLoaded $scope
               checkIfMoveBooking(bookings)
               checkIfWaitlistBookings(bookings)
@@ -143,9 +149,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       matches = /^.*print_purchase\/(.*?)(?:\?|$)/.exec($location.absUrl())
     unless matches
       matches = /^.*print_purchase_jl\/(.*?)(?:\?|$)/.exec($location.absUrl())
-   
+
     if matches
-      id = matches[1] 
+      id = matches[1]
     else
       id = QueryStringService('ref') if QueryStringService('ref')
     id = QueryStringService('booking_id')  if QueryStringService('booking_id')
@@ -153,11 +159,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
   $scope.move = (booking, route, options = {}) ->
-    
+
     route ||= $scope.move_route
     if $scope.move_all
       return $scope.moveAll(route, options)
-    
+
     $scope.notLoaded $scope
     $scope.initWidget({company_id: booking.company_id, no_route: true})
     $timeout () =>
@@ -207,7 +213,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
           new_item.move_done = false
           Array::push.apply proms, new_item.promises
           $scope.bb.basket.addItem(new_item)
-        $scope.bb.sortStackedItems() 
+        $scope.bb.sortStackedItems()
 
         $scope.setBasketItem($scope.bb.basket.items[0])
         $q.all(proms).then () ->
@@ -218,7 +224,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
           failMsg()
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-  
+
   $scope.bookWaitlistItem = (booking) ->
     $scope.notLoaded $scope
     params = { purchase: $scope.purchase, booking: booking }
@@ -285,14 +291,14 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       url: booking.$href('attachments'),
       method: method,
       # headers: {'header-key': 'header-value'},
-      # withCredentials: true, 
+      # withCredentials: true,
       data: {att_id: att_id},
       file: file, # or list of files: $files for html5 only
-      # set the file formData name ('Content-Desposition'). Default is 'file' 
+      # set the file formData name ('Content-Desposition'). Default is 'file'
       # fileFormDataName: myFile, //or a list of names for multiple files (html5).
       # customize how data is added to formData. See #40#issuecomment-28612000 for sample code
       # formDataAppender: function(formData, key, val){}
-    }).progress (evt) -> 
+    }).progress (evt) ->
       if $scope.upload_progress < 100
         $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
     .success (data, status, headers, config) ->
