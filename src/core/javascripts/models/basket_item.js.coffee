@@ -134,6 +134,14 @@ angular.module('BB.Models').factory "BasketItemModel",
           data.$get('product').then (product) =>
             @setProduct(product)
 
+        if data.$has('package_item')
+          data.$get('package_item').then (package_item) =>
+            @setPackageItem(package_item)
+
+        if data.$has('bulk_purchase')
+          data.$get('bulk_purchase').then (bulk_purchase) =>
+            @setBulkPurchase(bulk_purchase)
+
         if data.$has('deal')
           data.$get('deal').then (deal) =>
             @setDeal(new BBModel.Deal(deal))
@@ -738,9 +746,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     # @ready - means it's fully ready for checkout
     # @reserve_ready - means the question still need asking - but it can be reserved
     checkReady: ->
-      if ((@date && @time && @service) || @event || @product || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
         @ready = true
-      if ((@date && @time && @service) || @event || @product || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))  && (@asked_questions || !@has_questions || @reserve_without_questions)
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))  && (@asked_questions || !@has_questions || @reserve_without_questions)
         @reserve_ready = true
 
     ###**
@@ -803,6 +811,8 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.status = @status if @status
       data.num_resources = parseInt(@num_resources) if @num_resources?
       data.product = @product
+      data.package_item = @package_item if @package_item
+      data.bulk_purchase = @bulk_purchase if @bulk_purchase
       data.external_purchase = @external_purchase
       data.deal = @deal if @deal
       data.recipient = @recipient if @deal && @recipient
@@ -923,6 +933,8 @@ angular.module('BB.Models').factory "BasketItemModel",
       title = @product.name if @product
       title = @external_purchase.name if @external_purchase
       title = @deal.name if @deal
+      title = @package_item.name if @package_item
+      title = @bulk_purchase.name if @bulk_purchase
       return title
 
     ###**
@@ -1155,6 +1167,16 @@ angular.module('BB.Models').factory "BasketItemModel",
       @product = product
       @book_link = @product if @product.$has('book')
       @setPrice(product.price) if product.price
+
+    setPackageItem: (package_item) ->
+      @package_item = package_item
+      @book_link = @package_item if @package_item.$has('book')
+      @setPrice(package_item.price) if package_item.price
+
+    setBulkPurchase: (bulk_purchase) ->
+      @bulk_purchase = bulk_purchase
+      @book_link = @bulk_purchase if @bulk_purchase.$has('book')
+      @setPrice(bulk_purchase.price) if bulk_purchase.price
 
     ###**
     * @ngdoc method

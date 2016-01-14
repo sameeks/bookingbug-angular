@@ -39,8 +39,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       defer = $q.defer()
       if @group
         defer.resolve(@group)
-      else if @$has('event_groups')
-        @$get('event_groups').then (group) =>
+      else if @$has('event_groups') or @$has('event_group')
+        event_group = 'event_group'
+        event_group = 'event_groups' if @$has('event_groups')
+        @$get(event_group).then (group) =>
           @group = new BBModel.EventGroup(group)
           defer.resolve(@group)
         , (err) ->
@@ -63,8 +65,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       if @chain
         defer.resolve(@chain)
       else
-        if @$has('event_chains')
-          @$get('event_chains').then (chain) =>
+        if @$has('event_chains') or @$has('event_chain')
+          event_chain = 'event_chain'
+          event_chain = 'event_chains' if @$has('event_chains')
+          @$get(event_chain).then (chain) =>
             @chain = new BBModel.EventChain(chain)
             defer.resolve(@chain)
         else
