@@ -1,43 +1,43 @@
 <div bb-admin-booking-clients ng-init="per_page=50" class="bb-admin-client">
 
     <div class="page-intro">
-      <h2 class="section-title">Customer details</h2>
-      <p>Search for a customer or create a new one.</p>
+      <h2 class="section-title"><span translate="CLIENT_DETAILS_TITLE"></h2>
+      <p><span translate="CLIENT_DETAILS_INSTRUCTION"></span>.</p>
     </div>
 
     <div class="bb-button-headers">
       <div class="row">
         <div class="col-xs-6">
-          <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="showSearch()">Search for a customer</button>
+          <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="showSearch()"><span translate="CLIENT_DETAILS_SEARCH"></span></button>
         </div>
         <div class="col-xs-6">
-          <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="showClientForm()">Enter customer details</button>
+          <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="showClientForm()"><span translate="CLIENT_DETAILS_ENTER"></span></button>
         </div>
       </div>
     </div>
 
     <div ng-show="!newClient">
       <div ng-form="client_search_form" class="form-horizontal">
-        <label for="search" class="col-xs-offset-4 col-xs-8"><p>Search by Name or Email</p></label>
+        <label for="search" class="col-xs-offset-4 col-xs-8"><p><span translate="CLIENT_DETAILS_SEARCH_BY_NAME_OR_EMAIL"></span></p></label>
         <form ng-submit="getClients(null, searchText)">
           <div class="col-xs-offset-2 col-xs-8 input-group input-group-lg">
             <input type="search" name="search" id"search" ng-model="searchText" class="form-control"/> 
             <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary input-lg" bb-debounce>Search</button>
+              <button type="submit" class="btn btn-primary input-lg" bb-debounce><span translate="PROGRESS_SEARCH"></span></button>
             </span>
           </div>
         </form>
          <div class="col-sm-offset-2 messages">
           <div class="error-message" ng-show="search_error">
-            Sorry, your search must be more than 3 characters long.<br/>
-            Please try again.
+            <span translate="CLIENT_DETAILS_SEARCH_ERROR"></span>.<br/>
+            <span translate="PLEASE_TRY_AGAIN"></span>.
           </div>          
          </div>
        </div>
 
       <br clear='all'/>
       <div ng-if="clients">
-        <h2 class="section-title">Results</h2>
+        <h2 class="section-title"><span translate="RESULTS"></span></h2>
         <table tr-ng-grid="" items="clients" enable-filtering="false" enable-sorting="true" order-by="name" page-items="10" selection-mode="0">
           <thead>
             <tr>
@@ -52,7 +52,7 @@
               <td field-name="email" ng-bind="gridItem.email"></td>
               <td field-name="address" ng-bind-html="gridItem | address_multi_line"></td>
               <td>
-                <button class="btn btn-primary btn-block" ng-click="selectClient(gridItem)">Select</button>
+                <button class="btn btn-primary btn-block" ng-click="selectClient(gridItem)"><span translate="PROGRESS_SELECT"></span></button>
               </td>
             </tr>
           </tbody>
@@ -64,33 +64,32 @@
     <div ng-show="newClient">
       <div ng-form name="client_form" class="form-horizontal" role="form" novalidate>
         <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
-          <label for="first_name" class="control-label col-sm-4">First Name:</label>
+          <label for="first_name" class="control-label col-sm-4"><span translate="DETAILS_FIRST_NAME"></span>:</label>
           <div class="col-sm-5">
             <input type="text" name="first_name" id"first_name" ng-model="client.first_name" class="form-control"/>
           </div>
         </div>
 
         <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
-          <label for="last_name" class="control-label col-sm-4">Last Name:</label>
+          <label for="last_name" class="control-label col-sm-4"><span details="DETAILS_FIRST_NAME"></span>:</label>
           <div class="col-sm-5">
             <input type="text" name="last_name" id="last_name" ng-model="client.last_name" class="form-control"/>
           </div>
         </div>
 
         <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
-          <label for="email" class="control-label col-sm-4">E-mail:</label>
+          <label for="email" class="control-label col-sm-4"><span translate="DETAILS_EMAIL"></span>:</label>
           <div class="col-sm-5">
             <input type="email" name="email" id="email" required ng-model="client.email" class="form-control"/>
           </div>
           <div class="col-sm-offset-4 messages">
-            <div class="error-message" ng-show="client_form.email.$invalid && client_form.submitted">
-              Please enter a valid email address
+            <div class="error-message" ng-show="client_form.email.$invalid && client_form.submitted"><span translate="DETAILS_EMAIL_VALIDATION_MSG"></span>
             </div>          
           </div>
         </div>
 
         <div class="form-group" ng-class="{'has-error': client_form.phone.$invalid && client_form.submitted}">
-          <label for="phone" class="control-label col-sm-4">Phone:</label>
+          <label for="phone" class="control-label col-sm-4"><span translate="DETAILS_PHONE_MOBILE"></span>:</label>
           <div class="col-sm-5">
             <input type="text" name="phone" id="phone" ng-model="client.phone" class="form-control"/>
           </div>
@@ -119,7 +118,7 @@
       <div class="bb-step-navigation">
         <div class="row">
           <div class="pull-right col-sm-push-2 forward">
-            <button type="submit" class="btn btn-primary" ng-click="validator.validateForm(client_form) && createClient()" bb-debounce>Create Client</button>
+            <button type="submit" class="btn btn-primary" ng-click="validator.validateForm(client_form) && createClient()" bb-debounce><span translate="CLIENT_DETAILS_CREATE"></span></button>
           </div>
           <div class="col-sm-2 col-sm-pull-10 back">
           </div>

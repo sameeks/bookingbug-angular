@@ -1,7 +1,7 @@
 <div id="map" bb-map class="bb-store-search" ng-init="checkStepTitle('Select a company')">
 
   <div class="page-summary">
-    <p>Search for a store to begin your booking.</p>
+    <p><span translate="MAP_TITLE"></span></p>
   </div>
 
   <div class="panel panel-default">
@@ -10,18 +10,18 @@
         <div class="col-xs-10 col-sm-6 col-sm-offset-3">
           <form role="form" ng-submit="searchAddress({region: 'GB', componentRestrictions: {'country': 'GB'}, bounds: {sw:{x:'50.064192',y:'-9.711914'}, ne:{x:'61.015725',y:'3.691406'}}});">
             <div class="form-group" style="width: 100%;">
-              <label class="sr-only" for="search-stores">Search</label>
+              <label class="sr-only" for="search-stores"><span translate="PROGRESS_SEARCH"></span></label>
               <div class="input-group">
-                <input type="text" ng-model="address" class="form-control input-lg" id="search-stores" placeholder="Enter a town, city, postcode or store name">
+                <input type="text" ng-model="address" class="form-control input-lg" id="search-stores" placeholder="{{'MAP_PLACEHOLDER' | translate}}">
                 <span class="input-group-btn">
-                  <button class="btn btn-primary btn-lg" type="submit" title="Search"><span class="glyphicon glyphicon-search"></span></button>
+                  <button class="btn btn-primary btn-lg" type="submit" title="{{'SEARCH' | translate}}"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
               </div>
             </div>
           </form>
         </div>
         <div class="col-xs-2">
-          <button type="button" class="btn btn-default btn-lg" title="use current location" ng-click="geolocate()">
+          <button type="button" class="btn btn-default btn-lg" title="{{'GEOLOCATE' | translate}}" ng-click="geolocate()">
             <span class="glyphicon glyphicon-screenshot"></span>
           </button>
         </div>
@@ -32,7 +32,7 @@
 
   <div ng-show="loc">
 
-    <h2 class="company-map-header">{{shownMarkers.length}} results for stores near {{address}}</h2>
+    <h2 class="company-map-header"><span translate="STORE_RESULT_TITLE" translate-values="{number: shownMarkers.length, address: address}"></span></h2>
 
     <div class="company-map row">
 
@@ -43,12 +43,12 @@
 
           <p><strong>{{currentMarker.company.name}}</strong></p>
           <p ng-bind-html="currentMarker.company.address | address_multi_line"></p>
-          <p><strong>Phone:</strong> {{currentMarker.company.address.phone | uk_local_number}}</p>
+          <p><strong><span translate="STORE_PHONE">s></span>:</strong> {{currentMarker.company.address.phone | uk_local_number}}</p>
           <p>
             <span ng-if="currentMarker.company.extra.closing_time"><strong>{{currentMarker.company.extra.closing_time}}</strong></span>
             <span class="distance">{{roundNumberUp(currentMarker.distance,1)}}mi</span>
           </p>
-          <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.live">select</button>
+          <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.live"><span translate="PROGRESS_SELECT"></span></button>
 
         </div>
       </div>
@@ -66,12 +66,12 @@
 
             <ul class="store-details" ng-click="openMarkerInfo(marker)">
               <li ng-bind-html="marker.company.address | address_multi_line"></li>
-              <li><strong>Phone:</strong> {{marker.company.address.phone | uk_local_number}}</li>
+              <li><strong><span translate="STORE_PHONE"></span>:</strong> {{marker.company.address.phone | uk_local_number}}</li>
               <li>
                 <span class="distance">{{roundNumberUp(marker.distance,1)}}mi</span>
               </li>
             </ul>
-            <button type="button" ng-click="selectItem(marker.company)" class="btn btn-primary pull-right">Select</button>
+            <button type="button" ng-click="selectItem(marker.company)" class="btn btn-primary pull-right"><span translate="PROGRESS_SELECT"></span></button>
           </div>
         </div>
 
