@@ -186,7 +186,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate, $anchorScroll) ->
+    SettingsService, UriTemplate, $anchorScroll, $translate) ->
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -217,13 +217,20 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.bb.stacked_items = []
+  $scope.selected_language = {}
   # $scope.hide_page = false
   first_call = true
   con_started = $q.defer()
   $rootScope.connection_started = con_started.promise
   widget_started = $q.defer()
   $rootScope.widget_started = widget_started.promise
-  moment.locale([LocaleService, "en"])
+
+  last_language_key = $translate.storage().get($translate.storageKey()).toUpperCase()
+  $scope.selected_language.key = last_language_key
+  if $scope.selected_language
+    moment.locale($scope.selected_language.key)
+  else
+    moment.locale([LocaleService, "en"])
 
   $rootScope.Route =
     Company: 0

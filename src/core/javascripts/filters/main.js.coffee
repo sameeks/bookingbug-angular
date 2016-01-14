@@ -298,7 +298,7 @@ app.filter "uk_local_number", ->
 # format datetime, expects moment object but will attempt to convert to
 # moment object
 # TODO get timezone from company
-app.filter "datetime", ->
+app.filter "datetime", () ->
   (datetime, format, show_timezone = true) ->
 
     return if !datetime

@@ -2,16 +2,16 @@
 
   <div class="modal-header">
     <button type="button" class="close" ng-click="cancel()">&times;</button>
-    <h5 class="modal-title">Basket Details</h5>
+    <h5 class="modal-title"><span translate="BASKET_DETAILS_TITLE"></span></h5>
   </div>
 
   <div class="modal-body">
-    <p ng-hide="bb.basket.items">No items added to basket yet.</p>
+    <p ng-hide="bb.basket.items"><span translate="BASKET_DETAILS_NO"></span></p>
     <table class="table table-bordered" ng-show="bb.basket.items">
       <thead>
         <tr>
-          <th>Item</th>
-          <th>Appointment</th>
+          <th><span translate="ITEM"></span></th>
+          <th><span translate="BASKET_ITEM_APPOINTMENT"></span></th>
           <th>&nbsp;</th>
         </tr>
       </thead>
@@ -32,8 +32,8 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-    <button ng-show="bb.basket.items" class="btn btn-primary" ng-click="checkout('basket') && cancel()">Checkout</button>
+    <button class="btn btn-default" ng-click="cancel()"><span translate="PROGRESS_CANCEL"></span></button>
+    <button ng-show="bb.basket.items" class="btn btn-primary" ng-click="checkout('basket') && cancel()"><span translate="BASKET_CHECKOUT"></span></button>
   </div>
 
 </div>

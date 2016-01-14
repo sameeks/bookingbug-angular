@@ -45,7 +45,8 @@ gulp.task('javascripts', function() {
         './src/*/javascripts/**/*', 
         './src/*/directives/**/*', 
         './src/*/models/**/*', 
-        './src/*/services/**/*', 
+        './src/*/services/**/*',
+        './src/*/moment-locale/**.*', 
         '!./src/**/*_test.js.coffee',
         '!./**/*~']))
     // .pipe(filelog())
@@ -107,6 +108,11 @@ gulp.task('fonts', function() {
     .pipe(gulp.dest('release/fonts'));
 });
 
+gulp.task('i18n', function() {
+    gulp.src('src/core/i18n/default/*')
+        .pipe(flatten())
+        .pipe(gulp.dest('release/i18n/default'));
+});
 
 gulp.task('watch', function() {
   gulp.watch(['./src/**/*', '!./**/*~'], ['assets']);
@@ -119,7 +125,7 @@ gulp.task('webserver', ['assets'], function() {
   });
 });
 
-gulp.task('assets', ['clean', 'javascripts', 'images', 'stylesheets','fonts', 'theme', 'shims', 'widget']);
+gulp.task('assets', ['clean', 'javascripts', 'images', 'stylesheets','fonts', 'theme', 'shims', 'widget', 'i18n']);
 
 gulp.task('default', ['assets', 'watch', 'webserver']);
 
