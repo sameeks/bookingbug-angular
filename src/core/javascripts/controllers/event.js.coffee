@@ -28,7 +28,6 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
   scope : true
   controller : 'Event'
   link: (scope, element, attrs) ->
-    scope.options = scope.$eval(attrs.bbEvent) or {}
     scope.directives = "public.Event"
 
 angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService) ->
@@ -37,6 +36,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   angular.extend(this, new PageControllerService($scope, $q))
 
   $scope.validator = ValidatorService
+  $scope.event_options = $scope.$eval($attrs.bbEvent) or {}
 
   $rootScope.connection_started.then ->
     if $scope.bb.company
@@ -185,7 +185,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   $scope.getPrePaidsForEvent = (client, event) ->
     defer = $q.defer()
     params = {event_id: event.id}
-    client.$getPrePaidBookings(params).then (prepaids) ->
+    client.getPrePaidBookingsPromise(params).then (prepaids) ->
       $scope.pre_paid_bookings = prepaids
       defer.resolve(prepaids)
     , (err) ->

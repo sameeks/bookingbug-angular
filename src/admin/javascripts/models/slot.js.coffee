@@ -74,7 +74,6 @@ angular.module('BB.Models').factory "Admin.SlotModel", ($q, BBModel, BaseModel, 
     ###**
     * @ngdoc method
     * @name delete
-    * @param {item}
     * @methodOf BB.Models:AdminSlot
     * @description
     * Static function that delete an array of slots from a company object
