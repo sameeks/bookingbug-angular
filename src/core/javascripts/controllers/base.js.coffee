@@ -1199,7 +1199,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         # and one page has already been removed from the history by the browser
         pages_to_remove_from_history--
 
-      if pages_to_remove_from_history and pages_to_remove_from_history > 0
+      if pages_to_remove_from_history? and pages_to_remove_from_history > 0
         window.history.go(pages_to_remove_from_history*-1)
 
       # Load step
