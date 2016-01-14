@@ -215,7 +215,6 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
 * <div bb-background-image='images/example.jpg'></div>
 ####
 angular.module('BB.Directives').directive('bbBackgroundImage', () ->
-  return{
     restrict: 'A'
     scope: true
     link: (scope, el, attrs) ->     
@@ -224,5 +223,4 @@ angular.module('BB.Directives').directive('bbBackgroundImage', () ->
         if new_val          
           killWatch()
           el.css('background-image', 'url("' + new_val + '")')
-  }
 )
