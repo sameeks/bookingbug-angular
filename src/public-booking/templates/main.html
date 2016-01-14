@@ -30,10 +30,23 @@
     <span ng-if="bb.current_step == bb.allSteps.length" ng-bind="'Complete'"></span>
   </div> -->
 
+  <div class="row">
+    <div class="col-sm-12">
+      <div bb-translate ng-hide="bb.current_page == 'checkout' || bb.current_page == 'checkout_event' " class="btn-group" dropdown is-open="status.isopen" >
+        <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled" title="{{'CHANGE_LANG' | translate}}">
+          <span translate="{{selected_language.key}}"></span><span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li ng-repeat="language in languages"><a ng-click="changeLanguage(language)"><span translate="{{language.key}}"></span></a></li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
   <div class="alerts" bb-scroll-to="alert:raised" bb-always-scroll>
     <div alert ng-repeat="alert in $root.alerts" type="{{alert.type}}" >
       <ul>
-        <li ng-bind-html="alert.msg"></li>
+        <li><span translate="{{alert.msg}}"></span></li>
       </ul>
     </div>
   </div>
@@ -55,6 +68,6 @@
 
 <div class="footer">
   <div ng-show="isLoaded" class="powered-by">
-    <span>Bookings powered by <a href="http://www.bookingbug.com" style="text-decoration:none" target="_blank"><span style="color:#087f94">booking</span><span style="color:#88c66f">bug</span></a></span>
+    <span><span translate="POWERED_BY"></span> <a href="http://www.bookingbug.com" style="text-decoration:none" target="_blank"><span class="bb-primary-brand-color">booking</span><span class="bb-secondary-brand-color">bug</span></a></span>
   </div>
 </div>

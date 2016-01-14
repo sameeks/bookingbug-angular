@@ -13,7 +13,7 @@
 
       <div ng-show="item_details.hasQuestions" class="question-node">
         <div ng-form="booking_questions_form" role="form" novalidate>
-          <h3 class="booking-form-header">Questions</h3>
+          <h3 class="booking-form-header"><span translate="DETAILS_QUESTIONS"></span></h3>
 
           <div ng-repeat="question in item_details.questions" bb-question-line ng-show="question.currentlyShown">
             <div class="form-group" ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].dirty || booking_form.submitted)}">
@@ -26,8 +26,7 @@
                 <small ng-show="question.help_text">{{question.help_text}}<hr/></small>
               </div>
               <div class="col-sm-offset-4 messages">
-                <div class="error-message" ng-show="question.required.$invalid && booking_form.submitted">
-                  This field is required
+                <div class="error-message" ng-show="question.required.$invalid && booking_form.submitted"><span translate="DETAILS_VALIDATION_MSG"></span>
                 </div>
               </div>
             </div>
@@ -35,7 +34,7 @@
       </div>
 
       <div class="question-node">
-        <label for="notes">Booking Notes (optional):</label>
+        <label for="notes"><span translate="CLIENT_BOOKING_NOTES"></span> (<span translate="DETAILS_OPTIONAL"></span>):</label>
         <span>
           <textarea ng-model="item.private_note" name="note" id="note" rows="3" class="form-question form-control"></textarea><br>
          </span>
@@ -48,10 +47,10 @@
     <div class="bb-step-navigation">
       <div class="row">
         <div class="col-sm-9 col-sm-push-3 text-right">
-          <button type="submit" class="btn btn-primary pull-right" ng-click="confirm(booking_form)">Book</button>
+          <button type="submit" class="btn btn-primary pull-right" ng-click="confirm(booking_form)"><span translate="ROGRESS_BOOK"></span></button>
         </div>
         <div class="col-sm-3 col-sm-pull-9">
-          <button type="button" class="btn btn-default pull-left" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+          <button type="button" class="btn btn-default pull-left" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PROGRESS_BACK"></span></button>
         </div>
       </div>
     </div>

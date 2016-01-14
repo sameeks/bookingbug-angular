@@ -157,16 +157,22 @@ p {
 
 }
 
-.bb-thankyou-focus {
-  margin:10% 3% 10%;
-
-  h2 {
-    // color:#087f94; 
-    text-align:center; 
-    margin:10% 3% 10%;
-  }
-}
-
 .angular-google-map-container { 
   height: 200px; 
+}
+
+div[bb-translate] {
+  float: right;
+  margin-bottom: 45px;
+  // Width sized to generally the longest language name size 'Luxermbourgish'
+  button {
+    width: 160px;
+  }
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+.capitalise {
+  text-transform: capitalize;
 }
