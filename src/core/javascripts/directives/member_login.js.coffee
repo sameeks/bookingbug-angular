@@ -58,4 +58,3 @@ ng-if="schema && form"></form>
       else
         $scope.skipThisStep()
         $scope.decideNextPage()
-        
