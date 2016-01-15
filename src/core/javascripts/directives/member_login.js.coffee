@@ -56,4 +56,5 @@ ng-if="schema && form"></form>
       if $scope.bb.destination
         $scope.redirectTo($scope.bb.destination)
       else
+        $scope.skipThisStep()
         $scope.decideNextPage()
