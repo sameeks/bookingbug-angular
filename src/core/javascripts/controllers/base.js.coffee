@@ -704,7 +704,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   # $locationChangeStart is broadcast before a URL will change
-  $scope.$on '$locationChangeStart', (angularEvent, newUrl, oldUrl) ->
+  $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
 
     return if !$scope.bb.routeFormat and $scope.bb.routing
 
