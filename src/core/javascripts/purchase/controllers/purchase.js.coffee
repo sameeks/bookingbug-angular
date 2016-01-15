@@ -83,10 +83,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
             $scope.purchase.getBookingsPromise().then (bookings) ->
               $scope.bookings = bookings
 
-              bookings[0].getCompanyPromise().then (company) ->
-                $scope.purchase.bookings[0].company = company
-                company.getAddressPromise().then (address) ->
-                  $scope.purchase.bookings[0].company.address = address
+              if bookings[0]
+                bookings[0].getCompanyPromise().then (company) ->
+                  $scope.purchase.bookings[0].company = company
+                  company.getAddressPromise().then (address) ->
+                    $scope.purchase.bookings[0].company.address = address
 
               $scope.setLoaded $scope
               checkIfMoveBooking(bookings)
