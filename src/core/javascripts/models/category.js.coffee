@@ -6,7 +6,7 @@
 * @name BB.Models:Category
 *
 * @description
-* Representation of an Category Object
+* Representation of a Category Object
 ####
 
 

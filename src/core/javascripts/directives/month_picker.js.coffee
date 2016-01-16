@@ -1,18 +1,19 @@
 
-angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc) ->
+angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) ->
   restrict: 'AE'
   replace: true
   scope : true
-  require : '^bbEvents'
+  require : ['^?bbEvents', '^?bbMultiCompanyEvents']
   templateUrl : (element, attrs) ->
     PathSvc.directivePartial "_month_picker"
   link : (scope, el, attrs) ->
 
     scope.picker_settings = scope.$eval(attrs.bbMonthPicker) or {}
-    scope.watch_val = attrs.dayData
 
-    scope.$watch scope.watch_val, (newval, oldval) ->
-      scope.processDates(newval) if newval
+    stopWatch = scope.$watch attrs.dayData, (dates) ->
+      if dates
+        scope.processDates(dates)
+        stopWatch()
 
   controller : ($scope) ->
 
@@ -22,16 +23,16 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc) ->
         datehash[date.date.format("DDMMYY")] = date
         $scope.first_available_day = date.date if !$scope.first_available_day and date.spaces > 0
 
-      # start at current month or the first month that has availability?
+      # start at current month or the first month that has availability
       if $scope.picker_settings.start_at_first_available_day
         cur_month = $scope.first_available_day.clone().startOf('month')
       else
         cur_month = moment().startOf('month')
-
-      date = cur_month.startOf('week')
+     
       last_date = _.last dates
-      diff = last_date.date.diff(date, 'months')
+      diff = last_date.date.diff(cur_month, 'months')
       diff = if diff > 0 then diff + 1 else 1
+      
       # use picker settings or diff between first and last date to determine number of months to display
       $scope.num_months = if $scope.picker_settings and $scope.picker_settings.months then $scope.picker_settings.months else diff
 
@@ -39,6 +40,7 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc) ->
       for m in [1..$scope.num_months]
         date = cur_month.clone().startOf('week')
         month = {weeks: []}
+        month.index = m - 1
         for w in [1..6]
           week = {days: []}
           for d in [1..7]
@@ -46,14 +48,20 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc) ->
             month.start_date = date.clone() if date.isSame(date.clone().startOf('month'),'day') and !month.start_date
             day_data = datehash[date.format("DDMMYY")]
 
-            week.days.push({
+            day = {
               date      : date.clone(), 
               data      : day_data,
               available : day_data and day_data.spaces and day_data.spaces > 0,
               today     : moment().isSame(date, 'day'),
               past      : date.isBefore(moment(), 'day'),
               disabled  : !month.start_date or !date.isSame(month.start_date, 'month')
-            })
+            }
+
+            week.days.push(day)
+
+            if $scope.selected_date and day.date.isSame($scope.selected_date, 'day')
+              day.selected = true
+              $scope.selected_day = day
 
             date.add(1, 'day')
             
@@ -64,62 +72,41 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc) ->
 
       $scope.months = months
 
-      if $scope.selected_date?
-        $scope.selectMonthNumber($scope.selected_date.month())
-      $scope.selected_month = $scope.selected_month or $scope.months[0]
+      $scope.slick_config =
+        nextArrow: ".month-next",
+        prevArrow: ".month-prev",
+        slidesToShow: if $scope.months.length >= 3 then 3 else $scope.months.length,
+        infinite: false,
+        responsive: [
+          {breakpoint: 1200, settings: {slidesToShow: if $scope.months.length >= 2 then 2 else $scope.months.length}},
+          {breakpoint: 992, settings: {slidesToShow: 1}}
+        ],
+        method: {},
+        event:
+          init: (event, slick) ->
+            $timeout ->
+              # scroll to the selected month
+              if $scope.selected_day?
+                for m in $scope.months
+                  slick.slickGoTo(m.index) if m.start_date.month() is $scope.selected_day.date.month()
 
-
-    $scope.selectMonth = (month) ->
-      $scope.selected_month = month
-      # select the first day in the month that has some events, but only if we're in summary mode
-      if $scope.mode is 0
-        for week in month.weeks
-          for day in week.days
-            if (day.data && day.data.spaces > 0) and (day.date.isSame(month.start_date, 'day') or day.date.isAfter(month.start_date, 'day')) 
-              $scope.showDay(day) 
-              return
-
-
-    $scope.selectMonthNumber = (month) ->
-      return if $scope.selected_month && $scope.selected_month.start_date.month() == month
-
-      $scope.notLoaded $scope
-      for m in $scope.months
-        $scope.selectMonth(m) if m.start_date.month() == month
-      $scope.setLoaded $scope
       
-      return true
+    # listen to date changes from the date filter and clear the selected day
+    $scope.$on 'event_list_filter_date:changed', (event, date) ->    
+      $scope.selected_day.selected = false if $scope.selected_day
 
+      
+    $scope.toggleDay = (day) ->
 
-    $scope.add = (value) ->
-      for month, index in $scope.months
-        if $scope.selected_month is month and $scope.months[index + value]
-          $scope.selectMonth($scope.months[index + value])
-          return true
-      return false
+      return if !day || day.data and (day.data.spaces == 0 or day.disabled or !day.available) or (!day.data and !day._d)
 
+      $scope.selected_day.selected = false if $scope.selected_day
 
-    $scope.subtract = (value) ->
-      $scope.add(-value)
+      if !$scope.selected_day or ($scope.selected_day and !day.date.isSame($scope.selected_day.date, 'day'))
 
+        day.selected = true
+        $scope.selected_day = day
+       
+      # TODO refactor to call showDay via controller
+      $scope.showDay(day.date)
 
-    $scope.setMonth = (index, slides_to_show) ->
-      if $scope.months[index]
-        $scope.selectMonth($scope.months[index])
-        last_month_shown = $scope.months[index + (slides_to_show - 1)]
-        $scope.$emit 'month_picker:month_changed', $scope.months[index], last_month_shown
-
-
-
-angular.module('BB.Directives').directive 'bbSlick', ($rootScope, $timeout, $bbug, $compile, $templateCache, $window) ->
-  restrict: 'A'
-  replace: true
-  scope : true
-  require : '^bbMonthPicker'
-  controller : ($scope, $element, $attrs) ->
-
-    $scope.slickOnInit = () ->
-      $scope.refreshing = true
-      $scope.$apply()
-      $scope.refreshing = false
-      $scope.$apply()

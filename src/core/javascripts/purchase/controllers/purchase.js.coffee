@@ -7,7 +7,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     scope.init(scope.$eval( attrs.bbPurchase ))
     return
 
-angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, ErrorService, LoginService, $window, $upload, ServiceService, $sessionStorage) ->
+angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -16,7 +16,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   setPurchaseCompany = (company) ->
     $scope.bb.company_id = company.id
     $scope.bb.company = new BBModel.Company(company)
-    $scope.company = $scope.bb.company 
+    $scope.company = $scope.bb.company
     $scope.bb.item_defaults.company = $scope.bb.company
     if company.settings
       $scope.bb.item_defaults.merge_resources = true if company.settings.merge_resources
@@ -27,17 +27,17 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     if $scope.fail_msg
       AlertService.danger({msg:$scope.fail_msg})
     else
-      AlertService.danger(ErrorService.getAlert('GENERIC'))
+      AlertService.raise('GENERIC')
 
 
   $scope.init = (options) ->
     options = {} if !options
-    
+
     $scope.notLoaded $scope
     $scope.move_route = options.move_route if options.move_route
     $scope.move_all = options.move_all if options.move_all
     $scope.fail_msg = options.fail_msg if options.fail_msg
- 
+
     # is there a purchase total already in scope?
     if $scope.bb.total
       $scope.load($scope.bb.total.long_id)
@@ -82,6 +82,13 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
             $scope.purchase.getBookingsPromise().then (bookings) ->
               $scope.bookings = bookings
+
+              if bookings[0]
+                bookings[0].getCompanyPromise().then (company) ->
+                  $scope.purchase.bookings[0].company = company
+                  company.getAddressPromise().then (address) ->
+                    $scope.purchase.bookings[0].company.address = address
+
               $scope.setLoaded $scope
               checkIfMoveBooking(bookings)
               checkIfWaitlistBookings(bookings)
@@ -143,9 +150,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       matches = /^.*print_purchase\/(.*?)(?:\?|$)/.exec($location.absUrl())
     unless matches
       matches = /^.*print_purchase_jl\/(.*?)(?:\?|$)/.exec($location.absUrl())
-   
+
     if matches
-      id = matches[1] 
+      id = matches[1]
     else
       id = QueryStringService('ref') if QueryStringService('ref')
     id = QueryStringService('booking_id')  if QueryStringService('booking_id')
@@ -153,11 +160,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
   $scope.move = (booking, route, options = {}) ->
-    
+
     route ||= $scope.move_route
     if $scope.move_all
       return $scope.moveAll(route, options)
-    
+
     $scope.notLoaded $scope
     $scope.initWidget({company_id: booking.company_id, no_route: true})
     $timeout () =>
@@ -183,7 +190,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
   # potentially move all of the items in booking - move the whole lot to a basket
-  $scope.moveAll = ( route, options = {}) ->
+  $scope.moveAll = (route, options = {}) ->
     route ||= $scope.move_route
     $scope.notLoaded $scope
     $scope.initWidget({company_id: $scope.bookings[0].company_id, no_route: true})
@@ -207,7 +214,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
           new_item.move_done = false
           Array::push.apply proms, new_item.promises
           $scope.bb.basket.addItem(new_item)
-        $scope.bb.sortStackedItems() 
+        $scope.bb.sortStackedItems()
 
         $scope.setBasketItem($scope.bb.basket.items[0])
         $q.all(proms).then () ->
@@ -218,7 +225,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
           failMsg()
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-  
+
   $scope.bookWaitlistItem = (booking) ->
     $scope.notLoaded $scope
     params = { purchase: $scope.purchase, booking: booking }
@@ -239,8 +246,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-
-
   # delete a single booking
   $scope.delete = (booking) ->
     modalInstance = $modal.open
@@ -256,7 +261,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
   # delete all bookings assoicated to the purchase
-  $scope.delete_all = () ->
+  $scope.deleteAll = () ->
     modalInstance = $modal.open
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDeleteAll
@@ -264,7 +269,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
         purchase: ->
           $scope.purchase
     modalInstance.result.then (purchase) ->
-      PurchaseService.delete_all(purchase).then (purchase) ->
+      PurchaseService.deleteAll(purchase).then (purchase) ->
         $scope.purchase = purchase
         $scope.bookings = []
         $rootScope.$broadcast "booking:cancelled"
@@ -287,14 +292,14 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       url: booking.$href('attachments'),
       method: method,
       # headers: {'header-key': 'header-value'},
-      # withCredentials: true, 
+      # withCredentials: true,
       data: {att_id: att_id},
       file: file, # or list of files: $files for html5 only
-      # set the file formData name ('Content-Desposition'). Default is 'file' 
+      # set the file formData name ('Content-Desposition'). Default is 'file'
       # fileFormDataName: myFile, //or a list of names for multiple files (html5).
       # customize how data is added to formData. See #40#issuecomment-28612000 for sample code
       # formDataAppender: function(formData, key, val){}
-    }).progress (evt) -> 
+    }).progress (evt) ->
       if $scope.upload_progress < 100
         $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
     .success (data, status, headers, config) ->
@@ -302,14 +307,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       $scope.upload_progress = 100
       if data && data.attachments && booking
         booking.attachments = data.attachments
-    #.error(...)
-    #.then(success, error, progress); 
-    #.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
-
-    # alternative way of uploading, send the file binary with the file's content-type.
-    #   Could be used to upload files to CouchDB, imgur, etc... html5 FileReader is needed. 
-    #   It could also be used to monitor the progress of a normal http post/put request with large data*/
-    # $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
 
 
   $scope.createBasketItem = (booking) ->
@@ -321,12 +318,20 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   $scope.checkAnswer = (answer) ->
     typeof answer.value == 'boolean' || typeof answer.value == 'string' || typeof answer.value == "number"
 
+
+  $scope.changeAttendees = (route) ->
+    $scope.moveAll(route)
+
+
+
+
+
 # Simple modal controller for handling the 'delete' modal
 ModalDelete = ($scope,  $rootScope, $modalInstance, booking) ->
   $scope.controller = "ModalDelete"
   $scope.booking = booking
 
-  $scope.confirm_delete = () ->
+  $scope.confirmDelete = () ->
     $modalInstance.close(booking)
 
   $scope.cancel = ->
@@ -337,7 +342,7 @@ ModalDeleteAll = ($scope,  $rootScope, $modalInstance, purchase) ->
   $scope.controller = "ModalDeleteAll"
   $scope.purchase = purchase
 
-  $scope.confirm_delete = () ->
+  $scope.confirmDelete = () ->
     $modalInstance.close(purchase)
 
   $scope.cancel = ->

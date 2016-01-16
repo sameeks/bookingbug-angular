@@ -1,4 +1,4 @@
-#bb-event-list, [bb-events] {
+#bb-event-list, [bb-events], [bb-multi-company-events] {
 
   .date-chooser-heading {
     margin-bottom: 30px;
@@ -43,10 +43,12 @@
     margin-top: 10px;
     overflow: hidden;
 
-    .bb-month-nav-prev,
+   .bb-month-nav-prev,
     .bb-month-nav-next,{
-      padding-top: 117px;
-      @include make-xs-column(2);
+      @media(min-width:$screen-xs-max){
+      padding-top: 107px;
+      }
+      @include make-sm-column(2);
       @include make-md-column(1);
     }
 
@@ -59,11 +61,13 @@
     }
 
     .bb-months {
-      @include make-xs-column(8);
+      @include make-xs-column(12);
+      @include make-sm-column(8);
       @include make-md-column(10);
     }
 
     .bb-month {
+      outline: none;
       table {
         margin: 0 auto;
       }
@@ -84,18 +88,11 @@
       padding: 1px;
       height: 36px;
       width: 36px;
-      font-family: Arial, sans-serif;
-      //color:#EEE;
-      //background-color: #FFF;
-
-      // &.thisMonth {
-      //  // border: 1px solid #DDD;
-
-      //   cursor: default;
-      //   opacity: 1;
+      font-family: Arial, sans-serif;     
 
       &.past, &.disabled {
         color: #AAA;
+        cursor: auto;
       }
 
       &.available {
@@ -116,21 +113,21 @@
           }
         }
       }
+      &.disabled.available{
+        cursor: auto;
+	.circle{
+          background-color: transparent;
+          color: #AAA;
+          cursor: auto;         
+        }
+      }
       &.selected.available {
         .circle {
           background-color: rgb(25, 169, 115);
         }
-      }
-      // &.today {
-      //   .circle {
-      //     border: 1px solid #FFF;
-      //     &:hover {
-      //       border: 1px solid #FFF;
-      //     }
-      //   }
-      // }
-
+      }       
     }
+
     th {
       margin: 0;
       text-align: center;
@@ -168,7 +165,7 @@
     }
 
     .panel-body {
-      padding: 20px 0;
+      padding: 20px;
     }
 
     .event-title {
@@ -326,8 +323,8 @@
     // }
     display: block;
     position: relative;
-    width: 7em;
-    height: 7em;
+    width: 7.5em;
+    height: 7.5em;
     color: white;
     margin: 20px auto;
     border-radius: 20em;

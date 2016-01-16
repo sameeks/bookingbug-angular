@@ -142,3 +142,29 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
           @pusher_channel.bind 'cancellation', callback
           @pusher_channel.bind 'updating', callback
 
+    ###**
+    * @ngdoc method
+    * @name getPusherChannel
+    * @methodOf BB.Models:Company
+    *
+    * @returns {object} Pusher channel
+    ###
+    getPusherChannel: (model, options = {}) =>
+      unless @pusher
+        @pusher = new Pusher 'c8d8cea659cc46060608',
+          encrypted: if options.hasOwnProperty('encrypted') then options.encrypted else true
+          authEndpoint: @$link('pusher').href
+          auth:
+            headers:
+              'App-Id' : AppConfig.appId
+              'App-Key' : AppConfig.appKey
+              'Auth-Token' : $sessionStorage.getItem('auth_token')
+      if @$has(model)
+        channelName = @$href(model)
+        channelName = channelName.replace(/https?:\/\//,'').replace(/\//g,'-').replace(/:/g,'_')
+        if @pusher.channel(channelName)
+          @pusher.channel(channelName)
+        else
+          @pusher.subscribe(channelName)
+          @pusher.channel(channelName)
+

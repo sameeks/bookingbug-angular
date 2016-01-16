@@ -1,9 +1,9 @@
-<div bb-page ng-init="checkStepTitle('Review')">
+<div bb-page>
   <div bb-item-details>
 
     <h1>Review</h1>
 
-    <div bb-include="_service_item_aggregate">
+    <div bb-include="_basket_item_summary">
     </div>
 
     <div class="bb-subcontent">
@@ -105,10 +105,10 @@
         <div class="bb-step-navigation">
           <div class="row">
             <div class="col-sm-9 col-sm-push-3 text-right">
-              <button type="submit" class="btn btn-primary pull-right" ng-click="confirm(booking_form) && validator.validateForm(booking_form) && checkReady() && routeReady()">Confirm</button>
+              <button type="submit" class="btn btn-primary" ng-click="confirm(booking_form) && validator.validateForm(booking_form) && checkReady() && routeReady()">Confirm</button>
             </div>
             <div class="col-sm-3 col-sm-pull-9">
-              <button type="button" class="btn btn-default pull-left" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+              <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
             </div>
           </div>
         </div>

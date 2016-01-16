@@ -4,7 +4,7 @@
 * @ngdoc directive
 * @name BB.Directives:bbWidget
 * @restrict A
-* @scope 
+* @scope
 *   client: '=?'
 *   apiUrl: '@?'
 *   useParent:'='
@@ -44,7 +44,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     partial = if template then template else 'main'
     fromTemplateCache = $templateCache.get(partial)
     if fromTemplateCache
-      fromTemplateCache 
+      fromTemplateCache
     else
       src = PathSvc.directivePartial(partial).$$unwrapTrustedValue()
       $http.get(src, {cache: $templateCache}).then (response) ->
@@ -144,7 +144,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
           AppConfig['partial_url'] = scope.bb.partial_url
 
       transclude scope, (clone) =>
-        # if there's content or not whitespace  
+        # if there's content or not whitespace
         scope.has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
         if !scope.has_content
           if prms.custom_partial_url
@@ -186,7 +186,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate, LoadingService) ->
+    SettingsService, UriTemplate, LoadingService, $anchorScroll) ->
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -241,7 +241,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     Slot: 12
     Event: 13
     Login: 14
-  $scope.Route = $rootScope.Route 
+  $scope.Route = $rootScope.Route
 
 
   $compile("<span bb-display-mode></span>") $scope, (cloned, scope) =>
@@ -327,22 +327,25 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       # if setup is defined - blank the member -a s we're probably setting it - unless specifically defined as false
       prms.clear_member ||= true
     $scope.bb.client_defaults = prms.client or {}
-    
+
+    if prms.client_defaults
+      if prms.client_defaults.membership_ref
+        $scope.bb.client_defaults.membership_ref = prms.client_defaults.membership_ref
+
     if $scope.bb.client_defaults && $scope.bb.client_defaults.name
       match = $scope.bb.client_defaults.name.match(/^(\S+)(?:\s(\S+))?/)
       if match
         $scope.bb.client_defaults.first_name =  match[1]
         $scope.bb.client_defaults.last_name = match[2] if match[2]?
 
-    if prms.clear_member
+    if prms.clear_member      
       $scope.bb.clear_member = prms.clear_member
-      $sessionStorage.removeItem("login")
+      $sessionStorage.removeItem('login')
 
     if prms.app_id
       $scope.bb.app_id = prms.app_id
     if prms.app_key
       $scope.bb.app_key = prms.app_key
-
 
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
@@ -352,7 +355,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
 
     if prms.route_format
-      $scope.bb.setRouteFormat(prms.route_format)  
+      $scope.bb.setRouteFormat(prms.route_format)
       # do we need to call anything else before continuing...
       if $scope.bb_route_init
         $scope.bb_route_init()
@@ -372,17 +375,18 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.reserve_without_questions
       $scope.bb.reserve_without_questions = prms.reserve_without_questions
 
-    if prms.extra_setup 
-      $scope.bb.extra_setup          = prms.extra_setup  
+    if prms.extra_setup
+      $scope.bb.extra_setup          = prms.extra_setup
       $scope.bb.starting_step_number = parseInt(prms.extra_setup.step) if prms.extra_setup.step
       $scope.bb.return_url           = prms.extra_setup.return_url if prms.extra_setup.return_url
+      $scope.bb.destination          = prms.extra_setup.destination if prms.extra_setup.destination
 
     if prms.template
       $scope.bb.template = prms.template
 
     if prms.i18n
       SettingsService.enableInternationalizaton()
-      
+
     if prms.login_required
       $scope.bb.login_required = true
 
@@ -391,7 +395,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     if prms.qudini_booking_id
       $scope.bb.qudini_booking_id = prms.qudini_booking_id
-
 
     # this is used by the bbScrollTo directive so that we can account of
     # floating headers that might reside on sites where the widget is embedded
@@ -454,33 +457,36 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
       comp_def = $q.defer()
       comp_promise = comp_def.promise
+      options = {}
+      options.auth_token = $sessionStorage.getItem('auth_token') if $sessionStorage.getItem('auth_token')
       if $scope.bb.isAdmin
         comp_url = new UriTemplate($scope.bb.api_url + $scope.company_admin_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-        halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+        halClient.$get(comp_url, options).then (company) ->
           comp_def.resolve(company)
         , (err) ->
           # try non admin if admin failed
           comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-          halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+          halClient.$get(comp_url, options).then (company) ->
             comp_def.resolve(company)
           , (err) ->
             comp_def.reject(err)
 
       else
         comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-        halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+        halClient.$get(comp_url, options).then (company) ->
           comp_def.resolve(company)
         , (err) ->
           comp_def.reject(err)
 
       setup_promises.push(comp_promise)
       comp_promise.then (company) =>
+
         if $scope.bb.$wait_for_routing
           setup_promises2.push($scope.bb.$wait_for_routing.promise)
         comp = new BBModel.Company(company)
         # if there's a default company - and this is a parent - maybe we want to preselect one of children
         cprom = $q.defer()
-        setup_promises2.push(cprom.promise)  
+        setup_promises2.push(cprom.promise)
         child = null
         if comp.companies && $scope.bb.item_defaults.company
           child = comp.findChildCompany($scope.bb.item_defaults.company)
@@ -668,7 +674,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         category = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/categories/' + $scope.bb.item_defaults.category )
         $scope.bb.default_setup_promises.push(category)
         category.then (res) =>
-          $scope.bb.item_defaults.category = new BBModel.Category(res)    
+          $scope.bb.item_defaults.category = new BBModel.Category(res)
 
       if $scope.bb.item_defaults.clinic
         clinic = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/clinics/' + $scope.bb.item_defaults.clinic )
@@ -680,9 +686,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
       if $scope.bb.item_defaults.duration
         $scope.bb.item_defaults.duration = parseInt($scope.bb.item_defaults.duration)
- 
+
       $q.all($scope.bb.default_setup_promises)['finally'] () ->
-        def.resolve()     
+        def.resolve()
     else
       def.resolve()
     def.promise
@@ -695,7 +701,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.isLoadingPage = () =>
     $scope.loading_page
-    
+
   $scope.$on '$locationChangeStart', (event) =>
     return if !$scope.bb.routeFormat
     if !$scope.bb.routing
@@ -765,7 +771,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           $scope.showPage('confirmation')
         else
           return $scope.showPage(route)
-          
+
     # do we have a pre-set route...
     if $scope.bb.nextSteps && $scope.bb.current_page && $scope.bb.nextSteps[$scope.bb.current_page] && !$scope.bb.routeSteps
       return $scope.showPage($scope.bb.nextSteps[$scope.bb.current_page])
@@ -807,7 +813,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.showPage('slot_list')
       else
         return if $scope.setPageRoute($rootScope.Route.Date)
-        return $scope.showPage('day')
+        return $scope.showPage('calendar')
     else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.time && !$scope.bb.current_item.event? && (!$scope.bb.current_item.service || $scope.bb.current_item.service.duration_unit != 'day') && !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Time)
       return $scope.showPage('time')
@@ -889,7 +895,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         # not added to basket, clear the item
         $scope.clearBasketItem().then () ->
           add_defer.resolve(basket)
-      else    
+      else
         add_defer.resolve(basket)
     , (err) ->
       add_defer.reject(err)
@@ -921,10 +927,18 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.emptyBasket = ->
     return if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
+
+    defer = $q.defer()
+
     BasketService.empty($scope.bb).then (basket) ->
       if $scope.bb.current_item.id
-        delete $scope.bb.current_item.id 
+        delete $scope.bb.current_item.id
       $scope.setBasket(basket)
+      defer.resolve()
+    , (err) ->
+      defer.reject()
+
+    return defer.promise
 
   $scope.deleteBasketItem = (item) ->
     BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
@@ -965,7 +979,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.quickEmptybasket = (options) ->
     preserve_stacked_items = if options && options.preserve_stacked_items then true else false
     if !preserve_stacked_items
-      $scope.bb.stacked_items = [] 
+      $scope.bb.stacked_items = []
       $scope.setBasket(new BBModel.Basket(null, $scope.bb))
       $scope.clearBasketItem()
     else
@@ -975,7 +989,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       def = $q.defer()
       def.resolve()
       def.promise
-      
+
   $scope.setBasket = (basket) ->
     $scope.bb.basket = basket
     $scope.basket = basket
@@ -1027,7 +1041,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
             # HACK check if client_type is not contact
             if member.client_type != 'Contact'
               member = LoginService.setLogin(member)
-              $rootScope.member = member
               $scope.setClient(member)
         if $scope.bb.clear_basket
           restore_basket_defer.resolve()
@@ -1123,7 +1136,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.loadStep = (step) ->
     return if step == $scope.bb.current_step
     $scope.bb.calculatePercentageComplete(step)
-    # so actually use the data from the "next"page if there is one - but show the correct page
+    # so actually use the data from the "next" page if there is one - but show the correct page
     # this means we load the completed data from that page
     # if there isn't a next page - then try the select one
     st = $scope.bb.steps[step]
@@ -1144,10 +1157,32 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.allSteps[$scope.bb.current_step-1].active = true
 
 
-  $scope.loadPreviousStep = (number_of_steps_to_go_back) ->
-    number_of_steps_to_go_back = number_of_steps_to_go_back or 1
-    step = $scope.bb.current_step - number_of_steps_to_go_back
-    $scope.loadStep(step)
+  ###**
+  * @ngdoc method
+  * @name loadPreviousStep
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Loads the previous unskipped step
+  *
+  * @param {object} steps_to_go_back The number of steps to go back
+  ###
+  $scope.loadPreviousStep = (steps_to_go_back) ->
+
+    steps_to_go_back = steps_to_go_back or 1
+
+    past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
+
+    # find the last unskipped step and load that (whilst respecting
+    # the number of steps to go back)
+    step_count = 0
+    while step_count < steps_to_go_back
+      last_step = past_steps.pop()
+      if !last_step.skipped
+        step_to_load = last_step.number
+        step_count++
+
+    $scope.loadStep(step_to_load) if step_to_load
+
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps
@@ -1172,12 +1207,15 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.setBasicRoute(routes)
 
 
-  # record the page right now
-  # this look s the a record breadcrumb step path - and also helps keep updated passed and current steps
-
-
+  ###**
+  * @ngdoc method
+  * @name skipThisStep
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Marks the current step as skipped
+  ###
   $scope.skipThisStep = () ->
-    $scope.bb.current_step -= 1
+    $scope.bb.steps[$scope.bb.steps.length - 1].skipped = true
 
 
   #############################################################
@@ -1288,3 +1326,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.isMemberLoggedIn = () ->
     return LoginService.isLoggedIn()
+
+
+  $scope.scrollTo = (id) ->
+    $location.hash(id)
+    $anchorScroll()
+
+
+  $scope.redirectTo = (url) ->
+    $window.location.href = url

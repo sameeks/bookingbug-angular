@@ -61,7 +61,7 @@ angular.module('BB.Services').factory "PurchaseService", ($q, halClient, BBModel
     defer.promise
 
 
-  delete_all: (purchase) ->
+  deleteAll: (purchase) ->
 
     defer = $q.defer()
 
@@ -75,4 +75,14 @@ angular.module('BB.Services').factory "PurchaseService", ($q, halClient, BBModel
     , (err) =>
       defer.reject(err)
 
+    defer.promise
+
+  delete_item: (params) ->
+    defer = $q.defer()
+    uri = params.api_url + "/api/v1/purchases/" + params.long_id + "/purchase_item/" + params.purchase_item_id
+    halClient.$del(uri, {}).then (purchase) ->
+      purchase = new BBModel.Purchase.Total(purchase)
+      defer.resolve(purchase)
+    , (err) ->
+      defer.reject(err)
     defer.promise

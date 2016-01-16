@@ -100,6 +100,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: 'The requested time slot is not available. Please choose a different time.'
     },
     {
+      key: 'TOPUP_SUCCESS',
+      type: 'success',
+      title: '',
+      persist: true,
+      msg: 'Your wallet has been topped up'
+    },
+    {
       key: 'TOPUP_FAILED',
       type: 'warning',
       title: '',
@@ -135,6 +142,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: 'Sorry, your email or password was not recognised. Please try again or reset your password.'
     },
     {
+      key: 'PASSWORD_INVALID',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, your chosen password is invalid'
+    },
+    {
       key: 'PASSWORD_RESET_REQ_SUCCESS',
       type: 'success',
       title: '',
@@ -160,15 +174,35 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'Sorry, we couldn\'t update your password. Plese try again.'
-    }
-    ,
+      msg: 'Sorry, we couldn\'t update your password. Please try again.'
+    },
     {
       key: 'PASSWORD_MISMATCH',
       type: 'warning',
       title: '',
       persist: true,
       msg: 'Your passwords don\'t match'
+    },
+    {
+      key: 'ATTENDEES_CHANGED',
+      type: 'info',
+      title: '',
+      persist: true,
+      msg: 'Your booking has been successfully updated'
+    },
+    {
+      key: 'PAYMENT_FAILED',
+      type: 'danger',
+      title: '',
+      persist: true,
+      msg: 'We were unable to take payment. Please contact your card issuer or try again using a different card'
+    },
+    {
+      key: 'ACCOUNT_DISABLED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: "Your account appears to be disabled. Please contact the business you're booking with if the problem persists."
     }
   ]
 

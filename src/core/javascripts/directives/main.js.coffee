@@ -28,6 +28,7 @@ app.directive 'bbLoading', ($compile, LoadingService) ->
     $compile(element)(scope)
     return
 
+
 app.directive 'bbWaitFor', ($compile) ->
   transclude: false,
   restrict: 'A',

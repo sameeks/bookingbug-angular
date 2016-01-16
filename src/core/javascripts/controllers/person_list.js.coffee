@@ -107,6 +107,7 @@ angular.module('BB.Controllers').controller 'PersonList',
           items = items.filter (x) -> !x.group_id || x.group_id == bi.group
 
         promises = []
+
         for i in items
           promises.push(i.promise)
 

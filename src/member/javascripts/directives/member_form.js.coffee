@@ -18,10 +18,16 @@ angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, Me
 
       $scope.$watch 'member', (member) ->
         if member?
-          member.$get('edit_member').then (member_schema) ->
-            $scope.form = member_schema.form
-            $scope.schema = member_schema.schema
-            $scope.loading = false
+          if member.$has('edit_member')
+            member.$get('edit_member').then (member_schema) ->
+              $scope.form = member_schema.form
+              $scope.schema = member_schema.schema
+              $scope.loading = false
+          else if member.$has('edit')
+            member.$get('edit').then (member_schema) ->
+              $scope.form = member_schema.form
+              $scope.schema = member_schema.schema
+              $scope.loading = false
 
       $scope.submit = (form) ->
         $scope.loading = true

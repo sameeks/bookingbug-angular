@@ -1,9 +1,10 @@
 <label class="control-label">Date</label>
 <p class="input-group">
   <input type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="$$value$$"
-  class="form-control" is-open="opened"></input>
+  class="form-control" is-open="opened" ng-disabled="form.readonly"></input>
   <span class="input-group-btn">
-    <button type="button" class="btn btn-default" ng-click="open($event)">
+    <button type="button" class="btn btn-default" ng-click="open($event)"
+      ng-disabled="form.readonly">
       <i class="glyphicon glyphicon-calendar"></i>
     </button>
   </span>

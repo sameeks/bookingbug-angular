@@ -163,7 +163,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name recordCurrentPage
     * @methodOf BB.Models:BBWidget
     * @description
-    * Record current page
+    * Records the current page and determines the current step from either the predefined steps or the steps that have been passed already
     *
     * @returns {string} The returned record step
     ###
@@ -171,7 +171,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       if !@current_step
         @current_step = 0
       match = false
-      # can we find a match for this step against either previous or existing steps ?
+      # can we find a match for this step against either previous or existing steps?
       # first check the pre-defined steps
       if @allSteps
         for step in @allSteps
@@ -200,7 +200,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
 
     ###**
     * @ngdoc method
-    * @name recordCurrentPage
+    * @name recordStep
     * @methodOf BB.Models:BBWidget
     * @description
     * Record step in according of step and title parameters. Calculate percentile complete
@@ -215,7 +215,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
         number: step, 
         title: title,
         stacked_length: @stacked_items.length
-        }
+      }
 
       BreadcrumbService.setCurrentStep(step)
 

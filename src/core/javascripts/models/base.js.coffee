@@ -17,7 +17,7 @@ angular.module('BB.Models').run ($q, $injector, BBModel) ->
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
     'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
     'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
-    'PrePaidBooking']
+    'PrePaidBooking', 'MembershipLevel', 'Product', 'EventCollection', 'ExternalPurchase', 'PackageItem', 'BulkPurchase']
 
   for model in models
     BBModel[model] = $injector.get(model + "Model")
@@ -30,7 +30,7 @@ angular.module('BB.Models').run ($q, $injector, BBModel) ->
   BBModel['Purchase'] = pfuncs
 
   # member models
-#  member_models = ['Member', 'Booking', 'PrePaidBooking', 'Wallet', 'WalletLog']
+#  member_models = ['Member', 'Booking', 'PrePaidBooking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand']
 #  mfuncs = {}
 #  for model in member_models
 #    mfuncs[model] = $injector.get("Member." + model + "Model")

@@ -1,29 +1,34 @@
-angular.module('BBMember').directive 'bbWalletLogs', ($rootScope) ->
+angular.module('BBMember').directive 'bbWalletLogs', ($rootScope, PaginationService) ->
+  templateUrl: 'wallet_logs.html'
+  scope: true
+  controller: 'Wallet'
+  require: '^?bbWallet'
+  link: (scope, element, attrs, ctrl) ->
 
-  link = (scope, element, attrs) ->
-    $rootScope.bb ||= {}
-    $rootScope.bb.api_url ||= scope.apiUrl
-    $rootScope.bb.api_url ||= "http://www.bookingbug.com"
+    scope.member = scope.$eval(attrs.member)
+    scope.member ||= $rootScope.member if $rootScope.member
 
-    getWalletLogsForWallet = () ->
-      scope.getWalletLogs(scope.wallet)
+    scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
 
-    getWalletForMember = () ->
-      scope.getWalletForMember(scope.member)
+
+    getWalletLogs = ()->
+      scope.getWalletLogs().then (logs) ->
+        PaginationService.update(scope.pagination, logs.length)
     
-    scope.$watch 'member', (member) ->
-      if member?
-        getWalletForMember()
 
-    scope.$watch 'wallet', (wallet) ->
-      if wallet?
-        getWalletLogsForWallet()
+    # listen to when the wallet is topped up
+    scope.$on 'wallet:topped_up', (event) ->
+      getWalletLogs()
 
-  {
-    link: link
-    controller: 'Wallet'
-    templateUrl: 'wallet_logs.html'
-    scope:
-      member: '='
-      wallet: '='
-  }
+
+    # wait for wallet to be loaded by bbWallet or by self
+    $rootScope.connection_started.then () ->
+      if ctrl
+        deregisterWatch = scope.$watch 'wallet', () ->
+          if scope.wallet
+            getWalletLogs()
+            deregisterWatch()
+      else 
+        scope.getWalletForMember(scope.member).then () ->
+          getWalletLogs()
+

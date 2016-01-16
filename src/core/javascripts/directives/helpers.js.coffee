@@ -295,37 +295,62 @@ app.directive 'bbDateSplit', ($parse) ->
 
 
 # bbCommPref
-app.directive 'bbCommPref', ($parse) ->
+app.directive 'bbCommPref', () ->
   restrict: 'A'
   require: ['ngModel']
   link: (scope, element, attrs, ctrls) ->
 
-    ngModelCtrl = ctrls[0]
+    ng_model_ctrl = ctrls[0]
 
     # get the default communication preference 
-    comm_pref_default = scope.$eval attrs.bbCommPref or false
+    comm_pref = scope.$eval(attrs.bbCommPref) or false
 
-    # and set it
-    ngModelCtrl.$setViewValue(comm_pref_default)
+    # check if it's already been set
+    if scope.bb.current_item.settings.send_email_followup? and scope.bb.current_item.settings.send_sms_followup?
+      comm_pref = scope.bb.current_item.settings.send_email_followup
+    else
+      # set to the default
+      scope.bb.current_item.settings.send_email_followup = comm_pref
+      scope.bb.current_item.settings.send_sms_followup   = comm_pref
 
-    # watch for changes
-    scope.$watch attrs.ngModel, (newval, oldval) ->
-      if newval != oldval
-        scope.bb.current_item.settings.send_email_followup = newval
-        scope.bb.current_item.settings.send_sms_followup   = newval
+    # update the model
+    ng_model_ctrl.$setViewValue(comm_pref)
+
+    # register a parser to handle model changes
+    parser = (value) ->
+      scope.bb.current_item.settings.send_email_followup = value
+      scope.bb.current_item.settings.send_sms_followup   = value
+      value
+
+    ng_model_ctrl.$parsers.push parser
 
 
 # bbCountTicketTypes
-# returns the number of tickets purchased grouped by name
-app.directive 'bbCountTicketTypes', () ->
+# returns the number of tickets selected, grouped by name
+app.directive 'bbCountTicketTypes', ($rootScope) ->
   restrict: 'A'
+  scope: false
   link: (scope, element, attrs) ->
-    items = scope.$eval(attrs.bbCountTicketTypes)
-    counts = []
-    for item in items
-      if item.tickets
-        if counts[item.tickets.name] then counts[item.tickets.name] += 1 else counts[item.tickets.name] = 1
-        item.number = counts[item.tickets.name]
+
+
+    $rootScope.connection_started.then () ->
+      countTicketTypes()
+
+
+    scope.$on "basket:updated", (event, basket) ->
+      countTicketTypes()
+
+
+    countTicketTypes = (items) ->
+
+      items = scope.bb.basket.timeItems()
+
+      counts = []
+      for item in items
+        if item.tickets
+          if counts[item.tickets.name] then counts[item.tickets.name] += item.tickets.qty else counts[item.tickets.name] = item.tickets.qty
+          item.number = counts[item.tickets.name]
+      scope.counts = counts
 
 
 # bbCapitaliseFirstLetter
@@ -449,17 +474,3 @@ app.directive 'bbBookingExport', ($compile) ->
         <a class='image img_gcal' title='Add this booking to Google Calendar' href='#{purchase_total.gcalLink()}' target='_blank'><img src='//images.bookingbug.com/widget/gcal.png' border='0'></a>
       "
 
-
-app.directive 'bbCurrencyField', ($filter) ->
-  restrict: 'A',
-  require: 'ngModel',
-  link: (scope, element, attrs, ctrl) ->
-
-    convertToCurrency = (value) ->
-      value / 100
-
-    convertToInteger = (value) ->
-      value * 100
-
-    ctrl.$formatters.push(convertToCurrency)
-    ctrl.$parsers.push(convertToInteger)

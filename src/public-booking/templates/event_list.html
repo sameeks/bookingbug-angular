@@ -4,25 +4,7 @@
     <h1>Events at {{company.name}}</h1>
   </div>
 
-  <div ng-show="months" class="bb-month-picker" bb-month-picker day-data="item_dates">
-    <div class="bb-month-nav-prev">
-      <button type="button" class="btn btn-icon btn-xl month-prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">Previous</span>
-      </button>
-    </div>
-    <div class="bb-months">
-
-      <div bb-slick></div>
-
-    </div>
-
-    <div class="bb-month-nav-next">
-      <button type="button" class="btn btn-icon btn-xl month-next">
-        <span class="sr-only">Next</span> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-      </button>
-    </div>
-
-  </div>
+  <div bb-month-picker day-data="item_dates"></div>
 
   <div class="events" ng-show="items" bb-scroll-to="page:changed" bb-always-scroll>
 
@@ -62,6 +44,11 @@
             <label class="sr-only" for="date">Date</label>
             <div class="input-group date-picker">
               <!-- date format: http://docs.angularjs.org/api/ng.filter:date" -->
+              <span class="input-group-btn" ng-click="filterDateChanged({reset:true})">
+                <button class="btn btn-default" type="submit" title="Reset Date">
+                   <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </span>
               <input type="text" ng-model="filters.date" class="form-control"
                 bb-datepicker-popup="DD/MM/YYYY"
                 datepicker-popup="dd/MM/yyyy"

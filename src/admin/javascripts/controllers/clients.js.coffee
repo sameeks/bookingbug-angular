@@ -12,7 +12,7 @@ angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
     return
 
 
-angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService) ->
+angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, $log) ->
 
   $scope.clientDef = $q.defer()
   $scope.clientPromise = $scope.clientDef.promise 
@@ -33,7 +33,6 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,  $root
 
 
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
-    console.log currentPage, filterBy, filterByFields, orderBy, orderByReverse
     clientDef = $q.defer()
 
     $rootScope.connection_started.then ->
@@ -43,7 +42,6 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,  $root
         $scope.setLoaded $scope
         $scope.setPageLoaded()
         $scope.total_entries = clients.total_entries
-        console.log ($scope.clients)
         clientDef.resolve(clients.items)
       , (err) ->  
         clientDef.reject(err)
@@ -51,4 +49,4 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,  $root
     true
 
   $scope.edit = (item) ->
-    console.log item
+    $log.info("not implemented")

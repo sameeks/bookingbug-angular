@@ -18,11 +18,13 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
 
   class Event extends BaseModel
+    
     constructor: (data) ->
       super(data)
       @getDate()
       @time = new BBModel.TimeSlot(time: DateTimeUlititiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
+      @date_unix = @date.unix()
 
     ###**
     * @ngdoc method
@@ -37,8 +39,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       defer = $q.defer()
       if @group
         defer.resolve(@group)
-      else if @$has('event_groups')
-        @$get('event_groups').then (group) =>
+      else if @$has('event_groups') or @$has('event_group')
+        event_group = 'event_group'
+        event_group = 'event_groups' if @$has('event_groups')
+        @$get(event_group).then (group) =>
           @group = new BBModel.EventGroup(group)
           defer.resolve(@group)
         , (err) ->
@@ -61,8 +65,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       if @chain
         defer.resolve(@chain)
       else
-        if @$has('event_chains')
-          @$get('event_chains').then (chain) =>
+        if @$has('event_chains') or @$has('event_chain')
+          event_chain = 'event_chain'
+          event_chain = 'event_chains' if @$has('event_chains')
+          @$get(event_chain).then (chain) =>
             @chain = new BBModel.EventChain(chain)
             defer.resolve(@chain)
         else
@@ -115,25 +121,6 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           defer.resolve(@duration)
       defer.promise
 
-    ###**
-    * @ngdoc method
-    * @name printDuration
-    * @methodOf BB.Models:Event
-    * @description
-    * Display duration of the event
-    *
-    * @returns {date} The returned printed duration
-    ### 
-    printDuration: () ->
-      if @duration < 60
-        @duration + " mins"
-      else
-        h = Math.round(@duration / 60)
-        m = @duration % 60
-        if m == 0
-          h + " hours"
-        else
-          h + " hours " + m + " mins"
 
     ###**
     * @ngdoc method
@@ -162,17 +149,6 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       else
         return "#FFFFFF"
 
-    ###**
-    * @ngdoc method
-    * @name getPerson
-    * @methodOf BB.Models:Event
-    * @description
-    * Get the person name
-    *
-    * @returns {object} The returned person
-    ###
-    getPerson: () ->
-      @getChain().person_name
 
     ###**
     * @ngdoc method
@@ -292,6 +268,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     select: ->
       @selected = true
 
+
     ###**
     * @ngdoc method
     * @name unselect
@@ -337,7 +314,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
           @ticket_prices = _.indexBy(tickets, 'name')
 
-          def.resolve()
+          def.resolve(@)
       def.promise
 
     ###**

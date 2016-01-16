@@ -42,10 +42,10 @@ angular
 
       return {
 
-        set: function(key, val)
+        set: function(key, val, store)
         {
           // also store this in the session store
-          sessionStorage.setItem(key, val)
+          store.setItem(key, val)
           data[key] = val
           return val
         },
@@ -70,12 +70,12 @@ angular
     $http, $q, data_cache, shared_header, UriTemplate, $cookies, $sessionStorage
   ){
 
-
     if ($cookies['Auth-Token']){
       $sessionStorage.setItem('auth_token', $cookies['Auth-Token'])
     }
+
     if ($sessionStorage.getItem('auth_token'))
-      shared_header.set('auth_token', $sessionStorage.getItem('auth_token'))
+      shared_header.set('auth_token', $sessionStorage.getItem('auth_token'), $sessionStorage)
 
 
     return {
@@ -249,6 +249,11 @@ angular
       }//hrefLink
 
       function callLink(method, link, params, data) {
+
+        if (params == null) {
+          params = {};
+        }
+          
         if(angular.isArray(link)) return $q.all(link.map(function(link){
           if(method !== 'GET') throw 'method is not supported for arrays';
 
@@ -257,9 +262,11 @@ angular
 
         var linkHref = hrefLink(link, params);
         if(method === 'GET') {
-          if(embedded.has(linkHref)) return embedded.get(linkHref);
-          
-          return embedded.set(linkHref, callService(method, linkHref, options, data));
+          if(embedded.has(linkHref) && !params['no_cache']) {
+            return embedded.get(linkHref);
+          } else {
+            return embedded.set(linkHref, callService(method, linkHref, options, data));
+          }
         }
         else {
           return callService(method, linkHref, options, data);  
@@ -327,15 +334,16 @@ angular
         , 'Content-Type': 'application/json'
         , 'Accept': 'application/hal+json,application/json'
       }
-      if (options.app_id) shared_header.set('app_id', options.app_id);
-      if (options.app_key) shared_header.set('app_key', options.app_key);
+      if (options.app_id) shared_header.set('app_id', options.app_id, $sessionStorage);
+      if (options.app_key) shared_header.set('app_key', options.app_key, $sessionStorage);
       if (options.auth_token) {
-        sessionStorage.setItem('auth_token', options.auth_token);
-        shared_header.set('auth_token', options.auth_token);
+        $sessionStorage.setItem('auth_token', options.auth_token);
+        shared_header.set('auth_token', options.auth_token, $sessionStorage);
       }
 
       if (shared_header.has('app_id')) headers['App-Id'] = shared_header.get('app_id');
       if (shared_header.has('app_key')) headers['App-Key'] = shared_header.get('app_key');
+
       if (shared_header.has('auth_token')) headers['Auth-Token'] = shared_header.get('auth_token');
 
       if (options.bypass_auth) headers['Bypass-Auth'] = options.bypass_auth;
@@ -349,10 +357,11 @@ angular
         })
         .then(function(res){
 
-          // copy out the auth token from the header if there was one and make sure the child commands use it
-          if (res.headers('auth-token') && res.status != 304){
+          // copy out the auth token from the header if the response is new resource
+          // Note: we only take the auth token from created responses as at the app layer, success responses might be cached results, thus we don't want to use the auth token from these 
+          if (res.headers('auth-token') && res.status == 201){
             options.auth_token = res.headers('Auth-Token')
-            shared_header.set('auth_token', res.headers('Auth-Token'))
+            shared_header.set('auth_token', res.headers('Auth-Token'), $sessionStorage)
           }
           switch(res.status){
             case 200:

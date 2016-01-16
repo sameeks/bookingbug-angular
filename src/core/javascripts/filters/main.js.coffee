@@ -133,6 +133,11 @@ app.filter 'icurrency', ($window, $rootScope) ->
     $window.accounting.formatMoney(number, currency[currencyCode], 2, thousand, decimal, format)
 
 
+app.filter 'raw_currency', () ->
+  (number) =>
+    number / 100.0
+
+
 app.filter 'pretty_price', ($filter) ->
   (price, symbol) ->
     return $filter('ipretty_price')(price, symbol)

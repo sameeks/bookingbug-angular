@@ -1,32 +1,65 @@
-<div slick init-onload="true" data="months" on-init="slickOnInit()" on-set-position="slickOnInit()" slides-to-show="3" current-index="index" infinite="false" prev-arrow=".month-prev" next-arrow=".month-next" responsive="[{breakpoint: 1200, settings: {slidesToShow: 2}}, {breakpoint: 992, settings: {slidesToShow: 1}}]">
-
-  <div class="bb-month" ng-repeat="month in months" ng-class="{'hidden-xs': month.selected}">
-    <table>
-      <thead>
-        <tr>
-          <th colspan="7" class="months">{{month.start_date.format("MMMM")}}</th>
-        </tr>
-        <tr>
-          <th ng-repeat="day in month.weeks[0].days" class="days">{{day.date | datetime: "ddd" : false}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="week in month.weeks">
-          <td ng-repeat="day in week.days" 
-            ng-class="{'available': day.available, 
-                       'selected': day.selected,
-                       'today': day.today,
-                       'past': day.past,
-                       'disabled': day.disabled
-                      }" 
-              ng-click="showDay(day)"
-              ng-if="!refreshing"
-              ng-disabled="day.disabled || day.past">
-            <div class="circle">{{day.date.date()}}</div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="bb-month-picker">
+  <div class="bb-month-nav-prev hidden-xs">
+    <button type="button" class="btn btn-icon btn-xl month-prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">Previous</span>
+    </button>
   </div>
+  <div class="bb-months">
+    <div slick data="months" ng-if="months" settings="slick_config">
 
+      <div class="bb-month" ng-repeat="month in months" ng-class="{'hidden-xs': month.selected}">
+        <table>
+          <thead>
+            <tr>
+              <div class="row">
+                <div class="bb-month-nav-prev col-xs-4 visible-xs" style="text-align: right;">
+                  <button type="button" class="btn btn-icon month-prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 
+                    <span class="sr-only">Previous</span>
+                  </button>
+                </div>
+                <div class="months text-center col-xs-4 visible-xs"><b>
+                  {{month.start_date.format("MMMM")}}</b>
+                </div>
+                <div class="months text-center hidden-xs"><b>
+                  {{month.start_date.format("MMMM")}}</b>
+                </div>
+                <div class="bb-month-nav-next col-xs-4 visible-xs">
+                  <button type="button" class="btn btn-icon month-next">
+                    <span class="sr-only">Next</span> 
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </div>
+            </tr>
+            <tr>
+              <th ng-repeat="day in month.weeks[0].days" class="days">{{day.date | datetime: "ddd" : false}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="week in month.weeks">
+              <td ng-repeat="day in week.days" 
+                ng-class="{'available': day.available, 
+                           'selected': day.selected,
+                           'today': day.today,
+                           'past': day.past,
+                           'disabled': day.disabled
+                          }" 
+                  ng-click="toggleDay(day)"
+                  ng-disabled="day.disabled || day.past">
+                <div class="circle">{{day.date.date()}}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+  <div class="bb-month-nav-next hidden-xs" style="text-align:left;">
+    <button type="button" class="btn btn-icon btn-xl month-next">
+      <span class="sr-only">Next</span> 
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    </button>
+  </div>
 </div>
