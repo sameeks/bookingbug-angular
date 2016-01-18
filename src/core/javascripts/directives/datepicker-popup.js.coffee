@@ -25,7 +25,7 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
   link : (scope, element, attrs, ngModel) ->
     origDateParser = null
     data = element.controller('ngModel')
-    if attrs.datepickerPopup == ""
+    if attrs.datepickerPopup == "" or !attrs.datepickerPopup
       format =
         date_us: "MM/dd/yyyy"
         date_uk: "dd/MM/yyyy"
