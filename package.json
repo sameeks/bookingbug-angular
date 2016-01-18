@@ -17,14 +17,19 @@
     "start": "gulp"
   },
   "dependencies": {
+    "angular-translate": "^2.8.1",
+    "angular-translate-loader-partial": "^2.8.1",
+    "angular-translate-storage-cookie": "^2.8.1",
     "connect": "^3.4.0",
     "del": "^1.1.0",
     "deprecated": "0.0.1",
+    "lodash": "^3.10.1",
     "main-bower-files": "^2.4.1",
     "merge-stream": "^0.1.6",
     "orchestrator": "^0.3.7",
     "phantomjs": "^1.9.18",
     "serve-static": "^1.7.1",
+    "slick-carousel": "^1.5.9",
     "streamqueue": "^0.1.1",
     "vinyl-fs": "^0.3.13",
     "yargs": "^3.29.0"
