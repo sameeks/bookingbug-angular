@@ -297,7 +297,7 @@ app.filter "uk_local_number", ->
 # Checks if a format (option) is set if not checks the country and provides a default.
 # Additionally you can pass in date, time or datetime
 app.filter 'datetime', (SettingsService) ->
-  return (date, options) ->
+  return (date, format) ->
     if date and moment.isMoment(date)
       curdatetime = date
       datestrings =
@@ -311,10 +311,10 @@ app.filter 'datetime', (SettingsService) ->
       # cc = scope.bb.company.country_code
       if cc != "us"
         cc = "uk"
-      if options.match(/(date(time_uk|time_us|_us|_uk)*|(time(_uk|_us)*))/)
-        curdatetime = curdatetime.format(datestrings[options + "_" + cc])
+      if format.match(/(date(time_uk|time_us|_us|_uk)*|(time(_uk|_us)*))/)
+        curdatetime = curdatetime.format(datestrings[format + "_" + cc])
       else
-        curdatetime = curdatetime.format(options)
+        curdatetime = curdatetime.format(format)
     else
       return
 app.filter 'range', ->
