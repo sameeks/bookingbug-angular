@@ -45,7 +45,6 @@ angular.module('BB.Services').factory "BB.Service.resources", ($q, BBModel) ->
     deferred.promise
 
 
-
 angular.module('BB.Services').factory "BB.Service.service", ($q, BBModel) ->
   unwrap: (resource) ->
     return new BBModel.Service(resource)
@@ -64,6 +63,7 @@ angular.module('BB.Services').factory "BB.Service.services", ($q, BBModel) ->
       deferred.reject(err)
 
     deferred.promise
+
 
 angular.module('BB.Services').factory "BB.Service.package_item", ($q, BBModel) ->
   unwrap: (package_item) ->
@@ -105,7 +105,6 @@ angular.module('BB.Services').factory "BB.Service.bulk_purchases", ($q, BBModel)
     deferred.promise
 
 
-
 angular.module('BB.Services').factory "BB.Service.event_group", ($q, BBModel) ->
   unwrap: (resource) ->
     return new BBModel.EventGroup(resource)
@@ -127,6 +126,11 @@ angular.module('BB.Services').factory "BB.Service.event_groups", ($q, BBModel) -
 
 
 angular.module('BB.Services').factory "BB.Service.event_chain", ($q, BBModel) ->
+  unwrap: (resource) ->
+    return new BBModel.EventChain(resource)
+
+
+angular.module('BB.Services').factory "BB.Service.event_chains", ($q, BBModel) ->
   unwrap: (resource) ->
     return new BBModel.EventChain(resource)
 
@@ -171,6 +175,7 @@ angular.module('BB.Services').factory "BB.Service.child_clients", ($q, BBModel) 
       deferred.reject(err)
 
     deferred.promise
+
 
 angular.module('BB.Services').factory "BB.Service.clients", ($q, BBModel) ->
   promise: true
@@ -231,11 +236,6 @@ angular.module('BB.Services').factory "BB.Service.administrators", ($q, BBModel)
 angular.module('BB.Services').factory "BB.Service.company", ($q, BBModel) ->
   unwrap: (resource) ->
     return new BBModel.Company(resource)
-
-
-angular.module('BB.Services').factory "BB.Service.event_chains", ($q, BBModel) ->
-  unwrap: (resource) ->
-    return new BBModel.EventChain(resource)
 
 
 angular.module('BB.Services').factory "BB.Service.parent", ($q, BBModel) ->
@@ -328,22 +328,81 @@ angular.module('BB.Services').factory "BB.Service.pre_paid_booking", ($q, BBMode
 angular.module('BB.Services').factory "BB.Service.pre_paid_bookings", ($q, BBModel) ->
   promise: true
   unwrap: (resource) ->
+
     deferred = $q.defer()
-    resource.$get('pre_paid_bookings').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.PrePaidBooking(i))
+
+    if angular.isArray(resource)
+
+      models = (new BBModel.PrePaidBooking(pre_paid_booking) for pre_paid_booking in resource)
       deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+
+    else
+    
+      resource.$get('pre_paid_bookings').then (items) =>
+        models = []
+        for i in items
+          models.push(new BBModel.PrePaidBooking(i))
+        deferred.resolve(models)
+      , (err) =>
+        deferred.reject(err)
 
     deferred.promise
 
 
+angular.module('BB.Services').factory "BB.Service.external_purchase", ($q, BBModel) ->
+  unwrap: (resource) ->
+    return new BBModel.ExternalPurchase(resource)
+
+
 angular.module('BB.Services').factory "BB.Service.external_purchases", ($q, BBModel) ->
-  promise: false
-  unwrap: (items) ->
-    models = []
-    for i in items
-      models.push(new BBModel.ExternalPurchase(i))
-    return models
+  promise: true
+  unwrap: (resource) ->
+
+    deferred = $q.defer()
+
+    if angular.isArray(resource)
+
+      models = (new BBModel.ExternalPurchase(external_purchase) for external_purchase in resource)
+      deferred.resolve(models)
+
+    else
+    
+      resource.$get('external_purchases').then (items) =>
+        models = []
+        for i in items
+          models.push(new BBModel.ExternalPurchase(i))
+        deferred.resolve(models)
+      , (err) =>
+        deferred.reject(err)
+
+    deferred.promise
+
+
+
+angular.module('BB.Services').factory "BB.Service.purchase_item", ($q, BBModel) ->
+  unwrap: (resource) ->
+    return new BBModel.PurchaseItem(resource)
+
+
+angular.module('BB.Services').factory "BB.Service.purchase_items", ($q, BBModel) ->
+  promise: true
+  unwrap: (resource) ->
+
+    deferred = $q.defer()
+
+    if angular.isArray(resource)
+
+      models = (new BBModel.PurchaseItem(purchase_item) for purchase_item in resource)
+      deferred.resolve(models)
+
+    else
+    
+      resource.$get('external_purchases').then (items) =>
+        models = []
+        for i in items
+          models.push(new BBModel.PurchaseItem(i))
+        deferred.resolve(models)
+      , (err) =>
+        deferred.reject(err)
+
+    deferred.promise
