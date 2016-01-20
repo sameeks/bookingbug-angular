@@ -338,7 +338,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.client_defaults.first_name =  match[1]
         $scope.bb.client_defaults.last_name = match[2] if match[2]?
 
-    if prms.clear_member      
+    if prms.clear_member
       $scope.bb.clear_member = prms.clear_member
       $sessionStorage.removeItem('login')
 
@@ -1076,6 +1076,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over
     $scope.company = company
     $scope.bb.item_defaults.company = $scope.bb.company
+
+    SettingsService.setCountryCode($scope.bb.company.country_code)
 
     if company.$has('settings')
       company.getSettings().then (settings) =>
