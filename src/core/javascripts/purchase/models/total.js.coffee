@@ -127,7 +127,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
       defer = $q.defer()
       if @_data.$has('member')
         @_data.$get('member').then (member) =>
-          @member = new BBModel.Member.Member(member)
+          @member = new BBModel.Client(member)
           defer.resolve(@member)
       else
         defer.reject('No member')
