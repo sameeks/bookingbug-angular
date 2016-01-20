@@ -299,7 +299,6 @@ app.filter "uk_local_number", ->
 app.filter 'datetime', (SettingsService) ->
   return (date, format) ->
     if date and moment.isMoment(date)
-      curdatetime = date
       datestrings =
         datetime_us : 'MM/DD/YYYY, h:mm a'
         datetime_uk : 'DD/MM/YYYY, HH:MM'
@@ -308,15 +307,17 @@ app.filter 'datetime', (SettingsService) ->
         time_us : 'h:mm a'
         time_uk : 'HH:MM'
       cc = SettingsService.getCountryCode()
-      # cc = scope.bb.company.country_code
-      if cc != "us"
-        cc = "uk"
-      if format.match(/(date(time_uk|time_us|_us|_uk)*|(time(_uk|_us)*))/)
-        curdatetime = curdatetime.format(datestrings[format + "_" + cc])
+      cc = "uk" if cc != "us"
+      if format and format.match(/(date(time_uk|time_us|_us|_uk)*|(time(_uk|_us)*))/)
+        return date.format(datestrings[format + "_" + cc])
+      else if format
+        return date.format(format)
       else
-        curdatetime = curdatetime.format(format)
+        return date.format(datestrings["date_" + cc])
     else
       return
+
+
 app.filter 'range', ->
   (input, min, max) ->
     (input.push(i) for i in [parseInt(min)..parseInt(max)])
