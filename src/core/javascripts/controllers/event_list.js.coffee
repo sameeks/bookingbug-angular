@@ -71,7 +71,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         $scope.decideNextPage()
         return
       else if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
-        $scope.bb.company.getParentPromise().then (parent) ->
+        $scope.bb.company.$getParent().then (parent) ->
           $scope.company_parent = parent
           $scope.initialise()
         , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -103,16 +103,16 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     # company question promise
     if $scope.bb.company.$has('company_questions')
-      promises.push($scope.bb.company.getCompanyQuestionsPromise())
+      promises.push($scope.bb.company.$getCompanyQuestions())
     else if $scope.company_parent? && $scope.company_parent.$has('company_questions')
-      promises.push($scope.company_parent.getCompanyQuestionsPromise())
+      promises.push($scope.company_parent.$getCompanyQuestions())
     else
       promises.push($q.when([]))
       $scope.has_company_questions = false
 
     # event group promise
     if !$scope.current_item.event_group and $scope.bb.company.$has('event_groups')
-      promises.push($scope.bb.company.getEventGroupsPromise())
+      promises.push($scope.bb.company.$getEventGroups())
     else
       promises.push($q.when([]))
 
@@ -276,7 +276,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         item.spaces_left = item.getSpacesLeft()
 
       # Add address prop from the company to the item
-      $scope.bb.company.getAddressPromise().then (address) ->
+      $scope.bb.company.$getAddress().then (address) ->
         for item in $scope.items
           item.address = address              
       

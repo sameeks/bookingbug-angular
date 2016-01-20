@@ -296,7 +296,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       @getChain().then () =>
 
         if @chain.$has('address')
-          @chain.getAddressPromise().then (address) =>
+          @chain.$getAddress().then (address) =>
             @chain.address = address
 
         @chain.getTickets().then (tickets) =>

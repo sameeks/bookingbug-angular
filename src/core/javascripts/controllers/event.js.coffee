@@ -58,7 +58,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     $scope.event_options.use_my_details = if !$scope.event_options.use_my_details? then true else $scope.event_options.use_my_details
 
     promises = [
-      $scope.current_item.event_group.getImagesPromise(),
+      $scope.current_item.event_group.$getImages(),
       $scope.event.prepEvent()
     ]
 
