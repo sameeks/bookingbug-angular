@@ -1323,3 +1323,17 @@ angular.module('BB.Models').factory "BasketItemModel",
         return "#{@first_name} #{@last_name}"
       else if client
         return client.getName()
+
+
+    ###**
+    * @ngdoc method
+    * @name isTimeItem
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Indicates if the BasketItem is a time item (i.e. either an event
+    * or appointment booking)
+    *
+    * @returns {boolean}
+    ###
+    isTimeItem: () ->
+      return @service or @event
