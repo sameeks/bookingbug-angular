@@ -53,28 +53,38 @@ angular.module('BB.Services').factory "BB.Service.service", ($q, BBModel) ->
 angular.module('BB.Services').factory "BB.Service.services", ($q, BBModel) ->
   promise: true
   unwrap: (resource) ->
+
     deferred = $q.defer()
-    resource.$get('services').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.Service(i))
+
+     # if the resource is embedded, return the array of models
+    if angular.isArray(resource)
+
+      models = (new BBModel.Service(service) for service in resource)
       deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+
+    else
+    
+      resource.$get('services').then (items) =>
+        models = []
+        for i in items
+          models.push(new BBModel.Service(i))
+        deferred.resolve(models)
+      , (err) =>
+        deferred.reject(err)
 
     deferred.promise
 
 
 angular.module('BB.Services').factory "BB.Service.package_item", ($q, BBModel) ->
-  unwrap: (package_item) ->
-    return new BBModel.PackageItem(package_item)
+  unwrap: (resource) ->
+    return new BBModel.PackageItem(resource)
 
 
 angular.module('BB.Services').factory "BB.Service.package_items", ($q, BBModel) ->
   promise: true
-  unwrap: (package_item) ->
+  unwrap: (resource) ->
     deferred = $q.defer()
-    package_item.$get('bulk_purchases').then (package_items) =>
+    resource.$get('package_items').then (package_items) =>
       models = []
       for i in package_items
         models.push(new BBModel.PackageItem(i))
@@ -86,21 +96,31 @@ angular.module('BB.Services').factory "BB.Service.package_items", ($q, BBModel) 
 
 
 angular.module('BB.Services').factory "BB.Service.bulk_purchase", ($q, BBModel) ->
-  unwrap: (bulk_purchase) ->
-    return new BBModel.BulkPurchase(bulk_purchase)
+  unwrap: (resource) ->
+    return new BBModel.BulkPurchase(resource)
 
 
 angular.module('BB.Services').factory "BB.Service.bulk_purchases", ($q, BBModel) ->
   promise: true
-  unwrap: (bulk_purchase) ->
+  unwrap: (resource) ->
+
     deferred = $q.defer()
-    bulk_purchase.$get('bulk_purchases').then (bulk_purchases) =>
-      models = []
-      for i in bulk_purchases
-        models.push(new BBModel.BulkPurchase(i))
+
+    # if the resource is embedded, return the array of models
+    if angular.isArray(resource)
+
+      models = (new BBModel.BulkPurchase(bulk_purchase) for bulk_purchase in resource)
       deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+
+    else
+    
+      resource.$get('bulk_purchases').then (bulk_purchases) =>
+        models = []
+        for i in bulk_purchases
+          models.push(new BBModel.BulkPurchase(i))
+        deferred.resolve(models)
+      , (err) =>
+        deferred.reject(err)
 
     deferred.promise
 
@@ -360,6 +380,7 @@ angular.module('BB.Services').factory "BB.Service.external_purchases", ($q, BBMo
 
     deferred = $q.defer()
 
+    # if the resource is embedded, return the array of models
     if angular.isArray(resource)
 
       models = (new BBModel.ExternalPurchase(external_purchase) for external_purchase in resource)
@@ -378,7 +399,6 @@ angular.module('BB.Services').factory "BB.Service.external_purchases", ($q, BBMo
     deferred.promise
 
 
-
 angular.module('BB.Services').factory "BB.Service.purchase_item", ($q, BBModel) ->
   unwrap: (resource) ->
     return new BBModel.PurchaseItem(resource)
@@ -390,6 +410,7 @@ angular.module('BB.Services').factory "BB.Service.purchase_items", ($q, BBModel)
 
     deferred = $q.defer()
 
+     # if the resource is embedded, return the array of models
     if angular.isArray(resource)
 
       models = (new BBModel.PurchaseItem(purchase_item) for purchase_item in resource)
@@ -397,7 +418,7 @@ angular.module('BB.Services').factory "BB.Service.purchase_items", ($q, BBModel)
 
     else
     
-      resource.$get('external_purchases').then (items) =>
+      resource.$get('purchase_items').then (items) =>
         models = []
         for i in items
           models.push(new BBModel.PurchaseItem(i))
