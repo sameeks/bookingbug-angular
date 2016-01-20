@@ -111,6 +111,15 @@ window.bookingbug =
 
 moment.locale('en', {
     longDateFormat : {
-        LLLL : "dddd Do MMMM[,] h.mma"
+        LT: "h:mm A",
+        LTS: "h:mm:ss A",
+        L: "MM/DD/YYYY",
+        l: "M/D/YYYY",
+        LL: "MMMM Do YYYY",
+        ll: "MMM D YYYY",
+        LLL: "MMMM Do YYYY LT",
+        lll: "MMM D YYYY LT",
+        LLLL: "dddd Do MMMM[,] h.mma",
+        llll: "ddd, MMM D YYYY LT"
     }
   })
