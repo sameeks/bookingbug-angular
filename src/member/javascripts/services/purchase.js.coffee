@@ -11,7 +11,7 @@ angular.module('BBMember.Services').factory "MemberPurchaseService", ($q, $rootS
       member.$get('purchase_totals', params).then (purchases) =>
         purchases.$get('purchase_totals', params).then (purchases) =>
           purchases = for purchase in purchases
-            new BBModel.Member.Purchase(purchase)
+            new BBModel.PurchaseTotal(purchase)
           deferred.resolve(purchases)
         , (err) ->
           deferred.reject(err)
