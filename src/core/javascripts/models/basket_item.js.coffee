@@ -132,19 +132,24 @@ angular.module('BB.Models').factory "BasketItemModel",
 
         if data.$has('product')
           data.$get('product').then (product) =>
-            @setProduct(product)
+            @setProduct(new BBModel.Product(product))
 
         if data.$has('package_item')
           data.$get('package_item').then (package_item) =>
-            @setPackageItem(package_item)
+            @setPackageItem(new BBModel.PackageItem(package_item))
 
         if data.$has('bulk_purchase')
           data.$get('bulk_purchase').then (bulk_purchase) =>
-            @setBulkPurchase(bulk_purchase)
+            @setBulkPurchase(new BBModel.BulkPurchase(bulk_purchase))
 
         if data.$has('deal')
           data.$get('deal').then (deal) =>
             @setDeal(new BBModel.Deal(deal))
+
+        if data.$has('pre_paid_booking')
+          data.$get('pre_paid_booking').then (pre_paid_booking) =>
+            @setPrepaidBooking(new BBModel.PrePaidBooking(pre_paid_booking))
+
 
         @clinic_id = data.clinic_id if data.clinic_id
 
@@ -1268,9 +1273,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * Apply a prepaid booking to BasketItem
     *
     ###
-    setPrepaidBooking: (prepaid_booking) ->
-      @prepaid_booking     = prepaid_booking
-      @pre_paid_booking_id = prepaid_booking.id
+    setPrepaidBooking: (pre_paid_booking) ->
+      @pre_paid_booking    = pre_paid_booking
+      @pre_paid_booking_id = pre_paid_booking.id
 
 
     ###**
