@@ -1,6 +1,4 @@
-angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log,
-    $rootScope, MemberLoginService, MemberBookingService, $compile,
-    $templateCache, ModalForm, BBModel, Dialog) ->
+angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $rootScope, MemberLoginService, MemberBookingService, $compile, $templateCache, ModalForm, BBModel, Dialog) ->
 
   controller = ($scope, $modal) ->
 

@@ -811,8 +811,8 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.status = @status if @status
       data.num_resources = parseInt(@num_resources) if @num_resources?
       data.product = @product
-      data.package_item = @package_item if @package_item
-      data.bulk_purchase = @bulk_purchase if @bulk_purchase
+      data.package_id = @package_item.id if @package_item
+      data.bulk_purchase_id = @bulk_purchase.id if @bulk_purchase
       data.external_purchase = @external_purchase
       data.deal = @deal if @deal
       data.recipient = @recipient if @deal && @recipient
@@ -1007,6 +1007,10 @@ angular.module('BB.Models').factory "BasketItemModel",
       start_datetime.minutes(@time.time)
       start_datetime
 
+
+    startDatetime: () ->
+      @start_datetime()
+
     ###**
     * @ngdoc method
     * @name end_datetime
@@ -1023,6 +1027,10 @@ angular.module('BB.Models').factory "BasketItemModel",
       end_datetime = moment(@date.date.toISODate())
       end_datetime.minutes(@time.time + duration)
       end_datetime
+
+
+    endDatetime: () ->
+      @end_datetime()
 
     ###**
     * @ngdoc method
@@ -1323,3 +1331,17 @@ angular.module('BB.Models').factory "BasketItemModel",
         return "#{@first_name} #{@last_name}"
       else if client
         return client.getName()
+
+
+    ###**
+    * @ngdoc method
+    * @name isTimeItem
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Indicates if the BasketItem is a time item (i.e. either an event
+    * or appointment booking)
+    *
+    * @returns {boolean}
+    ###
+    isTimeItem: () ->
+      return @service or @event
