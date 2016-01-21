@@ -1,7 +1,8 @@
-angular.module('BB.Services').factory "MemberPurchaseService", ($q, $rootScope, BBModel) ->
+angular.module('BBMember.Services').factory "MemberPurchaseService", ($q, $rootScope, BBModel) ->
 
   query: (member, params) ->
     params ||= {}
+     # TODO - need to find a a means to specify that the collection should be not cached, but the individual totals should be
     params["no_cache"] = true
     deferred = $q.defer()
     if !member.$has('purchase_totals')
