@@ -1007,6 +1007,10 @@ angular.module('BB.Models').factory "BasketItemModel",
       start_datetime.minutes(@time.time)
       start_datetime
 
+
+    startDatetime: () ->
+      @start_datetime()
+
     ###**
     * @ngdoc method
     * @name end_datetime
@@ -1023,6 +1027,10 @@ angular.module('BB.Models').factory "BasketItemModel",
       end_datetime = moment(@date.date.toISODate())
       end_datetime.minutes(@time.time + duration)
       end_datetime
+
+
+    endDatetime: () ->
+      @end_datetime()
 
     ###**
     * @ngdoc method
