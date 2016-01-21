@@ -100,11 +100,6 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
         items = items.filter (x) -> !x.disabled && !x.deleted
 
-      for item in items
-        if item.listed_durations && item.listed_durations.length == 1
-          item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
-        else
-          item.display_name = item.name
       # not all service lists need filtering. check for attribute first
       filterItems = if $attrs.filterServices is 'false' then false else true
 
@@ -166,8 +161,14 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
         services = (i.item for i in items when i.item?)
 
-        
+        for item in services
+          if item.listed_durations && item.listed_durations.length == 1
+            item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
+          else
+            item.display_name = item.name
+
         $scope.bookable_services = services
+
         $scope.bookable_items = items
         
         if services.length is 1 and !$scope.allowSinglePick
