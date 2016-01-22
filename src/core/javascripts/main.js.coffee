@@ -64,13 +64,20 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
 
-app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig) ->
+app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, $localStorage, AppConfig, StorageService) ->
   # add methods to the rootscope if they are applicable to whole app
   $rootScope.$log = $log
   $rootScope.$setIfUndefined = FormDataStoreService.setIfUndefined
 
   $rootScope.bb ||= {}
   $rootScope.bb.api_url = $sessionStorage.getItem("host")
+
+
+  # TODO store preference in storage service, storage service can return correct storage service based on the setting
+  # if $localStorage.getItem('bb_persist_login')
+  #   StorageService.useLocalStorage()
+  # else
+  #   StorageService.useSessionStorage()
 
   # add bits of IE8 support
   if ($bbug.support.opacity == false)
