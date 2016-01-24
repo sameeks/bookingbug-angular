@@ -1,5 +1,6 @@
 
-angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope, BBModel, $sessionStorage) ->
+angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope, BBModel, $sessionStorage, $localStorage) ->
+
   companyLogin: (company, params, form) ->
     deferred = $q.defer()
     company.$post('login', params, form).then (login) =>
@@ -26,6 +27,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
       deferred.reject(err)
     deferred.promise
 
+
   FBLogin: (company, prms) ->
     deferred = $q.defer()
     company.$post('facebook_login', {}, prms).then (login) =>
@@ -47,11 +49,13 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
       comp_promise.then (company) =>
         company = new BBModel.Company(company)
 
+
   memberQuery: (params) =>
     if params.member_id && params.company_id
       member_promise = halClient.$get(location.protocol + '//' + location.host + "/api/v1/#{params.company_id}/" + "members/" + params.member_id)
       member_promise.then (member) =>
         member = new BBModel.Member.Member(member)
+
 
   ssoLogin: (options, data) ->
     deferred = $q.defer()
@@ -66,16 +70,13 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     , (err) =>
       deferred.reject(err)
     deferred.promise
-
-      
+   
 
   # check if we're logged in as a member - but not an admin
   isLoggedIn: ->
     @checkLogin()
-    if $rootScope.member && (!$rootScope.user or $rootScope.user is undefined)
-      true
-    else
-      false
+    return $rootScope.member and (!$rootScope.user or $rootScope.user is undefined)
+
 
   setLogin: (member) ->
     auth_token = member.getOption('auth_token')
@@ -85,16 +86,22 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     $rootScope.member = member
     member
 
+
   member: () ->
     @checkLogin()
     $rootScope.member
 
+
   checkLogin: () ->
-    return if $rootScope.member
+    return true if $rootScope.member
 
     member = $sessionStorage.getItem("login")
     if member
-      $rootScope.member = halClient.createResource(member)
+      member = halClient.createResource(member)
+      $rootScope.member = new BBModel.Member.Member(member)
+      return true
+    else
+      return false
 
 
   logout: (options) ->
@@ -106,18 +113,17 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     options['root'] ||= ""
     url = options['root'] + "/api/v1/logout"
 
-    $sessionStorage.removeItem("login")
-    $sessionStorage.removeItem('auth_token')
     $sessionStorage.clear()
+    $localStorage.clear()
     
     halClient.$del(url, options, {}).then (logout) =>
-      $sessionStorage.removeItem("login")
-      $sessionStorage.removeItem('auth_token')
       $sessionStorage.clear()
+      $localStorage.clear()
       deferred.resolve(true)
     , (err) =>
       deferred.reject(err)
     deferred.promise
+
 
   FBLogout: (options) ->
     $sessionStorage.removeItem("fb_user")

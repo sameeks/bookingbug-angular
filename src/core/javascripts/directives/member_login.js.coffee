@@ -1,4 +1,4 @@
-angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService, PathSvc, ValidatorService) ->
+angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService, PathSvc, ValidatorService, $localStorage) ->
   restrict: 'A'
   templateUrl : (element, attrs) ->
     if attrs.bbCustomLoginForm?
@@ -14,10 +14,7 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCach
 
     $rootScope.connection_started.then () ->
 
-      if $sessionStorage.getItem("login")
-        session_member = $sessionStorage.getItem("login")
-        session_member = halClient.createResource(session_member)
-        $rootScope.member = new BBModel.Member.Member session_member
+      if LoginService.checkLogin()
         $scope.setClient($rootScope.member)
         if $scope.bb.destination
           $scope.redirectTo($scope.bb.destination)
@@ -55,6 +52,9 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCach
 
     handleLogin = (member) ->
       member = LoginService.setLogin(member)
+      if $scope.login_form.persist_login
+        auth_token = member.getOption('auth_token')
+        $localStorage.setItem("auth_token", auth_token)
       $scope.setClient(member)
       if $scope.bb.destination
         $scope.redirectTo($scope.bb.destination)
