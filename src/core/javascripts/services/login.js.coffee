@@ -153,3 +153,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
         deferred.reject(err)
       deferred.promise
 
+  persistLogin: (member) ->
+    auth_token = member.getOption('auth_token')
+    $localStorage.setItem("auth_token", auth_token)
+

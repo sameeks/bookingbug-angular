@@ -33,7 +33,7 @@ angular.module('BB.Directives').directive 'bbLogin', () ->
   controller : 'Login'
 
 
-angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, LoginService, $q, ValidatorService, BBModel, $location, AlertService, $localStorage) ->
+angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, LoginService, $q, ValidatorService, BBModel, $location, AlertService) ->
 
   $scope.controller = "public.controllers.Login"
   $scope.validator = ValidatorService
@@ -125,8 +125,7 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
           $scope.setClient(member)
           AlertService.raise('PASSWORD_RESET_SUCESS')
           if $scope.login_form.persist_login
-            auth_token = member.getOption('auth_token')
-            $localStorage.setItem("auth_token", auth_token)
+            LoginService.persistLogin(member)
       , (err) =>
         $scope.error = err
         AlertService.raise('PASSWORD_RESET_FAILED')
