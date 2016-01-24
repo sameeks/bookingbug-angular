@@ -80,7 +80,6 @@ app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $docu
     document.createElement('footer')
 
 
-
 angular.module('BB.Services', [
   'ngResource',
   'ngSanitize',
