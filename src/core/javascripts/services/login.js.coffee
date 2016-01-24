@@ -78,12 +78,13 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     return $rootScope.member and (!$rootScope.user or $rootScope.user is undefined)
 
 
-  setLogin: (member) ->
+  setLogin: (member, persist) ->
     auth_token = member.getOption('auth_token')
     member = new BBModel.Member.Member(member)
     $sessionStorage.setItem("login", member.$toStore())
     $sessionStorage.setItem("auth_token", auth_token)
     $rootScope.member = member
+    $localStorage.setItem("auth_token", auth_token) if persist
     member
 
 
@@ -145,15 +146,10 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
       deferred = $q.defer()
       member.$post('update_password', {}, params).then (login) =>
         login.$get('member').then (member) =>
-          @setLogin(member)
+          @setLogin(member, params.persist_login)
           deferred.resolve(member)
         , (err) =>
           deferred.reject(err)
       , (err) =>
         deferred.reject(err)
       deferred.promise
-
-  persistLogin: (member) ->
-    auth_token = member.getOption('auth_token')
-    $localStorage.setItem("auth_token", auth_token)
-

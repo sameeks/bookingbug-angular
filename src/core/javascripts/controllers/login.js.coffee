@@ -120,12 +120,10 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
   $scope.updatePassword = (new_password, confirm_new_password) ->
     AlertService.clear()
     if $rootScope.member and new_password and confirm_new_password and (new_password is confirm_new_password)
-      LoginService.updatePassword($rootScope.member, {new_password: new_password, confirm_new_password: confirm_new_password}).then (member) =>
+      LoginService.updatePassword($rootScope.member, {new_password: new_password, confirm_new_password: confirm_new_password, persist_login: $scope.login_form.persist_login}).then (member) =>
         if member
           $scope.setClient(member)
           AlertService.raise('PASSWORD_RESET_SUCESS')
-          if $scope.login_form.persist_login
-            LoginService.persistLogin(member)
       , (err) =>
         $scope.error = err
         AlertService.raise('PASSWORD_RESET_FAILED')

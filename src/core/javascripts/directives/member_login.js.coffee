@@ -51,9 +51,7 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCach
 
 
     handleLogin = (member) ->
-      member = LoginService.setLogin(member)
-      if $scope.login_form.persist_login
-        LoginService.persistLogin(member)
+      member = LoginService.setLogin(member, $scope.login_form.persist_login)
       $scope.setClient(member)
       if $scope.bb.destination
         $scope.redirectTo($scope.bb.destination)
