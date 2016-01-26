@@ -94,7 +94,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
               checkIfWaitlistBookings(bookings)
 
               for booking in $scope.bookings
-                booking.getAnswersPromise().then (answers) ->
+                booking.$getAnswers().then (answers) ->
                   booking.answers = answers
             , (err) ->
               $scope.setLoaded $scope
