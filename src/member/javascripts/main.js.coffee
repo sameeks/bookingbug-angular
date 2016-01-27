@@ -33,12 +33,13 @@ angular.module('BBMember.Controllers', [
   'ngSanitize'
 ])
 
-angular.module('BBMember.Models', []).service 'BBMemberModel' , ($q, $injector) ->
+angular.module('BB.Models', []).service 'BBModel' , ($q, $injector) ->
 
-angular.module('BBMember.Models').run ($q, $injector, BBMemberModel) ->
+angular.module('BB.Models').run ($q, $injector, BBModel) ->
   models = ['Member', 'Booking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand']
-
+  mfuncs = {}
   for model in models
-    BBMemberModel[model] = $injector.get("Member." + model + "Model")
+    mfuncs[model] = $injector.get("Member." + model + "Model")
+  BBModel['Member'] = mfuncs
 
 angular.module('BBMemberMockE2E', ['BBMember', 'BBAdminMockE2E'])

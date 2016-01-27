@@ -1,4 +1,4 @@
-angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
+angular.module('BBAdmin.Services').factory 'AdminPersonService',  ($q, $window,
     $rootScope, halClient, SlotCollections, BBModel, LoginService, $log) ->
 
   query: (params) ->

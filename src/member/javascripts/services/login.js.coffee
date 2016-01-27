@@ -1,5 +1,5 @@
 angular.module('BBMember.Services').factory "MemberLoginService", ($q, halClient,
-    $rootScope, BBMemberModel, $sessionStorage) ->
+    $rootScope, BBModel, $sessionStorage) ->
  
   login: (form, options) ->
     defer = $q.defer()
@@ -8,7 +8,7 @@ angular.module('BBMember.Services').factory "MemberLoginService", ($q, halClient
     halClient.$post(url, options, form).then (login) ->
       if login.$has('member')
         login.$get('member').then (member) ->
-          member = new BBMemberModel.Member(member)
+          member = new BBModel.Member.Member(member)
           auth_token = member._data.getOption('auth_token')
           $sessionStorage.setItem("login", member.$toStore())
           $sessionStorage.setItem("auth_token", auth_token)

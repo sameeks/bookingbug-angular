@@ -1,5 +1,5 @@
 
-angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope, BBMemberModel, $sessionStorage) ->
+angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope, BBModel, $sessionStorage) ->
   companyLogin: (company, params, form) ->
     deferred = $q.defer()
     company.$post('login', params, form).then (login) =>
@@ -30,7 +30,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     deferred = $q.defer()
     company.$post('facebook_login', {}, prms).then (login) =>
       login.$get('member').then (member) =>
-        member = new BBMemberModel.Member(member)
+        member = new BBModel.Member.Member(member)
         $sessionStorage.setItem("fb_user", true)
         @setLogin(member)
         deferred.resolve(member);
@@ -51,7 +51,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     if params.member_id && params.company_id
       member_promise = halClient.$get(location.protocol + '//' + location.host + "/api/v1/#{params.company_id}/" + "members/" + params.member_id)
       member_promise.then (member) =>
-        member = new BBMemberModel.Member(member)
+        member = new BBModel.Member.Member(member)
 
   ssoLogin: (options, data) ->
     deferred = $q.defer()
@@ -60,7 +60,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     halClient.$post(url, {}, data).then (login) =>
       params = {auth_token: login.auth_token}
       login.$get('member').then (member) =>
-        member = new BBMemberModel.Member(member)
+        member = new BBModel.Member.Member(member)
         @setLogin(member)
         deferred.resolve(member)
     , (err) =>
@@ -79,7 +79,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
 
   setLogin: (member) ->
     auth_token = member.getOption('auth_token')
-    member = new BBMemberModel.Member(member)
+    member = new BBModel.Member.Member(member)
     $sessionStorage.setItem("login", member.$toStore())
     $sessionStorage.setItem("auth_token", auth_token)
     $rootScope.member = member
