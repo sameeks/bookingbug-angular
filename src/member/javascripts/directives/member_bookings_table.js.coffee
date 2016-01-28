@@ -13,7 +13,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log,
 
     $scope.edit = (id) ->
       booking = _.find $scope.booking_models, (b) -> b.id == id
-      booking.getAnswersPromise().then (answers) ->
+      booking.$getAnswers().then (answers) ->
         for answer in answers.answers
           booking["question#{answer.question_id}"] = answer.value
         ModalForm.edit

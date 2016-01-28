@@ -29,9 +29,19 @@ angular.module('BBAdmin.Controllers', [
 ])
 
 
-adminapp.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig, AdminLoginService) ->
+adminapp.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $injector, $sessionStorage, AppConfig, AdminLoginService, BBModel) ->
   # add methods to the rootscope if they are applicable to whole app
+  models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
+    'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup', 'Event', 'Queuer', 'ClientQueue', 'Clinic']
+
+  afuncs = {}
+  for model in models
+    afuncs[model] = $injector.get("Admin." + model + "Model")
+  BBModel['Admin'] = afuncs
+  
   AdminLoginService.checkLogin().then () ->
     if $rootScope.user && $rootScope.user.company_id
       $rootScope.bb ||= {}
       $rootScope.bb.company_id = $rootScope.user.company_id
+
+  

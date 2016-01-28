@@ -74,7 +74,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           if a.question_text && a.question_text == q
             return a.value
       else
-        @getAnswersPromise()
+        @$getAnswers()
       return null
 
 

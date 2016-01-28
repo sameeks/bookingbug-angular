@@ -9,7 +9,7 @@ angular.module('BBMember.Services').factory "MemberLoginService", ($q, halClient
       if login.$has('member')
         login.$get('member').then (member) ->
           member = new BBModel.Member.Member(member)
-          auth_token = member.getOption('auth_token')
+          auth_token = member._data.getOption('auth_token')
           $sessionStorage.setItem("login", member.$toStore())
           $sessionStorage.setItem("auth_token", auth_token)
           defer.resolve(member)

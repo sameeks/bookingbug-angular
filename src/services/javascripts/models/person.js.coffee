@@ -216,16 +216,6 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     *
     * @returns {Promise} Returns a promise that resolves to the filtered collection of people.
     ###
-    @query: (company, page, per_page, filter_by_fields, order_by, order_by_reverse) ->
-      AdminPersonService.query
-        company: company
-        page: page
-        per_page: per_page
-        filter_by_fields: filter_by_fields
-        order_by: order_by
-        order_by_reverse: order_by_reverse
-
-
-angular.module('BB.Models').factory 'AdminPerson', ($injector) ->
-  $injector.get('Admin.PersonModel')
+    @query: (params) ->
+      AdminPersonService.query(params)
 
