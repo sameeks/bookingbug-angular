@@ -28,9 +28,9 @@ angular.module('BBAdmin.Controllers', [
   'ngSanitize'
 ])
 
-angular.module('BBAdmin.Models', []).service 'BBModel' , ($q, $injector) ->
 
 adminapp.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $injector, $sessionStorage, AppConfig, AdminLoginService, BBModel) ->
+  # add methods to the rootscope if they are applicable to whole app
   models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
     'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup', 'Event', 'Queuer', 'ClientQueue', 'Clinic']
 
@@ -38,8 +38,10 @@ adminapp.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, 
   for model in models
     afuncs[model] = $injector.get("Admin." + model + "Model")
   BBModel['Admin'] = afuncs
-  # add methods to the rootscope if they are applicable to whole app
+  
   AdminLoginService.checkLogin().then () ->
     if $rootScope.user && $rootScope.user.company_id
       $rootScope.bb ||= {}
       $rootScope.bb.company_id = $rootScope.user.company_id
+
+  

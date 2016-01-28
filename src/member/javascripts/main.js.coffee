@@ -22,6 +22,8 @@ angular.module('BBMember.Directives', [])
 
 angular.module('BBMember.Filters', [])
 
+angular.module('BBMember.Models', [])
+
 angular.module('BBMember.Services', [
   'ngResource',
   'ngSanitize',
@@ -33,7 +35,6 @@ angular.module('BBMember.Controllers', [
   'ngSanitize'
 ])
 
-angular.module('BB.Models', []).service 'BBModel' , ($q, $injector) ->
 
 angular.module('BB.Models').run ($q, $injector, BBModel) ->
   models = ['Member', 'Booking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand']
