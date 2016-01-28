@@ -56,4 +56,5 @@ angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCach
       if $scope.bb.destination
         $scope.redirectTo($scope.bb.destination)
       else
+        $scope.skipThisStep()
         $scope.decideNextPage()
