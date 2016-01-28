@@ -1,4 +1,4 @@
-<div bb-basket-list class="modal-content bb-basket-mini"> 
+<div bb-basket-list class="modal-content bb-basket-mini">
 
   <div class="modal-header">
     <button type="button" class="close" ng-click="cancel()">&times;</button>
@@ -21,7 +21,7 @@
             {{ item.service_name }}
           </td>
           <td>
-            {{ item.date.date | datetime: "ddd Do MMM":false}} at {{ item.date.date | datetime: "h:mma":false}} for {{ item.duration | time_period }}
+            {{ item.date.date | datetime: "ddd Do MMM"}} at {{ item.date.date | datetime: "h:mma"}} for {{ item.duration | time_period }}
           </td>
           <td class="text-center">
             <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></span>

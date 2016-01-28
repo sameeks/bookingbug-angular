@@ -186,7 +186,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate, $anchorScroll) ->
+    SettingsService, UriTemplate, $anchorScroll, $localStorage) ->
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -338,7 +338,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.client_defaults.first_name =  match[1]
         $scope.bb.client_defaults.last_name = match[2] if match[2]?
 
-    if prms.clear_member      
+    if prms.clear_member
       $scope.bb.clear_member = prms.clear_member
       $sessionStorage.removeItem('login')
 
@@ -1032,7 +1032,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   restoreBasket = () ->
     restore_basket_defer = $q.defer()
     $scope.quickEmptybasket().then () ->
-      auth_token = $sessionStorage.getItem('auth_token')
+      auth_token = $localStorage.getItem('auth_token') or $sessionStorage.getItem('auth_token')
       href = $scope.bb.api_url +
         '/api/v1/status{?company_id,affiliate_id,clear_baskets,clear_member}'
       params =
@@ -1086,6 +1086,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over
     $scope.company = company
     $scope.bb.item_defaults.company = $scope.bb.company
+
+    SettingsService.setCountryCode($scope.bb.company.country_code)
 
     if company.$has('settings')
       company.getSettings().then (settings) =>

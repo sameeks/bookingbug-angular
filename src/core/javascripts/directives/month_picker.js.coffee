@@ -2,11 +2,11 @@
 angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) ->
   restrict: 'AE'
   replace: true
-  scope : true
-  require : ['^?bbEvents', '^?bbMultiCompanyEvents']
-  templateUrl : (element, attrs) ->
+  scope: true
+  require: ['^?bbEvents', '^?bbMultiCompanyEvents']
+  templateUrl: (element, attrs) ->
     PathSvc.directivePartial "_month_picker"
-  link : (scope, el, attrs) ->
+  link: (scope, el, attrs) ->
 
     scope.picker_settings = scope.$eval(attrs.bbMonthPicker) or {}
 

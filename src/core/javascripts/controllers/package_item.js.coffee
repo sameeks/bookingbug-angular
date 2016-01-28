@@ -51,15 +51,14 @@ angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, 
   $scope.controller = "public.controllers.PackageItem"
 
   $rootScope.connection_started.then ->
-    if $scope.bb.company
-      $scope.init($scope.bb.company)
-  , (err) ->
-    $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    $scope.init($scope.bb.company) if $scope.bb.company
+
 
   $scope.init = (company) ->
     $scope.booking_item ||= $scope.bb.current_item
-    PackageItemService.query(company).then (package_item) ->
-      $scope.packages = package_item
+    PackageItemService.query(company).then (package_items) ->
+      $scope.packages = package_items
+
 
   ###**
   * @ngdoc method
@@ -71,7 +70,6 @@ angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, 
   * @param {object} package The Service or BookableItem to select
   * @param {string=} route A specific route to load
   ###
-
   $scope.selectItem = (item, route) ->
     if $scope.$parent.$has_page_control
       $scope.package = item
@@ -81,6 +79,7 @@ angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, 
       $scope.decideNextPage(route)
       true
 
+
   ###**
   * @ngdoc method
   * @name setReady
@@ -88,13 +87,13 @@ angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, 
   * @description
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
   ###
-
   $scope.setReady = () ->
     if $scope.package
       $scope.booking_item.setPackageItem($scope.package)
       return true
     else
       return false
+
 
   ###**
   * @ngdoc method
@@ -104,8 +103,6 @@ angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, 
   * Query all of the services included in the package
   * @params {array} item.service_list an array of services within the item
   ###
-
-
   $scope.getPackageServices = (item) ->
     if item && !item.service_list
       item.service_list = []
@@ -115,5 +112,4 @@ angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, 
       return true
     else
       return false
-
 

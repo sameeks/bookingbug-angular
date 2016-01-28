@@ -1,20 +1,20 @@
-angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService) ->
+angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService, PathSvc, ValidatorService) ->
   restrict: 'A'
-  template: """
-<form name="login_form" ng-submit="submit(login_form)" sf-schema="schema"
-sf-form="form" sf-model="login_form" sf-options="{feedback: false}"
-ng-if="schema && form"></form>
-"""
+  templateUrl : (element, attrs) ->
+    if attrs.bbCustomLoginForm?
+      PathSvc.directivePartial "_member_login_form"
+    else
+      PathSvc.directivePartial "_member_login_schema_form"
+
   controller: ($scope, $element, $attrs) ->
 
     $scope.login_form = {}
 
+    $scope.validator = ValidatorService
+
     $rootScope.connection_started.then () ->
 
-      if $sessionStorage.getItem("login")
-        session_member = $sessionStorage.getItem("login")
-        session_member = halClient.createResource(session_member)
-        $rootScope.member = new BBModel.Member.Member session_member
+      if LoginService.checkLogin()
         $scope.setClient($rootScope.member)
         if $scope.bb.destination
           $scope.redirectTo($scope.bb.destination)
@@ -44,14 +44,14 @@ ng-if="schema && form"></form>
           login.$get('member').then (member) ->
             handleLogin(member)
       , (err) ->
-        if err.data.error == "Account has been disabled"
+        if err.data.error is "Account has been disabled"
           AlertService.raise('ACCOUNT_DISABLED')
         else
           AlertService.raise('LOGIN_FAILED')
 
 
     handleLogin = (member) ->
-      member = LoginService.setLogin(member)
+      member = LoginService.setLogin(member, $scope.login_form.persist_login)
       $scope.setClient(member)
       if $scope.bb.destination
         $scope.redirectTo($scope.bb.destination)

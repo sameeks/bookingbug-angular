@@ -1,9 +1,6 @@
 'use strict';
 
-# Directives
-app = angular.module 'BB.Directives'
-
-app.directive 'bbContent', ($compile) ->
+angular.module('BB.Directives').directive 'bbContent', ($compile) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
@@ -17,8 +14,7 @@ app.directive 'bbContent', ($compile) ->
 
     $compile(element)(scope)
 
-
-app.directive 'bbLoading', ($compile) ->
+angular.module('BB.Directives').directive 'bbLoading', ($compile) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
@@ -28,8 +24,7 @@ app.directive 'bbLoading', ($compile) ->
     $compile(element)(scope)
     return
 
-
-app.directive 'bbWaitFor', ($compile) ->
+angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
   transclude: false,
   restrict: 'A',
   priority: 800,
@@ -40,14 +35,11 @@ app.directive 'bbWaitFor', ($compile) ->
     prom = scope.$eval(attrs.bbWaitFor)
     prom.then () ->
       scope[name] = true
-#    element.attr('bb-wait-for',null)
-#    $compile(element)(scope)
     return
-
 
 # bbScrollTo
 # Allows you to scroll to a specific element
-app.directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, SettingsService) ->
+angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, SettingsService) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
@@ -83,10 +75,9 @@ app.directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $w
                 scrollTop: scroll_to_element.offset().top - SettingsService.getScrollOffset()
                 , bb_transition_time
 
-
 # bbSlotGrouper
 # group time slots together based on a given start time and end time
-app.directive  'bbSlotGrouper', () ->
+angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
   restrict: 'A'
   scope: true
   link: (scope, element, attrs) ->
@@ -97,11 +88,10 @@ app.directive  'bbSlotGrouper', () ->
       scope.grouped_slots.push(slot) if slot.time >= scope.$eval(attrs.startTime) && slot.time < scope.$eval(attrs.endTime)
     scope.has_slots = scope.grouped_slots.length > 0
 
-
 # bbForm
 # Adds behaviour to select first invalid input 
 # TODO more all form behaviour to this directive, initilising options as parmas
-app.directive 'bbForm', ($bbug, $window, SettingsService) ->
+angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService) ->
   restrict: 'A'
   require: '^form'
   link: (scope, elem, attrs, ctrls) ->
@@ -135,10 +125,9 @@ app.directive 'bbForm', ($bbug, $window, SettingsService) ->
         return false
       return true
 
-
 # bbAddressMap
 # Adds behaviour to select first invalid input 
-app.directive 'bbAddressMap', ($document) ->
+angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
   restrict: 'A'
   scope: true
   replace: true
@@ -173,7 +162,6 @@ app.directive 'bbAddressMap', ($document) ->
         }
       }
 
-
 angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
   restrict: 'A'
   scope: true
@@ -197,8 +185,6 @@ angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
 
       $scope.has_questions = _.pluck($scope.questions, 'question').length > 0
 
-
-
 angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
   restrict: 'A'
   scope: true
@@ -209,6 +195,32 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
       height = elem.height()
       modal_padding = 200
       if height > $bbug(window).height()
-        new_height = $(window).height() - modal_padding
+        new_height = $bbug(window).height() - modal_padding
         elem.attr( 'style', 'height: ' + (new_height) + 'px; overflow-y: scroll;' )
         deregisterWatcher()
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbBackgroundImage
+* @restrict A
+* @scope true
+*
+* @description
+* Adds a background-image to an element
+
+* @param
+* {string} url
+*
+* @example
+* <div bb-background-image='images/example.jpg'></div>
+####
+angular.module('BB.Directives').directive('bbBackgroundImage', () ->
+    restrict: 'A'
+    scope: true
+    link: (scope, el, attrs) ->     
+      return if !attrs.bbBackgroundImage or attrs.bbBackgroundImage == ""
+      killWatch = scope.$watch attrs.bbBackgroundImage, (new_val, old_val) ->       
+        if new_val          
+          killWatch()
+          el.css('background-image', 'url("' + new_val + '")')
+)
