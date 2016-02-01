@@ -127,16 +127,17 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @description
     * Match url to step
     *
-    * @returns {object} The returned null
+    * @returns {integer} Returns the step number
     ###
+
     matchURLToStep: () ->
       return null if !@routeFormat
       path = $location.path()
-
-      for step,_i in @steps
-        return step.number if step.url && step.url == path
-
-      return null
+      step = _.findWhere(@allSteps, {page: path.replace(/\//g, '')})
+      if step
+        return step.number
+      else
+        return null
 
     ###**
     * @ngdoc method

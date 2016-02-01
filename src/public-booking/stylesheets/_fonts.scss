@@ -9,6 +9,18 @@
   font-weight: normal;
   font-style: normal;
 }
+// \/\/\/\/\/\/\/\/\/\/\/
+// FontAwesome Icons
+// \/\/\/\/\/\/\/\/\/\/\/
+@font-face{
+  font-family: 'FontAwesome';
+  src: url('fonts/fontawesome-webfont.woff'); 
+  src: url('fonts/fontawesome-webfont.woff2') format('woff2'), 
+       url('fonts/fontawesome-webfont.eot'),
+       url('fonts/FontAwesome.otf'),
+       url('fonts/fontawesome-webfont.ttf') format('truetype'),
+       url('fonts/fontawesome-webfont.svg#svgFontName') format('svg');
+}
 
 .bb-icon {
   font-family: 'bb-icons';

@@ -532,7 +532,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     if !$scope.bb.current_item.time
       AlertService.raise('TIME_SLOT_NOT_SELECTED')
       return false
-    else if $scope.bb.moving_booking && $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime)
+    else if $scope.bb.moving_booking && $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime) && ($scope.current_item.person_name == $scope.current_item.person.name)
       AlertService.raise('APPT_AT_SAME_TIME')
       return false
     else if $scope.bb.moving_booking
