@@ -1,0 +1,29 @@
+// =============================================
+// Mixin to quickly generate button schemas
+// =============================================
+@mixin button($bc, $c, $bch, $ch){
+ transition: all .2s;
+ background-color: $bc;
+ border-color: $bc;
+ color: $c; 
+ &:hover, &:active, &:focus{
+   background-color: $bch;
+   border-color: $bch;
+   color: $ch;
+ }
+ &:disabled{
+  background: darken($bc, 10%);
+  opacity: .65;
+ }
+}
+
+// =========================================================
+// Mixin to add vendor prefixes
+// Note: gulp-autoprefixer is a much better tool for this
+// =========================================================
+@mixin prefix($prop, $val){
+ $prefixes: '' '-webkit-' '-moz-' '-ms-' '-o-' '-khtml-';
+ @each $item in $prefixes{
+   #{$item}#{$prop}:#{$val};
+ }
+}
