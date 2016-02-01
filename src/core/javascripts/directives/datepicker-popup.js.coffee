@@ -75,6 +75,11 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
         scope.opened = true
       ,
 
+    # completely disable focus for the input, but only if input is readonly
+    $bbug(element).on 'focus', () ->
+      if($(@).attr("readonly"))
+        @blur()
+
     # call the function which handles the date change
     # on-date-change="selectedDateChanged()"
     callDateHandler = (date) ->
