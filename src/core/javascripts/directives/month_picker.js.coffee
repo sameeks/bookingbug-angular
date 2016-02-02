@@ -9,6 +9,7 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
   link: (scope, el, attrs) ->
 
     scope.picker_settings = scope.$eval(attrs.bbMonthPicker) or {}
+    scope.picker_settings.months_to_show = scope.picker_settings.months_to_show or 3
 
     stopWatch = scope.$watch attrs.dayData, (dates) ->
       if dates
@@ -75,7 +76,7 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
       $scope.slick_config =
         nextArrow: ".month-next",
         prevArrow: ".month-prev",
-        slidesToShow: if $scope.months.length >= 3 then 3 else $scope.months.length,
+        slidesToShow: if $scope.months.length >= $scope.picker_settings.months_to_show then $scope.picker_settings.months_to_show else $scope.months.length,
         infinite: false,
         responsive: [
           {breakpoint: 1200, settings: {slidesToShow: if $scope.months.length >= 2 then 2 else $scope.months.length}},
