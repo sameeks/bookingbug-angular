@@ -25,6 +25,11 @@
 angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) ->
 
   class EventChain extends BaseModel
+
+    constructor: (data) ->
+      super
+      @capacity_view = setCapacityView(@capacity_view)
+
     name: () ->
       @_data.name
 
@@ -99,3 +104,21 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
       if @tickets
         for @ticket in @tickets
           @ticket.max_spaces = @spaces
+
+
+    ###**
+    * @ngdoc method
+    * @name setCapacityView
+    * @methodOf BB.Models:EventChain
+    * @description
+    * Sets the capacity_view (referred to as the "spaces view" in admin console) to a more helpful String
+    * @returns {String} code for the capacity_view
+    ###
+    setCapacityView = (capacity_view) ->
+      switch capacity_view
+        when 0 then capacity_view_str = "DO_NOT_DISPLAY"
+        when 1 then capacity_view_str = "NUM_SPACES"
+        when 2 then capacity_view_str = "NUM_SPACES_LEFT"
+        when 3 then capacity_view_str = "NUM_SPACES_AND_SPACES_LEFT"
+        else capacity_view_str = "NUM_SPACES_AND_SPACES_LEFT"
+      return capacity_view_str
