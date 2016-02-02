@@ -237,9 +237,9 @@ angular.module('BB.Directives').directive('bbBackgroundImage', () ->
 * @attribute ticket-type-singular
 * {String} Custom name for the ticket
 * @example
-* <div bb-capacity-view='event' ticket-type-singular='seat'></div>
-* @example_view
-* 5 of 10 seats available
+* <span bb-capacity-view='event' ticket-type-singular='seat'></span>
+* @example_result
+* <span bb-capacity-view='event' ticket-type-singular='seat' class='ng-binding'>5 of 10 seats available</span>
 ####
 angular.module('BB.Directives').directive('bbCapacityView', () ->
   restrict: 'A'
