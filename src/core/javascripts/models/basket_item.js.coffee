@@ -815,7 +815,6 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.qty = @qty   
       data.status = @status if @status
       data.num_resources = parseInt(@num_resources) if @num_resources?
-      data.product = @product
       data.package_id = @package_item.id if @package_item
       data.bulk_purchase_id = @bulk_purchase.id if @bulk_purchase
       data.external_purchase = @external_purchase
@@ -826,7 +825,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.is_coupon = @is_coupon
       data.attachment_id = @attachment_id if @attachment_id
       data.vouchers = @deal_codes if @deal_codes
-      data.product_id = @product_id if @product_id
+      data.product_id = @product.id if @product
 
       data.email = @email if @email
       data.first_name = @first_name if @first_name
