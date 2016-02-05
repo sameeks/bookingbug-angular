@@ -439,6 +439,7 @@ angular.module('BB.Models').factory "BasketItemModel",
               a=_.find(@questions, (c) -> c.id == q.id)
               if a and q.answer is undefined
                 q.answer = a.answer
+            @setAskedQuestions()
           if default_questions
             @item_details.setAnswers(default_questions)
             @setAskedQuestions()  # make sure the item knows the questions were all answered
@@ -799,7 +800,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.settings = @settings
       data.settings ||= {}
       data.settings.earliest_time = @earliest_time if @earliest_time
-      data.questions = @item_details.getPostData() if @item_details #&& @asked_questions
+      data.questions = @item_details.getPostData() if @item_details && @asked_questions
       data.move_item_id = @move_item_id if @move_item_id
       data.move_item_id = @srcBooking.id if @srcBooking
       data.service_id = @service.id if @service
