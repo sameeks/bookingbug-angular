@@ -329,9 +329,9 @@ angular.module('BB.Services').factory "BB.Service.products", ($q, BBModel) ->
     deferred = $q.defer()
     resource.$get('products').then (items) =>
       models = []
-      for i in items
+      for i, index in items
         cat = new BBModel.Product(i)
-        cat.order ||= _i
+        cat.order ||= index
         models.push(cat)
       deferred.resolve(models)
     , (err) =>
