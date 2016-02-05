@@ -777,10 +777,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       if route == 'none'
         return
       else
-        if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          $scope.showPage('confirmation')
-        else
-          return $scope.showPage(route)
+        # if $scope.bb.total && $scope.bb.payment_status == 'complete'
+        #   $scope.showPage('confirmation')
+        # else
+        return $scope.showPage(route)
 
     # do we have a pre-set route...
     if $scope.bb.nextSteps && $scope.bb.current_page && $scope.bb.nextSteps[$scope.bb.current_page] && !$scope.bb.routeSteps
