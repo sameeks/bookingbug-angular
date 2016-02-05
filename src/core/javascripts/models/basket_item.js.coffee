@@ -131,23 +131,33 @@ angular.module('BB.Models').factory "BasketItemModel",
           @attachment_id = data.attachment_id
 
         if data.$has('product')
-          data.$get('product').then (product) =>
+          promise = data.$get('product')
+          @promises.push(promise)
+          promise.then (product) =>
             @setProduct(new BBModel.Product(product))
 
         if data.$has('package_item')
-          data.$get('package_item').then (package_item) =>
+          promise = data.$get('package_item')
+          @promises.push(promise)
+          promise.then (package_item) =>
             @setPackageItem(new BBModel.PackageItem(package_item))
 
         if data.$has('bulk_purchase')
-          data.$get('bulk_purchase').then (bulk_purchase) =>
+          promise = data.$get('bulk_purchase')
+          @promises.push(promise)
+          promise.then (bulk_purchase) =>
             @setBulkPurchase(new BBModel.BulkPurchase(bulk_purchase))
 
         if data.$has('deal')
-          data.$get('deal').then (deal) =>
+          promise = data.$get('deal')
+          @promises.push(promise)
+          promise.then (deal) =>
             @setDeal(new BBModel.Deal(deal))
 
         if data.$has('pre_paid_booking')
-          data.$get('pre_paid_booking').then (pre_paid_booking) =>
+          promise = data.$get('pre_paid_booking')
+          @promises.push(promise)
+          promise.then (pre_paid_booking) =>
             @setPrepaidBooking(new BBModel.PrePaidBooking(pre_paid_booking))
 
 
