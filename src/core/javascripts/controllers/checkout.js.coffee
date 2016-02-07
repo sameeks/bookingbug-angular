@@ -8,7 +8,7 @@
 * @scope true
 *
 * @description
-* Loads a list of checkouts for the currently in scope company
+* Check out the basket
 *
 * <pre>
 * restrict: 'AE'
@@ -34,7 +34,7 @@ angular.module('BB.Directives').directive 'bbCheckout', () ->
   controller : 'Checkout'
 
 
-angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $attrs, BasketService, $q, $location, $window, $bbug, FormDataStoreService, $timeout) ->
+angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $attrs, BasketService, $q, $location, $window, FormDataStoreService, $timeout, PrintService) ->
   $scope.controller = "public.controllers.Checkout"
   $scope.notLoaded $scope
 
@@ -76,14 +76,14 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
   * @methodOf BB.Directives:bbCheckout
   * @description
   * Print booking details using print_purchase.html template
+  * NOTE: This method is deprecated - use window.print or $scope.printElement 
   *
   ###
-  # Deprecated - use window.print or $scope.printElement
-  # Print booking details using print_purchase.html template
   $scope.print = () =>
     $window.open($scope.bb.partial_url+'print_purchase.html?id='+$scope.total.long_id,'_blank',
                 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0')
     return true
+
 
   ###**
   * @ngdoc method
@@ -92,33 +92,8 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
   * @description
   * Print by creating popup containing the contents of the specified element
   *
-  * @param {integer} id The id of the specified element
+  * @param {string} id The id of the specified element
   * @param {string} stylesheet The stylesheet of popup
   ###
-  # Print by creating popup containing the contents of the specified element
-  # TODO move print methods to a service
   $scope.printElement = (id, stylesheet) ->
-    data = $bbug('#'+ id).html()
-    # window.open(URL,name,specs,replace)
-    # IE8 fix: URL and name params are deliberately left as blank
-    # http://stackoverflow.com/questions/710756/ie8-var-w-window-open-message-invalid-argument
-    mywindow = $window.open('', '', 'height=600,width=800')
-
-    $timeout () ->
-      mywindow.document.write '<html><head><title>Booking Confirmation</title>'
-
-      mywindow.document.write('<link rel="stylesheet" href="' + stylesheet + '" type="text/css" />') if stylesheet
-      mywindow.document.write '</head><body>'
-      mywindow.document.write data
-      mywindow.document.write '</body></html>'
-      #mywindow.document.close()
-
-      $timeout () ->
-        mywindow.document.close()
-        # necessary for IE >= 10
-        mywindow.focus()
-        # necessary for IE >= 10
-        mywindow.print()
-        mywindow.close()
-      , 100
-    , 2000
+    PrintService.printElement(id, stylesheet)
