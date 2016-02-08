@@ -237,7 +237,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
       x.password = @password
       x.notifications = @notifications
       x.member_level_id = @member_level_id if @member_level_id
-      x.send_welcome_email = @send_welcome_email if @send_welcome_email
+      x.send_welcome_email = @send_welcome_email if _.isBoolean(@send_welcome_email)
       x.default_company_id = @default_company_id if @default_company_id
 
       if @mobile
