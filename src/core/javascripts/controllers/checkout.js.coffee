@@ -58,6 +58,8 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
         if !$scope.options.disable_confirmation
           $scope.skipThisStep()
           $scope.decideNextPage()
+      else
+        $scope.payment_required = true
 
       $scope.checkoutSuccess = true
       $scope.setLoaded $scope
