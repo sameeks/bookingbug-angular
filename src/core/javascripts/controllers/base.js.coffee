@@ -241,6 +241,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     Slot: 12
     Event: 13
     Login: 14
+    Confirmation: 15
   $scope.Route = $rootScope.Route
 
 
@@ -250,6 +251,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   # legacy (already!) delete by Feb 2014 ;-)
   $scope.set_company = (prms) =>
     $scope.initWidget(prms)
+
 
   $scope.initWidget = (prms = {}) =>
 
@@ -277,7 +279,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           if args.iframe_proxy_ready
             $scope.initWidget2()
         return
-
 
 
   $scope.initWidget2 = () =>
@@ -441,9 +442,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           , (err) ->
             comp_p.reject(err)
 
-
     # load the company
-
     if company_id
       embed_params = prms.embed if prms.embed
       embed_params ||= null
@@ -530,7 +529,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         setup_promises.push sso_admin_login
 
       # if a total id is present, load the purchase total
-      # TODO is this required?- bbPurchase can handle this?
+      # TODO PLAT-46 - refactor as item_default
       total_id = QueryStringService('total_id')
       if total_id
         params =
@@ -540,8 +539,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           $scope.bb.total = total
           if total.paid > 0
             $scope.bb.payment_status = 'complete'
-          else
-            $scope.bb.payment_status = 'pending'
         setup_promises.push get_total
 
     $scope.isLoaded = false
@@ -583,9 +580,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     , (err) ->
       con_started.reject("Failed to start widget")
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
-
-
 
 
   setupDefaults = (company_id) =>
@@ -703,6 +697,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.setLoadingPage = (val) =>
     $scope.loading_page = val
 
+
   $scope.isLoadingPage = () =>
     $scope.loading_page
 
@@ -752,6 +747,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     $rootScope.$broadcast "page:loaded"
 
+
   $scope.jumpToPage = (route) =>
     $scope.current_page = route
     $scope.jumped = true
@@ -763,6 +759,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.getPartial = (file) ->
     $scope.bb.pageURL(file)
+
 
   $scope.setPageLoaded = () ->
     $scope.setLoaded $scope
@@ -778,13 +775,14 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.decideNextPage = (route) ->
 
+    # if route is provided, always load that page
     if route
       if route is 'none'
         return
       else
         return $scope.showPage(route)
 
-    # do we have a pre-set route...
+    # else, do we have a pre-set route...
     if $scope.bb.nextSteps and $scope.bb.current_page and $scope.bb.nextSteps[$scope.bb.current_page] and !$scope.bb.routeSteps
       return $scope.showPage($scope.bb.nextSteps[$scope.bb.current_page])
     
@@ -858,6 +856,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.showCheckout = ->
     $scope.bb.current_item.ready
+
 
   # add the current item to the basket service
   $scope.addItemToBasket = ->
@@ -936,6 +935,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
             $scope.decideNextPage()
     add_defer.promise
 
+
   $scope.emptyBasket = ->
     return if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
 
@@ -951,9 +951,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     return defer.promise
 
+
   $scope.deleteBasketItem = (item) ->
     BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
       $scope.setBasket(basket)
+
 
   $scope.deleteBasketItems = (items) ->
     for item in items
@@ -980,12 +982,15 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # for now also set a variable in the scope - for old views that we've not tidied up yet
     $scope.current_item = $scope.bb.current_item
 
+
   # say that the basket is ready to checkout
   $scope.setReadyToCheckout = (ready) ->
     $scope.bb.confirmCheckout = ready
 
+
   $scope.moveToBasket = ->
     $scope.bb.basket.addItem($scope.bb.current_item)
+
 
   $scope.quickEmptybasket = (options) ->
     preserve_stacked_items = if options && options.preserve_stacked_items then true else false
@@ -1000,6 +1005,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       def = $q.defer()
       def.resolve()
       def.promise
+
 
   $scope.setBasket = (basket) ->
     $scope.bb.basket = basket
@@ -1080,6 +1086,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         restore_basket_defer.resolve()
     restore_basket_defer.promise
 
+
   $scope.setCompany = (company, keep_basket) ->
     defer = $q.defer()
     $scope.bb.company_id = company.id
@@ -1126,6 +1133,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.recordStep = (step, title) ->
     $scope.bb.recordStep(step, title)
 
+
   # set the title fo the current step
   $scope.setStepTitle = (title) ->
     $scope.bb.steps[$scope.bb.current_step-1].title = title
@@ -1140,10 +1148,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if $scope.bb.current_step
         return steps[$scope.bb.current_step-1].title
 
+
   # conditionally set the title of the current step - if it doesn't have one
   $scope.checkStepTitle = (title) ->
     if !$scope.bb.steps[$scope.bb.current_step-1].title
       $scope.setStepTitle(title)
+
 
   # reload a step
   $scope.loadStep = (step) ->
@@ -1208,11 +1218,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       # Load step
       $scope.loadStep(step_to_load)
 
+
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps
       if step.page is page_name
         return $scope.loadStep(step.number)
     return $scope.loadStep(1)
+
 
   $scope.restart = () ->
     $rootScope.$broadcast 'clear:formData'
@@ -1225,6 +1237,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   # setup full route data
   $scope.setRoute = (rdata) ->
     $scope.bb.setRoute(rdata)
+
 
   # set basic step path only
   $scope.setBasicRoute = (routes) ->
@@ -1247,9 +1260,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.setUsingBasket = (usingBasket) =>
     $scope.bb.usingBasket = usingBasket
 
+
   $scope.setClient = (client) =>
     $scope.client = client
     $scope.bb.postcode = client.postcode if client.postcode && !$scope.bb.postcode
+
 
   $scope.clearClient = () =>
     $scope.client = new BBModel.Client()
@@ -1265,14 +1280,18 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.today = moment().toDate()
   $scope.tomorrow = moment().add(1, 'days').toDate()
 
+
   $scope.parseDate = (d) =>
     moment(d)
+
 
   $scope.getUrlParam = (param) =>
     $window.getURIparam param
 
+
   $scope.base64encode = (param) =>
     $window.btoa(param)
+
 
   $scope.setLastSelectedDate = (date) =>
     $scope.last_selected_date = date
@@ -1325,6 +1344,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         child = child.$$nextSibling
       true
 
+
   #set scope not loaded...
   $scope.notLoaded = (cscope) ->
     $scope.$emit 'show:loader', $scope
@@ -1339,22 +1359,22 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     return
 
 
-
-
-
-
   $scope.broadcastItemUpdate = () =>
     $scope.$broadcast("currentItemUpdate", $scope.bb.current_item)
+
 
   # do you show the page.
   $scope.hidePage = () ->
     $scope.hide_page = true
 
+
   $scope.bb.company_set =() ->
     $scope.bb.company_id?
 
+
   $scope.isAdmin = () ->
     $scope.bb.isAdmin
+
 
   $scope.isAdminIFrame = () ->
     if !$scope.bb.isAdmin
@@ -1369,8 +1389,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     catch err
       return false
 
+
   $scope.reloadDashboard = ->
     $window.parent.reload_dashboard()
+
 
   $scope.$debounce = (tim) ->
     return false if $scope._debouncing
@@ -1379,6 +1401,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $timeout ->
       $scope._debouncing = false
     , tim
+
 
   $scope.supportsTouch = () ->
     Modernizr.touch
