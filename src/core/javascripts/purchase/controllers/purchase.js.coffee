@@ -35,8 +35,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
     $scope.notLoaded $scope
     $scope.move_route = options.move_route if options.move_route
-    $scope.move_all = options.move_all if options.move_all
-    $scope.fail_msg = options.fail_msg if options.fail_msg
+    $scope.move_all   = options.move_all if options.move_all
+    $scope.fail_msg   = options.fail_msg if options.fail_msg
 
     # is there a purchase total already in scope?
     if $scope.bb.total
