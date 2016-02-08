@@ -94,7 +94,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     $http.get(prms.custom_partial_url).then (custom_templates) ->
       $compile(custom_templates.data) scope, (custom, scope) ->
         custom.addClass('custom_partial')
-        style = (tag for tag in custom when tag.tagName == "STYLE")
+        style = (tag for tag in custom when tag.tagName is "STYLE")
         non_style = (tag for tag in custom when tag.tagName != "STYLE")
         $bbug("#widget_#{prms.design_id}").html(non_style)
         element.append(style)
@@ -145,7 +145,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
 
       transclude scope, (clone) =>
         # if there's content or not whitespace
-        scope.has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+        scope.has_content = clone.length > 1 or (clone.length is 1 && (!clone[0].wholeText or /\S/.test(clone[0].wholeText)))
         if !scope.has_content
           if prms.custom_partial_url
             appendCustomPartials(scope, element, prms).then (style) ->
@@ -258,7 +258,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     con_started = $q.defer()
     $rootScope.connection_started = con_started.promise
 
-    if (!$sniffer.msie || $sniffer.msie > 9) || !first_call
+    if (!$sniffer.msie or $sniffer.msie > 9) or !first_call
       $scope.initWidget2()
       return
     else
@@ -266,7 +266,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       if $scope.bb.api_url
         url = document.createElement('a')
         url.href = $scope.bb.api_url
-        if url.host == '' || url.host == $location.host() || url.host == "#{$location.host()}:#{$location.port()}"
+        if url.host is '' or url.host is $location.host() or url.host is "#{$location.host()}:#{$location.port()}"
           $scope.initWidget2()
           return
       if $rootScope.iframe_proxy_ready
@@ -321,7 +321,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.clear_basket = true
     if prms.basket
       $scope.bb.clear_basket = false
-    if prms.clear_basket == false
+    if prms.clear_basket is false
       $scope.bb.clear_basket = false
     if $window.bb_setup || prms.client
       # if setup is defined - blank the member -a s we're probably setting it - unless specifically defined as false
@@ -363,7 +363,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.locale
       moment.locale(prms.locale)
 
-    if prms.hide == true
+    if prms.hide is true
       $scope.hide_page = true
     else
       $scope.hide_page = false
@@ -404,7 +404,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     @waiting_for_conn_started_def = $q.defer()
     $scope.waiting_for_conn_started = @waiting_for_conn_started_def.promise
 
-    if company_id || $scope.bb.affiliate_id
+    if company_id or $scope.bb.affiliate_id
       $scope.waiting_for_conn_started = $rootScope.connection_started
     else
       @waiting_for_conn_started_def.resolve()
@@ -565,7 +565,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
             $scope.client_details = new BBModel.ClientDetails()
           if !$scope.bb.stacked_items
             $scope.bb.stacked_items = []
-          if $scope.bb.company || $scope.bb.affiliate
+          if $scope.bb.company or $scope.bb.affiliate
             # onyl start if the company is valid
             con_started.resolve()
             $scope.done_starting = true
@@ -591,7 +591,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   setupDefaults = (company_id) =>
     def = $q.defer()
 
-    if first_call || ($scope.bb.orginal_company_id && $scope.bb.orginal_company_id != company_id)
+    if first_call or ($scope.bb.orginal_company_id && $scope.bb.orginal_company_id != company_id)
       # if this is the first call - or we've switch companies
       $scope.bb.orginal_company_id = company_id
       $scope.bb.default_setup_promises = []
@@ -737,7 +737,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if $window._gaq
       $window._gaq.push(['_trackPageview', route])
     $scope.setLoadingPage(true)
-    if $scope.bb.current_page == route
+    if $scope.bb.current_page is route
       $scope.bb_main = ""
       setTimeout () ->
         $scope.bb_main = $sce.trustAsResourceUrl($scope.bb.pageURL(route))
@@ -838,23 +838,21 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.showPage('client_admin')
       else
         return $scope.showPage('client')
-    else if ( !$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready ) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
+    else if ( !$scope.bb.basket.readyToCheckout() or !$scope.bb.current_item.ready ) and ($scope.bb.current_item.item_details and $scope.bb.current_item.item_details.hasQuestions)
       return if $scope.setPageRoute($rootScope.Route.Summary)
       if $scope.bb.isAdmin
         return $scope.showPage('check_items_admin')
       else
         return $scope.showPage('check_items')
-    else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
+    else if ($scope.bb.usingBasket and (!$scope.bb.confirmCheckout or $scope.bb.company_settings.has_vouchers or $scope.bb.company.$has('coupon')))
       return if $scope.setPageRoute($rootScope.Route.Basket)
       return $scope.showPage('basket')
-    else if $scope.bb.moving_booking && $scope.bb.basket.readyToCheckout()
+    else if $scope.bb.moving_booking and $scope.bb.basket.readyToCheckout()
       return $scope.showPage('purchase')
-    else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null && !$scope.bb.basket.waiting_for_checkout)
+    else if ($scope.bb.basket.readyToCheckout() and $scope.bb.payment_status is null and !$scope.bb.basket.waiting_for_checkout)
       return if $scope.setPageRoute($rootScope.Route.Checkout)
       return $scope.showPage('checkout')
-    # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
-    #   return $scope.showPage('payment')
-    else if $scope.bb.payment_status == "complete"
+    else if $scope.bb.payment_status is "complete"
       return $scope.showPage('confirmation')
 
 
@@ -871,7 +869,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.current_item.submitted.then (basket) ->
         add_defer.resolve(basket)
       , (err) ->
-        if err.status == 409
+        if err.status is 409
           # unavailable item - remove the time, person and resource and resete teh service
           $scope.bb.current_item.person = null
           $scope.bb.current_item.resource = null
@@ -913,7 +911,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     , (err) ->
       add_defer.reject(err)
       # handle item conflict
-      if err.status == 409
+      if err.status is 409
         # clear the currently cached time date
         halClient.clearCache("time_data")
         halClient.clearCache("events")
@@ -1061,7 +1059,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           if res.$has('baskets')
             res.$get('baskets').then (baskets) =>
               basket = _.find(baskets, (b) ->
-                parseInt(b.company_id) == $scope.bb.company_id)
+                parseInt(b.company_id) is $scope.bb.company_id)
               if basket
                 basket = new BBModel.Basket(basket, $scope.bb)
                 basket.$get('items').then (items) ->
@@ -1102,7 +1100,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.currency = $scope.bb.company_settings.currency
         $scope.bb.has_prices = $scope.bb.company_settings.has_prices
 
-        if !$scope.bb.basket || ($scope.bb.basket.company_id != $scope.bb.company_id && !keep_basket)
+        if !$scope.bb.basket or ($scope.bb.basket.company_id != $scope.bb.company_id && !keep_basket)
           restoreBasket().then () ->
             defer.resolve()
             $scope.$emit 'company:setup'
@@ -1110,7 +1108,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           defer.resolve()
           $scope.$emit 'company:setup'
     else
-      if !$scope.bb.basket || ($scope.bb.basket.company_id != $scope.bb.company_id && !keep_basket)
+      if !$scope.bb.basket or ($scope.bb.basket.company_id != $scope.bb.company_id && !keep_basket)
         restoreBasket().then () ->
           defer.resolve()
           $scope.$emit 'company:setup'
@@ -1149,7 +1147,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   # reload a step
   $scope.loadStep = (step) ->
-    return if step == $scope.bb.current_step
+    return if step is $scope.bb.current_step
     $scope.bb.calculatePercentageComplete(step)
     # so actually use the data from the "next" page if there is one - but show the correct page
     # this means we load the completed data from that page
@@ -1159,7 +1157,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     prev_step = st if st && !prev_step
     st = prev_step if !st
     if st && !$scope.bb.last_step_reached
-      $scope.bb.stacked_items = [] if !st.stacked_length ||  st.stacked_length == 0
+      $scope.bb.stacked_items = [] if !st.stacked_length or st.stacked_length is 0
       $scope.bb.current_item.loadStep(st.current_item)
       $scope.bb.steps.splice(step, $scope.bb.steps.length-step)
       $scope.bb.current_step = step
@@ -1197,7 +1195,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # Remove pages from browser history (sync browser history with routing)
     if step_to_load
       pages_to_remove_from_history = ($scope.bb.current_step - step_to_load)
-      if caller == "locationChangeStart"
+      if caller is "locationChangeStart"
         # Reduce number of pages to remove from browser history by one if this
         # method was triggered by Angular's $locationChangeStart broadcast
         # In this instance we can assume that the browser back button was used
@@ -1212,7 +1210,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps
-      if step.page == page_name
+      if step.page is page_name
         return $scope.loadStep(step.number)
     return $scope.loadStep(1)
 
