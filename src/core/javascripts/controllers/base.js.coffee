@@ -529,6 +529,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           $scope.bb.admin = admin
         setup_promises.push sso_admin_login
 
+      # if a total id is present, load the purchase total
+      # TODO is this required?- bbPurchase can handle this?
       total_id = QueryStringService('total_id')
       if total_id
         params =
@@ -538,6 +540,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           $scope.bb.total = total
           if total.paid > 0
             $scope.bb.payment_status = 'complete'
+          else
+            $scope.bb.payment_status = 'pending'
         setup_promises.push get_total
 
     $scope.isLoaded = false
@@ -773,61 +777,60 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.decideNextPage = (route) ->
+
     if route
-      if route == 'none'
+      if route is 'none'
         return
       else
-        # if $scope.bb.total && $scope.bb.payment_status == 'complete'
-        #   $scope.showPage('confirmation')
-        # else
         return $scope.showPage(route)
 
     # do we have a pre-set route...
-    if $scope.bb.nextSteps && $scope.bb.current_page && $scope.bb.nextSteps[$scope.bb.current_page] && !$scope.bb.routeSteps
+    if $scope.bb.nextSteps and $scope.bb.current_page and $scope.bb.nextSteps[$scope.bb.current_page] and !$scope.bb.routeSteps
       return $scope.showPage($scope.bb.nextSteps[$scope.bb.current_page])
-    if !$scope.client.valid() && LoginService.isLoggedIn()
+    
+    if !$scope.client.valid() and LoginService.isLoggedIn()
       # make sure we set the client to the currently logged in member
-      # we should also jsut check the logged in member is  a member of the company they are currently booking with
+      # we should also just check the logged in member is a member of the company they are currently booking with
       $scope.client = new BBModel.Client(LoginService.member()._data)
 
-    if ($scope.bb.company && $scope.bb.company.companies) || (!$scope.bb.company && $scope.affiliate)
-      return if $scope.setPageRoute($rootScope.Route.Company)
-      return $scope.showPage('company_list')
-    else if $scope.bb.total && $scope.bb.payment_status == "complete"
+    if $scope.bb.total and $scope.bb.payment_status is "complete"
       return $scope.showPage('confirmation')
 
-    else if ($scope.bb.total && $scope.bb.payment_status == "pending")
+    else if ($scope.bb.total and $scope.bb.payment_status is "pending")
       return $scope.showPage('payment')
 
-    else if ($scope.bb.company.$has('event_groups') && !$scope.bb.current_item.event_group && !$scope.bb.current_item.service && !$scope.bb.current_item.product && !$scope.bb.current_item.deal) or
-            ($scope.bb.company.$has('events') && $scope.bb.current_item.event_group && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
+    else if ($scope.bb.company and $scope.bb.company.companies) or (!$scope.bb.company and $scope.affiliate)
+      return if $scope.setPageRoute($rootScope.Route.Company)
+      return $scope.showPage('company_list')
+    else if ($scope.bb.company.$has('event_groups') and !$scope.bb.current_item.event_group and !$scope.bb.current_item.service and !$scope.bb.current_item.product and !$scope.bb.current_item.deal) or
+            ($scope.bb.company.$has('events') and $scope.bb.current_item.event_group and !$scope.bb.current_item.event? and !$scope.bb.current_item.product and !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Event)
       return $scope.showPage('event_list')
-    else if ($scope.bb.company.$has('events') && $scope.bb.current_item.event && !$scope.bb.current_item.num_book && (!$scope.bb.current_item.tickets || !$scope.bb.current_item.tickets.qty) && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
+    else if ($scope.bb.company.$has('events') and $scope.bb.current_item.event and !$scope.bb.current_item.num_book and (!$scope.bb.current_item.tickets or !$scope.bb.current_item.tickets.qty) and !$scope.bb.current_item.product and !$scope.bb.current_item.deal)
       return $scope.showPage('event')
-    else if ($scope.bb.company.$has('services') && !$scope.bb.current_item.service && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
+    else if ($scope.bb.company.$has('services') and !$scope.bb.current_item.service and !$scope.bb.current_item.event? and !$scope.bb.current_item.product and !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Service)
       return $scope.showPage('service_list')
-    else if ($scope.bb.company.$has('resources') && !$scope.bb.current_item.resource && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
+    else if ($scope.bb.company.$has('resources') and !$scope.bb.current_item.resource and !$scope.bb.current_item.event? and !$scope.bb.current_item.product and !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Resource)
       return $scope.showPage('resource_list')
-    else if ($scope.bb.company.$has('people') && !$scope.bb.current_item.person && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
+    else if ($scope.bb.company.$has('people') and !$scope.bb.current_item.person and !$scope.bb.current_item.event? and !$scope.bb.current_item.product and !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Person)
       return $scope.showPage('person_list')
-    else if (!$scope.bb.current_item.duration && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
+    else if (!$scope.bb.current_item.duration and !$scope.bb.current_item.event? and !$scope.bb.current_item.product and !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Duration)
       return $scope.showPage('duration_list')
-    else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.date && !$scope.bb.current_item.event? && !$scope.bb.current_item.deal)
+    else if ($scope.bb.current_item.days_link and !$scope.bb.current_item.date and !$scope.bb.current_item.event? and !$scope.bb.current_item.deal)
       if $scope.bb.company.$has('availability_slots')
         return if $scope.setPageRoute($rootScope.Route.Slot)
         return $scope.showPage('slot_list')
       else
         return if $scope.setPageRoute($rootScope.Route.Date)
         return $scope.showPage('calendar')
-    else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.time && !$scope.bb.current_item.event? && (!$scope.bb.current_item.service || $scope.bb.current_item.service.duration_unit != 'day') && !$scope.bb.current_item.deal)
+    else if ($scope.bb.current_item.days_link and !$scope.bb.current_item.time and !$scope.bb.current_item.event? and (!$scope.bb.current_item.service or $scope.bb.current_item.service.duration_unit != 'day') and !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Time)
       return $scope.showPage('time')
-    else if ($scope.bb.moving_booking && (!$scope.bb.current_item.ready || !$scope.bb.current_item.move_done))
+    else if ($scope.bb.moving_booking and (!$scope.bb.current_item.ready or !$scope.bb.current_item.move_done))
       return $scope.showPage('check_move')
     else if (!$scope.client.valid())
       return if $scope.setPageRoute($rootScope.Route.Client)
