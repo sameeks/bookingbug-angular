@@ -1,12 +1,12 @@
 angular.module('BBAdminServices').directive 'personTable', (AdminCompanyService,
-    AdminPerson, $log, ModalForm) ->
+    AdminPersonService, $log, ModalForm) ->
 
   controller = ($scope) ->
 
     $scope.fields = ['id', 'name', 'mobile']
 
     $scope.getPeople = () ->
-      AdminPerson.query($scope.company).then (people) ->
+      AdminPersonService.query(company: $scope.company).then (people) ->
         $scope.people = people
 
     $scope.newPerson = () ->

@@ -200,22 +200,3 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
       @$put('self', {}, data).then (res) =>
         @constructor(res) 
 
-
-    ###**
-    * @ngdoc method
-    * @name query
-    * @param {Company} company The company model.
-    * @param {integer=} page Specifies particular page of paginated response.
-    * @param {integer=} per_page Number of items per page of paginated response.
-    * @param {string=} filter_by_fields Comma separated list of field, value pairs to filter results by.
-    * @param {string=} order_by Specifies field to order results by.
-    * @param {boolean=} order_by_reverse Reverses the ordered results if true.
-    * @methodOf BB.Models:AdminPerson
-    * @description
-    * Gets a filtered collection of people.
-    *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of people.
-    ###
-    @query: (params) ->
-      AdminPersonService.query(params)
-

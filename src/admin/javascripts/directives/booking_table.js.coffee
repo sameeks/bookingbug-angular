@@ -9,7 +9,7 @@ angular.module('BBAdmin').directive 'bookingTable', (AdminCompanyService,
       params =
         company: $scope.company
       AdminBookingService.query(params).then (bookings) ->
-        $scope.bookings = bookings
+        $scope.bookings = bookings.items
 
     $scope.newBooking = () ->
       ModalForm.new

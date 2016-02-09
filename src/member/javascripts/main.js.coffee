@@ -36,7 +36,7 @@ angular.module('BBMember.Controllers', [
 ])
 
 
-angular.module('BBMember.Models').run ($q, $injector, BBModel) ->
+angular.module('BBMember').run ($q, $injector, BBModel) ->
   models = ['Member', 'Booking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand']
   mfuncs = {}
   for model in models

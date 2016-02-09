@@ -6,6 +6,7 @@ angular.module('BBAdmin', [
   'BBAdmin.Filters',
   'BBAdmin.Controllers',
   'BBAdmin.Models',
+  'BBAdmin.Directives',
   'trNgGrid'
   # 'ui.state',
 #  'ui.calendar',
@@ -31,7 +32,7 @@ angular.module('BBAdmin.Controllers', [
   'ngSanitize'
 ])
 
-angular.module('BBAdmin.Models').run ($q, $injector, BBModel) ->
+angular.module('BBAdmin.Services').run ($q, $injector, BBModel) ->
   models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
     'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup', 'Event', 'Queuer', 'ClientQueue', 'Clinic']
 
