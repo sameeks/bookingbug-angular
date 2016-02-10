@@ -47,10 +47,10 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
 
 
   init = () =>
-    if $scope.company 
+    if $scope.company
       if $scope.company.settings.requires_login
         $scope.checkIfLoggedIn()
-        if $rootScope.member 
+        if $rootScope.member
           getBookingAndSurvey()
         else
           return
@@ -77,7 +77,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
   * @param {array} purchase The purchase
   ###
   $scope.loadSurvey = (purchase) =>
-    unless $scope.company 
+    unless $scope.company
       $scope.purchase.$get('company').then (company) =>
         setPurchaseCompany(company)
 
@@ -85,12 +85,12 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
       $scope.purchase.$get('client').then (client) =>
         $scope.setClient(new BBModel.Client(client))
 
-    $scope.purchase.getBookingsPromise().then (bookings) =>
+    $scope.purchase.$getBookings().then (bookings) =>
       params = {}
       $scope.bookings = bookings
       for booking in $scope.bookings
         if booking.datetime
-          booking.pretty_date = moment(booking.datetime).format("dddd, MMMM Do YYYY")       
+          booking.pretty_date = moment(booking.datetime).format("dddd, MMMM Do YYYY")
         if booking.address
           address = new BBModel.Address(booking.address)
           pretty_address = address.addressSingleLine()
@@ -100,7 +100,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
         booking.$get("survey_questions", params).then (details) =>
           item_details = new BBModel.ItemDetails(details)
           booking.survey_questions = item_details.survey_questions
-          booking.getSurveyAnswersPromise().then (answers) =>
+          booking.$getSurveyAnswers().then (answers) =>
             booking.survey_answers = answers
             for question in booking.survey_questions
               if booking.survey_answers
@@ -111,7 +111,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
     , (err) ->
       $scope.setLoaded $scope
       failMsg()
-    
+
   ###**
   * @ngdoc method
   * @name submitSurveyLogin
@@ -126,7 +126,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
     LoginService.companyLogin($scope.company, {}, {email: $scope.login.email, password: $scope.login.password, id: $scope.company.id}).then (member) =>
       LoginService.setLogin(member)
       getBookingAndSurvey()
-    , (err) -> 
+    , (err) ->
       showLoginError()
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -138,7 +138,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
   * Load survey from purchase id in according of id parameter else display an error message
   *
   * @param {object} id The id of purchase
-  ###  
+  ###
   $scope.loadSurveyFromPurchaseID = (id) =>
     params = {purchase_id: id, url_root: $scope.bb.api_url}
     auth_token = $sessionStorage.getItem('auth_token')
@@ -195,7 +195,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
           $scope.setLoaded $scope
       else
         $scope.decideNextPage(route)
-  
+
   ###**
   * @ngdoc method
   * @name submitBookingRef
@@ -263,7 +263,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
   setPurchaseCompany = (company) ->
     $scope.bb.company_id = company.id
     $scope.bb.company = new BBModel.Company(company)
-    $scope.company = $scope.bb.company 
+    $scope.company = $scope.bb.company
     $scope.bb.item_defaults.company = $scope.bb.company
     if company.settings
       $scope.bb.item_defaults.merge_resources = true if company.settings.merge_resources

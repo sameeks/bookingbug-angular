@@ -44,7 +44,7 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     * @description
     * Get price by duration in function of duration
     *
-    * @returns {object} The returning price by duration 
+    * @returns {object} The returning price by duration
     ###
     getPriceByDuration: (dur) ->
       for d,i in @durations
@@ -53,14 +53,14 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
 
     ###**
     * @ngdoc method
-    * @name getCategoryPromise
+    * @name $getCategory
     * @methodOf BB.Models:Service
     * @description
     * Get category promise
     *
-    * @returns {object} The returning category promise 
+    * @returns {object} The returning category promise
     ###
-    getCategoryPromise: () =>
+    $getCategory: () =>
       return null if !@$has('category')
       prom = @$get('category')
       prom.then (cat) =>
@@ -74,7 +74,7 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     * @description
     * Put days in array
     *
-    * @returns {array} The returning days array 
+    * @returns {array} The returning days array
     ###
     days_array: () =>
       arr = []

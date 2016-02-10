@@ -9,7 +9,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     $scope.eventSources = [
       events: (start, end, timezone, callback) ->
         $scope.loading = true
-        $scope.getCompanyPromise().then (company) ->
+        $scope.$getCompany().then (company) ->
           params =
             company: company
             start_date: start.format('YYYY-MM-DD')
@@ -96,7 +96,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
     $scope.getPeople = (callback) ->
       $scope.loading = true
-      $scope.getCompanyPromise().then (company) ->
+      $scope.$getCompany().then (company) ->
         params = {company: company}
         AdminPersonService.query(params).then (people) ->
           $scope.loading = false
@@ -127,7 +127,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
       if $scope.company
     #    $interval () ->
     #      $http.get($scope.bb.api_url + "/api/v1/audit/bookings/?id=#{$scope.company.id}&channel_id=#{$scope.company.numeric_widget_id}").then (res) ->
-    #        if res && res.data 
+    #        if res && res.data
     #          for id in res.data
     #            console.log id
     #            booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', id))
@@ -176,7 +176,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
   link = (scope, element, attrs) ->
 
-    scope.getCompanyPromise = () ->
+    scope.$getCompany = () ->
       defer = $q.defer()
       if scope.company
         defer.resolve(scope.company)
@@ -186,13 +186,13 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           defer.resolve(scope.company)
       defer.promise
 
-    scope.getCompanyPromise().then (company) ->
+    scope.$getCompany().then (company) ->
       company.$get('services').then (collection) ->
         collection.$get('services').then (services) ->
           scope.services = (new BBModel.Admin.Service(s) for s in services)
           ColorPalette.setColors(scope.services)
 
-    scope.getCompanyPromise().then (company) ->
+    scope.$getCompany().then (company) ->
       scope.pusherSubscribe()
 
     $timeout () ->

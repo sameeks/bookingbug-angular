@@ -53,7 +53,7 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
       return $window.sprintf("£%.2f", parseFloat(@price))
 
 
-    getMemberPromise: () =>
+    $getMember: () =>
       defer = $q.defer()
       defer.resolve(@member) if @member
       if @_data.$has('member')

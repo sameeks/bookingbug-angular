@@ -33,7 +33,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
         $scope.user = user
         $scope.onSuccess() if $scope.onSuccess
       else
-        user.getAdministratorsPromise().then (administrators) ->
+        user.$getAdministrators().then (administrators) ->
           $scope.administrators = administrators
           $scope.pickCompany()
     , (err) ->
@@ -48,7 +48,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
       email: $scope.email
       password: $scope.password
     $scope.selected_admin.$post('login', {}, params).then (login) ->
-      $scope.selected_admin.getCompanyPromise().then (company) ->
+      $scope.selected_admin.$getCompany().then (company) ->
         $scope.bb.company = company
         AdminLoginService.setLogin($scope.selected_admin)
         $scope.onSuccess(company)

@@ -308,7 +308,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name fullMobile
     * @methodOf BB.Models:Address
     * @description
-    * Full mobile phone number of the client 
+    * Full mobile phone number of the client
     *
     * @returns {object} The returned full mobile number
     ###
@@ -334,14 +334,14 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
 
     ###**
     * @ngdoc method
-    * @name getPrePaidBookingsPromise
+    * @name $getPrePaidBookings
     * @methodOf BB.Models:Address
     * @description
     * Get pre paid bookings promise of the client
     *
     * @returns {promise} A promise for client pre paid bookings
     ###
-    getPrePaidBookingsPromise: (params) ->
+    $getPrePaidBookings: (params) ->
       defer = $q.defer()
       if @$has('pre_paid_bookings')
         @$get('pre_paid_bookings', params).then (collection) ->
