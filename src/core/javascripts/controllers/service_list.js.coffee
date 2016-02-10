@@ -127,7 +127,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       if $scope.booking_item.defaultService()
         for item in items
           if item.self == $scope.booking_item.defaultService().self or (item.name is $scope.booking_item.defaultService().name and !item.deleted)
-            $scope.selectItem(item, $scope.nextRoute)
+            $scope.selectItem(item, $scope.nextRoute, {skip_step: true})
 
       # if there's one selected - just select it
       if $scope.booking_item.service
