@@ -68,7 +68,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
             else if question.detail_type is "select" || question.detail_type is "select-price"
               html = "<select ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' class='form-question form-control'>"
               for itemx in question.options
-                html += "<option data_id='#{itemx.id}' value='#{itemx.name}'>#{itemx.display_name}</option>"
+                html += "<option data_id='#{itemx.id}' value='#{itemx.name.replace(/'/g, "&apos;")}'>#{itemx.display_name}</option>"
               html += "</select>"
 
             else if question.detail_type is "text_area"
