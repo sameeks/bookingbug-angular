@@ -656,8 +656,8 @@ angular.module('BB.Models').factory "BasketItemModel",
           @datetime.hour(hours)
           @datetime.minutes(mins)
 
-        if @price && @time.price && (@price != @time.price) 
-          @setPrice(@price)
+        if @price && @time.price && (@price != @time.price)
+          @setPrice(@time.price)
         else if @price && !@time.price
          @setPrice(@price)
         else if @time.price && !@price
