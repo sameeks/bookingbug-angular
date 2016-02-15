@@ -203,6 +203,24 @@
 
 }
 
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// KEEP CHEVRONS SPACED EVENLY AT EITHER SIDE OF THE CALENDAR
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+
+.calendar{
+  .day.navigation{
+    .btn-icon{
+    span.glyphicon{
+       font-size: 40px;
+       width: 100%;
+      }   
+    }
+    button{
+      width: 100%;
+    }  
+  }
+}
+
 // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 // DATEPICKER DEFAULT SCHEMA
 // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
