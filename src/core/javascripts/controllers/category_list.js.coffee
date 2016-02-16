@@ -19,7 +19,7 @@
 * @property {string} name The category name
 * @property {integer} id The category id
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -30,9 +30,9 @@
 *     </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
-*  
+*
 ####
 
 
@@ -44,7 +44,7 @@ angular.module('BB.Directives').directive 'bbCategories', () ->
 
 
 angular.module('BB.Controllers').controller 'CategoryList',
-($scope,  $rootScope, CategoryService, $q, PageControllerService) ->
+($scope, $rootScope, $q, PageControllerService, BBModel) ->
   $scope.controller = "public.controllers.CategoryList"
   $scope.notLoaded $scope
 
@@ -56,7 +56,7 @@ angular.module('BB.Controllers').controller 'CategoryList',
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
-    CategoryService.query(comp).then (items) =>
+    BBModel.Category.$query(comp).then (items) =>
       $scope.items = items
       if (items.length == 1)
         $scope.skipThisStep()
@@ -70,7 +70,7 @@ angular.module('BB.Controllers').controller 'CategoryList',
   * @name selectItem
   * @methodOf BB.Directives:bbCategories
   * @description
-  * Select an item 
+  * Select an item
   *
   * @param {object} item The Service or BookableItem to select
   * @param {string=} route A specific route to load

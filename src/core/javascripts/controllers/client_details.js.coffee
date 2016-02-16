@@ -42,7 +42,8 @@ angular.module('BB.Directives').directive 'bbClientDetails', () ->
   scope : true
   controller : 'ClientDetails'
 
-angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $rootScope, ClientDetailsService, ClientService, LoginService, BBModel, ValidatorService, QuestionService, AlertService) ->
+angular.module('BB.Controllers').controller 'ClientDetails',
+($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, BBModel) ->
   $scope.controller = "public.controllers.ClientDetails"
   $scope.notLoaded $scope
   $scope.validator = ValidatorService
@@ -68,13 +69,13 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
 
     if $scope.client.client_details
       $scope.client_details = $scope.client.client_details
-      QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
+      BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
       $scope.setLoaded $scope
     else
-      ClientDetailsService.query($scope.bb.company).then (details) =>
+      BBModel.ClientDetails.$query($scope.bb.company).then (details) =>
         $scope.client_details = details
         $scope.client.pre_fill_answers($scope.client_details) if $scope.client
-        QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
+        BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
         $scope.setLoaded $scope
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -104,7 +105,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
       $scope.client.parent_client_id = $scope.bb.parent_client.id
     $scope.client.setClientDetails($scope.client_details)
 
-    ClientService.create_or_update($scope.bb.company, $scope.client).then (client) =>
+    BBModel.Client.$create_or_update($scope.bb.company, $scope.client).then (client) =>
       $scope.setLoaded $scope
       $scope.setClient(client)
       $scope.client.setValid(true) if $scope.bb.isAdmin
@@ -143,7 +144,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
 
     if !$scope.suppress_client_create
 
-      prom = ClientService.create_or_update($scope.bb.company, $scope.client)
+      prom = BBModel.Client.$create_or_update($scope.bb.company, $scope.client)
       prom.then (client) =>
         $scope.setLoaded $scope
         $scope.setClient(client)
@@ -167,7 +168,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   $scope.clientSearch = () ->
     if $scope.client? && $scope.client.email? && $scope.client.email != ""
       $scope.notLoaded $scope
-      ClientService.query_by_email($scope.bb.company, $scope.client.email).then (client) ->
+      BBModel.Client.$query_by_email($scope.bb.company, $scope.client.email).then (client) ->
         if client?
           $scope.setClient(client)
           $scope.client = client
@@ -231,8 +232,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   * Recalculate question
   ###
   $scope.recalc_question = () ->
-    QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
-
+    BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
 
   handleError = (error) ->
     if error.data.error == "Please Login"

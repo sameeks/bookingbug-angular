@@ -13,7 +13,7 @@
 ####
 
 
-angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseModel, ClientDetailsService) ->
 
   class ClientDetails extends BaseModel
 
@@ -35,7 +35,7 @@ angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseMode
     *
     * @returns {object} The returned data
     ###
-    getPostData : (questions) ->
+    getPostData: (questions) ->
       data = []
       for q in questions
         data.push({answer: q.answer, id: q.id, price: q.price})
@@ -61,3 +61,6 @@ angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseMode
       for q in @questions
         if ahash[q.id]  # if we have answer for it
           q.answer = ahash[q.id].answer
+
+    @$query: (company) ->
+      ClientDetailsService.query(company)

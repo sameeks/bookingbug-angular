@@ -13,12 +13,13 @@
 ###
 
 
-angular.module('BB.Models').factory "SlotModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "SlotModel", ($q, BBModel, BaseModel, SlotService) ->
 
   class Slot extends BaseModel
 
-   constructor: (data) ->
+    constructor: (data) ->
       super(data)
       @datetime = moment(data.datetime)
 
-   
+    @$query: (company, params) ->
+      SlotService.query(company, params)

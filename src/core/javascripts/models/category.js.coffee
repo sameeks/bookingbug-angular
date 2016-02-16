@@ -10,7 +10,9 @@
 ####
 
 
-angular.module('BB.Models').factory "CategoryModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "CategoryModel", ($q, BBModel, BaseModel, CategoryService) ->
 
   class Category extends BaseModel
 
+    @$query: (company) ->
+      CategoryService.query(company)

@@ -40,7 +40,8 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService, PurchaseService) ->
+angular.module('BB.Controllers').controller 'ItemDetails',
+($scope, $attrs, $rootScope, $modal, $location, $upload, $translate, ItemDetailsService, PurchaseBookingService, AlertService, FormDataStoreService, ValidatorService, SettingsService, PurchaseService, BBModel) ->
 
   $scope.controller = "public.controllers.ItemDetails"
 
@@ -57,7 +58,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   # populate object with values stored in the question store. addAnswersByName()
   # is good for populating a single object. for dynamic question/answers see
   # addDynamicAnswersByName()
-  QuestionService.addAnswersByName($scope.client, [
+  BBModel.Question.$addAnswersByName($scope.client, [
     'first_name'
     'last_name'
     'email'
@@ -93,8 +94,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     if $scope.item.item_details
       setItemDetails $scope.item.item_details
       # this will add any values in the querystring
-      QuestionService.addDynamicAnswersByName($scope.item_details.questions)
-      QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
+      BBModel.Question.$addDynamicAnswersByName($scope.item_details.questions)
+      BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
       $scope.recalc_price()
       $scope.setLoaded $scope
       $scope.$emit "item_details:loaded", $scope.item_details
@@ -106,8 +107,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
         if details
           setItemDetails details
           $scope.item.item_details = $scope.item_details
-          QuestionService.addDynamicAnswersByName($scope.item_details.questions)
-          QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
+          BBModel.Question.$addDynamicAnswersByName($scope.item_details.questions)
+          BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
           $scope.recalc_price()
           $scope.$emit "item_details:loaded", $scope.item_details
         $scope.setLoaded $scope

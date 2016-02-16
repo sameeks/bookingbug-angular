@@ -338,7 +338,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.client_defaults.first_name =  match[1]
         $scope.bb.client_defaults.last_name = match[2] if match[2]?
 
-    if prms.clear_member      
+    if prms.clear_member
       $scope.bb.clear_member = prms.clear_member
       $sessionStorage.removeItem('login')
 
@@ -879,7 +879,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.updateBasket = () ->
     add_defer = $q.defer()
     params = {member_id: $scope.client.id, member: $scope.client, items: $scope.bb.basket.items, bb: $scope.bb }
-    BasketService.updateBasket($scope.bb.company, params).then (basket) ->
+    BBModel.Basket.$updateBasket($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
         item.reserve_without_questions = $scope.bb.reserve_without_questions
@@ -930,7 +930,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     defer = $q.defer()
 
-    BasketService.empty($scope.bb).then (basket) ->
+    BBModel.Basket.$empty($scope.bb).then (basket) ->
       if $scope.bb.current_item.id
         delete $scope.bb.current_item.id
       $scope.setBasket(basket)
@@ -941,12 +941,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     return defer.promise
 
   $scope.deleteBasketItem = (item) ->
-    BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
+    BBModel.Basket.$deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
       $scope.setBasket(basket)
 
   $scope.deleteBasketItems = (items) ->
     for item in items
-      BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
+      BBModel.Basket.$deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
         $scope.setBasket(basket)
 
 

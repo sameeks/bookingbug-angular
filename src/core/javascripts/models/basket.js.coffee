@@ -8,14 +8,14 @@
 * @description
 * Representation of an Basket Object
 *
-* @property {integer} company_id Company id that the basket belongs to 
+* @property {integer} company_id Company id that the basket belongs to
 * @property {integer} total_price Total price of the basket
 * @property {integer} total_due_price Total price of the basket after applying discounts
 * @property {array} items Array of items that are in the basket
 ####
 
 
-angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, BasketService) ->
 
   class Basket extends BaseModel
     constructor: (data, scope) ->
@@ -196,7 +196,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * @description
     * Set the client
     *
-    * @returns {object} client object 
+    * @returns {object} client object
     ###
     setClient: (client) ->
       @client = client
@@ -208,7 +208,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * @description
     * Set client details
     *
-    * @returns {object} client details 
+    * @returns {object} client details
     ###
     setClientDetails: (client_details) ->
       @client_details = new BBModel.PurchaseItem(client_details)
@@ -347,11 +347,11 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * Calculates the full discount for the basket
     *
     * @returns {integer} full discount
-    ###  
+    ###
     # return the total coupon discount applied to the basket
     totalCoupons: ->
       @fullPrice() - @totalPrice() - @totalDealPaid()
-    
+
     ###**
     * @ngdoc method
     * @name totalDuration
@@ -359,8 +359,8 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * @description
     * Calculates total duration of all items in basket
     *
-    * @returns {integer} total duration 
-    ###  
+    * @returns {integer} total duration
+    ###
     totalDuration: ->
       duration = 0
       for item in @items
@@ -375,7 +375,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * Checks if there is an item in items array, that is a deal
     *
     * @returns {boolean} true or false depending if a deal was found or not
-    ###  
+    ###
     containsDeal: ->
       for item in @items
         return true if item.deal_id
@@ -389,7 +389,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * Checks if there is any item in items array with a deal code
     *
     * @returns {boolean} true or false depending if a deal code was found or not
-    ###  
+    ###
     hasDeal: ->
       for item in @items
         return true if item.deal_codes && item.deal_codes.length > 0
@@ -403,7 +403,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * Builds an array of deal codes
     *
     * @returns {array} deal codes array
-    ###  
+    ###
     getDealCodes: ->
       @deals = if @items[0] && @items[0].deal_codes then @items[0].deal_codes else []
       @deals
@@ -416,7 +416,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * Calculates the total amount of deal codes array
     *
     * @returns {integer} total amount of deals
-    ###  
+    ###
     # return the total value of deals (gift certificates) applied to the basket
     totalDeals: ->
       value = 0
@@ -432,7 +432,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * Calculates the amount paid by gift certificates
     *
     * @returns {integer} amount paid by deals
-    ### 
+    ###
     # return amount paid by deals (gift certficates)
     totalDealPaid: ->
       total_cert_paid = 0
@@ -461,7 +461,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * Checks if the basket contains an wait list event
     *
     * @returns {boolean} true or false
-    ### 
+    ###
     hasWaitlistItem : ->
       for item in @items
         return true if item.isWaitlist()
@@ -475,7 +475,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * Checks if the basket contains an external purchase
     *
     * @returns {boolean} true or false
-    ### 
+    ###
     hasExternalPurchase : ->
       for item in @items
         return true if item.isExternalPurchase()
@@ -489,7 +489,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * Indicates if a wallet should be used for payment
     *
     * @returns {boolean} true or false
-    ### 
+    ###
     useWallet : (value, client) ->
       if client and client.$has('wallet') and value
         @take_from_wallet = true
@@ -497,3 +497,24 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
       else
         @take_from_wallet = false
         return false
+
+    $applyCoupon: (company, params) ->
+        BasketService.applyCoupon(company, params)
+
+    @$updateBasket: (company, params) ->
+      BasketService.updateBasket(company, params)
+
+    $deleteItem: (item, company, params) ->
+        BasketService.deleteItem(item, company, params)
+
+    @$checkout: (company, basket, params) ->
+        BasketService.checkout(company, basket, params)
+
+    $empty: (bb) ->
+        BasketService.empty (bb)
+
+    $applyDeal: (company, params) ->
+        BasketService.applyDeal(company, params)
+
+    $removeDeal: (company, params) ->
+        BasketService.removeDeal(company, params)

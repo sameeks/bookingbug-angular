@@ -21,7 +21,7 @@
 * @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a resource or person
 * @property {bulk_purchase} bulk_purchase The currectly selected bulk_purchase
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -32,9 +32,9 @@
 *     </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
-* 
+*
 ####
 
 angular.module('BB.Directives').directive 'bbBulkPurchases', () ->
@@ -44,16 +44,17 @@ angular.module('BB.Directives').directive 'bbBulkPurchases', () ->
   controller : 'BulkPurchase'
 
 
-angular.module('BB.Controllers').controller 'BulkPurchase', ($scope, $rootScope, BulkPurchaseService) ->
+angular.module('BB.Controllers').controller 'BulkPurchase',
+($scope, $rootScope, BBModel) ->
 
   $scope.controller = "public.controllers.BulkPurchase"
 
-  $rootScope.connection_started.then ->   
+  $rootScope.connection_started.then ->
     $scope.init($scope.bb.company) if $scope.bb.company
 
   $scope.init = (company) ->
     $scope.booking_item ||= $scope.bb.current_item
-    BulkPurchaseService.query(company).then (bulk_purchases) ->
+    BBModel.BulkPurchase.$query(company).then (bulk_purchases) ->
       $scope.bulk_purchases = bulk_purchases
 
 

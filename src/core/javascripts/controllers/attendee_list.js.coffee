@@ -2,7 +2,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller: ($scope, $rootScope, $q, PurchaseService, BBModel, AlertService, ValidatorService, ClientService) ->
+  controller: ($scope, $rootScope, $q, PurchaseService, AlertService, ValidatorService, BBModel) ->
 
     $scope.validator = ValidatorService
 
@@ -58,7 +58,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
       return false if !$scope.bb.current_item.ready or !$scope.bb.moving_purchase
 
       deferred = $q.defer()
-      
+
       $scope.notLoaded $scope
 
       client_promises = []
@@ -70,8 +70,8 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
           client = new BBModel.Client()
           client.first_name = item.first_name
           client.last_name  = item.last_name
-          
-          client_promises.push(ClientService.create_or_update($scope.bb.company, client))
+
+          client_promises.push(BBModel.Client.$create_or_update($scope.bb.company, client))
 
         else
 
@@ -94,7 +94,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
         , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
       return deferred.promise
-        
+
 
 
     ###**

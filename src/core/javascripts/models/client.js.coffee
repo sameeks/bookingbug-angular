@@ -26,7 +26,7 @@
 ####
 
 
-angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, LocaleService) ->
+angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, ClientService, LocaleService) ->
 
   class Client extends BaseModel
 
@@ -355,3 +355,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
       else
         defer.resolve([])
       defer.promise
+
+    @$create_or_update: (company, client) ->
+      ClientService.create_or_update(company, client)
+
+    @$query_by_email: (company, email) ->
+      ClientService.query_by_email(company, email)

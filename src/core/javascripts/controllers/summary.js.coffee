@@ -7,7 +7,7 @@
 * @description
 * Loads a summary of the booking
 *
-* 
+*
 ####
 
 
@@ -17,7 +17,7 @@ angular.module('BB.Directives').directive 'bbSummary', () ->
   scope : true
   controller : 'Summary'
 
-angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, ClientService, $q) ->
+angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, BBModel, $q) ->
 
   $scope.controller = "public.controllers.Summary"
 
@@ -26,7 +26,7 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Clie
     $scope.item  = $scope.bb.current_item
     $scope.items = $scope.bb.basket.timeItems()
 
-  
+
   ###**
   * @ngdoc method
   * @name confirm
@@ -39,7 +39,7 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Clie
     $scope.notLoaded $scope
 
     promises = [
-      ClientService.create_or_update($scope.bb.company, $scope.client),
+      BBModel.Client.$create_or_update($scope.bb.company, $scope.client),
     ]
 
     if $scope.bb.current_item.service

@@ -27,7 +27,8 @@ angular.module('BB.Directives').directive 'bbMiniBasket', () ->
 
 
 
-angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, BasketService, $q) ->
+angular.module('BB.Controllers').controller 'MiniBasket',
+($scope,  $rootScope, $q) ->
   $scope.controller = "public.controllers.MiniBasket"
   $scope.setUsingBasket(true)
   $rootScope.connection_started.then () =>
@@ -61,7 +62,8 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
 
 
 
-angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $attrs, $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
+angular.module('BB.Controllers').controller 'BasketList',
+($scope, $rootScope, $element, $attrs, $q, AlertService, FormDataStoreService, LoginService, BBModel) ->
 
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
@@ -164,7 +166,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
     AlertService.clear()
     $scope.notLoaded $scope
     params = {bb: $scope.bb, coupon: coupon }
-    BasketService.applyCoupon($scope.bb.company, params).then (basket) ->
+    BBModel.Basket.$applyCoupon($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
         item.reserve_without_questions = $scope.bb.reserve_without_questions
@@ -192,7 +194,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
       params = {bb: $scope.bb, deal_code: deal_code, member_id: $scope.client.id}
     else
       params = {bb: $scope.bb, deal_code: deal_code, member_id: null}
-    BasketService.applyDeal($scope.bb.company, params).then (basket) ->
+    BBModel.Basket.$applyDeal($scope.bb.company, params).then (basket) ->
 
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
@@ -217,7 +219,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
   ###
   $scope.removeDeal = (deal_code) =>
     params = {bb: $scope.bb, deal_code_id: deal_code.id }
-    BasketService.removeDeal($scope.bb.company, params).then (basket) ->
+    BBModel.Basket.$removeDeal($scope.bb.company, params).then (basket) ->
 
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)

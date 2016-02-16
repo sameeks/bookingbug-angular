@@ -29,7 +29,8 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
   scope : true
   controller : 'DealList'
 
-angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, DealService, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal) ->
+angular.module('BB.Controllers').controller 'DealList',
+($scope, $rootScope, $q, $modal, AlertService, FormDataStoreService, ValidatorService, BBModel) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
@@ -41,7 +42,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
   init = () ->
     $scope.notLoaded $scope
     if !$scope.deals
-      deal_promise = DealService.query($scope.bb.company)
+      deal_promise = BBModel.Deal.$query($scope.bb.company)
       deal_promise.then (deals) ->
         $scope.deals = deals
         $scope.setLoaded $scope
@@ -96,7 +97,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
     * Add to basket in according of form parameter
     *
     * @param {object} form The form where is added deal list to basket
-    ###    
+    ###
     $scope.addToBasket = (form) ->
       if !ValidatorService.validateForm(form)
         return

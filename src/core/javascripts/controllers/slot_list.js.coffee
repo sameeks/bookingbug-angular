@@ -17,12 +17,12 @@
 * scope: true
 * </pre>
 *
-* @property {array} booking_item The booking item 
+* @property {array} booking_item The booking item
 * @property {date} start_date The start date
 * @property {date} end_date The end date
 * @property {array} slots The slots
 * @property {object} validator The validator service - see {@link BB.Services:Validator validator Service}
-* 
+*
 ####
 
 
@@ -39,7 +39,7 @@ angular.module('BB.Directives').directive 'bbTimeSlots', () ->
     return
 
 angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
-    $rootScope, $q, $attrs, SlotService, FormDataStoreService, ValidatorService,
+    $rootScope, $q, $attrs, FormDataStoreService, ValidatorService,
     PageControllerService, halClient, BBModel) ->
 
   $scope.controller = "public.controllers.SlotList"
@@ -56,7 +56,7 @@ angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
     $scope.start_date = moment()
     $scope.end_date = moment().add(1, 'month')
 
-    SlotService.query($scope.bb.company, {item: $scope.booking_item,  start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}).then (slots) ->
+    BBModel.Slot.$query($scope.bb.company, {item: $scope.booking_item,  start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}).then (slots) ->
       $scope.slots = slots
       $scope.setLoaded $scope
     , (err) ->

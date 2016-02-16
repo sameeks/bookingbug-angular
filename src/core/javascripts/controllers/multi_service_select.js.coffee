@@ -33,7 +33,7 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   controller : 'MultiServiceSelect'
 
 angular.module('BB.Controllers').controller 'MultiServiceSelect',
-($scope, $rootScope, $q, $attrs, BBModel, AlertService, CategoryService, FormDataStoreService, $modal) ->
+($scope, $rootScope, $q, $attrs, $modal, AlertService, FormDataStoreService, BBModel) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selected_category_name'
@@ -66,7 +66,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
 
     promises = []
 
-    promises.push(CategoryService.query($scope.bb.company))
+    promises.push(BBModel.Category.$query($scope.bb.company))
 
     # company question promise
     promises.push($scope.company.$getCompanyQuestions()) if $scope.company.$has('company_questions')
