@@ -94,10 +94,10 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
         clientDef.reject(err)
 
 
-  $scope.searchClients = (val) ->
+  $scope.searchClients = (search_text) ->
     clientDef = $q.defer()
     params =
-      filter_by: val
+      filter_by: search_text
       company: $scope.bb.company
     AdminClientService.query(params).then (clients) =>
       clientDef.resolve(clients.items)
