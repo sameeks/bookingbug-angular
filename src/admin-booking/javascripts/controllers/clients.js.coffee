@@ -8,10 +8,10 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
 
 
 angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService, $log) ->
-  
+
   $scope.validator = ValidatorService
   $scope.clientDef = $q.defer()
-  $scope.clientPromise = $scope.clientDef.promise 
+  $scope.clientPromise = $scope.clientDef.promise
   $scope.per_page = 20
   $scope.total_entries = 0
   $scope.clients = []
@@ -25,7 +25,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
   $scope.showSearch = () =>
     $scope.search_clients = true
     $scope.newClient = false
-  
+
 
   $scope.showClientForm = () =>
     $scope.search_error = false
@@ -34,7 +34,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.newClient = true
     # clear the client if one has already been selected
     $scope.clearClient()
-  
+
 
   $scope.selectClient = (client, route) =>
     $scope.search_error = false
@@ -65,7 +65,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       $scope.setLoaded $scope
       $scope.selectClient(client, route)
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-   
+
 
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
     AlertService.clear()
@@ -89,12 +89,21 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
         $scope.setPageLoaded()
         $scope.total_entries = clients.total_entries
         clientDef.resolve(clients.items)
-      , (err) ->  
+      , (err) ->
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
         clientDef.reject(err)
- 
+
+
+  $scope.searchClients = (search_text) ->
+    clientDef = $q.defer()
+    params =
+      filter_by: search_text
+      company: $scope.bb.company
+    AdminClientService.query(params).then (clients) =>
+      clientDef.resolve(clients.items)
+      clients.items
+    return clientDef.promise
+
 
   $scope.edit = (item) ->
     $log.info("not implemented")
-
-    
