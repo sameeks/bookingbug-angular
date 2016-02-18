@@ -1,6 +1,7 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseModel, BookingCollections) ->
+angular.module('BB.Models').factory "Admin.BookingModel",
+($q, AdminBookingService, BBModel, BaseModel, BookingCollections) ->
 
   class Admin_Booking extends BaseModel
 
@@ -16,7 +17,7 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
         @className = "status_blocked"
       else if @status == 4
         @className = "status_booked"
- 
+
     getPostData: () ->
       data = {}
       data.date = @start.format("YYYY-MM-DD")
@@ -27,7 +28,7 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
       if @questions
         data.questions = (q.getPostData() for q in @questions)
       data
-      
+
     hasStatus: (status) ->
       @multi_status[status]?
 
@@ -62,12 +63,11 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
           if a.name == q
             return a.answer
       return null
- 
 
     $update: (data) ->
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
-        @constructor(res) 
+        @constructor(res)
         BookingCollections.checkItems(@)
 
     $refetch: () ->
@@ -76,3 +76,5 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
         @constructor(res)
         BookingCollections.checkItems(@)
 
+    @$query: (prms) ->
+      AdminBookingService.query(prms)

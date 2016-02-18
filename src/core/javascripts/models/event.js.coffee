@@ -14,11 +14,11 @@
 ####
 
 
-angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService) ->
+angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService, EventService) ->
 
 
   class Event extends BaseModel
-    
+
     constructor: (data) ->
       super(data)
       @getDate()
@@ -139,10 +139,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getColour
     * @methodOf BB.Models:Event
     * @description
-    * Get the colour 
+    * Get the colour
     *
     * @returns {string} The returned colour
-    ### 
+    ###
     getColour: () ->
       if @getGroup()
         return @getGroup().colour
@@ -155,10 +155,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getPounds
     * @methodOf BB.Models:Event
     * @description
-    * Get pounts 
+    * Get pounts
     *
     * @returns {integer} The returned pounts
-    ###  
+    ###
     getPounds: () ->
       if @chain
         Math.floor(@getPrice()).toFixed(0)
@@ -168,10 +168,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getPrice
     * @methodOf BB.Models:Event
     * @description
-    * Get price 
+    * Get price
     *
     * @returns {integer} The returned price
-    ### 
+    ###
     getPrice: () ->
       0
 
@@ -180,10 +180,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getPence
     * @methodOf BB.Models:Event
     * @description
-    * Get price 
+    * Get price
     *
     * @returns {integer} The returned pence
-    ### 
+    ###
     getPence: () ->
       if @chain
         (@getPrice() % 1).toFixed(2)[-2..-1]
@@ -193,7 +193,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getNumBooked
     * @methodOf BB.Models:Event
     * @description
-    * Get the number booked 
+    * Get the number booked
     *
     * @returns {object} The returned number booked
     ###
@@ -223,7 +223,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid space
     *
     * @returns {boolean} If this is a valid space
-    ### 
+    ###
     hasSpace: () ->
       (@getSpacesLeft() > 0)
 
@@ -235,7 +235,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid waiting list space
     *
     * @returns {boolean} If this is a valid waiting list space
-    ### 
+    ###
     hasWaitlistSpace: () ->
       (@getSpacesLeft() <= 0 && @getChain().waitlength > @spaces_wait)
 
@@ -247,7 +247,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the remaining description
     *
     * @returns {object} The returned remaining description
-    ### 
+    ###
     getRemainingDescription: () ->
       left = @getSpacesLeft()
       if left > 0 && left < 3
@@ -264,7 +264,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks is this considered a selected
     *
     * @returns {boolean} If this is a selected
-    ###  
+    ###
     select: ->
       @selected = true
 
@@ -332,4 +332,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           ticket.price = 0
         else
           ticket.price = ticket.old_price
+
+    @$query: (company, params) ->
+      EventService.query(company, params)
+
+    @$summary: (company, params) ->
+      EventService.summary(company, params)
 

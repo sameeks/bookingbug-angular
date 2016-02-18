@@ -40,13 +40,14 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService, PurchaseService) ->
+angular.module('BB.Controllers').controller 'ItemDetails',
+($scope, $attrs, $rootScope, $modal, $location, $upload, $translate, PurchaseBookingService, AlertService, FormDataStoreService, ValidatorService, SettingsService, PurchaseService, BBModel) ->
 
   $scope.controller = "public.controllers.ItemDetails"
 
   $scope.suppress_basket_update = $attrs.bbSuppressBasketUpdate?
   $scope.item_details_id = $scope.$eval $attrs.bbSuppressBasketUpdate
- 
+
   # if instructed to suppress basket updates (i.e. when the directive is invoked multiple times
   # on the same page), create a form store for each instance of the directive
   if $scope.suppress_basket_update
@@ -57,7 +58,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   # populate object with values stored in the question store. addAnswersByName()
   # is good for populating a single object. for dynamic question/answers see
   # addDynamicAnswersByName()
-  QuestionService.addAnswersByName($scope.client, [
+  BBModel.Question.$addAnswersByName($scope.client, [
     'first_name'
     'last_name'
     'email'
@@ -93,27 +94,27 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     if $scope.item.item_details
       setItemDetails $scope.item.item_details
       # this will add any values in the querystring
-      QuestionService.addDynamicAnswersByName($scope.item_details.questions)
-      QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
+      BBModel.Question.$addDynamicAnswersByName($scope.item_details.questions)
+      BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
       $scope.recalc_price()
       $scope.setLoaded $scope
       $scope.$emit "item_details:loaded", $scope.item_details
 
     else
-      
+
       params = {company: $scope.bb.company, cItem: $scope.item}
-      ItemDetailsService.query(params).then (details) ->
+      BBModel.ItemDetails.$query(params).then (details) ->
         if details
           setItemDetails details
           $scope.item.item_details = $scope.item_details
-          QuestionService.addDynamicAnswersByName($scope.item_details.questions)
-          QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
+          BBModel.Question.$addDynamicAnswersByName($scope.item_details.questions)
+          BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
           $scope.recalc_price()
           $scope.$emit "item_details:loaded", $scope.item_details
         $scope.setLoaded $scope
-        
+
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-    
+
 
   ###**
   * @ngdoc method
@@ -184,7 +185,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
     return true if $scope.$parent.$has_page_control
 
-   
+
     if $scope.item.ready
       $scope.notLoaded $scope
       $scope.addItemToBasket().then () ->
@@ -231,7 +232,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           bookings: $scope.bb.basket.items
         PurchaseService.update(params).then (purchase) ->
           $scope.bb.purchase = purchase
-          $scope.bb.purchase.getBookingsPromise().then (bookings)->
+          $scope.bb.purchase.$getBookings().then (bookings)->
             $scope.purchase = purchase
             $scope.setLoaded $scope
             $scope.item.move_done = true
@@ -246,11 +247,11 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       else
         PurchaseBookingService.update($scope.item).then (booking) ->
           b = new BBModel.Purchase.Booking(booking)
-    
+
           if $scope.bb.purchase
             for oldb, _i in $scope.bb.purchase.bookings
               $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
-        
+
           $scope.setLoaded $scope
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
@@ -353,13 +354,13 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     att_id = existing if existing
     method = "POST"
     method = "PUT" if att_id
-    url = item.$href('add_attachment') 
+    url = item.$href('add_attachment')
     $scope.upload = $upload.upload({
       url: url,
       method: method,
       data: {attachment_id: att_id},
-      file: file, 
-    }).progress (evt) -> 
+      file: file,
+    }).progress (evt) ->
       if $scope.upload_progress < 100
         $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
     .success (data, status, headers, config) ->

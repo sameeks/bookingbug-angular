@@ -9,7 +9,7 @@
 *
 * @description
 * Representation of an EventChain Object
-* 
+*
 * @property {integer} id The id of event chain
 * @property {string} name Name of the event chain
 * @property {string} description The description of the event
@@ -22,7 +22,7 @@
 ####
 
 
-angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, EventChainService) ->
 
   class EventChain extends BaseModel
     name: () ->
@@ -99,3 +99,6 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
       if @tickets
         for @ticket in @tickets
           @ticket.max_spaces = @spaces
+
+    @$query: (prms) ->
+      EventChainService.query(prms)

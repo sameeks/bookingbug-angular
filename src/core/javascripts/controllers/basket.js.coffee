@@ -27,7 +27,9 @@ angular.module('BB.Directives').directive 'bbMiniBasket', () ->
 
 
 
-angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, BasketService, $q) ->
+angular.module('BB.Controllers').controller 'MiniBasket',
+($scope,  $rootScope, $q) ->
+
   $scope.controller = "public.controllers.MiniBasket"
   $scope.setUsingBasket(true)
   $rootScope.connection_started.then () =>
@@ -37,7 +39,7 @@ angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, 
   * @name basketDescribe
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Basked describe in according of basket length 
+  * Basked describe in according of basket length
   *
   * @param {string} nothing Nothing to describe
   * @param {string} single The single describe
@@ -61,17 +63,18 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
 
 
 
-angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $attrs, $rootScope, BasketService, $q, AlertService, FormDataStoreService, LoginService) ->
+angular.module('BB.Controllers').controller 'BasketList',
+($scope, $rootScope, $element, $attrs, $q, AlertService, FormDataStoreService, LoginService, BBModel) ->
 
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
   $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') and $scope.bb.company_settings.has_wallets and $scope.client.valid() and LoginService.isLoggedIn() and LoginService.member().id == $scope.client.id and $scope.client.has_active_wallet
 
   # bb.basket.options - added 10-11-2015 @16:19
-  # For ex. bb-basket-list="{requires_deal: true}" 
+  # For ex. bb-basket-list="{requires_deal: true}"
   $scope.bb.basket.setSettings($scope.$eval $attrs.bbBasketList or {})
 
-  
+
   $rootScope.connection_started.then ->
 
     $scope.bb.basket.setClient($scope.client) if $scope.client
@@ -83,7 +86,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
 
       for basket_item in $scope.bb.basket.timeItems()
         params = {event_id: basket_item.getEventId()}
-        promises.push($scope.client.getPrePaidBookingsPromise(params))
+        promises.push($scope.client.$getPrePaidBookings(params))
 
       $q.all(promises).then (result) ->
 
@@ -91,11 +94,11 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
           prepaid_bookings = result[index]
 
           if $scope.bb.basket.settings and $scope.bb.basket.settings.auto_use_prepaid_bookings and prepaid_bookings.length > 0
-            basket_item.setPrepaidBooking(prepaid_bookings[0]) 
+            basket_item.setPrepaidBooking(prepaid_bookings[0])
 
         $scope.updateBasket().then () ->
           $scope.setLoaded $scope
-        
+
       , (err) ->
         $scope.setLoaded $scope
 
@@ -126,10 +129,10 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
   $scope.checkout = (route) =>
 
 
-    if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()     
+    if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()
       AlertService.raise('GIFT_CERTIFICATE_REQUIRED')
       return false
-      
+
     if $scope.bb.basket.items.length > 0
       $scope.setReadyToCheckout(true)
       if $scope.$parent.$has_page_control
@@ -164,7 +167,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
     AlertService.clear()
     $scope.notLoaded $scope
     params = {bb: $scope.bb, coupon: coupon }
-    BasketService.applyCoupon($scope.bb.company, params).then (basket) ->
+    BBModel.Basket.$applyCoupon($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
         item.reserve_without_questions = $scope.bb.reserve_without_questions
@@ -192,7 +195,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
       params = {bb: $scope.bb, deal_code: deal_code, member_id: $scope.client.id}
     else
       params = {bb: $scope.bb, deal_code: deal_code, member_id: null}
-    BasketService.applyDeal($scope.bb.company, params).then (basket) ->
+    BBModel.Basket.$applyDeal($scope.bb.company, params).then (basket) ->
 
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
@@ -217,7 +220,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
   ###
   $scope.removeDeal = (deal_code) =>
     params = {bb: $scope.bb, deal_code_id: deal_code.id }
-    BasketService.removeDeal($scope.bb.company, params).then (basket) ->
+    BBModel.Basket.$removeDeal($scope.bb.company, params).then (basket) ->
 
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
@@ -229,10 +232,10 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
       if err and err.data and err.data.error
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
-  
+
 
   $scope.topUpWallet = () ->
     $scope.decideNextPage("basket_wallet")
 
 
-      
+

@@ -1,5 +1,5 @@
-angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $rootScope,
-    AdminLoginService, $templateCache, $q) ->
+angular.module('BBAdmin.Directives').directive 'adminLogin',
+($modal, $log, $rootScope, $templateCache, $q, BBModel) ->
 
   loginAdminController = ($scope, $modalInstance, company_id) ->
     $scope.title = 'Login'
@@ -23,7 +23,7 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
     $scope.submit = (form) ->
       options =
         company_id: company_id
-      AdminLoginService.login(form, options).then (admin) ->
+      BBModel.Admin.Login.$login(form, options).then (admin) ->
         admin.email = form.email
         admin.password = form.password
         $modalInstance.close(admin)
@@ -98,7 +98,7 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
         password: scope.adminPassword
       options =
         company_id: scope.companyId
-      AdminLoginService.login(login_form, options).then (result) ->
+      BBModel.Admin.Login.$login(login_form, options).then (result) ->
         if result.$has('admins')
           result.$get('admins').then (admins) ->
             scope.admins = admins

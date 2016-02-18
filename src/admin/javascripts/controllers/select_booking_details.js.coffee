@@ -1,7 +1,5 @@
-
-
-angular.module('BBAdmin.Controllers').controller 'SelectedBookingDetails', ($scope,  $location, AdminBookingService, $rootScope) ->
-
+angular.module('BBAdmin.Controllers').controller 'SelectedBookingDetails',
+($scope, $location, $rootScope, AdminBookingService) ->
 
   $scope.$watch 'selectedBooking', (newValue, oldValue) =>
     if newValue

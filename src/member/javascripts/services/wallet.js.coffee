@@ -1,4 +1,5 @@
-angular.module("BB.Services").factory "WalletService", ($q, BBModel) ->
+angular.module("BB.Services").factory "WalletService",
+($q, BBModel) ->
 
   getWalletForMember: (member, params) ->
     params ||= {}
@@ -16,7 +17,7 @@ angular.module("BB.Services").factory "WalletService", ($q, BBModel) ->
 
   getWalletLogs: (wallet) ->
     params = {no_cache: true}
-    deferred = $q.defer() 
+    deferred = $q.defer()
     if !wallet.$has('logs')
       deferred.reject("No wallet transactions found")
     else
@@ -37,8 +38,8 @@ angular.module("BB.Services").factory "WalletService", ($q, BBModel) ->
       wallet.$get("purchase_bands", {}).then (resource) ->
         resource.$get("purchase_bands").then (bands) ->
           bands = (new BBModel.Member.WalletPurchaseBand(band) for band in bands)
-          deferred.resolve(bands) 
-      , (err) -> 
+          deferred.resolve(bands)
+      , (err) ->
         deferred.reject(err)
     deferred.promise
 

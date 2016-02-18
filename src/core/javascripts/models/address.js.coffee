@@ -8,17 +8,17 @@
 * @description
 * Representation of an Address Object
 *
-* @property {string} address1 First line of the address 
-* @property {string} address2 Second line of the address 
-* @property {string} address3 Third line of the address 
-* @property {string} address4 Fourth line of the address 
-* @property {string} address5 Fifth line of the address 
+* @property {string} address1 First line of the address
+* @property {string} address2 Second line of the address
+* @property {string} address3 Third line of the address
+* @property {string} address4 Fourth line of the address
+* @property {string} address5 Fifth line of the address
 * @property {string} postcode The Postcode/Zipcode
 * @property {string} country The country
 ####
 
 
-angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, AddressListService) ->
 
   class Address extends BaseModel
 
@@ -26,7 +26,7 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel) ->
       super(data)
       # Assign value to map_url if the value is an empty String
       # Note: This is not ideal as it will not show a map marker. But the map_url prop should already be set, so this is just a fallback
-      if !@map_url or @map_url == ""       
+      if !@map_url or @map_url == ""
         @map_url = "https://www.google.com/maps/@" + @lat + "," + @long + ",17z" if @lat and @long
 
     ###**
@@ -114,3 +114,9 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel) ->
       str += "<br/>" if @postcode && str.length > 0
       str += @postcode if @postcode
       str
+
+    @$query: (prms) ->
+      AddressListService.query(prms)
+
+    @$getAddress: (prms) ->
+      AddressListService.getAddress(prms)

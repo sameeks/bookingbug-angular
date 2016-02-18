@@ -17,7 +17,8 @@
 ####
 
 
-angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel, $bbug, QuestionService) ->
+angular.module('BB.Models').factory "ItemDetailsModel",
+($q, $bbug, ItemDetailsService, BBModel, BaseModel) ->
 
   class ItemDetails extends BaseModel
 
@@ -59,19 +60,19 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     * @name checkConditionalQuestions
     * @methodOf BB.Models:ItemDetails
     * @description
-    * Checks if exist conditional questions 
+    * Checks if exist conditional questions
     *
     * @returns {boolean} The returned existing conditional questions
     ###
     checkConditionalQuestions: () ->
-      QuestionService.checkConditionalQuestions(@questions)
+      BBModel.Question.$checkConditionalQuestions(@questions)
 
     ###**
     * @ngdoc method
     * @name getPostData
     * @methodOf BB.Models:ItemDetails
     * @description
-    * Get data 
+    * Get data
     *
     * @returns {array} The returned data
     ###
@@ -100,7 +101,7 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
       for q in @questions
         if ahash[q.id]  # if we have answer for it
           q.answer = ahash[q.id].answer
-      @checkConditionalQuestions()    
+      @checkConditionalQuestions()
 
     ###**
     * @ngdoc method
@@ -113,3 +114,6 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     ###
     getQuestion: (id) ->
       _.findWhere(@questions, {id: id})
+
+    @$query: (prms) ->
+      ItemDetailsService.query(prms)

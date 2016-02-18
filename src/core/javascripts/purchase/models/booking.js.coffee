@@ -7,15 +7,15 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     constructor: (data) ->
       super(data)
       @ready = false
-  
-      @datetime = moment.parseZone(@datetime) 
+
+      @datetime = moment.parseZone(@datetime)
       @datetime.tz(@time_zone) if @time_zone
       @original_datetime = moment(@datetime)
 
       @end_datetime = moment.parseZone(@end_datetime)
       @end_datetime.tz(@time_zone) if @time_zone
- 
- 
+
+
 
     getGroup: () ->
       return @group if @group
@@ -40,10 +40,10 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           @company
 
 
-    getAnswersPromise: () =>
+    $getAnswers: () =>
       defer = $q.defer()
       if @answers?
-        defer.resolve(@answers) 
+        defer.resolve(@answers)
       else
         @answers = []
         if @_data.$has('answers')
@@ -54,7 +54,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           defer.resolve([])
       defer.promise
 
-    getSurveyAnswersPromise: () =>
+    $getSurveyAnswers: () =>
       defer = $q.defer()
       defer.resolve(@survey_answers) if @survey_answers
       if @_data.$has('survey_answers')
@@ -86,19 +86,19 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
       data.client_id = @client_id
       data.company_id = @company_id
       data.time = (@datetime.hour() * 60) + @datetime.minute()
-      data.date = @datetime.toISODate() 
+      data.date = @datetime.toISODate()
       data.deleted = @deleted
       data.describe = @describe
       data.duration = @duration
       data.end_datetime = @end_datetime
 
-      # is the booking being moved (i.e. new time/new event) or are we just updating 
+      # is the booking being moved (i.e. new time/new event) or are we just updating
       # the existing booking
       if @time and @time.event_id and !@isEvent()
         data.event_id = @time.event_id
       else if @event
         data.event_id = @event.id
-      else 
+      else
         data.event_id = @slot_id
 
       data.full_describe = @full_describe
@@ -132,7 +132,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
       if @survey_questions
         data.survey_questions = @survey_questions
         for q in @survey_questions
-          formatted_survey_answers.push({value: q.answer, outcome: q.outcome, detail_type_id: q.id, price: q.price}) 
+          formatted_survey_answers.push({value: q.answer, outcome: q.outcome, detail_type_id: q.id, price: q.price})
         data.survey_answers = formatted_survey_answers
 
       return data
@@ -169,7 +169,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
 
     canMove: () ->
-      return @canCancel()  
+      return @canCancel()
 
 
     getAttendeeName: () ->

@@ -29,7 +29,7 @@
 * @property {service} service The currectly selected service
 * @property {hash} filters A hash of filters
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://dev01.bookingbug.com'>
 *   <div  bb-widget='{company_id:37167}'>
@@ -40,9 +40,9 @@
 *     </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
-* 
+*
 ####
 
 
@@ -60,7 +60,7 @@ angular.module('BB.Directives').directive 'bbServices', () ->
     scope.options.hide_disabled = attrs.hideDisabled if attrs.hideDisabled
     scope.directives = "public.ServiceList"
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService, LoadingService) ->
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, LoadingService) ->
 
   FormDataStoreService.init 'ServiceList', $scope, [
     'service'
@@ -84,7 +84,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
     $scope.booking_item ||= $scope.bb.current_item
 
     if $scope.bb.company.$has('named_categories')
-      CategoryService.query($scope.bb.company).then (items) =>
+      BBModel.Category.$query($scope.bb.company).then (items) =>
         $scope.all_categories = items
       , (err) ->  $scope.all_categories = []
     else
@@ -119,9 +119,9 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
       # filter out event groups unless explicity requested
       if !$scope.options.show_event_groups
-        items = items.filter (x) -> !x.is_event_group 
+        items = items.filter (x) -> !x.is_event_group
 
-      # if there's only one service and single pick hasn't been enabled, 
+      # if there's only one service and single pick hasn't been enabled,
       # automatically select the service.
       if (items.length is 1 && !$scope.options.allow_single_pick)
         if !$scope.selectItem(items[0], $scope.nextRoute, {skip_step: true})
@@ -165,22 +165,22 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
         services = (i.item for i in items when i.item?)
 
-        
+
         $scope.bookable_services = services
         $scope.bookable_items = items
-        
+
         if services.length is 1 and !$scope.options.allow_single_pick
           if !$scope.selectItem(services[0], $scope.nextRoute, {skip_step: true})
             setServiceItem services
         else
-          # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages. 
+          # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages.
           setServiceItem services
-        
+
         loader.setLoaded()
-      , (err) ->  
+      , (err) ->
         loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-  
-  
+
+
   # set the service item so the correct item is displayed in the dropdown menu.
   # without doing this the menu will default to 'please select'
   setServiceItem = (items) ->
@@ -269,7 +269,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   $scope.filterFunction = (service) ->
     if !service
       return false
-    $scope.service_array = [] 
+    $scope.service_array = []
     $scope.custom_array = (match)->
       if !match
         return false
@@ -279,12 +279,12 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
           item = item.toLowerCase()
           if item is match
             $scope.show_custom_array = true
-            return true 
+            return true
         return false
     $scope.service_name_include = (match) ->
       if !match
         return false
-      if match 
+      if match
         match = match.toLowerCase()
         item = service.name.toLowerCase()
         if item.includes(match)

@@ -7,11 +7,12 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   controller : 'adminBookingClients'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService, $log) ->
-  
+angular.module('BBAdminBooking').controller 'adminBookingClients',
+($scope,  $rootScope, $q, $log, AdminClientService, ClientDetailsService, AlertService, ValidatorService, ErrorService, BBModel) ->
+
   $scope.validator = ValidatorService
   $scope.clientDef = $q.defer()
-  $scope.clientPromise = $scope.clientDef.promise 
+  $scope.clientPromise = $scope.clientDef.promise
   $scope.per_page = 20
   $scope.total_entries = 0
   $scope.clients = []
@@ -21,11 +22,9 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
   $scope.search_error = false
   $scope.search_text = null
 
-
   $scope.showSearch = () =>
     $scope.search_clients = true
     $scope.newClient = false
-  
 
   $scope.showClientForm = () =>
     $scope.search_error = false
@@ -34,7 +33,6 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.newClient = true
     # clear the client if one has already been selected
     $scope.clearClient()
-  
 
   $scope.selectClient = (client, route) =>
     $scope.search_error = false
@@ -42,7 +40,6 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.setClient(client)
     $scope.client.setValid(true)
     $scope.decideNextPage(route)
-
 
   $scope.checkSearch = () =>
     if $scope.search_text and $scope.search_text.length >= 3
@@ -52,7 +49,6 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       $scope.search_error = true
       return false
 
-
   $scope.createClient = (route) =>
     $scope.notLoaded $scope
 
@@ -61,11 +57,10 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       $scope.client.parent_client_id = $scope.bb.parent_client.id
     $scope.client.setClientDetails($scope.client_details) if $scope.client_details
 
-    ClientService.create_or_update($scope.bb.company, $scope.client).then (client) =>
+    BBModel.Client.$create_or_update($scope.bb.company, $scope.client).then (client) =>
       $scope.setLoaded $scope
       $scope.selectClient(client, route)
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-   
 
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
     AlertService.clear()
@@ -89,12 +84,11 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
         $scope.setPageLoaded()
         $scope.total_entries = clients.total_entries
         clientDef.resolve(clients.items)
-      , (err) ->  
+      , (err) ->
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
         clientDef.reject(err)
- 
 
   $scope.edit = (item) ->
     $log.info("not implemented")
 
-    
+

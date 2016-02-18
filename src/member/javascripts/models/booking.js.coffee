@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel, BaseModel, $bbug) ->
+angular.module('BB.Models').factory "Member.BookingModel",
+($q, $window, $bbug, MemberBookingService, BBModel, BaseModel) ->
 
   class Member_Booking extends BaseModel
     constructor: (data) ->
@@ -12,7 +13,6 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
       @end_datetime = moment.parseZone(@end_datetime)
       @end_datetime.tz(@time_zone) if @time_zone
 
-
     getGroup: () ->
       return @group if @group
       if @_data.$has('event_groups')
@@ -20,13 +20,11 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
           @group = group
           @group
 
-
     getColour: () ->
       if @getGroup()
         return @getGroup().colour
       else
         return "#FFFFFF"
-
 
     getCompany: () ->
       return @company if @company
@@ -34,7 +32,6 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
         @_data.$get('company').then (company) =>
           @company = new BBModel.Company(company)
           @company
-
 
     getAnswers: () ->
       defer = $q.defer()
@@ -47,13 +44,11 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
-
     printed_price: () ->
       return "£" + @price if parseFloat(@price) % 1 == 0
       return $window.sprintf("£%.2f", parseFloat(@price))
 
-
-    getMemberPromise: () =>
+    $getMember: () =>
       defer = $q.defer()
       defer.resolve(@member) if @member
       if @_data.$has('member')
@@ -67,3 +62,15 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
 
     canMove: () ->
       return @canCancel()
+
+    @$query: (member, params) ->
+      MemberBookingService.query(member, params)
+
+    @$cancel: (member, booking) ->
+      MemberBookingService.cancel(member, booking)
+
+    @$update: (booking) ->
+      MemberBookingService.update(booking)
+
+    @$flush: (member, params) ->
+      MemberBookingService.flush(member, params)

@@ -3,7 +3,7 @@
 adminbookingapp = angular.module('BBAdminDashboard', [
   'trNgGrid',
   'BBAdmin',
-  'BBAdminServices',
+  'BBAdmin.Services',
   'ui.calendar',
   'ngStorage',
   'BBAdminBooking',

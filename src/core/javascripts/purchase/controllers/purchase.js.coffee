@@ -7,7 +7,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     scope.init(scope.$eval( attrs.bbPurchase ))
     return
 
-angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage) ->
+angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -67,7 +67,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
         $scope.waiting_for_conn_started.then () =>
           company_id = getCompanyID()
           if company_id
-            CompanyService.query(company_id, {}).then (company) ->
+            BBModel.Company.$query(company_id, {}).then (company) ->
               setPurchaseCompany(company)
           params = {purchase_id: id, url_root: $scope.bb.api_url}
           auth_token = $sessionStorage.getItem('auth_token')
@@ -80,13 +80,13 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
             $scope.bb.purchase = purchase
             $scope.price = !($scope.purchase.price == 0)
 
-            $scope.purchase.getBookingsPromise().then (bookings) ->
+            $scope.purchase.$getBookings().then (bookings) ->
               $scope.bookings = bookings
 
               if bookings[0]
-                bookings[0].getCompanyPromise().then (company) ->
+                bookings[0].$getCompany().then (company) ->
                   $scope.purchase.bookings[0].company = company
-                  company.getAddressPromise().then (address) ->
+                  company.$getAddress().then (address) ->
                     $scope.purchase.bookings[0].company.address = address
 
               $scope.setLoaded $scope
@@ -233,7 +233,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       $scope.purchase = purchase
       $scope.total = $scope.purchase
       $scope.bb.purchase = purchase
-      $scope.purchase.getBookingsPromise().then (bookings) ->
+      $scope.purchase.$getBookings().then (bookings) ->
         $scope.bookings = bookings
         $scope.waitlist_bookings = (booking for booking in $scope.bookings when (booking.on_waitlist && booking.settings.sent_waitlist == 1))
         if $scope.purchase.$has('new_payment') && $scope.purchase.due_now > 0

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('BBAdmin.Controllers').controller 'CalendarCtrl',
-($scope, AdminBookingService, $rootScope) ->
+($scope, BBModel, $rootScope) ->
 
   ### event source that pulls from google.com
   $scope.eventSource = {
@@ -18,7 +18,7 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl',
     prms.start_date = start.format("YYYY-MM-DD")
     prms.end_date = end.format("YYYY-MM-DD")
 
-    bookings = AdminBookingService.query(prms)
+    bookings = BBModel.Admin.Booking.$query(prms)
     bookings.then (s) =>
       console.log s.items
       callback(s.items)

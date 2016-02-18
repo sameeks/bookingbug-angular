@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('BBAdmin.Controllers').controller 'DashTimeList', ($scope,  $rootScope, $location, $q, $element, AdminTimeService) ->
+angular.module('BBAdmin.Controllers').controller 'DashTimeList',
+($scope, $rootScope, $location, $q, $element, AdminTimeService) ->
 
   $loaded = null # has somethign been loaded
 
@@ -79,8 +80,6 @@ angular.module('BBAdmin.Controllers').controller 'DashTimeList', ($scope,  $root
       modal: true,
       overlay: { opacity: 0.1, background: "black" },
     }
-
-
 
 ###
   var sprice = "&price=" + price;

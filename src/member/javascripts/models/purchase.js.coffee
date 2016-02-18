@@ -1,7 +1,8 @@
-angular.module("BB.Models").factory "Member.PurchaseModel", (BBModel, BaseModel, $q) ->
+angular.module("BB.Models").factory "Member.PurchaseModel",
+($q, MemberPurchaseService, BBModel, BaseModel) ->
 
   class Member_Purchase extends BaseModel
-    
+
     constructor: (data) ->
       super(data)
 
@@ -15,3 +16,6 @@ angular.module("BB.Models").factory "Member.PurchaseModel", (BBModel, BaseModel,
           new BBModel.Member.PurchaseItem(item)
         deferred.resolve(@items)
       deferred.promise
+
+    @$query: (member, params) ->
+      MemberPurchaseService.query(member, params)
