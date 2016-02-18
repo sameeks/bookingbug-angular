@@ -1,5 +1,5 @@
-
-angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope,  $rootScope, $location, $modal) ->
+angular.module('BBAdmin.Controllers').controller 'DashboardContainer',
+($scope, $rootScope, $location, $modal) ->
 
   $scope.selectedBooking = null
   $scope.poppedBooking = null
@@ -19,7 +19,7 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
         items: () => {booking: booking};
       }
     }
-    
+
     modalInstance.result.then (selectedItem) =>
       $scope.selected = selectedItem;
     , () =>
@@ -46,4 +46,3 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
         items: () => prms;
       }
     }
-    

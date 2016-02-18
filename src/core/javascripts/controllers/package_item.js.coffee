@@ -23,7 +23,7 @@
 * @property {package} package The currectly selected package
 * @property {hash} filters A hash of filters
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -34,9 +34,9 @@
 *     </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
-* 
+*
 ####
 
 angular.module('BB.Directives').directive 'bbPackageItems', () ->
@@ -46,7 +46,8 @@ angular.module('BB.Directives').directive 'bbPackageItems', () ->
   controller : 'PackageItem'
 
 
-angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, PackageItemService) ->
+angular.module('BB.Controllers').controller 'PackageItem',
+($scope, $rootScope, PackageItemService) ->
 
   $scope.controller = "public.controllers.PackageItem"
 

@@ -44,6 +44,7 @@ angular.module('BB.Directives').directive 'bbClientDetails', () ->
 
 angular.module('BB.Controllers').controller 'ClientDetails',
 ($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, BBModel) ->
+
   $scope.controller = "public.controllers.ClientDetails"
   $scope.notLoaded $scope
   $scope.validator = ValidatorService

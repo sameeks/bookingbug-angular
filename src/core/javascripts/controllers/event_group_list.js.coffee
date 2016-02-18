@@ -38,8 +38,7 @@ angular.module('BB.Directives').directive 'bbEventGroups', () ->
 
 
 angular.module('BB.Controllers').controller 'EventGroupList',
-($scope,  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
-  PageControllerService, halClient) ->
+($scope,  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, PageControllerService, halClient) ->
 
   $scope.controller = "public.controllers.EventGroupList"
   FormDataStoreService.init 'EventGroupList', $scope, [

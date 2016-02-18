@@ -1,9 +1,5 @@
-
-
-
-
-
-angular.module('BBAdmin.Controllers').controller 'TimeOptions', ($scope,  $location, $rootScope, AdminResourceService, AdminPersonService) ->
+angular.module('BBAdmin.Controllers').controller 'TimeOptions',
+($scope, $location, $rootScope, AdminResourceService, AdminPersonService) ->
 
   AdminResourceService.query({company: $scope.bb.company}).then (resources) -> $scope.resources = resources
 
@@ -13,6 +9,3 @@ angular.module('BBAdmin.Controllers').controller 'TimeOptions', ($scope,  $locat
     if $scope.person
       AdminPersonService.block($scope.bb.company, $scope.person, {start_time: $scope.start_time, end_time: $scope.end_time})
     $scope.ok()
-
-
-

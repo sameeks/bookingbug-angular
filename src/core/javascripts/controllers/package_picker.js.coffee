@@ -34,7 +34,9 @@ angular.module('BB.Directives').directive 'bbPackagePicker', () ->
   controller : 'PackagePicker'
 
 
-angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScope, $q, TimeService, BBModel) ->
+angular.module('BB.Controllers').controller 'PackagePicker',
+($scope,  $rootScope, $q, TimeService, BBModel) ->
+
   $scope.controller = "public.controllers.PackagePicker"
 
   $scope.sel_date = moment().add(1, 'days')
@@ -105,7 +107,7 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
   * Select slot in according of sel_item and slot parameters
   *
   * @param {array} sel_item The sel item
-  * @param {object} slot The slot 
+  * @param {object} slot The slot
   ###
   $scope.selectSlot = (sel_item, slot) =>
 

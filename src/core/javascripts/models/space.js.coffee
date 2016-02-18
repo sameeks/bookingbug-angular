@@ -12,5 +12,5 @@ angular.module('BB.Models').factory "SpaceModel", ($q, BBModel, BaseModel, Space
 
   class Space extends BaseModel
 
-    query: (company) ->
+    $query: (company) ->
       SpaceService.query(company)

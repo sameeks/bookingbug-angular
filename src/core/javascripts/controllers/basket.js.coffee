@@ -29,6 +29,7 @@ angular.module('BB.Directives').directive 'bbMiniBasket', () ->
 
 angular.module('BB.Controllers').controller 'MiniBasket',
 ($scope,  $rootScope, $q) ->
+
   $scope.controller = "public.controllers.MiniBasket"
   $scope.setUsingBasket(true)
   $rootScope.connection_started.then () =>

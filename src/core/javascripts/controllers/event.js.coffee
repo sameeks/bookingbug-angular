@@ -29,7 +29,9 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
   controller : 'Event'
 
 
-angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, $q, PageControllerService, ValidatorService, FormDataStoreService, BBModel) ->
+angular.module('BB.Controllers').controller 'Event',
+($scope, $attrs, $rootScope, $q, PageControllerService, ValidatorService, FormDataStoreService, BBModel) ->
+
   $scope.controller = "public.controllers.Event"
   $scope.notLoaded $scope
   angular.extend(this, new PageControllerService($scope, $q))

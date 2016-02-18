@@ -33,7 +33,9 @@ angular.module('BB.Directives').directive 'bbLogin', () ->
   controller : 'Login'
 
 
-angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, LoginService, $q, ValidatorService, BBModel, $location, AlertService) ->
+angular.module('BB.Controllers').controller 'Login',
+($scope, $rootScope, $q, $location, LoginService, ValidatorService, AlertService, BBModel) ->
+
   $scope.controller = "public.controllers.Login"
   $scope.error = false
   $scope.password_updated = false
@@ -67,7 +69,7 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
   * @description
   * Login with password
   *
-  * @param {string} email The email address that use for the login 
+  * @param {string} email The email address that use for the login
   * @param {string} password The password use for the login
   ###
   $scope.login_with_password = (email, password) ->

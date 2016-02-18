@@ -7,7 +7,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     scope.init(scope.$eval( attrs.bbPurchase ))
     return
 
-angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage) ->
+angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -67,7 +67,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
         $scope.waiting_for_conn_started.then () =>
           company_id = getCompanyID()
           if company_id
-            CompanyService.query(company_id, {}).then (company) ->
+            BBModel.Company.$query(company_id, {}).then (company) ->
               setPurchaseCompany(company)
           params = {purchase_id: id, url_root: $scope.bb.api_url}
           auth_token = $sessionStorage.getItem('auth_token')

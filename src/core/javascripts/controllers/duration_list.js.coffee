@@ -29,7 +29,9 @@ angular.module('BB.Directives').directive 'bbDurations', () ->
   controller : 'DurationList'
 
 
-angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $rootScope, PageControllerService, $q, AlertService, $filter) ->
+angular.module('BB.Controllers').controller 'DurationList',
+($scope, $attrs, $rootScope, $q, $filter, PageControllerService, AlertService) ->
+
   $scope.controller = "public.controllers.DurationList"
   $scope.notLoaded $scope
 
@@ -49,7 +51,7 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $ro
       $scope.durations =
         (for d in _.zip(service.durations, service.prices)
           {value: d[0], price: d[1]})
-      
+
       initial_duration = $scope.$eval($attrs.bbInitialDuration)
 
       for duration in $scope.durations

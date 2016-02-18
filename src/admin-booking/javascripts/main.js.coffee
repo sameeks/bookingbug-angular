@@ -22,9 +22,9 @@ angular.module('BBAdminBooking.Controllers', [
   'ngSanitize'
 ])
 
-adminbookingapp.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig, AdminLoginService) ->
+adminbookingapp.run ($rootScope, $log, DebugUtilsService, $bbug, $document, $sessionStorage, FormDataStoreService, AppConfig, BBModel) ->
 
-  AdminLoginService.checkLogin().then () ->
+  BBModel.Admin.Login.$checkLogin().then () ->
     if $rootScope.user && $rootScope.user.company_id
       $rootScope.bb ||= {}
       $rootScope.bb.company_id = $rootScope.user.company_id

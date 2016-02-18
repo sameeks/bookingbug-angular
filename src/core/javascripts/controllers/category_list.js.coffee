@@ -45,6 +45,7 @@ angular.module('BB.Directives').directive 'bbCategories', () ->
 
 angular.module('BB.Controllers').controller 'CategoryList',
 ($scope, $rootScope, $q, PageControllerService, BBModel) ->
+
   $scope.controller = "public.controllers.CategoryList"
   $scope.notLoaded $scope
 

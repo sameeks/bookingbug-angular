@@ -1,8 +1,5 @@
 'use strict';
 
-
-
-
 angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
   restrict: 'AE'
   replace: true
@@ -12,10 +9,11 @@ angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
     return
 
 
-angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, $log) ->
+angular.module('BBAdmin.Controllers').controller 'AdminClients',
+($scope, $rootScope, $q, $log, AdminClientService, ClientDetailsService, AlertService) ->
 
   $scope.clientDef = $q.defer()
-  $scope.clientPromise = $scope.clientDef.promise 
+  $scope.clientPromise = $scope.clientDef.promise
   $scope.per_page = 15
   $scope.total_entries = 0
   $scope.clients = []
@@ -31,7 +29,6 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,  $root
 #      $scope.client_details = details
 #      $scope.setLoaded $scope
 
-
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
     clientDef = $q.defer()
 
@@ -43,7 +40,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,  $root
         $scope.setPageLoaded()
         $scope.total_entries = clients.total_entries
         clientDef.resolve(clients.items)
-      , (err) ->  
+      , (err) ->
         clientDef.reject(err)
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     true

@@ -1,13 +1,13 @@
 
 angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     $rootScope, BBModel, $sessionStorage, $cookies, UriTemplate) ->
- 
+
   login: (form, options) ->
     deferred = $q.defer()
     url = "#{$rootScope.bb.api_url}/api/v1/login/admin"
     if (options? && options.company_id?)
       url = "#{url}/#{options.company_id}"
-    
+
     halClient.$post(url, options, form).then (login) =>
       if login.$has('administrator')
         login.$get('administrator').then (user) =>
@@ -43,7 +43,7 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     , (err) =>
       deferred.reject(err)
     deferred.promise
-      
+
 
   isLoggedIn: ->
     @checkLogin().then () ->

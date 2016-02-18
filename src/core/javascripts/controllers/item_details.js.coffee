@@ -41,7 +41,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
 
 
 angular.module('BB.Controllers').controller 'ItemDetails',
-($scope, $attrs, $rootScope, $modal, $location, $upload, $translate, ItemDetailsService, PurchaseBookingService, AlertService, FormDataStoreService, ValidatorService, SettingsService, PurchaseService, BBModel) ->
+($scope, $attrs, $rootScope, $modal, $location, $upload, $translate, PurchaseBookingService, AlertService, FormDataStoreService, ValidatorService, SettingsService, PurchaseService, BBModel) ->
 
   $scope.controller = "public.controllers.ItemDetails"
 
@@ -103,7 +103,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
     else
 
       params = {company: $scope.bb.company, cItem: $scope.item}
-      ItemDetailsService.query(params).then (details) ->
+      BBModel.ItemDetails.$query(params).then (details) ->
         if details
           setItemDetails details
           $scope.item.item_details = $scope.item_details

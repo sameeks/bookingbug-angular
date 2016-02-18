@@ -36,6 +36,7 @@ angular.module('BB.Directives').directive 'bbCheckout', () ->
 
 angular.module('BB.Controllers').controller 'Checkout',
 ($scope, $rootScope, $attrs, $q, $location, $window, $timeout, $bbug, FormDataStoreService, BBModel) ->
+
   $scope.controller = "public.controllers.Checkout"
   $scope.notLoaded $scope
 

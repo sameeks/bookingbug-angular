@@ -38,7 +38,8 @@ angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
   controller : 'TimeRangeListStackedController',
 
 
-angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, DateTimeUlititiesService) ->
+angular.module('BB.Controllers').controller 'TimeRangeListStackedController',
+($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, DateTimeUlititiesService) ->
 
   $scope.controller = "public.controllers.TimeRangeListStacked"
 

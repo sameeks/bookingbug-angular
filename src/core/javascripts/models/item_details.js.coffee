@@ -17,7 +17,8 @@
 ####
 
 
-angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel, $bbug) ->
+angular.module('BB.Models').factory "ItemDetailsModel",
+($q, $bbug, ItemDetailsService, BBModel, BaseModel) ->
 
   class ItemDetails extends BaseModel
 
@@ -113,3 +114,6 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     ###
     getQuestion: (id) ->
       _.findWhere(@questions, {id: id})
+
+    @$query: (prms) ->
+      ItemDetailsService.query(prms)

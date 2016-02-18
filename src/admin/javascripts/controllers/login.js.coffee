@@ -1,4 +1,3 @@
-
 angular.module('BBAdmin.Directives').directive 'bbAdminLogin', () ->
 
   restrict: 'AE'
@@ -13,8 +12,8 @@ angular.module('BBAdmin.Directives').directive 'bbAdminLogin', () ->
   template: '<div ng-include="login_template"></div>'
 
 
-angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
-    $rootScope, AdminLoginService, $q, $sessionStorage) ->
+angular.module('BBAdmin.Controllers').controller 'AdminLogin',
+($scope, $rootScope, $q, $sessionStorage, BBModel) ->
 
   $scope.login =
     host: $sessionStorage.getItem('host')
@@ -28,7 +27,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
     params =
       email: $scope.login.email
       password: $scope.login.password
-    AdminLoginService.login(params).then (user) ->
+    BBModel.Admin.Login.$login(params).then (user) ->
       if user.company_id?
         $scope.user = user
         $scope.onSuccess() if $scope.onSuccess
@@ -50,6 +49,5 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
     $scope.selected_admin.$post('login', {}, params).then (login) ->
       $scope.selected_admin.$getCompany().then (company) ->
         $scope.bb.company = company
-        AdminLoginService.setLogin($scope.selected_admin)
+        BBModel.Admin.Login.$setLogin($scope.selected_admin)
         $scope.onSuccess(company)
-

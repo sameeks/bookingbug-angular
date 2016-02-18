@@ -41,11 +41,9 @@ angular.module('BBAdmin.Services').run ($q, $injector, BBModel) ->
     afuncs[model] = $injector.get("Admin." + model + "Model")
   BBModel['Admin'] = afuncs
 
-angular.module('BBAdmin').run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $injector, $sessionStorage, AppConfig, AdminLoginService, BBModel) ->
+angular.module('BBAdmin').run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $injector, $sessionStorage, AppConfig, BBModel) ->
   # add methods to the rootscope if they are applicable to whole app
-  
-  
-  AdminLoginService.checkLogin().then () ->
+  BBModel.Admin.Login.$checkLogin().then () ->
     if $rootScope.user && $rootScope.user.company_id
       $rootScope.bb ||= {}
       $rootScope.bb.company_id = $rootScope.user.company_id

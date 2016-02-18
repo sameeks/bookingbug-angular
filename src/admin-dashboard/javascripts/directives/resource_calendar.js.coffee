@@ -1,5 +1,5 @@
 angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
-    uiCalendarConfig, AdminCompanyService, AdminBookingService,
+    uiCalendarConfig, AdminCompanyService,
     AdminPersonService, $q, $sessionStorage, ModalForm, BBModel,
     AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,$interval,$http,
     $timeout, $compile, $templateCache, BookingCollections) ->
@@ -14,7 +14,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             company: company
             start_date: start.format('YYYY-MM-DD')
             end_date: end.format('YYYY-MM-DD')
-          AdminBookingService.query(params).then (bookings) ->
+          BBModel.Admin.Booking.$query(params).then (bookings) ->
             $scope.loading = false
             b.resourceId = b.person_id for b in bookings.items
             $scope.bookings = bookings.items
