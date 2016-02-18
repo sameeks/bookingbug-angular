@@ -1,4 +1,5 @@
-angular.module('BB.Services').factory "MemberPurchaseService", ($q, $rootScope, BBModel) ->
+angular.module('BB.Services').factory "MemberPurchaseService",
+($q, $rootScope, BBModel) ->
 
   query: (member, params) ->
     params ||= {}

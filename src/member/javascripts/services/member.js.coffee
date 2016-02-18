@@ -1,4 +1,5 @@
-angular.module('BB.Services').factory "MemberService", ($q, halClient, $rootScope, BBModel) ->
+angular.module('BB.Services').factory "MemberService",
+($q, $rootScope, halClient, BBModel) ->
 
   refresh: (member) ->
     deferred = $q.defer()
@@ -27,7 +28,6 @@ angular.module('BB.Services').factory "MemberService", ($q, halClient, $rootScop
     , (err) =>
       deferred.reject(err)
     deferred.promise
-
 
   sendWelcomeEmail: (member, params) ->
     deferred = $q.defer()

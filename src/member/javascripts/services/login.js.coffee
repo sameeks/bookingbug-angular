@@ -1,6 +1,6 @@
-angular.module('BBMember.Services').factory "MemberLoginService", ($q, halClient,
-    $rootScope, BBModel, $sessionStorage) ->
- 
+angular.module('BBMember.Services').factory "MemberLoginService",
+($q, $rootScope, $sessionStorage, halClient,  BBModel) ->
+
   login: (form, options) ->
     defer = $q.defer()
     url = "#{$rootScope.bb.api_url}/api/v1/login"
@@ -27,4 +27,3 @@ angular.module('BBMember.Services').factory "MemberLoginService", ($q, halClient
       else
         defer.reject(err)
     defer.promise
-
