@@ -104,6 +104,12 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       clients.items
     return clientDef.promise
 
+  $scope.typeHeadResults = ($item, $model, $label) ->
+    item = $item
+    model = $model
+    label = $label
+    $scope.client = item
+    return
 
   $scope.edit = (item) ->
     $log.info("not implemented")
