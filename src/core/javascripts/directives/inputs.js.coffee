@@ -32,9 +32,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
   restrict: 'A',
   compile: (el,attr,trans) ->
       pre: (scope, element, attrs) ->
-        console.log attrs
         adminRequired = if attrs.bbAdminRequired? then true else false
-        console.log adminRequired
 
         date_format = 'DD/MM/YYYY'
         date_format_2 = 'dd/MM/yyyy'
@@ -93,7 +91,12 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
 
             else if question.detail_type is "check-price"
               html = "<div class='checkbox'><label><input name='q#{question.id}' id='#{question.id}' ng-model='question.answer' ng-checked='question.answer == \"1\"' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='checkbox' value=1> ({{question.price | currency:'GBP'}})</label></div>"
-
+            
+            else if question.detail_type is "radio-price"
+              html = '<div class="radio-group">'
+              for itemx in question.options
+                html += "<div class='radio'><label class='radio-label'><input ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='radio' value=\"#{itemx.name}\"/>#{itemx.display_name}</label></div>"
+              html += "</div>"
             else if question.detail_type is "date"
               html = "
                 <div class='input-group date-picker'>
