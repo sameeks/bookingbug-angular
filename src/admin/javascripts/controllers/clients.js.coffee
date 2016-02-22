@@ -10,7 +10,7 @@ angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
 
 
 angular.module('BBAdmin.Controllers').controller 'AdminClients',
-($scope, $rootScope, $q, $log, AdminClientService, ClientDetailsService, AlertService) ->
+($scope, $rootScope, $q, $log, AdminClientService, AlertService, BBModel) ->
 
   $scope.clientDef = $q.defer()
   $scope.clientPromise = $scope.clientDef.promise
@@ -25,7 +25,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients',
 #      $scope.clientDef.resolve(clients)
 #      $scope.setLoaded $scope
 #    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-#    ClientDetailsService.query($scope.bb.company).then (details) =>
+#    BBModel.ClientDetails.$query($scope.bb.company).then (details) =>
 #      $scope.client_details = details
 #      $scope.setLoaded $scope
 

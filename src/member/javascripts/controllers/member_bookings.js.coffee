@@ -1,5 +1,5 @@
 angular.module('BBMember').controller 'MemberBookings',
-($scope, $modal, $log, $q, ModalForm, MemberBookingService, MemberPrePaidBookingService, BBModel) ->
+($scope, $modal, $log, $q, ModalForm, MemberPrePaidBookingService, BBModel) ->
 
   $scope.loading = true
 

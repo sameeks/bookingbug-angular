@@ -47,7 +47,7 @@ angular.module('BB.Directives').directive 'bbPackageItems', () ->
 
 
 angular.module('BB.Controllers').controller 'PackageItem',
-($scope, $rootScope, PackageItemService) ->
+($scope, $rootScope, BBModel) ->
 
   $scope.controller = "public.controllers.PackageItem"
 
@@ -57,7 +57,7 @@ angular.module('BB.Controllers').controller 'PackageItem',
 
   $scope.init = (company) ->
     $scope.booking_item ||= $scope.bb.current_item
-    PackageItemService.query(company).then (package_items) ->
+    BBModel.PackageItem.$query(company).then (package_items) ->
       $scope.packages = package_items
 
 
@@ -107,7 +107,7 @@ angular.module('BB.Controllers').controller 'PackageItem',
   $scope.getPackageServices = (item) ->
     if item && !item.service_list
       item.service_list = []
-      promise = PackageItemService.getPackageServices(item)
+      promise = BBModel.PackageItem.$getPackageServices(item)
       promise.then (services) ->
         item.service_list = services
       return true
