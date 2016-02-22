@@ -123,6 +123,7 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
       LoginService.updatePassword($rootScope.member, {new_password: new_password, confirm_new_password: confirm_new_password, persist_login: $scope.login_form.persist_login}).then (member) =>
         if member
           $scope.setClient(member)
+          $scope.password_updated = true
           AlertService.raise('PASSWORD_RESET_SUCESS')
       , (err) =>
         $scope.error = err

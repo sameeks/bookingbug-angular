@@ -1129,7 +1129,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   # Breadcrumbs
   ############################################################################################
 
-  # record a steop in the checkout process. That's right, a "steop"!
+  # record a step in the checkout process
   $scope.recordStep = (step, title) ->
     $scope.bb.recordStep(step, title)
 

@@ -447,7 +447,7 @@ angular.module('BB.Models').factory "BasketItemModel",
           if @questions
             for q in @item_details.questions
               a=_.find(@questions, (c) -> c.id == q.id)
-              if a and q.answer is undefined
+              if a and q.answer is undefined or a != q.answer
                 q.answer = a.answer
             @setAskedQuestions()
           if default_questions
