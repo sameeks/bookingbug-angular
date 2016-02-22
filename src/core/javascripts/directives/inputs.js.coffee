@@ -32,10 +32,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
   restrict: 'A',
   compile: (el,attr,trans) ->
       pre: (scope, element, attrs) ->
-        console.log attrs
         adminRequired = if attrs.bbAdminRequired? then true else false
-        console.log adminRequired
-
         date_format = 'DD/MM/YYYY'
         date_format_2 = 'dd/MM/yyyy'
 
