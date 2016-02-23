@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:AdminResource
@@ -17,8 +16,8 @@
 * @property {boolean} disabled Verify if resources is disabled or not
 ####
 
-
-angular.module('BB.Models').factory "Admin.ResourceModel", ($q, BBModel, BaseModel, ResourceModel) ->
+angular.module('BB.Models').factory "Admin.ResourceModel",
+($q, AdminResourceService, BBModel, BaseModel, ResourceModel) ->
 
   class Admin_Resource extends ResourceModel
 
@@ -38,7 +37,7 @@ angular.module('BB.Models').factory "Admin.ResourceModel", ($q, BBModel, BaseMod
     isAvailable: (start, end) ->
       str = start.format("YYYY-MM-DD") + "-" + end.format("YYYY-MM-DD")
       @availability ||= {}
-      
+
       return @availability[str] == "Yes" if @availability[str]
       @availability[str] = "-"
 
@@ -50,4 +49,10 @@ angular.module('BB.Models').factory "Admin.ResourceModel", ($q, BBModel, BaseMod
       else
         @availability[str] = "Yes"
 
-      return @availability[str] == "Yes" 
+      return @availability[str] == "Yes"
+
+    @$query: (params) ->
+      AdminResourceService.query(params)
+
+    @$block: (company, resource, data) ->
+      block(company, resource, data)

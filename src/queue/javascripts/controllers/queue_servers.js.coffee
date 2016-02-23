@@ -1,10 +1,10 @@
-angular.module('BBQueue').controller 'bbQueueServers', ($scope, $log,
-    AdminQueueService, ModalForm, AdminPersonService) ->
+angular.module('BBQueue').controller 'bbQueueServers',
+($scope, $log, AdminQueueService, ModalForm, BBModel) ->
 
   $scope.loading = true
 
   $scope.getServers = () ->
-    AdminPersonService.query({company: $scope.company}).then (people) ->
+    BBModel.Admin.Person.$query({company: $scope.company}).then (people) ->
       $scope.all_people = people
       $scope.servers = []
       for person in $scope.all_people
@@ -16,7 +16,7 @@ angular.module('BBQueue').controller 'bbQueueServers', ($scope, $log,
       $scope.loading = false
 
 
- 
+
   $scope.setAttendance = (person, status) ->
     $scope.loading = true
     person.setAttendance(status).then (person) ->
@@ -36,7 +36,7 @@ angular.module('BBQueue').controller 'bbQueueServers', ($scope, $log,
         server.serving = null
         shash[server.self] = server
       for queuer in $scope.queuers
-        if queuer.$href('person') && shash[queuer.$href('person')] && queuer.position == 0 
+        if queuer.$href('person') && shash[queuer.$href('person')] && queuer.position == 0
           # currently being seen
           shash[queuer.$href('person')].serving = queuer
 
@@ -59,7 +59,7 @@ angular.module('BBQueue').controller 'bbQueueServers', ($scope, $log,
     $scope.$apply () ->
       $scope.selectDragQueuer(queuer)
       $scope.selectQueuer(queuer)
-    console.log "start", queuer  
+    console.log "start", queuer
     return false
 
   $scope.dragStop = (event, ui) ->

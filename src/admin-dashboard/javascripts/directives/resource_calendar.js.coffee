@@ -1,8 +1,5 @@
-angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
-    uiCalendarConfig, AdminCompanyService,
-    AdminPersonService, $q, $sessionStorage, ModalForm, BBModel,
-    AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,$interval,$http,
-    $timeout, $compile, $templateCache, BookingCollections) ->
+angular.module('BBAdminDashboard').directive 'bbResourceCalendar',
+(uiCalendarConfig, AdminCompanyService, $q, $sessionStorage, ModalForm, BBModel, AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,$interval,$http, $timeout, $compile, $templateCache, BookingCollections) ->
 
   controller = ($scope, $attrs) ->
 
@@ -98,7 +95,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
       $scope.loading = true
       $scope.$getCompany().then (company) ->
         params = {company: company}
-        AdminPersonService.query(params).then (people) ->
+        BBModel.Admin.Person.$query(params).then (people) ->
           $scope.loading = false
           $scope.people = _.sortBy people, 'name'
           p.title = p.name for p in $scope.people
