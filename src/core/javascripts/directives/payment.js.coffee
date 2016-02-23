@@ -1,6 +1,7 @@
 angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $http, $templateCache, $q, $log, TemplateSvc) ->
 
   getTemplate = (type, scope) ->
+    console.log type
     switch type
       when 'button_form'
         getButtonFormTemplate(scope)
@@ -48,11 +49,7 @@ angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $h
   return {
     restrict: 'EA'
     replace: true
-    scope: {
-      total: '='
-      bb: '='
-      decideNextPage: '='
-    }
+    scope: true
     link: linker
   }
 
@@ -81,4 +78,3 @@ angular.module('BB.Directives').directive 'bbPaypalExpressButton', ($compile, $s
     }
     link: linker
   }
-
