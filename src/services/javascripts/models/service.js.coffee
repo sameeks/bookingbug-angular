@@ -18,7 +18,7 @@
 ###
 
 angular.module('BB.Models').factory "Admin.ServiceModel",
-($q, ServiceModel, AdminServiceService, BBModel) ->
+($q, AdminServiceService, BBModel, ServiceModel) ->
 
   class Admin_Service extends ServiceModel
 

@@ -1,12 +1,12 @@
-angular.module('BBAdminServices').directive 'serviceTable', (AdminCompanyService,
-    AdminServiceService, $modal, $log, ModalForm) ->
+angular.module('BBAdminServices').directive 'serviceTable',
+( $modal, $log, ModalForm, AdminCompanyService, BBModel) ->
 
   controller = ($scope) ->
     $scope.fields = ['id', 'name']
     $scope.getServices = () ->
       params =
         company: $scope.company
-      AdminServiceService.query(params).then (services) ->
+      BBModel.Admin.Service.$query(params).then (services) ->
         $scope.services = services
 
     $scope.newService = () ->

@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:BBWidget
@@ -19,14 +18,12 @@
 * @property {string} payment_status The payment status
 ####
 
-
 # This class contrains handy functions and variables used in building and displaying a booking widget
 
-angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope) ->
-
+angular.module('BB.Models').factory "BBWidget",
+($q, $urlMatcherFactory, $location,  $window, $rootScope, BreadcrumbService, BBModel) ->
 
   class Widget
-
 
     constructor: () ->
       # uid used to store form data for user journeys
@@ -39,7 +36,6 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       @confirmCheckout = false
       @isAdmin = false
       @payment_status = null
-
 
     ###**
     * @ngdoc method
@@ -74,7 +70,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
         event_group = @convertToDashSnakeCase(@current_item.event_group.name) if @current_item.event_group
         date = @current_item.date.date.toISODate() if @current_item.date
         time = @current_item.time.time if @current_item.time
-        company = @convertToDashSnakeCase(@current_item.company.name) if @current_item.company 
+        company = @convertToDashSnakeCase(@current_item.company.name) if @current_item.company
       prms = angular.copy(@route_values) if @route_values
       prms ||= {}
       angular.extend(prms,{page: page, company: company, service: service_name, event_group: event_group, date: date, time: time})
@@ -205,14 +201,14 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @description
     * Record step in according of step and title parameters. Calculate percentile complete
     *
-    * @returns {boolean} If is the last step or not 
+    * @returns {boolean} If is the last step or not
     ###
     recordStep: (step, title) =>
       @steps[step-1] = {
         url: @updateRoute(@current_page),
-        current_item: @current_item.getStep(), 
-        page: @current_page, 
-        number: step, 
+        current_item: @current_item.getStep(),
+        page: @current_page,
+        number: step,
         title: title,
         stacked_length: @stacked_items.length
       }
@@ -240,7 +236,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @description
     * Calculate percentage complete in according of step number parameter
     *
-    * @returns {integer} The returned percentage complete 
+    * @returns {integer} The returned percentage complete
     ###
     calculatePercentageComplete: (step_number) =>
       @percentage_complete = if step_number && @allSteps then step_number / @allSteps.length * 100 else 0
@@ -370,7 +366,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     ###
     deleteStackedItem: (item) =>
       if item && item.id
-        BasketService.deleteItem(item, @company, {bb: @})
+        BBModel.Basket.$deleteItem(item, @company, {bb: @})
 
       @stacked_items = @stacked_items.filter (i) -> i isnt item
 
@@ -398,7 +394,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     deleteStackedItemByService: (item) =>
       for i in @stacked_items
         if i && i.service && i.service.self == item.self && i.id
-          BasketService.deleteItem(i, @company, {bb: @})
+          BBModel.Basket.$deleteItem(i, @company, {bb: @})
       @stacked_items = @stacked_items.filter (i) -> (i && i.service && i.service.self isnt item.self)
 
     ###**
