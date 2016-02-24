@@ -48,12 +48,6 @@
       <div class="bb-summary-value"><span>{{bb.current_item.start_datetime() | datetime: 'time'}}</span>
       </div>
     </li>
-    <li class="bb-confirmation-summary-item" ng-show="(bb.current_item.person && bb.current_item.person.name) && (bb.isAdmin)">
-      <div class="bb-summary-label">Person
-      </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.person.name}}</span>
-      </div>
-    </li>
   </ul>
   <div class="clearfix"></div>
 </div>
