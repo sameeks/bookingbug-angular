@@ -30,7 +30,7 @@
         font-weight: bold;
       }
     }
-    
+
   }
 }
 
@@ -45,4 +45,66 @@
       padding-bottom: 0;
     }
   }
+}
+
+// Basket Summary List
+.page-summary-var{
+  border-bottom: 1px $secondary-border-color solid;
+  padding-bottom: 15px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.bb-summary-label{
+  padding-top: 10px;
+  font-size: 18px;
+  color: $brand-primary;
+  margin-right: 10px;
+  width: 100%;
+  @media (max-width: $screen-xs-max) {
+    padding-top: 15px;
+    width: auto;
+    margin-right: 0;
+    display: inline-block;
+  }
+}
+.bb-summary-value{
+  padding-bottom: 10px;
+  font-size: 18px;
+  color: #909090;
+  @media (max-width: $screen-xs-max) {
+    width: auto;
+    display: inline-block;
+    padding: 0;
+  }
+}
+.bb-confirmation-summary-item{
+  display: block;
+  float: left;
+  margin-right: 40px;
+  padding: 10px 0 10px 0;
+  font-weight: bold;
+  @media (max-width: $screen-xs-max) {
+    float: none;
+    width: auto;
+    padding: 0;
+  }
+}
+.page-summary-header{
+  height: 1px;
+  border-bottom: 1px $secondary-border-color solid;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.page-summary-header-text{
+  padding-left: 20px;
+  padding-right: 20px;
+  position: relative;
+  display: inline-block;
+  bottom: 12px;
+  color: $brand-primary;
+  background-color: white;
+  font-size: 27px;
+  text-align: center;
+  margin: 0 auto;
 }
