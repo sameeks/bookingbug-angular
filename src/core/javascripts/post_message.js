@@ -75,8 +75,10 @@ var NO_JQUERY = {};
      var pm = {
 
          send: function(options) {
+            console.log("pm send", options)
              var o = $.extend({}, pm.defaults, options),
              target = o.target;
+             var test = document.getElementById("ieapiframefix").contentWindow
              if (!o.target) {
                  console.warn("postmessage target window required");
                  return;
@@ -92,11 +94,17 @@ var NO_JQUERY = {};
              if (o.error) {
                  msg.errback = pm._callback(o.error);
              }
+             debugger;
              if (("postMessage" in target) && !o.hash) {
+                  console.log("post message in target");
                  pm._bind();
                  target.postMessage(JSON.stringify(msg), o.origin || '*');
+             } else if ("postMessage" in test) {
+                pm._bind();
+                target.contentWindow.postMessage(JSON.stringify(msg), o.origin || '*');
              }
              else {
+                console.log("post message NOT in target");
                  pm.hash._bind();
                  pm.hash.send(o, msg);
              }
@@ -271,6 +279,9 @@ var NO_JQUERY = {};
              //console.log("hash.send", target_window, options, msg);
              var target_window = options.target,
              target_url = options.url;
+             console.log("send options", options)
+             console.log("target_url", target_url)
+             target_url = "http://127.0.0.1:3000"
              if (!target_url) {
                  console.warn("postmessage target window url is required");
                  return;
@@ -278,6 +289,10 @@ var NO_JQUERY = {};
              target_url = pm.hash._url(target_url);
              var source_window,
              source_url = pm.hash._url(window.location.href);
+             console.log("window", window)
+             console.log("target_window", target_window)
+             debugger;
+             source_window = "parent";
              if (window == target_window.parent) {
                  source_window = "parent";
              }

@@ -130,7 +130,8 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     evaluator = scope
     if scope.useParent && scope.$parent?
       evaluator = scope.$parent
-    init_params = evaluator.$eval( attrs.bbWidget )
+    init_params = evaluator.$eval(attrs.bbWidget)
+    console.log "init widget"
     scope.initWidget(init_params)
     $rootScope.widget_started.then () =>
       prms = scope.bb
@@ -166,6 +167,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
           scope.$on 'refreshPage', () ->
             scope.showPage scope.bb.current_page
         else
+          console.log "main included"
           element.html(clone).show()
           element.append('<style widget_css scoped></style>') if prms.design_mode
           $compile(element.contents())(scope)
@@ -258,10 +260,18 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     con_started = $q.defer()
     $rootScope.connection_started = con_started.promise
 
-    if (!$sniffer.msie || $sniffer.msie > 9) || !first_call
-      $scope.initWidget2()
-      return
-    else
+    
+     # detect version of webkit
+    regexp = /Safari\/([\d.]+)/
+    result = regexp.exec(navigator.userAgent)
+    webkit_version = parseFloat(result[1]) if result
+
+    console.log "webkit_version", webkit_version
+
+    if ((webkit_version and webkit_version < 538) || ($sniffer.msie and $sniffer.msie <= 9)) && first_call
+
+      console.log "use proxy"
+
       # ie 8 hacks
       if $scope.bb.api_url
         url = document.createElement('a')
@@ -270,13 +280,20 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           $scope.initWidget2()
           return
       if $rootScope.iframe_proxy_ready
+        console.log "rootScope.iframe_proxy_ready"
         $scope.initWidget2()
         return
       else
         $scope.$on 'iframe_proxy_ready', (event, args) ->
+          console.log "iframe_proxy_ready"
           if args.iframe_proxy_ready
             $scope.initWidget2()
         return
+
+    else
+
+      $scope.initWidget2()
+      return
 
 
 
@@ -572,6 +589,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
               page = prms.first_page if prms.first_page
 
               first_call = false
+              console.log "load first page"
               $scope.decideNextPage(page)
       , (err) ->
         con_started.reject("Failed to start widget")

@@ -10,7 +10,19 @@ angular.module('BB.Services').provider("ie8HttpBackend", function ie8HttpBackend
 
 
   function ieCreateHttpBackend ($browser, XHR, $browserDefer, callbacks, rawDocument, locationProtocol, msie, xhr) {
-    if (!msie || msie > 9) return null;
+
+    var regexp = /Safari\/([\d.]+)/
+    var result = regexp.exec(navigator.userAgent)
+    if (result){
+      var webkit_version = parseFloat(result[1]);
+    } 
+
+
+    if ((msie && msie <= 9) || (webkit_version && webkit_version < 538)) {
+      console.log("create backend");
+    } else {
+      return null;
+    }
  
     var getHostName = function (path) {
       var a = document.createElement('a');
@@ -46,6 +58,7 @@ angular.module('BB.Services').provider("ie8HttpBackend", function ie8HttpBackend
     }
     var pmHandler = function (method, url, post, callback, headers, timeout, withCredentials) {
       var win =  $('[name="' + getHostName(url) + '"]')[0].id ;
+      debugger
       pm({
         target: window.frames[win],
         type: 'xhrRequest',
