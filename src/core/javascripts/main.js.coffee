@@ -63,10 +63,9 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
 
   regexp = /Safari\/([\d.]+)/
   result = regexp.exec(navigator.userAgent)
-  webkit_version = parseFloat(result[1]) if result
+  webkit = parseFloat(result[1]) if result
 
-  if (msie && msie <= 9) or (webkit_version and webkit_version < 538)
-    console.log "set http backend provider"
+  if (msie && msie <= 9) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
 

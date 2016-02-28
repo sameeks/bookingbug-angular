@@ -1,25 +1,17 @@
 angular.module('BB.Services').provider("ie8HttpBackend", function ie8HttpBackendProvider() {
 
   this.$get = ['$browser', '$window', '$document', '$sniffer', function ie8HttpBackendFactory($browser, $window, $document, $sniffer) {
-    var msie = $sniffer.msie
-    var params = [$browser, createXhr, $browser.defer, $window.angular.callbacks, $document[0], $window.location.protocol.replace(':', ''), msie];
+    var params = [$browser, createXhr, $browser.defer, $window.angular.callbacks, $document[0], $window.location.protocol.replace(':', ''), $sniffer];
     var param4ie = params.concat([createHttpBackend.apply(this,params)]);
     return (ieCreateHttpBackend && ieCreateHttpBackend.apply(this, param4ie)) ||
       createHttpBackend.apply(this, params);
   }];
 
 
-  function ieCreateHttpBackend ($browser, XHR, $browserDefer, callbacks, rawDocument, locationProtocol, msie, xhr) {
+  function ieCreateHttpBackend ($browser, XHR, $browserDefer, callbacks, rawDocument, locationProtocol, sniffer, xhr) {
 
-    var regexp = /Safari\/([\d.]+)/
-    var result = regexp.exec(navigator.userAgent)
-    if (result){
-      var webkit_version = parseFloat(result[1]);
-    } 
-
-
-    if ((msie && msie <= 9) || (webkit_version && webkit_version < 538)) {
-      console.log("create backend");
+    if ((sniffer.msie && sniffer.msie <= 9) || (sniffer.webkit && sniffer.webkit < 537)) {
+      //console.log("create backend");
     } else {
       return null;
     }
@@ -58,7 +50,6 @@ angular.module('BB.Services').provider("ie8HttpBackend", function ie8HttpBackend
     }
     var pmHandler = function (method, url, post, callback, headers, timeout, withCredentials) {
       var win =  $('[name="' + getHostName(url) + '"]')[0].id ;
-      debugger
       pm({
         target: window.frames[win],
         type: 'xhrRequest',
