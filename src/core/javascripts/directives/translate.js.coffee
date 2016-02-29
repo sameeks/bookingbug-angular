@@ -1,19 +1,14 @@
 angular.module('pascalprecht.translate').config ($translateProvider, $translatePartialLoaderProvider) ->
-
-  $translatePartialLoaderProvider.addPart('default');
+  $translatePartialLoaderProvider.addPart('default')
   $translateProvider
     .useLoader('$translatePartialLoader', {
-      urlTemplate: '/i18n/{part}/{lang}.json',
-      loadFailureHandler: 'MyErrorHandler'
+      urlTemplate: '/i18n/{part}/{lang}.json'
     })
-    .determinePreferredLanguage () ->
-      language = navigator.languages[0] or navigator.language or navigator.browserLanguage or navigator.systemLanguage or navigator.userLanguage or 'en'
-      language.substr(0,2)
-    .fallbackLanguage('en')
     .useCookieStorage()
 
 
-angular.module('BB.Directives').directive 'bbTranslate', ($translate, $translatePartialLoader, $rootScope) ->
+angular.module('BB.Directives').requires.push('angularLoad')
+angular.module('BB.Directives').directive 'bbTranslate', ($translate, $translatePartialLoader, $rootScope, angularLoad) ->
   restrict: 'AE'
   scope : false
   link: (scope, element, attrs) ->
@@ -25,7 +20,12 @@ angular.module('BB.Directives').directive 'bbTranslate', ($translate, $translate
     scope.changeLanguage = (language) ->
       return if !language
       scope.selected_language = language
-      moment.locale(language.name)
+      # annoyingly, moment.locale(string, loadCallback, localePath) has been removed :'(
+      if language.name == 'en'
+        moment.locale('en')
+      else
+        angularLoad.loadScript("/i18n/momentjs/#{language.name}.js").then ->
+          moment.locale(language.name)
       $translate.use(language.name)
       # restart the widget 
       scope.clearBasketItem()
@@ -36,9 +36,3 @@ angular.module('BB.Directives').directive 'bbTranslate', ($translate, $translate
       $translatePartialLoader.addPart(options.widget_lang)
       $translate.refresh()
       scope.changeLanguage()
-
-
-angular.module('BB.Services').factory 'MyErrorHandler', ($q, $log) ->
-  return (part, lang) ->
-    $log.error('The "' + part + '/' + lang + '" part was not loaded.')
-    return $q.when({})

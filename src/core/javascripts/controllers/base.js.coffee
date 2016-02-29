@@ -225,6 +225,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   widget_started = $q.defer()
   $rootScope.widget_started = widget_started.promise
 
+  # TODO: move out
   last_language_key = $translate.storage().get($translate.storageKey()).toUpperCase()
   $scope.selected_language.key = last_language_key
   if $scope.selected_language

@@ -37,6 +37,7 @@
     "angular-ui-sortable": "~0.13.1",
     "angular-spectrum-colorpicker": "~1.4.2",
     "angular-dragdrop": "~1.0.11",
+    "angular-load": "0.4.1",
     "bootstrap-sass-official": "~3.3.1",
     "fontawesome": "~4.2.0",
     "ng-idle": "~0.3.5",
