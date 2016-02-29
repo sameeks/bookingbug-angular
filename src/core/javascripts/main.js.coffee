@@ -60,7 +60,12 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
   msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
   if (isNaN(msie))
     msie = int((/trident\/.*; rv:(\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
-  if msie && msie < 10
+
+  regexp = /Safari\/([\d.]+)/
+  result = regexp.exec(navigator.userAgent)
+  webkit = parseFloat(result[1]) if result
+
+  if (msie && msie <= 9) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
 

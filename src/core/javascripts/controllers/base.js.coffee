@@ -130,7 +130,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     evaluator = scope
     if scope.useParent && scope.$parent?
       evaluator = scope.$parent
-    init_params = evaluator.$eval( attrs.bbWidget )
+    init_params = evaluator.$eval(attrs.bbWidget)
     scope.initWidget(init_params)
     $rootScope.widget_started.then () =>
       prms = scope.bb
@@ -258,10 +258,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     con_started = $q.defer()
     $rootScope.connection_started = con_started.promise
 
-    if (!$sniffer.msie || $sniffer.msie > 9) || !first_call
-      $scope.initWidget2()
-      return
-    else
+    if (($sniffer.webkit and $sniffer.webkit < 537) || ($sniffer.msie and $sniffer.msie <= 9)) && first_call
+
       # ie 8 hacks
       if $scope.bb.api_url
         url = document.createElement('a')
@@ -277,6 +275,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           if args.iframe_proxy_ready
             $scope.initWidget2()
         return
+
+    else
+
+      $scope.initWidget2()
+      return
 
 
 
