@@ -134,6 +134,7 @@ app.filter 'raw_currency', () ->
     number / 100.0
 
 
+# unused in this repo
 app.filter 'pretty_price', ($filter) ->
   (price, symbol) ->
     return $filter('ipretty_price')(price, symbol)
@@ -162,35 +163,43 @@ app.filter 'ipretty_price', ($window, $rootScope) ->
       return symbol + $window.sprintf("%.2f", parseFloat(price))
 
 
-app.filter 'time_period', ->
-  (v, options) ->
+app.filter 'time_period', ($translate) ->
+  (v) ->
+    return unless angular.isNumber(v)
+    minutes = parseInt(v)
+    timePeriod = ''
 
-    return if !angular.isNumber(v)
+    hours = Math.floor(minutes / 60)
+    minutes %= 60
 
-    hour_string = if options && options.abbr_units then "hr"  else "hour"
-    min_string  = if options && options.abbr_units then "min" else "minute"
-    seperator   = if options && angular.isString(options.seperator) then options.seperator else "and"
+    if hours > 0
+        timePeriod += moment.duration(hours, 'hours').humanize()
+        if minutes > 0
+          timePeriod += $translate.instant('TIME_SEPARATOR')
+    if minutes > 0 or hours == 0
+      timePeriod += moment.duration(minutes, 'minutes').humanize()
 
-    val = parseInt(v)
-    if val < 60
-      return "#{val} #{min_string}s"
-    hours = parseInt(val / 60)
-    mins = val % 60
-    if mins == 0
-      if hours == 1
-        return "1 #{hour_string}"
-      else
-       return "#{hours} #{hour_string}s"
-    else
-      str = "#{hours} #{hour_string}"
-      str += "s" if hours > 1
-      return str if mins == 0
-      str += " #{seperator}" if seperator.length > 0
-      str += " #{mins} #{min_string}s"
-
-    return str
+    return timePeriod
 
 
+# unused in this repo
+app.filter 'time_period_from_seconds', ($translate, $filter) ->
+  (v) ->
+    return unless angular.isNumber(v)
+    seconds = parseInt(v)
+    timePeriod = ''
+
+    if seconds >= 60
+      timePeriod += $filter('time_period')(seconds / 60)
+      if (seconds % 60) > 0
+        timePeriod += $translate.instant('TIME_SEPARATOR')
+    if (seconds % 60) > 0
+      timePeriod += moment.duration(seconds % 60, 'seconds').humanize()
+
+    return timePeriod
+
+
+# unused in this repo
 app.filter 'twelve_hour_time', ($window) ->
   (time, options) ->
 
@@ -211,30 +220,6 @@ app.filter 'twelve_hour_time', ($window) ->
       time = "#{h}#{seperator}" + $window.sprintf("%02d", m)
     time += suffix
     return time
-
-# TODO refactor to use time_period
-app.filter 'time_period_from_seconds', ->
-  (v) ->
-    val = parseInt(v)
-    if val < 60
-      return "" + val + " seconds"
-    hours = Math.floor(val / 3600)
-    mins  = Math.floor(val % 3600 / 60)
-    secs  = Math.floor(val % 60)
-    str = ""
-    if hours > 0
-      str += hours + " hour"
-      str += "s" if hours > 1
-      return str if mins == 0 && secs == 0
-      str += " and "
-    if mins > 0
-      str +=  mins + " minute"
-      str += "s" if mins > 1
-      return str if secs == 0
-      str += " and "
-    str += secs + " second"
-    str += "s" if secs > 0  
-    return str
 
 
 app.filter 'round_up', ->

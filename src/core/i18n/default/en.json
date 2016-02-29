@@ -216,5 +216,6 @@
   },
   "THOUSANDS_SEPARATOR": ",",
   "DECIMAL_SEPARATOR": ".",
-  "CURRENCY_FORMAT": "%s%v"
+  "CURRENCY_FORMAT": "%s%v",
+  "TIME_SEPARATOR": " and "
 }
