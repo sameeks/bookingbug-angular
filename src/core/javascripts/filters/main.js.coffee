@@ -120,9 +120,7 @@ app.filter 'icurrency', ($translate, $window, $rootScope) ->
       MIXED: "~"
     }
 
-    console.log()
     format = $translate.instant(['THOUSANDS_SEPARATOR', 'DECIMAL_SEPARATOR', 'CURRENCY_FORMAT'])
-    console.log(JSON.stringify format)
 
     number = number / 100.0
 
