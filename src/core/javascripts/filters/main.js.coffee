@@ -1,5 +1,6 @@
 # Filters
 app = angular.module 'BB.Filters'
+app.requires.push 'pascalprecht.translate'
 
 # strips the postcode from the end of the address. i.e.
 # '15 some address, somwhere, SS1 4RP' becomes '15 some address, somwhere'
@@ -107,7 +108,7 @@ app.filter 'currency', ($filter) ->
   (number, currencyCode) =>
     return $filter('icurrency')(number, currencyCode)
 
-app.filter 'icurrency', ($window, $rootScope) ->
+app.filter 'icurrency', ($translate, $window, $rootScope) ->
   (number, currencyCode) =>
     currencyCode ||= $rootScope.bb_currency
     currency = {
@@ -119,18 +120,15 @@ app.filter 'icurrency', ($window, $rootScope) ->
       MIXED: "~"
     }
 
-    if $.inArray(currencyCode, ["USD", "AUD", "CAD", "MIXED", "GBP"]) >= 0
-      thousand = ","
-      decimal = "."
-      format = "%s%v"
-    else
-      thousand = "."
-      decimal = ","
-      format = "%s%v"
+    console.log()
+    format = $translate.instant(['THOUSANDS_SEPARATOR', 'DECIMAL_SEPARATOR', 'CURRENCY_FORMAT'])
+    console.log(JSON.stringify format)
 
     number = number / 100.0
 
-    $window.accounting.formatMoney(number, currency[currencyCode], 2, thousand, decimal, format)
+    $window.accounting.formatMoney(number, currency[currencyCode], 2,
+                                   format.THOUSANDS_SEPARATOR, format.DECIMAL_SEPARATORS,
+                                   format.CURRENCY_FORMAT)
 
 
 app.filter 'raw_currency', () ->

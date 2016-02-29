@@ -46,7 +46,7 @@
   "AVAIL_EVENING":"Soir",
   "AVAIL_WORD":"disponible",
   "AVAIL_NO":"Pas de service disponible",
-  "PICK_A_DATE":"Choisissez une date",
+  "PICK_ANUMBER_FORMAT_DATE":"Choisissez une date",
   "HOUR":"heure",
   "MIN":"min",
   "AND":"et",
@@ -206,5 +206,8 @@
     "ITEM_NO_LONGER_AVAILABLE":"Désolé. L'article que vous souhaitez réserver n'est plus disponible.",
     "FORM_INVALID":"Saisissez tous les champs obligatoires",
     "EMPTY_BASKET_FOR_CHECKOUT":"Il n'y a aucun élément dans le panier."
-  }
+  },
+  "THOUSANDS_SEPARATOR": ".",
+  "DECIMAL_SEPARATOR": ",",
+  "CURRENCY_FORMAT": "%v%s"
 }

@@ -213,5 +213,8 @@
     "FORM_INVALID":"Please complete all required fieldsssss",
     "GEOLOCATION_ERROR":"Sorry, we could not determine your location. Please try searching instead.",
     "EMPTY_BASKET_FOR_CHECKOUT":"There are no items in the basket to proceed to checkout."
-  }
+  },
+  "THOUSANDS_SEPARATOR": ",",
+  "DECIMAL_SEPARATOR": ".",
+  "CURRENCY_FORMAT": "%s%v"
 }

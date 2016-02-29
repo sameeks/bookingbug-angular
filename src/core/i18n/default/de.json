@@ -210,5 +210,8 @@
     "FORM_INVALID":"Bitte füllen Sie alle Felder aus",
     "GEOLOCATION_ERROR":"Leider konnten wir Dein Ort wurde nicht festzustellen. Bitte versuchen Sie statt.",
     "EMPTY_BASKET_FOR_CHECKOUT":"Es sind keine Artikel im Warenkorb zur Kasse gehen."
-  }
+  },
+  "THOUSANDS_SEPARATOR": ".",
+  "DECIMAL_SEPARATOR": ",",
+  "CURRENCY_FORMAT": "%v%s"
 }
