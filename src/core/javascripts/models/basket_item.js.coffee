@@ -414,7 +414,7 @@ angular.module('BB.Models').factory "BasketItemModel",
           return
       @event_chain = event_chain
       @base_price = parseFloat(event_chain.price)
-      if @price != @base_price
+      if @price? and @price != @base_price 
         @setPrice(@price)
       else
         @setPrice(@base_price)
