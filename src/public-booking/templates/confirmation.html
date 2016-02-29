@@ -13,7 +13,7 @@
             <p class="bb-confirmation-p-alignment">Thanks {{ total.client.first_name }}. You have successfully made the following bookings. We have you emailed you the details below.</p>
           </div>
           <div class="row hidden-print text-right">
-            <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span> Print</button>
+            <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print"></span> Print</button>
             <div bb-booking-export class="bb-booking-export"></div>
           </div>
         </div>
@@ -21,22 +21,22 @@
         <div>
           <ul class="confirmation-summary">
             <li class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Booking Reference <span class='fa fa-caret-right'></span></div>
-              <div class="col-sm-9 bb-summary-value">{{ total.id }}</div>
+              <div class="col-sm-3 bb-summary-label">Reference:</div>
+              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>   {{ total.id }}</div>
             </li>
           </ul>
           <ul class="confirmation-summary" ng-repeat="i in total.items">
             <li ng-if="i.full_describe" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Service <span class='fa fa-caret-right'></span></div>
-              <div class="col-sm-9 bb-summary-value">{{ i.full_describe }}</div>
+              <div class="col-sm-3 bb-summary-label">Service:</div>
+              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>   {{ i.full_describe }}</div>
             </li>
             <li ng-if="i.describe" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Date/Time <span class='fa fa-caret-right'></span></div>
-              <div class="col-sm-9 bb-summary-value">{{ i.describe }}</div>
+              <div class="col-sm-3 bb-summary-label">Date/Time:</div>
+              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>   {{ i.describe }}</div>
             </li>
             <li ng-if="i.price" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Price <span class='fa fa-caret-right'></span></div>
-              <div class="col-sm-9 bb-summary-value">{{ i.price | currency }}</div>
+              <div class="col-sm-3 bb-summary-label">Price:</div>
+              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>   {{ i.price | currency }}</div>
             </li>
           </ul>
           <ul ng-show="total.items[0].address.lat" class="confirmation-summary">
