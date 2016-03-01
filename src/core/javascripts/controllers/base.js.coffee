@@ -28,7 +28,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbWidgetsupportedLocales', (PathSvc, $http, $log,
+angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     $templateCache, $compile, $q, AppConfig, $timeout, $bbug,$rootScope) ->
 
   ###**
@@ -383,7 +383,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.template
       $scope.bb.template = prms.template
 
-    I18nService.init(prms.i18n, prms.supportedLocales)
+    I18nService.init(prms.i18n, prms.supported_locales)
     if prms.i18n
       $scope.i18n = true
 

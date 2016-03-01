@@ -22,8 +22,8 @@ app = angular.module('BB', [
   'uiGmapgoogle-maps',
   'angular.filter',
   'ui-rangeSlider',
-  'ngCookies',
   'pascalprecht.translate',
+  'ngCookies',
   'vcRecaptcha',
   'slickCarousel'
 ])
@@ -64,7 +64,7 @@ app.config ($locationProvider, $httpProvider, $translatePartialLoaderProvider,
     .useLoader('$translatePartialLoader', {
       urlTemplate: 'i18n/{part}/{lang}.json'
     })
-    .useCookieStorage()
+    .useLocalStorage()
 
   msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
   if (isNaN(msie))

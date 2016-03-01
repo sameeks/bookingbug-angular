@@ -7,15 +7,17 @@ angular.module('BB.Services').factory 'I18nService', ($translate, $window, angul
       angularLoad.loadScript("i18n/momentjs/#{locale}.js").then ->
         moment.locale(locale)
   supportedLocales = ['en', 'fr', 'de']
+  defaultLocale = $translate.proposedLanguage() || 'en'
   return {
     setLocale: (locale) ->
       $translate.use(locale)
       setMomentLocale(locale)
+    getDefaultLocale: -> defaultLocale
     getSupportedLocales: -> supportedLocales
     init: (multilingual, locales) ->
       if multilingual
         supportedLocales = locales || supportedLocales
-        setMomentLocale($translate.use())
+        this.setLocale(defaultLocale)
       else
         $translate.use('en')
   }
