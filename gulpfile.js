@@ -37,6 +37,7 @@ gulp.task('javascripts', function() {
         './bower_components/lodash/dist/lodash.js',
         './bower_components/angular-google-maps/dist/angular-google-maps.js',
         './bower_components/webshim/js-webshim/dev/polyfiller.js',
+        './src/i18n/en.js',
         './src/javascripts/core/main.js.coffee', 
         './src/*/javascripts/main.js.coffee', 
         './src/*/main.js.coffee', 
@@ -108,9 +109,9 @@ gulp.task('fonts', function() {
 });
 
 gulp.task('i18n', function() {
-    gulp.src('src/i18n/default/*')
+    gulp.src('src/i18n/*.json')
         .pipe(flatten())
-        .pipe(gulp.dest('release/i18n/default'));
+        .pipe(gulp.dest('release/i18n/'));
     gulp.src('bower_components/momentjs/locale/*.js')
         .pipe(flatten())
         .pipe(gulp.dest('release/i18n/momentjs'));

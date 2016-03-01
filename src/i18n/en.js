@@ -1,4 +1,4 @@
-{
+;window.BB_ENGLISH_TRANSLATIONS={
   "CHANGE_LANG":"Change language",
   "EN":"English",
   "DE":"Deutsch",
@@ -218,4 +218,4 @@
   "DECIMAL_SEPARATOR": ".",
   "CURRENCY_FORMAT": "%s%v",
   "TIME_SEPARATOR": " and "
-}
+};

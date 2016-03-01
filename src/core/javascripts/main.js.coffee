@@ -43,7 +43,7 @@ else
 
 app.constant('UriTemplate', window.UriTemplate)
 
-app.config ($locationProvider, $httpProvider, $translatePartialLoaderProvider,
+app.config ($locationProvider, $httpProvider,
             $translateProvider, $provide, ie8HttpBackendProvider) ->
 
   $httpProvider.defaults.headers.common =
@@ -59,11 +59,9 @@ app.config ($locationProvider, $httpProvider, $translatePartialLoaderProvider,
   lowercase = (string) ->
     if angular.isString(string) then string.toLowerCase() else string
 
-  $translatePartialLoaderProvider.addPart('default')
   $translateProvider
-    .useLoader('$translatePartialLoader', {
-      urlTemplate: 'i18n/{part}/{lang}.json'
-    })
+    .translations('en', window.BB_ENGLISH_TRANSLATIONS)
+    .useStaticFilesLoader(prefix: 'i18n/', suffix: '.json')
     .useLocalStorage()
 
   msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
