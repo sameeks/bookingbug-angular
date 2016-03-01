@@ -28,7 +28,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
+angular.module('BB.Directives').directive 'bbWidgetsupportedLocales', (PathSvc, $http, $log,
     $templateCache, $compile, $q, AppConfig, $timeout, $bbug,$rootScope) ->
 
   ###**
@@ -185,7 +185,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $rootScope, halClient, $window, $http, $localCache, $q, $timeout, BasketService,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
-    QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
+    QuestionService, I18nService, PurchaseService, $sessionStorage, $bbug,
     SettingsService, UriTemplate, $anchorScroll, $translate) ->
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
@@ -217,21 +217,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.bb.stacked_items = []
-  $scope.selected_language = {}
   # $scope.hide_page = false
   first_call = true
   con_started = $q.defer()
   $rootScope.connection_started = con_started.promise
   widget_started = $q.defer()
   $rootScope.widget_started = widget_started.promise
-
-  # TODO: move out
-  last_language_key = $translate.storage().get($translate.storageKey()).toUpperCase()
-  $scope.selected_language.key = last_language_key
-  if $scope.selected_language
-    moment.locale($scope.selected_language.key)
-  else
-    moment.locale([LocaleService, "en"])
 
   $rootScope.Route =
     Company: 0
@@ -392,8 +383,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.template
       $scope.bb.template = prms.template
 
+    I18nService.init(prms.i18n, prms.supportedLocales)
     if prms.i18n
-      SettingsService.enableInternationalizaton()
+      $scope.i18n = true
 
     if prms.login_required
       $scope.bb.login_required = true
@@ -851,7 +843,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     #   return $scope.showPage('payment')
     else if $scope.bb.payment_status == "complete"
       return $scope.showPage('confirmation')
-
 
   $scope.showCheckout = ->
     $scope.bb.current_item.ready

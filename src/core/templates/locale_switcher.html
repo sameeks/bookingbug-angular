@@ -1,0 +1,10 @@
+<div ng-hide="bb.current_page == 'checkout' || bb.current_page == 'checkout_event'" class="btn-group" dropdown is-open="status.isopen" >
+  <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle title="{{'CHANGE_LANG' | translate}}">
+    {{language | translate}}<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li ng-repeat="language in LANGUAGES">
+      <a ng-click="changeLanguage(language)">{{language | translate}}</a>
+    </li>
+  </ul>
+</div>

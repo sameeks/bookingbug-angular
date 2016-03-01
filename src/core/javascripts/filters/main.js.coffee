@@ -134,7 +134,7 @@ app.filter 'raw_currency', () ->
     number / 100.0
 
 
-# unused in this repo
+# unused in this repo, English-only
 app.filter 'pretty_price', ($filter) ->
   (price, symbol) ->
     return $filter('ipretty_price')(price, symbol)
@@ -199,7 +199,7 @@ app.filter 'time_period_from_seconds', ($translate, $filter) ->
     return timePeriod
 
 
-# unused in this repo
+# unused in this repo, english-only
 app.filter 'twelve_hour_time', ($window) ->
   (time, options) ->
 
@@ -279,7 +279,7 @@ app.filter "uk_local_number", ->
 # format datetime, expects moment object but will attempt to convert to
 # moment object
 # TODO get timezone from company
-app.filter "datetime", () ->
+app.filter "datetime", ->
   (datetime, format, show_timezone = true) ->
 
     return if !datetime
@@ -292,9 +292,9 @@ app.filter "datetime", () ->
     # if the dates time zone is different to the users, show the timezone too
     if datetime.utcOffset() != new Date().getTimezoneOffset() && show_timezone
       if datetime._z
-        result += datetime.format(" z") 
+        result += datetime.format(" z")
       else
-        result += " UTC" + datetime.format("Z") 
+        result += " UTC" + datetime.format("Z")
 
     return result
 
@@ -308,7 +308,7 @@ app.filter 'range', ->
 app.filter 'international_number', () ->
   (number, prefix) =>
     if number and prefix
-      return "#{prefix} #{number}" 
+      return "#{prefix} #{number}"
     else if number
       return "#{number}"
     else
@@ -333,7 +333,7 @@ app.filter 'spaces_remaining', () ->
   (spaces) ->
     if spaces < 1
       return 0
-    else 
+    else
       return spaces
 
 app.filter 'key_translate', ->

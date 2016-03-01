@@ -9,10 +9,11 @@ app = angular.module('BB', [
 
   'ngStorage',
   'angular-hal',
+  'angularLoad',
   'ui.bootstrap',
   'ngSanitize',
   'ui.map',
-  'ui.router.util', 
+  'ui.router.util',
   'ngLocalData',
   'ngAnimate',
   'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
@@ -25,7 +26,7 @@ app = angular.module('BB', [
   'pascalprecht.translate',
   'vcRecaptcha',
   'slickCarousel'
-]);
+])
 
 
 # use this to inject application wide settings around the app
@@ -42,7 +43,8 @@ else
 
 app.constant('UriTemplate', window.UriTemplate)
 
-app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) ->
+app.config ($locationProvider, $httpProvider, $translatePartialLoaderProvider,
+            $translateProvider, $provide, ie8HttpBackendProvider) ->
 
   $httpProvider.defaults.headers.common =
     'App-Id': 'f6b16c23',
@@ -56,6 +58,13 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
 
   lowercase = (string) ->
     if angular.isString(string) then string.toLowerCase() else string
+
+  $translatePartialLoaderProvider.addPart('default')
+  $translateProvider
+    .useLoader('$translatePartialLoader', {
+      urlTemplate: 'i18n/{part}/{lang}.json'
+    })
+    .useCookieStorage()
 
   msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
   if (isNaN(msie))
