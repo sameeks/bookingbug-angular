@@ -43,7 +43,7 @@ else
 
 app.constant('UriTemplate', window.UriTemplate)
 
-app.config ($locationProvider, $httpProvider,
+app.config ($locationProvider, $httpProvider, BB_ENGLISH_TRANSLATIONS
             $translateProvider, $provide, ie8HttpBackendProvider) ->
 
   $httpProvider.defaults.headers.common =
@@ -60,7 +60,7 @@ app.config ($locationProvider, $httpProvider,
     if angular.isString(string) then string.toLowerCase() else string
 
   $translateProvider
-    .translations('en', window.BB_ENGLISH_TRANSLATIONS)
+    .translations('en', BB_ENGLISH_TRANSLATIONS)
     .useStaticFilesLoader(prefix: 'i18n/', suffix: '.json')
     .useLocalStorage()
 

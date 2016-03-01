@@ -37,7 +37,6 @@ gulp.task('javascripts', function() {
         './bower_components/lodash/dist/lodash.js',
         './bower_components/angular-google-maps/dist/angular-google-maps.js',
         './bower_components/webshim/js-webshim/dev/polyfiller.js',
-        './src/i18n/en.js',
         './src/javascripts/core/main.js.coffee', 
         './src/*/javascripts/main.js.coffee', 
         './src/*/main.js.coffee', 
@@ -48,6 +47,7 @@ gulp.task('javascripts', function() {
         './src/*/models/**/*', 
         './src/*/services/**/*',
         '!./src/**/*_test.js.coffee',
+        './src/i18n/en.js',
         '!./**/*~']))
     // .pipe(filelog())
     .pipe(gulpif(/.*coffee$/, coffee().on('error', function (e) {
