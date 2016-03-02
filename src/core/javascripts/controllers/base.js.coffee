@@ -277,7 +277,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return
 
     else
-
       $scope.initWidget2()
       return
 
