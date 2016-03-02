@@ -389,16 +389,10 @@ app.directive 'bbApiUrl', ($rootScope, $compile, $sniffer, $timeout, $window, $l
             src = "#{url.protocol}://#{url.host}/ClientProxy.html"
           $rootScope.iframe_proxy_ready = false
 
-          $window.iframeLoaded = () ->
-            $rootScope.iframe_proxy_ready = true
-            $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
-
-          if $sniffer.webkit and $sniffer.webkit < 537
-            $timeout ->
-              $window.iframeLoaded()
-            , 1000
-
           $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;'></iframe>") scope, (cloned, scope) =>
+            cloned.bind "load", ->
+              $rootScope.iframe_proxy_ready = true
+              $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
             element.append(cloned)
 
 
