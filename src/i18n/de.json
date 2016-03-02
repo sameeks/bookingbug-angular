@@ -31,7 +31,7 @@
   "MAP_TITLE":"Finden Sie den nächstgelegenen laden",
   "MAP_PLACEHOLDER":"Ort, Postleitzahl oder ladens eingeben",
   "GEOLOCATE":"Aktuellen Standort benutzen",
-  "STORE_RESULT_TITLE":"{{number}} Ergebnisse für Ausstellungsräume in der Nähe von {{address}}",
+  "STORE_RESULT_TITLE":"{results, plural, =0{Keine Ergebnisse} one{1 Ergebnis} other{# Ergebnisse}} für Ausstellungsräume in der Nähe von {{address}}",
   "STORE_PHONE":"Telefon",
   "PICK_A_SERVICE":"wählen Sie einen Service",
   "PICK_AN_ADVISER":"holen einen Berater",

@@ -63,6 +63,7 @@ app.config ($locationProvider, $httpProvider, BB_ENGLISH_TRANSLATIONS
     .translations('en', BB_ENGLISH_TRANSLATIONS)
     .useStaticFilesLoader(prefix: 'i18n/', suffix: '.json')
     .useLocalStorage()
+    .addInterpolation('$translateMessageFormatInterpolation')
 
   msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
   if (isNaN(msie))

@@ -31,7 +31,7 @@
   "MAP_TITLE":"Trouvez un magasin près de chez vous",
   "MAP_PLACEHOLDER":"Saisissez une ville, un code postal ou un magasin",
   "GEOLOCATE":"Utilisez votre emplacement actuel",
-  "STORE_RESULT_TITLE":"{{number}} Résultats pour les magasins à proximité de {{address}}",
+  "STORE_RESULT_TITLE":"{results, plural, =0{Aucun réultat trouvé} one{1 résultat trouvé} other{# résultats trouvés}} pour les magasins à proximité de {{address}}",
   "STORE_PHONE":"Téléphone",
   "PICK_A_SERVICE":"choisir un service",
   "PICK_AN_ADVISER":"choisir un conseiller",

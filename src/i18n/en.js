@@ -31,7 +31,7 @@
   "MAP_TITLE":"Search for a store to begin your booking.",
   "MAP_PLACEHOLDER":"Enter a town, city, postcode or store",
   "GEOLOCATE":"Use current location",
-  "STORE_RESULT_TITLE":"{{number}} results for stores near {{address}}",
+  "STORE_RESULT_TITLE":"{results, plural, =0{No results} one{1 result} other{# results}} for stores near {{address}}",
   "STORE_PHONE":"Phone",
   "PICK_A_SERVICE":"pick a service",
   "PICK_AN_ADVISER":"pick an adviser",

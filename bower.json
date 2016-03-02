@@ -62,6 +62,8 @@
     "angular-translate-storage-local": "~2.7.2",
     "angular-translate-storage-cookie": "~2.7.2",
     "angular-translate-loader-static-files": "~2.7.2",
+    "angular-translate-interpolation-messageformat": "~2.7.2",
+    "messageformat": "0.3.1",
     "uri-templates": "~0.1.5",
     "angular-recaptcha": "~2.2.3",
     "angular-slick-carousel": "~3.1.4"
@@ -76,6 +78,7 @@
     "angular-translate": "~2.7.0",
     "humanize-duration": "~2.8.0",
     "spectrum": "1.7.0",
-    "slick-carousel": "~1.5.9"
+    "slick-carousel": "~1.5.9",
+    "messageformat": "0.3.1"
   }
 }
