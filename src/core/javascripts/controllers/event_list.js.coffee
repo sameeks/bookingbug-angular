@@ -144,6 +144,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       event_groups_collection = _.indexBy(event_groups, 'id')
       if $scope.items
         for item in $scope.items
+          console.warn item.description + " " + item.date._d
           item.group = event_groups_collection[item.service_id]      
 
       # Remove loading icon
