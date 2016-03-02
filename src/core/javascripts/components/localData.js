@@ -1,4 +1,4 @@
-
+// THIS DOESN'T APPEAR TO BE USED?
 angular.module('ngLocalData', ['angular-hal']).
  factory('$localCache', ['halClient', '$q', '$sessionStorage', function( halClient, $q, $sessionStorage) {
     data = {};

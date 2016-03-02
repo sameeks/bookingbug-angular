@@ -33,17 +33,11 @@ angular.module('BB.Directives').directive 'bbLogin', () ->
   controller : 'Login'
 
 
-angular.module('BB.Controllers').controller 'Login',
-($scope, $rootScope, $q, $location, LoginService, ValidatorService, AlertService, BBModel) ->
+angular.module('BB.Controllers').controller 'Login', ($scope, $rootScope, LoginService, $q, ValidatorService, BBModel, $location, AlertService) ->
 
   $scope.controller = "public.controllers.Login"
-  $scope.error = false
-  $scope.password_updated = false
-  $scope.password_error = false
-  $scope.email_sent = false
-  $scope.success = false
-  $scope.login_error = false
   $scope.validator = ValidatorService
+  $scope.login_form = {}
 
   ###**
   * @ngdoc method
@@ -73,13 +67,9 @@ angular.module('BB.Controllers').controller 'Login',
   * @param {string} password The password use for the login
   ###
   $scope.login_with_password = (email, password) ->
-    $scope.login_error = false
     LoginService.companyLogin($scope.bb.company, {}, {email: email, password: password}).then (member) =>
       $scope.member = new BBModel.Member.Member(member)
-      $scope.success = true
-      $scope.login_error = false
     , (err) =>
-      $scope.login_error = err
       AlertService.raise('LOGIN_FAILED')
 
   ###**
@@ -112,12 +102,9 @@ angular.module('BB.Controllers').controller 'Login',
   * @param {string} email The email address use for the send new password
   ###
   $scope.sendPasswordReset = (email) ->
-    $scope.error = false
     LoginService.sendPasswordReset($scope.bb.company, {email: email, custom: true}).then () ->
-      $scope.email_sent = true
       AlertService.raise('PASSWORD_RESET_REQ_SUCCESS')
     , (err) =>
-      $scope.error = err
       AlertService.raise('PASSWORD_RESET_REQ_FAILED')
 
   ###**
@@ -132,15 +119,12 @@ angular.module('BB.Controllers').controller 'Login',
   ###
   $scope.updatePassword = (new_password, confirm_new_password) ->
     AlertService.clear()
-    $scope.password_error = false
-    $scope.error = false
     if $rootScope.member and new_password and confirm_new_password and (new_password is confirm_new_password)
-      LoginService.updatePassword($rootScope.member, {new_password: new_password, confirm_new_password: confirm_new_password}).then (member) =>
+      LoginService.updatePassword($rootScope.member, {new_password: new_password, confirm_new_password: confirm_new_password, persist_login: $scope.login_form.persist_login}).then (member) =>
         if member
-          $scope.password_updated = true
           $scope.setClient(member)
+          $scope.password_updated = true
           AlertService.raise('PASSWORD_RESET_SUCESS')
-          $rootScope.$emit "login:password_reset"
       , (err) =>
         $scope.error = err
         AlertService.raise('PASSWORD_RESET_FAILED')

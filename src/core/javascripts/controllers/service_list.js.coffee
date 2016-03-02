@@ -101,21 +101,17 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
         items = items.filter (x) -> !x.disabled && !x.deleted
 
-      for item in items
-        if item.listed_durations && item.listed_durations.length == 1
-          item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
-        else
-          item.display_name = item.name
       # not all service lists need filtering. check for attribute first
       filterItems = if $attrs.filterServices is 'false' then false else true
 
       if filterItems
         if $scope.booking_item.service_ref && !$scope.options.show_all
           items = items.filter (x) -> x.api_ref is $scope.booking_item.service_ref
-        else if $scope.booking_item.category && !$scope.options.show_all
+        else if ($scope.booking_item.category || $scope.booking_item.service_group) && !$scope.options.show_all
+          $scope.category = $scope.booking_item.service_group if !$scope.booking_item.category
           # if we've selected a category for the current item - limit the list
           # of services to ones that are relevant
-          items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.booking_item.category.self
+          items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.category.self
 
       # filter out event groups unless explicity requested
       if !$scope.options.show_event_groups
@@ -133,7 +129,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       if $scope.booking_item.defaultService()
         for item in items
           if item.self == $scope.booking_item.defaultService().self or (item.name is $scope.booking_item.defaultService().name and !item.deleted)
-            $scope.selectItem(item, $scope.nextRoute)
+            $scope.selectItem(item, $scope.nextRoute, {skip_step: true})
 
       # if there's one selected - just select it
       if $scope.booking_item.service
@@ -165,8 +161,14 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
         services = (i.item for i in items when i.item?)
 
+        for item in services
+          if item.listed_durations && item.listed_durations.length == 1
+            item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
+          else
+            item.display_name = item.name
 
         $scope.bookable_services = services
+
         $scope.bookable_items = items
 
         if services.length is 1 and !$scope.options.allow_single_pick

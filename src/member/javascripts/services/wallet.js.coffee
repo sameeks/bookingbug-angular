@@ -1,5 +1,4 @@
-angular.module("BB.Services").factory "WalletService",
-($q, BBModel) ->
+angular.module("BBMember.Services").factory "WalletService", ($q, BBModel) ->
 
   getWalletForMember: (member, params) ->
     params ||= {}

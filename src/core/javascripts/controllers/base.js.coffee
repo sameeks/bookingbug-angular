@@ -130,7 +130,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     evaluator = scope
     if scope.useParent && scope.$parent?
       evaluator = scope.$parent
-    init_params = evaluator.$eval( attrs.bbWidget )
+    init_params = evaluator.$eval(attrs.bbWidget)
     scope.initWidget(init_params)
     $rootScope.widget_started.then () =>
       prms = scope.bb
@@ -186,7 +186,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate, LoadingService, $anchorScroll) ->
+    SettingsService, UriTemplate, LoadingService, $anchorScroll, $localStorage) ->
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -258,10 +258,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     con_started = $q.defer()
     $rootScope.connection_started = con_started.promise
 
-    if (!$sniffer.msie || $sniffer.msie > 9) || !first_call
-      $scope.initWidget2()
-      return
-    else
+    if (($sniffer.webkit and $sniffer.webkit < 537) || ($sniffer.msie and $sniffer.msie <= 9)) && first_call
+
       # ie 8 hacks
       if $scope.bb.api_url
         url = document.createElement('a')
@@ -277,6 +275,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           if args.iframe_proxy_ready
             $scope.initWidget2()
         return
+
+    else
+
+      $scope.initWidget2()
+      return
 
 
 
@@ -702,13 +705,23 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.isLoadingPage = () =>
     $scope.loading_page
 
-  $scope.$on '$locationChangeStart', (event) =>
-    return if !$scope.bb.routeFormat
-    if !$scope.bb.routing
-      step = $scope.bb.matchURLToStep()
-      $scope.loadStep(step) if step
-    $scope.bb.routing = false
 
+  # $locationChangeStart is broadcast before a URL will change
+  $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
+
+    return if !$scope.bb.routeFormat and $scope.bb.routing
+
+    # Get the step number we want to load
+    step_number = $scope.bb.matchURLToStep()
+
+    # Load next page
+    if step_number? and step_number > $scope.bb.current_step
+      $scope.loadStep(step_number)
+    else if step_number? and step_number < $scope.bb.current_step
+      # Load previous page
+      $scope.loadPreviousStep('locationChangeStart')
+    
+    $scope.bb.routing = false
 
 
   $scope.showPage = (route, dont_record_page) =>
@@ -717,7 +730,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.jumped = false
 
 
-    # don't load a new page if we'still loading an old one - helps prevent double clicks
+    # don't load a new page if we are still loading an old one - helps prevent double clicks
     return if $scope.isLoadingPage()
 
     if $window._gaq
@@ -1022,7 +1035,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   restoreBasket = () ->
     restore_basket_defer = $q.defer()
     $scope.quickEmptybasket().then () ->
-      auth_token = $sessionStorage.getItem('auth_token')
+      auth_token = $localStorage.getItem('auth_token') or $sessionStorage.getItem('auth_token')
       href = $scope.bb.api_url +
         '/api/v1/status{?company_id,affiliate_id,clear_baskets,clear_member}'
       params =
@@ -1077,6 +1090,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.company = company
     $scope.bb.item_defaults.company = $scope.bb.company
 
+    SettingsService.setCountryCode($scope.bb.company.country_code)
+
     if company.$has('settings')
       company.getSettings().then (settings) =>
         # setup some useful info
@@ -1109,7 +1124,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   # Breadcrumbs
   ############################################################################################
 
-  # record a steop in the checkout process
+  # record a step in the checkout process
   $scope.recordStep = (step, title) ->
     $scope.bb.recordStep(step, title)
 
@@ -1164,25 +1179,36 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   * @description
   * Loads the previous unskipped step
   *
-  * @param {object} steps_to_go_back The number of steps to go back
+  * @param {integer} steps_to_go_back: The number of steps to go back
+  * @param {string} caller: The method that called this function
   ###
-  $scope.loadPreviousStep = (steps_to_go_back) ->
-
-    steps_to_go_back = steps_to_go_back or 1
+  $scope.loadPreviousStep = (caller) ->
 
     past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
 
-    # find the last unskipped step and load that (whilst respecting
-    # the number of steps to go back)
-    step_count = 0
-    while step_count < steps_to_go_back
+    # Find the last unskipped step
+    step_to_load = past_steps[0]
+    while past_steps[0]
       last_step = past_steps.pop()
       if !last_step.skipped
         step_to_load = last_step.number
-        step_count++
+        break
 
-    $scope.loadStep(step_to_load) if step_to_load
+    # Remove pages from browser history (sync browser history with routing)
+    if step_to_load
+      pages_to_remove_from_history = ($scope.bb.current_step - step_to_load)
+      if caller == "locationChangeStart"
+        # Reduce number of pages to remove from browser history by one if this
+        # method was triggered by Angular's $locationChangeStart broadcast
+        # In this instance we can assume that the browser back button was used
+        # and one page has already been removed from the history by the browser
+        pages_to_remove_from_history--
 
+      if pages_to_remove_from_history? and pages_to_remove_from_history > 0
+        window.history.go(pages_to_remove_from_history*-1)
+
+      # Load step
+      $scope.loadStep(step_to_load)
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps

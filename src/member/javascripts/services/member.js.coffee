@@ -1,5 +1,4 @@
-angular.module('BB.Services').factory "MemberService",
-($q, $rootScope, halClient, BBModel) ->
+angular.module('BBMember.Services').factory "MemberService", ($q, halClient, $rootScope, BBModel) ->
 
   refresh: (member) ->
     deferred = $q.defer()

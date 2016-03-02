@@ -9,7 +9,7 @@
     <div ng-repeat="booking in past_bookings | filter:{deleted: false} |
       orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
       <div class="datetime col-sm-5">
-        <div>{{booking.datetime | datetime:'Do MMM YYYY HH:mm':false}}</div>
+        <div>{{booking.datetime | datetime:'Do MMM YYYY HH:mm'}}</div>
       </div>
       <div class="describe col-sm-5">
         <div class="detail">{{booking.full_describe}}</div>
