@@ -44,7 +44,7 @@
   "AVAIL_MORNING":"Matin",
   "AVAIL_AFTERNOON":"Après-midi",
   "AVAIL_EVENING":"Soir",
-  "AVAIL_WORD":"disponible",
+  "AVAILABLE":"{number, plural, =0{Aucun disponible} one{1 disponible} other{# disponibles}}",
   "AVAIL_NO":"Pas de service disponible",
   "PICK_A_DATE":"Choisissez une date",
   "HOUR":"heure",

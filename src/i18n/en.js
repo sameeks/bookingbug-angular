@@ -44,7 +44,7 @@
   "AVAIL_MORNING":"Morning",
   "AVAIL_AFTERNOON":"Afternoon",
   "AVAIL_EVENING":"Evening",
-  "AVAIL_WORD":"available",
+  "AVAILABLE":"{number, plural, =0{None available} other{# available}}",
   "AVAIL_NO":"No Service Available",
   "PICK_A_DATE":"Pick a date",
   "HOUR":"hour",

@@ -198,7 +198,6 @@ app.filter 'time_period_from_seconds', ($translate, $filter) ->
 
     return timePeriod
 
-
 # unused in this repo, english-only
 app.filter 'twelve_hour_time', ($window) ->
   (time, options) ->

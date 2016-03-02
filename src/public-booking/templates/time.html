@@ -42,10 +42,10 @@
                     <span translate="AVAIL_MORNING"></span>
                   </span>
                   <p ng-hide="is_selected || (is_open && has_availability)">
-                    <small>{{accordian_slots.length}} <span translate="AVAIL_WORD"></span></small>
+                    <small translate="AVAILABLE" translate-values="{ number: accordian_slots.length }" translate-interpolation="messageformat"></small>
                   </p>
                   <p class="selected-time" ng-show="is_selected && !is_open">
-                    <small>{{selected_slot.time_12}}</small>
+                    <small>{{selected_slot.local_time}}</small>
                   </p>
                 </div>
               </div>
@@ -53,7 +53,7 @@
               <ul class="row" ng-if="has_availability">
                 <li ng-if="slot.avail > 0" class="bb-time-slot col-sm-4" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-repeat="slot in accordian_slots">
                   <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="selectSlot(slot)">
-                    <span>{{slot.time_12}}</span>
+                    <span>{{slot.local_time}}</span>
                   </button>
                 </li>
               </ul>
@@ -73,7 +73,7 @@
                     <span translate="AVAIL_AFTERNOON"></span>
                   </span>
                   <p ng-hide="is_selected || (is_open && has_availability)">
-                    <small>{{accordian_slots.length}} <span translate="AVAIL_WORD"></span></small>
+                    <small translate="AVAILABLE" translate-values="{ number: accordian_slots.length }" translate-interpolation="messageformat"></small>
                   </p>
                   <p class="selected-time" ng-show="is_selected && !is_open">
                     <small>{{selected_slot.time_12}}</small>
@@ -104,7 +104,7 @@
                     <span translate="AVAIL_EVENING"></span>
                   </span>
                   <p ng-hide="is_selected || (is_open && has_availability)">
-                    <small>{{accordian_slots.length}} <span translate="AVAIL_WORD"></span></small>
+                    <small translate="AVAILABLE" translate-values="{ number: accordian_slots.length }" translate-interpolation="messageformat"></small>
                   </p>
                   <p class="selected-time" ng-show="is_selected && !is_open">
                     <small>{{selected_slot.time_12}}</small>
