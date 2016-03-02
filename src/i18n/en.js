@@ -7,8 +7,8 @@
   "DASHBOARD":"Dashboard",
   "DASHBOARD_TITLE":"Pick a Location/Service",
   "PROGRESS_BAR_TITLE":"Step",
-  "PROGRESS_BAR_COMPLETE":"Completed",
-  "PROGRESS_BACK":"Back",
+  "PROGRESS_BAR_COMPLETE":"Complete",
+  "PROGRESS_BACK":"Back"
   "PROGRESS_PREVIOUS":"Previous",
   "PROGRESS_CANCEL":"Cancel",
   "PROGRESS_CLEAR":"Clear",
@@ -254,5 +254,15 @@
   "MIN_TOP_UP": "Minimum top up amount must be greater than {{amount | currency }}",
   "TOP_UP_WALLET": "Top up wallet by {{amount | currency}}",
   "MAKE_PAYMENT": "Make Payment",
-  "$X_FOR_$Y": "{{x | currency}} for {{y | currency}}"
+  "$X_FOR_$Y": "{{x | currency}} for {{y | currency}}",
+  "YES": "Yes",
+  "NO": "No",
+  "NEW_EVENT_CHAIN": "New Event Chain",
+  "NEW_EVENT_GROUP": "New Event Group",
+  "DELETE": "Delete",
+  "NEW_ADMINISTRATOR": "New Administrator",
+  "SCHEDULE": "Schedule",
+  "NEW_PERSON": "New Person",
+  "NEW_RESOURCE": "New Resource",
+  "NEW_SERVICE": "New Service"
 });
