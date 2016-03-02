@@ -8,7 +8,7 @@
   "DASHBOARD_TITLE":"Pick a Location/Service",
   "PROGRESS_BAR_TITLE":"Step",
   "PROGRESS_BAR_COMPLETE":"Complete",
-  "PROGRESS_BACK":"Back"
+  "PROGRESS_BACK":"Back",
   "PROGRESS_PREVIOUS":"Previous",
   "PROGRESS_CANCEL":"Cancel",
   "PROGRESS_CLEAR":"Clear",
