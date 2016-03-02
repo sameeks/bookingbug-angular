@@ -8,8 +8,8 @@
     ng-hide="loading">
   </div>
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="cancelBooking(model)">Cancel Booking</button>
+    <button class="btn btn-default" ng-click="cancelBooking(model)" transalte="PROGRESS_CANCEL_BOOKING"></button>
     <input type="submit" class="btn btn-primary" ng-disabled="loading" value="OK">
-    <button class="btn btn-default" ng-click="cancel($event)">Close</button>
+    <button class="btn btn-default" ng-click="cancel($event)" translate="CLOSE"></button>
   </div>
 </form>

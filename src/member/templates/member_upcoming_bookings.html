@@ -2,7 +2,7 @@
 <div ng-hide="loading" class="bb-upcoming clearfix">
   <div id="bookings">
     <div ng-show="upcoming_bookings.length == 0">
-      <h3>You don't currently have any upcoming bookings.</h3>
+      <h3 translate="NO_UPCOMING_BOOKINGS"></h3>
     </div>
     <div ng-repeat="booking in upcoming_bookings | filter:{deleted: false} | orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" class="booking-row">
       <div class="datetime">
@@ -12,8 +12,8 @@
         <div class="detail">{{booking.full_describe}}</div>
       </div>
       <div class="bb-bookings-action">
-        <button ng-click="cancel(booking)" class="btn btn-danger bb-push">Cancel</button>
-        <button ng-click="edit(booking)" class="btn bb-push">Details</button>
+        <button ng-click="cancel(booking)" class="btn btn-danger bb-push" translate="PROGRESS_CANCEL"></button>
+        <button ng-click="edit(booking)" class="btn bb-push" translate="DETAILS_WORD"></button>
       </div>
     </div>
 

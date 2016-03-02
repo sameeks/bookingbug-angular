@@ -12,13 +12,13 @@
       <td>
         <button class="btn btn-default btn-sm"
           ng-hide="gridItem.date < now"
-          ng-click="cancel(gridItem.id)">
-            Cancel
+          ng-click="cancel(gridItem.id)"
+          translate="PROGRESS_CANCEL">
         </button>
         <button class="btn btn-default btn-sm"
           ng-hide="gridItem.date < now"
-          ng-click="edit(gridItem.id)">
-            Details
+          ng-click="edit(gridItem.id)"
+          translate="DETAILS_WORD">
         </button>
       </td>
     </tr>

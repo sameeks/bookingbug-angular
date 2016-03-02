@@ -3,7 +3,7 @@
   <div>
 
     <div ng-show="past_bookings.length == 0">
-      <h3>You don't currently have any past bookings.</h3>
+      <h3 translate="NO_PAST_BOOKINGS"></h3>
     </div>
 
     <div ng-repeat="booking in past_bookings | filter:{deleted: false} |

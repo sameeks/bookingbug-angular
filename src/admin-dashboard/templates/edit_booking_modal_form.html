@@ -10,9 +10,8 @@
   </div>
   <div class="modal-footer">
     <button class="btn btn-danger pull-left"
-      ng-click="cancelBooking($event)">Cancel Booking</button>
-    <input type="submit" class="btn btn-primary" ng-disabled="loading"
-    value="Save Booking">
-    <button class="btn btn-default" ng-click="cancel($event)">Do Not Cancel</button>
+      ng-click="cancelBooking($event)" translate="PROGRESS_CANCEL_BOOKING"></button>
+    <input type="submit" class="btn btn-primary" ng-disabled="loading" value="{{'SAVE_BOOKING' | translate}}">
+    <button class="btn btn-default" ng-click="cancel($event)" translate="PROGRESS_CANCEL_BOOKING"></button>
   </div>
 </form>
