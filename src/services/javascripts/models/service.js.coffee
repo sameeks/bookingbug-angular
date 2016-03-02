@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:AdminService
@@ -18,8 +17,10 @@
 * @property {integer} max_booings The maximum number of bookings
 ###
 
-
-angular.module('BB.Models').factory "Admin.ServiceModel", ($q, BBModel, ServiceModel) ->
-
+angular.module('BB.Models').factory "Admin.ServiceModel",
+($q, AdminServiceService, BBModel, ServiceModel) ->
 
   class Admin_Service extends ServiceModel
+
+    @$query: (params) ->
+      AdminServiceService.query(params)

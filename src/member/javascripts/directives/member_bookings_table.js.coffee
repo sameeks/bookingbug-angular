@@ -1,6 +1,5 @@
-angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log,
-    $rootScope, MemberLoginService, MemberBookingService, $compile,
-    $templateCache, ModalForm, BBModel, Dialog) ->
+angular.module('BBMember').directive 'memberBookingsTable',
+($modal, $log, $rootScope, $compile, $templateCache, ModalForm, Dialog, BBModel) ->
 
   controller = ($scope, $modal) ->
 
@@ -63,7 +62,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log,
       params =
         start_date: $scope.startDate.format('YYYY-MM-DD')
         end_date: $scope.endDate.format('YYYY-MM-DD') if $scope.endDate
-      MemberBookingService.query(member, params).then (bookings) ->
+      BBModel.Member.Booking.$query(member, params).then (bookings) ->
         $scope.booking_models = bookings
         $scope.setRows()
         $scope.loading = false

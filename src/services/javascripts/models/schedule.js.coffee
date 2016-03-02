@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:AdminSchedule
@@ -15,8 +14,8 @@
 * @property {date} duration The schedule duration
 ####
 
-
-angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "Admin.ScheduleModel",
+($q, AdminScheduleService, BBModel, BaseModel) ->
 
   class Admin_Schedule extends BaseModel
 
@@ -30,7 +29,7 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
     * @description
     * Get post data
     *
-    * @returns {array} Returns data. 
+    * @returns {array} Returns data.
     ###
     getPostData: () ->
       data = {}
@@ -40,4 +39,13 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
       data.company_id = @company_id
       data.duration = @duration
       data
-    
+
+    @$query: (params) ->
+      AdminScheduleService.query(params)
+
+    @$delete: (schedule) ->
+      AdminScheduleService.delete(schedule)
+
+    @$update: (schedule) ->
+      AdminScheduleService.update(schedule)
+

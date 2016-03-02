@@ -1,6 +1,5 @@
 angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel, MutexService) ->
 
-
   addItem: (company, params) ->
     deferred = $q.defer()
     lnk = params.item.book_link
@@ -32,7 +31,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
           deferred.reject(err)
     deferred.promise
 
-
   applyCoupon: (company, params) ->
     deferred = $q.defer()
 
@@ -60,21 +58,20 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         deferred.reject(err)
     deferred.promise
 
-
   # add several items at onece - params should have an array of items:
   updateBasket: (company, params) ->
     deferred = $q.defer()
-    
+
     data = {entire_basket: true, items:[]}
 
     for item in params.items
-      lnk = item.book_link if item.book_link 
-      xdata = item.getPostData() 
+      lnk = item.book_link if item.book_link
+      xdata = item.getPostData()
       # force the date into utc
 #      d = item.date.date._a
 #      date = new Date(Date.UTC(d[0], d[1], d[2]))
 #      xdata.date = date
-      data.items.push(xdata)  
+      data.items.push(xdata)
 
     if !lnk
       deferred.reject("rel book not found for event")
@@ -104,8 +101,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         MutexService.unlock(mutex)
         deferred.reject(err)
 
-    deferred.promise 
-
+    deferred.promise
 
   checkPrePaid: (item, pre_paid_bookings) ->
     valid_pre_paid = null
@@ -114,7 +110,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         valid_pre_paid = booking
         break
     valid_pre_paid
-
 
   query: (company, params) ->
     deferred = $q.defer()
@@ -130,7 +125,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
       , (err) ->
         deferred.reject(err)
     deferred.promise
-
 
   deleteItem: (item, company, params) ->
     params = {} if !params
@@ -154,7 +148,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         deferred.reject(err)
 
     deferred.promise
-
 
   checkout: (company, basket, params) ->
     deferred = $q.defer()
@@ -184,7 +177,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         deferred.reject(err)
     deferred.promise
 
-
   empty: (bb) ->
     deferred = $q.defer()
     MutexService.getLock().then (mutex) ->
@@ -198,7 +190,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
       MutexService.unlock(mutex)
       deferred.reject(err)
     deferred.promise
-
 
   memberCheckout: (basket, params) ->
     deferred = $q.defer()
@@ -218,7 +209,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
       , (err) ->
         deferred.reject(err)
     deferred.promise
-  
 
   applyDeal: (company, params) ->
     deferred = $q.defer()
@@ -246,7 +236,6 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         MutexService.unlock(mutex)
         deferred.reject(err)
     deferred.promise
-
 
   removeDeal: (company, params) ->
     params = {} if !params

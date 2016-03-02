@@ -1,5 +1,4 @@
-angular.module('BBAdminServices').directive 'scheduleTable', (AdminCompanyService,
-    AdminScheduleService, $modal, $log, ModalForm) ->
+angular.module('BBAdminServices').directive 'scheduleTable', (AdminCompanyService, $modal, $log, ModalForm) ->
 
   controller = ($scope) ->
 
@@ -8,7 +7,7 @@ angular.module('BBAdminServices').directive 'scheduleTable', (AdminCompanyServic
     $scope.getSchedules = () ->
       params =
         company: $scope.company
-      AdminScheduleService.query(params).then (schedules) ->
+      BBModel.Admin.Schedule.query(params).then (schedules) ->
         $scope.schedules = schedules
 
     $scope.newSchedule = () ->

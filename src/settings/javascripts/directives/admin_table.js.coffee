@@ -1,12 +1,12 @@
-angular.module('BBAdminSettings').directive 'adminTable', (AdminCompanyService,
-    AdminAdministratorService, $modal, $log, ModalForm) ->
+angular.module('BBAdminSettings').directive 'adminTable',
+($modal, $log, ModalForm, AdminCompanyService, BBModel) ->
 
   controller = ($scope) ->
 
     $scope.getAdministrators = () ->
       params =
         company: $scope.company
-      AdminAdministratorService.query(params).then (administrators) ->
+      BBModel.Admin.Administrator.$query(params).then (administrators) ->
         $scope.admin_models = administrators
         $scope.administrators = _.map administrators, (administrator) ->
           _.pick administrator, 'id', 'name', 'email', 'role'

@@ -1,5 +1,5 @@
-angular.module('BBAdminServices').directive 'resourceTable', (AdminCompanyService,
-    AdminResourceService, $modal, $log, ModalForm) ->
+angular.module('BBAdminServices').directive 'resourceTable',
+($modal, $log, ModalForm, AdminCompanyService) ->
 
   controller = ($scope) ->
 
@@ -8,7 +8,7 @@ angular.module('BBAdminServices').directive 'resourceTable', (AdminCompanyServic
     $scope.getResources = () ->
       params =
         company: $scope.company
-      AdminResourceService.query(params).then (resources) ->
+      BBModel.Admin.Resource.$query(params).then (resources) ->
         $scope.resources = resources
 
     $scope.newResource = () ->
