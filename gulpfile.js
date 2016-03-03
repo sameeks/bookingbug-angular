@@ -47,7 +47,7 @@ gulp.task('javascripts', function() {
         './src/*/models/**/*', 
         './src/*/services/**/*',
         '!./src/**/*_test.js.coffee',
-        './src/i18n/en.js',
+        './src/i18n/core/en.js',
         '!./**/*~']))
     // .pipe(filelog())
     .pipe(gulpif(/.*coffee$/, coffee().on('error', function (e) {
@@ -109,7 +109,7 @@ gulp.task('fonts', function() {
 });
 
 gulp.task('i18n', function() {
-    gulp.src('src/i18n/*.json')
+    gulp.src('src/core/i18n/*.json')
         .pipe(flatten())
         .pipe(gulp.dest('release/i18n/'));
     gulp.src('bower_components/momentjs/locale/*.js')
