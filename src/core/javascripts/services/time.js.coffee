@@ -1,5 +1,6 @@
 
-
+# I have no clue where toISODate comes from (I checked bookingbug/moment)
+Date.prototype.toISODate = moment.fn.toISODate = -> this.toISOString().split('T')[0]
 angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
   query: (prms) ->
     deferred = $q.defer()

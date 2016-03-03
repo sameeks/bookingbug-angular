@@ -32,7 +32,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
       @service = service
       @time_12 = @print_time12()
       @time_24 = @print_time()
-      @local_time = print_local_time()
+      @local_time = @print_local_time()
 
     ###**
     * @ngdoc method
@@ -44,7 +44,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @returns {date} The returning 12 hour time
     ###
     # 12 hour time
-    print_local_time: -> moment(@get('time')).format('LT').toLowerCase()
+    print_local_time: -> moment(@get('time') * 60000).format('LT').toLowerCase()
 
     ###**
     * @ngdoc method
