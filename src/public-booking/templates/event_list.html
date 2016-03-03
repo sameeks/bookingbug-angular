@@ -141,7 +141,8 @@
           <div class="panel-body" style="padding: 20px;">
             <div class="row">
               <div ng-class="{'col-sm-3':!$root.tiles}">
-                <div class="event-img" ng-init="item.getGroup();" ng-style="{'background-image': item.group.getImages()[0].url ? 'url(&quot;' + item.group.getImages()[0].url + '&quot;)' : 'none'}">
+               <!--  <div class="event-img" ng-init="item.getGroup();" ng-style="{'background-image': item.group.getImages()[0].url ? 'url(&quot;' + item.group.getImages()[0].url + '&quot;)' : 'none'}"> -->
+                 <div class="event-img" bb-background-image="item.group.getImages()[0].url">
                   <time datetime="{{item.date | datetime: 'YY[-]MM[-]DD'}}" class="icon" ng-click="selectItem(item)">
                     <em>{{item.date | datetime: 'dddd' : false}}</em>
                     <span class="date">{{item.date | datetime: 'DD'}}</span>
