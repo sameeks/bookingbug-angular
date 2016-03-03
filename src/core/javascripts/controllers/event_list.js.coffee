@@ -141,7 +141,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.event_groups = event_groups
 
       # Add EventGroup to Event so we don't have to make network requests using item.getGroup() from the view
-      event_groups_collection = _.indexBy(event_groups, 'id')
+      event_groups_collection = _.groupBy(event_groups, 'id')
       if $scope.items
         for item in $scope.items
           item.group = event_groups_collection[item.service_id]      
@@ -503,7 +503,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   # build dynamic filters using company questions
   buildDynamicFilters = (questions) ->
     $scope.dynamic_filters                = _.groupBy(questions, 'question_type')
-    $scope.dynamic_filters.question_types = _.uniq(_.pluck(questions, 'question_type'))
+    $scope.dynamic_filters.question_types = _.uniq(_.mapValues(questions, 'question_type'))
     $scope.dynamic_filters.values         = {}
 
 

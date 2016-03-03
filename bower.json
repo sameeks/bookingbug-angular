@@ -45,7 +45,7 @@
     "underscore": "~1.7.0",
     "fullcalendar": "~2.4.0",
     "fullcalendar-scheduler": "~1.0.0",
-    "angular-ui-calendar": "latest",
+    "angular-ui-calendar": "1.0.0",
     "sprintf": "~1.0.2",
     "angular-bootstrap": "https://github.com/BookingBug/bootstrap-bower.git#774d6a295da0813aac23cd1cf6e9ca396a461232",
     "angular-google-maps": "~2.0.15",

@@ -133,7 +133,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
           category.name  = category.name.slice(3)
     
     # index categories by their id
-    $scope.all_categories = _.indexBy(categories, 'id')
+    $scope.all_categories = _.groupBy(categories, 'id')
 
     # group services by category id
     all_categories = _.groupBy($scope.items, (item) -> item.category_id)
