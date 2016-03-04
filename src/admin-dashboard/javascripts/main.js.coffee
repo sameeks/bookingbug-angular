@@ -129,7 +129,7 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
     .state 'settings',
       parent: "root"
       url: "/settings"
-      templateUrl: "admin/settings.html"
+      templateUrl: "admin_settings_page.html"
     .state 'settings.page',
       parent: "settings"
       url: "/page/:path"
