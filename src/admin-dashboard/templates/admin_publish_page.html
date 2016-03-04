@@ -1,0 +1,39 @@
+<div>
+  <div bb-dashboard-sidebar-wrapper>
+    <li ui-sref-active="active">
+      <a ui-sref="publish.page({path: 'conf/inset/intro'})">
+        <i class="fa fa-laptop"></i> <span>Publish Business</span>
+      </a>
+    </li>
+    <li ui-sref-active="active">
+      <a ui-sref="publish.page({path: 'conf/homepage/user_edit'})">
+        <i class="fa fa-cloud-upload"></i> <span>Public Site</span>
+      </a>
+    </li>
+    <li ui-sref-active="active">
+      <a ui-sref="publish.page({path: 'conf/inset/view_insets'})">
+        <i class="fa fa-cubes"></i> <span>Customise Widgets</span>
+      </a>
+    </li>
+    <li ui-sref-active="active">
+      <a ui-sref="publish.page({path: 'event/single'})">
+        <i class="fa fa-cube"></i> <span>Single Widget</span>
+      </a>
+    </li>
+    <li ui-sref-active="active">
+      <a ui-sref="publish.page({path: 'conf/inset/book_now'})">
+        <i class="fa fa-check-square"></i> <span>'Book Now' Buttons</span>
+      </a>
+    </li>
+    <li ui-sref-active="active">
+      <a ui-sref="publish.page({path: 'conf/inset/tools'})">
+        <i class="fa fa-plug"></i> <span>Other Tools</span>
+      </a>
+    </li>
+  </div>
+  <div bb-dashboard-content-wrapper>
+    <div>
+      <div ui-view></div>
+    </div>
+  </div>
+</div>
