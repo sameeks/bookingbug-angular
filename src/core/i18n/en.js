@@ -1,4 +1,4 @@
-;angular.module('BB').constant('BB_ENGLISH_TRANSLATIONS', {
+;window.bookingbug.translations.en = {
   "CHANGE_LANG":"Change language",
   "EN":"English",
   "DE":"Deutsch",
@@ -265,4 +265,11 @@
   "NEW_PERSON": "New Person",
   "NEW_RESOURCE": "New Resource",
   "NEW_SERVICE": "New Service"
+};
+
+moment.locale('en', {
+  longDateFormat : {
+    LT : 'h:mmA',
+    LLLL : 'dddd Do MMMM[,] h.mma'
+  }
 });

@@ -43,8 +43,7 @@ else
 
 app.constant('UriTemplate', window.UriTemplate)
 
-app.config ($locationProvider, $httpProvider, BB_ENGLISH_TRANSLATIONS
-            $translateProvider, $provide, ie8HttpBackendProvider) ->
+app.config ($locationProvider, $httpProvider, $translateProvider, $provide, ie8HttpBackendProvider) ->
 
   $httpProvider.defaults.headers.common =
     'App-Id': 'f6b16c23',
@@ -60,9 +59,8 @@ app.config ($locationProvider, $httpProvider, BB_ENGLISH_TRANSLATIONS
     if angular.isString(string) then string.toLowerCase() else string
 
   $translateProvider
-    .translations('en', BB_ENGLISH_TRANSLATIONS)
-    .useStaticFilesLoader(prefix: 'i18n/', suffix: '.json')
     .useLocalStorage()
+    .useLoader('I18nService')
     .addInterpolation('$translateMessageFormatInterpolation')
 
   msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
@@ -115,11 +113,5 @@ window.bookingbug =
     angular.injector(['BB.Services', 'BB.Models', 'ng'])
            .get('LoginService').logout(logout_opts)
     window.location.reload() if options.reload
+  translations: {}
 
-
-moment.locale('en', {
-    longDateFormat : {
-        LT : 'h:mmA',
-        LLLL : 'dddd Do MMMM[,] h.mma'
-    }
-  })

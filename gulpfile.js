@@ -33,7 +33,6 @@ gulp.task('list', function() {
 
 gulp.task('javascripts', function() {
   javascripts = gulp.src(mainBowerFiles({filter: new RegExp('.js$')}).concat([
-        './bower_components/moment/locale/en-gb.js',
         './bower_components/lodash/dist/lodash.js',
         './bower_components/angular-google-maps/dist/angular-google-maps.js',
         './bower_components/webshim/js-webshim/dev/polyfiller.js',
@@ -46,8 +45,8 @@ gulp.task('javascripts', function() {
         './src/*/directives/**/*', 
         './src/*/models/**/*', 
         './src/*/services/**/*',
+        './src/core/i18n/en.js',
         '!./src/**/*_test.js.coffee',
-        './src/i18n/core/en.js',
         '!./**/*~']))
     // .pipe(filelog())
     .pipe(gulpif(/.*coffee$/, coffee().on('error', function (e) {
@@ -109,12 +108,9 @@ gulp.task('fonts', function() {
 });
 
 gulp.task('i18n', function() {
-    gulp.src('src/core/i18n/*.json')
+    gulp.src('src/core/i18n/*.js')
         .pipe(flatten())
         .pipe(gulp.dest('release/i18n/'));
-    gulp.src('bower_components/momentjs/locale/*.js')
-        .pipe(flatten())
-        .pipe(gulp.dest('release/i18n/momentjs'));
 });
 
 gulp.task('watch', function() {
