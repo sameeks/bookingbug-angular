@@ -11,7 +11,8 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
 
       @end_datetime = moment.parseZone(@end_datetime)
       @end_datetime.tz(@time_zone) if @time_zone
-
+     
+      @min_cancellation_time = moment(@min_cancellation_time)
 
     getGroup: () ->
       return @group if @group
@@ -46,12 +47,6 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
       else
         defer.resolve([])
       defer.promise
-
-
-    printed_price: () ->
-      return "£" + @price if parseFloat(@price) % 1 == 0
-      return $window.sprintf("£%.2f", parseFloat(@price))
-
 
     getMemberPromise: () =>
       defer = $q.defer()
