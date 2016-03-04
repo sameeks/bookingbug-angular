@@ -1,6 +1,7 @@
 angular.module('BB.Services').factory 'I18nService', ($translate, $window, $q, angularLoad, $translationCache) ->
-  defaultLocale = $translate.proposedLanguage() || 'en'
   supportedLocales = ['en', 'fr', 'de']
+  defaultLocale = $translate.proposedLanguage() || 'en'
+  initialized = false
 
   #angular-translate custom loader that just gets keys from window.BB_TRANSLATIONS
   factory = (options) ->
@@ -17,10 +18,12 @@ angular.module('BB.Services').factory 'I18nService', ($translate, $window, $q, a
   factory.getSupportedLocales = -> supportedLocales
 
   factory.init = (multilingual, locales) ->
-    if multilingual
-      supportedLocales = locales || supportedLocales
-      this.setLocale(defaultLocale)
-    else
-      $translate.use('en')
+    unless initialized
+      initialized = true
+      if multilingual
+        supportedLocales = locales || supportedLocales
+        this.setLocale($translate.proposedLanguage() || 'en').then -> $translate.refresh()
+      else
+        $translate.use('en')
 
   return factory
