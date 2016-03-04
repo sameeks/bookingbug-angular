@@ -9,7 +9,3 @@ angular.module('BB.Directives').directive 'bbLocaleSwitcher', (I18nService) ->
     scope.changeLanguage = (language) ->
       I18nService.setLocale(language.toLowerCase())
       scope.currentLanguage = language
-
-      scope.clearBasketItem()
-      scope.emptyBasket()
-      scope.restart()
