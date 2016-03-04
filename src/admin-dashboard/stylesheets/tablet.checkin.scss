@@ -1,0 +1,36 @@
+.tablet-checkin {
+  .full-block {
+    background-color: #FFF;
+        
+    .details {
+      font-size: 90%;
+      color: #336E57;
+      text-align: right;
+    }
+
+    span {
+      .red {color: #C00; }
+      .amber {color: #B90; }
+      .green {color: #0C0; }
+    }
+    
+    tfoot {
+      display: none;
+    }
+    
+    tr td:first-child {
+      border-left: 1px;
+    }
+    
+    tr td:last-child {
+      border-right: 1px;
+    }
+    
+    tr td {
+      border-left: 0px;
+      border-right: 0px;
+      height: 44px;
+      padding: 2px 8px;
+    }
+  }
+}

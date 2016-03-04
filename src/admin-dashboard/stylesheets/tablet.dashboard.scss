@@ -1,0 +1,163 @@
+// @import "../bootstrap/bootstrap.scss";
+
+#bb {
+  .tablet-dashboard {
+    h4 {
+      padding-left: 5px;
+    }
+    .icon-left {
+      float:left;
+      margin: 5px;
+    }
+    .icon-right {
+      float:right;
+      margin:5px;
+    }
+    .icon-enabled {
+      color:#6db9c7;
+    }
+    .icon-disabled {
+      color:#CCC;
+    }
+  
+    .top-section {
+//      @include make-row();
+      background-color: #F6F6F6;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      height:44px;
+      line-height: 44px;
+      border-bottom: 1px solid #CCC;
+
+      .icon-left {
+        float:left;
+        margin: 13px 10px;
+      }
+      .icon-right {
+        float:right;
+        margin: 13px 10px;
+      }
+    }
+
+    .left-tab {
+//      @include make-sm-column(4);
+      border-right:1px solid #888;
+      .left-block {
+//        @include make-row();
+        background-color: #FFF;
+        padding-left:10px;
+        height:44px;
+        line-height: 44px;
+        border-bottom: 1px solid #CCC;
+        &.all-staff {
+          border-top: 1px solid #CCC;
+          text-align: center;
+        }
+        .fa {
+          padding: 10px;
+        }
+      }
+    }
+  
+    .cal-frame {
+//      @include user-select(none);
+      -webkit-touch-callout: none;
+      cursor: default;
+      padding-top: 10px;
+    
+      $row_height: 90px;
+    
+      .icon-enabled {
+        &.icon-left {
+          color: #666;
+          margin-left: 20px;
+        }
+        &.icon-right {
+          color: #666;
+          margin-right: 20px;
+        }
+      }
+    
+      th {
+        text-align: center;
+        height: 35px;
+        width: 25%;
+        .cal-person-scroll {
+          text-align: center;
+        }
+      }
+      th.time-header {
+        width: 47px;
+        display: inline-block;
+      }
+      td {
+        height: $row_height;
+        &.avail {
+          background-color: #FFF;
+        }
+        &.times {
+          width:80px;
+          text-align: right;
+          padding-right: 10px;
+          vertical-align: top;
+        }
+        &.item {
+          border-right: 1px solid #CCC;
+          border-bottom: 1px solid #CCC;   
+          padding: 0;
+        }
+        .free-slot {
+           height: $row_height;
+        }
+
+        .time {
+          font-size: 85%;
+        }
+        .name {
+          font-size: 110%;
+        }
+        .service {
+          font-size: 90%;
+        }
+      
+        .booking {
+           background-color: #6db9c7;
+           padding: 5px;
+           height: $row_height;
+         
+           &.completed {
+             background-color: #87c76e;
+           }
+        }
+        
+        .blocking {
+           background-color: #CCC;
+           padding: 5px;
+           height: $row_height;
+        }
+        
+        .unavailable {
+           background-color: #E1F2DA;
+           padding: 5px;
+           height: $row_height;
+        }
+      }
+
+      .table-head {
+        width: 100%;
+      }
+
+      .table-body-wrapper {
+        height: 800px;
+        overflow: auto;
+      }
+
+//      @include make-row();
+    }
+
+    .right-tab {
+//      @include make-sm-column(8);
+    }
+  }
+}
