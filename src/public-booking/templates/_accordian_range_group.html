@@ -3,20 +3,20 @@
   <div accordion-heading>
     <div class="accordian-header">
       <span class="period-label">
-        <span ng-show="has_availability && !is_open" class="period-label-icon">+</span>
-        <span ng-show="has_availability && is_open" class="period-label-icon">-</span>
+        <span ng-show="has_availability && !is_open" class="{{arrow_classes.top}}">+</span>
+        <span ng-show="has_availability && is_open" class="{{arrow_classes.bottom}}">-</span>
         <span ng-if="heading" translate="AVAIL_{{heading}}"></span>
       </span>
-      <span class="period-detail" ng-hide="is_selected || (is_open && has_availability)" translate="AVAILABLE"
+      <span class="period-detail" ng-if="is_selected || (is_open && has_availability)" translate="AVAILABLE"
             translate-values="{ number: accordian_slots.length }" translate-interpolation="messageformat"></span>
 
-      <span class="period-detail selected-time" ng-show="is_selected && !is_open">{{selected_slot.local_time}}</span>
+      <span class="period-detail selected-time" ng-show="is_selected && !is_open">{{selected_slot.print_local_time()}}</span>
     </div>
   </div>
 
   <ul class="time-slots" ng-if="has_availability">
     <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(day, slot)" ng-repeat="slot in accordian_slots">
-      <span>{{slot.local_time}}</span>
+      <span>{{slot.print_local_time()}}</span>
     </li>
   </ul>
 
