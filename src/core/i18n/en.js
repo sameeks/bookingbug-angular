@@ -264,12 +264,15 @@
   "SCHEDULE": "Schedule",
   "NEW_PERSON": "New Person",
   "NEW_RESOURCE": "New Resource",
-  "NEW_SERVICE": "New Service"
+  "NEW_SERVICE": "New Service",
+  "TIME_AND_DURATION": "{{ time | datetime: 'LLLL':false}} for {{ duration | time_period }}"
 };
 
 moment.locale('en', {
   longDateFormat : {
     LT : 'h:mma',
-    LLLL : 'dddd Do MMMM[,] h.mma'
+    LL: 'Do MMMM YYYY',
+    LL: 'h:mma Do MMM YYYY'
+    LLLL : 'h:mma dddd Do MMMM YYYY'
   }
 });

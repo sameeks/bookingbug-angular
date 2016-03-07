@@ -6,7 +6,7 @@
     </div>
     <div ng-repeat="booking in upcoming_bookings | filter:{deleted: false} | orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" class="booking-row">
       <div class="datetime">
-        <div>{{booking.datetime.format('Do MMM YYYY HH:mm')}}</div>
+        <div>{{booking.datetime.format('LLL')}}</div>
       </div>
       <div class="describe">
         <div class="detail">{{booking.full_describe}}</div>

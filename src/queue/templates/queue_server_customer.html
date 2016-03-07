@@ -2,8 +2,8 @@
 <div ng-hide="loading">
   <div ng-if="server.serving">
     <h3>Serving {{server.serving.first_name}}</h3>
-    <p>Appointment started at {{server.serving.start | datetime: "h:mma":false}}</p>
-    <p>Appointment due to finish at {{server.serving.end | datetime: "h:mma":false}}</p>
+    <p>Appointment started at {{server.serving.start | datetime: "LT":false}}</p>
+    <p>Appointment due to finish at {{server.serving.end | datetime: "LT":false}}</p>
     <button ng-click="extendAppointment(5)" class="btn btn-default">
       Extend Appointment
     </button>

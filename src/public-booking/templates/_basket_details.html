@@ -20,8 +20,7 @@
           <td >
             {{ item.service_name }}
           </td>
-          <td>
-            {{ item.date.date | datetime: "ddd Do MMM":false}} at {{ item.date.date | datetime: "h:mma":false}} for {{ item.duration | time_period }}
+            <td translate="TIME_AND_DURATION" translate-values="{time: item.date.date, duration: item.duration}">
           </td>
           <td class="text-center">
             <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></span>

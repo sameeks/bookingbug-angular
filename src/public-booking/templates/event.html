@@ -8,11 +8,11 @@
         <ul class="row event-summary-list">
           <li class="col-xs-6 col-sm-4 date truncate-xs">
             <span class="bb-icon icon-calendar"></span>
-            <span class="hidden-xs">{{event.date.format('dddd ')}}</span><span>{{event.date.format('Do MMMM YYYY')}}</span>
+            <span class="hidden-xs">{{event.date.format('dddd ')}}</span><span>{{event.date.format('LL')}}</span>
           </li>
           <li class="col-xs-6 col-sm-4 time truncate-xs">
             <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-            <span class="event-time" ng-bind="event.date.format('h[:]mma')">&ndash;<span ng-bind="event.end_datetime.format('h[:]mma')"></span>
+            <span class="event-time" ng-bind="event.date.format('LT')">&ndash;<span ng-bind="event.end_datetime.format('LT')"></span>
           </li>
           <li class="hidden-xs col-sm-4 duration truncate-xs">
             <span class="glyphicon glyphicon-hourglass"></span>

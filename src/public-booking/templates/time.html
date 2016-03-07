@@ -18,7 +18,7 @@
 
     <div>
 
-      <h2 class="bb-section-title text-center hidden-xs">{{format_date('Do MMM YYYY')}}</h2>
+      <h2 class="bb-section-title text-center hidden-xs">{{format_date('LL')}}</h2>
       <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">{{format_date('Do MMM')}}</h2>
 
       <div ng-show="!slots || (slots && slots.length == 0)" class="bb-service-unavailable">
@@ -45,7 +45,7 @@
                     <small translate="AVAILABLE" translate-values="{ number: accordian_slots.length }" translate-interpolation="messageformat"></small>
                   </p>
                   <p class="selected-time" ng-show="is_selected && !is_open">
-                    <small>{{selected_slot.local_time}}</small>
+                    <small>{{selected_slot.print_local_time()}}</small>
                   </p>
                 </div>
               </div>
@@ -53,7 +53,7 @@
               <ul class="row" ng-if="has_availability">
                 <li ng-if="slot.avail > 0" class="bb-time-slot col-sm-4" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-repeat="slot in accordian_slots">
                   <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="selectSlot(slot)">
-                    <span>{{slot.local_time}}</span>
+                    <span>{{slot.print_local_time()}}</span>
                   </button>
                 </li>
               </ul>
@@ -76,7 +76,7 @@
                     <small translate="AVAILABLE" translate-values="{ number: accordian_slots.length }" translate-interpolation="messageformat"></small>
                   </p>
                   <p class="selected-time" ng-show="is_selected && !is_open">
-                    <small>{{selected_slot.time_12}}</small>
+                    <small>{{selected_slot.print_local_time()}}</small>
                   </p>
                 </div>
               </div>
@@ -84,7 +84,7 @@
               <ul class="row" ng-if="has_availability">
                 <li ng-if="slot.avail > 0" ng-repeat="slot in accordian_slots" class="bb-time-slot col-sm-4" ng-class="{'selected': slot.selected, 'disabled': slot.disable}" >
                   <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="selectSlot(slot)">
-                    <span>{{slot.time_12}}</span>
+                    <span>{{slot.print_local_time()}}</span>
                   </button>
                 </li>
               </ul>
@@ -107,7 +107,7 @@
                     <small translate="AVAILABLE" translate-values="{ number: accordian_slots.length }" translate-interpolation="messageformat"></small>
                   </p>
                   <p class="selected-time" ng-show="is_selected && !is_open">
-                    <small>{{selected_slot.time_12}}</small>
+                    <small>{{selected_slot.print_local_time()}}</small>
                   </p>
                 </div>
               </div>
@@ -115,7 +115,7 @@
               <ul class="row" ng-if="has_availability">
                 <li ng-if="slot.avail > 0" ng-repeat="slot in accordian_slots" class="bb-time-slot col-sm-4" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}">
                   <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="selectSlot(slot)">
-                    <span >{{slot.time_12}}</span>
+                    <span >{{slot.print_local_time()}}</span>
                   </button>
                 </li>
               </ul>

@@ -258,7 +258,8 @@
   "SCHEDULE": "Programmer",
   "NEW_PERSON": "Nouvelle personne",
   "NEW_RESOURCE": "Nouvelle resource",
-  "NEW_SERVICE": "Nouveau service"
+  "NEW_SERVICE": "Nouveau service",
+  "TIME_AND_DURATION": "{{ time | datetime: 'LLLL':false}} pour {{ duration | time_period }}"
 };
 
 (function (global, factory) {
