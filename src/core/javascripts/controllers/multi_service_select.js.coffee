@@ -139,7 +139,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
     all_categories = _.groupBy($scope.items, (item) -> item.category_id)
     
     # find any sub categories
-    sub_categories = _.findWhere($scope.company_questions, {name: 'Extra Category'})
+    sub_categories = _.find($scope.company_questions, {name: 'Extra Category'})
     sub_categories = _.map(sub_categories.question_items, (sub_category) -> sub_category.name) if sub_categories
 
     # filter categories that have no services

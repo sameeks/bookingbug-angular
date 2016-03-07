@@ -15,10 +15,10 @@
   "PROGRESS_SEARCH":"Rechercher",
   "PROGRESS_SELECT":"Choisir",
   "PROGRESS_CONFIRM":"Confirmer",
-  "PROGRESS_NEXT":"Prochaine",
+  "PROGRESS_NEXT":"Suivant",
   "PROGRESS_CONTINUE":"Continuer",
   "PROGRESS_BOOK":"Réserver",
-  "PROGRESS_BOOK_WAITLIST_ITEMS":"Réserver des listes d'attente Articles",
+  "PROGRESS_BOOK_WAITLIST_ITEMS":"Réserver des articles en liste d'attente",
   "PROGRESS_ADD":"Ajouter",
   "PROGRESS_BUY":"Acheter",
   "PROGRESS_RESERVE":"Réserver",
@@ -125,6 +125,7 @@
   "BASKET_TOTAL":"Total",
   "BASKET_TOTAL_DUE_NOW":"Total à payer",
   "REVIEW_TITLE":"Détail de votre rendez-vous",
+  "DETAILS_ADDRESS_VALIDATION_MSG": "Merci d'entrer votre adresse",
   "DETAILS_TITLE":"Vos coordonnées",
   "DETAILS_WORD":"Détails",
   "DETAILS_FIRST_NAME":"Prénom",
@@ -227,6 +228,7 @@
   "NO_PAST_BOOKINGS": "Vous n'avez pas de réservation passée.",
   "NO_PREPAID_BOOKINGS": "Vous n'avez pas de réservation à venir.",
   "REMAINING_BOOKINGS": "{remaining, plural, =0{Aucun restant} one{1 restant} other{# restants}} sur {total}",
+  "PREPAID_BOOKING_DATES": "À réserver avant le {{booking.book_by | datetime}} et à utiliser entre le {{booking.use_from | datetime}} et le {{booking.use_by | datetime}}",
   "YOUR_PURCHASES": "Vos achats",
   "NO_CURRENT_PURCHASES": "Vous n'avez aucun achat",
   "PURCHASE_REF": "Réference achat",
@@ -259,7 +261,11 @@
   "NEW_PERSON": "Nouvelle personne",
   "NEW_RESOURCE": "Nouvelle resource",
   "NEW_SERVICE": "Nouveau service",
-  "TIME_AND_DURATION": "{{ time | datetime: 'LLLL':false}} pour {{ duration | time_period }}"
+  "TIME_AND_DURATION": "{{ time | datetime: 'LLLL':false}} pour {{ duration | time_period }}",
+  "REQUIRED_FIELDS": "*Champs requis",
+  "PLEASE_ENTER_FIRST_NAME": "Merci d'entrer un prénom",
+  "PLEASE_ENTER_LAST_NAME": "Merci d'entrer un nom",
+  "PLEASE_ENTER_SOMETHING": "*Merci d'entrer un nom complet ou une addresse email"
 };
 
 (function (global, factory) {

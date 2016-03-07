@@ -69,7 +69,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             resourceTD.style.verticalAlign = "middle"
           dataTD.style.height = "44px" for dataTD in dataTDs
         eventRender: (event, element) ->
-          service = _.findWhere($scope.services, {id: event.service_id})
+          service = _.find($scope.services, {id: event.service_id})
           if service
             element.css('background-color', service.color)
             element.css('color', service.textColor)

@@ -20,7 +20,7 @@ app.filter 'stripPostcode', ->
 
     return address
 
-   
+
 app.filter 'labelNumber', ->
   (input, labels) ->
     response = input
@@ -273,7 +273,6 @@ app.filter "uk_local_number", ->
   (tel) ->
     return ""  unless tel
     return tel.replace(/\+44 \(0\)/, '0')
-
 
 # format datetime, expects moment object but will attempt to convert to
 # moment object

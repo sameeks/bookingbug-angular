@@ -5,6 +5,7 @@
   }
 }
 
+/* Only used in the basket_wallet.html */
 .bb-content {
   color: #000;
   min-height: 400px;
@@ -48,27 +49,8 @@ p {
   border-bottom: none;
 }
 
-.page-heading-wrapper {
-  margin: 0 0 10px 0;
-}
-
-.page-heading {
-  font-size: $font-size-h3;
-  padding: 0;
-  display: inline;
-  border-bottom: none;
-}
-
-.page-sub-heading {
-  font-size: $font-size-base;
-}
-
 .page-intro, .page-summary {
   margin-bottom: 30px;
-}
-
-.seperator {
-  margin: 30px 0;
 }
 
 #loading_icon{
@@ -97,8 +79,6 @@ p {
 
 .powered-by {
   font-size: $font-size-base;
-  // margin-top: 20px;
-  // padding-top: 20px;
   margin-bottom: 20px;
   text-align: right;
 
@@ -110,10 +90,6 @@ p {
 
 .text-block {
   margin-bottom: 20px;
-}
-
-.bb-member {
-  font-size: $font-size-base;
 }
 
 .bb-section-title {

@@ -70,13 +70,11 @@ angular
     $http, $q, data_cache, shared_header, UriTemplate, $cookies, $sessionStorage
   ){
 
-    if ($cookies['Auth-Token']){
-      $sessionStorage.setItem('auth_token', $cookies['Auth-Token'])
-    }
-
     if ($sessionStorage.getItem('auth_token'))
       shared_header.set('auth_token', $sessionStorage.getItem('auth_token'), $sessionStorage)
-
+    else if ($cookies['Auth-Token'] && !shared_header.has('auth_token')){
+      shared_header.set('auth_token', $cookies['Auth-Token'], $sessionStorage)
+    }
 
     return {
       setCache: function(cache) {

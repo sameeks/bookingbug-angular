@@ -10,9 +10,15 @@
 
       <form name="booking_form" role="form" novalidate bb-form class="form-horizontal">
 
-        <div ng-form name="client_form" class="bb-form" role="form" novalidate>
+<!--         <div ng-form name="client_form" class="bb-form" role="form" novalidate>
 
           <h2 class="booking-form-header"><span translate="DETAILS_TITLE"></span></h2>
+
+          <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-5">
+               <p class="form-control-static">*Required fields</p>
+            </div>
+          </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && (client_form.first_name.$dirty || booking_form.submitted)}">
             <label for="first_name" class="control-label col-sm-4"><span translate="DETAILS_FIRST_NAME"></span>*:</label>
@@ -70,23 +76,17 @@
 
           </div>
 
-          <div class="form-group">
-            <div class="col-sm-offset-4 col-sm-5">
-               <p class="form-control-static">*<span translate="DETAILS_REQUIRED"></span></p>
-            </div>
-          </div>
-
-
-        </div><!--client_form-->
+        </div> --><!--client_form-->
 
         <div ng-show="item_details.hasQuestions" ng-form name="booking_questions_form" class="bb-form" role="form" novalidate>
 
-          <h2 class="booking-form-header"><span translate="DETAILS_OTHER_INFO"></span></h2>
+          <h2 class="booking-form-header" translate="DETAILS_OTHER_INFO"></h2>
 
           <div class="form-group" ng-repeat="question in item_details.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
-            <label for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-show="question.required">*</span></label>
+            <label for="{{question.id}}" class="control-label col-sm-4" ng-hide="question.detail_type == 'check'">{{question.name}}<span ng-show="question.required">*</span></label>
+            <div ng-show="question.detail_type == 'check'" class="col-sm-4 hidden-xs">&nbsp;</div>
             <div class="col-sm-5">
-              <input bb-question="question"/>
+              <input bb-question="question"/><span ng-show="question.detail_type == 'check' && question.required">*</span>
             </div>
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )"><span translate="DETAILS_VALIDATION_MSG"></span>
@@ -100,7 +100,7 @@
         <div class="bb-step-navigation">
           <div class="row">
             <div class="col-sm-9 col-sm-push-3 text-right">
-              <button type="submit" class="btn btn-primary" ng-click="confirm(booking_form) && validator.validateForm(booking_form) && checkReady() && routeReady()"><span translate="PROGRESS_CONFIRM"></span></button>
+              <button type="submit" class="btn btn-primary" ng-click="confirm(booking_form) && validator.validateForm(booking_form) && checkReady() && routeReady()" translate="PROGRESS_CONFIRM"></button>
             </div>
             <div class="col-sm-3 col-sm-pull-9">
               <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PROGRESS_BACK"></span></button>

@@ -112,4 +112,4 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     * @returns {object} The returned question
     ###
     getQuestion: (id) ->
-      _.findWhere(@questions, {id: id})
+      _.find(@questions, {id: id})

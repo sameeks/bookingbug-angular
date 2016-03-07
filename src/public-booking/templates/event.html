@@ -67,14 +67,22 @@
             <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && (client_form.first_name.$dirty || booking_form.submitted)}">
               <label for="first_name" class="control-label col-sm-4"><span translate="DETAILS_FIRST_NAME"></span>:</label>
               <div class="col-sm-5">
-                <input type="text" name="first_name" id="first_name"  ng-model="client.first_name" class="form-control" />
+                <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" />
+              </div>
+              <div class="col-sm-3 messages">
+                <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted" translate="DETAILS_FIRST_NAME_VALIDATION_MSG">
+                </div>
               </div>
             </div>
 
             <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (client_form.last_name.$dirty|| booking_form.submitted)}">
               <label for="last_name" class="control-label col-sm-4"><span translate="DETAILS_LAST_NAME"></span>:</label>
               <div class="col-sm-5">
-                <input type="text" name="last_name" id="last_name" ng-model="client.last_name" class="form-control" />
+                <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" />
+              </div>
+              <div class="col-sm-3 messages">
+                <div class="error-message" ng-show="client_form.last_name.$invalid && booking_form.submitted" translate="DETAILS_LAST_NAME_VALIDATION_MSG">
+                </div>
               </div>
             </div>
 
@@ -92,7 +100,11 @@
             <div class="form-group" ng-class="{'has-error': client_form.phone.$invalid && ((client_form.phone.$dirty && !client_form.phone.$focused) || booking_form.submitted)}">
               <label for="phone" class="control-label col-sm-4"><span translate="STORE_PHONE"></span>:</label>
               <div class="col-sm-5">
-                <input type="tel" name="phone" id="phone" ng-model="client.phone" class="form-control"/>
+                <input type="tel" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern(true)" ng-model="client.mobile" class="form-control"/>
+              </div>
+              <div class="col-sm-3 messages">
+                <div class="error-message" ng-show="client_form.mobile.$dirty && client_form.email.$invalid && booking_form.submitted" translate="DETAILS_PHONE_MOBILE_VALIDATION_MSG">
+                </div>
               </div>
             </div>
 
@@ -100,6 +112,10 @@
               <label for="address1" class="control-label col-sm-4"><span translate="DETAILS_ADDRESS"></span>:</label>
               <div class="col-sm-5">
                 <input type="text" name="address1" id="address1" ng-model="client.address1" class="form-control"/>
+              </div>
+              <div class="col-sm-3 messages">
+                <div class="error-message" ng-show="client_form.address1.$invalid && booking_form.submitted" translate="DETAILS_ADDRESS_VALIDATION_MSG">
+                </div>
               </div>
             </div>
 
@@ -127,7 +143,11 @@
             <div class="form-group" ng-class="{'has-error': client_form.postcode.$invalid && ((client_form.postcode.$dirty && !client_form.postcode.$focused) || booking_form.submitted)}">
               <label for="postcode" class="control-label col-sm-4"><span translate="DETAILS_POSTCODE"></span>:</label>
               <div class="col-sm-5">
-                <input type="text" name="postcode" id="postcode" ng-model="client.postcode" class="form-control"/>
+                <input type="text" name="postcode" id="postcode" ng-pattern="validator.getUKPostcodePattern()" ng-model="client.postcode" class="form-control" onBlur="javascript:this.value=this.value.toUpperCase()" style="text-transform:uppercase"/>
+              </div>
+              <div class="col-sm-3 messages">
+                <div class="error-message" ng-show="client_form.postcode.$invalid && booking_form.submitted" translate="ERROR.INVALID_POSTCODE">
+                </div>
               </div>
             </div>
 

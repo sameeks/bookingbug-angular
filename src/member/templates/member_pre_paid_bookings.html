@@ -4,11 +4,15 @@
     <div ng-if="pre_paid_bookings.length == 0">
       <h3 translate="NO_PREPAID_BOOKINGS"></h3>
     </div>
-    <div ng-repeat="booking in pre_paid_bookings | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" class="booking-row">
+    <div ng-repeat="booking in pre_paid_bookings | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size | filter: {expired: false}" class="booking-row">
       <div class="describe">
-        <div class="detail">{{booking.service_name}}</div>
-        <div class="resource" translate="REMAINING_BOOKINGS" translate-interpolation="messageformat"
-             translate-values="{remaining: booking.remaining, total: booking.num_bookings}"></div>
+        <div class="col-xs-4">{{booking.service_name}}</div>
+        <div class="col-xs-8">
+          <span translate="REMAINING_BOOKINGS" translate-interpolation="messageformat"
+                translate-values="{remaining: booking.remaining, total: booking.num_bookings}"></span>
+          |
+          <span translate="PREPAID_BOOKING_DATES"></span>
+        </div>
       </div>
     </div>
 

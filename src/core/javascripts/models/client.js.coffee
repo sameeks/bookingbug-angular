@@ -229,7 +229,6 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel) ->
       x.address5 = @address5
       x.postcode = @postcode
       x.country = @country
-      x.phone = @phone
       x.email = @email
       x.id = @id
       x.comp_ref = @comp_ref
@@ -240,10 +239,15 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel) ->
       x.send_welcome_email = @send_welcome_email if @send_welcome_email
       x.default_company_id = @default_company_id if @default_company_id
 
+      if @phone
+        x.phone = @phone
+        x.phone_prefix = @phone_prefix if @phone_prefix
+
       if @mobile
         @remove_prefix()
         x.mobile = @mobile
         x.mobile_prefix = @mobile_prefix
+
 
       if @questions
         x.questions = []
@@ -308,7 +312,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel) ->
     * @name fullMobile
     * @methodOf BB.Models:Address
     * @description
-    * Full mobile phone number of the client 
+    * Full mobile phone number of the client
     *
     * @returns {object} The returned full mobile number
     ###

@@ -368,27 +368,6 @@ app.directive 'bbCapitaliseFirstLetter', () ->
         ngModel.$render()
         return
 
-# Deprecate - see below
-app.directive 'apiUrl', ($rootScope, $compile, $sniffer, $timeout, $window) ->
-  restrict: 'A'
-  replace: true
-  compile: (tElem, tAttrs) ->
-    pre: (scope, element, attrs) ->
-      $rootScope.bb ||= {}
-      $rootScope.bb.api_url = attrs.apiUrl
-      url = document.createElement('a')
-      url.href = attrs.apiUrl
-      if ($sniffer.msie && $sniffer.msie < 10) && url.host != $window.location.host
-        if url.protocol[url.protocol.length - 1] == ':'
-          src = "#{url.protocol}//#{url.host}/ClientProxy.html"
-        else
-          src = "#{url.protocol}://#{url.host}/ClientProxy.html"
-        $rootScope.iframe_proxy_ready = false
-        $window.iframeLoaded = () ->
-          $rootScope.iframe_proxy_ready = true
-          $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
-        $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;' onload='iframeLoaded()'></iframe>") scope, (cloned, scope) =>
-          element.append(cloned)
 
 
 app.directive 'bbApiUrl', ($rootScope, $compile, $sniffer, $timeout, $window, $location) ->
@@ -401,17 +380,19 @@ app.directive 'bbApiUrl', ($rootScope, $compile, $sniffer, $timeout, $window, $l
       $rootScope.bb.api_url = scope.apiUrl
       url = document.createElement('a')
       url.href = scope.apiUrl
-      if $sniffer.msie && $sniffer.msie < 10
+
+      if ($sniffer.msie and $sniffer.msie <= 9) or ($sniffer.webkit and $sniffer.webkit < 537)
         unless url.host == '' || url.host == $location.host() || url.host == "#{$location.host()}:#{$location.port()}"
           if url.protocol[url.protocol.length - 1] == ':'
             src = "#{url.protocol}//#{url.host}/ClientProxy.html"
           else
             src = "#{url.protocol}://#{url.host}/ClientProxy.html"
           $rootScope.iframe_proxy_ready = false
-          $window.iframeLoaded = () ->
-            $rootScope.iframe_proxy_ready = true
-            $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
-          $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;' onload='iframeLoaded()'></iframe>") scope, (cloned, scope) =>
+
+          $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;'></iframe>") scope, (cloned, scope) =>
+            cloned.bind "load", ->
+              $rootScope.iframe_proxy_ready = true
+              $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
             element.append(cloned)
 
 
@@ -455,22 +436,17 @@ app.directive 'bbPriceFilter', (PathSvc) ->
       $scope.filterChanged() if new_val != old_val
 
 
-app.directive 'bbBookingExport', ($compile) ->
+angular.module('BB.Directives').directive 'bbBookingExport', () ->
   restrict: 'AE'
   scope: true
-  template: '<div bb-include="_popout_export_booking" style="display: inline;"></div>'
-  link: (scope, element, attrs) ->
-
-    scope.$watch 'total', (newval, old) ->
-      setHTML(newval) if newval
-
-    scope.$watch 'purchase', (newval, old) ->
-      setHTML(newval) if newval
-
+  template: '<div bb-include="_popout_export_booking" style="display: inline-block"></div>'
+  link: (scope, el, attrs) ->
+    scope.$watch 'total', (new_val, old_val) ->
+      setHTML(new_val) if new_val
+    scope.$watch 'purchase', (new_val, old_val) ->
+      setHTML(new_val) if new_val
     setHTML = (purchase_total) ->
-      scope.html = "
-        <a class='image img_outlook' title='Add this booking to an Outlook Calendar' href='#{purchase_total.icalLink()}'><img alt='' src='//images.bookingbug.com/widget/outlook.png'></a>
-        <a class='image img_ical' title='Add this booking to an iCal Calendar' href='#{purchase_total.webcalLink()}'><img alt='' src='//images.bookingbug.com/widget/ical.png'></a>
-        <a class='image img_gcal' title='Add this booking to Google Calendar' href='#{purchase_total.gcalLink()}' target='_blank'><img src='//images.bookingbug.com/widget/gcal.png' border='0'></a>
-      "
-
+      scope.html = 
+        "<div class='text-center'><a href='#{purchase_total.webcalLink()}'><img src='images/outlook.png' alt='outlook.png' /><div class='clearfix'></div><span>Outlook</span></a></div><p></p>" +
+        "<div class='text-center'><a href='#{purchase_total.gcalLink()}'><img src='images/google.png' alt='outlook.png' /><div class='clearfix'></div><span>Google</span></a></div><p></p>" +
+        "<div class='text-center'><a href='#{purchase_total.icalLink()}'><img src='images/ical.png' alt='outlook.png' /><div class='clearfix'></div><span>iCal</span></a></div>"

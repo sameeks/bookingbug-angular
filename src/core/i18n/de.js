@@ -131,12 +131,13 @@
   "BASKET_TOTAL":"Gesamt",
   "BASKET_TOTAL_DUE_NOW":"Insgesamt Aufgrund Now",
   "REVIEW_TITLE":"Prüfen Sie bitte Ihre Terminwahl",
+  "DETAILS_ADDRESS_VALIDATION_MSG": "Bitte geben Sie Ihre Anschrift",
   "DETAILS_TITLE":"Angaben zu Ihrer Person",
   "DETAILS_WORD":"Einzelheiten",
   "DETAILS_FIRST_NAME":"Vorname",
-  "DETAILS_FIRST_NAME_VALIDATION_MSG": "Bitte geben Sie Ihre first Vorname",
+  "DETAILS_FIRST_NAME_VALIDATION_MSG": "Bitte geben Sie Ihre Vorname",
   "DETAILS_LAST_NAME":"Nachname",
-  "DETAILS_LAST_NAME_VALIDATION_MSG": "Bitte geben Sie Ihre last Nachname",
+  "DETAILS_LAST_NAME_VALIDATION_MSG": "Bitte geben Sie Ihre Nachname",
   "DETAILS_EMAIL":"E-Mail",
   "DETAILS_EMAIL_VALIDATION_MSG": "Bitte geben Sie eine gültige E-Mail-Adresse",
   "DETAILS_PHONE":"Mobil",
@@ -230,7 +231,8 @@
   "PURCHASES": "Purchases",
   "NO_PAST_BOOKINGS": "You don't currently have any past bookings.",
   "NO_PREPAID_BOOKINGS": "You don't currently have any pre-paid bookings.",
-  "REMAINING_BOOKINGS": "{{remaining}} of {{total}} remaining",
+  "REMAINING_BOOKINGS": "{remaining} of {total} remaining",
+  "PREPAID_BOOKING_DATES": "Book By {{booking.book_by | datetime}} | Use from {{booking.use_from | datetime}} | Use by {{booking.use_by | datetime}}",
   "YOUR_PURCHASES": "Your Purchases",
   "NO_CURRENT_PURCHASES": "You don't currently have any purchases",
   "PURCHASE_REF": "Purchase Ref",
@@ -263,7 +265,11 @@
   "NEW_PERSON": "New Person",
   "NEW_RESOURCE": "New Resource",
   "NEW_SERVICE": "New Service",
-  "TIME_AND_DURATION": "{{ time | datetime: 'LLLL':false}} für {{ duration | time_period }}"
+  "TIME_AND_DURATION": "{{ time | datetime: 'LLLL':false}} für {{ duration | time_period }}",
+  "REQUIRED_FIELDS": "*Required fields",
+  "PLEASE_ENTER_FIRST_NAME": "Please enter a first name",
+  "PLEASE_ENTER_LAST_NAME": "Please enter a last name",
+  "PLEASE_ENTER_SOMETHING": "*Please enter a first and last name or email address"
 };
 
 (function (global, factory) {

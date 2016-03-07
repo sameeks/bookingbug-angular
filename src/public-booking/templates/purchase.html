@@ -4,7 +4,7 @@
 
     <div class="row">
 
-      <div class="col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8">
+      <div class="col-xs-offset-1 col-xs-10">
 
         <div ng-if="purchase && bookings.length == 0">
           <div class="confirmation-header">
@@ -18,46 +18,55 @@
           </div>
           <div ng-hide="is_waitlist">
             <div class="confirmation-header">
-              <h2 class="confirmation-heading"><span translate="CONFIRMATION_PURCHASE_TITLE" translate-values="{service_name: purchase.bookings[0].service_name}"></span></h2>
+              <h2 class="confirmation-heading" translate="CONFIRMATION_PURCHASE_TITLE" translate-values="{service_name: purchase.bookings[0].service_name}"></h2>
               <!-- <p ng-if="bb.current_item.move_done" class="move-done-msg">Your booking has been moved to <strong>{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM"}}</strong>.</p> -->
               <div class="row hidden-print text-right" >
-              <button type="button" class="btn btn-link" onclick="window.print()"><span class="glyphicon glyphicon-print"></span><span translate="PRINT"></span></button>
+              <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span><span translate="PRINT"></span></button>
               <div bb-booking-export class="bb-booking-export"></div>
               </div>
             </div>
 
-            <ul class="confirmation-summary bb-checkout-top-border">
-              <li class="row confirmation-summary-item">
-                <div class="col-xs-3"><span translate="RECIPIENT_NAME"></span>:</div>
-                <div class="col-xs-9">{{purchase.client.name}}</div>
+            <ul class="confirmation-summary">
+              <li class="row confirmation-summary-item">          
+                <div class="bb-summary-label"><span translate="RECIPIENT_NAME"></span>:<span class='fa fa-caret-right'></span></div>
+                <div class="bb-summary-value">{{purchase.client.name}}</div>
               </li>
               <li class="row confirmation-summary-item">
-                <div class="col-xs-3"><span translate="DETAILS_EMAIL"></span>:</div>
-                <div class="col-xs-9">{{purchase.client.email}}</div>
+                <div class="bb-summary-label"><span translate="DETAILS_EMAIL">:<span class='fa fa-caret-right'></span></div>
+                <div class="bb-summary-value">{{purchase.client.email}}</div>
               </li>
               <li class="row confirmation-summary-item">
-                <div class="col-xs-3"><span translate="ITEM_SERVICE"></span>:</div>
-                <div class="col-xs-9">{{purchase.bookings[0].service_name}}</div>
+                <div class="bb-summary-label"><span translate="ITEM_SERVICE"></span>:<span class='fa fa-caret-right'></span></div>
+                <div class="bb-summary-value">{{purchase.bookings[0].service_name}}</div>
               </li>
               <li class="row confirmation-summary-item">
-                <div class="col-xs-3"><span translate="ITEM_WHEN"></span>:</div>
-                <div class="col-xs-9">{{purchase.bookings[0].datetime | datetime: "LLLL":false}}</div>
+                <div class="bb-summary-label"><span translate="ITEM_WHEN">:<span class='fa fa-caret-right'></span></div>
+                <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "LLLL":false}}</div>
               </li>
               <li class="row confirmation-summary-item">
-                <div class="col-xs-3"><span translate="ITEM_WHERE"></span>:</div>
-                <div class="col-xs-9">
+                <div class="bb-summary-label"><span translate="ITEM_WHERE"></span>:<span class='fa fa-caret-right'></span></div>
+                <div class="bb-summary-value">
                   <ul class="address">
-                    <li class="address-item">{{bb.company.name}}</li>
-                    <li class="address-item">{{bb.company.getAddress() | address_single_line}}</li>
-                    <li class="address-item">{{bb.company.getAddress().phone | uk_local_number}}</li>
+                    <li class="address-item">{{purchase.bookings[0].company.name}}</li>
+                    <li class="address-item">{{purchase.bookings[0].company.address | address_single_line}}</li>
+                    <li class="address-item">{{purchase.bookings[0].company.phone | uk_local_number}}</li>
                   </ul>
                 </div>
               </li>
-              <li class="row confirmation-summary-item">
-                <div class="col-xs-3"><span translate="ITEM_PRICE"></span>:</div>
-                <div class="col-xs-9">{{purchase.total_price | icurrency }}</div>
+              <li class="row confirmation-summary-item" ng-if="purchase.total_price > 0">
+                <div class="bb-summary-label"><span translate="ITEM_PRICE"></span>:<span class='fa fa-caret-right'></span></div>
+                <div class="bb-summary-value">{{purchase.total_price | icurrency }}</div>
               </li>
             </ul>
+
+
+            <div bb-address-map="purchase.bookings[0].company.address" class="view-booking-map">
+              <ui-gmap-google-map center='map.center' zoom='map.zoom' options="options">
+                <ui-gmap-marker coords="marker.coords" idkey="marker.id">
+                </ui-gmap-marker>
+              </ui-gmap-google-map>
+            </div>
+
 
             <div class="payment">
               <div bb-custom-confirmation-text class="text-block-sml bb-message-buffer" ng-show="messages">
@@ -67,14 +76,16 @@
 
             <div class="hidden-print">
               <div class="bb-step-navigation">
-                <div class="col-sm-4">
-                  <button type="button" class="btn btn-secondary btn-block" ng-click="delete(bookings[0])"><span translate="PROGRESS_CANCEL_BOOKING"></span></button>
-                </div>
-                <div class="col-sm-4">
-                  <button type="button" class="btn btn-primary btn-block" ng-click="move(bookings[0], '', {use_resource: true})"><span translate="PROGRESS_MOVE_BOOKING"></span></button>
-                </div>
-                <div ng-show="waitlist_bookings"class="col-sm-4">
-                  <button type="button" class="btn btn-primary btn-block" ng-click="is_waitlist = true"><span translate="PROGRESS_BOOK_WAITLIST_ITEMS"></span></button>
+                <div class='row'>
+                  <div class="col-sm-4">
+                    <button type="button" class="btn btn-secondary btn-block" ng-click="delete(bookings[0])" translate="PROGRESS_CANCEL_BOOKING"></button>
+                  </div>
+                  <div class="col-sm-4">
+                    <button type="button" class="btn btn-primary btn-block" ng-click="move(bookings[0], '', {use_resource: true})" translate="PROGRESS_MOVE_BOOKING"></button>
+                  </div>
+                  <div ng-show="waitlist_bookings"class="col-sm-4">
+                    <button type="button" class="btn btn-primary btn-block" ng-click="is_waitlist = true"><span translate="PROGRESS_BOOK_WAITLIST_ITEMS"></span></button>
+                  </div>
                 </div>
               </div>
             </div>

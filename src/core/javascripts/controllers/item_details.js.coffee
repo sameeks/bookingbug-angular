@@ -46,7 +46,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
   $scope.suppress_basket_update = $attrs.bbSuppressBasketUpdate?
   $scope.item_details_id = $scope.$eval $attrs.bbSuppressBasketUpdate
- 
+
   # if instructed to suppress basket updates (i.e. when the directive is invoked multiple times
   # on the same page), create a form store for each instance of the directive
   if $scope.suppress_basket_update
@@ -100,7 +100,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       $scope.$emit "item_details:loaded", $scope.item_details
 
     else
-      
+
       params = {company: $scope.bb.company, cItem: $scope.item}
       ItemDetailsService.query(params).then (details) ->
         if details
@@ -111,9 +111,9 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           $scope.recalc_price()
           $scope.$emit "item_details:loaded", $scope.item_details
         $scope.setLoaded $scope
-        
+
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-    
+
 
   ###**
   * @ngdoc method
@@ -139,7 +139,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       oldQuestions = $scope.item_details.questions
 
       _.each details.questions, (item) ->
-        search = _.findWhere(oldQuestions, { name: item.name })
+        search = _.find(oldQuestions, { name: item.name })
         if search
           item.answer = search.answer
     $scope.item_details = details
@@ -184,7 +184,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
     return true if $scope.$parent.$has_page_control
 
-   
+
     if $scope.item.ready
       $scope.notLoaded $scope
       $scope.addItemToBasket().then () ->
@@ -221,6 +221,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   $scope.confirm_move = (route) ->
     confirming = true
     $scope.item ||= $scope.bb.current_item
+    $scope.item.moved_booking = false
     # we need to validate the question information has been correctly entered here
     $scope.item.setAskedQuestions()
     if $scope.item.ready
@@ -235,6 +236,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
             $scope.purchase = purchase
             $scope.setLoaded $scope
             $scope.item.move_done = true
+            $scope.item.moved_booking = true
             $rootScope.$broadcast "booking:moved"
             $scope.decideNextPage(route)
             $scope.showMoveMessage(bookings[0].datetime)
@@ -246,11 +248,11 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       else
         PurchaseBookingService.update($scope.item).then (booking) ->
           b = new BBModel.Purchase.Booking(booking)
-    
+
           if $scope.bb.purchase
             for oldb, _i in $scope.bb.purchase.bookings
               $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
-        
+
           $scope.setLoaded $scope
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
@@ -353,13 +355,13 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     att_id = existing if existing
     method = "POST"
     method = "PUT" if att_id
-    url = item.$href('add_attachment') 
+    url = item.$href('add_attachment')
     $scope.upload = $upload.upload({
       url: url,
       method: method,
       data: {attachment_id: att_id},
-      file: file, 
-    }).progress (evt) -> 
+      file: file,
+    }).progress (evt) ->
       if $scope.upload_progress < 100
         $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
     .success (data, status, headers, config) ->

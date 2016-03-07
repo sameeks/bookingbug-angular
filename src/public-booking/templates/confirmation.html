@@ -1,6 +1,6 @@
 <div bb-total ng-init="checkStepTitle('Confirmed')" class="bb-checkout">
   <div class="row">
-    <div class="col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8">
+    <div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
 
       <div class="bb-subcontent">
         <div class="confirmation-header bb-confirmation-border-margin">
@@ -13,7 +13,7 @@
             <p class="bb-confirmation-p-alignment"><span translate="CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST" translate-values="{member_name: total.client.first_name}"></span></p>
           </div>
           <div class="row hidden-print text-right">
-            <button type="button" class="btn btn-link" onclick="window.print()"><span class="glyphicon glyphicon-print"></span><span translate="PRINT"></span></button>
+            <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print"></span><span translate="PRINT"></span></button>
             <div bb-booking-export class="bb-booking-export"></div>
           </div>
         </div>
@@ -21,23 +21,22 @@
         <div>
           <ul class="confirmation-summary">
             <li class="row confirmation-summary-item">
-              <div class="col-sm-3"><span translate="BOOKING_REFERENCE"></span>:</div>
-              <div class="col-sm-9">{{total.id}}</div>
+              <div class="col-sm-3 bb-summary-label"><span translate="BOOKING_REFERENCE"></span>:</div>
+              <div class="col-sm-9 bb-summary-label"><span class='fa fa-caret-right'></span>{{total.id}}</div>
             </li>
           </ul>
           <ul class="confirmation-summary" ng-repeat="i in total.items">
             <li ng-if="i.full_describe" class="row confirmation-summary-item">
               <div class="col-sm-3"><span translate="ITEM_SERVICE"></span>:</div>
-              <div class="col-sm-9">{{i.full_describe}}</div>
+              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>{{ i.full_describe }}</div>
             </li>
             <li ng-if="i.describe" class="row confirmation-summary-item">
               <div class="col-sm-3"><span translate="ITEM_DATE"></span>/<span translate="ITEM_TIME"></span>:</div>
-              <div class="col-sm-9">{{i.describe}}</div>
+              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>{{ i.describe }}</div>
             </li>
             <li ng-if="i.price" class="row confirmation-summary-item">
               <div class="col-sm-3"><span translate="ITEM_PRICE"></span>:</div>
-              <div class="col-sm-9">{{i.price | currency }}</div>
-            </li>
+              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>{{ i.price | currency }}</div>
           </ul>
           <ul ng-show="total.items[0].address.lat" class="confirmation-summary">
             <li class="row confirmation-summary-item">
@@ -52,7 +51,7 @@
             </li>
             <li class="row confirmation-summary-item">
               <div class="col-sm-12">
-                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> {{total.items[0].address | address_single_line }}
+                <span class="fa fa-map-marker" aria-hidden="true"></span> {{ total.items[0].address | address_single_line }}
               </div>
             </li>
           </ul>
@@ -69,8 +68,7 @@
   </div>
 </div>
 
-<div class="bb-step-navigation">
-</div>
+<!-- <div class="bb-step-navigation"></div> -->
 
 <div ng-show="isLoaded" class="powered-by visible-print">
   <p><span translate="POWERED_BY"></span> <span class="bb-primary-brand-color">booking</span><span class="bb-secondary-brand-color">bug</p>

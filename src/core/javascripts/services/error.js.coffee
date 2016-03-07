@@ -207,7 +207,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
   ]
 
   getError: (key) ->
-    error = _.findWhere(alerts, {key: key})
+    error = _.find(alerts, {key: key})
     error.persist = true
     translate = SettingsService.isInternationalizatonEnabled()
     # if i18n enabled, return the translation key
@@ -224,7 +224,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
 
 
   getAlert: (key) ->
-    alert = _.findWhere(alerts, {key: key})
+    alert = _.find(alerts, {key: key})
     translate = SettingsService.isInternationalizatonEnabled()
     # if i18n enabled, return the translation key
     if alert and translate

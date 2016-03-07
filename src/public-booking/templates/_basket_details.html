@@ -1,4 +1,4 @@
-<div bb-basket-list class="modal-content bb-basket-mini"> 
+<div bb-basket-list class="modal-content bb-basket-mini">
 
   <div class="modal-header">
     <button type="button" class="close" ng-click="cancel()">&times;</button>
@@ -20,8 +20,7 @@
           <td >
             {{ item.service_name }}
           </td>
-            <td translate="TIME_AND_DURATION" translate-values="{time: item.date.date, duration: item.duration}">
-          </td>
+          <td translate="TIME_AND_DURATION" translate-values="{time: item.date.date, duration: item.duration}">
           <td class="text-center">
             <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></span>
           </td>

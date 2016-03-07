@@ -1,0 +1,42 @@
+.tablet-appointments {
+  .full-block {
+    background-color: #FFF;
+    
+    a {
+      color: #333;
+      &:hover {
+        text-decoration: none;
+      }
+
+      .details {
+        color: #336E57;
+      }
+    }
+    
+    .details {
+      font-size: 90%;
+      color: #336E57;
+      text-align: right;
+    }
+    
+    tfoot, thead {
+      display: none;
+    }
+    
+    tr td:first-child {
+      border-left: 1px;
+    }
+    
+    tr td:last-child {
+      border-right: 1px;
+    }
+    
+    tr td {
+      border-left: 0px;
+      border-right: 0px;
+      height: 44px;
+      line-height: 44px;
+      padding: 0 8px;
+    }
+  }
+}

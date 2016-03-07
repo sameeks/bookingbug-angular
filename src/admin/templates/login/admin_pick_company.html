@@ -3,7 +3,7 @@
   <div ng-repeat="admin in administrators" class="radio">
     <label>
       <input id="company{{admin.company_id}}" type="radio"
-        ng-model="$parent.selected_admin" ng-value="admin" required
+        ng-model="login.selected_admin" ng-value="admin" required
         name="company">
       {{admin.company_name}}
     </label>

@@ -1,4 +1,4 @@
-angular.module('BB.Services').factory "MemberBookingService", ($q,
+angular.module('BBMember.Services').factory "MemberBookingService", ($q,
     SpaceCollections, $rootScope, MemberService, BBModel) ->
 
   query: (member, params) ->

@@ -2,6 +2,7 @@
 @import "bb-sass-3-3-1/bootstrap.scss";
 @import "animate";
 @import "fonts";
+@import "mixins";
 
 // Modules & Variables
 $bb-primary-brand-color     : #087f94;
@@ -63,4 +64,5 @@ $secondary-border-color     : #D5D5D5;
   @import "time";
   @import "filters";
   @import "admin";
+  @import "popovers";
 }
