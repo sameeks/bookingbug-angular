@@ -272,7 +272,7 @@ moment.locale('en', {
   longDateFormat : {
     LT : 'h:mma',
     LL: 'Do MMMM YYYY',
-    LL: 'h:mma Do MMM YYYY'
+    LL: 'h:mma Do MMM YYYY',
     LLLL : 'h:mma dddd Do MMMM YYYY'
   }
 });
