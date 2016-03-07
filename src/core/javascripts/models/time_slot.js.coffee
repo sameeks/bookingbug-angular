@@ -32,7 +32,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
       @service = service
       @time_12 = @print_time12()
       @time_24 = @print_time()
-
+      hours = @time / 60
+      min = @time
+      @time_moment = moment().minutes(min).hours(hours)
     ###**
     * @ngdoc method
     * @name print_time
@@ -40,7 +42,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @description
     * Print time of the slot
     *
-    * @returns {date} The returning time 
+    * @returns {date} The returning time
     ###
     # 24 hour time
     print_time: ->
@@ -61,7 +63,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @description
     * Print end time of the slot
     *
-    * @returns {date} The returning end time 
+    * @returns {date} The returning end time
     ###
     # 24 hour time
     print_end_time: (dur) ->
@@ -114,7 +116,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
         if @service.listed_duration?
           dur = @service.listed_duration
         else
-          dur = @service.listed_durations[0] 
+          dur = @service.listed_durations[0]
       t = @get('time') + dur
       h = Math.floor(t / 60)
       m = t%60
