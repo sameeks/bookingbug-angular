@@ -23,7 +23,7 @@
 ###
 
 
-angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, BaseModel, DateTimeUlititiesService) ->
 
   class TimeSlot extends BaseModel
 
@@ -34,7 +34,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
       @time_24 = @print_time()
       hours = @time / 60
       min = @time
-      @time_moment = moment().minutes(min).hours(hours)
+      @time_moment = DateTimeUlititiesService.convertTimeSlotToMoment({date: moment()}, @)
     ###**
     * @ngdoc method
     * @name print_time
