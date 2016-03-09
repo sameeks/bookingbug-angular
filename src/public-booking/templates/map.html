@@ -46,7 +46,7 @@
           <p><strong><span translate="STORE_PHONE">s></span>:</strong> {{currentMarker.company.address.phone | uk_local_number}}</p>
           <p>
             <span ng-if="currentMarker.company.extra.closing_time"><strong>{{currentMarker.company.extra.closing_time}}</strong></span>
-            <span class="distance">{{roundNumberUp(currentMarker.distance,1)}}mi</span>
+            <span class="distance">{{currentMarker.distance | distance}}</span>
           </p>
           <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.live"><span translate="PROGRESS_SELECT"></span></button>
 
@@ -68,7 +68,7 @@
               <li ng-bind-html="marker.company.address | address_multi_line"></li>
               <li><strong><span translate="STORE_PHONE"></span>:</strong> {{marker.company.address.phone | uk_local_number}}</li>
               <li>
-                <span class="distance">{{roundNumberUp(marker.distance,1)}}mi</span>
+                <span class="distance">{{currentMarker.distance | distance}}</span>
               </li>
             </ul>
             <button type="button" ng-click="selectItem(marker.company)" class="btn btn-primary pull-right"><span translate="PROGRESS_SELECT"></span></button>

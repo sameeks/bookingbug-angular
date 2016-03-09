@@ -271,7 +271,8 @@
   "REQUIRED_FIELDS": "*Required fields",
   "PLEASE_ENTER_FIRST_NAME": "Please enter a first name",
   "PLEASE_ENTER_LAST_NAME": "Please enter a last name",
-  "PLEASE_ENTER_SOMETHING": "*Please enter a first and last name or email address"
+  "PLEASE_ENTER_SOMETHING": "*Please enter a first and last name or email address",
+  "DISTANCE_UNIT": 'mi'
 };
 
 moment.locale('en', {

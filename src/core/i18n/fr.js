@@ -265,7 +265,8 @@
   "REQUIRED_FIELDS": "*Champs requis",
   "PLEASE_ENTER_FIRST_NAME": "Merci d'entrer un prénom",
   "PLEASE_ENTER_LAST_NAME": "Merci d'entrer un nom",
-  "PLEASE_ENTER_SOMETHING": "*Merci d'entrer un nom complet ou une addresse email"
+  "PLEASE_ENTER_SOMETHING": "*Merci d'entrer un nom complet ou une addresse email",
+  "DISTANCE_UNIT": "km"
 };
 
 (function (global, factory) {

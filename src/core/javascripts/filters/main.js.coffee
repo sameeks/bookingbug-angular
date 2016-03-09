@@ -128,6 +128,14 @@ app.filter 'icurrency', ($translate, $window, $rootScope) ->
                                    format.THOUSANDS_SEPARATOR, format.DECIMAL_SEPARATORS,
                                    format.CURRENCY_FORMAT)
 
+#only works with miles input for now
+app.filter 'distance', ($translate) ->
+  (distance) ->
+    localUnit = $translate.instant('DISTANCE_UNIT')
+    distance *= 0.621371 if localUnit is 'km'
+    prettyDistance = distance.toFixed(3).replace(/\.0+$/,'')
+    prettyDistance + localUnit
+    
 
 app.filter 'raw_currency', () ->
   (number) =>
