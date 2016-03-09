@@ -7,3 +7,15 @@
   border: none;
   background: transparent;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+//bootstrap overrides
+.panel-heading {
+  .btn-sm {
+    position: relative;
+    top:5px;
+  }
+}
