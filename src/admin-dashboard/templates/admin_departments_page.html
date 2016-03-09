@@ -1,0 +1,15 @@
+<div bb-dashboard-content-wrapper>
+  <div ng-repeat="department in departments"
+    ng-click="selectDepartment(department)" class="panel panel-default">
+    <div class="panel-body">
+      <h3>{{department.name}}</h3>
+      <p>{{department.address.address1}}</p>
+      <p>{{department.address.address2}}</p>
+      <p>{{department.address.address3}}</p>
+      <p>{{department.address.address4}}</p>
+      <p>{{department.address.postcode}}</p>
+      <p>{{department.address.country}}</p>
+      <p>{{department.timezone}}</p>
+    </div>
+  </div>
+</div>

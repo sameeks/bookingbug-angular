@@ -48,32 +48,68 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
       template: "<div ui-view></div>"
       resolve:
         user: ($q, AdminLoginService, $timeout, $state) ->
+          console.log 'root user'
           defer = $q.defer()
-          $q.when(AdminLoginService.checkLogin()).then () ->
-            unless AdminLoginService.isLoggedIn()
+          AdminLoginService.user().then (user) ->
+            if user
+              defer.resolve(user)
+            else
               $timeout () ->
                 $state.go 'login', {}, {reload: true}
-            else
-              defer.resolve(AdminLoginService.user())
           , (err) ->
             $timeout () ->
               $state.go 'login', {}, {reload: true}
           defer.promise
         company: (user, $q, $timeout, $state) ->
-          console.log(user)
+          console.log('user ', user)
           defer = $q.defer()
           user.getCompanyPromise().then (company) ->
-            defer.resolve(company)
+            console.log 'company ', company
+            if company.companies && company.companies.length > 0
+              $timeout () ->
+                $state.go 'departments', {}, {reload: true}
+            else
+              defer.resolve(company)
           , (err) ->
             $timeout () ->
               console.log('failed to get company')
               $state.go 'login', {}, {reload: true}
           defer.promise
-        services: (company) -> []
-        resources: (company) -> []
-        people: (company) -> []
-        addresses: (company, AdminAddressService) -> []
       controller: 'bbAdminRootPageController'
+    .state 'departments',
+      url: "/departments"
+      controller: ($scope, company, departments, AdminLoginService, $state, $timeout) ->
+        $scope.company = company
+        $scope.departments = departments
+
+        $scope.selectDepartment = (department) ->
+          AdminLoginService.setCompany(department.id).then (user) ->
+            $timeout () ->
+              $state.go 'dashboard', {}, {reload: true}
+
+      templateUrl: "admin_departments_page.html"
+      resolve:
+        user: ($q, AdminLoginService, $timeout, $state) ->
+          defer = $q.defer()
+          AdminLoginService.user().then (user) ->
+            if user
+              defer.resolve(user)
+            else
+              $timeout () ->
+                $state.go 'login', {}, {reload: true}
+          , (err) ->
+            $timeout () ->
+              $state.go 'login', {}, {reload: true}
+          defer.promise
+        company: (user) -> user.getCompanyPromise()
+        departments: (company, $q, $timeout, $state) ->
+          defer = $q.defer()
+          if company.companies && company.companies.length > 0
+            defer.resolve(company.companies)
+          else
+            $timeout () ->
+              $state.go 'dashboard', {}, {reload: true}
+          defer.promise
     .state 'dashboard',
       parent: "root"
       url: "/dashboard"

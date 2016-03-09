@@ -118,3 +118,20 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
       defer.reject(err)
     defer.promise
 
+  setCompany: (company_id) ->
+    defer = $q.defer()
+    url = "#{$rootScope.bb.api_url}/api/v1/login/admin"
+    params = {company_id: company_id}
+    halClient.$put(url, {}, params).then (login) =>
+      if login.$has('administrator')
+        login.$get('administrator').then (user) =>
+          user = @setLogin(user)
+          defer.resolve(user)
+        , (err) ->
+          defer.reject(err)
+      else
+        defer.reject()
+    , (err) ->
+      defer.reject(err)
+    defer.promise
+
