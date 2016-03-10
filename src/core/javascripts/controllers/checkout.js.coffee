@@ -55,10 +55,11 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
         $scope.$emit("checkout:success", total)
         $scope.bb.total = $scope.total
         $scope.bb.payment_status = 'complete'
-        $scope.reset()
         if !$scope.options.disable_confirmation
           $scope.skipThisStep()
           $scope.decideNextPage()
+        else
+          $scope.reset()
 
       $scope.checkoutSuccess = true
       $scope.setLoaded $scope
