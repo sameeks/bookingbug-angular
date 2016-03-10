@@ -49,12 +49,13 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
     $scope.loadingTotal = BasketService.checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
     $scope.loadingTotal.then (total) =>
       $scope.total = total
-   
+
       # if no payment is required, route to the next step unless instructed otherwise
       if !total.$has('new_payment')
         $scope.$emit("checkout:success", total)
         $scope.bb.total = $scope.total
         $scope.bb.payment_status = 'complete'
+        $scope.clearCheckout()
         if !$scope.options.disable_confirmation
           $scope.skipThisStep()
           $scope.decideNextPage()
@@ -66,7 +67,6 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
       $scope.checkoutFailed = true
       $scope.$emit("checkout:fail", err)
-
   , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
