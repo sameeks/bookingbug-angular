@@ -10,8 +10,9 @@ angular.module('BBMember').directive 'memberSsoLogin', ($rootScope, LoginService
     options =
       root: $rootScope.bb.api_url
       company_id: scope.companyId
-
-    data = {token: scope.token}
+    data = {}
+    data.token = scope.token if scope.token
+    data.token ||= scope.qs('sso_token') if scope.qs
 
     if $sniffer.msie && $sniffer.msie < 10 && $rootScope.iframe_proxy_ready == false
       $timeout () ->
