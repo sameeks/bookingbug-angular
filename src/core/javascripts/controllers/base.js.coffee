@@ -1190,7 +1190,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     while past_steps[0]
       last_step = past_steps.pop()
       if !last_step
-        break
+        break 
       if !last_step.skipped
         step_to_load = last_step.number
         break
