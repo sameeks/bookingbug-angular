@@ -272,7 +272,10 @@
   "PLEASE_ENTER_FIRST_NAME": "Please enter a first name",
   "PLEASE_ENTER_LAST_NAME": "Please enter a last name",
   "PLEASE_ENTER_SOMETHING": "*Please enter a first and last name or email address",
-  "DISTANCE_UNIT": 'mi'
+  "DISTANCE_UNIT": 'mi',
+  "SELECT_SERVICE": "Select a service",
+  "SELECT_CATEGORY": "Select a category",
+  "SERVICE_TYPE": "Choose service type"
 };
 
 moment.locale('en', {

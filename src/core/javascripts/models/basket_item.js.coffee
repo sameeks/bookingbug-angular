@@ -33,7 +33,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       @days_link =  null
       @book_link =  null
       @parts_links = {}
-      @settings or= {}
+      @settings ||= {}
       @has_questions = false
 
       if bb
