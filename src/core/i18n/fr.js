@@ -269,7 +269,17 @@
   "DISTANCE_UNIT": "km",
   "SELECT_SERVICE": "Choisir un service",
   "SELECT_CATEGORY": "Choisir une catégorie",
-  "SERVICE_TYPE": "Type de service"
+  "SERVICE_TYPE": "Type de service",
+  "ANY_DATE": "- Date -",
+  "PICK_DATE": "Choisir date",
+  "FULL_CALENDAR": "Calendrier entier",
+  "WEEK_BEGINNING": "La semaine commençant le",
+  "SELECT_DAY": "Choisir jour",
+  "AVAILABLE": "Disponible",
+  "UNAVAILABLE": "Non disponible",
+  "PREVIOUS_5_WEEKS": "5 semaines précédentes",
+  "NEXT_5_WEEKS": "5 semaines suivantes",
+  "KEY": "Clé"
 };
 
 (function (global, factory) {

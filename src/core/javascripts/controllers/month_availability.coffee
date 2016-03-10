@@ -28,10 +28,10 @@ angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
   restrict: 'A'
   replace: true
   scope : true
-  controller : 'DayList'
+  controller : 'MonthAvailability'
 
-angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q, DayService, AlertService) ->
-  $scope.controller = "public.controllers.DayList"
+angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $rootScope, $q, DayService, AlertService) ->
+  $scope.controller = "public.controllers.MonthAvailability"
   $scope.notLoaded $scope
 
 
