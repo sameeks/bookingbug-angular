@@ -1222,11 +1222,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.setLastSelectedDate(null)
     $scope.client =  new BBModel.Client()
     $scope.bb.last_step_reached = false
+    # This is to remove the current step you are on.
     $scope.bb.steps.splice(1)
 
 
   $scope.restart = () ->
-    $scope.clearCheckout()
+    $scope.reset()
     $scope.loadStep(1)
 
   # setup full route data
