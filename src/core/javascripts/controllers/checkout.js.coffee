@@ -59,6 +59,7 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
           $scope.skipThisStep()
           $scope.decideNextPage()
         else
+          # Reset ready for another booking
           $scope.reset()
 
       $scope.checkoutSuccess = true
