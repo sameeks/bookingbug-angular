@@ -1,4 +1,5 @@
 angular.module('BB.Services').factory "EventChainService",  ($q, BBModel) ->
+
   query: (company, params) ->
     deferred = $q.defer()
     if !company.$has('event_chains')
@@ -9,6 +10,19 @@ angular.module('BB.Services').factory "EventChainService",  ($q, BBModel) ->
           event_chains = for event_chain in event_chains
             new BBModel.EventChain(event_chain)
           deferred.resolve(event_chains)
+      , (err) =>
+        deferred.reject(err)
+    deferred.promise
+
+
+  queryEventChainCollection: (company, params) ->
+    deferred = $q.defer()
+    if !company.$has('event_chains')
+      deferred.resolve([])
+    else
+      company.$get('event_chains', params).then (resource) =>
+        collection = new BBModel.BBCollection(resource)
+        deferred.resolve(collection)
       , (err) =>
         deferred.reject(err)
     deferred.promise
