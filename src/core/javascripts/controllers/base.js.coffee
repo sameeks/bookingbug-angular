@@ -1216,7 +1216,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.loadStep(step.number)
     return $scope.loadStep(1)
 
-  $scope.clearCheckout = () ->
+  $scope.reset = () ->
     $rootScope.$broadcast 'clear:formData'
     $rootScope.$broadcast 'widget:restart'
     $scope.setLastSelectedDate(null)
