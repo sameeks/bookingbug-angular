@@ -75,8 +75,11 @@ angular.module('BBAdminDashboard').directive 'ltePinBottom', ($window, $bbug) ->
     if scope.adminlte.fixed_page
       scope.adminlte.iframe_style = ""
       pos = $bbug(element).position()
-      $bbug(element).height("" + ($window.innerHeight-pos.top)+ "px")
+      #if element is insite content we need to account for the padding
+      padding = if element.closest('.content').length then element.closest('.content').css('padding-bottom').replace("px", "") else 0
+
+      $bbug(element).height(($window.innerHeight-pos.top - padding)+ "px")
       angular.element($window).bind 'resize', ->
         pos = $bbug(element).position()
-        $bbug(element).height("" + ($window.innerHeight-pos.top)+ "px")
+        $bbug(element).height(($window.innerHeight-pos.top -padding)+ "px")
 
