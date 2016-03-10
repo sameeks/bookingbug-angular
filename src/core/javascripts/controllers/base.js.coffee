@@ -1183,7 +1183,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   * @param {string} caller: The method that called this function
   ###
   $scope.loadPreviousStep = (caller) ->
-    debugger
     past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
 
     # Find the last unskipped step
