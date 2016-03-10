@@ -48,7 +48,6 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
       template: "<div ui-view></div>"
       resolve:
         user: ($q, AdminLoginService, $timeout, $state) ->
-          console.log 'root user'
           defer = $q.defer()
           AdminLoginService.user().then (user) ->
             if user
@@ -61,10 +60,8 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
               $state.go 'login', {}, {reload: true}
           defer.promise
         company: (user, $q, $timeout, $state) ->
-          console.log('user ', user)
           defer = $q.defer()
           user.getCompanyPromise().then (company) ->
-            console.log 'company ', company
             if company.companies && company.companies.length > 0
               $timeout () ->
                 $state.go 'departments', {}, {reload: true}
@@ -189,7 +186,8 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
       templateUrl: "admin_login_page.html"
     .state 'logout',
       url: "/logout"
-      controller: (AdminLoginService, $state) ->
+      controller: (AdminLoginService, $state, $timeout) ->
         AdminLoginService.logout()
-        $state.go 'login', {}, {reload: true}
+        $timeout () ->
+          $state.go 'login', {}, {reload: true}
 
