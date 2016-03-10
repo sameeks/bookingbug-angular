@@ -49,7 +49,6 @@ app.filter 'time', ($window) ->
   (v) ->
     return $window.sprintf("%02d:%02d",Math.floor(v / 60), v%60 )
 
-
 app.filter 'address_single_line', ->
   (address) =>
 
@@ -104,30 +103,6 @@ app.filter 'map_lat_long', ->
     cord = /([-+]*\d{1,3}[\.]\d*)[, ]([-+]*\d{1,3}[\.]\d*)/.exec(address.map_url)
     return cord[0]
 
-app.filter 'currency', ($filter) ->
-  (number, currencyCode) =>
-    return $filter('icurrency')(number, currencyCode)
-
-app.filter 'icurrency', ($translate, $window, $rootScope) ->
-  (number, currencyCode) =>
-    currencyCode ||= $rootScope.bb_currency
-    currency = {
-      USD: "$",
-      GBP: "£",
-      AUD: "$",
-      EUR: "€",
-      CAD: "$",
-      MIXED: "~"
-    }
-
-    format = $translate.instant(['THOUSANDS_SEPARATOR', 'DECIMAL_SEPARATOR', 'CURRENCY_FORMAT'])
-
-    number = number / 100.0
-
-    $window.accounting.formatMoney(number, currency[currencyCode], 2,
-                                   format.THOUSANDS_SEPARATOR, format.DECIMAL_SEPARATORS,
-                                   format.CURRENCY_FORMAT)
-
 #only works with miles input for now
 app.filter 'distance', ($translate) ->
   (distance) ->
@@ -136,40 +111,30 @@ app.filter 'distance', ($translate) ->
     prettyDistance = distance.toFixed(3).replace(/\.0+$/,'')
     prettyDistance + localUnit
     
+do ->
+  currencyCodes = {USD: "$", GBP: "£", AUD: "$", EUR: "€", CAD: "$", MIXED: "~"}
 
-app.filter 'raw_currency', () ->
-  (number) =>
-    number / 100.0
+  currency = ($translate, $window, $rootScope) ->
+    (cents, currencyCode, prettyPrice=false) ->
+      currencyCode ||= $rootScope.bb_currency
 
+      format = $translate.instant(['THOUSANDS_SEPARATOR', 'DECIMAL_SEPARATOR', 'CURRENCY_FORMAT'])
+      hideCents = prettyPrice and (cents % 100 is 0)
 
-# unused in this repo, English-only
-app.filter 'pretty_price', ($filter) ->
-  (price, symbol) ->
-    return $filter('ipretty_price')(price, symbol)
+      $window.accounting.formatMoney(cents / 100.0, currencyCodes[currencyCode], hideCents ? 0 : 2,
+                                     format.THOUSANDS_SEPARATOR, format.DECIMAL_SEPARATORS, format.CURRENCY_FORMAT)
 
+  prettyPrice = ($translate, $filter) ->
+    (price, currencyCode) ->
+      if parseFloat(price) == 0 then $translate.instant('ITEM_FREE')
+      else $filter('currency')(price, currencyCode, true)
 
-app.filter 'ipretty_price', ($window, $rootScope) ->
-  (price, symbol) ->
-    if !symbol
-      currency = {
-        USD: "$",
-        GBP: "£",
-        AUD: "$",
-        EUR: "€",
-        CAD: "$",
-        MIXED: "~"
-      }
-      symbol = currency[$rootScope.bb_currency]
-
-    price /= 100.0
-
-    if parseFloat(price) == 0
-      return 'Free'
-    else if parseFloat(price) % 1 == 0
-      return symbol + parseFloat(price)
-    else
-      return symbol + $window.sprintf("%.2f", parseFloat(price))
-
+  app.filter 'currency', currency
+  app.filter 'icurrency', currency
+  app.filter 'raw_currency', -> (number) -> number / 100.0
+  app.filter 'pretty_price', prettyPrice
+  app.filter 'ipretty_price', prettyPrice
+  
 
 app.filter 'time_period', ($translate) ->
   (v) ->
@@ -205,29 +170,6 @@ app.filter 'time_period_from_seconds', ($translate, $filter) ->
       timePeriod += moment.duration(seconds % 60, 'seconds').humanize()
 
     return timePeriod
-
-# unused in this repo, english-only
-app.filter 'twelve_hour_time', ($window) ->
-  (time, options) ->
-
-    return if !angular.isNumber(time)
-
-    omit_mins_on_hour = options && options.omit_mins_on_hour or false
-    seperator         = if options && options.seperator then options.seperator else ":"
-
-    t = time
-    h = Math.floor(t / 60)
-    m = t%60
-    suffix = 'am'
-    suffix = 'pm' if h >=12
-    h -=12 if (h > 12)
-    if m is 0 && omit_mins_on_hour
-      time = "#{h}"
-    else
-      time = "#{h}#{seperator}" + $window.sprintf("%02d", m)
-    time += suffix
-    return time
-
 
 app.filter 'round_up', ->
   (number, interval) ->
@@ -348,3 +290,25 @@ app.filter 'key_translate', ->
     remove_punctuations = upper_case.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"")
     add_underscore = remove_punctuations.replace(/\ /g, "_")
     return add_underscore
+
+# unused in this repo, english-only
+app.filter 'twelve_hour_time', ($window) ->
+  (time, options) ->
+
+    return if !angular.isNumber(time)
+
+    omit_mins_on_hour = options && options.omit_mins_on_hour or false
+    seperator         = if options && options.seperator then options.seperator else ":"
+
+    t = time
+    h = Math.floor(t / 60)
+    m = t%60
+    suffix = 'am'
+    suffix = 'pm' if h >=12
+    h -=12 if (h > 12)
+    if m is 0 && omit_mins_on_hour
+      time = "#{h}"
+    else
+      time = "#{h}#{seperator}" + $window.sprintf("%02d", m)
+    time += suffix
+    return time
