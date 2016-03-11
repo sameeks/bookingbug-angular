@@ -83,11 +83,13 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           view.calendar.unselect()
           rid = null
           rid = resource.id if resource
-          AdminBookingPopup.open
-            item_defaults:
-              date: start.format('YYYY-MM-DD')
-              time: (start.hour() * 60 + start.minute())
-              person: rid
+          $scope.getCompanyPromise().then (company) ->
+            AdminBookingPopup.open
+              item_defaults:
+                date: start.format('YYYY-MM-DD')
+                time: (start.hour() * 60 + start.minute())
+                person: rid
+              company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
           $scope.currentDate = moment(date).format('YYYY-MM-DD')
