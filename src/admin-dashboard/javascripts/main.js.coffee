@@ -190,4 +190,8 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
         AdminLoginService.logout()
         $timeout () ->
           $state.go 'login', {}, {reload: true}
+    .state 'checkin',
+      parent: 'root'
+      url: "/checkin"
+      templateUrl: "checkin_page.html"
 

@@ -1,0 +1,79 @@
+<table class="full-block table table-striped">
+  <thead>
+    <tr>
+      <th class="col-sm-2">
+        <a href="" ng-click="doSort('client_name')">Customer &nbsp;
+          <i ng-show="sorter == 'client_name'" class="fa"
+            ng-class="sortAscending ? 'fa-sort-asc' : 'fa-sort-desc'"></i>
+        </a>
+      </th>
+      <th class="col-sm-2">
+        <a href="" ng-click="doSort('person_name')">Resource &nbsp;
+          <i ng-show="sorter == 'person_name'" class="fa"
+            ng-class="sortAscending ? 'fa-sort-asc' : 'fa-sort-desc'"></i>
+        </a>
+      </th>
+      <th class="col-sm-1">
+        <a href="" ng-click="doSort('unixTime')">Due
+          <i ng-show="sorter == 'unixTime'" class="fa"
+            ng-class="sortAscending ? 'fa-sort-asc' : 'fa-sort-desc'"></i>
+        </a>
+      </th>
+      <th class="col-sm-3">Arrived</th>
+      <th class="col-sm-3">Being Seen</th>
+      <th class="col-sm-3">Completed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="gridItem in bookings">
+      <td>
+        <a ui-sref="client({id: bmap[gridItem].client_id})">
+          {{bmap[gridItem].client_name}}
+        </a>
+      </td>
+      <td>
+        <span>
+           {{bmap[gridItem].person_name}}
+        </span>
+      </td>
+      <td>
+        <span>
+           {{bmap[gridItem].datetime.format("HH:mm")}}
+        </span>
+      </td>
+      <td>
+        <span ng-if="bmap[gridItem].hasStatus('checked_in')">
+          {{bmap[gridItem].statusTime("checked_in").format("HH:mm")}}
+        </span>
+        <span ng-if="!bmap[gridItem].hasStatus('checked_in')">
+          <button ng-click="setStatus(bmap[gridItem], 'checked_in')" class="btn btn-default">
+            Check in
+          </button>
+        </span>
+      </td>
+      <td>
+        <span ng-if="bmap[gridItem].hasStatus('being_seen')">
+          {{bmap[gridItem].statusTime("being_seen").format("HH:mm")}}
+        </span>
+        <span ng-if="!bmap[gridItem].hasStatus('being_seen') && !bmap[gridItem].hasStatus('checked_in') && bmap[gridItem].sinceStart() > 0" ng-class="bmap[gridItem].sinceStart() | gar:1000:10000">
+          Was due at {{ bmap[gridItem].sinceStart() | time_period }}
+        </span>
+        <span ng-if="!bmap[gridItem].hasStatus('being_seen') && bmap[gridItem].hasStatus('checked_in')">
+          <span ng-class="bmap[gridItem].sinceStart({later: 'checked_in'}) | gar:1000:10000" > Waiting for {{ bmap[gridItem].sinceStart({later: 'checked_in'}) | time_period }}</span><br/>
+          <button ng-click="setStatus(bmap[gridItem], 'being_seen')" class="btn btn-default">Serve</button>
+        </span>
+      </td>
+
+      <td>
+        <span ng-if="bmap[gridItem].hasStatus('completed')">
+          {{bmap[gridItem].statusTime("completed").format("HH:mm")}}
+        </span>
+        <span ng-if="!bmap[gridItem].hasStatus('completed') && bmap[gridItem].hasStatus('being_seen')">
+          <span ng-class="bmap[gridItem].sinceStatus('being_seen') | gar:100:10" > Being seen for {{ bmap[gridItem].sinceStatus('being_seen') | time_period }}</span><br/>
+          <button ng-click="setStatus(bmap[gridItem], 'completed')" class="btn btn-default">Completed</button>
+        </span>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
