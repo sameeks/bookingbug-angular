@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Address
@@ -8,15 +7,14 @@
 * @description
 * Representation of an Address Object
 *
-* @property {string} address1 First line of the address 
-* @property {string} address2 Second line of the address 
-* @property {string} address3 Third line of the address 
-* @property {string} address4 Fourth line of the address 
-* @property {string} address5 Fifth line of the address 
+* @property {string} address1 First line of the address
+* @property {string} address2 Second line of the address
+* @property {string} address3 Third line of the address
+* @property {string} address4 Fourth line of the address
+* @property {string} address5 Fifth line of the address
 * @property {string} postcode The Postcode/Zipcode
 * @property {string} country The country
 ####
-
 
 angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, AddressListService) ->
 
@@ -27,9 +25,9 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name addressSingleLine
     * @methodOf BB.Models:Address
     * @description
-    * Get a the address as a single comma sepeated line
+    * Creates the full address from all the address fields as a single line and comma separated string
     *
-    * @returns {string} The returned address
+    * @returns {string} Full address
     ###
     addressSingleLine: ->
       str = ""
@@ -51,9 +49,9 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name hasAddress
     * @methodOf BB.Models:Address
     * @description
-    * Checks if this is considered a valid address
+    * Returns the first or second address or the postcode if at least one of these exists
     *
-    * @returns {boolean} If this is a valid address
+    * @returns {string} One of these: address1, address2 or postcode
     ###
     hasAddress: ->
       return @address1 || @address2 || @postcode
@@ -63,9 +61,9 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name addressCsvLine
     * @methodOf BB.Models:Address
     * @description
-    * Get all address fields as a single comma sepeated line - suitable for csv export
+    * Creates the full address from all the address fields as a single line and comma separated string wich is suitable for csv export
     *
-    * @returns {string} The returned address
+    * @returns {string} Full address
     ###
     addressCsvLine: ->
       str = ""
@@ -89,9 +87,10 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name addressMultiLine
     * @methodOf BB.Models:Address
     * @description
-    * Get a the address as multiple lines with line feeds
     *
-    * @returns {string} The returned address
+    * Creates the full address from all the address fields as a multiple lines string.
+    *
+    * @returns {string} Full address
     ###
     addressMultiLine: ->
       str = ""

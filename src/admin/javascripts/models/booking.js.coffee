@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:AdminBooking
@@ -12,13 +11,11 @@
 * @property {date} datetime Booking date and time
 * @property {date} start Booking start date
 * @property {date} end Booking end date
-* @property {string} title The title of the booking
+* @property {string} title Booking title
 * @property {integer} time Booking time
 * @property {boolean} allDay Booking availability of the day
 * @property {integer} status The status of the booking
 ####
-
-
 
 angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseModel, BookingCollections, AdminBookingService) ->
 
@@ -36,15 +33,15 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
         @className = "status_blocked"
       else if @status == 4
         @className = "status_booked"
- 
+
     ###**
     * @ngdoc method
     * @name getPostData
     * @methodOf BB.Models:AdminBooking
     * @description
-    * Get post data
+    * (!!check)Provides information about the date, time, duration and questions
     *
-    * @returns {array} Returns data
+    * @returns {object} Data object
     ###
     getPostData: () ->
       data = {}
@@ -56,17 +53,17 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
       if @questions
         data.questions = (q.getPostData() for q in @questions)
       data
-    
+
     ###**
     * @ngdoc method
     * @name hasStatus
     * @methodOf BB.Models:AdminBooking
-    * @param {boolean=} status The status of the booking
+    * @param {boolean} status Booking status
     * @description
-    * Verify if booking have status true or false
+    * Verifies if a booking status is setted
     *
-    * @returns {boolean} Returns the status value
-    ###  
+    * @returns {boolean} False or True if status was setted
+    ###
     hasStatus: (status) ->
       @multi_status[status]?
 
@@ -74,42 +71,41 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
     * @ngdoc method
     * @name statusTime
     * @methodOf BB.Models:AdminBooking
-    * @param {boolean} status The status of the booking
+    * @param {boolean} status Booking status
     * @description
-    * Verify the status time
     *
-    * @returns {string} Returns the status time
+    * @returns {object} Returns a decorated object that contains information about the date
     ###
     statusTime: (status) ->
       if @multi_status[status]
         moment(@multi_status[status])
       else
         null
-    
+
     ###**
     * @ngdoc method
     * @name sinceStatus
     * @methodOf BB.Models:AdminBooking
-    * @param {boolean} status The status of the booking
+    * @param {boolean} status Booking status
     * @description
-    * Verify the status time in according of the status parameter
+    * Verifies the status time depending on the status parameter
     *
-    * @returns {integer} Returns 0 if status time is null or the moment status
+    * @returns {integer} Returns 0 if status time is null or the status unix time
     ###
     sinceStatus: (status) ->
       s = @statusTime(status)
       return 0 if !s
       return Math.floor((moment().unix() - s.unix()) / 60)
-    
+
     ###**
     * @ngdoc method
     * @name sinceStart
     * @methodOf BB.Models:AdminBooking
-    * @param {object} options The options of the booking
+    * @param {object} options Booking options
     * @description
-    * Get the start time of the booking in according of the option parameter
+    * Gets the booking start time depending on the options parameter
     *
-    * @returns {integer} Returns the start of booking
+    * @returns {integer} Booking start time
     ###
     sinceStart: (options) ->
       start = @datetime.unix()
@@ -124,14 +120,14 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
         if s < start
           return Math.floor((moment().unix() - s) / 60)
       return Math.floor((moment().unix() - start) / 60)
-    
+
     ###**
     * @ngdoc method
     * @name answer
     * @methodOf BB.Models:AdminBooking
-    * @param {string=} q The question of the answer
+    * @param {string} q Booking question
     * @description
-    * Get the answer in according of the q parameter
+    * Gets the answer depending on the q parameter
     *
     * @returns {string} Returns the answer
     ###
@@ -141,12 +137,12 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
           if a.name == q
             return a.answer
       return null
- 
+
     ###**
     * @ngdoc method
     * @name update
     * @methodOf BB.Models:AdminBooking
-    * @param {object} data The data of the booking
+    * @param {object} Booking data
     * @description
     * Update data on the booking collections
     *
@@ -155,7 +151,7 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
     $update: (data) ->
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
-        @constructor(res) 
+        @constructor(res)
         BookingCollections.checkItems(@)
 
     $refetch: () ->

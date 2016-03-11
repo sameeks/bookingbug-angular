@@ -30,7 +30,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Set current customer
     *
-    * @returns {Promise} Returns a promise that rezolve the current customer
+    * @returns {Promise} Returns a promise that resolves the current customer
     ###
     setCurrentCustomer: () ->
       defer = $q.defer()
@@ -52,7 +52,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Set attendance in according of the status parameter
     *
-    * @returns {Promise} Returns a promise that rezolve the attendance
+    * @returns {Promise} Returns a promise that resolves the attendance
     ###
     setAttendance: (status) ->
       defer = $q.defer()
@@ -70,7 +70,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Finish serving
     *
-    * @returns {Promise} Returns a promise that rezolve the finish serving
+    * @returns {Promise} Returns a promise that resolves the finish serving
     ###
     finishServing: () ->
       defer = $q.defer()
@@ -95,14 +95,14 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Look up a schedule for a time range to see if this available.
     *
-    * @returns {string} Returns yes if schedule is available or not. 
+    * @returns {string} Returns yes if schedule is available or not.
     ###
     # look up a schedule for a time range to see if this available
     # currently just checks the date - but chould really check the time too
     isAvailable: (start, end) ->
       str = start.format("YYYY-MM-DD") + "-" + end.format("YYYY-MM-DD")
       @availability ||= {}
-      
+
       return @availability[str] == "Yes" if @availability[str]
       @availability[str] = "-"
 
@@ -114,7 +114,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
       else
         @availability[str] = "Yes"
 
-      return @availability[str] == "Yes" 
+      return @availability[str] == "Yes"
 
     ###**
     * @ngdoc method
@@ -124,7 +124,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Start serving in according of the queuer parameter
     *
-    * @returns {Promise} Returns a promise that rezolve the start serving link 
+    * @returns {Promise} Returns a promise that resolves the start serving link
     ###
     startServing: (queuer) ->
       defer = $q.defer()
@@ -149,7 +149,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Get the queuers
     *
-    * @returns {Promise} Returns a promise that rezolve the queuer links 
+    * @returns {Promise} Returns a promise that resolves the queuer links
     ###
     getQueuers: () ->
       defer = $q.defer()
@@ -175,7 +175,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Get post data
     *
-    * @returns {array} Returns data 
+    * @returns {array} Returns data
     ###
     getPostData: () ->
       data = {}
@@ -193,12 +193,12 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Update the data in according of the data parameter
     *
-    * @returns {array} Returns the updated array 
+    * @returns {array} Returns the updated array
     ###
-    $update: (data) -> 
+    $update: (data) ->
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
-        @constructor(res) 
+        @constructor(res)
 
 
     ###**
@@ -208,7 +208,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Static function that loads an array of slots from a company object
     *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of people.
+    * @returns {Promise} Returns a promise that resolves to the filtered collection of people
     ###
     @$query: (params) ->
       AdminPersonService.query(params)

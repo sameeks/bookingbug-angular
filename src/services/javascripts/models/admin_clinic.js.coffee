@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:AdminClinic
@@ -9,25 +8,24 @@
 * Representation of an Clinic Object
 *
 * @property {string} setTimes Set times for the clinic
-* @property {string} setResourcesAndPeople Set resources and people for the clinic 
+* @property {string} setResourcesAndPeople Set resources and people for the clinic
 * @property {object} settings Clinic settings
 * @property {string} resources Clinic resources
 * @property {integer} resource_ids Clinic resources ids
 * @property {string} people Clinic people
-* @property {integer} person_ids Clinic Person ids
+* @property {integer} person_ids Clinic person ids
 * @property {string} services Clinic services
 * @property {integer} services_ids Clinic service ids
-* @property {string} uncovered The uncovered
-* @property {string} className The class Name
-* @property {string} start_time The clinic start thime
-* @property {string} end_time The clinic end time
+* @property {string} uncovered Uncovered
+* @property {string} className Class name
+* @property {string} start_time Clinic start thime
+* @property {string} end_time Clinic end time
 ####
-
 
 angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel, ClinicModel, AdminClinicService) ->
 
   class Admin_Clinic extends ClinicModel
- 
+
     constructor: (data) ->
       super(data)
       @repeat_rule ||= {}
@@ -38,9 +36,9 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
     * @name calcRepeatRule
     * @methodOf BB.Models:AdminClinic
     * @description
-    * Calculate the repeat rule
+    * Calculates the repeat rule
     *
-    * @returns {array} Returns an array of repeat rules 
+    * @returns {object} Returns an object with various information
     ###
     calcRepeatRule: () ->
       vals = {}
@@ -66,9 +64,9 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
     * @name getPostData
     * @methodOf BB.Models:AdminClinic
     * @description
-    * Get post data
+    * Gets post data
     *
-    * @returns {array} Returns an array with data
+    * @returns {object} Returns data object
     ###
     getPostData: () ->
       data = {}

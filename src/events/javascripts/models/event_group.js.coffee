@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:AdminEventGroup
@@ -11,7 +10,6 @@
 * @property {integer} total_entries The total entries of the event group
 * @property {array} event_groups An array with event groups
 ####
-
 
 angular.module('BB.Models').factory "Admin.EventGroupModel", ($q, BBModel, BaseModel, AdminEventGroupService) ->
 

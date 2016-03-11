@@ -30,7 +30,7 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
     * @description
     * Get post data
     *
-    * @returns {array} Returns data. 
+    * @returns {array} Returns data.
     ###
     getPostData: () ->
       data = {}
@@ -40,13 +40,13 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
       data.company_id = @company_id
       data.duration = @duration
       data
-    
+
     ###**
     * @ngdoc method
     * @name query
     * @methodOf BB.Models:AdminSchedule
     * @description
-    * Static function that loads an array of admin schedule service from a company object
+    * Static function that loads an array of admin schedules from a company object
     *
     * @returns {Promise} A returned promise
     ###
@@ -58,7 +58,7 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
     * @name delete
     * @methodOf BB.Models:AdminSchedule
     * @description
-    * Static function that deleted an array of administrator service from a company object
+    * Static function that deletes an admin schedule from a company object
     *
     * @returns {Promise} A returned promise
     ###
@@ -70,7 +70,7 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
     * @name update
     * @methodOf BB.Models:AdminSchedule
     * @description
-    * Static function that updated an array of schedule from a company object
+    * Static function that updates an admin schedule from a company object
     *
     * @returns {Promise} A returned promise
     ###
