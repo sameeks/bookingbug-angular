@@ -32,6 +32,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
     $scope.uiCalOptions =
       calendar:
+        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
         eventStartEditable: true
         eventDurationEditable: false
         height: height
