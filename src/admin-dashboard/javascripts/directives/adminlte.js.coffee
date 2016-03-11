@@ -71,7 +71,7 @@ angular.module('BBAdminDashboard').directive 'lteFixHeight', ($window) ->
 
 angular.module('BBAdminDashboard').directive 'ltePinBottom', ($window, $bbug) ->
   restrict: 'AE'
-  link: (scope, element, attrs) ->  
+  link: (scope, element, attrs) ->
     if scope.adminlte.fixed_page
       scope.adminlte.iframe_style = ""
       pos = $bbug(element).position()
@@ -81,15 +81,4 @@ angular.module('BBAdminDashboard').directive 'ltePinBottom', ($window, $bbug) ->
       angular.element($window).bind 'resize', ->
         pos = $bbug(element).position()
         $bbug(element).height(($window.innerHeight-pos.top-padding)+ "px")
-    else if element[0].tagName.toLowerCase() == 'iframe'
-      #if the directive is on an iframe, give it the height of the iframes contents
-      element.on 'load', ->
-        $bbug(@).height(@.contentWindow.document.body.scrollHeight+"px")
-      #same on resize
-      angular.element($window).bind 'resize', ->
-        $bbug(element).height(element[0].contentWindow.document.body.scrollHeight+"px")    
-      
-
-      
-
 
