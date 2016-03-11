@@ -25,7 +25,8 @@
     "jqueryui-touch-punch": "*",
     "pusher": "~2.2.4",
     "angular-ui-calendar": "~1.0.1",
-    "jqueryui": "~1.11.4"
+    "jqueryui": "~1.11.4",
+    "ui-router-extras": "^0.1.0"
   },
   "resolutions": {
     "angular": "1.2.28",

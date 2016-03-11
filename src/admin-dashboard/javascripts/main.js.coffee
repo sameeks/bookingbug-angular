@@ -10,7 +10,7 @@ adminbookingapp = angular.module('BBAdminDashboard', [
   'BBAdminDashboard',
   'BBAdmin.Directives',
   'ui.calendar', 'ngResource', 'ui.bootstrap',
-  'ui.router', 'ngTouch', 'ngInputDate', 'ngSanitize',
+  'ui.router', 'ct.ui.router.extras','ngTouch', 'ngInputDate', 'ngSanitize',
   'xeditable', 'ngIdle', 'ngLocalData'
 ])
 
@@ -163,6 +163,10 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
       parent: "root"
       url: "/settings"
       templateUrl: "admin_settings_page.html"
+      deepStateRedirect: {
+        default: { state: "settings.page", params: { path: "person" } }
+        params: true
+      }
     .state 'settings.page',
       parent: "settings"
       url: "/page/:path"
