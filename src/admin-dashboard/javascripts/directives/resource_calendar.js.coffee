@@ -35,6 +35,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
         eventStartEditable: true
         eventDurationEditable: false
+        minTime: $scope.options.minTime || "09:00"
+        maxTime: $scope.options.maxTime || "18:00"
         height: height
         header:
           left: 'today,prev,next'
