@@ -14,8 +14,9 @@ adminbookingapp = angular.module('BBAdminDashboard', [
   'xeditable', 'ngIdle', 'ngLocalData'
 ])
 
-angular.module('BBAdminDashboard').config ($logProvider) ->
+angular.module('BBAdminDashboard').config ($logProvider, $httpProvider) ->
   $logProvider.debugEnabled(true)
+  $httpProvider.defaults.withCredentials = true
 
 angular.module('BBAdminDashboard.Directives', [])
 
