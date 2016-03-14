@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Client
@@ -24,7 +23,6 @@
 * @property {array} answers Answers of the client
 * @property {boolean} deleted Verify if the client account is deleted or not
 ####
-
 
 angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, LocaleService, ClientService) ->
 
@@ -53,9 +51,11 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name setClientDetails
     * @methodOf BB.Models:Client
     * @description
-    * Set client details in according to details parameter
+    * Sets client details in according to details parameter
     *
-    * @returns {object} The returned client details
+    * @param {object} details Client Details
+    *
+    * @returns {array} The client question answers
     ###
     setClientDetails: (details) ->
       @client_details = details
@@ -66,9 +66,11 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name setDefaults
     * @methodOf BB.Models:Client
     * @description
-    * Set client defaults in according of values parameter
+    * Sets default values for client object
     *
-    * @returns {object} The returned client defaults
+    * @param {object} values Client default values
+    *
+    * @returns {array} Default client answers
     ###
     setDefaults: (values) ->
       @name = values.name if values.name
@@ -94,9 +96,11 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name pre_fill_answers
     * @methodOf BB.Models:Client
     * @description
-    * Pre fill client answers according of details
+    * Prefills client answers from client details.
     *
-    * @returns {object} The returned pre fill answers
+    * @param {object} details Client details
+    *
+    * @returns {array} Default client answers
     ###
     pre_fill_answers: (details) ->
       return if !@default_answers
@@ -109,9 +113,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name getName
     * @methodOf BB.Models:Client
     * @description
-    * Get client first name and last name
+    * Gets client first and last name.
     *
-    * @returns {string} The returned client name
+    * @returns {string} Client name
     ###
     getName:  ->
       str = ""
@@ -125,9 +129,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name addressSingleLine
     * @methodOf BB.Models:Client
     * @description
-    * Get the address and postcode of the client
+    * Creates the full address from all the address fields as a single line and comma separated string.
     *
-    * @returns {string} The returned address
+    * @returns {string} Full adress
     ###
     addressSingleLine: ->
       str = ""
@@ -149,9 +153,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name hasAddress
     * @methodOf BB.Models:Client
     * @description
-    * Checks if this is considered a valid address
+    * Returns the first or second address or the postcode if at least one of these exists
     *
-    * @returns {boolean} If this is a valid address
+    * @returns {string} One of these: address1, address2 or postcode
     ###
     hasAddress: ->
       return @address1 || @address2 || @postcode
@@ -161,7 +165,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name addressCsvLine
     * @methodOf BB.Models:Client
     * @description
-    * Get all address fields, postcode and country for CSV file
+    * Creates the full address from all the address fields as a single line and comma separated string wich is suitable for csv export.
     *
     * @returns {string} The returned address
     ###
@@ -187,9 +191,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name addressMultiLine
     * @methodOf BB.Models:Client
     * @description
-    * Get address several lines separated by line breaks
+    * Creates the full address from all the address fields as a multiple lines string.
     *
-    * @returns {string} The returned address
+    * @returns {string} Multiple lines full address
     ###
     addressMultiLine: ->
       str = ""
@@ -211,9 +215,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name getPostData
     * @methodOf BB.Models:Client
     * @description
-    * Build an array with details of the client
+    * Creates an object with client details.
     *
-    * @returns {array} newly created details array
+    * @returns {object} Newly created client details object
     ###
     getPostData: ->
       x = {}
@@ -253,9 +257,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name valid
     * @methodOf BB.Models:Client
     * @description
-    * Checks if this is considered a valid email
+    * Verifies if an email is valid.
     *
-    * @returns {boolean} If this is a valid email
+    * @returns {boolean} True or false depending on email validity
     ###
     valid: ->
       return @isValid if @isValid
@@ -267,11 +271,12 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name setValid
+    * @param {boolean} client validity
     * @methodOf BB.Models:Client
     * @description
-    * Set valid client, according of val
+    * Sets the client validity.
     *
-    * @returns {object} The returned valid client
+    * @returns {boolean} True or false depending on val parameter
     ###
     setValid: (val) ->
       @isValid = val
@@ -281,9 +286,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name hasServerId
     * @methodOf BB.Models:Client
     * @description
-    * Checks if this has a id
+    * Checks if client has an id and returns it.
     *
-    * @returns {boolean} If this has a id
+    * @returns {string} Client id
     ###
     hasServerId: ->
       return @id
@@ -293,9 +298,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name setAskedQuestions
     * @methodOf BB.Models:Client
     * @description
-    * Set asked questions of the client
+    * Sets asked questions of the client
     *
-    * @returns {boolean} If this is set
+    * @returns {boolean} True
     ###
     setAskedQuestions: ->
       @asked_questions = true
@@ -305,9 +310,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name fullMobile
     * @methodOf BB.Models:Client
     * @description
-    * Full mobile phone number of the client 
+    * Shows the mobile phone number of the client.
     *
-    * @returns {object} The returned full mobile number
+    * @returns {string} Mobile phone number
     ###
     fullMobile: ->
       return if !@mobile
@@ -319,9 +324,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name remove_prefix
     * @methodOf BB.Models:Client
     * @description
-    * Remove prefix from mobile number of the client
+    * Removes prefix from mobile phone number of the client.
     *
-    * @returns {array} The returned full mobile number without prefix
+    * @returns {string} Mobile phone number without prefix
     ###
     remove_prefix: ->
       pref_arr = @mobile.match(/^(\+|00)(999|998|997|996|995|994|993|992|991|990|979|978|977|976|975|974|973|972|971|970|969|968|967|966|965|964|963|962|961|960|899|898|897|896|895|894|893|892|891|890|889|888|887|886|885|884|883|882|881|880|879|878|877|876|875|874|873|872|871|870|859|858|857|856|855|854|853|852|851|850|839|838|837|836|835|834|833|832|831|830|809|808|807|806|805|804|803|802|801|800|699|698|697|696|695|694|693|692|691|690|689|688|687|686|685|684|683|682|681|680|679|678|677|676|675|674|673|672|671|670|599|598|597|596|595|594|593|592|591|590|509|508|507|506|505|504|503|502|501|500|429|428|427|426|425|424|423|422|421|420|389|388|387|386|385|384|383|382|381|380|379|378|377|376|375|374|373|372|371|370|359|358|357|356|355|354|353|352|351|350|299|298|297|296|295|294|293|292|291|290|289|288|287|286|285|284|283|282|281|280|269|268|267|266|265|264|263|262|261|260|259|258|257|256|255|254|253|252|251|250|249|248|247|246|245|244|243|242|241|240|239|238|237|236|235|234|233|232|231|230|229|228|227|226|225|224|223|222|221|220|219|218|217|216|215|214|213|212|211|210|98|95|94|93|92|91|90|86|84|82|81|66|65|64|63|62|61|60|58|57|56|55|54|53|52|51|49|48|47|46|45|44|43|41|40|39|36|34|33|32|31|30|27|20|7|1)/)
@@ -334,7 +339,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name getPrePaidBookingsPromise
     * @methodOf BB.Models:Client
     * @description
-    * Get pre paid bookings promise of the client
+    * Get pre paid bookings promise of the client.
     *
     * @returns {promise} A promise for client pre paid bookings
     ###
@@ -365,5 +370,14 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     @$query_by_email: (company, email) ->
       ClientService.query_by_email(company, email)
 
+    ###**
+    * @ngdoc method
+    * @name $create_or_update
+    * @methodOf BB.Models:Client
+    * @description
+    * Static function that updates a client from a company object.
+    *
+    * @returns {promise} A returned promise
+    ###
     @$create_or_update: (company, client) ->
       ClientService.create_or_update(company, client)

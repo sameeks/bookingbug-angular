@@ -31,6 +31,6 @@ body {
 }
 
 div[role] > .row:last-child > div{
-    height: 100vh;
+    height: 85vh;
     overflow: auto;
 }

@@ -18,7 +18,7 @@
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -30,9 +30,9 @@
 *      </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
-* 
+*
 ####
 
 
@@ -51,7 +51,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   $scope.validator = ValidatorService
   $scope.existing_member = false
   $scope.login_error = false
-  
+
   $rootScope.connection_started.then =>
 
     if !$scope.client.valid() && LoginService.isLoggedIn()
@@ -69,7 +69,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
       $scope.client_details = $scope.client.client_details
       QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
       $scope.setLoaded($scope)
-    else 
+    else
       BBModel.ClientDetails.$query($scope.bb.company).then (details) =>
         $scope.client_details = details
         $scope.client.pre_fill_answers($scope.client_details) if $scope.client
@@ -215,7 +215,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   ###
   $scope.useClient = (client) ->
     $scope.setClient(client)
-    
+
   ###**
   * @ngdoc method
   * @name recalc_question
@@ -228,7 +228,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
 
 
   handleError = (error) ->
-    if error.data.error == "Please Login" 
+    if error.data.error == "Please Login"
       $scope.existing_member = true
       AlertService.raise('ALREADY_REGISTERED')
     $scope.setLoaded($scope)

@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Clinic
@@ -9,7 +8,7 @@
 * Representation of an Clinic Object
 *
 * @property {string} setTimes Set times for the clinic
-* @property {string} setResourcesAndPeople Set resources and people for the clinic 
+* @property {string} setResourcesAndPeople Set resources and people for the clinic
 * @property {object} settings Clinic settings
 * @property {string} resources Clinic resources
 * @property {integer} resource_ids Clinic resources ids
@@ -26,7 +25,6 @@
 * @property {string} title The title
 ####
 
-
 angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, ClinicService) ->
 
   class Clinic extends BaseModel
@@ -36,14 +34,14 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, Clin
       @setTimes()
       @setResourcesAndPeople()
       @settings ||= {}
- 
 
     ###**
     * @ngdoc method
     * @name setResourcesAndPeople
     * @methodOf BB.Models:Clinic
     * @description
-    * Set resources and people for clinic
+    * (!!check)
+    * Sets resources and people for clinic.
     *
     * @returns {object} The returned resources and people
     ###
@@ -62,17 +60,17 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, Clin
       , {})
       @uncovered = !@person_ids || @person_ids.length == 0
       if @uncovered
-        @className = "clinic_uncovered" 
+        @className = "clinic_uncovered"
       else
-        @className = "clinic_covered" 
-
+        @className = "clinic_covered"
 
     ###**
     * @ngdoc method
     * @name setTimes
     * @methodOf BB.Models:Clinic
     * @description
-    * Set time for clinic
+    * (!!check)
+    * Sets time for clinic.
     *
     * @returns {object} The returned time
     ###
@@ -90,7 +88,7 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, Clin
     * @name $query
     * @methodOf BB.Models:Clinic
     * @description
-    * Static function that loads an array of clinic from a company object
+    * Static function that loads an array of clinic from a company object.
     *
     * @returns {promise} A returned promise
     ###

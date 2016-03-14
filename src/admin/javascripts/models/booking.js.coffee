@@ -39,7 +39,8 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
     * @name getPostData
     * @methodOf BB.Models:AdminBooking
     * @description
-    * (!!check)Provides information about the date, time, duration and questions
+    * (!!check)
+    * Provides information about the date, time, duration and questions
     *
     * @returns {object} Data object
     ###

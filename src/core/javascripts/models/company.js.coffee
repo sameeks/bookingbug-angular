@@ -1,27 +1,26 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Company
 *
 * @description
-* Representation of an Company Object
+* Representation of an Company Object.</br>
+* Here are some helpful functions about a company.
 *
 * @constructor
 * @param {HALobject=} data A HAL object to initialise the company from
-* 
-* @property {string} name The company name
-* @property {string} description The company description
-* @property {string} country_code the Country code for thie company
+*
+* @property {string} name Company name
+* @property {string} description Company description
+* @property {string} country_code Country code for this company
 * @property {string} currency_code A CCY for this company
 * @property {string} reference A custom external reference for the company
-* @property {integer} id The company ID
+* @property {integer} id Company ID
 * @property {boolean} live If this company is set live
-* @property {array} companies An array of child companies if this is a parent company
-* @property {string} timezone The timezone for the business
+* @property {array} companies An array of child companies if this company is a parent
+* @property {string} timezone Business timezone
 ####
-
 
 # helpful functions about a company
 angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, halClient, AppConfig, $sessionStorage, CompanyService) ->
@@ -36,7 +35,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
       if @companies
         all_companies = []
         @child_companies = []
-        for comp in @companies 
+        for comp in @companies
           c = new BBModel.Company(halClient.$parse(comp))
           @child_companies.push(c)
           if c.companies
@@ -51,10 +50,11 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @ngdoc method
     * @name getCompanyByRef
     * @methodOf BB.Models:Company
+    * @param {string} ref Ref
     * @description
-    * Find a child company by reference
+    * Finds a child company by reference.
     *
-    * @returns {promise} A promise for the child company
+    * @returns {promise} A promise for the child company.
     ###
     getCompanyByRef: (ref) ->
       defer = $q.defer()
@@ -73,10 +73,12 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @ngdoc method
     * @name findChildCompany
     * @methodOf BB.Models:Company
+    * @param {string} id Company id
     * @description
-    * Find a child company by id
+    * Finds a child company by id.</br>
+    * If company cannot be find by id it will be searched by name.
     *
-    * @returns {object} The child company 
+    * @returns {object} The child company.
     ###
     findChildCompany: (id) ->
       return null if !@companies
@@ -87,21 +89,21 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
           return c
       # failed to find by id - maybe by name ?
       if typeof id == "string"
-        name = id.replace(/[\s\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|'’!<>;:,.~`=+-@£&%"]/g, '').toLowerCase()  
+        name = id.replace(/[\s\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|'’!<>;:,.~`=+-@£&%"]/g, '').toLowerCase()
         for c in @companies
           cname = c.name.replace(/[\s\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|'’!<>;:,.~`=+-@£&%"]/g, '').toLowerCase()
           if name == cname
             return c
-      return null      
+      return null
 
     ###**
     * @ngdoc method
     * @name getSettings
     * @methodOf BB.Models:Company
     * @description
-    * Get settings company
+    * Gets company settings.
     *
-    * @returns {promise} A promise for settings company
+    * @returns {promise} A promise that on success will return the company settings.
     ###
     getSettings: () ->
       def = $q.defer()
@@ -120,10 +122,11 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @ngdoc method
     * @name pusherSubscribe
     * @methodOf BB.Models:Company
+    * @param {function} callback A function to be called whenever the event is triggered.
+    * @param {object} options If options parameter is null it will be set to an empty object.
     * @description
-    * Push subscribe for company
+    * A callback function will be called whenever a booking, cancellation or updating event is triggered.
     *
-    * @returns {object} Subscriber company
     ###
     pusherSubscribe: (callback, options = {}) =>
       if Pusher? && !@pusher?
@@ -147,9 +150,9 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @name $query
     * @methodOf BB.Models:Company
     * @description
-    * Static function that loads an array of company from a company object
+    * Static function that loads an array of companies from a company object.
     *
-    * @returns {promise} A returned promise
+    * @returns {promise} A returned promise.
     ###
     @$query: (company_id, options) ->
       CompanyService.query(company_id, options)
