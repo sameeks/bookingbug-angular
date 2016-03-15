@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:BasketItem
@@ -8,16 +7,15 @@
 * @description
 * Representation of an BasketItem Object
 *
-* @property {integer} company_id Company id that the basket item belongs to
-* @property {integer} total_price Total price of the basket item
-* @property {integer} total_due_price Total price of the basket item after applying discounts
-* @property {array} items Arrays of items that are in the basket
-* @property {integer} event_id The event id of the basket item
-* @property {date} datetime Date and time of the event
-* @property {integer} status Status of the items
+* @property {number} company_id Company id that the basket item belongs to
+* @property {number} total_price Basket item total price
+* @property {number} total_due_price Basket item total price after applying discounts
+* @property {array} items Items that are in the basket
+* @property {number} event_id The event id of the basket item
+* @property {date} datetime Event date and time
+* @property {number} status Item status
 *
 ###
-
 
 angular.module('BB.Models').factory "BasketItemModel",
 ($q, $window, BBModel, BookableItemModel, BaseModel, $bbug) ->
@@ -37,7 +35,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       @has_questions = false
 
       if bb
-        @reserve_without_questions = bb.reserve_without_questions        
+        @reserve_without_questions = bb.reserve_without_questions
 
       # if we were given an id then the item is ready - we need to fake a few items
       if @time
@@ -144,7 +142,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setDefaults
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set the default settings
+    * Sets the default settings.
+    *
+    * @param {object} defaults An object with default values
     *
     * @returns {object} Default settings
     ###
@@ -190,24 +190,25 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name storeDefaults
     * @methodOf BB.Models:BasketItem
     * @description
-    * Store the default settings by attaching them to the current context
+    * Stores the default settings by attaching them to the current context.
     *
-    * @returns {array} defaults variable
+    * @param {object} defaults An object with default values
+    *
+    * @returns {object} defaults Defaults
     ###
     storeDefaults: (defaults) ->
       @defaults = defaults
-
-
 
     ###**
     * @ngdoc method
     * @name canLoadItem
     * @methodOf BB.Models:BasketItem
     * @description
-    * See if this item is read to have a specific object type loads - i.e. services, resources, or people
-    * @param {object} company a hash representing a company object
+    * It checks if the item has a specific type.
     *
-    * @returns {boolean} if this item can be loaded
+    * @param {string} item Bascket item
+    *
+    * @returns {boolean} True if this item can be loaded
     ###
     canLoadItem: (item) ->
       if @service && @item != 'service'
@@ -224,9 +225,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name defaultService
     * @methodOf BB.Models:BasketItem
     * @description
-    * Return the default service if existent
+    * Returns the default service if existent.
     *
-    * @returns {array} Default service
+    * @returns {object} defaults Default service
     ###
     defaultService: () ->
       return null if !@defaults
@@ -238,7 +239,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name requestedTimeUnavailable
     * @methodOf BB.Models:BasketItem
     * @description
-    * Delete requested time and date if these are unavailable
+    * Deletes requested time and date if these are unavailable.
     ###
     # if it turned out that a requested date or time was unavailablem, we'll have to clear it
     requestedTimeUnavailable: ->
@@ -250,10 +251,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setSlot
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set the current slot based on the passed parameter
+    * Sets the current slot based on the passed parameter.
     *
     * @param {object} slot A hash representing a slot object
-    * @returns {array} The available slot
+    *
+    * @returns {string} Available slot id
     ###
     setSlot: (slot) ->
 
@@ -267,7 +269,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setCompany
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set the current company based on the passed parameter
+    * Sets the current company based on the passed parameter
+    *
     * @param {object} company a hash representing a company object
     ###
     setCompany: (company) ->
@@ -280,7 +283,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name clearExistingItem
     * @methodOf BB.Models:BasketItem
     * @description
-    * Clear existing item
+    * Clears the existing item.
     ###
     clearExistingItem: () ->
       if @$has('self') &&  @event_id
@@ -296,7 +299,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setItem
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set the current item based on the item object passed as parameter
+    * Sets the current item based on the item object passed as parameter.
+    *
+    * @param {object} item Item object
     ###
     setItem: (item) ->
       return if !item
@@ -312,7 +317,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setService
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set service in according of server parameter, if default_question is null
+    * (!!check)Sets the service object using the serv parameter.
+    *
+    * @param {object} serv Service
+    * @param {object} default_questions Default questions
     *
     * @returns {array} The returned service set
     ###
@@ -389,9 +397,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setEventGroup
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set event group based on the event_group param
+    * Sets the event group based on the event_group param
     *
-    * @param {object} event_group a hash
+    * @param {object} event_group Event group object
+    *
+    *@returns {array} Array of promises
     ###
     setEventGroup: (event_group) ->
       if @event_group
@@ -412,7 +422,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setEventChain
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set event chain in according of event_chain parameter, default_qustions is null
+    * Sets the event chain object using the event_chain parameter, default_qustions is null.
+    *
+    * @param {object} event_chain Event chain object
+    * @param {object} default_questions Default questionns
     *
     * @returns {array} The returned set event chaint
     ###
@@ -455,7 +468,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setEvent
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set event according to event parameter
+    * Sets the event object using event parameter.
+    *
+    * @param {object} event Event object
     *
     * @param {object} event A hash representing an event object
     ###
@@ -480,17 +495,15 @@ angular.module('BB.Models').factory "BasketItemModel",
       @num_book = event.qty
       if @event.getSpacesLeft() <= 0 && !@company.settings
         @status = 8 if @company.getSettings().has_waitlists
-      else if @event.getSpacesLeft() <= 0 && @company.settings && @company.settings.has_waitlists 
+      else if @event.getSpacesLeft() <= 0 && @company.settings && @company.settings.has_waitlists
         @status = 8
-
- 
 
     ###**
     * @ngdoc method
     * @name setCategory
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set category according to cat parameter
+    * Sets category using the cat parameter.
     *
     * @param {object} cat A hash representing a category object
     ###
@@ -503,11 +516,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setPerson
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set person according to per parameter
+    * Sets the person object using the per parameter.
     *
     * @param {object} per A hash representing a person object
-
-    * @param {boolean} set_selected The returned set resource for basket item
+    * @param {boolean} set_selected Flag
     ###
     setPerson: (per, set_selected = true) ->
       if set_selected && @earliest_time
@@ -539,7 +551,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setResource
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set resource in according of res parameter, if set_selected is true
+    * Sets the resource using the res parameter, if set_selected is true.
+    *
+    * @param {object} res A hash representing a resource object
+    * @param {boolean} set_selected Flag
     *
     * @returns {object} The returned set resource for basket item
     ###
@@ -573,9 +588,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setDuration
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set duration in according of dur parameter
+    * Sets the  duration using dur parameter.
     *
-    * @returns {integer} The returned set duration for basket item
+    * @param {date} dur Duration time
+    *
+    * @returns {date} The returned set duration for basket item
     ###
     setDuration: (dur) ->
       @duration = dur
@@ -583,9 +600,9 @@ angular.module('BB.Models').factory "BasketItemModel",
         @base_price = @service.getPriceByDuration(dur)
       if @time && @time.price
         @base_price = @time.price
-      if @price && (@price != @base_price) 
+      if @price && (@price != @base_price)
         @setPrice(@price)
-      else 
+      else
          @setPrice(@base_price)
 
     ###**
@@ -593,9 +610,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name print_time
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get to print time
+    * Shows the time in h:mm format
     *
-    * @returns {date} The returned print time
+    * @returns {date} Time
     ###
     print_time: () ->
       @time.print_time() if @time
@@ -605,9 +622,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name print_end_time
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get to print end time
+    * Shows the end timein h:mm format.
     *
-    * @returns {date} The returned print end time
+    * @returns {date} end time
     ###
     print_end_time: () ->
       @time.print_end_time(@duration) if @time
@@ -617,9 +634,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name print_time12
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get to print time12 if show suffix is true
+    * Shows the time in am/pm format.
     *
-    * @returns {date} The returned print time12
+    * @returns {date} Time
     ###
     print_time12: (show_suffix = true) ->
       @time.print_time12(show_suffix) if @time
@@ -629,9 +646,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name print_end_time12
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get to print end time12 if show_suffix is true
+    * Shows the end time in am/pm format.
     *
-    * @returns {date} The returned print end time12
+    * @returns {date} Time
     ###
     print_end_time12: (show_suffix = true) ->
       @time.print_end_time12(show_suffix, @duration) if @time
@@ -641,9 +658,12 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setTime
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set time in according of time parameter
+    * Sets the time using the time parameter.<br>
     *
-    * @returns {date} The returned set time
+    *
+    * @param {date} time Time
+    *
+    * @returns {boolean} True if date, time and service are set or there is an existing event, product, external purchase or a deal.
     ###
     setTime: (time) ->
       @time.unselect() if @time
@@ -658,7 +678,7 @@ angular.module('BB.Models').factory "BasketItemModel",
           @datetime.hour(hours)
           @datetime.minutes(mins)
 
-        if @price && @time.price && (@price != @time.price) 
+        if @price && @time.price && (@price != @time.price)
           @setPrice(@price)
         else if @price && !@time.price
          @setPrice(@price)
@@ -676,9 +696,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setDate
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set date in according of date parameter
+    * Sets the  date uding the date parameter.
     *
-    * @returns {date} The returned set date
+    * @param {date} date Date
+    *
+    * @returns {boolean} True if date, time and service are set or there is an existing event, product, external purchase or a deal.
     ###
     setDate: (date) ->
       @date = date
@@ -712,23 +734,25 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name clearTime
     * @methodOf BB.Models:BasketItem
     * @description
-    * Clear time
+    * Clears the  time.
     *
-    * @returns {date} The returned clear time
+    * @returns {boolean} Retuns false that indicates that reservations is not ready
     ###
     clearTime: () ->
       delete @time
       @ready = false
-      @reserve_ready = false  
+      @reserve_ready = false
 
     ###**
     * @ngdoc method
     * @name clearTime
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set group in according of group parameter
+    * Sets the group using the group parameter.
     *
-    * @returns {object} The returned set group
+    * @param {date} date Date
+    *
+    * @returns {object} The group that was set
     ###
     setGroup: (group) ->
       @group = group
@@ -738,9 +762,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setAskedQuestions
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set asked questions
+    * Sets the  asked questions.
     *
-    * @returns {object} The returned set asked questions
+    * @returns {boolean} True if date, time and service are set or there is an existing event, product, external purchase or a deal.
     ###
     setAskedQuestions: ->
       @asked_questions = true
@@ -751,13 +775,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name checkReady
     * @methodOf BB.Models:BasketItem
     * @description
-    * Check if an item is ready for checking out
-    *
-    * @returns {date} The returned item has been ready for checking out
+    * Checks if an item is ready for checking out. <br/>
+    * ready - means it's fully ready for checkout.
+    * reserve_ready - means the question still need asking - but it can be reserved.
+    * @returns {boolean} True when reservation is ready
     ###
-    # check if an item is ready for checking out
-    # @ready - means it's fully ready for checkout
-    # @reserve_ready - means the question still need asking - but it can be reserved
     checkReady: ->
       if ((@date && @time && @service) || @event || @product || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
         @ready = true
@@ -769,7 +791,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name getPostData
     * @methodOf BB.Models:BasketItem
     * @description
-    * Build an array with details for every basket item in items array
+    * Builds an array with details for every basket item in items array.
     *
     * @returns {array} Newly created details array
     ###
@@ -819,7 +841,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.pre_paid_booking_id = @pre_paid_booking_id if @pre_paid_booking_id?
       data.event_chain_id = @event_chain_id
       data.event_group_id = @event_group_id
-      data.qty = @qty   
+      data.qty = @qty
       data.status = @status if @status
       data.num_resources = parseInt(@num_resources) if @num_resources?
       data.product = @product
@@ -851,9 +873,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setPrice
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set price in according of nprice parameter
+    * Sets the price using the nprice parameter.
     *
-    * @returns {integer} The returned set price
+    * @param {date} date Date
+    * @returns {number} Price
     ###
     setPrice: (nprice) ->
       if nprice?
@@ -875,7 +898,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name getStep
     * @methodOf BB.Models:BasketItem
     * @description
-    * Build a temp object with current step variables
+    * Builds a temp object with current step variables.
     *
     * @returns {object} Temp hash
     ###
@@ -901,7 +924,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name loadStep
     * @methodOf BB.Models:BasketItem
     * @description
-    * Build current step variables based on a hash object passed as parameter
+    * Builds the current step variables based on a hash object passed as parameter
     *
     * @param {object} step Hash object representing a step
     *
@@ -929,11 +952,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name describe
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get information about of the basket item
+    * Prints the information about  a basket item.
     *
-    * @returns {object} The returned title
+    * @returns {string} A string that can contain one of these: service name, event group name and description, product name, external purchase name or deal name
     ###
-    # functions for pretty printing some information about of the basket item
     describe: ->
       title = "-"
       title = @service.name if @service
@@ -949,9 +971,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name booking_date
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get booking date of the basket item, in according of format parameter
+    * Gets the basket item booking date using format parameter.
     *
-    * @returns {date} The returned booking date
+    * @param {string} Date format
+    *
+    * @returns {regex} Formatted date
     ###
     booking_date: (format) ->
       return null if !@date || !@date.date
@@ -962,13 +986,14 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name booking_time
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get booking time of the basket item in according with separator = '-'
+    * Gets the basket item booking date using a custom separator
     *
-    * @returns {date} The returned booking time
+    *
+    * @returns {date} Formatted date with a specific separator
     ###
     booking_time: (seperator = '-') ->
       return null if !@time
-      duration = if @listed_duration then @listed_duration else @duration 
+      duration = if @listed_duration then @listed_duration else @duration
       @time.print_time() + " " + seperator + " " +  @time.print_end_time(duration)
 
     ###**
@@ -976,9 +1001,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name duePrice
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get due price for the basket item
+    * Gets the due price.
     *
-    * @returns {string} The returned price
+    * @returns {number} Due price
     ###
     # prints the amount due - which might be different if it's a waitlist
     duePrice: () ->
@@ -991,7 +1016,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name isWaitlist
     * @methodOf BB.Models:BasketItem
     * @description
-    * Checks if this is a wait list
+    * Checks if this is a wait list.
     *
     * @returns {boolean} If this is a wait list
     ###
@@ -1003,11 +1028,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name start_datetime
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get booking start date and time
+    * Gets the booking start datetime.
     *
-    * @returns {date} The returned start date time
+    * @returns {date} Start datetime
     ###
-    # get booking start datetime
     start_datetime: () ->
       return null if !@date || !@time
       start_datetime = moment(@date.date.toISODate())
@@ -1019,14 +1043,13 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name end_datetime
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get booking end date and time
+    * Gets the booking end datetime.
     *
-    * @returns {date} The returned end date time
+    * @returns {date} End datetime
     ###
-    # get booking end datetime
     end_datetime: () ->
       return null if !@date || !@time || (!@listed_duration && !@duration)
-      duration = if @listed_duration then @listed_duration else @duration 
+      duration = if @listed_duration then @listed_duration else @duration
       end_datetime = moment(@date.date.toISODate())
       end_datetime.minutes(@time.time + duration)
       end_datetime
@@ -1036,9 +1059,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setSrcBooking
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set a booking are to be a move if according of booking parameter
+    * (!!check)Sets a booking that was moved from a previous booking.
     *
-    * @returns {object} The returned end date time
+    * @returns {object} Booking duration
     ###
     # set a booking are to be a move (or a copy?) from a previous booking
     setSrcBooking: (booking) ->
@@ -1051,21 +1074,21 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name anyPerson
     * @methodOf BB.Models:BasketItem
     * @description
-    * Verify type of any person
+    * (!!check)Verifies the type of any person.
     *
-    * @returns {boolean} The returned any person
+    * @returns {boolean} Flag
     ###
     anyPerson: () ->
       @person && (typeof @person == 'boolean')
- 
+
     ###**
     * @ngdoc method
     * @name anyResource
     * @methodOf BB.Models:BasketItem
     * @description
-    * Verify type of any resorce
+    * (!!check)Verifies type of any resorce
     *
-    * @returns {boolean} The returned any resource
+    * @returns {boolean} Flag
     ###
     anyResource: () ->
       @resource && (typeof @resource == 'boolean')
@@ -1075,9 +1098,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name isMovingBooking
     * @methodOf BB.Models:BasketItem
     * @description
-    * Verify if booking has been moved
+    * (!!check srcBooking) Verifies if a booking has been moved.
     *
-    * @returns {boolean} The returned moving booking
+    * @returns {string} Booking id
     ###
     isMovingBooking: ->
       (@srcBooking || @move_item_id)
@@ -1087,9 +1110,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setCloneAnswers
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set clone answers in according of other item parameter
+    * Sets the clone answers using the otheritem parameter.
     *
-    * @returns {object} The returned clone answers
+    * @param {object} otherItem otherItem param
+    *
+    * @returns {object} cloneAnswersItem
     ###
     setCloneAnswers: (otherItem) ->
       @cloneAnswersItem = otherItem
@@ -1099,9 +1124,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name questionPrice
     * @methodOf BB.Models:BasketItem
     * @description
-    * Question price for the basket item
+    * Gets the question price for the basket item.
     *
-    * @returns {integer} The returned question price
+    * @returns {number} Question price
     ###
     questionPrice: =>
 
@@ -1113,9 +1138,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name getQty
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get quantity of tickets
+    * Gets the tickets quantity.
     *
-    * @returns {integer} The returned quatity of tickets
+    * @returns {number} Tickets quantity
     ###
     getQty: =>
       return @qty if @qty
@@ -1127,11 +1152,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name totalPrice
     * @methodOf BB.Models:BasketItem
     * @description
-    * Total price of the basket item (price including discounts)
+    * (!!check item or items)Total price of the basket item. <br/>
+    * This price does include the discounts.
     *
-    * @returns {integer} The returned total price
+    * @returns {number} Total price
     ###
-    # price including discounts
     totalPrice: =>
       if @tickets && @tickets.pre_paid_booking_id
         return 0
@@ -1147,11 +1172,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name fullPrice
     * @methodOf BB.Models:BasketItem
     * @description
-    * Full price for the basket item (price not including discounts)
+    * Will return the full price for the basket item. <br/>
+    * This price does not include the discounts.
     *
-    * @returns {integer} The returned full price
+    * @returns {number} Full price
     ###
-    # price not including discounts
     fullPrice: =>
       pr = @base_price
       pr ||= @total_price
@@ -1164,9 +1189,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setProduct
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set product in according of product parameter
+    * Sets the product object using the product parameter.
     *
-    * @returns {array} The returned product
+    * @returns {number} Price that has been set
     ###
     setProduct: (product) ->
       @product = product
@@ -1178,9 +1203,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setExternalPurchase
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set external purchase in according of external_purchase product
+    * Sets the external purchase using the external_purchase parameter.
     *
-    * @returns {object} The returned external purchase
+    * @returns {number} Price that has been set
     ###
     setExternalPurchase: (external_purchase) ->
       @external_purchase = external_purchase
@@ -1192,9 +1217,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setDeal
     * @methodOf BB.Models:BasketItem
     * @description
-    * Set deal of the basket item, in according of deal parameter
+    * Sets the deal of the basket item using the deal parameter.
     *
-    * @returns {object} The returned deal
+    * @param {object} deal deal object
+    *
+    * @returns {number} Price that has been set
     ###
     setDeal: (deal) ->
       @deal = deal
@@ -1209,9 +1236,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name hasPrice
     * @methodOf BB.Models:BasketItem
     * @description
-    * Checks if price is valid or not
+    * Checks if the price is valid.
     *
-    * @returns {boolean} If this is a valid price
+    * @returns {boolean} True if this is a valid price
     ###
     hasPrice: () ->
       if @price
@@ -1224,9 +1251,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name getAttachment
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get attachment of the basket item
+    * Gets the attachment of the basket item.
     *
-    * @returns {object} The returned attachment
+    * @returns {object} An attachment
     ###
     getAttachment: () ->
       return @attachment if @attachment

@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Basket
@@ -8,12 +7,11 @@
 * @description
 * Representation of an Basket Object
 *
-* @property {integer} company_id Company id that the basket belongs to 
-* @property {integer} total_price Total price of the basket
-* @property {integer} total_due_price Total price of the basket after applying discounts
+* @property {number} company_id Company id that the basket belongs to
+* @property {number} total_price Total price of the basket
+* @property {number} total_due_price Total price of the basket after applying discounts
 * @property {array} items Array of items that are in the basket
 ####
-
 
 angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, BasketService) ->
 
@@ -33,7 +31,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name addItem
     * @methodOf BB.Models:Basket
     * @description
-    * Adds an item to the items array of the basket
+    * Adds an item to the items array.
     *
     * @returns {array} items Array with the newly added item
     ###
@@ -149,7 +147,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Set the client
     *
-    * @returns {object} client object 
+    * @returns {object} client object
     ###
     setClient: (client) ->
       @client = client
@@ -161,7 +159,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Set client details
     *
-    * @returns {object} client details 
+    * @returns {object} client details
     ###
     setClientDetails: (client_details) ->
       @client_details = new BBModel.PurchaseItem(client_details)
@@ -299,11 +297,11 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * Calculates the full discount for the basket
     *
     * @returns {integer} full discount
-    ###  
+    ###
     # return the total coupon discount applied to the basket
     totalCoupons: ->
       @fullPrice() - @totalPrice() - @totalDealPaid()
-    
+
     ###**
     * @ngdoc method
     * @name totalDuration
@@ -311,8 +309,8 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Calculates total duration of all items in basket
     *
-    * @returns {integer} total duration 
-    ###  
+    * @returns {integer} total duration
+    ###
     totalDuration: ->
       duration = 0
       for item in @items
@@ -327,7 +325,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * Checks if there is an item in items array, that is a deal
     *
     * @returns {boolean} true or false depending if a deal was found or not
-    ###  
+    ###
     containsDeal: ->
       for item in @items
         return true if item.deal_id
@@ -341,7 +339,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * Checks if there is any item in items array with a deal code
     *
     * @returns {boolean} true or false depending if a deal code was found or not
-    ###  
+    ###
     hasDeal: ->
       for item in @items
         return true if item.deal_codes && item.deal_codes.length > 0
@@ -355,7 +353,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * Builds an array of deal codes
     *
     * @returns {array} deal codes array
-    ###  
+    ###
     getDealCodes: ->
       @deals = if @items[0] && @items[0].deal_codes then @items[0].deal_codes else []
       @deals
@@ -368,7 +366,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * Calculates the total amount of deal codes array
     *
     * @returns {integer} total amount of deals
-    ###  
+    ###
     # return the total value of deals (gift certificates) applied to the basket
     totalDeals: ->
       value = 0
@@ -384,7 +382,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * Calculates the amount paid by gift certificates
     *
     * @returns {integer} amount paid by deals
-    ### 
+    ###
     # return amount paid by deals (gift certficates)
     totalDealPaid: ->
       total_cert_paid = 0
@@ -413,12 +411,12 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * Checks if there is an item in the items array that's on the wait list
     *
     * @returns {boolean} true or false
-    ### 
+    ###
     hasWaitlistItem : ->
       for item in @items
         return true if item.isWaitlist()
       return false
-      
+
     ###**
     * @ngdoc method
     * @name $query

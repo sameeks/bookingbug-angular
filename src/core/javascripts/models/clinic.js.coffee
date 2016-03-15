@@ -41,7 +41,7 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, Clin
     * @methodOf BB.Models:Clinic
     * @description
     * (!!check)
-    * Sets resources and people for clinic.
+    * Sets the resources and people for clinic.
     *
     * @returns {object} The returned resources and people
     ###
@@ -70,7 +70,7 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, Clin
     * @methodOf BB.Models:Clinic
     * @description
     * (!!check)
-    * Sets time for clinic.
+    * Sets the time for clinic.
     *
     * @returns {object} The returned time
     ###
@@ -88,7 +88,7 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, Clin
     * @name $query
     * @methodOf BB.Models:Clinic
     * @description
-    * Static function that loads an array of clinic from a company object.
+    * Static function that loads an array of clinics from a company object.
     *
     * @returns {promise} A returned promise
     ###

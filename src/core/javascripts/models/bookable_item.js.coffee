@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:BookableItem
@@ -9,11 +8,10 @@
 * Representation of an BookableItem Object
 *
 * @property {string} name Property name display "-Waiting-"
-* @property {string} ready The ready
-* @property {string} promise The promise
+* @property {string} ready
+* @property {string} promise
 * @property {string} item Bookable item
 ####
-
 
 angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel, ItemService) ->
 
@@ -22,7 +20,7 @@ angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel
     item: null
 
     promise: null
-    
+
 
     constructor: (data) ->
       super
@@ -63,7 +61,7 @@ angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel
     * @name $query
     * @methodOf BB.Models:BookableItem
     * @description
-    * Static function that loads an array of bookable items from a company object
+    * Static function that loads an array of bookable items from a company object.
     *
     * @returns {promise} A returned promise
     ###

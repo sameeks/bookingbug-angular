@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Person
@@ -16,7 +15,6 @@
 * @property {boolean} disabled Verify if person is disabled or not
 * @property {integer} order The person order
 ####
-
 
 angular.module('BB.Models').factory "PersonModel", ($q, BBModel, BaseModel, PersonService) ->
 

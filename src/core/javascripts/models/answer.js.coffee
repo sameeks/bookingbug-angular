@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Answer
@@ -8,9 +7,8 @@
 * @description
 * Representation of an Answer Object
 *
-* @property {string} question The question that the answer belongs to
+* @property {string} question Question that corresponds with answer
 ####
-
 
 angular.module('BB.Models').factory "AnswerModel", ($q, BBModel, BaseModel, $bbug) ->
 
@@ -23,9 +21,9 @@ angular.module('BB.Models').factory "AnswerModel", ($q, BBModel, BaseModel, $bbu
     * @name getQuestion
     * @methodOf BB.Models:Answer
     * @description
-    * Build an array of questions 
+    * Gets the question.
     *
-    * @returns {promise} A promise for the question/s
+    * @returns {promise} A promise that will be resolved to a response question object when the request succeeds
     ###
     getQuestion: () ->
       defer = $q.defer()

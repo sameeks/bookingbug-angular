@@ -7,13 +7,13 @@
 * @description
 * Representation of an Address Object
 *
-* @property {string} address1 First line of the address
-* @property {string} address2 Second line of the address
-* @property {string} address3 Third line of the address
-* @property {string} address4 Fourth line of the address
-* @property {string} address5 Fifth line of the address
-* @property {string} postcode The Postcode/Zipcode
-* @property {string} country The country
+* @property {string} address1 Address 1
+* @property {string} address2 Address 2
+* @property {string} address3 Address 3
+* @property {string} address4 Address 4
+* @property {string} address5 Address 5
+* @property {string} postcode Postcode/Zipcode
+* @property {string} country Country
 ####
 
 angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseModel, AddressModel, AdminAddressService) ->
@@ -25,12 +25,13 @@ angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseMode
     * @ngdoc method
     * @name distanceFrom
     * @methodOf BB.Models:AdminAddress
-    * @param {string} address The admin address
-    * @param {array} options The options of admin address
     * @description
-    * Calculate the address distance in according of the address and options parameters
+     * Calculates the address distance using the address and options parameters.
+     *
+    * @param {string} address Admin address
+    * @param {object} options Options object
     *
-    * @returns {array} Returns an array of address
+    * @returns {array} Returns an array of addresses
     ###
     distanceFrom: (address, options) ->
 
@@ -43,7 +44,7 @@ angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseMode
     * @name query
     * @methodOf BB.Models:AdminAddress
     * @description
-    * Static function that loads an array of addresses from a company object
+    * Static function that loads an array of addresses from a company object.
     *
     * @returns {Promise} A returned promise
     ###

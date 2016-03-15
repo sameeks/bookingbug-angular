@@ -5,7 +5,7 @@
 * @name BB.Models:Company
 *
 * @description
-* Representation of an Company Object.</br>
+* Representation of an Company Object.<br/>
 * Here are some helpful functions about a company.
 *
 * @constructor
@@ -75,7 +75,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @methodOf BB.Models:Company
     * @param {string} id Company id
     * @description
-    * Finds a child company by id.</br>
+    * Finds a child company by id.<br/>
     * If company cannot be find by id it will be searched by name.
     *
     * @returns {object} The child company.

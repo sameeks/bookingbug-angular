@@ -7,13 +7,13 @@
 * @description
 * Representation of an Address Object
 *
-* @property {string} address1 First line of the address
-* @property {string} address2 Second line of the address
-* @property {string} address3 Third line of the address
-* @property {string} address4 Fourth line of the address
-* @property {string} address5 Fifth line of the address
-* @property {string} postcode The Postcode/Zipcode
-* @property {string} country The country
+* @property {string} address1 Address 1
+* @property {string} address2 Address 2
+* @property {string} address3 Address 3
+* @property {string} address4 Address 4
+* @property {string} address5 Address 5
+* @property {string} postcode Postcode/Zipcode
+* @property {string} country Country
 ####
 
 angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, AddressListService) ->
@@ -49,7 +49,7 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name hasAddress
     * @methodOf BB.Models:Address
     * @description
-    * Returns the first or second address or the postcode if at least one of these exists
+    * Returns the first address, second address or the postcode if at least one of these exists
     *
     * @returns {string} One of these: address1, address2 or postcode
     ###
@@ -61,7 +61,7 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name addressCsvLine
     * @methodOf BB.Models:Address
     * @description
-    * Creates the full address from all the address fields as a single line and comma separated string wich is suitable for csv export
+    * Creates the full address from all the address fields as a single line and comma separated string wich is suitable for csv export.
     *
     * @returns {string} Full address
     ###
@@ -112,7 +112,7 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name $query
     * @methodOf BB.Models:Address
     * @description
-    * Static function that loads an array of addresses from a company object
+    * Static function that loads an array of addresses from a company object.
     *
     * @returns {promise} A returned promise
     ###
