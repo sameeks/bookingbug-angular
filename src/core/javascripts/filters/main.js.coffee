@@ -106,6 +106,7 @@ app.filter 'map_lat_long', ->
 #only works with miles input for now
 app.filter 'distance', ($translate) ->
   (distance) ->
+    return '' unless distance
     localUnit = $translate.instant('DISTANCE_UNIT')
     distance *= 0.621371 if localUnit is 'km'
     prettyDistance = distance.toFixed(3).replace(/\.0+$/,'')
