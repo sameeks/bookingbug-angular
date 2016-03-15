@@ -134,8 +134,8 @@
             </button>
           </span>
           <h3 class="day-heading col-xs-8 col-sm-12">
-            <span class="visible-xs">{{day.date | datetime: "ddd"}} <strong>{{day.date | datetime: "D"}} </strong>{{day.date | datetime: "MMM"}}</span>
-            <span class="hidden-xs">{{day.date | datetime: "ddd"}} <strong>{{day.date | datetime: "D"}} </strong></span>
+            <span class="visible-xs">{{day.date | datetime: "ddd":false}} <strong>{{day.date | datetime: "D":false}}</strong></span>
+            <span class="hidden-xs">{{day.date | datetime: "ddd":false}} <strong>{{day.date | datetime: "D":false}} </strong></span>
           </h3>
           <span class="col-xs-2 next visible-xs">
             <button type="button" class="btn btn-icon visible-xs pull-right" ng-click="add('days', 1)" ng-disabled="!isLoaded">
@@ -151,15 +151,15 @@
           <div accordion close-others="false">
 
             <!-- MORNING TIME RANGE -->
-            <div bb-accordian-range-group="{heading: 'MORNING', range: [0, 720], slots: day.slots, collaspe_when_time_selected: true, arrow_classes: {top: 'period-label-icon', bottom: 'period-label-icon'}}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordian-range-group="{heading: 'MORNING', range: [0, 720], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
             <!-- AFTERNOON TIME RANGE -->
-            <div bb-accordian-range-group="{heading: 'AFTERNOON', range: [720, 1020], slots: day.slots, collaspe_when_time_selected: true, arrow_classes: {top: 'period-label-icon', bottom: 'period-label-icon'}}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordian-range-group="{heading: 'AFTERNOON', range: [720, 1020], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
             <!-- EVENING TIME RANGE -->
-            <div bb-accordian-range-group="{heading: 'EVENING', range: [1020, 1440], slots: day.slots, collaspe_when_time_selected: true, arrow_classes: {top: 'period-label-icon', bottom: 'period-label-icon'}}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordian-range-group="{heading: 'EVENING', range: [1020, 1440], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
           </div>

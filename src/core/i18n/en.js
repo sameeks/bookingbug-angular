@@ -285,7 +285,8 @@
   "UNAVAILABLE": "Unavailable",
   "PREVIOUS_5_WEEKS": "Previous 5 Weeks",
   "NEXT_5_WEEKS": "Next 5 Weeks",
-  "KEY": "Key"
+  "KEY": "Key",
+  "APPOINTMENT_TYPE": "Select appointment type"
 };
 
 moment.locale('en', {

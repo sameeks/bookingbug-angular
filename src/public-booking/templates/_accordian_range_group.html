@@ -3,8 +3,8 @@
   <div accordion-heading>
     <div class="accordian-header">
       <span class="period-label">
-        <span ng-show="has_availability && !is_open" class="{{arrow_classes.top}}">+</span>
-        <span ng-show="has_availability && is_open" class="{{arrow_classes.bottom}}">-</span>
+        <span ng-if="has_availability && !is_open">+</span>
+        <span ng-if="has_availability && is_open">-</span>
         <span ng-if="heading" translate="AVAIL_{{heading}}"></span>
       </span>
       <span class="period-detail" ng-if="is_selected || (is_open && has_availability)" translate="AVAILABLE"

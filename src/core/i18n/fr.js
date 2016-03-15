@@ -279,7 +279,8 @@
   "UNAVAILABLE": "Non disponible",
   "PREVIOUS_5_WEEKS": "5 semaines précédentes",
   "NEXT_5_WEEKS": "5 semaines suivantes",
-  "KEY": "Clé"
+  "KEY": "Clé",
+  "APPOINTMENT_TYPE": "Type de rdv"
 };
 
 (function (global, factory) {
