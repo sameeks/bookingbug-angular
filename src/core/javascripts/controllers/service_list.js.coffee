@@ -111,7 +111,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
           $scope.category = $scope.booking_item.service_group if !$scope.booking_item.category
           # if we've selected a category for the current item - limit the list
           # of services to ones that are relevant
-          items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.category.self
+          items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.booking_item.category.self
 
       # filter out event groups unless explicity requested
       if !$scope.options.show_event_groups
