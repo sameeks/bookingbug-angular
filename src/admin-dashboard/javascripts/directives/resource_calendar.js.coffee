@@ -32,7 +32,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
     $scope.uiCalOptions =
       calendar:
-        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
+        schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: true
         eventDurationEditable: false
         minTime: $scope.options.minTime || "09:00"
