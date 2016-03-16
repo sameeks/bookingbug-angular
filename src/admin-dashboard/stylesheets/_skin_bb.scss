@@ -196,3 +196,15 @@
     margin-left: 0px!important;
   }
 }
+
+
+//ng-grid overrides
+.tr-ng-grid {
+  .tr-ng-column-header .tr-ng-title {
+    padding-top: 0 !important;
+  }
+
+  .tr-ng-sort .tr-ng-sort-active, .tr-ng-sort .tr-ng-sort-inactive {
+    top: 5px !important;
+  }
+}

@@ -1,9 +1,10 @@
 <div class="content-wrapper" lte-fix-height>
-  <div alert ng-repeat="alert in alerts" type="{{alert.type}}"
-    close="closeAlert(alert)">
-    {{alert.msg}}
+  <div class="col-md-12" ng-show="alerts.length">
+    <br/>
+    <div alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert(alert)">
+      {{alert.msg}}
+    </div>
   </div>
-
   <section class="content-header" ng-if="adminlte.heading">
     <h1>
       {{adminlte.heading}}

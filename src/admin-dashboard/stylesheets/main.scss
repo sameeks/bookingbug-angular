@@ -1,445 +1,70 @@
-/* CSS Document */
-/*
- * COLOR SCHEME
- lightest grey: #f2f2f2;
- light grey; #bdbdbd;
- dark grey: #4e4d4a;
- darkest grey: #353432;
- green: #88c66f;
- blue: #087f94;
- dark blue: #274361;
- */
-
-//@import "../bootstrap/bootstrap";
-//@import "../bootstrap/_variables";
-//@import "../bootstrap/_mixins";
-@import "tablet.appointments";
-@import "tablet.checkin";
-@import "tablet.customers";
-@import "tablet.dashboard";
-@import "tablet";
-
  
 @import "skin_bb";
-
-
-nav {
-  .navbar-brand {
-    background:url("/assets/logo_small_app.gif") no-repeat scroll 10px -4px transparent;
-    width:144px;
-  }
-}
-
-
-/* stand bootslrap layouts for admin  */
-
-.form-horizontal {
-  .bb-label {
-//    @include make-sm-column(3);    
-  }  
-  .bb-field {
-//    @include make-sm-column(9);  
-    .form-control-static {
-      display: block;
-    }  
-  }  
-}
-
-
-
-.dashcontainer {
-   .side_details {
-      margin: 4px;
-      border:1px solid #087f94;
-      padding:3px;
-      border-radius: 8px;
-   }
-
-  .fc-event {
-    &.status_blocked {
-      border-color:#999;
-      background-color: #AAA;
-    }
-  }
-}
-
-$color-primary-0: #8FD38B !default;
-$color-primary-1: #CFEDCD !default;
-$color-primary-2: #B0E1AD !default;
-$color-primary-3: #6CBF67 !default;
-$color-primary-4: #4AA746 !default;
-
-$color-secondary-0: #6E9FA6 !default;
-$color-secondary-1: #BDD7DA !default;
-$color-secondary-2: #96BCC2 !default;
-$color-secondary-3: #4F8991 !default;
-$color-secondary-4: #36767F !default;
-
-$icon-colour: darken($color-primary-4, 10%);
-$booked_colour: $color-primary-1;
-$complete-colour: $color-primary-3;
-$unavailable-colour: $color-secondary-1;
-$button-colour: $color-primary-4;
-
-#bbadmin{
-  .fc-view-container hr {margin:0px}
-
-  .fc-event{
-    &.clinic_covered {
-      border-color: $color-primary-0;
-      background-color: $color-primary-0;
-    }
-
-  }
-
-
-  
-  .tablet-dashboard .icon-enabled {
-    color: $icon_colour;
-  }
-  
-  .tablet-customers .full-block a .details,
-  .tablet-appointments .full-block a .details {
-    color: $icon-colour;
-  }
-  
-  .tablet-dashboard .cal-frame td {
-    .unavailable {
-      background-color: $unavailable-colour;
-    }
-    
-    .booking {
-      background-color: $booked_colour;
-    
-      &.completed {
-        background-color: $complete_colour;
-      }
-    }
-  }
-  
-  .btn-check-in,
-  .btn-completed,
-  .btn-no-show {
-    display: none;
-  }
-  
-  .tablet-dashboard {
-    .cal-frame {
-      $row_height: 110px;
-    
-      td {
-        height: $row_height;
-        
-        .free-slot,
-        .booking,
-        .blocking,
-        .unavailable {
-           height: $row_height;
-        }
-      }
-
-      .cal-person-scroll {
-        height: 50px;
-      }
-
-      .cal-person-scroll .fa {
-        font-size: 1.4em;
-      }
-      
-    }
-  }
-  
-  #bbadmin {
-    .btn-primary, .bb-btn-prev, .bb-btn-next {
-      background-color: $button-colour;
-      border-color: lighten($button-colour, 5%);
-    }
-    
-    .bb-txt h5 {
-      font-size: 1.5em;
-    }
-    
-    .bb-services {
-      small {
-        display: none;
-      }
-    }
-    
-    .bb-date-pick .bb-month-frame .bb-month-name {
-      h2 {
-          color: $button-colour;
-      }
-    }
-    
-    .bb-frame {
-      border: none;
-      & > .bb-head {
-        background-color: clear;
-        border: none;
-      }
-      .bb-head {
-        border: none;
-        background-color: clear;
-        h2 {
-          color: $button-colour;
-        }
-      }
-    }
-
-    .bb-form {
-      .bb-entry {
-        margin-top: 10px;
-        margin-bottom: 5px;
-      }
-      .messages {
-        margin-top: 5px;
-      }
-      .error-message {
-        color: #b94a48;
-      }
-
-      .bb-capitalise {
-        text-transform: capitalize;
-      }
-
-    }
-
-  }
-
-  .key {
-//    @include make-row();
-    margin:3px;
-    .key-key {
-      margin:2px;
-      padding:3px 5px;
-      
-    }
-    .key-uncovered {
-      margin:2px;
-      padding:3px 5px;
-      color:#FFF;
-      background-color:#337ab7;   
-      border-radius:6px;   
-    }
-    .key-covered {
-      margin:2px;
-      padding:3px 5px;
-      color:#FFF;
-      background-color:$color-primary-0;      
-      border-radius:6px;   
-    }
-  }
-}
-
-
-#bbadmin {
-  .navbar-default {
-    border-top:0px;
-    background-color: #FFF;
-
-  }
-
-  .table-capacity {
-    thead th {
-      text-align: center;
-    }
-    .wday-am {
-      text-align: center;
-      width: 5%;
-      border-left: 1px solid #CCC;
-    }
-    .wday-pm {
-      text-align: center;
-      width: 5%;
-      border-right: 1px solid #CCC;
-    }
-    .col-cap-weekly, .col-cap-year {
-      width: 5%;
-      border-right: 1px solid #CCC;
-      border-left: 1px solid #CCC;
-      text-align: center;
-    }
-    input {
-      width: 80%;
-    }
-
-  }
-}
-
-#bbadmin {
-  .clinic-bookings {
-    .table {
-      background-color: #EEE;
-      margin-bottom: 0px;
-    }
-    .fc-toolbar, .fc-axis, .fc-day-header {
-      background-color: #EEE;
-    }
-    .cb-breach {font-size: 1.1em; color:#F55; font-weight: bold}
-    .cb-breach-title {font-size: 1.1em; padding-left:20px; display:inline-block;}
-    .cb-title {font-size: 1.1em;}
-    .infection {background-color: #FFBFA0;}
-  }
-}
-
-
-#bbadmin {
-
-  .bb-service-list, div[bb-services] {
-
-    .bb-service-name {
-      font-size:20px;
-      padding-bottom: 5px;
-    }
-  }
-  .panel-body {padding:10px;}
-  .tab-content {padding-top:5px;}
-
-
-  .resource-calendar {
-    .datepicker {
-      width: 230px;
-      button.datepicker-popup {
-        height: 34px;
-        padding: 6px 12px;
-        font-size: 14px;
-      }
-    }
-  }
-
-}
-
-.skin-bb .main-header .navbar {
-  background: #00371a; /* Old browsers */
-  background: -moz-linear-gradient(left,  #00371a 0%, #008443 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%,#00371a), color-stop(100%,#008443)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(left,  #00371a 0%,#008443 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(left,  #00371a 0%,#008443 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(left,  #00371a 0%,#008443 100%); /* IE10+ */
-  background: linear-gradient(to right,  #00371a 0%,#008443 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00371a', endColorstr='#008443',GradientType=1 ); /* IE6-9 */
-
-}
-
-.navbar-brand {
-  background: none;
-  width:220px;
-  padding:6px;
-  img {
-    margin:3px;
-    width: 50px;
-    float:right;
-  }
-}
-
-
-.skin-bb .main-header li.user-header {
-  background-color: #008443;
-
-}
-
-.fc-bgevent.drop_target {
-    background-color: #FAA;
-}
-
-
-.fc-time-grid .fc-slats td {
-  height: 3em;
-}
-
-
-#bb {
-  .bb-question-heading {
-    font-weight: bold;
-    text-align: left;
-  }
-  .red-block {
-    color:#C00;
-  }
-  .green-block {
-    color:#0C0;
-  }
-  .amber-block {
-    color:#CA0;
-  }
-
-  .loc {
-    font-size:0.6em;
-  }
-}
-
-div.loader-wrapper {
-  position: absolute;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  padding-top:100px;
-  .loader {
-    width: 100px;
-    height: 100px;
-  }
-}
-
-.calendar-loader {
-  display: block;
-  height: 16px;
-  width: 16px;
-  margin: 6.7px 20px;
-  .spinner {
-    background: url("images/calendar-wait.gif");
-    height: 16px;
-    width: 16px;
-  }
-}
-
-.fc-event .glyphicon {
-  margin-left: 2px;
-  font-size: 0.75em;
-}
-
-.modal-dialog .modal-content form .loader {
-  height: 100px;
-  width: 100px;
-  margin-bottom: 20px;
-}
-
-html {
-  body {
-    background-color: #ECF0F5;
-    .wrapper {
-      height: 100%;
-      [ui-view] {
-        height: 100%;
-        overflow-y: scroll;
-        &.no_scroll {
-          overflow-y: hidden;
-          .content {padding:0px;}
-        }
-        [content-wrapper] {
-          height: 100%;
-          overflow-y: hidden;
-        }
-        [ui-view] {
-          height: 100%;
-          overflow-y: hidden;
-          [content-wrapper] {
-            height: 100%;
-            overflow-y: hidden;
-          }
-        }
-      }
-    }
-  }
-}
-
-
-
-
 
 .bb-page-frame {
   width:100%;
   height: auto;
   border: none;
   background: transparent;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+//bootstrap overrides
+.panel-heading {
+  .btn-sm {
+    position: relative;
+    top:5px;
+  }
+}
+
+//resource callendar overrides
+.resource-calendar {
+	.fc-toolbar {
+		p.datepicker {
+			padding-top: 0; 
+
+			input.form-control {
+				height: 29px;
+				width: 140px;
+			}
+
+			.input-group-btn {
+				font-size: 1em;
+				width: auto;
+			}
+
+			.dropdown-menu {
+				width: 260px;
+			}
+		}
+
+		h2 {
+			font-size: 1.9em;
+		}
+	}
+
+	.fc-view-container {
+		background: #fff;
+
+		.fc-view {
+			&>table {
+				&>thead.fc-head {
+					border-left: 1px solid #ddd;
+					border-right: 1px solid #ddd;
+					border-top-left-radius: 4px;
+					border-top-right-radius: 4px;
+				}
+
+				&>tbody.fc-body {
+					border-left: 1px solid #ddd;
+					border-right: 1px solid #ddd;
+					border-bottom-left-radius: 4px;
+					border-bottom-right-radius: 4px;
+				}
+			}
+		}
+	}
 }

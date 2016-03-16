@@ -16,7 +16,9 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             end_date: end.format('YYYY-MM-DD')
           AdminBookingService.query(params).then (bookings) ->
             $scope.loading = false
-            b.resourceId = b.person_id for b in bookings.items
+            for b in bookings.items
+              b.resourceId = b.person_id 
+              b.useFullTime()
             $scope.bookings = bookings.items
             callback($scope.bookings)
     ]
@@ -32,8 +34,11 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
     $scope.uiCalOptions =
       calendar:
+        schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: true
         eventDurationEditable: false
+        minTime: $scope.options.minTime || "09:00"
+        maxTime: $scope.options.maxTime || "18:00"
         height: height
         header:
           left: 'today,prev,next'
@@ -82,11 +87,13 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           view.calendar.unselect()
           rid = null
           rid = resource.id if resource
-          AdminBookingPopup.open
-            item_defaults:
-              date: start.format('YYYY-MM-DD')
-              time: (start.hour() * 60 + start.minute())
-              person: rid
+          $scope.getCompanyPromise().then (company) ->
+            AdminBookingPopup.open
+              item_defaults:
+                date: start.format('YYYY-MM-DD')
+                time: (start.hour() * 60 + start.minute())
+                person: rid
+              company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
           $scope.currentDate = moment(date).format('YYYY-MM-DD')

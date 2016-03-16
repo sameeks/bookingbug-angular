@@ -10,12 +10,13 @@ adminbookingapp = angular.module('BBAdminDashboard', [
   'BBAdminDashboard',
   'BBAdmin.Directives',
   'ui.calendar', 'ngResource', 'ui.bootstrap',
-  'ui.router', 'ngTouch', 'ngInputDate', 'ngSanitize',
+  'ui.router', 'ct.ui.router.extras','ngTouch', 'ngInputDate', 'ngSanitize',
   'xeditable', 'ngIdle', 'ngLocalData'
 ])
 
-angular.module('BBAdminDashboard').config ($logProvider) ->
+angular.module('BBAdminDashboard').config ($logProvider, $httpProvider) ->
   $logProvider.debugEnabled(true)
+  $httpProvider.defaults.withCredentials = true
 
 angular.module('BBAdminDashboard.Directives', [])
 
@@ -41,39 +42,73 @@ angular.module('BBAdminDashboard').config ($idleProvider, idleStart, idleTimeout
   $idleProvider.warningDuration(idleTimeout)
 
 angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) ->
+  $stateProvider.root_state = "dashboard"
 
-  $urlRouterProvider.otherwise("/dashboard")
+  $urlRouterProvider.otherwise("/" + $stateProvider.root_state)
   $stateProvider
     .state 'root',
       template: "<div ui-view></div>"
       resolve:
         user: ($q, AdminLoginService, $timeout, $state) ->
           defer = $q.defer()
-          $q.when(AdminLoginService.checkLogin()).then () ->
-            unless AdminLoginService.isLoggedIn()
+          AdminLoginService.user().then (user) ->
+            if user
+              defer.resolve(user)
+            else
               $timeout () ->
                 $state.go 'login', {}, {reload: true}
-            else
-              defer.resolve(AdminLoginService.user())
           , (err) ->
             $timeout () ->
               $state.go 'login', {}, {reload: true}
           defer.promise
         company: (user, $q, $timeout, $state) ->
-          console.log(user)
           defer = $q.defer()
           user.getCompanyPromise().then (company) ->
-            defer.resolve(company)
+            if company.companies && company.companies.length > 0
+              $timeout () ->
+                $state.go 'departments', {}, {reload: true}
+            else
+              defer.resolve(company)
           , (err) ->
             $timeout () ->
               console.log('failed to get company')
               $state.go 'login', {}, {reload: true}
           defer.promise
-        services: (company) -> []
-        resources: (company) -> []
-        people: (company) -> []
-        addresses: (company, AdminAddressService) -> []
       controller: 'bbAdminRootPageController'
+    .state 'departments',
+      url: "/departments"
+      controller: ($scope, company, departments, AdminLoginService, $state, $timeout) ->
+        $scope.company = company
+        $scope.departments = departments
+
+        $scope.selectDepartment = (department) ->
+          AdminLoginService.setCompany(department.id).then (user) ->
+            $timeout () ->
+              $state.go $stateProvider.root_state, {}, {reload: true}
+
+      templateUrl: "admin_departments_page.html"
+      resolve:
+        user: ($q, AdminLoginService, $timeout, $state) ->
+          defer = $q.defer()
+          AdminLoginService.user().then (user) ->
+            if user
+              defer.resolve(user)
+            else
+              $timeout () ->
+                $state.go 'login', {}, {reload: true}
+          , (err) ->
+            $timeout () ->
+              $state.go 'login', {}, {reload: true}
+          defer.promise
+        company: (user) -> user.getCompanyPromise()
+        departments: (company, $q, $timeout, $state) ->
+          defer = $q.defer()
+          if company.companies && company.companies.length > 0
+            defer.resolve(company.companies)
+          else
+            $timeout () ->
+              $state.go $stateProvider.root_state, {}, {reload: true}
+          defer.promise
     .state 'dashboard',
       parent: "root"
       url: "/dashboard"
@@ -130,6 +165,10 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
       parent: "root"
       url: "/settings"
       templateUrl: "admin_settings_page.html"
+      deepStateRedirect: {
+        default: { state: "settings.page", params: { path: "person" } }
+        params: true
+      }
     .state 'settings.page',
       parent: "settings"
       url: "/page/:path"
@@ -153,7 +192,12 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
       templateUrl: "admin_login_page.html"
     .state 'logout',
       url: "/logout"
-      controller: (AdminLoginService, $state) ->
+      controller: (AdminLoginService, $state, $timeout) ->
         AdminLoginService.logout()
-        $state.go 'login', {}, {reload: true}
+        $timeout () ->
+          $state.go 'login', {}, {reload: true}
+    .state 'checkin',
+      parent: 'root'
+      url: "/checkin"
+      templateUrl: "checkin_page.html"
 

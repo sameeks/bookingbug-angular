@@ -63,7 +63,7 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
         scroll_to_element = $bbug(element)
 
       current_step = BreadcrumbService.getCurrentStep()
-      
+
       # if the event is page:loaded or the element is not in view, scroll to it
       if (scroll_to_element)
         if (evnt == "page:loaded" and current_step > 1) or always_scroll or (evnt == "widget:restart") or
@@ -82,14 +82,14 @@ angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
   scope: true
   link: (scope, element, attrs) ->
     slots = scope.$eval(attrs.slots)
-    return if !slots 
+    return if !slots
     scope.grouped_slots = []
     for slot in slots
       scope.grouped_slots.push(slot) if slot.time >= scope.$eval(attrs.startTime) && slot.time < scope.$eval(attrs.endTime)
     scope.has_slots = scope.grouped_slots.length > 0
 
 # bbForm
-# Adds behaviour to select first invalid input 
+# Adds behaviour to select first invalid input
 # TODO more all form behaviour to this directive, initilising options as parmas
 angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService) ->
   restrict: 'A'
@@ -111,11 +111,11 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsSer
       scope.$apply()
 
       invalid_form_group = elem.find('.has-error:first')
-      
+
       if invalid_form_group && invalid_form_group.length > 0
         if 'parentIFrame' of $window
           parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
-        else 
+        else
           $bbug("html, body").animate
             scrollTop: invalid_form_group.offset().top - SettingsService.getScrollOffset()
             , 1000
@@ -126,7 +126,7 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsSer
       return true
 
 # bbAddressMap
-# Adds behaviour to select first invalid input 
+# Adds behaviour to select first invalid input
 angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
   restrict: 'A'
   scope: true
@@ -136,16 +136,16 @@ angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
     $scope.isDraggable = $document.width() > 480
 
     $scope.$watch $attrs.bbAddressMap, (new_val, old_val) ->
-      
+
       return if !new_val
 
       map_item = new_val
 
-      $scope.map = { 
-        center: { 
-          latitude: map_item.lat, 
-          longitude: map_item.long 
-        }, 
+      $scope.map = {
+        center: {
+          latitude: map_item.lat,
+          longitude: map_item.long
+        },
         zoom: 15
       }
 
@@ -193,7 +193,10 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
     # watch modal height to ensure it does not exceed window height
     deregisterWatcher = scope.$watch ->
       height = elem.height()
-      modal_padding = 200
+      if $bbug(window).width() >= 769
+        modal_padding = 200
+      else
+        modal_padding = 20
       if height > $bbug(window).height()
         new_height = $bbug(window).height() - modal_padding
         elem.attr( 'style', 'height: ' + (new_height) + 'px; overflow-y: scroll;' )
@@ -217,10 +220,10 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
 angular.module('BB.Directives').directive('bbBackgroundImage', () ->
     restrict: 'A'
     scope: true
-    link: (scope, el, attrs) ->     
+    link: (scope, el, attrs) ->
       return if !attrs.bbBackgroundImage or attrs.bbBackgroundImage == ""
-      killWatch = scope.$watch attrs.bbBackgroundImage, (new_val, old_val) ->       
-        if new_val          
+      killWatch = scope.$watch attrs.bbBackgroundImage, (new_val, old_val) ->
+        if new_val
           killWatch()
           el.css('background-image', 'url("' + new_val + '")')
 )
@@ -252,7 +255,7 @@ angular.module('BB.Directives').directive('bbCapacityView', () ->
 
         num_spaces_plural = if item.num_spaces > 1 then "s" else ""
         spaces_left_plural = if item.spaces_left > 1 then "s" else ""
-        
+
         switch item.chain.capacity_view
           when "NUM_SPACES" then scope.capacity_view_description = scope.ticket_spaces = item.num_spaces + " " + ticket_type + num_spaces_plural
           when "NUM_SPACES_LEFT" then scope.capacity_view_description = scope.ticket_spaces = item.spaces_left + " " + ticket_type + spaces_left_plural + " available"
