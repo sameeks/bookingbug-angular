@@ -10,18 +10,18 @@
 * @property {string} first_name Client first name
 * @property {string} last_name Client last name
 * @property {string} email Client email address
-* @property {string} address1 The first line of client address
-* @property {string} address2 The second line of client address
-* @property {string} address3 The third line of client address
-* @property {string} address4 The fourth line of client address
-* @property {string} address4 The fifth line of client address
-* @property {string} postcode Postcode of the client
-* @property {string} country Country of the client
-* @property {integer} phone The phone number of the client
-* @property {integer} mobile The mobile phone number of the client
-* @property {integer} id Id of the client
-* @property {array} answers Answers of the client
-* @property {boolean} deleted Verify if the client account is deleted or not
+* @property {string} address1 Address 1
+* @property {string} address2 Address 2
+* @property {string} address3 Address 3
+* @property {string} address4 Address 4
+* @property {string} address4 Address 5
+* @property {string} postcode Client postcode
+* @property {string} country Client country
+* @property {integer} phone Client phone number
+* @property {integer} mobile Client mobile phone
+* @property {integer} id Client id
+* @property {array} answers Client answers
+* @property {boolean} deleted Verifies if the client account is deleted or not
 ####
 
 angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, LocaleService, ClientService) ->
@@ -115,7 +115,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @description
     * Gets the client first and last name.
     *
-    * @returns {string} Client name
+    * @returns {string} Client full name
     ###
     getName:  ->
       str = ""
@@ -153,7 +153,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name hasAddress
     * @methodOf BB.Models:Client
     * @description
-    * Returns the first or second address or the postcode if at least one of these exists
+    * Returns the first or second address or the postcode if at least one of these exists.
     *
     * @returns {string} One of these: address1, address2 or postcode
     ###
@@ -167,7 +167,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @description
     * Creates the full address from all the address fields as a single line and comma separated string wich is suitable for csv export.
     *
-    * @returns {string} The returned address
+    * @returns {string} Full address
     ###
     addressCsvLine: ->
       str = ""
@@ -217,7 +217,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @description
     * Creates an object with client details.
     *
-    * @returns {object} Newly created client details object
+    * @returns {object} Newly created object with client details
     ###
     getPostData: ->
       x = {}
@@ -271,10 +271,11 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     ###**
     * @ngdoc method
     * @name setValid
-    * @param {boolean} client validity
     * @methodOf BB.Models:Client
     * @description
     * Sets the client validity.
+    *
+    * @param {boolean} val val parameter
     *
     * @returns {boolean} True or false depending on val parameter
     ###
@@ -341,7 +342,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @description
     * Gets the  prepaid bookingss of a client.
     *
-    * @returns {promise} A promise for client prepaid bookings
+    * @returns {promise} A promise that on success will return the client prepaid bookings
     ###
     getPrePaidBookingsPromise: (params) ->
       defer = $q.defer()
@@ -363,9 +364,12 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @name query_by_email
     * @methodOf BB.Models:Client
     * @description
-    * Static function that loads an array of clients from a company object using the email parameter.
+    * Static function that will search for a client by email in a given company.
     *
-    * @returns {promise} A returned promise
+    * @param {object} company Company object
+    * @param {string} email Client email
+    *
+    * @returns {promise} A promise that on success will return a client
     ###
     @$query_by_email: (company, email) ->
       ClientService.query_by_email(company, email)
@@ -377,7 +381,10 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
     * @description
     * Static function that updates a client from a company object.
     *
-    * @returns {promise} A returned promise
+    * @param {object} company Company object
+    * @param {object} client Client object
+    *
+    * @returns {promise} A promise that on success will create or update an existing client
     ###
     @$create_or_update: (company, client) ->
       ClientService.create_or_update(company, client)
