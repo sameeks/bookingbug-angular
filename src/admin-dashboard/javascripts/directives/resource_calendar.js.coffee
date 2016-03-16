@@ -16,7 +16,9 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             end_date: end.format('YYYY-MM-DD')
           AdminBookingService.query(params).then (bookings) ->
             $scope.loading = false
-            b.resourceId = b.person_id for b in bookings.items
+            for b in bookings.items
+              b.resourceId = b.person_id 
+              b.useFullTime()
             $scope.bookings = bookings.items
             callback($scope.bookings)
     ]

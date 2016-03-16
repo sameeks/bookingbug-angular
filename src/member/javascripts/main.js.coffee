@@ -15,8 +15,7 @@ angular.module('BBMember').config ($logProvider) ->
   $logProvider.debugEnabled(true)
 
 angular.module('BBMember').run () ->
-  TrNgGrid.defaultColumnOptions =
-    enableFiltering: false
+  TrNgGrid.defaultColumnOptions.enableFiltering = false
 
 angular.module('BBMember.Directives', [])
 

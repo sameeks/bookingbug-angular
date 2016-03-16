@@ -42,8 +42,9 @@ angular.module('BBAdminDashboard').config ($idleProvider, idleStart, idleTimeout
   $idleProvider.warningDuration(idleTimeout)
 
 angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) ->
+  $stateProvider.root_state = "dashboard"
 
-  $urlRouterProvider.otherwise("/dashboard")
+  $urlRouterProvider.otherwise("/" + $stateProvider.root_state)
   $stateProvider
     .state 'root',
       template: "<div ui-view></div>"
@@ -83,7 +84,7 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
         $scope.selectDepartment = (department) ->
           AdminLoginService.setCompany(department.id).then (user) ->
             $timeout () ->
-              $state.go 'dashboard', {}, {reload: true}
+              $state.go $stateProvider.root_state, {}, {reload: true}
 
       templateUrl: "admin_departments_page.html"
       resolve:
@@ -106,7 +107,7 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
             defer.resolve(company.companies)
           else
             $timeout () ->
-              $state.go 'dashboard', {}, {reload: true}
+              $state.go $stateProvider.root_state, {}, {reload: true}
           defer.promise
     .state 'dashboard',
       parent: "root"
