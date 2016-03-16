@@ -33,7 +33,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Adds an item to the items array.
     *
-    * @returns {array} items Array with the newly added item
+    * @returns {array} Array with the newly added item
     ###
     addItem: (item) ->
       # check if then item is already in the basket
@@ -49,7 +49,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name clear
     * @methodOf BB.Models:Basket
     * @description
-    * Empty items array
+    * Removes the items from basket.
     *
     * @returns {array} Emptied items array
     ###
@@ -61,9 +61,11 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name clearItem
     * @methodOf BB.Models:Basket
     * @description
-    * Remove a given item from the items array
+    * Removes a given item from the items array.
     *
-    * @returns {array} items Array without the given item
+    * @param {object} item Item that must be removed
+    *
+    * @returns {array} Array without the given item
     ###
     clearItem: (item) ->
       @items = @items.filter (i) -> i isnt item
@@ -73,7 +75,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name readyToCheckout
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if items array is not empty, so it's ready for the checkout
+    * Checks if items array is not empty, so it's ready for the checkout.
     *
     * @returns {boolean} If items array is not empty
     ###
@@ -89,9 +91,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name timeItems
     * @methodOf BB.Models:Basket
     * @description
-    * Build an array of time items(all items that are not coupons)
+    * Builds an array of time items(all the items that are not coupons).
     *
-    * @returns {array} the newly build array of items
+    * @returns {array} Newly created array of items
     ###
     timeItems: ->
       titems = []
@@ -104,9 +106,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name couponItems
     * @methodOf BB.Models:Basket
     * @description
-    * Build an array of items that are coupons
+    * Builds an array of items that are coupons.
     *
-    * @returns {array} the newly build array of coupon items
+    * @returns {array} Newly created array of coupon items
     ###
     couponItems: ->
       citems = []
@@ -119,9 +121,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name removeCoupons
     * @methodOf BB.Models:Basket
     * @description
-    * Remove coupon items from the items array
+    * Removes the coupon items from the items array.
     *
-    * @returns {array} the items array after removing items that are coupons
+    * @returns {array} Items array after removing items that are coupons
     ###
     removeCoupons: ->
       @items = _.reject @items, (x) -> x.is_coupon
@@ -131,7 +133,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name setSettings
     * @methodOf BB.Models:Basket
     * @description
-    * Extend the settings with the set param passed to the function
+    * Extends the settings with the set param passed to the function.
+    *
+    * @param {object} set set parameter
     *
     * @returns {object} settings object
     ###
@@ -145,7 +149,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name setClient
     * @methodOf BB.Models:Basket
     * @description
-    * Set the client
+    * Sets the client.
+    *
+    * @param {object} client Client
     *
     * @returns {object} client object
     ###
@@ -157,7 +163,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name setClientDetails
     * @methodOf BB.Models:Basket
     * @description
-    * Set client details
+    * Sets the client details.
+    *
+    * @param {object} client_details Client details
     *
     * @returns {object} client details
     ###
@@ -169,9 +177,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name getPostData
     * @methodOf BB.Models:Basket
     * @description
-    * Build an array with details for every item in items array
+    * Builds an array with the details for every item in the basket.
     *
-    * @returns {array} newly created details array
+    * @returns {array} Newly created details array
     ###
     getPostData: ->
       post =
@@ -190,11 +198,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name dueTotal
     * @methodOf BB.Models:Basket
     * @description
-    * Total price after checking every item if it is on the wait list
+    * Gets the total price after checking every item if it is on the wait list.
     *
-    * @returns {integer} total
+    * @returns {number} Total price
     ###
-    # the amount due now - taking account of any wait list items
     dueTotal: ->
       total = @totalPrice()
       for item in @items
@@ -209,7 +216,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Length of the items array
     *
-    * @returns {integer} length
+    * @returns {number} length
     ###
     length: ->
       @items.length
@@ -221,7 +228,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Calculates total question's price
     *
-    * @returns {integer} question's price
+    * @returns {number} question's price
     ###
     questionPrice: (options) ->
       unready = options and options.unready
@@ -235,9 +242,11 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name totalPrice
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates total price of the items after coupuns have been applied
+    * Calculates the total price of the items after coupuns have been applied.
     *
-    * @returns {integer} total price
+    * @param {object} options options parameter
+    *
+    * @returns {number} Total price
     ###
     # return the total price after coupons have been applied
     totalPrice: (options) ->
@@ -252,9 +261,11 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name updateTotalPrice
     * @methodOf BB.Models:Basket
     * @description
-    * Update the total_price attribute using totalPrice method
+    * Updates the total_price attribute using totalPrice method.
     *
-    * @returns {integer} the updated total_price variable
+    * @param {object} options options parameter
+    *
+    * @returns {number} Updated total_price variable
     ###
     updateTotalPrice: (options) ->
       @total_price = @totalPrice(options)
@@ -264,11 +275,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name fullPrice
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates full price of all items, before applying any coupons or deals
+    * Calculates the full price of all items, before applying any coupons or deals.
     *
-    * @returns {integer} full price
+    * @returns {number} Full price
     ###
-    # return the full price before any coupons or deals have been applied
     fullPrice: ->
       price = 0
       for item in @items
@@ -280,9 +290,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name hasCoupon
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if there is an item in items array, that is a coupon
+    * Checks if the basket has an items that is a coupon.
     *
-    * @returns {boolean} true or false if a coupon is found or not
+    * @returns {boolean} True if an item was found, false otherwise
     ###
     hasCoupon: ->
       for item in @items
@@ -294,11 +304,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name totalCoupons
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates the full discount for the basket
+    * Calculates the coupons full discount.
     *
-    * @returns {integer} full discount
+    * @returns {number} Full discount
     ###
-    # return the total coupon discount applied to the basket
     totalCoupons: ->
       @fullPrice() - @totalPrice() - @totalDealPaid()
 
@@ -307,9 +316,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name totalDuration
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates total duration of all items in basket
+    * Calculates the basket items total duration.
     *
-    * @returns {integer} total duration
+    * @returns {number} Total duration
     ###
     totalDuration: ->
       duration = 0
@@ -322,9 +331,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name containsDeal
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if there is an item in items array, that is a deal
+    * Checks if the basket has an items that is a deal.
     *
-    * @returns {boolean} true or false depending if a deal was found or not
+    * @returns {boolean} True if an item was found, false otherwise
     ###
     containsDeal: ->
       for item in @items
@@ -336,9 +345,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name hasDeal
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if there is any item in items array with a deal code
+    * Checks if the basket has an items that contains at least one deal code.
     *
-    * @returns {boolean} true or false depending if a deal code was found or not
+    * @returns {boolean} True if an item was found, false otherwise
     ###
     hasDeal: ->
       for item in @items
@@ -350,9 +359,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name getDealCodes
     * @methodOf BB.Models:Basket
     * @description
-    * Builds an array of deal codes
+    * Builds an array of deal codes.
     *
-    * @returns {array} deal codes array
+    * @returns {array} Deal codes
     ###
     getDealCodes: ->
       @deals = if @items[0] && @items[0].deal_codes then @items[0].deal_codes else []
@@ -363,11 +372,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name totalDeals
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates the total amount of deal codes array
+    * Calculates the deal codes total amount.
     *
-    * @returns {integer} total amount of deals
+    * @returns {number} The total value of deals (gift certificates) applied to the basket
     ###
-    # return the total value of deals (gift certificates) applied to the basket
     totalDeals: ->
       value = 0
       for deal in @getDealCodes()
@@ -379,11 +387,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name totalDealPaid
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates the amount paid by gift certificates
+    * Calculates the amount paid by gift certificates.
     *
-    * @returns {integer} amount paid by deals
+    * @returns {number} Amount paid by deals (gift certficates)
     ###
-    # return amount paid by deals (gift certficates)
     totalDealPaid: ->
       total_cert_paid = 0
       for item in @items
@@ -395,11 +402,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name remainingDealBalance
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates the difference between total deals amount and amount paid by deals
+    * Calculates the difference between total deals amount and amount paid by deals.
     *
-    * @returns {integer} The remaining deal (gift certificate) balance
+    * @returns {number} The remaining deal (gift certificate) balance
     ###
-    # return the remaining deal (gift certificate) balance
     remainingDealBalance : ->
       return @totalDeals() - @totalDealPaid()
 
@@ -408,9 +414,9 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name hasWaitlistItem
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if there is an item in the items array that's on the wait list
+    * Checks if there is an item in the bakset that's on the wait list.
     *
-    * @returns {boolean} true or false
+    * @returns {boolean} True or false
     ###
     hasWaitlistItem : ->
       for item in @items
@@ -422,12 +428,21 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name $query
     * @methodOf BB.Models:Basket
     * @description
-    * Static function that loads an array of basket from a company object
+    * Static function that loads the basket items from a company object.
     *
-    * @returns {promise} A returned promise
+    * @returns {promise} A promise that on success will return the basket items
     ###
     @$query: (company,params) ->
       BasketService.query(company, params)
 
+    ###**
+    * @ngdoc method
+    * @name $checkout
+    * @methodOf BB.Models:Basket
+    * @description
+    * Static function that makes the checkout operation on a basket.
+    *
+    * @returns {promise} A promise that on success clears the basket and will trigger some updates on bookings
+    ###
     $checkout: (company,basket,params) ->
       BasketService.checkout(company,basket,params)

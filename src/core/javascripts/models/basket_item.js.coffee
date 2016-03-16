@@ -5,7 +5,8 @@
 * @name BB.Models:BasketItem
 *
 * @description
-* Representation of an BasketItem Object
+* A class that defines an item in a shopping basket. <br/>
+* This could represent a time based service, a ticket for an event or class, or any other purchasable item.
 *
 * @property {number} company_id Company id that the basket item belongs to
 * @property {number} total_price Basket item total price
@@ -19,9 +20,6 @@
 
 angular.module('BB.Models').factory "BasketItemModel",
 ($q, $window, BBModel, BookableItemModel, BaseModel, $bbug) ->
-
-  # A class that defines an item in a shopping basket
-  # This could represent a time based service, a ticket for an event or class, or any other purchasable item
 
   class BasketItem extends BaseModel
 
@@ -225,7 +223,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name defaultService
     * @methodOf BB.Models:BasketItem
     * @description
-    * Returns the default service if existent.
+    * Returns the default service if it exists.
     *
     * @returns {object} defaults Default service
     ###
@@ -241,7 +239,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @description
     * Deletes requested time and date if these are unavailable.
     ###
-    # if it turned out that a requested date or time was unavailablem, we'll have to clear it
     requestedTimeUnavailable: ->
       delete @requested_time
       delete @requested_date
@@ -251,7 +248,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setSlot
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the current slot based on the passed parameter.
+    * Sets the current slot based on the slot parameter.
     *
     * @param {object} slot A hash representing a slot object
     *
@@ -269,9 +266,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setCompany
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the current company based on the passed parameter
+    * Sets the current company based on the passed parameter.
     *
-    * @param {object} company a hash representing a company object
+    * @param {object} company A hash representing a company object
     ###
     setCompany: (company) ->
       @company = company
@@ -283,7 +280,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name clearExistingItem
     * @methodOf BB.Models:BasketItem
     * @description
-    * Clears the existing item.
+    * Clears the existing item.</br>
+    * When changing the service any present event is cleared.
     ###
     clearExistingItem: () ->
       if @$has('self') &&  @event_id
@@ -299,7 +297,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setItem
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the current item based on the item object passed as parameter.
+    * Sets the current item based on the item parameter.
     *
     * @param {object} item Item object
     ###
@@ -317,9 +315,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setService
     * @methodOf BB.Models:BasketItem
     * @description
-    * (!!check)Sets the service object using the serv parameter.
+    * Sets the service object using the serv parameter.
     *
-    * @param {object} serv Service
+    * @param {object} serv serv parameter
     * @param {object} default_questions Default questions
     *
     * @returns {array} The returned service set
@@ -397,7 +395,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setEventGroup
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the event group based on the event_group param
+    * Sets the event group based on the event_group param.
     *
     * @param {object} event_group Event group object
     *
@@ -422,10 +420,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setEventChain
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the event chain object using the event_chain parameter, default_qustions is null.
+    * Sets the event chain object using the event_chain parameter.
     *
     * @param {object} event_chain Event chain object
-    * @param {object} default_questions Default questionns
+    * @param {object} default_questions Default questionns. If this parameter is empty will be set to null.
     *
     * @returns {array} The returned set event chaint
     ###
@@ -610,7 +608,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name print_time
     * @methodOf BB.Models:BasketItem
     * @description
-    * Shows the time in h:mm format
+    * Shows the time in h:mm format.
     *
     * @returns {date} Time
     ###
@@ -622,9 +620,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name print_end_time
     * @methodOf BB.Models:BasketItem
     * @description
-    * Shows the end timein h:mm format.
+    * Shows the endtime in h:mm format.
     *
-    * @returns {date} end time
+    * @returns {date} Endtime
     ###
     print_end_time: () ->
       @time.print_end_time(@duration) if @time
@@ -658,10 +656,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setTime
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the time using the time parameter.<br>
+    * Sets the time using the time parameter.
     *
-    *
-    * @param {date} time Time
+    * @param {date} time Time parameter
     *
     * @returns {boolean} True if date, time and service are set or there is an existing event, product, external purchase or a deal.
     ###
@@ -734,7 +731,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name clearTime
     * @methodOf BB.Models:BasketItem
     * @description
-    * Clears the  time.
+    * Clears the time.
     *
     * @returns {boolean} Retuns false that indicates that reservations is not ready
     ###
@@ -762,7 +759,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setAskedQuestions
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the  asked questions.
+    * Sets the asked questions.
     *
     * @returns {boolean} True if date, time and service are set or there is an existing event, product, external purchase or a deal.
     ###
@@ -791,7 +788,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name getPostData
     * @methodOf BB.Models:BasketItem
     * @description
-    * Builds an array with details for every basket item in items array.
+    * Builds an array with details for every basket item.
     *
     * @returns {array} Newly created details array
     ###
@@ -875,7 +872,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @description
     * Sets the price using the nprice parameter.
     *
-    * @param {date} date Date
+    * @param {number} nprice nnprice parameter
+    *
     * @returns {number} Price
     ###
     setPrice: (nprice) ->
