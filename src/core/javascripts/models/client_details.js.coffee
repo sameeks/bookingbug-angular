@@ -8,7 +8,7 @@
 * Representation of an ClientDetails Object
 *
 * @property {array} questions Client questions
-* @property {integer} company_id Client company id
+* @property {number} company_id Client company id
 ####
 
 angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseModel, ClientDetailsService) ->
@@ -28,8 +28,9 @@ angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseMode
     * @name getPostData
     * @methodOf BB.Models:ClientDetails
     * @description
-    * (!!check)
     * Gets a list of answers where every list item has an answer, id, and a price.
+    *
+    * @param {array} questions Questions array
     *
     * @returns {array} An array of question answers.
     ###
@@ -44,8 +45,9 @@ angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseMode
     * @name setAnswers
     * @methodOf BB.Models:ClientDetails
     * @description
-    * (!!check)
     * Loads the answers from an answer set.
+    *
+    * @param {array} answers answers array
     *
     * @returns {array} An array of answers
     ###
@@ -65,9 +67,11 @@ angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseMode
     * @name $query
     * @methodOf BB.Models:ClientDetails
     * @description
-    * Static function that loads an array of client details from a company object.
+    * Static function that gets the client details from a company object.
     *
-    * @returns {promise} A returned promise
+    * @param {object} company Company object
+    *
+    * @returns {promise} A promise that on success will return the details about a company's clients
     ###
     @$query: (company) ->
       ClientDetailsService.query(company)

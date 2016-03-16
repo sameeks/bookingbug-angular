@@ -11,18 +11,18 @@
 * @property {string} setResourcesAndPeople Set resources and people for the clinic
 * @property {object} settings Clinic settings
 * @property {string} resources Clinic resources
-* @property {integer} resource_ids Clinic resources ids
+* @property {number} resource_ids Clinic resources ids
 * @property {string} people Clinic people
-* @property {integer} person_ids Clinic Person ids
+* @property {number} person_ids Clinic Person ids
 * @property {string} services Clinic services
-* @property {integer} services_ids Clinic service ids
-* @property {string} uncovered The uncovered
-* @property {string} className The class Name
-* @property {string} start_time The clinic start thime
-* @property {string} start The clinic start
-* @property {string} end_time The clinic end time
-* @property {string} end The clinic end
-* @property {string} title The title
+* @property {number} services_ids Clinic service ids
+* @property {string} uncovered TUncovered
+* @property {string} className TCass Name
+* @property {string} start_time Clinic startime
+* @property {string} start Clinic start
+* @property {string} end_time Clinic endtime
+* @property {string} end Clinic end
+* @property {string} title Title
 ####
 
 angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, ClinicService) ->

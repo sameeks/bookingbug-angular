@@ -16,7 +16,7 @@
 * @property {string} country_code Country code for this company
 * @property {string} currency_code A CCY for this company
 * @property {string} reference A custom external reference for the company
-* @property {integer} id Company ID
+* @property {number} id Company ID
 * @property {boolean} live If this company is set live
 * @property {array} companies An array of child companies if this company is a parent
 * @property {string} timezone Business timezone
@@ -54,7 +54,9 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @description
     * Finds a child company by reference.
     *
-    * @returns {promise} A promise for the child company.
+    * @param {string} ref ref parameter
+    *
+    * @returns {promise} A promise that on success will return a company object.
     ###
     getCompanyByRef: (ref) ->
       defer = $q.defer()
@@ -78,7 +80,9 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * Finds a child company by id.<br/>
     * If company cannot be find by id it will be searched by name.
     *
-    * @returns {object} The child company.
+    * @param {string} id Company id
+    *
+    * @returns {object} The child company
     ###
     findChildCompany: (id) ->
       return null if !@companies
@@ -103,7 +107,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @description
     * Gets company settings.
     *
-    * @returns {promise} A promise that on success will return the company settings.
+    * @returns {promise} A promise that on success will return the company settings
     ###
     getSettings: () ->
       def = $q.defer()
@@ -122,10 +126,11 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @ngdoc method
     * @name pusherSubscribe
     * @methodOf BB.Models:Company
-    * @param {function} callback A function to be called whenever the event is triggered.
-    * @param {object} options If options parameter is null it will be set to an empty object.
     * @description
     * A callback function will be called whenever a booking, cancellation or updating event is triggered.
+    *
+    * @param {function} callback A function to be called whenever the event is triggered.
+    * @param {object} options If options parameter is null it will be set to an empty object.
     *
     ###
     pusherSubscribe: (callback, options = {}) =>
