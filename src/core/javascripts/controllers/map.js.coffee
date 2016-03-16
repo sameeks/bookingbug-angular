@@ -162,7 +162,6 @@ angular.module('BB.Controllers').controller 'MapCtrl',
           if $scope.selectedStore.id is marker.company.id
             google.maps.event.trigger(marker, 'click');
       )
-
   ###**
   * @ngdoc method
   * @name title
@@ -240,7 +239,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     
     req = {
       query : prms.address
-      types: ['shopping_mall', 'store', 'embassy']
+      #types: ['shopping_mall', 'store', 'embassy'] WTF? We're looking for cities/streets/areas
     }
 
     req.bounds = prms.bounds if prms.bounds 

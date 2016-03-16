@@ -67,7 +67,7 @@
             <ul class="store-details" ng-click="openMarkerInfo(marker)">
               <li ng-bind-html="marker.company.address | address_multi_line"></li>
               <li><strong><span translate="STORE_PHONE"></span>:</strong> {{marker.company.address.phone | uk_local_number}}</li>
-              <li>
+              <li ng-show="currentMarker.distance">
                 <span class="distance">{{currentMarker.distance | distance}}</span>
               </li>
             </ul>
