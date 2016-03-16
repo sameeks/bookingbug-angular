@@ -109,7 +109,7 @@ app.filter 'distance', ($translate) ->
     return '' unless distance
     localUnit = $translate.instant('DISTANCE_UNIT')
     distance *= 0.621371 if localUnit is 'km'
-    prettyDistance = distance.toFixed(3).replace(/\.0+$/,'')
+    prettyDistance = distance.toFixed(1).replace(/\.0+$/,'')
     prettyDistance + localUnit
     
 do ->

@@ -146,7 +146,7 @@
                 <input type="text" name="postcode" id="postcode" ng-pattern="validator.getUKPostcodePattern()" ng-model="client.postcode" class="form-control" onBlur="javascript:this.value=this.value.toUpperCase()" style="text-transform:uppercase"/>
               </div>
               <div class="col-sm-3 messages">
-                <div class="error-message" ng-show="client_form.postcode.$invalid && booking_form.submitted" translate="ERROR.INVALID_POSTCODE">
+                <div class="error-message" ng-show="client_form.postcode.$invalid && booking_form.submitted" translate="ALERT.INVALID_POSTCODE">
                 </div>
               </div>
             </div>

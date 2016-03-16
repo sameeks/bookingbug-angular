@@ -204,7 +204,7 @@
   "SURVEY_NO":"No survey questions for this session.",
   "SURVEY_SUBMIT":"Submit Answers",
   "SURVEY_THANK_YOU":"Thank you for filling out the survey!",
-  "ERROR":{
+  "ALERTS":{
     "GENERIC":"Sorry, it appears that something went wrong. Please try again or call the business you're booking with if the problem persists.",
     "LOCATION_NOT_FOUND":"Sorry, we don't recognise that location",
     "MISSING_LOCATION":"Please enter your location",
@@ -213,7 +213,27 @@
     "ITEM_NO_LONGER_AVAILABLE":"Sorry. The item you were trying to book is no longer available. Please try again.",
     "FORM_INVALID":"Please complete all required fields",
     "GEOLOCATION_ERROR":"Sorry, we could not determine your location. Please try searching instead.",
-    "EMPTY_BASKET_FOR_CHECKOUT":"There are no items in the basket to proceed to checkout."
+    "EMPTY_BASKET_FOR_CHECKOUT":"There are no items in the basket to proceed to checkout.",
+    "ACCOUNT_DISABLED": "Your account appears to be disabled. Please contact the business you're booking with if the problem persists.",
+    "PAYMENT_FAILED": "We were unable to take payment. Please contact your card issuer or try again using a different card",
+    "ATTENDEES_CHANGED": "Your booking has been successfully updated",
+    "PASSWORD_MISMATCH": "Your passwords don't match",
+    "PASSWORD_RESET_FAILED": "Sorry, we couldn't update your password. Please try again.",
+    "PASSWORD_RESET_SUCESS": "Your password has been updated.",
+    "MAXIMUM_TICKETS": "Sorry, the maximum number of tickets per person has been reached.",
+    "GIFT_CERTIFICATE_REQUIRED": "A valid Gift Certificate is required to proceed with this booking",
+    "TIME_SLOT_NOT_SELECTED": "You need to select a time slot",
+    "APPT_AT_SAME_TIME": "Your appointment is already booked for this time",
+    "REQ_TIME_NOT_AVAIL": "The requested time slot is not available. Please choose a different time.",
+    "TOPUP_SUCCESS": "Your wallet has been topped up",
+    "TOPUP_FAILED": "Sorry, your topup failed. Please try again.",
+    "UPDATE_SUCCESS": "Updated",
+    "UPDATE_FAILED": "Update failed. Please try again",
+    "ALREADY_REGISTERED": "You have already registered with this email address. Please login or reset your password.",
+    "LOGIN_FAILED": "Sorry, your email or password was not recognised. Please try again or reset your password.",
+    "PASSWORD_INVALID": "Sorry, your chosen password is invalid",
+    "PASSWORD_RESET_REQ_SUCCESS": "We have sent you an email with instructions on how to reset your password.",
+    "PASSWORD_RESET_REQ_FAILED": "Sorry, we didn't find an account registered with that email."
   },
   "THOUSANDS_SEPARATOR": ",",
   "DECIMAL_SEPARATOR": ".",
@@ -272,7 +292,7 @@
   "PLEASE_ENTER_FIRST_NAME": "Please enter a first name",
   "PLEASE_ENTER_LAST_NAME": "Please enter a last name",
   "PLEASE_ENTER_SOMETHING": "*Please enter a first and last name or email address",
-  "DISTANCE_UNIT": 'mi',
+  "DISTANCE_UNIT": "mi",
   "SELECT_SERVICE": "Select a service",
   "SELECT_CATEGORY": "Select a category",
   "SERVICE_TYPE": "Choose service type",
@@ -291,9 +311,9 @@
 
 moment.locale('en', {
   longDateFormat : {
-    LT : 'h:mma',
-    LL: 'Do MMMM YYYY',
-    LL: 'h:mma Do MMM YYYY',
-    LLLL : 'h:mma dddd Do MMMM YYYY'
+    LT : "h:mma",
+    LL: "Do MMMM YYYY",
+    LL: "h:mma Do MMM YYYY",
+    LLLL : "h:mma dddd Do MMMM YYYY"
   }
 });

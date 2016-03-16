@@ -78,7 +78,6 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   # check if company is parent
   #if $scope.bb.company.$has('parent')
   $rootScope.connection_started.then ->
-
     $scope.setLoaded $scope if !$scope.selectedStore
     if $scope.bb.company.companies
       $rootScope.parent_id = $scope.bb.company.id
