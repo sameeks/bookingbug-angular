@@ -8,8 +8,8 @@
 * @description
 * Representation of an Day Object
 *
-* @property {string} string_date The string date
-* @property {date} date Second The date
+* @property {string} string_date Date as string
+* @property {date} date  Formatted date
 ####
 
 angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayService) ->
@@ -26,7 +26,7 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayServ
     * @name day
     * @methodOf BB.Models:Day
     * @description
-    * Get day date
+    * Gets the day date.
     *
     * @returns {date} The returned day
     ###
@@ -38,7 +38,9 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayServ
     * @name off
     * @methodOf BB.Models:Day
     * @description
-    * Get off by month
+    * (!!check)Get off by month.
+    *
+    * @param {date} month month parameter
     *
     * @returns {date} The returned off
     ###
@@ -50,7 +52,9 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayServ
     * @name class
     * @methodOf BB.Models:Day
     * @description
-    * Get class in according of month
+    * Gets the  class using the month parameter.
+    *
+    * @param {date} month month parameter
     *
     * @returns {string} The returned class
     ###
@@ -69,7 +73,7 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayServ
     * @name $query
     * @methodOf BB.Models:Day
     * @description
-    * Static function that loads an array of day from a company object
+    * Static function that loads an array of days from a company object.
     *
     * @returns {promise} A returned promise
     ###

@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Image
@@ -10,7 +9,6 @@
 *
 * @property {array} iamges An array with event images
 ####
-
 
 angular.module('BB.Models').factory "ImageModel", ($q, $filter, BBModel, BaseModel) ->
 

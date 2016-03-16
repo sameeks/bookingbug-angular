@@ -17,10 +17,10 @@ angular.module('BB.Models').factory "SpaceModel", ($q, BBModel, BaseModel, Space
     * @name $query
     * @methodOf BB.Models:Space
     * @description
-    * Static function that loads an array of space from a company object
+    * Static function that loads an array of space from a company object.
     *
     * @returns {promise} A returned promise
     ###
     @$query: (company) ->
       SpaceService.query(company)
-   
+

@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:EventTicket
@@ -8,17 +7,16 @@
 * @description
 * Representation of an EventTicket Object
 *
-* @property {integer} max The maximum of the event ticket
-* @property {integer} max_num_bookings The maximum number of the bookings
-* @property {integer} max_spaces The maximum spaces of the evenet
-* @property {integer} counts_as The counts as
-* @property {string} pool_name The pool name
-* @property {string} name The name 
-* @property {string} min_num_bookings The minimum number of the bookings
+* @property {number} max The maximum number of tickets for the event
+* @property {number} max_num_bookings The maximum number of bookings
+* @property {number} max_spaces The maximum spaces of the evenet
+* @property {number} counts_as Counts as
+* @property {string} pool_name Pool name
+* @property {string} name Name
+* @property {string} min_num_bookings Minimum number of bookings
 * @property {string} qty The quantity of the event ticket
-* @property {string} totalQty The total quantity of the event ticket
+* @property {string} totalQty Total quantity of the event tickets
 ####
-
 
 angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel) ->
 
@@ -41,9 +39,9 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @name fullName
     * @methodOf BB.Models:EventTicket
     * @description
-    * Get the full name
+    * Gets the event ticket full name.
     *
-    * @returns {object} The returned full name
+    * @returns {object} Full name
     ###
     fullName: () ->
       if @pool_name
@@ -55,9 +53,10 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @name getRange
     * @methodOf BB.Models:EventTicket
     * @description
-    * Get the range between minimum number of bookings and the maximum number of bookings
+    * Gets the range between minimum and maximum number of bookings.
     *
-    * @returns {array} The returned range
+    * @param {number} cap cap parameter
+    * @returns {array} Range
     ###
     getRange: (cap) ->
       if cap
@@ -73,13 +72,13 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @name totalQty
     * @methodOf BB.Models:EventTicket
     * @description
-    * Get the total quantity of the event ticket
+    * Gets the total quantity of the event tickets.
     *
-    * @returns {array} The returned total quantity
+    * @returns {number} Rotal Tickets quantity
     ###
     totalQty: () ->
       return 0 if !@qty
-      return @qty if !@counts_as  
+      return @qty if !@counts_as
       return @qty * @counts_as
 
     ###**
@@ -87,11 +86,10 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @name getMax
     * @methodOf BB.Models:EventTicket
     * @description
-    * Get the maximum - this looks at an optional cap, the maximum available and potential a running count of tickest already selected (from passing in the event being booked)
+    * Gets the maximum - this looks at an optional cap, the maximum available and potential a running count of tickest already selected (from passing in the event being booked)
     *
-    * @returns {array} The returned maximum
+    * @returns {number} Maximum
     ###
-    # get the max - this looks at an optional cap, the maximum available and potential a running count of tickest already selected (from passing in the event being booked)
     getMax: (cap, ev = null) ->
       live_max = @max
       if ev
@@ -117,14 +115,14 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @name add
     * @methodOf BB.Models:EventTicket
     * @description
-    * Add to the a quantity a new value
+    * Adds a new value to the a quantity.
     *
-    * @returns {array} The returned new quantity added
+    * @returns {number} New quantity
     ###
     add: (value) ->
       @qty = 0 if !@qty
       @qty = parseInt(@qty)
-      
+
       return if angular.isNumber(@qty) and (@qty >= @max and value > 0) or (@qty is 0 and value < 0)
       @qty += value
 
@@ -133,9 +131,9 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @name subtract
     * @methodOf BB.Models:EventTicket
     * @description
-    * Subtract a value from the quantity
+    * Subtracts a value from the quantity.
     *
-    * @returns {array} The returned substract
+    * @returns {number} New quantity
     ###
     subtract: (value) ->
       @add(-value)

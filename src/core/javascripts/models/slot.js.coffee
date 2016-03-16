@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Slot
@@ -8,10 +7,9 @@
 * @description
 * Representation of an Slot Object
 *
-* @property {integer} total_entries The The total entries of the slot
+* @property {number} total_entries Slot total entrie
 * @property {array} slots An array with slots
 ###
-
 
 angular.module('BB.Models').factory "SlotModel", ($q, BBModel, BaseModel, SlotService) ->
 
@@ -26,7 +24,7 @@ angular.module('BB.Models').factory "SlotModel", ($q, BBModel, BaseModel, SlotSe
     * @name $query
     * @methodOf BB.Models:Slot
     * @description
-    * Static function that loads an array of slot from a company object
+    * Static function that loads an array of slot from a company object.
     *
     * @returns {promise} A returned promise
     ###

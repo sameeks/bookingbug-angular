@@ -5,14 +5,13 @@
 * @description
 * This is the event object returned by the API
 *
-* @property {integer} id The event id
-* @property {date} datetime The event date and time
-* @property {string} description Description of the event
-* @property {integer} status Status of the event
-* @property {integer} spaces_booked The booked spaces
-* @property {integer} duration Duration of the event
+* @property {number} id Event id
+* @property {date} datetime Event date and time
+* @property {string} description Event description
+* @property {number} status Event status
+* @property {number} spaces_booked Booked spaces
+* @property {number} duration Event duration
 ####
-
 
 angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService, EventService) ->
 
@@ -29,9 +28,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getGroup
     * @methodOf BB.Models:Event
     * @description
-    * Get event groups
+    * Gets the event group.
     *
-    * @returns {promise} A promise for the group event
+    * @returns {promise} A promise that on success will return the event group object
     ###
     getGroup: () ->
       defer = $q.defer()
@@ -52,9 +51,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getGroup
     * @methodOf BB.Models:Event
     * @description
-    * Get the chains of the event
+    * Gets the event chain.
     *
-    * @returns {promise} A promise for the chains event
+    * @returns {promise} A promise that on success will return the event chain object
     ###
     getChain: () ->
       defer = $q.defer()
@@ -74,9 +73,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getDate
     * @methodOf BB.Models:Event
     * @description
-    * Get the date of the event
+    * Gets the event date.
     *
-    * @returns {date} The returned date
+    * @returns {date} Event date
     ###
     getDate: () ->
       return @date if @date
@@ -88,9 +87,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name dateString
     * @methodOf BB.Models:Event
     * @description
-    * Get date string of the event
+    * Gets the event date in string format
     *
-    * @returns {string} The returned date string
+    * @returns {string} Event date
     ###
     dateString: (str) ->
       date = @date()
@@ -101,9 +100,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getDuration
     * @methodOf BB.Models:Event
     * @description
-    * Get duration of the event chains
+    * Gets the event chain duration.
     *
-    * @returns {promise} A promise for duration of the event
+    * @returns {promise} A promise that on success will return the event chain duration
     ###
     getDuration: () ->
       defer = new $q.defer()
@@ -120,10 +119,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name printDuration
     * @methodOf BB.Models:Event
     * @description
-    * Display duration of the event
+    * Displays the event duration.
     *
-    * @returns {date} The returned printed duration
-    ### 
+    * @returns {string} Event duration
+    ###
     printDuration: () ->
       if @duration < 60
         @duration + " mins"
@@ -140,9 +139,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getDescription
     * @methodOf BB.Models:Event
     * @description
-    * Get duration of the event
+    * Gets event description
     *
-    * @returns {object} The returned description
+    * @returns {string} Event description
     ###
     getDescription: () ->
       @getChain().description
@@ -152,10 +151,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getColour
     * @methodOf BB.Models:Event
     * @description
-    * Get the colour 
+    * Gets the event color.
     *
-    * @returns {string} The returned colour
-    ### 
+    * @returns {string} The returned color
+    ###
     getColour: () ->
       if @getGroup()
         return @getGroup().colour
@@ -167,9 +166,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getPerson
     * @methodOf BB.Models:Event
     * @description
-    * Get the person name
+    * Gets the person assigned to the event.
     *
-    * @returns {object} The returned person
+    * @returns {string} Person name
     ###
     getPerson: () ->
       @getChain().person_name
@@ -179,10 +178,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getPounds
     * @methodOf BB.Models:Event
     * @description
-    * Get pounts 
+    * Gets the price in pounds.
     *
-    * @returns {integer} The returned pounts
-    ###  
+    * @returns {number} Price
+    ###
     getPounds: () ->
       if @chain
         Math.floor(@getPrice()).toFixed(0)
@@ -192,10 +191,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getPrice
     * @methodOf BB.Models:Event
     * @description
-    * Get price 
+    * Gets the  price.
     *
-    * @returns {integer} The returned price
-    ### 
+    * @returns {number} The returned price
+    ###
     getPrice: () ->
       0
 
@@ -204,10 +203,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getPence
     * @methodOf BB.Models:Event
     * @description
-    * Get price 
+    * Gets the price in pence.
     *
-    * @returns {integer} The returned pence
-    ### 
+    * @returns {number} Price
+    ###
     getPence: () ->
       if @chain
         (@getPrice() % 1).toFixed(2)[-2..-1]
@@ -217,7 +216,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getNumBooked
     * @methodOf BB.Models:Event
     * @description
-    * Get the number booked 
+    * Gets the number booked.
     *
     * @returns {object} The returned number booked
     ###
@@ -229,9 +228,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getSpacesLeft
     * @methodOf BB.Models:Event
     * @description
-    * Get the number of spaces left (possibly limited by a specific ticket pool)
+    * Gets the number of spaces left (possibly limited by a specific ticket pool)
     *
-    * @returns {object} The returned spaces left
+    * @returns {number} Spaces left
     ###
     # get the number of spaces left (possibly limited by a specific ticket pool)
     getSpacesLeft: (pool = null) ->
@@ -244,10 +243,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name hasSpace
     * @methodOf BB.Models:Event
     * @description
-    * Checks if this considered a valid space
+    * Checks if this is considered a valid space.
     *
     * @returns {boolean} If this is a valid space
-    ### 
+    ###
     hasSpace: () ->
       (@getSpacesLeft() > 0)
 
@@ -256,10 +255,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name hasWaitlistSpace
     * @methodOf BB.Models:Event
     * @description
-    * Checks if this considered a valid waiting list space
+    * Checks if this is considered a valid waiting list space.
     *
     * @returns {boolean} If this is a valid waiting list space
-    ### 
+    ###
     hasWaitlistSpace: () ->
       (@getSpacesLeft() <= 0 && @getChain().waitlength > @spaces_wait)
 
@@ -268,10 +267,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getRemainingDescription
     * @methodOf BB.Models:Event
     * @description
-    * Get the remaining description
+    * Gets the remaining description.
     *
-    * @returns {object} The returned remaining description
-    ### 
+    * @returns {object} Remaining description
+    ###
     getRemainingDescription: () ->
       left = @getSpacesLeft()
       if left > 0 && left < 3
@@ -285,10 +284,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name select
     * @methodOf BB.Models:Event
     * @description
-    * Checks is this considered a selected
+    * Sets selected flag to true if an event is selected.
     *
-    * @returns {boolean} If this is a selected
-    ###  
+    * @returns {boolean} True
+    ###
     select: ->
       @selected = true
 
@@ -297,7 +296,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name unselect
     * @methodOf BB.Models:Event
     * @description
-    * Unselect if is selected
+    * Unselect the event if is selected.
     *
     * @returns {boolean} If this is a unselected
     ###
@@ -309,12 +308,11 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name prepEvent
     * @methodOf BB.Models:Event
     * @description
-    * Prepare the event
+    * Prepares  the event by building some useful information about the event.
     *
     * @returns {promise} A promise for the event
     ###
     prepEvent: () ->
-      # build out some useful event stuff
       def = $q.defer()
       @getChain().then () =>
 
@@ -345,9 +343,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name updatePrice
     * @methodOf BB.Models:Event
     * @description
-    * Update price for the ticket
+    * Updates the ticket price.
     *
-    * @returns {object} The returned update price
+    * @returns {object} Updated price
     ###
     updatePrice: () ->
       for ticket in @tickets

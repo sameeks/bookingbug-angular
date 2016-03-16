@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Question
@@ -8,10 +7,9 @@
 * @description
 * Representation of an Question Object
 *
-* @property {integer} company_id The company id
+* @property {number} company_id Cmpany id
 * @property {array} question An array with questions
 ####
-
 
 angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, BaseModel) ->
 
@@ -45,9 +43,9 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
     * @name hasPrice
     * @methodOf BB.Models:Question
     * @description
-    * Check if it contains one of the following: "check-price", "select-price", "radio-price"
+    * Checks if it contains one of the following: "check-price", "select-price", "radio-price".
     *
-    * @returns {boolean} If this contains detail_type 
+    * @returns {boolean} If this contains detail_type
     ###
     hasPrice: ->
       return @detail_type == "check-price" || @detail_type == "select-price"  || @detail_type == "radio-price"
@@ -59,7 +57,7 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
     * @description
     * Select price if detail type si equal with check-price
     *
-    * @returns {float} The returned selected price 
+    * @returns {float} The returned selected price
     ###
     selectedPrice: ->
       return 0 if !@hasPrice()
@@ -74,13 +72,13 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
     * @name selectedPriceQty
     * @methodOf BB.Models:Question
     * @description
-    * Select price quantity if selected price has been selected
+    * Select price quantity if selected price has been selected.
     *
-    * @returns {object} The returned selected price quantity 
+    * @returns {object} The returned selected price quantity
     ###
     selectedPriceQty: (qty) ->
       qty ||= 1
-      p = @selectedPrice()  
+      p = @selectedPrice()
       if @price_per_booking
         p = p * qty
       p
@@ -90,9 +88,9 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
     * @name getAnswerId
     * @methodOf BB.Models:Question
     * @description
-    * Get answer id
+    * Gets the answer id.
     *
-    * @returns {object} The returned answer id 
+    * @returns {object} The returned answer id
     ###
     getAnswerId: ->
       return null if !@answer || !@options || @options.length == 0
@@ -105,9 +103,9 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
     * @name showElement
     * @methodOf BB.Models:Question
     * @description
-    * Show element
+    * Shows the element.
     *
-    * @returns {boolean} If element is displayed
+    * @returns {boolean} True if element is displayed
     ###
     showElement: ->
       @currentlyShown = true
@@ -117,7 +115,7 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
     * @name showElement
     * @methodOf BB.Models:Question
     * @description
-    * Hide element
+    * Hides the element.
     *
     * @returns {boolean} If element is hidden
     ###
@@ -129,7 +127,7 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
     * @name getPostData
     * @methodOf BB.Models:Question
     * @description
-    * Get post data
+    * Gets the post data.
     *
     * @returns {object} The returned post data
     ###

@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:TimeSlot
@@ -8,11 +7,11 @@
 * @description
 * Representation of an TimeSlot Object
 *
-* @property {string} service The service
-* @property {date} time_12 The time_12 of time slot
-* @property {date} time_24 The time_24 of time slot
-* @property {date} start The start time of the slot
-* @property {date} end The end time of the slot
+* @property {string} service Service
+* @property {date} time_12 Time slot in h:mm format
+* @property {date} time_24 Time slot in am/pm format
+* @property {date} start Slort start date
+* @property {date} end Slot end time
 * @property {string} service The service of time slot
 * @property {string} get Get the time slot
 * @property {string} selected The selected
@@ -21,7 +20,6 @@
 * @property {string} availability The availability of time slot
 * @property {string} avail The avail of time slot
 ###
-
 
 angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, BaseModel, TimeSlotService) ->
 
@@ -38,9 +36,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name print_time
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Print time of the slot
+    * Shows the time for a  slot.
     *
-    * @returns {date} The returning time 
+    * @returns {string} Time
     ###
     # 24 hour time
     print_time: ->
@@ -59,9 +57,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name print_end_time
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Print end time of the slot
+    * Shows the slot end time
     *
-    * @returns {date} The returning end time 
+    * @returns {string} End time
     ###
     # 24 hour time
     print_end_time: (dur) ->
@@ -82,9 +80,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name print_time12
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Print 12 hour time
+    * Shows the time in h:mm format.
     *
-    * @returns {date} The returning 12 hour time
+    * @returns {string} Time
     ###
     # 12 hour time
     print_time12: (show_suffix = true) ->
@@ -103,9 +101,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name print_end_time12
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Print 12 hour end time
+    * Shows the end time in h:mm format.
     *
-    * @returns {date} The returning 12 hour end time
+    * @returns {date} End time
     ###
     # 12 hour time
     print_end_time12: (show_suffix = true, dur) ->
@@ -114,7 +112,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
         if @service.listed_duration?
           dur = @service.listed_duration
         else
-          dur = @service.listed_durations[0] 
+          dur = @service.listed_durations[0]
       t = @get('time') + dur
       h = Math.floor(t / 60)
       m = t%60
@@ -130,9 +128,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name availability
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Get availability
+    * Gets the  availability
     *
-    * @returns {object} The returning availability
+    * @returns {object} Availability
     ###
     availability: ->
       @avail
@@ -142,9 +140,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name select
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Checks if selected is true
+    * Sets a time slot as selected.
     *
-    * @returns {boolean} If this is checked
+    * @returns {boolean} True
     ###
     select: ->
       @selected = true
@@ -154,7 +152,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name unselect
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Unselect if is selected
+    * Sets a time slot as unselected.
     *
     * @returns {boolean} If this is unselect
     ###
@@ -166,7 +164,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name disable
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Disable time slot by reason
+    * Disables the time slot using the reason parameter.
+    *
+    * @param {string} reason reason to disable the slot
     *
     * @returns {boolean} If this is a disabled
     ###
@@ -179,7 +179,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name enable
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Enable time slot
+    * Enables the time slot.
     *
     * @returns {boolean} If this is a enable
     ###
@@ -192,9 +192,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name status
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Get status of the time slot
+    * Gets the time slot status
     *
-    * @returns {object} The returned status
+    * @returns {string} Slot status
     ###
     status: ->
       return "selected" if @selected
@@ -207,7 +207,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name $query
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Static function that loads an array of time slot from a company object
+    * Static function that loads an array of time slots from a company object
     *
     * @returns {promise} A returned promise
     ###

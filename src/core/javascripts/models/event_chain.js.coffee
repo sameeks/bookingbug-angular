@@ -1,7 +1,4 @@
-
-
 'use strict';
-
 
 ###**
 * @ngdoc service
@@ -9,18 +6,17 @@
 *
 * @description
 * Representation of an EventChain Object
-* 
-* @property {integer} id The id of event chain
-* @property {string} name Name of the event chain
-* @property {string} description The description of the event
-* @property {integer} capacity_view The capacity view
+*
+* @property {number} id Event chain id
+* @property {string} name Event chain name
+* @property {string} description Event chain description
+* @property {number} capacity_view Event chain capacity view
 * @property {date} start_date Event chain start date
 * @property {date} finish_date Event chain finish date
-* @property {integer} price The price of the event chain
-* @property {string} ticket_type Type of the ticket
-* @property {boolean} course Verify is couse exist or not
+* @property {number} price Event chain price
+* @property {string} ticket_type Tcket tpye
+* @property {boolean} course Verifies if the course exist or not
 ####
-
 
 angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, EventChainService) ->
 
@@ -33,9 +29,9 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
     * @name isSingleBooking
     * @methodOf BB.Models:EventChain
     * @description
-    * Verify if is a single booking
+    * Verifies if is a single booking.
     *
-    * @returns {array} If maximum number of bookings is equal with 1 and not have an ticket sets
+    * @returns {boolean} True if event allows only one booking and has no more tickets sets
     ###
     isSingleBooking: () ->
       return @max_num_bookings == 1 && !@$has('ticket_sets')
@@ -45,9 +41,9 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
     * @name hasTickets
     * @methodOf BB.Models:EventChain
     * @description
-    * Checks if this is considered a valid tickets
+    * Checks if the tickets are valid.
     *
-    * @returns {boolean} If this have an ticket sets
+    * @returns {boolean} True if it has an ticket sets
     ###
     hasTickets: () ->
       @$has('ticket_sets')
@@ -57,7 +53,7 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
     * @name getTickets
     * @methodOf BB.Models:EventChain
     * @description
-    * Get the tickets of the event
+    * Gets the tickets for the event chain.
     *
     * @returns {promise} A promise for the tickets
     ###
@@ -94,7 +90,6 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
     *
     * @returns {object} The returned adjust tickets for remaining
     ###
-    # for each ticket set - adjust the number of tickets that can be booked due to changes in the number of remaining spaces
     adjustTicketsForRemaining: () ->
       if @tickets
         for @ticket in @tickets

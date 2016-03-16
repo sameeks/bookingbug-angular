@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:ItemDetails
@@ -9,13 +8,12 @@
 * Representation of an ItemDetails Object
 *
 * @property {string} self The self
-* @property {array} questions The questions
-* @property {array} survey_questions The survey questions
+* @property {array} questions Item related questions
+* @property {array} survey_questions Survey questions
 * @property {string} hasQuestions Has questions about the item details
 * @property {string} hasSurveyQuestions Has survey questions about the item details
-* @property {string} checkConditionalQuestions Check conditional questions about the item details
+* @property {string} checkConditionalQuestions Checks the conditional questions about the item details
 ####
-
 
 angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel, $bbug, QuestionService, ItemDetailsService) ->
 
@@ -42,9 +40,9 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     * @name questionPrice
     * @methodOf BB.Models:ItemDetails
     * @description
-    * Get question about price in according of quantity
+    * Gets the  question about the price using qty parameter.
     *
-    * @returns {integer} The returned price
+    * @returns {number} The returned price
     ###
     questionPrice: (qty) ->
       qty ||= 1
@@ -59,9 +57,9 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     * @name checkConditionalQuestions
     * @methodOf BB.Models:ItemDetails
     * @description
-    * Checks if exist conditional questions 
+    * Checks if conditional questions exists.
     *
-    * @returns {boolean} The returned existing conditional questions
+    * @returns {boolean} Existing conditional questions
     ###
     checkConditionalQuestions: () ->
       QuestionService.checkConditionalQuestions(@questions)
@@ -71,9 +69,9 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     * @name getPostData
     * @methodOf BB.Models:ItemDetails
     * @description
-    * Get data 
+    * Gets the post data.
     *
-    * @returns {array} The returned data
+    * @returns {array} data
     ###
     getPostData: ->
       data = []
@@ -86,9 +84,9 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     * @name setAnswers
     * @methodOf BB.Models:ItemDetails
     * @description
-    * Load the answers from an answer set - probably from loading an existing basket item
+    * Loads the answers from an answer set from loading an existing basket item.
     *
-    * @returns {object} The returned answers set
+    * @returns {object} Answers set
     ###
     # load the answers from an answer set - probably from loading an existing basket item
     setAnswers: (answers) ->
@@ -100,14 +98,14 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
       for q in @questions
         if ahash[q.id]  # if we have answer for it
           q.answer = ahash[q.id].answer
-      @checkConditionalQuestions()    
+      @checkConditionalQuestions()
 
     ###**
     * @ngdoc method
     * @name getQuestion
     * @methodOf BB.Models:ItemDetails
     * @description
-    * Get question about item details by id
+    * Gets the  question about an item details by id.
     *
     * @returns {object} The returned question
     ###
@@ -119,7 +117,7 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     * @name $query
     * @methodOf BB.Models:ItemDetails
     * @description
-    * Static function that loads an array of item details from a company object
+    * Static function that loads an array of item details from a company object.
     *
     * @returns {promise} A returned promise
     ###

@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:Service
@@ -8,16 +7,15 @@
 * @description
 * Representation of an Service Object
 *
-* @property {integer} id Id of the service
-* @property {string} name The name of service
-* @property {date} duration Duration of the service
-* @property {float} prices The prices of the service
-* @property {integer} detail_group_id The detail group id
-* @property {date} booking_time_step The time step of the booking
-* @property {integer} min_bookings The minimum number of bookings
-* @property {integer} max_booings The maximum number of bookings
+* @property {number} id Service id
+* @property {string} name Service name
+* @property {date} duration Service duration
+* @property {number} prices Service prices
+* @property {number} detail_group_id Detail group id
+* @property {date} booking_time_step Booking timpe step
+* @property {number} min_bookings The minimum number of bookings
+* @property {number} max_booings The maximum number of bookings
 ###
-
 
 angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, ServiceService) ->
 
@@ -42,9 +40,11 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     * @name getPriceByDuration
     * @methodOf BB.Models:Service
     * @description
-    * Get price by duration in function of duration
+    * Gets the price using duration parameter.
     *
-    * @returns {object} The returning price by duration 
+    * @param {date} dur dur parameter
+    *
+    * @returns {number} Price
     ###
     getPriceByDuration: (dur) ->
       for d,i in @durations
@@ -56,9 +56,9 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     * @name getCategoryPromise
     * @methodOf BB.Models:Service
     * @description
-    * Get category promise
+    * Gets the service category.
     *
-    * @returns {object} The returning category promise 
+    * @returns {object} A promise that on success returns the category object
     ###
     getCategoryPromise: () =>
       return null if !@$has('category')
@@ -72,9 +72,9 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     * @name days_array
     * @methodOf BB.Models:Service
     * @description
-    * Put days in array
+    * Puts the days in an array.
     *
-    * @returns {array} The returning days array 
+    * @returns {array} Days array
     ###
     days_array: () =>
       arr = []
@@ -84,13 +84,12 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
         arr.push({name: str, val: x})
       arr
 
-
     ###**
     * @ngdoc method
     * @name $query
     * @methodOf BB.Models:Service
     * @description
-    * Static function that loads an array of services from a company object
+    * Static function that loads an array of services from a company object.
     *
     * @returns {promise} A returned promise
     ###

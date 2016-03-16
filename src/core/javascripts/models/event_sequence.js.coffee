@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:EventSequence
@@ -8,10 +7,9 @@
 * @description
 * Representation of an EventSequence Object
 *
-* @property {integer} total_entries The total of entries in  event sequences
-* @property {array} event_chains An array with items of the event 
+* @property {number} total_entries Total entries in event sequence
+* @property {array} event_chains Event chains
 ####
-
 
 angular.module('BB.Models').factory "EventSequenceModel", ($q, BBModel, BaseModel, EventSequenceService) ->
 

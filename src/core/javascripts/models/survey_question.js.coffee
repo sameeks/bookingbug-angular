@@ -7,7 +7,7 @@
 * @description
 * Representation of an SurveyQuestion Object
 *
-* @property {integer} company_id The company id
+* @property {numbet} company_id Cmpany id
 * @property {array} questions An array with questions
 ###
 
