@@ -16,7 +16,7 @@
 * @property {string} country_code Country code for this company
 * @property {string} currency_code A CCY for this company
 * @property {string} reference A custom external reference for the company
-* @property {number} id Company ID
+* @property {number} id Company id
 * @property {boolean} live If this company is set live
 * @property {array} companies An array of child companies if this company is a parent
 * @property {string} timezone Business timezone

@@ -214,7 +214,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name length
     * @methodOf BB.Models:Basket
     * @description
-    * Length of the items array
+    * Gets the items array lenght.
     *
     * @returns {number} length
     ###
@@ -226,7 +226,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name questionPrice
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates total question's price
+    * Calculates the total question's price
     *
     * @returns {number} question's price
     ###

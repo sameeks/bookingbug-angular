@@ -7,7 +7,7 @@
 * @description
 * Representation of an Question Object
 *
-* @property {number} company_id Cmpany id
+* @property {number} company_id Company id
 * @property {array} question An array with questions
 ####
 
@@ -55,7 +55,7 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
     * @name selectedPrice
     * @methodOf BB.Models:Question
     * @description
-    * Select price if detail type si equal with check-price
+    * Select price if detail type si equal with check-price.
     *
     * @returns {float} The returned selected price
     ###

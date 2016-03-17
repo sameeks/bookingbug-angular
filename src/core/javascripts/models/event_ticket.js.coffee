@@ -86,7 +86,7 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @name getMax
     * @methodOf BB.Models:EventTicket
     * @description
-    * Gets the maximum - this looks at an optional cap, the maximum available and potential a running count of tickest already selected (from passing in the event being booked)
+    * Gets the maximum - this looks at an optional cap, the maximum available and a potential running count of tickest already selected (from passing in the event being booked)
     *
     * @returns {number} Maximum
     ###

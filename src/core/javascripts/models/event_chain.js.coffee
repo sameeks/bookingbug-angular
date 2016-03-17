@@ -86,7 +86,7 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
     * @name adjustTicketsForRemaining
     * @methodOf BB.Models:EventChain
     * @description
-    * Adjust the number of tickets that can be booked due to changes in the number of remaining spaces for each ticket set
+    * Adjust the number of tickets that can be booked due to changes in the number of remaining spaces for each ticket set.
     *
     * @returns {object} The returned adjust tickets for remaining
     ###
@@ -100,7 +100,7 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
     * @name $query
     * @methodOf BB.Models:EventChain
     * @description
-    * Static function that loads an array of event chain from a company object
+    * Static function that loads an array of event chains from a company object
     *
     * @returns {promise} A returned promise
     ###

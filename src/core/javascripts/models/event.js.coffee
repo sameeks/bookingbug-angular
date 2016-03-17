@@ -48,7 +48,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
     ###**
     * @ngdoc method
-    * @name getGroup
+    * @name getChain
     * @methodOf BB.Models:Event
     * @description
     * Gets the event chain.
@@ -87,7 +87,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name dateString
     * @methodOf BB.Models:Event
     * @description
-    * Gets the event date in string format
+    * Gets the event date in string format.
+    *
+    * @param {string} str str parameter
     *
     * @returns {string} Event date
     ###
@@ -139,7 +141,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getDescription
     * @methodOf BB.Models:Event
     * @description
-    * Gets event description
+    * Gets the event description.
     *
     * @returns {string} Event description
     ###
@@ -228,7 +230,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getSpacesLeft
     * @methodOf BB.Models:Event
     * @description
-    * Gets the number of spaces left (possibly limited by a specific ticket pool)
+    * Gets the number of spaces left (possibly limited by a specific ticket pool).
     *
     * @returns {number} Spaces left
     ###
@@ -359,7 +361,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name $query
     * @methodOf BB.Models:Event
     * @description
-    * Static function that loads an array of event from a company object
+    * Static function that loads an array of events from a company object.
     *
     * @returns {promise} A returned promise
     ###

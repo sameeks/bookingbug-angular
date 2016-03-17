@@ -22,7 +22,7 @@ angular.module('BB.Models').factory "EventSequenceModel", ($q, BBModel, BaseMode
     * @name $query
     * @methodOf BB.Models:EventSequence
     * @description
-    * Static function that loads an array of event sequence from a company object
+    * Static function that loads an array of event sequences from a company object.
     *
     * @returns {promise} A returned promise
     ###

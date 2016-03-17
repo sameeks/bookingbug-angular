@@ -20,7 +20,9 @@ angular.module('BB.Models').factory "Admin.AdministratorModel", ($q, BBModel, Ba
     * @name query
     * @methodOf BB.Models:AdminAdministrator
     * @description
-    * Static function that loads an array of administrators from a company object
+    * Static function that loads an array of administrators from a company object.
+    *
+    * @parem {object} paramas paramas object
     *
     * @returns {Promise} A returned promise
     ###

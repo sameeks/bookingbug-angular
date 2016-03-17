@@ -24,7 +24,7 @@ angular.module('BB.Models').factory "EventGroupModel", ($q, BBModel, BaseModel, 
     * @name $query
     * @methodOf BB.Models:EventGroup
     * @description
-    * Static function that loads an array of event group from a company object
+    * Static function that loads an array of event groups from a company object.
     *
     * @returns {promise} A returned promise
     ###

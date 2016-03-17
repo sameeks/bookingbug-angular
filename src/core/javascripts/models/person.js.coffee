@@ -25,7 +25,9 @@ angular.module('BB.Models').factory "PersonModel", ($q, BBModel, BaseModel, Pers
     * @name $query
     * @methodOf BB.Models:Person
     * @description
-    * Static function that loads an array of people from a company object
+    * Static function that loads an array of people from a company object.
+    *
+    * @param {object} company company object
     *
     * @returns {promise} A returned promise
     ###

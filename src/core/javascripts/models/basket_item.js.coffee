@@ -693,7 +693,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setDate
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the  date uding the date parameter.
+    * Sets the date using the date parameter.
     *
     * @param {date} date Date
     *
@@ -772,9 +772,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name checkReady
     * @methodOf BB.Models:BasketItem
     * @description
-    * Checks if an item is ready for checking out. <br/>
-    * ready - means it's fully ready for checkout.
-    * reserve_ready - means the question still need asking - but it can be reserved.
+    * Checks if an item is ready for checking out.
+    * <br/>ready is set to true - means it's fully ready for checkout.
+    * <br/>reserve_ready - means the question still need asking - but it can be reserved.
     * @returns {boolean} True when reservation is ready
     ###
     checkReady: ->
@@ -922,7 +922,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name loadStep
     * @methodOf BB.Models:BasketItem
     * @description
-    * Builds the current step variables based on a hash object passed as parameter
+    * Builds the current step variables based on a hash object passed as parameter.
     *
     * @param {object} step Hash object representing a step
     *
@@ -984,8 +984,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name booking_time
     * @methodOf BB.Models:BasketItem
     * @description
-    * Gets the basket item booking date using a custom separator
+    * Gets the basket item booking date using a custom separator.
     *
+    * @param {string } separator separator parameter
     *
     * @returns {date} Formatted date with a specific separator
     ###
@@ -1108,7 +1109,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setCloneAnswers
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the clone answers using the otheritem parameter.
+    * Sets the clone answers using the otherItem parameter.
     *
     * @param {object} otherItem otherItem param
     *
