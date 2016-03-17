@@ -68,7 +68,7 @@
               <li ng-bind-html="marker.company.address | address_multi_line"></li>
               <li><strong><span translate="STORE_PHONE"></span>:</strong> {{marker.company.address.phone | uk_local_number}}</li>
               <li ng-show="currentMarker.distance">
-                <span class="distance">{{currentMarker.distance | distance}}</span>
+                <span class="distance">{{marker.distance | distance}}</span>
               </li>
             </ul>
             <button type="button" ng-click="selectItem(marker.company)" class="btn btn-primary pull-right"><span translate="PROGRESS_SELECT"></span></button>
