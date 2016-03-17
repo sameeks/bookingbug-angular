@@ -1,5 +1,3 @@
-
-
 ###**
 * @ngdoc service
 * @name BB.Services:Loading
@@ -7,7 +5,6 @@
 * @description
 * Representation of an Loading Object
 ###
-
 
 angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $rootScope, AlertService) ->
 
@@ -31,11 +28,11 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
   * @ngdoc method
   * @name setLoaded
   * @methodOf BB.Services:Loading
-  * @param {array} cscope The cscope 
   * @description
-  * Set loaded in according of the cscope parameter
+  * Dispatches an event hide:loader upwards through the scope hierarchy notifying the registered $rootScope.Scope listeners.
+  * <br/> Checks all the scope objects to make sure they are entirely loaded.
   *
-  * @returns {Promise} Returned a promise
+  * @param {object} cscope cscope parameter
   ###
   # called from the scopes
   setLoaded: (cscope) ->
@@ -63,13 +60,12 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
   * @ngdoc method
   * @name setLoadedAndShowError
   * @methodOf BB.Services:Loading
-  * @param {object} scope The scope
-  * @param {object} err The error message
-  * @param {string} error_string  The error string
   * @description
-  * Set set loaded and show error in according of the scope, err and error_string parameters
+  * Sets some error messages depending on the error type.
   *
-  * @returns {Promise} Returned a promise
+  * @param {object} scope Scope object
+  * @param {object} err Error message
+  * @param {string} error_string  Error string
   ###
   setLoadedAndShowError: (scope, err, error_string) ->
     $log.warn(err, error_string)
@@ -85,9 +81,10 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
   * @ngdoc method
   * @name areScopesLoaded
   * @methodOf BB.Services:Loading
-  * @param {array} cscope The cscope 
   * @description
-  * Verify if the scope are loaded or not, in according of the cscope parameter
+  * Checks all the child scopes to see if they are fully loaded.
+  *
+  * @param {object} cscope cscope parameter
   *
   * @returns {boolean} Returns false of true
   ###
@@ -107,11 +104,12 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
   * @ngdoc method
   * @name notLoaded
   * @methodOf BB.Services:Loading
-  * @param {array} cscope The cscope 
-  * @description
-  * Set scope not loaded
   *
-  * @returns {object} Returns the scope not loaded
+  * @description
+  * Makes the loading icon appear.
+  *
+  * @param {object} cscope cscope parameter
+  *
   ###
   #set scope not loaded...
   notLoaded: (cscope) ->

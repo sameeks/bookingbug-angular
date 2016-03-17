@@ -1,26 +1,23 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:BBWidget
 *
 * @description
 * Representation of an BBWidget Object
+* .<br/> Widget class contains handy functions and variables used in building and displaying a booking widget.
 *
-* @property {integer} uid The unique id of the widget
+* @property {number} uid Widget unique id
 * @property {string} page_suffix Widget page suffix
-* @property {array} steps The widget steps
-* @property {array} allSteps The all steps of the widget
-* @property {object} item_defaults Widget defaults item
-* @property {boolean} Checks if widget using basket or not
-* @property {boolean} confirmCheckout Checks if widget confirm is checkout or not
-* @property {boolean} isAdm,in Verify if user is admin
-* @property {string} payment_status The payment status
+* @property {array} steps Wdget steps
+* @property {array} allSteps Widget all steps
+* @property {object} item_defaults Widget item defaults
+* @property {boolean} Checks if it's using the basket or not
+* @property {boolean} confirmCheckout Confirms the checkout
+* @property {boolean} isAdm Checks if a user is amin
+* @property {string} payment_status Payment status
 ####
-
-
-# This class contrains handy functions and variables used in building and displaying a booking widget
 
 angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope) ->
 
@@ -46,9 +43,11 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name pageURL
     * @methodOf BB.Models:BBWidget
     * @description
-    * Get page url in according of route
+    * Gets the page url using the route parameter.
     *
-    * @returns {object} The returned the page url
+    * @param {string} route Page route
+    *
+    * @returns {string} Page url
     ###
     pageURL: (route) ->
       route + '.html'
@@ -58,9 +57,11 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name updateRoute
     * @methodOf BB.Models:BBWidget
     * @description
-    * Update page route
+    * Updates the page route.
     *
-    * @returns {string} The returned the url
+    * @param {string} page page parameter
+    *
+    * @returns {string} url
     ###
     updateRoute: (page) ->
       return if !@routeFormat
@@ -74,7 +75,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
         event_group = @convertToDashSnakeCase(@current_item.event_group.name) if @current_item.event_group
         date = @current_item.date.date.toISODate() if @current_item.date
         time = @current_item.time.time if @current_item.time
-        company = @convertToDashSnakeCase(@current_item.company.name) if @current_item.company 
+        company = @convertToDashSnakeCase(@current_item.company.name) if @current_item.company
       prms = angular.copy(@route_values) if @route_values
       prms ||= {}
       angular.extend(prms,{page: page, company: company, service: service_name, event_group: event_group, date: date, time: time})
@@ -89,9 +90,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name setRouteFormat
     * @methodOf BB.Models:BBWidget
     * @description
-    * Set route format
+    * Sets the route format.
     *
-    * @returns {object} The returned the match
+    * @param {string} route Page route
     ###
     setRouteFormat: (route) ->
       @routeFormat = route
@@ -125,9 +126,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name matchURLToStep
     * @methodOf BB.Models:BBWidget
     * @description
-    * Match url to step
+    * Match url to step.
     *
-    * @returns {object} The returned null
+    * @returns {number} Will return the step number if the step url exists and matches the path.
     ###
     matchURLToStep: () ->
       return null if !@routeFormat
@@ -143,9 +144,11 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name convertToDashSnakeCase
     * @methodOf BB.Models:BBWidget
     * @description
-    * Convert to dash snake case in according of str parameter
+    * Converts a string to dash snake case.
     *
-    * @returns {string} The returned str
+    * @param {string} str str parameter
+    *
+    * @returns {string} converted string
     ###
     convertToDashSnakeCase: (str) ->
         str = str.toLowerCase();
@@ -163,7 +166,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name recordCurrentPage
     * @methodOf BB.Models:BBWidget
     * @description
-    * Record current page
+    * Records the current page.
     *
     * @returns {string} The returned record step
     ###
@@ -203,16 +206,19 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name recordCurrentPage
     * @methodOf BB.Models:BBWidget
     * @description
-    * Record step in according of step and title parameters. Calculate percentile complete
+    * Records the step using the step and title parameters.
     *
-    * @returns {boolean} If is the last step or not 
+    * @param {number} step step number
+    * @param {string} title title parameter
+    *
+    * @returns {boolean} If is the last step or not
     ###
     recordStep: (step, title) =>
       @steps[step-1] = {
         url: @updateRoute(@current_page),
-        current_item: @current_item.getStep(), 
-        page: @current_page, 
-        number: step, 
+        current_item: @current_item.getStep(),
+        page: @current_page,
+        number: step,
         title: title,
         stacked_length: @stacked_items.length
         }
@@ -238,9 +244,11 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name calculatePercentageComplete
     * @methodOf BB.Models:BBWidget
     * @description
-    * Calculate percentage complete in according of step number parameter
+    * If the step_number and allSteps are not empty this function  will return their ratio in percentage.
     *
-    * @returns {integer} The returned percentage complete 
+    * @param {number} step_number Step number
+    *
+    * @returns {number} The returned percentage complete
     ###
     calculatePercentageComplete: (step_number) =>
       @percentage_complete = if step_number && @allSteps then step_number / @allSteps.length * 100 else 0
@@ -250,7 +258,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name setRoute
     * @methodOf BB.Models:BBWidget
     * @description
-    * Set route data
+    * Sets the route data.
+    *
+    * @param {array} rdata radata array
     *
     * @returns {object} The returned route set
     ###
@@ -276,7 +286,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name setBasicRoute
     * @methodOf BB.Models:BBWidget
     * @description
-    * Set basic route in according of routes parameter
+    * Sets the basic route using routes parameter.
+    *
+    * @param {array} routes routes array
     *
     * @returns {object} The returned route set
     ###
@@ -295,7 +307,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @description
     * Wait for route
     *
-    * @returns {object}  The returned waiting route
+    * @returns {promise} A promise
     ###
     waitForRoutes: () =>
       if !@$wait_for_routing
@@ -310,9 +322,11 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name stackItem
     * @methodOf BB.Models:BBWidget
     * @description
-    * Push item in stacked items in according of item parameter
+    * Pushes an item in stacked_items array.
     *
-    * @returns {array} The returned sorted stacked items
+    * @param {object} item item object
+    *
+    * @returns {promise} A promise that on success will sort the stacked items
     ###
     stackItem: (item) =>
       @stacked_items.push(item)
@@ -323,9 +337,11 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name setStackedItems
     * @methodOf BB.Models:BBWidget
     * @description
-    * Set stacket items in according of items parameter
+    * Sets the stacket items using items parameter.
     *
-    * @returns {array} The returned sorted stacked items
+    * @param {array} items items array
+    *
+    * @returns {promise} A promise that on success will sort the stacked items
     ###
     setStackedItems: (items) =>
       @stacked_items = items
@@ -336,7 +352,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name sortStackedItems
     * @methodOf BB.Models:BBWidget
     * @description
-    * Sort stacked items
+    * Sorts the  stacked items.
     *
     * @returns {array} The returned sorted stacked items
     ###
@@ -364,7 +380,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name deleteStackedItem
     * @methodOf BB.Models:BBWidget
     * @description
-    * Delete stacked item in according of item parameter
+    * Deletes an stacked item.
+    *
+    * @param {object} item Item to be deleted
     *
     * @returns {array} The returned stacked items
     ###
@@ -379,7 +397,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name removeItemFromStack
     * @methodOf BB.Models:BBWidget
     * @description
-    * Remove item from stack in according of item parameter
+    * Removes an item from stack.
+    *
+    * @param {object} item Item to be removed
     *
     * @returns {array} The returned stacked items
     ###
@@ -391,7 +411,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name deleteStackedItemByService
     * @methodOf BB.Models:BBWidget
     * @description
-    * Delete stacked item bu service in according of item parameter
+    * Deletes the  stacked item by service.
+    *
+    * @param {object} item Item to be deleted
     *
     * @returns {array} The returned stacked items
     ###
@@ -406,9 +428,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name emptyStackedItems
     * @methodOf BB.Models:BBWidget
     * @description
-    * Empty stacked items
+    * Empties the stacked items.
     *
-    * @returns {array} The returned stacked items empty
+    * @returns {array} Empty stacked items array
     ###
     emptyStackedItems: () =>
       @stacked_items = []
@@ -418,9 +440,8 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name pushStackToBasket
     * @methodOf BB.Models:BBWidget
     * @description
-    * Push stack to basket
+    * Pushes the stack to basket and will delete all the items from it after that.
     *
-    * @returns {array} The returned stacked items
     ###
     pushStackToBasket: () ->
       @basket ||= new new BBModel.Basket(null, @)
@@ -433,9 +454,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name totalStackedItemsDuration
     * @methodOf BB.Models:BBWidget
     * @description
-    * Total stacked items duration
+    * Gets the total stacked items duration.
     *
-    * @returns {array} The returned duration
+    * @returns {number} Duration
     ###
     totalStackedItemsDuration: ->
       duration = 0
@@ -448,9 +469,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name clearStackedItemsDateTime
     * @methodOf BB.Models:BBWidget
     * @description
-    * Clear stacked items date and time
+    * Clears the  stacked items date and time.
     *
-    * @returns {array} The returned item with date and time clear
+    * @returns {array} The returned items with date and time cleared
     ###
     clearStackedItemsDateTime: ->
       for item in @stacked_items
@@ -461,9 +482,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name clearAddress
     * @methodOf BB.Models:BBWidget
     * @description
-    * Clear address
-    *
-    * @returns {string} The returned address clear
+    * Clears the address.
     ###
     # Address methods
     clearAddress: () =>

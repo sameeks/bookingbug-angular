@@ -18,7 +18,10 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @name titleLookup
     * @methodOf BB.Services:Alert
     * @description
-    * Title look up in according of type and title parameters
+    * Sets the appropriate title.
+    *
+    * @param {string} type Title type
+    * @param {string} title Title
     *
     * @returns {boolean} The returned title
   ###
@@ -35,7 +38,7 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     add: (type, {title, msg, persist}) ->
       persist = true if !persist?
       $rootScope.alerts = []
-      alert = 
+      alert =
         type: type
         title: titleLookup(type, title)
         msg: msg
@@ -47,15 +50,14 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
         , 3000
       $rootScope.$broadcast "alert:raised"
 
-
     ###**
     * @ngdoc method
     * @name closeAlert
     * @methodOf BB.Services:Alert
     * @description
-    * Close alert
+    * Closes the alert.
     *
-    * @returns {boolean}  close alert
+    * @returns {array} alerts Alerts array without the alert that was closed
     ###
     closeAlert: (alert) ->
       @closeAlertIdx $rootScope.alerts.indexOf(alert)
@@ -65,9 +67,9 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @name closeAlertIdx
     * @methodOf BB.Services:Alert
     * @description
-    * Close alert index
+    * Closes the alert using the alert index.
     *
-    * @returns {boolean}  The returned close alert index
+    * @returns {array} alerts Alerts array without the alert that was closed
     ###
     closeAlertIdx: (index) ->
       $rootScope.alerts.splice index, 1
@@ -77,9 +79,9 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @name clear
     * @methodOf BB.Services:Alert
     * @description
-    * Clear alert message
+    * Resets the alerts array.
     *
-    * @returns {array} Newly clear array of the alert messages
+    * @returns {array} Empty array
     ###
     clear: ->
       $rootScope.alerts = []
@@ -91,7 +93,9 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @description
     * Error alert
     *
-    * @returns {array} The returned error alert
+    * @param {object} alert alert object
+    *
+    * @returns {array} Error alert
     ###
     error: (alert) ->
       return if !alert
@@ -104,7 +108,9 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @description
     * Danger alert
     *
-    * @returns {array} The returned danger alert
+    * @param {object} alert alert object
+    *
+    * @returns {array} Dnger alert
     ###
     danger: (alert) ->
       return if !alert
@@ -117,7 +123,9 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @description
     * Info alert
     *
-    * @returns {array} The returned info alert
+    * @param {object} alert alert object
+    *
+    * @returns {array} Info alert
     ###
     info: (alert) ->
       return if !alert
@@ -129,6 +137,8 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @methodOf BB.Services:Alert
     * @description
     * Warning alert
+    *
+    * @param {object} alert alert object
     *
     * @returns {array} The returned warning alert
     ###
@@ -143,7 +153,9 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @description
     * Raise alert
     *
-    * @returns {array} The returned raise alert
+    * @param {object} alert alert object
+    *
+    * @returns {array} Raise alert
     ###
     raise: (key) ->
       return if !key
