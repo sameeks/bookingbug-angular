@@ -43,17 +43,26 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         header:
           left: 'today,prev,next'
           center: 'title'
-          right: 'timelineDay,agendaWeek,month'
+          right: 'timelineDay,timelineDayThirty,agendaWeek,month'
         defaultView: 'timelineDay'
         views:
           agendaWeek:
             slotDuration: $scope.options.slotDuration || "00:05"
+            buttonText: 'Week'
           month:
             eventLimit: 5
+            buttonText: 'Month'
           timelineDay:
             slotDuration: $scope.options.slotDuration || "00:05"
             eventOverlap: false
-            slotWidth: 44
+            slotWidth: 25
+            buttonText: 'Day (5m)'  
+          timelineDayThirty: 
+            type: 'timeline'
+            slotDuration: "00:30"
+            eventOverlap: false
+            slotWidth: 25
+            buttonText: 'Day (30m)'  
         resourceLabelText: 'Staff'
         selectable: true
         resources: (callback) ->
@@ -69,10 +78,10 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         eventClick: (event, jsEvent, view) ->
           $scope.editBooking(event)
         resourceRender: (resource, resourceTDs, dataTDs) ->
-          for resourceTD in resourceTDs
-            resourceTD.style.height = "44px"
-            resourceTD.style.verticalAlign = "middle"
-          dataTD.style.height = "44px" for dataTD in dataTDs
+          # for resourceTD in resourceTDs
+          #   resourceTD.style.height = "25px"
+          #   resourceTD.style.verticalAlign = "middle"
+          # dataTD.style.height = "25px" for dataTD in dataTDs
         eventRender: (event, element) ->
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
@@ -80,8 +89,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             element.css('color', service.textColor)
             element.css('border-color', service.textColor)
         eventAfterRender: (event, elements, view) ->
-          if view.type == "timelineDay"
-            element.style.height = "27px" for element in elements
+          # if view.type == "timelineDay"
+            # element.style.height = "15px" for element in elements
           elements.draggable()
         select: (start, end, jsEvent, view, resource) ->
           view.calendar.unselect()
