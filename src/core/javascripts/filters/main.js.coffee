@@ -361,3 +361,9 @@ app.filter 'key_translate', ->
     remove_punctuations = upper_case.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"")
     add_underscore = remove_punctuations.replace(/\ /g, "_")
     return add_underscore
+
+app.filter 'clearTimezone', ->
+  (val, offset) ->
+    if val != null and val.length > 19
+      return val.substring(0, 19)
+    val    
