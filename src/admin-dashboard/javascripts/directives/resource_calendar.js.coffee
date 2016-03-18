@@ -57,12 +57,14 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             eventOverlap: false
             slotWidth: 25
             buttonText: 'Day (5m)'  
+            resourceAreaWidth: '18%'
           timelineDayThirty: 
             type: 'timeline'
             slotDuration: "00:30"
             eventOverlap: false
             slotWidth: 25
             buttonText: 'Day (30m)'  
+            resourceAreaWidth: '18%'
         resourceLabelText: 'Staff'
         selectable: true
         resources: (callback) ->
