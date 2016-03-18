@@ -1,5 +1,3 @@
-
-
 ###**
 * @ngdoc service
 * @name BB.Models:Wallet

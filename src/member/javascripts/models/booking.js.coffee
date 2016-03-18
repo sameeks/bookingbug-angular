@@ -7,10 +7,9 @@
 * @description
 * Representation of an Booking Object
 *
-* @property {integer} price The booking price
-* @property {integer} paid Booking paid
+* @property {number} Booking price
+* @property {number} paid Booking paid
 ####
-
 
 angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel, BaseModel, $bbug, MemberBookingService) ->
 
@@ -29,9 +28,9 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     * @name getGroup
     * @methodOf BB.Models:MemberBooking
     * @description
-    * Get group
+    * Gets the group.
     *
-    * @returns {object} Returns the group
+    * @returns {object} Group
     ###
     getGroup: () ->
       return @group if @group
@@ -45,9 +44,9 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     * @name getColour
     * @methodOf BB.Models:MemberBooking
     * @description
-    * Get colour
+    * Gets the colour.
     *
-    * @returns {string} Returns the colour
+    * @returns {string} colour
     ###
     getColour: () ->
       if @getGroup()
@@ -60,9 +59,9 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     * @name getCompany
     * @methodOf BB.Models:MemberBooking
     * @description
-    * Get company
+    * Gets the company.
     *
-    * @returns {object} Returns the company
+    * @returns {object} Company
     ###
     getCompany: () ->
       return @company if @company
@@ -76,9 +75,9 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     * @name getAnswers
     * @methodOf BB.Models:MemberBooking
     * @description
-    * Get answers
+    * Gets the answers.
     *
-    * @returns {Promise} Returns a promise which resolve the answers
+    * @returns {Promise} A promise that on success will return an array with answer objects
     ###
     getAnswers: () ->
       defer = $q.defer()
@@ -96,9 +95,9 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     * @name printed_price
     * @methodOf BB.Models:MemberBooking
     * @description
-    * Print price for the booking
+    * Shows the price of a booking formatted for print.
     *
-    * @returns {integer} Returns the price of the booking
+    * @returns {number} Booking price
     ###
     printed_price: () ->
       return "£" + @price if parseFloat(@price) % 1 == 0
@@ -109,9 +108,9 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     * @name getMemberPromise
     * @methodOf BB.Models:MemberBooking
     * @description
-    * Get member promise
+    * Gets the member.
     *
-    * @returns {Promise} Returns a promise which resolve the member promise
+    * @returns {Promise} A promise that on success will return a member object
     ###
     getMemberPromise: () =>
       defer = $q.defer()
@@ -133,7 +132,10 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     * @name query
     * @methodOf BB.Models:MemberBooking
     * @description
-    * Static function that loads an array of bookings from a company object
+    * Static function that loads an array of bookings from a company object.
+    *
+    * @param {object} member member parameter
+    * @param {object} paramas paramas parameter
     *
     * @returns {Promise} A returned promise
     ###
@@ -145,7 +147,9 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     * @name update
     * @methodOf BB.Models:MemberBooking
     * @description
-    * Static function that updates an array of bookings from a company object
+    * Static function that updates an array of bookings from a company object.
+    *
+    * @param {object} booking booking parameter
     *
     * @returns {Promise} A returned promise
     ###

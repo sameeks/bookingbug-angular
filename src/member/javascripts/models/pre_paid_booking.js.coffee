@@ -1,5 +1,4 @@
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:MemberPrePaidBooking
@@ -8,22 +7,23 @@
 * Representation of an PrePaidBooking Object
 ####
 
-
 angular.module('BB.Models').factory "Member.PrePaidBookingModel", ($q, BBModel, BaseModel, MemberPrePaidBookingService) ->
 
   class Member_PrePaidBooking extends BaseModel
     constructor: (data) ->
       super(data)
-    
+
     ###**
     * @ngdoc method
     * @name checkValidity
     * @methodOf BB.Models:MemberPrePaidBooking
     * @param {object} event The event
     * @description
-    * Check if pre paid booking is valid or not in according of the event parameter
+    * Checks if the pre paid booking is valid or not using the event parameter
     *
-    * @returns {boolean} Returns true or false
+    * @param {object} event parameter
+    *
+    * @returns {boolean} True or false
     ###
     checkValidity: (event) ->
       if @service_id && event.service_id && @service_id != event.service_id
@@ -41,6 +41,9 @@ angular.module('BB.Models').factory "Member.PrePaidBookingModel", ($q, BBModel, 
     * @methodOf BB.Models:MemberPrePaidBooking
     * @description
     * Static function that loads an array of pre paid bookings from a company object
+    *
+    * @param {object} member parameter
+    * @param {params} params parameter
     *
     * @returns {Promise} A returned promise
     ###
