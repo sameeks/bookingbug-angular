@@ -1,16 +1,20 @@
 angular.module('BB.Services').provider("ie8HttpBackend", function ie8HttpBackendProvider() {
 
   this.$get = ['$browser', '$window', '$document', '$sniffer', function ie8HttpBackendFactory($browser, $window, $document, $sniffer) {
-    var msie = $sniffer.msie
-    var params = [$browser, createXhr, $browser.defer, $window.angular.callbacks, $document[0], $window.location.protocol.replace(':', ''), msie];
+    var params = [$browser, createXhr, $browser.defer, $window.angular.callbacks, $document[0], $window.location.protocol.replace(':', ''), $sniffer];
     var param4ie = params.concat([createHttpBackend.apply(this,params)]);
     return (ieCreateHttpBackend && ieCreateHttpBackend.apply(this, param4ie)) ||
       createHttpBackend.apply(this, params);
   }];
 
 
-  function ieCreateHttpBackend ($browser, XHR, $browserDefer, callbacks, rawDocument, locationProtocol, msie, xhr) {
-    if (!msie || msie > 9) return null;
+  function ieCreateHttpBackend ($browser, XHR, $browserDefer, callbacks, rawDocument, locationProtocol, sniffer, xhr) {
+
+    if ((sniffer.msie && sniffer.msie <= 9) || (sniffer.webkit && sniffer.webkit < 537)) {
+      //console.log("create backend");
+    } else {
+      return null;
+    }
  
     var getHostName = function (path) {
       var a = document.createElement('a');

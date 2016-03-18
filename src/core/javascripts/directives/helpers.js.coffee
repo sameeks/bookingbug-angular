@@ -368,27 +368,6 @@ app.directive 'bbCapitaliseFirstLetter', () ->
         ngModel.$render()
         return
 
-# Deprecate - see below
-app.directive 'apiUrl', ($rootScope, $compile, $sniffer, $timeout, $window) ->
-  restrict: 'A'
-  replace: true
-  compile: (tElem, tAttrs) ->
-    pre: (scope, element, attrs) ->
-      $rootScope.bb ||= {}
-      $rootScope.bb.api_url = attrs.apiUrl
-      url = document.createElement('a')
-      url.href = attrs.apiUrl
-      if ($sniffer.msie && $sniffer.msie < 10) && url.host != $window.location.host
-        if url.protocol[url.protocol.length - 1] == ':'
-          src = "#{url.protocol}//#{url.host}/ClientProxy.html"
-        else
-          src = "#{url.protocol}://#{url.host}/ClientProxy.html"
-        $rootScope.iframe_proxy_ready = false
-        $window.iframeLoaded = () ->
-          $rootScope.iframe_proxy_ready = true
-          $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
-        $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;' onload='iframeLoaded()'></iframe>") scope, (cloned, scope) =>
-          element.append(cloned)
 
 
 app.directive 'bbApiUrl', ($rootScope, $compile, $sniffer, $timeout, $window, $location) ->
@@ -401,17 +380,19 @@ app.directive 'bbApiUrl', ($rootScope, $compile, $sniffer, $timeout, $window, $l
       $rootScope.bb.api_url = scope.apiUrl
       url = document.createElement('a')
       url.href = scope.apiUrl
-      if $sniffer.msie && $sniffer.msie < 10
+
+      if ($sniffer.msie and $sniffer.msie <= 9) or ($sniffer.webkit and $sniffer.webkit < 537)
         unless url.host == '' || url.host == $location.host() || url.host == "#{$location.host()}:#{$location.port()}"
           if url.protocol[url.protocol.length - 1] == ':'
             src = "#{url.protocol}//#{url.host}/ClientProxy.html"
           else
             src = "#{url.protocol}://#{url.host}/ClientProxy.html"
           $rootScope.iframe_proxy_ready = false
-          $window.iframeLoaded = () ->
-            $rootScope.iframe_proxy_ready = true
-            $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
-          $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;' onload='iframeLoaded()'></iframe>") scope, (cloned, scope) =>
+
+          $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;'></iframe>") scope, (cloned, scope) =>
+            cloned.bind "load", ->
+              $rootScope.iframe_proxy_ready = true
+              $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
             element.append(cloned)
 
 

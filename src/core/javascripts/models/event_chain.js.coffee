@@ -43,7 +43,7 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
     * @returns {array} If maximum number of bookings is equal with 1 and not have an ticket sets
     ###
     isSingleBooking: () ->
-      return @max_num_bookings == 1 && !@$has('ticket_sets')
+      return @max_num_bookings == 1 and !@$has('ticket_sets')
 
     ###**
     * @ngdoc method

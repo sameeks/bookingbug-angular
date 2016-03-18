@@ -20,8 +20,8 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
   class Event extends BaseModel
     
     constructor: (data) ->
-      super(data)
-      @getDate()
+      super(data)     
+      @date = moment.parseZone(@datetime)   
       @time = new BBModel.TimeSlot(time: DateTimeUlititiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
       @date_unix = @date.unix()
@@ -77,33 +77,6 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
     ###**
     * @ngdoc method
-    * @name getDate
-    * @methodOf BB.Models:Event
-    * @description
-    * Get the date of the event
-    *
-    * @returns {date} The returned date
-    ###
-    getDate: () ->
-      return @date if @date
-      @date = moment(@_data.datetime)
-      return @date
-
-    ###**
-    * @ngdoc method
-    * @name dateString
-    * @methodOf BB.Models:Event
-    * @description
-    * Get date string of the event
-    *
-    * @returns {string} The returned date string
-    ###
-    dateString: (str) ->
-      date = @date()
-      if date then date.format(str)
-
-    ###**
-    * @ngdoc method
     * @name getDuration
     * @methodOf BB.Models:Event
     * @description
@@ -120,73 +93,6 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           @duration = chain.duration
           defer.resolve(@duration)
       defer.promise
-
-
-    ###**
-    * @ngdoc method
-    * @name getDescription
-    * @methodOf BB.Models:Event
-    * @description
-    * Get duration of the event
-    *
-    * @returns {object} The returned description
-    ###
-    getDescription: () ->
-      @getChain().description
-
-    ###**
-    * @ngdoc method
-    * @name getColour
-    * @methodOf BB.Models:Event
-    * @description
-    * Get the colour 
-    *
-    * @returns {string} The returned colour
-    ### 
-    getColour: () ->
-      if @getGroup()
-        return @getGroup().colour
-      else
-        return "#FFFFFF"
-
-
-    ###**
-    * @ngdoc method
-    * @name getPounds
-    * @methodOf BB.Models:Event
-    * @description
-    * Get pounts 
-    *
-    * @returns {integer} The returned pounts
-    ###  
-    getPounds: () ->
-      if @chain
-        Math.floor(@getPrice()).toFixed(0)
-
-    ###**
-    * @ngdoc method
-    * @name getPrice
-    * @methodOf BB.Models:Event
-    * @description
-    * Get price 
-    *
-    * @returns {integer} The returned price
-    ### 
-    getPrice: () ->
-      0
-
-    ###**
-    * @ngdoc method
-    * @name getPence
-    * @methodOf BB.Models:Event
-    * @description
-    * Get price 
-    *
-    * @returns {integer} The returned pence
-    ### 
-    getPence: () ->
-      if @chain
-        (@getPrice() % 1).toFixed(2)[-2..-1]
 
     ###**
     * @ngdoc method
@@ -332,4 +238,3 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           ticket.price = 0
         else
           ticket.price = ticket.old_price
-
