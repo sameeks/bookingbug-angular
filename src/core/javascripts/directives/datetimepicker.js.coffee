@@ -32,4 +32,3 @@ angular.module('BB.Directives').directive 'datetimepicker', ()->
   scope:
     schemaValidate: '='
   templateUrl: 'datetimepicker.html'
-
