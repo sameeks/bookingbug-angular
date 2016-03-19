@@ -40,6 +40,11 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   $scope.options = $scope.$eval($attrs.bbTimes) or {}
 
   $rootScope.connection_started.then =>
+    
+    if $scope.bb.current_item.requested_date
+      $scope.setDate($scope.bb.current_item.requested_date)
+      $scope.bb.current_item.setDate($scope.selected_day)
+    
     $scope.loadDay()
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -224,6 +229,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   ###
   $scope.loadDay = () =>
 
+#// <-------------------------->
     if $scope.data_source && $scope.data_source.days_link  || $scope.item_link_source
       if !$scope.selected_date && $scope.data_source && $scope.data_source.date
         $scope.selected_date = $scope.data_source.date.date
