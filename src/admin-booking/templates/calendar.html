@@ -1,15 +1,13 @@
 <div calendar-admin>
   <div class="col-md-12 section1">
-    <div class="col-md-12 cal-header page-header">
-      <h2>Resolve Conflict</h2>
-    </div>
     <div class="row">
       <div class="col-md-12 cal-subheader panel">
-        <p> A conflict has been detected, please choose the next available slots below or select book anyway. This is normally caused by one or both of the following reasons.
+        <p> A booking at an unavailable has been detected, please choose the next available slots below or select book anyway. This is normally caused by one or both of the following reasons.
         <p>
+        <i class="fa fa-arrow-right"></i>&nbsp; The Person/resource is not currently available at that time<br>
+        <i class="fa fa-arrow-right"></i>&nbsp; The time selected does not matched the normal time step for that service<br>
         <i class="fa fa-arrow-right"></i>&nbsp; The Person/resource is booked already<br>
-        <i class="fa fa-arrow-right"></i>&nbsp; The service duration is longer than the time available
-        <a class="col-md-2 col-md-offset-10" ng-click="switchWeekView()">{{name_switch}}</a>
+        <button class="btn btn-sm btn-default col-md-2 col-md-offset-10" ng-click="switchWeekView()">{{name_switch}}</button>
       </div>
     </div>
   </div>
@@ -139,28 +137,35 @@
           </div>
       </div>
       <ul>
-          <li class="bb-confirmation-summary-item" ng-show="bb.current_item.company">
+          <li class="bb-confirmation-summary-item col-sm-12" ng-if="bb.current_item.service.name">
             <div class="bb-summary-label">
               <i class="fa fa-map-marker pull-left"></i>
             </div>
-            <div class="bb-summary-value"><span>{{bb.current_item.company.name}}</span>
+            <div class="bb-summary-value"><span>{{bb.current_item.service.name}}</span>
             </div>
           </li>
-          <li class="bb-confirmation-summary-item" ng-show="bb.current_item.resource">
+          <li class="bb-confirmation-summary-item col-sm-12" ng-if="bb.current_item.resource.name">
             <div class="bb-summary-label">
               <i class="fa fa-user pull-left"></i>
             </div>
             <div class="bb-summary-value"><span>{{bb.current_item.resource.name}}</span>
             </div>
           </li>
-          <li class="bb-confirmation-summary-item" ng-show="bb.current_item.date">
+          <li class="bb-confirmation-summary-item col-sm-12" ng-if="bb.current_item.person.name">
+            <div class="bb-summary-label">
+              <i class="fa fa-user pull-left"></i>
+            </div>
+            <div class="bb-summary-value"><span>{{bb.current_item.person.name}}</span>
+            </div>
+          </li>
+          <li class="bb-confirmation-summary-item col-sm-12" ng-if="bb.current_item.date">
             <div class="bb-summary-label">
               <i class="fa fa-calendar pull-left"></i>
             </div>
             <div class="bb-summary-value"><span>{{bb.current_item.date.date | datetime: 'dddd MMMM Do':false}}</span>
             </div>
           </li>
-          <li class="bb-confirmation-summary-item" ng-show="bb.current_item.time">
+          <li class="bb-confirmation-summary-item col-sm-12" ng-if="bb.current_item.time">
             <div class="bb-summary-label">
               <i class="fa fa-clock-o pull-right"></i>
             </div>
@@ -168,7 +173,7 @@
               <span>{{bb.current_item.start_datetime() | datetime: 'h[:]mma':false }}</span>
             </div>
           </li>
-          <li class="bb-confirmation-summary-item" ng-show="bb.current_item.duration">
+          <li class="bb-confirmation-summary-item col-sm-12" ng-if="bb.current_item.duration">
             <div class="bb-summary-label">
               <i class="fa fa-clock-o pull-left"></i>
             </div>
@@ -176,7 +181,7 @@
               <span>{{bb.current_item.duration | time_period}}</span>
             </div>
           </li>
-          <li class="bb-confirmation-summary-item" ng-show="bb.current_item.price">
+          <li class="bb-confirmation-summary-item col-sm-12" ng-if="bb.current_item.price">
             <div class="bb-summary-label">
               Price:
             </div>
@@ -194,42 +199,57 @@
   <div bb-page ng-if="!week_view">
   <!--   <div bb-people></div> -->
 
-    <div bb-time-ranges class="calendar" ng-init="init({selected_day: today})">
+  <div bb-time-ranges="{selected_day: today}" class="calendar" ng-show="days">
 
-      <div class="month-header hidden-xs">
-        <h2 class="month-heading">{{pretty_month_title('MMMM', 'YYYY')}}</h2>
+    <div class="month-header hidden-xs">
+      <h2 class="month-heading">{{pretty_month_title('MMMM', 'YYYY')}}</h2>
+    </div>
+
+    <div class="visible-xs" class="form-group">
+      <label class="sr-only" for="date">Date</label>
+      <div class="input-group date-picker">
+        <!-- date format: http://docs.angularjs.org/api/ng.filter:date" -->
+        <input type="text" ng-model="selected_date" class="form-control"
+          bb-datepicker-popup="DD/MM/YYYY"
+          datepicker-popup="dd/MM/yyyy"
+          is-open="opened"
+          min-date="today"
+          on-date-change="selectedDateChanged()"
+          datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
+          show-weeks="false"
+          show-button-bar="false"
+          ng-readonly="true"
+          name="date"
+          id="date"
+          placeholder="&mdash; Any Date &mdash;"/>        
+        <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
+          <button class="btn btn-default" type="submit" title="Pick date">
+            <span class="fa fa-calendar-o"></span>
+          </button>
+        </span>
       </div>
+    </div>
 
-      <div class="date-select text-block visible-xs">
-        <div class="input-group date-picker">
-          <!-- date format: http://docs.angularjs.org/api/ng.filter:date -->
-          <input type="text" ng-model="selected_date" class="form-control"
-            bb-datepicker-popup="DD/MM/YYYY"
-            on-date-change="selectedDateChanged()"
-            datepicker-popup="dd/MM/yyyy"
-            is-open="opened"
-            min-date="today"
-            datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-            show-weeks="false"
-            show-button-bar="false"
-            ng-readonly="false"/>
-          <span class="input-group-btn" ng-click="$event.preventDefault();$event.stopPropagation();opened=true">
-            <button class="btn btn-default" type="submit" title="Search"><span class="glyphicon glyphicon-calendar"></span></button>
-          </span>
-        </div>
-      </div>
-
+    <div class="cal-custom">
       <ul class="week row">
 
         <li class="day navigation hidden-xs">
-          <button type="button" class="btn btn-icon" ng-click="subtract('days', subtract_length)" ng-disabled="!is_subtract_valid || !isLoaded">
+          <button type="button" class="btn btn-icon visible-xs" ng-click="subtract('days', 1)" ng-disabled="!is_subtract_valid || !isLoaded">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </button>
+          <button type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 3)" ng-disabled="!is_subtract_valid || !isLoaded">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </button>
+          <button type="button" class="btn btn-icon visible-md" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </button>
+          <button type="button" class="btn btn-icon visible-lg" ng-click="subtract('days', 7)" ng-disabled="!is_subtract_valid || !isLoaded">
             <span class="glyphicon glyphicon-chevron-left"></span>
           </button>
           <span ng-show="!is_subtract_valid || !isLoaded">&nbsp;</span>
         </li>
 
-        <li class="day" ng-repeat="day in days" ng-class="{'hidden-xs': day.hide, 'past': day.date.isBefore(moment(),'day')}">
-
+        <li class="day cal-col-{{$index + 1}}" ng-repeat="day in days" ng-class="{'past': day.date.isBefore(moment(),'day')}">
           <div class="day-header row">
             <span class="col-xs-2 previous visible-xs">
               <button type="button" class="btn btn-icon" ng-click="subtract('days', 1)" ng-disabled="day.date.isSame(moment(),'day') || !isLoaded">
@@ -237,12 +257,13 @@
               </button>
             </span>
             <h3 class="day-heading col-xs-8 col-sm-12">
-              <span class="visible-xs">{{day.date | datetime: "ddd":false}} <strong>{{day.date | datetime: "D":false}} </strong>{{day.date | datetime: "MMM":false}}</span>
-              <span class="hidden-xs">{{day.date | datetime: "ddd":false}} <strong>{{day.date | datetime: "D":false}} </strong></span>
+              <span class="visible-xs">{{day.date | datetime: "ddd"}} <strong>{{day.date | datetime: "D"}} </strong>{{day.date | datetime: "MMM"}}</span>
+              <span class="hidden-xs">{{day.date | datetime: "ddd"}} <strong>{{day.date | datetime: "D"}} </strong></span>
             </h3>
             <span class="col-xs-2 next visible-xs">
-              <button type="button" class="btn btn-icon" ng-click="add('days', 1)" ng-disabled="!isLoaded">
+              <button type="button" class="btn btn-icon visible-xs pull-right" ng-click="add('days', 1)" ng-disabled="!isLoaded">
                 <span class="glyphicon glyphicon-chevron-right"></span>
+              </button>
               </button>
             </span>
           </div>
@@ -253,76 +274,15 @@
             <div accordion close-others="false">
 
               <!-- MORNING TIME RANGE -->
-              <div bb-accordian-range-group="{range: [0, 720], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
-                <div accordion-group is-open="is_open" ng-disabled="!has_availability && !is_selected" ng-class="{'expanded': is_open, 'selected': is_selected}">
-
-                  <div accordion-heading>
-                    <div class="accordian-header">
-                      <span class="period-label">
-                        <span ng-show="has_availability && !is_open">+</span>
-                        <span ng-show="has_availability && is_open">-</span>
-                        Morning
-                      </span>
-                      <span ng-hide="is_selected || (is_open && has_availability)">{{accordian_slots.length}} available</span>
-                      <span class="selected-time" ng-show="is_selected && !is_open">{{selected_slot.time_12}}</span>
-                    </div>
-                  </div>
-
-                  <ul class="time-slots" ng-if="has_availability">
-                    <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(day, slot)" ng-repeat="slot in accordian_slots">
-                      <span>{{slot.time_12}}</span>
-                    </li>
-                  </ul>
-
-                </div>
+              <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
               </div>
 
               <!-- AFTERNOON TIME RANGE -->
-              <div bb-accordian-range-group="{range: [720, 1020], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
-                <div accordion-group is-open="is_open" ng-disabled="!has_availability && !is_selected" ng-class="{'expanded': is_open, 'selected': is_selected}">
-
-                  <div accordion-heading>
-                    <div class="accordian-header">
-                        <span class="period-label">
-                        <span ng-show="has_availability && !is_open">+</span>
-                        <span ng-show="has_availability && is_open">-</span>
-                        Afternoon
-                      </span>
-                      <span ng-hide="is_selected || (is_open && has_availability)">{{accordian_slots.length}} available</span>
-                      <span class="selected-time" ng-show="is_selected && !is_open">{{selected_slot.time_12}}</span>
-                    </div>
-                  </div>
-
-                  <ul class="time-slots">
-                    <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(day, slot)" ng-repeat="slot in accordian_slots">
-                      <span>{{slot.time_12}}</span>
-                    </li>
-                  </ul>
-                </div>
+              <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
               </div>
 
               <!-- EVENING TIME RANGE -->
-              <div bb-accordian-range-group="{range: [1020, 1440], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index); setRange(1020, 1440)" class="accordian-group">
-                <div accordion-group is-open="is_open" ng-disabled="!has_availability && !is_selected" ng-class="{'expanded': is_open, 'selected': is_selected}">
-
-                  <div accordion-heading>
-                    <div class="accordian-header">
-                      <span class="period-label">
-                        <span ng-show="has_availability && !is_open">+</span>
-                        <span ng-show="has_availability && is_open">-</span>
-                        Evening
-                      </span>
-                      <span ng-hide="is_selected || (is_open && has_availability)">{{accordian_slots.length}} available</span>
-                      <span class="selected-time" ng-show="is_selected && !is_open">{{selected_slot.time_12}}</span>
-                    </div>
-                  </div>
-
-                  <ul class="time-slots">
-                    <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(day, slot)" ng-repeat="slot in accordian_slots">
-                      <span>{{slot.time_12}}</span>
-                    </li>
-                  </ul>
-                </div>
+              <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
               </div>
 
             </div>
@@ -332,14 +292,21 @@
         </li>
 
         <li class="day navigation hidden-xs">
-          <button type="button" class="btn btn-icon" ng-disabled="!isLoaded" ng-click="add('weeks', 1)">
+          <button type="button" class="btn btn-icon visible-sm" ng-click="add('days', 3)" ng-disabled="!isLoaded">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </button>
+          <button type="button" class="btn btn-icon visible-md" ng-click="add('days', 5)" ng-disabled="!isLoaded">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </button>
+          <button type="button" class="btn btn-icon visible-lg" ng-click="add('days', 7)" ng-disabled="!isLoaded">
             <span class="glyphicon glyphicon-chevron-right"></span>
           </button>
         </li>
-
       </ul>
-
     </div>
+
+  </div>
+
 
   </div>
 
@@ -349,7 +316,7 @@
     </div>
     <div class="cal-modal">
       <div class="col-md-6 col-md-offset-4">
-        <button type="button" class="btn btn-danger btn-block" ng-click="popupBooking()">Book Anyway!</button>
+        <button type="button" class="btn btn-danger btn-block" ng-click="bookAnyway()">Book Anyway!</button>
       </div>
     </div>
   </div>

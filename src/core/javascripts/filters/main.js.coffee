@@ -301,11 +301,11 @@ app.filter 'datetime', (SettingsService) ->
     if date and moment.isMoment(date)
       datestrings =
         datetime_us : 'MM/DD/YYYY, h:mm a'
-        datetime_uk : 'DD/MM/YYYY, HH:MM'
+        datetime_uk : 'DD/MM/YYYY, HH:mm'
         date_us : 'MM/DD/YYYY'
         date_uk : 'DD/MM/YYYY'
         time_us : 'h:mm a'
-        time_uk : 'HH:MM'
+        time_uk : 'HH:mm'
       cc = SettingsService.getCountryCode()
       cc = "uk" if cc != "us"
       if format and format.match(/(date(time_uk|time_us|_us|_uk)*|(time(_uk|_us)*))/)

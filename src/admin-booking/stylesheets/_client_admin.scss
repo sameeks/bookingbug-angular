@@ -1,3 +1,32 @@
+.bb-admin-client {
+
+  .page-intro {
+    text-align: center;
+  }
+  .section-title {
+    text-align: center;
+  }
+
+  text-align: left;
+
+  .bb-button-headers {
+    margin-bottom: 70px;
+    border-bottom: 1px solid #999;
+    button {
+      border-color: #bbb;
+      border-radius: 15px;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;  
+    }
+  }
+
+  tfoot {
+    display: none;
+  }
+
+}
+
+
 // client_admin
 .admin-typehead{
   padding-left: 5px;
@@ -10,12 +39,21 @@
   margin-bottom: 20px;
   padding-left: 15px;
   padding-right: 15px;
-}
-.admin-dropdown-wrapper{
   .dropdown-menu{
     max-height: 500px;
     overflow: auto;
+
+    .typeahead_match {
+      border-bottom: 1px solid #999;
+      padding:3px;
+      &:hover {
+        background-color: #CCC;
+        cursor: pointer;
+      }
+    }
   }
+
+
 }
 .typehead-client-wrapper{
   border: 1px solid $secondary-border-color;

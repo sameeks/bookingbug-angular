@@ -5,7 +5,7 @@
   <div class="row">
     <div class="admin-typehead-wrapper">
       <div class="input-group">
-      <input class="admin-typehead input-lg form-control" ng-model="typehead_result" placeholder="Search Email or Name" typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" typeahead-on-select="typeHeadResults($item, $modal, $label)">
+      <input class="admin-typehead input form-control" ng-model="typehead_result" placeholder="Search Email or Name" typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typeahead.html" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" typeahead-on-select="typeHeadResults($item, $modal, $label)">
       <span class="input-group-btn">
         <button class="btn btn-primary form-control-btn btn-search-anyway" ng-click="getClients(null, typehead_result)"><i class="fa fa-search"></i></button>
       </span>
@@ -56,21 +56,44 @@
     <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
       <label for="first_name" class="control-label col-sm-4">First Name*:</label>
       <div class="col-sm-5">
-        <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control"/>
+        <input type="text" name="first_name" id="first_name" ng-model="client.first_name" class="form-control" ng-required="!client.email && !client.last_name"/>
+      </div>
+        <div class="col-sm-offset-4 messages">
+         <div class="error-message" ng-show="client_form.first_name.$invalid && client_form.submitted">
+           Please enter a first name
+         </div>
+        </div>
+        <div class="col-sm-offset-4 messages">
+         <div ng-hide="client_form.first_name.$invalid && client_form.submitted">
+           *Please enter a first and last name or email address
+        </div>
+
       </div>
     </div>
 
     <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
-      <label for="last_name" class="control-label col-sm-4">Last Name*:</label>
+      <label for="last_name" class="control-label col-sm-4">Last Name:</label>
       <div class="col-sm-5">
-        <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
+        <input type="text" name="last_name" id="last_name" ng-required="!client.first_name && !client.email" ng-model="client.last_name" class="form-control"/>
+      </div>
+
+      <div class="col-sm-offset-4 messages">
+        <div class="error-message" ng-show="client_form.last_name.$invalid && client_form.submitted">
+          Please enter a last name
+        </div>
       </div>
     </div>
 
     <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
       <label for="email" class="control-label col-sm-4">E-mail*:</label>
       <div class="col-sm-5">
-        <input type="email" name="email" id="email" required ng-model="client.email" class="form-control"/>
+        <input type="email" name="email" id="email" ng-required="!client.first_name && !client.last_name" ng-model="client.email" class="form-control"/>
+      </div>
+
+      <div class="col-sm-offset-4 messages">
+        <div class="error-message" ng-show="client_form.email.$invalid && client_form.submitted">       
+          Please enter a valid email address
+        </div>        
       </div>
     </div>
 
@@ -78,6 +101,13 @@
       <label for="mobile" class="control-label col-sm-4">Mobile:</label>
       <div class="col-sm-5">
         <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control"/>
+      </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': client_form.phone.$invalid && client_form.submitted}">
+      <label for="phone" class="control-label col-sm-4">Phone:</label>
+      <div class="col-sm-5">
+        <input type="text" name="phone" id="phone" ng-model="client.phone" class="form-control"/>
       </div>
     </div>
 
@@ -124,9 +154,7 @@
     </div>
 
     <div bb-client-details ng-show="client_details.hasQuestions">
-
-  <!--           <div class="form-group" ng-repeat="question in client_details.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{ 'check': question.detail_type == 'check', 'has-error': client_form['q' + question.id].$invalid && client_form.submitted}"> -->
-  <!--           <div class="form-group" ng-repeat="question in client_details.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{ 'check': question.detail_type == 'check', 'has-error': question.required && client_form.submitted}">
+      <div class="form-group" ng-repeat="question in client_details.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{ 'check': question.detail_type == 'check', 'has-error': question.required && client_form.submitted}">
         <label ng-hide="question.detail_type == 'check'" for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-show="question.required">*</span></label>
         <div ng-show="question.detail_type == 'check'" class="col-sm-4 hidden-xs">&nbsp;</div>
         <div class="col-sm-5">
@@ -138,7 +166,7 @@
           </div>
         </div>
       </div>
-  -->
+  
     </div>
 
   </div>
