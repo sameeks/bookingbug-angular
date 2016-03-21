@@ -104,6 +104,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
                 date: start.format('YYYY-MM-DD')
                 time: (start.hour() * 60 + start.minute())
                 person: rid
+              first_page: "quick_pick"
               company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
