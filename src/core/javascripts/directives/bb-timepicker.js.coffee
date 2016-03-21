@@ -6,11 +6,15 @@ angular.module('BB.Directives').directive 'bbTimepicker', [ ->
     scope:
       datetime: '='
       showMeridian: '='
+      minuteStep: '=?'
     controller: [
       '$scope'
       '$filter'
       '$timeout'
       ($scope, $filter, $timeout) ->
+        # Default minuteStep value
+        $scope.minuteStep = 10 if not $scope.minuteStep or typeof $scope.minuteStep == 'undefined'
+
         # Watch for changes from the datepicker
         $scope.$watch 'datetime', (newValue, oldValue) ->
           if newValue.toString() != oldValue.toString() and newValue?
