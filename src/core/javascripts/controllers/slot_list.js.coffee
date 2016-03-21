@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbTimeSlots
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of time slots for the currently in scope company
+* Loads a list of time slots for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,14 +15,13 @@
 * scope: true
 * </pre>
 *
-* @property {array} booking_item The booking item 
-* @property {date} start_date The start date
-* @property {date} end_date The end date
-* @property {array} slots The slots
-* @property {object} validator The validator service - see {@link BB.Services:Validator validator Service}
+* @property {array} booking_item Booking item
+* @property {date} start_date Start date
+* @property {date} end_date End date
+* @property {array} slots Slots
+* @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
 * 
 ####
-
 
 angular.module('BB.Directives').directive 'bbTimeSlots', () ->
   restrict: 'AE'
@@ -68,9 +65,9 @@ angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
   * @name selectItem
   * @methodOf BB.Directives:bbTimeSlots
   * @description
-  * Select an item into the current booking journey and route on to the next page dpending on the current page control
+  * Sets an item into the current booking journey and route on to the next page depending on the current page control.
   *
-  * @param {object} slot The slot from list
+  * @param {object} slot Slot from list
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (slot, route) ->
@@ -81,4 +78,3 @@ angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
       setItem(slot)
       $scope.decideNextPage(route)
       true
-

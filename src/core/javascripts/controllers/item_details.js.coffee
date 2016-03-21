@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbItemDetails
@@ -8,7 +7,6 @@
 * @scope true
 *
 * @description
-*
 * Loads a list of item details for the currently in scope company
 *
 * <pre>
@@ -18,13 +16,12 @@
 * </pre>
 *
 * @property {array} item An array of all item details
-* @property {array} product The product
-* @property {array} booking The booking
-* @property {array} upload_progress The item upload progress
-* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @property {array} product Product
+* @property {array} booking Booking
+* @property {array} upload_progress Item upload progress
+* @property {object} validator Validation Service - see {@link BB.Services:Validator Validation Service}
+* @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
 ###
-
 
 angular.module('BB.Directives').directive 'bbItemDetails', () ->
   restrict: 'AE'
@@ -48,7 +45,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
   $scope.suppress_basket_update = $attrs.bbSuppressBasketUpdate?
   $scope.item_details_id = $scope.$eval $attrs.bbSuppressBasketUpdate
- 
+
   # if instructed to suppress basket updates (i.e. when the directive is invoked multiple times
   # on the same page), create a form store for each instance of the directive
   if $scope.suppress_basket_update
@@ -57,7 +54,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     FormDataStoreService.init 'ItemDetails', $scope, ['item_details']
 
   # populate object with values stored in the question store. addAnswersByName()
-  # is good for populating a single object. for dynamic question/answers see
+  # is good for populating a single object, for dynamic question/answers see
   # addDynamicAnswersByName()
   QuestionService.addAnswersByName($scope.client, [
     'first_name'
@@ -79,9 +76,9 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name loadItem
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Load item in according of item parameter
+  * Load item according to item parameter.
   *
-  * @param {array} item The item loaded
+  * @param {array} item Loaded item
   ###
   $scope.loadItem = (item) ->
 
@@ -115,16 +112,16 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
         $scope.setLoaded $scope
         
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-    
+
 
   ###**
   * @ngdoc method
   * @name setItemDetails
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Set item details in according of details parameter
+  * Sets item details according to details parameter.
   *
-  * @param {array} details The details parameter
+  * @param {array} details Details parameter
   ###
   # compare the questions stored in the data store to the new questions and if
   # any of them match then copy the answer value. we're doing it like this as
@@ -158,7 +155,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name recalc_price
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Recalculate item price in function of quantity
+  * Recalculate item price based on quantity.
   ###
   $scope.recalc_price = ->
     qprice = $scope.item_details.questionPrice($scope.item.getQty())
@@ -171,9 +168,9 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name confirm
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Confirm the question
+  * Confirm the question.
   *
-  * @param {object} form The form where question are introduced
+  * @param {object} form Form where question are introduced
   * @param {string=} route A specific route to load
   ###
   $scope.confirm = (form, route) ->
@@ -186,7 +183,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
     return true if $scope.$parent.$has_page_control
 
-   
+
     if $scope.item.ready
       $scope.notLoaded $scope
       $scope.addItemToBasket().then () ->
@@ -202,7 +199,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name setReady
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
+  * Sets page section as ready. - see {@link BB.Directives:bbPage Page Control}
   ###
   $scope.setReady = () =>
     $scope.item.setAskedQuestions()
@@ -216,7 +213,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name confirm_move
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Confirm move question information has been correctly entered here
+  * Confirm move question information has been correctly entered here.
   *
   * @param {string=} route A specific route to load
   ###
@@ -240,17 +237,17 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       else
         PurchaseBookingService.update($scope.item).then (booking) ->
           b = new BBModel.Purchase.Booking(booking)
-    
+
           if $scope.bb.purchase
             for oldb, _i in $scope.bb.purchase.bookings
               $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
-        
+
           $scope.setLoaded $scope
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
 
-          # TODO remove whedn translate enabled by default
+          # TODO remove when translate enabled by default
           if SettingsService.isInternationalizatonEnabled()
             $translate('MOVE_BOOKINGS_MSG', { datetime:b.datetime.format('LLLL') }).then (translated_text) ->
               AlertService.add("info", { msg: translated_text })
@@ -268,7 +265,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name openTermsAndConditions
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Display terms and conditions view
+  * Displays terms and conditions view.
   ###
   $scope.openTermsAndConditions = () ->
     modalInstance = $modal.open(
@@ -281,9 +278,9 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name getQuestion
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Get question by id
+  * Get question by id.
   *
-  * @param {integer} id The id of the question
+  * @param {integer} id Question id
   ###
   $scope.getQuestion = (id) ->
     for question in $scope.item_details.questions
@@ -296,7 +293,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name updateItem
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Update item
+  * Update item.
   ###
   $scope.updateItem = () ->
     $scope.item.setAskedQuestions()
@@ -323,7 +320,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name editItem
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Edit item
+  * Edit item.
   ###
   $scope.editItem = () ->
     $scope.item_details_updated = false
@@ -333,10 +330,10 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @name onFileSelect
   * @methodOf BB.Directives:bbItemDetails
   * @description
-  * Select file to upload in according of item, $file and existing parameters
+  * Select file to upload according to item, $file and existing parameters.
   *
-  * @param {array} item The item for uploading
-  * @param {boolean} existing Checks if file item exist or not
+  * @param {array} item Item for uploading
+  * @param {boolean} existing Checks if the item file exists or not
   ###
   $scope.onFileSelect = (item, $file, existing) ->
     $scope.upload_progress = 0
@@ -345,13 +342,13 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     att_id = existing if existing
     method = "POST"
     method = "PUT" if att_id
-    url = item.$href('add_attachment') 
+    url = item.$href('add_attachment')
     $scope.upload = $upload.upload({
       url: url,
       method: method,
       data: {attachment_id: att_id},
-      file: file, 
-    }).progress (evt) -> 
+      file: file,
+    }).progress (evt) ->
       if $scope.upload_progress < 100
         $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
     .success (data, status, headers, config) ->

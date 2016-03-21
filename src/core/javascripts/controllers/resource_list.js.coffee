@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbResources
@@ -8,7 +7,7 @@
 * @scope true
 *
 * @description
-* Loads a list of resources for the currently in scope company
+* Loads a list of resources for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -16,15 +15,15 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbResources   A hash of options
-* @param {object}  bbItem   A specific basket item to reference
-* @param {boolean}  waitForService   Wait for a the service to be loaded before loading Resources
-* @param {boolean}  hideDisabled   In an admin widget, disabled resources are shown by default, you can choose to hide disabled resources
-* @property {array} booking_item The current basket item being referred to
-* @property {array} all_resources An array of all resources
-* @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a services or person
+* @param {hash} bbResources Hash options
+* @param {object} bbItem A specific basket reference item
+* @param {boolean} waitForService Wait for a service to be loaded before loading Resources
+* @param {boolean} hideDisabled In admin widget, disabled resources that are shown by default, you can choose to hide disabled resources
+* @property {array} booking_item Current basket item being referred to
+* @property {array} all_resources Resources array
+* @property {array} bookable_items Array of all BookableItems - used if the current_item has already selected a services or person
 * @property {array} bookable_resources An array of Resources - used if the current_item has already selected a services or person
-* @property {resource} resource The currectly selected resource
+* @property {resource} resource Currectly selected resource
 * @example
 *  <example module="BB"> 
 *    <file name="index.html">
@@ -37,7 +36,7 @@
 *     </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
 * 
 ####
@@ -71,7 +70,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
     if $scope.options.wait_for_service
       unless ($scope.bb.steps && $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
         if !$scope.booking_item.service || $scope.booking_item.service == $scope.change_watch_item
-          # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
+          # if there's no service - we have to wait for one to be set - so we're kind of done loading for now!
           if !$scope.booking_item.service
             loader.setLoaded()
           return
@@ -84,7 +83,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
       if $scope.booking_item.group  # check they're part of any currently selected group
         resources = resources.filter (x) -> !x.group_id || x.group_id == $scope.booking_item.group
       if $scope.options.hide_disabled
-        # this might happen to ahve been an admin api call which would include disabled resources - and we migth to hide them
+        # this might happen to have been an admin api call which would include disabled resources - and we migth to hide them
         resources = resources.filter (x) -> !x.disabled && !x.deleted
       $scope.all_resources = resources
 
@@ -106,7 +105,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
         $q.all(promises).then (res) =>
           resources = []
           if $scope.options.hide_disabled
-            # this might happen to ahve been an admin api call which would include disabled resources - and we migth to hide them
+            # this might happen to have been an admin api call which would include disabled resources - and we migth to hide them
             items = items.filter (x) -> !x.item? || (!x.item.disabled && !x.item.deleted)
 
           for i in items
@@ -139,9 +138,9 @@ angular.module('BB.Controllers').controller 'ResourceList',
   * @name getItemFromResource
   * @methodOf BB.Directives:bbResources
   * @description
-  * Get item from resource in according of resource parameter
+  * Get item from resource according to resource parameter.
   *
-  * @param {object} resource The resource 
+  * @param {object} resource Resource
   ###
   getItemFromResource = (resource) =>
     if (resource instanceof  ResourceModel)
@@ -156,11 +155,11 @@ angular.module('BB.Controllers').controller 'ResourceList',
   * @name selectItem
   * @methodOf BB.Directives:bbResources
   * @description
-  * Select an item into the current booking journey and route on to the next page dpending on the current page control
+  * Select an item into the current booking journey and route to the next page depending on the current page control.
   *
-  * @param {array} item The Service or BookableItem to select
+  * @param {array} item Service or BookableItem to select
   * @param {string=} route A specific route to load
-  * @param {string=} skip_step The skip_step has been set to false
+  * @param {string=} skip_step Skip_step has been set to false
   ###
   $scope.selectItem = (item, route, skip_step = false) =>
     if $scope.$parent.$has_page_control
@@ -189,7 +188,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
     * @name setReady
     * @methodOf BB.Directives:bbResources
     * @description
-    * Set this page section as ready
+    * Sets page section as ready.
     ###
    $scope.setReady = () =>
     if $scope.resource

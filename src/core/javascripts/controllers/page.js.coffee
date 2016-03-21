@@ -39,13 +39,12 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService) ->
   * @name checkReady
   * @methodOf BB.Directives:bbPage
   * @description
-  * Check the page ready
+  * Checks if the page is ready.
   ###
   $scope.checkReady = () ->
     ready_list = isScopeReady($scope)
     checkread = $q.defer()
     $scope.$checkingReady = checkread.promise;
-
 
     ready_list = ready_list.filter (v) -> !((typeof v == 'boolean') && v)
 
@@ -71,7 +70,7 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService) ->
   * @name routeReady
   * @methodOf BB.Directives:bbPage
   * @description
-  * Check the page route ready
+  * Check if the page route is ready.
   *
   * @param {string=} route A specific route to load
   ###
@@ -90,8 +89,7 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService) ->
 * @scope true
 *
 * @description
-*
-* Loads a list of page for the currently in scope company
+* Loads a list of page for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -112,4 +110,3 @@ angular.module('BB.Directives').directive 'bbPage', () ->
 
 angular.module('BB.Controllers').controller 'PageController', BBBasicPageCtrl
 angular.module('BB.Services').value "PageControllerService", BBBasicPageCtrl
-

@@ -1,5 +1,4 @@
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbPurchase
@@ -8,7 +7,7 @@
 *
 * @description
 *
-* Loads a list of purchase in scope company
+* Loads a list of purchase in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -16,12 +15,11 @@
 * scope: true
 * </pre>
 *
-* @param {hash} bbPurchase A hash of options
-* @property {boolean} is_waitlist The purchase is on wait list or not
-* @property {boolean} make_payment The purchase payment made or not
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @param {hash} bbPurchase Hash options
+* @property {boolean} is_waitlist Purchase is on wait list or not
+* @property {boolean} make_payment Purchase payment made or not
+* @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbPurchase', () ->
   restrict: 'AE'
@@ -40,12 +38,12 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   
   ###**
   * @ngdoc method
-  * @name setItemLinkSource
+  * @name setPurchaseCompany
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Set purchase company in according of the company parameter
+  * Set purchase company according to company parameter.
   *
-  * @param {object} company The company
+  * @param {object} company Company
   ###
   setPurchaseCompany = (company) ->
     $scope.bb.company_id = company.id
@@ -61,9 +59,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name failMsg
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Display a fail message
+  * Display a fail message.
   *
-  * @param {object} failMsg The fail message
+  * @param {object} failMsg Fail message
   ###
   failMsg = () ->
     if $scope.fail_msg
@@ -76,13 +74,13 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name init
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Initializate the purchase in according of the options parameter
+  * Initializate the purchase according to options parameter.
   *
-  * @param {array} options The options of purchase
+  * @param {array} options Options of purchase
   ###
   $scope.init = (options) ->
     options = {} if !options
-    
+
     $scope.notLoaded $scope
     $scope.move_route = options.move_route if options.move_route
     $scope.move_all = options.move_all if options.move_all
@@ -111,9 +109,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name load
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Load the purchase in according of the id parameter
+  * Load purchase according to id parameter.
   *
-  * @param {integer} id The id of purchase
+  * @param {integer} id Purchase id
   ###
   $scope.load = (id) ->
     $scope.notLoaded $scope
@@ -177,9 +175,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name checkIfMoveBooking
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Checks if move booking in according of the bookings parameter
+  * Checks move bookings according to bookings parameter.
   *
-  * @param {array} bookings An array that contains bookings
+  * @param {array} bookings Bookings array
   ###
   checkIfMoveBooking = (bookings) ->
     matches = /^.*(?:\?|&)move_booking=(.*?)(?:&|$)/.exec($location.absUrl())
@@ -193,9 +191,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name checkIfWaitlistBookings
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Checks if wait list bookings in according of the bookings parameter
+  * Checks wait list bookings according to bookings parameter.
   *
-  * @param {array} bookings An array that contains bookings
+  * @param {array} bookings Bookings array
   ###
   checkIfWaitlistBookings = (bookings) ->
     $scope.waitlist_bookings = (booking for booking in bookings when (booking.on_waitlist && booking.settings.sent_waitlist == 1))
@@ -205,7 +203,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name loginRequired
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Login required
+  * Login required.
   ###
   loginRequired = () =>
     if !$scope.bb.login_required
@@ -216,7 +214,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name getCompanyID
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Get the company id
+  * Get the company id.
   ###
   getCompanyID = () ->
     matches = /^.*(?:\?|&)company_id=(.*?)(?:&|$)/.exec($location.absUrl())
@@ -228,7 +226,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name getPurchaseID
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Get the purchase id
+  * Get the purchase id.
   ###
   getPurchaseID = () ->
     matches = /^.*(?:\?|&)id=(.*?)(?:&|$)/.exec($location.absUrl())
@@ -236,9 +234,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       matches = /^.*print_purchase\/(.*?)(?:\?|$)/.exec($location.absUrl())
     unless matches
       matches = /^.*print_purchase_jl\/(.*?)(?:\?|$)/.exec($location.absUrl())
-   
+
     if matches
-      id = matches[1] 
+      id = matches[1]
     else
       id = QueryStringService('ref') if QueryStringService('ref')
     id = QueryStringService('booking_id')  if QueryStringService('booking_id')
@@ -246,11 +244,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
   $scope.move = (booking, route, options = {}) ->
-    
+
     route ||= $scope.move_route
     if $scope.move_all
       return $scope.moveAll(route, options)
-    
+
     $scope.notLoaded $scope
     $scope.initWidget({company_id: booking.company_id, no_route: true})
     $timeout () =>
@@ -279,12 +277,12 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name moveAll
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Potentially move all of the items in booking - move the whole lot to a basket
+  * Potentially move all items in booking - move the whole lot to a basket.
   *
-  * @param {string} route The route
-  * @param {object} options The options
+  * @param {string} route Route
+  * @param {object} options Options
   ###
-  # potentially move all of the items in booking - move the whole lot to a basket
+  # potentially move all items in booking - move the whole lot to a basket
   $scope.moveAll = ( route, options = {}) ->
     route ||= $scope.move_route
     $scope.notLoaded $scope
@@ -309,7 +307,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
           new_item.move_done = false
           Array::push.apply proms, new_item.promises
           $scope.bb.basket.addItem(new_item)
-        $scope.bb.sortStackedItems() 
+        $scope.bb.sortStackedItems()
 
         $scope.setBasketItem($scope.bb.basket.items[0])
         $q.all(proms).then () ->
@@ -320,15 +318,15 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
           failMsg()
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-  
+
   ###**
   * @ngdoc method
   * @name bookWaitlistItem
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * The book wait list item
+  * Book wait list items.
   *
-  * @param {array} booking The booking 
+  * @param {array} booking Booking
   ###
   $scope.bookWaitlistItem = (booking) ->
     $scope.notLoaded $scope
@@ -355,9 +353,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name delete
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Delete a single booking
+  * Delete a single booking.
   *
-  * @param {array} booking The booking 
+  * @param {array} booking Booking 
   ###
   # delete a single booking
   $scope.delete = (booking) ->
@@ -377,11 +375,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name delete_all
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Delete all booking
+  * Delete all bookings.
   *
-  * @param {array} booking The booking 
+  * @param {array} booking Booking
   ###
-  # delete all bookings assoicated to the purchase
+  # delete all bookings associated to the purchase
   $scope.delete_all = () ->
     modalInstance = $modal.open
       templateUrl: $scope.getPartial "_cancel_modal"
@@ -400,9 +398,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name isMovable
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Verify if booking is movable
+  * Verify if booking is movable.
   *
-  * @param {array} booking The booking 
+  * @param {array} booking Booking
   ###
   $scope.isMovable = (booking) ->
     if booking.min_cancellation_time
@@ -414,11 +412,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name onFileSelect
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Select an file
+  * Select a file.
   *
-  * @param {array} booking The booking
-  * @param {object} $file The file 
-  * @param {object} existing The existing 
+  * @param {array} booking Booking
+  * @param {object} $file File 
+  * @param {object} existing Existing
   ###
   $scope.onFileSelect = (booking, $file, existing) ->
     $scope.upload_progress = 0
@@ -434,11 +432,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       # withCredentials: true, 
       data: {att_id: att_id},
       file: file, # or list of files: $files for html5 only
-      # set the file formData name ('Content-Desposition'). Default is 'file' 
+      # set the file formData name ('Content-Desposition'). Default is 'file'
       # fileFormDataName: myFile, //or a list of names for multiple files (html5).
       # customize how data is added to formData. See #40#issuecomment-28612000 for sample code
       # formDataAppender: function(formData, key, val){}
-    }).progress (evt) -> 
+    }).progress (evt) ->
       if $scope.upload_progress < 100
         $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
     .success (data, status, headers, config) ->
@@ -447,11 +445,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       if data && data.attachments && booking
         booking.attachments = data.attachments
     #.error(...)
-    #.then(success, error, progress); 
+    #.then(success, error, progress);
     #.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
 
     # alternative way of uploading, send the file binary with the file's content-type.
-    #   Could be used to upload files to CouchDB, imgur, etc... html5 FileReader is needed. 
+    #   Could be used to upload files to CouchDB, imgur, etc... html5 FileReader is needed.
     #   It could also be used to monitor the progress of a normal http post/put request with large data*/
     # $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
 
@@ -460,9 +458,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name createBasketItem
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Create a basket item
+  * Create a basket item.
   *
-  * @param {array} booking The booking
+  * @param {array} booking Booking
   ###
   $scope.createBasketItem = (booking) ->
     item = new BBModel.BasketItem(booking, $scope.bb)
@@ -474,11 +472,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   * @name checkAnswer
   * @methodOf BB.Directives:bbPurchase
   * @description
-  * Check answer
+  * Check answer.
   *
-  * @param {boolean} answer The answer
-  * @param {string} answer The answer
-  * @param {number} answer The answer
+  * @param {boolean} answer Answer
+  * @param {string} answer Answer
+  * @param {number} answer Answer
   ###
   $scope.checkAnswer = (answer) ->
     typeof answer.value == 'boolean' || typeof answer.value == 'string' || typeof answer.value == "number"

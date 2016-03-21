@@ -290,7 +290,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         prom.then () ->
 
       delete @earliest_time
-      delete @event_id  # when changing the service - we ahve to clear any pre-set event
+      delete @event_id  # when changing the service - we have to clear any pre-set event
 
     ###**
     * @ngdoc method
@@ -530,7 +530,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @setService(@service) if @service
         @setResource(@resource, false) if @resource && !@anyResource()
         if @event_id
-          delete @event_id  # when changing the person - we ahve to clear any pre-set event
+          delete @event_id  # when changing the person - we have to clear any pre-set event
           @setResource(null) if @resource && @defaults && @defaults.merge_resources  # if a resources has been automatically set - clear it
       else
         @person = per
@@ -541,7 +541,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         if per.$has('book')
           @book_link = per
         if @event_id && @$has('person') && @$href('person') != @person.self
-          delete @event_id  # when changing the person - we ahve to clear any pre-set event
+          delete @event_id  # when changing the person - we have to clear any pre-set event
           @setResource(null) if @resource && @defaults && @defaults.merge_resources  # if a resources has been automatically set - clear it
 
     ###**
@@ -567,7 +567,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @setService(@service) if @service
         @setPerson(@person, false) if @person && !@anyPerson()
         if @event_id
-          delete @event_id  # when changing the resource - we ahve to clear any pre-set event
+          delete @event_id  # when changing the resource - we have to clear any pre-set event
           @setPerson(null) if @person && @defaults && @defaults.merge_people # if a person has been automatically set - clear it
       else
         @resource = res
@@ -578,7 +578,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         if res.$has('book')
           @book_link = res
         if @event_id && @$has('resource') && @$href('resource') != @resource.self
-          delete @event_id  # when changing the resource - we ahve to clear any pre-set event
+          delete @event_id  # when changing the resource - we have to clear any pre-set event
           @setPerson(null) if @person && @defaults && @defaults.merge_people # if a person has been automatically set - clear it
 
     ###**

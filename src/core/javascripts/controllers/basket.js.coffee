@@ -7,7 +7,7 @@
 * @scope true
 *
 * @description
-* Loads a list of mini basket for the currently in scope company
+* Loads a list of mini basket for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -15,9 +15,8 @@
 * scope: true
 * </pre>
 *
-* @property {boolean} setUsingBasket Set using basket  or not
+* @property {boolean} setUsingBasket Set using basket or not
 ####
-
 
 angular.module('BB.Directives').directive 'bbMiniBasket', () ->
   restrict: 'AE'
@@ -39,11 +38,11 @@ angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, 
   * @name basketDescribe
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Basked describe in according of basket length 
+  * Basked describe according to basket length.
   *
   * @param {string} nothing Nothing to describe
-  * @param {string} single The single describe
-  * @param {string} plural The plural describe
+  * @param {string} single Single describe
+  * @param {string} plural Plural describe
   ###
   $scope.basketDescribe = (nothing, single, plural) =>
     if !$scope.bb.basket || $scope.bb.basket.length() == 0
@@ -52,7 +51,6 @@ angular.module('BB.Controllers').controller 'MiniBasket', ($scope,  $rootScope, 
       single
     else
       plural.replace("$0", $scope.bb.basket.length())
-
 
 
 angular.module('BB.Directives').directive 'bbBasketList', () ->
@@ -69,7 +67,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') && $scope.bb.company_settings.has_wallets && $scope.client.valid() && LoginService.isLoggedIn() && LoginService.member().id == $scope.client.id
 
   # bb.basket.options - added 10-11-2015 @16:19
-  # For ex. bb-basket-list="{requires_deal: true}" 
+  # For ex. bb-basket-list="{requires_deal: true}"
   $scope.bb.basket.setSettings($scope.$eval $attrs.bbBasketList or {})
 
   $scope.$watch 'basket', (newVal, oldVal) =>
@@ -81,7 +79,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   * @name addAnother
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Add another basket item in acording of route parameter
+  * Add another basket item acording to route parameter.
   *
   * @param {string} route A route of the added another item
   ###
@@ -96,13 +94,13 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   * @name checkout
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Reset the basket to the last item whereas the curren_item is not complete and should not be in the basket and that way,
+  * Reset the basket to the last item whereas the curent_item is not complete and should not be in the basket and that way,
   * we can proceed to checkout instead of hard-coding it on the html page.
   *
   * @param {string} route A route of the added another item
   ###
   $scope.checkout = (route) =>
-    # Reset the basket to the last item whereas the curren_item is not complete and should not be in the basket and that way, we can proceed to checkout instead of hard-coding it on the html page.
+    # Reset the basket to the last item whereas the curent_item is not complete and should not be in the basket and that way, we can proceed to checkout instead of hard-coding it on the html page.
     $scope.setReadyToCheckout(true)
     if $scope.bb.basket.items.length > 0
       $scope.decideNextPage(route)
@@ -116,9 +114,9 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   * @name applyCoupon
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Apply the coupon of basket item in according of coupon parameter
+  * Apply basket item coupon according to parameter coupon.
   *
-  * @param {string} coupon The applied coupon
+  * @param {string} coupon Applied coupon
   ###
   $scope.applyCoupon = (coupon) =>
     AlertService.clear()
@@ -142,9 +140,9 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   * @name applyDeal
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Apply the coupon of basket item in according of deal code parameter
+  * Apply the coupon of basket item according to deal code parameter.
   *
-  * @param {string} deal code The deal code
+  * @param {string} deal code Deal code
   ###
   $scope.applyDeal = (deal_code) =>
     AlertService.clear()
@@ -159,7 +157,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
         item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
-      $scope.items = $scope.bb.basket.items     
+      $scope.items = $scope.bb.basket.items
       $scope.deal_code = null
     , (err) ->
       if err and err.data and err.data.error
@@ -171,9 +169,9 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   * @name removeDeal
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Remove the deal in according of deal code parameter
+  * Remove the deal according to deal code parameter.
   *
-  * @param {string} deal code The deal code
+  * @param {string} deal code Deal code
   ###
   $scope.removeDeal = (deal_code) =>
     params = {bb: $scope.bb, deal_code_id: deal_code.id }
@@ -189,7 +187,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
       if err and err.data and err.data.error
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
-  
+
 
   $scope.topUpWallet = () ->
     $scope.decideNextPage("basket_wallet")
@@ -200,16 +198,15 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $attrs, $root
   * @name setReady
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Set this page section as ready
+  * Sets page section as ready.
   ###
-  $scope.setReady = ->    
-    if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()     
+  $scope.setReady = ->
+    if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()
       AlertService.raise('GIFT_CERTIFICATE_REQUIRED')
-      return false   
+      return false
     if $scope.bb.basket.items.length > 0
       $scope.setReadyToCheckout(true)
       return true
     else
       AlertService.raise('EMPTY_BASKET_FOR_CHECKOUT')
       return false
-      

@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbTimeRangeStacked
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of time range stacked for the currently in scope company
+* Loads a list of time range stacked for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,19 +15,18 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbTimeRangeStacked A hash of options
-* @property {date} start_date The start date of time range list
-* @property {date} end_date The end date of time range list
-* @property {integer} available_times The available times of range list
-* @property {object} day_of_week The day of week
-* @property {object} selected_day The selected day from the multi time range list
-* @property {object} original_start_date The original start date of range list
+* @param {hash} bbTimeRangeStacked Hash options
+* @property {date} start_date Start date of time range list
+* @property {date} end_date End date of time range list
+* @property {integer} available_times Available time of range list
+* @property {object} day_of_week Day of week
+* @property {object} selected_day Selected day from the multi time range list
+* @property {object} original_start_date Original start date of range list
 * @property {object} start_at_week_start The start at week start of range list
-* @property {object} selected_slot The selected slot from multi time range list
-* @property {object} selected_date The selected date from multi time range list
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @property {object} selected_slot Selected slot from multi time range list
+* @property {object} selected_date Selected date from multi time range list
+* @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
   restrict: 'AE'
@@ -45,7 +42,7 @@ angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
 angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, DateTimeUlititiesService) ->
 
   $scope.controller = "public.controllers.TimeRangeListStacked"
- 
+
   FormDataStoreService.init 'TimeRangeListStacked', $scope, [
     'selected_slot'
     'original_start_date'
@@ -68,18 +65,18 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
 
     if $attrs.bbDayOfWeek? or ($scope.options and $scope.options.day_of_week)
       $scope.day_of_week = if $attrs.bbDayOfWeek? then $scope.$eval($attrs.bbDayOfWeek) else $scope.options.day_of_week
- 
+
     if $attrs.bbSelectedDay? or ($scope.options and $scope.options.selected_day)
-      selected_day        = if $attrs.bbSelectedDay? then moment($scope.$eval($attrs.bbSelectedDay)) else moment($scope.options.selected_day)
+      selected_day = if $attrs.bbSelectedDay? then moment($scope.$eval($attrs.bbSelectedDay)) else moment($scope.options.selected_day)
       $scope.selected_day = selected_day if moment.isMoment(selected_day)
 
     # initialise the time range
     # last selected day is set (i.e, a user has already selected a date)
     if !$scope.start_date && $scope.last_selected_date
-      if $scope.original_start_date 
+      if $scope.original_start_date
         diff = $scope.last_selected_date.diff($scope.original_start_date, 'days')
         diff = diff % $scope.time_range_length
-        diff = if diff is 0 then diff else diff + 1 
+        diff = if diff is 0 then diff else diff + 1
         start_date = $scope.last_selected_date.clone().subtract(diff, 'days')
         setTimeRange($scope.last_selected_date, start_date)
       else
@@ -105,10 +102,10 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name setTimeRange
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Set time range in according of selected_date 
+  * Set time range according to selected_date.
   *
-  * @param {date} selected_date The selected date from multi time range list
-  * @param {date} start_date The start date of range list
+  * @param {date} selected_date Selected date from multi time range list
+  * @param {date} start_date Start date of range list
   ###
   setTimeRange = (selected_date, start_date) ->
     if start_date
@@ -133,10 +130,10 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name add
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Add date
+  * Add date.
   *
-  * @param {object} amount The selected amount
-  * @param {array} type The start type
+  * @param {object} amount Selected amount
+  * @param {array} type Start type
   ###
   $scope.add = (amount, type) ->
     $scope.selected_day = moment($scope.selected_date)
@@ -153,10 +150,10 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name subtract
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Subtract in according of amount and type parameters
+  * Subtract according to amount and type parameters.
   *
-  * @param {object} amount The selected amount
-  * @param {object} type The start type
+  * @param {object} amount Selected amount
+  * @param {object} type Start type
   ###
   $scope.subtract = (amount, type) ->
     $scope.add(-amount, type)
@@ -166,7 +163,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name isSubtractValid
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Verify if the subtract is valid or not
+  * Verify if the subtract is valid or not.
   ###
   isSubtractValid = () ->
     $scope.is_subtract_valid = true
@@ -181,15 +178,15 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       $scope.subtract_string = "Prev day"
     else
       $scope.subtract_string = "Prev"
- 
+
   ###**
   * @ngdoc method
   * @name selectedDateChanged
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Called on datepicker date change
+  * Called datepicker date change.
   ###
-  # called on datepicker date change
+  # called datepicker date change
   $scope.selectedDateChanged = () ->
     setTimeRange(moment($scope.selected_date))
     $scope.selected_slot = null
@@ -200,7 +197,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name updateHideStatus
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Update the hidden status
+  * Update the hidden status.
   ###
   updateHideStatus = () ->
     for key, day of $scope.days
@@ -212,7 +209,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name isPast
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Calculate if the current earliest date is in the past - in which case we. Might want to disable going backwards
+  * Calculate if the current earliest date is in the past - in which case we. Might want to disable going backwards.
   ###
   # calculate if the current earliest date is in the past - in which case we
   # might want to disable going backwards
@@ -225,12 +222,12 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name status
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Check the status of the slot to see if it has been selected
+  * Check the slot status to see if it has selected.
   *
-  * @param {date} day The day
-  * @param {object} slot The slot of day in multi time range list
+  * @param {date} day Day
+  * @param {object} slot Slot of day in multi time range list
   ###
-  # check the status of the slot to see if it has been selected
+  # check the slot status to see if it has selected
   # NOTE: This is very costly to call from a view, please consider using ng-class
   # to access the status
   $scope.status = (day, slot) ->
@@ -244,10 +241,10 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name highlightSlot
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Check the highlight slot
+  * Check the highlight slot.
   *
-  * @param {date} day The day
-  * @param {object} slot The slot of day in multi time range list
+  * @param {date} day Day
+  * @param {object} slot Slot of day in multi time range list
   ###
   $scope.highlightSlot = (day, slot) ->
 
@@ -270,7 +267,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
             item.setTime(slot)
             slot = slot.next
             break
-   
+
       updateHideStatus()
       $rootScope.$broadcast "time:selected"
 
@@ -279,7 +276,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name loadData
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Load the time data
+  * Load the time data.
   ###
   # load the time data
   $scope.loadData = ->
@@ -350,14 +347,14 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name spliceExistingDateTimes
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Splice existing date and times
+  * Splice existing date and times.
   *
-  * @param {array} stacked_item The stacked item
-  * @param {object} slots The slots of stacked_item from the multi_time_range_list
+  * @param {array} stacked_item Stacked item
+  * @param {object} slots Slots of stacked_item from the multi_time_range_list
   ###
   spliceExistingDateTimes = (stacked_item, slots) ->
 
-    return if !stacked_item.datetime and !stacked_item.date 
+    return if !stacked_item.datetime and !stacked_item.date
     datetime = stacked_item.datetime or DateTimeUlititiesService.convertTimeSlotToMoment(stacked_item.date, stacked_item.time)
     if $scope.start_date <= datetime && $scope.end_date >= datetime
       time = DateTimeUlititiesService.convertMomentToTime(datetime)
@@ -375,7 +372,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name setEnabledSlots
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Set the enabled slots
+  * Set enabled slots.
   ###
   setEnabledSlots = () ->
 
@@ -384,7 +381,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       day_data.slots = {}
 
       if $scope.bb.stacked_items.length > 1
-          
+
           for time, slot of $scope.bb.stacked_items[0].slots[day]
 
             slot = angular.copy(slot)
@@ -420,10 +417,10 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name pretty_month_title
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Display pretty month title in according of month format and year format parameters
+  * Display pretty month title according to month format and year format parameters.
   *
-  * @param {date} month_format The month format
-  * @param {date} year_format The year format
+  * @param {date} month_format Month format
+  * @param {date} year_format Year format
   * @param {string} separator The separator is '-'
   ###
   $scope.pretty_month_title = (month_format, year_format, seperator = '-') ->
@@ -510,8 +507,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name setReady
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Set this page section as ready
+  * Sets page section as ready.
   ###
   $scope.setReady = () ->
     return $scope.confirm('', {do_not_route: true})
-

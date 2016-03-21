@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbMonthAvailability
@@ -9,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of month availability for the currently in scope company
+* Loads a list of month availability for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,12 +16,11 @@
 * scope: true
 * </pre>
 *
-* @property {string} message The message text
-* @property {string} setLoaded  Set the day list loaded
-* @property {object} setLoadedAndShowError Set loaded and show error
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @property {string} message Text message
+* @property {string} setLoaded Set list loaded day
+* @property {object} setLoadedAndShowError Set as loaded and shows error
+* @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
   restrict: 'A'
@@ -30,7 +28,7 @@ angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
   scope : true
   controller : 'DayList'
   link: (scope, element, attrs) ->
-    scope.options = scope.$eval(attrs.bbMonthAvailability) or {} 
+    scope.options = scope.$eval(attrs.bbMonthAvailability) or {}
     scope.directives = "public.DayList"
 
 angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q, BBModel, DayModel, AlertService) ->
@@ -62,9 +60,9 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name setCalType
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Set cal type in acording of type
+  * Set cal type according to type.
   *
-  * @param {array} type The type of day list
+  * @param {array} type Day list type
   ###
   $scope.setCalType = (type) =>
     $scope.type = type
@@ -74,9 +72,9 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name setDataSource
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Set data source in according of source
+  * Set data source according to source.
   *
-  * @param {string} source The source of day list
+  * @param {string} source Day list source
   ###
   $scope.setDataSource = (source) =>
     $scope.data_source = source
@@ -86,9 +84,9 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name format_date
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Format date and get current date
+  * Format date and get current date.
   *
-  * @param {date} fmt The format date
+  * @param {date} fmt Date format
   ###
   $scope.format_date = (fmt) =>
     if $scope.current_date
@@ -99,9 +97,9 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name format_start_date
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Format start date in according of fmt parameter
+  * Format start date according to fmt parameter.
   *
-  * @param {date} fmt The format date
+  * @param {date} fmt Date format
   ###
   $scope.format_start_date = (fmt) =>
     $scope.format_date(fmt)
@@ -111,9 +109,9 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name format_end_date
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Format end date in according of fmt parameter
+  * Format end date according to fmt parameter.
   *
-  * @param {date} fmt The format date
+  * @param {date} fmt Date format
   ###
   $scope.format_end_date = (fmt) =>
     if $scope.end_date
@@ -124,11 +122,11 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name selectDay
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Select day
+  * Select day.
   *
-  * @param {date} day The day
+  * @param {date} day Day
   * @param {string=} route A specific route to load
-  * @param {string} force The force
+  * @param {string} force Force
   ###
   $scope.selectDay = (day, route, force) =>
     if day.spaces == 0 && !force
@@ -145,10 +143,10 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name setMonth
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Set month
+  * Set month.
   *
-  * @param {date} month The month
-  * @param {date} year The year 
+  * @param {date} month Month
+  * @param {date} year Year
   ###
   $scope.setMonth = (month, year) =>
     $scope.current_date = moment().startOf('month').year(year).month(month-1)
@@ -160,10 +158,10 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name setWeek
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Set month
+  * Set week.
   *
-  * @param {date} week The week
-  * @param {date} year The year 
+  * @param {date} week Week
+  * @param {date} year Year
   ###
   $scope.setWeek = (week, year) =>
     $scope.current_date = moment().year(year).isoWeek(week).startOf('week')
@@ -175,10 +173,10 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name add
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Add the current date in according of type and amount parameters
+  * Add the current date according to type and amount parameters.
   *
-  * @param {string} type The type
-  * @param {string} amount The amount 
+  * @param {string} type Type
+  * @param {string} amount Amount
   ###
   $scope.add = (type, amount) =>
     $scope.current_date.add(amount, type)
@@ -189,10 +187,10 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name subtract
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Substract the current date in according of type and amount
+  * Substract the current date according to type and amount.
   *
-  * @param {string} type The type
-  * @param {string} amount The amount 
+  * @param {string} type Type
+  * @param {string} amount Amount
   ###
   $scope.subtract = (type, amount) =>
     $scope.add(type, -amount)
@@ -202,9 +200,9 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name isPast
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Calculate if the current earlist date is in the past - in which case we might want to disable going backwards 
+  * Calculate if the current earliest date is in the past - in which case we might want to disable going backwards.
   ###
-  # calculate if the current earlist date is in the past - in which case we might want to disable going backwards
+  # calculate if the current earliest date is in the past - in which case we might want to disable going backwards
   $scope.isPast = () =>
     return true if !$scope.current_date
     return moment().isAfter($scope.current_date)
@@ -214,7 +212,7 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name loadData
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Load week if type is equals with week else load month
+  * Load week if type is equals with week else load month.
   ###
   $scope.loadData =  =>
     if $scope.type == "week"
@@ -227,7 +225,7 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name loadMonth
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Load month
+  * Load month.
   ###
   $scope.loadMonth =  =>
     date = $scope.current_date
@@ -253,18 +251,18 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     else
       $scope.setLoaded $scope
-   
+
   ###**
   * @ngdoc method
   * @name loadWeek
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Load week
+  * Load week.
   ###
   $scope.loadWeek = =>
     date = $scope.current_date
     $scope.notLoaded $scope
- 
+
     edate = moment(date).add(7, 'days')
     $scope.end_date = moment(edate).add(-1, 'days')
     if $scope.data_source
@@ -282,7 +280,7 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   * @name setReady
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Set this page section as ready
+  * Sets page section as ready.
   ###
   $scope.setReady = () =>
     if $scope.bb.current_item.date
@@ -291,4 +289,3 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
       AlertService.clear()
       AlertService.add("danger", { msg: "You need to select a date" })
       return false
-

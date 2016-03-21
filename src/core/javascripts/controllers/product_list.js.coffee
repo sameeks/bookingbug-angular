@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbProductList
@@ -9,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of product for the currently in scope company
+* Loads a list of product for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,12 +16,11 @@
 * scope: true
 * </pre>
 *
-* @property {array} products The products from the list
-* @property {array} item The item of the product list
-* @property {array} booking_item The booking item
-* @property {product} product The currectly selected product
+* @property {array} products Products from the list
+* @property {array} item Item from product list
+* @property {array} booking_item Booking item
+* @property {product} product Currectly selected product
 ####
-
 
 angular.module('BB.Directives').directive 'bbProductList', () ->
   restrict: 'AE'
@@ -66,9 +64,9 @@ angular.module('BB.Controllers').controller 'ProductList', ($scope,
   * @name selectItem
   * @methodOf BB.Directives:bbProductList
   * @description
-  * Select an item from the product list in according of item and route parameter
+  * Select an item from the product list according to item and route parameter
   *
-  * @param {array} item The array items
+  * @param {array} item Items array
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route) ->
@@ -79,4 +77,3 @@ angular.module('BB.Controllers').controller 'ProductList', ($scope,
       $scope.booking_item.setProduct(item)
       $scope.decideNextPage(route)
       true
-

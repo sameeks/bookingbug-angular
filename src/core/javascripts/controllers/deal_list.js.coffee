@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbDeals
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of deals for the currently in scope company
+* Loads a list of deals for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,11 +15,10 @@
 * scope: true
 * </pre>
 *
-* @property {array} deals The deals list
-* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @property {array} deals Deals list
+* @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
+* @property {object} alert Alert Service - see {@link BB.Services:Alert Alert Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbDeals', () ->
   restrict: 'AE'
@@ -43,7 +40,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $q,
 
   init = () ->
     $scope.notLoaded($scope)
-    
+
     if !$scope.deals
       deal_promise = BBModel.Deal.$query($scope.bb.company)
       deal_promise.then (deals) ->
@@ -55,9 +52,9 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $q,
   * @name selectDeal
   * @methodOf BB.Directives:bbDeals
   * @description
-  * Select the deal and open modal
+  * Select the deal and open modal.
   *
-  * @param {array} deal The deals array
+  * @param {array} deal Deals array
   ###
   $scope.selectDeal = (deal) ->
     iitem = new (BBModel.BasketItem)(null, $scope.bb)
@@ -97,9 +94,9 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $q,
     * @name addToBasket
     * @methodOf BB.Directives:bbDeals
     * @description
-    * Add to basket in according of form parameter
+    * Add to basket according to form parameters.
     *
-    * @param {object} form The form where is added deal list to basket
+    * @param {object} form Form where deal list is added to basket
     ###    
     $scope.addToBasket = (form) ->
       if !ValidatorService.validateForm(form)
@@ -114,7 +111,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $q,
   * @name purchaseDeals
   * @methodOf BB.Directives:bbDeals
   * @description
-  * Purchase deals if basket items and basket items length is bigger than 0 else display a alert message
+  * Purchase deals if basket items and basket items length is bigger than 0 else display a alert message.
   ###
   $scope.purchaseDeals = ->
     if $scope.bb.basket.items and $scope.bb.basket.items.length > 0
@@ -127,7 +124,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $q,
   * @name setReady
   * @methodOf BB.Directives:bbDeals
   * @description
-  * Set this page section as ready
+  * Sets page section as ready.
   ###
   $scope.setReady = ->
     if $scope.bb.basket.items and $scope.bb.basket.items.length > 0

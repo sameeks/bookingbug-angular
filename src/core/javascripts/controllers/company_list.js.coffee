@@ -34,7 +34,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
 
   $scope.selectItem = (item, route) =>
 
-    # if company id is passed in, set the company id to this number
+    # if company id is passed, set the company id to this number
     if angular.isNumber(item)
       company_id = item
     else
@@ -57,8 +57,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
 * @scope true
 *
 * @description
-*
-* Loads a list of companies for the currently in scope company
+* Loads a list of companies for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -66,17 +65,17 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
 * scope: true
 * </pre>
 *
-* @property {integer} id The company id
-* @property {string} name The company name
+* @property {integer} id Company id
+* @property {string} name Company name
 * @property {integer} address_id Company address id
 * @property {string} country_code Company country code
-* @property {string} currency_code The company currency code
-* @property {string} timezone The company time zone
-* @property {integer} numeric_widget_id The numeric widget id of the company
-* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @property {string} currency_code Company currency code
+* @property {string} timezone Company time zone
+* @property {integer} numeric_widget_id Numeric widget id of the company
+* @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
+* @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -91,8 +90,8 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
 *      </div>
 *     </div>
 *     </div>
-*   </file> 
-*  </example> 
+*   </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbCompanies', () ->
@@ -125,10 +124,10 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   * @name searchPostcode
   * @methodOf BB.Directives:bbCompanies
   * @description
-  * Search the postcode
+  * Search the postcode.
   *
-  * @param {object} form The form where postcode has been searched
-  * @param {object} prms The parameters of postcode searching 
+  * @param {object} form Form where postcode has been searched
+  * @param {object} prms Parameters of postcode search
   ###
   $scope.searchPostcode = (form, prms) =>
 
@@ -142,16 +141,16 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
         loc = ValidatorService.getGeocodeResult().geometry.location
         $scope.selectItem($scope.getNearestCompany({center: loc}))
       ,(err) ->
-        $scope.setLoaded $scope 
+        $scope.setLoaded $scope
     else
-      $scope.setLoaded $scope 
+      $scope.setLoaded $scope
 
   ###**
   * @ngdoc method
   * @name getNearestCompany
   * @methodOf BB.Directives:bbCompanies
   * @description
-  * Get nearest company in according of center parameter
+  * Gets nearest company according to center parameter.
   * 
   * @param {string} center Geolocation parameter
   ###
@@ -192,4 +191,3 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
         a.distance - b.distance
 
     return distances[0]
-

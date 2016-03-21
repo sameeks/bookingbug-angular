@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbPackagePicker
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of package pickers for the currently in scope company
+* Loads a list of package pickers for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,15 +15,12 @@
 * scope: true
 * </pre>
 *
-* @property {date} sel_date The sel date
-* @property {date} selected_date The selected date
-* @property {boolean} picked_time The picked time
-* @property {array} timeSlots The time slots
-* @property {boolean} data_valid The valid data
+* @property {date} sel_date Sel date
+* @property {date} selected_date Selected date
+* @property {boolean} picked_time Picked time
+* @property {array} timeSlots Slots time
+* @property {boolean} data_valid Valid data
 ####
-
-
-
 
 angular.module('BB.Directives').directive 'bbPackagePicker', () ->
   restrict: 'AE'
@@ -52,7 +47,7 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
   * @name loadDay
   * @methodOf BB.Directives:bbPackagePicker
   * @description
-  * Load day
+  * Load day.
   ###
   $scope.loadDay = () =>
     $scope.timeSlots = []
@@ -103,10 +98,10 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
   * @name selectSlot
   * @methodOf BB.Directives:bbPackagePicker
   * @description
-  * Select slot in according of sel_item and slot parameters
+  * Select slot according to sel_item and slot parameters.
   *
-  * @param {array} sel_item The sel item
-  * @param {object} slot The slot 
+  * @param {array} sel_item Sel item
+  * @param {object} slot Slot
   ###
   $scope.selectSlot = (sel_item, slot) =>
 
@@ -148,14 +143,14 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
   * @name hasAvailability
   * @methodOf BB.Directives:bbPackagePicker
   * @description
-  * Checks if picker have the start time and the end time available
+  * Checks if picker has the start time and end time available.
   *
-  * @param {object} slots The slots of the package picker
-  * @param {date} start_time The start time of the picker
-  * @param {date} end_time The end time of the picker
+  * @param {object} slots Package picker slots
+  * @param {date} start_time Picker start time
+  * @param {date} end_time Picker end time
   ###
   # helper function to determine if there's availability between given times,
-  # returns true immediately if a time a slot is found with availability
+  # returns true immediately if a time slot is found with availability
   $scope.hasAvailability = (slots, start_time, end_time) =>
 
     return false if !slots
@@ -181,6 +176,4 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
         return true if slot.availability() > 0
 
 
-
   $scope.confirm = () =>
-

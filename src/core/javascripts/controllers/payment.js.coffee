@@ -8,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of payments for the currently in scope company
+* Loads a list of payments for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -16,9 +16,8 @@
 * scope: true
 * </pre>
 *
-* @property {array} total The total of payment 
+* @property {array} total Total payment
 ####
-
 
 angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService) ->
 
@@ -93,13 +92,13 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   $rootScope.connection_started.then =>
     $scope.bb.total = $scope.total if $scope.total
     $scope.url = $sce.trustAsResourceUrl($scope.bb.total.$href('new_payment')) if $scope.bb && $scope.bb.total && $scope.bb.total.$href('new_payment')
-  
+
   ###**
   * @ngdoc method
   * @name callNotLoaded
   * @methodOf BB.Directives:bbPayment
   * @description
-  * Call not loaded
+  * Call not loaded.
   ###
   $scope.callNotLoaded = () =>
     $scope.notLoaded $scope
@@ -109,7 +108,7 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   * @name callSetLoaded
   * @methodOf BB.Directives:bbPayment
   * @description
-  * Call set loaded
+  * Call set loaded.
   ###
   $scope.callSetLoaded = () =>
     $scope.setLoaded $scope
@@ -119,7 +118,7 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   * @name paymentDone
   * @methodOf BB.Directives:bbPayment
   * @description
-  * Payment done
+  * Payment done.
   ###
   $scope.paymentDone = () ->
     $scope.bb.payment_status = "complete"

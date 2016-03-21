@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbGetAvailability
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of availability for the currently in scope company
+* Loads a list of availability for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,10 +15,9 @@
 * scope: true
 * </pre>
 *
-* @property {array} earliest_day The availability of earliest day
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @property {array} earliest_day Earliest available day
+* @property {object} alert Alert Service- see {@link BB.Services:Alert Alert Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbGetAvailability', () ->
   restrict: 'AE'
@@ -43,9 +40,9 @@ angular.module('BB.Controllers').controller 'GetAvailability',
   * @name loadAvailability
   * @methodOf BB.Directives:bbGetAvailability
   * @description
-  * Load availability of the services in according of prms parameter
+  * Load availability of services according to prms parameter.
   *
-  * @param {array} prms The parameters of availability
+  * @param {array} prms Availability parameter
   ###
   $scope.loadAvailability = (prms) =>
 
