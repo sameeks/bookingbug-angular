@@ -93,7 +93,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         eventAfterRender: (event, elements, view) ->
           # if view.type == "timelineDay"
             # element.style.height = "15px" for element in elements
-          PrePostTime.apply(event, elements, view)
+          PrePostTime.apply(event, elements, view, $scope)
           elements.draggable()
         select: (start, end, jsEvent, view, resource) ->
           view.calendar.unselect()
