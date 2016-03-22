@@ -22,7 +22,7 @@
 
   <hr>
 
-  <div ng-form name="block_time_form" class="bb-block-time">
+  <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
 
     <h1>Block Time</h1>
 
@@ -45,6 +45,9 @@
       <label>To</label>
       <div bb-date-time-picker="block_time.to"></div>
     </div>
+
+    <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false">Block Time</button>
+
 
   </div>
 
