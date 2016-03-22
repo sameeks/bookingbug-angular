@@ -2,7 +2,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     uiCalendarConfig, AdminCompanyService, AdminBookingService,
     AdminPersonService, $q, $sessionStorage, ModalForm, BBModel,
     AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,$interval,$http,
-    $timeout, $compile, $templateCache, BookingCollections) ->
+    $timeout, $compile, $templateCache, BookingCollections, PrePostTime) ->
 
   controller = ($scope, $attrs) ->
 
@@ -93,6 +93,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         eventAfterRender: (event, elements, view) ->
           # if view.type == "timelineDay"
             # element.style.height = "15px" for element in elements
+          PrePostTime.apply(event, elements, view, $scope)
           elements.draggable()
         select: (start, end, jsEvent, view, resource) ->
           view.calendar.unselect()
