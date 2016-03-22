@@ -64,10 +64,11 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
 
 
 angular.module('BB.Controllers').controller 'BasketList',
-($scope, $rootScope, $element, $attrs, $q, AlertService, FormDataStoreService, LoginService, BBModel) ->
+($scope, $rootScope, $element, $attrs, $q, AlertService, FormDataStoreService, LoginService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
+  loader = LoadingService.$loader($scope)
   $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') and $scope.bb.company_settings.has_wallets and $scope.client.valid() and LoginService.isLoggedIn() and LoginService.member().id == $scope.client.id and $scope.client.has_active_wallet
 
   # bb.basket.options - added 10-11-2015 @16:19
@@ -81,7 +82,7 @@ angular.module('BB.Controllers').controller 'BasketList',
 
     if $scope.client.$has('pre_paid_bookings') and $scope.bb.basket.timeItems().length > 0
 
-      $scope.notLoaded $scope
+      loader.notLoaded()
       promises = []
 
       for basket_item in $scope.bb.basket.timeItems()
@@ -97,10 +98,10 @@ angular.module('BB.Controllers').controller 'BasketList',
             basket_item.setPrepaidBooking(prepaid_bookings[0])
 
         $scope.updateBasket().then () ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
 
       , (err) ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -165,7 +166,7 @@ angular.module('BB.Controllers').controller 'BasketList',
   ###
   $scope.applyCoupon = (coupon) =>
     AlertService.clear()
-    $scope.notLoaded $scope
+    loader.notLoaded()
     params = {bb: $scope.bb, coupon: coupon }
     BBModel.Basket.$applyCoupon($scope.bb.company, params).then (basket) ->
       for item in basket.items
@@ -173,12 +174,12 @@ angular.module('BB.Controllers').controller 'BasketList',
         item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
-      $scope.setLoaded $scope
+      loader.setLoaded()
     , (err) ->
       if err and err.data and err.data.error
         AlertService.clear()
         AlertService.add("danger", { msg: err.data.error })
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method

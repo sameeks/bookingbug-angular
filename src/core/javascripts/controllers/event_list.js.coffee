@@ -45,10 +45,10 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
 
 
 angular.module('BB.Controllers').controller 'EventList',
-($scope, $rootScope, $q, $timeout, $filter, PageControllerService, FormDataStoreService, PaginationService, BBModel) ->
+($scope, $rootScope, $q, $timeout, $filter, PageControllerService, FormDataStoreService, PaginationService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.EventList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
   angular.extend(this, new PageControllerService($scope, $q))
   $scope.pick = {}
   $scope.start_date = moment()
@@ -75,16 +75,16 @@ angular.module('BB.Controllers').controller 'EventList',
         $scope.bb.company.$getParent().then (parent) ->
           $scope.company_parent = parent
           $scope.initialise()
-        , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       else
         $scope.initialise()
 
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $scope.initialise = () ->
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     delete $scope.selected_date if $scope.mode != 0
 
@@ -148,9 +148,9 @@ angular.module('BB.Controllers').controller 'EventList',
           item.group = event_groups_collection[item.service_id]
 
       # Remove loading icon
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -223,13 +223,13 @@ angular.module('BB.Controllers').controller 'EventList',
     if $scope.bb.item_defaults.event_chain
       deferred.resolve([])
     else
-      $scope.notLoaded $scope
+      loader.notLoaded()
       comp ||= $scope.bb.company
 
       params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
 
       BBModel.EventChain.$query(comp, params).then (event_chains) ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
         deferred.resolve(event_chains)
       , (err) ->  deferred.reject()
 
@@ -253,7 +253,7 @@ angular.module('BB.Controllers').controller 'EventList',
 
     current_event = $scope.current_item.event
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
     comp ||= $scope.bb.company
 
     # de-select the event chain if there's one already picked - as it's hiding other events in the same group
@@ -324,7 +324,7 @@ angular.module('BB.Controllers').controller 'EventList',
         # update the paging
         PaginationService.update($scope.pagination, $scope.filtered_items.length)
 
-        $scope.setLoaded $scope
+        loader.setLoaded()
         deferred.resolve($scope.items)
       , (err) ->  deferred.reject()
     , (err) ->  deferred.reject()
@@ -395,12 +395,12 @@ angular.module('BB.Controllers').controller 'EventList',
   ###
   $scope.selectItem = (item, route) =>
     return false unless (item.getSpacesLeft() <= 0 && $scope.bb.company.settings.has_waitlists) || item.hasSpace()
-    $scope.notLoaded $scope
+    loader.notLoaded()
     if $scope.$parent.$has_page_control
       $scope.event.unselect() if $scope.event
       $scope.event = item
       $scope.event.select()
-      $scope.setLoaded $scope
+      loader.setLoaded()
       return false
     else
       if $scope.bb.moving_purchase
@@ -409,7 +409,7 @@ angular.module('BB.Controllers').controller 'EventList',
       $scope.bb.current_item.ready = false
       $q.all($scope.bb.current_item.promises).then () ->
         $scope.decideNextPage(route)
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       return true
 
 

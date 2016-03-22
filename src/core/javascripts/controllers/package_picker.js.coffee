@@ -35,13 +35,14 @@ angular.module('BB.Directives').directive 'bbPackagePicker', () ->
 
 
 angular.module('BB.Controllers').controller 'PackagePicker',
-($scope,  $rootScope, $q, TimeService, BBModel) ->
+($scope,  $rootScope, $q, TimeService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.PackagePicker"
 
   $scope.sel_date = moment().add(1, 'days')
   $scope.selected_date = $scope.sel_date.toDate()
   $scope.picked_time = false
+  loader = LoadingService.$loader($scope)
 
   $scope.$watch 'selected_date', (newv, oldv) =>
     $scope.sel_date = moment(newv)
@@ -57,14 +58,14 @@ angular.module('BB.Controllers').controller 'PackagePicker',
   ###
   $scope.loadDay = () =>
     $scope.timeSlots = []
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     pslots = []
     for item in $scope.stackedItems
       pslots.push(TimeService.query({company: $scope.bb.company, cItem: item, date: $scope.sel_date, client: $scope.client }))
 
     $q.all(pslots).then (res) =>
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.data_valid = true
       $scope.timeSlots = []
       for item, _i in $scope.stackedItems
@@ -97,7 +98,7 @@ angular.module('BB.Controllers').controller 'PackagePicker',
             else
               next_latest = slot.time - item.service.duration
           latest = next_latest
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

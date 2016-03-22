@@ -41,9 +41,10 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
 
 
 angular.module('BB.Controllers').controller 'ItemDetails',
-($scope, $attrs, $rootScope, $modal, $location, $upload, $translate, PurchaseBookingService, AlertService, FormDataStoreService, ValidatorService, SettingsService, PurchaseService, BBModel) ->
+($scope, $attrs, $rootScope, $modal, $location, $upload, $translate, PurchaseBookingService, AlertService, FormDataStoreService, ValidatorService, SettingsService, PurchaseService, LoadingService,  BBModel) ->
 
   $scope.controller = "public.controllers.ItemDetails"
+  loader = LoadingService.$loader($scope)
 
   $scope.suppress_basket_update = $attrs.bbSuppressBasketUpdate?
   $scope.item_details_id = $scope.$eval $attrs.bbSuppressBasketUpdate
@@ -71,7 +72,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
 
   $rootScope.connection_started.then () ->
     $scope.loadItem($scope.bb.current_item) if !confirming
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -84,7 +85,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
   ###
   $scope.loadItem = (item) ->
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     confirming = true
     $scope.item = item
@@ -97,7 +98,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
       BBModel.Question.$addDynamicAnswersByName($scope.item_details.questions)
       BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
       $scope.recalc_price()
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.$emit "item_details:loaded", $scope.item_details
 
     else
@@ -111,9 +112,9 @@ angular.module('BB.Controllers').controller 'ItemDetails',
           BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
           $scope.recalc_price()
           $scope.$emit "item_details:loaded", $scope.item_details
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   ###**
@@ -187,12 +188,12 @@ angular.module('BB.Controllers').controller 'ItemDetails',
 
 
     if $scope.item.ready
-      $scope.notLoaded $scope
+      loader.notLoaded()
       $scope.addItemToBasket().then () ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.decideNextPage(route)
       , (err) ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
     else
       $scope.decideNextPage(route)
 
@@ -225,7 +226,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
     # we need to validate the question information has been correctly entered here
     $scope.item.setAskedQuestions()
     if $scope.item.ready
-      $scope.notLoaded $scope
+      loader.notLoaded()
       if $scope.bb.moving_purchase
         params =
           purchase: $scope.bb.moving_purchase
@@ -234,7 +235,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
           $scope.bb.purchase = purchase
           $scope.bb.purchase.$getBookings().then (bookings)->
             $scope.purchase = purchase
-            $scope.setLoaded $scope
+            loader.setLoaded()
             $scope.item.move_done = true
             $rootScope.$broadcast "booking:moved"
             $scope.decideNextPage(route)
@@ -242,7 +243,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
 
 
         , (err) ->
-           $scope.setLoaded $scope
+           loader.setLoaded()
            AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
       else
         PurchaseBookingService.update($scope.item).then (booking) ->
@@ -252,13 +253,13 @@ angular.module('BB.Controllers').controller 'ItemDetails',
             for oldb, _i in $scope.bb.purchase.bookings
               $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
 
-          $scope.setLoaded $scope
+          loader.setLoaded()
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
           $scope.showMoveMessage(b.datetime)
          , (err) =>
-          $scope.setLoaded $scope
+          loader.setLoaded()
           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
     else
       $scope.decideNextPage(route)
@@ -310,7 +311,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
   $scope.updateItem = () ->
     $scope.item.setAskedQuestions()
     if $scope.item.ready
-      $scope.notLoaded $scope
+      loader.notLoaded()
 
       PurchaseBookingService.update($scope.item).then (booking) ->
 
@@ -322,10 +323,10 @@ angular.module('BB.Controllers').controller 'ItemDetails',
 
         $scope.purchase.bookings = $scope.bookings
         $scope.item_details_updated = true
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
        , (err) =>
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
   ###**
   * @ngdoc method

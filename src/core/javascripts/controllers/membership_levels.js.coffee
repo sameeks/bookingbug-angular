@@ -3,20 +3,22 @@ angular.module('BB.Directives').directive 'bbMembershipLevels',
   restrict: 'AE'
   replace: true
   scope : true
-  controller = ($scope, $element, $attrs) ->
+  controller = ($scope, $element, $attrs, LoadingService) ->
+
+    loader = LoadingService.$loader($scope)
 
     $rootScope.connection_started.then ->
       $scope.initialise()
 
     $scope.initialise = () ->
       if $scope.bb.company and $scope.bb.company.$has('member_levels')
-        $scope.notLoaded $scope
+        loader.notLoaded()
         BBModel.MembershipLevels.$getMembershipLevels($scope.bb.company).then (member_levels) ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
           $scope.membership_levels = member_levels
           #checkClientDefaults()
         , (err) ->
-          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+          loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
     $scope.selectMemberLevel = (level) ->
       if level and $scope.client

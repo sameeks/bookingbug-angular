@@ -37,7 +37,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
 
 # TODO Get the add/subtract functions to respect the current time range. Get the time range length to adjust if display mode is preset
 angular.module('BB.Controllers').controller 'TimeRangeList',
-($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService) ->
+($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, LoadingService, BBModel, FormDataStoreService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
 
@@ -60,7 +60,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.postcode = $scope.bb.postcode
 
   # show the loading icon
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   # if the data source isn't set, set it as the current item
   if !$scope.data_source
@@ -116,7 +116,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     $scope.loadData()
 
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -339,11 +339,11 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         $scope.bb.current_item.setDate(day)
 
       if $scope.bb.current_item.reserve_ready
-        $scope.notLoaded $scope
+        loader.notLoaded()
         $scope.addItemToBasket().then () ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
           $scope.decideNextPage(route)
-        , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       else
         $scope.decideNextPage(route)
 
@@ -419,7 +419,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       loc = ",,,," + $scope.bb.postcode + ","
 
     if $scope.data_source && $scope.data_source.days_link
-      $scope.notLoaded $scope
+      loader.notLoaded()
       loc = null
       loc = ",,,," + $scope.bb.postcode + "," if $scope.bb.postcode
       promise = TimeService.query(
@@ -436,7 +436,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       )
 
       promise.finally ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
       promise.then (datetime_arr) ->
         $scope.days = []
@@ -469,9 +469,9 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
           checkRequestedTime(day, time_slots)
 
-      , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method

@@ -34,7 +34,7 @@ angular.module('BB.Directives').directive 'bbLogin', () ->
 
 
 angular.module('BB.Controllers').controller 'Login',
-($scope, $rootScope, $q, $location, LoginService, ValidatorService, AlertService, BBModel) ->
+($scope, $rootScope, $q, $location, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.Login"
   $scope.error = false
@@ -44,6 +44,7 @@ angular.module('BB.Controllers').controller 'Login',
   $scope.success = false
   $scope.login_error = false
   $scope.validator = ValidatorService
+  loader = LoadingService.$loader($scope)
 
   ###**
   * @ngdoc method
@@ -59,8 +60,8 @@ angular.module('BB.Controllers').controller 'Login',
     $rootScope.connection_started.then =>
       LoginService.ssoLogin({company_id: $scope.bb.company.id, root: $scope.bb.api_url}, {token: token}).then (member) =>
         $scope.showPage(route) if route
-      , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

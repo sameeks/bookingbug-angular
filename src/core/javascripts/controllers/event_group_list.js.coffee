@@ -38,13 +38,13 @@ angular.module('BB.Directives').directive 'bbEventGroups', () ->
 
 
 angular.module('BB.Controllers').controller 'EventGroupList',
-($scope,  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, PageControllerService, halClient) ->
+($scope,  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, PageControllerService, LoadingService, halClient) ->
 
   $scope.controller = "public.controllers.EventGroupList"
   FormDataStoreService.init 'EventGroupList', $scope, [
     'event_group'
   ]
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
   angular.extend(this, new PageControllerService($scope, $q))
 
   $scope.validator = ValidatorService
@@ -52,7 +52,7 @@ angular.module('BB.Controllers').controller 'EventGroupList',
   $rootScope.connection_started.then =>
     if $scope.bb.company
       $scope.init($scope.bb.company)
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $scope.init = (comp) ->
@@ -94,12 +94,12 @@ angular.module('BB.Controllers').controller 'EventGroupList',
             item.selected = true
             $scope.booking_item.setEventGroup($scope.event_group)
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
       if $scope.booking_item.event_group || (!$scope.booking_item.person && !$scope.booking_item.resource)
         # the "bookable services" are the event_group unless we've pre-selected something!
         $scope.bookable_services = $scope.items
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
 

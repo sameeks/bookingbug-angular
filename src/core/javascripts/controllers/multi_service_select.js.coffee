@@ -33,7 +33,7 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   controller : 'MultiServiceSelect'
 
 angular.module('BB.Controllers').controller 'MultiServiceSelect',
-($scope, $rootScope, $q, $attrs, $modal, AlertService, FormDataStoreService, BBModel) ->
+($scope, $rootScope, $q, $attrs, $modal, AlertService, FormDataStoreService, LoadingService, BBModel) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selected_category_name'
@@ -43,6 +43,8 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
   $scope.options.max_services       = $scope.options.max_services or Infinity
   $scope.options.ordered_categories = $scope.options.ordered_categories or false
   $scope.options.services           = $scope.options.services or 'items'
+
+  loader = LoadingService.$loader($scope)
 
   $rootScope.connection_started.then ->
     if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
@@ -97,9 +99,9 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
 
       $scope.$broadcast "multi_service_select:loaded"
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

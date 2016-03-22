@@ -44,17 +44,17 @@ angular.module('BB.Directives').directive 'bbCategories', () ->
 
 
 angular.module('BB.Controllers').controller 'CategoryList',
-($scope, $rootScope, $q, PageControllerService, BBModel) ->
+($scope, $rootScope, $q, PageControllerService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.CategoryList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   angular.extend(this, new PageControllerService($scope, $q))
 
   $rootScope.connection_started.then =>
     if $scope.bb.company
       $scope.init($scope.bb.company)
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
     BBModel.Category.$query(comp).then (items) =>
@@ -63,8 +63,8 @@ angular.module('BB.Controllers').controller 'CategoryList',
         $scope.skipThisStep()
         $rootScope.categories = items
         $scope.selectItem(items[0], $scope.nextRoute )
-      $scope.setLoaded $scope
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoaded()
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

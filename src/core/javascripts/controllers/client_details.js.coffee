@@ -43,10 +43,10 @@ angular.module('BB.Directives').directive 'bbClientDetails', () ->
   controller : 'ClientDetails'
 
 angular.module('BB.Controllers').controller 'ClientDetails',
-($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, BBModel) ->
+($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.ClientDetails"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
   $scope.validator = ValidatorService
   $scope.existing_member = false
   $scope.login_error = false
@@ -71,16 +71,16 @@ angular.module('BB.Controllers').controller 'ClientDetails',
     if $scope.client.client_details
       $scope.client_details = $scope.client.client_details
       BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
-      $scope.setLoaded $scope
+      loader.setLoaded()
     else
       BBModel.ClientDetails.$query($scope.bb.company).then (details) =>
         $scope.client_details = details
         $scope.client.pre_fill_answers($scope.client_details) if $scope.client
         BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
-        $scope.setLoaded $scope
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoaded()
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $rootScope.$watch 'member', (oldmem, newmem) =>
@@ -98,7 +98,7 @@ angular.module('BB.Controllers').controller 'ClientDetails',
   * @param {string=} route A specific route to load
   ###
   $scope.validateClient = (client_form, route) =>
-    $scope.notLoaded $scope
+    loader.notLoaded()
     $scope.existing_member = false
 
     # we need to validate teh client information has been correctly entered here
@@ -107,7 +107,7 @@ angular.module('BB.Controllers').controller 'ClientDetails',
     $scope.client.setClientDetails($scope.client_details)
 
     BBModel.Client.$create_or_update($scope.bb.company, $scope.client).then (client) =>
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.setClient(client)
       $scope.client.setValid(true) if $scope.bb.isAdmin
       $scope.existing_member = false
@@ -130,7 +130,7 @@ angular.module('BB.Controllers').controller 'ClientDetails',
         $scope.decideNextPage()
       , (err) ->
         $scope.login_error = true
-        $scope.setLoaded $scope
+        loader.setLoaded()
         AlertService.raise('LOGIN_FAILED');
 
   ###**
@@ -147,7 +147,7 @@ angular.module('BB.Controllers').controller 'ClientDetails',
 
       prom = BBModel.Client.$create_or_update($scope.bb.company, $scope.client)
       prom.then (client) =>
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.setClient(client)
         if client.waitingQuestions
           client.gotQuestions.then () ->
@@ -168,14 +168,14 @@ angular.module('BB.Controllers').controller 'ClientDetails',
   ###
   $scope.clientSearch = () ->
     if $scope.client? && $scope.client.email? && $scope.client.email != ""
-      $scope.notLoaded $scope
+      loader.notLoaded()
       BBModel.Client.$query_by_email($scope.bb.company, $scope.client.email).then (client) ->
         if client?
           $scope.setClient(client)
           $scope.client = client
-        $scope.setLoaded $scope
+        loader.setLoaded()
       , (err) ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
     else
       $scope.setClient({})
       $scope.client = {}
@@ -241,4 +241,4 @@ angular.module('BB.Controllers').controller 'ClientDetails',
       AlertService.raise('ALREADY_REGISTERED')
     else if error.data.error == "Invalid Password"
       AlertService.raise('PASSWORD_INVALID')
-    $scope.setLoaded $scope
+    loader.setLoaded()

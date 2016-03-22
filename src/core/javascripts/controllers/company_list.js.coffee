@@ -1,9 +1,9 @@
 'use strict';
 
-CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
+CompanyListBase = ($scope, $rootScope, $q, $attrs, LoadingService) ->
 
   $scope.controller = "public.controllers.CompanyList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   options = $scope.$eval $attrs.bbCompanies
 
@@ -16,7 +16,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
       return
     else
       $scope.init($scope.bb.company)
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
     $scope.companies = $scope.bb.company.companies
@@ -30,7 +30,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
         $scope.items = $scope.companies.filter (c) -> c.live
       else
         $scope.items = $scope.companies
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
   $scope.selectItem = (item, route) =>
 
@@ -40,7 +40,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
     else
       company_id = item.id
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
     prms = {company_id: company_id}
     $scope.initWidget(prms)
 
@@ -76,7 +76,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -91,8 +91,8 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
 *      </div>
 *     </div>
 *     </div>
-*   </file> 
-*  </example> 
+*   </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbCompanies', () ->
@@ -110,12 +110,13 @@ angular.module('BB.Directives').directive 'bbPostcodeLookup', () ->
   controller : 'PostcodeLookup'
 
 
-angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootScope, $q, ValidatorService, AlertService, $attrs) ->
+angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootScope, $q, ValidatorService, AlertService, LoadingService, $attrs) ->
   $scope.controller = "PostcodeLookup"
   angular.extend(this, new CompanyListBase($scope, $rootScope, $q, $attrs))
 
 
   $scope.validator = ValidatorService
+  loader = LoadingService.$loader($scope)
 
   ###**
   * @ngdoc method
@@ -125,11 +126,11 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   * Search the postcode
   *
   * @param {object} form The form where postcode has been searched
-  * @param {object} prms The parameters of postcode searching 
+  * @param {object} prms The parameters of postcode searching
   ###
   $scope.searchPostcode = (form, prms) =>
 
-    $scope.notLoaded($scope)
+    loader.notLoaded()
 
     promise = ValidatorService.validatePostcode(form, prms)
     if promise
@@ -149,7 +150,7 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   * @methodOf BB.Directives:bbCompanies
   * @description
   * Get nearest company in according of center parameter
-  * 
+  *
   * @param {string} center Geolocation parameter
   ###
   $scope.getNearestCompany = ({center}) =>

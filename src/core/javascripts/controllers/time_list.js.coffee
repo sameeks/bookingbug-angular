@@ -32,16 +32,16 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   scope : true
   controller : 'TimeList'
 
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, LoadingService, BBModel) ->
   $scope.controller = "public.controllers.TimeList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.data_source = $scope.bb.current_item if !$scope.data_source
   $scope.options = $scope.$eval($attrs.bbTimes) or {}
 
   $rootScope.connection_started.then =>
     $scope.loadDay()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -153,9 +153,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name highlightSlot
   * @methodOf BB.Directives:bbTimes
   * @description
-  * The highlight slot from time list 
+  * The highlight slot from time list
   *
-  * @param {date} slot The slot 
+  * @param {date} slot The slot
   ###
   $scope.highlightSlot = (slot) =>
     if slot && slot.availability() > 0
@@ -229,14 +229,14 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         $scope.selected_date = $scope.data_source.date.date
 
       if !$scope.selected_date
-        $scope.setLoaded $scope
+        loader.setLoaded()
         return
 
-      $scope.notLoaded $scope
+      loader.notLoaded()
       pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_date, client: $scope.client, available: 1 })
-      
+
       pslots.finally =>
-        $scope.setLoaded $scope
+        loader.setLoaded()
       pslots.then (data) =>
 
         $scope.slots = data
@@ -250,7 +250,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
           for pad, v in $scope.add_padding
             if (!dtimes[pad])
               data.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, data[0].service))
-        
+
         if ($scope.data_source.requested_time || $scope.data_source.time) && $scope.selected_date.isSame($scope.data_source.date.date)
           found_time = false
           for t in data
@@ -266,10 +266,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             $scope.data_source.requestedTimeUnavailable() if !$scope.options.persist_requested_time
             $scope.time_not_found = true
             AlertService.add("danger", { msg: "Sorry, your requested time slot is not available. Please choose a different time." })
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
     else
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method

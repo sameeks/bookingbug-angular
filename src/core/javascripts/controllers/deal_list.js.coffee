@@ -30,22 +30,23 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
   controller : 'DealList'
 
 angular.module('BB.Controllers').controller 'DealList',
-($scope, $rootScope, $q, $modal, AlertService, FormDataStoreService, ValidatorService, BBModel) ->
+($scope, $rootScope, $q, $modal, AlertService, FormDataStoreService, ValidatorService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then ->
     init()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   init = () ->
-    $scope.notLoaded $scope
+    loader.notLoaded()
     if !$scope.deals
       deal_promise = BBModel.Deal.$query($scope.bb.company)
       deal_promise.then (deals) ->
         $scope.deals = deals
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -70,19 +71,19 @@ angular.module('BB.Controllers').controller 'DealList',
             iitem
 
       modalInstance.result.then (item) ->
-        $scope.notLoaded $scope
+        loader.notLoaded()
         $scope.setBasketItem item
         $scope.addItemToBasket().then ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
         , (err) ->
-          $scope.setLoadedAndShowError $scope, err, 'Sorry, something went wrong'
+          loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
-      $scope.notLoaded $scope
+      loader.notLoaded()
       $scope.setBasketItem iitem
       $scope.addItemToBasket().then ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
       , (err) ->
-        $scope.setLoadedAndShowError $scope, err, 'Sorry, something went wrong'
+        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ModalInstanceCtrl = ($scope, $modalInstance, item, ValidatorService) ->
     $scope.controller = 'ModalInstanceCtrl'

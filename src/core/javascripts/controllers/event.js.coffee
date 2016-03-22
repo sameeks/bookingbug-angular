@@ -30,10 +30,10 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
 
 
 angular.module('BB.Controllers').controller 'Event',
-($scope, $attrs, $rootScope, $q, PageControllerService, ValidatorService, FormDataStoreService, BBModel) ->
+($scope, $attrs, $rootScope, $q, PageControllerService, ValidatorService, FormDataStoreService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.Event"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
   angular.extend(this, new PageControllerService($scope, $q))
 
   $scope.validator = ValidatorService
@@ -46,7 +46,7 @@ angular.module('BB.Controllers').controller 'Event',
 
   $rootScope.connection_started.then ->
     init($scope.bb.company) if $scope.bb.company
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   init = (comp) ->
@@ -79,9 +79,9 @@ angular.module('BB.Controllers').controller 'Event',
 
       $scope.$broadcast "bbEvent:initialised"
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   ###**
@@ -93,7 +93,7 @@ angular.module('BB.Controllers').controller 'Event',
   ###
   $scope.selectTickets = () ->
     # process the selected tickets - this may mean adding multiple basket items - add them all to the basket
-    $scope.notLoaded $scope
+    loader.notLoaded()
     $scope.bb.emptyStackedItems()
     # NOTE: basket is not cleared here as we might already have one!
     base_item = $scope.current_item
@@ -119,14 +119,14 @@ angular.module('BB.Controllers').controller 'Event',
     # ok so we have them as stacked items
     # now push the stacked items to a basket
     if $scope.bb.stacked_items.length == 0
-      $scope.setLoaded $scope
+      loader.setLoaded()
       return
 
     $scope.bb.pushStackToBasket()
 
     $scope.updateBasket().then () =>
       # basket has been saved
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.selected_tickets = true
       $scope.stopTicketWatch()
       $scope.tickets = (item.tickets for item in $scope.bb.basket.items)
@@ -134,7 +134,7 @@ angular.module('BB.Controllers').controller 'Event',
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
         item.tickets.price = item.totalPrice()
       , true
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   ###**
