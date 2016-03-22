@@ -1,4 +1,4 @@
-moment.fn.toISODate ||= -> @toDate().toISOString().split('T')[0]
+moment.fn.toISODate ||= -> this.locale('en').format('YYYY-MM-DD')
 
 angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
   query: (prms) ->
