@@ -442,7 +442,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         $scope.days = []
 
         # sort time slots to be in chronological order
-        for pair in _.sortBy(_.toPairs(datetime_arr), (pair) -> pair[0])
+        for pair in _.sortBy(_.pairs(datetime_arr), (pair) -> pair[0])
           d = pair[0]
           time_slots = pair[1]
           day = {date: moment(d), slots: time_slots}

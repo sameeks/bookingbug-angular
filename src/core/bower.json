@@ -56,7 +56,7 @@
     "waypoints": "~3.1.1",
     "angular-slick-carousel": "~3.1.4",
     "angular-load": "0.4.1",
-    "lodash": "4.6.1"
+    "lodash": "3.10.0"
   },
   "resolutions": {
     "moment": "2.11.2",
