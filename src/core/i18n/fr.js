@@ -289,7 +289,10 @@
   "SELECT_DURATION": "Choisir une durée",
   "SELECT_DATE": "Choisir une date",
   "TIME_SLOT_NOT_AVAILABLE": "Désolé, ce créneau n'est plus disponible. Veuillez choisir un autre créneau.",
-  "SELECT_TIME_SLOT": "Choisir un créneau horaire."
+  "SELECT_TIME_SLOT": "Choisir un créneau horaire.",
+  "MAKE_BOOKING": "Réserver",
+  "BLOCK_TIME": "Bloquer créneau horaire",
+  "FOR_SERVICE": "Pour"
 };
 
 (function (global, factory) {

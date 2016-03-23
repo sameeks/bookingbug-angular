@@ -76,6 +76,7 @@
   "ITEM_WHEN":"When",
   "ITEM_WHERE":"Where",
   "ITEM_FROM":"From",
+  "ITEM_TO": "To",
   "ITEM_DESCRIPTION":"Description",
   "ITEM_CONFIRMATION":"Confirmation",
   "EVENT_DETAILS_TITLE":" Event details",
@@ -314,7 +315,10 @@
   "SELECT_DURATION": "You need to select a duration",
   "SELECT_DATE": "You need to select a date",
   "TIME_SLOT_NOT_AVAILABLE": "Sorry, your requested time slot is not available. Please choose a different time.",
-  "SELECT_TIME_SLOT": "Please select a time slot"
+  "SELECT_TIME_SLOT": "Please select a time slot",
+  "MAKE_BOOKING": "Make a booking",
+  "BLOCK_TIME": "Block time",
+  "FOR_SERVICE": "For"
 };
 
 moment.locale('en', {
