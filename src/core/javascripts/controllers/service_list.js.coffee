@@ -162,7 +162,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         services = (i.item for i in items when i.item?)
 
         for item in services
-          if item.listed_durations && item.listed_durations.length == 1
+          if item.listed_durations and item.listed_durations.length is 1
             item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
           else
             item.display_name = item.name
