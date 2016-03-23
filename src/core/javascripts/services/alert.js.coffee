@@ -35,7 +35,7 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     add: (type, {title, msg, persist}) ->
       persist = true if !persist?
       $rootScope.alerts = []
-      alert = 
+      alert =
         type: type
         title: titleLookup(type, title)
         msg: msg
