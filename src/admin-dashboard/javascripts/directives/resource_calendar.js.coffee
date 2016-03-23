@@ -105,8 +105,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           rid = resource.id if resource
           $scope.getCompanyPromise().then (company) ->
             AdminBookingPopup.open
-              fromDatetime: start
-              toDatetime: end
+              from_datetime: start
+              to_datetime: end
               item_defaults:
                 date: start.format('YYYY-MM-DD')
                 time: (start.hour() * 60 + start.minute())
