@@ -5,7 +5,6 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     $timeout, $compile, $templateCache, BookingCollections) ->
 
   controller = ($scope, $attrs) ->
-
     $scope.eventSources = [
       events: (start, end, timezone, callback) ->
         $scope.loading = true
@@ -19,10 +18,35 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             for b in bookings.items
               b.resourceId = b.person_id 
               b.useFullTime()
+              b.title = labelAssembly(b)
             $scope.bookings = bookings.items
             callback($scope.bookings)
     ]
 
+    labelAssembly = (event)->
+      myRe = new RegExp("\\{([a-zA-z_-]+)\\|?([a-zA-z_-]+)?:?([a-zA-z0-9{}_-]+)?\\}", "g")
+
+      for match,index in $scope.labelAssembler.match myRe
+        console.log index
+        console.log match
+        parts = match.split(myRe)
+        parts.splice(0,1)
+        parts.pop()
+        console.log parts
+
+      event.title
+      # labelParts = $scope.$eval $attrs.labelAssembler
+      # if not angular.isArray labelParts
+      #   event.title
+      # else
+      #   title = ''
+      #   for part in labelParts 
+      #     if event[part]?
+      #       title += event[part] + ' '
+      #     else
+      #       title += part  + ' '
+
+      #   title    
 
     $scope.options = $scope.$eval $attrs.bbResourceCalendar
     $scope.options ||= {}
@@ -227,4 +251,6 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     controller: controller
     link: link
     templateUrl: 'resource_calendar_main.html'
+    scope :
+      labelAssembler : '@'
   }
