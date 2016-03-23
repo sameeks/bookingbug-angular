@@ -33,6 +33,7 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   controller : 'TimeList'
 
 angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel) ->
+  
   $scope.controller = "public.controllers.TimeList"
   $scope.notLoaded $scope
 
@@ -229,7 +230,6 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   ###
   $scope.loadDay = () =>
 
-#// <-------------------------->
     if $scope.data_source && $scope.data_source.days_link  || $scope.item_link_source
       if !$scope.selected_date && $scope.data_source && $scope.data_source.date
         $scope.selected_date = $scope.data_source.date.date
@@ -271,7 +271,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             # if we didn't find the time - give up and do force it's selecttion
             $scope.data_source.requestedTimeUnavailable() if !$scope.options.persist_requested_time
             $scope.time_not_found = true
-            AlertService.add("danger", { msg: "Sorry, your requested time slot is not available. Please choose a different time." })
+            # AlertService.add("danger", { msg: "Sorry, your requested time slot is not available. Please choose a different time." })
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     else

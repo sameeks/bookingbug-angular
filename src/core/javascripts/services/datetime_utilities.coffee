@@ -20,8 +20,6 @@ angular.module('BB.Services').factory "DateTimeUlititiesService", (AlertService)
 
   convertMomentToTime: (datetime) ->
     return datetime.minutes() + datetime.hours() * 60
-	
-# <---------------------------------------------------->
 
 
   checkRequestedTime: (day, time_slots, current_item) ->

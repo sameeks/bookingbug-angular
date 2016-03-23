@@ -1,33 +1,29 @@
 'use strict'
 
-angular.module('BB.Directives').directive 'calendarAdmin', () ->
+angular.module('BB.Directives').directive 'bbCalendarAdmin', () ->
   restrict: 'AE'
   replace: true
   scope : true
   controller : 'calendarAdminCtrl'
 
 
-angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $element, $controller, $attrs, $modal, BBModel) ->
-  $scope.adult_count    = 0
-  $scope.show_child_qty = false
-  $scope.show_price     = false
+angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $element, $controller, $attrs, $modal, BBModel, $rootScope) ->
 
-  angular.extend(this, $controller('TimeList',
-    {$scope: $scope,
+  angular.extend(this, $controller('TimeList', {
+    $scope: $scope,
     $attrs: $attrs,
-    $element: $element}
-    )
-  )
+    $element: $element
+  }))
 
-  $scope.week_view = true
-  $scope.name_switch = "switch to week view"
+  $rootScope.connection_started.then ->
+    debugger
+
+    $scope.week_view = !$scope.bb.current_item.requested_date
+
+
   $scope.switchWeekView = () ->
-    if $scope.week_view
-      $scope.week_view = false
-      $scope.name_switch = "switch to day view"
-    else
-      $scope.week_view = true
-      $scope.name_switch = "switch to week view"
+    $scope.week_view = !$scope.week_view
+
 
   $scope.bookAnyway = ->
       $scope.new_timeslot = new BBModel.TimeSlot({time: $scope.current_item.defaults.time, avail: 1})

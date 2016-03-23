@@ -473,43 +473,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     else
       $scope.setLoaded $scope
 
-  ###**
-  * @ngdoc method
-  * @name checkRequestedTime
-  * @methodOf BB.Directives:bbTimeRanges
-  * @description
-  * Check requested time
-  *
-  * @param {date} day The day
-  * @param {date} time_losts The time slots
-  ###
-  # checkRequestedTime = (day, time_slots) ->
-  #   # console.log day
-  #   # console.log time_slots
-  #
-  #   current_item = $scope.bb.current_item
-  #
-  #   if (current_item.requested_time or current_item.time) and current_item.requested_date and day.date.isSame(current_item.requested_date)
-  #     found_time = false
-  #
-  #     for slot in time_slots
-  #       if (slot.time is current_item.requested_time)
-  #         current_item.requestedTimeUnavailable()
-  #         $scope.selectSlot(day, slot)
-  #         found_time = true
-  #         $scope.days = []
-  #         return  # hey if we just picked the day and routed - then move on!
-  #
-  #       if (current_item.time and current_item.time.time is slot.time and slot.avail is 1)
-  #         if $scope.selected_slot and $scope.selected_slot.time isnt current_item.time.time
-  #           $scope.selected_slot = current_item.time
-  #         current_item.setTime(slot)  # reset it - just in case this is really a new slot!
-  #         found_time = true
-  #
-  #     if !found_time
-  #       current_item.requestedTimeUnavailable()
-  #       AlertService.raise('REQ_TIME_NOT_AVAIL')
-
 
   ###**
   * @ngdoc method
@@ -522,6 +485,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   ###
   $scope.padTimes = (times) ->
     $scope.add_padding = times
+
 
   ###**
   * @ngdoc method
@@ -550,41 +514,45 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       else
         return true
 
-  ###**
-  * @ngdoc method
-  * @name format_date
-  * @methodOf BB.Directives:bbTimeRanges
-  * @description
-  * Format the date in according of fmt parameter
-  *
-  * @param {date} fmt The format of date
-  ###
-  $scope.format_date = (fmt) ->
-    $scope.start_date.format(fmt) if $scope.start_date
 
   ###**
-  * @ngdoc method
-  * @name format_start_date
-  * @methodOf BB.Directives:bbTimeRanges
-  * @description
-  * Format the start date in according of fmt parameter
-  *
-  * @param {date} fmt The format of start date
-  ###
-  $scope.format_start_date = (fmt) ->
-    $scope.format_date(fmt)
+  # * @ngdoc method
+  # * @name format_date
+  # * @methodOf BB.Directives:bbTimeRanges
+  # * @description
+  # * Format the date in according of fmt parameter
+  # *
+  # * @param {date} fmt The format of date
+  # ###
+  # $scope.format_date = (fmt) ->
+  #   $scope.start_date.format(fmt) if $scope.start_date
 
-  ###**
-  * @ngdoc method
-  * @name format_end_date
-  * @methodOf BB.Directives:bbTimeRanges
-  * @description
-  * Format the end date in according of fmt parameter
-  *
-  * @param {date} fmt The format of end date
-  ###
-  $scope.format_end_date = (fmt) ->
-    $scope.end_date.format(fmt) if $scope.end_date
+
+  # ###**
+  # * @ngdoc method
+  # * @name format_start_date
+  # * @methodOf BB.Directives:bbTimeRanges
+  # * @description
+  # * Format the start date in according of fmt parameter
+  # *
+  # * @param {date} fmt The format of start date
+  # ###
+  # $scope.format_start_date = (fmt) ->
+  #   $scope.format_date(fmt)
+
+
+  # ###**
+  # * @ngdoc method
+  # * @name format_end_date
+  # * @methodOf BB.Directives:bbTimeRanges
+  # * @description
+  # * Format the end date in according of fmt parameter
+  # *
+  # * @param {date} fmt The format of end date
+  # ###
+  # $scope.format_end_date = (fmt) ->
+  #   $scope.end_date.format(fmt) if $scope.end_date
+
 
   ###**
   * @ngdoc method
@@ -600,11 +568,12 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.pretty_month_title = (month_format, year_format, seperator = '-') ->
     month_year_format = month_format + ' ' + year_format
     if $scope.start_date && $scope.end_date && $scope.end_date.isAfter($scope.start_date, 'month')
-      start_date = $scope.format_start_date(month_format)
-      start_date = $scope.format_start_date(month_year_format) if $scope.start_date.month() == 11
-      return start_date + ' ' + seperator + ' ' + $scope.format_end_date(month_year_format)
+      start_date = $scope.start_date.format(month_format)
+      start_date = $scope.start_date.format(month_year_format) if $scope.start_date.month() == 11
+      return start_date + ' ' + seperator + ' ' + $scope.end_date.format(month_year_format)
     else
-      return $scope.format_start_date(month_year_format)
+      return $scope.start_date.format(month_year_format)
+
 
   ###**
   * @ngdoc method

@@ -1,4 +1,7 @@
-<div calendar-admin>
+<div bb-calendar-admin>
+
+  <h1>Select a time</h1>
+
   <div class="col-md-12 section1">
     <div class="row">
       <div class="col-md-12 cal-subheader panel">
@@ -7,23 +10,26 @@
         <i class="fa fa-arrow-right"></i>&nbsp; The Person/resource is not currently available at that time<br>
         <i class="fa fa-arrow-right"></i>&nbsp; The time selected does not matched the normal time step for that service<br>
         <i class="fa fa-arrow-right"></i>&nbsp; The Person/resource is booked already<br>
-        <button class="btn btn-sm btn-default col-md-2 col-md-offset-10" ng-click="switchWeekView()">{{name_switch}}</button>
+        <button class="btn btn-sm btn-default col-md-2 col-md-offset-10" ng-click="switchWeekView()">
+          <span ng-show="week_view">switch to day view</span>
+          <span ng-hide="week_view">switch to week view</span>
+        </button>
       </div>
     </div>
   </div>
   <div class="row section2">
-    <div class="col-md-8" ng-if="week_view">
+    <div class="col-md-8" ng-if="!week_view">
       <div class="calendar-cal-admin panel">
 
-        <div bb-times ng-init="checkStepTitle('Select a time')" class="bb-time">
+        <div bb-times class="bb-time">
             <div class="bb-calendar-navigation">
               <button type="button" class="btn btn-link pull-left cal-dateheader-btn" ng-click="subtract('days',1)">
                 <span class="glyphicon glyphicon-chevron-left pull-left" aria-hidden="true"></span>
-                <span class="hidden-xs">Previous Day</span>
+                <span class="hidden-xs">Previous</span>
               </button>
               <button type="button" class="btn btn-link pull-right cal-dateheader-btn" ng-click="add('days',1)">
                 <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true" ></span>
-                <span class="hidden-xs">Next Day</span>
+                <span class="hidden-xs">Next</span>
               </button>
             </div>
 
@@ -33,72 +39,31 @@
               <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">{{format_date('Do MMM')}}</h2>
               <div ng-show="!slots || (slots && slots.length == 0)" class="bb-service-unavailable">
                 <p>
-                  No Service Available
+                  No availability found
                 </p>
               </div>
             </div>
             <div ng-if="slots">
 
               <div accordion close-others="false">
+
                 <!-- Morning -->
-                <div class="acc-cal-admin">
-                  <div bb-accordian-range-group="{range: [360, 720], slots: slots, collaspe_when_time_selected: true}"ng-init="setFormDataStoreId($index)" class="accordian-group">
-                    <div accordion-group is-open="is_open" ng-disabled="!has_availability && !is_selected" ng-class="{'expanded': is_open, 'selected': is_selected}">
-                      <div accordion-heading>
-                        <div class="panel-header-cal-admin">
-                              <div class="fa fa-angle-double-down pull-left" ng-show="has_availability && !is_open"></div>Morning<div class="fa fa-angle-double-down pull-right" ng-show="has_availability && !is_open"></div>
-                              <div class="fa fa-angle-double-up pull-left" ng-hide="has_availability && !is_open"></div><div class="fa fa-angle-double-up pull-right" ng-hide="has_availability && !is_open"></div>
-                          <p class="selected-time" ng-show="is_selected && !is_open">
-                            <small>{{selected_slot.time_12}}</small>
-                          </p>
-                        </div>
-                      </div>
-
-                      <div class="row" ng-if="has_availability">
-                        <div ng-if="slot.avail > 0" class="bb-time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-repeat="slot in accordian_slots">
-                          <button type="button" class="btn btn-primary btn-block btn-dropdown-cal-admin" ng-click="selectSlot(slot)">
-                            <span>{{slot.time_12}}</span>
-                          </button>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-                <div>
-                <!-- Afternoon -->
-                <div bb-accordian-range-group="{range: [720, 1080], slots: slots, collaspe_when_time_selected: true}"ng-init="setFormDataStoreId($index)" class="accordian-group">
-                  <div accordion-group is-open="is_open" ng-disabled="!has_availability && !is_selected" ng-class="{'expanded': is_open, 'selected': is_selected}">
-                    <div accordion-heading>
-                      <div class="panel-header-cal-admin">
-                            <div class="fa fa-angle-double-down pull-left" ng-show="has_availability && !is_open"></div>Afternoon<div class="fa fa-angle-double-down pull-right" ng-show="has_availability && !is_open"></div>
-                            <div class="fa fa-angle-double-up pull-left" ng-hide="has_availability && !is_open"></div><div class="fa fa-angle-double-up pull-right" ng-hide="has_availability && !is_open"></div>
-                        <p class="selected-time" ng-show="is_selected && !is_open">
-                        <p class="selected-time" ng-show="is_selected && !is_open">
-                          <small>{{selected_slot.time_12}}</small>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="row" ng-if="has_availability">
-                      <div ng-if="slot.avail > 0" ng-repeat="slot in accordian_slots" class="bb-time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disable}" >
-                        <button type="button" class="btn btn-primary btn-dropdown-cal-admin btn-block" ng-click="selectSlot(slot)">
-                          <span>{{slot.time_12}}</span>
-                        </button>
-                      </div>
-                    </div>
-
-                  </div>
+                <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
                 </div>
+
+                <!-- Afternoon -->
+                <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                </div>
+
+
                 <!-- Evening -->
-                <div bb-accordian-range-group="{range: [1080, 1200], slots: slots, collaspe_when_time_selected: true}"ng-init="setFormDataStoreId($index)" class="accordian-group">
+                <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+<!--                 <div bb-accordian-range-group="{range: [1080, 1200], slots: slots, collaspe_when_time_selected: true}"ng-init="setFormDataStoreId($index)" class="accordian-group">
                   <div accordion-group is-open="is_open" ng-disabled="!has_availability && !is_selected" ng-class="{'expanded': is_open, 'selected': is_selected}" disabled="disabled">
                     <div accordion-heading>
                       <div class="panel-header-cal-admin">
                             <div class="fa fa-angle-double-down pull-left" ng-show="has_availability && !is_open"></div>Evening<div class="fa fa-angle-double-down pull-right" ng-show="has_availability && !is_open"></div>
                             <div class="fa fa-angle-double-up pull-left" ng-hide="has_availability && !is_open"></div><div class="fa fa-angle-double-up pull-right" ng-hide="has_availability && !is_open"></div>
-                        <!-- <p ng-hide="is_selected || (is_open && has_availability)">
-                          <small>{{accordian_slots.length}} available</small>
-                        </p> -->
                         <p class="selected-time" ng-show="is_selected && !is_open">
                           <small>{{selected_slot.time_12}}</small>
                         </p>
@@ -114,7 +79,7 @@
                     </ul>
 
                   </div>
-                </div>
+                </div> -->
               </div>
 
             </div>
@@ -130,7 +95,7 @@
     </div>
     </div>
     </div>
-    <div class="widget-wrapper col-md-4" ng-if="week_view">
+    <div class="widget-wrapper col-md-4" ng-if="!week_view">
       <div>
           <div class="header-top">
            <h2>Information</h2>
@@ -196,7 +161,7 @@
 
 
 
-  <div bb-page ng-if="!week_view">
+  <div bb-page ng-if="week_view">
   <!--   <div bb-people></div> -->
 
   <div bb-time-ranges="{selected_day: today}" class="calendar" ng-show="days">
@@ -310,14 +275,28 @@
 
   </div>
 
-  <div class="row section3">
+<!--   <div class="row section3">
     <div class="col-sm-2">
       <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
     </div>
     <div class="cal-modal">
       <div class="col-md-6 col-md-offset-4">
-        <button type="button" class="btn btn-danger btn-block" ng-click="bookAnyway()">Book Anyway!</button>
+        <button type="button" class="btn btn-danger btn-block" ng-click="bookAnyway()">Book Anyway</button>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="bb-step-navigation">
+    <div class="row">
+      <div class="col-sm-9 col-sm-push-3 text-right">
+        <button type="button" class="btn btn-danger" ng-click="bookAnyway()">Book Anyway</button>
+      </div>
+      <div class="col-sm-3 col-sm-pull-9">
+        <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
       </div>
     </div>
   </div>
+
+
+
 </div>
