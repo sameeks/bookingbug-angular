@@ -14,7 +14,7 @@
 ####
 
 
-angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService) ->
+angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService, $translate) ->
 
 
   class Event extends BaseModel
@@ -157,9 +157,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     getRemainingDescription: () ->
       left = @getSpacesLeft()
       if left > 0 && left < 3
-        return "Only " + left + " " + (if left > 1 then "spaces" else "space") + " left"
+        return $translate.instant("SPACES_LEFT", {N: left}, 'messageformat')
       if @hasWaitlistSpace()
-        return "Join Waitlist"
+        return $translate.instant("JOIN_WAITLIST")
       return ""
 
     ###**

@@ -45,13 +45,7 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
 
     $scope.$watch ->
       $scope.basketItemCount = len = if $scope.bb.basket then $scope.bb.basket.length() else 0
-      if not len
-        $scope.basketStatus = "empty"
-      else
-        if len is 1
-          $scope.basketStatus = "1 item in your basket"
-        else
-          $scope.basketStatus = len + " items in your basket"
+      $scope.baskenStatus = $translate.instant("BASKET_STATUS", {N: len}, "messageformat")
       return
     return
 
@@ -66,7 +60,7 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
 angular.module('BB.Directives').directive 'bbMinSpend', () ->
   restrict: 'A'
   scope: true
-  controller: ($scope, $element, $attrs, AlertService, $filter) ->
+  controller: ($scope, $element, $attrs, AlertService, $translate) ->
 
     options = $scope.$eval $attrs.bbMinSpend or {}
     $scope.min_spend = options.min_spend or 0
@@ -85,6 +79,5 @@ angular.module('BB.Directives').directive 'bbMinSpend', () ->
         return true
       else
         AlertService.clear()
-        price = $filter('ipretty_price')($scope.min_spend)
-        AlertService.add("warning", { msg: "You need to spend at least #{price} to make a booking."})
+        AlertService.add("warning", { msg: $translate.instant('SPEND_AT_LEAST', min_spend: $scope.min_spend)})
         return false

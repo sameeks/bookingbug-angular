@@ -230,7 +230,6 @@ app.filter "uk_local_number", ->
 # TODO get timezone from company
 app.filter "datetime", ->
   (datetime, format, show_timezone = true) ->
-
     return if !datetime
 
     datetime = moment(datetime)
@@ -242,6 +241,8 @@ app.filter "datetime", ->
     if datetime.utcOffset() != new Date().getTimezoneOffset() && show_timezone
       if datetime._z
         result += datetime.format(" z")
+
+    result
 
 
 app.filter 'range', ->

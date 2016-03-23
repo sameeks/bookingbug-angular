@@ -34,7 +34,7 @@
   "STORE_RESULT_TITLE":"{results, plural, =0{Keine Ergebnisse} one{1 Ergebnis} other{# Ergebnisse}} für Ausstellungsräume in der Nähe von {address}",
   "STORE_PHONE":"Telefon",
   "PICK_A_SERVICE":"wählen Sie einen Service",
-  "PICK_AN_ADVISER":"holen einen Berater",
+  "PICK_STAFF":"holen einen Berater",
   "PICK_A_RESOURCE":"wählen Sie eine Ressource",
   "AVAIL_TITLE":"Wählen Sie ein Datum und die Uhrzeit für den Termin.",
   "AVAIL_DAY_PREVIOUS":"Vorheriger Tag",

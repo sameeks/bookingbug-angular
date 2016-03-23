@@ -29,7 +29,7 @@ angular.module('BB.Directives').directive 'bbDurations', () ->
   controller : 'DurationList'
 
 
-angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $rootScope, PageControllerService, $q, AlertService, $filter) ->
+angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $rootScope, PageControllerService, $q, AlertService, $filter, $translate) ->
   $scope.controller = "public.controllers.DurationList"
   $scope.notLoaded $scope
 
@@ -112,7 +112,7 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $ro
       return true
     else
       AlertService.clear()
-      AlertService.add("danger", { msg: "You need to select a duration" })
+      AlertService.add("danger", { msg: $translate.instant('SELECT_DURATION') })
       return false
 
 

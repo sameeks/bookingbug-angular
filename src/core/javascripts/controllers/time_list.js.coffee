@@ -32,7 +32,7 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   scope : true
   controller : 'TimeList'
 
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, $translate, TimeService, AlertService, BBModel) ->
   $scope.controller = "public.controllers.TimeList"
   $scope.notLoaded $scope
 
@@ -271,7 +271,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             # if we didn't find the time - give up and do force it's selecttion
             $scope.data_source.requestedTimeUnavailable() if !$scope.options.persist_requested_time
             $scope.time_not_found = true
-            AlertService.add("danger", { msg: "Sorry, your requested time slot is not available. Please choose a different time." })
+            AlertService.add("danger", { msg: $translate.instant('TIME_SLOT_NOT_AVAILABLE') })
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     else
@@ -299,7 +299,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   $scope.setReady = () =>
     if !$scope.data_source.time
       AlertService.clear()
-      AlertService.add("danger", { msg: "You need to select a time slot" })
+      AlertService.add("danger", { msg: $translate.instant('SELECT_TIME_SLOT') })
       return false
     else
       if $scope.data_source.ready

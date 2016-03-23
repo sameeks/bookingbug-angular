@@ -90,7 +90,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
       $scope.bookings = bookings
       for booking in $scope.bookings
         if booking.datetime
-          booking.pretty_date = moment(booking.datetime).format("dddd, MMMM Do YYYY")       
+          booking.pretty_date = moment(booking.datetime).format("dddd, MMMM Do YYYY")
         if booking.address
           address = new BBModel.Address(booking.address)
           pretty_address = address.addressSingleLine()

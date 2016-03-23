@@ -29,7 +29,7 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
   scope : true
   controller : 'DealList'
 
-angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, DealService, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal) ->
+angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, DealService, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal, $translate) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
@@ -96,7 +96,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
     * Add to basket in according of form parameter
     *
     * @param {object} form The form where is added deal list to basket
-    ###    
+    ###
     $scope.addToBasket = (form) ->
       if !ValidatorService.validateForm(form)
         return
@@ -116,7 +116,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
     if $scope.bb.basket.items and $scope.bb.basket.items.length > 0
       $scope.decideNextPage()
     else
-      AlertService.add('danger', msg: 'You need to select at least one Gift Certificate to continue')
+      AlertService.add('danger', msg: $translate.instant('SELECT_GIFT_CERTIFICATE'))
 
   ###**
   * @ngdoc method
@@ -129,4 +129,4 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
     if $scope.bb.basket.items and $scope.bb.basket.items.length > 0
       true
     else
-      AlertService.add('danger', msg: 'You need to select at least one Gift Certificate to continue')
+      AlertService.add('danger', msg: $translate.instant('SELECT_GIFT_CERTIFICATE'))

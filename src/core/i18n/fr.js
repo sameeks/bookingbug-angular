@@ -34,7 +34,7 @@
   "STORE_RESULT_TITLE":"{results, plural, =0{Aucun réultat trouvé} one{1 résultat trouvé} other{# résultats trouvés}} pour les magasins à proximité de {address}",
   "STORE_PHONE":"Téléphone",
   "PICK_A_SERVICE":"choisir un service",
-  "PICK_AN_ADVISER":"choisir un conseiller",
+  "PICK_STAFF":"choisir un employé",
   "PICK_A_RESOURCE":"choisir une ressource",
   "AVAIL_TITLE":"Sélectionnez une date et une heure pour votre rendez-vous",
   "AVAIL_DAY_PREVIOUS":"Jour Précédent",
@@ -280,7 +280,16 @@
   "PREVIOUS_5_WEEKS": "5 semaines précédentes",
   "NEXT_5_WEEKS": "5 semaines suivantes",
   "KEY": "Clé",
-  "APPOINTMENT_TYPE": "Type de rdv"
+  "APPOINTMENT_TYPE": "Type de rdv",
+  "SPACES_LEFT": "Seulemet {N, plural, one{un espace disponible}, others{# espaces disponibles}}",
+  "JOIN_WAITLIST": "S'inscrire sur la liste d'attente",
+  "BASKET_STATUS": "{N, plural, =0 {vide}, one {Un article dans votre panier}, others {# articles dans votre panier}}",
+  "SPEND_AT_LEAST": "Le montant minimal pour une réservation est de {{min_spend | pretty_price}}.",
+  "SELECT_GIFT_CERTIFICATE": "Vous devez sélectionner au moins une carte cadeau pour continuer.",
+  "SELECT_DURATION": "Choisir une durée",
+  "SELECT_DATE": "Choisir une date",
+  "TIME_SLOT_NOT_AVAILABLE": "Désolé, ce créneau n'est plus disponible. Veuillez choisir un autre créneau.",
+  "SELECT_TIME_SLOT": "Choisir un créneau horaire."
 };
 
 (function (global, factory) {

@@ -30,7 +30,7 @@ angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
   scope : true
   controller : 'MonthAvailability'
 
-angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $rootScope, $q, DayService, AlertService) ->
+angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $rootScope, $q, $translate, DayService, AlertService) ->
   $scope.controller = "public.controllers.MonthAvailability"
   $scope.notLoaded $scope
 
@@ -286,6 +286,6 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
       return true
     else
       AlertService.clear()
-      AlertService.add("danger", { msg: "You need to select a date" })
+      AlertService.add("danger", { msg: $translate.instant("SELECT_DATE") })
       return false
 

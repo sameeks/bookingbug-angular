@@ -305,15 +305,24 @@
   "PREVIOUS_5_WEEKS": "Previous 5 Weeks",
   "NEXT_5_WEEKS": "Next 5 Weeks",
   "KEY": "Key",
-  "APPOINTMENT_TYPE": "Select appointment type"
+  "APPOINTMENT_TYPE": "Select appointment type",
+  "SPACES_LEFT": "Only {N, plural, one{one space}, others{# spaces}} left",
+  "JOIN_WAITLIST": "Join waitlist",
+  "BASKET_STATUS": "{N, plural, =0 {empty}, one {One item in your basket}, others {#items in your basket}}",
+  "SPEND_AT_LEAST": "You need to spend at least {{min_spend | pretty_price}} to make a booking.",
+  "SELECT_GIFT_CERTIFICATE": "You need to select at least one Gift Certificate to continue",
+  "SELECT_DURATION": "You need to select a duration",
+  "SELECT_DATE": "You need to select a date",
+  "TIME_SLOT_NOT_AVAILABLE": "Sorry, your requested time slot is not available. Please choose a different time.",
+  "SELECT_TIME_SLOT": "Please select a time slot"
 };
 
 moment.locale('en', {
   longDateFormat: {
     LT : "h:mma",
     LL: "Do MMMM YYYY",
-    LL: "h:mma Do MMM YYYY",
-    LLLL : "h:mma dddd Do MMMM YYYY"
+    LLL: "Do MMM YYYY h:mma",
+    LLLL : "dddd Do MMMM YYYY h:mma"
   },
   relativeTime: {
     future: "in %s",
