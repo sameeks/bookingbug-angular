@@ -309,10 +309,25 @@
 };
 
 moment.locale('en', {
-  longDateFormat : {
+  longDateFormat: {
     LT : "h:mma",
     LL: "Do MMMM YYYY",
     LL: "h:mma Do MMM YYYY",
     LLLL : "h:mma dddd Do MMMM YYYY"
-  }
+  },
+  relativeTime: {
+    future: "in %s",
+    past:   "%s ago",
+    s:  "seconds",
+    m:  "one minute",
+    mm: "%d minutes",
+    h:  "one hour",
+    hh: "%d hours",
+    d:  "one day",
+    dd: "%d days",
+    M:  "one month",
+    MM: "%d months",
+    y:  "one year",
+    yy: "%d years"
+  }  
 });
