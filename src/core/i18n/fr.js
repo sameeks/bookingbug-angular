@@ -74,6 +74,7 @@
   "ITEM_WHEN":"Quand",
   "ITEM_WHERE":"Où",
   "ITEM_FROM":"À partir de",
+  "ITEM_TO":"Jusqu'à",
   "ITEM_DESCRIPTION":"Description",
   "ITEM_CONFIRMATION":"Confirmation",
   "EVENT_DETAILS_TITLE":"Détails de l'événement",

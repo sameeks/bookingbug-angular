@@ -76,6 +76,7 @@
   "ITEM_WHEN":"Wann",
   "ITEM_WHERE":"Wo",
   "ITEM_FROM":"Von",
+  "ITEM_TO":"Bis",
   "ITEM_DESCRIPTION":"Beschreibung",
   "ITEM_CONFIRMATION":"Bestätigung",
   "EVENT_DETAILS_TITLE":"Event-Details",
