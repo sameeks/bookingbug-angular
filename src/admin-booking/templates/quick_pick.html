@@ -35,15 +35,19 @@
         {{bb.current_item.resource.name}}
       </p>
     </div>
-
-    <div class="form-group">
-      <label>From</label>
-      <div bb-date-time-picker="block_time.from"></div>
-    </div>
-
-    <div class="form-group">
-      <label>To</label>
-      <div bb-date-time-picker="block_time.to"></div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>From</label>
+          <div bb-date-time-picker date="config.from_datetime"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>To</label>
+          <div bb-date-time-picker date="config.to_datetime"></div>
+        </div>
+      </div>
     </div>
 
     <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false">Block Time</button>
