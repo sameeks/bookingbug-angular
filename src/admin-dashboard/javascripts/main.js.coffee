@@ -7,7 +7,6 @@ adminbookingapp = angular.module('BBAdminDashboard', [
   'ui.calendar',
   'ngStorage',
   'BBAdminBooking',
-  'BBAdminDashboard',
   'BBAdmin.Directives',
   'ui.calendar', 'ngResource', 'ui.bootstrap',
   'ui.router', 'ct.ui.router.extras','ngTouch', 'ngInputDate', 'ngSanitize',

@@ -34,7 +34,7 @@
   "STORE_RESULT_TITLE":"{results, plural, =0{No results} one{1 result} other{# results}} for stores near {address}",
   "STORE_PHONE":"Phone",
   "PICK_A_SERVICE":"pick a service",
-  "PICK_AN_ADVISER":"pick an adviser",
+  "PICK_STAFF":"Pick a staff member",
   "PICK_A_RESOURCE":"pick a resource",
   "AVAIL_TITLE":"Select a date and time for your {{ current_item }} appointment.",
   "AVAIL_DAY_PREVIOUS":"Previous Day",

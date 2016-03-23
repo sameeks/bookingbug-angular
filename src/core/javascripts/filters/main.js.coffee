@@ -242,10 +242,6 @@ app.filter "datetime", ->
     if datetime.utcOffset() != new Date().getTimezoneOffset() && show_timezone
       if datetime._z
         result += datetime.format(" z")
-      else
-        result += " UTC" + datetime.format("Z")
-
-    return result
 
 
 app.filter 'range', ->
@@ -313,3 +309,9 @@ app.filter 'twelve_hour_time', ($window) ->
       time = "#{h}#{seperator}" + $window.sprintf("%02d", m)
     time += suffix
     return time
+
+app.filter 'clearTimezone', ->
+  (val, offset) ->
+    if val != null and val.length > 19
+      return val.substring(0, 19)
+    val

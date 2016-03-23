@@ -96,7 +96,6 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
     ppromise = comp.getServicesPromise()
     ppromise.then (items) =>
-
       if $scope.hide_disabled
         # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
         items = items.filter (x) -> !x.disabled && !x.deleted
@@ -107,8 +106,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       if filterItems
         if $scope.booking_item.service_ref && !$scope.show_all
           items = items.filter (x) -> x.api_ref is $scope.booking_item.service_ref
-        else if ($scope.booking_item.category || $scope.booking_item.service_group) && !$scope.show_all
-          $scope.category = $scope.booking_item.service_group if !$scope.booking_item.category
+        else if $scope.booking_item.category && !$scope.show_all
           # if we've selected a category for the current item - limit the list
           # of services to ones that are relevant
           items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.booking_item.category.self

@@ -1,5 +1,5 @@
 .calendar, div[bb-time-ranges],  {
-  padding-bottom: 50px;
+  padding-bottom: 30px;
 
   .week {
     padding: 0 15px;
@@ -81,7 +81,7 @@
 
   .panel-default > .panel-heading {
     background: none;
-    padding: 10px;
+    padding: 4px 4px 10px 4px;
     position: relative;
     cursor: pointer;
     color: inherit;
@@ -115,10 +115,12 @@
     // font-size: 0.9rem;
   }
 
-  // .selected-time {
+  .selected-time {
+    display: block;
+    text-align: center;
   //   font-size: 12px;
   //   font-size: 1.2rem;
-  // }
+  }
 
   .time-slot {
     padding: 15px 25px;

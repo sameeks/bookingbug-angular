@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <ul class="bb-summary-list">
   <li class="bb-confirmation-summary-item" ng-show="bb.current_item.service">
     <div class="bb-summary-label"><span translate="ITEM_SERVICE"></span>:
@@ -42,3 +43,51 @@
     </div>
   </li>
 </ul>
+=======
+<div class="page-summary-var">
+  <div class="page-summary-header">
+    <div class="page-summary-header-text">
+      {{bb.current_item.service.name}}
+    </div>
+  </div>
+  <ul class="bb-summary-list">
+    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.duration">
+      <div class="bb-summary-label" translate="ITEM_DURATION">
+      </div>
+      <div class="bb-summary-value"><span>{{bb.current_item.duration | time_period}}</span>
+      </div>
+    </li>
+    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.resource && bb.current_item.resource.name">
+      <div class="bb-summary-label" translate="ITEM_RESOURCE">
+      </div>
+      <div class="bb-summary-value"><span>{{bb.current_item.resource.name}}</span>
+      </div>
+    </li>
+    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.person && bb.current_item.person.name">
+      <div class="bb-summary-label" translate="ITEM_PERSON">
+      </div>
+      <div class="bb-summary-value"><span>{{bb.current_item.person.name}}</span>
+      </div>
+    </li>
+    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.price">
+      <div class="bb-summary-label" translate="ITEM_PRICE">
+      </div>
+      <div class="bb-summary-value"><span>{{bb.current_item.price | currency}}</span>
+      </div>
+    </li>
+    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.date">
+      <div class="bb-summary-label" translate="ITEM_DATE">
+      </div>
+      <div class="bb-summary-value"><span>{{bb.current_item.date.date | datetime: 'LL'}}</span>
+      </div>
+    </li>
+    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.time">
+      <div class="bb-summary-label" transalte="ITEM_TIME">
+      </div>
+      <div class="bb-summary-value"><span>{{bb.current_item.start_datetime() | datetime: 'LT'}}</span>
+      </div>
+    </li>
+  </ul>
+  <div class="clearfix"></div>
+</div>
+>>>>>>> c83a4e3f6795df9fda0e010f45ea1b3ad44a44f6

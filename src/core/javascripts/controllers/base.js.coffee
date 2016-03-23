@@ -825,6 +825,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.showPage('slot_list')
       else
         return if $scope.setPageRoute($rootScope.Route.Date)
+        # if we're an admin and we've pre-selected a time - route to that instead
         return $scope.showPage('calendar')
     else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.time && !$scope.bb.current_item.event? && (!$scope.bb.current_item.service || $scope.bb.current_item.service.duration_unit != 'day') && !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Time)
@@ -833,16 +834,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return $scope.showPage('check_move')
     else if (!$scope.client.valid())
       return if $scope.setPageRoute($rootScope.Route.Client)
-      if $scope.bb.isAdmin
-        return $scope.showPage('client_admin')
-      else
-        return $scope.showPage('client')
+      return $scope.showPage('client')
     else if ( !$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready ) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
       return if $scope.setPageRoute($rootScope.Route.Summary)
-      if $scope.bb.isAdmin
-        return $scope.showPage('check_items_admin')
-      else
-        return $scope.showPage('check_items')
+      return $scope.showPage('check_items')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
       return if $scope.setPageRoute($rootScope.Route.Basket)
       return $scope.showPage('basket')
