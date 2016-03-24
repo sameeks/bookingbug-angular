@@ -20,7 +20,6 @@
 * @property {date} end_date End date
 * @property {array} slots Slots
 * @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
-* 
 ####
 
 angular.module('BB.Directives').directive 'bbTimeSlots', () ->

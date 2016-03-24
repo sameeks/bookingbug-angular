@@ -82,7 +82,7 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope
   * Selects list duration according to duration and route parameter.
   *
   * @param {object} dur Duration list
-  * @param {string} route Specific route to load
+  * @param {string=} route Specific route to load
   ###
   $scope.selectDuration = (dur, route) =>
     if $scope.$parent.$has_page_control

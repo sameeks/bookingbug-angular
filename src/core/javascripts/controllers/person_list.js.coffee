@@ -7,7 +7,6 @@
 * @scope true
 *
 * @description
-*
 * Loads a list of peoples for the currently in scope company.
 *
 * <pre>
@@ -39,7 +38,6 @@
 *     </div>
 *   </file>
 *  </example>
-* 
 ####
 
 angular.module('BB.Directives').directive 'bbPeople', () ->

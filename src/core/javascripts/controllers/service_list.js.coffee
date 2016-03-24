@@ -39,7 +39,6 @@
 *     </div>
 *   </file>
 *  </example>
-*
 ####
 
 angular.module('BB.Directives').directive 'bbServices', () ->
