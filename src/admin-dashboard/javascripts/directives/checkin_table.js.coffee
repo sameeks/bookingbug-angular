@@ -12,50 +12,42 @@ angular.module('BBAdminDashboard').controller 'CheckinsController', ($scope,  $r
     BusyService, $q, $filter, AdminTimeService, AdminBookingService,
     AdminSlotService, $timeout, AlertService) ->
 
-  $scope.sorter = "unixTime"
-
-  $scope.doSort = (sorter) =>
-    if sorter == $scope.sorter && $scope.sortAscending?
-      $scope.sortAscending = !$scope.sortAscending
-    else
-      $scope.sortAscending = true
-
-    $scope.sorter = sorter
-    $scope.bookings = $filter('orderBy')($scope.bookings, (item) =>
-      $scope.bmap[item][sorter]
-    , !$scope.sortAscending)
-
-    return false
-
-  $scope.loadAppointments = () =>
-
-    BusyService.notLoaded $scope
-    prms = { company_id: $scope.bb.company_id, date: moment().format('YYYY-MM-DD') }
-    prms.url = $scope.bb.api_url
-
-    AdminBookingService.query(prms).then (res) =>
+  $scope.getAppointments = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
+    if filterByFields && filterByFields.name?
+      filterByFields.name = filterByFields.name.replace(/\s/g, '')
+    if filterByFields && filterByFields.mobile?
+      mobile = filterByFields.mobile
+      if mobile.indexOf('0') == 0
+        filterByFields.mobile = mobile.substring(1)
+    defer = $q.defer()
+    params =
+      company: $scope.company
+      date: moment().format('YYYY-MM-DD')
+      url: $scope.bb.api_url
+    params.filter_by = filterBy if filterBy
+    params.filter_by_fields = filterByFields if filterByFields
+    params.order_by = orderBy if orderBy
+    params.order_by_reverse = orderByReverse if orderByReverse
+    AdminBookingService.query(params).then (res) =>
       $scope.booking_collection = res
       $scope.bookings = []
       $scope.bmap = {}
       for item in res.items
-        item.unixTime = item.datetime.unix()
         if item.status != 3 # not blocked
           $scope.bookings.push(item.id)
           $scope.bmap[item.id] = item
-      $scope.doSort($scope.sorter)
-      BusyService.setLoaded $scope
-      BusyService.setPageLoaded($scope)
       # update the items if they've changed
       $scope.booking_collection.addCallback $scope, (booking, status) =>
         $scope.bookings = []
         $scope.bmap = {}
         for item in $scope.booking_collection.items
-          item.unixTime = item.datetime.unix()
           if item.status != 3 # not blocked
             $scope.bookings.push(item.id)
             $scope.bmap[item.id] = item
-        $scope.doSort($scope.sorter)
-
+      defer.resolve($scope.bookings)
+    , (err) ->
+      defer.reject(err)
+    defer.promise
 
   $scope.setStatus = (booking, status) =>
     booking.current_multi_status = status
@@ -71,7 +63,6 @@ angular.module('BBAdminDashboard').controller 'CheckinsController', ($scope,  $r
       @checker()
     , 1000
 
+  $scope.getAppointments()
+
   @checker()
-
-  $scope.loadAppointments()
-
