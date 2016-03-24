@@ -25,15 +25,14 @@
   <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
 
     <h1>Block Time</h1>
-
     <div class="form-group">
       <label>For</label>
-      <p ng-show="bb.current_item.person.name">
-        {{bb.current_item.person.name}}
-      </p>
       <p ng-show="bb.current_item.resource.name">
         {{bb.current_item.resource.name}}
       </p>
+      <select id="people" ng-model="picked_resource" ng-options="item.id as item.name for item in people" class="form-control">
+        <option value="">-- select a resource --</option>
+      </select>
     </div>
     <div class="row">
       <div class="col-md-6">
