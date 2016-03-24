@@ -16,9 +16,8 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
   }))
 
   $rootScope.connection_started.then ->
-    debugger
 
-    $scope.week_view = !$scope.bb.current_item.requested_date
+    $scope.week_view = !$scope.bb.current_item.requested_time
 
 
   $scope.switchWeekView = () ->

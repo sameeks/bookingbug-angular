@@ -1,6 +1,69 @@
 <div bb-calendar-admin>
 
-  <h1>Select a time</h1>
+  <div class="page-header">
+    <h1>Select a time</h1>
+  </div>
+
+  <div class="panel panel-danger">
+    <div class="panel-heading">Availability Conflict</div>
+    <div class="panel-body">
+      <p>
+        <span>{{bb.current_item.person.name}}</span>
+        <span>{{bb.current_item.resource.name}}</span>
+        for {{bb.current_item.service.name}} at {{bb.current_item.startDatetime() | datetime: 'time'}} is not available.  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
+      </p>
+      <ul>
+        <li>The Staff/Resource is not currently available at that time</li>
+        <li>The Staff/resource is booked already</li>
+        <li>There's not enought time to complete the service </li>
+      </ul>
+      <p>You can either choose another time below or overbook.</p>
+
+      <button type="button" class="btn btn-danger pull-right">Overbook {{bb.current_item.requested_time}}</button>
+
+    </div>
+
+    
+  </div>
+
+  <hr>
+
+  <h2>Availbility</h2>
+
+  <div ng-form="resource_select_form">
+
+    <div class="row">
+
+      <div class="col-sm-6">
+        <div ng-if="bb.company.$has('people')">
+          <div class="form-group" bb-people>
+            <label>Person</label>
+            <select  class=" form-control" id="person" ng-model="person" ng-options="p.name for p in bookable_people | orderBy: 'name'" >
+              <option value="">-- select a person --</option>
+            </select>
+          </div>
+        </div> 
+      </div>
+
+      <div class="col-sm-6">
+        <div ng-if="bb.company.$has('resources')">
+          <div class="form-group" bb-resources>
+            <label>Resource</label>
+              <select class="form-control"  id="resource" ng-model="resource" ng-options="r.name for r in bookable_resources | orderBy: 'name'">
+                <option value="">-- select a resource --</option>
+              </select>
+            </div>
+        </div>  
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+
+
 
   <div class="col-md-12 section1">
     <div class="row">
