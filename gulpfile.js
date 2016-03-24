@@ -67,7 +67,7 @@ gulp.task('images', function() {
   return gulp.src('src/*/images/*')
     .pipe(imagemin())
     .pipe(flatten())
-    .pipe(gulp.dest('release'));
+    .pipe(gulp.dest('release/images'));
 });
 
 gulp.task('shims', function() {

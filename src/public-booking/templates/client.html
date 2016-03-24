@@ -9,9 +9,15 @@
       <h2 ng-if="!isAdmin()" class="booking-form-header"><span ng-if="!isAdmin()">Your details</span></h2>
       <h2 ng-if="isAdmin()" class="booking-form-header"><span ng-if="isAdmin()">Client details</span></h2>
     </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-4 col-sm-5">
+         <p class="form-control-static">*Required fields</p>
+      </div>
+    </div>
     
     <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && (!client_form.first_name.$pristine || client_form.submitted)}">
-      <label bb-question-label="question" for="first_name" class="control-label col-sm-4">First Name:</label>
+      <label bb-question-label="question" for="first_name" class="control-label col-sm-4">First Name*:</label>
       <div class="col-sm-5">
         <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" autofocus bb-resettable ng-pattern="validator.alpha" />
       </div>
@@ -22,7 +28,7 @@
       </div> 
     </div>
     <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (!client_form.last_name.$pristine || client_form.submitted)}">
-      <label bb-question-label="question" class="control-label col-sm-4" for="last_name">Last Name:</label>
+      <label bb-question-label="question" class="control-label col-sm-4" for="last_name">Last Name*:</label>
       <div class="bb-field col-sm-5">
         <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" bb-resettable ng-pattern="validator.alpha" />
       </div>
@@ -33,7 +39,7 @@
       </div>
     </div>
     <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && (!client_form.email.$pristine || client_form.submitted)}">
-      <label bb-question-label="question" class="control-label col-sm-4" for="email">Email:</label>
+      <label bb-question-label="question" class="control-label col-sm-4" for="email">Email*:</label>
       <div class="bb-field col-sm-5">
         <input type="email" name="email" id="email" required ng-model="client.email" class="form-control" bb-resettable />
       </div>
@@ -49,17 +55,22 @@
         <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" bb-resettable ng-pattern="validator.getMobilePattern()" />
       </div>
     </div>
-    <div ng-show="client_details.hasQuestions">
+    <div ng-show="client_details.hasQuestions" ng-form name="client_questions_form" class="bb-form" role="form" nonvalidate>
+
+      <h2 class="booking-form-header">Other Information</h2>
+
       <div>
-        <h2 class="booking-form-header">Other Information</h2>
-      </div>
-      <div>
-        <div class="form-group" ng-repeat="question in client_details.questions" bb-question-line ng-show="question.currentlyShown" ng-class="{'has-error': client_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].dirty || booking_form.submitted), 'bb-check-space': (question.detail_type == 'check')}">
+        <div class="form-group" ng-repeat="question in client_details.questions" bb-question-line ng-show="question.currentlyShown" ng-class="{'has-error': client_questions_form['q' + question.id].$invalid && (client_questions_form['q' + question.id].dirty || client_form.submitted), 'bb-check-space': (question.detail_type == 'check')}">
           <label class="control-label col-sm-4" bb-question-label="question" for="{{question.id}}">{{question.name}}<span ng-show="question.required">*</span>:</label>
           <div class="col-sm-5">
             <input bb-question="question" class="form-control"/><br/>
             <small ng-show="question.help_text">{{question.help_text}}</small>
           </div>
+          <div class="col-sm-offset-4 messages">
+            <div class="error-message" ng-show="client_questions_form['q' + question.id].$invalid && (client_questions_form['q' + question.id].dirty || client_form.submitted)">
+              This field is required
+            </div>
+          </div> 
         </div>
       </div>
     </div>

@@ -35,7 +35,6 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Adds an item to the items array of the basket
     *
-    * @returns {array} items Array with the newly added item
     ###
     addItem: (item) ->
       # check if then item is already in the basket
@@ -53,7 +52,6 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Empty items array
     *
-    * @returns {array} Emptied items array
     ###
     clear: () ->
       @items = []
@@ -65,7 +63,6 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Remove a given item from the items array
     *
-    * @returns {array} items Array without the given item
     ###
     clearItem: (item) ->
       @items = @items.filter (i) -> i isnt item
@@ -91,14 +88,14 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name timeItems
     * @methodOf BB.Models:Basket
     * @description
-    * Build an array of time items(all items that are not coupons)
+    * Build an array of time items (i.e. event and appointment bookings)
     *
-    * @returns {array} the newly build array of items
+    * @returns {array}
     ###
     timeItems: ->
       titems = []
       for i in @items
-        titems.push(i) if !i.is_coupon and !i.isExternalPurchase()
+        titems.push(i) if i.isTimeItem()
       titems
 
     ###**
@@ -106,13 +103,13 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name hasTimeItems
     * @methodOf BB.Models:Basket
     * @description
-    * Build an array of time items(all items that are not coupons)
+    * Indicates if the basket contains time items (i.e. event and appointment bookings)
     *
-    * @returns {array} the newly build array of items
+    * @returns {boolean}
     ###
     hasTimeItems: ->
       for i in @items
-        return true if !i.is_coupon and !i.isExternalPurchase()
+        return true if i.isTimeItem()
       return false
 
 

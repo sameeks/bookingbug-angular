@@ -7,8 +7,7 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   controller : 'adminBookingClients'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients',
-($scope,  $rootScope, $q, $log, AdminClientService, ClientDetailsService, AlertService, ValidatorService, ErrorService, LoadingService, BBModel) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, PaginationService, LoadingService) ->
 
   $scope.validator = ValidatorService
   $scope.clientDef = $q.defer()
@@ -21,6 +20,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients',
   $scope.no_clients = false
   $scope.search_error = false
   $scope.search_text = null
+  $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   loader = LoadingService.$loader($scope)
 
   $scope.showSearch = () =>
@@ -65,6 +65,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients',
 
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
     AlertService.clear()
+    $scope.search_triggered = true
     $scope.no_clients = false
     $scope.search_error = false
     clientDef = $q.defer()
@@ -84,10 +85,33 @@ angular.module('BBAdminBooking').controller 'adminBookingClients',
         loader.setLoaded()
         $scope.setPageLoaded()
         $scope.total_entries = clients.total_entries
+        PaginationService.update($scope.pagination, $scope.clients.length)
         clientDef.resolve(clients.items)
       , (err) ->
         loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
         clientDef.reject(err)
+
+
+  $scope.searchClients = (search_text) ->
+    clientDef = $q.defer()
+    params =
+      filter_by: search_text
+      company: $scope.bb.company
+    AdminClientService.query(params).then (clients) =>
+      clientDef.resolve(clients.items)
+      clients.items
+    return clientDef.promise
+
+  $scope.typeHeadResults = ($item, $model, $label) ->
+    item = $item
+    model = $model
+    label = $label
+    $scope.client = item
+    return
+
+  $scope.clearSearch = () ->
+    $scope.clients = null
+    $scope.search_triggered = false
 
   $scope.edit = (item) ->
     $log.info("not implemented")

@@ -1,5 +1,4 @@
-angular.module('BB.Services').factory "MemberBookingService",
-($q, $rootScope, SpaceCollections, BBModel) ->
+angular.module('BBMember.Services').factory "MemberBookingService", ($q, SpaceCollections, $rootScope, MemberService, BBModel) ->
 
   query: (member, params) ->
     deferred = $q.defer()

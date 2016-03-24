@@ -23,35 +23,31 @@ angular.module('BB.Directives').directive 'bbMiniBasket', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller : 'MiniBasket'
+  controller: ($scope, $rootScope, BasketService, $q) ->
+    $scope.controller = "public.controllers.MiniBasket"
+    $scope.setUsingBasket(true)
+    $rootScope.connection_started.then () =>
+
+    ###**
+    * @ngdoc method
+    * @name basketDescribe
+    * @methodOf BB.Directives:bbMiniBasket
+    * @description
+    * Basked describe in according of basket length
+    *
+    * @param {string} nothing Nothing to describe
+    * @param {string} single The single describe
+    * @param {string} plural The plural describe
+    ###
+    $scope.basketDescribe = (nothing, single, plural) =>
+      if !$scope.bb.basket || $scope.bb.basket.length() == 0
+        nothing
+      else if $scope.bb.basket.length() == 1
+        single
+      else
+        plural.replace("$0", $scope.bb.basket.length())
 
 
-
-angular.module('BB.Controllers').controller 'MiniBasket',
-($scope,  $rootScope, $q) ->
-
-  $scope.controller = "public.controllers.MiniBasket"
-  $scope.setUsingBasket(true)
-  $rootScope.connection_started.then () =>
-
-  ###**
-  * @ngdoc method
-  * @name basketDescribe
-  * @methodOf BB.Directives:bbMiniBasket
-  * @description
-  * Basked describe in according of basket length
-  *
-  * @param {string} nothing Nothing to describe
-  * @param {string} single The single describe
-  * @param {string} plural The plural describe
-  ###
-  $scope.basketDescribe = (nothing, single, plural) =>
-    if !$scope.bb.basket || $scope.bb.basket.length() == 0
-      nothing
-    else if $scope.bb.basket.length() == 1
-      single
-    else
-      plural.replace("$0", $scope.bb.basket.length())
 
 
 
