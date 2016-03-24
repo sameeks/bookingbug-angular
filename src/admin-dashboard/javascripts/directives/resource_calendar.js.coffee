@@ -2,7 +2,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     uiCalendarConfig, AdminCompanyService, AdminBookingService,
     AdminPersonService, $q, $sessionStorage, ModalForm, BBModel,
     AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,
-    $timeout, $compile, $templateCache, BookingCollections, PrePostTime) ->
+    $timeout, $compile, $templateCache, BookingCollections, PrePostTime,
+    AdminScheduleService) ->
 
   controller = ($scope, $attrs) ->
 
@@ -21,6 +22,11 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
               b.useFullTime()
             $scope.bookings = bookings.items
             callback($scope.bookings)
+    ,
+      events: (start, end, timezone, callback) ->
+        $scope.getCompanyPromise().then (company) ->
+          AdminScheduleService.getPeopleScheduleEvents(company, start, end).then (events) ->
+            callback(events)
     ]
 
 
@@ -49,6 +55,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           agendaWeek:
             slotDuration: $scope.options.slotDuration || "00:05"
             buttonText: 'Week'
+            groupByDateAndResource: true
           month:
             eventLimit: 5
             buttonText: 'Month'
