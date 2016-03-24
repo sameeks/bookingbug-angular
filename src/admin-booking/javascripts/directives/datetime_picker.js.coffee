@@ -1,5 +1,6 @@
 angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
-  scope: true
+  scope: 
+  	date: '='
   restrict: 'A'
   templateUrl : (element, attrs) ->
     PathSvc.directivePartial "_datetime_picker"

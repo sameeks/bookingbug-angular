@@ -85,6 +85,10 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           #   resourceTD.style.verticalAlign = "middle"
           # dataTD.style.height = "25px" for dataTD in dataTDs
         eventRender: (event, element) ->
+          # If its a blocked timeslot add colored overlay
+          if event.status == 3
+            element.find('.fc-bg').css({'background-color':'#000'})
+          
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
             element.css('background-color', service.color)
@@ -101,6 +105,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           rid = resource.id if resource
           $scope.getCompanyPromise().then (company) ->
             AdminBookingPopup.open
+              from_datetime: start
+              to_datetime: end
               item_defaults:
                 date: start.format('YYYY-MM-DD')
                 time: (start.hour() * 60 + start.minute())
