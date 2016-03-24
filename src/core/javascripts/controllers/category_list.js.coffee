@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbCategories
@@ -8,7 +7,7 @@
 * @scope true
 *
 * @description
-* Loads a list of categories for the currently in scope company
+* Loads a list of categories for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -16,10 +15,10 @@
 * scope: true
 * </pre>
 *
-* @property {string} name The category name
-* @property {integer} id The category id
+* @property {string} name Category name
+* @property {integer} id Category id
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -30,11 +29,10 @@
 *     </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
 *  
 ####
-
 
 angular.module('BB.Directives').directive 'bbCategories', () ->
   restrict: 'AE'
@@ -65,7 +63,7 @@ angular.module('BB.Controllers').controller 'CategoryList',
       if (items.length == 1)
         $scope.skipThisStep()
         $rootScope.categories = items
-        $scope.selectItem(items[0], $scope.nextRoute )
+        $scope.selectItem(items[0], $scope.nextRoute)
       $scope.setLoaded($scope)
     , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -74,12 +72,11 @@ angular.module('BB.Controllers').controller 'CategoryList',
   * @name selectItem
   * @methodOf BB.Directives:bbCategories
   * @description
-  * Select an item 
+  * Selects an item.
   *
-  * @param {object} item The Service or BookableItem to select
-  * @param {string=} route A specific route to load
+  * @param {object} item Service or BookableItem to select
+  * @param {string=} route Specific route to load
   ###
   $scope.selectItem = (item, route) =>
     $scope.bb.current_item.setCategory(item)
     $scope.decideNextPage(route)
-

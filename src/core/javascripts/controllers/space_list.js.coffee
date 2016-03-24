@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbSpaces
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of spaces for the currently in scope company
+* Loads a list of spaces for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,10 +15,9 @@
 * scope: true
 * </pre>
 *
-* @property {array} items An array of all services
-* @property {space} space The currectly selected space
+* @property {array} items Services array
+* @property {space} space Currectly selected space
 ###
-
 
 angular.module('BB.Directives').directive 'bbSpaces', () ->
   restrict: 'AE'
@@ -55,13 +52,11 @@ angular.module('BB.Controllers').controller 'SpaceList',
   * @name selectItem
   * @methodOf BB.Directives:bbSpaces
   * @description
-  * Select the current item in according of item and route parameters
+  * Select the current item according to item and route parameters.
   *
-  * @param {array} item The Space or BookableItem to select
+  * @param {array} item Space or BookableItem to select
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route) =>
     $scope.currentItem.setService(item)
     $scope.decide_next_page(route)
-
-

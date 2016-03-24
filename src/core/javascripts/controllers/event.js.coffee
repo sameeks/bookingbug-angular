@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbEvent
@@ -8,7 +7,7 @@
 * @scope true
 *
 * @description
-* Loads a list of event for the currently in scope company
+* Loads a list of event for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -16,11 +15,10 @@
 * scope: true
 * </pre>
 *
-* @property {integer} total_entries The total entries of the event
-* @property {array} events The events array
-* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
+* @property {integer} total_entries Total event entries
+* @property {array} events Events array
+* @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbEvent', () ->
   restrict: 'AE'
@@ -55,7 +53,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
         image = result[0][0]
         image.background_css = {'background-image': 'url(' + image.url + ')'}
         $scope.event.image = image
-        # TODO pick most promiment image
+        # TODO pick most prominent image
         # colorThief = new ColorThief()
         # colorThief.getColor image.url
 
@@ -69,7 +67,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
       # lock the ticket number dropdown box if only 1 ticket is available to puchase at a time (one-on-one training etc)
       $scope.selectTickets() if $scope.event_options.default_num_tickets and $scope.event_options.auto_select_tickets and $scope.event.tickets.length is 1 and $scope.event.tickets[0].max_num_bookings is 1
-      
+
       $scope.tickets = $scope.event.tickets
       $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
       $scope.stopTicketWatch = $scope.$watch 'tickets', (tickets, oldtickets) ->
@@ -85,10 +83,10 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * @name selectTickets
   * @methodOf BB.Directives:bbEvent
   * @description
-  * Process the selected tickets - this may mean adding multiple basket items - add them all to the basket
+  * Process selected tickets - this may mean adding multiple basket items - add them all to basket.
   ###
   $scope.selectTickets = () ->
-    # process the selected tickets - this may mean adding multiple basket items - add them all to the basket
+    # process the selected tickets - this may mean adding multiple basket items - add them all to basket
     $scope.notLoaded($scope)
     $scope.bb.emptyStackedItems()
     #$scope.setBasket(new BBModel.Basket(null, $scope.bb)) # we might already have a basket!!
@@ -137,9 +135,9 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * @name selectItem
   * @methodOf BB.Directives:bbEvent
   * @description
-  * Select an item event in according of item and route parameter
+  * Selects an event item according to item and route parameter.
   *
-  * @param {array} item The Event or BookableItem to select
+  * @param {array} item Event or BookableItem to select
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route) =>
@@ -157,7 +155,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * @name setReady
   * @methodOf BB.Directives:bbEvent
   * @description
-  * Set this page section as ready
+  * Sets page section as ready.
   ###
   $scope.setReady = () =>
     $scope.bb.event_details = {
@@ -177,10 +175,10 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * @name getPrePaidsForEvent
   * @methodOf BB.Directives:bbEvent
   * @description
-  * Get pre paids for event in according of client and event parameter
+  * Get pre paids for event according to client and event parameter.
   *
-  * @param {array} client The client 
-  * @param {array} event The event
+  * @param {array} client Client
+  * @param {array} event Event
   ###
   $scope.getPrePaidsForEvent = (client, event) ->
     defer = $q.defer()
@@ -191,4 +189,3 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     , (err) ->
       defer.reject(err)
     defer.promise
-

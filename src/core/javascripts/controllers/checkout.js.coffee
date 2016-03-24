@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbCheckout
@@ -8,7 +7,7 @@
 * @scope true
 *
 * @description
-* Loads a list of checkouts for the currently in scope company
+* Loads a list of checkouts for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -16,16 +15,15 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbCheckout   A hash of options
-* @property {string} loadingTotal The loading total
-* @property {string} skipThisStep The skip this step
-* @property {string} decideNextPage The decide next page
-* @property {boolean} checkoutSuccess The checkout success
-* @property {string} setLoaded The set loaded
-* @property {string} setLoadedAndShowError The set loaded and show error
-* @property {boolean} checkoutFailed The checkout failed
+* @param {hash} bbCheckout Hash options
+* @property {string} loadingTotal Total loading
+* @property {string} skipThisStep Skip this step
+* @property {string} decideNextPage Decide next page
+* @property {boolean} checkoutSuccess Checkout successful
+* @property {string} setLoaded Set as loaded
+* @property {string} setLoadedAndShowError Set as loaded and show error
+* @property {boolean} checkoutFailed Checkout failed
 ####
-
 
 angular.module('BB.Directives').directive 'bbCheckout', () ->
   restrict: 'AE'
@@ -42,7 +40,7 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
 
   $scope.options = $scope.$eval($attrs.bbCheckout) or {}
 
-  # clear the form data store as we no longer need the data
+  # clears form store data as this is no longer needed
   FormDataStoreService.destroy($scope)
 
   $rootScope.connection_started.then =>
@@ -51,7 +49,7 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
     $scope.loadingTotal = $scope.bb.basket.$checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
     $scope.loadingTotal.then (total) =>
       $scope.total = total
-   
+
       # if no payment is required, route to the next step unless instructed otherwise
       if !total.$has('new_payment')
         $scope.$emit("checkout:success", total)
@@ -77,7 +75,7 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
   * @name print
   * @methodOf BB.Directives:bbCheckout
   * @description
-  * Print booking details using print_purchase.html template
+  * Print booking details using print_purchase.html template.
   *
   ###
   # Deprecated - use window.print or $scope.printElement
@@ -92,12 +90,12 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
   * @name printElement
   * @methodOf BB.Directives:bbCheckout
   * @description
-  * Print by creating popup containing the contents of the specified element
+  * Prints a popup containing the contents of the specified element.
   *
-  * @param {integer} id The id of the specified element
-  * @param {string} stylesheet The stylesheet of popup
+  * @param {integer} id Id of the specified element
+  * @param {string} stylesheet Popup stylesheet
   ###
-  # Print by creating popup containing the contents of the specified element
+  # Print a popup containing the contents of the specified element
   # TODO move print methods to a service
   $scope.printElement = (id, stylesheet) ->
     data = $bbug('#'+ id).html()

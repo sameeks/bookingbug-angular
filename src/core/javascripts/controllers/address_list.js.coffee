@@ -7,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of addresses for the currently in scope company
+* Loads a list of addresses for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -16,14 +15,14 @@
 * scope: true
 * </pre>
 *
-* @property {boolean} manual_postcode_entry The manual postcode entry of the address
-* @property {string} address1 The first address of the client
-* @property {string} address2 The second address of the client
-* @property {string} address3 The third address of the client
-* @property {string} address4 The fourth address of the client
-* @property {string} address5 The fifth address of the client
-* @property {boolean} show_complete_address Display complete address of the client
-* @property {boolean} postcode_submitted Postcode of the client has been submitted
+* @property {boolean} manual_postcode_entry Manual address postcode entry
+* @property {string} address1 First customer address
+* @property {string} address2 Second customer address
+* @property {string} address3 Third customer address
+* @property {string} address4 Fourth customer address
+* @property {string} address5 Fifth customer address
+* @property {boolean} show_complete_address Display customer complete address
+* @property {boolean} postcode_submitted Client postcode has been submitted
 * @property {string} findByPostcode Find address by postcode
 * @property {string} setLoaded Set loaded address list
 * @property {string} notLoaded Address list not loaded
@@ -52,7 +51,7 @@ angular.module('BB.Controllers').controller 'AddressList',
     if $scope.client.postcode && !$scope.bb.postcode
       $scope.bb.postcode = $scope.client.postcode
 
-    # if client postcode is set and matches postcode entered by the user (and address isn't already set), copy the address from the client 
+    # if client postcode is set and matches postcode entered by the user (and address isn't already set), copy address from client
     if $scope.client.postcode && $scope.bb.postcode && $scope.client.postcode == $scope.bb.postcode && !$scope.bb.address1 
       $scope.bb.address1 = $scope.client.address1
       $scope.bb.address2 = $scope.client.address2
@@ -87,7 +86,7 @@ angular.module('BB.Controllers').controller 'AddressList',
       post_code: $scope.bb.postcode
     )
     .then (response) ->
-      # create an array of addresses
+      # creates an array of addresses
       if angular.isArray(response)
         addressArr = _.map response, (item, i) ->
           address : item.partialAddress
@@ -107,8 +106,8 @@ angular.module('BB.Controllers').controller 'AddressList',
         addressArr = newaddr
 
       $scope.addresses = addressArr
-      # set address as as first item to prevent angular adding an empty item to
-      # the select control this is bound to
+      # sets address as first item to prevent angular from adding a empty item to
+      # the selected controller this is bounded to
       $scope.bb.address = addressArr[0]
       $scope.client.address = addressArr[0]
       $scope.setLoaded($scope)
@@ -123,7 +122,7 @@ angular.module('BB.Controllers').controller 'AddressList',
   * @name showCompleteAddress
   * @methodOf BB.Directives:bbAddresses
   * @description
-  * Show complete address
+  * Shows complete address.
   ###
   $scope.showCompleteAddress = () ->
       $scope.show_complete_address = true
@@ -171,7 +170,7 @@ angular.module('BB.Controllers').controller 'AddressList',
             $scope.bb.address4 = address.town
 
 
-          #The below conditional logic is VERY specific to different company address layouts
+          # The below conditional logic is VERY specific to different company address layouts
           if address.companyName?
             $scope.bb.address1 = address.companyName
 
@@ -231,13 +230,13 @@ angular.module('BB.Controllers').controller 'AddressList',
   * @name setManualPostcodeEntry
   * @methodOf BB.Directives:bbAddresses
   * @description
-  * Set manual postcode entry
+  * Sets manual postcode entry.
   *
-  * @param {string} value The value of postcode
+  * @param {string} value Postcode value
   ###
   $scope.setManualPostcodeEntry = (value) ->
     $scope.manual_postcode_entry = value
-    
+
 
   $scope.$on "client_details:reset_search", (event) ->
     $scope.bb.address1 = null
@@ -248,4 +247,3 @@ angular.module('BB.Controllers').controller 'AddressList',
     $scope.show_complete_address = false
     $scope.postcode_submitted = false
     $scope.bb.address = $scope.addresses[0]
-    

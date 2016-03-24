@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbAccordianRangeGroup
@@ -8,29 +7,26 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of accordian range group for the currently in scope company
-*
+* Loads a list of accordian range group for the currently in scope company.
 * <pre>
 * restrict: 'AE'
 * replace: true
 * scope: true
 * </pre>
 *
-* @param {hash} bbAccordianRangeGroup  A hash of options
+* @param {hash} bbAccordianRangeGroup Hash options
 * @property {boolean} collaspe_when_time_selected Collapse when time is selected
-* @property {string} setRange Set time range for start and end
-* @property {string} start_time The start time
-* @property {string} end_time The end time
-* @property {array} accordian_slots The accordian slots
+* @property {string} setRange Sets start and end time range
+* @property {string} start_time Start time
+* @property {string} end_time End time
+* @property {array} accordian_slots Accordian slots
 * @property {boolean} is_open Time is open
-* @property {boolean} has_availability Group has have availability
+* @property {boolean} has_availability Group has availability
 * @property {boolean} is_selected Group is selected
-* @property {string} source_slots Source of slots
-* @property {boolean} selected_slot Range group selected slot
-* @property {boolean} hideHeading Range group hide heading
+* @property {string} source_slots Slots source
+* @property {boolean} selected_slot Group range selected slot
+* @property {boolean} hideHeading Group range hide heading
 ####
-
 
 angular.module('BB.Directives').directive 'bbAccordianRangeGroup', () ->
   restrict: 'AE'
@@ -55,14 +51,14 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
 
   ###**
   * @ngdoc method
-  * @name selectItem
+  * @name setFormDataStoreId
   * @methodOf BB.Directives:bbAccordianRangeGroup
   * @description
-  * Set form data store by id
+  * Stores form data by id.
   *
-  * @param {object} id Id that sets store form data
+  * @param {object} id Id used to store form data
   ###
-  # store the form data for the following scope properties
+  # stores form data for the following scope properties
   $scope.setFormDataStoreId = (id) ->
     FormDataStoreService.init ('AccordianRangeGroup'+id), $scope, []
 
@@ -71,11 +67,11 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   * @name init
   * @methodOf BB.Directives:bbAccordianRangeGroup
   * @description
-  * Initialization of start time, end time and options
+  * Start time, end time and options initialization.
   *
-  * @param {date} start_time The start time of the range group
-  * @param {date} end_time The end time of the range group
-  * @param {object} options The options of the range group
+  * @param {date} start_time Group range start time
+  * @param {date} end_time Group range end time
+  * @param {object} options Group range options
   ###
   $scope.init = (start_time, end_time, options) ->
     $scope.setRange(start_time, end_time)
@@ -86,10 +82,10 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   * @name setRange
   * @methodOf BB.Directives:bbAccordianRangeGroup
   * @description
-  * Set range of start time and end time
+  * Sets start time and end time range.
   *
-  * @param {date} start_time The start time of the range group
-  * @param {date} end_time The end time of the range group
+  * @param {date} start_time Group range start time
+  * @param {date} end_time Group range end time
   ###
   $scope.setRange = (start_time, end_time) ->
     if !$scope.options
@@ -103,7 +99,7 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   * @name setData
   * @methodOf BB.Directives:bbAccordianRangeGroup
   * @description
-  * Set this data as ready
+  * Sets data as ready.
   ###
   setData = () ->
     $scope.accordian_slots = []
@@ -134,16 +130,16 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   * @name updateAvailability
   * @methodOf BB.Directives:bbAccordianRangeGroup
   * @description
-  * Update availability of the slot
+  * Updates slot availability.
   *
-  * @param {date} day The day of range group
-  * @param {string} slot The slot of range group
+  * @param {date} day Group range day
+  * @param {string} slot Group range slot
   ###
-  updateAvailability = (day, slot) ->   
+  updateAvailability = (day, slot) ->
     $scope.selected_slot = null
     $scope.has_availability = hasAvailability() if $scope.accordian_slots
 
-    # if a day and slot has been provided, check if the slot is in range
+    # if a day and slot are provided, check if slot is in range
     if day and slot
       $scope.selected_slot = slot if day.date.isSame($scope.day.date) and slot.time >= $scope.start_time and slot.time < $scope.end_time
     else 
@@ -158,14 +154,14 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
       $scope.is_open = false if $scope.collaspe_when_time_selected
     else
       $scope.is_selected = false
-      $scope.is_open = false if $scope.collaspe_when_time_selected      
+      $scope.is_open = false if $scope.collaspe_when_time_selected
 
   ###**
   * @ngdoc method
   * @name hasAvailability
   * @methodOf BB.Directives:bbAccordianRangeGroup
   * @description
-  * Verify if availability of accordian slots have a slot
+  * Verify accordian slots availability.
   ###
   hasAvailability = ->
     return false if !$scope.accordian_slots
@@ -173,14 +169,11 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
       return true if slot.availability() > 0
     return false
 
-
-  $scope.$on 'slotChanged', (event, day, slot) ->  
+  $scope.$on 'slotChanged', (event, day, slot) ->
     if day and slot
       updateAvailability(day, slot)
     else
       updateAvailability()
 
-
   $scope.$on 'dataReloaded', (event, earliest_slot) ->
     setData()
-

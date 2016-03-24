@@ -5,7 +5,7 @@
 * @scope true
 *
 * @description
-* Loads a list of client details for the currently in scope company
+* Loads a list of client details for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -13,10 +13,10 @@
 * scope: true
 * </pre>
 *
-* @property {array} questions Questions of the client
-* @property {integer} company_id The company id of the client company
-* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @property {array} questions Client questions
+* @property {integer} company_id Company id of client
+* @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
+* @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
 * @example
 *  <example module="BB">
 *    <file name="index.html">
@@ -34,7 +34,6 @@
 *  </example>
 *
 ####
-
 
 angular.module('BB.Directives').directive 'bbClientDetails', () ->
   restrict: 'AE'
@@ -55,8 +54,8 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   $rootScope.connection_started.then =>
 
     if !$scope.client.valid() && LoginService.isLoggedIn()
-      # make sure we set the client to the currently logged in member
-      # we should also jsut check the logged in member is a member of the company they are currently booking with
+      # make sure we set the client to the currently logged member
+      # we should also check if the logged member is a member of the company they are currently booking with
       $scope.setClient(new BBModel.Client(LoginService.member()._data))
 
     if LoginService.isLoggedIn() && LoginService.member().$has("child_clients") && LoginService.member()
@@ -89,16 +88,16 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * @name validateClient
   * @methodOf BB.Directives:bbClientDetails
   * @description
-  * Validate the client
+  * Validate the client.
   *
-  * @param {object} client_form The client form
+  * @param {object} client_form Client form
   * @param {string=} route A specific route to load
   ###
   $scope.validateClient = (client_form, route) =>
     $scope.notLoaded($scope)
     $scope.existing_member = false
 
-    # we need to validate teh client information has been correctly entered here
+    # we need to validate if the client information has added correctly
     if $scope.bb && $scope.bb.parent_client
       $scope.client.parent_client_id = $scope.bb.parent_client.id
     $scope.client.setClientDetails($scope.client_details)
@@ -116,7 +115,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * @name clientLogin
   * @methodOf BB.Directives:bbClientDetails
   * @description
-  * Client login
+  * Client login.
   ###
   $scope.clientLogin = () =>
     $scope.login_error = false
@@ -135,7 +134,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * @name setReady
   * @methodOf BB.Directives:bbClientDetails
   * @description
-  * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
+  * Sets page section as ready - see {@link BB.Directives:bbPage Page Control}
   ###
   $scope.setReady = () =>
     $scope.client.setClientDetails($scope.client_details)
@@ -155,7 +154,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * @name clientSearch
   * @methodOf BB.Directives:bbClientDetails
   * @description
-  * Client search
+  * Client search.
   ###
   $scope.clientSearch = () ->
     if $scope.client? && $scope.client.email? && $scope.client.email != ""
@@ -176,7 +175,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * @name switchNumber
   * @methodOf BB.Directives:bbClientDetails
   * @description
-  * Switch number
+  * Switch number to mobile.
   *
   * @param {array} to Switch number to mobile
   ###
@@ -194,9 +193,9 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * @name getQuestion
   * @methodOf BB.Directives:bbClientDetails
   * @description
-  * Get question by id
+  * Get questions by id.
   *
-  * @param {integer} id The id question
+  * @param {integer} id Question id
   ###
   $scope.getQuestion = (id) ->
     for question in $scope.client_details.questions
@@ -209,9 +208,9 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * @name useClient
   * @methodOf BB.Directives:bbClientDetails
   * @description
-  * Use client by client
+  * Use client by client.
   *
-  * @param {array} client The client
+  * @param {array} client Client
   ###
   $scope.useClient = (client) ->
     $scope.setClient(client)
@@ -221,7 +220,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * @name recalc_question
   * @methodOf BB.Directives:bbClientDetails
   * @description
-  * Recalculate question
+  * Recalculate question.
   ###
   $scope.recalc_question = () ->
     QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions

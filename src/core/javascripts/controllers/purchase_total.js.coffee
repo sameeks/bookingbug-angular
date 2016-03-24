@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbPurchaseTotal
@@ -9,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of purchase total for the currently in scope company
+* Loads a list of purchase total for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,9 +16,8 @@
 * scope: true
 * </pre>
 *
-* @property {array} total The total purchase
+* @property {array} total Total purchase
 ####
-
 
 angular.module('BB.Directives').directive 'bbPurchaseTotal', () ->
   restrict: 'AE'
@@ -41,13 +39,12 @@ angular.module('BB.Controllers').controller 'PurchaseTotal',
   * @name load
   * @methodOf BB.Directives:bbPurchaseTotal
   * @description
-  * Load the total purchase by id
+  * Loads total purchase by id.
   *
-  * @param {integer} total_id The total id of the total purchase
+  * @param {integer} total_id Total id of total purchase
   ###
   $scope.load = (total_id) =>
     $rootScope.connection_started.then =>
       $scope.loadingTotal = PurchaseTotalService.query({company: $scope.bb.company, total_id: total_id})
       $scope.loadingTotal.then (total) =>
         $scope.total = total
-

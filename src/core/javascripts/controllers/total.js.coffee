@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbTotal
@@ -9,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of totals for the currently in scope company
+* Loads a list of totals for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,11 +16,10 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbTotal A hash of options
-* @property {array} payment_status The payment status
+* @param {hash}  bbTotal Hash options
+* @property {array} payment_status Payment status
 * @property {array} total The total
 ####
-
 
 angular.module('BB.Directives').directive 'bbTotal', () ->
   restrict: 'AE'
@@ -29,7 +27,7 @@ angular.module('BB.Directives').directive 'bbTotal', () ->
   scope : true
   controller : 'Total'
 
-angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q, $location, $window, PurchaseService, QueryStringService) ->
+angular.module('BB.Controllers').controller 'Total', ($scope, $rootScope, $q, $location, $window, PurchaseService, QueryStringService) ->
 
   $scope.controller = "public.controllers.Total"
   $scope.notLoaded $scope
@@ -56,10 +54,9 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q, $
   * @name print
   * @methodOf BB.Directives:bbTotal
   * @description
-  * Open new window from partial url
+  * Open new window from partial url.
   ###
   $scope.print = () =>
     $window.open($scope.bb.partial_url+'print_purchase.html?id='+$scope.total.long_id,'_blank',
                 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0')
     return true
-

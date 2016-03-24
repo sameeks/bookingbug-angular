@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbEventGroups
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of event groups for the currently in scope company
+* Loads a list of event groups for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,12 +15,11 @@
 * scope: true
 * </pre>
 *
-* @property {integer} total_entries The event total entries
-* @property {array} events The events array
-* @property {hash} filters A hash of filters
-* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
+* @property {integer} total_entries Total event entries
+* @property {array} events Events array
+* @property {hash} filters Filters hash
+* @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbEventGroups', () ->
   restrict: 'AE'
@@ -70,12 +67,11 @@ angular.module('BB.Controllers').controller 'EventGroupList',
         if $scope.booking_item.service_ref && !$scope.show_all
           items = items.filter (x) -> x.api_ref is $scope.booking_item.service_ref
         else if $scope.booking_item.category && !$scope.show_all
-          # if we've selected a category for the current item - limit the list
-          # of services to ones that are relevant
+          # if we've selected a category for the current item - limit the services list to relevant ones
           items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.booking_item.category.self
 
       if (items.length is 1 && !$scope.allowSinglePick)
-        if !$scope.selectItem(items[0], $scope.nextRoute )
+        if !$scope.selectItem(items[0], $scope.nextRoute)
           setEventGroupItem items
         else
           $scope.skipThisStep()
@@ -100,10 +96,9 @@ angular.module('BB.Controllers').controller 'EventGroupList',
       $scope.setLoaded $scope
 
       if $scope.booking_item.event_group || (!$scope.booking_item.person && !$scope.booking_item.resource)
-        # the "bookable services" are the event_group unless we've pre-selected something!
+        # "bookable services" are event_group unless we've pre-selected something!
         $scope.bookable_services = $scope.items
     , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
 
 
   ###**
@@ -111,11 +106,11 @@ angular.module('BB.Controllers').controller 'EventGroupList',
   * @name setEventGroupItem
   * @methodOf BB.Directives:bbEventGroups
   * @description
-  * Set event group item in accroding of items parameter
+  * Set event group items according to item parameter.
   *
-  * @param {array} items Items of event group
+  * @param {array} items Event group items
   ###
-  # set the event_group item so the correct item is displayed in the dropdown menu.
+  # set the event_group item so that the correct item is displayed in the dropdown menu.
   # without doing this the menu will default to 'please select'
   setEventGroupItem = (items) ->
     $scope.items = items
@@ -129,9 +124,9 @@ angular.module('BB.Controllers').controller 'EventGroupList',
   * @name selectItem
   * @methodOf BB.Directives:bbEventGroups
   * @description
-  * Select an item from event group in according of item and route parameters
+  * Selects an item from event group according to item and route parameter.
   *
-  * @param {array} item The event group or BookableItem to select
+  * @param {array} item Event group or BookableItem to select
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route) =>
@@ -146,7 +141,7 @@ angular.module('BB.Controllers').controller 'EventGroupList',
   $scope.$watch 'event_group', (newval, oldval) =>
     if $scope.event_group
       if !$scope.booking_item.event_group or $scope.booking_item.event_group.self isnt $scope.event_group.self
-        # only set and broadcast if it's changed
+        # set broadcast only on changed
         $scope.booking_item.setEventGroup($scope.event_group)
         $scope.broadcastItemUpdate()
 
@@ -155,7 +150,7 @@ angular.module('BB.Controllers').controller 'EventGroupList',
   * @name setReady
   * @methodOf BB.Directives:bbEventGroups
   * @description
-  * Set this page section as ready
+  * Sets page section as ready.
   ###
   $scope.setReady = () =>
     if $scope.event_group
@@ -163,4 +158,3 @@ angular.module('BB.Controllers').controller 'EventGroupList',
       return true
     else
       return false
-

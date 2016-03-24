@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbPeople
@@ -9,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of peoples for the currently in scope company
+* Loads a list of peoples for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,17 +16,17 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbPeople   A hash of options
-* @param {object}  bbItem   A specific basket item to reference
-* @param {boolean}  waitForService   Wait for a the service to be loaded before loading People
-* @param {boolean}  hideDisabled   In an admin widget, disabled resources are shown by default, you can choose to hide disabled resources
-* @property {array} booking_item The current basket item being referred to
+* @param {hash} bbPeople Hash options
+* @param {object} bbItem Specific basket item to reference
+* @param {boolean} waitForService Wait for the service to be loaded before loading People
+* @param {boolean} hideDisabled In an admin widget, disabled resources shown by default, you can choose to hide disabled resources
+* @property {array} booking_item Current basket item being referred to
 * @property {array} all_people An array of all people
-* @property {array} bookable_people The bookable people from the person list
-* @property {array} bookable_items The bookable items from the person list
-* @property {array} booking_item The booking item from the person list
+* @property {array} bookable_people Bookable people from the person list
+* @property {array} bookable_items Bookable items from the person list
+* @property {array} booking_item Booking items from the person list
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://dev01.bookingbug.com'>
 *   <div  bb-widget='{company_id:37167}'>
@@ -38,11 +37,10 @@
 *     </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
 * 
 ####
-
 
 angular.module('BB.Directives').directive 'bbPeople', () ->
   restrict: 'AE'
@@ -92,7 +90,7 @@ angular.module('BB.Controllers').controller 'PersonList',
       if bi.group # check they're part of any currently selected group
         people = people.filter (x) -> !x.group_id || x.group_id == bi.group
       if $scope.options.hide_disabled
-        # this might happen to ahve been an admin api call which would include disabled people - and we migth to hide them
+        # this might happen to have been an admin api call which would include disabled people - and we migth to hide them
         people = people.filter (x) -> !x.disabled && !x.deleted
       $scope.all_people = people
 
@@ -113,7 +111,7 @@ angular.module('BB.Controllers').controller 'PersonList',
         $q.all(promises).then (res) =>
           people = []
           if $scope.options.hide_disabled
-            # this might happen to ahve been an admin api call which would include disabled people - and we migth to hide them
+            # this might happen to have been an admin api call which would include disabled people - and we migth to hide them
             items = items.filter (x) -> !x.item? || (!x.item.disabled && !x.item.deleted)
           for i in items
             people.push(i.item)
@@ -147,9 +145,9 @@ angular.module('BB.Controllers').controller 'PersonList',
   * @name setPerson
   * @methodOf BB.Directives:bbPeople
   * @description
-  * Storing the person property in the form store
+  * Store the person property in the form store.
   *
-  * @param {array} people The people 
+  * @param {array} people People
   ###
   # we're storing the person property in the form store but the angular select
   # menu has to have a reference to the same object memory address for it to
@@ -166,9 +164,9 @@ angular.module('BB.Controllers').controller 'PersonList',
   * @name getItemFromPerson
   * @methodOf BB.Directives:bbPeople
   * @description
-  * Get item from person
+  * Get item from person.
   *
-  * @param {array} person The person
+  * @param {array} person Person
   ###
   getItemFromPerson = (person) =>
     if (person instanceof  PersonModel)
@@ -183,7 +181,7 @@ angular.module('BB.Controllers').controller 'PersonList',
   * @name selectItem
   * @methodOf BB.Directives:bbPeople
   * @description
-  * Select an item into the current person list in according of item and route parameters
+  * Select an item into the current person list according to item and route parameters.
   *
   * @param {array} item Selected item from the list of current people
   * @param {string=} route A specific route to load
@@ -202,7 +200,7 @@ angular.module('BB.Controllers').controller 'PersonList',
   * @name selectAndRoute
   * @methodOf BB.Directives:bbPeople
   * @description
-  * Select and route person from list in according of item and route parameters
+  * Select and route person from list according to item and route parameters.
   *
   * @param {array} item Selected item from the list of current people
   * @param {string=} route A specific route to load
@@ -231,7 +229,7 @@ angular.module('BB.Controllers').controller 'PersonList',
   * @name setReady
   * @methodOf BB.Directives:bbPeople
   * @description
-  * Set this page section as ready
+  * Sets page section as ready.
   ###
   $scope.setReady = () =>
     if $scope.person

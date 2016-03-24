@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbPayForm
@@ -9,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of pay forms for the currently in scope company
+* Loads a list of pay forms for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,22 +16,20 @@
 * scope: true
 * </pre>
 *
-* @property {array} total The total pay_form price
-* @property {array} card The card is used to payment
+* @property {array} total Total pay_form price
+* @property {array} card Card used for payment
 ####
 
-
 angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout, $sce, $http, $compile, $document, $location, SettingsService) ->
-
 
   ###**
   * @ngdoc method
   * @name applyCustomPartials
   * @methodOf BB.Directives:bbPayForm
   * @description
-  * Apply the custom partials in according of custom partial url, scope and element parameters
+  * Apply the custom partials according to custom partial url, scope and element parameters.
   *
-  * @param {string} custom_partial_url The custom partial url
+  * @param {string} custom_partial_url Custom partial url
   ###
   applyCustomPartials = (custom_partial_url, scope, element) ->
     if custom_partial_url?
@@ -55,9 +52,9 @@ angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout, $sce,
   * @name applyCustomStylesheet
   * @methodOf BB.Directives:bbPayForm
   * @description
-  * Apply the custom stylesheet from href
+  * Apply the custom stylesheet from href.
   *
-  * @param {string} href The href of the stylesheet
+  * @param {string} href Href of the stylesheet
   ###
   applyCustomStylesheet = (href) ->
     css_id = 'custom_css'
@@ -70,11 +67,11 @@ angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout, $sce,
       link.href = href
       link.media = 'all'
       head.appendChild link
-      
+
       # listen to load of css and trigger resize
       link.onload = ->
         parentIFrame.size() if 'parentIFrame' of $window
-      
+
 
   linker = (scope, element, attributes) ->
     scope.directives ="public.PayForm"
@@ -110,9 +107,9 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
   * @name setTotal
   * @methodOf BB.Directives:bbPayForm
   * @description
-  * Set total price
+  * Set total price.
   *
-  * @param {array} total The total price
+  * @param {array} total Total price
   ###
   $scope.setTotal = (total) ->
     $scope.total = total
@@ -122,9 +119,9 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
   * @name setCard
   * @methodOf BB.Directives:bbPayForm
   * @description
-  * Set card used to payment
+  * Set card used for payment.
   *
-  * @param {array} card The card used to payment
+  * @param {array} card Card used for payment
   ###
   $scope.setCard = (card) ->
     $scope.card = card
@@ -134,7 +131,7 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
   * @name sendSubmittingEvent
   * @methodOf BB.Directives:bbPayForm
   * @description
-  * Send submitting event
+  * Send submitting event.
   ###
   sendSubmittingEvent = () =>
     referrer = $location.protocol() + "://" + $location.host()
@@ -153,7 +150,7 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
   * @name submitPaymentForm
   * @methodOf BB.Directives:bbPayForm
   * @description
-  * Submit payment form
+  * Submit payment form.
   ###
   submitPaymentForm = () =>
     payment_form = angular.element.find('form')
@@ -164,9 +161,9 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
   * @name submitAndSendMessage
   * @methodOf BB.Directives:bbPayForm
   * @description
-  * Submit and send message in according of event paramenter
+  * Submit and send message according to event paramenter.
   *
-  * @param {object} event The event
+  * @param {object} event Event
   ###
   $scope.submitAndSendMessage = (event) =>
     event.preventDefault()
@@ -178,6 +175,3 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
     else
       sendSubmittingEvent()
       submitPaymentForm()
-
-
-

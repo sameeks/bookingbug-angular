@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbMap
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of maps for the currently in scope company
+* Loads a list of maps for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,23 +15,22 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbMap A hash of options
-* @property {object} mapLoaded The map has been loaded
-* @property {object} mapReady The maps has been ready
-* @property {object} map_init The initialization the map
-* @property {object} numSearchResults The number of search results
-* @property {object} range_limit The range limit
-* @property {boolean} showAllMarkers Display or not all markers
-* @property {array} mapMarkers The map markers
+* @param {hash} bbMap Hash options
+* @property {object} mapLoaded Map has been loaded
+* @property {object} mapReady Maps are ready
+* @property {object} map_init Map initialization
+* @property {object} numSearchResults Number of search results
+* @property {object} range_limit Range limit
+* @property {boolean} showAllMarkers Display markers or not
+* @property {array} mapMarkers Map markers
 * @property {array} shownMarkers Display the markers
-* @property {integer} numberedPin The numbered pin
-* @property {integer} defaultPin The default pin
-* @proeprty {boolean} hide_not_live_stores Hide or not the live stores
-* @property {object} address The address
-* @property {object} error_msg The error message
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @property {integer} numberedPin Pin number
+* @property {integer} defaultPin Default pin
+* @proeprty {boolean} hide_not_live_stores Hide live stores or not
+* @property {object} address Address
+* @property {object} error_msg Error message
+* @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbMap', () ->
   restrict: 'AE'
@@ -76,7 +73,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   webshim.polyfill("geolocation")
 
   # check if company is parent
-  #if $scope.bb.company.$has('parent')
+  # if $scope.bb.company.$has('parent')
   $rootScope.connection_started.then ->
 
     $scope.setLoaded $scope if !$scope.selectedStore
@@ -100,13 +97,13 @@ angular.module('BB.Controllers').controller 'MapCtrl',
         $scope.mapBounds.extend(latlong)
 
     $scope.mapOptions =  {
-        center: $scope.mapBounds.getCenter(), 
-        zoom: 6, 
+        center: $scope.mapBounds.getCenter(),
+        zoom: 6,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControl:true, 
-      mapTypeControlOptions: { 
-          style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU 
-      } 
+      mapTypeControl:true,
+      mapTypeControlOptions: {
+          style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU
+      }
     }
 
     if options and options.map_options
@@ -168,9 +165,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name title
   * @methodOf BB.Directives:bbMap
   * @description
-  * Create title for the map selection step
+  * Creates title for map selection step.
   ###
-  # create title for the map selection step
+  # creates title for map selection step
   $scope.title = ->
     ci = $scope.bb.current_item
     if ci.category and ci.category.description
@@ -185,14 +182,14 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name searchAddress
   * @methodOf BB.Directives:bbMap
   * @description
-  * Search address in according of prms parameter
+  * Search address according to prms parameter.
   *
-  * @param {object} prms The parameters of the address
+  * @param {object} prms Address parameters
   ###
   $scope.searchAddress = (prms) ->
 
     # if a reverse geocode has been performed and the address 
-    # is no  different to one the entered, abort the search
+    # is not different from the entered one, abort the search
     return false if $scope.reverse_geocode_address && $scope.reverse_geocode_address == $scope.address
 
     delete $scope.geocoder_result
@@ -232,9 +229,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name searchPlaces
   * @methodOf BB.Directives:bbMap
   * @description
-  * Search places in according of prms parameter
+  * Search places according to prms parameter.
   *
-  * @param {object} prms The parameters of the places
+  * @param {object} prms Places parameters
   ###
   searchPlaces = (prms) ->
     
@@ -243,11 +240,11 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       types: ['shopping_mall', 'store', 'embassy']
     }
 
-    req.bounds = prms.bounds if prms.bounds 
+    req.bounds = prms.bounds if prms.bounds
 
     service = new google.maps.places.PlacesService($scope.myMap)
     service.textSearch req, (results, status) ->
-      if results.length > 0 and status is 'OK'      
+      if results.length > 0 and status is 'OK'
         searchSuccess(results[0])
       else if $scope.geocoder_result
         searchSuccess($scope.geocoder_result)
@@ -259,9 +256,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name searchSuccess
   * @methodOf BB.Directives:bbMap
   * @description
-  * Search has been succeeded, and return 
+  * Search has been successful, and return.
   *
-  * @param {object} result The result of the search
+  * @param {object} result Result search
   ###
   searchSuccess = (result) ->
     AlertService.clear()
@@ -277,8 +274,8 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name searchFailed
   * @methodOf BB.Directives:bbMap
   * @description
-  * Search failed and displayed an error
-  ###
+  * Search failed and error message displayed.
+   ###
   searchFailed = () ->
     $scope.search_failed = true
     AlertService.raise('LOCATION_NOT_FOUND')
@@ -290,9 +287,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name validateAddress
   * @methodOf BB.Directives:bbMap
   * @description
-  * Validate the address using form
+  * Validate the address using form.
   *
-  * @param {object} form The form where address has been validate
+  * @param {object} form Form where address has validated
   ###
   $scope.validateAddress = (form) ->
     return false if !form
@@ -308,9 +305,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name showClosestMarkers
   * @methodOf BB.Directives:bbMap
   * @description
-  * Display the closest markers
+  * Display the closest markers.
   *
-  * @param {array} latlong Using for determinate the closest markers
+  * @param {array} latlong Determinate closest markers
   ###
   $scope.showClosestMarkers = (latlong) ->
     pi = Math.PI;
@@ -370,7 +367,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       index += 1
 
     $scope.$emit 'map:shown_markers_updated', $scope.shownMarkers
-    
+
     google.maps.event.trigger($scope.myMap, 'resize')
     $scope.myMap.fitBounds(localBounds)
 
@@ -379,9 +376,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name openMarkerInfo
   * @methodOf BB.Directives:bbMap
   * @description
-  * Display marker information on the map
+  * Display marker information on map.
   *
-  * @param {object} marker The marker
+  * @param {object} marker Marker
   ###
   $scope.openMarkerInfo = (marker) ->
     $scope.currentMarker = marker
@@ -392,9 +389,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name selectItem
   * @methodOf BB.Directives:bbMap
   * @description
-  * Select an item from map
+  * Select an item from map.
   *
-  * @param {array} item The Map or BookableItem to select
+  * @param {array} item Map or BookableItem to select
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route) ->
@@ -419,10 +416,10 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name roundNumberUp
   * @methodOf BB.Directives:bbMap
   * @description
-  * Calculate the round number up 
+  * Calculate the rounded number.
   *
-  * @param {integer} num The number of places
-  * @param {object} places The places
+  * @param {integer} num Number of places
+  * @param {object} places Places
   ###
   $scope.roundNumberUp = (num, places) ->
     Math.round(num * Math.pow(10, places)) / Math.pow(10, places);
@@ -432,7 +429,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name geolocate
   * @methodOf BB.Directives:bbMap
   * @description
-  * Get geolocation information
+  * Get geolocation information.
   ###
   $scope.geolocate = () ->
     return false if !navigator.geolocation || ($scope.reverse_geocode_address && $scope.reverse_geocode_address == $scope.address)
@@ -449,14 +446,14 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name geolocateFail
   * @methodOf BB.Directives:bbMap
   * @description
-  * Geolocation fail and display an error message
+  * Geolocation failed and error message displayed.
   *
-  * @param {object} error The error 
+  * @param {object} error Error 
   ###
   geolocateFail = (error) ->
     switch error.code
       # if the geocode failed because the position was unavailable or the request timed out, raise an alert
-      when 2, 3 
+      when 2, 3
         $scope.setLoaded $scope
         AlertService.raise('GEOLOCATION_ERROR')
       else
@@ -468,9 +465,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name reverseGeocode
   * @methodOf BB.Directives:bbMap
   * @description
-  * Reverse geocode in according of position parameter
+  * Reverse geocode according to position parameter.
   *
-  * @param {object} positon The postion get latitude and longitude from google maps api
+  * @param {object} positon Get latitude and longitude from google maps api
   ###
   reverseGeocode = (position) ->
     lat    = parseFloat(position.coords.latitude)
@@ -482,7 +479,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
         $scope.geocoder_result = results[0]
 
         for ac in $scope.geocoder_result.address_components 
-          $scope.reverse_geocode_address = ac.long_name if ac.types.indexOf("route") >= 0  
+          $scope.reverse_geocode_address = ac.long_name if ac.types.indexOf("route") >= 0
           $scope.reverse_geocode_address += ', ' + ac.long_name if ac.types.indexOf("locality") >= 0
           $scope.address = $scope.reverse_geocode_address
         searchSuccess($scope.geocoder_result)
@@ -493,7 +490,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name increaseRange
   * @methodOf BB.Directives:bbMap
   * @description
-  * Increase range, the range limit is infinity
+  * Increase range, the range limit is infinity.
   ###
   $scope.increaseRange = () ->
     $scope.range_limit = Infinity

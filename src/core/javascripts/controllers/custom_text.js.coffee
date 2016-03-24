@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbCustomBookingText
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of custom booking text for the currently in scope company
+* Loads a list of custom booking text for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,11 +15,10 @@
 * scope: true
 * </pre>
 *
-* @property {string} messages The messages text
-* @property {string} setLoaded Loading set of custom text
-* @property {object} setLoadedAndShowError Set loaded and show error
+* @property {string} messages Text messages
+* @property {string} setLoaded Loading sets of custom text
+* @property {object} setLoadedAndShowError Set as loaded and show error
 ####
-
 
 angular.module('BB.Directives').directive 'bbCustomBookingText', () ->
   restrict: 'AE'
@@ -45,7 +42,6 @@ angular.module('BB.Controllers').controller 'CustomBookingText', ($scope,  $root
   , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-
 angular.module('BB.Directives').directive 'bbCustomConfirmationText', () ->
   restrict: 'AE'
   replace: true
@@ -66,7 +62,7 @@ angular.module('BB.Controllers').controller 'CustomConfirmationText', ($scope, $
   * @name loadData
   * @methodOf BB.Directives:bbCustomBookingText
   * @description
-  * Load data and display a text message
+  * Loads data and displays a text message.
   ###
   $scope.loadData = () =>
 
@@ -88,4 +84,3 @@ angular.module('BB.Controllers').controller 'CustomConfirmationText', ($scope, $
 
     else
       $scope.setLoaded $scope
-

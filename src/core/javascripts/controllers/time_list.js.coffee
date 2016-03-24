@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbTimes
@@ -9,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of times for the currently in scope company
+* Loads a list of times for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,14 +16,13 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbTimes A hash of options
-* @property {array} selected_day The selected day
-* @property {date} selected_date The selected date
-* @property {array} data_source The data source
-* @property {array} item_link_source The item link source
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @param {hash} bbTimes Hash options
+* @property {array} selected_day Selected day
+* @property {date} selected_date Selected date
+* @property {array} data_source Source data
+* @property {array} item_link_source Source link item
+* @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbTimes', () ->
   restrict: 'AE'
@@ -49,9 +47,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name setDate
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Set a date of time list
+  * Set date of time list.
   *
-  * @param {date} date The date of time list
+  * @param {date} date Date of time list
   ###
   # set a date
   $scope.setDate = (date) =>
@@ -63,9 +61,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name setDay
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Set based on a day model
+  * Set based on day model.
   *
-  * @param {object} dayItem The dayItem
+  * @param {object} dayItem DayItem
   ###
   # set based on a day model
   $scope.setDay = (dayItem) =>
@@ -77,9 +75,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name setDataSource
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Set data source model of time list
+  * Set data source model of time list.
   *
-  * @param {object} source The source
+  * @param {object} source Source
   ###
   $scope.setDataSource = (source) =>
     $scope.data_source = source
@@ -89,9 +87,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name setItemLinkSource
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Set item link source model
+  * Set item link source model.
   *
-  * @param {object} source The source
+  * @param {object} source Source
   ###
   $scope.setItemLinkSource = (source) =>
     $scope.item_link_source = source
@@ -111,9 +109,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name format_date
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Format data source date of the time list
+  * Format data source date of the time list.
   *
-  * @param {date} fmt The format data
+  * @param {date} fmt Data format
   ###
   # format data source date
   # This method is deprecated, use datetime filter instead, e.g. moment() | datetime:'dd/mm/yy'
@@ -126,9 +124,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name selectSlot
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Select the slot from time list in according of slot and route parameters
+  * Select the slot from time list according to slot and route parameters.
   *
-  * @param {date} slot The slot
+  * @param {date} slot Slot
   * @param {string=} A specific route to load
   ###
   $scope.selectSlot = (slot, route) =>
@@ -154,9 +152,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name highlightSlot
   * @methodOf BB.Directives:bbTimes
   * @description
-  * The highlight slot from time list 
+  * The highlight slot from time list.
   *
-  * @param {date} slot The slot 
+  * @param {date} slot Slot
   ###
   $scope.highlightSlot = (slot) =>
     if slot && slot.availability() > 0
@@ -172,9 +170,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name status
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Check the status of the slot to see if it has been selected
+  * Check the status of the slot to see if it has been selected.
   *
-  * @param {date} slot The slot
+  * @param {date} slot Slot
   ###
   # check the status of the slot to see if it has been selected
   $scope.status = (slot) ->
@@ -187,10 +185,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name add
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Add unit of time to the selected day
+  * Add unit of time to the selected day.
   *
   * @param {date} type The type
-  * @param {date} amount The amount
+  * @param {date} amount Amount
   ###
   # add unit of time to the selected day
   # deprecated, use bbDate directive instead
@@ -206,10 +204,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name subtract
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Subtract unit of time to the selected day
+  * Subtract unit of time from the selected day.
   *
-  * @param {date} type The type
-  * @param {date} amount The amount
+  * @param {date} type Type
+  * @param {date} amount Amount
   ###
   # subtract unit of time to the selected day
   # deprecated, use bbDate directive instead
@@ -221,7 +219,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name loadDay
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Load day
+  * Load day.
   ###
   $scope.loadDay = () =>
 
@@ -235,7 +233,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
       $scope.notLoaded $scope
       pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_date, client: $scope.client, available: 1 })
-      
+
       pslots.finally =>
         $scope.setLoaded $scope
       pslots.then (data) =>
@@ -251,7 +249,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
           for pad, v in $scope.add_padding
             if (!dtimes[pad])
               data.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, data[0].service))
-        
+
         if ($scope.data_source.requested_time || $scope.data_source.time) && $scope.selected_date.isSame($scope.data_source.date.date)
           found_time = false
           for t in data
@@ -259,7 +257,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
               $scope.data_source.requestedTimeUnavailable()
               $scope.selectSlot(t)
               found_time = true
-            if ($scope.data_source.time && t.time == $scope.data_source.time.time )
+            if ($scope.data_source.time && t.time == $scope.data_source.time.time)
               $scope.data_source.setTime(t)
               found_time = true
           if !found_time
@@ -277,9 +275,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name padTimes
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Pad Times in according of times parameter
+  * Pad Times according to times parameter.
   *
-  * @param {date} times The times
+  * @param {date} times Time
   ###
   $scope.padTimes = (times) =>
     $scope.add_padding = times
@@ -289,7 +287,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @name setReady
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Set this page section as ready
+  * Sets page section as ready.
   ###
   $scope.setReady = () =>
     if !$scope.data_source.time
@@ -301,7 +299,6 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         return $scope.addItemToBasket()
       else
         return true
-
 
 
 angular.module('BB.Directives').directive 'bbAccordianGroup', () ->

@@ -1,6 +1,4 @@
 
-
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbLogin
@@ -9,7 +7,7 @@
 *
 * @description
 *
-* Loads a list of logins for the currently in scope company
+* Loads a list of logins for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,14 +15,13 @@
 * scope: true
 * </pre>
 *
-* @property {boolean} password_updated The user password updated
-* @property {boolean} password_error The user password error
-* @property {boolean} email_sent The email sent
-* @property {boolean} success If user are log in with success
+* @property {boolean} password_updated User password updated
+* @property {boolean} password_error User password error
+* @property {boolean} email_sent Email was send
+* @property {boolean} success User successfully authenticated
 * @property {boolean} login_error If user have some errors when try to log in
-* @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
+* @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbLogin', () ->
   restrict: 'AE'
@@ -50,9 +47,9 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
   * @name login_sso
   * @methodOf BB.Directives:bbLogin
   * @description
-  * Login to application
+  * Login to application.
   *
-  * @param {object} token The token to use for login
+  * @param {object} token Token used for login
   * @param {string=} route A specific route to load
   ###
   $scope.login_sso = (token, route) ->
@@ -67,10 +64,10 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
   * @name login_with_password
   * @methodOf BB.Directives:bbLogin
   * @description
-  * Login with password
+  * Login with password.
   *
-  * @param {string} email The email address that use for the login 
-  * @param {string} password The password use for the login
+  * @param {string} email Email address used for login
+  * @param {string} password Password used for login
   ###
   $scope.login_with_password = (email, password) ->
     $scope.login_error = false
@@ -87,7 +84,7 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
   * @name showEmailPasswordReset
   * @methodOf BB.Directives:bbLogin
   * @description
-  * Display email reset password page
+  * Display email reset password page.
   ###
   $scope.showEmailPasswordReset = () =>
     $scope.showPage('email_reset_password')
@@ -97,7 +94,7 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
   * @name isLoggedIn
   * @methodOf BB.Directives:bbLogin
   * @description
-  * Verify if user are logged in
+  * Verify if user is logged in.
   ###
   $scope.isLoggedIn = () ->
     LoginService.isLoggedIn()
@@ -107,9 +104,9 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
   * @name sendPasswordReset
   * @methodOf BB.Directives:bbLogin
   * @description
-  * Send password reset via email
+  * Send password reset via email.
   *
-  * @param {string} email The email address use for the send new password
+  * @param {string} email Email address used for sending new password
   ###
   $scope.sendPasswordReset = (email) ->
     $scope.error = false
@@ -125,10 +122,10 @@ angular.module('BB.Controllers').controller 'Login', ($scope,  $rootScope, Login
   * @name updatePassword
   * @methodOf BB.Directives:bbLogin
   * @description
-  * Update password
+  * Update password.
   *
-  * @param {string} new_password The new password has been set
-  * @param {string} confirm_new_password The new password has been confirmed
+  * @param {string} new_password New password has been set
+  * @param {string} confirm_new_password New password has been confirmed
   ###
   $scope.updatePassword = (new_password, confirm_new_password) ->
     AlertService.clear()

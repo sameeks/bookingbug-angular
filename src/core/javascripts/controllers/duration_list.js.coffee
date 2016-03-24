@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbDurations
@@ -8,8 +7,7 @@
 * @scope true
 *
 * @description
-*
-* Loads a list of durations for the currently in scope company
+* Loads a list of durations for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'
@@ -17,10 +15,9 @@
 * scope: true
 * </pre>
 *
-* @property {array} duration The duration list
-* @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+* @property {array} duration Duration list
+* @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
 ####
-
 
 angular.module('BB.Directives').directive 'bbDurations', () ->
   restrict: 'AE'
@@ -50,7 +47,7 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope
       $scope.durations =
         (for d in _.zip(service.durations, service.prices)
           {value: d[0], price: d[1]})
-      
+
       initial_duration = $scope.$eval($attrs.bbInitialDuration)
 
       for duration in $scope.durations
@@ -82,10 +79,10 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope
   * @name selectItem
   * @methodOf BB.Directives:bbDurations
   * @description
-  * Select duration of the list in according of dur and route parameter
+  * Selects list duration according to duration and route parameter.
   *
-  * @param {object} dur The duration list
-  * @param {string=} route A specific route to load
+  * @param {object} dur Duration list
+  * @param {string} route Specific route to load
   ###
   $scope.selectDuration = (dur, route) =>
     if $scope.$parent.$has_page_control
@@ -101,7 +98,7 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope
   * @name durationChanged
   * @methodOf BB.Directives:bbDurations
   * @description
-  * Change the list duration and update item
+  * Change the list duration and update item.
   ###
   $scope.durationChanged = () =>
     $scope.bb.current_item.setDuration($scope.duration.value)
@@ -112,7 +109,7 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope
   * @name setReady
   * @methodOf BB.Directives:bbDurations
   * @description
-  * Set this page section as ready
+  * Sets page section as ready.
   ###
   $scope.setReady = () =>
     if $scope.duration
@@ -124,6 +121,6 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope
       return false
 
 
-  # when the current item is updated, reload the duration data
+  # when the current item is updated, reload data duration
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadData()

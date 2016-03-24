@@ -108,7 +108,7 @@ angular.module('BB.Services').factory 'QuestionService', ($window, QueryStringSe
           ans = cond.getAnswerId()
           found = false
           if $bbug.isEmptyObject(q.settings.conditional_answers) && cond.detail_type == "check" && !cond.answer
-            # this is messy - we're showing the question when we ahve a checkbox conditional, based on it being unticked
+            # this is messy - we're showing the question when we have a checkbox conditional, based on it being unticked
             found = true
 
           for a,v of q.settings.conditional_answers
