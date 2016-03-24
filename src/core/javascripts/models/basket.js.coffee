@@ -75,11 +75,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name readyToCheckout
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if items array is not empty, so it's ready for the checkout.
+    * Checks if the items array is not empty and it's ready for the checkout.
     *
     * @returns {boolean} If items array is not empty
     ###
-    # should we try to checkout ?
     readyToCheckout: ->
       if @items.length > 0
         return true
@@ -93,7 +92,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Builds an array of time items(all the items that are not coupons).
     *
-    * @returns {array} Newly created array of items
+    * @returns {array} Newly created array of time items
     ###
     timeItems: ->
       titems = []
@@ -290,7 +289,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name hasCoupon
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if the basket has an items that is a coupon.
+    * Checks if the basket has an item that is a coupon.
     *
     * @returns {boolean} True if an item was found, false otherwise
     ###
@@ -331,7 +330,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name containsDeal
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if the basket has an items that is a deal.
+    * Checks if the basket has an item that is a deal.
     *
     * @returns {boolean} True if an item was found, false otherwise
     ###
@@ -345,7 +344,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name hasDeal
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if the basket has an items that contains at least one deal code.
+    * Checks if the basket has an item that contains at least one deal code.
     *
     * @returns {boolean} True if an item was found, false otherwise
     ###

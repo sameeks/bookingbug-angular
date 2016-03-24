@@ -38,7 +38,7 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayServ
     * @name off
     * @methodOf BB.Models:Day
     * @description
-    * (!!check)Get off by month.
+    * Get off by month.
     *
     * @param {date} month month parameter
     *

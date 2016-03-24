@@ -140,7 +140,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setDefaults
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the default settings.
+    * Sets the default settings for an basket item.
     *
     * @param {object} defaults An object with default values
     *
@@ -202,7 +202,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name canLoadItem
     * @methodOf BB.Models:BasketItem
     * @description
-    * It checks if the item has a specific type.
+    * It checks if the basket item has a specific type.
+    * <br/>It could be a service, a resource or a person.
     *
     * @param {string} item Bascket item
     *
@@ -266,7 +267,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setCompany
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets the current company based on the passed parameter.
+    * Sets the current company based on the company parameter.
     *
     * @param {object} company A hash representing a company object
     ###
@@ -281,7 +282,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @methodOf BB.Models:BasketItem
     * @description
     * Clears the existing item.</br>
-    * When changing the service any present event is cleared.
+    * When changing the service any preset event is cleared.
     ###
     clearExistingItem: () ->
       if @$has('self') &&  @event_id
@@ -299,7 +300,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @description
     * Sets the current item based on the item parameter.
     *
-    * @param {object} item Item object
+    * @param {object} item item parameter
     ###
     setItem: (item) ->
       return if !item
@@ -423,7 +424,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * Sets the event chain object using the event_chain parameter.
     *
     * @param {object} event_chain Event chain object
-    * @param {object} default_questions Default questionns. If this parameter is empty will be set to null.
+    * @param {object} default_questions Default questionns. If this parameter is empty it will be set to null.
     *
     * @returns {array} The returned set event chaint
     ###
@@ -501,11 +502,11 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setCategory
     * @methodOf BB.Models:BasketItem
     * @description
-    * Sets category using the cat parameter.
+    * Sets the basket item category using the cat parameter.
+    * <br/> If someone sets a category - we may then later restrict the service list by category.
     *
     * @param {object} cat A hash representing a category object
     ###
-    # if someone sets a category - we may then later restrict the service list by category
     setCategory: (cat) ->
       @category = cat
 
@@ -1058,7 +1059,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setSrcBooking
     * @methodOf BB.Models:BasketItem
     * @description
-    * (!!check)Sets a booking that was moved from a previous booking.
+    * Sets a booking that was moved from a previous booking.
     *
     * @returns {object} Booking duration
     ###
@@ -1073,7 +1074,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name anyPerson
     * @methodOf BB.Models:BasketItem
     * @description
-    * (!!check)Verifies the type of any person.
+    * Verifies the type of any person.
     *
     * @returns {boolean} Flag
     ###
@@ -1085,7 +1086,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name anyResource
     * @methodOf BB.Models:BasketItem
     * @description
-    * (!!check)Verifies type of any resorce
+    * Verifies the type of any resorce
     *
     * @returns {boolean} Flag
     ###
@@ -1097,7 +1098,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name isMovingBooking
     * @methodOf BB.Models:BasketItem
     * @description
-    * (!!check srcBooking) Verifies if a booking has been moved.
+    * Verifies if a booking has been moved.
     *
     * @returns {string} Booking id
     ###
@@ -1151,7 +1152,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name totalPrice
     * @methodOf BB.Models:BasketItem
     * @description
-    * (!!check item or items)Total price of the basket item. <br/>
+    * Total price of the basket item. <br/>
     * This price does include the discounts.
     *
     * @returns {number} Total price

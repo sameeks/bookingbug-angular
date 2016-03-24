@@ -40,7 +40,6 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, Clin
     * @name setResourcesAndPeople
     * @methodOf BB.Models:Clinic
     * @description
-    * (!!check)
     * Sets the resources and people for clinic.
     *
     * @returns {object} The returned resources and people
@@ -69,7 +68,6 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel, Clin
     * @name setTimes
     * @methodOf BB.Models:Clinic
     * @description
-    * (!!check)
     * Sets the time for clinic.
     *
     * @returns {object} The returned time

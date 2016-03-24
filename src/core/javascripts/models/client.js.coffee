@@ -17,9 +17,9 @@
 * @property {string} address4 Address 5
 * @property {string} postcode Client postcode
 * @property {string} country Client country
-* @property {integer} phone Client phone number
-* @property {integer} mobile Client mobile phone
-* @property {integer} id Client id
+* @property {string} phone Client phone number
+* @property {string} mobile Client mobile phone
+* @property {number} id Client id
 * @property {array} answers Client answers
 * @property {boolean} deleted Verifies if the client account is deleted or not
 ####
