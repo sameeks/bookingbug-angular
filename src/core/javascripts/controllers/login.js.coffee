@@ -38,6 +38,8 @@ angular.module('BB.Controllers').controller 'Login',
 
   $scope.controller = "public.controllers.Login"
   $scope.validator = ValidatorService
+  $scope.login_form = {}
+
   loader = LoadingService.$loader($scope)
 
   ###**
