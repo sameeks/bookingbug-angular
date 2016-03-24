@@ -33,14 +33,15 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
     # On select change update the right current_item variable depending 
     # whether the selected item is a person or a resource
     $scope.$watch 'picked_resource', (newValue, oldValue)->
-      parts = newValue.split '_'
-      angular.forEach $scope.resources, (value, key)->
-        if value.identifier == newValue
-          if parts[1] == 'p'
-            $scope.bb.current_item.person = value
-          else if parts[1] == 'r'  
-            $scope.bb.current_item.resource = value
-          return  
+      if newValue != oldValue and newValue?
+        parts = newValue.split '_'
+        angular.forEach $scope.resources, (value, key)->
+          if value.identifier == newValue
+            if parts[1] == 'p'
+              $scope.bb.current_item.person = value
+            else if parts[1] == 'r'  
+              $scope.bb.current_item.resource = value
+            return  
 
     $scope.blockTime = ()->
       # Block call
