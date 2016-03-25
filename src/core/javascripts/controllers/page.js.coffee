@@ -9,8 +9,6 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
 
   $scope.validator = ValidatorService
 
-  loader = LoadingService.$loader($scope)
-
   # go around child scopes - return false if *any* child scope is marked as isLoaded = false
   isScopeReady = (cscope) =>
     ready_list = []
@@ -61,7 +59,8 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
         checkread.reject()
         return false
 
-    loader.notLoaded()
+    loader = LoadingService.$loader($scope).notLoaded()
+
     $q.all(ready_list).then () ->
       loader.setLoaded()
       checkread.resolve()
