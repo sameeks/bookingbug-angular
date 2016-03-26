@@ -301,11 +301,11 @@ app.filter 'datetime', (SettingsService) ->
     if date and moment.isMoment(date)
       datestrings =
         datetime_us : 'MM/DD/YYYY, h:mm a'
-        datetime_uk : 'DD/MM/YYYY, HH:MM'
+        datetime_uk : 'DD/MM/YYYY, HH:mm'
         date_us : 'MM/DD/YYYY'
         date_uk : 'DD/MM/YYYY'
         time_us : 'h:mm a'
-        time_uk : 'HH:MM'
+        time_uk : 'HH:mm'
       cc = SettingsService.getCountryCode()
       cc = "uk" if cc != "us"
       if format and format.match(/(date(time_uk|time_us|_us|_uk)*|(time(_uk|_us)*))/)
@@ -361,3 +361,9 @@ app.filter 'key_translate', ->
     remove_punctuations = upper_case.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"")
     add_underscore = remove_punctuations.replace(/\ /g, "_")
     return add_underscore
+
+app.filter 'clearTimezone', ->
+  (val, offset) ->
+    if val != null and val.length > 19
+      return val.substring(0, 19)
+    val    

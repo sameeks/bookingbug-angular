@@ -12,6 +12,9 @@ angular.module('BB.Models').factory "Member.BookingModel",
 
       @end_datetime = moment.parseZone(@end_datetime)
       @end_datetime.tz(@time_zone) if @time_zone
+     
+      @min_cancellation_time = moment(@min_cancellation_time)
+      @min_cancellation_hours = @datetime.diff(@min_cancellation_time, 'hours')
 
     getGroup: () ->
       return @group if @group

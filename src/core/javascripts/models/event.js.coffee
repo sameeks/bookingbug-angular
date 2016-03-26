@@ -20,8 +20,8 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
   class Event extends BaseModel
 
     constructor: (data) ->
-      super(data)
-      @getDate()
+      super(data)     
+      @date = moment.parseZone(@datetime)   
       @time = new BBModel.TimeSlot(time: DateTimeUlititiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
       @date_unix = @date.unix()
@@ -74,33 +74,6 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
         else
           defer.reject("No event chain")
       defer.promise
-
-    ###**
-    * @ngdoc method
-    * @name getDate
-    * @methodOf BB.Models:Event
-    * @description
-    * Get the date of the event
-    *
-    * @returns {date} The returned date
-    ###
-    getDate: () ->
-      return @date if @date
-      @date = moment(@_data.datetime)
-      return @date
-
-    ###**
-    * @ngdoc method
-    * @name dateString
-    * @methodOf BB.Models:Event
-    * @description
-    * Get date string of the event
-    *
-    * @returns {string} The returned date string
-    ###
-    dateString: (str) ->
-      date = @date()
-      if date then date.format(str)
 
     ###**
     * @ngdoc method

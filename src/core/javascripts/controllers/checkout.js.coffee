@@ -60,6 +60,9 @@ angular.module('BB.Controllers').controller 'Checkout',
         if !$scope.options.disable_confirmation
           $scope.skipThisStep()
           $scope.decideNextPage()
+        else
+          # Reset ready for another booking
+          $scope.reset()
 
       $scope.checkoutSuccess = true
       loader.setLoaded()
@@ -68,7 +71,6 @@ angular.module('BB.Controllers').controller 'Checkout',
       loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       $scope.checkoutFailed = true
       $scope.$emit("checkout:fail", err)
-
   , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 

@@ -14,8 +14,7 @@
 * @property {date} duration The schedule duration
 ####
 
-angular.module('BB.Models').factory "Admin.ScheduleModel",
-($q, AdminScheduleService, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, AdminScheduleService, BBModel, BaseModel, ScheduleRules) ->
 
   class Admin_Schedule extends BaseModel
 
@@ -48,4 +47,3 @@ angular.module('BB.Models').factory "Admin.ScheduleModel",
 
     @$update: (schedule) ->
       AdminScheduleService.update(schedule)
-

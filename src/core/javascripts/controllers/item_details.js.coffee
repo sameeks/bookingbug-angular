@@ -223,6 +223,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
   $scope.confirm_move = (route) ->
     confirming = true
     $scope.item ||= $scope.bb.current_item
+    $scope.item.moved_booking = false
     # we need to validate the question information has been correctly entered here
     $scope.item.setAskedQuestions()
     if $scope.item.ready
@@ -237,6 +238,7 @@ angular.module('BB.Controllers').controller 'ItemDetails',
             $scope.purchase = purchase
             loader.setLoaded()
             $scope.item.move_done = true
+            $scope.item.moved_booking = true
             $rootScope.$broadcast "booking:moved"
             $scope.decideNextPage(route)
             $scope.showMoveMessage(bookings[0].datetime)

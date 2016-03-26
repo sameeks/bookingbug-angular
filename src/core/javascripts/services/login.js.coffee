@@ -12,7 +12,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     , (err) =>
       deferred.reject(err)
     deferred.promise
-  
+
 
   login: (form, options) ->
     deferred = $q.defer()
@@ -42,7 +42,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
       deferred.reject(err)
     deferred.promise
 
-  
+
   companyQuery: (id) =>
     if id
       comp_promise = halClient.$get(location.protocol + '//' + location.host + '/api/v1/company/' + id)
@@ -70,7 +70,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     , (err) =>
       deferred.reject(err)
     deferred.promise
-   
+
 
   # check if we're logged in as a member - but not an admin
   isLoggedIn: ->
@@ -116,7 +116,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
 
     $sessionStorage.clear()
     $localStorage.clear()
-    
+
     halClient.$del(url, options, {}).then (logout) =>
       $sessionStorage.clear()
       $localStorage.clear()
@@ -129,7 +129,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
   FBLogout: (options) ->
     $sessionStorage.removeItem("fb_user")
     @logout(options)
-      
+
 
   sendPasswordReset: (company, params) ->
     deferred = $q.defer()
@@ -138,7 +138,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
     , (err) =>
       deferred.reject(err)
     deferred.promise
-  
+
 
   updatePassword: (member, params) ->
     params.auth_token = member.getOption('auth_token')

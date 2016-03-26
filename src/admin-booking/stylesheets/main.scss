@@ -1,0 +1,21 @@
+// Modules & Variables
+$heading-text-color         : #000000;
+$page-background-color      : #FFFFFF;
+$hyperlink-color            : #609ABE; 
+$placeholder-text           : #A5A5A5; 
+
+$primary-text-color         : #000000; 
+$primary-background-color   : #EEEEEE; 
+$primary-border-color       : #666666;
+
+$secondary-text-color       : #255B93;
+$secondary-background-color : #FAFAFA; 
+$secondary-border-color     : #D5D5D5; 
+
+@import "calendar_admin";
+@import "client_admin";
+
+
+// components
+@import "date_picker"
+

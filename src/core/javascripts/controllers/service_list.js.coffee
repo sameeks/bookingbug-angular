@@ -107,11 +107,10 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       if filterItems
         if $scope.booking_item.service_ref && !$scope.options.show_all
           items = items.filter (x) -> x.api_ref is $scope.booking_item.service_ref
-        else if ($scope.booking_item.category || $scope.booking_item.service_group) && !$scope.options.show_all
-          $scope.category = $scope.booking_item.service_group if !$scope.booking_item.category
+        else if $scope.booking_item.category && !$scope.options.show_all
           # if we've selected a category for the current item - limit the list
           # of services to ones that are relevant
-          items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.category.self
+          items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.booking_item.category.self
 
       # filter out event groups unless explicity requested
       if !$scope.options.show_event_groups
@@ -162,7 +161,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         services = (i.item for i in items when i.item?)
 
         for item in services
-          if item.listed_durations && item.listed_durations.length == 1
+          if item.listed_durations and item.listed_durations.length is 1
             item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
           else
             item.display_name = item.name

@@ -66,7 +66,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   $scope.shownMarkers         = $scope.shownMarkers or []
   $scope.numberedPin          ||= null
   $scope.defaultPin           ||= null
-  $scope.hide_not_live_stores = false
+  $scope.hide_not_live_stores = if options.hide_not_live_stores? then options.hide_not_live_stores else false
   $scope.address              = $scope.$eval $attrs.bbAddress if !$scope.address && $attrs.bbAddress
   $scope.error_msg            = options.error_msg or "You need to select a store"
   loader = LoadingService.$loader($scope).notLoaded()

@@ -7,7 +7,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     scope.init(scope.$eval( attrs.bbPurchase ))
     return
 
-angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage, LoadingService) ->
+angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage, LoadingService, SettingsService, $translate) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -28,7 +28,11 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Pu
     if $scope.fail_msg
       AlertService.danger({msg:$scope.fail_msg})
     else
-      AlertService.raise('GENERIC')
+      if SettingsService.isInternationalizatonEnabled()
+        $translate('ERROR.GENERIC', {}).then (translated_text) ->
+          AlertService.add("danger", { msg: translated_text })
+      else
+        AlertService.raise('GENERIC')
 
 
   $scope.init = (options) ->

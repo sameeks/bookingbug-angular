@@ -19,6 +19,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin',
     host: $sessionStorage.getItem('host')
     email: null
     password: null
+    selected_admin: null
 
   $scope.login_template = 'admin_login.html'
 
@@ -39,15 +40,16 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin',
       $scope.alert = "Sorry, either your email or password was incorrect"
 
   $scope.pickCompany = () ->
-    $scope.login_template = 'pick_company.html'
+    $scope.login_template = 'admin_pick_company.html'
 
   $scope.selectedCompany = () ->
     $scope.alert = ""
     params =
-      email: $scope.email
-      password: $scope.password
-    $scope.selected_admin.$post('login', {}, params).then (login) ->
-      $scope.selected_admin.$getCompany().then (company) ->
+
+      email: $scope.login.email
+      password: $scope.login.password
+    $scope.login.selected_admin.$post('login', {}, params).then (login) ->
+      $scope.login.selected_admin.$getCompany().then (company) ->
         $scope.bb.company = company
-        BBModel.Admin.Login.$setLogin($scope.selected_admin)
+        AdminLoginService.$setLogin($scope.login.selected_admin)
         $scope.onSuccess(company)

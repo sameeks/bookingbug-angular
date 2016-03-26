@@ -277,7 +277,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return
 
     else
-
       $scope.initWidget2()
       return
 
@@ -708,7 +707,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   # $locationChangeStart is broadcast before a URL will change
   $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
-
+    # TODO dont need to handle this when widget is initialising
     return if !$scope.bb.routeFormat and $scope.bb.routing
 
     # Get the step number we want to load
@@ -720,7 +719,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     else if step_number? and step_number < $scope.bb.current_step
       # Load previous page
       $scope.loadPreviousStep('locationChangeStart')
-    
+
     $scope.bb.routing = false
 
 
@@ -826,6 +825,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.showPage('slot_list')
       else
         return if $scope.setPageRoute($rootScope.Route.Date)
+        # if we're an admin and we've pre-selected a time - route to that instead
         return $scope.showPage('calendar')
     else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.time && !$scope.bb.current_item.event? && (!$scope.bb.current_item.service || $scope.bb.current_item.service.duration_unit != 'day') && !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Time)
@@ -834,16 +834,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return $scope.showPage('check_move')
     else if (!$scope.client.valid())
       return if $scope.setPageRoute($rootScope.Route.Client)
-      if $scope.bb.isAdmin
-        return $scope.showPage('client_admin')
-      else
-        return $scope.showPage('client')
+      return $scope.showPage('client')
     else if ( !$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready ) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
       return if $scope.setPageRoute($rootScope.Route.Summary)
-      if $scope.bb.isAdmin
-        return $scope.showPage('check_items_admin')
-      else
-        return $scope.showPage('check_items')
+      return $scope.showPage('check_items')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
       return if $scope.setPageRoute($rootScope.Route.Basket)
       return $scope.showPage('basket')
@@ -1161,7 +1155,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if st && !$scope.bb.last_step_reached
       $scope.bb.stacked_items = [] if !st.stacked_length ||  st.stacked_length == 0
       $scope.bb.current_item.loadStep(st.current_item)
-      $scope.bb.steps.splice(step, $scope.bb.steps.length-step)
+      if $scope.bb.steps.length > 1
+        $scope.bb.steps.splice(step, $scope.bb.steps.length-step)
       $scope.bb.current_step = step
       $scope.showPage(prev_step.page, true)
     if $scope.bb.allSteps
@@ -1183,32 +1178,32 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   * @param {string} caller: The method that called this function
   ###
   $scope.loadPreviousStep = (caller) ->
-
     past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
 
     # Find the last unskipped step
-    step_to_load = past_steps[0]
+    step_to_load = 0
     while past_steps[0]
       last_step = past_steps.pop()
+      if !last_step
+        break 
       if !last_step.skipped
         step_to_load = last_step.number
         break
 
     # Remove pages from browser history (sync browser history with routing)
-    if step_to_load
-      pages_to_remove_from_history = ($scope.bb.current_step - step_to_load)
-      if caller == "locationChangeStart"
-        # Reduce number of pages to remove from browser history by one if this
-        # method was triggered by Angular's $locationChangeStart broadcast
-        # In this instance we can assume that the browser back button was used
-        # and one page has already been removed from the history by the browser
-        pages_to_remove_from_history--
+    pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
+    if caller == "locationChangeStart"
+      # Reduce number of pages to remove from browser history by one if this
+      # method was triggered by Angular's $locationChangeStart broadcast
+      # In this instance we can assume that the browser back button was used
+      # and one page has already been removed from the history by the browser
+      pages_to_remove_from_history--
 
-      if pages_to_remove_from_history? and pages_to_remove_from_history > 0
-        window.history.go(pages_to_remove_from_history*-1)
+    if pages_to_remove_from_history? and pages_to_remove_from_history > 0
+      window.history.go(pages_to_remove_from_history*-1)
 
-      # Load step
-      $scope.loadStep(step_to_load)
+    # Load step
+    $scope.loadStep(step_to_load)
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps
@@ -1216,13 +1211,19 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.loadStep(step.number)
     return $scope.loadStep(1)
 
-  $scope.restart = () ->
+  $scope.reset = () ->
     $rootScope.$broadcast 'clear:formData'
     $rootScope.$broadcast 'widget:restart'
     $scope.setLastSelectedDate(null)
+    $scope.client =  new BBModel.Client()
     $scope.bb.last_step_reached = false
-    $scope.loadStep(1)
+    # This is to remove the current step you are on.
+    $scope.bb.steps.splice(1)
 
+
+  $scope.restart = () ->
+    $scope.reset()
+    $scope.loadStep(1)
 
   # setup full route data
   $scope.setRoute = (rdata) ->
@@ -1241,7 +1242,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   * Marks the current step as skipped
   ###
   $scope.skipThisStep = () ->
-    $scope.bb.steps[$scope.bb.steps.length - 1].skipped = true
+    $scope.bb.steps[$scope.bb.steps.length - 1].skipped = true if $scope.bb.steps[$scope.bb.steps.length - 1]
 
 
   #############################################################

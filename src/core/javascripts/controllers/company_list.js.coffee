@@ -19,11 +19,13 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs, LoadingService) ->
   , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
+    
     $scope.companies = $scope.bb.company.companies
     if !$scope.companies || $scope.companies.length == 0
       $scope.companies = [$scope.bb.company]
 
     if $scope.companies.length == 1
+      $scope.skipThisStep()
       $scope.selectItem($scope.companies[0])
     else
       if options and options.hide_not_live_stores

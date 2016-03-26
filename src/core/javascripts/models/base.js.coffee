@@ -17,7 +17,7 @@ angular.module('BB.Models').run ($q, $injector, BBModel) ->
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
     'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
     'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
-    'PrePaidBooking', 'MembershipLevel', 'Product', 'EventCollection', 'ExternalPurchase', 'PackageItem', 'BulkPurchase']
+    'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection', 'ExternalPurchase', 'PackageItem', 'BulkPurchase']
 
   for model in models
     BBModel[model] = $injector.get(model + "Model")

@@ -85,7 +85,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @returns {date} Returns the added range of date
     ###
     addRangeToDate: (date, range) =>
-      ranges = if @rules[date] then @rules[date].split(',') else []
+      ranges = if @rules[date] then @rules[date] else []
       @rules[date] = @joinRanges(@insertRange(ranges, range))
 
     ###**
@@ -100,7 +100,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @returns {date} Returns the removed range of date
     ###
     removeRangeFromDate: (date, range) =>
-      ranges = if @rules[date] then @rules[date].split(',') else []
+      ranges = if @rules[date] then @rules[date] else []
       @rules[date] = @joinRanges(@subtractRange(ranges, range))
       delete @rules[date] if @rules[date] == ''
 
@@ -266,17 +266,17 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @description
     * Go to events day
     *
-    * @returns {array} Returns the event start and end time
+    * @returns {array} Returns fullcalendar compatible events
     ###
     toEvents: (d) ->
       if d
-        _.map(@rules[d].split(','), (range) =>
+        _.map(@rules[d], (range) =>
           start: [d, @formatTime(range.split('-')[0])].join('T')
           end: [d, @formatTime(range.split('-')[1])].join('T')
         )
       else
         _.reduce(@filterRulesByDates(), (memo, ranges, date) =>
-          memo.concat(_.map(ranges.split(','), (range) =>
+          memo.concat(_.map(ranges, (range) =>
             start: [date, @formatTime(range.split('-')[0])].join('T')
             end: [date, @formatTime(range.split('-')[1])].join('T')
           ))
@@ -289,12 +289,12 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @description
     * Go to events week day
     *
-    * @returns {array} Returns the event of week day
+    * @returns {array} Returns fullcalendar compatible events
     ###
     toWeekdayEvents: () ->
       _.reduce(@filterRulesByWeekdays(), (memo, ranges, day) =>
         date = moment().set('day', day).format('YYYY-MM-DD')
-        memo.concat(_.map(ranges.split(','), (range) =>
+        memo.concat(_.map(ranges, (range) =>
           start: [date, @formatTime(range.split('-')[0])].join('T')
           end: [date, @formatTime(range.split('-')[1])].join('T')
         ))
