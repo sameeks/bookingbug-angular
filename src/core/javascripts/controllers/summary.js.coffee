@@ -17,7 +17,7 @@ angular.module('BB.Directives').directive 'bbSummary', () ->
   scope : true
   controller : 'Summary'
 
-angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, BBModel, $q) ->
+angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, LoadingService, BBModel, $q) ->
 
   $scope.controller = "public.controllers.Summary"
 
@@ -36,7 +36,7 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, BBMo
   ###
   $scope.confirm = () =>
 
-    $scope.notLoaded $scope
+    loader = LoadingService.$loader($scope).notLoaded()
 
     promises = [
       BBModel.Client.$create_or_update($scope.bb.company, $scope.client),
@@ -53,7 +53,7 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, BBMo
         client.gotQuestions.then () ->
           $scope.client_details = client.client_details
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.decideNextPage()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')

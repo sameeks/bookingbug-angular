@@ -2,9 +2,10 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller: ($scope, $rootScope, $q, PurchaseService, AlertService, ValidatorService, BBModel) ->
+  controller: ($scope, $rootScope, $q, PurchaseService, AlertService, ValidatorService, LoadingService, BBModel) ->
 
     $scope.validator = ValidatorService
+    loader = LoadingService.$loader($scope)
 
     $rootScope.connection_started.then () ->
       initialise()
@@ -24,7 +25,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
         notify: true
       PurchaseService.update(params).then (purchase) ->
         $scope.bb.purchase = purchase
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.bb.current_item.move_done = true
         $rootScope.$broadcast "booking:updated"
         deferred.resolve()
@@ -59,7 +60,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
 
       deferred = $q.defer()
 
-      $scope.notLoaded $scope
+      loader.notLoaded()
 
       client_promises = []
 
@@ -91,7 +92,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
             $scope.decideNextPage('purchase')
             AlertService.raise('ATTENDEES_CHANGED')
             deferred.resolve()
-        , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
       return deferred.promise
 

@@ -37,10 +37,11 @@ angular.module('BB.Directives').directive 'bbAddresses', () ->
 
 
 angular.module('BB.Controllers').controller 'AddressList',
-($scope, $rootScope, $filter, $sniffer, FormDataStoreService, BBModel) ->
+($scope, $rootScope, $filter, $sniffer, FormDataStoreService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.AddressList"
   $scope.manual_postcode_entry = false
+  loader = LoadingService.$loader($scope)
 
   FormDataStoreService.init 'AddressList', $scope, [
     'show_complete_address'
@@ -63,7 +64,7 @@ angular.module('BB.Controllers').controller 'AddressList',
     if !$scope.postcode_submitted
       $scope.findByPostcode()
       $scope.postcode_submitted = false
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   ###**
@@ -80,7 +81,7 @@ angular.module('BB.Controllers').controller 'AddressList',
     $scope.postcode_submitted = true
     return if !$scope.bb.postcode
 
-    $scope.notLoaded($scope)
+    loader.notLoaded()
     BBModel.Address.$query(
       company: $scope.bb.company
       post_code: $scope.bb.postcode
@@ -111,12 +112,12 @@ angular.module('BB.Controllers').controller 'AddressList',
       # the select control this is bound to
       $scope.bb.address = addressArr[0]
       $scope.client.address = addressArr[0]
-      $scope.setLoaded $scope
+      loader.setLoaded()
       return
     ,(err) ->
       $scope.show_complete_address = true
       $scope.postcode_submitted = true
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -130,7 +131,7 @@ angular.module('BB.Controllers').controller 'AddressList',
       $scope.postcode_submitted = false
 
       if $scope.bb.address && $scope.bb.address.moniker
-        $scope.notLoaded($scope)
+        loader.notLoaded()
         BBModel.Address.$getAddress(
           company : $scope.bb.company,
           id : $scope.bb.address.moniker
@@ -224,7 +225,7 @@ angular.module('BB.Controllers').controller 'AddressList',
         ,(err) ->
             $scope.show_complete_address = true
             $scope.postcode_submitted = false
-            $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+            loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

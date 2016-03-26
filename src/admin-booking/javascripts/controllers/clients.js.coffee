@@ -7,7 +7,7 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   controller : 'adminBookingClients'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, PaginationService) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, PaginationService, LoadingService) ->
 
   $scope.validator = ValidatorService
   $scope.clientDef = $q.defer()
@@ -21,6 +21,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
   $scope.search_error = false
   $scope.search_text = null
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
+  loader = LoadingService.$loader($scope)
 
   $scope.showSearch = () =>
     $scope.search_clients = true
@@ -50,7 +51,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       return false
 
   $scope.createClient = (route) =>
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     # we need to validate the client information has been correctly entered here
     if $scope.bb && $scope.bb.parent_client
@@ -58,9 +59,9 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.client.setClientDetails($scope.client_details) if $scope.client_details
 
     BBModel.Client.$create_or_update($scope.bb.company, $scope.client).then (client) =>
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.selectClient(client, route)
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
     AlertService.clear()
@@ -77,17 +78,17 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       order_by_reverse: orderByReverse
     params.page = currentPage+1 if currentPage
     $rootScope.connection_started.then ->
-      $scope.notLoaded $scope
+      loader.notLoaded()
       $rootScope.bb.api_url = $scope.bb.api_url if !$rootScope.bb.api_url && $scope.bb.api_url
       AdminClientService.query(params).then (clients) =>
         $scope.clients = clients.items
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.setPageLoaded()
         $scope.total_entries = clients.total_entries
         PaginationService.update($scope.pagination, $scope.clients.length)
         clientDef.resolve(clients.items)
       , (err) ->
-        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
         clientDef.reject(err)
 
 

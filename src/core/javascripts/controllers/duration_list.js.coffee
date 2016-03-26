@@ -30,10 +30,10 @@ angular.module('BB.Directives').directive 'bbDurations', () ->
 
 
 angular.module('BB.Controllers').controller 'DurationList',
-($scope, $attrs, $rootScope, $q, $filter, PageControllerService, AlertService) ->
+($scope, $attrs, $rootScope, $q, $filter, PageControllerService, AlertService, LoadingService) ->
 
   $scope.controller = "public.controllers.DurationList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   angular.extend(this, new PageControllerService($scope, $q))
 
@@ -41,7 +41,7 @@ angular.module('BB.Controllers').controller 'DurationList',
 
   $rootScope.connection_started.then ->
     $scope.loadData()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $scope.loadData = () =>
@@ -69,7 +69,7 @@ angular.module('BB.Controllers').controller 'DurationList',
         $scope.skipThisStep()
         $scope.selectDuration($scope.durations[0], $scope.nextRoute)
 
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
   ###**
   * @ngdoc method

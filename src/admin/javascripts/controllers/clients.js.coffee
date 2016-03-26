@@ -10,13 +10,15 @@ angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
 
 
 angular.module('BBAdmin.Controllers').controller 'AdminClients',
-($scope, $rootScope, $q, $log, AdminClientService, AlertService, BBModel) ->
+($scope, $rootScope, $q, $log, AdminClientService, AlertService, LoadingService, BBModel) ->
 
   $scope.clientDef = $q.defer()
   $scope.clientPromise = $scope.clientDef.promise
   $scope.per_page = 15
   $scope.total_entries = 0
   $scope.clients = []
+
+  loader = LoadingService.$loader($scope)
 
 #  $rootScope.connection_started.then ->
 #    $scope.notLoaded $scope
@@ -33,16 +35,16 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients',
     clientDef = $q.defer()
 
     $rootScope.connection_started.then ->
-      $scope.notLoaded $scope
+      loader.notLoaded()
       AdminClientService.query({company_id:$scope.bb.company_id, per_page: $scope.per_page, page: currentPage+1, filter_by: filterBy, filter_by_fields: filterByFields, order_by: orderBy, order_by_reverse: orderByReverse    }).then (clients) =>
         $scope.clients = clients.items
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.setPageLoaded()
         $scope.total_entries = clients.total_entries
         clientDef.resolve(clients.items)
       , (err) ->
         clientDef.reject(err)
-        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     true
 
   $scope.edit = (item) ->

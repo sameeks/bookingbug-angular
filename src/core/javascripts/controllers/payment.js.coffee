@@ -16,7 +16,7 @@
 * scope: true
 * </pre>
 *
-* @property {array} total The total of payment 
+* @property {array} total The total of payment
 ####
 
 
@@ -89,18 +89,18 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
     link: linker
   }
 
-angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q, $location, $window, $sce, $log, $timeout) ->
+angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q, $location, $window, $sce, $log, $timeout, LoadingService) ->
 
   $scope.controller = "public.controllers.Payment"
 
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.bb.total = $scope.purchase if $scope.purchase
 
   $rootScope.connection_started.then =>
     $scope.bb.total = $scope.total if $scope.total
     $scope.url = $sce.trustAsResourceUrl($scope.bb.total.$href('new_payment')) if $scope.bb && $scope.bb.total && $scope.bb.total.$href('new_payment')
-  
+
   ###**
   * @ngdoc method
   * @name callNotLoaded
@@ -109,7 +109,7 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   * Call not loaded
   ###
   $scope.callNotLoaded = () =>
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
   ###**
   * @ngdoc method
@@ -119,7 +119,7 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   * Call set loaded
   ###
   $scope.callSetLoaded = () =>
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
   ###**
   * @ngdoc method
