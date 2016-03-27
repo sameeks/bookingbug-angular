@@ -1392,10 +1392,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $rootScope.$on 'hide:loader', () ->
     $scope.loading = false
 
-  String.prototype.parameterise = (seperator = '-') ->
-    return this.trim().replace(/\s/g,seperator).toLowerCase()
-
-
   $scope.isMemberLoggedIn = () ->
     return LoginService.isLoggedIn()
 
