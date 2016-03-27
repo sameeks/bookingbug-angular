@@ -27,8 +27,10 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # http://regexlib.com/REDetails.aspx?regexp_id=260
   # uk_postcode_regex = /^([A-PR-UWYZ0-9][A-HK-Y0-9][AEHMNPRTVXY0-9]?[ABEHMNPRVWXY0-9]? {1,2}[0-9][ABD-HJLN-UW-Z]{2}|GIR 0AA)$/i
   uk_postcode_regex = /^(((([A-PR-UWYZ][0-9][0-9A-HJKS-UW]?)|([A-PR-UWYZ][A-HK-Y][0-9][0-9ABEHMNPRV-Y]?))\s{0,1}[0-9]([ABD-HJLNP-UW-Z]{2}))|(GIR\s{0,2}0AA))$/i
+  
   # US postcode regex used for getMailingPattern
   us_postcode_regex = /^\d{5}(?:[-\s]\d{4})?$/
+  
   # UK postcode regex (lenient) - this checks for a postcode like string
   # https://gist.github.com/simonwhitaker/5748487
   uk_postcode_regex_lenient = /^[A-Z]{1,2}[0-9][0-9A-Z]?\s*[0-9][A-Z]{2}$/i
@@ -52,6 +54,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   international_number = /^(\+)([\d \(\)]{9,19})$/
 
   email_regex = /^$|^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+
   # password requires minimum of 7 characters and 1 number
   standard_password = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
@@ -63,10 +66,8 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # letters and spaces
   alpha: /^[a-zA-Z\s]*$/
 
-  us_phone_number: /(^[\d \(\)-]{9,16})$/
-
-  # Strict email check that also checks for the top domain level too part 1 of 2.
-  # email_pattern: /^[a-z0-9!#$%&'*+=?^_\/`{|}~.-]+@.[a-z0-9!#$%&'*+=?^_`{|}~.-]+[.]{1}[a-z0-9-]{2,20}$/i
+  # https://www.safaribooksonline.com/library/view/regular-expressions-cookbook/9781449327453/ch04s02.html
+  us_phone_number: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 
   ###**
     * @ngdoc method
@@ -113,6 +114,8 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   ###
   getUKPostcodePattern: () ->
     return uk_postcode_regex_lenient
+
+
   getMailingPattern: () ->
     cc = SettingsService.getCountryCode()
     if cc = "us"
