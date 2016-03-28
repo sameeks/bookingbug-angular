@@ -1211,6 +1211,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.loadStep(step.number)
     return $scope.loadStep(1)
 
+
   $scope.reset = () ->
     $rootScope.$broadcast 'clear:formData'
     $rootScope.$broadcast 'widget:restart'
@@ -1224,10 +1225,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.restart = () ->
     $scope.reset()
     $scope.loadStep(1)
+    # TODO clear current item?
+
 
   # setup full route data
   $scope.setRoute = (rdata) ->
     $scope.bb.setRoute(rdata)
+
 
   # set basic step path only
   $scope.setBasicRoute = (routes) ->
