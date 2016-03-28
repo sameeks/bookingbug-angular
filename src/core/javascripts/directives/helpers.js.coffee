@@ -447,6 +447,6 @@ angular.module('BB.Directives').directive 'bbBookingExport', () ->
       setHTML(new_val) if new_val
     setHTML = (purchase_total) ->
       scope.html = 
-        "<div class='text-center'><a href='#{purchase_total.webcalLink()}'><img src='images/outlook.png' alt='outlook.png' /><div class='clearfix'></div><span>Outlook</span></a></div><p></p>" +
-        "<div class='text-center'><a href='#{purchase_total.gcalLink()}'><img src='images/google.png' alt='outlook.png' /><div class='clearfix'></div><span>Google</span></a></div><p></p>" +
-        "<div class='text-center'><a href='#{purchase_total.icalLink()}'><img src='images/ical.png' alt='outlook.png' /><div class='clearfix'></div><span>iCal</span></a></div>"
+        "<div class='text-center'><a href='#{purchase_total.webcalLink()}'><img src='images/outlook.png' alt='outlook calendar icon' height='30' width='30' /><div class='clearfix'></div><span>Outlook</span></a></div><p></p>" +
+        "<div class='text-center'><a href='#{purchase_total.gcalLink()}'><img src='images/google.png' alt='google calendar icon' height='30' width='30' /><div class='clearfix'></div><span>Google</span></a></div><p></p>" +
+        "<div class='text-center'><a href='#{purchase_total.icalLink()}'><img src='images/ical.png' alt='ical calendar icon' height='30' width='30' /><div class='clearfix'></div><span>iCal</span></a></div>"
