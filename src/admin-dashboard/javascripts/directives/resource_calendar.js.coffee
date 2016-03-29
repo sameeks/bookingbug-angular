@@ -98,7 +98,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             element.css('border-color', service.textColor)
         eventAfterRender: (event, elements, view) ->
           PrePostTime.apply(event, elements, view, $scope)
-          elements.draggable()
+          if not event.rendering? or event.rendering != 'background'
+            elements.draggable()
         select: (start, end, jsEvent, view, resource) ->
           view.calendar.unselect()
           rid = null
