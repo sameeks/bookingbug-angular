@@ -3,7 +3,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     AdminPersonService, $q, $sessionStorage, ModalForm, BBModel,
     AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,
     $timeout, $compile, $templateCache, BookingCollections, PrePostTime,
-    AdminScheduleService) ->
+    AdminScheduleService, $filter) ->
 
   controller = ($scope, $attrs) ->
     $scope.eventSources = [
@@ -30,29 +30,37 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     ]
 
     labelAssembly = (event)->
+      # if labelAssembler attribute not defined return the normal title
+      return event.title if not $scope.labelAssembler?
+      # if label-assembler attr is provided it needs to be inline with the following RegExp
+      #   ex: label-assembler='{service_name} - {client_name} - {created_at|date:shortTime}'
+      # everything outside  {} will remain as is, inside the {} the first param (required) is the property name 
+      # second after the '|' (optional) is the filter and third after the ':' (optional) are the options for filter
       myRe = new RegExp("\\{([a-zA-z_-]+)\\|?([a-zA-z_-]+)?:?([a-zA-z0-9{}_-]+)?\\}", "g")
 
+      label = $scope.labelAssembler      
       for match,index in $scope.labelAssembler.match myRe
-        console.log index
-        console.log match
         parts = match.split(myRe)
+        # Remove unnecessary empty properties of the array (first/last)
         parts.splice(0,1)
         parts.pop()
-        console.log parts
+        
+        # If requested property exists replace the placeholder with value otherwise with ''
+        if event.hasOwnProperty parts[0]
+          replaceWith = event[parts[0]]
+          # if a filter is requested as part of the expression and filter exists
+          if parts[1]? and $filter(parts[1])? 
+            # If filter has options as part of the expression use them
+            if parts[2]?
+              replaceWith = $filter(parts[1])(replaceWith, $scope.$eval(parts[2]))
+            else  
+              replaceWith = $filter(parts[1])(replaceWith)
 
-      event.title
-      # labelParts = $scope.$eval $attrs.labelAssembler
-      # if not angular.isArray labelParts
-      #   event.title
-      # else
-      #   title = ''
-      #   for part in labelParts 
-      #     if event[part]?
-      #       title += event[part] + ' '
-      #     else
-      #       title += part  + ' '
+          label = label.replace(match, replaceWith)
+        else 
+          label = label.replace(match, '')  
 
-      #   title    
+      label   
 
     $scope.options = $scope.$eval $attrs.bbResourceCalendar
     $scope.options ||= {}
