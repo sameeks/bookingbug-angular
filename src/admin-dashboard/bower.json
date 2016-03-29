@@ -22,7 +22,8 @@
   "dependencies": {
     "bookingbug-angular-core": "master",
     "bookingbug-angular-admin": "master",
-    "fullcalendar": "2.4.0",
+    "fullcalendar": "2.6.1",
+    "fullcalendar-scheduler": "1.2.1",
     "jqueryui-touch-punch": "*",
     "pusher": "~2.2.4",
     "angular-ui-calendar": "~1.0.1",

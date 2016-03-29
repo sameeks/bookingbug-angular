@@ -1,47 +1,58 @@
-<div bb-wait-for="quickEmptybasket()" bb-wait-var="allDone" ng-if="allDone" bb-form-data-store ng-controller="PageController">
+<div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store bb-page>
 
- <h3>Make a booking</h3>
-  <div id="appointment-booking-form-wrap" class="block">
-    <form id="appointment-booking-form" >
+  <div ng-form name="appointment-booking-form">
 
-      <div bb-form-data-store ng-controller="ServiceList">
-        <div class="input-row selectbox">
-          <label>Pick a Service</label>
-          <span class="no-border">
-            <select id="enquiry-type" ng-model="service" ng-options="s.display_name for s in bookable_services">
-              <option value="">-- pick a service --</option>
-            </select>
-          </span>
+    <h1>Make a Booking</h1>
+
+    <div bb-services>
+      <div class="form-group">
+        <label>Service</label>
+        
+        <!-- TODO use display_name -->
+        <select id="service" ng-model="service" ng-options="s.name for s in bookable_services | orderBy: 'name'" class="form-control">
+          <option value="">-- select a service --</option>
+        </select>
+        
+      </div>
+    </div>
+    
+    <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady('calendar')" bb-debounce ng-disabled="!bb.current_item.service">Book</button>
+
+  </div>
+
+  <hr>
+
+  <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
+
+    <h1>Block Time</h1>
+
+    <div class="form-group">
+      <label>For</label>
+      <p ng-show="bb.current_item.person.name">
+        {{bb.current_item.person.name}}
+      </p>
+      <p ng-show="bb.current_item.resource.name">
+        {{bb.current_item.resource.name}}
+      </p>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>From</label>
+          <div bb-date-time-picker date="config.from_datetime"></div>
         </div>
       </div>
-
-      <div ng-if="bb.company.$has('people') && !bb.item_defaults.person" ng-show="bb.current_item.service" ng-controller="PersonList">
-        <div class="input-row selectbox">
-          <label>Pick a staff member</label>
-          <span class="no-border">
-            <select id="enquiry-stype" ng-model="person" ng-options="s.name for s in bookable_people">
-              <option value="">-- pick any staff --</option>
-            </select>
-          </span>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>To</label>
+          <div bb-date-time-picker date="config.to_datetime"></div>
         </div>
       </div>
+    </div>
 
-      <div ng-if="bb.company.$has('resources') && !bb.item_defaults.resource" ng-show="bb.current_item.service" ng-controller="ResourceList">
-        <div class="input-row selectbox">
-          <label>Pick a Resource</label>
-          <span class="no-border">
-            <select id="enquiry-type" ng-model="resource" ng-options="s.name for s in bookable_resources">
-              <option value="">-- pick any resource --</option>
-            </select>
-          </span>
-        </div>
-      </div>
-      <br />
-      <div ng-show="bb.current_item.service">
-        <a class="button-colour-a" ng-click="checkReady() && routeReady()" bb-debounce>Next</a>
-      </div>
+    <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false">Block Time</button>
 
-    </form>
+
   </div>
 
 </div>
