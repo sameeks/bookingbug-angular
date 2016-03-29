@@ -11,21 +11,9 @@
 * @property {array} event_groups An array with event chain
 ####
 
-angular.module('BB.Models').factory "Admin.EventChainModel", ($q, BBModel, BaseModel, AdminEventChainService) ->
+angular.module('BB.Models').factory "Admin.EventChainModel", ($q, BBModel, BaseModel) ->
 
   class Admin_EventChain extends BaseModel
 
     constructor: (data) ->
       super(data)
-
-    ###**
-    * @ngdoc method
-    * @name query
-    * @methodOf BB.Models:AdminEventChain
-    * @description
-    * Static function that loads an array of events chain from a company object
-    *
-    * @returns {Promise} A returned promise
-    ###
-    @$query: (params) ->
-      AdminEventChainService.query (params)

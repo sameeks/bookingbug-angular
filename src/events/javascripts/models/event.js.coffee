@@ -11,7 +11,7 @@
 * @property {array} events An array with events
 ####
 
-angular.module('BB.Models').factory "Admin.EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService) ->
+angular.module('BB.Models').factory "Admin.EventModel", ($q, BBModel, BaseModel) ->
 
   class Admin_Event extends BaseModel
 
