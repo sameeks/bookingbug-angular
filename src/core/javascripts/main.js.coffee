@@ -49,8 +49,8 @@ app.config ($locationProvider, $httpProvider, $translateProvider, $provide, ie8H
     'App-Id': 'f6b16c23',
     'App-Key': 'f0bc4f65f4fbfe7b4b3b7264b655f5eb'
 
-# this shouold not be enforced - but set per app for custom app that uses html paths
-# $locationProvider.html5Mode(false).hashPrefix('!')
+  # this shouold not be enforced - but set per app for custom app that uses html paths
+  # $locationProvider.html5Mode(false).hashPrefix('!')
 
   int = (str) ->
     parseInt(str, 10)
@@ -118,3 +118,18 @@ window.bookingbug =
            .get('LoginService').logout(logout_opts)
     window.location.reload() if options.reload
   translations: {}
+
+# String::includes polyfill
+if !String::includes
+
+  String::includes = (search, start) ->
+    if typeof start != 'number'
+      start = 0
+    if start + search.length > @length
+      false
+    else
+      @indexOf(search, start) != -1
+
+# Extend String with parameterise method
+String::parameterise = (seperator = '-') ->
+  @trim().replace(/\s/g,seperator).toLowerCase()

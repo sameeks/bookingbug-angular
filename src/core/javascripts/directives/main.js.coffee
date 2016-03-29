@@ -105,7 +105,7 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsSer
 
       # mark nested forms as submitted too
       for property of form_controller
-        if form_controller[property].hasOwnProperty('$valid')
+        if angular.isObject(form_controller[property]) and form_controller[property].hasOwnProperty('$valid')
           form_controller[property].submitted = true
 
       scope.$apply()

@@ -63,15 +63,13 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.notLoaded $scope
 
   # if the data source isn't set, set it as the current item
-  if !$scope.data_source
-    $scope.data_source = $scope.bb.current_item
+  $scope.data_source = $scope.bb.current_item if !$scope.data_source
 
+  $scope.options = $scope.$eval($attrs.bbTimeRanges) or {}
 
   $rootScope.connection_started.then ->
 
     # read initialisation attributes
-    $scope.options = $scope.$eval($attrs.bbTimeRanges) or {}
-
     if $attrs.bbTimeRangeLength?
       $scope.time_range_length = $scope.$eval($attrs.bbTimeRangeLength)
     else if $scope.options and $scope.options.time_range_length

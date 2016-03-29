@@ -234,7 +234,8 @@
     "LOGIN_FAILED": "Sorry, your email or password was not recognised. Please try again or reset your password.",
     "PASSWORD_INVALID": "Sorry, your chosen password is invalid",
     "PASSWORD_RESET_REQ_SUCCESS": "We have sent you an email with instructions on how to reset your password.",
-    "PASSWORD_RESET_REQ_FAILED": "Sorry, we didn't find an account registered with that email."
+    "PASSWORD_RESET_REQ_FAILED": "Sorry, we didn't find an account registered with that email.",
+    "FB-LOGIN-FAILED": "Sorry, we couldn't find a login associated with this Facebook account. You will need to sign up using Facebook first"
   },
   "THOUSANDS_SEPARATOR": ",",
   "DECIMAL_SEPARATOR": ".",

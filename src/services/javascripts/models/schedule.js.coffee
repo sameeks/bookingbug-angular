@@ -16,7 +16,7 @@
 ####
 
 
-angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseModel, ScheduleRules) ->
 
   class Admin_Schedule extends BaseModel
 
@@ -40,4 +40,3 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
       data.company_id = @company_id
       data.duration = @duration
       data
-    

@@ -190,35 +190,20 @@ app.filter 'exclude_days', ->
       excluded.indexOf(day.date.format('dddd')) == -1
 
 
-# US phone formatter
-# http://stackoverflow.com/questions/12700145/how-to-format-a-telephone-number-in-angularjs
-app.filter "us_tel", ->
-  (tel) ->
-    return ""  unless tel
-    value = tel.toString().trim().replace(/^\+/, "")
-    return tel  if value.match(/[^0-9]/)
-    country = undefined
-    city = undefined
-    number = undefined
-    switch value.length
-      when 10 # +1PPP####### -> C (PPP) ###-####
-        country = 1
-        city = value.slice(0, 3)
-        number = value.slice(3)
-      when 11 # +CPPP####### -> CCC (PP) ###-####
-        country = value[0]
-        city = value.slice(1, 4)
-        number = value.slice(4)
-      when 12 # +CCCPP####### -> CCC (PP) ###-####
-        country = value.slice(0, 3)
-        city = value.slice(3, 5)
-        number = value.slice(5)
-      else
-        return tel
-    country = ""  if country is 1
-    number = number.slice(0, 3) + "-" + number.slice(3)
-    (country + city + "-" + number).trim()
+# format number as local number
+angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, ValidatorService) ->
+  (phone_number) ->
+    console.log phone_number
 
+    return if !phone_number
+
+    cc = SettingsService.getCountryCode()
+
+    switch cc
+      when "uk" then return "0#{phone_number}"
+      when "us" then return phone_number.replace(ValidatorService.us_phone_number, "($1) $2 $3")
+      else
+        return phone_number
 
 app.filter "uk_local_number", ->
   (tel) ->
@@ -275,12 +260,14 @@ app.filter 'add', ->
       item = parseInt(item)
       return item + value
 
+
 app.filter 'spaces_remaining', () ->
   (spaces) ->
     if spaces < 1
       return 0
     else
       return spaces
+
 
 app.filter 'key_translate', ->
   (input) ->
