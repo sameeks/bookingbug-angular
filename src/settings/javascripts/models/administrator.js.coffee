@@ -8,7 +8,8 @@
 * Representation of an Administrator Object
 ####
 
-angular.module('BB.Models').factory "Admin.AdministratorModel", ($q, BBModel, BaseModel, AdminAdministratorService) ->
+angular.module('BB.Models').factory "Admin.AdministratorModel",
+($q, AdminAdministratorService, BBModel, BaseModel) ->
 
   class Admin_Administrator extends BaseModel
 
@@ -28,6 +29,3 @@ angular.module('BB.Models').factory "Admin.AdministratorModel", ($q, BBModel, Ba
     ###
     @$query: (params) ->
       AdminAdministratorService.query(params)
-
-angular.module('BB.Models').factory 'AdminAdministrator', ($injector) ->
-  $injector.get('Admin.AdministratorModel')

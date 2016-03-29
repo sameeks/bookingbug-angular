@@ -21,6 +21,11 @@
 angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, EventChainService) ->
 
   class EventChain extends BaseModel
+
+    constructor: (data) ->
+      super
+      @capacity_view = setCapacityView(@capacity_view)
+
     name: () ->
       @_data.name
 
@@ -34,7 +39,7 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
     * @returns {boolean} True if event allows only one booking and has no more tickets sets
     ###
     isSingleBooking: () ->
-      return @max_num_bookings == 1 && !@$has('ticket_sets')
+      return @max_num_bookings == 1 and !@$has('ticket_sets')
 
     ###**
     * @ngdoc method
@@ -97,6 +102,23 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
 
     ###**
     * @ngdoc method
+    * @name setCapacityView
+    * @methodOf BB.Models:EventChain
+    * @description
+    * Sets the capacity_view (referred to as the "spaces view" in admin console) to a more helpful String
+    * @returns {String} code for the capacity_view
+    ###
+    setCapacityView = (capacity_view) ->
+      switch capacity_view
+        when 0 then capacity_view_str = "DO_NOT_DISPLAY"
+        when 1 then capacity_view_str = "NUM_SPACES"
+        when 2 then capacity_view_str = "NUM_SPACES_LEFT"
+        when 3 then capacity_view_str = "NUM_SPACES_AND_SPACES_LEFT"
+        else capacity_view_str = "NUM_SPACES_AND_SPACES_LEFT"
+      return capacity_view_str
+
+    ###**
+    * @ngdoc method
     * @name $query
     * @methodOf BB.Models:EventChain
     * @description
@@ -106,3 +128,5 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, 
     ###
     @$query: (company, params) ->
       EventChainService.query(company, params)
+
+

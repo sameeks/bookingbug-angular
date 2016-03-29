@@ -34,7 +34,7 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
     scope.directives = "public.MultiServiceSelect"
 
 angular.module('BB.Controllers').controller 'MultiServiceSelect',
-($scope, $rootScope, $q, $attrs, BBModel, AlertService, CategoryModel, FormDataStoreService, $modal) ->
+($scope, $rootScope, $q, $attrs, $modal, AlertService, FormDataStoreService, LoadingService, BBModel) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selected_category_name'
@@ -43,6 +43,8 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
   $scope.options.max_services       = $scope.options.max_services or Infinity
   $scope.options.ordered_categories = $scope.options.ordered_categories or false
   $scope.options.services           = $scope.options.services or 'items'
+
+  loader = LoadingService.$loader($scope)
 
   $rootScope.connection_started.then ->
     if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
@@ -97,9 +99,9 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
 
       $scope.$broadcast "multi_service_select:loaded"
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -173,10 +175,10 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       category_details = {name: $scope.all_categories[category_id].name, description: $scope.all_categories[category_id].description} if $scope.all_categories[category_id]
 
       # set the category
-      category.name = category_details.name 
-      category.description = category_details.description 
+      category.name = category_details.name
+      category.description = category_details.description
 
-      # get the order if instructed
+      # get the order if instruccted
       category.order = $scope.all_categories[category_id].order if $scope.options.ordered_categories && $scope.all_categories[category_id]
 
       $scope.categories.push(category)
@@ -185,7 +187,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       if $scope.selected_category_name and $scope.selected_category_name is category_details.name
         $scope.selected_category = $scope.categories[$scope.categories.length - 1]
       # or if there's a default category
-      else if $scope.bb.item_defaults.category and $scope.bb.item_defaults.category.name is category_details.name and !$scope.selected_category 
+      else if $scope.bb.item_defaults.category and $scope.bb.item_defaults.category.name is category_details.name and !$scope.selected_category
         $scope.selected_category = $scope.categories[$scope.categories.length - 1]
         $scope.selected_category_name = $scope.selected_category.name
 

@@ -26,12 +26,15 @@ angular.module('BB.Directives').directive 'bbSpaces', () ->
   controller : 'SpaceList'
 
 angular.module('BB.Controllers').controller 'SpaceList',
-($scope,  $rootScope, ServiceService, SpaceModel, BBModel, $q) ->
+($scope, $rootScope, $q, ServiceService, LoadingService, BBModel) ->
   $scope.controller = "public.controllers.SpaceList"
+
+  loader = LoadingService.$loader($scope)
+
   $rootScope.connection_started.then =>
     if $scope.bb.company
       $scope.init($scope.bb.company)
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
     BBModel.Space.$query(comp).then (items) =>
@@ -45,7 +48,7 @@ angular.module('BB.Controllers').controller 'SpaceList',
         $scope.selectItem(items[0], $scope.nextRoute )
       else
         $scope.listLoaded = true
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

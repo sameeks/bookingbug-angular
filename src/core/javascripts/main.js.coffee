@@ -12,20 +12,19 @@ app = angular.module('BB', [
   'ui.bootstrap',
   'ngSanitize',
   'ui.map',
-  'ui.router.util', 
+  'ui.router.util',
   'ngLocalData',
   'ngAnimate',
   'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
   'angularFileUpload',
   'schemaForm',
-  'ngStorage',
   'uiGmapgoogle-maps',
   'angular.filter',
   'ui-rangeSlider',
   'ngCookies',
-  'slick',
   'pascalprecht.translate',
-  'vcRecaptcha'
+  'vcRecaptcha',
+  # 'slickCarousel'
 ]);
 
 
@@ -61,7 +60,12 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
   msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
   if (isNaN(msie))
     msie = int((/trident\/.*; rv:(\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
-  if msie && msie < 10
+
+  regexp = /Safari\/([\d.]+)/
+  result = regexp.exec(navigator.userAgent)
+  webkit = parseFloat(result[1]) if result
+
+  if (msie && msie <= 9) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
 
@@ -79,7 +83,6 @@ app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $docu
     document.createElement('nav')
     document.createElement('section')
     document.createElement('footer')
-
 
 
 angular.module('BB.Services', [
@@ -112,6 +115,15 @@ window.bookingbug =
 
 moment.locale('en', {
     longDateFormat : {
-        LLLL : "dddd Do MMMM[,] h.mma"
+        LT: "h:mm A",
+        LTS: "h:mm:ss A",
+        L: "MM/DD/YYYY",
+        l: "M/D/YYYY",
+        LL: "MMMM Do YYYY",
+        ll: "MMM D YYYY",
+        LLL: "MMMM Do YYYY LT",
+        lll: "MMM D YYYY LT",
+        LLLL: "dddd Do MMMM[,] h.mma",
+        llll: "ddd, MMM D YYYY LT"
     }
   })

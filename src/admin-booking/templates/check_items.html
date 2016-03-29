@@ -1,6 +1,6 @@
 <div bb-item-details ng-init="checkStepTitle('Booking Summary')">
 
-  <div bb-include="_service_item_aggregate">
+  <div bb-include="_basket_item_summary">
   </div>
 
   <form name="booking_form" class="form-horizontal" role="form" bb-form>
@@ -32,16 +32,6 @@
               </div>
             </div>
           </div>
-          <div class="form-group">
-            <label class="control-label col-sm-4">&nbsp;</label>
-            <div class="col-sm-5">
-              <div class="bb-checkbox" ng-if="item">
-                <label><input type="checkbox" ng-model="item.settings.send_email_reminder" ng-initial="true">Send me an email reminder</label>
-                <label><input type="checkbox" ng-model="item.settings.send_sms_reminder" ng-initial="true">Send me a SMS reminder</label>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="question-node">

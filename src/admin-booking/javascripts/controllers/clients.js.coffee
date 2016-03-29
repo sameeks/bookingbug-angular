@@ -7,11 +7,11 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   controller : 'adminBookingClients'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService) ->
-  
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, PaginationService, LoadingService) ->
+
   $scope.validator = ValidatorService
   $scope.clientDef = $q.defer()
-  $scope.clientPromise = $scope.clientDef.promise 
+  $scope.clientPromise = $scope.clientDef.promise
   $scope.per_page = 20
   $scope.total_entries = 0
   $scope.clients = []
@@ -20,12 +20,12 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
   $scope.no_clients = false
   $scope.search_error = false
   $scope.search_text = null
-
+  $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
+  loader = LoadingService.$loader($scope)
 
   $scope.showSearch = () =>
     $scope.search_clients = true
     $scope.newClient = false
-  
 
   $scope.showClientForm = () =>
     $scope.search_error = false
@@ -34,7 +34,6 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.newClient = true
     # clear the client if one has already been selected
     $scope.clearClient()
-  
 
   $scope.selectClient = (client, route) =>
     $scope.search_error = false
@@ -42,7 +41,6 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.setClient(client)
     $scope.client.setValid(true)
     $scope.decideNextPage(route)
-
 
   $scope.checkSearch = () =>
     if $scope.search_text and $scope.search_text.length >= 3
@@ -52,23 +50,22 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       $scope.search_error = true
       return false
 
-
   $scope.createClient = (route) =>
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     # we need to validate the client information has been correctly entered here
     if $scope.bb && $scope.bb.parent_client
       $scope.client.parent_client_id = $scope.bb.parent_client.id
     $scope.client.setClientDetails($scope.client_details) if $scope.client_details
 
-    ClientService.create_or_update($scope.bb.company, $scope.client).then (client) =>
-      $scope.setLoaded $scope
+    BBModel.Client.$create_or_update($scope.bb.company, $scope.client).then (client) =>
+      loader.setLoaded()
       $scope.selectClient(client, route)
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-   
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
     AlertService.clear()
+    $scope.search_triggered = true
     $scope.no_clients = false
     $scope.search_error = false
     clientDef = $q.defer()
@@ -81,20 +78,42 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       order_by_reverse: orderByReverse
     params.page = currentPage+1 if currentPage
     $rootScope.connection_started.then ->
-      $scope.notLoaded $scope
+      loader.notLoaded()
       $rootScope.bb.api_url = $scope.bb.api_url if !$rootScope.bb.api_url && $scope.bb.api_url
       AdminClientService.query(params).then (clients) =>
         $scope.clients = clients.items
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.setPageLoaded()
         $scope.total_entries = clients.total_entries
+        PaginationService.update($scope.pagination, $scope.clients.length)
         clientDef.resolve(clients.items)
-      , (err) ->  
-        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) ->
+        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
         clientDef.reject(err)
- 
+
+
+  $scope.searchClients = (search_text) ->
+    clientDef = $q.defer()
+    params =
+      filter_by: search_text
+      company: $scope.bb.company
+    AdminClientService.query(params).then (clients) =>
+      clientDef.resolve(clients.items)
+      clients.items
+    return clientDef.promise
+
+  $scope.typeHeadResults = ($item, $model, $label) ->
+    item = $item
+    model = $model
+    label = $label
+    $scope.client = item
+    return
+
+  $scope.clearSearch = () ->
+    $scope.clients = null
+    $scope.search_triggered = false
 
   $scope.edit = (item) ->
-    console.log item
+    $log.info("not implemented")
 
-    
+

@@ -25,7 +25,7 @@
 * @property {array} bookable_resources An array of Resources - used if the current_item has already selected a services or person
 * @property {resource} resource Currectly selected resource
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://dev01.bookingbug.com'>
 *   <div  bb-widget='{company_id:37167}'>
@@ -68,8 +68,8 @@ angular.module('BB.Controllers').controller 'ResourceList',
     # do nothing if nothing has changed
     if $scope.options.wait_for_service
       unless ($scope.bb.steps && $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
-        if !$scope.booking_item.service || $scope.booking_item.service == $scope.change_watch_item
-          # if there's no service - we have to wait for one to be set - so we're kind of done loading for now!
+        if !$scope.booking_item.service or $scope.booking_item.service == $scope.change_watch_item
+          # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
           if !$scope.booking_item.service
             loader.setLoaded()
           return
@@ -80,7 +80,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
     rpromise = BBModel.Resource.$query($scope.bb.company)
     rpromise.then (resources) =>
       if $scope.booking_item.group  # check they're part of any currently selected group
-        resources = resources.filter (x) -> !x.group_id || x.group_id == $scope.booking_item.group
+        resources = resources.filter (x) -> !x.group_id or x.group_id == $scope.booking_item.group
       if $scope.options.hide_disabled
         # this might happen to have been an admin api call which would include disabled resources - and we migth to hide them
         resources = resources.filter (x) -> !x.disabled && !x.deleted
@@ -160,14 +160,13 @@ angular.module('BB.Controllers').controller 'ResourceList',
   * @param {string=} route A specific route to load
   * @param {string=} skip_step Skip_step has been set to false
   ###
-  $scope.selectItem = (item, route, skip_step = false) =>
+  $scope.selectItem = (item, route, options={}) =>
     if $scope.$parent.$has_page_control
       $scope.resource = item
       return false
     else
       $scope.booking_item.setResource(getItemFromResource(item))
-      if skip_step
-        $scope.skipThisStep()
+      $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       return true
 

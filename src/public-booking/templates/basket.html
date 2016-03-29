@@ -1,4 +1,4 @@
-<div bb-basket-list ng-init="checkStepTitle('Check Your Basket')" class="bb-basket">
+<div bb-basket-list class="bb-basket">
 	<div class="row">
 
 
@@ -6,11 +6,11 @@
 			<div class="bb-subcontent">
 
 				<h2 class="bb-section-title">Your basket</h2>
-				<div class="bb-empty-basket-full-screen" ng-hide="items">
+				<div class="bb-empty-basket-full-screen" ng-hide="bb.basket.items">
 					<h3>There are no items in the basket</h3>
 					<p>Please press the add another item button if you wish to add a product or service.</p>
 				</div>
-				<table class="table table-bordered" ng-show="items">
+				<table class="table table-bordered" ng-show="bb.basket.items">
 					<thead>
 						<tr>
 							<th>Item</th>
@@ -19,18 +19,17 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="item in items" ng-class="{'last-item': $last}">
+						<tr ng-repeat="item in bb.basket.basketItems()" ng-class="{'last-item': $last}">
 							<td>
 								<p>
 									{{item.describe()}}
 									<br/>
-									<small>{{item.date.date | datetime: "h:mma dddd Do MMMM":false}}</small>
+                  <small>{{item.time.time_12}} {{item.date.date | datetime: "dddd Do MMMM"}}</small>
 									<br/>
 									<small>{{item.resource.getAddress() | address_single_line }}</small>
 									<br/>
 									<small ng-if="item.recipient"> Recipient: {{ item.recipient }} </small>
 								</p>
-								<p></p>
 							</td>
 							<td class="text-right">
 								{{ item.total_price | currency }}
@@ -51,7 +50,7 @@
 							<td>
 								<p>
 									{{deal_code.description}}
-									<br/> 
+									<br/>
 								</p>
 								<p></p>
 							</td>
@@ -68,14 +67,14 @@
 							<th class="text-right">{{basket.fullPrice() | currency }}</th>
 							<th>&nbsp;</th>
 						</tr>
-						
+
 						<tr data-ng-if="basket.questionPrice()">
 							<th class="text-right">Booking Fee</th>
 							<th class="text-right">{{basket.questionPrice() | currency}}</th>
 							<th>&nbsp;</th>
 						</tr>
-						
-						
+
+
 						<tr data-ng-if="basket.hasDeal()">
 							<th class="text-right">Total Gift Certificates</th>
 							<th class="text-right">{{basket.totalDeals() | currency }}</th>
@@ -159,7 +158,7 @@
 						<button type="button" class="btn btn-default" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span>Back</span></button>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</div>
 
 	</div>

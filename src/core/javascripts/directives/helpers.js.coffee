@@ -295,37 +295,62 @@ app.directive 'bbDateSplit', ($parse) ->
 
 
 # bbCommPref
-app.directive 'bbCommPref', ($parse) ->
+app.directive 'bbCommPref', () ->
   restrict: 'A'
   require: ['ngModel']
   link: (scope, element, attrs, ctrls) ->
 
-    ngModelCtrl = ctrls[0]
+    ng_model_ctrl = ctrls[0]
 
     # get the default communication preference 
-    comm_pref_default = scope.$eval attrs.bbCommPref or false
+    comm_pref = scope.$eval(attrs.bbCommPref) or false
 
-    # and set it
-    ngModelCtrl.$setViewValue(comm_pref_default)
+    # check if it's already been set
+    if scope.bb.current_item.settings.send_email_followup? and scope.bb.current_item.settings.send_sms_followup?
+      comm_pref = scope.bb.current_item.settings.send_email_followup
+    else
+      # set to the default
+      scope.bb.current_item.settings.send_email_followup = comm_pref
+      scope.bb.current_item.settings.send_sms_followup   = comm_pref
 
-    # watch for changes
-    scope.$watch attrs.ngModel, (newval, oldval) ->
-      if newval != oldval
-        scope.bb.current_item.settings.send_email_followup = newval
-        scope.bb.current_item.settings.send_sms_followup   = newval
+    # update the model
+    ng_model_ctrl.$setViewValue(comm_pref)
+
+    # register a parser to handle model changes
+    parser = (value) ->
+      scope.bb.current_item.settings.send_email_followup = value
+      scope.bb.current_item.settings.send_sms_followup   = value
+      value
+
+    ng_model_ctrl.$parsers.push parser
 
 
 # bbCountTicketTypes
-# returns the number of tickets purchased grouped by name
-app.directive 'bbCountTicketTypes', () ->
+# returns the number of tickets selected, grouped by name
+app.directive 'bbCountTicketTypes', ($rootScope) ->
   restrict: 'A'
+  scope: false
   link: (scope, element, attrs) ->
-    items = scope.$eval(attrs.bbCountTicketTypes)
-    counts = []
-    for item in items
-      if item.tickets
-        if counts[item.tickets.name] then counts[item.tickets.name] += 1 else counts[item.tickets.name] = 1
-        item.number = counts[item.tickets.name]
+
+
+    $rootScope.connection_started.then () ->
+      countTicketTypes()
+
+
+    scope.$on "basket:updated", (event, basket) ->
+      countTicketTypes()
+
+
+    countTicketTypes = (items) ->
+
+      items = scope.bb.basket.timeItems()
+
+      counts = []
+      for item in items
+        if item.tickets
+          if counts[item.tickets.name] then counts[item.tickets.name] += item.tickets.qty else counts[item.tickets.name] = item.tickets.qty
+          item.number = counts[item.tickets.name]
+      scope.counts = counts
 
 
 # bbCapitaliseFirstLetter
@@ -343,27 +368,6 @@ app.directive 'bbCapitaliseFirstLetter', () ->
         ngModel.$render()
         return
 
-# Deprecate - see below
-app.directive 'apiUrl', ($rootScope, $compile, $sniffer, $timeout, $window) ->
-  restrict: 'A'
-  replace: true
-  compile: (tElem, tAttrs) ->
-    pre: (scope, element, attrs) ->
-      $rootScope.bb ||= {}
-      $rootScope.bb.api_url = attrs.apiUrl
-      url = document.createElement('a')
-      url.href = attrs.apiUrl
-      if ($sniffer.msie && $sniffer.msie < 10) && url.host != $window.location.host
-        if url.protocol[url.protocol.length - 1] == ':'
-          src = "#{url.protocol}//#{url.host}/ClientProxy.html"
-        else
-          src = "#{url.protocol}://#{url.host}/ClientProxy.html"
-        $rootScope.iframe_proxy_ready = false
-        $window.iframeLoaded = () ->
-          $rootScope.iframe_proxy_ready = true
-          $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
-        $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;' onload='iframeLoaded()'></iframe>") scope, (cloned, scope) =>
-          element.append(cloned)
 
 
 app.directive 'bbApiUrl', ($rootScope, $compile, $sniffer, $timeout, $window, $location) ->
@@ -376,17 +380,19 @@ app.directive 'bbApiUrl', ($rootScope, $compile, $sniffer, $timeout, $window, $l
       $rootScope.bb.api_url = scope.apiUrl
       url = document.createElement('a')
       url.href = scope.apiUrl
-      if $sniffer.msie && $sniffer.msie < 10
+
+      if ($sniffer.msie and $sniffer.msie <= 9) or ($sniffer.webkit and $sniffer.webkit < 537)
         unless url.host == '' || url.host == $location.host() || url.host == "#{$location.host()}:#{$location.port()}"
           if url.protocol[url.protocol.length - 1] == ':'
             src = "#{url.protocol}//#{url.host}/ClientProxy.html"
           else
             src = "#{url.protocol}://#{url.host}/ClientProxy.html"
           $rootScope.iframe_proxy_ready = false
-          $window.iframeLoaded = () ->
-            $rootScope.iframe_proxy_ready = true
-            $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
-          $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;' onload='iframeLoaded()'></iframe>") scope, (cloned, scope) =>
+
+          $compile("<iframe id='ieapiframefix' name='" + url.hostname + "' src='#{src}' style='visibility:false;display:none;'></iframe>") scope, (cloned, scope) =>
+            cloned.bind "load", ->
+              $rootScope.iframe_proxy_ready = true
+              $rootScope.$broadcast('iframe_proxy_ready', {iframe_proxy_ready: true})
             element.append(cloned)
 
 
@@ -430,36 +436,17 @@ app.directive 'bbPriceFilter', (PathSvc) ->
       $scope.filterChanged() if new_val != old_val
 
 
-app.directive 'bbBookingExport', ($compile) ->
+angular.module('BB.Directives').directive 'bbBookingExport', () ->
   restrict: 'AE'
   scope: true
-  template: '<div bb-include="_popout_export_booking" style="display: inline;"></div>'
-  link: (scope, element, attrs) ->
-
-    scope.$watch 'total', (newval, old) ->
-      setHTML(newval) if newval
-
-    scope.$watch 'purchase', (newval, old) ->
-      setHTML(newval) if newval
-
+  template: '<div bb-include="_popout_export_booking" style="display: inline-block"></div>'
+  link: (scope, el, attrs) ->
+    scope.$watch 'total', (new_val, old_val) ->
+      setHTML(new_val) if new_val
+    scope.$watch 'purchase', (new_val, old_val) ->
+      setHTML(new_val) if new_val
     setHTML = (purchase_total) ->
-      scope.html = "
-        <a class='image img_outlook' title='Add this booking to an Outlook Calendar' href='#{purchase_total.icalLink()}'><img alt='' src='//images.bookingbug.com/widget/outlook.png'></a>
-        <a class='image img_ical' title='Add this booking to an iCal Calendar' href='#{purchase_total.webcalLink()}'><img alt='' src='//images.bookingbug.com/widget/ical.png'></a>
-        <a class='image img_gcal' title='Add this booking to Google Calendar' href='#{purchase_total.gcalLink()}' target='_blank'><img src='//images.bookingbug.com/widget/gcal.png' border='0'></a>
-      "
-
-
-app.directive 'bbCurrencyField', ($filter) ->
-  restrict: 'A',
-  require: 'ngModel',
-  link: (scope, element, attrs, ctrl) ->
-
-    convertToCurrency = (value) ->
-      value / 100
-
-    convertToInteger = (value) ->
-      value * 100
-
-    ctrl.$formatters.push(convertToCurrency)
-    ctrl.$parsers.push(convertToInteger)
+      scope.html = 
+        "<div class='text-center'><a href='#{purchase_total.webcalLink()}'><img src='images/outlook.png' alt='outlook.png' /><div class='clearfix'></div><span>Outlook</span></a></div><p></p>" +
+        "<div class='text-center'><a href='#{purchase_total.gcalLink()}'><img src='images/google.png' alt='outlook.png' /><div class='clearfix'></div><span>Google</span></a></div><p></p>" +
+        "<div class='text-center'><a href='#{purchase_total.icalLink()}'><img src='images/ical.png' alt='outlook.png' /><div class='clearfix'></div><span>iCal</span></a></div>"

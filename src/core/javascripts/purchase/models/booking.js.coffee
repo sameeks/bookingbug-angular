@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:PurchaseBooking
@@ -15,24 +14,24 @@
 * @property {date} end_date The end date of the booking
 ####
 
-
-
 angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBModel, BaseModel, $bbug, PurchaseBookingService) ->
-
 
   class Purchase_Booking extends BaseModel
     constructor: (data) ->
       super(data)
       @ready = false
-  
-      @datetime = moment.parseZone(@datetime) 
+
+      @datetime = moment.parseZone(@datetime)
       @datetime.tz(@time_zone) if @time_zone
+
       @original_datetime = moment(@datetime)
 
       @end_datetime = moment.parseZone(@end_datetime)
       @end_datetime.tz(@time_zone) if @time_zone
- 
- 
+
+      @min_cancellation_time = moment(@min_cancellation_time)
+      @min_cancellation_hours = @datetime.diff(@min_cancellation_time, 'hours')
+
     ###**
     * @ngdoc method
     * @name getGroup
@@ -40,7 +39,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @description
     * Get group if that have an event group on specified date
     *
-    * @returns {object} Returns the group 
+    * @returns {object} Returns the group
     ###
     getGroup: () ->
       return @group if @group
@@ -56,7 +55,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @description
     * Get the group colour
     *
-    * @returns {string} Returns the colour 
+    * @returns {string} Returns the colour
     ###
     getColour: () ->
       if @getGroup()
@@ -71,7 +70,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @description
     * Get the company
     *
-    * @returns {object} Returns the comapny 
+    * @returns {object} Returns the comapny
     ###
     getCompany: () ->
       return @company if @company
@@ -82,17 +81,17 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
     ###**
     * @ngdoc method
-    * @name getAnswersPromise
+    * @name $getAnswers
     * @methodOf BB.Models:PurchaseBooking
     * @description
     * Get the answers promise
     *
     * @returns {Promise} Returns a promise that resolve the getting answers promise
     ###
-    getAnswersPromise: () =>
+    $getAnswers: () =>
       defer = $q.defer()
       if @answers?
-        defer.resolve(@answers) 
+        defer.resolve(@answers)
       else
         @answers = []
         if @_data.$has('answers')
@@ -105,14 +104,14 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
     ###**
     * @ngdoc method
-    * @name getSurveyAnswersPromise
+    * @name $getSurveyAnswers
     * @methodOf BB.Models:PurchaseBooking
     * @description
     * Get the survey answers promise
     *
     * @returns {Promise} Returns a promise that resolve the getting survey answers promise
     ###
-    getSurveyAnswersPromise: () =>
+    $getSurveyAnswers: () =>
       defer = $q.defer()
       defer.resolve(@survey_answers) if @survey_answers
       if @_data.$has('survey_answers')
@@ -141,7 +140,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           if a.question_text && a.question_text == q
             return a.value
       else
-        @getAnswersPromise()
+        @$getAnswers()
       return null
 
     ###**
@@ -154,19 +153,28 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @returns {object} Returns data
     ###
     getPostData: () ->
+
       data = {}
 
       data.attended = @attended
       data.client_id = @client_id
       data.company_id = @company_id
       data.time = (@datetime.hour() * 60) + @datetime.minute()
-      data.date = @datetime.toISODate() 
+      data.date = @datetime.toISODate()
       data.deleted = @deleted
       data.describe = @describe
       data.duration = @duration
       data.end_datetime = @end_datetime
-      data.event_id = @event.id if @event
-      data.event_id = @time.event_id if @time && @time.event_id
+
+      # is the booking being moved (i.e. new time/new event) or are we just updating
+      # the existing booking
+      if @time and @time.event_id and !@isEvent()
+        data.event_id = @time.event_id
+      else if @event
+        data.event_id = @event.id
+      else
+        data.event_id = @slot_id
+
       data.full_describe = @full_describe
       data.id = @id
       data.min_cancellation_time =  @min_cancellation_time
@@ -191,16 +199,18 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
         data.email = @email
       if @email_admin?
         data.email_admin = @email_admin
+      data.first_name = @first_name if @first_name
+      data.last_name = @last_name if @last_name
 
       formatted_survey_answers = []
       if @survey_questions
         data.survey_questions = @survey_questions
         for q in @survey_questions
-          formatted_survey_answers.push({value: q.answer, outcome: q.outcome, detail_type_id: q.id, price: q.price}) 
+          formatted_survey_answers.push({value: q.answer, outcome: q.outcome, detail_type_id: q.id, price: q.price})
         data.survey_answers = formatted_survey_answers
 
       return data
-    
+
     ###**
     * @ngdoc method
     * @name checkReady
@@ -272,7 +282,10 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
       return moment(@min_cancellation_time).isAfter(moment())
 
     canMove: () ->
-      return @canCancel()  
+      return @canCancel()
+
+    getAttendeeName: () ->
+      return "#{@first_name} #{@last_name}"
 
     ###**
     * @ngdoc method
@@ -285,3 +298,6 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     ###
     @$update: (booking) ->
       PurchaseBookingService.update(booking)
+
+    isEvent: () ->
+      return @event_chain?

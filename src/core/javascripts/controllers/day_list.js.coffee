@@ -31,9 +31,11 @@ angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
     scope.options = scope.$eval(attrs.bbMonthAvailability) or {}
     scope.directives = "public.DayList"
 
-angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q, BBModel, DayModel, AlertService) ->
+angular.module('BB.Controllers').controller 'DayList',
+($scope, $rootScope, $q, AlertService, LoadingService, BBModel) ->
+
   $scope.controller = "public.controllers.DayList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
 
   $scope.WeekHeaders = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -50,7 +52,7 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
     else if !$scope.current_date
       $scope.current_date = moment().startOf($scope.type)
     $scope.loadData()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadData()
@@ -231,7 +233,7 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
     date = $scope.current_date
 
     $scope.month = date.month()
-    $scope.notLoaded $scope
+    loader.notLoaded()
     edate = moment(date).add(1, 'months')
     $scope.end_date = moment(edate).add(-1, 'days')
 
@@ -247,10 +249,10 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
             week.push(days[w*7+d])
           weeks.push(week)
         $scope.weeks = weeks
-        $scope.setLoaded $scope
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoaded()
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -261,7 +263,7 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
   ###
   $scope.loadWeek = =>
     date = $scope.current_date
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     edate = moment(date).add(7, 'days')
     $scope.end_date = moment(edate).add(-1, 'days')
@@ -270,10 +272,10 @@ angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q,
         $scope.days = days
         for day in days
           $scope.day_data[day.string_date] = day
-        $scope.setLoaded $scope
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoaded()
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method

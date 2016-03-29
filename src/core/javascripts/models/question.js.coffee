@@ -11,7 +11,7 @@
 * @property {array} question An array with questions
 ####
 
-angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, BaseModel, QuestionService) ->
 
   class Question extends BaseModel
 
@@ -139,3 +139,15 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
       p = @selectedPrice()
       x.price = p if p
       x
+
+    @$addAnswersByName: (obj, keys) ->
+      QuestionService.addAnswersByName(obj, keys)
+
+    @$addDynamicAnswersByName: (questions) ->
+      QuestionService.addDynamicAnswersByName(questions)
+
+    @$addAnswersFromDefaults: (questions, answers) ->
+      QuestionService.addAnswersFromDefaults(questions, answers)
+
+    @$checkConditionalQuestions: (questions) ->
+      QuestionService.checkConditionalQuestions(questions)

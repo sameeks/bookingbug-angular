@@ -14,7 +14,8 @@
 * @property {integer} order The person order
 ####
 
-angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel, PersonModel, AdminPersonService) ->
+angular.module('BB.Models').factory "Admin.PersonModel",
+($q, AdminPersonService, BBModel, BaseModel, PersonModel) ->
 
   class Admin_Person extends PersonModel
 
@@ -200,7 +201,6 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
       @$put('self', {}, data).then (res) =>
         @constructor(res)
 
-
     ###**
     * @ngdoc method
     * @name query
@@ -213,7 +213,8 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     @$query: (params) ->
       AdminPersonService.query(params)
 
+    @$block: (company, person, data) ->
+      AdminPersonService.block(company, person, data)
 
-angular.module('BB.Models').factory 'AdminPerson', ($injector) ->
-  $injector.get('Admin.PersonModel')
-
+    @$signup: (user, data) ->
+      AdminPersonService.signup(user, data)

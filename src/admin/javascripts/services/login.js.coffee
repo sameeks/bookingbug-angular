@@ -1,13 +1,13 @@
 
 angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
-    $rootScope, BBModel, $sessionStorage, $cookies, UriTemplate) ->
+    $rootScope, BBModel, $sessionStorage, $cookies, UriTemplate, shared_header) ->
  
   login: (form, options) ->
     deferred = $q.defer()
     url = "#{$rootScope.bb.api_url}/api/v1/login/admin"
     if (options? && options.company_id?)
       url = "#{url}/#{options.company_id}"
-    
+
     halClient.$post(url, options, form).then (login) =>
       if login.$has('administrator')
         login.$get('administrator').then (user) =>
@@ -43,7 +43,7 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     , (err) =>
       deferred.reject(err)
     deferred.promise
-      
+
 
   isLoggedIn: ->
     @checkLogin().then () ->
@@ -97,15 +97,35 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     defer.promise
 
   logout: () ->
-    $rootScope.user = null
-    $sessionStorage.removeItem("user")
-    $sessionStorage.removeItem("auth_token")
-    $cookies['Auth-Token'] = null
+    url = "#{$rootScope.bb.api_url}/api/v1/login"
+    halClient.$del(url).finally () ->
+      $rootScope.user = null
+      $sessionStorage.removeItem("user")
+      $sessionStorage.removeItem("auth_token")
+      $cookies['Auth-Token'] = null
+      shared_header.del('auth_token')
 
   getLogin: (options) ->
     defer = $q.defer()
     url = "#{$rootScope.bb.api_url}/api/v1/login/admin/#{options.company_id}"
     halClient.$get(url, options).then (login) =>
+      if login.$has('administrator')
+        login.$get('administrator').then (user) =>
+          user = @setLogin(user)
+          defer.resolve(user)
+        , (err) ->
+          defer.reject(err)
+      else
+        defer.reject()
+    , (err) ->
+      defer.reject(err)
+    defer.promise
+
+  setCompany: (company_id) ->
+    defer = $q.defer()
+    url = "#{$rootScope.bb.api_url}/api/v1/login/admin"
+    params = {company_id: company_id}
+    halClient.$put(url, {}, params).then (login) =>
       if login.$has('administrator')
         login.$get('administrator').then (user) =>
           user = @setLogin(user)

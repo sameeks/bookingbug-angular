@@ -34,7 +34,7 @@ angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseMode
     *
     * @returns {array} An array of question answers.
     ###
-    getPostData : (questions) ->
+    getPostData: (questions) ->
       data = []
       for q in questions
         data.push({answer: q.answer, id: q.id, price: q.price})

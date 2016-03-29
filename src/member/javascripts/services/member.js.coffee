@@ -1,4 +1,4 @@
-angular.module('BB.Services').factory "MemberService", ($q, halClient, $rootScope, BBModel) ->
+angular.module('BBMember.Services').factory "MemberService", ($q, halClient, $rootScope, BBModel) ->
 
   refresh: (member) ->
     deferred = $q.defer()
@@ -17,4 +17,22 @@ angular.module('BB.Services').factory "MemberService", ($q, halClient, $rootScop
     setTimeout callback, 200
     # member = () ->
       # deferred.resolve($rootScope.member)
+    deferred.promise
+
+  updateMember: (member, params) ->
+    deferred = $q.defer()
+    member.$put('self', {}, params).then (member) =>
+      member = new BBModel.Member.Member(member)
+      deferred.resolve(member)
+    , (err) =>
+      deferred.reject(err)
+    deferred.promise
+
+  sendWelcomeEmail: (member, params) ->
+    deferred = $q.defer()
+    member.$post('send_welcome_email', params).then (member) =>
+      member = new BBModel.Member.Member(member)
+      deferred.resolve(member)
+    , (err) =>
+      deferred.reject(err)
     deferred.promise

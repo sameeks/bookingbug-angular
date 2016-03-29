@@ -1,9 +1,9 @@
 'use strict';
 
-CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
+CompanyListBase = ($scope, $rootScope, $q, $attrs, LoadingService) ->
 
   $scope.controller = "public.controllers.CompanyList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   options = $scope.$eval $attrs.bbCompanies
 
@@ -16,21 +16,23 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
       return
     else
       $scope.init($scope.bb.company)
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
+
     $scope.companies = $scope.bb.company.companies
     if !$scope.companies || $scope.companies.length == 0
       $scope.companies = [$scope.bb.company]
 
     if $scope.companies.length == 1
+      $scope.skipThisStep()
       $scope.selectItem($scope.companies[0])
     else
       if options and options.hide_not_live_stores
         $scope.items = $scope.companies.filter (c) -> c.live
       else
         $scope.items = $scope.companies
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
   $scope.selectItem = (item, route) =>
 
@@ -40,7 +42,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
     else
       company_id = item.id
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
     prms = {company_id: company_id}
     $scope.initWidget(prms)
 
@@ -112,12 +114,13 @@ angular.module('BB.Directives').directive 'bbPostcodeLookup', () ->
   controller : 'PostcodeLookup'
 
 
-angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootScope, $q, ValidatorService, AlertService, $attrs) ->
+angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootScope, $q, ValidatorService, AlertService, LoadingService, $attrs) ->
   $scope.controller = "PostcodeLookup"
   angular.extend(this, new CompanyListBase($scope, $rootScope, $q, $attrs))
 
 
   $scope.validator = ValidatorService
+  loader = LoadingService.$loader($scope)
 
   ###**
   * @ngdoc method
@@ -126,12 +129,12 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   * @description
   * Search the postcode.
   *
-  * @param {object} form Form where postcode has been searched
-  * @param {object} prms Parameters of postcode search
+  * @param {object} form The form where postcode has been searched
+  * @param {object} prms The parameters of postcode searching
   ###
   $scope.searchPostcode = (form, prms) =>
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     promise = ValidatorService.validatePostcode(form, prms)
     if promise
@@ -150,8 +153,8 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   * @name getNearestCompany
   * @methodOf BB.Directives:bbCompanies
   * @description
-  * Gets nearest company according to center parameter.
-  * 
+  * Gets the nearest company according to center parameter.
+  *
   * @param {string} center Geolocation parameter
   ###
   $scope.getNearestCompany = ({center}) =>

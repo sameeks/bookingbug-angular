@@ -37,10 +37,10 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
 
 # TODO Get the add/subtract functions to respect the current time range. Get the time range length to adjust if display mode is preset
 angular.module('BB.Controllers').controller 'TimeRangeList',
-($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService) ->
+($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, LoadingService, BBModel, FormDataStoreService, DateTimeUlititiesService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
- 
+
   # store the form data for the following scope properties
   currentPostcode = $scope.bb.postcode
 
@@ -60,7 +60,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.postcode = $scope.bb.postcode
 
   # show the loading icon
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   # if the data source isn't set, set it as current item
   if !$scope.data_source
@@ -78,7 +78,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     if $attrs.bbDayOfWeek? or ($scope.options and $scope.options.day_of_week)
       $scope.day_of_week = if $attrs.bbDayOfWeek? then $scope.$eval($attrs.bbDayOfWeek) else $scope.options.day_of_week
- 
+
     if $attrs.bbSelectedDay? or ($scope.options and $scope.options.selected_day)
       selected_day        = if $attrs.bbSelectedDay? then moment($scope.$eval($attrs.bbSelectedDay)) else moment($scope.options.selected_day)
       $scope.selected_day = selected_day if moment.isMoment(selected_day)
@@ -113,7 +113,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     $scope.loadData()
 
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -349,11 +349,11 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         $scope.bb.current_item.setDate(day)
 
       if $scope.bb.current_item.reserve_ready
-        $scope.notLoaded $scope
+        loader.notLoaded()
         $scope.addItemToBasket().then () ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
           $scope.decideNextPage(route)
-        , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       else
         $scope.decideNextPage(route)
 
@@ -386,7 +386,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       if $scope.bb.current_item.earliest_time_slot and $scope.bb.current_item.earliest_time_slot.selected and (!$scope.bb.current_item.earliest_time_slot.date.isSame(day.date, 'day') or $scope.bb.current_item.earliest_time_slot.time != slot.time)
         $scope.bb.current_item.earliest_time_slot.selected = false
 
-      $scope.updateHideStatus()
+
       $rootScope.$broadcast "time:selected"
       # broadcast message to the accordian range groups
       $scope.$broadcast 'slotChanged', day, slot
@@ -429,7 +429,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       loc = ",,,," + $scope.bb.postcode + ","
 
     if $scope.data_source && $scope.data_source.days_link
-      $scope.notLoaded $scope
+      loader.notLoaded()
       loc = null
       loc = ",,,," + $scope.bb.postcode + "," if $scope.bb.postcode
       promise = TimeService.query(
@@ -446,7 +446,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       )
 
       promise.finally ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
       promise.then (datetime_arr) ->
         $scope.days = []
@@ -477,12 +477,11 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
               if (!dtimes[pad])
                 time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-          checkRequestedTime(day, time_slots)
+          DateTimeUlititiesService.checkRequestedTime(day, time_slots, current_item)
 
-        $scope.updateHideStatus()
-      , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -518,7 +517,32 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       if !found_time
         current_item.requestedTimeUnavailable()
         AlertService.raise('REQ_TIME_NOT_AVAIL')
-
+  # checkRequestedTime = (day, time_slots) ->
+  #   # console.log day
+  #   # console.log time_slots
+  #
+  #   current_item = $scope.bb.current_item
+  #
+  #   if (current_item.requested_time or current_item.time) and current_item.requested_date and day.date.isSame(current_item.requested_date)
+  #     found_time = false
+  #
+  #     for slot in time_slots
+  #       if (slot.time is current_item.requested_time)
+  #         current_item.requestedTimeUnavailable()
+  #         $scope.selectSlot(day, slot)
+  #         found_time = true
+  #         $scope.days = []
+  #         return  # hey if we just picked the day and routed - then move on!
+  #
+  #       if (current_item.time and current_item.time.time is slot.time and slot.avail is 1)
+  #         if $scope.selected_slot and $scope.selected_slot.time isnt current_item.time.time
+  #           $scope.selected_slot = current_item.time
+  #         current_item.setTime(slot)  # reset it - just in case this is really a new slot!
+  #         found_time = true
+  #
+  #     if !found_time
+  #       current_item.requestedTimeUnavailable()
+  #       AlertService.raise('REQ_TIME_NOT_AVAIL')
 
   ###**
   * @ngdoc method
@@ -543,7 +567,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     if !$scope.bb.current_item.time
       AlertService.raise('TIME_SLOT_NOT_SELECTED')
       return false
-    else if $scope.bb.moving_booking && $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime)
+    else if $scope.bb.moving_booking && $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime) && ($scope.current_item.person_name == $scope.current_item.person.name)
       AlertService.raise('APPT_AT_SAME_TIME')
       return false
     else if $scope.bb.moving_booking

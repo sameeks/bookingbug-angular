@@ -20,6 +20,13 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
 
   class Address extends BaseModel
 
+    constructor: (data) ->
+      super(data)
+      # Assign value to map_url if the value is an empty String
+      # Note: This is not ideal as it will not show a map marker. But the map_url prop should already be set, so this is just a fallback
+      if !@map_url or @map_url == ""
+        @map_url = "https://www.google.com/maps/@" + @lat + "," + @long + ",17z" if @lat and @long
+
     ###**
     * @ngdoc method
     * @name addressSingleLine
@@ -118,3 +125,7 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     ###
     @$query: (prms) ->
       AddressListService.query(prms)
+
+    @$getAddress: (prms) ->
+      AddressListService.getAddress(prms)
+

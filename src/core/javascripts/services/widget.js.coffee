@@ -19,11 +19,10 @@
 * @property {string} payment_status Payment status
 ####
 
-angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope) ->
-
+angular.module('BB.Models').factory "BBWidget",
+($q, $urlMatcherFactory, $location,  $window, $rootScope, BreadcrumbService, BBModel) ->
 
   class Widget
-
 
     constructor: () ->
       # uid used to store form data for user journeys
@@ -36,7 +35,6 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       @confirmCheckout = false
       @isAdmin = false
       @payment_status = null
-
 
     ###**
     * @ngdoc method
@@ -130,14 +128,15 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     *
     * @returns {number} Will return the step number if the step url exists and matches the path.
     ###
+
     matchURLToStep: () ->
       return null if !@routeFormat
       path = $location.path()
-
-      for step,_i in @steps
-        return step.number if step.url && step.url == path
-
-      return null
+      step = _.findWhere(@allSteps, {page: path.replace(/\//g, '')})
+      if step
+        return step.number
+      else
+        return null
 
     ###**
     * @ngdoc method
@@ -166,7 +165,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @name recordCurrentPage
     * @methodOf BB.Models:BBWidget
     * @description
-    * Records the current page.
+    * Records the current page and determines the current step from either the predefined steps or the steps that have been passed already.
     *
     * @returns {string} The returned record step
     ###
@@ -174,7 +173,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       if !@current_step
         @current_step = 0
       match = false
-      # can we find a match for this step against either previous or existing steps ?
+      # can we find a match for this step against either previous or existing steps?
       # first check the pre-defined steps
       if @allSteps
         for step in @allSteps
@@ -203,7 +202,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
 
     ###**
     * @ngdoc method
-    * @name recordCurrentPage
+    * @name recordStep
     * @methodOf BB.Models:BBWidget
     * @description
     * Records the step using the step and title parameters.
@@ -221,7 +220,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
         number: step,
         title: title,
         stacked_length: @stacked_items.length
-        }
+      }
 
       BreadcrumbService.setCurrentStep(step)
 
@@ -388,7 +387,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     ###
     deleteStackedItem: (item) =>
       if item && item.id
-        BasketService.deleteItem(item, @company, {bb: @})
+        BBModel.Basket.$deleteItem(item, @company, {bb: @})
 
       @stacked_items = @stacked_items.filter (i) -> i isnt item
 
@@ -420,7 +419,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     deleteStackedItemByService: (item) =>
       for i in @stacked_items
         if i && i.service && i.service.self == item.self && i.id
-          BasketService.deleteItem(i, @company, {bb: @})
+          BBModel.Basket.$deleteItem(i, @company, {bb: @})
       @stacked_items = @stacked_items.filter (i) -> (i && i.service && i.service.self isnt item.self)
 
     ###**

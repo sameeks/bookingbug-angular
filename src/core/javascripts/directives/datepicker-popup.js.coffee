@@ -25,6 +25,14 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
   link : (scope, element, attrs, ngModel) ->
     origDateParser = null
     data = element.controller('ngModel')
+    if attrs.datepickerPopup?
+      format =
+        date_us: "MM/dd/yyyy"
+        date_uk: "dd/MM/yyyy"
+      if scope.bb.company.country_code == "us"
+        attrs.datepickerPopup = format.date_us
+      else
+        attrs.datepickerPopup = format.date_uk
 
     dateFormat = if !!attrs.bbDatepickerPopup then attrs.bbDatepickerPopup else 'DD/MM/YYYY'
     yearNow = moment(new Date()).year()
@@ -66,6 +74,11 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
       $timeout ->
         scope.opened = true
       ,
+
+    # completely disable focus for the input, but only if input is readonly
+    $bbug(element).on 'focus', () ->
+      if($(@).attr("readonly"))
+        @blur()
 
     # call the function which handles the date change
     # on-date-change="selectedDateChanged()"

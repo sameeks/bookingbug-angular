@@ -17,7 +17,7 @@ app.directive 'bbQuestionLine', ($compile) ->
       element.html(elm)
 
     # are we using a completely custom question
-    if scope.idmaps and ((scope.idmaps[scope.question.detail_type] and scope.idmaps[scope.question.detail_type].block) or 
+    if scope.idmaps and ((scope.idmaps[scope.question.detail_type] and scope.idmaps[scope.question.detail_type].block) or
       (scope.idmaps[scope.question.id] && scope.idmaps[scope.question.id].block))
         index = if scope.idmaps[scope.question.id] then scope.question.id else scope.question.detail_type
         html = scope.$parent.idmaps[index].html
@@ -32,13 +32,13 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
   restrict: 'A',
   compile: (el,attr,trans) ->
       pre: (scope, element, attrs) ->
-        adminRequired = attrs.bbAdminRequired ? false
+        adminRequired = if attrs.bbAdminRequired? then true else false
 
-        date_format = 'DD/MM/YYYY'  
+        date_format = 'DD/MM/YYYY'
         date_format_2 = 'dd/MM/yyyy'
 
         if attrs.bbDateFormat? && attrs.bbDateFormat is 'US'
-          date_format = 'MM/DD/YYYY' 
+          date_format = 'MM/DD/YYYY'
           date_format_2 = 'MM/dd/yyyy'
 
 
@@ -53,7 +53,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
                 placeholder = question.default if question.default
                 if question.answer == question.default
                   question.answer = ""
-            
+
             scope.recalc = () =>
               if angular.isDefined(scope.recalc_price)
                 scope.recalc_price() if !question.outcome
@@ -66,18 +66,18 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
               html = scope.idmaps[index].html
 
             else if question.detail_type is "select" || question.detail_type is "select-price"
-              html = "<select ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' class='form-question form-control'>"
+              html = "<select ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' class='form-question form-control'>"
               for itemx in question.options
-                html += "<option data_id='#{itemx.id}' value='#{itemx.name}'>#{itemx.display_name}</option>"
+                html += "<option data_id='#{itemx.id}' value='#{itemx.name.replace(/'/g, "&apos;")}'>#{itemx.display_name}</option>"
               html += "</select>"
 
             else if question.detail_type is "text_area"
-              html = "<textarea placeholder='#{placeholder}' ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' rows=3 class='form-question form-control'>#{question['answer']}</textarea>"
+              html = "<textarea placeholder='#{placeholder}' ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' rows=3 class='form-question form-control'>#{question['answer']}</textarea>"
 
             else if question.detail_type is "radio"
               html = '<div class="radio-group">'
               for itemx in question.options
-                html += "<div class='radio'><label class='radio-label'><input ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' type='radio' value=\"#{itemx.name}\"/>#{itemx.name}</label></div>"
+                html += "<div class='radio'><label class='radio-label'><input ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='radio' value=\"#{itemx.name}\"/>#{itemx.name}</label></div>"
               html += "</div>"
 
             else if question.detail_type is "check"
@@ -87,22 +87,27 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
               if name is lastName
                 name = ""
               lastName = question.name
-              html = "<div class='checkbox' ng-class='{\"selected\": question.answer}'><label><input name='q#{question.id}' id='#{question.id}' ng-model='question.answer' ng-checked='question.answer == \"1\"' ng-change='recalc()' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' type='checkbox' value=1>#{name}</label></div>"
+              html = "<div class='checkbox' ng-class='{\"selected\": question.answer}'><label><input name='q#{question.id}' id='#{question.id}' ng-model='question.answer' ng-checked='question.answer == \"1\"' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='checkbox' value=1>#{name}</label></div>"
 
             else if question.detail_type is "check-price"
-              html = "<div class='checkbox'><label><input name='q#{question.id}' id='#{question.id}' ng-model='question.answer' ng-checked='question.answer == \"1\"' ng-change='recalc()' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' type='checkbox' value=1> ({{question.price | currency:'GBP'}})</label></div>"
-
+              html = "<div class='checkbox'><label><input name='q#{question.id}' id='#{question.id}' ng-model='question.answer' ng-checked='question.answer == \"1\"' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='checkbox' value=1> ({{question.price | currency:'GBP'}})</label></div>"
+            
+            else if question.detail_type is "radio-price"
+              html = '<div class="radio-group">'
+              for itemx in question.options
+                html += "<div class='radio'><label class='radio-label'><input ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='radio' value=\"#{itemx.name}\"/>#{itemx.display_name}</label></div>"
+              html += "</div>"
             else if question.detail_type is "date"
               html = "
                 <div class='input-group date-picker'>
-                  <input type='text' class='form-question form-control' name='q#{question.id}' id='#{question.id}' bb-datepicker-popup='#{date_format}' datepicker-popup='#{date_format_2}' ng-model='question.answer' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' datepicker-options='{\"starting-day\": 1}' show-weeks='false' show-button-bar='false' is-open='opened' />
+                  <input type='text' class='form-question form-control' name='q#{question.id}' id='#{question.id}' bb-datepicker-popup='#{date_format}' datepicker-popup='#{date_format_2}' ng-model='question.answer' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' datepicker-options='{\"starting-day\": 1}' show-weeks='false' show-button-bar='false' is-open='opened' />
                   <span class='input-group-btn' ng-click='$event.preventDefault();$event.stopPropagation();opened=true'>
                     <button class='btn btn-default' type='submit'><span class='glyphicon glyphicon-calendar'></span></button>
                   </span>
                 </div>"
 
             else
-              html = "<input type='text' placeholder='#{placeholder}'  ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-required='question.currentlyShown && (#{adminRequired} || (question.required && !bb.isAdmin))' class='form-question form-control'/>"
+              html = "<input type='text' placeholder='#{placeholder}'  ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' class='form-question form-control'/>"
 
             if html
               e = $compile(html) scope, (cloned, scope) =>
@@ -155,6 +160,22 @@ app.directive "bbFocus", [->
 ]
 
 
+app.directive 'bbCurrencyField', ($filter) ->
+  restrict: 'A',
+  require: 'ngModel',
+  link: (scope, element, attrs, ctrl) ->
+
+    convertToCurrency = (value) ->
+      value / 100
+
+    convertToInteger = (value) ->
+      value * 100
+
+    ctrl.$formatters.push(convertToCurrency)
+    ctrl.$parsers.push(convertToInteger)
+
+
+
 # Min/Max directives for use with number inputs
 # Although angular provides min/max directives when using a HTML number input, the control does not validate if the field is actually a number
 # so we have to use a text input with a ng-pattern that only allows numbers.
@@ -167,18 +188,11 @@ app.directive "ngMin", ->
   restrict: "A"
   require: "ngModel"
   link: (scope, elem, attr, ctrl) ->
-    scope.$watch attr.ngMin, ->
-      ctrl.$setViewValue ctrl.$viewValue
-      return
 
     minValidator = (value) ->
       min = scope.$eval(attr.ngMin) or 0
-      if not isEmpty(value) and value < min
-        ctrl.$setValidity "ngMin", false
-        `undefined`
-      else
-        ctrl.$setValidity "ngMin", true
-        value
+      ctrl.$setValidity "ngMin", isEmpty(value) or value >= min
+      value
 
     ctrl.$parsers.push minValidator
     ctrl.$formatters.push minValidator
@@ -188,18 +202,11 @@ app.directive "ngMax", ->
   restrict: "A"
   require: "ngModel"
   link: (scope, elem, attr, ctrl) ->
-    scope.$watch attr.ngMax, ->
-      ctrl.$setViewValue ctrl.$viewValue
-      return
 
     maxValidator = (value) ->
       max = scope.$eval(attr.ngMax) # or Infinity
-      if not isEmpty(value) and value > max
-        ctrl.$setValidity "ngMax", false
-        `undefined`
-      else
-        ctrl.$setValidity "ngMax", true
-        value
+      ctrl.$setValidity "ngMax", isEmpty(value) or value <= max
+      value
 
     ctrl.$parsers.push maxValidator
     ctrl.$formatters.push maxValidator
@@ -315,7 +322,7 @@ app.directive 'bbInputGroupManager', (ValidatorService) ->
           @input_groups[name] = {
             inputs : [],
             valid  : false
-          } 
+          }
 
         @input_groups[name].inputs.push(input)
 
@@ -325,17 +332,17 @@ app.directive 'bbInputGroupManager', (ValidatorService) ->
           is_valid = input.$modelValue
           break if is_valid
 
-        if is_valid is not @input_groups[name].valid 
+        if is_valid is not @input_groups[name].valid
 
           for input in @input_groups[name].inputs
             input.$setValidity(input.$name,is_valid)
 
           @input_groups[name].valid = is_valid
-          
+
     }
 
     # on form submit, validate all input groups
-    $element.on "submit", ->  
+    $element.on "submit", ->
       for input_group of $scope.input_manger.input_groups
         $scope.input_manger.validateInputGroup(input_group)
 

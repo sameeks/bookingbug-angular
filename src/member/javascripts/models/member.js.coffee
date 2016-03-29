@@ -6,15 +6,19 @@
 * Representation of an Member Object
 ####
 
-angular.module('BB.Models').factory "Member.MemberModel", ($q, BBModel,
-    BaseModel, ClientModel) ->
+angular.module('BB.Models').factory "Member.MemberModel",
+($q, MemberService, BBModel, BaseModel, ClientModel) ->
 
   class Member_Member extends ClientModel
 
-    wallet: () ->
-      if @$has("wallet")
-        @$get("wallet").then (wallet) ->
-          @wallet = wallet
-          @wallet
+    @$refresh: (member) ->
+      MemberService.refresh(member)
 
+    @$current: () ->
+      MemberService.current()
 
+    @$updateMember: (member, params) ->
+      MemberService.updateMember(member, params)
+
+    @$sendWelcomeEmail: (member, params) ->
+      MemberService.sendWelcomeEmail(member, params)

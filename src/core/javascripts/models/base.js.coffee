@@ -17,7 +17,7 @@ angular.module('BB.Models').run ($q, $injector, BBModel) ->
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
     'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
     'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
-    'PrePaidBooking']
+    'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection', 'ExternalPurchase', 'PackageItem', 'BulkPurchase']
 
   for model in models
     BBModel[model] = $injector.get(model + "Model")
@@ -29,20 +29,7 @@ angular.module('BB.Models').run ($q, $injector, BBModel) ->
     pfuncs[model] = $injector.get("Purchase." + model + "Model")
   BBModel['Purchase'] = pfuncs
 
-  # member models
-#  member_models = ['Member', 'Booking', 'PrePaidBooking', 'Wallet', 'WalletLog']
-#  mfuncs = {}
-#  for model in member_models
-#    mfuncs[model] = $injector.get("Member." + model + "Model")
-#  BBModel['Member'] = mfuncs
 
-  # admin models
-#  admin_models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
-#    'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup', 'Event', 'Queuer', 'ClientQueue', 'Clinic']
-#  afuncs = {}
-#  for model in admin_models
-#    afuncs[model] = $injector.get("Admin." + model + "Model")
-#  BBModel['Admin'] = afuncs
 
 
 

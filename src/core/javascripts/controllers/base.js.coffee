@@ -4,7 +4,7 @@
 * @ngdoc directive
 * @name BB.Directives:bbWidget
 * @restrict A
-* @scope 
+* @scope
 *   client: '=?'
 *   apiUrl: '@?'
 *   useParent:'='
@@ -129,7 +129,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     evaluator = scope
     if scope.useParent && scope.$parent?
       evaluator = scope.$parent
-    init_params = evaluator.$eval( attrs.bbWidget )
+    init_params = evaluator.$eval(attrs.bbWidget)
     scope.initWidget(init_params)
     $rootScope.widget_started.then () =>
       prms = scope.bb
@@ -183,7 +183,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate, LoadingService) ->
+    SettingsService, UriTemplate, LoadingService, $anchorScroll, $localStorage) ->
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -255,10 +255,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     con_started = $q.defer()
     $rootScope.connection_started = con_started.promise
 
-    if (!$sniffer.msie || $sniffer.msie > 9) || !first_call
-      $scope.initWidget2()
-      return
-    else
+    if (($sniffer.webkit and $sniffer.webkit < 537) || ($sniffer.msie and $sniffer.msie <= 9)) && first_call
+
       # ie 8 hacks
       if $scope.bb.api_url
         url = document.createElement('a')
@@ -274,6 +272,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           if args.iframe_proxy_ready
             $scope.initWidget2()
         return
+
+    else
+      $scope.initWidget2()
+      return
 
 
   $scope.initWidget2 = () =>
@@ -332,13 +334,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     if prms.clear_member
       $scope.bb.clear_member = prms.clear_member
-      $sessionStorage.removeItem("login")
+      $sessionStorage.removeItem('login')
 
     if prms.app_id
       $scope.bb.app_id = prms.app_id
     if prms.app_key
       $scope.bb.app_key = prms.app_key
-
 
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
@@ -372,6 +373,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.extra_setup          = prms.extra_setup
       $scope.bb.starting_step_number = parseInt(prms.extra_setup.step) if prms.extra_setup.step
       $scope.bb.return_url           = prms.extra_setup.return_url if prms.extra_setup.return_url
+      $scope.bb.destination          = prms.extra_setup.destination if prms.extra_setup.destination
 
     if prms.template
       $scope.bb.template = prms.template
@@ -387,7 +389,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     if prms.qudini_booking_id
       $scope.bb.qudini_booking_id = prms.qudini_booking_id
-
 
     # this is used by the bbScrollTo directive so that we can account of
     # floating headers that might reside on sites where the widget is embedded
@@ -450,27 +451,30 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
       comp_def = $q.defer()
       comp_promise = comp_def.promise
+      options = {}
+      options.auth_token = $sessionStorage.getItem('auth_token') if $sessionStorage.getItem('auth_token')
       if $scope.bb.isAdmin
         comp_url = new UriTemplate($scope.bb.api_url + $scope.company_admin_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-        halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+        halClient.$get(comp_url, options).then (company) ->
           comp_def.resolve(company)
         , (err) ->
           # try non admin if admin failed
           comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-          halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+          halClient.$get(comp_url, options).then (company) ->
             comp_def.resolve(company)
           , (err) ->
             comp_def.reject(err)
 
       else
         comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
-        halClient.$get(comp_url, {"auth_token": $sessionStorage.getItem('auth_token')}).then (company) ->
+        halClient.$get(comp_url, options).then (company) ->
           comp_def.resolve(company)
         , (err) ->
           comp_def.reject(err)
 
       setup_promises.push(comp_promise)
       comp_promise.then (company) =>
+
         if $scope.bb.$wait_for_routing
           setup_promises2.push($scope.bb.$wait_for_routing.promise)
         comp = new BBModel.Company(company)
@@ -672,7 +676,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
       if $scope.bb.item_defaults.duration
         $scope.bb.item_defaults.duration = parseInt($scope.bb.item_defaults.duration)
- 
+
       $q.all($scope.bb.default_setup_promises)['finally'] () ->
         def.resolve()
     else
@@ -688,11 +692,22 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.isLoadingPage = () =>
     $scope.loading_page
 
-  $scope.$on '$locationChangeStart', (event) =>
-    return if !$scope.bb.routeFormat
-    if !$scope.bb.routing
-      step = $scope.bb.matchURLToStep()
-      $scope.loadStep(step) if step
+
+  # $locationChangeStart is broadcast before a URL will change
+  $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
+    # TODO dont need to handle this when widget is initialising
+    return if !$scope.bb.routeFormat and $scope.bb.routing
+
+    # Get the step number we want to load
+    step_number = $scope.bb.matchURLToStep()
+
+    # Load next page
+    if step_number? and step_number > $scope.bb.current_step
+      $scope.loadStep(step_number)
+    else if step_number? and step_number < $scope.bb.current_step
+      # Load previous page
+      $scope.loadPreviousStep('locationChangeStart')
+
     $scope.bb.routing = false
 
 
@@ -702,7 +717,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.jumped = false
 
 
-    # don't load a new page if we'still loading an old one - helps prevent double clicks
+    # don't load a new page if we are still loading an old one - helps prevent double clicks
     return if $scope.isLoadingPage()
 
     if $window._gaq
@@ -756,7 +771,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
           $scope.showPage('confirmation')
         else
           return $scope.showPage(route)
-          
+
     # do we have a pre-set route...
     if $scope.bb.nextSteps && $scope.bb.current_page && $scope.bb.nextSteps[$scope.bb.current_page] && !$scope.bb.routeSteps
       return $scope.showPage($scope.bb.nextSteps[$scope.bb.current_page])
@@ -798,7 +813,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.showPage('slot_list')
       else
         return if $scope.setPageRoute($rootScope.Route.Date)
-        return $scope.showPage('day')
+        # if we're an admin and we've pre-selected a time - route to that instead
+        return $scope.showPage('calendar')
     else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.time && !$scope.bb.current_item.event? && (!$scope.bb.current_item.service || $scope.bb.current_item.service.duration_unit != 'day') && !$scope.bb.current_item.deal)
       return if $scope.setPageRoute($rootScope.Route.Time)
       return $scope.showPage('time')
@@ -806,16 +822,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return $scope.showPage('check_move')
     else if (!$scope.client.valid())
       return if $scope.setPageRoute($rootScope.Route.Client)
-      if $scope.bb.isAdmin
-        return $scope.showPage('client_admin')
-      else
-        return $scope.showPage('client')
+      return $scope.showPage('client')
     else if ( !$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready ) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
       return if $scope.setPageRoute($rootScope.Route.Summary)
-      if $scope.bb.isAdmin
-        return $scope.showPage('check_items_admin')
-      else
-        return $scope.showPage('check_items')
+      return $scope.showPage('check_items')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
       return if $scope.setPageRoute($rootScope.Route.Basket)
       return $scope.showPage('basket')
@@ -864,7 +874,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.updateBasket = () ->
     add_defer = $q.defer()
     params = {member_id: $scope.client.id, member: $scope.client, items: $scope.bb.basket.items, bb: $scope.bb }
-    BasketService.updateBasket($scope.bb.company, params).then (basket) ->
+    BBModel.Basket.$updateBasket($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
         item.reserve_without_questions = $scope.bb.reserve_without_questions
@@ -912,18 +922,26 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.emptyBasket = ->
     return if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
-    BasketService.empty($scope.bb).then (basket) ->
+
+    defer = $q.defer()
+
+    BBModel.Basket.$empty($scope.bb).then (basket) ->
       if $scope.bb.current_item.id
         delete $scope.bb.current_item.id
       $scope.setBasket(basket)
+      defer.resolve()
+    , (err) ->
+      defer.reject()
+
+    return defer.promise
 
   $scope.deleteBasketItem = (item) ->
-    BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
+    BBModel.Basket.$deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
       $scope.setBasket(basket)
 
   $scope.deleteBasketItems = (items) ->
     for item in items
-      BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
+      BBModel.Basket.$deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
         $scope.setBasket(basket)
 
 
@@ -966,7 +984,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       def = $q.defer()
       def.resolve()
       def.promise
-      
+
   $scope.setBasket = (basket) ->
     $scope.bb.basket = basket
     $scope.basket = basket
@@ -999,7 +1017,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   restoreBasket = () ->
     restore_basket_defer = $q.defer()
     $scope.quickEmptybasket().then () ->
-      auth_token = $sessionStorage.getItem('auth_token')
+      auth_token = $localStorage.getItem('auth_token') or $sessionStorage.getItem('auth_token')
       href = $scope.bb.api_url +
         '/api/v1/status{?company_id,affiliate_id,clear_baskets,clear_member}'
       params =
@@ -1018,7 +1036,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
             # HACK check if client_type is not contact
             if member.client_type != 'Contact'
               member = LoginService.setLogin(member)
-              $rootScope.member = member
               $scope.setClient(member)
         if $scope.bb.clear_basket
           restore_basket_defer.resolve()
@@ -1054,6 +1071,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # for now also set a scope variable for company - we should remove this as soon as all partials are moved over
     $scope.company = company
     $scope.bb.item_defaults.company = $scope.bb.company
+
+    SettingsService.setCountryCode($scope.bb.company.country_code)
 
     if company.$has('settings')
       company.getSettings().then (settings) =>
@@ -1124,7 +1143,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if st && !$scope.bb.last_step_reached
       $scope.bb.stacked_items = [] if !st.stacked_length ||  st.stacked_length == 0
       $scope.bb.current_item.loadStep(st.current_item)
-      $scope.bb.steps.splice(step, $scope.bb.steps.length-step)
+      if $scope.bb.steps.length > 1
+        $scope.bb.steps.splice(step, $scope.bb.steps.length-step)
       $scope.bb.current_step = step
       $scope.showPage(prev_step.page, true)
     if $scope.bb.allSteps
@@ -1135,10 +1155,43 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.allSteps[$scope.bb.current_step-1].active = true
 
 
-  $scope.loadPreviousStep = (number_of_steps_to_go_back) ->
-    number_of_steps_to_go_back = number_of_steps_to_go_back or 1
-    step = $scope.bb.current_step - number_of_steps_to_go_back
-    $scope.loadStep(step)
+  ###**
+  * @ngdoc method
+  * @name loadPreviousStep
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Loads the previous unskipped step
+  *
+  * @param {integer} steps_to_go_back: The number of steps to go back
+  * @param {string} caller: The method that called this function
+  ###
+  $scope.loadPreviousStep = (caller) ->
+    past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
+
+    # Find the last unskipped step
+    step_to_load = 0
+    while past_steps[0]
+      last_step = past_steps.pop()
+      if !last_step
+        break
+      if !last_step.skipped
+        step_to_load = last_step.number
+        break
+
+    # Remove pages from browser history (sync browser history with routing)
+    pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
+    if caller == "locationChangeStart"
+      # Reduce number of pages to remove from browser history by one if this
+      # method was triggered by Angular's $locationChangeStart broadcast
+      # In this instance we can assume that the browser back button was used
+      # and one page has already been removed from the history by the browser
+      pages_to_remove_from_history--
+
+    if pages_to_remove_from_history? and pages_to_remove_from_history > 0
+      window.history.go(pages_to_remove_from_history*-1)
+
+    # Load step
+    $scope.loadStep(step_to_load)
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps
@@ -1146,13 +1199,19 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return $scope.loadStep(step.number)
     return $scope.loadStep(1)
 
-  $scope.restart = () ->
+  $scope.reset = () ->
     $rootScope.$broadcast 'clear:formData'
     $rootScope.$broadcast 'widget:restart'
     $scope.setLastSelectedDate(null)
+    $scope.client =  new BBModel.Client()
     $scope.bb.last_step_reached = false
-    $scope.loadStep(1)
+    # This is to remove the current step you are on.
+    $scope.bb.steps.splice(1)
 
+
+  $scope.restart = () ->
+    $scope.reset()
+    $scope.loadStep(1)
 
   # setup full route data
   $scope.setRoute = (rdata) ->
@@ -1163,12 +1222,15 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.setBasicRoute(routes)
 
 
-  # record the page right now
-  # this looks the record breadcrumb step path - and also helps keep updated passed and current steps
-
-
+  ###**
+  * @ngdoc method
+  * @name skipThisStep
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Marks the current step as skipped
+  ###
   $scope.skipThisStep = () ->
-    $scope.bb.current_step -= 1
+    $scope.bb.steps[$scope.bb.steps.length - 1].skipped = true if $scope.bb.steps[$scope.bb.steps.length - 1]
 
 
   #############################################################
@@ -1279,3 +1341,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.isMemberLoggedIn = () ->
     return LoginService.isLoggedIn()
+
+
+  $scope.scrollTo = (id) ->
+    $location.hash(id)
+    $anchorScroll()
+
+
+  $scope.redirectTo = (url) ->
+    $window.location.href = url

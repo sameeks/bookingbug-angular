@@ -84,6 +84,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
   merge_times: (all_events, service, item) ->
     return [] if !all_events || all_events.length == 0
 
+    all_events = _.shuffle(all_events)
     sorted_times = []
     for ev in all_events
       if ev.times

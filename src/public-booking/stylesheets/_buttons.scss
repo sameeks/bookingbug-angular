@@ -22,8 +22,11 @@
   padding-top: 15px;
   .btn {
     width: 100%;
-    @media (min-width: 768px) {
+    @media (min-width: $screen-sm-min) {
       width: auto;
+    }
+    @media (max-width: $screen-xs-max) {
+      margin-top: 10px;
     }
   }
   &.bordered {
@@ -34,4 +37,5 @@
 
 .date-picker .input-group-btn .btn {
   height: 36px;
+  margin-bottom: 15px;
 }

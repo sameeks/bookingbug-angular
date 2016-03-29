@@ -1,8 +1,4 @@
-.confirmation-summary-container {
-  margin-bottom: 60px;
-}
-
-.confirmation-header, .confirmation-change-options {
+.confirmation-header {
   font-size: $font-size-base;
   text-align: center;
 }
@@ -32,37 +28,6 @@
   }
 }
 
-.booking-export {
-  padding-bottom: 20px;
-}
-
-.print {
-  padding-top: 5px;
-  text-align: right;
-}
-
-.calendar-export {
-  font-size: $font-size-base;
-  line-height: 42px;
-}
-
-.calendar-export-label {
-  padding-right: 10px;
-}
-
-.btn-change-booking {
-  margin: 0 auto;
-}
-
-.manage-booking {
-  border-top: 1px solid #999;
-  padding: 20px 0;
-}
-
-.bookings-details {
-  margin-bottom: 300px;
-}
-
 .move-done-msg {
   color: green;
 }
@@ -87,7 +52,7 @@
     margin-bottom: 5px;
   }
 
-  .bb-checkout-pay-button-div {
+  .bb-checkout-pay-button {
     text-align: right;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -102,10 +67,6 @@
       margin: 10px 0 5px;
     }
   }
-}
-
-.bb-confirmation-no-border-below {
-  border-bottom: none;
 }
 
 .angular-google-map-container { 

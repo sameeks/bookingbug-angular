@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html ng-app="BBMemberMockE2E">
+<html ng-app="BBMember">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/flatly/bootstrap.min.css" media="screen" />
@@ -130,12 +130,18 @@
       }
     </style>
   </head>
-  <body login_member member_email="smith@example.com" member_password="sk5Ds0"
-    company_id="123" api_url="http://www.bookingbug.com" member="member">
+
+  <body
+    login_member
+    member_email="victor.jeman+1@assist.ro"
+    member_password="Assist1234"
+    company_id="37033 "
+    api_url="https://assist-dev.bookingbug.com"
+    member="member">
     <h1>{{member.first_name}} {{member.last_name}}</h1>
     <tabset class="tabbable tabs-left" ng-init="activeTab = true">
       <tab heading="New Booking">
-        <div bb-widget="{company_id: 123}" client="member"
+        <div bb-widget="{company_id: 37033}" client="member"
           class="col-md-11"></div>
       </tab>
       <tab heading="Upcoming">

@@ -20,14 +20,16 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel, BaseMode
     constructor: (data) ->
       super(data)
       @promise = @_data.$get('purchase_items')
-      @items = []
+      @purchase_items = []
       @promise.then (items) =>
         for item in items
-          @items.push(new BBModel.PurchaseItem(item))
+          @purchase_items.push(new BBModel.PurchaseItem(item))
       if @_data.$has('client')
        cprom = data.$get('client')
        cprom.then (client) =>
          @client = new BBModel.Client(client)
+      @created_at = moment.parseZone(@created_at)
+      @created_at.tz(@time_zone) if @time_zone
 
     ###**
     * @ngdoc method
@@ -88,3 +90,4 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel, BaseMode
     ###
     @$query: (prms) ->
       PurchaseTotalService.query(prms)
+

@@ -51,7 +51,6 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Removes the items from basket.
     *
-    * @returns {array} Emptied items array
     ###
     clear: () ->
       @items = []
@@ -97,8 +96,51 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     timeItems: ->
       titems = []
       for i in @items
-        titems.push(i) if !i.is_coupon #and !i.ready
+        titems.push(i) if i.isTimeItem()
       titems
+
+    ###**
+    * @ngdoc method
+    * @name hasTimeItems
+    * @methodOf BB.Models:Basket
+    * @description
+    * Indicates if the basket contains time items (i.e. event and appointment bookings)
+    *
+    ###
+    hasTimeItems: ->
+      for i in @items
+        return true if i.isTimeItem()
+      return false
+
+    ###**
+    * @ngdoc method
+    * @name basketItems
+    * @methodOf BB.Models:Basket
+    * @description
+    * Gets all BasketItem's that are not coupons
+    *
+    * @returns {array} array of basket items
+    ###
+    basketItems: ->
+      bitems = []
+      for i in @items
+        bitems.push(i) if !i.is_coupon
+      bitems
+
+    ###**
+    * @ngdoc method
+    * @name externalPurchaseItems
+    * @methodOf BB.Models:Basket
+    * @description
+    * Gets all external purchases in the basket
+    *
+    * @returns {array} array of external purchases
+    ###
+    externalPurchaseItems: ->
+      eitems = []
+      for i in @items
+        eitems.push(i) if i.isExternalPurchase()
+      eitems
 
     ###**
     * @ngdoc method
@@ -187,6 +229,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
         reference: @reference
       post.is_admin = @is_admin
       post.parent_client_id = @parent_client_id
+      post.take_from_wallet = @take_from_wallet
       post.items = []
       for item in @items
         post.items.push(item.getPostData())
@@ -305,7 +348,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Calculates the coupons full discount.
     *
-    * @returns {number} Full discount
+    * @returns {number} Total coupon discount applied to the basket
     ###
     totalCoupons: ->
       @fullPrice() - @totalPrice() - @totalDealPaid()
@@ -445,3 +488,52 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     ###
     $checkout: (company,basket,params) ->
       BasketService.checkout(company,basket,params)
+
+    ###**
+    * @ngdoc method
+    * @name hasExternalPurchase
+    * @methodOf BB.Models:Basket
+    * @description
+    * Checks if the basket contains an external purchase
+    *
+    * @returns {boolean} true or false
+    ###
+    hasExternalPurchase : ->
+      for item in @items
+        return true if item.isExternalPurchase()
+      return false
+
+    ###**
+    * @ngdoc method
+    * @name useWallet
+    * @methodOf BB.Models:Basket
+    * @description
+    * Indicates if a wallet should be used for payment
+    *
+    * @returns {boolean} true or false
+    ###
+    useWallet : (value, client) ->
+      if client and client.$has('wallet') and value
+        @take_from_wallet = true
+        return true
+      else
+        @take_from_wallet = false
+        return false
+
+    $applyCoupon: (company, params) ->
+        BasketService.applyCoupon(company, params)
+
+    @$updateBasket: (company, params) ->
+      BasketService.updateBasket(company, params)
+
+    $deleteItem: (item, company, params) ->
+        BasketService.deleteItem(item, company, params)
+
+    $empty: (bb) ->
+        BasketService.empty (bb)
+
+    $applyDeal: (company, params) ->
+        BasketService.applyDeal(company, params)
+
+    $removeDeal: (company, params) ->
+        BasketService.removeDeal(company, params)

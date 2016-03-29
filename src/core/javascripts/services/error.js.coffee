@@ -10,14 +10,14 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
     },
     {
       key: 'LOCATION_NOT_FOUND',
-      type: 'warning', 
-      title: '', 
+      type: 'warning',
+      title: '',
       persist: true,
       msg: "Sorry, we don't recognise that location"
     },
     {
       key: 'MISSING_LOCATION',
-      type: 'warning', 
+      type: 'warning',
       title: '',
       persist: true,
       msg: 'Please enter your location'
@@ -31,14 +31,14 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
     },
     {
       key: 'INVALID_POSTCODE',
-      type: 'warning', 
+      type: 'warning',
       title: '',
       persist: true,
       msg: 'Please enter a valid postcode'
       },
     {
-      key: 'ITEM_NO_LONGER_AVAILABLE', 
-      type: 'error',       
+      key: 'ITEM_NO_LONGER_AVAILABLE',
+      type: 'error',
       title: '',
       persist: true,
       msg: 'Sorry. The item you were trying to book is no longer available. Please try again.'
@@ -46,19 +46,19 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
     {
       key: 'FORM_INVALID',
       type: 'warning',
-      title: '', 
+      title: '',
       persist: true,
       msg: 'Please complete all required fields'
     },
     {
       key: 'GEOLOCATION_ERROR',
-      type: 'error', 
+      type: 'error',
       title: '',
       persist: true,
       msg: 'Sorry, we could not determine your location. Please try searching instead.'
     },
     {
-      key: 'EMPTY_BASKET_FOR_CHECKOUT', 
+      key: 'EMPTY_BASKET_FOR_CHECKOUT',
       type: 'warning',
       title: '',
       persist: true,
@@ -66,7 +66,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
     },
     {
       key: 'MAXIMUM_TICKETS',
-      type: 'warning', 
+      type: 'warning',
       title: '',
       persist: true,
       msg: 'Sorry, the maximum number of tickets per person has been reached.'
@@ -80,14 +80,14 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
     },
     {
       key: 'TIME_SLOT_NOT_SELECTED',
-      type: 'warning', 
+      type: 'warning',
       title: '',
       persist: true,
       msg: 'You need to select a time slot'
     },
     {
       key: 'APPT_AT_SAME_TIME',
-      type: 'warning', 
+      type: 'warning',
       title: '',
       persist: true,
       msg: 'Your appointment is already booked for this time'
@@ -98,6 +98,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'The requested time slot is not available. Please choose a different time.'
+    },
+    {
+      key: 'TOPUP_SUCCESS',
+      type: 'success',
+      title: '',
+      persist: true,
+      msg: 'Your wallet has been topped up'
     },
     {
       key: 'TOPUP_FAILED',
@@ -135,6 +142,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: 'Sorry, your email or password was not recognised. Please try again or reset your password.'
     },
     {
+      key: 'PASSWORD_INVALID',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, your chosen password is invalid'
+    },
+    {
       key: 'PASSWORD_RESET_REQ_SUCCESS',
       type: 'success',
       title: '',
@@ -160,15 +174,42 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       type: 'warning',
       title: '',
       persist: true,
-      msg: 'Sorry, we couldn\'t update your password. Plese try again.'
-    }
-    ,
+      msg: 'Sorry, we couldn\'t update your password. Please try again.'
+    },
     {
       key: 'PASSWORD_MISMATCH',
       type: 'warning',
       title: '',
       persist: true,
       msg: 'Your passwords don\'t match'
+    },
+    {
+      key: 'ATTENDEES_CHANGED',
+      type: 'info',
+      title: '',
+      persist: true,
+      msg: 'Your booking has been successfully updated'
+    },
+    {
+      key: 'PAYMENT_FAILED',
+      type: 'danger',
+      title: '',
+      persist: true,
+      msg: 'We were unable to take payment. Please contact your card issuer or try again using a different card'
+    },
+    {
+      key: 'ACCOUNT_DISABLED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: "Your account appears to be disabled. Please contact the business you're booking with if the problem persists."
+    },
+    {
+      key: 'FB-LOGIN-FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: "Sorry, we couldn't find a login associated with this Facebook account. You will need to sign up using Facebook first."
     }
   ]
 

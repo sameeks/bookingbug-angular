@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:ScheduleRules
@@ -10,7 +9,6 @@
 *
 * @property {object} rules The schedule rules
 ####
-
 
 angular.module('BB.Models').factory "ScheduleRules", () ->
 
@@ -42,7 +40,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @description
     * Remove date range in according of the start and end parameters
     *
-    * @returns {date} Returns the removed date 
+    * @returns {date} Returns the removed date
     ###
     removeRange: (start, end) ->
       @applyFunctionToDateRange(start, end, 'YYYY-MM-DD', @removeRangeFromDate)
@@ -56,7 +54,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @description
     * Add week day range in according of the start and end parameters
     *
-    * @returns {date} Returns the week day 
+    * @returns {date} Returns the week day
     ###
     addWeekdayRange: (start, end) ->
       @applyFunctionToDateRange(start, end, 'd', @addRangeToDate)
@@ -70,7 +68,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @description
     * Remove week day range in according of the start and end parameters
     *
-    * @returns {date} Returns removed week day 
+    * @returns {date} Returns removed week day
     ###
     removeWeekdayRange: (start, end) ->
       @applyFunctionToDateRange(start, end, 'd', @removeRangeFromDate)
@@ -84,10 +82,10 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @description
     * Add range to date in according of the date and range parameters
     *
-    * @returns {date} Returns the added range of date 
+    * @returns {date} Returns the added range of date
     ###
     addRangeToDate: (date, range) =>
-      ranges = if @rules[date] then @rules[date].split(',') else []
+      ranges = if @rules[date] then @rules[date] else []
       @rules[date] = @joinRanges(@insertRange(ranges, range))
 
     ###**
@@ -99,10 +97,10 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @description
     * Remove range to date in according of the date and range parameters
     *
-    * @returns {date} Returns the removed range of date 
+    * @returns {date} Returns the removed range of date
     ###
     removeRangeFromDate: (date, range) =>
-      ranges = if @rules[date] then @rules[date].split(',') else []
+      ranges = if @rules[date] then @rules[date] else []
       @rules[date] = @joinRanges(@subtractRange(ranges, range))
       delete @rules[date] if @rules[date] == ''
 
@@ -251,7 +249,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @ngdoc method
     * @name formatTime
     * @methodOf BB.Models:ScheduleRules
-    * @param {date=} time The time 
+    * @param {date=} time The time
     * @description
     * Format the time in according of the time parameter
     *
@@ -264,21 +262,21 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @ngdoc method
     * @name toEvents
     * @methodOf BB.Models:ScheduleRules
-    * @param {array} d The day of events 
+    * @param {array} d The day of events
     * @description
     * Go to events day
     *
-    * @returns {array} Returns the event start and end time
+    * @returns {array} Returns fullcalendar compatible events
     ###
     toEvents: (d) ->
       if d
-        _.map(@rules[d].split(','), (range) =>
+        _.map(@rules[d], (range) =>
           start: [d, @formatTime(range.split('-')[0])].join('T')
           end: [d, @formatTime(range.split('-')[1])].join('T')
         )
       else
         _.reduce(@filterRulesByDates(), (memo, ranges, date) =>
-          memo.concat(_.map(ranges.split(','), (range) =>
+          memo.concat(_.map(ranges, (range) =>
             start: [date, @formatTime(range.split('-')[0])].join('T')
             end: [date, @formatTime(range.split('-')[1])].join('T')
           ))
@@ -291,12 +289,12 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @description
     * Go to events week day
     *
-    * @returns {array} Returns the event of week day
+    * @returns {array} Returns fullcalendar compatible events
     ###
     toWeekdayEvents: () ->
       _.reduce(@filterRulesByWeekdays(), (memo, ranges, day) =>
         date = moment().set('day', day).format('YYYY-MM-DD')
-        memo.concat(_.map(ranges.split(','), (range) =>
+        memo.concat(_.map(ranges, (range) =>
           start: [date, @formatTime(range.split('-')[0])].join('T')
           end: [date, @formatTime(range.split('-')[1])].join('T')
         ))

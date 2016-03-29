@@ -33,17 +33,17 @@ angular.module('BB.Directives').directive 'bbTimeSlots', () ->
     return
 
 angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
-    $rootScope, $q, $attrs, SlotModel, FormDataStoreService, ValidatorService,
-    PageControllerService, halClient, BBModel) ->
+    $rootScope, $q, $attrs, FormDataStoreService, ValidatorService,
+    PageControllerService, LoadingService, halClient, BBModel) ->
 
   $scope.controller = "public.controllers.SlotList"
 
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
   $rootScope.connection_started.then ->
     if $scope.bb.company
       $scope.init($scope.bb.company)
   , (err) ->
-    $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (company) ->
     $scope.booking_item ||= $scope.bb.current_item
@@ -52,9 +52,9 @@ angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
 
     BBModel.Slot.$query($scope.bb.company, {item: $scope.booking_item,  start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}).then (slots) ->
       $scope.slots = slots
-      $scope.setLoaded $scope
+      loader.setLoaded()
     , (err) ->
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   setItem = (slot) ->
     $scope.booking_item.setSlot(slot)

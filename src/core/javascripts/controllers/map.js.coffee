@@ -42,7 +42,7 @@ angular.module('BB.Directives').directive 'bbMap', () ->
     scope.directives = "public.MapCtrl"
 
 angular.module('BB.Controllers').controller 'MapCtrl',
-($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, $q, $window, $timeout) ->
+($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout) ->
 
   $scope.controller = "public.controllers.MapCtrl"
 
@@ -51,7 +51,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     'selectedStore'
     'search_prms'
   ]
-  
+
+  # init vars
+  options = $scope.$eval($attrs.bbMap) or {}
   map_ready_def               = $q.defer()
   $scope.mapLoaded            = $q.defer()
   $scope.mapReady             = map_ready_def.promise
@@ -63,11 +65,11 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   $scope.shownMarkers         = $scope.shownMarkers or []
   $scope.numberedPin          ||= null
   $scope.defaultPin           ||= null
-  $scope.hide_not_live_stores = false
+  $scope.hide_not_live_stores = if options.hide_not_live_stores? then options.hide_not_live_stores else false
   $scope.address              = $scope.$eval $attrs.bbAddress if !$scope.address && $attrs.bbAddress
   $scope.error_msg            = options.error_msg or "You need to select a store"
-  $scope.notLoaded $scope
-  
+  loader = LoadingService.$loader($scope).notLoaded()
+
   # setup geolocation shim
   webshim.setOptions({'waitReady': false, 'loadStyles': false})
   webshim.polyfill("geolocation")
@@ -76,7 +78,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   # if $scope.bb.company.$has('parent')
   $rootScope.connection_started.then ->
 
-    $scope.setLoaded $scope if !$scope.selectedStore
+    loader.setLoaded() if !$scope.selectedStore
     if $scope.bb.company.companies
       $rootScope.parent_id = $scope.bb.company.id
     else if $rootScope.parent_id
@@ -112,7 +114,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
 
     map_ready_def.resolve(true)
 
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   # load map and create the map markers. the map is hidden at this point
@@ -149,10 +151,10 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   # if the user has clicked back to the map then display it.
   checkDataStore = ->
     if $scope.selectedStore
-      $scope.notLoaded $scope
+      loader.notLoaded()
       if $scope.search_prms
         $scope.searchAddress $scope.search_prms
-      else 
+      else
         $scope.geolocate()
       google.maps.event.addListenerOnce($scope.myMap, 'idle', ->
         _.each $scope.mapMarkers, (marker) ->
@@ -188,8 +190,8 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   ###
   $scope.searchAddress = (prms) ->
 
-    # if a reverse geocode has been performed and the address 
-    # is not different from the entered one, abort the search
+    # if a reverse geocode has been performed and the address
+    # is no  different to one the entered, abort the search
     return false if $scope.reverse_geocode_address && $scope.reverse_geocode_address == $scope.address
 
     delete $scope.geocoder_result
@@ -215,14 +217,14 @@ angular.module('BB.Controllers').controller 'MapCtrl',
 
           if !$scope.geocoder_result or ($scope.geocoder_result and $scope.geocoder_result.partial_match)
             searchPlaces(req)
-            return 
+            return
           else if $scope.geocoder_result
             searchSuccess($scope.geocoder_result)
           else
             searchFailed()
-          $scope.setLoaded $scope
+          loader.setLoaded()
 
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -234,7 +236,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @param {object} prms Places parameters
   ###
   searchPlaces = (prms) ->
-    
+
     req = {
       query : prms.address
       types: ['shopping_mall', 'store', 'embassy']
@@ -401,7 +403,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       AlertService.warning({msg:$scope.error_msg})
       return
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     # if the selected store changes, emit an event. the form data store uses
     # this to clear data, but it can be used to action anything.
@@ -434,7 +436,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   $scope.geolocate = () ->
     return false if !navigator.geolocation || ($scope.reverse_geocode_address && $scope.reverse_geocode_address == $scope.address)
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     webshim.ready 'geolocation', ->
       # set timeout as 5 seconds and max age as 1 hour
@@ -448,16 +450,16 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @description
   * Geolocation failed and error message displayed.
   *
-  * @param {object} error Error 
+  * @param {object} error Error
   ###
   geolocateFail = (error) ->
     switch error.code
       # if the geocode failed because the position was unavailable or the request timed out, raise an alert
       when 2, 3
-        $scope.setLoaded $scope
+        loader.setLoaded()
         AlertService.raise('GEOLOCATION_ERROR')
       else
-        $scope.setLoaded $scope
+        loader.setLoaded()
     $scope.$apply()
 
   ###**
@@ -478,12 +480,12 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       if results.length > 0 and status is 'OK'
         $scope.geocoder_result = results[0]
 
-        for ac in $scope.geocoder_result.address_components 
+        for ac in $scope.geocoder_result.address_components
           $scope.reverse_geocode_address = ac.long_name if ac.types.indexOf("route") >= 0
           $scope.reverse_geocode_address += ', ' + ac.long_name if ac.types.indexOf("locality") >= 0
           $scope.address = $scope.reverse_geocode_address
         searchSuccess($scope.geocoder_result)
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method

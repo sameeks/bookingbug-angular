@@ -1,6 +1,6 @@
 'use strict';
 
-BBBasicPageCtrl = ($scope, $q, ValidatorService) ->
+BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
   # dont' give this $scope a 'controller' property as it's used for controller
   # inheritance, so the $scope agument is not injected but passed in as an
   # argument, so it would overwrite the property set elsewhere
@@ -58,11 +58,12 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService) ->
         checkread.reject()
         return false
 
-    $scope.notLoaded $scope
+    loader = LoadingService.$loader($scope).notLoaded()
+
     $q.all(ready_list).then () ->
-      $scope.setLoaded $scope
+      loader.setLoaded()
       checkread.resolve()
-    , (err) ->  $scope.setLoaded $scope
+    , (err) ->  loader.setLoaded()
     return true
 
   ###**

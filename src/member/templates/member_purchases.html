@@ -1,0 +1,43 @@
+<div>
+  <div class="bb-head">
+    <span id="your_bookings">Your Purchases</span>
+  </div>
+  <div id="bookings">
+    <div ng-if="purchases.length == 0">
+      <h3>You don't currently have any purchases.</h3>
+    </div>
+
+    <div class="row headers  hidden-xs">
+
+      <div class="col-sm-2">
+        Purchase Ref
+      </div>
+
+      <div class="col-sm-8">
+        Date
+      </div>
+
+    </div>
+
+    
+    <div ng-repeat="purchase in purchases | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
+      <div>
+        {{purchase.id}}
+      </div>
+      <div>
+        {{purchase.created_at | datetime}}
+      </div>
+      <div bb-member-purchase-items purchase="purchase">
+        <div ng-repeat="item in items">
+          {{item.full_describe}}
+        </div>
+      </div>
+    </div>
+
+    <pagination total-items="pagination.num_items"
+      ng-model="pagination.current_page" items-per-page="pagination.page_size"
+      max-size="pagination.max_size" boundary-links="true" rotate="false"
+      num-pages="pagination.num_pages" ng-show="purchases && purchases.length > 10"></pagination>
+    
+  </div>
+</div>

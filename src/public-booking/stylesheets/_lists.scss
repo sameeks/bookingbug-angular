@@ -1,16 +1,4 @@
-.bb-list {
-  margin-top: 0;
-}
-
-.bb-list li {
-  border-bottom: 1px solid #CCCCCC;
-  padding: 10px 0;
-  margin: 0;
-  &:last-child {
-    border: none;
-  }
-}
-
+/* .summary-list used in survey only*/
 .summary-list {
   margin-bottom: 20px;
   line-height: 1.4;
@@ -42,7 +30,7 @@
         font-weight: bold;
       }
     }
-    
+
   }
 }
 

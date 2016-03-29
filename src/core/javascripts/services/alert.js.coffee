@@ -146,6 +146,22 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
       return if !alert
       @add('warning', {title: alert.title, msg: alert.msg, persist: alert.persist})
 
+
+    ###**
+    * @ngdoc error
+    * @name success
+    * @methodOf BB.Services:Alert
+    * @description
+    * Success alert
+    *
+    * @returns {array} The returned warning alert
+    ###
+    success: (alert) ->
+      return if !alert
+      @add('success', {title: alert.title, msg: alert.msg, persist: alert.persist})
+
+
+
     ###**
     * @ngdoc error
     * @name raise

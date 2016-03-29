@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:AdminSchedule
@@ -15,8 +14,7 @@
 * @property {date} duration The schedule duration
 ####
 
-
-angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseModel, AdminScheduleService) ->
+angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, AdminScheduleService, BBModel, BaseModel, ScheduleRules) ->
 
   class Admin_Schedule extends BaseModel
 
@@ -28,7 +26,7 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
     * @name getPostData
     * @methodOf BB.Models:AdminSchedule
     * @description
-    * Get post data
+    * Gets the post data
     *
     * @returns {array} Returns data.
     ###
@@ -76,6 +74,3 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q, BBModel, BaseMod
     ###
     @$update: (schedule) ->
       AdminScheduleService.update(schedule)
-
-angular.module('BB.Models').factory 'AdminSchedule', ($injector) ->
-  $injector.get('Admin.ScheduleModel')

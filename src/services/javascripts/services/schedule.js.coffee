@@ -1,4 +1,4 @@
-angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel) ->
+angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel, ScheduleRules) ->
 
   query: (params) ->
     company = params.company
@@ -31,3 +31,23 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel
       deferred.resolve(schedule)
     , (err) =>
       deferred.reject(err)
+
+  mapPeopleToScheduleEvents: (start, end, people) ->
+    _.map people, (p) ->
+      params =
+        start_date: start.format('YYYY-MM-DD')
+        end_date: end.format('YYYY-MM-DD')
+      p.$get('schedule', params).then (schedules) ->
+        rules = new ScheduleRules(schedules.dates)
+        events = rules.toEvents()
+        _.each events, (e) ->
+          e.resourceId = p.id
+          e.title = p.name
+          e.rendering = "background"
+        events
+
+  getPeopleScheduleEvents: (company, start, end) ->
+    company.getPeoplePromise().then (people) =>
+      $q.all(@mapPeopleToScheduleEvents(start, end, people)).then (schedules) ->
+        _.flatten(schedules)
+

@@ -39,9 +39,11 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsModel, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService, PurchaseService) ->
+angular.module('BB.Controllers').controller 'ItemDetails',
+($scope, $attrs, $rootScope, $modal, $location, $upload, $translate, PurchaseBookingService, AlertService, FormDataStoreService, ValidatorService, SettingsService, PurchaseService, LoadingService,  BBModel) ->
 
   $scope.controller = "public.controllers.ItemDetails"
+  loader = LoadingService.$loader($scope)
 
   $scope.suppress_basket_update = $attrs.bbSuppressBasketUpdate?
   $scope.item_details_id = $scope.$eval $attrs.bbSuppressBasketUpdate
@@ -56,7 +58,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   # populate object with values stored in the question store. addAnswersByName()
   # is good for populating a single object, for dynamic question/answers see
   # addDynamicAnswersByName()
-  QuestionService.addAnswersByName($scope.client, [
+  BBModel.Question.$addAnswersByName($scope.client, [
     'first_name'
     'last_name'
     'email'
@@ -69,7 +71,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
   $rootScope.connection_started.then () ->
     $scope.loadItem($scope.bb.current_item) if !confirming
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -82,7 +84,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   ###
   $scope.loadItem = (item) ->
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     confirming = true
     $scope.item = item
@@ -92,27 +94,26 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     if $scope.item.item_details
       setItemDetails $scope.item.item_details
       # this will add any values in the querystring
-      QuestionService.addDynamicAnswersByName($scope.item_details.questions)
-      QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
+      BBModel.Question.$addDynamicAnswersByName($scope.item_details.questions)
+      BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
       $scope.recalc_price()
-      $scope.setLoaded $scope
-      $scope.$emit "item_details:loaded"
+      loader.setLoaded()
+      $scope.$emit "item_details:loaded", $scope.item_details
 
     else
-      
+
       params = {company: $scope.bb.company, cItem: $scope.item}
       BBModel.ItemDetails.$query(params).then (details) ->
         if details
           setItemDetails details
           $scope.item.item_details = $scope.item_details
-          QuestionService.addDynamicAnswersByName($scope.item_details.questions)
-          QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
+          BBModel.Question.$addDynamicAnswersByName($scope.item_details.questions)
+          BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
           $scope.recalc_price()
-          $scope.$emit "item_details:loaded"
-        $scope.setLoaded $scope
-        
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+          $scope.$emit "item_details:loaded", $scope.item_details
+        loader.setLoaded()
 
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -143,8 +144,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           item.answer = search.answer
     $scope.item_details = details
 
-
-  $scope.$on 'currentItemUpdate', (service) ->
+  # TODO document listener
+  $scope.$on 'currentItemUpdate', (event) ->
     if $scope.item_from_param
       $scope.loadItem($scope.item_from_param)
     else
@@ -185,12 +186,12 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
 
     if $scope.item.ready
-      $scope.notLoaded $scope
+      loader.notLoaded()
       $scope.addItemToBasket().then () ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.decideNextPage(route)
       , (err) ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
     else
       $scope.decideNextPage(route)
 
@@ -220,20 +221,30 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   $scope.confirm_move = (route) ->
     confirming = true
     $scope.item ||= $scope.bb.current_item
+    $scope.item.moved_booking = false
     # we need to validate the question information has been correctly entered here
     $scope.item.setAskedQuestions()
     if $scope.item.ready
-      $scope.notLoaded $scope
+      loader.notLoaded()
       if $scope.bb.moving_purchase
         params =
           purchase: $scope.bb.moving_purchase
           bookings: $scope.bb.basket.items
         PurchaseService.update(params).then (purchase) ->
-          $scope.purchase = purchase
-          $scope.setLoaded $scope
-          $scope.item.move_done = true
-          $rootScope.$broadcast "booking:moved"
-          $scope.decideNextPage(route)
+          $scope.bb.purchase = purchase
+          $scope.bb.purchase.$getBookings().then (bookings)->
+            $scope.purchase = purchase
+            loader.setLoaded()
+            $scope.item.move_done = true
+            $scope.item.moved_booking = true
+            $rootScope.$broadcast "booking:moved"
+            $scope.decideNextPage(route)
+            $scope.showMoveMessage(bookings[0].datetime)
+
+
+        , (err) ->
+           loader.setLoaded()
+           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
       else
         PurchaseBookingService.update($scope.item).then (booking) ->
           b = new BBModel.Purchase.Booking(booking)
@@ -242,23 +253,25 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
             for oldb, _i in $scope.bb.purchase.bookings
               $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
 
-          $scope.setLoaded $scope
+          loader.setLoaded()
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
-
-          # TODO remove when translate enabled by default
-          if SettingsService.isInternationalizatonEnabled()
-            $translate('MOVE_BOOKINGS_MSG', { datetime:b.datetime.format('LLLL') }).then (translated_text) ->
-              AlertService.add("info", { msg: translated_text })
-          else
-            AlertService.add("info", { msg: "Your booking has been moved to #{b.datetime.format('LLLL')}" })
-
+          $scope.showMoveMessage(b.datetime)
          , (err) =>
-          $scope.setLoaded $scope
+          loader.setLoaded()
           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
     else
       $scope.decideNextPage(route)
+
+  $scope.showMoveMessage = (datetime) ->
+    # TODO remove whem translate enabled by default
+    if SettingsService.isInternationalizatonEnabled()
+      $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
+        AlertService.add("info", { msg: translated_text })
+    else
+      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
+
 
   ###**
   * @ngdoc method
@@ -298,7 +311,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   $scope.updateItem = () ->
     $scope.item.setAskedQuestions()
     if $scope.item.ready
-      $scope.notLoaded $scope
+      loader.notLoaded()
 
       PurchaseBookingService.update($scope.item).then (booking) ->
 
@@ -310,10 +323,10 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
         $scope.purchase.bookings = $scope.bookings
         $scope.item_details_updated = true
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
        , (err) =>
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
   ###**
   * @ngdoc method

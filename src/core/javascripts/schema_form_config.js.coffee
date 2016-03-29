@@ -64,3 +64,35 @@ angular.module('schemaForm').config (schemaFormProvider,
     'date'
     'date_form.html'
   )
+
+
+  schemaFormDecoratorsProvider.addMapping(
+    'bootstrapDecorator'
+    'radios'
+    'radios.html'
+  )
+
+  schemaFormDecoratorsProvider.createDirective(
+    'radios'
+    'radios.html'
+  )
+  schemaFormDecoratorsProvider.addMapping(
+    'bootstrapDecorator'
+    'radios-inline'
+    'radios-inline.html'
+  )
+
+  schemaFormDecoratorsProvider.createDirective(
+    'radios-inline'
+    'radios-inline.html'
+  )
+  schemaFormDecoratorsProvider.addMapping(
+    'bootstrapDecorator'
+    'radiobuttons'
+    'radio-buttons.html'
+  )
+
+  schemaFormDecoratorsProvider.createDirective(
+    'radiobuttons'
+    'radio-buttons.html'
+  )

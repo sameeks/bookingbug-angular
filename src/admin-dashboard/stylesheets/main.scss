@@ -1,12 +1,23 @@
-// @import "scheduler.min"; // File currently missing.
+ 
+@import "skin_bb";
 
-[bb-resource-calendar] {
-  .datepicker {
-    width: 230px;
-    button.datepicker-popup {
-      height: 34px;
-      padding: 6px 12px;
-      font-size: 14px;
-    }
+.bb-page-frame {
+  width:100%;
+  height: auto;
+  border: none;
+  background: transparent;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+//bootstrap overrides
+.panel-heading {
+  .btn-sm {
+    position: relative;
+    top:5px;
   }
 }
+
+@import "resource_calendar";

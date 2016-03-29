@@ -11,7 +11,8 @@
 * @property {number} paid Booking paid
 ####
 
-angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel, BaseModel, $bbug, MemberBookingService) ->
+angular.module('BB.Models').factory "Member.BookingModel",
+($q, $window, $bbug, MemberBookingService, BBModel, BaseModel) ->
 
   class Member_Booking extends BaseModel
     constructor: (data) ->
@@ -22,6 +23,10 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
 
       @end_datetime = moment.parseZone(@end_datetime)
       @end_datetime.tz(@time_zone) if @time_zone
+
+
+      @min_cancellation_time = moment(@min_cancellation_time)
+      @min_cancellation_hours = @datetime.diff(@min_cancellation_time, 'hours')
 
     ###**
     * @ngdoc method
@@ -48,6 +53,7 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     *
     * @returns {string} colour
     ###
+
     getColour: () ->
       if @getGroup()
         return @getGroup().colour
@@ -63,6 +69,7 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     *
     * @returns {object} Company
     ###
+
     getCompany: () ->
       return @company if @company
       if @$has('company')
@@ -105,14 +112,14 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
 
     ###**
     * @ngdoc method
-    * @name getMemberPromise
+    * @name getMember
     * @methodOf BB.Models:MemberBooking
     * @description
     * Gets the member.
     *
     * @returns {Promise} A promise that on success will return a member object
     ###
-    getMemberPromise: () =>
+    $getMember: () =>
       defer = $q.defer()
       defer.resolve(@member) if @member
       if @_data.$has('member')
@@ -156,5 +163,9 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, BBModel
     @$update: (booking) ->
       MemberBookingService.update(booking)
 
-angular.module('BB.Models'). factory 'MemberBooking', ($injector) ->
-  $injector.get('Member.BookingModel')
+    @$cancel: (member, booking) ->
+      MemberBookingService.cancel(member, booking)
+
+    @$flush: (member, params) ->
+      MemberBookingService.flush(member, params)
+

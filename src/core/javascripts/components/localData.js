@@ -1,6 +1,6 @@
-
+// THIS DOESN'T APPEAR TO BE USED?
 angular.module('ngLocalData', ['angular-hal']).
- factory('$localCache', ['halClient', '$q', function( halClient, $q) {
+ factory('$localCache', ['halClient', '$q', '$sessionStorage', function( halClient, $q, $sessionStorage) {
     data = {};
 
     jsonData = function(data) {
@@ -9,7 +9,7 @@ angular.module('ngLocalData', ['angular-hal']).
 
     storage = function()
     {
-      return sessionStorage
+      return $sessionStorage
     } 
     localSave = function(key, item){
       storage().setItem(key, item.$toStore())   
@@ -64,7 +64,7 @@ angular.module('ngLocalData', ['angular-hal']).
     }
 
 }]).
- factory('$localData', ['$http', '$rootScope', function($http, $rootScope) {
+ factory('$localData', ['$http', '$rootScope', '$sessionStorage', function($http, $rootScope, $sessionStorage) {
     function LocalDataFactory(name) {
       function LocalData(value){
         this.setStore(value);
@@ -76,7 +76,7 @@ angular.module('ngLocalData', ['angular-hal']).
 
       LocalData.prototype.storage = function()
       {
-        return sessionStorage
+        return $sessionStorage
       }  
 
       LocalData.prototype.localSave = function(item)

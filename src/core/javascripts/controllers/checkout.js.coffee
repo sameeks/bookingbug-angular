@@ -34,9 +34,11 @@ angular.module('BB.Directives').directive 'bbCheckout', () ->
     scope.directives = "public.Checkout"
 
 
-angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $attrs, BBModel, BasketModel, $q, $location, $window, $bbug, FormDataStoreService, $timeout) ->
+angular.module('BB.Controllers').controller 'Checkout',
+($scope, $rootScope, $attrs, $q, $location, $window, $timeout, $bbug, FormDataStoreService, LoadingService, BBModel) ->
+
   $scope.controller = "public.controllers.Checkout"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.options = $scope.$eval($attrs.bbCheckout) or {}
 
@@ -46,7 +48,8 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
   $rootScope.connection_started.then =>
     $scope.bb.basket.setClient($scope.client)
     $scope.bb.no_notifications = $scope.options.no_notifications if $scope.options.no_notifications
-    $scope.loadingTotal = $scope.bb.basket.$checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
+    $scope.loadingTotal = BBModel.Basket.$checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
+
     $scope.loadingTotal.then (total) =>
       $scope.total = total
 
@@ -58,16 +61,18 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
         if !$scope.options.disable_confirmation
           $scope.skipThisStep()
           $scope.decideNextPage()
+        else
+          # Reset ready for another booking
+          $scope.reset()
 
       $scope.checkoutSuccess = true
-      $scope.setLoaded $scope
+      loader.setLoaded()
       # currently just close the window and refresh the parent if we're in an admin popup
     , (err) ->
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       $scope.checkoutFailed = true
       $scope.$emit("checkout:fail", err)
-
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   ###**

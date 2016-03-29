@@ -1,30 +1,39 @@
-<div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
-<div ng-hide="loading">
-  <h4> Wallet Payment History </h4>
+<div>
+  <h4>Wallet Transaction History</h4>
   <table class="table table-bordered">
     <thead>
       <tr>
         <th>Action</th>
         <th>Amount</th>
+        <th>Balance</th>
         <th>Changed By</th>
         <th>Date and Time</th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="log in logs" ng-class="{'last-item': $last}">
+      <tr ng-repeat="log in logs | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" ng-class="{'last-item': $last}">
         <td>
-           {{log.action}}
+          {{log.action}}
         </td>
         <td class="text-right">
-           {{log.payment_amount | icurrency:log.wallet_currency }}
+          {{log.payment_amount | currency}}
+        </td>
+        <td class="text-right">
+          {{log.new_wallet_amount | currency}}
         </td>
         <td class="text-center">
-           {{ log.who_made_the_change }}
+          {{log.who_made_the_change}}
         </td>
         <td class="text-center">
-           {{ log.created_at | datetime  }}
+          {{log.created_at | datetime: "DD/MM/YYYY HH:mm"}}
         </td>
       </tr>
     </tbody>
   </table>
+
+  <pagination total-items="pagination.num_items"
+    ng-model="pagination.current_page" items-per-page="pagination.page_size"
+    max-size="pagination.max_size" boundary-links="true" rotate="false"
+    num-pages="pagination.num_pages" ng-show="logs && logs.length > 10"></pagination>
+  
 </div>

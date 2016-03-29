@@ -19,7 +19,7 @@ app.filter 'stripPostcode', ->
 
     return address
 
-   
+
 app.filter 'labelNumber', ->
   (input, labels) ->
     response = input
@@ -133,6 +133,11 @@ app.filter 'icurrency', ($window, $rootScope) ->
     $window.accounting.formatMoney(number, currency[currencyCode], 2, thousand, decimal, format)
 
 
+app.filter 'raw_currency', () ->
+  (number) =>
+    number / 100.0
+
+
 app.filter 'pretty_price', ($filter) ->
   (price, symbol) ->
     return $filter('ipretty_price')(price, symbol)
@@ -232,7 +237,7 @@ app.filter 'time_period_from_seconds', ->
       return str if secs == 0
       str += " and "
     str += secs + " second"
-    str += "s" if secs > 0  
+    str += "s" if secs > 0
     return str
 
 
@@ -289,28 +294,28 @@ app.filter "uk_local_number", ->
     return ""  unless tel
     return tel.replace(/\+44 \(0\)/, '0')
 
-
-# format datetime, expects moment object but will attempt to convert to
-# moment object
-# TODO get timezone from company
-app.filter "datetime", ->
-  (datetime, format, show_timezone = true) ->
-
-    return if !datetime
-
-    datetime = moment(datetime)
-    return if !datetime.isValid()
-
-    result = datetime.format(format)
-
-    # if the dates time zone is different to the users, show the timezone too
-    if datetime.utcOffset() != new Date().getTimezoneOffset() && show_timezone
-      if datetime._z
-        result += datetime.format(" z") 
+# Checks if a format (option) is set if not checks the country and provides a default.
+# Additionally you can pass in date, time or datetime
+app.filter 'datetime', (SettingsService) ->
+  return (date, format) ->
+    if date and moment.isMoment(date)
+      datestrings =
+        datetime_us : 'MM/DD/YYYY, h:mm a'
+        datetime_uk : 'DD/MM/YYYY, HH:mm'
+        date_us : 'MM/DD/YYYY'
+        date_uk : 'DD/MM/YYYY'
+        time_us : 'h:mm a'
+        time_uk : 'HH:mm'
+      cc = SettingsService.getCountryCode()
+      cc = "uk" if cc != "us"
+      if format and format.match(/(date(time_uk|time_us|_us|_uk)*|(time(_uk|_us)*))/)
+        return date.format(datestrings[format + "_" + cc])
+      else if format
+        return date.format(format)
       else
-        result += " UTC" + datetime.format("Z") 
-
-    return result
+        return date.format(datestrings["date_" + cc])
+    else
+      return
 
 
 app.filter 'range', ->
@@ -322,7 +327,7 @@ app.filter 'range', ->
 app.filter 'international_number', () ->
   (number, prefix) =>
     if number and prefix
-      return "#{prefix} #{number}" 
+      return "#{prefix} #{number}"
     else if number
       return "#{number}"
     else
@@ -347,7 +352,7 @@ app.filter 'spaces_remaining', () ->
   (spaces) ->
     if spaces < 1
       return 0
-    else 
+    else
       return spaces
 
 app.filter 'key_translate', ->
@@ -356,3 +361,9 @@ app.filter 'key_translate', ->
     remove_punctuations = upper_case.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"")
     add_underscore = remove_punctuations.replace(/\ /g, "_")
     return add_underscore
+
+app.filter 'clearTimezone', ->
+  (val, offset) ->
+    if val != null and val.length > 19
+      return val.substring(0, 19)
+    val    

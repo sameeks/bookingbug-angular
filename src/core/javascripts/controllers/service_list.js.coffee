@@ -26,7 +26,7 @@
 * @property {service} service Currectly selected service
 * @property {hash} filters Hash of filters
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://dev01.bookingbug.com'>
 *   <div  bb-widget='{company_id:37167}'>
@@ -55,7 +55,7 @@ angular.module('BB.Directives').directive 'bbServices', () ->
     scope.options.hide_disabled = attrs.hideDisabled if attrs.hideDisabled
     scope.directives = "public.ServiceList"
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService, LoadingService) ->
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, LoadingService) ->
 
   FormDataStoreService.init 'ServiceList', $scope, [
     'service'
@@ -79,7 +79,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
     $scope.booking_item ||= $scope.bb.current_item
 
     if $scope.bb.company.$has('named_categories')
-      CategoryService.query($scope.bb.company).then (items) =>
+      BBModel.Category.$query($scope.bb.company).then (items) =>
         $scope.all_categories = items
       , (err) ->  $scope.all_categories = []
     else
@@ -90,11 +90,12 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       $scope.service = null
 
     ppromise = comp.$getServices()
-    @skipped = false
+
     ppromise.then (items) =>
       if $scope.options.hide_disabled
         # this might happen to have been an admin api call which would include disabled services - and we migth need to hide them
         items = items.filter (x) -> !x.disabled && !x.deleted
+
 
       # not all service lists needs filtering. check for attribute first
       filterItems = if $attrs.filterServices is 'false' then false else true
@@ -114,11 +115,8 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       # if there's only one service and single pick hasn't been enabled,
       # automatically select the service.
       if (items.length is 1 && !$scope.options.allow_single_pick)
-        if !$scope.selectItem(items[0], $scope.nextRoute )
+        if !$scope.selectItem(items[0], $scope.nextRoute, {skip_step: true})
           setServiceItem items
-        else if !@skipped
-          $scope.skipThisStep()
-          @skipped = true
       else
         setServiceItem items
 
@@ -126,7 +124,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       if $scope.booking_item.defaultService()
         for item in items
           if item.self == $scope.booking_item.defaultService().self or (item.name is $scope.booking_item.defaultService().name and !item.deleted)
-            $scope.selectItem(item, $scope.nextRoute)
+            $scope.selectItem(item, $scope.nextRoute, {skip_step: true})
 
       # if there's one selected - just select it
       if $scope.booking_item.service
@@ -158,25 +156,22 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
         services = (i.item for i in items when i.item?)
 
-
         $scope.bookable_services = services
+
         $scope.bookable_items = items
 
         if services.length is 1 and !$scope.options.allow_single_pick
-          if !$scope.selectItem(services[0], $scope.nextRoute )
+          if !$scope.selectItem(services[0], $scope.nextRoute, {skip_step: true})
             setServiceItem services
-          else if !@skipped
-            $scope.skipThisStep()
-            @skipped = true  
         else
-          # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages. 
+          # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages.
           setServiceItem services
 
         loader.setLoaded()
       , (err) ->
         loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
-  # set the service item so the correct item displayed in the dropdown menu.
+  # set the service item so the correct item is displayed in the dropdown menu.
   # without doing this the menu will default to 'please select'
   setServiceItem = (items) ->
     $scope.items = items
@@ -197,7 +192,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   * @param {object} item Service or BookableItem to select
   * @param {string=} route A specific route to load
   ###
-  $scope.selectItem = (item, route) =>
+  $scope.selectItem = (item, route, options={}) =>
     if $scope.routed
       return true
 
@@ -206,10 +201,12 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       return false
     else if item.is_event_group
       $scope.booking_item.setEventGroup(item)
+      $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       $scope.routed = true
     else
       $scope.booking_item.setService(item)
+      $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       $scope.routed = true
       return true
@@ -272,12 +269,12 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
           item = item.toLowerCase()
           if item is match
             $scope.show_custom_array = true
-            return true 
+            return true
         return false
     $scope.service_name_include = (match) ->
       if !match
         return false
-      if match 
+      if match
         match = match.toLowerCase()
         item = service.name.toLowerCase()
         if item.includes(match)

@@ -101,8 +101,9 @@ angular.module('BB.Models').factory "BasketItemModel",
         if data.$has('event_chain')
           chain = data.$get('event_chain')
           @promises.push(chain)
-          chain.then (serv) =>
-            @setEventChain(new BBModel.EventChain(serv), data.questions)
+          if !data.$has('event') # onlt set the event chain if we don't have the full event details - which will also set the event chain
+            chain.then (serv) =>
+              @setEventChain(new BBModel.EventChain(serv), data.questions)
 
 
         if data.$has('resource')
@@ -127,11 +128,24 @@ angular.module('BB.Models').factory "BasketItemModel",
 
         if data.$has('product')
           data.$get('product').then (product) =>
-            @setProduct(product)
+            @setProduct(new BBModel.Product(product))
+
+        if data.$has('package_item')
+          data.$get('package_item').then (package_item) =>
+            @setPackageItem(new BBModel.PackageItem(package_item))
+
+        if data.$has('bulk_purchase')
+          data.$get('bulk_purchase').then (bulk_purchase) =>
+            @setBulkPurchase(new BBModel.BulkPurchase(bulk_purchase))
 
         if data.$has('deal')
           data.$get('deal').then (deal) =>
             @setDeal(new BBModel.Deal(deal))
+
+        if data.$has('pre_paid_booking')
+          data.$get('pre_paid_booking').then (pre_paid_booking) =>
+            @setPrepaidBooking(new BBModel.PrePaidBooking(pre_paid_booking))
+
 
         @clinic_id = data.clinic_id if data.clinic_id
 
@@ -387,7 +401,7 @@ angular.module('BB.Models').factory "BasketItemModel",
 
       if @service.$has('category')
         # we have a category?
-        prom = @service.getCategoryPromise()
+        prom = @service.$getCategory()
         if prom
           @promises.push(prom)
 
@@ -412,7 +426,7 @@ angular.module('BB.Models').factory "BasketItemModel",
 
       if @event_group.$has('category')
         # we have a category?
-        prom = @event_group.getCategoryPromise()
+        prom = @event_group.$getCategory()
         if prom
           @promises.push(prom)
 
@@ -434,11 +448,11 @@ angular.module('BB.Models').factory "BasketItemModel",
           return
       @event_chain = event_chain
       @base_price = parseFloat(event_chain.price)
-      if @price != @base_price
+      if @price? and @price != @base_price
         @setPrice(@price)
       else
         @setPrice(@base_price)
-      if @event_chain.isSingleBooking()
+      if @event_chain.isSingleBooking() # i.e. does not have tickets sets and max bookings is 1
         # if you can only book one ticket - just use that
         @tickets = {name: "Admittance", max: 1, type: "normal", price: @base_price}
         @tickets.pre_paid_booking_id = @pre_paid_booking_id
@@ -454,6 +468,12 @@ angular.module('BB.Models').factory "BasketItemModel",
         prom.then (details) =>
           @item_details = new BBModel.ItemDetails(details)
           @has_questions = @item_details.hasQuestions
+          if @questions
+            for q in @item_details.questions
+              a=_.find(@questions, (c) -> c.id == q.id)
+              if a and q.answer is undefined or a != q.answer
+                q.answer = a.answer
+            @setAskedQuestions()
           if default_questions
             @item_details.setAnswers(default_questions)
             @setAskedQuestions()  # make sure the item knows the questions were all answered
@@ -473,7 +493,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @param {object} event A hash representing an event object
     ###
-    setEvent: (event) ->
+    setEvent: (event, default_questions = null) ->
 
       @event.unselect() if @event
       @event = event
@@ -483,15 +503,15 @@ angular.module('BB.Models').factory "BasketItemModel",
       @setTime(event.time)
       @setDuration(event.duration)
       @book_link = event if event.$has('book')
+      @num_book = event.qty if event.qty
       prom = @event.getChain()
       @promises.push(prom)
       prom.then (chain) =>
-        @setEventChain(chain)
+        @setEventChain(chain, default_questions)
       prom = @event.getGroup()
       @promises.push(prom)
       prom.then (group) =>
         @setEventGroup(group)
-      @num_book = event.qty
       if @event.getSpacesLeft() <= 0 && !@company.settings
         @status = 8 if @company.getSettings().has_waitlists
       else if @event.getSpacesLeft() <= 0 && @company.settings && @company.settings.has_waitlists
@@ -597,12 +617,12 @@ angular.module('BB.Models').factory "BasketItemModel",
       @duration = dur
       if @service
         @base_price = @service.getPriceByDuration(dur)
-      if @time && @time.price
+      else if @time && @time.price
         @base_price = @time.price
-      if @price && (@price != @base_price)
-        @setPrice(@price)
-      else
-         @setPrice(@base_price)
+      else if @price
+        @base_price = @price
+
+      @setPrice(@base_price)
 
     ###**
     * @ngdoc method
@@ -779,9 +799,9 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @returns {boolean} True when reservation is ready
     ###
     checkReady: ->
-      if ((@date && @time && @service) || @event || @product || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
         @ready = true
-      if ((@date && @time && @service) || @event || @product || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))  && (@asked_questions || !@has_questions || @reserve_without_questions)
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))  && (@asked_questions || !@has_questions || @reserve_without_questions)
         @reserve_ready = true
 
     ###**
@@ -809,7 +829,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         data.time = @time.time
         if @time.event_id
           data.event_id = @time.event_id
-        else if @time.event_ids
+        else if @time.event_ids # what's this about?
           data.event_ids = @time.event_ids
       else if @date and @date.event_id
         data.event_id = @date.event_id
@@ -831,6 +851,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.length = @length
       if @event
         data.event_id = @event.id
+        # when can events have a prepaid booking id?
         if @event.pre_paid_booking_id?
           data.pre_paid_booking_id = @event.pre_paid_booking_id
         else if @tickets && @tickets.pre_paid_booking_id?
@@ -842,7 +863,8 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.qty = @qty
       data.status = @status if @status
       data.num_resources = parseInt(@num_resources) if @num_resources?
-      data.product = @product
+      data.package_id = @package_item.id if @package_item
+      data.bulk_purchase_id = @bulk_purchase.id if @bulk_purchase
       data.external_purchase = @external_purchase
       data.deal = @deal if @deal
       data.recipient = @recipient if @deal && @recipient
@@ -851,6 +873,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.is_coupon = @is_coupon
       data.attachment_id = @attachment_id if @attachment_id
       data.vouchers = @deal_codes if @deal_codes
+      data.product_id = @product.id if @product
 
       data.email = @email if @email
       data.first_name = @first_name if @first_name
@@ -963,6 +986,8 @@ angular.module('BB.Models').factory "BasketItemModel",
       title = @product.name if @product
       title = @external_purchase.name if @external_purchase
       title = @deal.name if @deal
+      title = @package_item.name if @package_item
+      title = @bulk_purchase.name if @bulk_purchase
       return title
 
     ###**
@@ -1038,6 +1063,10 @@ angular.module('BB.Models').factory "BasketItemModel",
       start_datetime.minutes(@time.time)
       start_datetime
 
+
+    startDatetime: () ->
+      @start_datetime()
+
     ###**
     * @ngdoc method
     * @name end_datetime
@@ -1053,6 +1082,10 @@ angular.module('BB.Models').factory "BasketItemModel",
       end_datetime = moment(@date.date.toISODate())
       end_datetime.minutes(@time.time + duration)
       end_datetime
+
+
+    endDatetime: () ->
+      @end_datetime()
 
     ###**
     * @ngdoc method
@@ -1160,6 +1193,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     totalPrice: =>
       if @tickets && @tickets.pre_paid_booking_id
         return 0
+      if @pre_paid_booking_id
+        return 0
       if @discount_price?
         return @discount_price + @questionPrice()
       pr = @total_price
@@ -1200,6 +1235,32 @@ angular.module('BB.Models').factory "BasketItemModel",
 
     ###**
     * @ngdoc method
+    * @name setPackageItem
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Apply a package to the BasketItem
+    *
+    ###
+    setPackageItem: (package_item) ->
+      @package_item = package_item
+      @book_link = @package_item if @package_item.$has('book')
+      @setPrice(package_item.price) if package_item.price
+
+    ###**
+    * @ngdoc method
+    * @name setBulkPurchase
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Apply a bulk purchase to the BasketItem
+    *
+    ###
+    setBulkPurchase: (bulk_purchase) ->
+      @bulk_purchase = bulk_purchase
+      @book_link = @bulk_purchase if @bulk_purchase.$has('book')
+      @setPrice(bulk_purchase.price) if bulk_purchase.price
+
+    ###**
+    * @ngdoc method
     * @name setExternalPurchase
     * @methodOf BB.Models:BasketItem
     * @description
@@ -1228,9 +1289,6 @@ angular.module('BB.Models').factory "BasketItemModel",
       @book_link = @deal if @deal.$has('book')
       @setPrice(deal.price) if deal.price
 
-    ####################
-    # various status tests
-
     ###**
     * @ngdoc method
     * @name hasPrice
@@ -1241,10 +1299,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @returns {boolean} True if this is a valid price
     ###
     hasPrice: () ->
-      if @price
-        true
-      else
-        false
+      return @price?
 
     ###**
     * @ngdoc method
@@ -1261,3 +1316,84 @@ angular.module('BB.Models').factory "BasketItemModel",
         @_data.$get('attachment').then (att) =>
           @attachment = att
           @attachment
+
+    ###**
+    * @ngdoc method
+    * @name setPrepaidBooking
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Apply a prepaid booking to BasketItem
+    *
+    ###
+    setPrepaidBooking: (pre_paid_booking) ->
+      @pre_paid_booking    = pre_paid_booking
+      @pre_paid_booking_id = pre_paid_booking.id
+
+    ###**
+    * @ngdoc method
+    * @name hasPrepaidBooking
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Indicates if the basket item has a prepaid booking applied
+    *
+    * @returns {boolean} boolean indicating if the BasketItem has a prepaid booking
+    ###
+    hasPrepaidBooking: () ->
+      return @pre_paid_booking_id?
+
+    ###**
+    * @ngdoc method
+    * @name getEventId
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Get the event id for the BasketItem
+    *
+    * @returns {string} The Event ID
+    ###
+    getEventId: () ->
+      if @time and @time.event_id
+        return @time.event_id
+      else if @date and @date.event_id
+        return @date.event_id
+      else if @event
+        return @event.id
+
+    ###**
+    * @ngdoc method
+    * @name isExternalPurchase
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Indicates if the BasketItem is an external purchase
+    *
+    * @returns {boolean} Flag
+    ###
+    isExternalPurchase: () ->
+      return @external_purchase?
+
+    ###**
+    * @ngdoc method
+    * @name getName
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Returns the name
+    *
+    * @returns {String} Client name
+    ###
+    getName: (client) ->
+      if @first_name
+        return "#{@first_name} #{@last_name}"
+      else if client
+        return client.getName()
+
+    ###**
+    * @ngdoc method
+    * @name isTimeItem
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Indicates if the BasketItem is a time item (i.e. either an event
+    * or appointment booking)
+    *
+    * @returns {boolean} Flag
+    ###
+    isTimeItem: () ->
+      return @service or @event

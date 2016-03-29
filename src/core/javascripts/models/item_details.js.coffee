@@ -15,7 +15,8 @@
 * @property {string} checkConditionalQuestions Checks the conditional questions about the item details
 ####
 
-angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel, $bbug, QuestionService, ItemDetailsService) ->
+angular.module('BB.Models').factory "ItemDetailsModel",
+($q, $bbug, ItemDetailsService, BBModel, BaseModel) ->
 
   class ItemDetails extends BaseModel
 
@@ -62,7 +63,7 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, BBModel, BaseModel,
     * @returns {boolean} Existing conditional questions
     ###
     checkConditionalQuestions: () ->
-      QuestionService.checkConditionalQuestions(@questions)
+      BBModel.Question.$checkConditionalQuestions(@questions)
 
     ###**
     * @ngdoc method

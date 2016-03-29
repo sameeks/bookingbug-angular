@@ -6,3 +6,4 @@ angular.module('BB.Models').factory "DealModel", ($q, BBModel, BaseModel, DealSe
 
     @$query: (company) ->
       DealService.query(company)
+

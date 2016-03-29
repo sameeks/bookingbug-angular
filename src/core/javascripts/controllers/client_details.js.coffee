@@ -43,18 +43,23 @@ angular.module('BB.Directives').directive 'bbClientDetails', () ->
     scope.options = scope.$eval(attrs.bbClientDetails) or {}
     scope.directives = "public.ClientDetails"
 
-angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScope, BBModel, LoginService, ValidatorService, QuestionService, AlertService) ->
+angular.module('BB.Controllers').controller 'ClientDetails',
+($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
+
   $scope.controller = "public.controllers.ClientDetails"
-  $scope.notLoaded($scope)
+  loader = LoadingService.$loader($scope).notLoaded()
   $scope.validator = ValidatorService
   $scope.existing_member = false
   $scope.login_error = false
 
+  options = $scope.$eval($attrs.bbClientDetails) or {}
+  $scope.suppress_client_create = $attrs.bbSuppressCreate? or options.suppress_client_create
+
   $rootScope.connection_started.then =>
 
     if !$scope.client.valid() && LoginService.isLoggedIn()
-      # make sure we set the client to the currently logged member
-      # we should also check if the logged member is a member of the company they are currently booking with
+      # make sure we set the client to the currently logged in member
+      # we should also just check the logged in member is a member of the company they are currently booking with
       $scope.setClient(new BBModel.Client(LoginService.member()._data))
 
     if LoginService.isLoggedIn() && LoginService.member().$has("child_clients") && LoginService.member()
@@ -65,17 +70,18 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
 
     if $scope.client.client_details
       $scope.client_details = $scope.client.client_details
-      QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
-      $scope.setLoaded($scope)
+
+      BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
+      loader.setLoaded()
     else
       BBModel.ClientDetails.$query($scope.bb.company).then (details) =>
         $scope.client_details = details
         $scope.client.pre_fill_answers($scope.client_details) if $scope.client
-        QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
-        $scope.setLoaded($scope)
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
+        loader.setLoaded()
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $rootScope.$watch 'member', (oldmem, newmem) =>
@@ -93,7 +99,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * @param {string=} route A specific route to load
   ###
   $scope.validateClient = (client_form, route) =>
-    $scope.notLoaded($scope)
+    loader.notLoaded()
     $scope.existing_member = false
 
     # we need to validate if the client information has added correctly
@@ -102,12 +108,12 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
     $scope.client.setClientDetails($scope.client_details)
 
     BBModel.Client.$create_or_update($scope.bb.company, $scope.client).then (client) =>
-      $scope.setLoaded($scope)
+      loader.setLoaded()
       $scope.setClient(client)
       $scope.client.setValid(true) if $scope.bb.isAdmin
       $scope.existing_member = false
       $scope.decideNextPage(route)
-    , (err) -> handleError()
+    , (err) -> handleError(err)
 
   ###**
   * @ngdoc method
@@ -125,8 +131,8 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
         $scope.decideNextPage()
       , (err) ->
         $scope.login_error = true
-        $scope.setLoaded($scope)
-        AlertService.danger({msg: "Sorry, your email or password was not recognised. Please try again."})
+        loader.setLoaded()
+        AlertService.raise('LOGIN_FAILED');
 
   ###**
   * @ngdoc method
@@ -138,15 +144,21 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   $scope.setReady = () =>
     $scope.client.setClientDetails($scope.client_details)
 
-    prom = BBModel.Client.$create_or_update($scope.bb.company, $scope.client)
-    prom.then (client) =>
-      $scope.setLoaded($scope)
-      $scope.setClient(client)
-      if client.waitingQuestions
-        client.gotQuestions.then () ->
-          $scope.client_details = client.client_details
-    , (err) -> handleError(err)
-    return prom
+    if !$scope.suppress_client_create
+
+      prom = BBModel.Client.$create_or_update($scope.bb.company, $scope.client)
+      prom.then (client) =>
+        loader.setLoaded()
+        $scope.setClient(client)
+        if client.waitingQuestions
+          client.gotQuestions.then () ->
+            $scope.client_details = client.client_details
+      , (err) -> handleError(err)
+      return prom
+
+    else
+
+      return true
 
   ###**
   * @ngdoc method
@@ -157,14 +169,14 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   ###
   $scope.clientSearch = () ->
     if $scope.client? && $scope.client.email? && $scope.client.email != ""
-      $scope.notLoaded($scope)
-      ClientService.query_by_email($scope.bb.company, $scope.client.email).then (client) ->
+      loader.notLoaded()
+      BBModel.Client.$query_by_email($scope.bb.company, $scope.client.email).then (client) ->
         if client?
           $scope.setClient(client)
           $scope.client = client
-        $scope.setLoaded($scope)
+        loader.setLoaded()
       , (err) ->
-        $scope.setLoaded($scope)
+        loader.setLoaded()
     else
       $scope.setClient({})
       $scope.client = {}
@@ -222,11 +234,12 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope,  $rootScop
   * Recalculate question.
   ###
   $scope.recalc_question = () ->
-    QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
-
+    BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
 
   handleError = (error) ->
     if error.data.error == "Please Login"
       $scope.existing_member = true
       AlertService.raise('ALREADY_REGISTERED')
-    $scope.setLoaded($scope)
+    else if error.data.error == "Invalid Password"
+      AlertService.raise('PASSWORD_INVALID')
+    loader.setLoaded()

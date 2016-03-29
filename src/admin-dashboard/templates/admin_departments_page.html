@@ -1,0 +1,40 @@
+<div bb-dashboard-content-wrapper>
+  <div class="row">
+    <div ng-repeat="department in departments">
+      <div class="clearfix" ng-if="$index % 3 == 0"></div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span class="btn btn-default btn-sm pull-right" ng-click="selectDepartment(department)" >
+              <i class="fa fa-unlock"></i> Login
+            </span>
+            <h4>{{department.name}}</h4>
+          </div>
+          <table class="table">
+            <tr ng-show="department.address.address1 || department.address.address2 || department.address.address3 || department.address.address4">
+              <td width="30%"><b>Address:</b></td>
+              <td>
+                {{department.address.address1}}
+                {{department.address.address2}}
+                {{department.address.address3}}
+                {{department.address.address4}}
+              </td>
+            </tr>
+            <tr ng-show="department.address.postcode">
+              <td><b>Postcode:</b></td>
+              <td>{{department.address.postcode}}</td>
+            </tr>
+            <tr ng-show="department.address.country">
+              <td><b>Country:</b></td>
+              <td>{{department.address.country}}</td>
+            </tr>
+            <tr ng-show="department.timezone">
+              <td><b>Timezone:</b></td>
+              <td>{{department.timezone}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

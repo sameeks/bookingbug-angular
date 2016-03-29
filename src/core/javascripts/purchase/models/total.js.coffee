@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:PurchaseTotal
@@ -13,10 +12,7 @@
 * @propertu {integer} paid The booking paid
 ####
 
-
-
 angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel, BaseModel, $sce, PurchaseService) ->
-
 
   class Purchase_Total extends BaseModel
     constructor: (data) ->
@@ -25,6 +21,8 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         @items = items
       @getClient().then (client) =>
         @client = client
+      @getMember().then (member) =>
+        @member = member
 
     ###**
     * @ngdoc method
@@ -33,11 +31,11 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @description
     * Get the client id
     *
-    * @returns {integer} Returns the client id 
+    * @returns {integer} Returns the client id
     ###
     id: ->
       @get('id')
-    
+
     ###**
     * @ngdoc method
     * @name icalLink
@@ -45,7 +43,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @description
     * Get the ical link
     *
-    * @returns {string} Returns the ical link 
+    * @returns {string} Returns the ical link
     ###
     icalLink: ->
       @_data.$href('ical')
@@ -87,8 +85,8 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
       defer = $q.defer()
       defer.resolve(@items) if @items
       $q.all([
-        @getBookingsPromise(),
-        @getCourseBookingsPromise(),
+        @$getBookings(),
+        @$getCourseBookings(),
         @getPackages(),
         @getProducts(),
         @getDeals()
@@ -99,14 +97,14 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
 
     ###**
     * @ngdoc method
-    * @name getBookingsPromise
+    * @name getBookings
     * @methodOf BB.Models:PurchaseTotal
     * @description
     * Get the bookings promise
     *
     * @returns {Promise} Returns a promise that resolve the getting booking promise
     ###
-    getBookingsPromise: =>
+    $getBookings: =>
       defer = $q.defer()
       defer.resolve(@bookings) if @bookings
       if @_data.$has('bookings')
@@ -120,14 +118,14 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
 
     ###**
     * @ngdoc method
-    * @name getCourseBookingsPromise
+    * @name getCourseBookings
     * @methodOf BB.Models:PurchaseTotal
     * @description
     * Get the course bookings promise
     *
     * @returns {Promise} Returns a promise that resolve the getting course booking promise
     ###
-    getCourseBookingsPromise: =>
+    $getCourseBookings: =>
       defer = $q.defer()
       defer.resolve(@course_bookings) if @course_bookings
       if @_data.$has('course_bookings')
@@ -158,7 +156,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
       else
         defer.resolve([])
       defer.promise
-    
+
     ###**
     * @ngdoc method
     * @name getProducts
@@ -246,6 +244,16 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.reject('No client')
       defer.promise
 
+    getMember: =>
+      defer = $q.defer()
+      if @_data.$has('member')
+        @_data.$get('member').then (member) =>
+          @member = new BBModel.Client(member)
+          defer.resolve(@member)
+      else
+        defer.reject('No member')
+      defer.promise
+
     ###**
     * @ngdoc method
     * @name getConfirmMessages
@@ -264,7 +272,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
       else
         defer.reject('no messages')
       defer.promise
-    
+
     ###**
     * @ngdoc method
     * @name printed_total_price
@@ -313,7 +321,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @description
     * Create an array what cointains wait list item
     *
-    * @returns {array} Returns the wait list items 
+    * @returns {array} Returns the wait list items
     ###
     containsWaitlistItems: () ->
       waitlist = []

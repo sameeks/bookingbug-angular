@@ -1,62 +1,62 @@
-angular.module('BB').directive 'bbMemberLogin', ($log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService) ->
+angular.module('BB').directive 'bbMemberLogin', (PathSvc) ->
   restrict: 'A'
-  template: """
-<form name="login_form" ng-submit="submit(login_form)" sf-schema="schema"
-sf-form="form" sf-model="login_form" sf-options="{feedback: false}"
-ng-if="schema && form"></form>
-"""
-  controller: ($scope, $element, $attrs) ->
+  controller: 'MemberLogin'
+  templateUrl : (elem, attrs) ->
+    if attrs.bbCustomLoginForm?
+      PathSvc.directivePartial "_member_login_form"
+    else
+      PathSvc.directivePartial "_member_login_schema_form"
+  
 
-    $scope.login_form = {}
+angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService, ValidatorService) ->
 
-    $rootScope.connection_started.then () ->
+  $scope.login_form = {}
 
-      if $sessionStorage.getItem("login")
-        session_member = $sessionStorage.getItem("login")
-        session_member = halClient.createResource(session_member)
-        $rootScope.member = new BBModel.Member.Member session_member
-        $scope.setClient($rootScope.member)
-        if $scope.bb.destination
-          $scope.redirectTo($scope.bb.destination)
-        else
-          $scope.setLoaded $scope
-          $scope.decideNextPage()
+  $scope.validator = ValidatorService
+
+  $rootScope.connection_started.then () ->
+
+    if LoginService.checkLogin()
+      $scope.setClient($rootScope.member)
+      if $scope.bb.destination
+        $scope.redirectTo($scope.bb.destination)
       else
-        halClient.$get("#{$scope.bb.api_url}/api/v1").then (root) ->
-          root.$get("new_login").then (new_login) ->
-            $scope.form = new_login.form
-            $scope.schema = new_login.schema
-          , (err) ->
-            console.log 'err ', err
+        $scope.setLoaded $scope
+        $scope.decideNextPage()
+    else
+      halClient.$get("#{$scope.bb.api_url}/api/v1").then (root) ->
+        root.$get("new_login").then (new_login) ->
+          $scope.form = new_login.form
+          $scope.schema = new_login.schema
         , (err) ->
           console.log 'err ', err
-
-
-    $scope.redirectTo = (destination) ->
-      $window.location.href = destination
-
-
-    $scope.submit = (form) ->
-      form['role'] = 'member'
-      $scope.company.$post('login', {}, form).then (login) ->
-        if login.$has('members')
-          login.$get('members').then (members) ->
-            $rootScope.member = new BBModel.Member.Member members[0]
-            auth_token = $rootScope.member.getOption('auth_token')
-            $sessionStorage.setItem("login", $rootScope.member.$toStore())
-            $sessionStorage.setItem("auth_token", auth_token)
-            $scope.setClient($rootScope.member)
-            if $scope.bb.destination
-              $scope.redirectTo($scope.bb.destination)
-            else
-              $scope.decideNextPage()
-        else if login.$has('member')
-          login.$get('member').then (member) ->
-            $rootScope.member = new BBModel.Member.Member member
-            auth_token = $rootScope.member.getOption('auth_token')
-            $sessionStorage.setItem("login", $rootScope.member.$toStore())
-            $sessionStorage.setItem("auth_token", auth_token)
-            $scope.setClient($rootScope.member)
-            $scope.decideNextPage()
       , (err) ->
+        console.log 'err ', err
+
+
+  $scope.submit = (form) ->
+
+    form['role'] = 'member'
+
+    $scope.company.$post('login', {}, form).then (login) ->
+      if login.$has('members')
+        login.$get('members').then (members) ->
+          $scope.handleLogin(members[0])
+      else if login.$has('member')
+        login.$get('member').then (member) ->
+          $scope.handleLogin(member)
+    , (err) ->
+      if err.data.error is "Account has been disabled"
+        AlertService.raise('ACCOUNT_DISABLED')
+      else
         AlertService.raise('LOGIN_FAILED')
+
+
+  $scope.handleLogin = (member) ->
+    member = LoginService.setLogin(member, $scope.login_form.persist_login)
+    $scope.setClient(member)
+    if $scope.bb.destination
+      $scope.redirectTo($scope.bb.destination)
+    else
+      $scope.skipThisStep()
+      $scope.decideNextPage()

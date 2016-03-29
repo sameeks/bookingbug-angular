@@ -17,7 +17,8 @@
 * @property {integer} status The status of the booking
 ####
 
-angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseModel, BookingCollections, AdminBookingService) ->
+angular.module('BB.Models').factory "Admin.BookingModel",
+($q, AdminBookingService, BBModel, BaseModel, BookingCollections) ->
 
   class Admin_Booking extends BaseModel
 
@@ -34,21 +35,23 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
       else if @status == 4
         @className = "status_booked"
 
-    ###**
-    * @ngdoc method
-    * @name getPostData
-    * @methodOf BB.Models:AdminBooking
-    * @description
-    * Provides information about the date, time, duration and questions.
-    *
-    * @returns {object} Data object
-    ###
+    useFullTime: () ->
+      @using_full_time = true
+      @start = @datetime.clone().subtract(@pre_time, 'minutes') if @pre_time
+      @end = @datetime.clone().add(@duration + @post_time, 'minutes') if @post_time
+
     getPostData: () ->
+      @datetime = @start.clone()
+      if (@using_full_time)
+        # we need to make sure if @start has changed - that we're adjusting for a possible pre-time
+        @datetime.add(@pre_time, 'minutes')
       data = {}
-      data.date = @start.format("YYYY-MM-DD")
-      data.time = @start.hour() * 60 + @start.minute()
+      data.date = @datetime.format("YYYY-MM-DD")
+      data.time = @datetime.hour() * 60 + @datetime.minute()
       data.duration = @duration
       data.id = @id
+      data.pre_time = @pre_time
+      data.post_time = @post_time
       data.person_id = @person_id
       if @questions
         data.questions = (q.getPostData() for q in @questions)
@@ -152,12 +155,16 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
         @constructor(res)
+        if @using_full_time
+          @useFullTime()
         BookingCollections.checkItems(@)
 
     $refetch: () ->
       @$flush('self')
       @$get('self').then (res) =>
         @constructor(res)
+        if @using_full_time
+          @useFullTime()
         BookingCollections.checkItems(@)
 
     ###**
@@ -172,5 +179,3 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
     @$query: (prms) ->
       AdminBookingService.query(prms)
 
-angular.module('BB.Models').factory 'AdminBooking', ($injector) ->
-  $injector.get('Admin.BookingModel')

@@ -53,14 +53,14 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
 
     ###**
     * @ngdoc method
-    * @name getCategoryPromise
+    * @name $getCategory
     * @methodOf BB.Models:Service
     * @description
     * Gets the service category.
     *
     * @returns {object} A promise that on success returns the category object
     ###
-    getCategoryPromise: () =>
+    $getCategory: () =>
       return null if !@$has('category')
       prom = @$get('category')
       prom.then (cat) =>

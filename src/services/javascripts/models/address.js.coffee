@@ -16,8 +16,7 @@
 * @property {string} country Country
 ####
 
-angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseModel, AddressModel, AdminAddressService) ->
-
+angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseModel, AddressModel) ->
 
   class Admin_Address extends AddressModel
 
@@ -50,6 +49,3 @@ angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseMode
     ###
     @query: (params) ->
       AdminAddressService.query(params)
-
-angular.module('BB.Models').factory 'AdminAddress', ($injector) ->
-  $injector.get('Admin.AddressModel')

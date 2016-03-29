@@ -95,6 +95,9 @@ var NO_JQUERY = {};
              if (("postMessage" in target) && !o.hash) {
                  pm._bind();
                  target.postMessage(JSON.stringify(msg), o.origin || '*');
+             } else if (("postMessage" in target.contentWindow) && !o.hash) {
+                pm._bind();
+                target.contentWindow.postMessage(JSON.stringify(msg), o.origin || '*');
              }
              else {
                  pm.hash._bind();

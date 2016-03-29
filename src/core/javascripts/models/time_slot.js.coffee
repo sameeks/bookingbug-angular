@@ -21,7 +21,7 @@
 * @property {string} avail The avail of time slot
 ###
 
-angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, BaseModel, TimeSlotService) ->
+angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, BaseModel, DateTimeUlititiesService) ->
 
   class TimeSlot extends BaseModel
 
@@ -30,7 +30,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
       @service = service
       @time_12 = @print_time12()
       @time_24 = @print_time()
-
+      @time_moment = DateTimeUlititiesService.convertTimeSlotToMoment({date: moment()}, @)
     ###**
     * @ngdoc method
     * @name print_time

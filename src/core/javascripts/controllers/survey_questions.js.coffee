@@ -30,7 +30,7 @@ angular.module('BB.Directives').directive 'bbSurveyQuestions', () ->
 angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootScope,
     CompanyService, PurchaseService, ClientService, $modal, $location, $timeout,
     BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService,
-    LoginService, $window, $upload, ServiceService, ValidatorService, PurchaseBookingService, $sessionStorage) ->
+    LoginService, $window, $upload, ServiceService, ValidatorService, PurchaseBookingService, LoadingService, $sessionStorage) ->
 
   $scope.controller = "SurveyQuestions"
 
@@ -39,11 +39,11 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
   $scope.login_error = false
   $scope.booking_ref = ""
 
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then ->
     init()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   init = () =>
@@ -77,7 +77,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
   * @param {array} purchase Purchase
   ###
   $scope.loadSurvey = (purchase) =>
-    unless $scope.company 
+    unless $scope.company
       $scope.purchase.$get('company').then (company) =>
         setPurchaseCompany(company)
 
@@ -107,9 +107,9 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
                 for answer in booking.survey_answers
                   if (answer.question_text) == question.name && answer.value
                     question.answer = answer.value
-            $scope.setLoaded $scope
+            loader.setLoaded()
     , (err) ->
-      $scope.setLoaded $scope
+      loader.setLoaded()
       failMsg()
 
   ###**
@@ -126,9 +126,9 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
     LoginService.companyLogin($scope.company, {}, {email: $scope.login.email, password: $scope.login.password, id: $scope.company.id}).then (member) =>
       LoginService.setLogin(member)
       getBookingAndSurvey()
-    , (err) -> 
+    , (err) ->
       showLoginError()
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -138,7 +138,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
   * Load survey from purchase id according to id parameter else display an error message.
   *
   * @param {object} id The id of purchase
-  ###  
+  ###
   $scope.loadSurveyFromPurchaseID = (id) =>
     params = {purchase_id: id, url_root: $scope.bb.api_url}
     auth_token = $sessionStorage.getItem('auth_token')
@@ -148,7 +148,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
       $scope.total = $scope.purchase
       $scope.loadSurvey($scope.purchase)
     , (err) ->
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -169,7 +169,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
       $scope.loadSurvey($scope.purchase)
     , (err) ->
       showLoginError()
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -185,14 +185,14 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
     for booking in $scope.bookings
       booking.checkReady()
       if booking.ready
-        $scope.notLoaded $scope
+        loader.notLoaded()
         booking.client_id = $scope.client.id
         params = (booking)
         PurchaseBookingService.addSurveyAnswersToBooking(params).then (booking) ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
           $scope.completed = true
         , (err) ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
       else
         $scope.decideNextPage(route)
 
@@ -207,7 +207,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
   ###
   $scope.submitBookingRef = (form) =>
     return if !ValidatorService.validateForm(form)
-    $scope.notLoaded $scope
+    loader.notLoaded()
     params = {booking_ref: $scope.booking_ref, url_root: $scope.bb.api_url, raw: true}
     auth_token = $sessionStorage.getItem('auth_token')
     params.auth_token = auth_token if auth_token
@@ -217,7 +217,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
       $scope.loadSurvey($scope.purchase)
     , (err) ->
       showLoginError()
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

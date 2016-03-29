@@ -29,23 +29,24 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
     scope.options = scope.$eval(attrs.bbDeals)
     scope.directives = "public.DealList"
 
-angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal) ->
+angular.module('BB.Controllers').controller 'DealList',
+($scope, $rootScope, $q, $modal, AlertService, FormDataStoreService, ValidatorService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then ->
     init()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   init = () ->
-    $scope.notLoaded($scope)
-
+    loader.notLoaded()
     if !$scope.deals
       deal_promise = BBModel.Deal.$query($scope.bb.company)
       deal_promise.then (deals) ->
         $scope.deals = deals
-        $scope.setLoaded($scope)
+        loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -70,19 +71,19 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $q,
             iitem
 
       modalInstance.result.then (item) ->
-        $scope.notLoaded($scope)
+        loader.notLoaded()
         $scope.setBasketItem item
         $scope.addItemToBasket().then ->
-          $scope.setLoaded($scope)
+          loader.setLoaded()
         , (err) ->
-          $scope.setLoadedAndShowError $scope, err, 'Sorry, something went wrong'
+          loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
-      $scope.notLoaded($scope)
+      loader.notLoaded()
       $scope.setBasketItem iitem
       $scope.addItemToBasket().then ->
-        $scope.setLoaded($scope)
+        loader.setLoaded()
       , (err) ->
-        $scope.setLoadedAndShowError $scope, err, 'Sorry, something went wrong'
+        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ModalInstanceCtrl = ($scope, $modalInstance, item, ValidatorService) ->
     $scope.controller = 'ModalInstanceCtrl'
@@ -97,7 +98,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $q,
     * Add to basket according to form parameters.
     *
     * @param {object} form Form where deal list is added to basket
-    ###    
+    ###
     $scope.addToBasket = (form) ->
       if !ValidatorService.validateForm(form)
         return

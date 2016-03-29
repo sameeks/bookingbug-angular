@@ -6,7 +6,7 @@
 * Representation of an Loading Object
 ###
 
-angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $rootScope, AlertService) ->
+angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $rootScope, AlertService, ErrorService) ->
 
   # create a trackable loader - this in theory allows multiple trackable loading objects in a scope - meaning we're not tied to a per-scope faction
   # currently it's still just using the scope to store the status, but we're encapsulating it away so that we can change it later
@@ -70,7 +70,7 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
   setLoadedAndShowError: (scope, err, error_string) ->
     $log.warn(err, error_string)
     scope.setLoaded(scope)
-    if err.status is 409
+    if err and err.status is 409
       AlertService.danger(ErrorService.getError('ITEM_NO_LONGER_AVAILABLE'))
     else if err.data and err.data.error is "Number of Bookings exceeds the maximum"
       AlertService.danger(ErrorService.getError('MAXIMUM_TICKETS'))

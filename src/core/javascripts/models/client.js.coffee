@@ -24,7 +24,8 @@
 * @property {boolean} deleted Verifies if the client account is deleted or not
 ####
 
-angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, LocaleService, ClientService) ->
+
+angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, ClientService, LocaleService) ->
 
   class Client extends BaseModel
 
@@ -233,18 +234,25 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
       x.address5 = @address5
       x.postcode = @postcode
       x.country = @country
-      x.phone = @phone
       x.email = @email
       x.id = @id
       x.comp_ref = @comp_ref
       x.parent_client_id = @parent_client_id
       x.password = @password
       x.notifications = @notifications
+      x.member_level_id = @member_level_id if @member_level_id
+      x.send_welcome_email = @send_welcome_email if @send_welcome_email
+      x.default_company_id = @default_company_id if @default_company_id
+
+      if @phone
+        x.phone = @phone
+        x.phone_prefix = @phone_prefix if @phone_prefix
 
       if @mobile
         @remove_prefix()
         x.mobile = @mobile
         x.mobile_prefix = @mobile_prefix
+
 
       if @questions
         x.questions = []
@@ -337,14 +345,14 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
 
     ###**
     * @ngdoc method
-    * @name getPrePaidBookingsPromise
-    * @methodOf BB.Models:Client
+    * @name $getPrePaidBookings
+    * @methodOf BB.Models:Address
     * @description
     * Gets the  prepaid bookingss of a client.
     *
     * @returns {promise} A promise that on success will return the client prepaid bookings
     ###
-    getPrePaidBookingsPromise: (params) ->
+    $getPrePaidBookings: (params) ->
       defer = $q.defer()
       if @$has('pre_paid_bookings')
         @$get('pre_paid_bookings', params).then (collection) ->
@@ -354,6 +362,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
             defer.reject(err)
         , (err) ->
           defer.reject(err)
+      # return empty array if there are no prepaid bookings
       else
         defer.resolve([])
         #defer.reject('missing pre_paid_bookings link')

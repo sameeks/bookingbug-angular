@@ -27,27 +27,36 @@ angular.module('BB.Directives').directive 'bbTotal', () ->
   scope : true
   controller : 'Total'
 
-angular.module('BB.Controllers').controller 'Total', ($scope, $rootScope, $q, $location, $window, PurchaseService, QueryStringService) ->
+
+angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q, $location, $window, PurchaseService, QueryStringService, LoadingService) ->
 
   $scope.controller = "public.controllers.Total"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then =>
     $scope.bb.payment_status = null
 
-    id = if $scope.bb.total then $scope.bb.total.long_id else QueryStringService('purchase_id')
+    id = QueryStringService('purchase_id')
 
-    if id
+    if id and !$scope.bb.total
       PurchaseService.query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
         $scope.total = total
         $scope.setLoaded $scope
 
         # emit checkout:success event if the amount paid matches the total price
         $scope.$emit("checkout:success", total) if total.paid == total.total_price
+    else
+      $scope.total = $scope.bb.total
+      $scope.setLoaded $scope
 
+      # emit checkout:success event if the amount paid matches the total price
+      $scope.$emit("checkout:success", $scope.total) if $scope.total.paid == $scope.total.total_price
+
+    # Reset ready for another booking
+    $scope.reset()
 
   , (err) ->
-    $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

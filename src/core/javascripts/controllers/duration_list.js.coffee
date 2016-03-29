@@ -29,15 +29,19 @@ angular.module('BB.Directives').directive 'bbDurations', () ->
     scope.directives = "public.DurationList"
 
 
-angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope, PageControllerService, $q, $attrs, AlertService) ->
+angular.module('BB.Controllers').controller 'DurationList',
+($scope, $attrs, $rootScope, $q, $filter, PageControllerService, AlertService, LoadingService) ->
+
   $scope.controller = "public.controllers.DurationList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   angular.extend(this, new PageControllerService($scope, $q))
 
+  options = $scope.$eval($attrs.bbDurations) or {}
+
   $rootScope.connection_started.then ->
     $scope.loadData()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $scope.loadData = () =>
@@ -58,21 +62,14 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope,  $rootScope
           $scope.duration = duration
           $scope.bb.current_item.setDuration(duration.value)
 
-        if duration.value < 60
-          duration.pretty = duration.value + " minutes"
-        else if duration.value == 60
-          duration.pretty = "1 hour"
-        else
-          duration.pretty = Math.floor(duration.value/60) + " hours"
-          rem = duration.value % 60
-          if rem != 0
-            duration.pretty += " " + rem + " minutes"
+        duration.pretty = $filter('time_period')(duration.value)
+        duration.pretty += " (#{$filter('currency')(duration.price)})" if options.show_prices
 
       if $scope.durations.length == 1
         $scope.skipThisStep()
         $scope.selectDuration($scope.durations[0], $scope.nextRoute)
 
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
   ###**
   * @ngdoc method

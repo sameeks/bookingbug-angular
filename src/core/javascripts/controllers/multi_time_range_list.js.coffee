@@ -39,7 +39,8 @@ angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
     scope.directives = "public.TimeRangeListStacked"
 
 
-angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, DateTimeUlititiesService) ->
+angular.module('BB.Controllers').controller 'TimeRangeListStackedController',
+($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, LoadingService, DateTimeUlititiesService) ->
 
   $scope.controller = "public.controllers.TimeRangeListStacked"
 
@@ -50,7 +51,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   ]
 
   # show the loading icon
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
   $scope.available_times = 0
 
   $rootScope.connection_started.then ->
@@ -95,7 +96,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
 
     $scope.loadData()
 
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -122,7 +123,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
     # to be saved as a variable as functions cannot be passed into the
     # AngluarUI date picker
     $scope.selected_date = $scope.selected_day.toDate()
-    
+
     isSubtractValid()
 
   ###**
@@ -281,12 +282,12 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   # load the time data
   $scope.loadData = ->
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     # if the selected date has already been loaded, there's no need to call the API
     if $scope.request and $scope.request.start.twix($scope.request.end).contains($scope.selected_day)
       updateHideStatus()
-      $scope.setLoaded $scope
+      loader.setLoaded()
       return
 
     $scope.start_date = moment($scope.start_date)
@@ -338,9 +339,9 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       else
         # raise error
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -472,7 +473,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
 
     if $scope.bb.moving_booking
       # if we're moving - confirm everything in the basket right now
-      $scope.notLoaded $scope
+      loader.notLoaded()
 
       prom = PurchaseService.update({purchase: $scope.bb.moving_booking, bookings: $scope.bb.basket.items})
 
@@ -484,23 +485,23 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
               for oldb, _i in $scope.bookings
                 if oldb.id == booking.id
                   $scope.bookings[_i] = booking
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.bb.current_item.move_done = true
         $scope.decideNextPage()
       , (err) ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
         AlertService.add("danger", { msg: "Failed to move booking" })
       return
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     if options.do_not_route
       return $scope.updateBasket()
     else
       $scope.updateBasket().then ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.decideNextPage(route)
-      , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

@@ -28,12 +28,15 @@
 * @property {boolean} hideHeading Group range hide heading
 ####
 
-angular.module('BB.Directives').directive 'bbAccordianRangeGroup', () ->
+
+angular.module('BB.Directives').directive 'bbAccordianRangeGroup', (PathSvc) ->
   restrict: 'AE'
-  replace: true
+  replace: false
   scope: true
   require: '^?bbTimeRangeStacked'
   controller: 'AccordianRangeGroup'
+  templateUrl : (element, attrs) ->
+    PathSvc.directivePartial "_accordian_range_group"
   link: (scope, element, attrs, ctrl) ->
     scope.options = scope.$eval(attrs.bbAccordianRangeGroup) or {}
     scope.options.using_stacked_items = ctrl?
@@ -76,6 +79,7 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   $scope.init = (start_time, end_time, options) ->
     $scope.setRange(start_time, end_time)
     $scope.collaspe_when_time_selected = if options && !options.collaspe_when_time_selected then false else true
+    $scope.heading = if options.heading then options.heading
 
   ###**
   * @ngdoc method
@@ -142,7 +146,7 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
     # if a day and slot are provided, check if slot is in range
     if day and slot
       $scope.selected_slot = slot if day.date.isSame($scope.day.date) and slot.time >= $scope.start_time and slot.time < $scope.end_time
-    else 
+    else
       for slot in $scope.accordian_slots
         if slot.selected
           $scope.selected_slot = slot

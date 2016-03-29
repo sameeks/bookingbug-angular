@@ -29,6 +29,3 @@ angular.module('BB.Models').factory "Admin.EventChainModel", ($q, BBModel, BaseM
     ###
     @$query: (params) ->
       AdminEventChainService.query (params)
-
-angular.module('BB.Models').factory "AdminEventChain", ($injector) ->
-  $injector.get('Admin.EventChainModel')

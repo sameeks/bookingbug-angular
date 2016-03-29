@@ -32,15 +32,20 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   link: (scope, element, attrs) ->
     scope.directives = "public.TimeList"
 
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, LoadingService, BBModel) ->
   $scope.controller = "public.controllers.TimeList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.data_source = $scope.bb.current_item if !$scope.data_source
 
   $rootScope.connection_started.then =>
+
+    if $scope.bb.current_item.requested_date
+      $scope.setDate($scope.bb.current_item.requested_date)
+      $scope.bb.current_item.setDate($scope.selected_day)
+
     $scope.loadDay()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -223,19 +228,20 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   ###
   $scope.loadDay = () =>
 
+#// <-------------------------->
     if $scope.data_source && $scope.data_source.days_link  || $scope.item_link_source
       if !$scope.selected_date && $scope.data_source && $scope.data_source.date
         $scope.selected_date = $scope.data_source.date.date
 
       if !$scope.selected_date
-        $scope.setLoaded $scope
+        loader.setLoaded()
         return
 
-      $scope.notLoaded $scope
+      loader.notLoaded()
       pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_date, client: $scope.client, available: 1 })
 
       pslots.finally =>
-        $scope.setLoaded $scope
+        loader.setLoaded()
       pslots.then (data) =>
 
         $scope.slots = data
@@ -265,10 +271,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             $scope.data_source.requestedTimeUnavailable() if !$scope.options.persist_requested_time
             $scope.time_not_found = true
             AlertService.add("danger", { msg: "Sorry, your requested time slot is not available. Please choose a different time." })
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
     else
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method

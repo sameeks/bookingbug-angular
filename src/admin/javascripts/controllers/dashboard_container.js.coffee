@@ -1,5 +1,5 @@
-
-angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope,  $rootScope, $location, $modal) ->
+angular.module('BBAdmin.Controllers').controller 'DashboardContainer',
+($scope, $rootScope, $location, $modal) ->
 
   $scope.selectedBooking = null
   $scope.poppedBooking = null
@@ -19,7 +19,7 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
         items: () => {booking: booking};
       }
     }
-    
+
     modalInstance.result.then (selectedItem) =>
       $scope.selected = selectedItem;
     , () =>
@@ -28,7 +28,6 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
   ModalInstanceCtrl = ($scope, $modalInstance, items) ->
     angular.extend($scope, items)
     $scope.ok = () ->
-      console.log "closeing", items,
       if items.booking && items.booking.self
         items.booking.$update()
       $modalInstance.close();
@@ -37,7 +36,6 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
 
   # a popup performing an action on a time, possible blocking, or mkaing a new booking
   $scope.popupTimeAction = (prms) ->
-    console.log(prms)
 
     modalInstance = $modal.open {
       templateUrl: $scope.partial_url + 'time_popup',
@@ -48,4 +46,3 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
         items: () => prms;
       }
     }
-    

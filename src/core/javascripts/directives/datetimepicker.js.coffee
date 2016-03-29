@@ -20,7 +20,7 @@ angular.module('BB.Directives').directive 'datetimepicker', ()->
         else
           scope.$$value$$ = ngModel.$viewValue
       else
-        scope.$$value$$ = scope.schemaValidate.schema.default
+        scope.$$value$$ = new Date()
 
     scope.updateModel = (value) ->
       ngModel.$setViewValue(moment(value).format())
@@ -32,4 +32,3 @@ angular.module('BB.Directives').directive 'datetimepicker', ()->
   scope:
     schemaValidate: '='
   templateUrl: 'datetimepicker.html'
-

@@ -1,9 +1,6 @@
 'use strict';
 
-# Directives
-app = angular.module 'BB.Directives'
-
-app.directive 'bbContent', ($compile) ->
+angular.module('BB.Directives').directive 'bbContent', ($compile) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
@@ -17,8 +14,7 @@ app.directive 'bbContent', ($compile) ->
 
     $compile(element)(scope)
 
-
-app.directive 'bbLoading', ($compile, LoadingService) ->
+angular.module('BB.Directives').directive 'bbLoading', ($compile, LoadingService) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
@@ -28,7 +24,7 @@ app.directive 'bbLoading', ($compile, LoadingService) ->
     $compile(element)(scope)
     return
 
-app.directive 'bbWaitFor', ($compile) ->
+angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
   transclude: false,
   restrict: 'A',
   priority: 800,
@@ -39,14 +35,11 @@ app.directive 'bbWaitFor', ($compile) ->
     prom = scope.$eval(attrs.bbWaitFor)
     prom.then () ->
       scope[name] = true
-#    element.attr('bb-wait-for',null)
-#    $compile(element)(scope)
     return
-
 
 # bbScrollTo
 # Allows you to scroll to a specific element
-app.directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, SettingsService) ->
+angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, SettingsService) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
@@ -70,7 +63,7 @@ app.directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $w
         scroll_to_element = $bbug(element)
 
       current_step = BreadcrumbService.getCurrentStep()
-      
+
       # if the event is page:loaded or the element is not in view, scroll to it
       if (scroll_to_element)
         if (evnt == "page:loaded" and current_step > 1) or always_scroll or (evnt == "widget:restart") or
@@ -82,25 +75,23 @@ app.directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $w
                 scrollTop: scroll_to_element.offset().top - SettingsService.getScrollOffset()
                 , bb_transition_time
 
-
 # bbSlotGrouper
 # group time slots together based on a given start time and end time
-app.directive  'bbSlotGrouper', () ->
+angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
   restrict: 'A'
   scope: true
   link: (scope, element, attrs) ->
     slots = scope.$eval(attrs.slots)
-    return if !slots 
+    return if !slots
     scope.grouped_slots = []
     for slot in slots
       scope.grouped_slots.push(slot) if slot.time >= scope.$eval(attrs.startTime) && slot.time < scope.$eval(attrs.endTime)
     scope.has_slots = scope.grouped_slots.length > 0
 
-
 # bbForm
-# Adds behaviour to select first invalid input 
+# Adds behaviour to select first invalid input
 # TODO more all form behaviour to this directive, initilising options as parmas
-app.directive 'bbForm', ($bbug, $window, SettingsService) ->
+angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService) ->
   restrict: 'A'
   require: '^form'
   link: (scope, elem, attrs, ctrls) ->
@@ -120,11 +111,11 @@ app.directive 'bbForm', ($bbug, $window, SettingsService) ->
       scope.$apply()
 
       invalid_form_group = elem.find('.has-error:first')
-      
+
       if invalid_form_group && invalid_form_group.length > 0
         if 'parentIFrame' of $window
           parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
-        else 
+        else
           $bbug("html, body").animate
             scrollTop: invalid_form_group.offset().top - SettingsService.getScrollOffset()
             , 1000
@@ -134,10 +125,9 @@ app.directive 'bbForm', ($bbug, $window, SettingsService) ->
         return false
       return true
 
-
 # bbAddressMap
-# Adds behaviour to select first invalid input 
-app.directive 'bbAddressMap', ($document) ->
+# Adds behaviour to select first invalid input
+angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
   restrict: 'A'
   scope: true
   replace: true
@@ -146,16 +136,16 @@ app.directive 'bbAddressMap', ($document) ->
     $scope.isDraggable = $document.width() > 480
 
     $scope.$watch $attrs.bbAddressMap, (new_val, old_val) ->
-      
+
       return if !new_val
 
       map_item = new_val
 
-      $scope.map = { 
-        center: { 
-          latitude: map_item.lat, 
-          longitude: map_item.long 
-        }, 
+      $scope.map = {
+        center: {
+          latitude: map_item.lat,
+          longitude: map_item.long
+        },
         zoom: 15
       }
 
@@ -171,7 +161,6 @@ app.directive 'bbAddressMap', ($document) ->
           longitude: map_item.long
         }
       }
-
 
 angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
   restrict: 'A'
@@ -196,8 +185,6 @@ angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
 
       $scope.has_questions = _.pluck($scope.questions, 'question').length > 0
 
-
-
 angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
   restrict: 'A'
   scope: true
@@ -206,8 +193,70 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
     # watch modal height to ensure it does not exceed window height
     deregisterWatcher = scope.$watch ->
       height = elem.height()
-      modal_padding = 200
+      if $bbug(window).width() >= 769
+        modal_padding = 200
+      else
+        modal_padding = 20
       if height > $bbug(window).height()
-        new_height = $(window).height() - modal_padding
+        new_height = $bbug(window).height() - modal_padding
         elem.attr( 'style', 'height: ' + (new_height) + 'px; overflow-y: scroll;' )
         deregisterWatcher()
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbBackgroundImage
+* @restrict A
+* @scope true
+*
+* @description
+* Adds a background-image to an element
+*
+* @example
+* <div bb-background-image='images/example.jpg'></div>
+####
+angular.module('BB.Directives').directive('bbBackgroundImage', () ->
+    restrict: 'A'
+    scope: true
+    link: (scope, el, attrs) ->
+      return if !attrs.bbBackgroundImage or attrs.bbBackgroundImage == ""
+      killWatch = scope.$watch attrs.bbBackgroundImage, (new_val, old_val) ->
+        if new_val
+          killWatch()
+          el.css('background-image', 'url("' + new_val + '")')
+)
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbCapacityView
+* @restrict A
+* @description
+* Assigns an appropriate description of ticket availability based
+* on the value of the "Select spaces view" dropdown in the admin console
+* @param
+* {object} The event object
+* @attribute ticket-type-singular
+* {String} Custom name for the ticket
+* @example
+* <span bb-capacity-view='event' ticket-type-singular='seat'></span>
+* @example_result
+* <span bb-capacity-view='event' ticket-type-singular='seat' class='ng-binding'>5 of 10 seats available</span>
+####
+angular.module('BB.Directives').directive('bbCapacityView', () ->
+  restrict: 'A'
+  template: '{{capacity_view_description}}'
+  link: (scope, el, attrs) ->
+    ticket_type = attrs.ticketTypeSingular || "ticket"
+    killWatch = scope.$watch(attrs.bbCapacityView, (item) ->
+      if item
+        killWatch()
+
+        num_spaces_plural = if item.num_spaces > 1 then "s" else ""
+        spaces_left_plural = if item.spaces_left > 1 then "s" else ""
+
+        switch item.chain.capacity_view
+          when "NUM_SPACES" then scope.capacity_view_description = scope.ticket_spaces = item.num_spaces + " " + ticket_type + num_spaces_plural
+          when "NUM_SPACES_LEFT" then scope.capacity_view_description = scope.ticket_spaces = item.spaces_left + " " + ticket_type + spaces_left_plural + " available"
+          when "NUM_SPACES_AND_SPACES_LEFT" then scope.capacity_view_description = scope.ticket_spaces = item.spaces_left + " of " + item.num_spaces + " " + ticket_type + num_spaces_plural + " available"
+
+      )
+  )

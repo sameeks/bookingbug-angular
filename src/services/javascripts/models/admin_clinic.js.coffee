@@ -22,7 +22,7 @@
 * @property {string} end_time Clinic end time
 ####
 
-angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel, ClinicModel, AdminClinicService) ->
+angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel, ClinicModel) ->
 
   class Admin_Clinic extends ClinicModel
 
@@ -75,6 +75,7 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
       data.start_time = @start_time
       data.end_time = @end_time
       data.resource_ids = []
+      data.update_for_repeat = @update_for_repeat
       for id, en of @resources
         data.resource_ids.push(id) if en
       data.person_ids = []
@@ -113,6 +114,11 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
         @setTimes()
         @setResourcesAndPeople()
 
+    $update: (data) ->
+      data ||= @
+      @$put('self', {}, data).then (res) =>
+        @constructor(res)
+
     ###**
     * @ngdoc method
     * @name query
@@ -148,6 +154,3 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
     ###
     @$update: (clinic) ->
       AdminClinicService.update(clinic)
-
-angular.module('BB.Models').factory 'AdminClinic', ($injector) ->
-  $injector.get('Admin.ClinicModel')

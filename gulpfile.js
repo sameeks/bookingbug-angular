@@ -37,7 +37,7 @@ gulp.task('javascripts', function() {
         './bower_components/lodash/dist/lodash.js',
         './bower_components/angular-google-maps/dist/angular-google-maps.js',
         './bower_components/webshim/js-webshim/dev/polyfiller.js',
-        './src/javascripts/core/main.js.coffee', 
+        './src/core/javascripts/main.js.coffee',
         './src/*/javascripts/main.js.coffee', 
         './src/*/main.js.coffee', 
         './src/core/javascripts/services/widget.js.coffee', 
@@ -67,7 +67,7 @@ gulp.task('images', function() {
   return gulp.src('src/*/images/*')
     .pipe(imagemin())
     .pipe(flatten())
-    .pipe(gulp.dest('release'));
+    .pipe(gulp.dest('release/images'));
 });
 
 gulp.task('shims', function() {

@@ -5,7 +5,7 @@
 * @name BB.Models:Category
 *
 * @description
-* Representation of an Category Object
+* Representation of a Category Object
 ####
 
 angular.module('BB.Models').factory "CategoryModel", ($q, BBModel, BaseModel, CategoryService) ->
@@ -23,5 +23,5 @@ angular.module('BB.Models').factory "CategoryModel", ($q, BBModel, BaseModel, Ca
     *
     * @returns {promise} A returned promise
     ###
-  	 @$query: (company) ->
+    @$query: (company) ->
        CategoryService.query(company)
