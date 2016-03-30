@@ -1,8 +1,9 @@
 angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     uiCalendarConfig, AdminCompanyService, AdminBookingService,
     AdminPersonService, $q, $sessionStorage, ModalForm, BBModel,
-    AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,$interval,$http,
-    $timeout, $compile, $templateCache, BookingCollections, PrePostTime) ->
+    AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,
+    $timeout, $compile, $templateCache, BookingCollections, PrePostTime,
+    AdminScheduleService) ->
 
   controller = ($scope, $attrs) ->
 
@@ -17,10 +18,15 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           AdminBookingService.query(params).then (bookings) ->
             $scope.loading = false
             for b in bookings.items
-              b.resourceId = b.person_id 
+              b.resourceId = b.person_id
               b.useFullTime()
             $scope.bookings = bookings.items
             callback($scope.bookings)
+    ,
+      events: (start, end, timezone, callback) ->
+        $scope.getCompanyPromise().then (company) ->
+          AdminScheduleService.getPeopleScheduleEvents(company, start, end).then (events) ->
+            callback(events)
     ]
 
 
@@ -49,6 +55,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           agendaWeek:
             slotDuration: $scope.options.slotDuration || "00:05"
             buttonText: 'Week'
+            groupByDateAndResource: true
           month:
             eventLimit: 5
             buttonText: 'Month'
@@ -56,14 +63,14 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             slotDuration: $scope.options.slotDuration || "00:05"
             eventOverlap: false
             slotWidth: 25
-            buttonText: 'Day (5m)'  
+            buttonText: 'Day (5m)'
             resourceAreaWidth: '18%'
-          timelineDayThirty: 
+          timelineDayThirty:
             type: 'timeline'
             slotDuration: "00:30"
             eventOverlap: false
             slotWidth: 25
-            buttonText: 'Day (30m)'  
+            buttonText: 'Day (30m)'
             resourceAreaWidth: '18%'
         resourceLabelText: 'Staff'
         selectable: true
@@ -79,28 +86,28 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
               revertFunc()
         eventClick: (event, jsEvent, view) ->
           $scope.editBooking(event)
-        resourceRender: (resource, resourceTDs, dataTDs) ->
-          # for resourceTD in resourceTDs
-          #   resourceTD.style.height = "25px"
-          #   resourceTD.style.verticalAlign = "middle"
-          # dataTD.style.height = "25px" for dataTD in dataTDs
         eventRender: (event, element) ->
+          # If its a blocked timeslot add colored overlay
+          if event.status == 3
+            element.find('.fc-bg').css({'background-color':'#000'})
+          
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
             element.css('background-color', service.color)
             element.css('color', service.textColor)
             element.css('border-color', service.textColor)
         eventAfterRender: (event, elements, view) ->
-          # if view.type == "timelineDay"
-            # element.style.height = "15px" for element in elements
           PrePostTime.apply(event, elements, view, $scope)
-          elements.draggable()
+          if not event.rendering? or event.rendering != 'background'
+            elements.draggable()
         select: (start, end, jsEvent, view, resource) ->
           view.calendar.unselect()
           rid = null
           rid = resource.id if resource
           $scope.getCompanyPromise().then (company) ->
             AdminBookingPopup.open
+              from_datetime: start
+              to_datetime: end
               item_defaults:
                 date: start.format('YYYY-MM-DD')
                 time: (start.hour() * 60 + start.minute())
@@ -145,25 +152,6 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
     $scope.pusherSubscribe = () =>
       if $scope.company
-    #    $interval () ->
-    #      $http.get($scope.bb.api_url + "/api/v1/audit/bookings/?id=#{$scope.company.id}&channel_id=#{$scope.company.numeric_widget_id}").then (res) ->
-    #        if res && res.data 
-    #          for id in res.data
-    #            console.log id
-    #            booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', id))
-    #            if booking
-    #              booking.$refetch().then () ->
-    #                booking.resourceId = booking.person_id
-    #                uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
-    #            else
-    #              $scope.company.$get('bookings', {id: id}).then (response) ->
-    #                booking = new BBModel.Admin.Booking(response)
-    #                BookingCollections.checkItems(booking)
-    #                $timeout ->
-    #                  uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
-    #                , 100
-    #     , 5000
-
         $scope.company.pusherSubscribe((res) =>
           if res.id?
             booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))

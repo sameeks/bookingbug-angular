@@ -3,6 +3,7 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
   scope: true
   link: (scope, element, attrs) ->
 
+    options = scope.$eval(attrs.bbFbLogin) or {}
     $rootScope.connection_started.then ->
       checkLoginState()
 
@@ -10,6 +11,7 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
       if response.status == 'connected'
         params = {}
         params.access_token = response.authResponse.accessToken
+        params.login_only = options.login_only if options.login_only
         loginToBBWithFBUser(params)
       else if response.status == 'not_authorized'
          scope.loginFB()
@@ -33,7 +35,10 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
           scope.setLoaded scope
           scope.decideNextPage()
       , (err) ->
-        AlertService.raise('LOGIN_FAILED')
+        if err.data.error == "FACEBOOK-LOGIN-UNAUTHORIZED"
+          AlertService.raise('FB-LOGIN-FAILED')
+        else
+          AlertService.raise('LOGIN_FAILED')
 
 
     scope.loginFB = () ->
@@ -41,6 +46,7 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
         if response.status == 'connected'
           params = {}
           params.access_token = response.authResponse.accessToken
+          params.login_only = options.login_only if options.login_only
           loginToBBWithFBUser(params)
         else if response.status == 'not_authorized'
           AlertService.raise('LOGIN_FAILED')
