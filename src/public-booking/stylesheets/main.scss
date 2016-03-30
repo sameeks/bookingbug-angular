@@ -29,7 +29,7 @@ $secondary-border-color     : #D5D5D5;
   margin: 0; // remove default body margin
 
   // Theme
-  @import "bb_light_theme";
+  //@import "bb_light_theme";
 
   // Page Elements
   @import "buttons";
@@ -38,9 +38,6 @@ $secondary-border-color     : #D5D5D5;
   @import "helpers";
   @import "lists";
   @import "page";
-
-  // Components
-  @import "angular.rangeSlider";
 
   // Partials
   @import "basket";
