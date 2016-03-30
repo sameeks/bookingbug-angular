@@ -30,8 +30,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     ]
 
     labelAssembly = (event)->
-      # if labelAssembler attribute not defined return the normal title
-      return event.title if not $scope.labelAssembler?
+      # if labelAssembler attribute not defined or event is "block" return the normal title
+      return event.title if not $scope.labelAssembler? || event.status == 3
       # if label-assembler attr is provided it needs to be inline with the following RegExp
       #   ex: label-assembler='{service_name} - {client_name} - {created_at|date:shortTime}'
       # everything outside  {} will remain as is, inside the {} the first param (required) is the property name 
