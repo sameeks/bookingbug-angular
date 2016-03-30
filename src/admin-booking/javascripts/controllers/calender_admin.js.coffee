@@ -19,7 +19,7 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
     )
   )
 
-  $scope.week_view = true
+  $scope.week_view = false
   $scope.name_switch = "switch to week view"
   $scope.switchWeekView = () ->
     if $scope.week_view
@@ -30,5 +30,5 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
       $scope.name_switch = "switch to week view"
 
   $scope.bookAnyway = ->
-      $scope.new_timeslot = new BBModel.TimeSlot({time: $scope.current_item.defaults.time, avail: 1})
-      $scope.selectSlot($scope.new_timeslot)
+    $scope.new_timeslot = new BBModel.TimeSlot({time: $scope.current_item.defaults.time, avail: 1})
+    $scope.selectSlot($scope.new_timeslot)

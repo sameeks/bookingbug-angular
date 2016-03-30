@@ -3,12 +3,13 @@
     <h2>Check In</h2>
     <div class="panel">
       <table class="table table-bordered table-hover dataTable" tr-ng-grid=""
-          items="bookings" page-items="per_page" total-items="total_entries" on-data-required="getClients(currentPage, filterBy, filterByFields, orderBy, orderByReverse)" role="grid">
+          items="bookings" page-items="per_page" total-items="total_entries"
+          on-data-required="getAppointments(currentPage, filterBy, filterByFields, orderBy, orderByReverse)" role="grid">
         <thead>
           <tr role="row">
             <th field-name="client_name" display-name="Customer"></th>
             <th field-name="person_name" display-name="Person"></th>
-            <th field-name="unixTime" display-name="Due"></th>
+            <th field-name="datetime" display-name="Due"></th>
             <th><div class="tr-ng-title">Arrived</div></th>
             <th><div class="tr-ng-title">Being Seen</div></th>
             <th><div class="tr-ng-title">Completed</div></th>
@@ -22,7 +23,7 @@
             <td field-name="person_name">
               <span>{{bmap[gridItem].person_name}}</span>
             </td>
-            <td field-name="unixTime">
+            <td field-name="datetime">
               <span>{{bmap[gridItem].datetime.format("HH:mm")}}</span>
             </td>
             <td>
