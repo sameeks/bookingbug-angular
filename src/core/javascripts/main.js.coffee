@@ -127,8 +127,7 @@ moment.locale('en', {
         llll: "ddd, MMM D YYYY LT"
     }
   })
-<<<<<<< HEAD
-=======
+
 
 # String::includes polyfill
 if !String::includes
@@ -144,4 +143,3 @@ if !String::includes
 # Extend String with parameterise method
 String::parameterise = (seperator = '-') ->
   @trim().replace(/\s/g,seperator).toLowerCase()
->>>>>>> 9c1e8c3219e1a180e92fdf34bf313d65283919e5
