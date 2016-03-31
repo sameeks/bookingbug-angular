@@ -14,6 +14,16 @@
 angular.module('BB.Models').factory "EventSequenceModel", ($q, BBModel, BaseModel, EventSequenceService) ->
 
   class EventSequence extends BaseModel
+
+    ###**
+    * @ngdoc method
+    * @name name
+    * @methodOf BB.Models:EventSequence
+    * @description
+    * Gets the event sequence name.
+    *
+    * @returns {string} Event sequence name
+    ###
     name: () ->
       @_data.name
 

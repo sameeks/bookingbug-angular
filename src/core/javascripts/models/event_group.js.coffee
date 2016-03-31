@@ -12,10 +12,30 @@
 ####
 
 angular.module('BB.Models').factory "EventGroupModel", ($q, BBModel, BaseModel, EventGroupService) ->
+
   class EventGroup extends BaseModel
+
+    ###**
+    * @ngdoc method
+    * @name name
+    * @methodOf BB.Models:EventGroup
+    * @description
+    * Gets the event group name
+    *
+    * @returns {string} Event grup name
+    ###
     name: () ->
       @_data.name
 
+    ###**
+    * @ngdoc method
+    * @name colour
+    * @methodOf BB.Models:EventGroup
+    * @description
+    * Gets the event group colour.
+    *
+    * @returns {string} Event grup colour
+    ###
     colour: () ->
       @_data.colour
 

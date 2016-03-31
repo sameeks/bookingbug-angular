@@ -15,7 +15,6 @@
 
 angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService, EventService) ->
 
-
   class Event extends BaseModel
 
     constructor: (data) ->
@@ -199,7 +198,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getPrice
     * @methodOf BB.Models:Event
     * @description
-    * Gets the  price.
+    * Gets the price.
     *
     * @returns {number} The returned price
     ###
@@ -237,6 +236,8 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @methodOf BB.Models:Event
     * @description
     * Gets the number of spaces left (possibly limited by a specific ticket pool).
+    *
+    * @param {number} pool pool parameter
     *
     * @returns {number} Spaces left
     ###
@@ -370,11 +371,26 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @description
     * Static function that loads an array of events from a company object.
     *
+    * @param {object} company company parameter
+    * @param {object} params params parameter
+    *
     * @returns {promise} A returned promise
     ###
     @$query: (company, params) ->
       EventService.query(company, params)
 
+    ###**
+    * @ngdoc method
+    * @name $summary
+    * @methodOf BB.Models:Event
+    * @description
+    * Static function that loads event summary from a company object.
+    *
+    * @param {object} company company parameter
+    * @param {object} params params parameter
+    *
+    * @returns {promise} A returned promise
+    ###
     @$summary: (company, params) ->
       EventService.summary(company, params)
 

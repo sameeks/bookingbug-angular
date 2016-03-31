@@ -183,6 +183,9 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @description
     * Static function that loads an array of companies from a company object.
     *
+    * @param {number} company_id company_id parameter
+    * @param {object} options options parameter
+    *
     * @returns {promise} A returned promise.
     ###
     @$query: (company_id, options) ->

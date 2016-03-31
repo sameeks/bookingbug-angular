@@ -7,21 +7,20 @@
 * @description
 * Representation of an EventTicket Object
 *
-* @property {number} max The maximum number of tickets for the event
-* @property {number} max_num_bookings The maximum number of bookings
-* @property {number} max_spaces The maximum spaces of the evenet
-* @property {number} counts_as Counts as
+* @property {number} max Maximum number of tickets for the event
+* @property {number} max_num_bookings Maximum number of bookings
+* @property {number} max_spaces Maximum spaces of the evenet
+* @property {number} counts_as counts_as property
 * @property {string} pool_name Pool name
 * @property {string} name Name
 * @property {string} min_num_bookings Minimum number of bookings
-* @property {string} qty The quantity of the event ticket
+* @property {string} qty Event tickets quantity
 * @property {string} totalQty Total quantity of the event tickets
 ####
 
 angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel) ->
 
   class EventTicket extends BaseModel
-
 
     constructor: (data) ->
       super(data)
@@ -56,6 +55,7 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * Gets the range between minimum and maximum number of bookings.
     *
     * @param {number} cap cap parameter
+    *
     * @returns {array} Range
     ###
     getRange: (cap) ->
@@ -74,7 +74,7 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @description
     * Gets the total quantity of the event tickets.
     *
-    * @returns {number} Rotal Tickets quantity
+    * @returns {number} Total tickets quantity
     ###
     totalQty: () ->
       return 0 if !@qty
@@ -87,6 +87,9 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @methodOf BB.Models:EventTicket
     * @description
     * Gets the maximum - this looks at an optional cap, the maximum available and a potential running count of tickest already selected (from passing in the event being booked)
+    *
+    * @param {number} cap cap parameter
+    * @param {object} ev ev parameter
     *
     * @returns {number} Maximum
     ###
@@ -117,6 +120,8 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @description
     * Adds a new value to the a quantity.
     *
+    * @param {number} value value parameter
+    *
     * @returns {number} New quantity
     ###
     add: (value) ->
@@ -132,6 +137,8 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     * @methodOf BB.Models:EventTicket
     * @description
     * Subtracts a value from the quantity.
+    *
+    * @param {number} value value parameter
     *
     * @returns {number} New quantity
     ###
