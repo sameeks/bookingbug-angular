@@ -21,6 +21,7 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
 
   $scope.week_view = false
   $scope.name_switch = "switch to week view"
+  
   $scope.switchWeekView = () ->
     if $scope.week_view
       $scope.week_view = false
