@@ -42,9 +42,6 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Clie
             @questions = @client_details.questions
             @setAskedQuestions()  # make sure the item knows the questions were all answered
             @waitingQuestions.resolve()
-        @raw_mobile = @mobile
-        @mobile = "0" + @mobile if @mobile && @mobile[0] != "0"
-        @phone  = "0" + @phone if @phone && @phone[0] != "0"
 
 
     ###**
