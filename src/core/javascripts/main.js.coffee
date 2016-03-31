@@ -65,7 +65,7 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
   result = regexp.exec(navigator.userAgent)
   webkit = parseFloat(result[1]) if result
 
-  if (msie && msie <= 9) or (webkit and webkit < 537)
+  if (msie && msie <= 11) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
 

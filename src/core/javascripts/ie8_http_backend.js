@@ -10,7 +10,7 @@ angular.module('BB.Services').provider("ie8HttpBackend", function ie8HttpBackend
 
   function ieCreateHttpBackend ($browser, XHR, $browserDefer, callbacks, rawDocument, locationProtocol, sniffer, xhr) {
 
-    if ((sniffer.msie && sniffer.msie <= 9) || (sniffer.webkit && sniffer.webkit < 537)) {
+    if ((sniffer.msie && sniffer.msie <= 11) || (sniffer.webkit && sniffer.webkit < 537)) {
       //console.log("create backend");
     } else {
       return null;

@@ -258,7 +258,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     con_started = $q.defer()
     $rootScope.connection_started = con_started.promise
 
-    if (($sniffer.webkit and $sniffer.webkit < 537) || ($sniffer.msie and $sniffer.msie <= 9)) && first_call
+    if (($sniffer.webkit and $sniffer.webkit < 537) || ($sniffer.msie and $sniffer.msie <= 11)) && first_call
 
       # ie 8 hacks
       if $scope.bb.api_url
