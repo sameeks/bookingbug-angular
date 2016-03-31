@@ -736,7 +736,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name clearDateTime
     * @methodOf BB.Models:BasketItem
     * @description
-    * Clear date and time
+    * Clears the date and time.
     *
     * @returns {date} The returned clear date and time
     ###
@@ -974,7 +974,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name describe
     * @methodOf BB.Models:BasketItem
     * @description
-    * Prints the information about  a basket item.
+    * Prints the information about a basket item.
     *
     * @returns {string} A string that can contain one of these: service name, event group name and description, product name, external purchase name or deal name
     ###
@@ -1238,7 +1238,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setPackageItem
     * @methodOf BB.Models:BasketItem
     * @description
-    * Apply a package to the BasketItem
+    * Apply a package to the BasketItem.
     *
     ###
     setPackageItem: (package_item) ->
@@ -1251,7 +1251,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setBulkPurchase
     * @methodOf BB.Models:BasketItem
     * @description
-    * Apply a bulk purchase to the BasketItem
+    * Apply a bulk purchase to the BasketItem.
     *
     ###
     setBulkPurchase: (bulk_purchase) ->
@@ -1322,7 +1322,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name setPrepaidBooking
     * @methodOf BB.Models:BasketItem
     * @description
-    * Apply a prepaid booking to BasketItem
+    * Apply a prepaid booking to BasketItem.
     *
     ###
     setPrepaidBooking: (pre_paid_booking) ->
@@ -1334,7 +1334,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name hasPrepaidBooking
     * @methodOf BB.Models:BasketItem
     * @description
-    * Indicates if the basket item has a prepaid booking applied
+    * Indicates if the basket item has a prepaid booking applied.
     *
     * @returns {boolean} boolean indicating if the BasketItem has a prepaid booking
     ###
@@ -1346,7 +1346,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name getEventId
     * @methodOf BB.Models:BasketItem
     * @description
-    * Get the event id for the BasketItem
+    * Get the event id for the BasketItem.
     *
     * @returns {string} The Event ID
     ###
@@ -1363,7 +1363,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name isExternalPurchase
     * @methodOf BB.Models:BasketItem
     * @description
-    * Indicates if the BasketItem is an external purchase
+    * Indicates if the BasketItem is an external purchase.
     *
     * @returns {boolean} Flag
     ###
@@ -1391,7 +1391,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @methodOf BB.Models:BasketItem
     * @description
     * Indicates if the BasketItem is a time item (i.e. either an event
-    * or appointment booking)
+    * or appointment booking).
     *
     * @returns {boolean} Flag
     ###

@@ -345,7 +345,9 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Clie
     * @name $getPrePaidBookings
     * @methodOf BB.Models:Address
     * @description
-    * Gets the  prepaid bookingss of a client.
+    * Gets the prepaid bookingss of a client.
+    *
+    * @param {object} params params parameter
     *
     * @returns {promise} A promise that on success will return the client prepaid bookings
     ###

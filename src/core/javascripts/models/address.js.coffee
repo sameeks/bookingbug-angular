@@ -32,7 +32,7 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name addressSingleLine
     * @methodOf BB.Models:Address
     * @description
-    * Creates the full address from all the address fields as a single line and comma separated string
+    * Creates the full address from all the address fields as a single line and comma separated string.
     *
     * @returns {string} Full address
     ###
@@ -56,7 +56,7 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name hasAddress
     * @methodOf BB.Models:Address
     * @description
-    * Returns the first address, second address or the postcode if at least one of these exists
+    * Returns the first address, second address or the postcode if at least one of these exists.
     *
     * @returns {string} One of these: address1, address2 or postcode
     ###
@@ -94,7 +94,6 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @name addressMultiLine
     * @methodOf BB.Models:Address
     * @description
-    *
     * Creates the full address from all the address fields as a multiple lines string.
     *
     * @returns {string} Full address
@@ -121,11 +120,24 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * @description
     * Static function that loads an array of addresses from a company object.
     *
-    * @returns {promise} A returned promise
+    * @param {object} prms prms parameter
+    *
+    * @returns {promise} A promise that on success will return an address list
     ###
     @$query: (prms) ->
       AddressListService.query(prms)
 
+    ###**
+    * @ngdoc method
+    * @name $getAddress
+    * @methodOf BB.Models:Address
+    * @description
+    * Static function that loads an array of addresses from a company object.
+    *
+    * @param {object} prms prms parameter
+    *
+    * @returns {promise} A promise that on success will return the customer address
+    ###
     @$getAddress: (prms) ->
       AddressListService.getAddress(prms)
 

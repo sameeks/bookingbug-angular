@@ -5,7 +5,7 @@
 * @name BB.Models:Basket
 *
 * @description
-* Representation of an Basket Object
+* Representation of an Basket Object.
 *
 * @property {number} company_id Company id that the basket belongs to
 * @property {number} total_price Total price of the basket
@@ -32,6 +32,8 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @methodOf BB.Models:Basket
     * @description
     * Adds an item to the items array.
+    *
+    * @param {object} item Item that must be added
     *
     * @returns {array} Array with the newly added item
     ###
@@ -104,7 +106,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name hasTimeItems
     * @methodOf BB.Models:Basket
     * @description
-    * Indicates if the basket contains time items (i.e. event and appointment bookings)
+    * Indicates if the basket contains time items (i.e. event and appointment bookings).
     *
     ###
     hasTimeItems: ->
@@ -117,7 +119,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name basketItems
     * @methodOf BB.Models:Basket
     * @description
-    * Gets all BasketItem's that are not coupons
+    * Gets all BasketItem's that are not coupons.
     *
     * @returns {array} array of basket items
     ###
@@ -132,7 +134,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name externalPurchaseItems
     * @methodOf BB.Models:Basket
     * @description
-    * Gets all external purchases in the basket
+    * Gets all external purchases in the basket.
     *
     * @returns {array} array of external purchases
     ###
@@ -240,7 +242,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name dueTotal
     * @methodOf BB.Models:Basket
     * @description
-    * Gets the total price after checking every item if it is on the wait list.
+    * Gets the total price after checking every item if it's on the wait list.
     *
     * @returns {number} Total price
     ###
@@ -268,7 +270,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name questionPrice
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates the total question's price
+    * Calculates the total question's price.
     *
     * @returns {number} question's price
     ###
@@ -284,7 +286,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name totalPrice
     * @methodOf BB.Models:Basket
     * @description
-    * Calculates the total price of the items after coupuns have been applied.
+    * Calculates the total price of the items after the coupons have been applied.
     *
     * @param {object} options options parameter
     *
@@ -494,7 +496,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name hasExternalPurchase
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if the basket contains an external purchase
+    * Checks if the basket contains an external purchase.
     *
     * @returns {boolean} true or false
     ###
@@ -508,7 +510,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name useWallet
     * @methodOf BB.Models:Basket
     * @description
-    * Indicates if a wallet should be used for payment
+    * Indicates if a wallet should be used for payment.
+    *
+    * @param {number} value value parameter
+    * @param {object} client Client object
     *
     * @returns {boolean} true or false
     ###
@@ -520,20 +525,92 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
         @take_from_wallet = false
         return false
 
+    ###**
+    * @ngdoc method
+    * @name $applyCoupon
+    * @methodOf BB.Models:Basket
+    * @description
+    * Applies coupon discounts on the basket.
+    *
+    * @param {object} company company parameter
+    * @param {object} params params parameter
+    *
+    * @returns {promise} A returned promise
+    ###
     $applyCoupon: (company, params) ->
         BasketService.applyCoupon(company, params)
 
+    ###**
+    * @ngdoc method
+    * @name $updateBasket
+    * @methodOf BB.Models:Basket
+    * @description
+    * Updates the basket.
+    *
+    * @param {object} company company parameter
+    * @param {object} params params parameter
+    *
+    * @returns {promise} A returned promise
+    ###
     @$updateBasket: (company, params) ->
       BasketService.updateBasket(company, params)
 
+    ###**
+    * @ngdoc method
+    * @name $deleteItem
+    * @methodOf BB.Models:Basket
+    * @description
+    * Deletes an item from the basket.
+    *
+    * @param {object} item item parameter
+    * @param {object} company company parameter
+    * @param {object} params params parameter
+    *
+    * @returns {promise} A returned promise
+    ###
     $deleteItem: (item, company, params) ->
         BasketService.deleteItem(item, company, params)
 
+    ###**
+    * @ngdoc method
+    * @name $empty
+    * @methodOf BB.Models:Basket
+    * @description
+    * Empties the basket.
+    *
+    * @param {object} bb bb parameter
+    *
+    * @returns {promise} A returned promise
+    ###
     $empty: (bb) ->
         BasketService.empty (bb)
 
+    ###**
+    * @ngdoc method
+    * @name $applyDeal
+    * @methodOf BB.Models:Basket
+    * @description
+    * Applies a deal to the basket.
+    *
+    * @param {object} company company parameter
+    * @param {object} params params parameter
+    *
+    * @returns {promise} A returned promise
+    ###
     $applyDeal: (company, params) ->
         BasketService.applyDeal(company, params)
 
+    ###**
+    * @ngdoc method
+    * @name $removeDeal
+    * @methodOf BB.Models:Basket
+    * @description
+    * Removes the deal from basket.
+    *
+    * @param {object} company company parameter
+    * @param {object} params params parameter
+    *
+    * @returns {promise} A returned promise
+    ###
     $removeDeal: (company, params) ->
         BasketService.removeDeal(company, params)

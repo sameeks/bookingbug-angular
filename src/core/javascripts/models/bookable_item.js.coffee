@@ -63,6 +63,8 @@ angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel
     * @description
     * Static function that loads an array of bookable items from a company object.
     *
+    * @params {object} prms prms parameter
+    *
     * @returns {promise} A returned promise
     ###
     @$query: (prms) ->
