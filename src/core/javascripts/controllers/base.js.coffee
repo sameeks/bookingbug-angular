@@ -1128,13 +1128,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.getCurrentStepTitle = ->
-    steps = $scope.bb.steps
-
-    if !_.compact(steps).length
-      steps = $scope.bb.allSteps
-
     if $scope.bb.current_step
-        return steps[$scope.bb.current_step-1].title
+      return $scope.bb.allSteps[$scope.bb.current_step-1].title
 
   # conditionally set the title of the current step - if it doesn't have one
   $scope.checkStepTitle = (title) ->
