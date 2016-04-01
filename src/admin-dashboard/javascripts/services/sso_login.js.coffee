@@ -22,7 +22,7 @@ angular.module('BB').factory 'AdminSsoLoginUrl', [
 * Responsible for loging in the admin user via the sso token
 *
 * @property {string} sso_token The sso_token to be used
-* @property {function} callback (optional) funtion to be called after the successfull login, receives UserAdmin obj as input 
+* @property {function} callback (optional) funtion to be called after the successfull login, receives UserAdmin (BaseResource) obj as input 
 ###
 angular.module('BB').factory 'AdminSsoLogin', [
   'halClient', 'AdminSsoLoginUrl',
