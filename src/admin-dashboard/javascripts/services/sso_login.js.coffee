@@ -6,11 +6,11 @@
 * Returns the complete url for admin sso login
 ###
 angular.module('BB').factory 'AdminSsoLoginUrl', [
-  '$rootScope', 'base_company_id',
-  ($rootScope, base_company_id) ->
+  '$rootScope', 'company_id',
+  ($rootScope, company_id) ->
     # Make sure we dont override the company id if its already set
     if not $rootScope.bb.companyId?
-      $rootScope.bb.companyId |= base_company_id
+      $rootScope.bb.companyId |= company_id
     "#{$rootScope.bb.api_url}/api/v1/login/admin_sso/#{$rootScope.bb.companyId}"
 ]
 
