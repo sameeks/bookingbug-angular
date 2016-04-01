@@ -152,7 +152,6 @@
   "CLIENT_DETAILS_INSTRUCTION":"Recherche d'un client ou en créer un nouveau",
   "CLIENT_DETAILS_SEARCH":"Recherche d'un client",
   "CLIENT_DETAILS_SEARCH_BY_NAME_OR_EMAIL":"Recherche par nom ou Email",
-  "CLIENT_DETAILS_SEARCH_ERROR":"Désolé, votre recherche doit être plus de 3 caractères",
   "CLIENT_DETAILS_FIRST_NAME":"Saisir le prénom du client",
   "CLIENT_DETAILS_FIRST_NAME":"Saisir le prénom du client",
   "CLIENT_DETAILS_LAST_NAME":"Saisir le nom du client",
