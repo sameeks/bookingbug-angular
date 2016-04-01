@@ -6,11 +6,15 @@
 * Returns the complete url for admin sso login
 ###
 angular.module('BB').factory 'AdminSsoLoginUrl', [
-  '$rootScope', 'company_id',
-  ($rootScope, company_id) ->
+  '$rootScope', 'company_id', '$exceptionHandler',
+  ($rootScope, company_id, $exceptionHandler) ->
     # Make sure we dont override the company id if its already set
     if not $rootScope.bb.companyId?
       $rootScope.bb.companyId |= company_id
+
+    if not $rootScope.bb.companyId 
+      $exceptionHandler(new Error('Angular value "company_id" is undefined! '))
+        
     "#{$rootScope.bb.api_url}/api/v1/login/admin_sso/#{$rootScope.bb.companyId}"
 ]
 
@@ -26,12 +30,12 @@ angular.module('BB').factory 'AdminSsoLoginUrl', [
 ###
 angular.module('BB').factory 'AdminSsoLogin', [
   'halClient', 'AdminSsoLoginUrl',
-  (halClient, SsoLoginUrl) ->
+  (halClient, AdminSsoLoginUrl) ->
     return (sso_token, callback)->
       data = {
         token: sso_token
       }
-      halClient.$post(SsoLoginUrl, {}, data).then (login) ->
+      halClient.$post(AdminSsoLoginUrl, {}, data).then (login) ->
         params = {auth_token: login.auth_token}
         login.$get('administrator', params).then (admin) ->
           if typeof callback == 'function'

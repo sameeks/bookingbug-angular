@@ -41,8 +41,8 @@ angular.module('BBAdminDashboard').config ($idleProvider, idleStart, idleTimeout
   $idleProvider.warningDuration(idleTimeout)
 
 # Default values (expect to be overriden in bespoke) 
-angular.module('BBAdminDashboard').value 'company_id', '37000'
-angular.module('BBAdminDashboard').value('sso_token', false);
+angular.module('BBAdminDashboard').value 'company_id', null
+angular.module('BBAdminDashboard').value 'sso_token', false
 
 angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) ->
   $stateProvider.root_state = "dashboard"
@@ -60,7 +60,6 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
               AdminSsoLogin sso_token, (admin)->
                 AdminLoginService.setLogin admin
                 defer.resolve()  
-
             else 
               defer.resolve()   
 
