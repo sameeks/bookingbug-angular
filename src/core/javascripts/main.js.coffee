@@ -12,7 +12,7 @@ app = angular.module('BB', [
   'ui.bootstrap',
   'ngSanitize',
   'ui.map',
-  'ui.router.util', 
+  'ui.router.util',
   'ngLocalData',
   'ngAnimate',
   'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
@@ -32,6 +32,13 @@ app = angular.module('BB', [
 app.value('AppConfig', {
   appId: 'f6b16c23',
   appKey: 'f0bc4f65f4fbfe7b4b3b7264b655f5eb'
+})
+
+# airbrake-js authentication
+app.value('AirbrakeConfig', {
+  projectId: '',
+  projectKey: '',
+  environment: ''
 })
 
 if (window.use_no_conflict)
