@@ -205,7 +205,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: "Your account appears to be disabled. Please contact the business you're booking with if the problem persists."
     },
     {
-      key: 'FB_LOGIN_FAILED',
+      key: 'FB_LOGIN_NOT_A_MEMBER',
       type: 'warning',
       title: '',
       persist: true,
