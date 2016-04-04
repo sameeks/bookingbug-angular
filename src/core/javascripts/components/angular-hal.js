@@ -118,8 +118,9 @@ angular
 
 
 
-    function BaseResource(href, options, data){
+    function BaseResource(href, options, data, extra){
       if(!options) options = {};
+      if(!extra) extra = {};
       var links = {};
       var embedded = data_cache
       if (data.hasOwnProperty('auth_token')) {
@@ -217,6 +218,8 @@ angular
         }, this);
       }
 
+      if(extra.is_new) this.is_new = true;
+
       function defineHiddenProperty(target, name, value) {
         target[name] = value
 //        Object.defineProperty(target, name, {
@@ -286,12 +289,12 @@ angular
 
 
 
-    function createResource(href, options, data){
+    function createResource(href, options, data, extra){
       if(angular.isArray(data)) return data.map(function(data){
-        return createResource(href, options, data);
+        return createResource(href, options, data, extra);
       });
 
-      var resource = new BaseResource(href, options, data);
+      var resource = new BaseResource(href, options, data, extra);
 
       return resource;
 
@@ -367,7 +370,8 @@ angular
             return null;
 
             case 201:
-            if(res.data) return createResource(href, options, res.data);
+            extra = {is_new: true};
+            if(res.data) return createResource(href, options, res.data, extra);
             if(res.headers('Content-Location')) return res.headers('Content-Location');
             return null;
 
