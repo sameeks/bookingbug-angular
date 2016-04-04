@@ -52,11 +52,15 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
     .state 'root',
       template: "<div ui-view></div>"
       resolve:
-        sso: ($q, sso_token, AdminLoginService, AdminSsoLogin) ->
+        sso: ($q, sso_token, AdminLoginService, $injector) ->
           defer = $q.defer()
 
           AdminLoginService.isLoggedIn().then (loggedIn)-> 
             if not loggedIn and sso_token != false
+              # Use the injector to avoid errors for including a 
+              # service with dependencies on construct (AdminSsoLogin requires company_id value)
+              AdminSsoLogin = $injector.get 'AdminSsoLogin'
+
               AdminSsoLogin sso_token, (admin)->
                 AdminLoginService.setLogin admin
                 defer.resolve()  
