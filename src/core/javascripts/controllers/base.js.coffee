@@ -476,7 +476,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       else
         comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
         halClient.$get(comp_url, options).then (company) ->
-          comp_def.resolve(company)
+          if company
+            comp_def.resolve(company)
+          else
+            comp_def.reject("Invalid company ID #{company_id}")
         , (err) ->
           comp_def.reject(err)
 
