@@ -57,7 +57,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name print_end_time
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Shows the slot end time
+    * Shows the slot end time.
+    *
+    * @param {number} dur dur parameter
     *
     * @returns {string} End time
     ###
@@ -82,6 +84,8 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @description
     * Shows the time in h:mm format.
     *
+    * @param {boolean} show_suffix show_suffix parameter
+    *
     * @returns {string} Time
     ###
     # 12 hour time
@@ -102,6 +106,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @methodOf BB.Models:TimeSlot
     * @description
     * Shows the end time in h:mm format.
+    *
+    * @param {boolean} show_suffix show_suffix parameter
+    * @param {number} dur dur parameter
     *
     * @returns {date} End time
     ###
@@ -192,7 +199,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name status
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Gets the time slot status
+    * Gets the time slot status.
     *
     * @returns {string} Slot status
     ###
@@ -207,7 +214,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
     * @name $query
     * @methodOf BB.Models:TimeSlot
     * @description
-    * Static function that loads an array of time slots from a company object
+    * Static function that loads an array of time slots from a company object.
+    *
+    * @param {object} params params parmeter
     *
     * @returns {promise} A returned promise
     ###

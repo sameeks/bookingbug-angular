@@ -26,10 +26,10 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # http://regexlib.com/REDetails.aspx?regexp_id=260
   # uk_postcode_regex = /^([A-PR-UWYZ0-9][A-HK-Y0-9][AEHMNPRTVXY0-9]?[ABEHMNPRVWXY0-9]? {1,2}[0-9][ABD-HJLN-UW-Z]{2}|GIR 0AA)$/i
   uk_postcode_regex = /^(((([A-PR-UWYZ][0-9][0-9A-HJKS-UW]?)|([A-PR-UWYZ][A-HK-Y][0-9][0-9ABEHMNPRV-Y]?))\s{0,1}[0-9]([ABD-HJLNP-UW-Z]{2}))|(GIR\s{0,2}0AA))$/i
-  
+
   # US postcode regex used for getMailingPattern
   us_postcode_regex = /^\d{5}(?:[-\s]\d{4})?$/
-  
+
   # UK postcode regex (lenient) - this checks for a postcode like string
   # https://gist.github.com/simonwhitaker/5748487
   uk_postcode_regex_lenient = /^[A-Z]{1,2}[0-9][0-9A-Z]?\s*[0-9][A-Z]{2}$/i
@@ -85,7 +85,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   * @name getStandardPassword
   * @methodOf BB.Services:Validator
   * @description
-  * Get the email pattern
+  * Get the standard pattern.
   *
   * @returns {string} Returns Password must contain at least 7 characters and 1 number password pattern
   ###
@@ -104,7 +104,15 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   getUKPostcodePattern: () ->
     return uk_postcode_regex_lenient
 
-
+  ###**
+  * @ngdoc method
+  * @name getMailingPattern
+  * @methodOf BB.Services:Validator
+  * @description
+  * Gets the mailing pattern.
+  *
+  * @returns {regex} UK postcode pattern
+  ###
   getMailingPattern: () ->
     cc = SettingsService.getCountryCode()
     if cc = "us"
@@ -145,7 +153,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   *
   * @param {boolean} strict strict parameter
   *
-  * @returns {regex} Returns the UK mobile regex if strict parameter is not null  otherwise returns mobile regex lenient
+  * @returns {regex} Returns the UK mobile regex if strict parameter is not null otherwise returns mobile regex lenient
   ###
   getUKMobilePattern: (strict = false) ->
     return uk_mobile_regex_strict if strict
@@ -156,7 +164,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   * @name getMobilePattern
   * @methodOf BB.Services:Validator
   * @description
-  * Gets the  the mobile pattern.
+  * Gets the the mobile pattern.
   *
   * @returns {regex} Mobile regex
   ###
@@ -215,7 +223,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   * @param {object} form object
   * @param {object} prms object
   *
-  * @returns {promise} A promise for valid postocde
+  * @returns {promise} A promise for valid postcode
   ###
   validatePostcode: (form, prms) ->
     AlertService.clear()

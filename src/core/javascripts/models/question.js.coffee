@@ -74,6 +74,8 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
     * @description
     * Select price quantity if selected price has been selected.
     *
+    * @param {number} qty qty parameter
+    *
     * @returns {object} The returned selected price quantity
     ###
     selectedPriceQty: (qty) ->
@@ -111,8 +113,8 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
       @currentlyShown = true
 
     ###**
-    * @ngdoc hideElement
-    * @name showElement
+    * @ngdoc method
+    * @name hideElement
     * @methodOf BB.Models:Question
     * @description
     * Hides the element.
@@ -123,7 +125,7 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
       @currentlyShown = false
 
     ###**
-    * @ngdoc hideElement
+    * @ngdoc method
     * @name getPostData
     * @methodOf BB.Models:Question
     * @description
@@ -140,14 +142,56 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel, Base
       x.price = p if p
       x
 
+    ###**
+    * @ngdoc method
+    * @name $addAnswersByName
+    * @methodOf BB.Models:Question
+    * @description
+    * Adds the answer by name.
+    *
+    * @param {object} obj obj parameter
+    * @param {array} keys keys parameter
+    *
+    ###
     @$addAnswersByName: (obj, keys) ->
       QuestionService.addAnswersByName(obj, keys)
 
+    ###**
+    * @ngdoc method
+    * @name $addDynamicAnswersByName
+    * @methodOf BB.Models:Question
+    * @description
+    * Adds dynamic answers by name
+    *
+    * @param {array} questions questions parameter
+    *
+    ###
     @$addDynamicAnswersByName: (questions) ->
       QuestionService.addDynamicAnswersByName(questions)
 
+    ###**
+    * @ngdoc method
+    * @name $addAnswersFromDefaults
+    * @methodOf BB.Models:Question
+    * @description
+    * Adds dynamic answers by name
+    *
+    * @param {array} questions questions parameter
+    * @param {array} answers answers parameter
+    *
+    ###
     @$addAnswersFromDefaults: (questions, answers) ->
       QuestionService.addAnswersFromDefaults(questions, answers)
 
+    ###**
+    * @ngdoc method
+    * @name $checkConditionalQuestions
+    * @methodOf BB.Models:Question
+    * @description
+    * Adds dynamic answers by name
+    *
+    * @param {array} questions questions parameter
+    *
+    ###
     @$checkConditionalQuestions: (questions) ->
       QuestionService.checkConditionalQuestions(questions)

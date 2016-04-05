@@ -27,6 +27,8 @@ angular.module('BB.Models').factory "ResourceModel", ($q, BBModel, BaseModel, Re
     * @description
     * Static function that loads an array of resources from a company object.
     *
+    * @param {object} company company parameter
+    *
     * @returns {promise} A returned promise
     ###
     @$query: (company) ->

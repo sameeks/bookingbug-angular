@@ -57,6 +57,8 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @description
     * Closes the alert.
     *
+    * @param {object} alert alert object
+    *
     * @returns {array} alerts Alerts array without the alert that was closed
     ###
     closeAlert: (alert) ->
@@ -68,6 +70,8 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @methodOf BB.Services:Alert
     * @description
     * Closes the alert using the alert index.
+    *
+    * @param {number} index index parameter
     *
     * @returns {array} alerts Alerts array without the alert that was closed
     ###
@@ -110,7 +114,7 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     *
     * @param {object} alert alert object
     *
-    * @returns {array} Dnger alert
+    * @returns {array} Danger alert
     ###
     danger: (alert) ->
       return if !alert
@@ -154,6 +158,8 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @description
     * Success alert
     *
+    * @param {object} alert alert object
+    *
     * @returns {array} The returned warning alert
     ###
     success: (alert) ->
@@ -167,9 +173,9 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @name raise
     * @methodOf BB.Services:Alert
     * @description
-    * Raise alert
+    * Raises an alert.
     *
-    * @param {object} alert alert object
+    * @param {number} key key parameter
     *
     * @returns {array} Raise alert
     ###

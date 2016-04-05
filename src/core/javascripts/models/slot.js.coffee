@@ -26,6 +26,9 @@ angular.module('BB.Models').factory "SlotModel", ($q, BBModel, BaseModel, SlotSe
       * @description
       * Static function that loads an array of slot from a company object.
       *
+      * @param {object} company company parameter
+      * @param {object} params params parameter
+      *
       * @returns {promise} A returned promise
       ###
      @$query: (company, params) ->

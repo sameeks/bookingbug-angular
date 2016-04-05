@@ -8,8 +8,17 @@
 
 angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $rootScope, AlertService, ErrorService) ->
 
-  # create a trackable loader - this in theory allows multiple trackable loading objects in a scope - meaning we're not tied to a per-scope faction
-  # currently it's still just using the scope to store the status, but we're encapsulating it away so that we can change it later
+  ###**
+  * @ngdoc method
+  * @name setLoaded
+  * @methodOf BB.Services:Loading
+  * @description
+  * Vreate a trackable loader - this in theory allows multiple trackable loading objects in a scope - meaning we're not tied to a per-scope faction. <br/> Currently it's still just using the scope to store the status, but we're encapsulating it away so that we can change it later.
+  *
+  * @param {object} cscope cscope parameter
+  *
+  * @returns {object} item Newly created item object
+  ###
   $loader: (scope) ->
     lservice = @
     item = {
@@ -88,7 +97,7 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
   *
   * @returns {boolean} Returns false of true
   ###
-  # go around schild scopes - return false if *any* child scope is marked as
+  # go around child scopes - return false if *any* child scope is marked as
   # isLoaded = false
   areScopesLoaded: (cscope) ->
     if cscope.hasOwnProperty('isLoaded') && !cscope.isLoaded

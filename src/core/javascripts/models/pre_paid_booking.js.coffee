@@ -20,7 +20,17 @@ angular.module('BB.Models').factory "PrePaidBookingModel", ($q, BBModel, BaseMod
       # TODO remove once api updated to not return expired prepaid bookings
       @expired = (@book_by and moment().isAfter(@book_by, 'day')) or (@use_by and moment().isAfter(@use_by, 'day')) or false
 
-
+    ###**
+    * @ngdoc method
+    * @name checkValidity
+    * @methodOf BB.Models:PrePaidBooking
+    * @description
+    * Checks the prepaid booking validity.
+    *
+    * @param {object} item item object
+    *
+    * @returns {boolean} True or false
+    ###
     checkValidity: (item) ->
       if @service_id && item.service_id && @service_id != item.service_id
         false
