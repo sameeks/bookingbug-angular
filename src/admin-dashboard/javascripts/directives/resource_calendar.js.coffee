@@ -3,7 +3,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     AdminPersonService, $q, $sessionStorage, ModalForm, BBModel,
     AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,
     $timeout, $compile, $templateCache, BookingCollections, PrePostTime,
-    AdminScheduleService, $filter) ->
+    AdminScheduleService, $filter, $state) ->
 
   controller = ($scope, $attrs) ->
     $scope.eventSources = [
@@ -158,9 +158,16 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
       $scope.getCompanyPromise().then (company) ->
         params = {company: company}
         AdminPersonService.query(params).then (people) ->
+          $scope.people = []
           $scope.loading = false
-          $scope.people = _.sortBy people, 'name'
-          p.title = p.name for p in $scope.people
+          # If resourceId is part of the state params, remove all other resources from the list
+          if $state.params.resourceId? and $state.params.resourceId != '' and (person = _.findWhere(people, {id : parseInt($state.params.resourceId)}))?
+            $scope.people.push person
+          else
+            $scope.people = _.sortBy people, 'name'
+
+          p.title = p.name for p in $scope.people     
+         
           uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
           callback($scope.people)
 

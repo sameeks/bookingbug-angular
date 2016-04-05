@@ -12,6 +12,11 @@ angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window,
 
     uri = new UriTemplate(href).fillFromObject(prms || {})
     deferred = $q.defer()
+
+    # If params flush is bool true clear cash before attempting to resolve the resource
+    if prms.flush
+      halClient.clearCache(uri)
+
     halClient.$get(uri, {}).then  (resource) =>
       if resource.$has('clients')
         resource.$get('clients').then (items) =>

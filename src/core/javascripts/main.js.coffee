@@ -34,6 +34,13 @@ app.value('AppConfig', {
   appKey: 'f0bc4f65f4fbfe7b4b3b7264b655f5eb'
 })
 
+# airbrake-js authentication
+app.value('AirbrakeConfig', {
+  projectId: '34693',
+  projectKey: 'b4174c79b8b7dfb0111e45aa35c95b71',
+  environment: ''
+})
+
 if (window.use_no_conflict)
   window.bbjq = $.noConflict()
   app.value '$bbug', jQuery.noConflict(true)

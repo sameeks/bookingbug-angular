@@ -29,7 +29,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       date = moment().subtract(1, 'year')
     params =
       start_date: date.format('YYYY-MM-DD')
-      end_date: moment().format('YYYY-MM-DD')
+      end_date: moment().add(1,'day').format('YYYY-MM-DD')
     getBookings(params).then (past_bookings) ->
 
       $scope.past_bookings = _.chain(past_bookings)

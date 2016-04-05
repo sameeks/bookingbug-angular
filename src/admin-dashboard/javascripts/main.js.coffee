@@ -40,6 +40,10 @@ angular.module('BBAdminDashboard').config ($idleProvider, idleStart, idleTimeout
   $idleProvider.idleDuration(idleStart)
   $idleProvider.warningDuration(idleTimeout)
 
+# Default values (expect to be overriden in bespoke) 
+angular.module('BBAdminDashboard').value 'company_id', null
+angular.module('BBAdminDashboard').value 'sso_token', false
+
 angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) ->
   $stateProvider.root_state = "dashboard"
 
@@ -48,7 +52,24 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
     .state 'root',
       template: "<div ui-view></div>"
       resolve:
-        user: ($q, AdminLoginService, $timeout, $state) ->
+        sso: ($q, sso_token, AdminLoginService, $injector) ->
+          defer = $q.defer()
+
+          AdminLoginService.isLoggedIn().then (loggedIn)-> 
+            if not loggedIn and sso_token != false
+              # Use the injector to avoid errors for including a 
+              # service with dependencies on construct (AdminSsoLogin requires company_id value)
+              AdminSsoLogin = $injector.get 'AdminSsoLogin'
+
+              AdminSsoLogin sso_token, (admin)->
+                AdminLoginService.setLogin admin
+                defer.resolve()  
+            else 
+              defer.resolve()   
+
+          defer.promise  
+
+        user: ($q, AdminLoginService, $timeout, $state, sso) ->
           defer = $q.defer()
           AdminLoginService.user().then (user) ->
             if user

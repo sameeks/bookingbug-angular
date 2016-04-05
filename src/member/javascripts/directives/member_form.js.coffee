@@ -6,6 +6,8 @@ angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, Me
     scope:
       apiUrl: '@'
       member: '='
+      onSuccessSave: '='
+      onFailSave: '='
     link: (scope, element, attrs) ->
 
       $rootScope.bb ||= {}
@@ -34,6 +36,12 @@ angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, Me
         $scope.member.$put('self', {}, form).then (member) ->
           $scope.loading = false
           AlertService.raise('UPDATE_SUCCESS')
+
+          if typeof $scope.onSuccessSave == 'function'
+            $scope.onSuccessSave()
         , (err) ->
           $scope.loading = false
           AlertService.raise('UPDATE_FAILED')
+
+          if typeof $scope.onFailSave == 'function'
+            $scope.onFailSave()

@@ -1,4 +1,5 @@
 angular.module('BB.Services').factory "CompanyService",  ($q, halClient, BBModel) ->
+  
   query: (company_id, options) ->
     options['root'] ||= ""
     url = options['root'] + "/api/v1/company/" + company_id
