@@ -330,11 +330,12 @@ angular
 
     function callService(method, href, options, data){
       if(!options) options = {};
-      headers = {
-        'Authorization': options.authorization
-        , 'Content-Type': 'application/json'
-        , 'Accept': 'application/hal+json,application/json'
-      }
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/hal+json,application/json'
+      };
+      if(options.authorization)
+        headers.Authorization = options.authorization;
       if (options.app_id) shared_header.set('app_id', options.app_id, $sessionStorage);
       if (options.app_key) shared_header.set('app_key', options.app_key, $sessionStorage);
       if (options.auth_token) {
