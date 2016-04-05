@@ -366,7 +366,8 @@ angular
           }
           switch(res.status){
             case 200:
-            if(res.data) return createResource(href, options, res.data);
+            //For back-ends that return `"null"` instead of `null` -_-
+            if(res.data && res.data !== '"null"') return createResource(href, options, res.data);
             return null;
 
             case 201:
