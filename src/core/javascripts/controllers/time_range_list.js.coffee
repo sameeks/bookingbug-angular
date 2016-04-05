@@ -34,8 +34,6 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
   priority: 1
   controller : 'TimeRangeList'
 
-
-# TODO Get the add/subtract functions to respect the current time range. Get the time range length to adjust if display mode is preset
 angular.module('BB.Controllers').controller 'TimeRangeList',
 ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, DateTimeUlititiesService) ->
 
@@ -107,7 +105,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     else if $scope.selected_day
       $scope.original_start_date = $scope.original_start_date or moment($scope.selected_day)
       setTimeRange($scope.selected_day)
-    # set the time range as today, showing the current week
+    # set the time range to show the current week
     else
       $scope.start_at_week_start = true
       setTimeRange(moment())
