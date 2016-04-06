@@ -1,13 +1,30 @@
+###
+* @ngdoc directive
+* @name BBMember.directive:memberForm
+* @scope
+* @restrict E
+*
+* @description
+* Member form, validates & submits a form that represents a member/client
+*
+* @param {string}    apiUrl              Expexts to be bled through the scope (MUST FIX)
+* @param {object}    member              Member object
+* @param {function}  onSuccessSave       On save success callback
+* @param {function}  onFailSave          On save fail callback
+* @param {function}  onValidationError   On validation fail callback
+*
+###
 angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, MemberLoginService,MemberBookingService, AlertService) ->
     template: """
-<form sf-schema="schema" sf-form="form" sf-model="member"
-  ng-submit="submit(member)" ng-hide="loading"></form>
+<form sf-schema="schema" name="memberForm" sf-form="form" sf-model="member"
+  ng-submit="submit(memberForm, member)" ng-hide="loading"></form>
     """
     scope:
       apiUrl: '@'
       member: '='
       onSuccessSave: '='
       onFailSave: '='
+      onValidationError: '='
     link: (scope, element, attrs) ->
 
       $rootScope.bb ||= {}
@@ -31,17 +48,24 @@ angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, Me
               $scope.schema = member_schema.schema
               $scope.loading = false
 
-      $scope.submit = (form) ->
-        $scope.loading = true
-        $scope.member.$put('self', {}, form).then (member) ->
-          $scope.loading = false
-          AlertService.raise('UPDATE_SUCCESS')
+      $scope.submit = (form, data) ->
+        # Required for the fields to validate themselves
+        $scope.$broadcast('schemaFormValidate')
 
-          if typeof $scope.onSuccessSave == 'function'
-            $scope.onSuccessSave()
-        , (err) ->
-          $scope.loading = false
-          AlertService.raise('UPDATE_FAILED')
+        if (form.$valid)
+          $scope.loading = true
+          $scope.member.$put('self', {}, data).then (member) ->
+            $scope.loading = false
+            AlertService.raise('UPDATE_SUCCESS')
 
-          if typeof $scope.onFailSave == 'function'
-            $scope.onFailSave()
+            if typeof $scope.onSuccessSave == 'function'
+              $scope.onSuccessSave()
+          , (err) ->
+            $scope.loading = false
+            AlertService.raise('UPDATE_FAILED')
+
+            if typeof $scope.onFailSave == 'function'
+              $scope.onFailSave()
+        else 
+          if typeof $scope.onValidationError == 'function'
+              $scope.onValidationError()      
