@@ -13,6 +13,8 @@ module.exports = (config) ->
       'src/core/javascripts/post_message.js'
       'src/core/javascripts/schema_form_config.js.coffee'
       'src/*/javascripts/**/*.js.coffee'
+      'src/core/templates/*.html'
+      'src/public-booking/templates/*.html'
     ]
 
     exclude: [
@@ -21,6 +23,7 @@ module.exports = (config) ->
 
     preprocessors: {
       '**/*.coffee': ['coffee']
+      '**/*.html': ['ng-html2js']
     }
 
     reporters: ['progress']
@@ -36,3 +39,10 @@ module.exports = (config) ->
     browsers: ['PhantomJS']
 
     singleRun: false
+
+    ngHtml2JsPreprocessor:
+      cacheIdFromPath: (filepath) ->
+        splittedPath = filepath.split('/')
+        splittedPath[splittedPath.length - 1]
+      moduleName: 'templates'
+    
