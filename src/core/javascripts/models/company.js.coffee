@@ -24,7 +24,7 @@
 
 
 # helpful functions about a company
-angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, halClient, AppConfig, $sessionStorage, CompanyService) ->
+angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, halClient, AppConfig, $sessionStorage, CompanyService, AddressListService) ->
 
   class Company extends BaseModel
 
@@ -170,3 +170,6 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
 
     @$query: (company_id, options) ->
       CompanyService.query(company_id, options)
+
+    $getAddress: (prms) ->
+      AddressListService.getAddress(prms)

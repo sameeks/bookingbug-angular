@@ -59,12 +59,12 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
         checkread.reject()
         return false
 
-    loader = LoadingService.$loader($scope).notLoaded()
+    $scope.notLoaded $scope
 
     $q.all(ready_list).then () ->
-      loader.setLoaded()
+      $scope.setLoaded $scope
       checkread.resolve()
-    , (err) ->  loader.setLoaded()
+    , (err) ->  $scope.setLoaded $scope
     return true
 
   ###**

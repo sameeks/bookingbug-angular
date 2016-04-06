@@ -277,7 +277,11 @@ angular.module('BB.Controllers').controller 'EventList',
         item.spaces_left = item.getSpacesLeft()
 
       # Add address prop from the company to the item
-      $scope.bb.company.$getAddress().then (address) ->
+      $scope.bb.company.$getAddress(
+        company : $scope.bb.company,
+        id : $scope.bb.orginal_company_id
+      )
+      .then (address) ->
         for item in $scope.items
           item.address = address
 
