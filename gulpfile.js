@@ -32,7 +32,7 @@ gulp.task('list', function() {
     .pipe(filelog())
 });
 
-gulp.task('javascripts', function() {
+gulp.task('javascripts', function(cb) {
   javascripts = gulp.src(mainBowerFiles({filter: new RegExp('.js$')}).concat([
         './bower_components/moment/locale/en-gb.js',
         './bower_components/lodash/dist/lodash.js',
@@ -62,7 +62,8 @@ gulp.task('javascripts', function() {
     .pipe(concat('bookingbug-angular.js'))
     .pipe(gulpif(argv.env != 'development' && argv.env != 'dev',
             uglify({mangle: false}))).on('error', gutil.log)
-    .pipe(gulp.dest('release'));
+    .pipe(gulp.dest('release'))
+    .on('end', cb);
 });
 
 gulp.task('images', function() {
@@ -178,10 +179,8 @@ gulp.task('unit-tests', ['dependencies'], function (done) {
     singleRun: true
   }, done).start();
 });
-var wait = require('gulp-wait');
-gulp.task('e2e-tests', ['webserver'], function(cb) {
+gulp.task('e2e-tests', ['assets', 'webserver'], function(cb) {
   gulp.src(['e2e_tests.js.coffee'])
-    .pipe(wait(5000))
     .pipe(protractor({
       configFile: 'protractor.conf.js'
     }))
