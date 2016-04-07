@@ -42,13 +42,13 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q, $
     if id and !$scope.bb.total
       PurchaseService.query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
         $scope.total = total
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
         # emit checkout:success event if the amount paid matches the total price
         $scope.$emit("checkout:success", total) if total.paid == total.total_price
     else
       $scope.total = $scope.bb.total
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
       # emit checkout:success event if the amount paid matches the total price
       $scope.$emit("checkout:success", $scope.total) if $scope.total.paid == $scope.total.total_price

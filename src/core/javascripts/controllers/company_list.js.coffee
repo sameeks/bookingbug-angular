@@ -19,7 +19,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs, LoadingService) ->
   , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
-    
+
     $scope.companies = $scope.bb.company.companies
     if !$scope.companies || $scope.companies.length == 0
       $scope.companies = [$scope.bb.company]
@@ -142,9 +142,9 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
         loc = ValidatorService.getGeocodeResult().geometry.location
         $scope.selectItem($scope.getNearestCompany({center: loc}))
       ,(err) ->
-        $scope.setLoaded($scope)
+        loader.setLoaded()
     else
-      $scope.setLoaded($scope)
+      loader.setLoaded()
 
   ###**
   * @ngdoc method

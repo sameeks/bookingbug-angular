@@ -6,13 +6,13 @@ angular.module('BB').directive 'bbMemberLogin', (PathSvc) ->
       PathSvc.directivePartial "_member_login_form"
     else
       PathSvc.directivePartial "_member_login_schema_form"
-  
 
-angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService, ValidatorService) ->
+
+angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService, ValidatorService, LoadingService) ->
 
   $scope.login_form = {}
-
   $scope.validator = ValidatorService
+  loader = LoadingService.$loader($scope)
 
   $rootScope.connection_started.then () ->
 
@@ -21,7 +21,7 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootS
       if $scope.bb.destination
         $scope.redirectTo($scope.bb.destination)
       else
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.decideNextPage()
     else
       halClient.$get("#{$scope.bb.api_url}/api/v1").then (root) ->

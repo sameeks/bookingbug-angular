@@ -1,5 +1,5 @@
 angular.module('BBAdminServices').directive 'resourceTable',
-($modal, $log, ModalForm, AdminCompanyService) ->
+($modal, $log, ModalForm, AdminCompanyService, BBModel) ->
 
   controller = ($scope) ->
 
