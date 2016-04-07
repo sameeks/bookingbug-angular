@@ -9,20 +9,23 @@
 * the Use of Moment.js in the App and Date in the pickers 
 *
 * @param {object}  date   A moment.js date object
-* @param {boolean}  showMeridian   Switch to show/hide meridian
+* @param {boolean}  showMeridian   Switch to show/hide meridian (optional, default:false)
 * @param {number}  minuteStep Step for the timepicker (optional, default:10)
 ###
 angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
   scope: 
     date: '='
-    showMeridian: '='
+    showMeridian: '=?'
     minuteStep: '=?'
   restrict: 'A'
   templateUrl : (element, attrs) ->
     PathSvc.directivePartial "_datetime_picker"
-  controller: ($scope, $filter, $timeout) ->
+  controller: ($scope, $filter, $timeout, GeneralOptions) ->
     # Default minuteStep value
-    $scope.minuteStep = 10 if not $scope.minuteStep or typeof $scope.minuteStep == 'undefined'
+    $scope.minuteStep = GeneralOptions.calendar_minute_step if not $scope.minuteStep or typeof $scope.minuteStep == 'undefined'
+
+    # Default showMeridian value
+    $scope.showMeridian = GeneralOptions.twelve_hour_format if not $scope.showMeridian or typeof $scope.showMeridian == 'undefined'
 
     # Watch for changes in the timepicker and reassemble the new datetime
     $scope.$watch 'datetimeWithNoTz', (newValue, oldValue) ->
