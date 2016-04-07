@@ -4,12 +4,11 @@
 * @name BB.Models:PurchaseCourseBooking
 *
 * @description
-* Representation of an Purchase Course Booking Object
+* Representation of an PurchaseCourseBooking Object
 *
-* @property {integer} price The booking price
-* @property {integer} paid Booking paid
+* @property {number} price The booking price
+* @property {number} paid Booking paid
 ####
-
 
 angular.module('BB.Models').factory "Purchase.CourseBookingModel", ($q, BBModel, BaseModel) ->
 
@@ -22,9 +21,9 @@ angular.module('BB.Models').factory "Purchase.CourseBookingModel", ($q, BBModel,
     * @name getBookings
     * @methodOf BB.Models:PurchaseCourseBooking
     * @description
-    * Get bookings
+    * Gets the purchase bookings.
     *
-    * @returns {Promise} Returns a promise that resolve the getting bookings
+    * @returns {Promise} A promise that on success will return an array of purchase bookings
     ###
     getBookings: =>
       defer = $q.defer()

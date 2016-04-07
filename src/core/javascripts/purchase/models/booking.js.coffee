@@ -5,7 +5,7 @@
 * @name BB.Models:PurchaseBooking
 *
 * @description
-* Representation of an Purchase Booking Object
+* Representation of an PurchaseBooking Object
 *
 * @property {boolean} ready Verify if booking is ready for purchase or not
 * @property {date} datetime The booking date and time
@@ -37,7 +37,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name getGroup
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Get group if that have an event group on specified date
+    * Gets the event group.
     *
     * @returns {object} Returns the group
     ###
@@ -53,7 +53,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name getColour
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Get the group colour
+    * Gets the group colour.
     *
     * @returns {string} Returns the colour
     ###
@@ -68,7 +68,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name getCompany
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Get the company
+    * Gets the company.
     *
     * @returns {object} Returns the comapny
     ###
@@ -84,9 +84,9 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name $getAnswers
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Get the answers promise
+    * Static function that gets the answers
     *
-    * @returns {Promise} Returns a promise that resolve the getting answers promise
+    * @returns {Promise} A promise that on success will return an array of answers
     ###
     $getAnswers: () =>
       defer = $q.defer()
@@ -107,9 +107,9 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name $getSurveyAnswers
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Get the survey answers promise
+    * Static function that gets the survey answers.
     *
-    * @returns {Promise} Returns a promise that resolve the getting survey answers promise
+    * @returns {Promise} A promise that on success will return an array of survey answers
     ###
     $getSurveyAnswers: () =>
       defer = $q.defer()
@@ -128,7 +128,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @methodOf BB.Models:PurchaseBooking
     * @param {string} q The question
     * @description
-    * Verify if answers have text or not in according of the q parameter
+    * Verifies if answers have text or not in according of the q parameter.
     *
     * @returns {string} Returns question text or null
     ###
@@ -148,9 +148,9 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name getPostData
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Get post data
+    * Gets the post data.
     *
-    * @returns {object} Returns data
+    * @returns {object} Returns newwly created data object
     ###
     getPostData: () ->
 
@@ -216,7 +216,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name checkReady
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Checks if booking is ready
+    * Checks if the booking is ready.
     *
     * @returns {boolean} Returns true if booking is ready
     ###
@@ -229,9 +229,9 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name printed_price
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Print the price of the booking
+    * Prints the booking price.
     *
-    * @returns {integer} Returns the price of booking
+    * @returns {number} Returns the price of booking
     ###
     printed_price: () ->
       return "£" + parseInt(@price) if parseFloat(@price) % 1 == 0
@@ -242,7 +242,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name getDateString
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Get date in string format
+    * Gets the date in string format.
     *
     * @returns {string} Returns the date in ISO format
     ###
@@ -254,9 +254,9 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name getTimeInMins
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Get time in minutes
+    * Gets the time in minutes.
     *
-    * @returns {integer} Returns the time of day in total minutes
+    * @returns {number} Returns the time of day in total minutes
     ###
     # return the time of day in total minutes
     getTimeInMins: () ->
@@ -267,7 +267,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @name getAttachments
     * @methodOf BB.Models:PurchaseBooking
     * @description
-    * Get the attachments
+    * Gets the attachments.
     *
     * @returns {array} Returns the attachments
     ###
@@ -294,10 +294,19 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
     * @description
     * Static function that updated an array of booking from a company object
     *
-    * @returns {promise} A returned promise
+    * @returns {promise} A promise that on success will return the updated purchase booking object
     ###
     @$update: (booking) ->
       PurchaseBookingService.update(booking)
 
+    ###**
+    * @ngdoc method
+    * @name isEvent
+    * @methodOf BB.Models:PurchaseBooking
+    * @description
+    * Checks if the booking is an event chain.
+    *
+    * @returns {boolean} True or false
+    ###
     isEvent: () ->
       return @event_chain?

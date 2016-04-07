@@ -7,9 +7,9 @@
 * @description
 * Representation of an Purchase Total Object
 *
-* @property {integer} total_price The total price of booking
-* @property {integer} price Booking price
-* @propertu {integer} paid The booking paid
+* @property {number} total_price The total price of booking
+* @property {number} price Booking price
+* @propertu {number} paid The booking paid
 ####
 
 angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel, BaseModel, $sce, PurchaseService) ->
@@ -29,9 +29,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name id
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the client id
+    * Gets the client id.
     *
-    * @returns {integer} Returns the client id
+    * @returns {number} Returns the client id
     ###
     id: ->
       @get('id')
@@ -41,7 +41,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name icalLink
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the ical link
+    * Gets the ical link.
     *
     * @returns {string} Returns the ical link
     ###
@@ -53,7 +53,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name webcalLink
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the web cal link
+    * Gets the web cal link.
     *
     * @returns {string} Returns the web cal link
     ###
@@ -65,7 +65,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name gcalLink
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the gcal link
+    * Gets the gcal link.
     *
     * @returns {string} Returns the gcal link
     ###
@@ -77,9 +77,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name getItems
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the booking items
+    * Gets the booking items.
     *
-    * @returns {Promise} Returns a promise that resolve the getting items
+    * @returns {Promise} A promise that on success will return the items
     ###
     getItems: =>
       defer = $q.defer()
@@ -100,9 +100,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name getBookings
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the bookings promise
+    * Gets the bookings.
     *
-    * @returns {Promise} Returns a promise that resolve the getting booking promise
+    * @returns {Promise} Returns a promise that on success will return an array of bookings
     ###
     $getBookings: =>
       defer = $q.defer()
@@ -121,9 +121,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name getCourseBookings
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the course bookings promise
+    * Gets the course bookings.
     *
-    * @returns {Promise} Returns a promise that resolve the getting course booking promise
+    * @returns {Promise} A promise that on success will return the course bookings
     ###
     $getCourseBookings: =>
       defer = $q.defer()
@@ -142,9 +142,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name getPackages
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the packages
+    * Gets the packages.
     *
-    * @returns {Promise} Returns a promise that resolve the getting packages
+    * @returns {Promise} A promise that on success will return the packages
     ###
     getPackages: =>
       defer = $q.defer()
@@ -162,9 +162,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name getProducts
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the products
+    * Gets the products.
     *
-    * @returns {Promise} Returns a promise that resolve the getting products
+    * @returns {Promise} A promise that on success will return the products
     ###
     getProducts: =>
       defer = $q.defer()
@@ -182,9 +182,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name getDeals
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the deals
+    * Gets the deals.
     *
-    * @returns {Promise} Returns a promise that resolve the getting deals
+    * @returns {Promise} A promise that on success will return the deals
     ###
     getDeals: =>
       defer = $q.defer()
@@ -201,12 +201,13 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @ngdoc method
     * @name getMessages
     * @methodOf BB.Models:PurchaseTotal
-    * @param {string} booking_texts The booking texts
-    * @param {array} msg_type An array with types of the messages
     * @description
-    * Get the messages in according of the booking_text and msg_type parameters
+    * Gets the messages.
     *
-    * @returns {Promise} Returns a promise that resolve the getting messages
+    * @param {array} booking_texts booking_texts parameter
+    * @param {array} msg_type msg_type parameter
+    *
+    * @returns {Promise} A promise that on success will return an array of messages
     ###
     getMessages: (booking_texts, msg_type) =>
       defer = $q.defer()
@@ -230,9 +231,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name getClient
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the client
+    * Gets the client.
     *
-    * @returns {Promise} Returns a promise that resolve the getting client
+    * @returns {Promise} A promise that on success will return an client object
     ###
     getClient: =>
       defer = $q.defer()
@@ -244,6 +245,15 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.reject('No client')
       defer.promise
 
+    ###**
+    * @ngdoc method
+    * @name getConfirmMessages
+    * @methodOf BB.Models:PurchaseTotal
+    * @description
+    * Gets the member.
+    *
+    * @returns {Promise} A promise that on success will return an member object
+    ###
     getMember: =>
       defer = $q.defer()
       if @_data.$has('member')
@@ -259,9 +269,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name getConfirmMessages
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Get the confirm messages
+    * Gets the confirm messages.
     *
-    * @returns {Promise} Returns a promise that resolve the getting confirm messages
+    * @returns {Promise} A promise that on success will return the confirm messages
     ###
     getConfirmMessages: () =>
       defer = $q.defer()
@@ -278,9 +288,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name printed_total_price
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Print the total price of booking
+    * Prints the booking total price.
     *
-    * @returns {integer} Returns the total price of booking
+    * @returns {number} Returns the total booking price
     ###
     printed_total_price: () ->
       return "£" + parseInt(@total_price) if parseFloat(@total_price) % 1 == 0
@@ -291,7 +301,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name newPaymentUrl
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Create a new payment url
+    * Creates a new payment url.
     *
     * @returns {string} Returns the new payment url
     ###
@@ -304,9 +314,9 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name totalDuration
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * The total duration of booking
+    * Gets the booking total duration.
     *
-    * @returns {integer} Returns the duration
+    * @returns {number} Total duration
     ###
     totalDuration: () ->
       duration = 0
@@ -319,7 +329,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name containsWaitlistItems
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Create an array what cointains wait list item
+    * Creates an array that cointains the wait list items.
     *
     * @returns {array} Returns the wait list items
     ###
@@ -335,9 +345,11 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     * @name $query
     * @methodOf BB.Models:PurchaseTotal
     * @description
-    * Static function that updated an array of total booking from a company object
+    * Static function that loads the total purchase object.
     *
-    * @returns {promise} A returned promise
+    * @param {object} params params
+    *
+    * @returns {promise} A promise that on success will return an array of total bookings
     ###
     @$query: (params) ->
       PurchaseService.update(params)
