@@ -3,10 +3,9 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     AdminPersonService, $q, $sessionStorage, ModalForm, BBModel,
     AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,
     $timeout, $compile, $templateCache, BookingCollections, PrePostTime,
-    AdminScheduleService) ->
+    AdminScheduleService, $filter, $state) ->
 
   controller = ($scope, $attrs) ->
-
     $scope.eventSources = [
       events: (start, end, timezone, callback) ->
         $scope.loading = true
@@ -20,6 +19,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             for b in bookings.items
               b.resourceId = b.person_id
               b.useFullTime()
+              b.title = labelAssembly(b)
             $scope.bookings = bookings.items
             callback($scope.bookings)
     ,
@@ -29,6 +29,38 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
             callback(events)
     ]
 
+    labelAssembly = (event)->
+      # if labelAssembler attribute not defined or event is "block" return the normal title
+      return event.title if not $scope.labelAssembler? || event.status == 3
+      # if label-assembler attr is provided it needs to be inline with the following RegExp
+      #   ex: label-assembler='{service_name} - {client_name} - {created_at|date:shortTime}'
+      # everything outside  {} will remain as is, inside the {} the first param (required) is the property name 
+      # second after the '|' (optional) is the filter and third after the ':' (optional) are the options for filter
+      myRe = new RegExp("\\{([a-zA-z_-]+)\\|?([a-zA-z_-]+)?:?([a-zA-z0-9{}_-]+)?\\}", "g")
+
+      label = $scope.labelAssembler      
+      for match,index in $scope.labelAssembler.match myRe
+        parts = match.split(myRe)
+        # Remove unnecessary empty properties of the array (first/last)
+        parts.splice(0,1)
+        parts.pop()
+        
+        # If requested property exists replace the placeholder with value otherwise with ''
+        if event.hasOwnProperty parts[0]
+          replaceWith = event[parts[0]]
+          # if a filter is requested as part of the expression and filter exists
+          if parts[1]? and $filter(parts[1])? 
+            # If filter has options as part of the expression use them
+            if parts[2]?
+              replaceWith = $filter(parts[1])(replaceWith, $scope.$eval(parts[2]))
+            else  
+              replaceWith = $filter(parts[1])(replaceWith)
+
+          label = label.replace(match, replaceWith)
+        else 
+          label = label.replace(match, '')  
+
+      label   
 
     $scope.options = $scope.$eval $attrs.bbResourceCalendar
     $scope.options ||= {}
@@ -38,6 +70,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     else
       800
 
+    # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
     $scope.uiCalOptions =
       calendar:
         schedulerLicenseKey: '0598149132-fcs-1443104297'
@@ -126,9 +159,16 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
       $scope.getCompanyPromise().then (company) ->
         params = {company: company}
         AdminPersonService.query(params).then (people) ->
+          $scope.people = []
           $scope.loading = false
-          $scope.people = _.sortBy people, 'name'
-          p.title = p.name for p in $scope.people
+          # If resourceId is part of the state params, remove all other resources from the list
+          if $state.params.resourceId? and $state.params.resourceId != '' and (person = _.findWhere(people, {id : parseInt($state.params.resourceId)}))?
+            $scope.people.push person
+          else
+            $scope.people = _.sortBy people, 'name'
+
+          p.title = p.name for p in $scope.people     
+         
           uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
           callback($scope.people)
 
@@ -216,4 +256,6 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     controller: controller
     link: link
     templateUrl: 'resource_calendar_main.html'
+    scope :
+      labelAssembler : '@'
   }

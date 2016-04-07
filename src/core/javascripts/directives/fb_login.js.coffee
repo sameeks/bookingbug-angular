@@ -35,8 +35,8 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService, $rootScope
           scope.setLoaded scope
           scope.decideNextPage()
       , (err) ->
-        if err.data.error == "FACEBOOK-LOGIN-UNAUTHORIZED"
-          AlertService.raise('FB-LOGIN-FAILED')
+        if err.data.error == "FACEBOOK-LOGIN-MEMBER-NOT-FOUND"
+          AlertService.raise('FB_LOGIN_NOT_A_MEMBER')
         else
           AlertService.raise('LOGIN_FAILED')
 

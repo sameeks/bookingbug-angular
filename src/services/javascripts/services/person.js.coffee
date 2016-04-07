@@ -19,12 +19,12 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
     defer.promise
 
   block: (company, person, data) ->
-    # Strip timezone
-    regex = /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/
-    if data.start_time && regex.test(data.start_time)
-      data.start_time = data.start_time.match(regex)[1]
-    if data.end_time && regex.test(data.end_time)
-      data.end_time = data.end_time.match(regex)[1]
+    # # Strip timezone
+    # regex = /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/
+    # if data.start_time && regex.test(data.start_time)
+    #   data.start_time = data.start_time.match(regex)[1]
+    # if data.end_time && regex.test(data.end_time)
+    #   data.end_time = data.end_time.match(regex)[1]
     deferred = $q.defer()
     person.$put('block', {}, data).then  (slot) =>
       slot = new BBModel.Admin.Slot(slot)

@@ -25,5 +25,5 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
 
 
   $scope.bookAnyway = ->
-      $scope.new_timeslot = new BBModel.TimeSlot({time: $scope.current_item.defaults.time, avail: 1})
-      $scope.selectSlot($scope.new_timeslot)
+    $scope.new_timeslot = new BBModel.TimeSlot({time: $scope.current_item.defaults.time, avail: 1})
+    $scope.selectSlot($scope.new_timeslot)

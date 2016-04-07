@@ -260,10 +260,13 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         if ($scope.data_source.requested_time || $scope.data_source.time) && $scope.selected_date.isSame($scope.data_source.date.date)
           found_time = false
           for t in data
-            if (t.time == $scope.data_source.requested_time)
+            if (t.time is $scope.data_source.requested_time)
               $scope.data_source.requestedTimeUnavailable()
-              $scope.selectSlot(t)
+              $scope.highlightSlot(t)
+              $scope.skipThisStep()
+              $scope.decideNextPage()
               found_time = true
+              break
             if ($scope.data_source.time && t.time == $scope.data_source.time.time )
               $scope.data_source.setTime(t)
               found_time = true
