@@ -18,6 +18,18 @@
 * @param {hash} bbEvents Hash options
 * @property {integer} total_entries Total event entries
 * @property {array} events Events array
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-events>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbEvents', () ->

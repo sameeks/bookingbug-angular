@@ -7,7 +7,6 @@
 * @scope true
 *
 * @description
-*
 * Loads a list of times for the currently in scope company.
 *
 * <pre>
@@ -22,6 +21,18 @@
 * @property {array} data_source Source data
 * @property {array} item_link_source Source link item
 * @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-times>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbTimes', () ->

@@ -7,7 +7,6 @@
 * @scope true
 *
 * @description
-*
 * Loads a list of payments for the currently in scope company.
 *
 * <pre>
@@ -17,6 +16,18 @@
 * </pre>
 *
 * @property {array} total The total of payment
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-payment>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService, AlertService) ->

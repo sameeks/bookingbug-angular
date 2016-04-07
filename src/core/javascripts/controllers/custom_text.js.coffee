@@ -18,6 +18,18 @@
 * @property {string} messages Text messages
 * @property {string} setLoaded Loading sets of custom text
 * @property {object} setLoadedAndShowError Set as loaded and show error
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-custom-booking-text>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbCustomBookingText', () ->

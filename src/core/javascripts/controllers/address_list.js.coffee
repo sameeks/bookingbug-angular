@@ -26,6 +26,18 @@
 * @property {string} findByPostcode Find address by postcode
 * @property {string} setLoaded Set loaded address list
 * @property {string} notLoaded Address list not loaded
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-addresses>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbAddresses', () ->

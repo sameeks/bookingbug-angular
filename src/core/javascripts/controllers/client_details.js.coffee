@@ -20,17 +20,17 @@
 * @example
 *  <example module="BB">
 *    <file name="index.html">
-*   <div bb-api-url='https://uk.bookingbug.com'>
-*   <div  bb-widget='{company_id:21}'>
-*     <div bb-client-details>
-*        <p>company_id: {{client_details.company_id}}</p>
-*        <p>offer_login: {{client_details.offer_login}}</p>
-*        <p>ask_address: {{client_details.ask_address}}</p>
-*        <p>no_phone: {{client_details.no_phone}}</p>
+*      <div bb-api-url='https://uk.bookingbug.com'>
+*        <div bb-widget='{company_id:21}'>
+*          <div bb-client-details>
+*            <p>company_id: {{client_details.company_id}}</p>
+*            <p>offer_login: {{client_details.offer_login}}</p>
+*            <p>ask_address: {{client_details.ask_address}}</p>
+*            <p>no_phone: {{client_details.no_phone}}</p>
+*          </div>
+*        </div>
 *      </div>
-*     </div>
-*     </div>
-*   </file>
+*    </file>
 *  </example>
 ####
 

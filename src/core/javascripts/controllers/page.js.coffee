@@ -40,6 +40,18 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
   * @methodOf BB.Directives:bbPage
   * @description
   * Checks if the page is ready.
+  * @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div  bb-widget='{company_id:37167}'>
+*          <div bb-page>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
   ###
   $scope.checkReady = () ->
     ready_list = isScopeReady($scope)

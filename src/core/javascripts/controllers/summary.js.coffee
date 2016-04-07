@@ -5,7 +5,7 @@
 * @scope true
 *
 * @description
-* Loads a summary of the booking
+* Loads a summary of the booking.
 *
 *
 ####

@@ -20,6 +20,18 @@
 * @property {string} setLoaded Set list loaded day
 * @property {object} setLoadedAndShowError Set as loaded and shows error
 * @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-month-availability>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbMonthAvailability', () ->

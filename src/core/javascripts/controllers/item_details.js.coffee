@@ -7,7 +7,7 @@
 * @scope true
 *
 * @description
-* Loads a list of item details for the currently in scope company
+* Loads a list of item details for the currently in scope company.
 *
 * <pre>
 * restrict: 'AE'

@@ -17,6 +17,18 @@
 *
 * @property {array} earliest_day Earliest available day
 * @property {object} alert Alert Service- see {@link BB.Services:Alert Alert Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-get-availability>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbGetAvailability', () ->

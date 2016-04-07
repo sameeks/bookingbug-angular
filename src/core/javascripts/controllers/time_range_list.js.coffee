@@ -15,13 +15,25 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbTimeRanges Hash options
+* @param {hash} bbTimeRanges Hash options
 * @property {string} selected_slot Selected slot
 * @property {date} selected_date Selected date
 * @property {string} postcode Postcode
 * @property {date} original_start_date Original start date
 * @property {date} start_at_week_start Week start
 * @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-time-ranges>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbTimeRanges', () ->
@@ -32,7 +44,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
   controller : 'TimeRangeList'
   link: (scope, element, attrs) ->
     # read initialisation attributes
-    scope.options = scope.$eval(attrs.bbTimeRanges) or  {}
+    scope.options = scope.$eval(attrs.bbTimeRanges) or {}
 
 
 # TODO Get the add/subtract functions to respect the current time range. Get the time range length to adjust if display mode is preset

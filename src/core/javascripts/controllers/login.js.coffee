@@ -6,7 +6,6 @@
 * @scope true
 *
 * @description
-*
 * Loads a list of logins for the currently in scope company.
 *
 * <pre>
@@ -21,6 +20,18 @@
 * @property {boolean} success User successfully authenticated
 * @property {boolean} login_error If user have some errors when try to log in
 * @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-login>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbLogin', () ->

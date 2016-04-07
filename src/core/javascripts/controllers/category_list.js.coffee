@@ -20,16 +20,16 @@
 * @example
 *  <example module="BB">
 *    <file name="index.html">
-*   <div bb-api-url='https://uk.bookingbug.com'>
-*   <div  bb-widget='{company_id:21}'>
-*     <div bb-categories>
-*        <ul>
-*          <li ng-repeat='category in items'>name: {{category.name}}</li>
-*        </ul>
-*     </div>
-*     </div>
-*     </div>
-*   </file>
+*      <div bb-api-url='https://uk.bookingbug.com'>
+*        <div bb-widget='{company_id:21}'>
+*          <div bb-categories>
+*            <ul>
+*              <li ng-repeat='category in items'>name: {{category.name}}</li>
+*            </ul>
+*          </div>
+*        </div>
+*      </div>
+*    </file>
 *  </example>
 ####
 

@@ -17,6 +17,18 @@
 *
 * @property {array} items Services array
 * @property {space} space Currectly selected space
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-spaces>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ###
 
 angular.module('BB.Directives').directive 'bbSpaces', () ->

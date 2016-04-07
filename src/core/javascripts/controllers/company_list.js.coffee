@@ -79,20 +79,20 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs, LoadingService) ->
 * @example
 *  <example module="BB">
 *    <file name="index.html">
-*   <div bb-api-url='https://uk.bookingbug.com'>
-*   <div  bb-widget='{company_id:21}'>
-*     <div bb-company>
-*       <p>id: {{company.id}}</p>
-*        <p>name: {{company.name}}</p>
-*        <p>address_id: {{company.address_id}}</p>
-*        <p>country_code: {{company.country_code}}</p>
-*        <p>currency_code: {{company.country_code}}</p>
-*        <p>timezone: {{company.timezone}}</p>
-*        <p>numeric_widget_id: {{company.numeric_widget_id}}</p>
+*      <div bb-api-url='https://uk.bookingbug.com'>
+*        <div bb-widget='{company_id:21}'>
+*          <div bb-company>
+*            <p>id: {{company.id}}</p>
+*            <p>name: {{company.name}}</p>
+*            <p>address_id: {{company.address_id}}</p>
+*            <p>country_code: {{company.country_code}}</p>
+*            <p>currency_code: {{company.country_code}}</p>
+*            <p>timezone: {{company.timezone}}</p>
+*            <p>numeric_widget_id: {{company.numeric_widget_id}}</p>
+*          </div>
+*        </div>
 *      </div>
-*     </div>
-*     </div>
-*   </file>
+*    </file>
 *  </example>
 ####
 

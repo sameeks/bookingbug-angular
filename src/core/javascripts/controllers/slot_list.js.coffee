@@ -20,6 +20,18 @@
 * @property {date} end_date End date
 * @property {array} slots Slots
 * @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-time-slots>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbTimeSlots', () ->

@@ -18,6 +18,18 @@
 * @property {array} deals Deals list
 * @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
 * @property {object} alert Alert Service - see {@link BB.Services:Alert Alert Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-deals>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbDeals', () ->

@@ -26,6 +26,18 @@
 * @property {object} selected_slot Selected slot from multi time range list
 * @property {object} selected_date Selected date from multi time range list
 * @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-time-range-stacked>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->

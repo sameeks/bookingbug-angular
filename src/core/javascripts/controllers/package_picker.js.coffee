@@ -20,6 +20,18 @@
 * @property {boolean} picked_time Picked time
 * @property {array} timeSlots Slots time
 * @property {boolean} data_valid Valid data
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-package-picker>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbPackagePicker', () ->

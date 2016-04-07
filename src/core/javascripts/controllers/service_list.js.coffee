@@ -28,16 +28,16 @@
 * @example
 *  <example module="BB">
 *    <file name="index.html">
-*   <div bb-api-url='https://dev01.bookingbug.com'>
-*   <div  bb-widget='{company_id:37167}'>
-*     <div bb-services>
-*        <ul>
-*          <li ng-repeat='service in all_services'> {{service.name}}</li>
-*        </ul>
-*     </div>
-*     </div>
-*     </div>
-*   </file>
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-services>
+*            <ul>
+*              <li ng-repeat='service in all_services'> {{service.name}}</li>
+*            </ul>
+*          </div>
+*        </div>
+*      </div>
+*    </file>
 *  </example>
 ####
 

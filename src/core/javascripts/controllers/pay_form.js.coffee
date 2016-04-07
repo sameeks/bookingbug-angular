@@ -18,6 +18,18 @@
 *
 * @property {array} total Total pay_form price
 * @property {array} card Card used for payment
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-pay-form>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout, $sce, $http, $compile, $document, $location, SettingsService) ->

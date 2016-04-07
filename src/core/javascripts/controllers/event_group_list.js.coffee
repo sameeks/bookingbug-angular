@@ -19,6 +19,18 @@
 * @property {array} events Events array
 * @property {hash} filters Filters hash
 * @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-event-groups>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbEventGroups', () ->
@@ -37,7 +49,7 @@ angular.module('BB.Directives').directive 'bbEventGroups', () ->
 
 
 angular.module('BB.Controllers').controller 'EventGroupList',
-($scope,  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, PageControllerService, LoadingService, halClient) ->
+($scope, $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, PageControllerService, LoadingService, halClient) ->
 
   $scope.controller = "public.controllers.EventGroupList"
   FormDataStoreService.init 'EventGroupList', $scope, [

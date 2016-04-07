@@ -7,7 +7,6 @@
 * @scope true
 *
 * @description
-*
 * Loads a list of product for the currently in scope company.
 *
 * <pre>
@@ -20,6 +19,18 @@
 * @property {array} item Item from product list
 * @property {array} booking_item Booking item
 * @property {product} product Currectly selected product
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-product-list>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbProductList', () ->

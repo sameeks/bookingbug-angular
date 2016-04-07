@@ -26,6 +26,18 @@
 * @property {string} source_slots Slots source
 * @property {boolean} selected_slot Group range selected slot
 * @property {boolean} hideHeading Group range hide heading
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://uk.bookingbug.com'>
+*        <div bb-widget='{company_id:21}'>
+*          <div bb-accordian-range-group>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 

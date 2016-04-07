@@ -16,6 +16,18 @@
 * </pre>
 *
 * @property {boolean} setUsingBasket Set using basket or not
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-mini-basket>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbMiniBasket', () ->
@@ -32,7 +44,7 @@ angular.module('BB.Directives').directive 'bbMiniBasket', () ->
     * @name basketDescribe
     * @methodOf BB.Directives:bbMiniBasket
     * @description
-    * Basked describe in according of basket length
+    * Basked describe in according of basket length.
     *
     * @param {string} nothing Nothing to describe
     * @param {string} single The single describe
@@ -45,7 +57,6 @@ angular.module('BB.Directives').directive 'bbMiniBasket', () ->
         single
       else
         plural.replace("$0", $scope.bb.basket.length())
-
 
 
 
@@ -143,7 +154,7 @@ angular.module('BB.Controllers').controller 'BasketList',
   * @name setReady
   * @methodOf BB.Directives:bbMiniBasket
   * @description
-  * Set this page section as ready
+  * Set this page section as ready.
   ###
   $scope.setReady = () ->
     return $scope.checkout()

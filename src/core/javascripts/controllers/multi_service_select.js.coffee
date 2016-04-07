@@ -7,7 +7,6 @@
 * @scope true
 *
 * @description
-*
 * Loads a list of multi service selected for the currently in scope company.
 *
 * <pre>
@@ -15,7 +14,7 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbMultiServiceSelect Hash options
+* @param {hash} bbMultiServiceSelect Hash options
 * @property {object} options Options for services
 * @property {object} max_services Max services
 * @property {boolean} ordered_categories Verify if categories are ordered or not
@@ -23,6 +22,18 @@
 * @property {array} company Company
 * @property {array} items An array of service items
 * @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-multi-service-select>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->

@@ -25,6 +25,16 @@
 * @property {string} pusher Pusher
 * @property {string} pusher_channel Pusher channel
 * @property {string} init_params Basic parameters initialization
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,

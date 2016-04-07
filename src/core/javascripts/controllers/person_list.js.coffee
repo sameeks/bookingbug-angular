@@ -27,16 +27,16 @@
 * @example
 *  <example module="BB">
 *    <file name="index.html">
-*   <div bb-api-url='https://dev01.bookingbug.com'>
-*   <div  bb-widget='{company_id:37167}'>
-*     <div bb-people>
-*        <ul>
-*          <li ng-repeat='person in all_people'> {{person.name}}</li>
-*        </ul>
-*     </div>
-*     </div>
-*     </div>
-*   </file>
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div  bb-widget='{company_id:37167}'>
+*          <div bb-people>
+*            <ul>
+*              <li ng-repeat='person in all_people'> {{person.name}}</li>
+*            </ul>
+*          </div>
+*        </div>
+*      </div>
+*    </file>
 *  </example>
 ####
 
@@ -63,7 +63,7 @@ angular.module('BB.Controllers').controller 'PersonList',
 
   $rootScope.connection_started.then ->
     loadData()
-  , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.options = $scope.$eval($attrs.bbServices) or {}
 

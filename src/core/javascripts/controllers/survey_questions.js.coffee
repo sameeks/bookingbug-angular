@@ -19,6 +19,18 @@
 * @property {object} validator Validation service - see {@link BB.Services:Validator Validation Service}
 * @property {object} widget Widget service - see {@link BB.Models:BBWidget Widget Service}
 * @property {object} alert Alert service - see {@link BB.Services:Alert Alert Service}
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*      <div bb-api-url='https://dev01.bookingbug.com'>
+*        <div bb-widget='{company_id:37167}'>
+*          <div bb-survey-questions>
+*
+*          </div>
+*        </div>
+*      </div>
+*    </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbSurveyQuestions', () ->
@@ -155,7 +167,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootSc
   * @name loadSurveyFromBookingRef
   * @methodOf BB.Directives:bbSurveyQuestions
   * @description
-  * Load survey from booking ref according to id else display an error message
+  * Load survey from booking ref according to id else display an error message.
   *
   * @param {object} id Booking id
   ###
