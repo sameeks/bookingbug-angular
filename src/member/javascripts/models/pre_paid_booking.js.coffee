@@ -19,7 +19,7 @@ angular.module('BB.Models').factory "Member.PrePaidBookingModel", ($q, BBModel, 
     * @methodOf BB.Models:MemberPrePaidBooking
     * @param {object} event The event
     * @description
-    * Checks if the pre paid booking is valid or not using the event parameter
+    * Checks if the pre paid booking is valid or not using the event parameter.
     *
     * @param {object} event parameter
     *
@@ -37,13 +37,13 @@ angular.module('BB.Models').factory "Member.PrePaidBookingModel", ($q, BBModel, 
 
     ###**
     * @ngdoc method
-    * @name query
+    * @name $query
     * @methodOf BB.Models:MemberPrePaidBooking
     * @description
     * Static function that loads an array of pre paid bookings from a company object
     *
     * @param {object} member parameter
-    * @param {params} params parameter
+    * @param {object} params parameter
     *
     * @returns {Promise} A returned promise
     ###

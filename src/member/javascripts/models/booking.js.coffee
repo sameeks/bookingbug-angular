@@ -112,7 +112,7 @@ angular.module('BB.Models').factory "Member.BookingModel",
 
     ###**
     * @ngdoc method
-    * @name getMember
+    * @name $getMember
     * @methodOf BB.Models:MemberBooking
     * @description
     * Gets the member.
@@ -139,7 +139,7 @@ angular.module('BB.Models').factory "Member.BookingModel",
     * @name query
     * @methodOf BB.Models:MemberBooking
     * @description
-    * Static function that loads an array of bookings from a company object.
+    * Static function that loads an array of bookings for a member from a company object.
     *
     * @param {object} member member parameter
     * @param {object} paramas paramas parameter
@@ -151,7 +151,7 @@ angular.module('BB.Models').factory "Member.BookingModel",
 
     ###**
     * @ngdoc method
-    * @name update
+    * @name $update
     * @methodOf BB.Models:MemberBooking
     * @description
     * Static function that updates an array of bookings from a company object.
@@ -163,9 +163,33 @@ angular.module('BB.Models').factory "Member.BookingModel",
     @$update: (booking) ->
       MemberBookingService.update(booking)
 
+    ###**
+    * @ngdoc method
+    * @name $cancel
+    * @methodOf BB.Models:MemberBooking
+    * @description
+    * Static function that will cancel the member booking.
+    *
+    * @param {object} member member parameter
+    * @param {object} booking booking parameter
+    *
+    * @returns {Promise} A returned promise
+    ###
     @$cancel: (member, booking) ->
       MemberBookingService.cancel(member, booking)
 
+    ###**
+    * @ngdoc method
+    * @name $flush
+    * @methodOf BB.Models:MemberBooking
+    * @description
+    * Static function that will delete the member bookings.
+    *
+    * @param {object} member member parameter
+    * @param {object} params params parameter
+    *
+    * @returns {Promise} A returned promise
+    ###
     @$flush: (member, params) ->
       MemberBookingService.flush(member, params)
 
