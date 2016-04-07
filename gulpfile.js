@@ -17,6 +17,7 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     gulpDocs = require('gulp-ngdocs'),
     KarmaServer = require('karma').Server,
+    protractor = require('gulp-protractor').protractor,
     bower = require('gulp-bower'),
     argv = require('yargs').argv;
 
@@ -171,10 +172,21 @@ gulp.task('dependencies', ['bower'], function() {
     .pipe(gulp.dest('release'));
 });
 
-gulp.task('test', ['dependencies'], function (done) {
+gulp.task('unit-tests', ['dependencies'], function (done) {
   new KarmaServer({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
   }, done).start();
 });
+var wait = require('gulp-wait');
+gulp.task('e2e-tests', ['webserver'], function(cb) {
+  gulp.src(['e2e_tests.js.coffee'])
+    .pipe(wait(5000))
+    .pipe(protractor({
+      configFile: 'protractor.conf.js'
+    }))
+    .on('error', console.error.bind(console))
+    .on('end', cb);
+});
 
+gulp.task('test', ['unit-tests', 'e2e-tests']);

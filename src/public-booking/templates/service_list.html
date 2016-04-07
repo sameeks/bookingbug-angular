@@ -4,7 +4,7 @@
     <div ng-show="items.length > 8" bb-include="_service_list_filter">
     </div>
 
-    <div class="panel panel-default" ng-repeat="item in filtered_items">
+    <div class="panel panel-default item" ng-repeat="item in filtered_items">
       <div class="panel-body">
         <div class="row" ng-class="{'bb-vertical-align-center': item.extra.image_url || item.description}">
           <div class="col-sm-8 col-xs-6">
