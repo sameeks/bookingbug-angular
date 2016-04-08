@@ -4,6 +4,7 @@ angular.module('BBAdminBooking').factory 'AdminBookingPopup', ($modal, $timeout)
     $modal.open
       size: 'lg'
       controller: ($scope, $modalInstance, config) ->
+        $scope.Math = window.Math
         if $scope.bb && $scope.bb.current_item 
           delete $scope.bb.current_item
         $scope.config = angular.extend

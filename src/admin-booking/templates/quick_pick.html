@@ -9,7 +9,7 @@
         <label>Service</label>
         
         <!-- TODO use display_name -->
-        <select id="service" ng-model="service" ng-options="s.name for s in bookable_services | orderBy: 'name'" class="form-control">
+        <select id="service" ng-model="service" ng-options="(s.name + ' (' + (Math.floor(s.durations[0] / 60)) + ':' + (s.durations[0] % 60) + ')') for s in bookable_services | orderBy: 'name'" class="form-control">
           <option value="">-- select a service --</option>
         </select>
         
