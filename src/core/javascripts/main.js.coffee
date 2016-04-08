@@ -38,7 +38,7 @@ app.value('AppConfig', {
 app.value('AirbrakeConfig', {
   projectId: '122836',
   projectKey: 'e6d6710b2cf00be965e8452d6a384d37',
-  environment: ''
+  environment: if window.location.hostname == 'locahost' then 'development' else 'production'
 })
 
 if (window.use_no_conflict)
