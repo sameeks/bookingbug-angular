@@ -36,8 +36,8 @@ app.value('AppConfig', {
 
 # airbrake-js authentication
 app.value('AirbrakeConfig', {
-  projectId: '34693',
-  projectKey: 'b4174c79b8b7dfb0111e45aa35c95b71',
+  projectId: '122836',
+  projectKey: 'e6d6710b2cf00be965e8452d6a384d37',
   environment: ''
 })
 
