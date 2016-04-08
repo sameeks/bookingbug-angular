@@ -23,17 +23,17 @@ var gulp = require('gulp'),
 
 gulp.task('clean', function(cb) {
   del.sync(['release']);
-  cb()
+  cb();
 });
 
 
 gulp.task('list', function() {
-  gulp.src(mainBowerFiles({filter: new RegExp('.js$')}))
-    .pipe(filelog())
+  return gulp.src(mainBowerFiles({filter: new RegExp('.js$')}))
+    .pipe(filelog());
 });
 
 gulp.task('javascripts', function(cb) {
-  javascripts = gulp.src(mainBowerFiles({filter: new RegExp('.js$')}).concat([
+  var javascripts = gulp.src(mainBowerFiles({filter: new RegExp('.js$')}).concat([
         './bower_components/moment/locale/en-gb.js',
         './bower_components/lodash/dist/lodash.js',
         './bower_components/angular-google-maps/dist/angular-google-maps.js',
@@ -52,12 +52,12 @@ gulp.task('javascripts', function(cb) {
         '!./**/*~']))
     // .pipe(filelog())
     .pipe(gulpif(/.*coffee$/, coffee().on('error', function (e) {
-      gutil.log(e)
-      this.emit('end')
-    })))
-  templates = gulp.src('./src/*/templates/**/*.html')
+      gutil.log(e);
+      this.emit('end');
+    })));
+  var templates = gulp.src('./src/*/templates/**/*.html')
     .pipe(flatten())
-    .pipe(templateCache({module: 'BB'}))
+    .pipe(templateCache({module: 'BB'}));
   streamqueue({objectMode: true}, javascripts, templates)
     .pipe(concat('bookingbug-angular.js'))
     .pipe(gulpif(argv.env != 'development' && argv.env != 'dev',
@@ -79,17 +79,17 @@ gulp.task('shims', function() {
 });
 
 gulp.task('stylesheets', function() {
-  css_stream = gulp.src(mainBowerFiles({filter: new RegExp('.css$')}))
-  sass_stream = gulp.src('src/*/stylesheets/main.scss')
+  var css_stream = gulp.src(mainBowerFiles({filter: new RegExp('.css$')}));
+  var sass_stream = gulp.src('src/*/stylesheets/main.scss')
     .pipe(sass({errLogToConsole: true}))
-    .pipe(flatten())
-  streamqueue({objectMode: true}, css_stream, sass_stream)
+    .pipe(flatten());
+  return streamqueue({objectMode: true}, css_stream, sass_stream)
     .pipe(concat('bookingbug-angular.css'))
     .pipe(gulp.dest('release'));
 });
 
 gulp.task('widget', function() {
-  gulp.src('src/widget/stylesheets/main.scss')
+  return gulp.src('src/widget/stylesheets/main.scss')
     .pipe(sass({errLogToConsole: true}))
     .pipe(flatten())
     .pipe(concat('bookingbug-widget.css'))
@@ -97,7 +97,7 @@ gulp.task('widget', function() {
 });
 
 gulp.task('theme', function() {
-  gulp.src('src/*/stylesheets/bb_light_theme.scss')
+  return gulp.src('src/*/stylesheets/bb_light_theme.scss')
     .pipe(sass({errLogToConsole: true}))
     .pipe(flatten())
     .pipe(concat('bb-theme.css'))
@@ -105,7 +105,7 @@ gulp.task('theme', function() {
 });
 
 gulp.task('fonts', function() {
-  gulp.src('src/*/fonts/*')
+  return gulp.src('src/*/fonts/*')
     .pipe(flatten())
     .pipe(gulp.dest('release/fonts'));
 });
@@ -128,7 +128,7 @@ gulp.task('default', ['assets', 'watch', 'webserver']);
 
 gulp.task('cleandocs', function(cb) {
   del.sync(['docs']);
-  cb()
+  cb();
 });
 
 gulp.task('ngdocs', [], function () {
@@ -148,7 +148,7 @@ gulp.task('ngdocs', [], function () {
     scripts: [
       'examples/booking-widget.js'
     ]
-  }
+  };
   return gulp.src('src/*/javascripts/**')
     .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
     .pipe(gulpDocs.process(options))
@@ -160,7 +160,7 @@ gulp.task('docs', ['cleandocs','ngdocs'], function (cb) {
   return connect.server({
     root: ['docs'],
     port: 8000
-  })
+  });
 });
 
 gulp.task('bower', function() {
@@ -179,10 +179,11 @@ gulp.task('unit-tests', ['dependencies'], function (done) {
     singleRun: true
   }, done).start();
 });
-gulp.task('e2e-tests', ['assets', 'webserver'], function(cb) {
-  gulp.src(['e2e_tests.js.coffee'])
+
+gulp.task('e2e-tests', ['webserver'], function(cb) {
+  return gulp.src(['e2e-tests/booking.js.coffee'])
     .pipe(protractor({
-      configFile: 'protractor.conf.js'
+      configFile: 'e2e-tests/protractor.conf.js'
     }))
     .on('error', console.error.bind(console))
     .on('end', cb);
