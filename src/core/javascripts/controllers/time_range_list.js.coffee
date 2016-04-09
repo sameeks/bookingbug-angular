@@ -32,7 +32,22 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
   replace: true
   scope : true
   priority: 1
+  transclude: true
   controller : 'TimeRangeList'
+  link: (scope, element, attrs, controller, transclude) ->
+
+    transclude scope, (clone) =>
+      # if there's content compile that or grab the week_calendar template
+      has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+
+      if has_content
+        element.html(clone).show()
+        $compile(element.contents())(scope)
+      else
+        $q.when($templateCache.get('_week_calendar.html')).then (template) ->
+          element.html(template).show()
+          $compile(element.contents())(scope)
+
 
 angular.module('BB.Controllers').controller 'TimeRangeList',
 ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, DateTimeUlititiesService) ->
@@ -463,7 +478,11 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
               if (!dtimes[pad])
                 time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-          DateTimeUlititiesService.checkRequestedTime(day, time_slots, current_item)
+          requested_slot = DateTimeUlititiesService.checkRequestedTime(day.date, time_slots, current_item)
+
+          if requested_slot
+            $scope.selectSlot(day, requested_slot)
+
 
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     else

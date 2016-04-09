@@ -20,7 +20,7 @@
 
 
 angular.module('BB.Models').factory "BasketItemModel",
-($q, $window, BBModel, BookableItemModel, BaseModel, $bbug) ->
+($q, $window, BBModel, BookableItemModel, BaseModel, $bbug, DateTimeUlititiesService) ->
 
   # A class that defines an item in a shopping basket
   # This could represent a time based service, a ticket for an event or class, or any other purchasable item
@@ -180,10 +180,13 @@ angular.module('BB.Models').factory "BasketItemModel",
         @setService(defaults.service)
       if defaults.category
         @setCategory(defaults.category)
-      if defaults.time
-        @requested_time = parseInt(defaults.time)
-      if defaults.date
-        @requested_date = moment(defaults.date)
+      if defaults.time or defaults.date
+        date = if defaults.date then moment(defaults.date) else moment()
+        time = if defaults.time then parseInt(defaults.time) else 0
+        @requested_datetime = {
+          checked: false
+          datetime: DateTimeUlititiesService.convertTimeSlotToMoment({date: date}, {time: time})
+        }
       if defaults.service_ref
         @service_ref = defaults.service_ref
       if defaults.group
@@ -230,12 +233,12 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name requestedTimeUnavailable
     * @methodOf BB.Models:BasketItem
     * @description
-    * Delete requested time and date if these are unavailable
+    * Mark requested datetime as checked
     ###
-    # if it turned out that a requested date or time was unavailablem, we'll have to clear it
-    requestedTimeUnavailable: ->
-      delete @requested_time
-      delete @requested_date
+    requestedTimeChecked: ->
+      @requested_datetime.checked = true
+      # delete @requested_time
+      # delete @requested_date
 
     ###**
     * @ngdoc method

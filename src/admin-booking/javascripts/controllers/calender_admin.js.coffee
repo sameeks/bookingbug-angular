@@ -17,13 +17,13 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
 
   $rootScope.connection_started.then ->
 
-    $scope.week_view = !$scope.bb.current_item.requested_time
+    $scope.week_view = !$scope.bb.current_item.requested_datetime
 
 
-  $scope.switchWeekView = () ->
+  $scope.switchView = () ->
     $scope.week_view = !$scope.week_view
 
 
-  $scope.bookAnyway = ->
-    $scope.new_timeslot = new BBModel.TimeSlot({time: $scope.current_item.defaults.time, avail: 1})
-    $scope.selectSlot($scope.new_timeslot)
+  $scope.overBook = ->
+    new_timeslot = new BBModel.TimeSlot({time: $scope.current_item.defaults.time, avail: 1})
+    $scope.selectSlot(new_timeslot)

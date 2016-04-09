@@ -1,4 +1,4 @@
-angular.module('BB.Services').factory "DateTimeUlititiesService", (AlertService) ->
+angular.module('BB.Services').factory "DateTimeUlititiesService", () ->
 
   # converts date and time belonging to BBModel.Day and BBModel.TimeSlot into
   # a valid moment object
@@ -22,25 +22,26 @@ angular.module('BB.Services').factory "DateTimeUlititiesService", (AlertService)
     return datetime.minutes() + datetime.hours() * 60
 
 
-  checkRequestedTime: (day, time_slots, current_item) ->
-    # current_item = $scope.bb.current_item
+  checkRequestedTime: (date, time_slots, basket_item) ->
 
-    if (current_item.requested_time or current_item.time) and current_item.requested_date and day.date.isSame(current_item.requested_date)
-      found_time = false
+    debugger
+
+    return false if basket_item.requested_datetime.checked
+
+    found_time_slot = null
+
+    if (basket_item.requested_time or basket_item.time) and basket_item.date and date.isSame(basket_item.date.date, 'day')
 
       for slot in time_slots
-        if (slot.time is current_item.requested_time)
-          current_item.requestedTimeUnavailable()
-          $scope.selectSlot(day, slot)
-          found_time = true
-          $scope.days = []
-          return  # hey if we just picked the day and routed - then move on!
+        if (basket_item.requested_time and basket_item.requested_time is slot.time) and slot.avail is 1
+          found_time_slot = slot
+          break
 
-        if (current_item.time and current_item.time.time is slot.time and slot.avail is 1)
-          if $scope.selected_slot and $scope.selected_slot.time isnt current_item.time.time
-            $scope.selected_slot = current_item.time
-          current_item.setTime(slot)  # reset it - just in case this is really a new slot!
-          found_time = true
+        if (basket_item.time and basket_item.time.time is slot.time) and slot.avail is 1
+          found_time_slot = slot
+          break
 
-      if !found_time
-        current_item.requestedTimeUnavailable() 
+    basket_item.requestedTimeChecked() 
+    return found_time_slot
+
+        

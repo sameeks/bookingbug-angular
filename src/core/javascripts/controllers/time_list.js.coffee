@@ -243,37 +243,44 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
       
       pslots.finally =>
         $scope.setLoaded $scope
-      pslots.then (data) =>
+      pslots.then (time_slots) =>
 
-        $scope.slots = data
+        $scope.slots = time_slots
         $scope.$broadcast('slotsUpdated')
         # padding is used to ensure that a list of time slots is always padded out with a certain of values, if it's a partial set of results
-        if $scope.add_padding && data.length > 0
+        if $scope.add_padding && time_slots.length > 0
           dtimes = {}
-          for s in data
+          for s in time_slots
             dtimes[s.time] = 1
 
           for pad, v in $scope.add_padding
             if (!dtimes[pad])
-              data.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, data[0].service))
+              time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
         
-        if ($scope.data_source.requested_time || $scope.data_source.time) && $scope.selected_date.isSame($scope.data_source.date.date)
-          found_time = false
-          for t in data
-            if (t.time is $scope.data_source.requested_time)
-              $scope.data_source.requestedTimeUnavailable()
-              $scope.highlightSlot(t)
-              $scope.skipThisStep()
-              $scope.decideNextPage()
-              found_time = true
-              break
-            if ($scope.data_source.time && t.time == $scope.data_source.time.time )
-              $scope.data_source.setTime(t)
-              found_time = true
-          if !found_time
-            # if we didn't find the time - give up and do force it's selecttion
-            $scope.data_source.requestedTimeUnavailable() if !$scope.options.persist_requested_time
-            $scope.time_not_found = true
+        requested_slot = DateTimeUlititiesService.checkRequestedTime($scope.selected_date, time_slots, $scope.data_source)
+
+        if requested_slot
+          $scope.highlightSlot(requested_slot)
+          $scope.skipThisStep()
+          $scope.decideNextPage()
+
+        # if ($scope.data_source.requested_time || $scope.data_source.time) && $scope.selected_date.isSame($scope.data_source.date.date)
+        #   found_time = false
+        #   for t in data
+        #     if (t.time is $scope.data_source.requested_time)
+        #       $scope.data_source.requestedTimeUnavailable()
+        #       $scope.highlightSlot(t)
+        #       $scope.skipThisStep()
+        #       $scope.decideNextPage()
+        #       found_time = true
+        #       break
+        #     if ($scope.data_source.time && t.time == $scope.data_source.time.time )
+        #       $scope.data_source.setTime(t)
+        #       found_time = true
+        #   if !found_time
+        #     # if we didn't find the time - give up and do force it's selecttion
+        #     $scope.data_source.requestedTimeUnavailable() if !$scope.options.persist_requested_time
+        #     $scope.time_not_found = true
             # AlertService.add("danger", { msg: "Sorry, your requested time slot is not available. Please choose a different time." })
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 

@@ -719,8 +719,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # Load next page
     if step_number? and step_number > $scope.bb.current_step
       $scope.loadStep(step_number)
-    else if step_number? and step_number < $scope.bb.current_step
-      # Load previous page
+    # else if step_number? and step_number < $scope.bb.current_step
+    #   # Load previous page
+    #   $scope.loadPreviousStep('locationChangeStart')
+    # else
+    else
       $scope.loadPreviousStep('locationChangeStart')
 
     $scope.bb.routing = false
