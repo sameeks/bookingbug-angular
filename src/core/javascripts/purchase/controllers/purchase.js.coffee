@@ -257,12 +257,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       controller: ModalDelete
       resolve:
         booking: ->
-          booking
-    
-    # Ensure modal is on top of all content
-    $timeout ->
-      $(".modal").css("z-index", "9999999")
-
+          booking    
+   
     modalInstance.result.then (booking) ->
       booking.$del('self').then (service) =>
         $scope.bookings = _.without($scope.bookings, booking)
