@@ -17,10 +17,9 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     gulpDocs = require('gulp-ngdocs'),
     KarmaServer = require('karma').Server,
-    protractor = require('gulp-protractor').protractor,
     bower = require('gulp-bower'),
     argv = require('yargs').argv,
-    child_process = require('child_process');
+    protractor = require('gulp-protractor');
 
 
 gulp.task('clean', function(cb) {
@@ -181,15 +180,11 @@ gulp.task('unit-tests', ['dependencies'], function (done) {
   }, done).start();
 });
 
-gulp.task('install-webdriver', function(done){
-    child_process.spawn('node_modules/protractor/bin/webdriver-manager', ['update'], {
-        stdio: 'inherit'
-    }).once('close', done);
-});
+gulp.task('install-webdriver', protractor.webdriver_update);
 
 gulp.task('e2e-tests', ['webserver', 'install-webdriver'], function() {
   return gulp.src(['e2e-tests/booking.js.coffee'])
-    .pipe(protractor({
+    .pipe(protractor.protractor({
       configFile: 'e2e-tests/protractor.conf.js'
     }))
     .on('error', console.error.bind(console));
