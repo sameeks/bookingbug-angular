@@ -185,11 +185,13 @@ angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
 
       $scope.has_questions = _.pluck($scope.questions, 'question').length > 0
 
-angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
+angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) ->
   restrict: 'A'
   scope: true
   link: (scope, elem, attrs) ->
-
+    $timeout ->     
+      elem.parent().parent().parent().css("z-index", 999999)    
+    ,
     # watch modal height to ensure it does not exceed window height
     deregisterWatcher = scope.$watch ->
       height = elem.height()
@@ -201,10 +203,9 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
         new_height = $bbug(window).height() - modal_padding
         elem.css({
           "height": new_height + "px"
-          "overflow-y": "scroll"
-          "z-index": "999999"
+          "overflow-y": "scroll"         
           })       
-        deregisterWatcher()
+        deregisterWatcher()      
 
 ###**
 * @ngdoc directive
