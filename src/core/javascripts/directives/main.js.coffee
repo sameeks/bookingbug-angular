@@ -200,9 +200,9 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
       if height > $bbug(window).height()
         new_height = $bbug(window).height() - modal_padding
         elem.css({
-          height: new_height + "px"
-          overflowY: scroll
-          zIndex: 999999
+          "height": new_height + "px"
+          "overflow-y": "scroll"
+          "z-index": "999999"
           })       
         deregisterWatcher()
 
