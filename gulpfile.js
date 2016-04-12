@@ -180,13 +180,12 @@ gulp.task('unit-tests', ['dependencies'], function (done) {
   }, done).start();
 });
 
-gulp.task('e2e-tests', ['webserver'], function(cb) {
+gulp.task('e2e-tests', ['webserver'], function() {
   return gulp.src(['e2e-tests/booking.js.coffee'])
     .pipe(protractor({
       configFile: 'e2e-tests/protractor.conf.js'
     }))
-    .on('error', console.error.bind(console))
-    .on('end', cb);
+    .on('error', console.error.bind(console));
 });
 
 gulp.task('test', ['unit-tests', 'e2e-tests']);

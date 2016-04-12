@@ -1,7 +1,18 @@
 describe "Standard booking journey:", ->
   waitFor = (selector) ->
     browser.wait protractor.ExpectedConditions.presenceOf($(selector)), 5000
-  browser.ignoreSynchronization = true
+
+  browser.ignoreSynchronization = false
+  browser.driver.manage().window().setSize(1024, 768)
+
+  checkoutResponse = require './mocks/checkout.json'
+  checkoutMock = ->
+    checkoutResponse = arguments[0]
+    alert(arguments)
+    angular.module('checkoutMock', ['ngMockE2E']).run ($httpBackend) ->
+      alert(checkoutResponse)
+      $httpBackend.whenPOST(/checkout/).respond(checkoutResponse)
+  browser.addMockModule 'checkoutMock', checkoutMocke
 
   it "Widget should load", ->
     browser.get 'http://localhost:8888/new_booking.html'
@@ -31,10 +42,10 @@ describe "Standard booking journey:", ->
       expect(items.first().element(By.tagName 'h2').getText()).toEqual 'Derrick C'
 
     it "should have formatted duration", ->
-      expect(element(By.css "ul.bb-summary-list .bb-summary-value").getText()).toEqual '1 hour'
+      expect(element.all(By.css "ul.bb-summary-list .bb-summary-value").first().getText()).toEqual '1 hour'
   
     it "should move to calendar", ->
-      element(By.css '[bb-people] .panel button').click()
+      element.all(By.css '[bb-people] .panel button').first().click()
       waitFor "[bb-time-ranges]"
 
   describe "Calendar", ->
@@ -45,11 +56,11 @@ describe "Standard booking journey:", ->
 
     accordion = null
     it "should expand accordions", ->
-      accordion = element(By.css "[bb-accordian-range-group]>.panel:not([disabled]")
+      accordion = element.all(By.css "[bb-accordian-range-group]>.panel:not([disabled]").first()
       accordion.click()
 
     it "should select a time slot and move to questions", ->
-      accordion.element(By.css 'li.time-slot').click()
+      accordion.element(By.css 'li.time-slot:first-child').click()
       element(By.buttonText 'Continue').click()
       waitFor '[bb-client-details]'
 
