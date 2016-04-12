@@ -2,18 +2,24 @@ describe "Standard booking journey:", ->
   waitFor = (selector) ->
     browser.wait protractor.ExpectedConditions.presenceOf($(selector)), 5000
 
-  browser.ignoreSynchronization = false
+  browser.ignoreSynchronization = true
   browser.driver.manage().window().setSize(1024, 768)
 
+  ###
+  #TODO: work out why mock modules never get injected even when ignoreSynchronization = false.
+  #Temporary fix: examples/checkout_mock.js
+  browser.ignoreSynchronization = false
   checkoutResponse = require './mocks/checkout.json'
   checkoutMock = ->
     checkoutResponse = arguments[0]
-    alert(arguments)
     angular.module('checkoutMock', ['ngMockE2E']).run ($httpBackend) ->
-      alert(checkoutResponse)
-      $httpBackend.whenPOST(/checkout/).respond(checkoutResponse)
-  browser.addMockModule 'checkoutMock', checkoutMocke
+      $httpBackend.whenPOST(/.*checkout/).respond(checkoutResponse)
+      $httpBackend.whenPOST(/.* /).passThrough()
+      $httpBackend.whenGET(/.* /).passThrough()
 
+    angular.module('BB').requires.push('checkoutMock')
+  browser.addMockModule 'checkoutMock', checkoutMock
+  ###
   it "Widget should load", ->
     browser.get 'http://localhost:8888/new_booking.html'
     waitFor '[bb-widget] .content'
