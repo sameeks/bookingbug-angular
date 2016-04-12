@@ -1,6 +1,6 @@
 describe "Standard booking journey:", ->
   waitFor = (selector) ->
-    browser.wait protractor.ExpectedConditions.presenceOf($(selector)), 5000
+    browser.wait protractor.ExpectedConditions.presenceOf($(selector)), 8000
 
   browser.ignoreSynchronization = true
   browser.driver.manage().window().setSize(1024, 768)
