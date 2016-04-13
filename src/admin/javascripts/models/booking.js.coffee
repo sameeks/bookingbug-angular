@@ -77,6 +77,10 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
  
 
     $update: (data) ->
+      if data
+        data.datetime = moment(data.datetime)
+        data.datetime.tz()
+        data.datetime = data.datetime.format()
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
         @constructor(res) 
