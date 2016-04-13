@@ -257,7 +257,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       controller: ModalDelete
       resolve:
         booking: ->
-          booking
+          booking    
+   
     modalInstance.result.then (booking) ->
       booking.$del('self').then (service) =>
         $scope.bookings = _.without($scope.bookings, booking)
@@ -331,11 +332,12 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
 # Simple modal controller for handling the 'delete' modal
-ModalDelete = ($scope,  $rootScope, $modalInstance, booking) ->
+ModalDelete = ($scope,  $rootScope, $modalInstance, booking, AlertService) ->
   $scope.controller = "ModalDelete"
   $scope.booking = booking
 
   $scope.confirmDelete = () ->
+    AlertService.clear()
     $modalInstance.close(booking)
 
   $scope.cancel = ->

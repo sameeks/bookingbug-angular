@@ -707,11 +707,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.isLoadingPage = () =>
     $scope.loading_page
 
-
   # $locationChangeStart is broadcast before a URL will change
   $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
     # TODO dont need to handle this when widget is initialising
     return if !$scope.bb.routeFormat and $scope.bb.routing
+
+    #save the current lenght of browser history
+    $scope.history_at_widget_init = $scope.history_at_widget_init or window.parent.history.length
 
     # Get the step number we want to load
     step_number = $scope.bb.matchURLToStep()
@@ -1191,7 +1193,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     while past_steps[0]
       last_step = past_steps.pop()
       if !last_step
-        break 
+        break
       if !last_step.skipped
         step_to_load = last_step.number
         break
@@ -1205,7 +1207,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       # and one page has already been removed from the history by the browser
       pages_to_remove_from_history--
 
-    if pages_to_remove_from_history? and pages_to_remove_from_history > 0
+    ignore_browser_history_sync = $scope.history_at_widget_init == window.history.length
+
+    if pages_to_remove_from_history? and pages_to_remove_from_history > 0 and !ignore_browser_history_sync
       window.history.go(pages_to_remove_from_history*-1)
 
     # Load step

@@ -12,7 +12,7 @@ angular.module('BB.Services').factory '$exceptionHandler', ($log, AirbrakeConfig
     projectId: AirbrakeConfig.projectId
     projectKey: AirbrakeConfig.projectKey)
   airbrake.addFilter (notice) ->
-    if AirbrakeConfig.environment == 'development'
+    if AirbrakeConfig.environment is 'development'
       return
     notice.context.environment = 'production'
     notice
