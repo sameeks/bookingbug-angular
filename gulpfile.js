@@ -187,7 +187,11 @@ gulp.task('e2e-tests', ['webserver', 'install-webdriver'], function() {
     .pipe(protractor.protractor({
       configFile: 'e2e-tests/protractor.conf.js'
     }))
-    .on('error', console.error.bind(console));
+    .on('end', function() { process.exit(0) })
+    .on('error', function(message) {
+      console.error(message)
+      process.exit(1)
+    });
 });
 
 gulp.task('test', ['unit-tests', 'e2e-tests']);
