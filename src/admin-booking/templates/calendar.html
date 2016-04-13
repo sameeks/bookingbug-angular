@@ -2,141 +2,151 @@
 
   <div bb-calendar-admin>
 
-<!--     <div class="page-header">
-      <h1>Select a Time</h1>
-    </div> -->
-
-    <div class="page-summary">
-      <div bb-include="_basket_item_summary"></div>
+    <div class="page-header">
+      <h1><!-- Select a Time -->Availability</h1>
     </div>
 
-    <div class="panel panel-danger">
-      <div class="panel-heading">Availability Conflict Detected</div>
-      <div class="panel-body">
-        <p>
-          Theres's an availability conflict
-          <span ng-show="bb.current_item.person.name">with {{bb.current_item.person.name}}</span>
-          <span ng-show="bb.current_item.resource.name">in {{bb.current_item.resource.name}}</span>
-          for {{bb.current_item.service.name}} at {{bb.current_item.defaults.datetime | datetime: 'time'}}.  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
-        </p>
-        <ul class="bb-bullet-list">
-          <li>The Staff/Resource being unavailable</li>
-          <li>The Staff/Resource being booked already</li>
-          <li>Not enough available time to complete the booking before an existing one starts</li>
-        </ul>
-        <p>You can either choose another time below or overbook.</p>
-
-        <button type="button" class="btn btn-danger pull-right" ng-click="overBook()" bb-debounce>Overbook {{bb.current_item.defaults.datetime | datetime: 'time'}}</button>
-
-      </div>
-
-    </div>
-
-    <hr>
-
-    <h2>Availability</h2>
-
-    <div ng-form="resource_select_form">
-
-      <div class="row">
-
-        <div class="col-sm-6">
-          <div ng-if="bb.company.$has('people')">
-            <div class="form-group" bb-people>
-              <label>Person</label>
-              <select  class=" form-control" id="person" ng-model="person" ng-options="p.name for p in bookable_people | orderBy: 'name'" >
-                <option value="">-- select a person --</option>
-              </select>
-            </div>
-          </div> 
-        </div>
-
-        <div class="col-sm-6">
-          <div ng-if="bb.company.$has('resources')">
-            <div class="form-group" bb-resources>
-              <label>Resource</label>
-                <select class="form-control"  id="resource" ng-model="resource" ng-options="r.name for r in bookable_resources | orderBy: 'name'">
-                  <option value="">-- select a resource --</option>
-                </select>
-              </div>
-          </div>  
-        </div>
-
-      </div>
-
-    </div>
-
-    <hr>
-
+    <p>
+      Theres's an availability conflict
+      <span ng-show="bb.current_item.person.name">with {{bb.current_item.person.name}}</span>
+      <span ng-show="bb.current_item.resource.name">in {{bb.current_item.resource.name}}</span>
+     <!--  for {{bb.current_item.service.name}} at {{bb.current_item.defaults.datetime | datetime: 'time'}} -->.  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
+    </p>
+    <!-- put pust list in cols, 2 or 3? -->
     <div class="row">
-      <div class="col-xs-12">
-        <button class="btn btn-sm btn-default pull-right" ng-click="switchView()">
-          <span ng-show="week_view">
-            <i class="fa fa-calendar-times-o"></i>
-            Day
-          </span>
-          <span ng-hide="week_view">
-            <i class="fa fa-calendar-o"></i>
-            Week
-          </span>
-        </button>
-      </div>
+      <ul class="bb-bullet-list">   
+        <li class="col-sm-6 col-md-4">The Staff/Resource being unavailable</li>
+        <li class="col-sm-6 col-md-4">The Staff/Resource being booked already</li>
+        <li class="col-sm-6 col-md-4">Not enough available time to complete the booking before an existing one starts</li>
+        <li class="col-sm-6 col-md-4">The time step....</li>
+      </ul>
     </div>
 
+    <p>You can either use the calendar to choose another time overbook.</p>
+    
     <hr>
 
-    <div ng-if="!week_view">
+    <div class="panel panel-default">
+      <div class="panel-heading">Calendar</div>
+      <div class="panel-body">
 
-      <div class="bb-admin-calendar-day-nav">
-        <button type="button" class="btn btn-link pull-left" ng-click="subtract('days', 1)">
-          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-          <span class="hidden-xs">Previous</span>
-        </button>
-
-        <div class="cal-dateheader">
-          <h2 class="bb-section-title text-center hidden-xs">{{selected_date | datetime: 'Do MMM YYYY'}}</h2>
-          <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">{{selected_date | datetime: 'Do MMM'}}</h2>
+        <div class="page-summary">
+          <div bb-include="_basket_item_summary"></div>
         </div>
 
-        <button type="button" class="btn btn-link pull-right" ng-click="add('days', 1)">
-          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true" ></span>
-          <span class="hidden-xs">Next</span>
-        </button>
-      </div>
+        <div ng-form="resource_select_form">
 
-      <div class="bb-availability">
+          <div class="row">
 
-        <div ng-show="!slots || (slots && slots.length == 0)" class="bb-service-unavailable">
-          <p>No availability found</p>
-        </div>
-
-        <div ng-if="slots">
-
-          <div accordion close-others="false">
-
-            <!-- Morning -->
-            <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: slots, collaspe_when_time_selected: true, day: selected_date}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div class="col-sm-6">
+              <div ng-if="bb.company.$has('people')">
+                <div class="form-group" bb-people>
+                  <label>Person</label>
+                  <select  class=" form-control" id="person" ng-model="person" ng-options="p.name for p in bookable_people | orderBy: 'name'" >
+                    <option value="">-- select a person --</option>
+                  </select>
+                </div>
+              </div> 
             </div>
 
-            <!-- Afternoon -->
-            <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: slots, collaspe_when_time_selected: true, day: selected_date}" ng-init="setFormDataStoreId($index)" class="accordian-group">
-            </div>
-
-
-            <!-- Evening -->
-            <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true, day: selected_date}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div class="col-sm-6">
+              <div ng-if="bb.company.$has('resources')">
+                <div class="form-group" bb-resources>
+                  <label>Resource</label>
+                    <select class="form-control"  id="resource" ng-model="resource" ng-options="r.name for r in bookable_resources | orderBy: 'name'">
+                      <option value="">-- select a resource --</option>
+                    </select>
+                  </div>
+              </div>  
             </div>
 
           </div>
 
         </div>
 
-      </div>
+        <div class="row bb-admin-calendar-view-switch">
+          <div class="col-xs-12">
+            <div class="btn-group pull-right">
+              <button class="btn btn-sm btn-default" ng-class="{active: !week_view}" ng-click="switchView()">
+                <i class="fa fa-calendar-times-o"></i> Day
+              </button>
+              <button class="btn btn-sm btn-default" ng-class="{active: week_view}" ng-click="switchView()">
+                <i class="fa fa-calendar-o"></i> Week
+              </button>
+            </div>
+          </div>
+        </div>
 
+        <div ng-if="!week_view">
+
+          <div class="bb-admin-calendar-day-nav">
+            <button type="button" class="btn btn-link pull-left" ng-click="subtract('days', 1)">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              <span class="hidden-xs">Previous</span>
+            </button>
+
+            <div class="cal-dateheader">
+              <h2 class="bb-section-title text-center hidden-xs">{{selected_date | datetime: 'Do MMM YYYY'}}</h2>
+              <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">{{selected_date | datetime: 'Do MMM'}}</h2>
+            </div>
+
+            <button type="button" class="btn btn-link pull-right" ng-click="add('days', 1)">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true" ></span>
+              <span class="hidden-xs">Next</span>
+            </button>
+          </div>
+
+          <div class="bb-availability">
+
+            <div ng-show="!slots || (slots && slots.length == 0)" class="bb-service-unavailable">
+              <p>No availability found</p>
+            </div>
+
+            <div ng-if="slots">
+
+              <div accordion close-others="false">
+
+                <!-- Morning -->
+                <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: slots, collaspe_when_time_selected: true, day: selected_date}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                </div>
+
+                <!-- Afternoon -->
+                <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: slots, collaspe_when_time_selected: true, day: selected_date}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                </div>
+
+
+                <!-- Evening -->
+                <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true, day: selected_date}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div ng-if="week_view">
+          <div bb-time-ranges="{selected_day: today}"></div>
+        </div>
+
+        <button type="button" class="btn btn-primary pull-right" ng-click="checkReady() && routeReady()" bb-debounce>Continue</button>
+
+      </div>
     </div>
 
-    <div ng-if="week_view">
-      <div bb-time-ranges="{selected_day: today}"></div>
+  
+    <div class="panel panel-danger">
+      <div class="panel-heading"><!-- Availability Conflict Detected -->Overbook</div>
+      <div class="panel-body">
+      
+        <p>Overbooking ignores booking time step and availability constraints to make a booking.</p>
+        
+        <button type="button" class="btn btn-danger pull-right" ng-click="overBook()" bb-debounce>Overbook {{bb.current_item.defaults.datetime | datetime: 'time'}}</button>
+
+      </div>
+
     </div>
 
   </div>
@@ -144,13 +154,12 @@
   <div class="bb-step-navigation">
     <div class="row">
       <div class="col-sm-9 col-sm-push-3 text-right">
-        <button type="button" class="btn btn-danger" ng-click="checkReady() && routeReady()" bb-debounce>Continue</button>
+        <!-- <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady()" bb-debounce>Continue</button> -->
       </div>
       <div class="col-sm-3 col-sm-pull-9">
         <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
       </div>
     </div>
   </div>
-
 
 </div>
