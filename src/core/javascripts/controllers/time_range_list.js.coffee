@@ -27,7 +27,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbTimeRanges', () ->
+angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $compile) ->
   restrict: 'AE'
   replace: true
   scope : true
@@ -37,6 +37,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
   link: (scope, element, attrs, controller, transclude) ->
 
     transclude scope, (clone) =>
+
       # if there's content compile that or grab the week_calendar template
       has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
 
@@ -50,7 +51,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', () ->
 
 
 angular.module('BB.Controllers').controller 'TimeRangeList',
-($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, DateTimeUlititiesService) ->
+($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, DateTimeUtilitiesService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
 
@@ -478,7 +479,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
               if (!dtimes[pad])
                 time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-          requested_slot = DateTimeUlititiesService.checkRequestedTime(day.date, time_slots, current_item)
+          requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item)
 
           if requested_slot
             $scope.selectSlot(day, requested_slot)

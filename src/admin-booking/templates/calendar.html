@@ -11,13 +11,13 @@
     </div>
 
     <div class="panel panel-danger">
-      <div class="panel-heading">Availability Conflict</div>
+      <div class="panel-heading">Availability Conflict Detected</div>
       <div class="panel-body">
         <p>
           Theres's an availability conflict
           <span ng-show="bb.current_item.person.name">with {{bb.current_item.person.name}}</span>
           <span ng-show="bb.current_item.resource.name">in {{bb.current_item.resource.name}}</span>
-          for {{bb.current_item.service.name}} at {{bb.current_item.requested_datetime.datetime | datetime: 'time'}}.  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
+          for {{bb.current_item.service.name}} at {{bb.current_item.defaults.datetime | datetime: 'time'}}.  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
         </p>
         <ul class="bb-bullet-list">
           <li>The Staff/Resource being unavailable</li>
@@ -26,7 +26,7 @@
         </ul>
         <p>You can either choose another time below or overbook.</p>
 
-        <button type="button" class="btn btn-danger pull-right" ng-click="overBook()" bb-debounce>Overbook {{bb.current_item.requested_datetime.datetime | datetime: 'time'}}</button>
+        <button type="button" class="btn btn-danger pull-right" ng-click="overBook()" bb-debounce>Overbook {{bb.current_item.defaults.datetime | datetime: 'time'}}</button>
 
       </div>
 
@@ -94,8 +94,8 @@
         </button>
 
         <div class="cal-dateheader">
-          <h2 class="bb-section-title text-center hidden-xs">{{format_date('Do MMM YYYY')}}</h2>
-          <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">{{format_date('Do MMM')}}</h2>
+          <h2 class="bb-section-title text-center hidden-xs">{{selected_date | datetime: 'Do MMM YYYY'}}</h2>
+          <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">{{selected_date | datetime: 'Do MMM'}}</h2>
         </div>
 
         <button type="button" class="btn btn-link pull-right" ng-click="add('days', 1)">
@@ -110,21 +110,21 @@
           <p>No availability found</p>
         </div>
 
-        <div ng-show="slots">
+        <div ng-if="slots">
 
           <div accordion close-others="false">
 
             <!-- Morning -->
-            <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: slots, collaspe_when_time_selected: true, day: selected_date}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
             <!-- Afternoon -->
-            <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: slots, collaspe_when_time_selected: true, day: selected_date}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
 
             <!-- Evening -->
-            <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true, day: selected_date}" ng-init="setFormDataStoreId($index)" class="accordian-group">
             </div>
 
           </div>

@@ -32,7 +32,7 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   scope : true
   controller : 'TimeList'
 
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService) ->
   
   $scope.controller = "public.controllers.TimeList"
   $scope.notLoaded $scope
@@ -40,42 +40,34 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   $scope.data_source = $scope.bb.current_item if !$scope.data_source
   $scope.options = $scope.$eval($attrs.bbTimes) or {}
 
-  $rootScope.connection_started.then =>
+
+  $rootScope.connection_started.then ->
     
-    if $scope.bb.current_item.requested_date
-      $scope.setDate($scope.bb.current_item.requested_date)
-      $scope.bb.current_item.setDate($scope.selected_day)
-    
+    # use default date if current item doesn't have one already
+    if $scope.bb.current_item.defaults.date and !$scope.bb.current_item.date
+      $scope.setDate($scope.bb.current_item.defaults.date)
+      
     $scope.loadDay()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
 
   ###**
   * @ngdoc method
   * @name setDate
   * @methodOf BB.Directives:bbTimes
   * @description
-  * Set a date of time list
+  * Set the date the time list reprents
   *
-  * @param {date} date The date of time list
+  * @param {moment} the date to set the time list to use
   ###
   # set a date
   $scope.setDate = (date) =>
     day = new BBModel.Day({date: date, spaces: 1})
-    $scope.setDay(day)
+    $scope.selected_day  = day
+    $scope.selected_date = day.date
+    $scope.data_source.setDate(day)
 
-  ###**
-  * @ngdoc method
-  * @name setDay
-  * @methodOf BB.Directives:bbTimes
-  * @description
-  * Set based on a day model
-  *
-  * @param {object} dayItem The dayItem
-  ###
-  # set based on a day model
-  $scope.setDay = (dayItem) =>
-    $scope.selected_day  = dayItem
-    $scope.selected_date = dayItem.date
 
   ###**
   * @ngdoc method
@@ -111,20 +103,6 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadDay()
 
-  ###**
-  * @ngdoc method
-  * @name format_date
-  * @methodOf BB.Directives:bbTimes
-  * @description
-  * Format data source date of the time list
-  *
-  * @param {date} fmt The format data
-  ###
-  # format data source date
-  # This method is deprecated, use datetime filter instead, e.g. moment() | datetime:'dd/mm/yy'
-  $scope.format_date = (fmt) =>
-    if $scope.data_source.date
-      return $scope.data_source.date.date.format(fmt)
 
   ###**
   * @ngdoc method
@@ -133,8 +111,8 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @description
   * Select the slot from time list in according of slot and route parameters
   *
-  * @param {date} slot The slot
-  * @param {string=} A specific route to load
+  * @param {TimeSlot} slot The slot
+  * @param {string} A specific route to load
   ###
   $scope.selectSlot = (slot, route) =>
     if slot && slot.availability() > 0
@@ -161,7 +139,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @description
   * The highlight slot from time list 
   *
-  * @param {date} slot The slot 
+  * @param {TimeSlot} slot The slot 
   ###
   $scope.highlightSlot = (slot) =>
     if slot && slot.availability() > 0
@@ -239,11 +217,11 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         return
 
       $scope.notLoaded $scope
-      pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_date, client: $scope.client, available: 1 })
+      pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_date.toI, client: $scope.client, available: 1 })
       
-      pslots.finally =>
+      pslots.finally ->
         $scope.setLoaded $scope
-      pslots.then (time_slots) =>
+      pslots.then (time_slots) ->
 
         $scope.slots = time_slots
         $scope.$broadcast('slotsUpdated')
@@ -257,7 +235,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
         
-        requested_slot = DateTimeUlititiesService.checkRequestedTime($scope.selected_date, time_slots, $scope.data_source)
+        requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
 
         if requested_slot
           $scope.highlightSlot(requested_slot)
@@ -274,6 +252,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         #       $scope.decideNextPage()
         #       found_time = true
         #       break
+        # TODO why are checking this time?
         #     if ($scope.data_source.time && t.time == $scope.data_source.time.time )
         #       $scope.data_source.setTime(t)
         #       found_time = true
@@ -319,63 +298,63 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
 
 
-angular.module('BB.Directives').directive 'bbAccordianGroup', () ->
-  restrict: 'AE'
-  scope : true
-  controller : 'AccordianGroup'
+# angular.module('BB.Directives').directive 'bbAccordianGroup', () ->
+#   restrict: 'AE'
+#   scope : true
+#   controller : 'AccordianGroup'
 
 
-angular.module('BB.Controllers').controller 'AccordianGroup', ($scope,  $rootScope, $q) ->
-  $scope.accordian_slots             = []
-  $scope.is_open                     = false
-  $scope.has_availability            = false
-  $scope.is_selected                 = false
-  $scope.collaspe_when_time_selected = true
-  $scope.start_time                  = 0
-  $scope.end_time                    = 0
+# angular.module('BB.Controllers').controller 'AccordianGroup', ($scope,  $rootScope, $q) ->
+#   $scope.accordian_slots             = []
+#   $scope.is_open                     = false
+#   $scope.has_availability            = false
+#   $scope.is_selected                 = false
+#   $scope.collaspe_when_time_selected = true
+#   $scope.start_time                  = 0
+#   $scope.end_time                    = 0
 
-  $scope.init = (start_time, end_time, options) =>
+#   $scope.init = (start_time, end_time, options) =>
 
-    $scope.start_time = start_time
-    $scope.end_time   = end_time
-    $scope.collaspe_when_time_selected = if options && !options.collaspe_when_time_selected then false else true
+#     $scope.start_time = start_time
+#     $scope.end_time   = end_time
+#     $scope.collaspe_when_time_selected = if options && !options.collaspe_when_time_selected then false else true
 
-    for slot in $scope.slots
-      $scope.accordian_slots.push(slot) if slot.time >= start_time && slot.time < end_time
+#     for slot in $scope.slots
+#       $scope.accordian_slots.push(slot) if slot.time >= start_time && slot.time < end_time
 
-    updateAvailability()
-
-
-  updateAvailability = () =>
-    $scope.has_availability = false
-
-    if $scope.accordian_slots
-
-      $scope.has_availability = hasAvailability()
-
-      # does the BasketItem's selected time reside in the accordian group?
-      item = $scope.data_source
-      if item.time && item.time.time >= $scope.start_time && item.time.time < $scope.end_time && (item.date && item.date.date.isSame($scope.selected_day.date, 'day'))
-        $scope.is_selected = true
-        $scope.is_open = true unless $scope.collaspe_when_time_selected
-      else
-        $scope.is_selected = false
-        $scope.is_open = false
+#     updateAvailability()
 
 
-  hasAvailability = () =>
-    return false if !$scope.accordian_slots
-    for slot in $scope.accordian_slots
-      return true if slot.availability() > 0
-    return false
+#   updateAvailability = () =>
+#     $scope.has_availability = false
+
+#     if $scope.accordian_slots
+
+#       $scope.has_availability = hasAvailability()
+
+#       # does the BasketItem's selected time reside in the accordian group?
+#       item = $scope.data_source
+#       if item.time && item.time.time >= $scope.start_time && item.time.time < $scope.end_time && (item.date && item.date.date.isSame($scope.selected_day.date, 'day'))
+#         $scope.is_selected = true
+#         $scope.is_open = true unless $scope.collaspe_when_time_selected
+#       else
+#         $scope.is_selected = false
+#         $scope.is_open = false
 
 
-  $scope.$on 'slotChanged', (event) =>
-    updateAvailability()
+#   hasAvailability = () =>
+#     return false if !$scope.accordian_slots
+#     for slot in $scope.accordian_slots
+#       return true if slot.availability() > 0
+#     return false
 
 
-  $scope.$on 'slotsUpdated', (event) =>
-    $scope.accordian_slots = []
-    for slot in $scope.slots
-      $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time && slot.time < $scope.end_time
-    updateAvailability()
+#   $scope.$on 'slotChanged', (event) =>
+#     updateAvailability()
+
+
+#   $scope.$on 'slotsUpdated', (event) =>
+#     $scope.accordian_slots = []
+#     for slot in $scope.slots
+#       $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time && slot.time < $scope.end_time
+#     updateAvailability()

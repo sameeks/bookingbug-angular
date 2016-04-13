@@ -17,7 +17,7 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
 
   $rootScope.connection_started.then ->
 
-    $scope.week_view = !$scope.bb.current_item.requested_datetime
+    $scope.week_view = !$scope.bb.current_item.defaults.time
 
 
   $scope.switchView = () ->
@@ -25,5 +25,7 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
 
 
   $scope.overBook = ->
+
     new_timeslot = new BBModel.TimeSlot({time: $scope.current_item.defaults.time, avail: 1})
+    
     $scope.selectSlot(new_timeslot)

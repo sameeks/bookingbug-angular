@@ -1,4 +1,4 @@
-angular.module('BB.Services').factory "DateTimeUlititiesService", () ->
+angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
 
   # converts date and time belonging to BBModel.Day and BBModel.TimeSlot into
   # a valid moment object
@@ -22,26 +22,29 @@ angular.module('BB.Services').factory "DateTimeUlititiesService", () ->
     return datetime.minutes() + datetime.hours() * 60
 
 
-  checkRequestedTime: (date, time_slots, basket_item) ->
+  checkDefaultTime: (date, time_slots, basket_item) ->
 
     debugger
 
-    return false if basket_item.requested_datetime.checked
+    return if !basket_item.defaults.time
 
     found_time_slot = null
 
-    if (basket_item.requested_time or basket_item.time) and basket_item.date and date.isSame(basket_item.date.date, 'day')
+    if (basket_item.defaults.time or basket_item.time) and basket_item.date and date.isSame(basket_item.date.date, 'day')
 
       for slot in time_slots
+
         if (basket_item.requested_time and basket_item.requested_time is slot.time) and slot.avail is 1
           found_time_slot = slot
           break
 
-        if (basket_item.time and basket_item.time.time is slot.time) and slot.avail is 1
-          found_time_slot = slot
-          break
+        # TODO can i delete this?
+        # if (basket_item.time and basket_item.time.time is slot.time) and slot.avail is 1
+        #   found_time_slot = slot
+        #   break
 
-    basket_item.requestedTimeChecked() 
+    delete basket_item.defaults.time if found_time_slot
+
     return found_time_slot
 
         
