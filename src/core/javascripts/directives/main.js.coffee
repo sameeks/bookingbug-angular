@@ -15,12 +15,19 @@ angular.module('BB.Directives').directive 'bbContent', ($compile) ->
     $compile(element)(scope)
 
 angular.module('BB.Directives').directive 'bbLoading', ($compile) ->
-  transclude: false,
-  restrict: 'A',
   link: (scope, element, attrs) ->
     scope.scopeLoaded = scope.areScopesLoaded(scope)
-    element.attr('ng-hide',"scopeLoaded")
-    element.attr('bb-loading',null)
+    element.attr("ng-hide", "scopeLoaded")
+    element.attr("bb-loading", null)
+    positionLoadingIcon = () ->
+      center = $(window).innerHeight() / 2 - $("#wait_graphic").height() / 2
+      $("#loading_icon").css("padding-top", center + "px")
+    positionLoadingIcon()
+    $(window).on "resize", ->
+      positionLoadingIcon()
+    scope.$on "page:loaded", ->
+      positionLoadingIcon()   
+
     $compile(element)(scope)
     return
 

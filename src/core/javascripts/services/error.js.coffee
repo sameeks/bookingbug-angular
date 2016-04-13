@@ -86,6 +86,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: 'You need to select a time slot'
     },
     {
+      key: 'STORE_NOT_SELECTED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'You need to select a store'
+    },
+    {
       key: 'APPT_AT_SAME_TIME',
       type: 'warning',
       title: '',
