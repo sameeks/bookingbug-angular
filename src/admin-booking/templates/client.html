@@ -38,13 +38,13 @@
   <div ng-show="client.name">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <span style="font-family: proxbold;">{{client.name}}</span>
+        <span>{{client.name}}</span>
         <i class="fa fa-times panel-client-close" ng-click="client = null"></i>
       </div>
       <div class="panel-body">
-        <p ng-show="client.id"><span style="font-family: proxbold;">ID: </span>{{client.id}}</p>
-        <p ng-show="client.email"><span style="font-family: proxbold;">Email: </span>{{client.email}}</p>
-        <p ng-show="client.phone"><span style="font-family: proxbold;">Phone: </span>{{client.phone}}</p>
+        <p ng-show="client.id"><span>ID: </span>{{client.id}}</p>
+        <p ng-show="client.email"><span>Email: </span>{{client.email}}</p>
+        <p ng-show="client.phone"><span>Phone: </span>{{client.phone}}</p>
         <button class="btn btn-primary pull-right" ng-click="selectClient(client)">Select</button>
       </div>
     </div>
