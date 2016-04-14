@@ -518,7 +518,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     $scope.selectedStore = company
 
     # Add answers object to the item_defaults if questions have already been asked before the map step
-    if $scope.bb.current_item.item_details.questions
+    if $scope.bb.current_item.item_details and $scope.bb.current_item.item_details.questions
       setAnswers()
 
     if company.service
