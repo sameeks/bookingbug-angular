@@ -2,6 +2,10 @@
   @include placeholder(#CCC);
 }
 
+.form-control[disabled]{
+  cursor: default;
+}
+
 .bb-question-heading {
   @include make-sm-column(8);
   @include make-sm-column-offset(4);

@@ -1,9 +1,20 @@
+###**
+* @ngdoc service
+* @name BB.Services:Airbrake
+*
+* @description
+* JavaScript notifier for capturing errors in web browsers and reporting them to Airbrake.
+*
+####
+
 angular.module('BB.Services').factory '$exceptionHandler', ($log, AirbrakeConfig) ->
   airbrake = new (airbrakeJs.Client)(
     projectId: AirbrakeConfig.projectId
     projectKey: AirbrakeConfig.projectKey)
   airbrake.addFilter (notice) ->
-    notice.context.environment = AirbrakeConfig.environment
+    if AirbrakeConfig.environment is 'development'
+      return
+    notice.context.environment = 'production'
     notice
   (exception, cause) ->
     $log.error exception

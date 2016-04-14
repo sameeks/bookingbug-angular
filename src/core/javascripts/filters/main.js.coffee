@@ -4,7 +4,7 @@ app.requires.push 'pascalprecht.translate'
 
 # strips the postcode from the end of the address. i.e.
 # '15 some address, somwhere, SS1 4RP' becomes '15 some address, somwhere'
-app.filter 'stripPostcode', ->
+angular.module('BB.Filters').filter 'stripPostcode', ->
   (address) ->
     # test to see if the address contains a postcode by searching for a any
     # letter followed by a number i.e N1, CM11
@@ -21,7 +21,7 @@ app.filter 'stripPostcode', ->
     return address
 
 
-app.filter 'labelNumber', ->
+angular.module('BB.Filters').filter 'labelNumber', ->
   (input, labels) ->
     response = input
     if labels[input]
@@ -29,13 +29,13 @@ app.filter 'labelNumber', ->
     return response
 
 
-app.filter 'interpolate', ['version', (version) ->
+angular.module('BB.Filters').filter 'interpolate', ['version', (version) ->
   (text) ->
     return String(text).replace(/\%VERSION\%/mg, version)
 ]
 
 
-app.filter 'rag', ->
+angular.module('BB.Filters').filter 'rag', ->
   (value, v1, v2) ->
    if (value <= v1)
       return "red"
@@ -45,11 +45,11 @@ app.filter 'rag', ->
       return "green"
 
 
-app.filter 'time', ($window) ->
+angular.module('BB.Filters').filter 'time', ($window) ->
   (v) ->
     return $window.sprintf("%02d:%02d",Math.floor(v / 60), v%60 )
 
-app.filter 'address_single_line', ->
+angular.module('BB.Filters').filter 'address_single_line', ->
   (address) =>
 
     return if !address
@@ -75,7 +75,7 @@ app.filter 'address_single_line', ->
     return addr
 
 
-app.filter 'address_multi_line', ->
+angular.module('BB.Filters').filter 'address_multi_line', ->
   (address) =>
 
     return if !address
@@ -95,7 +95,7 @@ app.filter 'address_multi_line', ->
     str += address.postcode if address.postcode
     return str
 
-app.filter 'map_lat_long', ->
+angular.module('BB.Filters').filter 'map_lat_long', ->
   (address) =>
     return if !address
     return if !address.map_url
@@ -108,7 +108,7 @@ app.filter 'distance', ($translate) ->
   (distance) ->
     return '' unless distance
     localUnit = $translate.instant('DISTANCE_UNIT')
-    distance *= 0.621371 if localUnit is 'km'
+    distance *= 1.60934 if localUnit is 'km'
     prettyDistance = distance.toFixed(1).replace(/\.0+$/,'')
     prettyDistance + localUnit
     
@@ -172,7 +172,7 @@ app.filter 'time_period_from_seconds', ($translate, $filter) ->
 
     return timePeriod
 
-app.filter 'round_up', ->
+angular.module('BB.Filters').filter 'round_up', ->
   (number, interval) ->
     result = number / interval
     result = parseInt(result)
@@ -184,11 +184,10 @@ app.filter 'round_up', ->
 
 # Usage:
 # day in days | exclude_days : ['Saturday','Sunday']
-app.filter 'exclude_days', ->
+angular.module('BB.Filters').filter 'exclude_days', ->
   (days, excluded) ->
     _.filter days, (day) ->
       excluded.indexOf(day.date.format('dddd')) == -1
-
 
 # format number as local number
 angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, ValidatorService) ->
@@ -229,14 +228,13 @@ app.filter "datetime", ->
 
     result
 
-
-app.filter 'range', ->
+angular.module('BB.Filters').filter 'range', ->
   (input, min, max) ->
     (input.push(i) for i in [parseInt(min)..parseInt(max)])
     input
 
 
-app.filter 'international_number', () ->
+angular.module('BB.Filters').filter 'international_number', () ->
   (number, prefix) =>
     if number and prefix
       return "#{prefix} #{number}"
@@ -246,7 +244,7 @@ app.filter 'international_number', () ->
       return ""
 
 
-app.filter "startFrom", ->
+angular.module('BB.Filters').filter "startFrom", ->
   (input, start) ->
     if input is `undefined`
       input
@@ -254,22 +252,20 @@ app.filter "startFrom", ->
       input.slice +start
 
 
-app.filter 'add', ->
+angular.module('BB.Filters').filter 'add', ->
   (item, value) =>
     if item and value
       item = parseInt(item)
       return item + value
 
-
-app.filter 'spaces_remaining', () ->
+angular.module('BB.Filters').filter 'spaces_remaining', () ->
   (spaces) ->
     if spaces < 1
       return 0
     else
       return spaces
 
-
-app.filter 'key_translate', ->
+angular.module('BB.Filters').filter 'key_translate', ->
   (input) ->
     upper_case = angular.uppercase(input)
     remove_punctuations = upper_case.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"")

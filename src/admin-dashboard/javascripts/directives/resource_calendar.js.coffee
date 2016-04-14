@@ -70,6 +70,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     else
       800
 
+    # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
     $scope.uiCalOptions =
       calendar:
         schedulerLicenseKey: '0598149132-fcs-1443104297'

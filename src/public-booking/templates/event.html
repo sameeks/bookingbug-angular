@@ -218,26 +218,34 @@
                     </div>
                   </div>
 
+                  <!-- \/\/\/\/\/\/\/\/ -->
+                  <!-- CUSTOM QUESTIONS -->
+                  <!-- \/\/\/\/\/\/\/\/ -->
+
                   <div bb-item-details="item" bb-suppress-basket-update="$index">
                     <div ng-form name="booking_questions_form">
-                      <div class="form-group" ng-repeat="question in item_details.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
-                        <label for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-if="question.required">*</span>:</label>
-                        <div class="col-sm-5">
-                          <input bb-question="question" />
-                        </div>
-                        <div class="col-sm-3 messages">
-                          <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )"><span translate="DETAILS_VALIDATION_MSG"></span>
-                            
+                      <div ng-repeat="question in item_details.questions">
+                        <div class="form-group" ng-if="question.currentlyShown" bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
+                          <label for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-if="question.required">*</span>:</label>
+                          <div class="col-sm-5">
+                            <input bb-question="question" />
+                          </div>
+                          <div class="col-sm-3 messages">
+                            <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )" translate="DETAILS_VALIDATION_MSG">
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
 
-          </div>
+          </div><!-- accordion close -->
+          
+          <div class='accordion-bottom-border'></div>
 
         </div>
       </div>

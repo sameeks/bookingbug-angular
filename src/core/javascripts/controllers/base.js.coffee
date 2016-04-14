@@ -279,8 +279,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.initWidget2()
       return
 
-
-
   $scope.initWidget2 = () =>
     $scope.init_widget_started = true
 
@@ -347,14 +345,17 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.app_id = prms.app_id
     if prms.app_key
       $scope.bb.app_key = prms.app_key
-
+   
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
       $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
     else if $scope.bb.original_item_defaults
-      # possibly reset the defails
+      # possibly reset the defails (yes, the defails!)
       $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
 
+    if $scope.bb.selected_service and $scope.bb.selected_service.company_id == company_id
+      $scope.bb.item_defaults.service = $scope.bb.selected_service.id
+     
     if prms.route_format
       $scope.bb.setRouteFormat(prms.route_format)
       # do we need to call anything else before continuing...
@@ -476,7 +477,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       else
         comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
         halClient.$get(comp_url, options).then (company) ->
-          comp_def.resolve(company)
+          if company
+            comp_def.resolve(company)
+          else
+            comp_def.reject("Invalid company ID #{company_id}")
         , (err) ->
           comp_def.reject(err)
 
@@ -583,9 +587,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-
-
-
   setupDefaults = (company_id) =>
     def = $q.defer()
 
@@ -616,7 +617,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         person.then (res) =>
           $scope.bb.item_defaults.person = new BBModel.Person(res)
 
-
       if $scope.bb.item_defaults.person_ref
         if $scope.bb.isAdmin
           person = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/people/find_by_ref/' + $scope.bb.item_defaults.person_ref )
@@ -626,7 +626,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.default_setup_promises.push(person)
         person.then (res) =>
           $scope.bb.item_defaults.person = new BBModel.Person(res)
-
+     
       if $scope.bb.item_defaults.service
         if $scope.bb.isAdmin
           service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services/' + $scope.bb.item_defaults.service )
@@ -684,8 +684,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         clinic.then (res) =>
           $scope.bb.item_defaults.clinic = new BBModel.Clinic(res)
 
-
-
       if $scope.bb.item_defaults.duration
         $scope.bb.item_defaults.duration = parseInt($scope.bb.item_defaults.duration)
 
@@ -704,11 +702,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.isLoadingPage = () =>
     $scope.loading_page
 
-
   # $locationChangeStart is broadcast before a URL will change
   $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
     # TODO dont need to handle this when widget is initialising
     return if !$scope.bb.routeFormat and $scope.bb.routing
+
+    #save the current lenght of browser history
+    $scope.history_at_widget_init = $scope.history_at_widget_init or window.parent.history.length
 
     # Get the step number we want to load
     step_number = $scope.bb.matchURLToStep()
@@ -1081,6 +1081,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.company = company
     # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over
     $scope.company = company
+  
     $scope.bb.item_defaults.company = $scope.bb.company
 
     SettingsService.setCountryCode($scope.bb.company.country_code)
@@ -1184,7 +1185,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     while past_steps[0]
       last_step = past_steps.pop()
       if !last_step
-        break 
+        break
       if !last_step.skipped
         step_to_load = last_step.number
         break
@@ -1198,7 +1199,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       # and one page has already been removed from the history by the browser
       pages_to_remove_from_history--
 
-    if pages_to_remove_from_history? and pages_to_remove_from_history > 0
+    ignore_browser_history_sync = $scope.history_at_widget_init == window.history.length
+
+    if pages_to_remove_from_history? and pages_to_remove_from_history > 0 and !ignore_browser_history_sync
       window.history.go(pages_to_remove_from_history*-1)
 
     # Load step

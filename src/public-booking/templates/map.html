@@ -1,4 +1,4 @@
-<div id="map" bb-map class="bb-store-search" ng-init="checkStepTitle('Select a company')">
+<div id="map" bb-map="{default_zoom: 6, filter_by_service: true}" class="bb-store-search" ng-init="checkStepTitle('Select a company')">
 
   <div class="page-summary">
     <p><span translate="MAP_TITLE"></span></p>
@@ -22,7 +22,7 @@
         </div>
         <div class="col-xs-2">
           <button type="button" class="btn btn-default btn-lg" title="{{'GEOLOCATE' | translate}}" ng-click="geolocate()">
-            <span class="glyphicon glyphicon-screenshot"></span>
+            <span class="glyphicon glyphicon-map-marker"></span>
           </button>
         </div>
       </div>
@@ -34,51 +34,66 @@
 
     <h2 class="company-map-header"><span translate="STORE_RESULT_TITLE" translate-values="{results: shownMarkers.length, address: address}" translate-interpolation="messageformat"></span></h2>
 
+    <div class="row filter-by-service" ng-show="can_filter_by_service">
+      <div class="col-xs-12">
+        <label>
+          <span translate="HIDE_STORES"></span>   
+          &nbsp;&nbsp;<input type='checkbox' ng-model="filter_by_service" ng-change="filterByService()" />
+        </label>
+      </div>
+    </div>
+
     <div class="company-map row">
 
       <div class="bb-map-block col-sm-8 col-sm-push-4">
         <div ng-delayed="ui-map" ng-delayed-value="myMap" ng-delayed-watch="mapReady" ng-delayed-ready="mapLoaded" ui-options="mapOptions" class="map-canvas"></div>
         <div ng-repeat="marker in mapMarkers" ui-map-marker="mapMarkers[$index]" ui-event="{'map-click': 'openMarkerInfo(marker)'}"> </div>
         <div ui-map-info-window="myInfoWindow" class="clearfix">
-
           <p><strong>{{currentMarker.company.name}}</strong></p>
-          <p ng-bind-html="currentMarker.company.address | address_multi_line"></p>
-          <p><strong><span translate="STORE_PHONE">s></span>:</strong> {{currentMarker.company.address.phone | uk_local_number}}</p>
-          <p>
-            <span ng-if="currentMarker.company.extra.closing_time"><strong>{{currentMarker.company.extra.closing_time}}</strong></span>
-            <span class="distance">{{currentMarker.distance | distance}}</span>
-          </p>
-          <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.live"><span translate="PROGRESS_SELECT"></span></button>
+          <div ng-show="currentMarker.company.has_service">
+            <p ng-bind-html="currentMarker.company.address | address_multi_line"></p>
+            <p><strong><span translate="STORE_PHONE"></span>:</strong> {{currentMarker.company.address.phone | uk_local_number}}</p>
+            <p>
+              <strong ng-if="currentMarker.company.extra.closing_time">{{currentMarker.company.extra.closing_time}}</strong>
+              <span class="distance">{{currentMarker.distance | distance}}</span>
+            </p>
+          </div>
 
+          <div ng-show="!currentMarker.company.has_service" translate="SERVICE_UNAVAILABLE"
+               translate-values="{name: marker.company.service.name}">
+          </div>
+
+          <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.live" translate="PROGRESS_SELECT"></button>
         </div>
       </div>
 
-
-      <div class="bb-company-block col-sm-4 col-sm-pull-8" >
+      <div class="bb-company-block col-sm-4 col-sm-pull-8">
 
         <div accordion close-others="true">
-          <div accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" ng-repeat="marker in shownMarkers" class="store-body" ng-init="is_open = $first">
-
+          <div accordion-group is-open="marker.is_open" ng-class="{'expanded': marker.is_open, 'selected': is_selected}" ng-repeat="marker in shownMarkers" class="store-body" ng-click="openMarkerInfo(marker)">
+            
             <div accordion-heading class="store-header">
               <span><strong>{{$index+1}}.</strong> {{marker.company.name}}</span>
-              <span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></span>
+              <span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': marker.is_open, 'glyphicon-chevron-right': !marker.is_open}"></span>
             </div>
 
-            <ul class="store-details" ng-click="openMarkerInfo(marker)">
+
+            <ul ng-show="marker.company.has_service" class="store-details" ng-click="openMarkerInfo(marker)">
               <li ng-bind-html="marker.company.address | address_multi_line"></li>
-              <li><strong><span translate="STORE_PHONE"></span>:</strong> {{marker.company.address.phone | uk_local_number}}</li>
+              <li><strong><span translate="STORE_PHONE"></span>:</strong> {{marker.company.address.phone | local_phone_number}}</li>
               <li ng-show="currentMarker.distance">
                 <span class="distance">{{marker.distance | distance}}</span>
               </li>
             </ul>
-            <button type="button" ng-click="selectItem(marker.company)" class="btn btn-primary pull-right"><span translate="PROGRESS_SELECT"></span></button>
+            <div ng-show="!marker.company.has_service" translate="SERVICE_UNAVAILABLE" translate-values="{name: marker.company.service.name}"></div>
+            <button type="button" ng-click="selectItem(marker.company)" ng-show="currentMarker.company.has_service" class="btn btn-primary pull-right"><span translate="PROGRESS_SELECT"></span></button>
           </div>
         </div>
 
       </div>
- 
+
     </div>
   </div>
-  <div ng-if="loc"class="bb-step-navigation">
+  <div ng-show="loc"class="bb-step-navigation">
   </div>
 </div>

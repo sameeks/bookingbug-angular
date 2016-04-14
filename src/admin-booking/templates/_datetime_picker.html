@@ -1,9 +1,9 @@
 
 
 <div class="row bb-date-picker">
-  <div class="col-sm-8">
+  <div class="col-sm-7">
     <div class="input-group">       
-      <input type="text" ng-model="date" class="form-control"
+      <input type="text" ng-model="datetimeWithNoTz" class="form-control"
         datepicker-popup="dd/MM/yyyy"
         is-open="opened"
         min-date="today"
@@ -17,7 +17,7 @@
       </span>
     </div>
   </div>
-  <div class="col-sm-4">
-    <div bb-timepicker datetime="date" show-meridian="false"></div>
+  <div class="col-sm-5">
+    <div timepicker ng-model="datetimeWithNoTz" show-meridian="showMeridian" minute-step="minuteStep"></div>
   </div>
 </div>

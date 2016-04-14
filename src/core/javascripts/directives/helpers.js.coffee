@@ -450,3 +450,28 @@ angular.module('BB.Directives').directive 'bbBookingExport', () ->
         "<div class='text-center'><a href='#{purchase_total.webcalLink()}'><img src='images/outlook.png' alt='outlook calendar icon' height='30' width='30' /><div class='clearfix'></div><span>Outlook</span></a></div><p></p>" +
         "<div class='text-center'><a href='#{purchase_total.gcalLink()}'><img src='images/google.png' alt='google calendar icon' height='30' width='30' /><div class='clearfix'></div><span>Google</span></a></div><p></p>" +
         "<div class='text-center'><a href='#{purchase_total.icalLink()}'><img src='images/ical.png' alt='ical calendar icon' height='30' width='30' /><div class='clearfix'></div><span>iCal</span></a></div>"
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbBlurOnReturn
+* @restrict A
+* @scope true
+*
+* @description
+* Removes focus from an input[type=text] element when return key is pressed
+* @example
+* <input type='text' bb-blur-on-return></div>
+####
+angular.module('BB.Directives').directive('bbBlurOnReturn', ($timeout) ->
+  restrict: 'A'
+  require: 'ngModel'
+  link: (scope, el, attrs) ->
+    el.keydown((e) ->
+      key = e.which or e.keyCode
+      if key == 13 or key == '13'
+        $timeout( () ->
+          e.target.blur() if e.target
+        , 10
+        )
+    )
+)
