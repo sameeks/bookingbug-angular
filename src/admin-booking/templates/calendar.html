@@ -6,8 +6,12 @@
       <h1><!-- Select a Time -->Availability</h1>
     </div>
 
+    <div class="page-summary">
+      <div bb-include="_basket_item_summary"></div>
+    </div>
+
     <p>
-      Theres's an availability conflict
+      There's an availability conflict
       <span ng-show="bb.current_item.person.name">with {{bb.current_item.person.name}}</span>
       <span ng-show="bb.current_item.resource.name">in {{bb.current_item.resource.name}}</span>
      <!--  for {{bb.current_item.service.name}} at {{bb.current_item.defaults.datetime | datetime: 'time'}} -->.  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
@@ -29,10 +33,6 @@
     <div class="panel panel-default">
       <div class="panel-heading">Calendar</div>
       <div class="panel-body">
-
-        <div class="page-summary">
-          <div bb-include="_basket_item_summary"></div>
-        </div>
 
         <div ng-form="resource_select_form">
 
@@ -140,7 +140,7 @@
     <div class="panel panel-danger">
       <div class="panel-heading"><!-- Availability Conflict Detected -->Overbook</div>
       <div class="panel-body">
-      
+
         <p>Overbooking ignores booking time step and availability constraints to make a booking.</p>
         
         <button type="button" class="btn btn-danger pull-right" ng-click="overBook()" bb-debounce>Overbook {{bb.current_item.defaults.datetime | datetime: 'time'}}</button>
