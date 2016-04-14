@@ -179,10 +179,16 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
 
     $scope.editBooking = (booking) ->
+      if booking.status == 3
+        templateUrl = 'edit_block_modal_form.html'
+        title = 'Edit Block'
+      else
+        templateUrl = 'edit_block_modal_form.html'
+        title = 'Edit Booking'
       ModalForm.edit
-        templateUrl: 'edit_booking_modal_form.html'
+        templateUrl: templateUrl
         model: booking
-        title: 'Edit Booking'
+        title: title
         success: (response) =>
           if response.is_cancelled
             uiCalendarConfig.calendars.resourceCalendar.fullCalendar('removeEvents', [response.id])
