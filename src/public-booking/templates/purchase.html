@@ -6,65 +6,64 @@
 
       <div class="col-xs-offset-1 col-xs-10">
 
-        <div ng-if="purchase && bookings.length == 0">
+        <div ng-show="purchase && bookings.length == 0">
           <div class="confirmation-header">
             <h2 class="confirmation-heading">Your booking has been cancelled</h2>
           </div>
         </div>
 
-        <div ng-if="bookings">
+        <div ng-show="bookings">
           <div ng-show="is_waitlist">
             <div bb-include="book_waitlist"></div>
           </div>
           <div ng-hide="is_waitlist">
             <div class="confirmation-header">
-              <h3 class="confirmation-heading">Your <span>{{purchase.bookings[0].service_name}}</span> booking</h3>
-              <!-- <p ng-if="bb.current_item.move_done" class="move-done-msg">Your booking has been moved to <strong>{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM"}}</strong>.</p> -->
+              <h3 class="confirmation-heading">Your <span>{{purchase.bookings[0].service_name}}</span> booking</h3>            
+
               <div class="row hidden-print text-right" >
               <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span> Print</button>
               <div bb-booking-export class="bb-booking-export"></div>
               </div>
             </div>
 
-            <ul class="confirmation-summary">
-              <li class="row confirmation-summary-item">          
-                <div class="bb-summary-label">Name <span class='fa fa-caret-right'></span></div>
-                <div class="bb-summary-value">{{purchase.client.name}}</div>
-              </li>
-              <li class="row confirmation-summary-item">
-                <div class="bb-summary-label">Email <span class='fa fa-caret-right'></span></div>
-                <div class="bb-summary-value">{{purchase.client.email}}</div>
-              </li>
-              <li class="row confirmation-summary-item">
-                <div class="bb-summary-label">Service <span class='fa fa-caret-right'></span></div>
-                <div class="bb-summary-value">{{purchase.bookings[0].service_name}}</div>
-              </li>
-              <li class="row confirmation-summary-item">
-                <div class="bb-summary-label">When <span class='fa fa-caret-right'></span></div>
-                <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM":false}}</div>
-              </li>
-              <li class="row confirmation-summary-item">
-                <div class="bb-summary-label">Where <span class='fa fa-caret-right'></span></div>
-                <div class="bb-summary-value">
-                  <ul class="address">
-                    <li class="address-item">{{purchase.bookings[0].company.name}}</li>
-                    <li class="address-item">{{purchase.bookings[0].company.address | address_single_line}}</li>
-                    <li class="address-item">{{purchase.bookings[0].company.phone | local_phone_number}}</li>
-                  </ul>
-                </div>
-              </li>
-              <li class="row confirmation-summary-item" ng-if="purchase.total_price > 0">
-                <div class="bb-summary-label">Price <span class='fa fa-caret-right'></span></div>
-                <div class="bb-summary-value">{{purchase.total_price | currency }}</div>
-              </li>
-            </ul>
+
+            <div>
+              <ul class="confirmation-summary">
+                <li class="row confirmation-summary-item">          
+                  <div class="bb-summary-label">Name: </div>
+                  <div class="bb-summary-value">{{purchase.client.name}}</div>
+                </li>
+                <li class="row confirmation-summary-item">
+                  <div class="bb-summary-label">Email: </div>
+                  <div class="bb-summary-value">{{purchase.client.email}}</div>
+                </li>
+                <li class="row confirmation-summary-item">
+                  <div class="bb-summary-label">Service: </div>
+                  <div class="bb-summary-value">{{purchase.bookings[0].service_name}}</div>
+                </li>
+                <li class="row confirmation-summary-item">
+                  <div class="bb-summary-label">When: </div>
+                  <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM":false}}</div>
+                </li>            
+                <li class="row confirmation-summary-item" ng-show="purchase.total_price > 0">
+                  <div class="bb-summary-label">Price: </div>
+                  <div class="bb-summary-value">{{purchase.total_price | currency }}</div>
+                </li>
+              </ul>
 
 
-            <div bb-address-map="purchase.bookings[0].company.address" class="view-booking-map">
-              <ui-gmap-google-map center='map.center' zoom='map.zoom' options="options">
-                <ui-gmap-marker coords="marker.coords" idkey="marker.id">
-                </ui-gmap-marker>
-              </ui-gmap-google-map>
+              <div bb-address-map="purchase.bookings[0].company.address" class="view-booking-map">
+                <ui-gmap-google-map center='map.center' zoom='map.zoom' options="options">
+                  <ui-gmap-marker coords="marker.coords" idkey="marker.id">
+                  </ui-gmap-marker>
+                </ui-gmap-google-map>
+              </div>
+
+              <div class="confirmation-summary-address">
+                <div><span class='fa fa-map-marker'></span> {{purchase.bookings[0].company.address | address_single_line}}</div>
+                <div> <span class='fa fa-phone'></span> {{purchase.bookings[0].company.address.phone | local_phone_number}}</div>
+              </div>
+
             </div>
 
 
@@ -99,11 +98,5 @@
     </div>
 
   </div>
-
-<!--   <div ng-show="bb.moving_booking && !bb.current_item.move_done" bb-scroll-to="booking:move" bb-always-scroll class="move-booking-container hidden-print">
-    <hr>
-    <h2 ng-hide="purchase && bookings.length == 0">Move your booking</h2>
-    <div bb-content></div>
-  </div> -->
 
 </div>

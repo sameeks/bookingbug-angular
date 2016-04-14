@@ -1,14 +1,14 @@
 <div bb-total ng-init="checkStepTitle('Confirmed')" class="bb-checkout">
   <div class="row">
-    <div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
+    <div class="col-xs-offset-1 col-xs-10">
 
       <div class="bb-subcontent">
         <div class="confirmation-header bb-confirmation-border-margin">
-          <div ng-if="!total.containsWaitlistItems()">
+          <div ng-show="!total.containsWaitlistItems()">
             <h2>Booking Confirmation</h2>
             <p class="bb-confirmation-p-alignment">Thanks {{ total.client.first_name }}. Your booking is now confirmed. We have emailed you the details below.</p>
           </div>
-           <div ng-if="total.containsWaitlistItems()">
+           <div ng-show="total.containsWaitlistItems()">
             <h2>Confirmation</h2>
             <p class="bb-confirmation-p-alignment">Thanks {{ total.client.first_name }}. You have successfully made the following bookings. We have you emailed you the details below.</p>
           </div>
@@ -21,28 +21,32 @@
         <div>
           <ul class="confirmation-summary">
             <li class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Reference:</div>
-              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>   {{ total.id }}</div>
+              <div class="bb-summary-label">Reference: </div>
+              <div class="bb-summary-value">{{total.id}}</div>             
             </li>
           </ul>
-          <ul class="confirmation-summary" ng-repeat="i in total.items">
-            <li ng-if="i.full_describe" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Service:</div>
-              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>   {{ i.full_describe }}</div>
+          
+          <ul class="confirmation-summary" ng-repeat="booking in total.bookings">
+            <li ng-show="booking.full_describe" class="row confirmation-summary-item">
+              <div class="bb-summary-label">Service: </div>
+              <div class="bb-summary-value">{{booking.full_describe}}</div>
             </li>
-            <li ng-if="i.describe" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Date/Time:</div>
-              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>   {{ i.describe }}</div>
+            <li ng-show="booking.describe" class="row confirmation-summary-item">
+              <div class="bb-summary-label">Date/Time:</div>
+              <div class="bb-summary-value">{{booking.describe}}</div>
             </li>
-            <li ng-if="i.price" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Price:</div>
-              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>   {{ i.price | currency }}</div>
+            <li ng-show="booking.price" class="row confirmation-summary-item">
+              <div class="bb-summary-label">Price:</div>
+              <div class="bb-summary-value">{{booking.price | currency}}</div>
             </li>
           </ul>
-          <ul ng-show="total.items[0].address.lat" class="confirmation-summary">
+
+
+          <ul ng-show="total.bookings[0].address.lat" class="confirmation-summary">
+            
             <li class="row confirmation-summary-item">
               <div class="col-sm-12">
-                <div bb-address-map="total.items[0].address">
+                <div bb-address-map="total.bookings[0].address">
                   <ui-gmap-google-map center='map.center' zoom='map.zoom' options="options">
                     <ui-gmap-marker coords="marker.coords" idkey="marker.id">
                     </ui-gmap-marker>
@@ -50,11 +54,12 @@
                 </div>
               </div>
             </li>
-            <li class="row confirmation-summary-item">
-              <div class="col-sm-12">
-                <span class="fa fa-map-marker" aria-hidden="true"></span> {{ total.items[0].address | address_single_line }}
-              </div>
-            </li>
+
+            <div class="confirmation-summary-address">
+              <div><span class='fa fa-map-marker'></span> {{total.bookings[0].address | address_single_line}}</div>
+              <div> <span class='fa fa-phone'></span> {{total.bookings[0].address.phone | local_phone_number}}</div>
+            </div>
+
           </ul>
 
           <div bb-custom-confirmation-text class="bb-message">
@@ -67,11 +72,4 @@
 
     </div>
   </div>
-</div>
-
-<!-- <div class="bb-step-navigation"></div> -->
-
-<div ng-show="isLoaded" class="powered-by visible-print">
-  <p>Bookings powered by <span style="color:#087f94">booking</span><span style="color:#88c66f">bug</p>
-  <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"></a>
 </div>

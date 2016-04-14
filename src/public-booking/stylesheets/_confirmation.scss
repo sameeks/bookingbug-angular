@@ -1,6 +1,11 @@
 .confirmation-header {
   font-size: $font-size-base;
   text-align: center;
+  button{
+    &:hover, &:focus{
+      box-shadow: 2px 2px 15px #ddd;
+    }
+  }
 }
 
 .confirmation-heading {
@@ -19,6 +24,28 @@
 
 .confirmation-summary-item {
   margin-bottom: 10px;
+}
+
+.confirmation-summary{
+  .confirmation-summary-item{
+    .bb-summary-label, .bb-summary-value{
+      float: left;
+      min-width: 115px;
+      padding: 0px 15px 5px 15px;
+      color: #555;
+    }
+    .bb-summary-value{
+      width: auto;
+      color: inherit;
+    }
+  }
+}
+
+.confirmation-summary-address{
+  div{
+    padding-top: 5px;
+    font-size: 14px;
+  }
 }
 
 .address-item {
