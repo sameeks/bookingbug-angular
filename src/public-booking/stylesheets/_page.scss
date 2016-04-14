@@ -66,8 +66,8 @@ p {
 }
 #loading_icon #wait_graphic {
   background:url("images/BB_wait.gif");
-  width:118px;
-  height:118px;
+  width: 100px;
+  height: 100px;
 }
 
 .powered-by {
@@ -93,15 +93,10 @@ p {
 }
 
 .bb-step-navigation {
-  margin-top: 75px;
+  margin-top: 50px;
   margin-bottom: 20px;
-  border-top: 1px solid #999;
+  border-top: 1px solid #ddd;
   padding-top: 20px;
-  @media (max-width: $screen-xs-max) {
-    margin-top: 60px;
-    border-top: 1px solid #666;
-    padding-top: 20px;
-  }
 
   .btn {
     @media (max-width: $screen-xs-max) {

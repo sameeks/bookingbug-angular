@@ -280,8 +280,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.initWidget2()
       return
 
-
-
   $scope.initWidget2 = () =>
     $scope.init_widget_started = true
 
@@ -348,14 +346,17 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.app_id = prms.app_id
     if prms.app_key
       $scope.bb.app_key = prms.app_key
-
+   
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
       $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
     else if $scope.bb.original_item_defaults
-      # possibly reset the defails
+      # possibly reset the defails (yes, the defails!)
       $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
 
+    if $scope.bb.selected_service and $scope.bb.selected_service.company_id == company_id
+      $scope.bb.item_defaults.service = $scope.bb.selected_service.id
+     
     if prms.route_format
       $scope.bb.setRouteFormat(prms.route_format)
       # do we need to call anything else before continuing...
@@ -586,9 +587,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-
-
-
   setupDefaults = (company_id) =>
     def = $q.defer()
 
@@ -619,7 +617,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         person.then (res) =>
           $scope.bb.item_defaults.person = new BBModel.Person(res)
 
-
       if $scope.bb.item_defaults.person_ref
         if $scope.bb.isAdmin
           person = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/people/find_by_ref/' + $scope.bb.item_defaults.person_ref )
@@ -629,7 +626,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.default_setup_promises.push(person)
         person.then (res) =>
           $scope.bb.item_defaults.person = new BBModel.Person(res)
-
+     
       if $scope.bb.item_defaults.service
         if $scope.bb.isAdmin
           service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services/' + $scope.bb.item_defaults.service )
@@ -686,8 +683,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.default_setup_promises.push(clinic)
         clinic.then (res) =>
           $scope.bb.item_defaults.clinic = new BBModel.Clinic(res)
-
-
 
       if $scope.bb.item_defaults.duration
         $scope.bb.item_defaults.duration = parseInt($scope.bb.item_defaults.duration)
@@ -1090,6 +1085,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.company = company
     # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over
     $scope.company = company
+  
     $scope.bb.item_defaults.company = $scope.bb.company
 
     SettingsService.setCountryCode($scope.bb.company.country_code)

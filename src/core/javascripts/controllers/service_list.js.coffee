@@ -218,6 +218,9 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       $scope.routed = true
     else
       $scope.booking_item.setService(item)
+      # -----------------------------------------------------------
+      $scope.bb.selected_service = $scope.booking_item.service
+      # -----------------------------------------------------------
       $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       $scope.routed = true
@@ -229,6 +232,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         # only set and broadcast if it's changed
         $scope.booking_item.setService($scope.service)
         $scope.broadcastItemUpdate()
+        $scope.bb.selected_service = $scope.service
 
   ###**
   * @ngdoc method
