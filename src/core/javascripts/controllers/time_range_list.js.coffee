@@ -444,6 +444,16 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
           d = pair[0]
           time_slots = pair[1]
           day = {date: moment(d), slots: time_slots}
+          console.log "slot", day
+          console.log $scope.options
+         
+          # Hide time slots that do not start from "start_from_minutes"
+          if $scope.options.start_from_minutes
+            filter = _.filter(day.slots, (slot) ->             
+              return slot.time_24.split(":")[1] == $scope.options.start_from_minutes
+              )
+          day.slots = filter if filter          
+
           $scope.days.push(day)
 
           if time_slots.length > 0
