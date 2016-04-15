@@ -1,16 +1,18 @@
 <div bb-total ng-init="checkStepTitle('Confirmed')" class="bb-checkout">
   <div class="row">
-    <div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
+    <div class="col-xs-offset-1 col-xs-10">
 
       <div class="bb-subcontent">
         <div class="confirmation-header bb-confirmation-border-margin">
           <div ng-if="!total.containsWaitlistItems()">
-            <h2><span translate="CONFIRMATION_BOOKING_TITLE"></span></h2>
-            <p class="bb-confirmation-p-alignment"><span translate="CONFIRMATION_BOOKING_SUBHEADER" translate-values="{member_name: total.client.first_name}"></span></p>
+            <h2 translate="CONFIRMATION_BOOKING_TITLE"></h2>
+            <p class="bb-confirmation-p-alignment" translate="CONFIRMATION_BOOKING_SUBHEADER"
+               translate-values="{member_name: total.client.first_name}"></p>
           </div>
            <div ng-if="total.containsWaitlistItems()">
-            <h2><span translate="ITEM_CONFIRMATION"></span></h2>
-            <p class="bb-confirmation-p-alignment"><span translate="CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST" translate-values="{member_name: total.client.first_name}"></span></p>
+            <h2 translate="ITEM_CONFIRMATION"></h2>
+            <p class="bb-confirmation-p-alignment" translate="CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST"
+               translate-values="{member_name: total.client.first_name}"></p>
           </div>
           <div class="row hidden-print text-right">
             <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span><span translate="PRINT"></span></button>
@@ -21,35 +23,40 @@
         <div>
           <ul class="confirmation-summary">
             <li class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label"><span translate="BOOKING_REFERENCE"></span>:</div>
-              <div class="col-sm-9 bb-summary-label"><span class='fa fa-caret-right'></span>{{total.id}}</div>
+              <div class="bb-summary-label"><span translate="BOOKING_REFERENCE"></span>:</div>
+              <div class="bb-summary-value">{{total.id}}</div>
             </li>
           </ul>
-          <ul class="confirmation-summary" ng-repeat="i in total.items">
-            <li ng-if="i.full_describe" class="row confirmation-summary-item">
-              <div class="col-sm-3"><span translate="ITEM_SERVICE"></span>:</div>
-              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>{{ i.full_describe }}</div>
+          <ul class="confirmation-summary" ng-repeat="booking in total.bookings">
+            <li ng-if="booking.full_describe" class="row confirmation-summary-item">
+              <div class="bb-summary-label"><span translate="ITEM_SERVICE"></span>:</div>
+              <div class="bb-summary-value">{{ booking.full_describe }}</div>
             </li>
-            <li ng-if="i.describe" class="row confirmation-summary-item">
-              <div class="col-sm-3"><span translate="ITEM_DATE"></span>/<span translate="ITEM_TIME"></span>:</div>
-              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>{{ i.describe }}</div>
+            <li ng-if="booking.describe" class="row confirmation-summary-item">
+              <div class="bb-summary-label"><span translate="ITEM_DATE"></span>/<span translate="ITEM_TIME"></span>:</div>
+              <div class="bb-summary-value">{{booking.describe}}</div>
             </li>
-            <li ng-if="i.price" class="row confirmation-summary-item">
-              <div class="col-sm-3"><span translate="ITEM_PRICE"></span>:</div>
-              <div class="col-sm-9 bb-summary-value"><span class='fa fa-caret-right'></span>{{ i.price | currency }}</div>
+            <li ng-if="booking.price" class="row confirmation-summary-item">
+              <div class="bb-summary-label"><span translate="ITEM_PRICE"></span>:</div>
+              <div class="bb-summary-value">{{booking.price | currency}}</div>
+            </li>
           </ul>
-          <ul ng-show="total.items[0].address.lat" class="confirmation-summary">
+
+
+          <ul ng-show="total.bookings[0].address.lat" class="confirmation-summary">
+            
             <li class="row confirmation-summary-item">
               <div class="col-sm-12">
                 <div bb-address-map="total.items[0].address">
                 </div>
               </div>
             </li>
-            <li class="row confirmation-summary-item">
-              <div class="col-sm-12">
-                <span class="fa fa-map-marker" aria-hidden="true"></span> {{ total.items[0].address | address_single_line }}
-              </div>
-            </li>
+
+            <div class="confirmation-summary-address">
+              <div><span class='fa fa-map-marker'></span> {{total.bookings[0].address | address_single_line}}</div>
+              <div><span class='fa fa-phone'></span> {{total.bookings[0].address.phone | local_phone_number}}</div>
+            </div>
+
           </ul>
 
           <div bb-custom-confirmation-text class="bb-message">
@@ -62,11 +69,4 @@
 
     </div>
   </div>
-</div>
-
-<!-- <div class="bb-step-navigation"></div> -->
-
-<div ng-show="isLoaded" class="powered-by visible-print">
-  <p><span translate="POWERED_BY"></span> <span class="bb-primary-brand-color">booking</span><span class="bb-secondary-brand-color">bug</p>
-  <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"></a>
 </div>
