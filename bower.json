@@ -17,7 +17,7 @@
   "dependencies": {
     "jquery": "~1.11.2",
     "jquery-ui": "~1.11.2",
-    "moment": "2.11.2",
+    "moment": "^2.9.0",
     "moment-timezone": "~0.4.1",
     "accounting": "~0.3.2",
     "angular": "~1.2.25",
@@ -39,7 +39,6 @@
     "bootstrap-sass-official": "~3.3.1",
     "fontawesome": "~4.2.0",
     "ng-idle": "~0.3.5",
-    "lodash": "4.6.1",
     "fullcalendar": "~2.4.0",
     "fullcalendar-scheduler": "~1.0.0",
     "angular-ui-calendar": "1.0.0",
@@ -59,11 +58,11 @@
     "angular-translate-storage-local": "~2.7.2",
     "angular-translate-loader-static-files": "~2.7.2",
     "angular-translate-interpolation-messageformat": "~2.7.2",
-    "messageformat": "0.3.1",
+    "messageformat": "~0.3.1",
     "uri-templates": "~0.1.5",
     "angular-recaptcha": "~2.2.3",
     "angular-slick-carousel": "~3.1.4",
-    "lodash": "3.10.1",
+    "lodash": "~3.10.1",
     "airbrake-js-client": "^0.5.8"
   },
   "resolutions": {
