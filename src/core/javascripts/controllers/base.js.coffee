@@ -732,8 +732,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # don't load a new page if we are still loading an old one - helps prevent double clicks
     return if $scope.isLoadingPage()
 
-    if $window._gaq
-      $window._gaq.push(['_trackPageview', route])
     $scope.setLoadingPage(true)
     if $scope.bb.current_page == route
       $scope.bb_main = ""
