@@ -232,7 +232,7 @@
   padding: 10px;
 }
 
-[datepicker]{
+[datepicker], [bb-events] .date-picker{
   &:active, &:focus{
     outline: none;
     border: none;
@@ -261,30 +261,23 @@
       }
     }
 
-    button.btn-default{
-      background-color: transparent;
-      &:hover, &:active, &:focus{
-        background-color: #e6e6e6;
-        border-color: #adadad;
-        color: #777;
-      }
-
-    }
-
-    button.btn-info{
-      background-color: #31b0d5;
-      border-color: #269abc;
+    button.btn-default.active{
+      background-image: linear-gradient(to bottom, #eff3e9 0%, #fff 100%);
       span{
-        color: #fff;
-      }
-
-      &:hover, &:active, &:focus{
-        background-color: #31b0d5;
-        span{
-          color: #fff;
-        }
+        font-weight: bold;
       }
     }
+
+    button.btn-default{       
+        &:hover, &:active, &:focus{
+           background-image: linear-gradient(to bottom, #eff3e9 0%, #fff 100%);
+           outline: none;
+           span{
+            font-weight: bold;
+           }
+        }        
+    }
+    
   }
 }
 

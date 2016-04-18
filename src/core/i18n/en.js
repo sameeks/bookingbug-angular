@@ -79,7 +79,7 @@
   "ITEM_TO": "To",
   "ITEM_DESCRIPTION":"Description",
   "ITEM_CONFIRMATION":"Confirmation",
-  "EVENT_DETAILS_TITLE":" Event details",
+  "EVENT_DETAILS_TITLE":"Course details",
   "EVENT_WORD":"Events",
   "EVENT_LOCATION":"Events at",
   "EVENT_NO":"No events found",
