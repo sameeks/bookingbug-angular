@@ -5,9 +5,9 @@
       <h3>You don't currently have any pre-paid bookings.</h3>
     </div>
     <ul class="bb-list bb-banded-list">
-      <li ng-repeat="booking in pre_paid_bookings | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size | filter: {expired: false}" class="bb-list-item">
+      <li ng-repeat="booking in pre_paid_bookings | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" class="bb-list-item">
         <div class="row">
-          <div class="col-xs-4"><strong>{{booking.service_name}}</strong></div>
+          <div class="col-xs-4"><strong>{{booking.name}}</strong></div>
           <div class="col-xs-8">{{booking.number_of_bookings_remaining}} of {{booking.number_of_bookings}} remaining | Book By {{booking.book_by | datetime}} | Use from {{booking.use_from | datetime}} | Use by {{booking.use_by | datetime}}</div>
         </div>
       </li>
