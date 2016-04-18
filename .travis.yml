@@ -1,4 +1,7 @@
 language: node_js
+env:
+  SAUCELABS_SECRET:
+    secure: "NYyRB3TBC8Xa1u2FlXhdqaYS1jnet+c934EDKbSvl/cTFFSG89GWG5GeKFJ6/mmNBrLq66MrTWoVds71T9gVZpvOIuEe3bcFU2Bx8JWh0L+l/l/mBJJH7/Gtp2WWK4VWse5SAN9TYvsKC4kZzSHA1cPu93qhg28J4eeKI3PqupA="
 node_js:
   - "5.1"
 before_script:

@@ -21,7 +21,6 @@ var gulp = require('gulp'),
     argv = require('yargs').argv,
     protractor = require('gulp-protractor');
 
-
 gulp.task('clean', function(cb) {
   del.sync(['release']);
   cb();
@@ -180,9 +179,17 @@ gulp.task('unit-tests', ['dependencies'], function (done) {
   }, done).start();
 });
 
-gulp.task('install-webdriver', protractor.webdriver_update);
+var launchSauceConnect = function(cb) {
+  var sauceConnectLauncher = require('sauce-connect-launcher');
+  sauceConnectLauncher({
+    username: 'bookingbug-angular',
+    accessKey: process.env.SAUCELABS_SECRET
+  }, cb);
+};
 
-gulp.task('e2e-tests', ['webserver', 'install-webdriver'], function() {
+gulp.task('prepare-e2e-tests', process.env.TRAVIS ? launchSauceConnect : protractor.webdriver_update);
+
+gulp.task('e2e-tests', ['webserver', 'prepare-e2e-tests'], function() {
   return gulp.src(['e2e-tests/booking.js.coffee'])
     .pipe(protractor.protractor({
       configFile: 'e2e-tests/protractor.conf.js'

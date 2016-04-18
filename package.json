@@ -49,6 +49,7 @@
     "gulp-uglify": "^1.0.2",
     "gulp-util": "^3.0.1",
     "selenium-server-standalone-jar": "2.53.0",
+    "sauce-connect-launcher": "^0.14.0",
     "jasmine-core": "^2.3.4",
     "karma": "^0.13.10",
     "karma-jasmine": "^0.3.6",
