@@ -67,6 +67,10 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
   $scope.options = $scope.$eval($attrs.bbTimeRanges) or {}
 
+  # date helpers
+  $scope.today = moment().toDate()
+  $scope.tomorrow = moment().add(1, 'days').toDate()
+
   $rootScope.connection_started.then ->
 
     # read initialisation attributes
