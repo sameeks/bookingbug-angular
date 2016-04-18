@@ -345,7 +345,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.app_id = prms.app_id
     if prms.app_key
       $scope.bb.app_key = prms.app_key
-   
+
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
       $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
@@ -355,7 +355,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     if $scope.bb.selected_service and $scope.bb.selected_service.company_id == company_id
       $scope.bb.item_defaults.service = $scope.bb.selected_service.id
-     
+
     if prms.route_format
       $scope.bb.setRouteFormat(prms.route_format)
       # do we need to call anything else before continuing...
@@ -626,7 +626,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.default_setup_promises.push(person)
         person.then (res) =>
           $scope.bb.item_defaults.person = new BBModel.Person(res)
-     
+
       if $scope.bb.item_defaults.service
         if $scope.bb.isAdmin
           service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services/' + $scope.bb.item_defaults.service )
@@ -732,8 +732,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # don't load a new page if we are still loading an old one - helps prevent double clicks
     return if $scope.isLoadingPage()
 
-    if $window._gaq
-      $window._gaq.push(['_trackPageview', route])
     $scope.setLoadingPage(true)
     if $scope.bb.current_page == route
       $scope.bb_main = ""
@@ -1081,7 +1079,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.company = company
     # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over
     $scope.company = company
-  
+
     $scope.bb.item_defaults.company = $scope.bb.company
 
     SettingsService.setCountryCode($scope.bb.company.country_code)
@@ -1266,13 +1264,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.client.setDefaults($window.bb_setup)
     if $scope.bb.client_defaults
       $scope.client.setDefaults($scope.bb.client_defaults)
-
-
-  #######################################################
-  # date helpers
-
-  $scope.today = moment().toDate()
-  $scope.tomorrow = moment().add(1, 'days').toDate()
 
   $scope.parseDate = (d) =>
     moment(d)

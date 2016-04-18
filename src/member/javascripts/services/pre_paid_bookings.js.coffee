@@ -2,6 +2,8 @@ angular.module('BBMember.Services').factory "MemberPrePaidBookingService", ($q, 
 
   query: (member, params) ->
     deferred = $q.defer()
+    params ||= {}
+    params.no_cache = true
     if !member.$has('pre_paid_bookings')
       deferred.reject("member does not have pre paid bookings")
     else

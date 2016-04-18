@@ -394,15 +394,8 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @param {array} latlong Using for determinate the closest markers
   ###
   $scope.showClosestMarkers = (latlong) ->
-
-    pi = Math.PI
-    R = 6371  #equatorial radius
-
     distances = []
     distances_with_services = []
-
-    lat1 = latlong.lat()
-    lon1 = latlong.lng()
 
     for marker in $scope.mapMarkers
 
@@ -601,6 +594,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
           $scope.address = $scope.reverse_geocode_address
         searchSuccess($scope.geocoder_result)
       $scope.setLoaded $scope
+
 
   ###**
   * @ngdoc method
