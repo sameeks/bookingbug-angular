@@ -1,7 +1,7 @@
 angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
   scope: true
   restrict: 'A'
-  controller: ($scope, $element, $attrs, AdminPersonService, uiCalendarConfig) ->
+  controller: ($scope, $element, $attrs, AdminPersonService, BBModel, BookingCollections, $rootScope) ->
     # All options (resources, people) go to the same select
     $scope.resources = []
     # If company setup with people add people to select
@@ -21,16 +21,16 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
           r.identifier = r.id + '_r'
           r.group      = 'Resources '
 
-        $scope.resources = _.union $scope.resources, resources    
-    
+        $scope.resources = _.union $scope.resources, resources
+
     # If in "Day" view a person or resource will have been passed in
     if $scope.bb.current_item.person? and $scope.bb.current_item.person.id?
       $scope.picked_resource = $scope.bb.current_item.person.id + '_p'
 
     if $scope.bb.current_item.resource? and $scope.bb.current_item.resource.id?
-      $scope.picked_resource = $scope.bb.current_item.resource.id  + '_r' 
+      $scope.picked_resource = $scope.bb.current_item.resource.id  + '_r'
 
-    # On select change update the right current_item variable depending 
+    # On select change update the right current_item variable depending
     # whether the selected item is a person or a resource
     $scope.changeResource = ()->
       if $scope.picked_resource?
@@ -40,9 +40,9 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
           if value.identifier == $scope.picked_resource
             if parts[1] == 'p'
               $scope.bb.current_item.person = value
-            else if parts[1] == 'r'  
+            else if parts[1] == 'r'
               $scope.bb.current_item.resource = value
-            return  
+            return
 
     $scope.blockTime = ()->
       if !isValid()
@@ -51,24 +51,26 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       if typeof $scope.bb.current_item.person == 'object'
         # Block call
         AdminPersonService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime}).then (response)->
-          blockSuccess()
-      else if typeof $scope.bb.current_item.resource == 'object'    
+          blockSuccess(response)
+      else if typeof $scope.bb.current_item.resource == 'object'
         # Block call
         AdminResourceService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime}).then (response)->
-          blockSuccess()     
+          blockSuccess(response)
 
     isValid = ()->
       $scope.resourceError = false
       if  (typeof $scope.bb.current_item.person != 'object' && typeof $scope.bb.current_item.resource != 'object')
         $scope.resourceError = true
 
-      if  (typeof $scope.bb.current_item.person != 'object' && typeof $scope.bb.current_item.resource != 'object') || !$scope.config.from_datetime? || !$scope.config.to_datetime     
+      if  (typeof $scope.bb.current_item.person != 'object' && typeof $scope.bb.current_item.resource != 'object') || !$scope.config.from_datetime? || !$scope.config.to_datetime
         return false
 
       return true
-        
-    blockSuccess = ()->
+
+    blockSuccess = (response)->
+      booking = new BBModel.Admin.Booking(response)
+      BookingCollections.checkItems(booking)
       # Refresh events (will update calendar with the new events)
-      uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+      $rootScope.$broadcast('refetchBookings')
       # Close modal window
-      $scope.cancel()    
+      $scope.cancel()
