@@ -1130,7 +1130,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.getCurrentStepTitle = ->
     steps = $scope.bb.steps
 
-    if !_.compact(steps).length
+    if !_.compact(steps).length or steps.length == 1 and steps[0].number != $scope.bb.current_step
       steps = $scope.bb.allSteps
 
     if $scope.bb.current_step
