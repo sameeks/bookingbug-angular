@@ -72,12 +72,13 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       if @current_item
         service_name = @convertToDashSnakeCase(@current_item.service.name) if @current_item.service
         event_group = @convertToDashSnakeCase(@current_item.event_group.name) if @current_item.event_group
+        event =  @current_item.event.id if @current_item.event
         date = @current_item.date.date.toISODate() if @current_item.date
         time = @current_item.time.time if @current_item.time
         company = @convertToDashSnakeCase(@current_item.company.name) if @current_item.company 
       prms = angular.copy(@route_values) if @route_values
       prms ||= {}
-      angular.extend(prms,{page: page, company: company, service: service_name, event_group: event_group, date: date, time: time})
+      angular.extend(prms,{page: page, company: company, service: service_name, event_group: event_group, date: date, time: time, event: event})
       url = pattern.format(prms)
       url = url.replace(/\/+$/, "")
       $location.path(url)
@@ -113,6 +114,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
           @item_defaults.company = decodeURIComponent(match.company) if match.company
           @item_defaults.service = decodeURIComponent(match.service) if match.service && match.service != "-"
           @item_defaults.event_group = match.event_group if match.event_group && match.event_group != "-"
+          @item_defaults.event = decodeURIComponent(match.event) if match.event && match.event != "-"
           @item_defaults.person = decodeURIComponent(match.person) if match.person
           @item_defaults.resource = decodeURIComponent(match.resource) if match.resource
           @item_defaults.resources = decodeURIComponent(match.resoures) if match.resources

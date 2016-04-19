@@ -65,8 +65,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   
   $rootScope.connection_started.then ->
     if $scope.bb.company
+      
       # if there's a default event, skip this step
-      if $scope.bb.item_defaults.event
+      if $scope.bb.current_item.defaults and $scope.bb.current_item.defaults.event
         $scope.skipThisStep()
         $scope.decideNextPage()
         return

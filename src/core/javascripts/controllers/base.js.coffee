@@ -1136,7 +1136,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   # conditionally set the title of the current step - if it doesn't have one
   $scope.checkStepTitle = (title) ->
-    if !$scope.bb.steps[$scope.bb.current_step-1].title
+    if $scope.bb.steps[$scope.bb.current_step-1] and !$scope.bb.steps[$scope.bb.current_step-1].title
       $scope.setStepTitle(title)
 
   # reload a step

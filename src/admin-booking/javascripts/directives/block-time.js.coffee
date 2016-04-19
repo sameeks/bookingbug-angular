@@ -34,6 +34,7 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
     # whether the selected item is a person or a resource
     $scope.changeResource = ()->
       if $scope.picked_resource?
+        $scope.resourceError = false
         parts = $scope.picked_resource.split '_'
         angular.forEach $scope.resources, (value, key)->
           if value.identifier == $scope.picked_resource
@@ -44,9 +45,30 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
             return  
 
     $scope.blockTime = ()->
-      # Block call
-      AdminPersonService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime}).then (response)->
-        # Refresh events (will update calendar with the new events)
-        uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
-        # Close modal window
-        $scope.cancel()
+      if !isValid()
+        return false
+
+      if typeof $scope.bb.current_item.person == 'object'
+        # Block call
+        AdminPersonService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime}).then (response)->
+          blockSuccess()
+      else if typeof $scope.bb.current_item.resource == 'object'    
+        # Block call
+        AdminResourceService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime}).then (response)->
+          blockSuccess()     
+
+    isValid = ()->
+      $scope.resourceError = false
+      if  (typeof $scope.bb.current_item.person != 'object' && typeof $scope.bb.current_item.resource != 'object')
+        $scope.resourceError = true
+
+      if  (typeof $scope.bb.current_item.person != 'object' && typeof $scope.bb.current_item.resource != 'object') || !$scope.config.from_datetime? || !$scope.config.to_datetime     
+        return false
+
+      return true
+        
+    blockSuccess = ()->
+      # Refresh events (will update calendar with the new events)
+      uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+      # Close modal window
+      $scope.cancel()    

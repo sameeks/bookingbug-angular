@@ -216,14 +216,18 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name defaultService
     * @methodOf BB.Models:BasketItem
     * @description
-    * Return the default service if existent
+    * Return the default service or event group
     *
-    * @returns {array} Default service
+    * @returns {Object} Default Service or EventGroup
     ###
     defaultService: () ->
-      return null if !@defaults
-      return @defaults.service
-      # @defaults = defaults
+      if @defaults and @defaults.service
+        return @defaults.service
+      else if @defaults and @defaults.event_group
+        return @defaults.event_group
+      else
+       return null
+
 
     ###**
     * @ngdoc method
