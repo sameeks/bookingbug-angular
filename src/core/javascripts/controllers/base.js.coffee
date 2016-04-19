@@ -704,6 +704,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   # $locationChangeStart is broadcast before a URL will change
   $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
+
     # TODO dont need to handle this when widget is initialising
     return if !$scope.bb.routeFormat and $scope.bb.routing
 

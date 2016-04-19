@@ -69,6 +69,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       pattern = $urlMatcherFactory.compile(@routeFormat)
       service_name = "-"
       event_group = "-"
+      event = "-"
       if @current_item
         service_name = @convertToDashSnakeCase(@current_item.service.name) if @current_item.service
         event_group = @convertToDashSnakeCase(@current_item.event_group.name) if @current_item.event_group
@@ -133,6 +134,9 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     ###
 
     matchURLToStep: () ->
+
+      # TODO use matcher factory to get page name from url
+
       return null if !@routeFormat
       path = $location.path()
       step = _.findWhere(@allSteps, {page: path.replace(/\//g, '')})
