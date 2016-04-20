@@ -12,8 +12,8 @@ angular.module('BBAdmin.Directives').directive 'bbAdminSsoLogin', ($rootScope, A
   link: (scope, element, attrs) ->
     scope.qs = QueryStringService
     data = {}
-    data.token = scope.token if scope.token
-    data.token ||= scope.qs('sso_token') if scope.qs
+    data.token = scope.qs('sso_token') if scope.qs
+    data.token ||= scope.token if scope.token
     api_host = scope.apiUrl if scope.apiUrl
     api_host ||= $rootScope.bb.api_url
     url = "#{api_host}/api/v1/login/admin_sso/#{scope.companyId}"

@@ -227,6 +227,9 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     $scope.$watch 'currentDate', (newDate, oldDate) ->
       $scope.lazyUpdateDate(newDate)
 
+    $scope.$on 'refetchBookings', () ->
+      uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+
 
   link = (scope, element, attrs) ->
 
