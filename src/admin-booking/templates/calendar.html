@@ -9,7 +9,7 @@
     <div class="page-summary">
 
       <p>
-        There's an availability conflict <span ng-show="bb.current_item.person.name">with {{bb.current_item.person.name}}</span><span ng-show="bb.current_item.resource.name">in {{bb.current_item.resource.name}}</span>.
+        There's an availability conflict <span ng-show="person_name">with {{person_name}}</span><span ng-show="resource_name">in {{resource_name}}</span>.
            <!--at {{bb.current_item.defaults.datetime | datetime: 'time'}} -->  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
       </p>
 
@@ -79,54 +79,6 @@
           </div>
 
         </div>
-
-
-<!--         <div ng-form="resource_select_form">
-
-          <div class="row">
-
-            <div ng-class="{'col-sm-12': !has_resources_and_people, 'col-sm-6': has_resources_and_people}">
-              <div ng-if="bb.company.$has('people')">
-                <div class="form-group" bb-people>
-                  <label>Person</label>
-                  <select  class=" form-control" id="person" ng-model="person" ng-options="p.name for p in bookable_people | orderBy: 'name'" >
-                    <option value="">-- select a person --</option>
-                  </select>
-                </div>
-              </div> 
-            </div>
-
-            <div ng-class="{'col-sm-12': !has_resources_and_people, 'col-sm-6': has_resources_and_people}">
-              <div ng-if="bb.company.$has('resources')">
-                <div class="form-group" bb-resources>
-                  <label>Resource</label>
-                    <select class="form-control"  id="resource" ng-model="resource" ng-options="r.name for r in bookable_resources | orderBy: 'name'">
-                      <option value="">-- select a resource --</option>
-                    </select>
-                  </div>
-              </div>  
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="row bb-cal-view-ctrl hidden-xs">
-
-          <div class="col-sm-12">
-            <div class="btn-group pull-right">
-              <button class="btn btn-sm btn-default" ng-class="{active: !week_view}" ng-click="switchView()">
-                <i class="fa fa-calendar-times-o"></i> Day
-              </button>
-              <button class="btn btn-sm btn-default" ng-class="{active: week_view}" ng-click="switchView()">
-                <i class="fa fa-calendar-o"></i> 
-                <span class="visible-sm-inline">3 day</span>
-                <span class="visible-md-inline">5 day</span>
-                <span class="visible-lg-inline">7 day</span>
-              </button>
-            </div>
-          </div>
-        </div> -->
 
         <div ng-if="!week_view">
 
