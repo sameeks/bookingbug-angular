@@ -346,7 +346,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   ###
   # called when user selects a time slot
   # use this when you want to route to the next step as a slot is selected
-  $scope.selectSlot = (day, slot, route) ->
+  $scope.selectSlot = (slot, day, route) ->
     if slot && slot.availability() > 0
       $scope.bb.current_item.setTime(slot)
 

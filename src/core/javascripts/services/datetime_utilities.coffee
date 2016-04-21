@@ -24,8 +24,6 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
 
   checkDefaultTime: (date, time_slots, basket_item) ->
 
-    debugger
-
     return if !basket_item.defaults.time
 
     found_time_slot = null

@@ -3,31 +3,34 @@
   <div bb-calendar-admin>
 
     <div class="page-header">
-      <h1><!-- Select a Time -->Resolve Availability Conflict</h1>
+      <h1>Availability Conflict</h1>
     </div>
-<!-- 
+
     <div class="page-summary">
-      <div bb-include="_basket_item_summary"></div>
-    </div> -->
 
-    <p>
-      There's an availability conflict
-      <span ng-show="bb.current_item.person.name">with {{bb.current_item.person.name}}</span>
-      <span ng-show="bb.current_item.resource.name">in {{bb.current_item.resource.name}}</span>
-       for {{bb.current_item.service.name}} <!--at {{bb.current_item.defaults.datetime | datetime: 'time'}} -->.  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
-    </p>
-    <!-- put pust list in cols, 2 or 3? -->
-    <div class="row">
-      <ul class="bb-bullet-list">   
-        <li class="col-sm-6 col-md-4">The Staff/Resource being unavailable</li>
-        <li class="col-sm-6 col-md-4">The Staff/Resource being booked already</li>
-        <li class="col-sm-6 col-md-4">Not enough available time to complete the booking before an existing one starts</li>
-        <li class="col-sm-6 col-md-4">The time step....</li>
-      </ul>
+      <p>
+        There's an availability conflict <span ng-show="bb.current_item.person.name">with {{bb.current_item.person.name}}</span><span ng-show="bb.current_item.resource.name">in {{bb.current_item.resource.name}}</span>.
+           <!--at {{bb.current_item.defaults.datetime | datetime: 'time'}} -->  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
+      </p>
+
+      <div class="row">
+        <ul class="bb-bullet-list">
+          <div class="col-sm-6 col-md-4">
+            <li>The Staff/Resource being booked or blocked already</li>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <li>Not enough available time to complete the booking before an existing one starts</li>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <li>The selected time being outside of the {{bb.current_item.service.booking_time_step | time_period}} booking time step for {{bb.current_item.service.name}}.</li>
+          </div>
+        </ul>
+      </div>
+
+      <p>You can either use the calendar to choose another time or overbook.</p>
+
     </div>
-
-    <p>You can either use the calendar to choose another time or overbook.</p>
-    
+      
 <!--     <hr> -->
 
     <div class="panel panel-default">
@@ -38,7 +41,7 @@
 
           <div class="row">
 
-            <div class="col-sm-6">
+            <div ng-class="{'col-sm-12': !has_resources_and_people, 'col-sm-6': has_resources_and_people}">
               <div ng-if="bb.company.$has('people')">
                 <div class="form-group" bb-people>
                   <label>Person</label>
@@ -49,7 +52,7 @@
               </div> 
             </div>
 
-            <div class="col-sm-6">
+            <div ng-class="{'col-sm-12': !has_resources_and_people, 'col-sm-6': has_resources_and_people}">
               <div ng-if="bb.company.$has('resources')">
                 <div class="form-group" bb-resources>
                   <label>Resource</label>
@@ -64,14 +67,18 @@
 
         </div>
 
-        <div class="row bb-admin-calendar-view-switch">
-          <div class="col-xs-12">
+        <div class="row bb-cal-view-ctrl hidden-xs">
+
+          <div class="col-sm-12">
             <div class="btn-group pull-right">
               <button class="btn btn-sm btn-default" ng-class="{active: !week_view}" ng-click="switchView()">
                 <i class="fa fa-calendar-times-o"></i> Day
               </button>
               <button class="btn btn-sm btn-default" ng-class="{active: week_view}" ng-click="switchView()">
-                <i class="fa fa-calendar-o"></i> Week
+                <i class="fa fa-calendar-o"></i> 
+                <span class="visible-sm-inline">3 day</span>
+                <span class="visible-md-inline">5 day</span>
+                <span class="visible-lg-inline">7 day</span>
               </button>
             </div>
           </div>
@@ -79,24 +86,24 @@
 
         <div ng-if="!week_view">
 
-          <div class="bb-admin-calendar-day-nav">
-            <button type="button" class="btn btn-link pull-left" ng-click="subtract('days', 1)">
-              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-              <span class="hidden-xs">Previous</span>
+          <div class="bb-day-nav">
+
+            <button type="button" class="btn btn-link btn-day-nav btn-lg" ng-click="subtract('days', 1)">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+              <!-- <span class="hidden-xs">Previous</span> -->
             </button>
 
-            <div class="cal-dateheader">
-              <h2 class="bb-section-title text-center hidden-xs">{{selected_date | datetime: 'Do MMM YYYY'}}</h2>
-              <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">{{selected_date | datetime: 'Do MMM'}}</h2>
-            </div>
+            <h2 class="hidden-xs bb-day-nav-heading">{{selected_date | datetime: 'Do MMMM YYYY'}}</h2>
+            <h2 class="hidden-sm hidden-md hidden-lg bb-day-nav-heading">{{selected_date | datetime: 'Do MMMM'}}</h2>
 
-            <button type="button" class="btn btn-link pull-right" ng-click="add('days', 1)">
-              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true" ></span>
-              <span class="hidden-xs">Next</span>
+            <button type="button" class="btn btn-link btn-day-nav btn-lg" ng-click="add('days', 1)">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+              <!-- <span class="hidden-xs">Next</span> -->
             </button>
+
           </div>
 
-          <div class="bb-availability">
+          <div class="bb-calendar">
 
             <div ng-show="!slots || (slots && slots.length == 0)" class="bb-service-unavailable">
               <p>No availability found</p>
@@ -131,7 +138,7 @@
           <div bb-time-ranges="{selected_day: today}"></div>
         </div>
 
-        <button type="button" class="btn btn-primary pull-right" ng-click="checkReady() && routeReady()" bb-debounce>Continue</button>
+        <button type="button" class="btn btn-primary pull-right" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time">Book {{bb.current_item.start_datetime() | datetime: 'time'}}</button>
 
       </div>
     </div>

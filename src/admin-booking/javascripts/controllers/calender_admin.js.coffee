@@ -18,6 +18,8 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
   $rootScope.connection_started.then ->
 
     $scope.week_view = !$scope.bb.current_item.defaults.time
+    $scope.has_resources_and_people = $scope.bb.company.$has('people') and $scope.bb.company.$has('resources')
+
 
 
   $scope.switchView = () ->
