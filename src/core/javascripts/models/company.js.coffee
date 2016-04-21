@@ -135,12 +135,13 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
               'App-Id' : AppConfig.appId
               'App-Key' : AppConfig.appKey
               'Auth-Token' : $sessionStorage.getItem('auth_token')
-        channelName = "private-c#{@id}-w#{@numeric_widget_id}"
-        unless @pusher.channel(channelName)?
-          @pusher_channel = @pusher.subscribe(channelName)
-          @pusher_channel.bind 'booking', callback
-          @pusher_channel.bind 'cancellation', callback
-          @pusher_channel.bind 'updating', callback
+
+      channelName = "private-c#{@id}-w#{@numeric_widget_id}"
+      unless @pusher.channel(channelName)?
+        @pusher_channel = @pusher.subscribe(channelName)
+        @pusher_channel.bind 'booking', callback
+        @pusher_channel.bind 'cancellation', callback
+        @pusher_channel.bind 'updating', callback
 
     ###**
     * @ngdoc method

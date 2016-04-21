@@ -88,7 +88,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           agendaWeek:
             slotDuration: $scope.options.slotDuration || "00:05"
             buttonText: 'Week'
-            groupByDateAndResource: true
+            groupByDateAndResource: false
           month:
             eventLimit: 5
             buttonText: 'Month'
@@ -226,6 +226,9 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
     $scope.$watch 'currentDate', (newDate, oldDate) ->
       $scope.lazyUpdateDate(newDate)
+
+    $scope.$on 'refetchBookings', () ->
+      uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
 
 
   link = (scope, element, attrs) ->
