@@ -17,9 +17,12 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
 
     deferred = $q.defer()
     existing = BookingCollections.find(prms)
-    if existing
+    if existing  && !prms.skip_cache
       deferred.resolve(existing)
     else if company
+      if prms.skip_cache
+        BookingCollections.delete(existing) if existing
+        company.$flush('bookings', prms)
       company.$get('bookings', prms).then (collection) ->
         collection.$get('bookings').then (bookings) -> 
           models = (new BBModel.Admin.Booking(b) for b in bookings)
