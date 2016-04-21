@@ -1,5 +1,4 @@
-// Modules & Variables
-$heading-text-color         : #000000;
+$heading-text-color         : #333333;
 $page-background-color      : #FFFFFF;
 $hyperlink-color            : #609ABE; 
 $placeholder-text           : #A5A5A5; 
@@ -14,12 +13,19 @@ $secondary-border-color     : #D5D5D5;
 
 #bb {
 
-@import "calendar_admin";
-@import "client_admin";
+  // templates
+  @import "calendar_admin";
+  @import "client_admin";
 
+  // components
+  @import "date_picker";
 
-// components
-@import "date_picker";
+  // module overrides
+  &[bb-admin-booking] {
+    .form-control {
+      border-radius: 4px !important;
+    }
+  }
 
 }
 

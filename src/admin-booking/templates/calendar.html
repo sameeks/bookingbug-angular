@@ -31,13 +31,57 @@
 
     </div>
       
-<!--     <hr> -->
-
     <div class="panel panel-default">
       <div class="panel-heading"><strong>Calendar</strong></div>
       <div class="panel-body">
 
-        <div ng-form="resource_select_form">
+
+        <div class="row">
+          <div class="col-sm-6">
+
+            <div class="form-inline">
+
+              <div class="bb-filter-icon ">
+                <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 
+                Filter by:
+              </div>
+
+              <div class="form-group" ng-if="bb.company.$has('people')">
+                <select bb-people class=" form-control" id="person" ng-model="person" ng-options="p.name for p in bookable_people | orderBy: 'name'" >
+                  <option value="">Any person</option>
+                </select>
+              </div>
+
+              <div class="form-group" ng-if="bb.company.$has('resources')">
+                <select bb-resources class="form-control"  id="resource" ng-model="resource" ng-options="r.name for r in bookable_resources | orderBy: 'name'">
+                  <option value="">-- select a resource --</option>
+                </select>
+              </div>
+
+
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="bb-view-switcher hidden-xs">
+              <div class="btn-group pull-right">
+                <button class="btn btn-sm btn-default" ng-class="{active: !week_view}" ng-click="switchView()">
+                  <i class="fa fa-calendar-times-o"></i> Day
+                </button>
+                <button class="btn btn-sm btn-default" ng-class="{active: week_view}" ng-click="switchView()">
+                  <i class="fa fa-calendar-o"></i> 
+                  <span class="visible-sm-inline">3 day</span>
+                  <span class="visible-md-inline">5 day</span>
+                  <span class="visible-lg-inline">7 day</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+<!--         <div ng-form="resource_select_form">
 
           <div class="row">
 
@@ -82,7 +126,7 @@
               </button>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div ng-if="!week_view">
 
