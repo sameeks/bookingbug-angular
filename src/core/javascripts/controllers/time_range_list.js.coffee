@@ -371,7 +371,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {date} day The day
   * @param {array} slot The slot
   ###
-  $scope.highlightSlot = (day, slot) ->
+  $scope.highlightSlot = (slot, day) ->
     current_item = $scope.bb.current_item
 
     if slot && slot.availability() > 0
