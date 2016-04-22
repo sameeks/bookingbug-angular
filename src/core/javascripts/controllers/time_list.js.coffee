@@ -235,12 +235,15 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
         
-        requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
+        if $scope.data_source.defaults.time
+          requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
 
-        if requested_slot
-          $scope.highlightSlot(requested_slot)
-          $scope.skipThisStep()
-          $scope.decideNextPage()
+          if requested_slot
+            $scope.highlightSlot(requested_slot)
+            $scope.skipThisStep()
+            $scope.decideNextPage()
+          else
+            $scope.availability_conflict = true
 
         # if ($scope.data_source.requested_time || $scope.data_source.time) && $scope.selected_date.isSame($scope.data_source.date.date)
         #   found_time = false

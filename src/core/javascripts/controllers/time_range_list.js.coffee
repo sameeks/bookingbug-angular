@@ -344,8 +344,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {array} slot The slot
   * @param {string=} route A route of the selected slot
   ###
-  # called when user selects a time slot
-  # use this when you want to route to the next step as a slot is selected
   $scope.selectSlot = (slot, day, route) ->
     if slot && slot.availability() > 0
       $scope.bb.current_item.setTime(slot)
@@ -373,8 +371,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {date} day The day
   * @param {array} slot The slot
   ###
-  # called when user selects a time slot
-  # use this when you just want to hightlight the the slot and not progress to the next step
   $scope.highlightSlot = (day, slot) ->
     current_item = $scope.bb.current_item
 

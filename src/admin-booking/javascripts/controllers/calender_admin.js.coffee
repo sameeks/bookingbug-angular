@@ -15,18 +15,33 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
     $element: $element
   }))
 
+  $scope.calendar_view = {
+    next_available: false,
+    day: false,
+    multi_day: false
+  }
+
   $rootScope.connection_started.then ->
 
+    # clear selected time to restore original state
     delete $scope.bb.current_item.time
 
-    $scope.week_view = !$scope.bb.current_item.defaults.time
-    $scope.has_resources_and_people = $scope.bb.company.$has('people') and $scope.bb.company.$has('resources')
-    $scope.person_name = $scope.bb.current_item.person.name if $scope.bb.current_item.person
+    # set default view
+    if $scope.bb.item_defaults.pick_first_time
+      $scope.switchView('next_available')
+    else if $scope.bb.current_item.defaults.time
+      $scope.switchView('day')
+    else
+      $scope.switchView('multi_day')
+
+    $scope.person_name   = $scope.bb.current_item.person.name if $scope.bb.current_item.person
     $scope.resource_name = $scope.bb.current_item.resource.name if $scope.bb.current_item.resource
 
 
-  $scope.switchView = () ->
-    $scope.week_view = !$scope.week_view
+  $scope.switchView = (view) ->
+    for key, value of $scope.calendar_view
+      $scope.calendar_view[key] = false
+    $scope.calendar_view[view] = true
 
 
   $scope.overBook = () ->
