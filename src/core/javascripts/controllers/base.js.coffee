@@ -1184,10 +1184,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   * @param {string} caller: The method that called this function
   ###
   $scope.loadPreviousStep = (caller) ->
+
     past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
 
     # Find the last unskipped step
     step_to_load = 0
+    
     while past_steps[0]
       last_step = past_steps.pop()
       if !last_step
@@ -1197,18 +1199,19 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         break
 
     # Remove pages from browser history (sync browser history with routing)
-    pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
-    if caller == "locationChangeStart"
-      # Reduce number of pages to remove from browser history by one if this
-      # method was triggered by Angular's $locationChangeStart broadcast
-      # In this instance we can assume that the browser back button was used
-      # and one page has already been removed from the history by the browser
-      pages_to_remove_from_history--
+    if $scope.bb.routeFormat
+      pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
+      if caller is "locationChangeStart"
+        # Reduce number of pages to remove from browser history by one if this
+        # method was triggered by Angular's $locationChangeStart broadcast
+        # In this instance we can assume that the browser back button was used
+        # and one page has already been removed from the history by the browser
+        pages_to_remove_from_history--
 
-    ignore_browser_history_sync = $scope.history_at_widget_init == window.history.length
+      ignore_browser_history_sync = $scope.history_at_widget_init is window.history.length
 
-    if pages_to_remove_from_history? and pages_to_remove_from_history > 0 and !ignore_browser_history_sync
-      window.history.go(pages_to_remove_from_history*-1)
+      if pages_to_remove_from_history > 0 and !ignore_browser_history_sync
+        window.history.go(pages_to_remove_from_history*-1)
 
     # Load step
     $scope.loadStep(step_to_load)
