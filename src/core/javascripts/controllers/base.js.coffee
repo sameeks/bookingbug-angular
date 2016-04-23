@@ -702,27 +702,30 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.isLoadingPage = () =>
     $scope.loading_page
 
+
   # $locationChangeStart is broadcast before a URL will change
   $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
 
-    # TODO dont need to handle this when widget is initialising
-    return if !$scope.bb.routeFormat and $scope.bb.routing
+    return if !$scope.bb.routeFormat
 
-    #save the current lenght of browser history
-    $scope.history_at_widget_init = $scope.history_at_widget_init or window.parent.history.length
+    # don't load any steps if route is being updated
+    if !$scope.bb.routing
 
-    # Get the step number we want to load
-    step_number = $scope.bb.matchURLToStep()
+      # save the current lenght of browser history
+      $scope.history_at_widget_init = $scope.history_at_widget_init or window.parent.history.length
 
-    # Load next page
-    if step_number? and step_number > $scope.bb.current_step
-      $scope.loadStep(step_number)
-    # else if step_number? and step_number < $scope.bb.current_step
-    #   # Load previous page
-    #   $scope.loadPreviousStep('locationChangeStart')
-    # else
-    else
-      $scope.loadPreviousStep('locationChangeStart')
+      # Get the step number to load
+      step_number = $scope.bb.matchURLToStep()
+
+      # Load next page
+      if step_number? and step_number > $scope.bb.current_step
+        $scope.loadStep(step_number)
+      # else if step_number? and step_number < $scope.bb.current_step
+      #   # Load previous page
+      #   $scope.loadPreviousStep('locationChangeStart')
+      # else
+      else
+        $scope.loadPreviousStep('locationChangeStart')
 
     $scope.bb.routing = false
 
