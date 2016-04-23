@@ -1,4 +1,4 @@
-.bb-calendar, div[bb-time-ranges],  {
+.bb-calendar, [bb-time-ranges],  {
   padding-bottom: 30px;
 
   .week {
@@ -62,6 +62,13 @@
     }
 
   }
+
+  .date-picker {
+    @media (max-width: $screen-xs-max) {
+      padding-bottom: 15px;
+    }
+  }
+
   // panel styling
   .panel-group {
     .panel {
