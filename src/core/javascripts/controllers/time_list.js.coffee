@@ -61,7 +61,6 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   *
   * @param {moment} the date to set the time list to use
   ###
-  # set a date
   $scope.setDate = (date) =>
     day = new BBModel.Day({date: date, spaces: 1})
     $scope.selected_day  = day
@@ -178,11 +177,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   # add unit of time to the selected day
   # deprecated, use bbDate directive instead
   $scope.add = (type, amount) =>
-    newdate = moment($scope.data_source.date.date).add(amount, type)
-    $scope.data_source.setDate(new BBModel.Day({date: newdate.format(), spaces: 0}))
-    $scope.setLastSelectedDate(newdate)
+    new_date = moment($scope.data_source.date.date).add(amount, type)
+    $scope.setDate(new_date)
     $scope.loadDay()
-    $scope.$broadcast('dateChanged', newdate)
+    #$scope.$broadcast('dateChanged', newdate)
 
   ###**
   * @ngdoc method
