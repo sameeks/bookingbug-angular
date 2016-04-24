@@ -32,16 +32,16 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
 
       for slot in time_slots
 
-        if (basket_item.requested_time and basket_item.requested_time is slot.time) and slot.avail is 1
+        if (basket_item.defaults.time and basket_item.defaults.time is slot.time) and slot.avail is 1
           found_time_slot = slot
           break
 
-        # TODO can i delete this?
-        # if (basket_item.time and basket_item.time.time is slot.time) and slot.avail is 1
-        #   found_time_slot = slot
-        #   break
+        # TODO redundant?
+        if (basket_item.time and basket_item.time.time is slot.time) and slot.avail is 1
+          found_time_slot = slot
+          break
 
-    delete basket_item.defaults.time if found_time_slot
+      delete basket_item.defaults.time
 
     return found_time_slot
 

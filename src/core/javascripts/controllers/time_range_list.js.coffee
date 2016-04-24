@@ -532,45 +532,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
 
   ###**
-  # * @ngdoc method
-  # * @name format_date
-  # * @methodOf BB.Directives:bbTimeRanges
-  # * @description
-  # * Format the date in according of fmt parameter
-  # *
-  # * @param {date} fmt The format of date
-  # ###
-  # $scope.format_date = (fmt) ->
-  #   $scope.start_date.format(fmt) if $scope.start_date
-
-
-  # ###**
-  # * @ngdoc method
-  # * @name format_start_date
-  # * @methodOf BB.Directives:bbTimeRanges
-  # * @description
-  # * Format the start date in according of fmt parameter
-  # *
-  # * @param {date} fmt The format of start date
-  # ###
-  # $scope.format_start_date = (fmt) ->
-  #   $scope.format_date(fmt)
-
-
-  # ###**
-  # * @ngdoc method
-  # * @name format_end_date
-  # * @methodOf BB.Directives:bbTimeRanges
-  # * @description
-  # * Format the end date in according of fmt parameter
-  # *
-  # * @param {date} fmt The format of end date
-  # ###
-  # $scope.format_end_date = (fmt) ->
-  #   $scope.end_date.format(fmt) if $scope.end_date
-
-
-  ###**
   * @ngdoc method
   * @name pretty_month_title
   * @methodOf BB.Directives:bbTimeRanges
