@@ -344,7 +344,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {array} slot The slot
   * @param {string=} route A route of the selected slot
   ###
-  $scope.selectSlot = (slot, day, route) ->
+  $scope.selectSlot = (day, slot, route) ->
     if slot && slot.availability() > 0
       $scope.bb.current_item.setTime(slot)
 
@@ -371,7 +371,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {date} day The day
   * @param {array} slot The slot
   ###
-  $scope.highlightSlot = (slot, day) ->
+  $scope.highlightSlot = (day, slot) ->
     current_item = $scope.bb.current_item
 
     if slot && slot.availability() > 0

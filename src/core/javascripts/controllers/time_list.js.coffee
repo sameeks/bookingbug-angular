@@ -114,7 +114,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {TimeSlot} slot The slot
   * @param {string} A specific route to load
   ###
-  $scope.selectSlot = (slot, route) =>
+  $scope.selectSlot = (day, slot, route) =>
     if slot && slot.availability() > 0
       # if this time cal was also for a specific item source (i.e.a person or resoure- make sure we've selected it)
       if $scope.item_link_source
@@ -141,7 +141,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   *
   * @param {TimeSlot} slot The slot 
   ###
-  $scope.highlightSlot = (slot) =>
+  $scope.highlightSlot = (day, slot) =>
     if slot && slot.availability() > 0
       if $scope.selected_day
         $scope.setLastSelectedDate($scope.selected_day.date)
@@ -217,7 +217,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         return
 
       $scope.notLoaded $scope
-      pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_date.toI, client: $scope.client, available: 1 })
+      pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_date, client: $scope.client, available: 1 })
       
       pslots.finally ->
         $scope.setLoaded $scope
