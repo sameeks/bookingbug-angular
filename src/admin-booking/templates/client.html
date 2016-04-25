@@ -50,7 +50,7 @@
     </div>
   </div>
   <hr />
-<div ng-hide="clients || client.name" class="admin-create-client">
+<div ng-hide="client.name || search_triggered" class="admin-create-client">
   <h3>Create New Customer</h3>
   <div ng-form name="client_form" class="form-horizontal admin-form-submit" role="form" novalidate>
     <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
@@ -91,9 +91,9 @@
       </div>
 
       <div class="col-sm-offset-4 messages">
-        <div class="error-message" ng-show="client_form.email.$invalid && client_form.submitted">       
+        <div class="error-message" ng-show="client_form.email.$invalid && client_form.submitted">
           Please enter a valid email address
-        </div>        
+        </div>
       </div>
     </div>
 
@@ -166,9 +166,25 @@
           </div>
         </div>
       </div>
-  
+
     </div>
 
   </div>
   <button type="submit" class="btn btn-primary col-sm-offset-7 col-sm-2" ng-click="validator.validateForm(client_form) && createClient()" bb-debounce>Create Customer</button>
+
+  <div class="bb-step-navigation">
+    <div class="row">
+      <div class="col-sm-9 col-sm-push-3 text-right">
+        <!-- <button type="submit" class="btn btn-primary" ng-click="confirm(booking_form) && validator.validateForm(booking_form) && checkReady() && routeReady()">Confirm</button> -->
+      </div>
+      <div class="col-sm-3 col-sm-pull-9">
+        <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
 </div>

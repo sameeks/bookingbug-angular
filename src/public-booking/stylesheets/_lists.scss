@@ -34,6 +34,18 @@
   }
 }
 
+.bb-bullet-list {
+  list-style: disc outside none;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  float: left;
+
+  li {
+    padding: 0 0 5px 0;
+  }
+
+}
+
 .event-summary-list {
   margin-bottom: 5px;
   li {

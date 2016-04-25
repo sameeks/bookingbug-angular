@@ -14,7 +14,7 @@
 ####
 
 
-angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService) ->
+angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUtilitiesService) ->
 
 
   class Event extends BaseModel
@@ -22,7 +22,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     constructor: (data) ->
       super(data)     
       @date = moment.parseZone(@datetime)   
-      @time = new BBModel.TimeSlot(time: DateTimeUlititiesService.convertMomentToTime(@date))
+      @time = new BBModel.TimeSlot(time: DateTimeUtilitiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
       @date_unix = @date.unix()
 

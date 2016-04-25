@@ -20,7 +20,7 @@
 
 
 angular.module('BB.Models').factory "BasketItemModel",
-($q, $window, BBModel, BookableItemModel, BaseModel, $bbug) ->
+($q, $window, BBModel, BookableItemModel, BaseModel, $bbug, DateTimeUtilitiesService) ->
 
   # A class that defines an item in a shopping basket
   # This could represent a time based service, a ticket for an event or class, or any other purchasable item
@@ -162,7 +162,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {object} Default settings
     ###
-    # bookable slot based functions
     setDefaults: (defaults) ->
       if defaults.settings
         @settings = defaults.settings
@@ -180,10 +179,14 @@ angular.module('BB.Models').factory "BasketItemModel",
         @setService(defaults.service)
       if defaults.category
         @setCategory(defaults.category)
-      if defaults.time
-        @requested_time = parseInt(defaults.time)
       if defaults.date
-        @requested_date = moment(defaults.date)
+        # NOTE: date is not set as it might not be available
+        defaults.date = moment(defaults.date)
+      if defaults.time
+         # NOTE: time is not set as it might not be available
+        date = if defaults.date then defaults.date else moment()
+        time = if defaults.time then parseInt(defaults.time) else 0
+        defaults.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment({date: defaults.date}, {time: time})
       if defaults.service_ref
         @service_ref = defaults.service_ref
       if defaults.group
@@ -229,17 +232,6 @@ angular.module('BB.Models').factory "BasketItemModel",
        return null
 
 
-    ###**
-    * @ngdoc method
-    * @name requestedTimeUnavailable
-    * @methodOf BB.Models:BasketItem
-    * @description
-    * Delete requested time and date if these are unavailable
-    ###
-    # if it turned out that a requested date or time was unavailablem, we'll have to clear it
-    requestedTimeUnavailable: ->
-      delete @requested_time
-      delete @requested_date
 
     ###**
     * @ngdoc method

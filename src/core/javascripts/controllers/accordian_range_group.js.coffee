@@ -1,6 +1,5 @@
 'use strict';
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbAccordianRangeGroup
@@ -36,14 +35,9 @@ angular.module('BB.Directives').directive 'bbAccordianRangeGroup', (PathSvc) ->
   restrict: 'AE'
   replace: false
   scope: true
-  require: '^?bbTimeRangeStacked'
   controller: 'AccordianRangeGroup'
   templateUrl : (element, attrs) ->
     PathSvc.directivePartial "_accordian_range_group"
-  link: (scope, element, attrs, ctrl) ->
-    scope.options = scope.$eval(attrs.bbAccordianRangeGroup) or {}
-    scope.options.using_stacked_items = ctrl?
-
 
 angular.module('BB.Controllers').controller 'AccordianRangeGroup',
 ($scope, $attrs, $rootScope, $q, FormDataStoreService) ->
@@ -51,7 +45,11 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   $scope.controller = "public.controllers.AccordianRangeGroup"
   $scope.collaspe_when_time_selected = true
 
+  $scope.options = $scope.$eval($attrs.bbAccordianRangeGroup) or {}
+  $scope.day = $scope.day or $scope.options.day
+
   $rootScope.connection_started.then ->
+
     $scope.init($scope.options.range[0], $scope.options.range[1], $scope.options) if $scope.options and $scope.options.range
 
   ###**
@@ -124,10 +122,10 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
 
       if angular.isArray($scope.source_slots)
         for slot in $scope.source_slots
-          $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time && slot.avail == 1
+          $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time and slot.avail is 1
       else
         for key, slot of $scope.source_slots
-          $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time && slot.avail == 1
+          $scope.accordian_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time and slot.avail is 1
 
       updateAvailability()
 
