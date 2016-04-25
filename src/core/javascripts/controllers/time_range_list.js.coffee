@@ -471,6 +471,8 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
           checkRequestedTime(day, time_slots)
 
+         $scope.$broadcast "time_slots:loaded", time_slots
+
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     else
       $scope.setLoaded $scope
