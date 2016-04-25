@@ -32,20 +32,27 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   scope : true
   controller : 'TimeList'
 
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService) ->
   
   $scope.controller = "public.controllers.TimeList"
   $scope.notLoaded $scope
+
+  angular.extend(this, new PageControllerService($scope, $q))
 
   $scope.data_source = $scope.bb.current_item if !$scope.data_source
   $scope.options = $scope.$eval($attrs.bbTimes) or {}
 
 
   $rootScope.connection_started.then ->
+
+    # clear selected time to restore original state
+    delete $scope.bb.current_item.time
     
     # use default date if current item doesn't have one already
-    if $scope.bb.current_item.defaults.date and !$scope.bb.current_item.date
+    if $scope.bb.current_item.defaults.date
       $scope.setDate($scope.bb.current_item.defaults.date)
+    else if $scope.bb.current_item.date.date
+      $scope.setDate($scope.bb.current_item.date.date)
       
     $scope.loadDay()
 
@@ -65,7 +72,6 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
     day = new BBModel.Day({date: date, spaces: 1})
     $scope.selected_day  = day
     $scope.selected_date = day.date
-    $scope.data_source.setDate(day)
 
 
   ###**
@@ -177,10 +183,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   # add unit of time to the selected day
   # deprecated, use bbDate directive instead
   $scope.add = (type, amount) =>
-    new_date = moment($scope.data_source.date.date).add(amount, type)
+    new_date = moment($scope.selected_day.date).add(amount, type)
     $scope.setDate(new_date)
     $scope.loadDay()
-    #$scope.$broadcast('dateChanged', newdate)
+
 
   ###**
   * @ngdoc method
@@ -206,11 +212,11 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   ###
   $scope.loadDay = () =>
 
-    if $scope.data_source and ($scope.data_source.days_link || $scope.item_link_source) and $scope.data_source.date
+    if $scope.data_source and ($scope.data_source.days_link || $scope.item_link_source) and $scope.selected_day
 
       $scope.notLoaded $scope
 
-      pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.data_source.date.date, client: $scope.client, available: 1 })
+      pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_day.date, client: $scope.client, available: 1})
       
       pslots.finally ->
         $scope.setLoaded $scope
@@ -229,17 +235,16 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
         
         if $scope.data_source.defaults.time
-          date = if $scope.data_source.defaults.date then $scope.data_source.defaults.date else $scope.data_source.date.date
-          requested_slot = DateTimeUtilitiesService.checkDefaultTime(date, time_slots, $scope.data_source)
+          requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
 
           if requested_slot
-            $scope.highlightSlot(requested_slot)
+            $scope.highlightSlot($scope.selected_day, requested_slot)
             $scope.skipThisStep()
             $scope.decideNextPage()
           else
             $scope.availability_conflict = true
 
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     else
       $scope.setLoaded $scope
@@ -255,6 +260,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   ###
   $scope.padTimes = (times) =>
     $scope.add_padding = times
+
 
   ###**
   * @ngdoc method

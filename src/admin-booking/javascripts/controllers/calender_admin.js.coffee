@@ -22,10 +22,7 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
   }
 
   $rootScope.connection_started.then ->
-
-    # clear selected time to restore original state
-    delete $scope.bb.current_item.time
-
+    
     # set default view
     if $scope.bb.item_defaults.pick_first_time
       $scope.switchView('next_available')
