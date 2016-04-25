@@ -32,6 +32,12 @@ angular.module('BBAdminServices').directive 'resourceTable', (AdminCompanyServic
         model: resource
         title: 'Edit Resource'
 
+    $scope.schedule = (resource) ->
+      resource.$get('schedule').then (schedule) ->
+        ModalForm.edit
+          model: schedule
+          title: 'Edit Schedule'
+
   link = (scope, element, attrs) ->
     if scope.company
       scope.getResources()
