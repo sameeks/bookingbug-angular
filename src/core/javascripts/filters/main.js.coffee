@@ -274,7 +274,7 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
     cc = SettingsService.getCountryCode()
 
     switch cc
-      when "gb" then return tel.replace(/\+44 \(0\)/, '0')
+      when "gb" then return phone_number.replace(/\+44 \(0\)/, '0')
       when "us" then return phone_number.replace(ValidatorService.us_phone_number, "($1) $2 $3")
       else
         return phone_number
