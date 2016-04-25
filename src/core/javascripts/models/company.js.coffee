@@ -137,11 +137,17 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
               'Auth-Token' : $sessionStorage.getItem('auth_token')
 
       channelName = "private-c#{@id}-w#{@numeric_widget_id}"
-      unless @pusher.channel(channelName)?
-        @pusher_channel = @pusher.subscribe(channelName)
-        @pusher_channel.bind 'booking', callback
-        @pusher_channel.bind 'cancellation', callback
-        @pusher_channel.bind 'updating', callback
+
+      # Nuke the channel if it exists, must be done if this is to be used in multiple pages
+      # this is being delt differently in the newer implementation
+      if @pusher.channel(channelName)?
+        @pusher.unsubscribe(channelName)
+
+      @pusher_channel = @pusher.subscribe(channelName)
+      @pusher_channel.bind 'booking', callback
+      @pusher_channel.bind 'cancellation', callback
+      @pusher_channel.bind 'updating', callback
+        
 
     ###**
     * @ngdoc method
