@@ -59,6 +59,17 @@ angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
 
             $scope.datetimeWithNoTz = $filter('clearTimezone')(assembledDate.format())
 
+        if $scope.maxDateClean? 
+          maxDateClean = new Date($scope.maxDateClean)
+          if (newValue.getTime()/1000) > (maxDateClean.getTime()/1000)
+            if newValue.getHours() > maxDateClean.getHours()
+              assembledDate.hours(parseInt(maxDateClean.getHours()))
+
+            if newValue.getMinutes() > maxDateClean.getMinutes()
+              assembledDate.minutes(parseInt(maxDateClean.getMinutes()))  
+
+            $scope.datetimeWithNoTz = $filter('clearTimezone')(assembledDate.format())    
+
         $scope.date = assembledDate.format()
       return    
 
@@ -67,9 +78,15 @@ angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
     $scope.minDateClean = null
     $scope.maxDateClean = null
 
-    
-    if $scope.minDate? and moment($scope.minDate).isValid()
-      $scope.minDateClean = $filter('clearTimezone')(moment($scope.minDate).format())
+    $scope.$watch 'minDate', (newValue, oldValue) ->
+      if newValue != oldValue
+        $scope.minDateClean = filterDate(newValue)
 
-    if $scope.maxDate? and moment($scope.maxDate).isValid()
-      $scope.maxDateClean = $filter('clearTimezone')(moment($scope.maxDate).format())  
+    $scope.$watch 'maxDate', (newValue, oldValue) ->
+      if newValue != oldValue
+        $scope.maxDateClean = filterDate(newValue)    
+
+    filterDate = (date)->
+      if date? and moment(date).isValid()
+        return $filter('clearTimezone')(moment(date).format())  
+      null    
