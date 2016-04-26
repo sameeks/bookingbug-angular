@@ -80,7 +80,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
         resources = []
         for i in items
           resources.push(i.item)
-          if $scope.bb.current_item and $scope.bb.current_item.resource and $scope.bb.current_item.resource.self == i.item.self
+          if $scope.bb.current_item and $scope.bb.current_item.resource and $scope.bb.current_item.resource.id is i.item.id
             $scope.resource = i.item
 
       # if there's only one resource and single pick hasn't been enabled, 

@@ -193,7 +193,7 @@
   "CONFIRMATION_HOMEPAGE_LINK":"Return to the homepage",
   "BOOKING_REFERENCE":"Booking Reference",
   "PRINT":" Print",
-  "CALENDAR_EXPORT_TITLE":" Export to calendar",
+  "CALENDAR_EXPORT_TITLE":"Export",
   "CANCEL_QUESTION":"Are you sure you want to cancel this booking?",
   "CANCEL_CONFIRMATION":"Your booking has been cancelled.",
   "RESULTS":"Results",
@@ -323,7 +323,8 @@
   "REMEMBER_ME": "Remember me",
   "LOGIN": "Login",
   "EMAIL": "Email",
-  "PLEASE_ENTER_PASSWORD": "Please enter your password"
+  "PLEASE_ENTER_PASSWORD": "Please enter your password",
+  "SELECT_RESOURCE": "Please select a resource or member of staff"
 };
 
 moment.locale('en', {

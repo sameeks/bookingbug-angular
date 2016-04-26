@@ -5,16 +5,9 @@
   }
 }
 
-/* Only used in the basket_wallet.html */
-.bb-content {
-  color: #000;
-  min-height: 400px;
+.bb-content, .content {
+  min-height: 600px;
 }
-
-.content {
-  min-height: 420px;
-}
-
 
 h1, h2, h3, h4, h5, h6 {
   padding: 0;

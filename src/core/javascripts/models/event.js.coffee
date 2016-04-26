@@ -22,7 +22,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     constructor: (data) ->
       super(data)     
       @date = moment.parseZone(@datetime)   
-      @time = new BBModel.TimeSlot(time: DateTimeUlititiesService.convertMomentToTime(@date))
+      @time = new BBModel.TimeSlot(time: DateTimeUtilitiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
       @date_unix = @date.unix()
 
@@ -129,7 +129,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid space
     *
     * @returns {boolean} If this is a valid space
-    ### 
+    ###
     hasSpace: () ->
       (@getSpacesLeft() > 0)
 
@@ -141,7 +141,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid waiting list space
     *
     * @returns {boolean} If this is a valid waiting list space
-    ### 
+    ###
     hasWaitlistSpace: () ->
       (@getSpacesLeft() <= 0 && @getChain().waitlength > @spaces_wait)
 
@@ -153,7 +153,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the remaining description
     *
     * @returns {object} The returned remaining description
-    ### 
+    ###
     getRemainingDescription: () ->
       left = @getSpacesLeft()
       if left > 0 && left < 3
@@ -170,7 +170,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks is this considered a selected
     *
     * @returns {boolean} If this is a selected
-    ###  
+    ###
     select: ->
       @selected = true
 

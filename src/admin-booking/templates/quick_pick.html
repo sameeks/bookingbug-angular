@@ -18,8 +18,9 @@
     
     <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady('calendar')" bb-debounce ng-disabled="!bb.current_item.service" translate="PROGRESS_BOOK"></button>
 
+    <hr>
+
   </div>
-  <hr>
 
   <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
 
@@ -36,20 +37,23 @@
       <div class="col-md-6">
         <div class="form-group">
           <label translate="ITEM_FROM"></label>
-          <div bb-date-time-picker date="config.from_datetime"></div>
+          <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime"></div>
+          <label>From</label>
+          <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime"></div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label translate="ITEM_TO"></label>
-          <div bb-date-time-picker date="config.to_datetime"></div>
+          <div bb-date-time-picker date="config.to_datetime" min-date="config.from_datetime"></div>
         </div>
       </div>
     </div>
 
     <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false" translate="BLOCK_TIME"></button>
 
-
   </div>
+
+  <hr>
 
 </div>

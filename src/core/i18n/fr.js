@@ -188,7 +188,7 @@
   "CONFIRMATION_HOMEPAGE_LINK":"Retour à la page d'accueil",
   "BOOKING_REFERENCE":"Référence de votre réservation",
   "PRINT":" Imprimer",
-  "CALENDAR_EXPORT_TITLE":" Exporter dans votre agenda",
+  "CALENDAR_EXPORT_TITLE":"Exporter",
   "CANCEL_QUESTION":"Êtes-vous sûr que vous voulez annuler cette réservation?",
   "CANCEL_CONFIRMATION":"Votre réservation a été annulée.",
   "RESULTS":"Résultats",
@@ -319,7 +319,8 @@
   "REMEMBER_ME": "Rester connecter",
   "LOGIN": "Connexion",
   "EMAIL": "Email",
-  "PLEASE_ENTER_PASSWORD": "Merci d'entrer le mot de passe"
+  "PLEASE_ENTER_PASSWORD": "Veuillez entrer le mot de passe",
+  "SELECT_RESOURCE": "Veuillez choisir une resource ou un employé"
 };
 
 (function (global, factory) {

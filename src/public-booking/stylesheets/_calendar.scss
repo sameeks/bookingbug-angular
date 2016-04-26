@@ -1,4 +1,4 @@
-.calendar, div[bb-time-ranges],  {
+.bb-calendar, [bb-time-ranges],  {
   padding-bottom: 30px;
 
   .week {
@@ -23,7 +23,7 @@
       font-size: $font-size-h2;
       color: inherit;
       float: left;
-      margin-top: 118px;
+      margin-top: 92px;
     }
     &:last-of-type {
       padding-right: 0;
@@ -35,8 +35,8 @@
      .month-heading {
       margin: 0;
       text-align: center;
-      //text-transform: uppercase;
-      font-size: $font-size-h2;
+      line-height: 33px;
+      font-size: $font-size-large;
     }
   }
 
@@ -63,6 +63,11 @@
 
   }
 
+  .date-picker {
+    @media (max-width: $screen-xs-max) {
+      padding-bottom: 15px;
+    }
+  }
 
   // panel styling
   .panel-group {
@@ -81,7 +86,7 @@
 
   .panel-default > .panel-heading {
     background: none;
-    padding: 4px 4px 10px 4px;
+    padding: 10px 4px 10px 4px;
     position: relative;
     cursor: pointer;
     color: inherit;

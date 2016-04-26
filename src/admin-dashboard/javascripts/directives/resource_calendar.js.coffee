@@ -149,7 +149,6 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
               company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
-          $scope.currentDate = moment(date).format('YYYY-MM-DD')
         eventResize: (event, delta, revertFunc, jsEvent, ui, view) ->
           event.duration = event.end.diff(event.start, 'minutes')
           $scope.updateBooking(event)
