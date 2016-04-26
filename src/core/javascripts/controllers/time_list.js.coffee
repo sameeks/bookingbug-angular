@@ -53,6 +53,8 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
       $scope.setDate($scope.bb.current_item.defaults.date)
     else if $scope.bb.current_item.date
       $scope.setDate($scope.bb.current_item.date.date)
+    else
+      $scope.setDate(moment())
       
     $scope.loadDay()
 
