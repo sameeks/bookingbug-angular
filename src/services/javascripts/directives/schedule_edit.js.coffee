@@ -12,6 +12,8 @@ angular.module('BBAdminServices').directive 'scheduleEdit', () ->
     link: link
     templateUrl: 'schedule_edit_main.html'
     require: 'ngModel'
+    scope:
+      options: '='
   }
 
 

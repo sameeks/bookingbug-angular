@@ -70,14 +70,20 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     else
       800
 
+    if not $scope.options.minTime? 
+      $scope.options.minTime = "09:00"
+
+    if not $scope.options.maxTime? 
+      $scope.options.maxTime = "18:00"  
+
     # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
     $scope.uiCalOptions =
       calendar:
         schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: true
         eventDurationEditable: false
-        minTime: $scope.options.minTime || "09:00"
-        maxTime: $scope.options.maxTime || "18:00"
+        minTime: $scope.options.minTime
+        maxTime: $scope.options.maxTime
         height: height
         header:
           left: 'today,prev,next'
@@ -138,7 +144,20 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           rid = null
           rid = resource.id if resource
           $scope.getCompanyPromise().then (company) ->
+  
+            setTimeToMoment = (date, time)->
+              newDate = moment(time,'HH:mm')
+              newDate.set({
+                'year': parseInt(date.get('year'))
+                'month': parseInt(date.get('month'))
+                'date': parseInt(date.get('date'))
+                'second': 0
+              })
+              newDate
+
             AdminBookingPopup.open
+              min_date: setTimeToMoment(start,$scope.options.minTime)
+              max_date: setTimeToMoment(end,$scope.options.maxTime) 
               from_datetime: start
               to_datetime: end
               item_defaults:
@@ -149,6 +168,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
               company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
+          
         eventResize: (event, delta, revertFunc, jsEvent, ui, view) ->
           event.duration = event.end.diff(event.start, 'minutes')
           $scope.updateBooking(event)
