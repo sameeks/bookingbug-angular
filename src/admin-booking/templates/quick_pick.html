@@ -30,7 +30,7 @@
       <select id="resource" ng-model="picked_resource" ng-change="changeResource()" ng-options="item.identifier as item.name group by item.group for item in resources" class="form-control">
         <option value="">-- select --</option>
       </select>
-      <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError">Please select a resource or member of staff</p>
+      <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError" translate="SELECT_RESOURCE"></p>
     </div>
 
     <div class="row">
