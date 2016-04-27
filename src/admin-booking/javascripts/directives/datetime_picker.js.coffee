@@ -92,6 +92,10 @@ angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
 
     $scope.datetimeWithNoTz = $filter('clearTimezone')(moment($scope.date).format())
 
+    $scope.$watch 'date', (newValue, oldValue) ->
+      if newValue != oldValue
+        $scope.datetimeWithNoTz = $filter('clearTimezone')(moment($scope.date).format())
+
     $scope.$watch 'minDate', (newValue, oldValue) ->
       if newValue != oldValue
         $scope.minDateClean = filterDate(newValue)
