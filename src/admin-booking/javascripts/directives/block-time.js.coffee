@@ -74,3 +74,8 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       $rootScope.$broadcast('refetchBookings')
       # Close modal window
       $scope.cancel()
+
+    $scope.changeBlockDay = (blockDay)->
+      if blockDay
+        $scope.config.from_datetime = $scope.config.min_date.format() 
+        $scope.config.to_datetime = $scope.config.max_date.format() 
