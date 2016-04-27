@@ -272,7 +272,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
       scope.pusherSubscribe()
 
     $timeout () ->
-      uiCalElement = angular.element(element.children()[1])
+      uiCalElement = angular.element(element.children()[2])
       toolbarElement = angular.element(uiCalElement.children()[0])
       toolbarLeftElement = angular.element(toolbarElement.children()[0])
       scope.currentDate = moment().format()

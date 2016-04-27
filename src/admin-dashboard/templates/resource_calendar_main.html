@@ -1,3 +1,32 @@
+<div class="form-inline calendar-filters">
+	<div class="form-group">
+		<label>Show&nbsp;&nbsp;</label>
+		<toggle-switch ng-init="showAll = true"
+	    ng-model="showAll"
+	    on-label="all"
+	    off-label="some"
+	    class="switch-primary">
+	  </toggle-switch>
+	</div>  
+	<div class="form-group" ng-hide="showAll">
+		<ui-select multiple ng-model="whetever" theme="bootstrap" close-on-select="true" title="Choose a person" style="min-width: 300px;">
+		  <ui-select-match placeholder="Select staff or resource...">{{$item.name}} &lt;{{$item.email}}&gt;</ui-select-match>
+		  <ui-select-choices repeat="person.email as person in people | propsFilter: {name: $select.search, age: $select.search}">
+		    <div ng-bind-html="person.name | highlight: $select.search"></div>
+		    <small>
+		      email: {{person.email}}
+		      age: <span ng-bind-html="''+person.age | highlight: $select.search"></span>
+		    </small>
+		  </ui-select-choices>
+		</ui-select>
+	</div>
+	<div class="form-group" ng-hide="showAll">
+	<button class="btn btn-primary btn-sm">
+		<i class="fa fa-search"></i> Filter
+	</button>
+	</div>	
+</div>
+
 <div id='loading_icon' ng-show="loading">
   <div id='wait_graphic'>&nbsp;</div>
 </div>
