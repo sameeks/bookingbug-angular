@@ -1,30 +1,26 @@
 <div class="form-inline calendar-filters">
 	<div class="form-group">
 		<label>Show&nbsp;&nbsp;</label>
-		<toggle-switch ng-init="showAll = true"
+		<toggle-switch 
+			ng-change="changeSelectedResources()"
 	    ng-model="showAll"
 	    on-label="all"
 	    off-label="some"
 	    class="switch-primary">
 	  </toggle-switch>
-	</div>  
+	</div>
 	<div class="form-group" ng-hide="showAll">
-		<ui-select multiple ng-model="whetever" theme="bootstrap" close-on-select="true" title="Choose a person" style="min-width: 300px;">
-		  <ui-select-match placeholder="Select staff or resource...">{{$item.name}} &lt;{{$item.email}}&gt;</ui-select-match>
-		  <ui-select-choices repeat="person.email as person in people | propsFilter: {name: $select.search, age: $select.search}">
-		    <div ng-bind-html="person.name | highlight: $select.search"></div>
-		    <small>
-		      email: {{person.email}}
-		      age: <span ng-bind-html="''+person.age | highlight: $select.search"></span>
+		<ui-select multiple ng-model="selectedResources.selected" ng-change="changeSelectedResources()" theme="bootstrap" close-on-select="true" title="Choose a person" style="min-width: 300px;">
+		  <ui-select-match placeholder="Select staff or resource...">{{$item.name}}</ui-select-match>
+		  <ui-select-choices repeat="asset in assets | propsFilter: {name: $select.search, email: $select.search}">
+		    <div ng-bind-html="asset.name | highlight: $select.search"></div>
+		    <small ng-show="asset.email">
+		      email: {{asset.email}}
 		    </small>
 		  </ui-select-choices>
 		</ui-select>
 	</div>
-	<div class="form-group" ng-hide="showAll">
-	<button class="btn btn-primary btn-sm">
-		<i class="fa fa-search"></i> Filter
-	</button>
-	</div>	
+	<div class="form-group" ng-show="loading"><i class="fa fa-refresh fa-spin"></i></div>  
 </div>
 
 <div id='loading_icon' ng-show="loading">

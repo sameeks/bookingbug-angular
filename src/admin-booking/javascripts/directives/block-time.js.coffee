@@ -1,7 +1,7 @@
 angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
   scope: true
   restrict: 'A'
-  controller: ($scope, $element, $attrs, AdminPersonService, BBModel, BookingCollections, $rootScope) ->
+  controller: ($scope, $element, $attrs, AdminPersonService, AdminResourceService, BBModel, BookingCollections, $rootScope) ->
     # All options (resources, people) go to the same select
     $scope.resources = []
     # If company setup with people add people to select
