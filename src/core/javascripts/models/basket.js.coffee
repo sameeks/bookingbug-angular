@@ -494,3 +494,18 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
       else
         @take_from_wallet = false
         return false
+
+    ###**
+    * @ngdoc method
+    * @name voucherRemainder
+    * @methodOf BB.Models:Basket
+    * @description
+    * Remaining voucher value if used
+    *
+    * @returns {integer} remaining voucher value
+    ### 
+    voucherRemainder : ->
+      amount = 0
+      for item in @items
+          amount += item.voucher_remainder if item.voucher_remainder
+      return amount
