@@ -1,6 +1,6 @@
 <div bb-page>
 
-  <div bb-calendar-admin>
+  <div bb-admin-calendar class="bb-admin-calendar">
 
     <div class="page-header">
       <h1 ng-show="availability_conflict">Availability Conflict</h1>
@@ -43,7 +43,7 @@
 
 
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-9">
 
             <div class="form-inline">
 
@@ -67,7 +67,7 @@
             </div>
           </div>
 
-          <div class="col-sm-6">
+          <div class="col-sm-3">
             <div class="bb-view-switcher hidden-xs">
               <div class="btn-group pull-right">
                 <button class="btn btn-sm btn-default" ng-class="{active: calendar_view.next_available}" ng-click="switchView('next_available')" ng-if="bb.item_defaults.pick_first_time">
@@ -124,7 +124,7 @@
 
           <div class="bb-day-nav">
 
-            <button type="button" class="btn btn-link btn-day-nav btn-lg" ng-click="subtract('days', 1)">
+            <button type="button" class="btn btn-icon btn-lg" ng-click="subtract('days', 1)">
               <span class="glyphicon glyphicon-chevron-left"></span>
               <!-- <span class="hidden-xs">Previous</span> -->
             </button>
@@ -132,7 +132,7 @@
             <h2 class="hidden-xs bb-day-nav-heading">{{selected_date | datetime: 'Do MMMM YYYY'}}</h2>
             <h2 class="hidden-sm hidden-md hidden-lg bb-day-nav-heading">{{selected_date | datetime: 'Do MMMM'}}</h2>
 
-            <button type="button" class="btn btn-link btn-day-nav btn-lg" ng-click="add('days', 1)">
+            <button type="button" class="btn btn-icon btn-lg" ng-click="add('days', 1)">
               <span class="glyphicon glyphicon-chevron-right"></span>
               <!-- <span class="hidden-xs">Next</span> -->
             </button>

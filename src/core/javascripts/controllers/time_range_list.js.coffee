@@ -36,6 +36,8 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
   controller : 'TimeRangeList'
   link: (scope, element, attrs, controller, transclude) ->
 
+    scope.options = scope.$eval(attrs.bbTimeRanges) or {}
+
     transclude scope, (clone) =>
 
       # if there's content compile that or grab the week_calendar template
@@ -83,9 +85,21 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.today = moment().toDate()
   $scope.tomorrow = moment().add(1, 'days').toDate()
 
-  $rootScope.connection_started.then ->
 
-    $scope.options = $scope.$eval($attrs.bbTimeRanges) or {}
+  $rootScope.connection_started.then ->
+    $scope.initialise()
+
+
+
+  ###**
+  * @ngdoc method
+  * @name initialise
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Set time range in according of selected date and start date parameters
+  *
+  ###
+  $scope.initialise = () ->
 
     # read initialisation attributes
     if $attrs.bbTimeRangeLength?
@@ -132,7 +146,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     $scope.loadData()
 
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -164,12 +177,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     return
 
-
-  # deprecated, please use bbSelectedDay to initialise the selected_day
-  $scope.init = (options = {}) ->
-    if options.selected_day?
-      unless options.selected_day._isAMomementObject
-        $scope.selected_day = moment(options.selected_day)
 
   ###**
   * @ngdoc method
@@ -372,6 +379,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {array} slot The slot
   ###
   $scope.highlightSlot = (day, slot) ->
+
     current_item = $scope.bb.current_item
 
     if slot && slot.availability() > 0
@@ -388,8 +396,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       if $scope.bb.current_item.earliest_time_slot and $scope.bb.current_item.earliest_time_slot.selected and (!$scope.bb.current_item.earliest_time_slot.date.isSame(day.date, 'day') or $scope.bb.current_item.earliest_time_slot.time != slot.time)
         $scope.bb.current_item.earliest_time_slot.selected = false
 
-
-      $rootScope.$broadcast "time:selected"
       # broadcast message to the accordian range groups
       $scope.$broadcast 'slotChanged', day, slot
 

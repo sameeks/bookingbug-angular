@@ -8,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of accordian range group for the currently in scope company
+* Use to group TimeSlot's by specified range for use with AngularUI Bootstrap accordian control
 *
 * <pre>
 * restrict: 'AE'
@@ -46,7 +46,16 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   $scope.collaspe_when_time_selected = true
 
   $scope.options = $scope.$eval($attrs.bbAccordianRangeGroup) or {}
-  $scope.day = $scope.day or $scope.options.day
+  $scope.options.hide_availability_summary = if _.isBoolean($scope.options.hide_availability_summary) then $scope.options.hide_availability_summary else true
+
+  # if day is being passed in, watch for changes
+  if $attrs.bbDay
+    $scope.day = $scope.$eval $attrs.bbDay
+
+    $scope.$watch $attrs.bbDay, () ->
+      new_day    = $scope.$eval $attrs.bbDay
+      $scope.day = new_day if new_day != $scope.day
+
 
   $rootScope.connection_started.then ->
 
@@ -139,7 +148,7 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   * @param {date} day The day of range group
   * @param {string} slot The slot of range group
   ###
-  updateAvailability = (day, slot) ->   
+  updateAvailability = (day, slot) ->
     $scope.selected_slot = null
     $scope.has_availability = hasAvailability() if $scope.accordian_slots
 

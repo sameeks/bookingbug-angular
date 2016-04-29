@@ -17,12 +17,13 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbTimes A hash of options
+* @param {hash} bbTimes A hash of options
 * @property {array} selected_day The selected day
 * @property {date} selected_date The selected date
 * @property {array} data_source The data source
 * @property {array} item_link_source The item link source
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+*
 ####
 
 
@@ -47,12 +48,14 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
     # clear selected time to restore original state
     delete $scope.bb.current_item.time
+    delete item.time for item in $scope.bb.stacked_items
     
-    # use default date if current item doesn't have one already
-    if $scope.bb.current_item.defaults.date
+    if $scope.bb.current_item.defaults.date and !$scope.bb.current_item.date
       $scope.setDate($scope.bb.current_item.defaults.date)
     else if $scope.bb.current_item.date
       $scope.setDate($scope.bb.current_item.date.date)
+    else
+      $scope.setDate(moment())
       
     $scope.loadDay()
 
@@ -137,6 +140,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         else
           $scope.decideNextPage(route)
 
+
   ###**
   * @ngdoc method
   * @name highlightSlot
@@ -147,13 +151,15 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {TimeSlot} slot The slot 
   ###
   $scope.highlightSlot = (day, slot) =>
-    if slot and slot.availability() > 0
-      if day
-        $scope.setLastSelectedDate(day.date)
-        $scope.data_source.setDate(day)
+
+    if day and slot and slot.availability() > 0
+
+      $scope.setLastSelectedDate(day.date)
+      $scope.data_source.setDate(day)
       $scope.data_source.setTime(slot)
       # tell any accordian groups to update
       $scope.$broadcast 'slotChanged'
+
 
   ###**
   * @ngdoc method
@@ -169,6 +175,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
     return if !slot
     status = slot.status()
     return status
+
 
   ###**
   * @ngdoc method
@@ -238,6 +245,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
           requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
 
           if requested_slot
+            debugger
             $scope.highlightSlot($scope.selected_day, requested_slot)
             $scope.skipThisStep()
             $scope.decideNextPage()

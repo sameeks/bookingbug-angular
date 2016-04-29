@@ -98,9 +98,6 @@
     <ul class="week row" ng-show="days">
 
       <li class="day navigation hidden-xs">
-        <button type="button" class="btn btn-icon visible-xs" ng-click="subtract('days', 1)" ng-disabled="!is_subtract_valid || !isLoaded">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </button>
         <button type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 3)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
@@ -127,7 +124,6 @@
           <span class="col-xs-2 next visible-xs">
             <button type="button" class="btn btn-icon visible-xs pull-right" ng-click="add('days', 1)" ng-disabled="!isLoaded">
               <span class="glyphicon glyphicon-chevron-right"></span>
-            </button>
             </button>
           </span>
         </div>

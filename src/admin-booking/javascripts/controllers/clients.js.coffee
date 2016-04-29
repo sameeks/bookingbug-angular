@@ -59,12 +59,21 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     # we need to validate the client information has been correctly entered here
     if $scope.bb && $scope.bb.parent_client
       $scope.client.parent_client_id = $scope.bb.parent_client.id
+
     $scope.client.setClientDetails($scope.client_details) if $scope.client_details
 
     ClientService.create_or_update($scope.bb.company, $scope.client).then (client) =>
       $scope.setLoaded $scope
       $scope.selectClient(client, route)
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) ->
+
+      if err.data.error == "Please Login" 
+        $scope.setLoaded($scope)
+        AlertService.raise('EMAIL_ALREADY_REGISTERED_ADMIN')
+      
+      if err.data.error == "Sorry, it appears that this phone number already exists"
+        $scope.setLoaded($scope)
+        AlertService.raise('PHONE_NUMBER_ALREADY_REGISTERED_ADMIN')
 
 
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
@@ -102,6 +111,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       clients.items
     return clientDef.promise
 
+
   $scope.typeHeadResults = ($item, $model, $label) ->
     item = $item
     model = $model
@@ -109,9 +119,11 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.client = item
     return
 
+
   $scope.clearSearch = () ->
     $scope.clients = null
     $scope.search_triggered = false
+
 
   $scope.edit = (item) ->
     $log.info("not implemented")
