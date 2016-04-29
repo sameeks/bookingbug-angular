@@ -33,7 +33,7 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   controller : 'TimeList'
 
 angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService) ->
-  
+
   $scope.controller = "public.controllers.TimeList"
   $scope.notLoaded $scope
 
@@ -47,7 +47,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
     # clear selected time to restore original state
     delete $scope.bb.current_item.time
-    
+
     # use default date if current item doesn't have one already
     if $scope.bb.current_item.defaults.date
       $scope.setDate($scope.bb.current_item.defaults.date)
@@ -55,7 +55,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
       $scope.setDate($scope.bb.current_item.date.date)
     else
       $scope.setDate(moment())
-      
+
     $scope.loadDay()
 
   , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -130,23 +130,21 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         $scope.setLastSelectedDate(day.date)
         $scope.data_source.setDate(day)
       $scope.data_source.setTime(slot)
-      if $scope.$parent.$has_page_control
-        return
-      else
-        if $scope.data_source.ready
-          $scope.addItemToBasket().then () =>
-            $scope.decideNextPage(route)
-        else
+
+      if $scope.data_source.reserve_ready
+        $scope.addItemToBasket().then () =>
           $scope.decideNextPage(route)
+      else
+        $scope.decideNextPage(route)
 
   ###**
   * @ngdoc method
   * @name highlightSlot
   * @methodOf BB.Directives:bbTimes
   * @description
-  * The highlight slot from time list 
+  * The highlight slot from time list
   *
-  * @param {TimeSlot} slot The slot 
+  * @param {TimeSlot} slot The slot
   ###
   $scope.highlightSlot = (day, slot) =>
     if slot and slot.availability() > 0
@@ -219,7 +217,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
       $scope.notLoaded $scope
 
       pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_day.date, client: $scope.client, available: 1})
-      
+
       pslots.finally ->
         $scope.setLoaded $scope
       pslots.then (time_slots) ->
@@ -235,14 +233,13 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
           for pad, v in $scope.add_padding
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
-        
+
         if $scope.data_source.defaults.time
           requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
 
           if requested_slot
-            $scope.highlightSlot($scope.selected_day, requested_slot)
             $scope.skipThisStep()
-            $scope.decideNextPage()
+            $scope.selectSlot($scope.selected_day, requested_slot)
           else
             $scope.availability_conflict = true
 
@@ -271,13 +268,13 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @description
   * Set this page section as ready
   ###
-  $scope.setReady = () =>
+  $scope.setReady = () ->
     if !$scope.data_source.time
       AlertService.clear()
       AlertService.add("danger", { msg: "You need to select a time slot" })
       return false
     else
-      if $scope.data_source.ready
+      if $scope.data_source.reserve_ready
         return $scope.addItemToBasket()
       else
         return true

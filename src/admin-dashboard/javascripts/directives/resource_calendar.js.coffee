@@ -322,6 +322,9 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     $scope.$on 'refetchBookings', () ->
       uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
 
+    $scope.$on 'newCheckout', () ->
+      uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+
   link = (scope, element, attrs) ->
 
     scope.getCompanyPromise().then (company) ->
