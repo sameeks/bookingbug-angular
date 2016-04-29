@@ -3,12 +3,16 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     AdminPersonService, $q, $sessionStorage, ModalForm, BBModel,
     AdminBookingPopup, $window, $bbug, ColorPalette, AppConfig, Dialog,
     $timeout, $compile, $templateCache, BookingCollections, PrePostTime,
-    AdminScheduleService, $filter, $state) ->
+    AdminScheduleService, $filter) ->
 
-  controller = ($scope, $attrs, BBAssets) ->
+  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state) ->
+
+    filters = {
+      requestedAssets : ProcessAssetsFilter($state.params.assets)
+    }
+
     $scope.eventSources = [
       events: (start, end, timezone, callback) ->
-        console.log 'refetching events'
         $scope.loading = true
         $scope.getCompanyPromise().then (company) ->
           params =
@@ -32,9 +36,9 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
       events: (start, end, timezone, callback) ->
         $scope.loading = true
         $scope.getCompanyPromise().then (company) ->
-          AdminScheduleService.getPeopleScheduleEvents(company, start, end).then (events) ->
+          AdminScheduleService.getAssetsScheduleEvents(company, start, end, !$scope.showAll, $scope.selectedResources.selected).then (availabilities) ->
             $scope.loading = false
-            callback(events)
+            callback(availabilities)
     ]
 
     bookingBelongsToSelectedResource = (booking)->
@@ -187,6 +191,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         eventResize: (event, delta, revertFunc, jsEvent, ui, view) ->
           event.duration = event.end.diff(event.start, 'minutes')
           $scope.updateBooking(event)
+        loading: (isLoading, view) ->
+          $scope.calendarLoading = isLoading  
 
     $scope.getCompanyPromise = () ->
       defer = $q.defer()
@@ -206,13 +212,11 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     }
 
     $scope.changeSelectedResources = ()->
+      if $scope.showAll
+        $scope.selectedResources.selected = []
+
       uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchResources')
       uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
-
-      if $scope.showAll
-        null
-      else
-        null  
 
     $scope.getCompanyPromise().then (company) ->
       $scope.loading = true
@@ -220,7 +224,32 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
       BBAssets(company).then((assets)->
         $scope.loading = false
         $scope.assets = assets
-      )    
+
+        # requestedAssets
+        if filters.requestedAssets.length > 0
+          $scope.showAll = false
+          angular.forEach($scope.assets, (asset)->
+            isInArray = _.find(filters.requestedAssets, (id)-> 
+              return parseInt(id) == asset.id
+            )  
+
+            if typeof isInArray != 'undefined'  
+              $scope.selectedResources.selected.push asset
+          )  
+
+          $scope.changeSelectedResources()
+      )   
+
+    $scope.$watch 'selectedResources.selected', (newValue, oldValue) ->
+      if newValue != oldValue
+        assets = []
+        angular.forEach(newValue, (asset)->
+          assets.push asset.id
+        )
+
+        params = $state.params;
+        params.assets = assets.join()
+        $state.go($state.current.name, params, { notify:false, reload:false});
 
     $scope.getCalendarAssets = (callback) ->
       $scope.loading = true
@@ -233,7 +262,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           )            
         else
           $scope.loading = false
-          callback($scope.selectedResources.selected)      
+          callback($scope.selectedResources.selected)        
 
     $scope.updateBooking = (booking) ->
       booking.person_id = booking.resourceId

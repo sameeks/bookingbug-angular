@@ -1,5 +1,5 @@
 ###
-* @ngdoc controller
+* @ngdoc service
 * @name BBAdminBooking.service:BBAssets
 * @description
 * Gets all the resources for the callendar
