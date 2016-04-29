@@ -34,33 +34,33 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
       return event.title if not $scope.labelAssembler? || event.status == 3
       # if label-assembler attr is provided it needs to be inline with the following RegExp
       #   ex: label-assembler='{service_name} - {client_name} - {created_at|date:shortTime}'
-      # everything outside  {} will remain as is, inside the {} the first param (required) is the property name 
+      # everything outside  {} will remain as is, inside the {} the first param (required) is the property name
       # second after the '|' (optional) is the filter and third after the ':' (optional) are the options for filter
       myRe = new RegExp("\\{([a-zA-z_-]+)\\|?([a-zA-z_-]+)?:?([a-zA-z0-9{}_-]+)?\\}", "g")
 
-      label = $scope.labelAssembler      
+      label = $scope.labelAssembler
       for match,index in $scope.labelAssembler.match myRe
         parts = match.split(myRe)
         # Remove unnecessary empty properties of the array (first/last)
         parts.splice(0,1)
         parts.pop()
-        
+
         # If requested property exists replace the placeholder with value otherwise with ''
         if event.hasOwnProperty parts[0]
           replaceWith = event[parts[0]]
           # if a filter is requested as part of the expression and filter exists
-          if parts[1]? and $filter(parts[1])? 
+          if parts[1]? and $filter(parts[1])?
             # If filter has options as part of the expression use them
             if parts[2]?
               replaceWith = $filter(parts[1])(replaceWith, $scope.$eval(parts[2]))
-            else  
+            else
               replaceWith = $filter(parts[1])(replaceWith)
 
           label = label.replace(match, replaceWith)
-        else 
-          label = label.replace(match, '')  
+        else
+          label = label.replace(match, '')
 
-      label   
+      label
 
     $scope.options = $scope.$eval $attrs.bbResourceCalendar
     $scope.options ||= {}
@@ -70,11 +70,11 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     else
       800
 
-    if not $scope.options.minTime? 
+    if not $scope.options.minTime?
       $scope.options.minTime = "09:00"
 
-    if not $scope.options.maxTime? 
-      $scope.options.maxTime = "18:00"  
+    if not $scope.options.maxTime?
+      $scope.options.maxTime = "18:00"
 
     # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
     $scope.uiCalOptions =
@@ -129,7 +129,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           # If its a blocked timeslot add colored overlay
           if event.status == 3
             element.find('.fc-bg').css({'background-color':'#000'})
-          
+
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
             element.css('background-color', service.color)
@@ -144,7 +144,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           rid = null
           rid = resource.id if resource
           $scope.getCompanyPromise().then (company) ->
-  
+
             setTimeToMoment = (date, time)->
               newDate = moment(time,'HH:mm')
               newDate.set({
@@ -157,7 +157,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
             AdminBookingPopup.open
               min_date: setTimeToMoment(start,$scope.options.minTime)
-              max_date: setTimeToMoment(end,$scope.options.maxTime) 
+              max_date: setTimeToMoment(end,$scope.options.maxTime)
               from_datetime: start
               to_datetime: end
               item_defaults:
@@ -168,7 +168,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
               company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
-          
+          $scope.currentDate = date.format()
         eventResize: (event, delta, revertFunc, jsEvent, ui, view) ->
           event.duration = event.end.diff(event.start, 'minutes')
           $scope.updateBooking(event)
@@ -186,8 +186,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           else
             $scope.people = _.sortBy people, 'name'
 
-          p.title = p.name for p in $scope.people     
-         
+          p.title = p.name for p in $scope.people
+
           uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
           callback($scope.people)
 
@@ -275,7 +275,6 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
       uiCalElement = angular.element(element.children()[1])
       toolbarElement = angular.element(uiCalElement.children()[0])
       toolbarLeftElement = angular.element(toolbarElement.children()[0])
-      scope.currentDate = moment().format()
       datePickerElement = $compile($templateCache.get('calendar_date_picker.html'))(scope)
       toolbarLeftElement.append(datePickerElement)
     , 0
