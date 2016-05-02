@@ -906,7 +906,8 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     loadStep: (step) ->
       # don't load the step - if we have an id
-      return if @id
+      #return if @id
+      # if if we have an id alreayd, need to make sure it doesn't get added to the basket as a new item again, update basketservice to handle this
       @service = step.service
       @category = step.category
       @person = step.person

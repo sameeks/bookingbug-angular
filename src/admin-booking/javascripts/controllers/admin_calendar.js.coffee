@@ -4,7 +4,7 @@ angular.module('BB.Directives').directive 'bbAdminCalendar', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller : 'calendarAdminCtrl'
+  controller : 'adminCalendarCtrl'
 
 
 angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $element, $controller, $attrs, $modal, BBModel, $rootScope) ->

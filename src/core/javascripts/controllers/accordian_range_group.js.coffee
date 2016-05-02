@@ -46,7 +46,7 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   $scope.collaspe_when_time_selected = true
 
   $scope.options = $scope.$eval($attrs.bbAccordianRangeGroup) or {}
-  $scope.options.hide_availability_summary = if _.isBoolean($scope.options.hide_availability_summary) then $scope.options.hide_availability_summary else true
+  $scope.options.hide_availability_summary = if _.isBoolean($scope.options.hide_availability_summary) then $scope.options.hide_availability_summary else false
 
   # if day is being passed in, watch for changes
   if $attrs.bbDay

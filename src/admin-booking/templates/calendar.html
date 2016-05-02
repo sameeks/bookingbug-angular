@@ -59,7 +59,7 @@
               </div>
 
               <div class="form-group" ng-if="bb.company.$has('resources')">
-                <select bb-resources class="form-control"  id="resource" ng-model="resource" ng-options="r.name for r in bookable_resources | orderBy: 'name'">
+                <select bb-resources="{allow_single_pick: true}" class="form-control"  id="resource" ng-model="resource" ng-options="r.name for r in bookable_resources | orderBy: 'name'">
                   <option value="">Any resource</option>
                 </select>
               </div>
@@ -150,15 +150,15 @@
               <div accordion close-others="false">
 
                 <!-- Morning -->
-                <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: slots, collaspe_when_time_selected: true, day: selected_day}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: slots, collaspe_when_time_selected: true}" bb-day="selected_day" ng-init="setFormDataStoreId($index)" class="accordian-group">
                 </div>
 
                 <!-- Afternoon -->
-                <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: slots, collaspe_when_time_selected: true, day: selected_day}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: slots, collaspe_when_time_selected: true}" bb-day="selected_day" ng-init="setFormDataStoreId($index)" class="accordian-group">
                 </div>
 
                 <!-- Evening -->
-                <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true, day: selected_day}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true}" bb-day="selected_day" ng-init="setFormDataStoreId($index)" class="accordian-group">
                 </div>
 
               </div>
