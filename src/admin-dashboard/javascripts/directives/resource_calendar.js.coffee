@@ -159,21 +159,25 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
           if not event.rendering? or event.rendering != 'background'
             elements.draggable()
         select: (start, end, jsEvent, view, resource) ->
+
+          setTimeToMoment = (date, time)->
+            newDate = moment(time,'HH:mm')
+            newDate.set({
+              'year': parseInt(date.get('year'))
+              'month': parseInt(date.get('month'))
+              'date': parseInt(date.get('date'))
+              'second': 0
+            })
+            newDate
+
+          if Math.abs(start.diff(end, 'days')) > 0
+            end.subtract(1,'days')
+            end = setTimeToMoment(end,$scope.options.maxTime)         
+
           view.calendar.unselect()
           rid = null
           rid = resource.id if resource
           $scope.getCompanyPromise().then (company) ->
-  
-            setTimeToMoment = (date, time)->
-              newDate = moment(time,'HH:mm')
-              newDate.set({
-                'year': parseInt(date.get('year'))
-                'month': parseInt(date.get('month'))
-                'date': parseInt(date.get('date'))
-                'second': 0
-              })
-              newDate
-
             AdminBookingPopup.open
               min_date: setTimeToMoment(start,$scope.options.minTime)
               max_date: setTimeToMoment(end,$scope.options.maxTime) 
