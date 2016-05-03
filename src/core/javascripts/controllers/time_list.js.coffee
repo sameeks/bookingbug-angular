@@ -241,11 +241,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
         
-        if $scope.data_source.defaults.time
+        if $scope.data_source.defaults.time?
           requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
 
           if requested_slot
-            debugger
             $scope.highlightSlot($scope.selected_day, requested_slot)
             $scope.skipThisStep()
             $scope.decideNextPage()
