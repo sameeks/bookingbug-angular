@@ -32,7 +32,7 @@
       </select>
       <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError">Please select a resource or member of staff</p>
     </div>
-    <div class="form-group" ng-init="blockWholeDay = false">
+    <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
       <label>Block whole day &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" on-label="Yes" off-label="No"></toggle-switch></label>
     </div>
     <div class="row" ng-hide="blockWholeDay">
