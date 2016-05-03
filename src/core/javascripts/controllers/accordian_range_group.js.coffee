@@ -50,11 +50,14 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
 
   # if day is being passed in, watch for changes
   if $attrs.bbDay
+    
     $scope.day = $scope.$eval $attrs.bbDay
 
-    $scope.$watch $attrs.bbDay, () ->
-      new_day    = $scope.$eval $attrs.bbDay
-      $scope.day = new_day if new_day != $scope.day
+    $scope.$watch $attrs.bbDay, (new_day) ->
+      if new_day and new_day != $scope.day
+        console.log "day changed"
+        $scope.day = new_day
+        updateAvailability()
 
 
   $rootScope.connection_started.then ->
@@ -115,6 +118,7 @@ angular.module('BB.Controllers').controller 'AccordianRangeGroup',
   * Set this data as ready
   ###
   setData = () ->
+    # TODO eval slots each time this is called!
     $scope.accordian_slots = []
     $scope.is_open = $scope.is_open or false
     $scope.has_availability = $scope.has_availability or false

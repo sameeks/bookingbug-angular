@@ -249,28 +249,13 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     $element.addClass('subtract')
     $scope.add(type, -amount)
 
-  ###**
-  * @ngdoc method
-  * @name isSubtractValid
-  * @methodOf BB.Directives:bbTimeRanges
-  * @description
-  * Deprecated due to performance issues, use $scope.is_subtract_valid and $scope.subtract_length instead
-  *
-  * @param {object} type The type
-  * @param {object} amount The amount of the days
-  ###
-  # deprecated due to performance issues, use $scope.is_subtract_valid and $scope.subtract_length instead
-  $scope.isSubtractValid = (type, amount) ->
-    return true if !$scope.start_date || $scope.isAdmin()
-    date = $scope.start_date.clone().subtract(amount, type)
-    return !date.isBefore(moment(), 'day')
 
   ###**
   * @ngdoc method
   * @name isSubtractValid
   * @methodOf BB.Directives:bbTimeRanges
   * @description
-  * Verify if substraction is valid
+  * Use to determine if subtraction of the time range is valid (i.e. it's not in the past)
   *
   ###
   isSubtractValid = () ->
