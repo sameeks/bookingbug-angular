@@ -10,7 +10,7 @@ adminbookingapp = angular.module('BBAdminDashboard', [
   'BBAdmin.Directives',
   'ui.calendar', 'ngResource', 'ui.bootstrap',
   'ui.router', 'ct.ui.router.extras','ngTouch', 'ngInputDate', 'ngSanitize',
-  'xeditable', 'ngIdle', 'ngLocalData'
+  'xeditable', 'ngIdle', 'ngLocalData', 'toggle-switch', 'ui.select'
 ])
 
 angular.module('BBAdminDashboard').config ($logProvider, $httpProvider) ->

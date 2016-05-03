@@ -11,8 +11,8 @@
 * @param {object}  date   A moment.js date object
 * @param {boolean}  showMeridian   Switch to show/hide meridian (optional, default:false)
 * @param {number}  minuteStep Step for the timepicker (optional, default:10)
-* @param {object}  date Min date value for datetimepicker
-* @param {object}  date Max date value for datetimepicker
+* @param {object}  minDate Min date value for datetimepicker
+* @param {object}  maxDate Max date value for datetimepicker
 ###
 angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
   scope: 
@@ -45,12 +45,20 @@ angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
           'second': 0,
         })
 
-        # These checks are for the timepicker explicitly because our version of bootstrap-ui
         # 0.12.0 does not support min-max values for the timepicker 
-        # @todo remove this and refactor accordingly once version is updated
+        # @todo refactor accordingly once version is updated
         if $scope.minDateClean? 
           minDateDate = new Date($scope.minDateClean)
           if (newValue.getTime()/1000) < (minDateDate.getTime()/1000)
+            if newValue.getFullYear() < minDateDate.getFullYear()
+              assembledDate.year(parseInt(minDateDate.getFullYear()))
+
+            if newValue.getMonth() < minDateDate.getMonth()
+              assembledDate.month(parseInt(minDateDate.getMonth()))
+            
+            if newValue.getDate() < minDateDate.getDate()
+              assembledDate.date(parseInt(minDateDate.getDate()))
+
             if newValue.getHours() < minDateDate.getHours()
               assembledDate.hours(parseInt(minDateDate.getHours()))
 
@@ -62,6 +70,15 @@ angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
         if $scope.maxDateClean? 
           maxDateClean = new Date($scope.maxDateClean)
           if (newValue.getTime()/1000) > (maxDateClean.getTime()/1000)
+            if newValue.getFullYear() > minDateDate.getFullYear()
+              assembledDate.year(parseInt(minDateDate.getFullYear()))
+
+            if newValue.getMonth() > minDateDate.getMonth()
+              assembledDate.month(parseInt(minDateDate.getMonth()))
+            
+            if newValue.getDate() > minDateDate.getDate()
+              assembledDate.date(parseInt(minDateDate.getDate()))
+
             if newValue.getHours() > maxDateClean.getHours()
               assembledDate.hours(parseInt(maxDateClean.getHours()))
 
@@ -75,8 +92,9 @@ angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
 
     $scope.datetimeWithNoTz = $filter('clearTimezone')(moment($scope.date).format())
 
-    $scope.minDateClean = null
-    $scope.maxDateClean = null
+    $scope.$watch 'date', (newValue, oldValue) ->
+      if newValue != oldValue
+        $scope.datetimeWithNoTz = $filter('clearTimezone')(moment($scope.date).format())
 
     $scope.$watch 'minDate', (newValue, oldValue) ->
       if newValue != oldValue
@@ -89,4 +107,7 @@ angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
     filterDate = (date)->
       if date? and moment(date).isValid()
         return $filter('clearTimezone')(moment(date).format())  
-      null    
+      null   
+
+    $scope.minDateClean = filterDate($scope.minDate)
+    $scope.maxDateClean = filterDate($scope.maxDate)   

@@ -37,7 +37,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       @has_questions = false
 
       if bb
-        @reserve_without_questions = bb.reserve_without_questions        
+        @reserve_without_questions = bb.reserve_without_questions
 
       # if we were given an id then the item is ready - we need to fake a few items
       if @time
@@ -410,7 +410,7 @@ angular.module('BB.Models').factory "BasketItemModel",
           return
       @event_chain = event_chain
       @base_price = parseFloat(event_chain.price)
-      if @price? and @price != @base_price 
+      if @price? and @price != @base_price
         @setPrice(@price)
       else
         @setPrice(@base_price)
@@ -474,10 +474,10 @@ angular.module('BB.Models').factory "BasketItemModel",
         @setEventGroup(group)
       if @event.getSpacesLeft() <= 0 && !@company.settings
         @status = 8 if @company.getSettings().has_waitlists
-      else if @event.getSpacesLeft() <= 0 && @company.settings && @company.settings.has_waitlists 
+      else if @event.getSpacesLeft() <= 0 && @company.settings && @company.settings.has_waitlists
         @status = 8
 
- 
+
 
     ###**
     * @ngdoc method
@@ -652,7 +652,7 @@ angular.module('BB.Models').factory "BasketItemModel",
           @datetime.hour(hours)
           @datetime.minutes(mins)
 
-        if @price && @time.price && (@price != @time.price) 
+        if @price && @time.price && (@price != @time.price)
           @setPrice(@price)
         else if @price && !@time.price
          @setPrice(@price)
@@ -713,7 +713,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     clearTime: () ->
       delete @time
       @ready = false
-      @reserve_ready = false  
+      @reserve_ready = false
 
     ###**
     * @ngdoc method
@@ -814,7 +814,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.pre_paid_booking_id = @pre_paid_booking_id if @pre_paid_booking_id?
       data.event_chain_id = @event_chain_id
       data.event_group_id = @event_group_id
-      data.qty = @qty   
+      data.qty = @qty
       data.status = @status if @status
       data.num_resources = parseInt(@num_resources) if @num_resources?
       data.package_id = @package_item.id if @package_item
@@ -968,7 +968,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     booking_time: (seperator = '-') ->
       return null if !@time
-      duration = if @listed_duration then @listed_duration else @duration 
+      duration = if @listed_duration then @listed_duration else @duration
       @time.print_time() + " " + seperator + " " +  @time.print_end_time(duration)
 
     ###**
@@ -1030,7 +1030,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     # get booking end datetime
     end_datetime: () ->
       return null if !@date || !@time || (!@listed_duration && !@duration)
-      duration = if @listed_duration then @listed_duration else @duration 
+      duration = if @listed_duration then @listed_duration else @duration
       end_datetime = moment(@date.date.toISODate())
       end_datetime.minutes(@time.time + duration)
       end_datetime
@@ -1065,7 +1065,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     anyPerson: () ->
       @person && (typeof @person == 'boolean')
- 
+
     ###**
     * @ngdoc method
     * @name anyResource
@@ -1287,10 +1287,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @description
     * Indicates if the basket item has a prepaid booking applied
     *
-    * @returns {boolean} boolean indicating if the BasketItem has a prepaid booking  
+    * @returns {boolean} boolean indicating if the BasketItem has a prepaid booking
     ###
     hasPrepaidBooking: () ->
-      return @pre_paid_booking_id?  
+      return @pre_paid_booking_id?
 
 
     ###**
@@ -1321,7 +1321,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @returns {boolean}
     ###
     isExternalPurchase: () ->
-      return @external_purchase?  
+      return @external_purchase?
 
 
     ###**

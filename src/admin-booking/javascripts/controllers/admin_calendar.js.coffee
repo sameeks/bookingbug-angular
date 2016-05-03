@@ -22,11 +22,10 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
   }
 
   $rootScope.connection_started.then ->
-    
     # set default view
     if $scope.bb.item_defaults.pick_first_time
       $scope.switchView('next_available')
-    else if $scope.bb.current_item.defaults.time
+    else if $scope.bb.current_item.defaults.time?
       $scope.switchView('day')
     else
       $scope.switchView('multi_day')
@@ -48,7 +47,7 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
   $scope.overBook = () ->
 
     new_timeslot = new BBModel.TimeSlot({time: $scope.bb.current_item.defaults.time, avail: 1})
-    
+
     if $scope.selected_day
       $scope.setLastSelectedDate($scope.selected_day.date)
       $scope.bb.current_item.setDate($scope.selected_day)

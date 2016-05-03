@@ -15,10 +15,13 @@ angular.module('BBAdminServices').directive 'scheduleWeekdays', (uiCalendarConfi
           (start.isAfter(e.start) || start.isSame(e.start)) &&
             (end.isBefore(e.end) || end.isSame(e.end)))
 
-    options = $scope.$eval($attrs.scheduleWeekdays) or {}
+    options = $scope.setOptions
+    options ||= {}
 
     $scope.options =
       calendar:
+        schedulerLicenseKey: '0598149132-fcs-1443104297'
+        height: options.height || "auto"
         editable: false
         selectable: true
         defaultView: 'agendaWeek'
@@ -88,4 +91,5 @@ angular.module('BBAdminServices').directive 'scheduleWeekdays', (uiCalendarConfi
     require: 'ngModel'
     scope:
       render: '=?'
+      setOptions: '=options'
   }
