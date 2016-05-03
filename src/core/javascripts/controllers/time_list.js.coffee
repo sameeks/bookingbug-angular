@@ -278,15 +278,12 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * Set this page section as ready
   ###
   $scope.setReady = () =>
-    debugger
     if !$scope.data_source.time
       AlertService.clear()
       AlertService.add("danger", { msg: "You need to select a time slot" })
       return false
     else
-      $scope.addItemToBasket()
-      # if $scope.data_source.ready
-      #   debugger
-      #   return $scope.addItemToBasket()
-      # else
-      #   return true
+      if $scope.data_source.reserve_ready
+        return $scope.addItemToBasket()
+      else
+        return true

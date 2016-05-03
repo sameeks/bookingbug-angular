@@ -18,6 +18,7 @@
 angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
 
   class Basket extends BaseModel
+
     constructor: (data, scope) ->
       if scope && scope.isAdmin
         @is_admin = scope.isAdmin
@@ -37,11 +38,11 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     *
     ###
     addItem: (item) ->
-      # check if then item is already in the basket
+      # check if the item is already in the basket
       for i in @items
-        if i == item
+        if i is item
           return
-        if i.id && item.id && i.id == item.id
+        if i.id and item.id and i.id is item.id
           return
       @items.push(item)
 
@@ -72,11 +73,10 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * @name readyToCheckout
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if items array is not empty, so it's ready for the checkout
+    * Use to check if the basket is ready to checkout
     *
-    * @returns {boolean} If items array is not empty
+    * @returns {boolean} Flag to indicate if basket is ready checkout
     ###
-    # should we try to checkout ?
     readyToCheckout: ->
       if @items.length > 0
         return true
@@ -88,7 +88,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * @name timeItems
     * @methodOf BB.Models:Basket
     * @description
-    * Build an array of time items (i.e. event and appointment bookings)
+    * Returns an array of time items (i.e. event and appointment bookings)
     *
     * @returns {array}
     ###
