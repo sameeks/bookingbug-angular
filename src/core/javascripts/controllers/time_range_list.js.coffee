@@ -36,7 +36,9 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
   controller : 'TimeRangeList'
   link: (scope, element, attrs, controller, transclude) ->
 
-    scope.options = scope.$eval(attrs.bbTimeRanges) or {}
+    # date helpers
+    scope.today = moment().toDate()
+    scope.tomorrow = moment().add(1, 'days').toDate()
 
     transclude scope, (clone) =>
 
@@ -80,11 +82,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
   # if the data source isn't set, set it as the current item
   $scope.data_source = $scope.bb.current_item if !$scope.data_source
-
-  # date helpers
-  $scope.today = moment().toDate()
-  $scope.tomorrow = moment().add(1, 'days').toDate()
-
 
   $rootScope.connection_started.then ->
     $scope.initialise()
@@ -536,6 +533,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {object} separator The separator of month and year format
   ###
   $scope.pretty_month_title = (month_format, year_format, seperator = '-') ->
+    return if !$scope.start_date or !$scope.end_date
     month_year_format = month_format + ' ' + year_format
     if $scope.start_date && $scope.end_date && $scope.end_date.isAfter($scope.start_date, 'month')
       start_date = $scope.start_date.format(month_format)
