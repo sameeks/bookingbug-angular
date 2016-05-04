@@ -40,6 +40,8 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
     scope.today = moment().toDate()
     scope.tomorrow = moment().add(1, 'days').toDate()
 
+    scope.options = scope.$eval(attrs.bbTimeRanges) or {}
+
     transclude scope, (clone) =>
 
       # if there's content compile that or grab the week_calendar template
