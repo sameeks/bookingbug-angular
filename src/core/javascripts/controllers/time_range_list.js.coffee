@@ -47,7 +47,6 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
       if has_content
         element.html(clone).show()
-        $compile(element.contents())(scope)
       else
         $q.when($templateCache.get('_week_calendar.html')).then (template) ->
           element.html(template).show()
