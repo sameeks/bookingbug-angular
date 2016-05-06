@@ -107,28 +107,28 @@ angular.module('BB.Filters').filter 'map_lat_long', ->
 app.filter 'distance', ($translate) ->
   (distance) ->
     return '' unless distance
-    localUnit = $translate.instant('DISTANCE_UNIT')
-    distance *= 1.60934 if localUnit is 'km'
-    prettyDistance = distance.toFixed(1).replace(/\.0+$/,'')
-    prettyDistance + localUnit
+    local_unit = $translate.instant('DISTANCE_UNIT')
+    distance *= 1.60934 if local_unit is 'km'
+    pretty_distance = distance.toFixed(1).replace(/\.0+$/,'')
+    pretty_distance + local_unit
     
 do ->
-  currencyCodes = {USD: "$", GBP: "£", AUD: "$", EUR: "€", CAD: "$", MIXED: "~"}
+  currency_codes = {USD: "$", GBP: "£", AUD: "$", EUR: "€", CAD: "$", MIXED: "~"}
 
   currency = ($translate, $window, $rootScope) ->
-    (cents, currencyCode, prettyPrice=false) ->
-      currencyCode ||= $rootScope.bb_currency
+    (cents, currency_code, prettyPrice=false) ->
+      currency_code ||= $rootScope.bb_currency
 
       format = $translate.instant(['THOUSANDS_SEPARATOR', 'DECIMAL_SEPARATOR', 'CURRENCY_FORMAT'])
       hideCents = prettyPrice and (cents % 100 is 0)
 
-      $window.accounting.formatMoney(cents / 100.0, currencyCodes[currencyCode], hideCents ? 0 : 2,
+      $window.accounting.formatMoney(cents / 100.0, currency_codes[currency_code], hideCents ? 0 : 2,
                                      format.THOUSANDS_SEPARATOR, format.DECIMAL_SEPARATORS, format.CURRENCY_FORMAT)
 
   prettyPrice = ($translate, $filter) ->
-    (price, currencyCode) ->
+    (price, currency_code) ->
       if parseFloat(price) == 0 then $translate.instant('ITEM_FREE')
-      else $filter('currency')(price, currencyCode, true)
+      else $filter('currency')(price, currency_code, true)
 
   app.filter 'currency', currency
   app.filter 'icurrency', currency
@@ -141,19 +141,19 @@ app.filter 'time_period', ($translate) ->
   (v) ->
     return unless angular.isNumber(v)
     minutes = parseInt(v)
-    timePeriod = ''
+    time_period = ''
 
     hours = Math.floor(minutes / 60)
     minutes %= 60
 
     if hours > 0
-        timePeriod += moment.duration(hours, 'hours').humanize()
+        time_period += moment.duration(hours, 'hours').humanize()
         if minutes > 0
-          timePeriod += $translate.instant('TIME_SEPARATOR')
+          time_period += $translate.instant('TIME_SEPARATOR')
     if minutes > 0 or hours == 0
-      timePeriod += moment.duration(minutes, 'minutes').humanize()
+      time_period += moment.duration(minutes, 'minutes').humanize()
 
-    return timePeriod
+    return time_period
 
 
 # unused in this repo
@@ -161,16 +161,16 @@ app.filter 'time_period_from_seconds', ($translate, $filter) ->
   (v) ->
     return unless angular.isNumber(v)
     seconds = parseInt(v)
-    timePeriod = ''
+    time_period = ''
 
     if seconds >= 60
-      timePeriod += $filter('time_period')(seconds / 60)
+      time_period += $filter('time_period')(seconds / 60)
       if (seconds % 60) > 0
-        timePeriod += $translate.instant('TIME_SEPARATOR')
+        time_period += $translate.instant('TIME_SEPARATOR')
     if (seconds % 60) > 0
-      timePeriod += moment.duration(seconds % 60, 'seconds').humanize()
+      time_period += moment.duration(seconds % 60, 'seconds').humanize()
 
-    return timePeriod
+    return time_period
 
 angular.module('BB.Filters').filter 'round_up', ->
   (number, interval) ->
