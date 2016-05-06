@@ -18,10 +18,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
 
   class Event extends BaseModel
-    
+
     constructor: (data) ->
-      super(data)     
-      @date = moment.parseZone(@datetime)   
+      super(data)
+      @date = moment.parseZone(@datetime)
       @time = new BBModel.TimeSlot(time: DateTimeUtilitiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
       @date_unix = @date.unix()
@@ -99,7 +99,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getNumBooked
     * @methodOf BB.Models:Event
     * @description
-    * Get the number booked 
+    * Get the number booked
     *
     * @returns {object} The returned number booked
     ###
@@ -118,13 +118,12 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     getSpacesLeft: (pool = null) ->
       if pool && @ticket_spaces && @ticket_spaces[pool]
         return @ticket_spaces[pool].left
-      else if @ticket_spaces
+      else if !_.isEmpty(@ticket_spaces)
         spaces = 0
         spaces += pool.left for key, pool of @ticket_spaces
-        return spaces 
+        return spaces
       else
         return @num_spaces - @getNumBooked()
-
     ###**
     * @ngdoc method
     * @name hasSpace
@@ -133,7 +132,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid space
     *
     * @returns {boolean} If this is a valid space
-    ### 
+    ###
     hasSpace: () ->
       (@getSpacesLeft() > 0)
 
@@ -145,7 +144,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid waiting list space
     *
     * @returns {boolean} If this is a valid waiting list space
-    ### 
+    ###
     hasWaitlistSpace: () ->
       (@getSpacesLeft() <= 0 && @getChain().waitlength > @spaces_wait)
 
@@ -157,7 +156,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the remaining description
     *
     * @returns {object} The returned remaining description
-    ### 
+    ###
     getRemainingDescription: () ->
       left = @getSpacesLeft()
       if left > 0 && left < 3
@@ -174,7 +173,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks is this considered a selected
     *
     * @returns {boolean} If this is a selected
-    ###  
+    ###
     select: ->
       @selected = true
 
