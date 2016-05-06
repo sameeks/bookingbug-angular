@@ -9,8 +9,8 @@ angular.module('BB.Services').factory 'I18nService', ($translate, $window, $q, a
 
   #interface
   factory.setLocale = (locale) ->
-    loadingPromise = if locale is 'en' then $q.when() else angularLoad.loadScript("i18n/#{locale}.js")
-    loadingPromise.then ->
+    loading_promise = if locale is 'en' then $q.when() else angularLoad.loadScript("i18n/#{locale}.js")
+    loading_promise.then ->
       $translate.use(locale)
       moment.locale(locale)
 
