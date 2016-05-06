@@ -324,7 +324,8 @@
   "LOGIN": "Login",
   "EMAIL": "Email",
   "PLEASE_ENTER_PASSWORD": "Please enter your password",
-  "SELECT_RESOURCE": "Please select a resource or member of staff"
+  "SELECT_RESOURCE": "Please select a resource or member of staff",
+  "BLOCK_WHOLE_DAY": "Block whole day"
 };
 
 moment.locale('en', {
@@ -349,4 +350,4 @@ moment.locale('en', {
     y:  "one year",
     yy: "%d years"
   }  
-});
+);

@@ -320,7 +320,8 @@
   "LOGIN": "Connexion",
   "EMAIL": "Email",
   "PLEASE_ENTER_PASSWORD": "Veuillez entrer le mot de passe",
-  "SELECT_RESOURCE": "Veuillez choisir une resource ou un employé"
+  "SELECT_RESOURCE": "Veuillez choisir une resource ou un employé",
+  "BLOCK_WHOLE_DAY": "Bloquer la journée entière"
 };
 
 (function (global, factory) {

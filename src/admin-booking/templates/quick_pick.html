@@ -28,24 +28,24 @@
     <div class="form-group" ng-class="{'has-error': resourceError}">
       <label translate="FOR_SERVICE"></label>
       <select id="resource" ng-model="picked_resource" ng-change="changeResource()" ng-options="item.identifier as item.name group by item.group for item in resources" class="form-control">
-        <option value="">-- select --</option>
+        <option value="">-- {{'SELECT_A_SERVICE' | translate}} --</option>
       </select>
       <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError" translate="SELECT_RESOURCE"></p>
     </div>
-
-    <div class="row">
+    <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
+      <label>{{'BLOCK_WHOLE_DAY' | translate}} &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" on-label="{{'YES'|translate}}" off-label="{{'NO'|translate}}"></toggle-switch></label>
+    </div>
+    <div class="row" ng-hide="blockWholeDay">
       <div class="col-md-6">
         <div class="form-group">
           <label translate="ITEM_FROM"></label>
-          <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime"></div>
-          <label>From</label>
-          <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime"></div>
+          <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime" min-date="config.min_date"></div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label translate="ITEM_TO"></label>
-          <div bb-date-time-picker date="config.to_datetime" min-date="config.from_datetime"></div>
+          <div bb-date-time-picker date="config.to_datetime" min-date="config.from_datetime" max-date="config.max_date"></div>
         </div>
       </div>
     </div>

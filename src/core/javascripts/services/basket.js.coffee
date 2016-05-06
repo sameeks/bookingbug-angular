@@ -164,7 +164,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
       data = basket.getPostData()
       data.qudini_booking_id = params.bb.qudini_booking_id if params.bb.qudini_booking_id
       data.no_notifications = params.bb.no_notifications  if params.bb.no_notifications
-      data.affiliate_id = $rootScope.affiliate_id
+      data.affiliate_id = $rootScope.affiliate_id || params.affiliate_id
       basket.waiting_for_checkout = true
       MutexService.getLock().then (mutex) ->
         basket.$post('checkout', params, data).then (total) ->

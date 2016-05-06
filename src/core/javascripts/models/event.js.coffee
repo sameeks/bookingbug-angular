@@ -115,11 +115,15 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     *
     * @returns {object} The returned spaces left
     ###
-    # get the number of spaces left (possibly limited by a specific ticket pool)
     getSpacesLeft: (pool = null) ->
       if pool && @ticket_spaces && @ticket_spaces[pool]
         return @ticket_spaces[pool].left
-      return @num_spaces - @getNumBooked()
+      else if @ticket_spaces
+        spaces = 0
+        spaces += pool.left for key, pool of @ticket_spaces
+        return spaces 
+      else
+        return @num_spaces - @getNumBooked()
 
     ###**
     * @ngdoc method

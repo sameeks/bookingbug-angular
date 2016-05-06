@@ -9,16 +9,16 @@ $bb-primary-brand-color     : #087f94;
 $bb-secondary-brand-color   : #88c66f;
 $heading-text-color         : #222222;
 $page-background-color      : #FFFFFF;
-$hyperlink-color            : #609ABE; 
-$placeholder-text           : #A5A5A5; 
+$hyperlink-color            : #609ABE;
+$placeholder-text           : #A5A5A5;
 
-$primary-text-color         : #222222; 
-$primary-background-color   : #EEEEEE; 
+$primary-text-color         : #222222;
+$primary-background-color   : #EEEEEE;
 $primary-border-color       : #666666;
 
 $secondary-text-color       : #255B93;
-$secondary-background-color : #FAFAFA; 
-$secondary-border-color     : #D5D5D5; 
+$secondary-background-color : #FAFAFA;
+$secondary-border-color     : #D5D5D5;
 
 #bb {
   .bb-primary-brand-color {
@@ -35,7 +35,7 @@ $secondary-border-color     : #D5D5D5;
   background-color: $page-background-color;
   margin: 0; // remove default body margin
 
-  // 
+  //
   // ADD THEME HERE
   //
 
@@ -63,4 +63,5 @@ $secondary-border-color     : #D5D5D5;
   @import "time";
   @import "filters";
   @import "popovers";
+  @import "company_cards";
 }
