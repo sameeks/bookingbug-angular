@@ -220,4 +220,6 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
       parent: 'root'
       url: "/checkin"
       templateUrl: "checkin_page.html"
+      controller: ($scope, $stateParams) ->
+        $scope.adminlte.heading = 'Check-in'
 
