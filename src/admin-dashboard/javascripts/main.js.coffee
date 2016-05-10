@@ -222,4 +222,52 @@ angular.module('BBAdminDashboard').config ($stateProvider, $urlRouterProvider) -
       templateUrl: "checkin_page.html"
       controller: ($scope, $stateParams) ->
         $scope.adminlte.heading = 'Check-in'
+    .state 'clients',
+      parent: 'root'
+      url: "/clients"
+      templateUrl: "admin_clients.html"
+      controller: ($scope) ->
+        $scope.adminlte.heading = null
+        $scope.clientsOptions = {search: null}
+        $scope.adminlte.side_menu = true
+
+        $scope.set_current_client = (client) ->
+          $scope.current_client = client
+    .state 'clients.new',
+      url: "/new"
+      templateUrl: "client_new.html"
+    .state 'clients.all',
+      url: "/all"
+      templateUrl: "all_clients.html"
+      controller: ($scope) ->
+        $scope.set_current_client(null)
+    .state 'clients.edit',
+      url: "/edit/:id"
+      templateUrl: "admin_client.html"
+      resolve:
+        client: (company, $stateParams, AdminClientService) ->
+          params =
+            company_id: company.id
+            id: $stateParams.id
+          AdminClientService.query(params)
+      controller: ($scope, client, $state, company, AdminClientService) ->
+        $scope.client = client
+        $scope.historicalStartDate = moment().add(-1, 'years')
+        $scope.historicalEndDate = moment()
+        # Refresh Client Resource after save
+        $scope.memberSaveCallback = ()->
+          params =
+            company_id: company.id
+            id: $state.params.id
+            flush: true
+
+          AdminClientService.query(params).then (client)->
+            $scope.client = client
+    .state 'calendar',
+      parent: 'root'
+      url: "/calendar/:assets"
+      templateUrl: "calendar_page.html"
+      controller: ($scope) ->
+        $scope.adminlte.side_menu = false
+        $scope.adminlte.heading = null
 
