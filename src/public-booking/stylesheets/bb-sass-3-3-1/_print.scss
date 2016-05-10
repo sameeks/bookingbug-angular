@@ -51,9 +51,6 @@
         page-break-inside: avoid;
     }
 
-    img {
-        max-width: 100% !important;
-    }
 
     p,
     h2,
@@ -99,5 +96,12 @@
     }
 
     // Bootstrap specific changes end
+    .angular-google-map-container{
+      div{
+        a{
+          display: none !important;
+        }
+      }
+    }
 }
 }
