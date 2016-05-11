@@ -67,10 +67,10 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       $scope.selectClient(client, route)
     , (err) ->
 
-      if err.data and err.data.error == "Please Login" 
+      if err.data and err.data.error == "Please Login"
         $scope.setLoaded($scope)
         AlertService.raise('EMAIL_ALREADY_REGISTERED_ADMIN')
-      
+
       else if err.data and err.data.error == "Sorry, it appears that this phone number already exists"
         $scope.setLoaded($scope)
         AlertService.raise('PHONE_NUMBER_ALREADY_REGISTERED_ADMIN')
@@ -120,11 +120,12 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     model = $model
     label = $label
     $scope.client = item
+    $scope.selectClient($item)
     return
 
 
   $scope.clearSearch = () ->
-    $scope.clients = null
+    $scope.clients = []
     $scope.search_triggered = false
 
 

@@ -16,7 +16,7 @@
       border-color: #bbb;
       border-radius: 15px;
       border-bottom-left-radius: 0px;
-      border-bottom-right-radius: 0px;  
+      border-bottom-right-radius: 0px;
     }
   }
 
@@ -37,8 +37,6 @@
 .admin-typehead-wrapper{
   padding-right: 5px;
   margin-bottom: 20px;
-  padding-left: 15px;
-  padding-right: 15px;
   .dropdown-menu{
     max-height: 500px;
     overflow: auto;
@@ -86,7 +84,8 @@
   padding: 0;
   padding-left: 10px;
   padding-right: 10px;
-  padding-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border: 1px solid $secondary-border-color;
   border-top: 0px;
 }
@@ -95,4 +94,19 @@
     max-height: 500px;
     overflow: auto;
   }
+}
+
+.new-cus-input{
+  margin-top: 10px;
+}
+.dropdown-menu{
+  .active{
+    background-color: $hyperlink-color;
+  }
+}
+.icon-padding{
+  padding-left: 10px;
+}
+.typh-header{
+  font-size: 22px;
 }
