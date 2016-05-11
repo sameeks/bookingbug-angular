@@ -1,13 +1,13 @@
 'use strict'
 
-angular.module('BB.Directives').directive 'bbCalendarAdmin', () ->
+angular.module('BB.Directives').directive 'bbAdminCalendar', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller : 'calendarAdminCtrl'
+  controller : 'adminCalendarCtrl'
 
 
-angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $element, $controller, $attrs, $modal, BBModel, $rootScope) ->
+angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $element, $controller, $attrs, $modal, BBModel, $rootScope) ->
 
   angular.extend(this, $controller('TimeList', {
     $scope: $scope,
@@ -35,8 +35,12 @@ angular.module('BB.Controllers').controller 'calendarAdminCtrl', ($scope, $eleme
 
 
   $scope.switchView = (view) ->
+
+    # reset views
     for key, value of $scope.calendar_view
       $scope.calendar_view[key] = false
+
+    # set new view
     $scope.calendar_view[view] = true
 
 

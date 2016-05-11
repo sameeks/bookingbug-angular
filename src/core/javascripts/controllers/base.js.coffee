@@ -168,8 +168,6 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
         else
           element.html(clone).show()
           element.append('<style widget_css scoped></style>') if prms.design_mode
-          $compile(element.contents())(scope)
-
 
 
 # a controller used for the main page contents - just in case we need one here
@@ -840,7 +838,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     else if (!$scope.client.valid())
       return if $scope.setPageRoute($rootScope.Route.Client)
       return $scope.showPage('client')
-    else if ( !$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready ) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
+    else if (!$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
       return if $scope.setPageRoute($rootScope.Route.Summary)
       return $scope.showPage('check_items')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))

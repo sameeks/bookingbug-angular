@@ -1,6 +1,6 @@
 <div bb-page>
 
-  <div bb-calendar-admin>
+  <div bb-admin-calendar class="bb-admin-calendar">
 
     <div class="page-header">
       <h1 ng-show="availability_conflict">Availability Conflict</h1>
@@ -43,7 +43,7 @@
 
 
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-9">
 
             <div class="form-inline">
 
@@ -59,7 +59,7 @@
               </div>
 
               <div class="form-group" ng-if="bb.company.$has('resources')">
-                <select bb-resources class="form-control"  id="resource" ng-model="resource" ng-options="r.name for r in bookable_resources | orderBy: 'name'">
+                <select bb-resources="{allow_single_pick: true}" class="form-control"  id="resource" ng-model="resource" ng-options="r.name for r in bookable_resources | orderBy: 'name'">
                   <option value="">Any resource</option>
                 </select>
               </div>
@@ -67,7 +67,7 @@
             </div>
           </div>
 
-          <div class="col-sm-6">
+          <div class="col-sm-3">
             <div class="bb-view-switcher hidden-xs">
               <div class="btn-group pull-right">
                 <button class="btn btn-sm btn-default" ng-class="{active: calendar_view.next_available}" ng-click="switchView('next_available')" ng-if="bb.item_defaults.pick_first_time">
@@ -100,12 +100,12 @@
           <div class="bb-calendar">
 
             <div class="panel-group">
-              <div class="accordian-group">
+              <div class="accordion-group">
                 <div class="panel panel-default">
 
                   <ul class="time-slots">
 
-                    <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(selected_day, slot)" ng-repeat="slot in slots | in_the_future | limitTo: 10">
+                    <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(slot, selected_day)" ng-repeat="slot in slots | in_the_future | limitTo: 10">
                       <span>{{slot.time_moment | datetime: 'time'}} (in {{slot.time | tod_from_now }})</span>
                     </li>
 
@@ -124,7 +124,7 @@
 
           <div class="bb-day-nav">
 
-            <button type="button" class="btn btn-link btn-day-nav btn-lg" ng-click="subtract('days', 1)">
+            <button type="button" class="btn btn-icon btn-lg" ng-click="subtract('days', 1)">
               <span class="glyphicon glyphicon-chevron-left"></span>
               <!-- <span class="hidden-xs">Previous</span> -->
             </button>
@@ -132,7 +132,7 @@
             <h2 class="hidden-xs bb-day-nav-heading">{{selected_date | datetime: 'Do MMMM YYYY'}}</h2>
             <h2 class="hidden-sm hidden-md hidden-lg bb-day-nav-heading">{{selected_date | datetime: 'Do MMMM'}}</h2>
 
-            <button type="button" class="btn btn-link btn-day-nav btn-lg" ng-click="add('days', 1)">
+            <button type="button" class="btn btn-icon btn-lg" ng-click="add('days', 1)">
               <span class="glyphicon glyphicon-chevron-right"></span>
               <!-- <span class="hidden-xs">Next</span> -->
             </button>
@@ -142,23 +142,20 @@
           <div class="bb-calendar">
 
             <div ng-show="!slots || (slots && slots.length == 0)">
-              <p>No availability found</p>
+              <p class="text-center">No availability found</p>
             </div>
 
             <div ng-if="slots">
 
               <div accordion close-others="false">
 
-                <!-- Morning -->
-                <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: slots, collaspe_when_time_selected: true, day: selected_day}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                <div bb-accordion-range-group="{heading: 'Morning', range: [0, 720], collaspe_when_time_selected: true}" day="selected_day" slots="slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
                 </div>
 
-                <!-- Afternoon -->
-                <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: slots, collaspe_when_time_selected: true, day: selected_day}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                <div bb-accordion-range-group="{heading: 'Afternoon', range: [720, 1020], collaspe_when_time_selected: true}" day="selected_day" slots="slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
                 </div>
 
-                <!-- Evening -->
-                <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true, day: selected_day}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+                <div bb-accordion-range-group="{heading: 'Evening', range: [1020, 1440], collaspe_when_time_selected: true}" day="selected_day" slots="slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
                 </div>
 
               </div>
@@ -173,7 +170,7 @@
           <div bb-time-ranges="{selected_day: today}"></div>
         </div>
 
-        <button type="button" class="btn btn-primary pull-right" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time">Book {{bb.current_item.start_datetime() | datetime: 'time'}}</button>
+        <button type="button" class="btn btn-primary pull-right" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time">Book</button>
 
       </div>
 
@@ -185,8 +182,21 @@
       <div class="panel-body">
 
         <p>Overbooking ignores booking time step and availability constraints to make a booking.</p>
+
+        <div class="bb-list-heading">Selected date and time:</div>
+
+        <ul class="bb-list bb-list-horizontal bb-bordered">
+          <li>
+            <i class="fa fa-calendar" aria-hidden="true"></i>
+            {{bb.current_item.defaults.datetime | datetime: 'date'}}
+          </li>
+          <li>
+            <i class="fa fa-clock-o" aria-hidden="true"></i>
+            {{bb.current_item.defaults.datetime | datetime: 'time'}}
+          </li>
+        </ul>
         
-        <button type="button" class="btn btn-danger pull-right" ng-click="overBook()" bb-debounce>Overbook {{bb.current_item.defaults.datetime | datetime: 'time'}}</button>
+        <button type="button" class="btn btn-danger pull-right" ng-click="overBook()" bb-debounce>Overbook</button>
 
       </div>
 

@@ -98,9 +98,6 @@
     <ul class="week row" ng-show="days">
 
       <li class="day navigation hidden-xs">
-        <button type="button" class="btn btn-icon visible-xs" ng-click="subtract('days', 1)" ng-disabled="!is_subtract_valid || !isLoaded">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </button>
         <button type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 3)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
@@ -128,7 +125,6 @@
             <button type="button" class="btn btn-icon visible-xs pull-right" ng-click="add('days', 1)" ng-disabled="!isLoaded">
               <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
-            </button>
           </span>
         </div>
 
@@ -137,16 +133,13 @@
           <!-- if time list has slots -->
           <div accordion close-others="false">
 
-            <!-- MORNING TIME RANGE -->
-            <div bb-accordian-range-group="{heading: 'Morning', range: [0, 720], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordion-range-group="{heading: 'Morning', range: [0, 720], collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
             </div>
 
-            <!-- AFTERNOON TIME RANGE -->
-            <div bb-accordian-range-group="{heading: 'Afternoon', range: [720, 1020], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordion-range-group="{heading: 'Afternoon', range: [720, 1020], collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
             </div>
 
-            <!-- EVENING TIME RANGE -->
-            <div bb-accordian-range-group="{heading: 'Evening', range: [1020, 1440], slots: day.slots, collaspe_when_time_selected: true}" ng-init="setFormDataStoreId($index)" class="accordian-group">
+            <div bb-accordion-range-group="{heading: 'Evening', range: [1020, 1440], collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
             </div>
 
           </div>

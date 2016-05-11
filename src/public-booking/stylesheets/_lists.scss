@@ -34,6 +34,26 @@
   }
 }
 
+.bb-list {
+  margin: 0 0 15px 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.bb-list-horizontal li {
+  display: inline-block;
+  padding: 15px 15px 15px 0;
+}
+
+.bb-list i {
+  padding-right: 5px;
+}
+
+.bb-list-heading {
+  margin: 15px 0 5px 0;
+  font-weight: bold;
+}
+
 .bb-bullet-list {
   list-style: disc outside none;
   padding-bottom: 10px;

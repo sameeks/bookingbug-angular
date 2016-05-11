@@ -107,6 +107,11 @@ p {
 
 }
 
+.bb-bordered {
+  border-top: 1px solid $gray-lighter;
+  border-bottom: 1px solid $gray-lighter;
+}
+
 @media (min-width: $screen-sm) {
 
   .row.bb-vertical-align-center {
