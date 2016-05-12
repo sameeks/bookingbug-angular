@@ -8,9 +8,9 @@
     <h3>Search</h3>
     <div class="admin-typehead-wrapper">
       <div class="input-group">
-      <input class="admin-typehead form-control" ng-model="typehead_result" placeholder="Search Email or Name" typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" typeahead-on-select="typeHeadResults($item, $modal, $label)">
+      <input class="input-lg form-control" ng-model="typehead_result" placeholder="Search Email or Name" typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" typeahead-on-select="typeHeadResults($item, $modal, $label)">
       <span class="input-group-btn">
-        <button class="btn btn-primary form-control-btn btn-search-anyway" ng-click="getClients(null, typehead_result)"><i class="fa fa-search"></i></button>
+        <button class="btn btn-primary btn-lg" ng-click="getClients(null, typehead_result)"><i class="fa fa-search"></i></button>
       </span>
     </div>
     </div>
@@ -61,21 +61,21 @@
   <div ng-hide="client.name || search_triggered" class="admin-create-client">
     <h3>New Customer</h3>
     <div ng-form name="client_form" class="row">
-      <div class="col-xs-12 new-cus-input" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
-        <label for="first_name" class="control-label">First Name*:</label><br />
+      <div class="col-xs-12 form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
+        <label for="first_name" class="control-label">First Name:</label><br />
         <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control"/>
       </div>
-      <div class="col-xs-12 new-cus-input" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
-        <label for="last_name" class="control-label">Last Name*:</label><br />
+      <div class="col-xs-12 form-group" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
+        <label for="last_name" class="control-label">Last Name:</label><br />
         <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
       </div>
-      <div class="col-xs-12 new-cus-input" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
-        <label for="email" class="control-label">E-mail*:</label>
-        <input type="email" name="email" id="email" required ng-model="client.email" class="form-control"/>
+      <div class="col-xs-12 form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
+        <label for="email" class="control-label">E-mail:</label>
+        <input type="email" name="email" id="email" ng-required="!client.mobile" ng-model="client.email" class="form-control"/>
       </div>
-      <div class="col-xs-12 new-cus-input" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
+      <div class="col-xs-12 form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
         <label for="mobile" class="control-label">Mobile:</label>
-        <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control"/>
+        <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email"/>
       </div>
       <div ng-show="bb.company_settings.ask_address" class="col-xs-12">
          <div class="form-group" style="margin-top: 10px;" ng-class="{'has-error': client_form.address1.$invalid && ((client_form.address1.$dirty && !client_form.address1.$focused) || booking_form.submitted)}">
