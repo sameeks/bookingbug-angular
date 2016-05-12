@@ -1,112 +1,79 @@
-.bb-admin-client {
+.bb-admin-client, [bb-admin-booking-clients] {
 
-  .page-intro {
-    text-align: center;
-  }
-  .section-title {
-    text-align: center;
-  }
+  .admin-typehead-wrapper {
+    margin-bottom: 20px;
+    .dropdown-menu{
+      max-height: 500px;
+      overflow: auto;
 
-  text-align: left;
-
-  .bb-button-headers {
-    margin-bottom: 70px;
-    border-bottom: 1px solid #999;
-    button {
-      border-color: #bbb;
-      border-radius: 15px;
-      border-bottom-left-radius: 0px;
-      border-bottom-right-radius: 0px;
-    }
-  }
-
-  tfoot {
-    display: none;
-  }
-
-}
-
-
-// client_admin
-.admin-typehead{
-  padding-left: 5px;
-  border-radius: 5px;
-  border: 1px $secondary-border-color solid;
-  font-size: 18px;
-}
-.admin-typehead-wrapper{
-  padding-right: 5px;
-  margin-bottom: 20px;
-  .dropdown-menu{
-    max-height: 500px;
-    overflow: auto;
-
-    .typeahead_match {
-      border-bottom: 1px solid #999;
-      padding:3px;
-      &:hover {
-        background-color: #CCC;
-        cursor: pointer;
+      .typeahead_match {
+        border-bottom: 1px solid #999;
+        padding:3px;
+        &:hover {
+          background-color: #CCC;
+          cursor: pointer;
+        }
       }
     }
   }
 
-
-}
-.typehead-client-wrapper{
-  border: 1px solid $secondary-border-color;
-  border-bottom: 0;
-  border-left: 0;
-  border-right: 0;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.panel-client-close{
-  padding-top: 2px;
-  float: right;
-  &:hover{
-    transition: 0.5s;
-    transform: scale(1.25);
+  .typehead-client-wrapper{
+    border: 1px solid $secondary-border-color;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
-}
-.btn-search-anyway{
-  padding-top: 13px;
-  padding-bottom: 14px;
-}
-.admin-form-submit{
-  margin-top: 20px;
-}
-.search-results{
-  margin-top: 40px;
-}
-.typehead-results-wrapper{
-  font-size: 18px;
-  padding: 0;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border: 1px solid $secondary-border-color;
-  border-top: 0px;
-}
-.admin-typehead{
+
+  .panel-client-close{
+    padding-top: 2px;
+    float: right;
+    &:hover{
+      transition: 0.5s;
+      transform: scale(1.25);
+    }
+  }
+
+  .admin-form-submit{
+    margin-top: 20px;
+  }
+
+  .search-results{
+    margin-top: 40px;
+  }
+
+  .typehead-results-wrapper{
+    font-size: 18px;
+    padding: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid $secondary-border-color;
+    border-top: 0px;
+  }
+
+  .admin-typehead{
+    .dropdown-menu{
+      max-height: 500px;
+      overflow: auto;
+    }
+  }
+
   .dropdown-menu{
-    max-height: 500px;
-    overflow: auto;
+    .active{
+      background-color: $hyperlink-color;
+      color: white;
+    }
   }
-}
 
-.new-cus-input{
-  margin-top: 10px;
-}
-.dropdown-menu{
-  .active{
-    background-color: $hyperlink-color;
+  .icon-padding {
+    padding-left: 10px;
   }
-}
-.icon-padding{
-  padding-left: 10px;
-}
-.typh-header{
-  font-size: 22px;
+
+  .typh-header{
+    font-size: 22px;
+  }
+
 }
