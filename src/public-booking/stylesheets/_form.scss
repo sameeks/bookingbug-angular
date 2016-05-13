@@ -104,6 +104,14 @@
   }
 }
 
+/* use to align inputs in a single line */
+.bb-input-row {
+  height: 33px;
+  padding-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .form-inline {
 
   .input-group .input-group-btn {
