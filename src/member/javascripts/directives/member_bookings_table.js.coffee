@@ -4,7 +4,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
 
     $scope.loading = true
 
-    $scope.fields ||= ['datetime', 'details']
+    $scope.fields ||= ['date', 'details']
 
     $scope.$watch 'member', (member) ->
       getBookings($scope, member) if member?
@@ -53,7 +53,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
     $scope.setRows = () ->
       $scope.bookings = _.map $scope.booking_models, (booking) ->
         id: booking.id
-        date: moment(booking.datetime).format('YYYY-MM-DD')
+        date: moment(booking.datetime).format('x')
         datetime: moment(booking.datetime).format('ddd DD MMM YY HH:mm')
         details: booking.full_describe
 
