@@ -107,6 +107,18 @@ p {
 
 }
 
+.bb-bordered {
+  border-top: 1px solid $gray-lighter;
+  border-bottom: 1px solid $gray-lighter;
+}
+
+/* use to wrap components just as lists */
+.bb-block {
+  padding-top: 15px;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
 @media (min-width: $screen-sm) {
 
   .row.bb-vertical-align-center {

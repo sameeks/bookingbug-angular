@@ -122,7 +122,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {TimeSlot} slot The slot
   * @param {string} A specific route to load
   ###
-  $scope.selectSlot = (day, slot, route) =>
+  $scope.selectSlot = (slot, day, route) =>
     if slot && slot.availability() > 0
       # if this time cal was also for a specific item source (i.e.a person or resoure- make sure we've selected it)
       if $scope.item_link_source
@@ -147,14 +147,14 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   *
   * @param {TimeSlot} slot The slot
   ###
-  $scope.highlightSlot = (day, slot) =>
+  $scope.highlightSlot = (slot, day) =>
 
     if day and slot and slot.availability() > 0
 
       $scope.setLastSelectedDate(day.date)
       $scope.data_source.setDate(day)
       $scope.data_source.setTime(slot)
-      # tell any accordian groups to update
+      # tell any accordion groups to update
       $scope.$broadcast 'slotChanged'
 
 
@@ -185,8 +185,11 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {date} amount The amount
   ###
   # add unit of time to the selected day
-  # deprecated, use bbDate directive instead
   $scope.add = (type, amount) =>
+  
+    # clear existing time
+    delete $scope.bb.current_item.time
+    
     new_date = moment($scope.selected_day.date).add(amount, type)
     $scope.setDate(new_date)
     $scope.loadDay()
@@ -203,7 +206,6 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {date} amount The amount
   ###
   # subtract unit of time to the selected day
-  # deprecated, use bbDate directive instead
   $scope.subtract = (type, amount) =>
     $scope.add(type, -amount)
 
@@ -243,7 +245,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
           if requested_slot
             $scope.skipThisStep()
-            $scope.selectSlot($scope.selected_day, requested_slot)
+            $scope.selectSlot(requested_slot, $scope.selected_day)
           else
             $scope.availability_conflict = true
 

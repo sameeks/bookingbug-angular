@@ -1,5 +1,4 @@
-angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $rootScope,
-    AdminLoginService, $templateCache, $q) ->
+angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $rootScope, AdminLoginService, $templateCache, $q) ->
 
   loginAdminController = ($scope, $modalInstance, company_id) ->
     $scope.title = 'Login'

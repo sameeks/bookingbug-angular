@@ -34,6 +34,66 @@
   }
 }
 
+.bb-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  li {
+    padding-bottom: 15px;
+  }
+
+  li span.glyphicon {
+    padding-right: 5px;
+  }
+
+  &.bb-list-banded {
+
+    li:nth-child(even) {
+      background-color: $gray-light;
+    }
+
+    li:nth-child(odd) {
+      background-color: $gray-lighter;
+    }
+  }
+
+  &.bb-list-bordered {
+
+    li:first-child {
+      border-bottom: none;
+    }
+
+    li {
+      border-top: 1px solid $gray;
+      border-bottom: 1px solid $gray;
+    }
+
+  }
+
+  &.bb-list-horizontal {
+
+    li {
+      display: inline-block;
+      padding: 0 10px 10px 0;
+    }
+
+  }
+
+  .bb-list-heading {
+    margin: 15px 0 5px 0;
+    font-weight: bold;
+  }
+
+  &.bb-list-sm {
+    li {
+      padding-bottom: 5px;
+    }
+  }
+
+}
+
+
 .bb-bullet-list {
   list-style: disc outside none;
   padding-bottom: 10px;

@@ -168,8 +168,6 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
         else
           element.html(clone).show()
           element.append('<style widget_css scoped></style>') if prms.design_mode
-          $compile(element.contents())(scope)
-
 
 
 # a controller used for the main page contents - just in case we need one here

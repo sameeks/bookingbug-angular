@@ -49,7 +49,6 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
       if has_content
         element.html(clone).show()
-        $compile(element.contents())(scope)
       else
         $q.when($templateCache.get('_week_calendar.html')).then (template) ->
           element.html(template).show()
@@ -335,7 +334,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {array} slot The slot
   * @param {string=} route A route of the selected slot
   ###
-  $scope.selectSlot = (day, slot, route) ->
+  $scope.selectSlot = (slot, day, route) ->
     if slot && slot.availability() > 0
       $scope.bb.current_item.setTime(slot)
 
@@ -362,7 +361,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {date} day The day
   * @param {array} slot The slot
   ###
-  $scope.highlightSlot = (day, slot) ->
+  $scope.highlightSlot = (slot, day) ->
 
     current_item = $scope.bb.current_item
 
@@ -380,7 +379,9 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       if $scope.bb.current_item.earliest_time_slot and $scope.bb.current_item.earliest_time_slot.selected and (!$scope.bb.current_item.earliest_time_slot.date.isSame(day.date, 'day') or $scope.bb.current_item.earliest_time_slot.time != slot.time)
         $scope.bb.current_item.earliest_time_slot.selected = false
 
-      # broadcast message to the accordian range groups
+      $rootScope.$broadcast "time:selected"
+
+      # broadcast message to the accordion range groups
       $scope.$broadcast 'slotChanged', day, slot
 
   ###**

@@ -5,7 +5,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     $timeout, $compile, $templateCache, BookingCollections, PrePostTime,
     AdminScheduleService, $filter) ->
 
-  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state) ->
+  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions) ->
 
     filters = {
       requestedAssets : ProcessAssetsFilter($state.params.assets)
@@ -50,14 +50,18 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
     labelAssembly = (event)->
       # if labelAssembler attribute not defined or event is "block" return the normal title
-      return event.title if not $scope.labelAssembler? || event.status == 3
+      return event.title if (not $scope.labelAssembler? and event.status != 3) || (not $scope.blockLabelAssembler? and event.status == 3)
       # if label-assembler attr is provided it needs to be inline with the following RegExp
       #   ex: label-assembler='{service_name} - {client_name} - {created_at|date:shortTime}'
       # everything outside  {} will remain as is, inside the {} the first param (required) is the property name
       # second after the '|' (optional) is the filter and third after the ':' (optional) are the options for filter
       myRe = new RegExp("\\{([a-zA-z_-]+)\\|?([a-zA-z_-]+)?:?([a-zA-z0-9{}_-]+)?\\}", "g")
 
-      label = $scope.labelAssembler
+      if event.status == 3
+        label = $scope.blockLabelAssembler
+      else
+        label = $scope.labelAssembler
+
       for match,index in $scope.labelAssembler.match myRe
         parts = match.split(myRe)
         # Remove unnecessary empty properties of the array (first/last)
@@ -89,11 +93,14 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     else
       800
 
-    if not $scope.options.minTime?
-      $scope.options.minTime = "09:00"
+    if not $scope.options.min_time?
+      $scope.options.min_time = GeneralOptions.calendar_min_time
 
-    if not $scope.options.maxTime?
-      $scope.options.maxTime = "18:00"
+    if not $scope.options.max_time?
+      $scope.options.max_time = GeneralOptions.calendar_max_time
+
+    if not $scope.options.cal_slot_duration?
+      $scope.options.cal_slot_duration = GeneralOptions.calendar_slot_duration
 
     # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
     $scope.uiCalOptions =
@@ -101,8 +108,8 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: true
         eventDurationEditable: false
-        minTime: $scope.options.minTime
-        maxTime: $scope.options.maxTime
+        minTime: $scope.options.min_time
+        maxTime: $scope.options.max_time
         height: height
         header:
           left: 'today,prev,next'
@@ -111,24 +118,17 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         defaultView: 'timelineDay'
         views:
           agendaWeek:
-            slotDuration: $scope.options.slotDuration || "00:05"
+            slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
             buttonText: 'Week'
             groupByDateAndResource: false
           month:
             eventLimit: 5
             buttonText: 'Month'
           timelineDay:
-            slotDuration: $scope.options.slotDuration || "00:05"
+            slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
             eventOverlap: false
             slotWidth: 25
-            buttonText: 'Day (5m)'
-            resourceAreaWidth: '18%'
-          timelineDayThirty:
-            type: 'timeline'
-            slotDuration: "00:30"
-            eventOverlap: false
-            slotWidth: 25
-            buttonText: 'Day (30m)'
+            buttonText: 'Day (' + $scope.options.cal_slot_duration + 'm)'
             resourceAreaWidth: '18%'
         resourceLabelText: 'Staff'
         selectable: true
@@ -172,15 +172,15 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
 
           if Math.abs(start.diff(end, 'days')) > 0
             end.subtract(1,'days')
-            end = setTimeToMoment(end,$scope.options.maxTime)
+            end = setTimeToMoment(end,$scope.options.max_time)
 
           view.calendar.unselect()
           rid = null
           rid = resource.id if resource
           $scope.getCompanyPromise().then (company) ->
             AdminBookingPopup.open
-              min_date: setTimeToMoment(start,$scope.options.minTime)
-              max_date: setTimeToMoment(end,$scope.options.maxTime)
+              min_date: setTimeToMoment(start,$scope.options.min_time)
+              max_date: setTimeToMoment(end,$scope.options.max_time)
               from_datetime: start
               to_datetime: end
               item_defaults:
@@ -279,7 +279,7 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
         templateUrl = 'edit_block_modal_form.html'
         title = 'Edit Block'
       else
-        templateUrl = 'edit_block_modal_form.html'
+        templateUrl = 'edit_booking_modal_form.html'
         title = 'Edit Booking'
       ModalForm.edit
         templateUrl: templateUrl
@@ -354,4 +354,5 @@ angular.module('BBAdminDashboard').directive 'bbResourceCalendar', (
     templateUrl: 'resource_calendar_main.html'
     scope :
       labelAssembler : '@'
+      blockLabelAssembler: '@'
   }

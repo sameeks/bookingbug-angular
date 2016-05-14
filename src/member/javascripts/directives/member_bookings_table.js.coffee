@@ -4,7 +4,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
 
     $scope.loading = true
 
-    $scope.fields ||= ['datetime', 'details']
+    $scope.fields ||= ['date_order', 'details']
 
     $scope.$watch 'member', (member) ->
       getBookings($scope, member) if member?
@@ -54,6 +54,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
       $scope.bookings = _.map $scope.booking_models, (booking) ->
         id: booking.id
         date: moment(booking.datetime).format('YYYY-MM-DD')
+        date_order: moment(booking.datetime).format('x')
         datetime: moment(booking.datetime).format('ddd DD MMM YY HH:mm')
         details: booking.full_describe
 
@@ -71,7 +72,9 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
 
     $scope.startDate ||= moment()
 
-    $scope.orderBy ||= 'datetime'
+    $scope.orderBy = $scope.defaultOrder
+    if not $scope.orderBy?
+      $scope.orderBy = 'date_order'
 
     $scope.now = moment().format('YYYY-MM-DD')
 
@@ -86,4 +89,5 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
       member: '='
       startDate: '=?'
       endDate: '=?'
+      defaultOrder: '=?'
   }
