@@ -56,6 +56,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   $scope.events = {}
   $scope.fully_booked = false
+  $scope.event_data_loaded = false
 
   FormDataStoreService.init 'EventList', $scope, [
     'selected_date',
@@ -246,6 +247,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   ###
   $scope.loadEventData = (comp) ->
 
+    $scope.notLoaded $scope
+
+    $scope.event_data_loaded = false
+
     # clear the items when in summary mode
     delete $scope.items if $scope.mode is 0
 
@@ -325,7 +330,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         PaginationService.update($scope.pagination, $scope.filtered_items.length)
 
         $scope.setLoaded $scope
+        $scope.event_data_loaded = true
+
         deferred.resolve($scope.items)
+
       , (err) ->  deferred.reject()
     , (err) ->  deferred.reject()
     return deferred.promise
