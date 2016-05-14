@@ -258,7 +258,6 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     current_event = $scope.current_item.event
 
-    $scope.notLoaded $scope
     comp ||= $scope.bb.company 
 
     # de-select the event chain if there's one already picked - as it's hiding other events in the same group
