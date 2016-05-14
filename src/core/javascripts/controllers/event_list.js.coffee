@@ -224,13 +224,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     if $scope.bb.item_defaults.event_chain
       deferred.resolve([])
     else
-      $scope.notLoaded $scope
       comp ||= $scope.bb.company 
 
       params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
 
       EventChainService.query(comp, params).then (event_chains) ->
-        $scope.setLoaded $scope
         deferred.resolve(event_chains)
       , (err) ->  deferred.reject()
 
