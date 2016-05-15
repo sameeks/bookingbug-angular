@@ -104,27 +104,18 @@
   }
 }
 
-/* use to align inputs in a single line */
-.bb-input-row {
-  height: 33px;
-  padding-right: 5px;
-  display: inline-block;
-  vertical-align: middle;
-}
-
+/* Bootstrap form-inline enhancements */
 .form-inline {
+
+  .bb-label {
+    padding-right: 5px;
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: normal;
+  }
 
   .input-group .input-group-btn {
     width: 1%;
-  }
-
-  .form-group {
-    padding-right: 15px;
-    padding-bottom: 15px;
-    @media (max-width: $screen-xs-max) {
-      padding-right: 0;
-      padding-bottom: 0;
-    }
   }
   
   .form-group.calendar{

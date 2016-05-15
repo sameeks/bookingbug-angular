@@ -39,22 +39,8 @@
     }
   }
 
-
-  .panel-client-close{
-    padding-top: 2px;
-    float: right;
-    &:hover{
-      transition: 0.5s;
-      transform: scale(1.25);
-    }
-  }
-
-  .admin-form-submit{
-    margin-top: 20px;
-  }
-
   .search-results{
-    margin-top: 40px;
+    margin-top: 30px;
   }
 
   .fa-mobile.fa-lg.fa-fw {
@@ -63,6 +49,21 @@
 
   .bb-typh-header{
     font-size: 20px;
+  }
+
+  .btn-select-client {
+    margin-top: 14px;
+  }
+
+  .bb-search-options {
+    text-align: right;
+  }
+
+  .bb-search-summary {
+    line-height: 34px;
+    font-size: 18px;
+    font-weight: bold;
+    display: inline-block;
   }
 
 }

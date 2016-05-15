@@ -10,11 +10,7 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
 angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, ClientService, ValidatorService, ErrorService, $log, PaginationService) ->
 
   $scope.validator = ValidatorService
-  $scope.per_page = 20
-  $scope.total_entries = 0
   $scope.clients = []
-  $scope.search_clients = false
-  $scope.search_text = null
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   
   $scope.sort_by_options = [
@@ -26,18 +22,8 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
 
   $scope.sort_by = $scope.sort_by_options[0].key
 
-  $scope.showSearch = () =>
-    $scope.search_clients = true
-
-
-  $scope.showClientForm = () =>
-    $scope.search_clients = false
-    # clear the client if one has already been selected
-    $scope.clearClient()
-
 
   $scope.selectClient = (client, route) =>
-
     $scope.setClient(client)
     $scope.client.setValid(true)
     $scope.decideNextPage(route)
@@ -54,40 +40,36 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.client.setClientDetails($scope.client_details) if $scope.client_details
 
     ClientService.create_or_update($scope.bb.company, $scope.client).then (client) =>
-
       $scope.setLoaded $scope
       $scope.selectClient(client, route)
-    
     , (err) ->
 
       if err.data and err.data.error == "Please Login"
         $scope.setLoaded($scope)
         AlertService.raise('EMAIL_ALREADY_REGISTERED_ADMIN')
-
       else if err.data and err.data.error == "Sorry, it appears that this phone number already exists"
         $scope.setLoaded($scope)
         AlertService.raise('PHONE_NUMBER_ALREADY_REGISTERED_ADMIN')
-
       else
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-  $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
+  $scope.getClients = (current_page, filter_by, filter_by_fields, order_by, order_by_reverse) ->
 
-    AlertService.clear()
     $scope.search_triggered = true
-    $scope.no_clients = false
-    $scope.search_error = false
     defer = $q.defer()
+
+    # TODO update api to accept sort by fields, an OR rather than AND like filter_by
+    # TODO update pagination service to call api for more clients
 
     params =
       company: $scope.bb.company
-      per_page: $scope.per_page
-      filter_by: if filterBy? then filterBy else $scope.search_text
-      filter_by_fields: filterByFields
-      order_by: orderBy
-      order_by_reverse: orderByReverse
-    params.page = currentPage+1 if currentPage
+      per_page: 100
+      filter_by: filter_by
+      filter_by_fields: filter_by_fields
+      order_by: order_by
+      order_by_reverse: order_by_reverse
+    params.page = current_page + 1 if current_page
     
     $scope.notLoaded $scope
     
@@ -103,12 +85,15 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
   $scope.searchClients = (search_text) ->
 
     defer = $q.defer()
+
     params =
       filter_by: search_text
       company: $scope.bb.company
+
     AdminClientService.query(params).then (clients) =>
       defer.resolve(clients.items)
       clients.items
+
     return defer.promise
 
 
@@ -121,11 +106,10 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
 
     $scope.selectClient($item)
 
-    return
-
 
   $scope.clearSearch = () ->
     $scope.clients = []
+    $scope.typehead_result = null
     $scope.search_triggered = false
 
 
