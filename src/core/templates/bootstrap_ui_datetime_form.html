@@ -1,5 +1,5 @@
-<div class="form-group" ng-class="{'has-error': hasError()}">
-	<label class="control-label">Date</label>
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': !hasError()}">
+	<label class="control-label">{{form.title}}</label>
 	<p class="input-group">
   	<div bb-date-time-picker date="$$value$$"></div>
 	</p>	
