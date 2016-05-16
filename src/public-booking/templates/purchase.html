@@ -18,7 +18,7 @@
           </div>
           <div ng-hide="is_waitlist">
             <div class="confirmation-header">
-              <h3 class="confirmation-heading">Your <span>{{purchase.bookings[0].service_name}}</span> booking</h3>            
+              <h3 class="confirmation-heading">Your <span>{{purchase.bookings[0].service_name}}</span> booking</h3>
 
               <div class="row hidden-print text-right" >
               <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span> Print</button>
@@ -29,7 +29,7 @@
 
             <div>
               <ul class="confirmation-summary">
-                <li class="row confirmation-summary-item">          
+                <li class="row confirmation-summary-item">
                   <div class="bb-summary-label">Name: </div>
                   <div class="bb-summary-value">{{purchase.client.name}}</div>
                 </li>
@@ -44,7 +44,7 @@
                 <li class="row confirmation-summary-item">
                   <div class="bb-summary-label">When: </div>
                   <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM":false}}</div>
-                </li>            
+                </li>
                 <li class="row confirmation-summary-item" ng-show="purchase.total_price > 0">
                   <div class="bb-summary-label">Price: </div>
                   <div class="bb-summary-value">{{purchase.total_price | currency }}</div>
