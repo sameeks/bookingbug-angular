@@ -2,12 +2,12 @@
 
 ###
 * @ngdoc controller
-* @name BBAdminDashboard.settings-iframe.controllers.controller:ConfigIframePageCtrl
+* @name BBAdminDashboard.config-iframe.controllers.controller:ConfigIframePageCtrl
 #
 * @description
-* Controller for the settings page
+* Controller for the config page
 ###
-angular.module('BBAdminDashboard.settings-iframe.controllers')
+angular.module('BBAdminDashboard.config-iframe.controllers')
 .controller 'ConfigIframePageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
 
   $scope.parent_state = $state.is("config")
