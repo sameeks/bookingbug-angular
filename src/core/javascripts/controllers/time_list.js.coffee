@@ -17,12 +17,13 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbTimes A hash of options
+* @param {hash} bbTimes A hash of options
 * @property {array} selected_day The selected day
 * @property {date} selected_date The selected date
 * @property {array} data_source The data source
 * @property {array} item_link_source The item link source
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+*
 ####
 
 
@@ -46,15 +47,15 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
     # clear selected time to restore original state
     delete $scope.bb.current_item.time
-
-    # use default date if current item doesn't have one already
-    if $scope.bb.current_item.defaults.date
+    delete item.time for item in $scope.bb.stacked_items
+    
+    if $scope.bb.current_item.defaults.date and !$scope.bb.current_item.date
       $scope.setDate($scope.bb.current_item.defaults.date)
     else if $scope.bb.current_item.date
       $scope.setDate($scope.bb.current_item.date.date)
     else
       $scope.setDate(moment())
-
+      
     $scope.loadDay()
 
   , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -120,7 +121,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {TimeSlot} slot The slot
   * @param {string} A specific route to load
   ###
-  $scope.selectSlot = (day, slot, route) =>
+  $scope.selectSlot = (slot, day, route) =>
     if slot && slot.availability() > 0
       # if this time cal was also for a specific item source (i.e.a person or resoure- make sure we've selected it)
       if $scope.item_link_source
@@ -145,14 +146,16 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   *
   * @param {TimeSlot} slot The slot
   ###
-  $scope.highlightSlot = (day, slot) =>
-    if slot and slot.availability() > 0
-      if day
-        $scope.setLastSelectedDate(day.date)
-        $scope.data_source.setDate(day)
+  $scope.highlightSlot = (slot, day) =>
+
+    if day and slot and slot.availability() > 0
+
+      $scope.setLastSelectedDate(day.date)
+      $scope.data_source.setDate(day)
       $scope.data_source.setTime(slot)
-      # tell any accordian groups to update
+      # tell any accordion groups to update
       $scope.$broadcast 'slotChanged'
+
 
   ###**
   * @ngdoc method
@@ -169,6 +172,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
     status = slot.status()
     return status
 
+
   ###**
   * @ngdoc method
   * @name add
@@ -180,8 +184,11 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {date} amount The amount
   ###
   # add unit of time to the selected day
-  # deprecated, use bbDate directive instead
   $scope.add = (type, amount) =>
+  
+    # clear existing time
+    delete $scope.bb.current_item.time
+    
     new_date = moment($scope.selected_day.date).add(amount, type)
     $scope.setDate(new_date)
     $scope.loadDay()
@@ -198,7 +205,6 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {date} amount The amount
   ###
   # subtract unit of time to the selected day
-  # deprecated, use bbDate directive instead
   $scope.subtract = (type, amount) =>
     $scope.add(type, -amount)
 
@@ -233,12 +239,12 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-        if $scope.data_source.defaults.time
+        if $scope.data_source.defaults.time?
           requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
 
           if requested_slot
             $scope.skipThisStep()
-            $scope.selectSlot($scope.selected_day, requested_slot)
+            $scope.selectSlot(requested_slot, $scope.selected_day)
           else
             $scope.availability_conflict = true
 

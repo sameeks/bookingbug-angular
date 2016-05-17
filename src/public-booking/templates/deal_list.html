@@ -1,5 +1,5 @@
 <div bb-deals>
-  
+
   <h2 class="deal-list-heading">
     <span translate="BASKET_GIFT_CERTIFICATE"></span>
   </h2>
@@ -15,7 +15,6 @@
         </tr>
       </thead>
       <tbody>
-
         <tr ng-repeat="item in bb.stacked_items" ng-class="{'last-item': $last}">
           <td>
             <p>
@@ -49,7 +48,7 @@
                </div>
              </p>
            </td>
-           <td class="text-right">
+          <td class="text-right">
             {{ item.deal.price | icurrency }}
           </td>
           <td class="text-center">
@@ -60,32 +59,32 @@
     </table>
   </div>
 
-<div class="panel panel-default bb-event-card" ng-repeat="deal in deals">
-  <div class="panel-body">  
-    <div class="row vertical-row-align">
+  <div class="panel panel-default bb-event-card" ng-repeat="deal in deals">
+    <div class="panel-body">
+      <div class="row vertical-row-align">
 
-      <div class="col-sm-9 col-xs-12 deal-details">
-        <h3 >{{deal.name}}</h3>
-        <ul class="deal-summary-list">
-          <li class="deal-description">
-            <span>{{ deal.description }}</span>
-          </li>
-          <li class="price">
-            <span class="bb-icon icon-price"></span>
-            <span>{{deal.price | currency}}</span>
-          </li>
-        </ul>
-      </div>
-
-        <div class="col-sm-3 deal-select">
-          <button type="button" ng-click="selectDeal(deal)" class="btn btn-primary btn-block">
-            <span><span translate="PROGRESS_BUY"></span></span>
-          </button>
+        <div class="col-sm-9 col-xs-12 deal-details">
+          <h3 >{{deal.name}}</h3>
+          <ul class="deal-summary-list">
+            <li class="deal-description">
+              <span>{{ deal.description }}</span>
+            </li>
+            <li class="price">
+              <span class="bb-icon icon-price"></span>
+              <span>{{deal.price | currency}}</span>
+            </li>
+          </ul>
         </div>
 
+          <div class="col-sm-3 deal-select">
+            <button type="button" ng-click="selectDeal(deal)" class="btn btn-primary btn-block">
+              <span><span translate="PROGRESS_BUY"></span></span>
+            </button>
+          </div>
+
+      </div>
     </div>
   </div>
-</div>
 
   <div ng-if="bb.stacked_items && bb.stacked_items[0].deal">
     <button type="button" class="btn btn-primary btn-block" ng-click="purchaseDeals()"><span translate="BASKET_GIFT_CERTIFICATE_BUY"></span></button>

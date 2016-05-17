@@ -248,7 +248,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @param {date} day The day
   * @param {object} slot The slot of day in multi time range list
   ###
-  $scope.highlightSlot = (day, slot) ->
+  $scope.highlightSlot = (slot, day) ->
 
     if day and slot and slot.availability() > 0
       $scope.bb.clearStackedItemsDateTime()
@@ -258,7 +258,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       $scope.selected_day  = day.date
       $scope.selected_date = day.date.toDate()
 
-      # broadcast message to the accordian range groups
+      # broadcast message to the accordion range groups
       $scope.$broadcast 'slotChanged', day, slot
 
       # set the date and time on the stacked items
@@ -336,7 +336,6 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
         setEnabledSlots()
         updateHideStatus()
         $rootScope.$broadcast "TimeRangeListStacked:loadFinished"
-        $scope.$broadcast "dataReloaded"
       else
         # raise error
 

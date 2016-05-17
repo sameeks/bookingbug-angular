@@ -40,6 +40,13 @@
 //   margin-bottom: 15px;
 // }
 
-.btn .fa {
-  height: 18px;
+.btn {
+  .fa {
+    height: 18px;
+  }
+
+  &.btn-lg .fa {
+    height: 22px;
+  }
+
 }

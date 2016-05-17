@@ -227,7 +227,9 @@
     "PASSWORD_INVALID": "Désolé, votre mot de passe n'est pas valide",
     "PASSWORD_RESET_REQ_SUCCESS": "Nous avons envoyé un email avec un lien pour changer votre mot de passe.",
     "PASSWORD_RESET_REQ_FAILED": "Désolé, nous n'avons pas trouvé de compte pour cet email.",
-    "FB-LOGIN-FAILED": "Aucun compte associé à ce compte Facebook. Veuillez vous enregistrer avec Facebook d'abord"    
+    "FB_LOGIN_NOT_A_MEMBER": "Aucun compte associé à ce compte Facebook. Veuillez vous enregistrer avec Facebook d'abord",
+    "PHONE_NUMBER_ALREADY_REGISTERED_ADMIN": "Il y a déjà un compte associé à ce numéro de téléphone. Utilisez le champ de research.",
+    "EMAIL_ALREADY_REGISTERED_ADMIN": "Il y a déjà un compte associé à cette addresse mail. Utilisez le champ de research."
   },
   "THOUSANDS_SEPARATOR": ".",
   "DECIMAL_SEPARATOR": ",",

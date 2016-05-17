@@ -313,6 +313,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     stackItem: (item) =>
       @stacked_items.push(item)
       @sortStackedItems()
+      @current_item = item if @stacked_items.length is 1
 
     ###**
     * @ngdoc method

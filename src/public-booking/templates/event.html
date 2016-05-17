@@ -12,7 +12,7 @@
           </li>
           <li class="col-xs-6 col-sm-4 time truncate-xs">
             <span class="fa fa-clock-o" aria-hidden="true"></span>
-            <span class="event-time" ng-bind="event.date.format('LT')">&ndash;<span ng-bind="event.end_datetime.format('LT')"></span>
+            <span class="event-time" ng-bind="event.date.format('LT')"></span>&ndash;<span ng-bind="event.end_datetime.format('LT')"></span>
           </li>
           <li class="hidden-xs col-sm-4 duration truncate-xs">
             <span class="fa fa-hourglass-half"></span>
@@ -161,7 +161,7 @@
               <div ng-form name="client_ticket_form" class="form-horizontal" role="form" novalidate>
                 <div ticket-accordion accordion-group is-open="is_open" ng-init="is_open = $first">
                   <div accordion-heading>
-                    <h2><span class="text-capitalize" translate="EVENT_TICKET"></span> <span ng-if="bb.basket.timeItems().length != 1">{{$index + 1}}</span> <span translate="DETAILS_WORD"></span> <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i></h2> 
+                    <h2>{{"EVENT_TICKET" | translate}} <span ng-if="bb.basket.timeItems().length != 1">{{$index + 1}}</span> {{"DETAILS_WORD" | translate}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i></h2>
                   </div>
 
 
@@ -171,7 +171,7 @@
                       <label><input type="checkbox" name="use_my_details" id="use_my_details" ng-model="$parent.use_my_details"><span translate="ATTENDEE_USE_MY_DETAILS"></span></label>
                     </div>
                   </div>
-                
+
                   <div class="form-group" ng-class="{'has-error': (!$first || !use_my_details) && client_ticket_form.attendee_first_name.$invalid && (client_ticket_form.attendee_first_name.$dirty || booking_form.submitted)}">
                     <label for="attendee_first_name" class="control-label col-sm-4"><span translate="DETAILS_FIRST_NAME"></span>*:</label>
                     <div ng-if="use_my_details && $first"  class="col-sm-5">
@@ -232,7 +232,7 @@
             </div>
 
           </div><!-- accordion close -->
-          
+
           <div class='accordion-bottom-border'></div>
 
         </div>

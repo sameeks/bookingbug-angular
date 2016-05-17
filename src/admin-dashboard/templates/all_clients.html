@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-md-12">
+    <h2>Customers</h2>
+    <div class="box">
+      <div bb-clients-table class="tablet-search">
+        <table class="table table-bordered table-hover dataTable" tr-ng-grid=""
+           filter-by="clientsOptions.search" items="clients" page-items="per_page" total-items="total_entries" on-data-required="getClients(currentPage, filterBy, filterByFields, orderBy, orderByReverse)" role="grid">
+          <thead>
+            <tr role="row">
+              <th field-name="name" ></th>
+              <th field-name="email"></th>
+              <th field-name="mobile"></th>
+              <th><div class="tr-ng-title">Actions</div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr role="row">
+              <td field-name="name">
+                <a ui-sref="clients.edit({id: gridItem.id})">{{gridItem.name}}</a>
+              </td>
+              <td field-name="email" ng-bind-html="gridItem.email | linky" />
+              <td field-name="mobile"></td>
+              <td class="text-center">
+                <a class="btn btn-xs btn-default" ui-sref="clients.edit({id: gridItem.id})"><i class="fa fa-pencil"></i> Edit</a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+                <td>
+                    <span tr-ng-grid-global-filter=""></span>
+                    <span tr-ng-grid-pager=""></span>
+                </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -19,10 +19,9 @@
           <div ng-hide="is_waitlist">
             <div class="confirmation-header">
               <h3 class="confirmation-heading" translate="CONFIRMATION_PURCHASE_TITLE" translate-values="{service_name: purchase.bookings[0].service_name}"></h3>
-              <!-- <p ng-if="bb.current_item.move_done" class="move-done-msg">Your booking has been moved to <strong>{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM"}}</strong>.</p> -->
               <div class="row hidden-print text-right" >
-              <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span><span translate="PRINT"></span></button>
-              <div bb-booking-export class="bb-booking-export"></div>
+                <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span><span translate="PRINT"></span></button>
+                <div bb-booking-export class="bb-booking-export"></div>
               </div>
             </div>
 
@@ -41,22 +40,12 @@
                   <div class="bb-summary-value">{{purchase.bookings[0].service_name}}</div>
                 </li>
                 <li class="row confirmation-summary-item">
-                  <div class="bb-summary-label"><span translate="ITEM_WHEN"></span>:</div>
+                  <div class="bb-summary-label"><span translate="ITEM_WHEN">: </div>
                   <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "LLLL":false}}</div>
                 </li>
-                <li class="row confirmation-summary-item">
-                  <div class="bb-summary-label"><span translate="ITEM_WHERE"></span>:</div>
-                  <div class="bb-summary-value">
-                    <ul class="address">
-                      <li class="address-item">{{purchase.bookings[0].company.name}}</li>
-                      <li class="address-item">{{purchase.bookings[0].company.address | address_single_line}}</li>
-                      <li class="address-item">{{purchase.bookings[0].company.phone | local_phone_number}}</li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="row confirmation-summary-item" ng-if="purchase.total_price > 0">
-                  <div class="bb-summary-label"><span translate="ITEM_PRICE"></span>:</div>
-                  <div class="bb-summary-value">{{purchase.total_price | icurrency }}</div>
+                <li class="row confirmation-summary-item" ng-show="purchase.total_price > 0">
+                  <div class="bb-summary-label"><span translate="ITEM_PRICE"></span>: </div>
+                  <div class="bb-summary-value">{{purchase.total_price | currency }}</div>
                 </li>
               </ul>
 

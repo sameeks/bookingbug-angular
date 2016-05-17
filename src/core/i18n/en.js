@@ -233,7 +233,9 @@
     "PASSWORD_INVALID": "Sorry, your chosen password is invalid",
     "PASSWORD_RESET_REQ_SUCCESS": "We have sent you an email with instructions on how to reset your password.",
     "PASSWORD_RESET_REQ_FAILED": "Sorry, we didn't find an account registered with that email.",
-    "FB-LOGIN-FAILED": "Sorry, we couldn't find a login associated with this Facebook account. You will need to sign up using Facebook first"
+    "FB_LOGIN_NOT_A_MEMBER": "Sorry, we couldn't find a login associated with this Facebook account. You will need to sign up using Facebook first",
+    "PHONE_NUMBER_ALREADY_REGISTERED_ADMIN": "There's already an account registered with this phone number. Use the search field to find the customers account.",
+    "EMAIL_ALREADY_REGISTERED_ADMIN": "There's already an account registered with this email. Use the search field to find the customers account."
   },
   "THOUSANDS_SEPARATOR": ",",
   "DECIMAL_SEPARATOR": ".",

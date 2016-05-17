@@ -56,6 +56,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   $scope.events = {}
   $scope.fully_booked = false
+  $scope.event_data_loaded = false
 
   FormDataStoreService.init 'EventList', $scope, [
     'selected_date',
@@ -223,13 +224,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     if $scope.bb.item_defaults.event_chain
       deferred.resolve([])
     else
-      $scope.notLoaded $scope
       comp ||= $scope.bb.company 
 
       params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
 
       EventChainService.query(comp, params).then (event_chains) ->
-        $scope.setLoaded $scope
         deferred.resolve(event_chains)
       , (err) ->  deferred.reject()
 
@@ -246,6 +245,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   ###
   $scope.loadEventData = (comp) ->
 
+    $scope.notLoaded $scope
+
+    $scope.event_data_loaded = false
+
     # clear the items when in summary mode
     delete $scope.items if $scope.mode is 0
 
@@ -253,7 +256,6 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     current_event = $scope.current_item.event
 
-    $scope.notLoaded $scope
     comp ||= $scope.bb.company 
 
     # de-select the event chain if there's one already picked - as it's hiding other events in the same group
@@ -325,7 +327,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         PaginationService.update($scope.pagination, $scope.filtered_items.length)
 
         $scope.setLoaded $scope
+        $scope.event_data_loaded = true
+
         deferred.resolve($scope.items)
+
       , (err) ->  deferred.reject()
     , (err) ->  deferred.reject()
     return deferred.promise
