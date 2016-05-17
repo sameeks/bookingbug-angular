@@ -15,5 +15,5 @@ angular.module('BBAdminDashboard.login.controllers')
   $scope.loginSuccess = (company) ->
     $scope.company = company
     $scope.bb.company = company
-    $state.go 'dashboard'
+    $state.go 'calendar'
 ]
