@@ -58,39 +58,56 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-  $scope.getClients = (current_page, filter_by, filter_by_fields, order_by, order_by_reverse) ->
+  $scope.getClients = (params) ->
+
+    return if !params
+
+    filter_by = params.filter_by
+    filter_by_fields = params.filter_by_fields
+    order_by =  params.order_by
+    order_by_reverse = params.order_by_reverse
+    page = params.page if params.page
 
     # TODO update api to accept fields to search by - an OR rather than AND like filter_by
     # TODO update pagination service to call api for more clients when users requests more than initially loaded
 
-    params =
+    $scope.params =
       company: $scope.bb.company
-      per_page: 100
+      per_page: 10
       filter_by: filter_by
       order_by: order_by
       order_by_reverse: order_by_reverse
-    #params.page = current_page + 1 if current_page
+      page: page
 
-    params2 =
-      company: $scope.bb.company
-      per_page: 100
-      filter_by_fields: 'mobile,' + filter_by
-      order_by: order_by
-      order_by_reverse: order_by_reverse
+    # params2 =
+    #   company: $scope.bb.company
+    #   per_page: 10
+    #   filter_by_fields: 'mobile,' + filter_by
+    #   order_by: order_by
+    #   order_by_reverse: order_by_reverse
     #params.page = current_page + 1 if current_page
     
     $scope.notLoaded $scope
 
-    promises = []
-    promises.push(AdminClientService.query(params))
-    promises.push(AdminClientService.query(params2))
+    # promises = []
+    # promises.push(AdminClientService.query(params))
+    # promises.push(AdminClientService.query(params2))
 
-    $q.all(promises).then (result) ->
+    # $q.all(promises).then (result) ->
+    #   console.log "result", result
+    #   $scope.search_complete = true
+    #   $scope.clients = _.union(result[0].items, result[1].items)
+    #   $scope.setLoaded $scope
+    #   $scope.setPageLoaded()
+    #   PaginationService.update($scope.pagination, $scope.clients.length)
+
+    AdminClientService.query($scope.params).then (result) ->
       $scope.search_complete = true
-      $scope.clients = _.union(result[0].items, result[1].items)
+      $scope.client_collection = result
+      $scope.clients = $scope.clients.concat(result.items)
+      PaginationService.update($scope.pagination, result.total_entries)
       $scope.setLoaded $scope
       $scope.setPageLoaded()
-      PaginationService.update($scope.pagination, $scope.clients.length)
 
 
   $scope.searchClients = (search_text) ->
@@ -126,3 +143,10 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
 
   $scope.edit = (item) ->
     $log.info("not implemented")
+
+
+  $scope.pageChanged = () ->
+    debugger
+    if PaginationService.checkItems($scope.pagination, $scope.clients.length)
+      $scope.params.page = $scope.pagination.current_page
+      $scope.getClients($scope.params)

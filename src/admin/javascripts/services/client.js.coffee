@@ -1,7 +1,5 @@
 
-
-angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window,
-    $rootScope, halClient, ClientCollections, BBModel, UriTemplate) ->
+angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window, $rootScope, halClient, ClientCollections, BBModel, UriTemplate) ->
 
   query: (prms) ->
     if prms.company
@@ -20,9 +18,7 @@ angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window,
     halClient.$get(uri, {}).then  (resource) =>
       if resource.$has('clients')
         resource.$get('clients').then (items) =>
-          people = []
-          for i in items
-            people.push(new BBModel.Client(i))
+          people = (new BBModel.Client(i) for i in items)
           clients  = new $window.Collection.Client(resource, people, prms)
           clients.total_entries = resource.total_entries 
           ClientCollections.add(clients)
