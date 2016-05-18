@@ -7,7 +7,7 @@ angular.module('BB.Services').factory "PaginationService", () ->
 
 
   update: (paginator, length) ->
-    return if !paginator or !length
+    return if !paginator or !length?
     paginator.num_items = length
     start = ((paginator.page_size - 1) * paginator.current_page) - ((paginator.page_size - 1) - paginator.current_page)
     end   = paginator.current_page * paginator.page_size

@@ -67,18 +67,18 @@
         </div>
       </div>
 
-      <div class="bb-block text-center" ng-hide="pagination.num_items > 0">
-
-        <p>
-          No customers found matching <strong>{{typehead_result}}</strong>
-        </p>
-        <p>
-          <button class="btn btn-link" ng-click="clearSearch()">Create one instead?</button>
-        </p>
-        
-      </div>
+      
 
 
+    </div>
+
+    <div class="bb-block text-center" ng-show="pagination.num_items == 0">
+      <p>
+        No customers found matching <strong>{{typehead_result}}</strong>
+      </p>
+      <p>
+        <button class="btn btn-link" ng-click="clearSearch()">Create one instead?</button>
+      </p>
     </div>
  
     <div class="clearfix"></div>
