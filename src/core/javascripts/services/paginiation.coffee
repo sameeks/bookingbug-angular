@@ -19,28 +19,10 @@ angular.module('BB.Services').factory "PaginationService", () ->
 
   checkItems: (paginator, items_loaded) ->
 
-    # determine if we need to load more items
+    # determine if we need to load more items from the API
 
+    items_traversed = paginator.page_size * (paginator.current_page - 1)
     remaining_items = paginator.num_items - items_loaded
-    items_traversed = (paginator.current_page - 1) * paginator.page_size
 
+    return (items_loaded < (items_traversed + paginator.page_size)) and remaining_items > 0
 
-    # if 15 a page and loading 20 at a time, 2 page would need to make request to get more
-    # 15 
-
-
-    # items loaded 20
-    # 20 - 15 = 5 LOAD MORE
-
-    # items loaded 15
-    # 15 - 15 = 0 LOAD MORE
-
-
-    # total entires - items loaded =   remaining items
-        16                 10           6
-
-
-    # page items
-    10 
-
-    # if remaning items greater than number displayed, load more!

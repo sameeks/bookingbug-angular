@@ -6,7 +6,7 @@ angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window, 
       prms.company_id = prms.company.id
     url = ""
     url = $rootScope.bb.api_url if $rootScope.bb.api_url
-    href = url + "/api/v1/admin/{company_id}/client{/id}{?page,per_page,filter_by,filter_by_fields,order_by,order_by_reverse}"
+    href = url + "/api/v1/admin/{company_id}/client{/id}{?page,per_page,filter_by,filter_by_fields,order_by,order_by_reverse,search_by_fields}"
 
     uri = new UriTemplate(href).fillFromObject(prms || {})
     deferred = $q.defer()
