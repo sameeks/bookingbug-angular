@@ -1,6 +1,6 @@
 ###
 * @ngdoc service
-* @module BBAdminBooking
+* @module BB.Services
 * @name GeneralOptions
 *
 * @description
@@ -9,7 +9,7 @@
 
 ###
 * @ngdoc service
-* @module BBAdminBooking
+* @module BB.Services
 * @name GeneralOptionsProvider
 *
 * @description
@@ -22,7 +22,7 @@
   ]
   </example>
 ###
-angular.module('BBAdminBooking').provider 'GeneralOptions', [ ->
+angular.module('BB.Services').provider 'GeneralOptions', [ ->
   # This list of default options is meant to grow
   options = {
     twelve_hour_format : false,
