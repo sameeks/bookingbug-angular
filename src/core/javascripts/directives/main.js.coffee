@@ -14,6 +14,8 @@ angular.module('BB.Directives').directive 'bbContent', ($compile) ->
 
     $compile(element)(scope)
 
+
+
 angular.module('BB.Directives').directive 'bbLoading', ($compile) ->
   link: (scope, element, attrs) ->
     scope.scopeLoaded = scope.areScopesLoaded(scope)
@@ -31,6 +33,8 @@ angular.module('BB.Directives').directive 'bbLoading', ($compile) ->
     $compile(element)(scope)
     return
 
+
+
 angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
   transclude: false,
   restrict: 'A',
@@ -43,6 +47,8 @@ angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
     prom.then () ->
       scope[name] = true
     return
+
+
 
 # bbScrollTo
 # Allows you to scroll to a specific element
@@ -82,6 +88,8 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
                 scrollTop: scroll_to_element.offset().top - SettingsService.getScrollOffset()
                 , bb_transition_time
 
+
+
 # bbSlotGrouper
 # group time slots together based on a given start time and end time
 angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
@@ -95,31 +103,50 @@ angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
       scope.grouped_slots.push(slot) if slot.time >= scope.$eval(attrs.startTime) && slot.time < scope.$eval(attrs.endTime)
     scope.has_slots = scope.grouped_slots.length > 0
 
-# bbForm
-# Adds behaviour to select first invalid input
-# TODO more all form behaviour to this directive, initilising options as parmas
-angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService) ->
+
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbForm
+* @restrict A
+* @scope true
+*
+* @description
+* Use with forms to add enhanced validation. When using with ng-form, submitForm 
+* needs to be called manually as submit event is not raised.
+
+*
+* @example
+* <div ng-form name="example_form" bb-form></div>
+* <form name="example_form" bb-form></form>
+*
+####
+angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService, ValidatorService) ->
   restrict: 'A'
   require: '^form'
   link: (scope, elem, attrs, ctrls) ->
 
-    form_controller = ctrls
+    form = ctrls
 
     # set up event handler on the form element
     elem.on "submit", ->
+      scope.submitForm()
+      scope.$apply()
 
-      form_controller.submitted = true
+
+    scope.submitForm = () ->
+
+      form.submitted = true
 
       # mark nested forms as submitted too
-      for property of form_controller
-        if angular.isObject(form_controller[property]) and form_controller[property].hasOwnProperty('$valid')
-          form_controller[property].submitted = true
-
-      scope.$apply()
+      for property of form
+        if angular.isObject(form[property]) and form[property].hasOwnProperty('$valid')
+          form[property].submitted = true
 
       invalid_form_group = elem.find('.has-error:first')
 
-      if invalid_form_group && invalid_form_group.length > 0
+      if invalid_form_group and invalid_form_group.length > 0 and !form.raise_alerts 
+        
         if 'parentIFrame' of $window
           parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
         else
@@ -129,8 +156,10 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsSer
 
         invalid_input = invalid_form_group.find('.ng-invalid')
         invalid_input.focus()
-        return false
-      return true
+
+      return ValidatorService.validateForm(form)
+
+
 
 # bbAddressMap
 # Adds behaviour to select first invalid input
@@ -169,6 +198,8 @@ angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
         }
       }
 
+
+
 angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
   restrict: 'A'
   scope: true
@@ -192,10 +223,26 @@ angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
 
       $scope.has_questions = _.pluck($scope.questions, 'question').length > 0
 
+
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbModal
+* @restrict A
+* @scope true
+*
+* @description
+* Use with modal templates to ensure modal height does not exceed window height
+
+*
+* @example
+* <div bb-modal></div>
+####
 angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) ->
   restrict: 'A'
   scope: true
   link: (scope, elem, attrs) ->
+
     $timeout ->     
       elem.parent().parent().parent().css("z-index", 999999)    
     ,
@@ -213,6 +260,8 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) 
           "overflow-y": "scroll"         
           })       
         deregisterWatcher()      
+
+
 
 ###**
 * @ngdoc directive
@@ -239,6 +288,8 @@ angular.module('BB.Directives').directive('bbBackgroundImage', () ->
           killWatch()
           el.css('background-image', 'url("' + new_val + '")')
 )
+
+
 
 ###**
 * @ngdoc directive

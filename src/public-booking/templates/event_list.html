@@ -40,7 +40,7 @@
             </select>
           </div>
 
-         
+
           <div class="form-group calendar">
             <label class="sr-only" for="date">Date</label>
             <div class="input-group date-picker">
@@ -57,7 +57,7 @@
                 ng-readonly="true"
                 name="date"
                 id="date"
-                placeholder="&mdash; Any Date &mdash;"/>        
+                placeholder="&mdash; Any Date &mdash;"/>
               <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
                 <button class="btn btn-default" type="submit" title="Pick date">
                   <span class="fa fa-calendar-o"></span>
@@ -116,6 +116,7 @@
             <span class="hidden-xs">
               <button type="button" class="btn btn-icon" ng-disabled="!$root.tiles" ng-click="$root.tiles = !$root.tiles"><span class="glyphicon glyphicon-th-list" aria-hidden="true" ></span></button>
               <button type="button" class="btn btn-icon" ng-disabled="$root.tiles"  ng-click="$root.tiles = !$root.tiles"><span class="glyphicon glyphicon-th-large" aria-hidden="true" ></span></button>
+            </span>
             </div>
           </div>
         </div>
@@ -139,7 +140,7 @@
         <div class="panel panel-default bb-event-card" ng-class="{'col-sm-6 col-md-4 col-lg-3':$root.tiles}">
           <div class="panel-body" style="padding: 20px;">
             <div class="row">
-              <div ng-class="{'col-sm-3':!$root.tiles}">        
+              <div ng-class="{'col-sm-3':!$root.tiles}">
                  <div class="event-img" bb-background-image="item.group.getImages()[0].url">
                   <time datetime="{{item.date | datetime: 'YY[-]MM[-]DD'}}" class="icon" ng-click="selectItem(item)">
                     <em>{{item.date | datetime: 'dddd' : false}}</em>

@@ -22,10 +22,10 @@
           <ul class="confirmation-summary">
             <li class="row confirmation-summary-item">
               <div class="bb-summary-label">Reference: </div>
-              <div class="bb-summary-value">{{total.id}}</div>             
+              <div class="bb-summary-value">{{total.id}}</div>
             </li>
           </ul>
-          
+
           <ul class="confirmation-summary" ng-repeat="booking in total.bookings">
             <li ng-show="booking.full_describe" class="row confirmation-summary-item">
               <div class="bb-summary-label">Service: </div>
@@ -43,7 +43,7 @@
 
 
           <ul ng-show="total.bookings[0].address.lat" class="confirmation-summary">
-            
+
             <li class="row confirmation-summary-item">
               <div class="col-sm-12">
                 <div bb-address-map="total.bookings[0].address">

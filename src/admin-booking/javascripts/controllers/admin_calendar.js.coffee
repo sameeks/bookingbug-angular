@@ -22,6 +22,9 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
   }
 
   $rootScope.connection_started.then ->
+    $scope.initialise()
+
+  $scope.initialise = () ->
     # set default view
     if $scope.bb.item_defaults.pick_first_time
       $scope.switchView('next_available')

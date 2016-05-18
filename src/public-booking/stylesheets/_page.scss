@@ -112,6 +112,22 @@ p {
   border-bottom: 1px solid $gray-lighter;
 }
 
+.bb-block-heading {
+  padding-bottom: 5px;
+}
+
+/* use to wrap components just as lists */
+.bb-block {
+  padding-top: 15px;
+  padding-bottom: 0;
+  margin-bottom: 15px;
+
+  &.bb-block-sm {
+    padding-bottom: 10px;
+  }
+
+}
+
 @media (min-width: $screen-sm) {
 
   .row.bb-vertical-align-center {
