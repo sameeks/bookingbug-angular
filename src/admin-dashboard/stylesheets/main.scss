@@ -1,23 +1,33 @@
+@import "bootstrap_variables";
+@import "../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+@import "ng-scrollable";
+
+/*BB specific CSS*/
+@import "animations";
+@import "general";
+@import "login";
+@import "default-theme";
+
  
-@import "skin_bb";
+// @import "skin_bb";
 
-.bb-page-frame {
-  width:100%;
-  height: auto;
-  border: none;
-  background: transparent;
-}
+// .bb-page-frame {
+//   width:100%;
+//   height: auto;
+//   border: none;
+//   background: transparent;
+// }
 
-.clickable {
-  cursor: pointer;
-}
+// .clickable {
+//   cursor: pointer;
+// }
 
-//bootstrap overrides
-.panel-heading {
-  .btn-sm {
-    position: relative;
-    top:5px;
-  }
-}
+// //bootstrap overrides
+// .panel-heading {
+//   .btn-sm {
+//     position: relative;
+//     top:5px;
+//   }
+// }
 
-@import "resource_calendar";
+// @import "resource_calendar";

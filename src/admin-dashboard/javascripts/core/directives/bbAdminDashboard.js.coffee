@@ -39,5 +39,5 @@ angular.module('BBAdminDashboard.directives').directive 'bbAdminDashboard', () -
 
   restrict: 'AE'
   controller: controller
-  templateUrl: 'admin_dashboard.html'
+  templateUrl: 'admin_layout.html'
 
