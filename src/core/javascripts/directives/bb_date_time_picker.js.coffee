@@ -1,6 +1,6 @@
 ###**
 * @ngdoc directive
-* @name BBAdminBooking.directive:bbDateTimePicker
+* @name BB.Directives.directive:bbDateTimePicker
 * @scope
 * @restrict A
 *
@@ -14,7 +14,7 @@
 * @param {object}  minDate Min date value for datetimepicker
 * @param {object}  maxDate Max date value for datetimepicker
 ###
-angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
+angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
   scope: 
     date: '='
     showMeridian: '=?'
@@ -22,8 +22,7 @@ angular.module('BBAdminBooking').directive 'bbDateTimePicker', (PathSvc) ->
     minDate: '=?'
     maxDate: '=?'
   restrict: 'A'
-  templateUrl : (element, attrs) ->
-    PathSvc.directivePartial "_datetime_picker"
+  templateUrl : 'bb_date_time_picker.html'
   controller: ($scope, $filter, $timeout, GeneralOptions) ->
     # Default minuteStep value
     $scope.minuteStep = GeneralOptions.calendar_minute_step if not $scope.minuteStep or typeof $scope.minuteStep == 'undefined'
