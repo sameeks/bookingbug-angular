@@ -364,6 +364,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.locale
       moment.locale(prms.locale)
 
+    if prms.use_local_timezone
+      SettingsService.setUseLocalTimezone(prms.use_local_timezone)
+
     if prms.hide == true
       $scope.hide_page = true
     else
