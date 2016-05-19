@@ -16,6 +16,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
   $scope.sort_by_options = [
     {key: 'first_name', name: 'First Name'},
     {key: 'last_name', name: 'Last Name'},
+    {key: 'email', name: 'Email'},
     {key: 'mobile', name: 'Mobile'},
     {key: 'phone', name: 'Phone'}
   ]
