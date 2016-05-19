@@ -285,18 +285,20 @@ angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
   local_time_regex = /LT|H/i
   local_utc_offset = moment().utcOffset()
   hardcoded_formats =
-    datetime_us : 'MM/DD/YYYY, h:mm a'
-    datetime_uk : 'DD/MM/YYYY, HH:mm'
-    date_us : 'MM/DD/YYYY'
-    date_uk : 'DD/MM/YYYY'
-    time_us : 'h:mm a'
-    time_uk : 'HH:mm'
-  hardcoded_formats_regex = /date|time/
+    datetime:
+      us: 'MM/DD/YYYY, h:mm a'
+      uk: 'DD/MM/YYYY, HH:mm'
+    date:
+      us: 'MM/DD/YYYY'
+      uk: 'DD/MM/YYYY'
+    time:
+      us: 'h:mm a'
+      uk: 'HH:mm'
 
   (date, format="LLL") ->
-    if format.match(hardcoded_formats_regex)
-      cc = SettingsService.getCountryCode() || 'uk'
-      format = hardcoded_formats["format_#{cc}"]
+    if hardcoded_formats[format]
+      cc = if SettingsService.getCountryCode() is 'us' then 'us' else 'uk'
+      format = hardcoded_formats[format][cc]
 
     if date and moment.isMoment(date)
       if SettingsService.getUseLocalTimezone() and format.match(local_time_regex)
