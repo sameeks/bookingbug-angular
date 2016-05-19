@@ -365,7 +365,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     current_item = $scope.bb.current_item
 
-    if slot && slot.availability() > 0
+    if slot && slot.availability() > 0 and !slot.disabled
       if day
         $scope.setLastSelectedDate(day.date)
         current_item.setDate(day)
