@@ -41,30 +41,30 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
               $scope.loading = false
               return callback(availabilities)
             else 
-              # Joined availability for weekly & monthly views
-              overAllAvailability = 
-                end : null
-                start : null
-                rendering : "background"
-                title : "Joined availability"
+              overAllAvailabilities = []
 
               angular.forEach availabilities, (availability, index)->
-                if overAllAvailability.start == null && overAllAvailability.end == null
-                  overAllAvailability.start = moment(availability.start)
-                  overAllAvailability.end = moment(availability.end)
-                  return
+                dayAvailability = _.filter overAllAvailabilities, (overAllAvailability)->
+                  if overAllAvailability.start.dayOfYear() == moment(availability.start).dayOfYear()
+                    return true
+                  return false
+                
+                if dayAvailability.length > 0
+                  if moment(availability.start).unix() < dayAvailability[0].start.unix()    
+                     dayAvailability[0].start = moment(availability.start)
 
-                if moment(availability.start).unix() < overAllAvailability.start.unix()
-                  overAllAvailability.start = moment(availability.start)
-
-                if moment(availability.end).unix() > overAllAvailability.end.unix()
-                  overAllAvailability.end = moment(availability.end)  
+                  if moment(availability.end).unix() > dayAvailability[0].end.unix()
+                    dayAvailability[0].end = moment(availability.end)
+                else 
+                  overAllAvailabilities.push {
+                    start : moment(availability.start)
+                    end : moment(availability.end)
+                    rendering : "background"
+                    title : "Joined availability " + moment(availability.start).format('YYYY-MM-DD') 
+                  }    
 
               $scope.loading = false
-              if availabilities.length > 0
-                return callback([overAllAvailability])
-              else 
-                return callback([])  
+              return callback(overAllAvailabilities)
             
     ]
 
