@@ -103,13 +103,15 @@
               <div class="accordion-group">
                 <div class="panel panel-default">
 
-                  <ul class="time-slots">
+                  <ul class="time-slots" ng-if="slots.length > 0">
 
                     <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(slot, selected_day)" ng-repeat="slot in slots | in_the_future | limitTo: 10">
                       <span>{{slot.time_moment | datetime: 'time'}} (in {{slot.time | tod_from_now }})</span>
                     </li>
 
                   </ul>
+
+                  <p class="text-center" ng-if="slots.length == 0">No availability found, try a different time-range</p>
 
                 </div>
               </div>
