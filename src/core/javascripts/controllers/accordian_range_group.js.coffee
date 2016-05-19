@@ -37,7 +37,8 @@ angular.module('BB.Directives').directive 'bbAccordionRangeGroup', (PathSvc) ->
   scope: {
     day: '=',
     slots: '=',
-    selectSlot: '='
+    selectSlot: '=',
+    disabledSlot: '='
   }
   controller: 'AccordionRangeGroup'
   link: (scope, element, attrs) ->
@@ -108,11 +109,10 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
     $scope.has_availability = $scope.has_availability or false
     $scope.is_selected = $scope.is_selected or false
 
-    if $scope.slots
 
+    if $scope.slots
       angular.forEach $scope.slots, (slot) ->
         $scope.accordion_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time and slot.avail is 1
-
       updateAvailability()
 
 
@@ -131,10 +131,15 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
     $scope.selected_slot = null
     $scope.has_availability = hasAvailability() if $scope.accordion_slots
 
+    if $scope.disabledSlot
+      if $scope.disabledSlot.date == $scope.day.date.toISODate()
+        relevent_slot = _.findWhere($scope.slots, {time: $scope.disabledSlot.time})
+        if relevent_slot
+          relevent_slot.disabled = true
     # if a day and slot has been provided, check if the slot is in range
     if day and slot
       $scope.selected_slot = slot if day.date.isSame($scope.day.date) and slot.time >= $scope.start_time and slot.time < $scope.end_time
-    else 
+    else
       for slot in $scope.accordion_slots
         if slot.selected
           $scope.selected_slot = slot
@@ -146,7 +151,7 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
       $scope.is_open = false if $scope.options.collaspe_when_time_selected
     else
       $scope.is_selected = false
-      $scope.is_open = false if $scope.options.collaspe_when_time_selected      
+      $scope.is_open = false if $scope.options.collaspe_when_time_selected
 
 
   ###**
