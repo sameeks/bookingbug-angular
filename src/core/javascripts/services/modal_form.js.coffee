@@ -86,6 +86,42 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
           model.$del('self').then (response) ->
             success(response) if success
 
+  bookForm = ($scope, $modalInstance, model, company, title, success, fail) ->
+    $scope.loading = true
+    $scope.title = title
+    $scope.model = model
+    $scope.company = company
+    if $scope.model.$has('new_booking')
+      $scope.model.$get('new_booking').then (schema) ->
+        $scope.form = _.reject schema.form, (x) -> x.type == 'submit'
+        $scope.schema = schema.schema
+        $scope.form_model = {}
+        $scope.loading = false
+    else
+      $log.warn("model does not have 'new_booking' rel")
+
+    $scope.submit = (form) ->
+      $scope.$broadcast('schemaFormValidate')
+      if form.$valid
+        $scope.loading = true
+        $scope.company.$post('bookings', {}, $scope.form_model).then (booking) ->
+          $scope.loading = false
+          $modalInstance.close(booking)
+          success(booking) if success
+        , (err) ->
+          $scope.loading = false
+          $modalInstance.close(err)
+          $log.error 'Failed to create'
+          fail() if fail
+      else
+        $log.warn 'Invalid form'
+
+    $scope.cancel = (event) ->
+      event.preventDefault()
+      event.stopPropagation()
+      $modalInstance.dismiss('cancel')
+
+
   new: (config) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
@@ -110,6 +146,20 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
       size: config.size
       resolve:
         model: () -> config.model
+        title: () -> config.title
+        success: () -> config.success
+        fail: () -> config.fail
+
+  book: (config) ->
+    templateUrl = config.templateUrl if config.templateUrl
+    templateUrl ||= 'modal_form.html'
+    $modal.open
+      templateUrl: templateUrl
+      controller: bookForm
+      size: config.size
+      resolve:
+        model: () -> config.model
+        company: () -> config.company
         title: () -> config.title
         success: () -> config.success
         fail: () -> config.fail

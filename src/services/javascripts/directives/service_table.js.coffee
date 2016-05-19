@@ -29,6 +29,14 @@ angular.module('BBAdminServices').directive 'serviceTable', (AdminCompanyService
         model: service
         title: 'Edit Service'
 
+    $scope.newBooking = (service) ->
+      ModalForm.book
+        model: service
+        company: $scope.company
+        title: 'New Booking'
+        success: (booking) ->
+          $log.info 'Created new booking ', booking
+
   link = (scope, element, attrs) ->
     if scope.company
       scope.getServices()

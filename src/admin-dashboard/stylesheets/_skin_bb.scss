@@ -59,6 +59,10 @@
     background-color: white;
   }
 
+  &.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),
+  &.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
+    z-index: 100;
+  }
 
 
   .sidebar a.sidebar-toggle {
@@ -72,10 +76,10 @@
   .sidebar a.sidebar-toggle #close {
     display: block;
   }
-  .sidebar-collapse .sidebar a.sidebar-toggle #close {
+  &.sidebar-collapse .sidebar a.sidebar-toggle #close {
     display: none;
   }
-  .sidebar-collapse .sidebar a.sidebar-toggle #open {
+  &.sidebar-collapse .sidebar a.sidebar-toggle #open {
     display: block;
   }
    .sidebar a.sidebar-toggle {
