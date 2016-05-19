@@ -142,11 +142,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
       if $scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))
         # the "bookable services" are the service unless we've pre-selected something!
-        for item in items
-          if item.listed_durations and item.listed_durations.length is 1
-            item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
-          else
-            item.display_name = item.name
+        items = setServicesDisplayName(items)
         $scope.bookable_services = items
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -165,11 +161,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
         services = (i.item for i in items when i.item?)
 
-        for item in services
-          if item.listed_durations and item.listed_durations.length is 1
-            item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
-          else
-            item.display_name = item.name
+        services = setServicesDisplayName(services)
 
         $scope.bookable_services = services
 
@@ -185,7 +177,16 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         $scope.setLoaded($scope)
       , (err) ->  
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-  
+
+  setServicesDisplayName = (items)->
+    for item in items
+      if item.listed_durations and item.listed_durations.length is 1
+        item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
+      else
+        item.display_name = item.name  
+
+    items    
+    
   
   # set the service item so the correct item is displayed in the dropdown menu.
   # without doing this the menu will default to 'please select'
