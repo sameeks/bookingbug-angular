@@ -37,8 +37,35 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         $scope.loading = true
         $scope.getCompanyPromise().then (company) ->
           AdminScheduleService.getAssetsScheduleEvents(company, start, end, !$scope.showAll, $scope.selectedResources.selected).then (availabilities) ->
-            $scope.loading = false
-            callback(availabilities)
+            if uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getView').type == 'timelineDay'
+              $scope.loading = false
+              return callback(availabilities)
+            else 
+              # Joined availability for weekly & monthly views
+              overAllAvailability = 
+                end : null
+                start : null
+                rendering : "background"
+                title : "Joined availability"
+
+              angular.forEach availabilities, (availability, index)->
+                if overAllAvailability.start == null && overAllAvailability.end == null
+                  overAllAvailability.start = moment(availability.start)
+                  overAllAvailability.end = moment(availability.end)
+                  return
+
+                if moment(availability.start).unix() < overAllAvailability.start.unix()
+                  overAllAvailability.start = moment(availability.start)
+
+                if moment(availability.end).unix() > overAllAvailability.end.unix()
+                  overAllAvailability.end = moment(availability.end)  
+
+              $scope.loading = false
+              if availabilities.length > 0
+                return callback([overAllAvailability])
+              else 
+                return callback([])  
+            
     ]
 
     bookingBelongsToSelectedResource = (booking)->
