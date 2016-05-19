@@ -1,5 +1,5 @@
 angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
-    $rootScope, halClient, SlotCollections, BBModel, LoginService, $log) ->
+    $rootScope, halClient, SlotCollections, BookingCollections, BBModel, LoginService, $log) ->
 
   query: (params) ->
     company = params.company
@@ -20,10 +20,16 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
 
   block: (company, person, data) ->
     deferred = $q.defer()
-    person.$put('block', {}, data).then  (slot) =>
-      slot = new BBModel.Admin.Slot(slot)
-      SlotCollections.checkItems(slot)
-      deferred.resolve(slot)
+    person.$put('block', {}, data).then  (response) =>
+      console.log 'response ', response
+      if response.$href('self').indexOf('bookings') > -1
+        booking = new BBModel.Admin.Booking(response)
+        BookingCollections.checkItems(booking)
+        deferred.resolve(booking)
+      else
+        slot = new BBModel.Admin.Slot(response)
+        SlotCollections.checkItems(slot)
+        deferred.resolve(slot)
     , (err) =>
       deferred.reject(err)
 

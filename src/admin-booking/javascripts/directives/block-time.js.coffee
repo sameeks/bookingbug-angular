@@ -44,11 +44,11 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
 
       if typeof $scope.bb.current_item.person == 'object'
         # Block call
-        AdminPersonService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime}).then (response)->
+        AdminPersonService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
           blockSuccess(response)
       else if typeof $scope.bb.current_item.resource == 'object'
         # Block call
-        AdminResourceService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime}).then (response)->
+        AdminResourceService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
           blockSuccess(response)
 
     isValid = ()->
@@ -62,9 +62,6 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       return true
 
     blockSuccess = (response)->
-      booking = new BBModel.Admin.Booking(response)
-      BookingCollections.checkItems(booking)
-      # Refresh events (will update calendar with the new events)
       $rootScope.$broadcast('refetchBookings')
       # Close modal window
       $scope.cancel()
