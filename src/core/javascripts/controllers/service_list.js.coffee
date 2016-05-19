@@ -142,11 +142,15 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
       if $scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))
         # the "bookable services" are the service unless we've pre-selected something!
-        $scope.bookable_services = $scope.items
+        for item in items
+          if item.listed_durations and item.listed_durations.length is 1
+            item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
+          else
+            item.display_name = item.name
+        $scope.bookable_services = items
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-    if ($scope.booking_item.person && !$scope.booking_item.anyPerson()) ||
-       ($scope.booking_item.resource && !$scope.booking_item.anyResource())
+    if ($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource())
 
       # if we've already picked a service or a resource - get a more limited service selection
       ItemService.query({company: $scope.bb.company, cItem: $scope.booking_item, wait: ppromise, item: 'service'}).then (items) =>
