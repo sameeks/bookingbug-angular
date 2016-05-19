@@ -1,14 +1,12 @@
 
-
-angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window,
-    $rootScope, halClient, ClientCollections, BBModel, UriTemplate) ->
+angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window, $rootScope, halClient, ClientCollections, BBModel, UriTemplate) ->
 
   query: (prms) ->
     if prms.company
       prms.company_id = prms.company.id
     url = ""
     url = $rootScope.bb.api_url if $rootScope.bb.api_url
-    href = url + "/api/v1/admin/{company_id}/client{/id}{?page,per_page,filter_by,filter_by_fields,order_by,order_by_reverse}"
+    href = url + "/api/v1/admin/{company_id}/client{/id}{?page,per_page,filter_by,filter_by_fields,order_by,order_by_reverse,search_by_fields}"
 
     uri = new UriTemplate(href).fillFromObject(prms || {})
     deferred = $q.defer()
@@ -20,9 +18,7 @@ angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window,
     halClient.$get(uri, {}).then  (resource) =>
       if resource.$has('clients')
         resource.$get('clients').then (items) =>
-          people = []
-          for i in items
-            people.push(new BBModel.Client(i))
+          people = (new BBModel.Client(i) for i in items)
           clients  = new $window.Collection.Client(resource, people, prms)
           clients.total_entries = resource.total_entries 
           ClientCollections.add(clients)
