@@ -9,6 +9,12 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       $scope.resources = assets
     )
 
+    if !moment.isMoment($scope.config.to_datetime)
+      $scope.config.to_datetime = moment($scope.config.to_datetime)
+
+    if !moment.isMoment($scope.config.from_datetime)
+      $scope.config.from_datetime = moment($scope.config.from_datetime)
+
     $scope.hideBlockAllDay = Math.abs($scope.config.from_datetime.diff($scope.config.to_datetime, 'days')) > 0
 
     # If in "Day" view a person or resource will have been passed in
