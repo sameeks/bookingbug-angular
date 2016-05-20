@@ -22,7 +22,14 @@ img.loader {
 div.loader {
   margin: auto;
   display: block;
-  background:url("images/BB_wait.gif")
+  background:url("images/BB_wait.gif");
+}
+
+.modal-content {
+  div.loader {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 [bb-loading-spinner] {

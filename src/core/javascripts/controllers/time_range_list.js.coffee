@@ -365,7 +365,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     current_item = $scope.bb.current_item
 
-    if slot && slot.availability() > 0
+    if slot && slot.availability() > 0 and !slot.disabled
       if day
         $scope.setLastSelectedDate(day.date)
         current_item.setDate(day)
@@ -473,7 +473,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
           requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item)
 
           if requested_slot
-            $scope.selectSlot(day, requested_slot)
+            $scope.selectSlot(requested_slot, day)
 
 
          $scope.$broadcast "time_slots:loaded", time_slots

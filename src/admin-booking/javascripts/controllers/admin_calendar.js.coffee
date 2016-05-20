@@ -50,11 +50,13 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
   $scope.overBook = () ->
 
     new_timeslot = new BBModel.TimeSlot({time: $scope.bb.current_item.defaults.time, avail: 1})
-
-    if $scope.selected_day
-      $scope.setLastSelectedDate($scope.selected_day.date)
-      $scope.bb.current_item.setDate($scope.selected_day)
+    
+    $scope.setLastSelectedDate(new_day.date)
+    $scope.bb.current_item.setDate(new_day)
 
     $scope.bb.current_item.setTime(new_timeslot)
+
+    $scope.bb.current_item.setPerson($scope.bb.current_item.defaults.person)
+    $scope.bb.current_item.setResource($scope.bb.current_item.defaults.resource) 
 
     $scope.decideNextPage()
