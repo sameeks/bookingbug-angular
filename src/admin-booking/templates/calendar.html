@@ -185,8 +185,6 @@
 
         <p>Overbooking ignores booking time step and availability constraints to make a booking.</p>
 
-        <p>Selected date and time:</p>
-
         <ul class="bb-list bb-list-horizontal bb-bordered bb-block bb-block-sm">
           <li>
             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -195,6 +193,14 @@
           <li>
             <i class="fa fa-clock-o" aria-hidden="true"></i>
             {{bb.current_item.defaults.datetime | datetime: 'time'}}
+          </li>
+          <li ng-show="bb.current_item.defaults.person">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            {{bb.current_item.defaults.person.name}}
+          </li>
+          <li ng-show="bb.current_item.defaults.resource">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            {{bb.current_item.defaults.resource.name}}
           </li>
         </ul>
         
