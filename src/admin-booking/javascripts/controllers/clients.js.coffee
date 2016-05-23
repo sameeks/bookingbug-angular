@@ -7,11 +7,10 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   controller : 'adminBookingClients'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AlertService, ClientService, ValidatorService, ErrorService, $log, PaginationService, $timeout) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, $timeout) ->
 
   $scope.validator  = ValidatorService
-  $scope.clients    = []
-  $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
+  $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 100})
   
   $scope.sort_by_options = [
     {key: 'first_name', name: 'First Name'},
@@ -71,24 +70,25 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
 
     $scope.params =
       company: $scope.bb.company
-      per_page: 10
+      per_page: $scope.clients.request_page_size
       filter_by: params.filter_by
       search_by_fields: 'phone,mobile'
       order_by: params.order_by
       order_by_reverse: params.order_by_reverse
-      page: if params.page then params.page else 1
+      page: params.page or 1
 
     $scope.notLoaded $scope
 
     AdminClientService.query($scope.params).then (result) ->
+
       $scope.search_complete = true
-      if options.append
-        $scope.clients = $scope.clients.concat(result.items)
-      else 
-        $scope.clients = result.items
-      PaginationService.update($scope.pagination, result.total_entries)
+
+      if options.add
+        $scope.clients.add(params.page, result.items)
+      else
+        $scope.clients.initialise(result.items, result.total_entries)
+      
       $scope.setLoaded $scope
-      $scope.setPageLoaded()
 
 
   $scope.searchClients = (search_text) ->
@@ -117,7 +117,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
 
 
   $scope.clearSearch = () ->
-    $scope.clients = []
+    $scope.clients.initialise()
     $scope.typehead_result = null
     $scope.search_complete = false
 
@@ -127,6 +127,9 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
 
 
   $scope.pageChanged = () ->
-    if PaginationService.checkItems($scope.pagination, $scope.clients.length)
-      $scope.params.page = $scope.pagination.current_page
-      $scope.getClients($scope.params, {append: true})
+
+    [items_present, page_to_load] = $scope.clients.update()
+
+    if !items_present
+      $scope.params.page = page_to_load
+      $scope.getClients($scope.params, {add: true})
