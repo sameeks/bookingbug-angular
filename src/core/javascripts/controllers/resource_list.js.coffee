@@ -16,7 +16,9 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbResources   A hash of options
+* @param {hash} bbResources A hash of options
+* @param {BasketItem} bbItem The BasketItem that will be updated with the selected resource. If no item is provided, bb.current_item is used as the default
+# @param {array} bbItems An array of BasketItem's that will be updated with the selected resource.
 * @property {array} items An array of all resources
 * @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a services or person
 * @property {array} bookable_resources An array of Resources - used if the current_item has already selected a services or person
@@ -31,6 +33,8 @@ angular.module('BB.Directives').directive 'bbResources', () ->
   scope : true
   controller : 'ResourceList'
   link : (scope, element, attrs) ->
+
+    scope.options = scope.$eval(attrs.bbResources) or {}
 
     if attrs.bbItems
       scope.booking_items = scope.$eval(attrs.bbItems) or []
@@ -48,10 +52,9 @@ angular.module('BB.Controllers').controller 'ResourceList',
   angular.extend(this, new PageControllerService($scope, $q))
 
 
-  $scope.options = $scope.$eval($attrs.bbResources) or {}
-
   $rootScope.connection_started.then () =>
     loadData()
+
 
   loadData = () =>
     # do nothing if nothing has changed

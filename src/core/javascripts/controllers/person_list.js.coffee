@@ -17,10 +17,12 @@
 * scope: true
 * </pre>
 *
-* @property {array} items The items of the person list
+* @param {BasketItem} bbItem The BasketItem that will be updated with the selected person. If no item is provided, bb.current_item is used as the default
+# @param {array} bbItems An array of BasketItem's that will be updated with the selected person.
+* @property {array} items A list of people
 * @property {array} bookable_people The bookable people from the person list
 * @property {array} bookable_items The bookable items from the person list
-* @property {array} booking_item The booking item from the person list
+* @property {array} booking_item The BasketItem used by the person list. If bbItems provided, this will be the first item
 ####
 
 
