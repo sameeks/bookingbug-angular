@@ -38,7 +38,7 @@ angular.module('BB.Directives').directive 'bbAccordionRangeGroup', (PathSvc) ->
     day: '=',
     slots: '=',
     selectSlot: '=',
-    disabledSlot: '='
+    disabled_slot: "=disabledSlot"
   }
   controller: 'AccordionRangeGroup'
   link: (scope, element, attrs) ->
@@ -131,11 +131,18 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
     $scope.selected_slot = null
     $scope.has_availability = hasAvailability() if $scope.accordion_slots
 
-    if $scope.disabledSlot
-      if $scope.disabledSlot.date == $scope.day.date.toISODate()
-        relevent_slot = _.findWhere($scope.slots, {time: $scope.disabledSlot.time})
-        if relevent_slot
-          relevent_slot.disabled = true
+    if $scope.disabled_slot and $scope.disabled_slot.time
+      if $scope.disabled_slot.date == $scope.day.date.toISODate()
+        if Array.isArray($scope.disabled_slot.time)
+          for times in $scope.disabled_slot.time
+            times
+            relevent_slot = _.findWhere($scope.slots, {time: times})
+            if relevent_slot
+              relevent_slot.disabled = true
+        else
+          relevent_slot = _.findWhere($scope.slots, {time: $scope.disabled_slot.time})
+          if relevent_slot
+            relevent_slot.disabled = true
     # if a day and slot has been provided, check if the slot is in range
     if day and slot
       $scope.selected_slot = slot if day.date.isSame($scope.day.date) and slot.time >= $scope.start_time and slot.time < $scope.end_time
