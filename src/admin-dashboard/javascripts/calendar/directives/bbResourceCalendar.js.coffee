@@ -319,20 +319,25 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             booking.resourceId = booking.person_id
             uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
 
+    $scope.pusherBooking = (res) ->
+      if res.id?
+        booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))
+        console.log booking
+        if booking && booking.$refetch
+          booking.$refetch().then () ->
+            uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+        else
+          $scope.company.$get('bookings', {id: res.id}).then (response) ->
+            booking = new BBModel.Admin.Booking(response)
+            BookingCollections.checkItems(booking)
+            uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+
     $scope.pusherSubscribe = () =>
       if $scope.company
-        $scope.company.pusherSubscribe((res) =>
-          if res.id?
-            booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))
-            if booking
-              booking.$refetch().then () ->
-                uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
-            else
-              $scope.company.$get('bookings', {id: res.id}).then (response) ->
-                booking = new BBModel.Admin.Booking(response)
-                BookingCollections.checkItems(booking)
-                uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
-        , {encrypted: false})
+        pusher_channel = $scope.company.getPusherChannel('bookings')
+        pusher_channel.bind 'create', $scope.pusherBooking
+        pusher_channel.bind 'update', $scope.pusherBooking
+        pusher_channel.bind 'destroy', $scope.pusherBooking
 
     $scope.openDatePicker = ($event) ->
         $event.preventDefault()
