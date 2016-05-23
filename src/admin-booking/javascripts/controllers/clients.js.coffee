@@ -7,7 +7,7 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   controller : 'adminBookingClients'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AlertService, ClientService, ValidatorService, ErrorService, $log, PaginationService) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AlertService, ClientService, ValidatorService, ErrorService, $log, PaginationService, $timeout) ->
 
   $scope.validator  = ValidatorService
   $scope.clients    = []
@@ -61,7 +61,13 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
 
   $scope.getClients = (params, options = {}) ->
 
-    return if !params
+    $scope.search_triggered = true
+
+    $timeout ->
+      $scope.search_triggered = false
+    , 1000
+
+    return if !params or (params and !params.filter_by)
 
     $scope.params =
       company: $scope.bb.company

@@ -4,12 +4,14 @@
     <h1>Select a customer</h1>
   </div>
 
-  <div class="admin-typehead-wrapper">
-    <div class="input-group">
-      <input class="input-lg form-control" ng-model="typehead_result" placeholder="Search by email or name" typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="customer_typeahead_loading" typeahead-no-results="no_results" class="form-control" typeahead-on-select="typeHeadResults($item, $modal, $label)" typeahead-focus-first="false" typeahead-min-length="2">
-      <span class="input-group-btn">
-        <button class="btn btn-primary btn-lg" ng-click="getClients({filter_by: typehead_result})"><i class="fa fa-search"></i></button>
-      </span>
+  <div class="admin-typehead-wrapper" ng-form bb-form name="client_search_form">
+    <div class="form-group" ng-class="{'has-error': client_search_form.result.$invalid && (client_search_form.result.$dirty || client_search_form.submitted)}">
+      <div class="input-group" ng-class="{'animated shake': !typehead_result && search_triggered}">
+        <input class="input-lg form-control" name="result" ng-model="typehead_result" placeholder="Search by email or name" required typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="customer_typeahead_loading" typeahead-no-results="no_results" class="form-control" typeahead-on-select="typeHeadResults($item, $modal, $label)" typeahead-focus-first="false" typeahead-min-length="2">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-primary btn-lg" ng-click="submitForm(); getClients({filter_by: typehead_result})"><i class="fa fa-search"></i></button>
+        </span>
+      </div>
     </div>
   </div>
 
