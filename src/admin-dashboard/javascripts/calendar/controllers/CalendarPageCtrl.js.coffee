@@ -9,7 +9,7 @@
 ###
 angular.module('BBAdminDashboard.calendar.controllers')
 .controller 'CalendarPageCtrl',['$scope', '$state', ($scope, $state) ->
-  $scope.adminlte.side_menu = false
-  $scope.adminlte.heading = null
+  # $scope.adminlte.side_menu = false
+  # $scope.adminlte.heading = null
 
 ]

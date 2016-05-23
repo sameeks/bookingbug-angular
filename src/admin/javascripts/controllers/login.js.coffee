@@ -24,21 +24,25 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
 
   $scope.login_template = 'admin_login.html'
 
-  $scope.login = () ->
-    $scope.alert = ""
-    params =
-      email: $scope.login.email
-      password: $scope.login.password
-    AdminLoginService.login(params).then (user) ->
-      if user.company_id?
-        $scope.user = user
-        $scope.onSuccess() if $scope.onSuccess
-      else
-        user.getAdministratorsPromise().then (administrators) ->
-          $scope.administrators = administrators
-          $scope.pickCompany()
-    , (err) ->
-      $scope.alert = "Sorry, either your email or password was incorrect"
+  $scope.login = (isValid) ->
+    if isValid
+      $scope.formErrors = []
+
+      $scope.alert = ""
+      params =
+        email: $scope.login.email
+        password: $scope.login.password
+      AdminLoginService.login(params).then (user) ->
+        if user.company_id?
+          $scope.user = user
+          $scope.onSuccess() if $scope.onSuccess
+        else
+          user.getAdministratorsPromise().then (administrators) ->
+            $scope.administrators = administrators
+            $scope.pickCompany()
+      , (err) ->
+        console.log err
+        $scope.formErrors.push { message: "Sorry, either your email or password was incorrect"}
 
   $scope.pickCompany = () ->
     $scope.login_template = 'admin_pick_company.html'
