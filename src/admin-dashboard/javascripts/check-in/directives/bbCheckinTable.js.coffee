@@ -50,8 +50,9 @@ angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsContr
     defer.promise
 
   $scope.setStatus = (booking, status) =>
-    booking.current_multi_status = status
-    booking.$update(booking).then (res) ->
+    clone = _.clone(booking) 
+    clone.current_multi_status = status
+    booking.$update(clone).then (res) ->
       $scope.booking_collection.checkItem(res)
     , (err) ->
       AlertService.danger({msg: 'Something went wrong'})
