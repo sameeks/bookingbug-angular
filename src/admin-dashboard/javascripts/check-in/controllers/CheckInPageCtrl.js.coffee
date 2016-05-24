@@ -9,5 +9,5 @@
 ###
 angular.module('BBAdminDashboard.check-in.controllers')
 .controller 'CheckInPageCtrl',['$scope', '$state', ($scope, $state) ->
-  $scope.adminlte.heading = 'Check-in'
+  $scope.adminlte.heading = ''
 ]
