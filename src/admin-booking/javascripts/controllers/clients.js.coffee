@@ -10,14 +10,12 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
 angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, $timeout) ->
 
   $scope.validator  = ValidatorService
-  $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 100})
+  $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 10})
   
   $scope.sort_by_options = [
     {key: 'first_name', name: 'First Name'},
     {key: 'last_name', name: 'Last Name'},
-    {key: 'email', name: 'Email'},
-    {key: 'mobile', name: 'Mobile'},
-    {key: 'phone', name: 'Phone'}
+    {key: 'email', name: 'Email'}
   ]
 
   $scope.sort_by = $scope.sort_by_options[0].key
@@ -69,11 +67,11 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
     return if !params or (params and !params.filter_by)
 
     $scope.params =
-      company: $scope.bb.company
-      per_page: $scope.clients.request_page_size
+      company: params.company or $scope.bb.company
+      per_page: params.per_page or $scope.clients.request_page_size
       filter_by: params.filter_by
-      search_by_fields: 'phone,mobile'
-      order_by: params.order_by
+      search_by_fields: params.search_by_fields or 'phone,mobile'
+      order_by: params.order_by or $scope.sort_by
       order_by_reverse: params.order_by_reverse
       page: params.page or 1
 
@@ -133,3 +131,9 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
     if !items_present
       $scope.params.page = page_to_load
       $scope.getClients($scope.params, {add: true})
+
+
+  $scope.sortChanged = (sort_by) ->
+    $scope.params.order_by = sort_by
+    $scope.params.page = 1
+    $scope.getClients($scope.params)

@@ -60,7 +60,7 @@
        
             <div class="form-group">
               <label class="bb-label" for="sort_by">Sort by: </label>
-              <select ng-model="sort_by" id="sort_by" class="form-control" ng-options="option.key as option.name for option in sort_by_options">
+              <select ng-model="sort_by" id="sort_by" class="form-control" ng-options="option.key as option.name for option in sort_by_options" ng-change="sortChanged(sort_by)">
               </select>
             </div>
 
@@ -84,7 +84,7 @@
 
     <ul class="bb-list bb-list-bordered bb-list-fade-in">
 
-      <li ng-repeat="client in clients.items | orderBy: sort_by | startFrom: (clients.current_page - 1) * clients.page_size | limitTo: clients.page_size track by $index">
+      <li ng-repeat="client in clients.items | startFrom: (clients.current_page - 1) * clients.page_size | limitTo: clients.page_size track by $index">
 
         <div class="typehead-item-wrapper">
         
