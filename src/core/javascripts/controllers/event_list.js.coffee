@@ -41,6 +41,10 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
     # 2 = Next 100 events and event summary (gets event summary, loads next 100 events, and gets more events if requested)
     scope.mode = if options and options.mode then options.mode else 0
     scope.mode = 0 if scope.summary
+
+    # set the total number of events loaded?
+    scope.per_page = options.per_page if options and options.per_page
+    
     return
 
 
@@ -170,6 +174,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       delete $scope.bb.current_item.event_chain_id
 
     comp = $scope.bb.company 
+
     params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
     params.event_chain_id = $scope.bb.item_defaults.event_chain if $scope.bb.item_defaults.event_chain
 
@@ -265,6 +270,8 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate(), include_non_bookable: true}
     params.event_chain_id = $scope.bb.item_defaults.event_chain if $scope.bb.item_defaults.event_chain
+
+    params.per_page = $scope.per_page if $scope.per_page
 
     chains = $scope.loadEventChainData(comp)
     $scope.events = {}
