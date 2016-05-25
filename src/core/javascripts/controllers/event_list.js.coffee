@@ -263,7 +263,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       delete $scope.bb.current_item.event_chain
       delete $scope.bb.current_item.event_chain_id
 
-    params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
+    params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate(), include_non_bookable: true}
     params.event_chain_id = $scope.bb.item_defaults.event_chain if $scope.bb.item_defaults.event_chain
 
     chains = $scope.loadEventChainData(comp)
