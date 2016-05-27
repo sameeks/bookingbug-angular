@@ -35,6 +35,14 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             callback($scope.bookings)
     ,
       events: (start, end, timezone, callback) ->
+        $scope.getCompanyPromise().then (company) ->
+          if company.$has('external_bookings')
+            company.$get('external_bookings').then (collection) ->
+              collection.$get('external_bookings').then (bookings) ->
+                b.resourceId = b.person_id for b in bookings
+                callback(bookings)
+    ,
+      events: (start, end, timezone, callback) ->
         $scope.loading = true
         $scope.getCompanyPromise().then (company) ->
           AdminScheduleService.getAssetsScheduleEvents(company, start, end, !$scope.showAll, $scope.selectedResources.selected).then (availabilities) ->
@@ -173,7 +181,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             fail: () ->
               revertFunc()
         eventClick: (event, jsEvent, view) ->
-          $scope.editBooking(event)
+          if event.$has('edit')
+            $scope.editBooking(event)
         eventRender: (event, element) ->
           # If its a blocked timeslot add colored overlay
           if event.status == 3
@@ -185,9 +194,13 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             element.css('color', service.textColor)
             element.css('border-color', service.textColor)
         eventAfterRender: (event, elements, view) ->
-          PrePostTime.apply(event, elements, view, $scope)
           if not event.rendering? or event.rendering != 'background'
-            elements.draggable()
+            PrePostTime.apply(event, elements, view, $scope)
+            if event.$has('edit')
+              elements.draggable()
+            else
+              elements.editable = false
+              elements.removeClass('fc-draggable')
         select: (start, end, jsEvent, view, resource) ->
           view.calendar.unselect()
 
