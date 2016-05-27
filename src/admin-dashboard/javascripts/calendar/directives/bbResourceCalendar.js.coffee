@@ -158,10 +158,12 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             slotWidth: 25
             buttonText: 'Day (' + $scope.options.cal_slot_duration + 'm)'
             resourceAreaWidth: '18%'
-        resourceLabelText: 'Staff'
+        resourceGroupField: 'group'
+        resourceLabelText: ' '
         selectable: true
+        lazyFetching: false
         resources: (callback) ->
-          $scope.getCalendarAssets(callback)
+          getCalendarAssets(callback)
         eventDrop: (event, delta, revertFunc) ->
           Dialog.confirm
             model: event
@@ -187,36 +189,37 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           if not event.rendering? or event.rendering != 'background'
             elements.draggable()
         select: (start, end, jsEvent, view, resource) ->
-
-          setTimeToMoment = (date, time)->
-            newDate = moment(time,'HH:mm')
-            newDate.set({
-              'year': parseInt(date.get('year'))
-              'month': parseInt(date.get('month'))
-              'date': parseInt(date.get('date'))
-              'second': 0
-            })
-            newDate
-
-          if Math.abs(start.diff(end, 'days')) > 0
-            end.subtract(1,'days')
-            end = setTimeToMoment(end,$scope.options.max_time)
-
           view.calendar.unselect()
-          rid = null
-          rid = resource.id if resource
-          $scope.getCompanyPromise().then (company) ->
-            AdminBookingPopup.open
-              min_date: setTimeToMoment(start,$scope.options.min_time)
-              max_date: setTimeToMoment(end,$scope.options.max_time)
-              from_datetime: start
-              to_datetime: end
-              item_defaults:
-                date: start.format('YYYY-MM-DD')
-                time: (start.hour() * 60 + start.minute())
-                person: rid
-              first_page: "quick_pick"
-              company_id: company.id
+
+          if isTimeRangeAvailable(start, end, resource) || Math.abs(start.diff(end, 'days'))
+            setTimeToMoment = (date, time)->
+              newDate = moment(time,'HH:mm')
+              newDate.set({
+                'year': parseInt(date.get('year'))
+                'month': parseInt(date.get('month'))
+                'date': parseInt(date.get('date'))
+                'second': 0
+              })
+              newDate
+
+            if Math.abs(start.diff(end, 'days')) > 0
+              end.subtract(1,'days')
+              end = setTimeToMoment(end,$scope.options.max_time)
+
+            rid = null
+            rid = resource.id if resource
+            $scope.getCompanyPromise().then (company) ->
+              AdminBookingPopup.open
+                min_date: setTimeToMoment(start,$scope.options.min_time)
+                max_date: setTimeToMoment(end,$scope.options.max_time)
+                from_datetime: start
+                to_datetime: end
+                item_defaults:
+                  date: start.format('YYYY-MM-DD')
+                  time: (start.hour() * 60 + start.minute())
+                  person: rid
+                first_page: "quick_pick"
+                company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
           $scope.currentDate = date.format()
@@ -225,6 +228,13 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           $scope.updateBooking(event)
         loading: (isLoading, view) ->
           $scope.calendarLoading = isLoading
+
+    isTimeRangeAvailable = (start, end, resource) ->
+      events = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', (event)->
+        event.rendering == 'background' && start >= event.start && end <= event.end && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
+      ) 
+
+      events.length > 0    
 
     $scope.getCompanyPromise = () ->
       defer = $q.defer()
@@ -283,7 +293,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         params.assets = assets.join()
         $state.go($state.current.name, params, { notify:false, reload:false});
 
-    $scope.getCalendarAssets = (callback) ->
+    getCalendarAssets = (callback) ->
       $scope.loading = true
 
       $scope.getCompanyPromise().then (company) ->
