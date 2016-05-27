@@ -3,7 +3,7 @@ angular.module('BBAdminBooking').factory 'AdminBookingPopup', ($modal, $timeout)
   open: (config) ->
     $modal.open
       size: 'lg'
-      controller: ($scope, $modalInstance, config, $window) ->
+      controller: ($scope, $modalInstance, config, $window, AdminBookingOptions) ->
         $scope.Math = $window.Math
         if $scope.bb && $scope.bb.current_item 
           delete $scope.bb.current_item
@@ -13,8 +13,8 @@ angular.module('BBAdminBooking').factory 'AdminBookingPopup', ($modal, $timeout)
         , config
         $scope.config.company_id ||= $scope.company.id if $scope.company
         $scope.config.item_defaults = angular.extend 
-          merge_resources: true
-          merge_people: false
+          merge_resources: AdminBookingOptions.merge_resources
+          merge_people: AdminBookingOptions.merge_people
         , config.item_defaults
         $scope.cancel = () ->
           $modalInstance.dismiss('cancel')

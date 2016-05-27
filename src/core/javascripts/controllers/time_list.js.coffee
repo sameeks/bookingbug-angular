@@ -240,12 +240,14 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-        requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
+        requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.config)
 
-        if requested_slot
+        if requested_slot and $scope.data_source.resource and $scope.data_source.person
           $scope.skipThisStep()
           $scope.selectSlot(requested_slot, $scope.selected_day)
-        else if requested_slot is null 
+        else if requested_slot
+          $scope.highlightSlot(requested_slot, $scope.selected_day)
+        else if requested_slot is null
           $scope.availability_conflict = true
 
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')

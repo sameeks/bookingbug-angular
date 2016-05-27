@@ -23,11 +23,11 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
     return datetime.minutes() + datetime.hours() * 60
 
 
-  checkDefaultTime: (date, time_slots, basket_item) ->
+  checkDefaultTime: (date, time_slots, basket_item, config) ->
 
     return if !(basket_item.defaults.time? and 
     ((basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person)) and 
-      ((basket_item.defaults.resource and basket_item.defaults.resource.self is basket_item.resource.self) or _.isBoolean(basket_item.resource)))
+      ((basket_item.defaults.resource and basket_item.defaults.resource.self is basket_item.resource.self) or _.isBoolean(basket_item.resource) or !config.item_defaults.merge_resources))
 
     found_time_slot = null
 
