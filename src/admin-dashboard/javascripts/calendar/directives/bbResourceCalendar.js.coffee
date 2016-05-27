@@ -19,6 +19,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             company: company
             start_date: start.format('YYYY-MM-DD')
             end_date: end.format('YYYY-MM-DD')
+            skip_cache: true
           AdminBookingService.query(params).then (bookings) ->
             $scope.loading = false
             filteredBookings = []
@@ -32,6 +33,14 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
                 filteredBookings.push b
             $scope.bookings = filteredBookings
             callback($scope.bookings)
+    ,
+      events: (start, end, timezone, callback) ->
+        $scope.getCompanyPromise().then (company) ->
+          if company.$has('external_bookings')
+            company.$get('external_bookings').then (collection) ->
+              collection.$get('external_bookings').then (bookings) ->
+                b.resourceId = b.person_id for b in bookings
+                callback(bookings)
     ,
       events: (start, end, timezone, callback) ->
         $scope.loading = true
@@ -157,10 +166,12 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             slotWidth: 25
             buttonText: 'Day (' + $scope.options.cal_slot_duration + 'm)'
             resourceAreaWidth: '18%'
-        resourceLabelText: 'Staff'
+        resourceGroupField: 'group'
+        resourceLabelText: ' '
         selectable: true
+        lazyFetching: false
         resources: (callback) ->
-          $scope.getCalendarAssets(callback)
+          getCalendarAssets(callback)
         eventDrop: (event, delta, revertFunc) ->
           Dialog.confirm
             model: event
@@ -170,7 +181,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             fail: () ->
               revertFunc()
         eventClick: (event, jsEvent, view) ->
-          $scope.editBooking(event)
+          if event.$has('edit')
+            $scope.editBooking(event)
         eventRender: (event, element) ->
           # If its a blocked timeslot add colored overlay
           if event.status == 3
@@ -182,40 +194,45 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             element.css('color', service.textColor)
             element.css('border-color', service.textColor)
         eventAfterRender: (event, elements, view) ->
-          PrePostTime.apply(event, elements, view, $scope)
           if not event.rendering? or event.rendering != 'background'
-            elements.draggable()
+            PrePostTime.apply(event, elements, view, $scope)
+            if event.$has('edit')
+              elements.draggable()
+            else
+              elements.editable = false
+              elements.removeClass('fc-draggable')
         select: (start, end, jsEvent, view, resource) ->
-
-          setTimeToMoment = (date, time)->
-            newDate = moment(time,'HH:mm')
-            newDate.set({
-              'year': parseInt(date.get('year'))
-              'month': parseInt(date.get('month'))
-              'date': parseInt(date.get('date'))
-              'second': 0
-            })
-            newDate
-
-          if Math.abs(start.diff(end, 'days')) > 0
-            end.subtract(1,'days')
-            end = setTimeToMoment(end,$scope.options.max_time)
-
           view.calendar.unselect()
-          rid = null
-          rid = resource.id if resource
-          $scope.getCompanyPromise().then (company) ->
-            AdminBookingPopup.open
-              min_date: setTimeToMoment(start,$scope.options.min_time)
-              max_date: setTimeToMoment(end,$scope.options.max_time)
-              from_datetime: start
-              to_datetime: end
-              item_defaults:
-                date: start.format('YYYY-MM-DD')
-                time: (start.hour() * 60 + start.minute())
-                person: rid
-              first_page: "quick_pick"
-              company_id: company.id
+
+          if isTimeRangeAvailable(start, end, resource) || Math.abs(start.diff(end, 'days'))
+            setTimeToMoment = (date, time)->
+              newDate = moment(time,'HH:mm')
+              newDate.set({
+                'year': parseInt(date.get('year'))
+                'month': parseInt(date.get('month'))
+                'date': parseInt(date.get('date'))
+                'second': 0
+              })
+              newDate
+
+            if Math.abs(start.diff(end, 'days')) > 0
+              end.subtract(1,'days')
+              end = setTimeToMoment(end,$scope.options.max_time)
+
+            rid = null
+            rid = resource.id if resource
+            $scope.getCompanyPromise().then (company) ->
+              AdminBookingPopup.open
+                min_date: setTimeToMoment(start,$scope.options.min_time)
+                max_date: setTimeToMoment(end,$scope.options.max_time)
+                from_datetime: start
+                to_datetime: end
+                item_defaults:
+                  date: start.format('YYYY-MM-DD')
+                  time: (start.hour() * 60 + start.minute())
+                  person: rid
+                first_page: "quick_pick"
+                company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
           $scope.currentDate = date.format()
@@ -224,6 +241,13 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           $scope.updateBooking(event)
         loading: (isLoading, view) ->
           $scope.calendarLoading = isLoading
+
+    isTimeRangeAvailable = (start, end, resource) ->
+      events = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', (event)->
+        event.rendering == 'background' && start >= event.start && end <= event.end && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
+      ) 
+
+      events.length > 0    
 
     $scope.getCompanyPromise = () ->
       defer = $q.defer()
@@ -282,7 +306,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         params.assets = assets.join()
         $state.go($state.current.name, params, { notify:false, reload:false});
 
-    $scope.getCalendarAssets = (callback) ->
+    getCalendarAssets = (callback) ->
       $scope.loading = true
 
       $scope.getCompanyPromise().then (company) ->
@@ -319,20 +343,21 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             booking.resourceId = booking.person_id
             uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
 
+    pusherBooking = (res) ->
+      if res.id?
+        booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))
+        if booking && booking.$refetch
+          booking.$refetch().then () ->
+            uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+        else
+          uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+
     $scope.pusherSubscribe = () =>
       if $scope.company
-        $scope.company.pusherSubscribe((res) =>
-          if res.id?
-            booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))
-            if booking
-              booking.$refetch().then () ->
-                uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
-            else
-              $scope.company.$get('bookings', {id: res.id}).then (response) ->
-                booking = new BBModel.Admin.Booking(response)
-                BookingCollections.checkItems(booking)
-                uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
-        , {encrypted: false})
+        pusher_channel = $scope.company.getPusherChannel('bookings')
+        pusher_channel.bind 'create', pusherBooking
+        pusher_channel.bind 'update', pusherBooking
+        pusher_channel.bind 'destroy', pusherBooking
 
     $scope.openDatePicker = ($event) ->
         $event.preventDefault()

@@ -50,6 +50,7 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
   $scope.overBook = () ->
 
     new_timeslot = new BBModel.TimeSlot({time: $scope.bb.current_item.defaults.time, avail: 1})
+    new_day = new BBModel.Day({date: $scope.bb.current_item.defaults.datetime, spaces: 1})
     
     $scope.setLastSelectedDate(new_day.date)
     $scope.bb.current_item.setDate(new_day)

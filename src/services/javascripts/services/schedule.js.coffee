@@ -40,10 +40,14 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel
     @mapAssetsToScheduleEvents(start, end, assets)  
 
   mapAssetsToScheduleEvents: (start, end, assets) ->
-    _.map assets, (asset) ->
+    assets_with_schedule = _.filter assets, (asset)->
+      asset.$has('schedule')
+
+    _.map assets_with_schedule, (asset) ->
       params =
         start_date: start.format('YYYY-MM-DD')
         end_date: end.format('YYYY-MM-DD')
+         
       asset.$get('schedule', params).then (schedules) ->
         rules = new ScheduleRules(schedules.dates)
         events = rules.toEvents()
