@@ -89,7 +89,7 @@ $screen-header-collapse : $screen-xs-max;
 
 
 //login section 
-#loginWrapper {
+.loginWrapper {
   //background: $gray-lighter;
   @include gradient-radial($gray-lighter, lighten($gray-light,10));
 
@@ -97,7 +97,7 @@ $screen-header-collapse : $screen-xs-max;
     opacity:0;
     @include animation(fadeInUpSmall);
     @include animation-duration(0.3s);
-    @include animation-delay(0.2s);
+    @include animation-delay(0.5s);
     @include animation-fill-mode(forwards);
 
     .login-logo-container {
