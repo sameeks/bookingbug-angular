@@ -41,6 +41,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
               collection.$get('external_bookings').then (bookings) ->
                 b.resourceId = b.person_id for b in bookings
                 callback(bookings)
+          else
+            callback([])
     ,
       events: (start, end, timezone, callback) ->
         $scope.loading = true
