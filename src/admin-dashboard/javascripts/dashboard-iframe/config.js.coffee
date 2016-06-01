@@ -9,17 +9,19 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
   'BBAdminDashboard.dashboard-iframe.services',
   'BBAdminDashboard.dashboard-iframe.directives'
 ])
-.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
-  $stateProvider
-    .state 'dashboard',
-      parent: "root"
-      url: "/dashboard"
-      controller: "DashboardIframePageCtrl"
-      templateUrl: "admin_dashboard_page.html"
+.run ['RuntimeStates', 'AdminDashboardIframeOptions', (RuntimeStates, AdminDashboardIframeOptions) ->
+  # Choose to opt out of the default routing
+  if AdminDashboardIframeOptions.use_default_states
 
-    .state 'dashboard.page',
-      parent: "dashboard"
-      url: "/page/:path"
-      controller: 'DashboardSubIframePageCtrl'
-      templateUrl: "iframe_page.html"
-]
+    RuntimeStates
+      .state 'dashboard',
+        parent: AdminDashboardIframeOptions.parent_state
+        url: "/dashboard"
+        controller: "DashboardIframePageCtrl"
+        templateUrl: "admin_dashboard_page.html"
+
+      .state 'dashboard.page',
+        url: "/page/:path"
+        controller: 'DashboardSubIframePageCtrl'
+        templateUrl: "iframe_page.html"  
+]  

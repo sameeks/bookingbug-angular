@@ -9,11 +9,14 @@ angular.module('BBAdminDashboard.calendar', [
   'BBAdminDashboard.calendar.services',
   'BBAdminDashboard.calendar.directives'
 ])
-.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
-  $stateProvider
-    .state 'calendar',
-      parent: 'root'
-      url: "/calendar/:assets"
-      templateUrl: "calendar_page.html"
-      controller: 'CalendarPageCtrl'
-]
+.run ['RuntimeStates', 'AdminCalendarOptions', (RuntimeStates, AdminCalendarOptions) ->
+  # Choose to opt out of the default routing
+  if AdminCalendarOptions.use_default_states
+
+    RuntimeStates
+      .state 'calendar',
+        parent: AdminCalendarOptions.parent_state
+        url: "/calendar/:assets"
+        templateUrl: "calendar_page.html"
+        controller: 'CalendarPageCtrl'
+]    

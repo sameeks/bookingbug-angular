@@ -9,16 +9,19 @@ angular.module('BBAdminDashboard.config-iframe', [
   'BBAdminDashboard.config-iframe.services',
   'BBAdminDashboard.config-iframe.directives'
 ])
-.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
-  $stateProvider
-    .state 'config',
-      parent: "root"
-      url: "/config"
-      templateUrl: "admin_config_page.html"
-      controller: "ConfigIframePageCtrl"
+.run ['RuntimeStates', 'AdminConfigIframeOptions', (RuntimeStates, AdminConfigIframeOptions) ->
+  # Choose to opt out of the default routing
+  if AdminConfigIframeOptions.use_default_states
 
-    .state 'config.page',
-      url: "/page/:path"
-      templateUrl: "iframe_page.html"
-      controller: 'ConfigSubIframePageCtrl'
-]
+    RuntimeStates
+      .state 'config',
+        parent: AdminConfigIframeOptions.parent_state
+        url: "/config"
+        templateUrl: "admin_config_page.html"
+        controller: "ConfigIframePageCtrl"
+
+      .state 'config.page',
+        url: "/page/:path"
+        templateUrl: "iframe_page.html"
+        controller: 'ConfigSubIframePageCtrl'
+]  
