@@ -45,17 +45,64 @@ angular.module('BBAdmin.Directives').directive 'bbAdminLogin', [() ->
             email: $scope.login.email
             password: $scope.login.password
           AdminLoginService.login(params).then (user) ->
-            if user.company_id?
-              $scope.template_vars.show_loading = false
-              $scope.user = user
-              $scope.onSuccess() if $scope.onSuccess
-            else
-              user.getAdministratorsPromise().then (administrators) ->
-                $scope.template_vars.show_loading = false
-                $scope.template_vars.show_login = false
-                $scope.template_vars.show_pick_company = true
 
+            # if user is admin 
+            if user.$has('administrators')
+              user.getAdministratorsPromise().then () ->
                 $scope.administrators = administrators
+
+                # if user is admin in more than one company show select company
+                if administrators.length > 1
+                  $scope.template_vars.show_loading = false
+                  $scope.template_vars.show_login = false
+                  $scope.template_vars.show_pick_company = true
+                else 
+                # else automatically select the first admin
+                  params =
+                    email: $scope.login.email
+                    password: $scope.login.password
+
+                  $scope.login.selected_admin = _.first(administrators)  
+
+                  $scope.login.selected_admin.$post('login', {}, params).then (login) ->
+                    $scope.login.selected_admin.getCompanyPromise().then (company) ->
+                      $scope.template_vars.show_loading = false
+                      # if there are departments show department selector
+                      if company.companies && company.companies.length > 0
+                        $scope.template_vars.show_pick_department = true
+                        $scope.departments = company.companies
+                      else  
+                      # else select that company directly and move on
+                        $scope.login.selected_company = company  
+                        AdminLoginService.setLogin($scope.login.selected_admin)
+                        AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
+                          $scope.onSuccess($scope.login.selected_company)
+            
+            # else if there is an associated company
+            else if user.$has('company')
+              $scope.login.selected_admin = user
+              user.getCompanyPromise().then (company) ->
+
+                # if departments are available show departments selector
+                if company.companies && company.companies.length > 0
+                  $scope.template_vars.show_loading = false
+                  $scope.template_vars.show_pick_department = true
+                  $scope.template_vars.show_login = false
+                  $scope.departments = company.companies
+                else  
+                # else select that company directly and move on
+                  $scope.login.selected_company = company  
+                  AdminLoginService.setLogin($scope.login.selected_admin)
+                  AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
+                    $scope.onSuccess($scope.login.selected_company)
+              , (err) ->
+                $scope.template_vars.show_loading = false
+                $scope.formErrors.push { message: "Sorry, there seems to be a problem with the company associated with this account"}
+
+            else
+              $scope.template_vars.show_loading = false
+              $scope.formErrors.push { message: "Sorry, there seems to be a problem with this account"}
+                            
           , (err) ->
             $scope.template_vars.show_loading = false
             $scope.formErrors.push { message: "Sorry, either your email or password was incorrect"}
@@ -79,6 +126,7 @@ angular.module('BBAdmin.Directives').directive 'bbAdminLogin', [() ->
 
 
       $scope.selectCompanyDepartment = (isValid) ->
+        $scope.template_vars.show_loading = true
         if isValid
           $scope.bb.company = $scope.login.selected_company
           AdminLoginService.setLogin($scope.login.selected_admin)

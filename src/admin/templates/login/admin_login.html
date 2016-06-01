@@ -24,13 +24,13 @@
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fa fa-unlock"></i> Login</button>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="template_vars.show_loading"><i class="fa fa-unlock"></i> Login</button>
                     </div>
                 </div>
             </form>
         </div>
 
-        <div class="col-md-4 col-md-offset-4" ng-show="template_vars.show_pick_company">
+        <div class="col-md-4 col-md-offset-4" ng-show="template_vars.show_pick_company || template_vars.show_pick_department">
 
             <form name="pick_company_form" ng-model="pick_company_form" ng-submit="selectCompanyDepartment(pick_company_form.$valid)">
                 <div class="login-logo-container">
@@ -41,7 +41,7 @@
                         <h3 class="panel-title"><i ng-show="template_vars.show_loading" class="pull-right fa fa-circle-o-notch" ng-class="{'fa-spin': template_vars.show_loading}"></i> Select company</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="form-group">
+                        <div class="form-group" ng-show="template_vars.show_pick_company">
                             <label for="company">Companies</label>
                             <ui-select ng-model="login.selected_admin" theme="bootstrap" ng-change="pickCompany()">
                                 <ui-select-match placeholder="Select or search a company in the list...">{{$select.selected.company_name}}</ui-select-match>
