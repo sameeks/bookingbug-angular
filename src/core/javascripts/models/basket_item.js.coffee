@@ -20,7 +20,7 @@
 
 
 angular.module('BB.Models').factory "BasketItemModel",
-($q, $window, BBModel, BookableItemModel, BaseModel, $bbug, DateTimeUtilitiesService) ->
+($q, $window, BBModel, BookableItemModel, BaseModel, $bbug, DateTimeUtilitiesService, SettingsService) ->
 
   # A class that defines an item in a shopping basket
   # This could represent a time based service, a ticket for an event or class, or any other purchasable item
@@ -46,6 +46,24 @@ angular.module('BB.Models').factory "BasketItemModel",
         @date = new BBModel.Day({date: @date, spaces: 1})
       if @datetime
         @date = new BBModel.Day({date: @datetime.toISODate(), spaces: 1})
+        cc = SettingsService.getCountryCode()
+        cc = "uk" if cc != "us"
+        LLLL = if cc == 'us' then "dddd, MMMM Do[,] h.mma" else "dddd Do MMMM[,] h.mma"
+        moment.locale('en', {
+            longDateFormat : {
+                LT: "h:mm A",
+                LTS: "h:mm:ss A",
+                L: "MM/DD/YYYY",
+                l: "M/D/YYYY",
+                LL: "MMMM Do YYYY",
+                ll: "MMM D YYYY",
+                LLL: "MMMM Do YYYY LT",
+                lll: "MMM D YYYY LT",
+                LLLL: LLLL,
+                llll: "ddd, MMM D YYYY LT"
+            }
+          })
+    
         t =  @datetime.hour() * 60 +  @datetime.minute()
         @time = new BBModel.TimeSlot({time: t, event_id: @event_id, selected: true, avail: 1, price: @price })
 
