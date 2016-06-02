@@ -9,10 +9,14 @@ angular.module('BBAdminDashboard.login', [
   'BBAdminDashboard.login.services',
   'BBAdminDashboard.login.directives'
 ])
-.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
-  $stateProvider
-    .state 'login',
-      url: "/login"
-      controller: "LoginPageCtrl"
-      templateUrl: "admin_login_page.html"
-]
+.run ['RuntimeStates', 'AdminLoginOptions', (RuntimeStates, AdminLoginOptions) ->
+  # Choose to opt out of the default routing
+  if AdminLoginOptions.use_default_states
+
+    RuntimeStates
+      .state 'login',
+        parent: AdminLoginOptions.parent_state        
+        url: "/login"
+        controller: "LoginPageCtrl"
+        templateUrl: "admin_login_page.html"  
+]  
