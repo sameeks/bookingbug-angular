@@ -347,9 +347,15 @@ angular.module('BB.Filters').filter 'key_translate', ->
     add_underscore = remove_punctuations.replace(/\ /g, "_")
     return add_underscore
 
+angular.module('BB.Filters').filter 'nl2br', ->
+  return (str) ->
+    if str
+      # replace new lines with <br/> tags for multiline display in HTML
+      return str.replace(/\n/g, '<br/>')
+
 
 app.filter 'clearTimezone', ->
   (val, offset) ->
     if val != null and val.length > 19
       return val.substring(0, 19)
-    val    
+    val
