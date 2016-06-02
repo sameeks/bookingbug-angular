@@ -9,18 +9,19 @@ angular.module('BBAdminDashboard.publish-iframe', [
   'BBAdminDashboard.publish-iframe.services',
   'BBAdminDashboard.publish-iframe.directives'
 ])
-.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
-  $stateProvider
-    .state 'publish',
-      parent: 'root'
-      url: '/publish'
-      templateUrl: 'admin_publish_page.html'
-      controller: 'PublishIframePageCtrl'
+.run ['RuntimeStates', 'AdminPublishIframeOptions', (RuntimeStates, AdminPublishIframeOptions) ->
+  # Choose to opt out of the default routing
+  if AdminPublishIframeOptions.use_default_states
 
-    .state 'publish.page',
-      parent: 'publish'
-      url: '/page/:path'
-      templateUrl: 'iframe_page.html'
-      controller: 'PublishSubIframePageCtrl'
-      
-]
+    RuntimeStates
+      .state 'publish',
+        parent: AdminPublishIframeOptions.parent_state
+        url: '/publish'
+        templateUrl: 'admin_publish_page.html'
+        controller: 'PublishIframePageCtrl'
+
+      .state 'publish.page',
+        url: '/page/:path'
+        templateUrl: 'iframe_page.html'
+        controller: 'PublishSubIframePageCtrl'  
+]  

@@ -9,17 +9,19 @@ angular.module('BBAdminDashboard.members-iframe', [
   'BBAdminDashboard.members-iframe.services',
   'BBAdminDashboard.members-iframe.directives'
 ])
-.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
-  $stateProvider
-    .state 'members',
-      parent: 'root'
-      url: '/members'
-      templateUrl: 'admin_members_page.html'
-      controller: 'MembersIframePageCtrl'
+.run ['RuntimeStates', 'AdminMembersIframeOptions', (RuntimeStates, AdminMembersIframeOptions) ->
+  # Choose to opt out of the default routing
+  if AdminMembersIframeOptions.use_default_states
 
-    .state 'members.page',
-      parent: 'members'
-      url: '/page/:path/:id'
-      templateUrl: 'iframe_page.html'
-      controller: 'MembersSubIframePageCtrl'
-]
+    RuntimeStates
+      .state 'members',
+        parent: AdminMembersIframeOptions.parent_state
+        url: '/members'
+        templateUrl: 'admin_members_page.html'
+        controller: 'MembersIframePageCtrl'
+
+      .state 'members.page',
+        url: '/page/:path/:id'
+        templateUrl: 'iframe_page.html'
+        controller: 'MembersSubIframePageCtrl'  
+]  
