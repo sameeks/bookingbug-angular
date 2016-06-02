@@ -12,10 +12,8 @@ angular.module('BBAdminDashboard.login', [
 .run ['RuntimeStates', 'AdminLoginOptions', (RuntimeStates, AdminLoginOptions) ->
   # Choose to opt out of the default routing
   if AdminLoginOptions.use_default_states
-
     RuntimeStates
       .state 'login',
-        parent: AdminLoginOptions.parent_state        
         url: "/login"
         controller: "LoginPageCtrl"
         templateUrl: "admin_login_page.html"  
