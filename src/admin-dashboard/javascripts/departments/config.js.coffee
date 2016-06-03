@@ -3,11 +3,13 @@
 angular.module('BBAdminDashboard.departments.controllers', [])
 angular.module('BBAdminDashboard.departments.services', [])
 angular.module('BBAdminDashboard.departments.directives', [])
+angular.module('BBAdminDashboard.departments.translations', [])
 
 angular.module('BBAdminDashboard.departments', [
   'BBAdminDashboard.departments.controllers',
   'BBAdminDashboard.departments.services',
-  'BBAdminDashboard.departments.directives'
+  'BBAdminDashboard.departments.directives',
+  'BBAdminDashboard.departments.translations'
 ])
 .config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
   $stateProvider
