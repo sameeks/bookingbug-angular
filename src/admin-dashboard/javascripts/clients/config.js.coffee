@@ -3,11 +3,13 @@
 angular.module('BBAdminDashboard.clients.controllers', [])
 angular.module('BBAdminDashboard.clients.services', [])
 angular.module('BBAdminDashboard.clients.directives', [])
+angular.module('BBAdminDashboard.clients.translations', [])
 
 angular.module('BBAdminDashboard.clients', [
   'BBAdminDashboard.clients.controllers',
   'BBAdminDashboard.clients.services',
-  'BBAdminDashboard.clients.directives'
+  'BBAdminDashboard.clients.directives',
+  'BBAdminDashboard.clients.translations'
 ])
 .run ['RuntimeStates', 'AdminClientsOptions', (RuntimeStates, AdminClientsOptions) ->
   # Choose to opt out of the default routing
