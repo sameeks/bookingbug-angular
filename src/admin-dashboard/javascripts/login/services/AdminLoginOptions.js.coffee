@@ -25,6 +25,7 @@
 angular.module('BBAdminDashboard.login.services').provider 'AdminLoginOptions', [ ->
   # This list of options is meant to grow
   options = {
+    show_api_field     : false
     use_default_states : true
     show_in_navigation : true
     parent_state       : 'root'

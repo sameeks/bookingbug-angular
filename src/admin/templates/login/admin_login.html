@@ -7,24 +7,28 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i ng-show="template_vars.show_loading" class="pull-right fa fa-circle-o-notch" ng-class="{'fa-spin': template_vars.show_loading}"></i> Login to view your account</h3>
+                        <h3 class="panel-title"><i ng-show="template_vars.show_loading" class="pull-right fa fa-circle-o-notch" ng-class="{'fa-spin': template_vars.show_loading}"></i><span translate>LOGIN_PAGE.HEADING</span></h3>
                     </div>
                     <div class="panel-body">
-                        <alert  ng-repeat="alert in formErrors" type="danger" close="formErrors.splice($index, 1)">{{alert.message}}</alert>
+                        <alert  ng-repeat="alert in formErrors" type="danger" close="formErrors.splice($index, 1)">{{alert.message | translate}}</alert>
+                        <div class="form-group" ng-show="template_vars.show_api_field">
+                            <label for="site"><span translate>LOGIN_PAGE.SITE</span></label>
+                            <input type="text" name="site" ng-model="login.site" ng-required="template_vars.show_api_field" class="form-control" id="site" placeholder="www.bookingbug.com">
+                        </div>
                         <div class="form-group">
-                            <label for="username">Username</label>
+                            <label for="username"><span translate>LOGIN_PAGE.USERNAME</span></label>
                             <input type="text" name="username" ng-model="login.email" required="required" class="form-control" id="username">
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
+                            <label for="password"><span translate>LOGIN_PAGE.PASSWORD</span></label>
                             <input type="password" name="password" ng-model="login.password" required="required" class="form-control" id="password">
                         </div>
                         <div class="form-group">
-                            <a class="">Forgot your password?</a>
+                            <a class=""><span translate>LOGIN_PAGE.FORGOT_PASSWORD</span></a>
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="template_vars.show_loading"><i class="fa fa-unlock"></i> Login</button>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="template_vars.show_loading"><i class="fa fa-unlock"></i><span translate>LOGIN_PAGE.LOGIN</span></button>
                     </div>
                 </div>
             </form>
@@ -38,13 +42,13 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i ng-show="template_vars.show_loading" class="pull-right fa fa-circle-o-notch" ng-class="{'fa-spin': template_vars.show_loading}"></i> Select company</h3>
+                        <h3 class="panel-title"><i ng-show="template_vars.show_loading" class="pull-right fa fa-circle-o-notch" ng-class="{'fa-spin': template_vars.show_loading}"></i><span translate>LOGIN_PAGE.SELECT_COMPANY</span></h3>
                     </div>
                     <div class="panel-body">
                         <div class="form-group" ng-show="template_vars.show_pick_company">
-                            <label for="company">Companies</label>
+                            <label for="company"><span translate>LOGIN_PAGE.COMPANIES</span></label>
                             <ui-select ng-model="login.selected_admin" theme="bootstrap" ng-change="pickCompany()">
-                                <ui-select-match placeholder="Select or search a company in the list...">{{$select.selected.company_name}}</ui-select-match>
+                                <ui-select-match placeholder="{{'LOGIN_PAGE.SEARCH_COMPANY_PLACEHOLDER' | translate}}">{{$select.selected.company_name}}</ui-select-match>
                                 <ui-select-choices repeat="admin in administrators | filter: $select.search">
                                   <div ng-bind-html="admin.company_name | highlight: $select.search"></div>
                                   <!-- <small ng-bind-html="admin.email | highlight: $select.search"></small> -->
@@ -53,9 +57,9 @@
                         </div>
 
                         <div class="form-group" ng-show="template_vars.show_pick_department">
-                            <label for="company">Departments</label>
+                            <label for="company"><span translate>LOGIN_PAGE.DEPARTMENTS</span></label>
                             <ui-select ng-model="login.selected_company" theme="bootstrap">
-                                <ui-select-match placeholder="Select or search a department in the list...">{{$select.selected.name}}</ui-select-match>
+                                <ui-select-match placeholder="{{'LOGIN_PAGE.SEARCH_DEPARTMENT_PLACEHOLDER' | translate}}">{{$select.selected.name}}</ui-select-match>
                                 <ui-select-choices repeat="department in departments | filter: $select.search">
                                   <div ng-bind-html="department.name | highlight: $select.search"></div>
                                   <small ng-bind-html="department.address.country + ' (' + department.timezone + ')' | highlight: $select.search"></small>
@@ -65,7 +69,7 @@
                         
                     </div>
                     <div class="panel-footer">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="!login.selected_company">Select</button>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="!login.selected_company"><span translate>LOGIN_PAGE.SELECT</span></button>
                     </div>
                 </div>
             </form>

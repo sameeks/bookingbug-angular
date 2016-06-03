@@ -22,24 +22,33 @@ angular.module('BBAdmin.Directives').directive 'bbAdminLogin', [() ->
       bb: '='
     }
     templateUrl: 'admin_login.html'
-    controller: ['$scope', '$rootScope', 'AdminLoginService', '$q', '$sessionStorage', ($scope, $rootScope, AdminLoginService, $q, $sessionStorage)->
+    controller: ['$scope', '$rootScope', 'AdminLoginService', '$q', '$localStorage', 'AdminLoginOptions', ($scope, $rootScope, AdminLoginService, $q, $localStorage, AdminLoginOptions)->
       $scope.template_vars =
+        show_api_field: AdminLoginOptions.show_api_field
         show_login: true
         show_pick_company: false
         show_pick_department: false
         show_loading: false
 
       $scope.login =
-        host: $sessionStorage.getItem('host')
         email: null
         password: null
         selected_admin: null
         selected_company: null
-
+        site: $localStorage.getItem("api_url")
+      
       $scope.login = (isValid) ->
         if isValid
           $scope.template_vars.show_loading = true
           $scope.formErrors = []
+          
+          #if the site field is used set the api url to the submmited url
+          if AdminLoginOptions.show_api_field
+            if $scope.login.site.indexOf("http") == -1
+              $scope.login.site = "https://" + $scope.login.site
+            $scope.bb.api_url =  $scope.login.site
+            $rootScope.bb.api_url = $scope.login.site
+            $localStorage.setItem("api_url", $scope.login.site)
 
           params =
             email: $scope.login.email
@@ -48,7 +57,7 @@ angular.module('BBAdmin.Directives').directive 'bbAdminLogin', [() ->
 
             # if user is admin 
             if user.$has('administrators')
-              user.getAdministratorsPromise().then () ->
+              user.getAdministratorsPromise().then (administrators) ->
                 $scope.administrators = administrators
 
                 # if user is admin in more than one company show select company
@@ -97,15 +106,15 @@ angular.module('BBAdmin.Directives').directive 'bbAdminLogin', [() ->
                     $scope.onSuccess($scope.login.selected_company)
               , (err) ->
                 $scope.template_vars.show_loading = false
-                $scope.formErrors.push { message: "Sorry, there seems to be a problem with the company associated with this account"}
+                $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
 
             else
               $scope.template_vars.show_loading = false
-              $scope.formErrors.push { message: "Sorry, there seems to be a problem with this account"}
+              $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"}
                             
           , (err) ->
             $scope.template_vars.show_loading = false
-            $scope.formErrors.push { message: "Sorry, either your email or password was incorrect"}
+            $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_INCORRECT_CREDS"}
 
       $scope.pickCompany = ()->
         $scope.template_vars.show_loading = true
