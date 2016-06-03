@@ -93,11 +93,16 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
   *
   * @param {string} route A route of the added another item
   ###
+  # THIS IS FOR SORTING FOR MULTI EVENTS
+  if $scope.bb.basket.timeItems()
+    $scope.multi_basket_grouping = _.groupBy($scope.bb.basket.timeItems(), 'event.description')
+    console.log $scope.multi_basket_grouping
+
   $scope.addAnother = (route) =>
     $scope.clearBasketItem()
     $scope.bb.emptyStackedItems()
     $scope.bb.current_item.setCompany($scope.bb.company)
-    $scope.restart()
+    $scope.decideNextPage(route)
 
   ###**
   * @ngdoc method

@@ -792,7 +792,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return $scope.showPage($scope.bb.nextSteps[$scope.bb.current_page])
     if !$scope.client.valid() && LoginService.isLoggedIn()
       # make sure we set the client to the currently logged in member
-      # we should also jsut check the logged in member is  a member of the company they are currently booking with
+      # we should also just check the logged in member is  a member of the company they are currently booking with
       $scope.client = new BBModel.Client(LoginService.member()._data)
 
     if ($scope.bb.company && $scope.bb.company.companies) || (!$scope.bb.company && $scope.affiliate)
@@ -952,6 +952,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.deleteBasketItem = (item) ->
     BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
       $scope.setBasket(basket)
+      if $scope.basket.items.length == 1
+        $scope.selected_tickets = false
 
   $scope.deleteBasketItems = (items) ->
     for item in items
@@ -1131,6 +1133,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.getCurrentStepTitle = ->
+    console.log steps
     steps = $scope.bb.steps
 
     if !_.compact(steps).length or steps.length == 1 and steps[0].number != $scope.bb.current_step
@@ -1186,7 +1189,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     # Find the last unskipped step
     step_to_load = 0
-    
+
     while past_steps[0]
       last_step = past_steps.pop()
       if !last_step

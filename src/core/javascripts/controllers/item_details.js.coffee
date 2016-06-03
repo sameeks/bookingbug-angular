@@ -30,14 +30,25 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
   restrict: 'AE'
   replace: true
   scope : true
+  transclude: true
   controller : 'ItemDetails'
-  link : (scope, element, attrs) ->
+  link: (scope, element, attrs, controller, transclude) ->
     if attrs.bbItemDetails
       item = scope.$eval(attrs.bbItemDetails)
       scope.item_from_param = item
       delete scope.item_details if scope.item_details
-      scope.loadItem(item)
+      scope.loadItem(item) if item
     return
+    transclude scope, (clone) =>
+      # if there's content compile that or grab the week_calendar template
+      has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+      if has_content
+        element.html(clone).show()
+      else
+        $q.when($templateCache.get('item_details.html')).then (template) ->
+          element.html(template).show()
+          $compile(element.contents())(scope)
+
 
 
 angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService, PurchaseService) ->

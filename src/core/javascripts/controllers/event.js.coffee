@@ -30,7 +30,7 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
 
 
 angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService, FormDataStoreService) ->
-  
+
   $scope.controller = "public.controllers.Event"
   $scope.notLoaded $scope
   angular.extend(this, new PageControllerService($scope, $q))
@@ -107,6 +107,8 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
               item.tickets = angular.copy(ticket)
               item.tickets.qty = 1
               $scope.bb.stackItem(item)
+              if $scope.company.settings.use_shopping_basket
+                $scope.decideNextPage()
           when "multi_space"
             item = new BBModel.BasketItem()
             angular.extend(item, base_item)
@@ -114,6 +116,8 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
             delete item.id
             item.tickets.qty = ticket.qty
             $scope.bb.stackItem(item)
+            if $scope.company.settings.use_shopping_basket
+              $scope.decideNextPage()
 
     # ok so we have them as stacked items
     # now push the stacked items to a basket
@@ -190,7 +194,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * @description
   * Get pre paids for event in according of client and event parameter
   *
-  * @param {array} client The client 
+  * @param {array} client The client
   * @param {array} event The event
   ###
   $scope.getPrePaidsForEvent = (client, event) ->
@@ -207,7 +211,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
   initImage = (images) ->
     image = images[0]
-    if image 
+    if image
       image.background_css = {'background-image': 'url(' + image.url + ')'}
       $scope.event.image = image
       # TODO pick most promiment image
@@ -217,7 +221,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
   initTickets = () ->
 
-    # no need to init tickets if some have been selected already 
+    # no need to init tickets if some have been selected already
     return if $scope.selected_tickets
 
     # if a default number of tickets is provided, set only the first ticket type to that default
@@ -230,10 +234,10 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
     # lock the ticket number dropdown box if only 1 ticket is available to puchase at a time (one-on-one training etc)
     $scope.selectTickets() if $scope.event_options.default_num_tickets and $scope.event_options.auto_select_tickets and $scope.event.tickets.length is 1 and $scope.event.tickets[0].max_num_bookings is 1
-    
+
     $scope.tickets = $scope.event.tickets
     $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
     $scope.stopTicketWatch = $scope.$watch 'tickets', (tickets, oldtickets) ->
       $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
       $scope.event.updatePrice()
-    , true    
+    , true

@@ -64,17 +64,17 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
   # add several items at onece - params should have an array of items:
   updateBasket: (company, params) ->
     deferred = $q.defer()
-    
+
     data = {entire_basket: true, items:[]}
 
     for item in params.items
-      lnk = item.book_link if item.book_link 
-      xdata = item.getPostData() 
+      lnk = item.book_link if item.book_link
+      xdata = item.getPostData()
       # force the date into utc
 #      d = item.date.date._a
 #      date = new Date(Date.UTC(d[0], d[1], d[2]))
 #      xdata.date = date
-      data.items.push(xdata)  
+      data.items.push(xdata)
 
     if !lnk
       deferred.reject("rel book not found for event")
@@ -104,7 +104,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
         MutexService.unlock(mutex)
         deferred.reject(err)
 
-    deferred.promise 
+    deferred.promise
 
 
   checkPrePaid: (item, pre_paid_bookings) ->
@@ -218,7 +218,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
       , (err) ->
         deferred.reject(err)
     deferred.promise
-  
+
 
   applyDeal: (company, params) ->
     deferred = $q.defer()

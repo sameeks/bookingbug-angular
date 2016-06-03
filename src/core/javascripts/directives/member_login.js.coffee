@@ -6,7 +6,7 @@ angular.module('BB').directive 'bbMemberLogin', (PathSvc) ->
       PathSvc.directivePartial "_member_login_form"
     else
       PathSvc.directivePartial "_member_login_schema_form"
-  
+
 
 angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService, ValidatorService) ->
 
