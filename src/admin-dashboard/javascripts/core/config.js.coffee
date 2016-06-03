@@ -4,6 +4,7 @@ angular.module('BBAdminDashboard.controllers', [])
 angular.module('BBAdminDashboard.filters', [])
 angular.module('BBAdminDashboard.services', [])
 angular.module('BBAdminDashboard.directives', [])
+angular.module('BBAdminDashboard.translations', [])
 
 BBAdminDashboardDependencies = [
   'ngStorage',
@@ -13,6 +14,7 @@ BBAdminDashboardDependencies = [
   'ngIdle',
   'ngLocalData', 
   'ngInputDate', 
+  'ngCookies', 
 
   'BBAdmin',
   'BBAdminServices',
@@ -27,11 +29,13 @@ BBAdminDashboardDependencies = [
   'trNgGrid',
   'xeditable', 
   'toggle-switch', 
+  'pascalprecht.translate',
 
   'BBAdminDashboard.controllers',
   'BBAdminDashboard.filters',
   'BBAdminDashboard.services',
   'BBAdminDashboard.directives',
+  'BBAdminDashboard.translations',
 
   'BBAdminDashboard.check-in',
   'BBAdminDashboard.clients',
@@ -112,3 +116,27 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
 .config ($idleProvider, idleStart, idleTimeout) ->
   $idleProvider.idleDuration(idleStart)
   $idleProvider.warningDuration(idleTimeout)
+
+# Translatition Configuration
+.config ['$translateProvider', 'AdminCoreOptionsProvider', ($translateProvider, AdminCoreOptionsProvider) ->
+  # Sanitisation strategy
+  $translateProvider.useSanitizeValueStrategy('sanitize');
+  # Persist language selection in localStorage
+  $translateProvider.useLocalStorage()
+  # # Register available languages and their associations
+  $translateProvider
+    .registerAvailableLanguageKeys(AdminCoreOptionsProvider.getOption('available_languages'),AdminCoreOptionsProvider.getOption('available_language_associations'))
+    # Set fallbacklanguage
+    .fallbackLanguage(AdminCoreOptionsProvider.getOption('available_languages'))
+]
+.run ['$translate', 'AdminCoreOptions', ($translate, AdminCoreOptions) ->
+  # define fallback
+  $translate.preferredLanguage AdminCoreOptions.default_language
+
+  # Depending on configuration use the browser to decide prefered language
+  if AdminCoreOptions.use_browser_language 
+    browserLocale = $translate.negotiateLocale($translate.resolveClientLocale())
+
+    if _.contains(AdminCoreOptions.available_languages, browserLocale)
+      $translate.preferredLanguage browserLocale
+]
