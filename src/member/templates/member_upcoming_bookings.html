@@ -1,21 +1,50 @@
 <div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
+
 <div ng-hide="loading" class="bb-upcoming clearfix">
-  <div id="bookings">
+
+  <div>
+
     <div ng-show="upcoming_bookings.length == 0">
       <h3>You don't currently have any upcoming bookings.</h3>
     </div>
-    <div ng-repeat="booking in upcoming_bookings | filter:{deleted: false} | orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" class="booking-row">
-      <div class="datetime">
-        <div>{{booking.datetime.format('Do MMM YYYY h.mma')}}</div>
-      </div>
-      <div class="describe">
-        <div class="detail">{{booking.full_describe}}</div>
-      </div>
-      <div class="bb-bookings-action">
-        <button ng-click="cancel(booking)" class="btn btn-danger bb-push">Cancel</button>
-        <button ng-click="edit(booking)" class="btn bb-push">Details</button>
-      </div>
-    </div>
+
+    <h3>On Waitlist</h3>
+
+    <ul class="bb-list bb-list-banded bb-list-bordered">
+    </ul>
+
+    <hr/>
+
+    <h3>Confirmed</h3>
+
+    <ul class="bb-list bb-list-banded bb-list-bordered" ng-repeat="booking in upcoming_bookings | filter:{deleted: false, on_waitlist: true} | orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
+
+      <li>
+
+        <h4>{{booking.full_describe}}</h4>
+
+        <ul class="bb-list bb-list-horizontal bb-bordered bb-block bb-block-sm">
+          <li>
+            <i class="fa fa-calendar" aria-hidden="true"></i>
+            {{booking.datetime | datetime: 'date'}}
+          </li>
+          <li>
+            <i class="fa fa-clock-o" aria-hidden="true"></i>
+            {{booking.datetime | datetime: 'time'}}
+          </li>
+        </ul>
+
+
+        <div class="describe">
+          <div class="detail"></div>
+        </div>
+        <div class="bb-bookings-action">
+          <button ng-click="cancel(booking)" class="btn btn-danger bb-push">Cancel</button>
+          <button ng-click="edit(booking)" class="btn bb-push">Details</button>
+        </div>
+      </li>
+
+    </ul>
 
     <pagination total-items="pagination.num_items"
       ng-model="pagination.current_page" items-per-page="pagination.page_size"
