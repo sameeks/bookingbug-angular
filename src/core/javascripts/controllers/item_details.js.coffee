@@ -270,10 +270,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
         AlertService.add("info", { msg: translated_text })
     else
-      cc = SettingsService.getCountryCode()
-      cc = "uk" if cc != "us"
-      date_format = if (cc == 'uk') then 'LLLL' else 'dddd, MMMM Do[,] h:mm A'
-      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format(date_format)}" })
+      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
 
 
   ###**
