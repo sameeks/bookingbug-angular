@@ -27,9 +27,10 @@ BBAdminDashboardDependencies = [
   'ui.select',
   'ct.ui.router.extras',
   'trNgGrid',
-  'xeditable', 
   'toggle-switch', 
   'pascalprecht.translate',
+  'angular-loading-bar',
+  'ngScrollable',
 
   'BBAdminDashboard.controllers',
   'BBAdminDashboard.filters',
@@ -39,7 +40,6 @@ BBAdminDashboardDependencies = [
 
   'BBAdminDashboard.check-in',
   'BBAdminDashboard.clients',
-  'BBAdminDashboard.departments',
   'BBAdminDashboard.login',
   'BBAdminDashboard.logout',
   'BBAdminDashboard.calendar',
@@ -94,7 +94,7 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
           user.getCompanyPromise().then (company) ->
             if company.companies && company.companies.length > 0
               $timeout () ->
-                $state.go 'departments', {}, {reload: true}
+                $state.go 'login', {}, {reload: true}
             else
               defer.resolve(company)
           , (err) ->

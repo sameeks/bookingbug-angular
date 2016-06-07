@@ -127,10 +127,10 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.options = $scope.$eval $attrs.bbResourceCalendar
     $scope.options ||= {}
 
-    height = if $scope.options.header_height
-      $bbug($window).height() - $scope.options.header_height
-    else
-      800
+    # height = if $scope.options.header_height
+    #   $bbug($window).height() - $scope.options.header_height
+    # else
+    #   800
 
     if not $scope.options.min_time?
       $scope.options.min_time = GeneralOptions.calendar_min_time
@@ -149,7 +149,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         eventDurationEditable: false
         minTime: $scope.options.min_time
         maxTime: $scope.options.max_time
-        height: height
+        height: 'auto'
         header:
           left: 'today,prev,next'
           center: 'title'

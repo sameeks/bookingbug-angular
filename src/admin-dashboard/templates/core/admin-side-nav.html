@@ -1,0 +1,6 @@
+<div ng-repeat="goup in navigation">
+	<ul class="sidebar-menu" ng-if="goup.group_name">
+		<li class="header" translate>{{goup.group_name}}</li>
+	</ul>
+	<div ng-repeat="partialNav in goup.items" ng-include="partialNav.navPartial"></div>
+</div>

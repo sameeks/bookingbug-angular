@@ -84,3 +84,19 @@ html,body {
     }
   }
 }
+
+.sidebar-toggle.off {
+  &:before {
+    content: "\f00d" !important;
+  }
+}
+
+#loading-bar-spinner {
+    top: 15px !important;
+    left: 10px !important;
+
+    .spinner-icon {
+        height: 20px !important;
+        width: 20px !important;
+    }
+}

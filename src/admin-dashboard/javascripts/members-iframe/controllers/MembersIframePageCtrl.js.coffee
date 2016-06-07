@@ -11,11 +11,8 @@ angular.module('BBAdminDashboard.members-iframe.controllers')
 .controller 'MembersIframePageCtrl',['$scope', '$state', '$rootScope', '$window', ($scope, $state, $rootScope, $window) ->
 
   $scope.parent_state = $state.is("members")
-  $scope.bb.side_menu = "member_menu"
-  $scope.path = "client"
 
   $rootScope.$on '$stateChangeStart', (event, toState, toParams, fromState, fromParams) ->
-    $scope.adminlte.fixed_page = toParams.fixed
     $scope.parent_state = false
     if (toState.name == "members")
       $scope.parent_state = true

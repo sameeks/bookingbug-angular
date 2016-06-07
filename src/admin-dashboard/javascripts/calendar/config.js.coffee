@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.calendar', [
   'BBAdminDashboard.calendar.directives',
   'BBAdminDashboard.calendar.translations'
 ])
-.run ['RuntimeStates', 'AdminCalendarOptions', (RuntimeStates, AdminCalendarOptions) ->
+.run ['RuntimeStates', 'AdminCalendarOptions', 'SideNavigationPartials', (RuntimeStates, AdminCalendarOptions, SideNavigationPartials) ->
   # Choose to opt out of the default routing
   if AdminCalendarOptions.use_default_states
 
@@ -21,4 +21,7 @@ angular.module('BBAdminDashboard.calendar', [
         url: "/calendar/:assets"
         templateUrl: "calendar_page.html"
         controller: 'CalendarPageCtrl'
+
+  if AdminCalendarOptions.show_in_navigation 
+    SideNavigationPartials.addPartialTemplate('calendar', 'calendar/nav.html')    
 ]    

@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
   'BBAdminDashboard.settings-iframe.directives',
   'BBAdminDashboard.settings-iframe.translations',
 ])
-.run ['RuntimeStates', 'AdminSettingsIframeOptions', (RuntimeStates, AdminSettingsIframeOptions) ->
+.run ['RuntimeStates', 'AdminSettingsIframeOptions', 'SideNavigationPartials', (RuntimeStates, AdminSettingsIframeOptions, SideNavigationPartials) ->
   # Choose to opt out of the default routing
   if AdminSettingsIframeOptions.use_default_states
 
@@ -29,4 +29,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
         url: "/page/:path"
         templateUrl: "iframe_page.html"
         controller: 'SettingsSubIframePageCtrl'  
+
+  if AdminSettingsIframeOptions.show_in_navigation 
+    SideNavigationPartials.addPartialTemplate('settings-iframe', 'settings-iframe/nav.html')       
 ]  

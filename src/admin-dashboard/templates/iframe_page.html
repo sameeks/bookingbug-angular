@@ -1,6 +1,6 @@
-<div bb-frame>
-  <iframe class="bb-page-frame" ng-style="adminlte.iframe_style"
-    seamless="seamless" lte-pin-bottom scrolling="no" ng-src="{{frame_src}}"
-    allowtransparency="true" style="display:none" onload="this.style.display = 'block';">
-  </iframe>
-</div>
+<section class="content-header" ng-if="pageHeader">
+  <h1>{{pageHeader}}</h1>
+</section>
+<section class="content">
+	<div admin-iframe path="path" api-url="bb.api_url" extra-params="extra_params"></div>
+</section>	

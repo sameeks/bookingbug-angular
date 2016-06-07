@@ -5,7 +5,7 @@
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
             <!-- Sidebar toggle button-->
-            <a class="sidebar-toggle" ng-click="page.sideMenuOn = !page.sideMenuOn" role="button">
+            <a class="sidebar-toggle" ng-class="{off: page.sideMenuOn}" ng-click="page.sideMenuOn = !page.sideMenuOn" role="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -41,44 +41,7 @@
     <!-- Left side column. contains the sidebar -->
     <aside class="main-sidebar" ng-scrollable="{scrollX:'none',scrollY:'right'}" content-height include-header="false" include-footer="false">
         <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-            <ul class="sidebar-menu">
-                <li ng-class="{active: isState('admin.dashboard')}">
-                    <a ui-sref="admin.dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>
-                </li>
-                <li class="header">BOOKINGS</li>
-                <li class="treeview" ng-class="{active: isState('admin.calendar')}">
-                    <a ui-sref="admin.calendar"><i class="fa fa-calendar"></i> Calendar</a>
-                    <ul class="treeview-menu">
-                        <li ng-class="{active: isState('admin.calendar.dashboard')}"><a ui-sref="admin.calendar.dashboard"><i class="fa fa-calendar"></i> Dashboard</a></li>
-                        <li ng-class="{active: isState('admin.calendar.upcoming')}"><a ui-sref="admin.calendar.upcoming"><i class="fa fa-calendar-plus-o"></i> Upcoming</a></li>
-                        <li ng-class="{active: isState('admin.calendar.search')}"><a ui-sref="admin.calendar.search"><i class="fa fa-search"></i> Search</a></li>
-                        <li ng-class="{active: isState('admin.calendar.bulk')}"><a ui-sref="admin.calendar.bulk"><i class="fa fa-cloud"></i> Bulk</a></li>
-                        <li ng-class="{active: isState('admin.calendar.insights')}"><a ui-sref="admin.calendar.insights"><i class="fa fa-bar-chart"></i> Insights</a></li>
-                    </ul>
-                </li>
-                <li ng-class="{active: isState('admin.customers')}">
-                    <a ui-sref="admin.customers"><i class="fa fa-users"></i> Customers</a>
-                </li>
-                <li ng-class="{active: isState('admin.check-in')}">
-                    <a ui-sref="admin.check-in"><i class="fa fa-calendar-check-o"></i> Check in</a>
-                </li>
-                <li class="header">CONFIGURATION</li>
-                <li class="treeview" ng-class="{active: isState('admin.settings')}">
-                    <a ui-sref="admin.settings"><i class="fa fa-cogs"></i> Settings</a>
-                    <ul class="treeview-menu">
-                        <li ng-class="{active: isState('admin.settings.business')}"><a ui-sref="admin.settings.business"><i class="fa fa-home"></i> Your business</a></li>
-                        <li ng-class="{active: isState('admin.settings.events')}"><a ui-sref="admin.settings.events"><i class="fa fa-calendar"></i> Events</a></li>
-                        <li ng-class="{active: isState('admin.settings.promotions')}"><a ui-sref="admin.settings.promotions"><i class="fa fa-tags"></i> Promotions</a></li>
-                        <li ng-class="{active: isState('admin.settings.bookings')}"><a ui-sref="admin.settings.bookings"><i class="fa fa-book"></i> Bookings</a></li>
-                    </ul>
-                </li>
-                <li class="header">MISC</li>
-                <li>
-                    <a href="http://feedback.bookingbug.com/" target="_blank"><i class="fa fa-question-circle"></i> Knowledge base</a>
-                </li>
-            </ul>
-        </section>
+        <section class="sidebar" admin-side-nav></section>
         <!-- /.sidebar -->
     </aside>
 

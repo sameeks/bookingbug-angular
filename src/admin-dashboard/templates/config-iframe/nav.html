@@ -1,0 +1,12 @@
+<ul class="sidebar-menu">
+	<li ng-class="{active: isState('config')}">
+		<a ui-sref="config"><i class="fa fa-cogs"></i> Config</a>
+		<ul class="treeview-menu">
+			<li ui-sref-active="active"><a ui-sref="config.page({path: 'resource'})"><i class="fa fa-square"></i> <span>Resources</span></a></li>
+		  <li ui-sref-active="active"><a ui-sref="config.page({path: 'person'})"><i class="fa fa-user"></i> <span>People</span></a></li>
+		  <li ui-sref-active="active"><a ui-sref="config.page({path: 'service'})"><i class="fa fa-list"></i> <span>Services</span></a></li>
+		  <li ui-sref-active="active"><a href="#"><i class="fa fa-money"></i> <span>Promotions</span></a></li>
+		  <li ui-sref-active="active"><a href="#"><i class="fa fa-wrench"></i> <span>Booking Settings</span></a></li>
+    </ul>
+	</li>
+</ul>	
