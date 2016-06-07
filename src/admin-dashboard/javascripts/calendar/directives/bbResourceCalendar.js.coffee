@@ -40,6 +40,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             company.$get('external_bookings', {no_cache: true}).then (collection) ->
               collection.$get('external_bookings').then (bookings) ->
                 b.resourceId = b.person_id for b in bookings
+                b.type = 'external' for b in bookings
                 callback(bookings)
           else
             callback([])
@@ -187,9 +188,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             $scope.editBooking(event)
         eventRender: (event, element) ->
           # If its a blocked timeslot add colored overlay
-          if event.status == 3
+          if event.status == 3 || event.type == 'external'
             element.find('.fc-bg').css({'background-color':'#000'})
-
+            
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
             element.css('background-color', service.color)
