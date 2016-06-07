@@ -21,9 +21,13 @@ angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
     minuteStep: '=?'
     minDate: '=?'
     maxDate: '=?'
+    format: '=?'
   restrict: 'A'
   templateUrl : 'bb_date_time_picker.html'
   controller: ($scope, $filter, $timeout, GeneralOptions) ->
+    if !$scope.format?
+      $scope.format = 'dd/MM/yyyy'
+
     # Default minuteStep value
     $scope.minuteStep = GeneralOptions.calendar_minute_step if not $scope.minuteStep or typeof $scope.minuteStep == 'undefined'
 
