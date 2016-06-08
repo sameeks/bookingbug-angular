@@ -20,6 +20,7 @@ BBAdminDashboardDependencies = [
   'BBAdminServices',
   'BBAdminBooking',
   'BBAdmin.Directives',
+  'BBMember',
 
   'ui.calendar', 
   'ui.bootstrap',

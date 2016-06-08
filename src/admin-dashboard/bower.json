@@ -36,6 +36,7 @@
 
     "bookingbug-angular-core": "master",
     "bookingbug-angular-admin": "master",
+    "bookingbug-angular-member": "master",
     "adminlte-bower": "^2.3.3",
     "fullcalendar": "2.7.2",
     "fullcalendar-scheduler": "1.3.1",

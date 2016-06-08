@@ -1,0 +1,86 @@
+<section class="content-header">
+  <h1>
+      Client: {{client.name}}
+  </h1>
+</section>
+<section class="content">
+  <div class="row" >
+    <div class="col-lg-3 col-md-4">
+      <!-- Profile Image -->
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <img class="profile-user-img img-responsive img-circle"
+          src="images/photo_hold.jpg" alt="User profile picture">
+          <h3 class="profile-username text-center">{{client.name}}</h3>
+          <p class="text-muted text-center"  ng-bind-html="(client.email || 'empty') | linky"></p>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+      
+    <div class="col-lg-9 col-md-8">
+      <!-- About Me Box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">About {{client.first_name}}</h3>
+        </div><!-- /.box-header -->
+        <table class="table table-striped">
+          <tr>
+            <td width="100"><b>Email</b></td>
+            <td ng-bind-html="(client.email || 'empty') | linky"></td>
+          </tr>
+          <tr>
+            <td><b>Mobile</b></td>
+            <td><a ng-href="tel:{{client.mobile}}" target=_blank>{{client.mobile}}</a></td>
+          </tr>
+          <tr>
+            <td><b>Phone</b></td>
+            <td><a ng-href="tel:{{client.phone}}" target=_blank>{{client.phone}}</a></td>
+          </tr>
+          <tr>
+            <td><b>Address</b></td>
+            <td><span ng-bind-html="client.addressMultiLine()"></span></td>
+          </tr>
+        </table>
+      </div><!-- /.box -->
+    </div>
+  </div>  
+  <div class="row">
+    <div class="col-md-12">
+  
+      <tabset class="bb-tabs nav-tabs-custom">
+
+        <tab id="client-upcoming-booking-tab">
+          <tab-heading>
+            Upcoming Bookings
+          </tab-heading>
+
+          <div member-bookings-table member="client"></div>
+    
+        </tab>
+    
+        <tab  id="client-past-booking-tab">
+          <tab-heading>
+            Past Bookings
+          </tab-heading>
+
+          <div member-bookings-table member="client"
+            start-date="historicalStartDate"
+            end-date="historicalEndDate"></div>
+    
+        </tab> 
+
+        <tab id="client-details-tab" >
+          <tab-heading>
+            Customer Details
+          </tab-heading>
+
+          <div member-form member="client" on-success-save="memberSaveCallback"></div>
+
+        </tab>
+
+    
+      </tabset>
+
+    </div>
+  </div>  
+</section>  
