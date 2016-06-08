@@ -10,13 +10,13 @@ angular.module('BBMember.Services').factory "MemberBookingService", ($q,
     else
       member.$get('bookings', params).then (bookings) =>
         if angular.isArray bookings
-          bookings = for booking in bookings
-            new BBModel.Member.Booking(booking)
+          # bookings embedded in member
+          bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
           deferred.resolve(bookings)
         else
+          params.no_cache = false
           bookings.$get('bookings', params).then (bookings) =>
-            bookings = for booking in bookings
-              new BBModel.Member.Booking(booking)
+            bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
             deferred.resolve(bookings)
           , (err) ->
             deferred.reject(err)

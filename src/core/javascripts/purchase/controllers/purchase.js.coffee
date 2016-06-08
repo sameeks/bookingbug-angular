@@ -231,21 +231,30 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
   $scope.bookWaitlistItem = (booking) ->
+
     $scope.notLoaded $scope
-    params = { purchase: $scope.purchase, booking: booking }
+
+    params =
+      purchase: $scope.purchase
+      booking: booking
+
     PurchaseService.bookWaitlistItem(params).then (purchase) ->
+
       $scope.purchase = purchase
       $scope.total = $scope.purchase
       $scope.bb.purchase = purchase
+
       $scope.purchase.getBookingsPromise().then (bookings) ->
         $scope.bookings = bookings
-        $scope.waitlist_bookings = (booking for booking in $scope.bookings when (booking.on_waitlist && booking.settings.sent_waitlist == 1))
-        if $scope.purchase.$has('new_payment') && $scope.purchase.due_now > 0
+        $scope.waitlist_bookings = (booking for booking in $scope.bookings when (booking.on_waitlist and booking.settings.sent_waitlist is 1))
+        if $scope.purchase.$has('new_payment') and $scope.purchase.due_now > 0
           $scope.make_payment = true
         $scope.setLoaded $scope
+
       , (err) ->
         $scope.setLoaded $scope
         failMsg()
+
     , (err) =>
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -256,8 +265,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDelete
       resolve:
-        booking: ->
-          booking    
+        booking: -> booking    
    
     modalInstance.result.then (booking) ->
       booking.$del('self').then (service) =>
@@ -271,8 +279,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDeleteAll
       resolve:
-        purchase: ->
-          $scope.purchase
+        purchase: -> $scope.purchase
     modalInstance.result.then (purchase) ->
       PurchaseService.deleteAll(purchase).then (purchase) ->
         $scope.purchase = purchase

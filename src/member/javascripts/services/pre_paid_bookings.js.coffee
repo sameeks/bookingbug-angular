@@ -9,11 +9,12 @@ angular.module('BBMember.Services').factory "MemberPrePaidBookingService", ($q, 
     else
       member.$get('pre_paid_bookings', params).then (bookings) =>
         if angular.isArray bookings
-          # pre paid bookings were embedded in member
+          # pre paid bookings embedded in member
           bookings = for booking in bookings
             new BBModel.PrePaidBooking(booking)
           deferred.resolve(bookings)
         else
+          params.no_cache = false
           bookings.$get('pre_paid_bookings', params).then (bookings) =>
             bookings = for booking in bookings
               new BBModel.PrePaidBooking(booking)
