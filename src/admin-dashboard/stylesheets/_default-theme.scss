@@ -39,6 +39,20 @@ $screen-header-collapse : $screen-xs-max;
           background-color: darken($theme-color, 5%);
         }
       }
+
+      .navbar-custom-menu {
+        .language-picker {
+          .btn-default {
+            color: #fff;
+          }
+
+          input.form-control {
+            color: #fff;
+            @include placeholder(#fff);
+          }
+        }
+      }
+
       @media (max-width: $screen-header-collapse) {
         .dropdown-menu {
           li {

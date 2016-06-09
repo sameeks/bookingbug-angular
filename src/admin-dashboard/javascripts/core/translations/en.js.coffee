@@ -9,8 +9,10 @@
 ###
 angular.module('BBAdminDashboard.translations')
 .config ['$translateProvider', ($translateProvider)->
-	$translateProvider.translations('en',{
+  $translateProvider.translations('en',{
     'SIDE_NAV_BOOKINGS': 'BOOKINGS',
     'SIDE_NAV_CONFIG': 'CONFIGURATION',
+    'LANGUAGE_EN': 'English',
+    'LANGUAGE_ES': 'Spanish'    
   })
 ]

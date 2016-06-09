@@ -11,6 +11,7 @@ angular.module('BBAdminDashboard.controllers')
 .controller 'CorePageController',['$scope', '$state', 'company', 'SideNavigationPartials', ($scope, $state, company, SideNavigationPartials) ->
   $scope.company = company
   $scope.bb.company = company
+
   #Set timezone globally per company basis (company contains timezone info)
   moment.tz.setDefault(company.timezone)
 

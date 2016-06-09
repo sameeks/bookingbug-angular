@@ -32,6 +32,7 @@ BBAdminDashboardDependencies = [
   'pascalprecht.translate',
   'angular-loading-bar',
   'ngScrollable',
+  'toastr',
 
   'BBAdminDashboard.controllers',
   'BBAdminDashboard.filters',
@@ -59,7 +60,7 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
   $urlRouterProvider.otherwise("/" + $stateProvider.root_state)
   $stateProvider
     .state 'root',
-      templateUrl: "admin_layout.html"
+      templateUrl: "core/admin-layout.html"
       resolve:
         sso: ($q, sso_token, AdminLoginService, $injector) ->
           defer = $q.defer()
