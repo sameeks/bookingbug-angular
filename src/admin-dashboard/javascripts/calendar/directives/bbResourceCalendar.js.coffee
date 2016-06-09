@@ -5,7 +5,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $timeout, $compile, $templateCache, BookingCollections, PrePostTime,
     AdminScheduleService, $filter) ->
 
-  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions) ->
+  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions, AdminCalendarOptions) ->
 
     filters = {
       requestedAssets : ProcessAssetsFilter($state.params.assets)
@@ -173,6 +173,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         resourceLabelText: ' '
         selectable: true
         lazyFetching: false
+        columnFormat: AdminCalendarOptions.column_format or null
         resources: (callback) ->
           getCalendarAssets(callback)
         eventDrop: (event, delta, revertFunc) ->
