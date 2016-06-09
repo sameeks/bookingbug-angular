@@ -71,7 +71,7 @@ $screen-header-collapse : $screen-xs-max;
     }
     //Logo
     .logo {
-      background: url("/images/bb-logo.svg") no-repeat center center;
+      background: url("images/bb-logo.svg") no-repeat center center;
       background-size: contain;
 
       @include logo-variant(#ffffff);
