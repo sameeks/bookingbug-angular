@@ -173,7 +173,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         resourceLabelText: ' '
         selectable: true
         lazyFetching: false
-        columnFormat: AdminCalendarOptions.column_format or null
+        columnFormat: AdminCalendarOptions.column_format
         resources: (callback) ->
           getCalendarAssets(callback)
         eventDrop: (event, delta, revertFunc) ->
