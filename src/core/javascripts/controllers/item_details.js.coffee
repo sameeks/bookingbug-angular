@@ -161,7 +161,10 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   $scope.recalc_price = ->
     qprice = $scope.item_details.questionPrice($scope.item.getQty())
     bprice = $scope.item.base_price
+    bprice = $scope.item.price unless bprice
+
     $scope.item.setPrice(qprice + bprice)
+
 
 
   ###**

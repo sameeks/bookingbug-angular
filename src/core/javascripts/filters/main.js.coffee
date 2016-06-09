@@ -272,27 +272,11 @@ angular.module('BB.Filters').filter 'key_translate', ->
     add_underscore = remove_punctuations.replace(/\ /g, "_")
     return add_underscore
 
-# unused in this repo, english-only
-app.filter 'twelve_hour_time', ($window) ->
-  (time, options) ->
-
-    return if !angular.isNumber(time)
-
-    omit_mins_on_hour = options && options.omit_mins_on_hour or false
-    seperator         = if options && options.seperator then options.seperator else ":"
-
-    t = time
-    h = Math.floor(t / 60)
-    m = t%60
-    suffix = 'am'
-    suffix = 'pm' if h >=12
-    h -=12 if (h > 12)
-    if m is 0 && omit_mins_on_hour
-      time = "#{h}"
-    else
-      time = "#{h}#{seperator}" + $window.sprintf("%02d", m)
-    time += suffix
-    return time
+angular.module('BB.Filters').filter 'nl2br', ->
+  return (str) ->
+    if str
+      # replace new lines with <br/> tags for multiline display in HTML
+      return str.replace(/\n/g, '<br/>')
 
 app.filter 'clearTimezone', ->
   (val, offset) ->

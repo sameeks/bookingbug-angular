@@ -121,12 +121,13 @@ angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
 * <form name="example_form" bb-form></form>
 *
 ####
-angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService, ValidatorService) ->
+angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService, ValidatorService, $timeout) ->
   restrict: 'A'
   require: '^form'
+  scope: true
   link: (scope, elem, attrs, ctrls) ->
 
-    form = ctrls
+    scope.form = ctrls
 
     # set up event handler on the form element
     elem.on "submit", ->
@@ -136,28 +137,30 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsSer
 
     scope.submitForm = () ->
 
-      form.submitted = true
+      scope.form.submitted = true
 
       # mark nested forms as submitted too
-      for property of form
-        if angular.isObject(form[property]) and form[property].hasOwnProperty('$valid')
-          form[property].submitted = true
+      for property of scope.form
+        if angular.isObject(scope.form[property]) and scope.form[property].hasOwnProperty('$valid')
+          scope.form[property].submitted = true
 
-      invalid_form_group = elem.find('.has-error:first')
+      $timeout ->
+        invalid_form_group = elem.find('.has-error:first')
 
-      if invalid_form_group and invalid_form_group.length > 0 and !form.raise_alerts
-        
-        if 'parentIFrame' of $window
-          parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
-        else
-          $bbug("html, body").animate
-            scrollTop: invalid_form_group.offset().top - SettingsService.getScrollOffset()
-            , 1000
+        if invalid_form_group and invalid_form_group.length > 0 and !scope.form.raise_alerts
+          
+          if 'parentIFrame' of $window
+            parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
+          else
+            $bbug("html, body").animate
+              scrollTop: invalid_form_group.offset().top - SettingsService.getScrollOffset()
+              , 1000
 
-        invalid_input = invalid_form_group.find('.ng-invalid')
-        invalid_input.focus()
+          invalid_input = invalid_form_group.find('.ng-invalid')
+          invalid_input.focus()
+      , 100
 
-      return ValidatorService.validateForm(form)
+      return ValidatorService.validateForm(scope.form)
 
 
 

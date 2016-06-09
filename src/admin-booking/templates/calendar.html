@@ -53,7 +53,7 @@
               </div>
 
               <div class="form-group" ng-if="bb.company.$has('people')">
-                <select bb-people class=" form-control" id="person" ng-model="person" ng-options="p.name for p in bookable_people | orderBy: 'name'" >
+                <select bb-people class=" form-control" id="person" ng-model="person" ng-options="p.name for p in bookable_people | orderBy: 'name'">
                   <option value="">Any person</option>
                 </select>
               </div>
@@ -103,13 +103,15 @@
               <div class="accordion-group">
                 <div class="panel panel-default">
 
-                  <ul class="time-slots">
+                  <ul class="time-slots" ng-if="slots.length > 0">
 
                     <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(slot, selected_day)" ng-repeat="slot in slots | in_the_future | limitTo: 10">
                       <span>{{slot.time_moment | datetime: 'time'}} (in {{slot.time | tod_from_now }})</span>
                     </li>
 
                   </ul>
+
+                  <p class="text-center" ng-if="slots.length == 0">No availability found, try a different time-range</p>
 
                 </div>
               </div>
@@ -183,8 +185,6 @@
 
         <p>Overbooking ignores booking time step and availability constraints to make a booking.</p>
 
-        <p>Selected date and time:</p>
-
         <ul class="bb-list bb-list-horizontal bb-bordered bb-block bb-block-sm">
           <li>
             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -193,6 +193,14 @@
           <li>
             <i class="fa fa-clock-o" aria-hidden="true"></i>
             {{bb.current_item.defaults.datetime | datetime: 'time'}}
+          </li>
+          <li ng-show="bb.current_item.defaults.person">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            {{bb.current_item.defaults.person.name}}
+          </li>
+          <li ng-show="bb.current_item.defaults.resource">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            {{bb.current_item.defaults.resource.name}}
           </li>
         </ul>
         

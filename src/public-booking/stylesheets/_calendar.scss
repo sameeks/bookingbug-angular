@@ -220,11 +220,11 @@
     span.glyphicon{
        font-size: 40px;
        width: 100%;
-      }   
+      }
     }
     button{
       width: 100%;
-    }  
+    }
   }
 }
 
@@ -273,19 +273,22 @@
       }
     }
 
-    button.btn-default{       
+    button.btn-default{
         &:hover, &:active, &:focus{
            background-image: linear-gradient(to bottom, #eff3e9 0%, #fff 100%);
            outline: none;
            span{
             font-weight: bold;
            }
-        }        
+        }
     }
-    
+
   }
 }
-
+// for the new time slot disabled method
+.time-slot.disabled{
+  opacity: 0.2;
+}
 
 // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 // DATEPICKER DEFAULT SCHEMA end
