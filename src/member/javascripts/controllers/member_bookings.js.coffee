@@ -1,4 +1,4 @@
-angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope, AlertService) ->
+angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope, AlertService, PurchaseService) ->
 
   $scope.loading = true
 
@@ -152,22 +152,30 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     # , (err) =>
     #   $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
+    params =
+      purchase_id: booking.purchase_ref
+      url_root: $rootScope.bb.api_url
+      booking: booking
 
+    PurchaseService.bookWaitlistItem(params).then (purchase_total) ->
+      if purchase_total.$has('new_payment')
+        #$scope.total = purchase_total
+        openPaymentModal(booking, purchase_total)
+      else
+        $log.error "total is missing new_payment link"
+
+      $scpe.loading = false
+
+
+  openPaymentModal = (booking, total) ->
     modalInstance = $modal.open
-      templateUrl: "member_waitlist_payment.html"
+      templateUrl: "booking_payment_modal.html"
       windowClass: "bbug"
       size: "lg"
-      controller: ($scope, $rootScope, $modalInstance, booking, PurchaseService ) ->
+      controller: ($scope, $rootScope, $modalInstance, booking, total, PurchaseService) ->
         
         $scope.booking = booking
-
-        params =
-          purchase_id: booking.purchase_ref
-          url_root: $rootScope.bb.api_url
-          booking: booking
-
-        PurchaseService.bookWaitlistItem(params).then (purchase_total) ->
-          $scope.total = purchase_total
+        $scope.total = total
 
         $scope.handlePaymentSuccess = () ->
           $modalInstance.close(booking)
@@ -177,6 +185,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     
       resolve:
         booking: -> booking
+        total: -> total
 
     modalInstance.result.then (booking) ->
       AlertService.success({msg: "You're booking is now confirmed!"})
