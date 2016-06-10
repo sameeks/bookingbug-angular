@@ -1,15 +1,16 @@
-angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, PaginationService) ->
+angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, BBModel) ->
   templateUrl: 'member_past_bookings.html'
   scope:
     member: '='
   controller: 'MemberBookings'
   link: (scope, element, attrs) ->
 
-    scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
+    scope.pagination = BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 100})
 
     getBookings = () ->
       scope.getPastBookings().then (past_bookings) ->
-        PaginationService.update(scope.pagination, past_bookings.length)
+        scope.pagination.num_items = past_bookings.length
+        scope.pagination.update()
 
 
     scope.$watch 'member', () ->
