@@ -138,33 +138,25 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     
     $scope.loading = true
 
-      # load modal to handle payment (what about payment redirects?) or add item to basket (nothing to checkout though, just payment then confirm), lets go for a modal - that would be consient with edit and cancel then
-
-      #$scope.purchase.getBookingsPromise().then (bookings) ->
-        #$scope.bookings = bookings
-        #$scope.waitlist_bookings = (booking for booking in $scope.bookings when (booking.on_waitlist && booking.settings.sent_waitlist == 1))
-        # if $scope.purchase.$has('new_payment') && $scope.purchase.due_now > 0
-        #   $scope.make_payment = true
-    #     $scope.setLoaded $scope
-    #   , (err) ->
-    #     $scope.setLoaded $scope
-    #     failMsg()
-    # , (err) =>
-    #   $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
     params =
       purchase_id: booking.purchase_ref
       url_root: $rootScope.bb.api_url
       booking: booking
 
     PurchaseService.bookWaitlistItem(params).then (purchase_total) ->
-      if purchase_total.$has('new_payment')
-        #$scope.total = purchase_total
-        openPaymentModal(booking, purchase_total)
+      if purchase_total.due_now > 0 
+        if purchase_total.$has('new_payment')
+          openPaymentModal(booking, purchase_total)
+        else
+          $log.error "total is missing new_payment link, this is usually caused by online payment not being configured correctly"
       else
-        $log.error "total is missing new_payment link"
 
-      $scpe.loading = false
+      $scope.loading = false
+
+
+  bookWaitlistSucces = () ->
+    AlertService.success({msg: "You're booking is now confirmed!"})
+    updateBookings()
 
 
   openPaymentModal = (booking, total) ->
@@ -188,6 +180,5 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
         total: -> total
 
     modalInstance.result.then (booking) ->
-      AlertService.success({msg: "You're booking is now confirmed!"})
-      updateBookings()
+      bookWaitlistSucces()
 
