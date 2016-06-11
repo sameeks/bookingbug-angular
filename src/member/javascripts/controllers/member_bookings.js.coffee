@@ -150,7 +150,8 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
         else
           $log.error "total is missing new_payment link, this is usually caused by online payment not being configured correctly"
       else
-
+        bookWaitlistSucces()
+        
       $scope.loading = false
 
 
