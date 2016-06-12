@@ -151,7 +151,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
           $log.error "total is missing new_payment link, this is usually caused by online payment not being configured correctly"
       else
         bookWaitlistSucces()
-        
+
       $scope.loading = false
 
 
@@ -165,10 +165,12 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       templateUrl: "booking_payment_modal.html"
       windowClass: "bbug"
       size: "lg"
-      controller: ($scope, $rootScope, $modalInstance, booking, total, PurchaseService) ->
+      controller: ($scope, $rootScope, $modalInstance, booking, total, notLoaded, setLoaded) ->
         
         $scope.booking = booking
         $scope.total = total
+        $scope.notLoaded = notLoaded
+        $scope.setLoaded = setLoaded
 
         $scope.handlePaymentSuccess = () ->
           $modalInstance.close(booking)
@@ -179,6 +181,8 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       resolve:
         booking: -> booking
         total: -> total
+        notLoaded: -> $scope.notLoaded
+        setLoaded: -> $scope.setLoaded
 
     modalInstance.result.then (booking) ->
       bookWaitlistSucces()

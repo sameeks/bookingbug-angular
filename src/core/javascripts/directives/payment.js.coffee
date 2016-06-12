@@ -5,6 +5,8 @@ angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $h
     total: '='
     bb: '='
     decideNextPage: '='
+    notLoaded: '='
+    setLoaded: '='
   link: (scope, element, attributes) ->
 
     getTemplate = (type, scope) ->
