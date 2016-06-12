@@ -36,7 +36,7 @@ angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $h
           $(element).removeClass(c)
 
     killWatch = scope.$watch 'total', (total) ->
-      if total
+      if total and total.$has('new_payment')
         killWatch()
         scope.bb.payment_status = "pending"
         scope.bb.total = scope.total
