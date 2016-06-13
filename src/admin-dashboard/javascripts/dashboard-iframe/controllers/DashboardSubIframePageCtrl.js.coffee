@@ -9,5 +9,8 @@
 ###
 angular.module('BBAdminDashboard.dashboard-iframe.controllers')
 .controller 'DashboardSubIframePageCtrl',['$scope', '$state', '$stateParams', ($scope, $state, $stateParams) ->
-   $scope.path = $stateParams.path
+  $scope.path = $stateParams.path
+
+  if $scope.path == 'view/dashboard/index'
+  	$scope.fullHeight = true
 ]

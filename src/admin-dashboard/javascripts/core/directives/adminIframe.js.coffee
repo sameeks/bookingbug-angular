@@ -11,6 +11,7 @@
  *
  * @param {string}  path         A string that contains the iframe url
  * @param {string}  apiUrl       A string that contains the ApiUrl
+ * @param {boolean} fullHeight   A boolean that enables the iframe to take all available hight in the content area
  * @param {object}  extraParams  An object that contains extra params for the url (optional)
 ###
 angular.module('BBAdminDashboard.directives').directive 'adminIframe', ['$window', '$timeout', ($window, $timeout) ->
@@ -19,15 +20,37 @@ angular.module('BBAdminDashboard.directives').directive 'adminIframe', ['$window
     scope:
       path: '='
       apiUrl: '='
+      fullHeight: '=?'
       extraParams: '=?'
     templateUrl: 'core/admin-iframe.html'  
     controller: ['$scope', '$sce', ($scope, $sce) ->
       $scope.frameSrc = $sce.trustAsResourceUrl($scope.apiUrl + '/' + unescape($scope.path) + "?whitelabel=adminlte&uiversion=aphid&#{$scope.extraParams if $scope.extraParams}")
     ]  
     link: (scope, element, attrs) ->
-      $window.addEventListener 'message', (event) ->
-        if event.data.height
-          element.height(event.data.height + 'px')
+      calculateFullHeight = (containerHeight)->
+
+        heightToConsider = 0
+        # Make sure we include the content container's padding in the calculation
+        contentSection = angular.element(document.querySelectorAll('section.content'))
+        if contentSection.length
+          contentSection   = contentSection[0]
+          heightToConsider = heightToConsider + parseInt($window.getComputedStyle(contentSection,null).getPropertyValue('padding-top'))
+          heightToConsider = heightToConsider + parseInt($window.getComputedStyle(contentSection,null).getPropertyValue('padding-bottom'))
+
+        return (containerHeight - heightToConsider)   
+
+      if scope.fullHeight
+        # first load attempt 
+        element.find('iframe').height( calculateFullHeight(angular.element(document.querySelector('#content-wrapper')).height()) + 'px')
+
+        # This will listen for resize events
+        scope.$on 'content.changed', (event, data) ->
+          element.find('iframe').height( calculateFullHeight(data.height) + 'px')   
+
+      else  
+        $window.addEventListener 'message', (event) ->
+          if event.data.height
+            element.find('iframe').height(event.data.height + 'px')
       return
   }
 ]

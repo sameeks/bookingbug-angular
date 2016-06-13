@@ -8,7 +8,7 @@
  *
  * @description
  * Fix the contentContainer height (dependant on whether to include the header or the footer in the calculations)
- * Emits 'content.changed' event to work with the slider component
+ * Emits & boradcasts 'content.changed' event
  *
  * @param {boolean}  includeHeader  (optional) include the header in the calculation of the content height
  * @param {boolean}  includeFooter  (optional) include the footer in the calculation of the content height
@@ -42,8 +42,9 @@ angular.module('BBAdminDashboard.directives').directive 'contentHeight', ['$wind
         element.css {
           height : height + 'px'
         }
-        #Update the slider component if one exists
-        scope.$emit 'content.changed'
+        #inform parents and children (custom-scrollbars, full-height iframes etc) that height has changed
+        scope.$emit 'content.changed', {height : height}
+        scope.$broadcast 'content.changed', {height : height}
         return
       return
   }
