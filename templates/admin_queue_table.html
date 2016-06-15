@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html ng-app="BBQueue">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>BookingBug</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="example.css">
+    <link rel="stylesheet" href="/bookingbug-angular.css" media="screen">
+
+    <script src="/bookingbug-angular.js"></script>
+  </head>
+  <body>
+
+    <section
+      bb-admin-queue-table
+      admin_email="<%= admin_email %>"
+      admin_password="<%= admin_password %>"
+      company_id="<%= company_id %>"
+      api_url="<%= api_url %>">
+    </section>
+
+  </body>
+</html>

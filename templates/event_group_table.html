@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html ng-app="BBAdminEvents">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>BookingBug</title>
+
+    <link rel="stylesheet" href="/bookingbug-angular.css" media="screen">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="example.css">
+
+    <script src="/bookingbug-angular.js"></script>
+  </head>
+  <body>
+
+    <section
+      event-group-table
+      admin_email="<%= admin_email %>"
+      admin_password="<%= admin_password %>"
+      company_id="<%= company_id %>"
+      api_url="<%= api_url %>">
+    </section>
+
+  </body>
+</html>

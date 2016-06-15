@@ -1,66 +1,78 @@
 var gulp = require('gulp'),
-    coffee = require('gulp-coffee'),
-    concat = require('gulp-concat'),
-    gulpif = require('gulp-if'),
-    filelog = require('gulp-filelog'),
-    gutil = require('gulp-util'),
-    del = require('del'),
-    connect = require('gulp-connect'),
-    templateCache = require('gulp-angular-templatecache'),
-    imagemin = require('gulp-imagemin'),
-    rename = require('gulp-rename'),
-    flatten = require('gulp-flatten'),
-    sass = require('gulp-sass'),
-    merge = require('merge-stream'),
-    mainBowerFiles = require('main-bower-files'),
-    streamqueue = require('streamqueue'),
-    uglify = require('gulp-uglify'),
-    gulpDocs = require('gulp-ngdocs'),
-    KarmaServer = require('karma').Server,
-    bower = require('gulp-bower'),
-    argv = require('yargs').argv;
+  coffee = require('gulp-coffee'),
+  concat = require('gulp-concat'),
+  gulpif = require('gulp-if'),
+  filelog = require('gulp-filelog'),
+  gutil = require('gulp-util'),
+  del = require('del'),
+  connect = require('gulp-connect'),
+  templateCache = require('gulp-angular-templatecache'),
+  imagemin = require('gulp-imagemin'),
+  rename = require('gulp-rename'),
+  flatten = require('gulp-flatten'),
+  sass = require('gulp-sass'),
+  merge = require('merge-stream'),
+  mainBowerFiles = require('main-bower-files'),
+  streamqueue = require('streamqueue'),
+  uglify = require('gulp-uglify'),
+  gulpDocs = require('gulp-ngdocs'),
+  KarmaServer = require('karma').Server,
+  bower = require('gulp-bower'),
+  argv = require('yargs').argv,
+  template = require('gulp-template');
 
 gulp.task('clean', function(cb) {
   del.sync(['release']);
-  cb()
+  cb();
 });
 
 
 gulp.task('list', function() {
-  gulp.src(mainBowerFiles({filter: new RegExp('.js$')}))
-    .pipe(filelog())
+  gulp.src(mainBowerFiles({
+      filter: new RegExp('.js$')
+    }))
+    .pipe(filelog());
 });
 
 gulp.task('javascripts', function() {
-  javascripts = gulp.src(mainBowerFiles({filter: new RegExp('.js$')}).concat([
-        './bower_components/moment/locale/en-gb.js',
-        './bower_components/lodash/dist/lodash.js',
-        './bower_components/angular-google-maps/dist/angular-google-maps.js',
-        './bower_components/webshim/js-webshim/dev/polyfiller.js',
-        './bower_components/airbrake-js-client/dist/client.min.js',
-        './src/javascripts/core/main.js.coffee',
-        './src/*/javascripts/main.js.coffee',
-        './src/*/main.js.coffee',
-        './src/core/javascripts/services/widget.js.coffee',
-        './src/core/javascripts/collections/base.js.coffee',
-        './src/*/javascripts/**/*',
-        './src/*/directives/**/*',
-        './src/*/models/**/*',
-        './src/*/services/**/*',
-        '!./src/**/*_test.js.coffee',
-        '!./**/*~']))
+  javascripts = gulp.src(mainBowerFiles({
+      filter: new RegExp('.js$')
+    }).concat([
+      './bower_components/moment/locale/en-gb.js',
+      './bower_components/lodash/dist/lodash.js',
+      './bower_components/angular-google-maps/dist/angular-google-maps.js',
+      './bower_components/webshim/js-webshim/dev/polyfiller.js',
+      './bower_components/airbrake-js-client/dist/client.min.js',
+      './src/javascripts/core/main.js.coffee',
+      './src/*/javascripts/main.js.coffee',
+      './src/*/main.js.coffee',
+      './src/core/javascripts/services/widget.js.coffee',
+      './src/core/javascripts/collections/base.js.coffee',
+      './src/*/javascripts/**/*',
+      './src/*/directives/**/*',
+      './src/*/models/**/*',
+      './src/*/services/**/*',
+      '!./src/**/*_test.js.coffee',
+      '!./**/*~'
+    ]))
     // .pipe(filelog())
-    .pipe(gulpif(/.*coffee$/, coffee().on('error', function (e) {
-      gutil.log(e)
-      this.emit('end')
-    })))
+    .pipe(gulpif(/.*coffee$/, coffee().on('error', function(e) {
+      gutil.log(e);
+      this.emit('end');
+    })));
   templates = gulp.src('./src/*/templates/**/*.html')
     .pipe(flatten())
-    .pipe(templateCache({module: 'BB'}))
-  streamqueue({objectMode: true}, javascripts, templates)
+    .pipe(templateCache({
+      module: 'BB'
+    }));
+  streamqueue({
+      objectMode: true
+    }, javascripts, templates)
     .pipe(concat('bookingbug-angular.js'))
     .pipe(gulpif(argv.env != 'development' && argv.env != 'dev',
-            uglify({mangle: false}))).on('error', gutil.log)
+      uglify({
+        mangle: false
+      }))).on('error', gutil.log)
     .pipe(gulp.dest('release'));
 });
 
@@ -77,18 +89,26 @@ gulp.task('shims', function() {
 });
 
 gulp.task('stylesheets', function() {
-  css_stream = gulp.src(mainBowerFiles({filter: new RegExp('.css$')}))
+  css_stream = gulp.src(mainBowerFiles({
+    filter: new RegExp('.css$')
+  }))
   sass_stream = gulp.src('src/*/stylesheets/main.scss')
-    .pipe(sass({errLogToConsole: true}))
-    .pipe(flatten())
-  streamqueue({objectMode: true}, css_stream, sass_stream)
+    .pipe(sass({
+      errLogToConsole: true
+    }))
+    .pipe(flatten());
+  streamqueue({
+      objectMode: true
+    }, css_stream, sass_stream)
     .pipe(concat('bookingbug-angular.css'))
     .pipe(gulp.dest('release'));
 });
 
 gulp.task('widget', function() {
   gulp.src('src/widget/stylesheets/main.scss')
-    .pipe(sass({errLogToConsole: true}))
+    .pipe(sass({
+      errLogToConsole: true
+    }))
     .pipe(flatten())
     .pipe(concat('bookingbug-widget.css'))
     .pipe(gulp.dest('release'));
@@ -96,7 +116,9 @@ gulp.task('widget', function() {
 
 gulp.task('theme', function() {
   gulp.src('src/*/stylesheets/bb_light_theme.scss')
-    .pipe(sass({errLogToConsole: true}))
+    .pipe(sass({
+      errLogToConsole: true
+    }))
     .pipe(flatten())
     .pipe(concat('bb-theme.css'))
     .pipe(gulp.dest('release'));
@@ -120,45 +142,45 @@ gulp.task('webserver', ['assets'], function() {
   });
 });
 
-gulp.task('assets', ['clean', 'javascripts', 'images', 'stylesheets','fonts', 'theme', 'shims', 'widget']);
+gulp.task('assets', ['clean', 'javascripts', 'images', 'stylesheets', 'fonts', 'theme', 'shims', 'widget']);
 
 gulp.task('default', ['assets', 'watch', 'webserver']);
 
 gulp.task('cleandocs', function(cb) {
   del.sync(['docs']);
-  cb()
+  cb();
 });
 
-gulp.task('ngdocs', [], function () {
+gulp.task('ngdocs', [], function() {
   var options = {
     html5Mode: false,
     editExample: true,
     sourceLink: true,
-    image: "custom-template/logo.png",
-    imageLink: "custom-template/logo.png",
-    navTemplate: 'custom-template/custom-head.html',
-    styles: "custom-template/custom-style.css",
+    image: "docs-template/logo.png",
+    imageLink: "docs-template/logo.png",
+    navTemplate: 'docs-template/custom-head.html',
+    styles: "docs-template/custom-style.css",
     loadDefaults: {
       angular: false,
       angularAnimate: false
     },
     title: "BookingBug SDK Docs",
     scripts: [
-      'examples/booking-widget.js'
+      'release/bookingbug-angular.js'
     ]
-  }
+  };
   return gulp.src('src/*/javascripts/**')
     .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
     .pipe(gulpDocs.process(options))
     .pipe(gulp.dest('./docs'));
 });
 
-gulp.task('docs', ['cleandocs','ngdocs'], function (cb) {
+gulp.task('docs', ['cleandocs', 'ngdocs'], function(cb) {
   gulp.watch('src/*/javascripts/**', ['ngdocs']);
   return connect.server({
     root: ['docs'],
     port: 8000
-  })
+  });
 });
 
 gulp.task('bower', function() {
@@ -166,15 +188,40 @@ gulp.task('bower', function() {
 });
 
 gulp.task('dependencies', ['bower'], function() {
-  return gulp.src(mainBowerFiles({filter: new RegExp('.js$')}))
+  return gulp.src(mainBowerFiles({
+      filter: new RegExp('.js$')
+    }))
     .pipe(concat('bookingbug-angular-dependencies.js'))
     .pipe(gulp.dest('release'));
 });
 
-gulp.task('test', ['dependencies'], function (done) {
+gulp.task('test', ['dependencies'], function(done) {
   new KarmaServer({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
   }, done).start();
 });
 
+
+
+//  Configurate the examples templates by adding company_id and api_url
+var config;
+gulp.task('config', function(done) {
+
+  config = require('./config.json');
+  console.log('config: ', config);
+
+  gulp.src('./templates/**/*.html')
+    .pipe(template({
+      company_id: config.company_id,
+      api_url: config.api_url,
+      admin_email: config.admin_email,
+      admin_password: config.admin_password,
+      member_email: config.member_email,
+      member_password: config.member_password,
+    }))
+    .pipe(gulp.dest('examples'));
+
+    gulp.src('./templates/example.css')
+      .pipe(gulp.dest('examples'));
+});

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html ng-app="BBAdmin">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>BookingBug</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.0.3/flatly/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="example.css">
+    <link rel="stylesheet" href="/bookingbug-angular.css" media="screen">
+
+    <script src="/bookingbug-angular.js"></script>
+  </head>
+  <body>
+
+    <section class="jumbotron jumbotron-intro">
+
+      <article bb-login>
+        <div ng-if="bb.api_url">Host: {{bb.api_url}}</div>
+        <div ng-if="user">User: {{user.name}}</div>
+        <div ng-if="bb.company_id">Company: {{bb.company_id}}</div>
+      </article>
+
+      <h4 class="text-center">Examples of the BookingBug AngularJS modules:</h4>
+
+      <article class="panel panel-default panel-intro">
+        <header class="panel-heading">
+          Public booking
+        </header>
+        <section class="panel-body">
+          <div class="list-group">
+            <a href="/new_booking.html" class="list-group-item">
+              1. New Booking
+            </a>
+            <a href="/new_booking_event.html" class="list-group-item">
+              2. Public Booking Event
+            </a>
+          </div>
+        </section>
+      </article>
+
+      <article class="panel panel-default panel-intro">
+        <header class="panel-heading">
+          Member Examples
+        </header>
+        <section class="panel-body">
+          <div class="list-group">
+            <a href="/member.html" class="list-group-item">
+              1. Member
+            </a>
+          </div>
+        </section>
+      </article>
+
+      <article class="panel panel-default panel-intro">
+        <header class="panel-heading">
+          Admin Examples
+        </header>
+        <section class="panel-body">
+          <div class="list-group">
+            <a href="/admin_queue_table.html" class="list-group-item">
+             1. Admin Queue Table
+            </a>
+            <a class="list-group-item" href="/login.html">
+              2. Login
+            </a>
+            <a class="list-group-item" href="/person_table.html">
+              3. Person Table
+            </a>
+            <a class="list-group-item" href="/service_table.html">
+              4. Service Table
+            </a>
+            <a class="list-group-item" href="/admin_table.html">
+              5. Admin Table
+            </a>
+            <a class="list-group-item" href="/schedule_table.html">
+              6. Schedule Table
+            </a>
+            <a class="list-group-item" href="/event_chain_table.html">
+              7. Event Chain Table
+            </a>
+            <a class="list-group-item" href="/event_group_table.html">
+              8. Event Group Table
+            </a>
+          </div>
+        </section>
+      </article>
+
+    </section>
+  </body>
+</html>

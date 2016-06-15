@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html ng-app="BBAdminServices">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>BookingBug</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.0.3/flatly/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="example.css">
+    <link rel="stylesheet" href="/bookingbug-angular.css" media="screen">
+
+    <script src="/bookingbug-angular.js"></script>
+  </head>
+  <body>
+
+    <section
+      service-table
+      admin_email="<%= admin_email %>"
+      admin_password="<%= admin_password %>"
+      company_id="<%= company_id %>"
+      api_url="<%= api_url %>">
+    </section>
+
+  </body>
+</html>
