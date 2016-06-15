@@ -14,26 +14,35 @@ angular.module('BB.Directives').directive 'bbContent', ($compile) ->
 
     $compile(element)(scope)
 
-
-
-angular.module('BB.Directives').directive 'bbLoading', ($compile) ->
+angular.module('BB.Directives').directive 'bbLoading', ($compile, $timeout) ->
   link: (scope, element, attrs) ->
     scope.scopeLoaded = scope.areScopesLoaded(scope)
     element.attr("ng-hide", "scopeLoaded")
     element.attr("bb-loading", null)
+
     positionLoadingIcon = () ->
-      center = $(window).innerHeight() / 2 - $("#wait_graphic").height() / 2
-      $("#loading_icon").css("padding-top", center + "px")
+      loading_icon = $('.bb-loader').find('#loading_icon')
+      wait_graphic = $('.bb-loader').find('#wait_graphic')
+      modal_open = $('[ng-app]').find('body').hasClass('modal-open')
+
+      if modal_open
+        $timeout ->
+          center = $('[ng-app]').find('.modal-dialog').height() or $('[ng-app]').find('.modal-content').height() or $('[ng-app]').find('.modal').height()
+          center = (center / 2) - (wait_graphic.height() / 2)
+          loading_icon.css("padding-top", center + "px")
+        , 50
+      else
+        center = ($(window).innerHeight() / 2) - (wait_graphic.height() / 2)
+        loading_icon.css("padding-top", center + "px")
+
     positionLoadingIcon()
     $(window).on "resize", ->
       positionLoadingIcon()
     scope.$on "page:loaded", ->
-      positionLoadingIcon()   
+      positionLoadingIcon()
 
     $compile(element)(scope)
     return
-
-
 
 angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
   transclude: false,
@@ -112,7 +121,7 @@ angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
 * @scope true
 *
 * @description
-* Use with forms to add enhanced validation. When using with ng-form, submitForm 
+* Use with forms to add enhanced validation. When using with ng-form, submitForm
 * needs to be called manually as submit event is not raised.
 
 *
@@ -147,8 +156,8 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsSer
       $timeout ->
         invalid_form_group = elem.find('.has-error:first')
 
-        if invalid_form_group and invalid_form_group.length > 0 and !scope.form.raise_alerts 
-          
+        if invalid_form_group and invalid_form_group.length > 0 and !scope.form.raise_alerts
+
           if 'parentIFrame' of $window
             parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
           else
@@ -246,8 +255,8 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) 
   scope: true
   link: (scope, elem, attrs) ->
 
-    $timeout ->     
-      elem.parent().parent().parent().css("z-index", 999999)    
+    $timeout ->
+      elem.parent().parent().parent().css("z-index", 999999)
     ,
     # watch modal height to ensure it does not exceed window height
     deregisterWatcher = scope.$watch ->
@@ -260,9 +269,9 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) 
         new_height = $bbug(window).height() - modal_padding
         elem.css({
           "height": new_height + "px"
-          "overflow-y": "scroll"         
-          })       
-        deregisterWatcher()      
+          "overflow-y": "scroll"
+          })
+        deregisterWatcher()
 
 
 
