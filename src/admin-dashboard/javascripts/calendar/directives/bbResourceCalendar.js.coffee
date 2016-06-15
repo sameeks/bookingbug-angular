@@ -27,11 +27,12 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
               b.resourceIds = []
               if b.person_id?
                 b.resourceIds.push parseInt(b.person_id)
-              if b.resource_id? 
+              if b.resource_id?
                 b.resourceIds.push parseInt(b.resource_id)
 
               b.useFullTime()
               b.title = labelAssembly(b)
+              b.startEditable = true if b.$has('edit')
               if $scope.showAll
                 filteredBookings.push b
               else if not $scope.showAll and bookingBelongsToSelectedResource(b)
@@ -48,10 +49,10 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
                   b.resourceIds = []
                   if b.person_id?
                     b.resourceIds.push parseInt(b.person_id)
-                  if b.resource_id?  
+                  if b.resource_id?
                     b.resourceIds.push parseInt(b.resource_id)
 
-                b.type = 'external' for b in bookings
+                  b.type = 'external' for b in bookings
                 callback(bookings)
           else
             callback([])
@@ -63,7 +64,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             if uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getView').type == 'timelineDay'
               $scope.loading = false
               return callback(availabilities)
-            else 
+            else
               overAllAvailabilities = []
 
               angular.forEach availabilities, (availability, index)->
@@ -71,24 +72,24 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
                   if overAllAvailability.start.dayOfYear() == moment(availability.start).dayOfYear()
                     return true
                   return false
-                
+
                 if dayAvailability.length > 0
-                  if moment(availability.start).unix() < dayAvailability[0].start.unix()    
+                  if moment(availability.start).unix() < dayAvailability[0].start.unix()
                      dayAvailability[0].start = moment(availability.start)
 
                   if moment(availability.end).unix() > dayAvailability[0].end.unix()
                     dayAvailability[0].end = moment(availability.end)
-                else 
+                else
                   overAllAvailabilities.push {
                     start : moment(availability.start)
                     end : moment(availability.end)
                     rendering : "background"
-                    title : "Joined availability " + moment(availability.start).format('YYYY-MM-DD') 
-                  }    
+                    title : "Joined availability " + moment(availability.start).format('YYYY-MM-DD')
+                  }
 
               $scope.loading = false
               return callback(overAllAvailabilities)
-            
+
     ]
 
     bookingBelongsToSelectedResource = (booking)->
@@ -157,7 +158,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.uiCalOptions =
       calendar:
         schedulerLicenseKey: '0598149132-fcs-1443104297'
-        eventStartEditable: true
+        eventStartEditable: false
         eventDurationEditable: false
         minTime: $scope.options.min_time
         maxTime: $scope.options.max_time
@@ -203,7 +204,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           # If its a blocked timeslot add colored overlay
           if event.status == 3 || event.type == 'external'
             element.find('.fc-bg').css({'background-color':'#000'})
-            
+
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
             element.css('background-color', service.color)
@@ -212,11 +213,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         eventAfterRender: (event, elements, view) ->
           if not event.rendering? or event.rendering != 'background'
             PrePostTime.apply(event, elements, view, $scope)
-            if event.$has('edit')
-              elements.draggable()
-            else
-              elements.editable = false
-              elements.removeClass('fc-draggable')
         select: (start, end, jsEvent, view, resource) ->
           view.calendar.unselect()
 
@@ -265,9 +261,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     isTimeRangeAvailable = (start, end, resource) ->
       events = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', (event)->
         event.rendering == 'background' && start >= event.start && end <= event.end && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
-      ) 
+      )
 
-      events.length > 0    
+      events.length > 0
 
     $scope.getCompanyPromise = () ->
       defer = $q.defer()
@@ -345,7 +341,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         booking.resourceId = null
         if booking.person_id?
           booking.resourceIds.push parseInt(booking.person_id)
-        if booking.resource_id?  
+        if booking.resource_id?
           booking.resourceIds.push parseInt(booking.resource_id)
 
         uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
