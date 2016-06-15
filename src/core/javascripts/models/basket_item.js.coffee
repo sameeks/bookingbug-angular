@@ -46,7 +46,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @date = new BBModel.Day({date: @date, spaces: 1})
       if @datetime
         @date = new BBModel.Day({date: @datetime.toISODate(), spaces: 1})
-    
+
         t =  @datetime.hour() * 60 +  @datetime.minute()
         @time = new BBModel.TimeSlot({time: t, event_id: @event_id, selected: true, avail: 1, price: @price })
 
@@ -1242,7 +1242,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @description
     * Checks if the BasketItem has a price
     *
-    * @returns {boolean}
+    * @returns {boolean} boolean
     ###
     hasPrice: () ->
       return @price?
@@ -1316,7 +1316,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @description
     * Indicates if the BasketItem is an external purchase
     *
-    * @returns {boolean}
+    * @returns {boolean} boolean
     ###
     isExternalPurchase: () ->
       return @external_purchase?
@@ -1329,7 +1329,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @description
     * Returns the name
     *
-    * @returns {String}
+    * @returns {String} string
     ###
     getName: (client) ->
       if @first_name
@@ -1346,7 +1346,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * Indicates if the BasketItem is a time item (i.e. either an event
     * or appointment booking)
     *
-    * @returns {boolean}
+    * @returns {boolean} boolean
     ###
     isTimeItem: () ->
       return @service or @event

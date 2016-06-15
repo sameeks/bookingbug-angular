@@ -1,3 +1,16 @@
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbAttendees
+* @restrict AE
+* @repace true
+* @scope true
+* @scope
+*
+* @description
+* Attendees directive
+####
+
 angular.module('BB.Directives').directive 'bbAttendees', () ->
   restrict: 'AE'
   replace: true
@@ -58,7 +71,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
       return false if !$scope.bb.current_item.ready or !$scope.bb.moving_purchase
 
       deferred = $q.defer()
-      
+
       $scope.notLoaded $scope
 
       client_promises = []
@@ -70,7 +83,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
           client = new BBModel.Client()
           client.first_name = item.first_name
           client.last_name  = item.last_name
-          
+
           client_promises.push(ClientService.create_or_update($scope.bb.company, client))
 
         else
@@ -94,7 +107,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
         , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
       return deferred.promise
-        
+
 
 
     ###**

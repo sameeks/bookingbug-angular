@@ -28,7 +28,7 @@ angular.module('BB.Directives').directive 'bbLoading', ($compile) ->
     $(window).on "resize", ->
       positionLoadingIcon()
     scope.$on "page:loaded", ->
-      positionLoadingIcon()   
+      positionLoadingIcon()
 
     $compile(element)(scope)
     return
@@ -112,7 +112,7 @@ angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
 * @scope true
 *
 * @description
-* Use with forms to add enhanced validation. When using with ng-form, submitForm 
+* Use with forms to add enhanced validation. When using with ng-form, submitForm
 * needs to be called manually as submit event is not raised.
 
 *
@@ -147,8 +147,8 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsSer
       $timeout ->
         invalid_form_group = elem.find('.has-error:first')
 
-        if invalid_form_group and invalid_form_group.length > 0 and !scope.form.raise_alerts 
-          
+        if invalid_form_group and invalid_form_group.length > 0 and !scope.form.raise_alerts
+
           if 'parentIFrame' of $window
             parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
           else
@@ -246,8 +246,8 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) 
   scope: true
   link: (scope, elem, attrs) ->
 
-    $timeout ->     
-      elem.parent().parent().parent().css("z-index", 999999)    
+    $timeout ->
+      elem.parent().parent().parent().css("z-index", 999999)
     ,
     # watch modal height to ensure it does not exceed window height
     deregisterWatcher = scope.$watch ->
@@ -260,9 +260,9 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) 
         new_height = $bbug(window).height() - modal_padding
         elem.css({
           "height": new_height + "px"
-          "overflow-y": "scroll"         
-          })       
-        deregisterWatcher()      
+          "overflow-y": "scroll"
+          })
+        deregisterWatcher()
 
 
 
@@ -275,8 +275,7 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) 
 * @description
 * Adds a background-image to an element
 
-* @param
-* {string} url
+* @param {string} url url
 *
 * @example
 * <div bb-background-image='images/example.jpg'></div>
@@ -301,8 +300,7 @@ angular.module('BB.Directives').directive('bbBackgroundImage', () ->
 * @description
 * Assigns an appropriate description of ticket availability based
 * on the value of the "Select spaces view" dropdown in the admin console
-* @param
-* {object} The event object
+* @param {object} event The event object
 * @attribute ticket-type-singular
 * {String} Custom name for the ticket
 * @example
