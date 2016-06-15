@@ -21,7 +21,6 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
   block: (company, person, data) ->
     deferred = $q.defer()
     person.$put('block', {}, data).then  (response) =>
-      console.log 'response ', response
       if response.$href('self').indexOf('bookings') > -1
         booking = new BBModel.Admin.Booking(response)
         BookingCollections.checkItems(booking)
