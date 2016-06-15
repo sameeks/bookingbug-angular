@@ -32,6 +32,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
 
               b.useFullTime()
               b.title = labelAssembly(b)
+              b.startEditable = true if b.$has('edit')
               if $scope.showAll
                 filteredBookings.push b
               else if not $scope.showAll and bookingBelongsToSelectedResource(b)
@@ -52,6 +53,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
                     b.resourceIds.push parseInt(b.resource_id)
 
                 b.type = 'external' for b in bookings
+                b.startEditable = false
                 callback(bookings)
           else
             callback([])
@@ -157,7 +159,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.uiCalOptions =
       calendar:
         schedulerLicenseKey: '0598149132-fcs-1443104297'
-        eventStartEditable: true
+        eventStartEditable: false
         eventDurationEditable: false
         minTime: $scope.options.min_time
         maxTime: $scope.options.max_time
@@ -212,11 +214,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         eventAfterRender: (event, elements, view) ->
           if not event.rendering? or event.rendering != 'background'
             PrePostTime.apply(event, elements, view, $scope)
-            if event.$has('edit')
-              elements.draggable()
-            else
-              elements.editable = false
-              elements.removeClass('fc-draggable')
         select: (start, end, jsEvent, view, resource) ->
           view.calendar.unselect()
 
