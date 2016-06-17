@@ -36,12 +36,12 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         selected_admin: null
         selected_company: null
         site: $localStorage.getItem("api_url")
-      
+
       $scope.login = (isValid) ->
         if isValid
           $scope.template_vars.show_loading = true
           $scope.formErrors = []
-          
+
           #if the site field is used set the api url to the submmited url
           if AdminLoginOptions.show_api_field
             if $scope.login.site.indexOf("http") == -1
@@ -55,7 +55,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             password: $scope.login.password
           AdminLoginService.login(params).then (user) ->
 
-            # if user is admin 
+            # if user is admin
             if user.$has('administrators')
               user.getAdministratorsPromise().then (administrators) ->
                 $scope.administrators = administrators
@@ -65,13 +65,13 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
                   $scope.template_vars.show_loading = false
                   $scope.template_vars.show_login = false
                   $scope.template_vars.show_pick_company = true
-                else 
+                else
                 # else automatically select the first admin
                   params =
                     email: $scope.login.email
                     password: $scope.login.password
 
-                  $scope.login.selected_admin = _.first(administrators)  
+                  $scope.login.selected_admin = _.first(administrators)
 
                   $scope.login.selected_admin.$post('login', {}, params).then (login) ->
                     $scope.login.selected_admin.getCompanyPromise().then (company) ->
@@ -80,13 +80,13 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
                       if company.companies && company.companies.length > 0
                         $scope.template_vars.show_pick_department = true
                         $scope.departments = company.companies
-                      else  
+                      else
                       # else select that company directly and move on
-                        $scope.login.selected_company = company  
+                        $scope.login.selected_company = company
                         AdminLoginService.setLogin($scope.login.selected_admin)
                         AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
                           $scope.onSuccess($scope.login.selected_company)
-            
+
             # else if there is an associated company
             else if user.$has('company')
               $scope.login.selected_admin = user
@@ -98,9 +98,9 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
                   $scope.template_vars.show_pick_department = true
                   $scope.template_vars.show_login = false
                   $scope.departments = company.companies
-                else  
+                else
                 # else select that company directly and move on
-                  $scope.login.selected_company = company  
+                  $scope.login.selected_company = company
                   AdminLoginService.setLogin($scope.login.selected_admin)
                   AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
                     $scope.onSuccess($scope.login.selected_company)
@@ -111,7 +111,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             else
               $scope.template_vars.show_loading = false
               $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"}
-                            
+
           , (err) ->
             $scope.template_vars.show_loading = false
             $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_INCORRECT_CREDS"}
@@ -130,7 +130,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             if company.companies && company.companies.length > 0
               $scope.template_vars.show_pick_department = true
               $scope.departments = company.companies
-            else  
+            else
               $scope.login.selected_company = company
 
 
@@ -142,5 +142,5 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
           AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
             $scope.onSuccess($scope.login.selected_company)
     ]
-  }  
+  }
 ]
