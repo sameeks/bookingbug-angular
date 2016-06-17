@@ -15,7 +15,8 @@ angular.module('BBAdminDashboard.filters').filter 'propsFilter', ->
         while i < keys.length
           prop = keys[i]
           text = props[prop].toLowerCase()
-          if item[prop].toString().toLowerCase().indexOf(text) != -1
+
+          if item[prop]? && item[prop].toString().toLowerCase().indexOf(text) != -1
             itemMatches = true
             break
           i++
