@@ -5,7 +5,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $timeout, $compile, $templateCache, BookingCollections, PrePostTime,
     AdminScheduleService, $filter) ->
 
-  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions) ->
+  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions, AdminCalendarOptions) ->
 
     filters = {
       requestedAssets : ProcessAssetsFilter($state.params.assets)
@@ -24,13 +24,21 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             $scope.loading = false
             filteredBookings = []
             for b in bookings.items
-              b.resourceId = b.person_id
+              b.resourceIds = []
+              if b.person_id?
+                b.resourceIds.push b.person_id + '_p'
+              if b.resource_id?
+                b.resourceIds.push b.resource_id + '_r'
+
               b.useFullTime()
               b.title = labelAssembly(b)
+              b.startEditable = true if b.$has('edit')
+
               if $scope.showAll
                 filteredBookings.push b
               else if not $scope.showAll and bookingBelongsToSelectedResource(b)
                 filteredBookings.push b
+
             $scope.bookings = filteredBookings
             callback($scope.bookings)
     ,
@@ -39,8 +47,14 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           if company.$has('external_bookings')
             company.$get('external_bookings', {no_cache: true}).then (collection) ->
               collection.$get('external_bookings').then (bookings) ->
-                b.resourceId = b.person_id for b in bookings
-                b.type = 'external' for b in bookings
+                for b in bookings
+                  b.resourceIds = []
+                  if b.person_id?
+                    b.resourceIds.push b.person_id + '_p'
+                  if b.resource_id?
+                    b.resourceIds.push b.resource_id  + '_r'
+
+                  b.type = 'external' for b in bookings
                 callback(bookings)
           else
             callback([])
@@ -49,42 +63,44 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         $scope.loading = true
         $scope.getCompanyPromise().then (company) ->
           AdminScheduleService.getAssetsScheduleEvents(company, start, end, !$scope.showAll, $scope.selectedResources.selected).then (availabilities) ->
+
             if uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getView').type == 'timelineDay'
               $scope.loading = false
               return callback(availabilities)
-            else 
+            else
               overAllAvailabilities = []
 
               angular.forEach availabilities, (availability, index)->
                 dayAvailability = _.filter overAllAvailabilities, (overAllAvailability)->
-                  if overAllAvailability.start.dayOfYear() == moment(availability.start).dayOfYear()
+                  if moment(overAllAvailability.start).dayOfYear() == moment(availability.start).dayOfYear()
                     return true
                   return false
-                
-                if dayAvailability.length > 0
-                  if moment(availability.start).unix() < dayAvailability[0].start.unix()    
-                     dayAvailability[0].start = moment(availability.start)
 
-                  if moment(availability.end).unix() > dayAvailability[0].end.unix()
-                    dayAvailability[0].end = moment(availability.end)
-                else 
+                if dayAvailability.length > 0
+                  if moment(availability.start).unix() < moment(dayAvailability[0].start).unix()
+                     dayAvailability[0].start = availability.start
+
+                  if moment(availability.end).unix() > moment(dayAvailability[0].end).unix()
+                    dayAvailability[0].end = availability.end
+                else
                   overAllAvailabilities.push {
-                    start : moment(availability.start)
-                    end : moment(availability.end)
+                    start : availability.start
+                    end : availability.end
                     rendering : "background"
-                    title : "Joined availability " + moment(availability.start).format('YYYY-MM-DD') 
-                  }    
+                    title : "Joined availability " + moment(availability.start).format('YYYY-MM-DD')
+                  }
 
               $scope.loading = false
               return callback(overAllAvailabilities)
-            
+
     ]
 
     bookingBelongsToSelectedResource = (booking)->
       belongs = false
       _.each $scope.selectedResources.selected, (asset) ->
-        if parseInt(asset.id) == parseInt(booking.person_id) || parseInt(asset.id) == parseInt(booking.resourceId)
+        if _.contains(booking.resourceIds, asset.id)
           belongs = true
+
       return belongs
 
     labelAssembly = (event)->
@@ -145,7 +161,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.uiCalOptions =
       calendar:
         schedulerLicenseKey: '0598149132-fcs-1443104297'
-        eventStartEditable: true
+        eventStartEditable: false
         eventDurationEditable: false
         minTime: $scope.options.min_time
         maxTime: $scope.options.max_time
@@ -173,8 +189,11 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         resourceLabelText: ' '
         selectable: true
         lazyFetching: false
+        columnFormat: AdminCalendarOptions.column_format
         resources: (callback) ->
           getCalendarAssets(callback)
+        eventDragStop: (event, jsEvent, ui, view) ->
+          event.oldResourceIds = event.resourceIds
         eventDrop: (event, delta, revertFunc) ->
           Dialog.confirm
             model: event
@@ -190,7 +209,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           # If its a blocked timeslot add colored overlay
           if event.status == 3 || event.type == 'external'
             element.find('.fc-bg').css({'background-color':'#000'})
-            
+
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
             element.css('background-color', service.color)
@@ -199,12 +218,12 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         eventAfterRender: (event, elements, view) ->
           if not event.rendering? or event.rendering != 'background'
             PrePostTime.apply(event, elements, view, $scope)
-            if event.$has('edit')
-              elements.draggable()
-            else
-              elements.editable = false
-              elements.removeClass('fc-draggable')
         select: (start, end, jsEvent, view, resource) ->
+          # For some reason clicking on the scrollbars triggers this event
+          #  therefore we filter based on the jsEvent target
+          if jsEvent.target.className == 'fc-scroller'
+            return
+
           view.calendar.unselect()
 
           if isTimeRangeAvailable(start, end, resource) || Math.abs(start.diff(end, 'days'))
@@ -222,18 +241,22 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
               end.subtract(1,'days')
               end = setTimeToMoment(end,$scope.options.max_time)
 
-            rid = null
-            rid = resource.id if resource
+            item_defaults =
+              date: start.format('YYYY-MM-DD')
+              time: (start.hour() * 60 + start.minute())
+
+            if resource && resource.type == 'person'
+              item_defaults.person = resource.id.substring(0, resource.id.indexOf('_'))
+            else if resource && resource.type == 'resource'
+              item_defaults.resource = resource.id.substring(0, resource.id.indexOf('_'))
+
             $scope.getCompanyPromise().then (company) ->
               AdminBookingPopup.open
                 min_date: setTimeToMoment(start,$scope.options.min_time)
                 max_date: setTimeToMoment(end,$scope.options.max_time)
                 from_datetime: start
                 to_datetime: end
-                item_defaults:
-                  date: start.format('YYYY-MM-DD')
-                  time: (start.hour() * 60 + start.minute())
-                  person: rid
+                item_defaults: item_defaults
                 first_page: "quick_pick"
                 company_id: company.id
         viewRender: (view, element) ->
@@ -248,9 +271,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     isTimeRangeAvailable = (start, end, resource) ->
       events = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', (event)->
         event.rendering == 'background' && start >= event.start && end <= event.end && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
-      ) 
+      )
 
-      events.length > 0    
+      events.length > 0
 
     $scope.getCompanyPromise = () ->
       defer = $q.defer()
@@ -280,6 +303,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       $scope.loading = true
 
       BBAssets(company).then((assets)->
+        for asset in assets
+          asset.id = asset.identifier
         $scope.loading = false
         $scope.assets = assets
 
@@ -288,7 +313,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           $scope.showAll = false
           angular.forEach($scope.assets, (asset)->
             isInArray = _.find(filters.requestedAssets, (id)->
-              return parseInt(id) == asset.id
+              return id == asset.id
             )
 
             if typeof isInArray != 'undefined'
@@ -315,17 +340,31 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       $scope.getCompanyPromise().then (company) ->
         if $scope.showAll
           BBAssets(company).then((assets)->
+            for asset in assets
+              asset.id = asset.identifier
+
             $scope.loading = false
-            callback($scope.assets)
+            callback(assets)
           )
         else
           $scope.loading = false
           callback($scope.selectedResources.selected)
 
     $scope.updateBooking = (booking) ->
-      booking.person_id = booking.resourceId
+      newAssetId = booking.resourceId.substring(0, booking.resourceId.indexOf('_'))
+      if booking.resourceId.indexOf('_p') > -1
+        booking.person_id = newAssetId
+      else if booking.resourceId.indexOf('_r') > -1
+        booking.resource_id = newAssetId
+
       booking.$update().then (response) ->
-        booking.resourceId = booking.person_id
+        booking.resourceIds = []
+        booking.resourceId = null
+        if booking.person_id?
+          booking.resourceIds.push booking.person_id + '_p'
+        if booking.resource_id?
+          booking.resourceIds.push booking.resource_id + '_r'
+
         uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
 
     $scope.editBooking = (booking) ->
@@ -343,7 +382,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           if response.is_cancelled
             uiCalendarConfig.calendars.resourceCalendar.fullCalendar('removeEvents', [response.id])
           else
-            booking.resourceId = booking.person_id
             uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
 
     pusherBooking = (res) ->

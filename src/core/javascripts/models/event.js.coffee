@@ -238,3 +238,19 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           ticket.price = 0
         else
           ticket.price = ticket.old_price
+
+    ###**
+    * @ngdoc method
+    * @name numTicketsSelected
+    * @methodOf BB.Models:Event
+    * @description
+    * 
+    *
+    * @returns {object} get number of tickets selected
+    ###
+    numTicketsSelected: () ->
+      num = 0
+      for ticket in @tickets
+        num += ticket.qty
+      num
+

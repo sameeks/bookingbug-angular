@@ -28,6 +28,7 @@ angular.module('BBAdminDashboard.calendar.services').provider 'AdminCalendarOpti
     use_default_states : true
     show_in_navigation : true
     parent_state       : 'root'
+    column_format      :  null
   }
 
   @setOption = (option, value) ->
