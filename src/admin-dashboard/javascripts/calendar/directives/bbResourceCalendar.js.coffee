@@ -72,20 +72,20 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
 
               angular.forEach availabilities, (availability, index)->
                 dayAvailability = _.filter overAllAvailabilities, (overAllAvailability)->
-                  if overAllAvailability.start.dayOfYear() == moment(availability.start).dayOfYear()
+                  if moment(overAllAvailability.start).dayOfYear() == moment(availability.start).dayOfYear()
                     return true
                   return false
 
                 if dayAvailability.length > 0
-                  if moment(availability.start).unix() < dayAvailability[0].start.unix()
-                     dayAvailability[0].start = moment(availability.start)
+                  if moment(availability.start).unix() < moment(dayAvailability[0].start).unix()
+                     dayAvailability[0].start = availability.start
 
-                  if moment(availability.end).unix() > dayAvailability[0].end.unix()
-                    dayAvailability[0].end = moment(availability.end)
+                  if moment(availability.end).unix() > moment(dayAvailability[0].end).unix()
+                    dayAvailability[0].end = availability.end
                 else
                   overAllAvailabilities.push {
-                    start : moment(availability.start)
-                    end : moment(availability.end)
+                    start : availability.start
+                    end : availability.end
                     rendering : "background"
                     title : "Joined availability " + moment(availability.start).format('YYYY-MM-DD')
                   }
