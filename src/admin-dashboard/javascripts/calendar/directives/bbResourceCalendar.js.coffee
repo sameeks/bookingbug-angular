@@ -438,7 +438,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       scope.pusherSubscribe()
 
     $timeout () ->
-      uiCalElement = angular.element(element.children()[2])
+      uiCalElement = angular.element(document.getElementById('uicalendar'))
       toolbarElement = angular.element(uiCalElement.children()[0])
       toolbarLeftElement = angular.element(toolbarElement.children()[0])
       datePickerElement = $compile($templateCache.get('calendar_date_picker.html'))(scope)
@@ -449,6 +449,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     controller: controller
     link: link
     templateUrl: 'resource_calendar_main.html'
+    replace: true
     scope :
       labelAssembler : '@'
       blockLabelAssembler: '@'
