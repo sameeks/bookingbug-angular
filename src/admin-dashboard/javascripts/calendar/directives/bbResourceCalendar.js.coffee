@@ -45,7 +45,11 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       events: (start, end, timezone, callback) ->
         $scope.getCompanyPromise().then (company) ->
           if company.$has('external_bookings')
-            company.$get('external_bookings', {no_cache: true}).then (collection) ->
+            params =
+              start: start.format()
+              end: end.format()
+              no_cache: true
+            company.$get('external_bookings', params).then (collection) ->
               collection.$get('external_bookings').then (bookings) ->
                 for b in bookings
                   b.resourceIds = []
