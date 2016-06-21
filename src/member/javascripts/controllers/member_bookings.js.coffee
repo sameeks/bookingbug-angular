@@ -112,6 +112,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       # does a removeBooking method exist in the scope chain?
       $scope.removeBooking(booking) if $scope.removeBooking
     , (err) ->
+      AlertService.raise('GENERIC')
       $scope.upcoming_bookings.splice(index, 0, booking)
 
 
