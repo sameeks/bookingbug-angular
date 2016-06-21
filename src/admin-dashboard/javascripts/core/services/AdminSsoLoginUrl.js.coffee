@@ -12,8 +12,8 @@ angular.module('BBAdminDashboard.services').factory 'AdminSsoLoginUrl', [
     if not $rootScope.bb.companyId?
       $rootScope.bb.companyId |= company_id
 
-    if not $rootScope.bb.companyId 
-      $exceptionHandler(new Error('Angular value "company_id" is undefined! '))
-        
+    if not $rootScope.bb.companyId
+      $exceptionHandler(new Error('Angular value "company_id" is undefined! '), '', true)
+
     "#{$rootScope.bb.api_url}/api/v1/login/admin_sso/#{$rootScope.bb.companyId}"
 ]
