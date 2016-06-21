@@ -156,7 +156,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
 
   bookWaitlistSucces = () ->
-    AlertService.success({msg: "You're booking is now confirmed!"})
+    AlertService.success({msg: "You're booking is now confirmed!", persist: false})
     updateBookings()
 
 
