@@ -231,6 +231,20 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: "There's already an account registered with this email. Use the search field to find the customers account."
+    },
+    {
+      key: 'WAITLIST_ACCEPTED',
+      type: 'success',
+      title: '',
+      persist: false,
+      msg: "Your booking is now confirmed!"
+    },
+    {
+      key: 'BOOKING_CANCELLED',
+      type: 'success',
+      title: '',
+      persist: false,
+      msg: "Your booking has been cancelled."
     }
   ]
 

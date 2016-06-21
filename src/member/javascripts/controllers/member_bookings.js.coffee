@@ -99,20 +99,20 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
 
   $scope.cancelBooking = (booking) ->
-    $scope.loading = true
+
+    index = _.indexOf($scope.upcoming_bookings, booking)
+
+    return false if index is -1
+
+    $scope.upcoming_bookings.splice(index, 1)
+    AlertService.raise('BOOKING_CANCELLED')
+
     MemberBookingService.cancel($scope.member, booking).then () ->
-      
       $rootScope.$broadcast("booking:cancelled")
-
-      removeBooking = (booking, bookings) ->
-        return bookings.filter (b) -> b.id != booking.id
-
-      $scope.past_bookings = removeBooking(booking, $scope.past_bookings) if $scope.past_bookings
-      $scope.upcoming_bookings = removeBooking(booking, $scope.upcoming_bookings) if $scope.upcoming_bookings
-
       # does a removeBooking method exist in the scope chain?
       $scope.removeBooking(booking) if $scope.removeBooking
-      $scope.loading = false
+    , (err) ->
+      $scope.upcoming_bookings.splice(index, 0, booking)
 
 
   $scope.getPrePaidBookings = (params) ->
@@ -156,7 +156,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
 
   bookWaitlistSucces = () ->
-    AlertService.success({msg: "You're booking is now confirmed!", persist: false})
+    AlertService.raise('WAITLIST_ACCEPTED')
     updateBookings()
 
 
