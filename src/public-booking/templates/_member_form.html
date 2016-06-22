@@ -1,0 +1,37 @@
+<form name="memberForm" ng-submit="submit(memberForm, member)" ng-hide="loading">
+
+	<div class="form-group" ng-class="{'has-error': memberForm.first_name.$invalid && !memberForm.first_name.$pristine, 'has-success': memberForm.first_name.$valid}">
+		<label class="control-label" for="first_name">First Name</label>
+		<input type="text" class="form-control" name="first_name" id="first_name" ng-model="member.first_name" required />
+	</div>
+
+	<div class="form-group" ng-class="{'has-error': memberForm.last_name.$invalid && !memberForm.last_name.$pristine, 'has-success': memberForm.last_name.$valid}">
+		<label class="control-label" for="last_name">Last Name</label>
+		<input type="text" class="form-control" name="last_name" id="last_name" ng-model="member.last_name" required />
+	</div>
+
+	<div class="form-group" ng-class="{'has-error': memberForm.email.$invalid && !memberForm.email.$pristine, 'has-success': memberForm.email.$valid}">
+		<label class="control-label" for="email">Email</label>
+		<input type="email" class="form-control" name="email" id="email" ng-model="member.email" required />
+	</div>
+
+	<div class="form-group" ng-class="{'has-error': memberForm.phone.$invalid && !memberForm.phone.$pristine, 'has-success': memberForm.phone.$valid}">
+		<label class="control-label" for="phone">Phone</label>
+		<input type="text" class="form-control" name="phone" id="phone" ng-model="member.phone" />
+	</div>
+
+	<div class="form-group" ng-class="{'has-error': memberForm.mobile.$invalid && !memberForm.mobile.$pristine, 'has-success': memberForm.mobile.$valid && !memberForm.mobile.$pristine}">
+		<label class="control-label" for="mobile">Mobile</label>
+		<input type="text" class="form-control" name="mobile" id="mobile" ng-model="member.mobile" />
+	</div>
+
+	<div ng-repeat="question in member.questions" class="form-group" ng-class="{'has-error': memberForm['q' + question.id].$invalid && !memberForm['q' + question.id].$pristine, 'has-success': memberForm['q' + question.id].$valid}">
+		<label class="control-label" for="{{question.id}}">{{question.name}}</label>
+		<input class="form-control" bb-question="question" />
+	</div>
+
+	<div class="form-group">
+		<input type="submit" class="btn btn-primary" value="Save" />
+	</div>
+
+</form>
