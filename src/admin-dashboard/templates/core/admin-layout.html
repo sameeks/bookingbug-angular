@@ -15,14 +15,12 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <!-- User Account: style can be found in dropdown.less -->
-                    <li class="dropdown" uib-dropdown>
-                        <a href class="dropdown-toggle" uib-dropdown-toggle>
-                            <span class="user-image" ng-show="uiData.user.image != ''" ng-style="uiData.user.image && {'background-image': 'url('+uiData.user.image+')'}"></span>
-                            &nbsp;<span class="hidden-xs">&nbsp;Hi, {{uiData.user.firstName}} {{uiData.user.lastName}}</span>
+                    <li class="dropdown" dropdown is-open="isopen">
+                        <a href class="dropdown-toggle" dropdown-toggle>
+                            <span class="hidden-xs">&nbsp;Hi, {{user.name}} <span class="caret"></span></span>
                         </a>
-                        <ul uib-dropdown-menu class="dropdown-menu">
-                            <li><a href ui-sref="cms.profile"><i class="fa fa-user"></i> Profile</a></li>
-                            <li><a href ng-click="logout()"><i class="fa fa-power-off"></i> Logout</a></li>
+                        <ul class="dropdown-menu user-dropdown">
+                            <li><a ui-sref="logout" class="btn btn-default btn-sm btn-block"><i class="fa fa-lock"></i> Logout</a></li>
                         </ul>
                     </li>
                     <li>
@@ -38,7 +36,7 @@
             </div>
         </nav>
     </header>
-    
+
     <!-- =============================================== -->
 
     <!-- Left side column. contains the sidebar -->
