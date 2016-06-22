@@ -8,17 +8,22 @@
 ####
 
 angular.module('BB.Services').factory '$exceptionHandler', ($log, AirbrakeConfig) ->
-  airbrake = new (airbrakeJs.Client)(
+
+  airbrake = new airbrakeJs.Client(
     projectId: AirbrakeConfig.projectId
-    projectKey: AirbrakeConfig.projectKey)
+    projectKey: AirbrakeConfig.projectKey
+  )
+
   airbrake.addFilter (notice) ->
-    if AirbrakeConfig.environment is 'development'
-      return
+    if AirbrakeConfig.environment is 'development' || !notice.params.from_sdk
+      return false
+
     notice.context.environment = 'production'
     notice
-  (exception, cause) ->
+
+  (exception, cause, sdkError) ->
     $log.error exception
     airbrake.notify
       error: exception
-      params: angular_cause: cause
+      params: angular_cause: cause, from_sdk: sdkError
     return

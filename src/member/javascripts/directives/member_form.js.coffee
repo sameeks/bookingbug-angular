@@ -54,6 +54,8 @@ angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, Me
 
         if (form.$valid)
           $scope.loading = true
+          for item in data.questions
+            item.answer = data.q[item.id].answer
           $scope.member.$put('self', {}, data).then (member) ->
             $scope.loading = false
             AlertService.raise('UPDATE_SUCCESS')
@@ -66,6 +68,6 @@ angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, Me
 
             if typeof $scope.onFailSave == 'function'
               $scope.onFailSave()
-        else 
+        else
           if typeof $scope.onValidationError == 'function'
-              $scope.onValidationError()      
+              $scope.onValidationError()
