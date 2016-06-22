@@ -107,8 +107,6 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
               item.tickets = angular.copy(ticket)
               item.tickets.qty = 1
               $scope.bb.stackItem(item)
-              if $scope.company.settings.use_shopping_basket
-                $scope.decideNextPage()
           when "multi_space"
             item = new BBModel.BasketItem()
             angular.extend(item, base_item)
@@ -116,8 +114,6 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
             delete item.id
             item.tickets.qty = ticket.qty
             $scope.bb.stackItem(item)
-            if $scope.company.settings.use_shopping_basket
-              $scope.decideNextPage()
 
     # ok so we have them as stacked items
     # now push the stacked items to a basket
