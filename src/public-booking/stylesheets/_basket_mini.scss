@@ -9,15 +9,15 @@
   }
 
   .badge-notify {
-    background-color: #FF0000;
+    background-color: red;
     position: relative;
     top: -34px;
     right: 10px;
     float: right;
   }
 
-  table.table {
-    color: #000000;
+  table {
+    color: $gray-base;
     font-size: $font-size-base;
     .glyphicon {
       font-size: $font-size-base;

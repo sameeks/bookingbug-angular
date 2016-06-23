@@ -4,10 +4,17 @@
     text-align: center;
   }
 
+  .btn-day-nav {
+    color: $gray-dark;
+    &:hover {
+      color: $gray-base;
+    }
+  }
+
   .bb-day-nav-heading {
     display: inline-block;
     margin-bottom: 0;
-    font-size: 18px;
+    font-size: $font-size-large;
     padding: 15px 0 15px 0;
   }
 
@@ -19,4 +26,3 @@
   }
 
 }
-

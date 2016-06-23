@@ -5,7 +5,7 @@
 
   .booking-row {
     padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $bb-border;
     margin-bottom: 10px;
     &:last-child {
       border-bottom: none;

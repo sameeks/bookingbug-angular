@@ -1,37 +1,15 @@
-$heading-text-color         : #333333;
-$page-background-color      : #FFFFFF;
-$hyperlink-color            : #609ABE; 
-$placeholder-text           : #A5A5A5; 
+@import "calendar_admin";
+@import "client_admin";
+@import "date_picker";
 
-$primary-text-color         : #000000; 
-$primary-background-color   : #EEEEEE; 
-$primary-border-color       : #666666;
-
-$secondary-text-color       : #255B93;
-$secondary-background-color : #FAFAFA; 
-$secondary-border-color     : #D5D5D5; 
-
-#bb {
-
-  // templates
-  @import "admin_calendar";
-  @import "client_admin";
-
-  // components
-  @import "date_picker";
-
-  // module overrides
-  &[bb-admin-booking] {
-    .form-control {
-      border-radius: 4px !important;
-    }
-
-
-    .input-group .form-control:first-child {
-      border-bottom-right-radius: 0 !important;
-      border-top-right-radius: 0 !important;
-    }
+//Module overwrite
+[bb-admin-booking], &[bb-admin-booking] {
+  .form-control {
+    border-radius: 4px !important;
   }
 
+  .input-group .form-control:first-child {
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
 }
-
