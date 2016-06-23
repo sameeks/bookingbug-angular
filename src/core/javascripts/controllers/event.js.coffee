@@ -83,6 +83,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
+
   ###**
   * @ngdoc method
   * @name selectTickets
@@ -135,6 +136,20 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       , true
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
+    if $scope.bb.basket.timeItems()
+      $scope.multi_basket_grouping = _.groupBy($scope.bb.basket.timeItems(), 'event.description')
+
+
+      # this is for repeating through only the tickets on the most recent item added to basket
+
+      $scope.multi_basket_grouping = _.values($scope.multi_basket_grouping)
+
+      if $scope.multi_basket_grouping.length is 1
+        $scope.shown_tickets = $scope.multi_basket_grouping[0]
+      else 
+        $scope.shown_tickets = _.last($scope.multi_basket_grouping)
+
+
 
   ###**
   * @ngdoc method
@@ -155,6 +170,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       $scope.bb.current_item.ready = false
       $scope.decideNextPage(route)
       return true
+
 
   ###**
   * @ngdoc method
@@ -181,6 +197,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       return true
     else
       return $scope.updateBasket()
+
 
 
   ###**
@@ -237,3 +254,4 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
       $scope.event.updatePrice()
     , true
+
