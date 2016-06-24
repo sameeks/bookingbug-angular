@@ -3,6 +3,7 @@ angular.module('BB.Services').factory 'SettingsService', () ->
   scroll_offset = 0
   country_code = ""
   use_local_timezone = false
+  currency = ""
 
   enableInternationalizaton: () ->
     i18n = true
@@ -29,3 +30,10 @@ angular.module('BB.Services').factory 'SettingsService', () ->
 
   getUseLocalTimezone: ->
     use_local_timezone
+
+  setCurrency: (value) ->
+    currency = value
+
+  getCurrency: ->
+    currency
+

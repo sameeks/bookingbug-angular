@@ -107,9 +107,9 @@ angular.module('BB.Filters').filter 'currency', ($filter) ->
   (number, currencyCode) =>
     return $filter('icurrency')(number, currencyCode)
 
-angular.module('BB.Filters').filter 'icurrency', ($window, $rootScope) ->
+angular.module('BB.Filters').filter 'icurrency', ($window, SettingsService) ->
   (number, currencyCode) =>
-    currencyCode ||= $rootScope.bb_currency
+    currencyCode ||= SettingsService.getCurrency()
     currency = {
       USD: "$",
       GBP: "£",
@@ -143,7 +143,7 @@ angular.module('BB.Filters').filter 'pretty_price', ($filter) ->
     return $filter('ipretty_price')(price, symbol)
 
 
-angular.module('BB.Filters').filter 'ipretty_price', ($window, $rootScope) ->
+angular.module('BB.Filters').filter 'ipretty_price', ($window, SettingsService) ->
   (price, symbol) ->
     if !symbol
       currency = {
@@ -154,7 +154,7 @@ angular.module('BB.Filters').filter 'ipretty_price', ($window, $rootScope) ->
         CAD: "$",
         MIXED: "~"
       }
-      symbol = currency[$rootScope.bb_currency]
+      symbol = currency[SettingsService.getCurrency()]
 
     price /= 100.0
 

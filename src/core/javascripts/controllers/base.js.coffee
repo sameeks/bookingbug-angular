@@ -1093,7 +1093,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     $scope.bb.item_defaults.company = $scope.bb.company
 
-    SettingsService.setCountryCode($scope.bb.company.country_code)
+    SettingsService.setCountryCode(company.country_code)
+    SettingsService.setCurrency(company.currency_code)
+
+    moment.tz.setDefault(company.timezone)
 
     if company.$has('settings')
       company.getSettings().then (settings) =>
