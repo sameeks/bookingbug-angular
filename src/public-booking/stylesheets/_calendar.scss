@@ -75,12 +75,12 @@
       border-radius: 0;
       margin: 0;
       border: none;
-      border-bottom: 1px rgb(221, 221, 221) solid;
+      border-bottom: 1px $bb-border solid;
       box-shadow: none;
     }
 
     .accordion-group:first-child .panel {
-      border-top: 1px rgb(221, 221, 221) solid;
+      border-top: 1px $bb-border solid;
     }
   }
 
@@ -103,7 +103,7 @@
     border: none;
   }
 
-   .panel-body {
+  .panel-body {
     padding: 0;
   }
 
@@ -132,7 +132,7 @@
     cursor: pointer;
     text-align: center;
     &:hover, &.selected {
-      background-color: #333;
+      background-color: $gray-darker;
       color: #FFF;
     }
   }
@@ -145,11 +145,11 @@
 
   // expanded or selected panel
   .panel-group .panel.expanded {
-    background-color: #EEE;
+    background-color: $gray-lighter;
   }
 
   .panel-group .panel.selected {
-    background-color: #777;
+    background-color: $gray-light;
     color: #FFF;
   }
 
@@ -168,7 +168,7 @@
       display: none;
     }
     .panel-title {
-      color: #CCC;
+      color: $bb-gray;
     }
   }
 
@@ -219,11 +219,11 @@
     span.glyphicon{
        font-size: 40px;
        width: 100%;
-      }   
+      }
     }
     button{
       width: 100%;
-    }  
+    }
   }
 }
 
@@ -255,13 +255,13 @@
     button{
       background: transparent;
       border-radius: 0px;
-      border: solid 1px #ddd;
-      color: #777;
+      border: solid 1px $bb-border;
+      color: $gray-light;
       &:disabled{
         opacity: .5;
       }
       span{
-        color: #777;
+        color: $gray-light;
       }
     }
 
@@ -272,19 +272,22 @@
       }
     }
 
-    button.btn-default{       
+    button.btn-default{
         &:hover, &:active, &:focus{
            background-image: linear-gradient(to bottom, #eff3e9 0%, #fff 100%);
            outline: none;
            span{
             font-weight: bold;
            }
-        }        
+        }
     }
-    
+
   }
 }
-
+// for the new time slot disabled method
+.time-slot.disabled{
+  opacity: 0.2;
+}
 
 // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 // DATEPICKER DEFAULT SCHEMA end

@@ -21,12 +21,7 @@ ul, ol {
 }
 
 a {
-  color: #333;
   text-decoration: underline;
-  &:hover, &:focus {
-    color: #333;
-    text-decoration: none;
-  }
 }
 
 p {
@@ -52,7 +47,7 @@ p {
   top:0;
   left:0;
   width:100%;
-  background-color:#FFF;
+  background-color: white;
   padding-top:100px;
   filter:alpha(opacity=70);
   -moz-opacity:0.7;
@@ -86,7 +81,7 @@ p {
 }
 
 .bb-section-title {
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid $gray-light;
   padding-bottom: 10px;
   margin-bottom: 20px;
   font-size: $font-size-h3;
@@ -95,7 +90,7 @@ p {
 .bb-step-navigation {
   margin-top: 50px;
   margin-bottom: 20px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid $bb-border;
   padding-top: 20px;
 
   .btn {
@@ -110,6 +105,22 @@ p {
 .bb-bordered {
   border-top: 1px solid $gray-lighter;
   border-bottom: 1px solid $gray-lighter;
+}
+
+.bb-block-heading {
+  padding-bottom: 5px;
+}
+
+/* use to wrap components just as lists */
+.bb-block {
+  padding-top: 15px;
+  padding-bottom: 0;
+  margin-bottom: 15px;
+
+  &.bb-block-sm {
+    padding-bottom: 10px;
+  }
+
 }
 
 @media (min-width: $screen-sm) {

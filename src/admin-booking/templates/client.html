@@ -1,126 +1,226 @@
 <div bb-admin-booking-clients>
-  <div>
-    <div class="page-subheader-var">
-      <h1>Select a customer</h1>
+
+  <div class="page-header">
+    <h1>Select a customer</h1>
+  </div>
+
+  <div class="admin-typehead-wrapper" ng-form bb-form name="client_search_form">
+    <div class="form-group" ng-class="{'has-error': client_search_form.result.$invalid && (client_search_form.result.$dirty || client_search_form.submitted)}">
+      <div class="input-group" ng-class="{'animated shake': !typehead_result && search_triggered}">
+        <input class="input-lg form-control" name="result" ng-model="typehead_result" placeholder="Search by email or name" required typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="customer_typeahead_loading" typeahead-no-results="no_results" class="form-control" typeahead-on-select="typeHeadResults($item, $modal, $label)" typeahead-focus-first="false" typeahead-min-length="2">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-primary btn-lg" ng-click="submitForm(); getClients({filter_by: typehead_result})"><i class="fa fa-search"></i></button>
+        </span>
+      </div>
     </div>
   </div>
-  <div ng-hide="search_triggered">
-    <h3>Search</h3>
-    <div class="admin-typehead-wrapper">
-      <div class="input-group">
-      <input class="input-lg form-control" ng-model="typehead_result" placeholder="Search Email or Name" typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" typeahead-on-select="typeHeadResults($item, $modal, $label)">
-      <span class="input-group-btn">
-        <button class="btn btn-primary btn-lg" ng-click="getClients(null, typehead_result)"><i class="fa fa-search"></i></button>
-      </span>
-    </div>
-    </div>
-  </div>
+
   <script type="text/ng-template" id="_typehead.html">
-    <div class="typehead-results-wrapper">
-      <div class="typh-header">{{match.model.name}}</div>
-      <div><i class="fa fa-envelope-o"></i> {{match.model.email}}</div>
-      <div><i class="fa fa-phone"></i> <span>{{match.model.mobile}}</div>
+
+    <div class="bb-typehead-results-wrapper">
+
+      <ul class="bb-list bb-list-sm">
+        <li class="bb-typh-header">
+          {{match.model.name}}
+        </li>
+        <li ng-show="match.model.email">
+          <i class="fa fa-envelope-o fa-fw"></i>
+          {{match.model.email}}
+        </li>
+        <li ng-show="match.model.mobile && !match.model.email">
+          <i class="fa fa-mobile fa-lg fa-fw"></i>
+          {{match.model.mobile | local_phone_number}}
+        </li>
+        <li ng-show="match.model.phone && !match.model.email">
+          <i class="fa fa-phone fa-fw"></i>
+          {{match.model.phone | local_phone_number}}
+        </li>
+      </ul>
+
     </div>
+
   </script>
-  <div ng-if="search_triggered" class="search-results">
-    <span class="pull-left">
-      sort by :
-    </span>
-    <div class="col-xs-2">
-        <select ng-model="sortBy">
-            <option value="name">Name</option>
-            <option value="mobile">Mobile</option>
-            <option value="email">Email</option>
-        </select>
-    </div>
-    <button class="btn-link pull-right" style="margin-bottom: 10px;" ng-click="clearSearch()">Clear Results</button>
-    <div class="clearfix"></div>
-    <div ng-repeat="item in clients | orderBy: sortBy | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
-      <div class="typehead-client-wrapper row">
-        <div class="col-sm-10">
-          <span ng-show="item.name" style="font-size: 20px;"><strong>{{item.name}}</strong><br /></span>
-          <span ng-show="item.email" class="icon-padding"><i class="fa fa-envelope-o"></i> </span>{{item.email}}</span>
-          <span ng-show="item.phone" class="icon-padding"><i class="fa fa-phone"></i> </span>{{item.phone}}</span>
-          <span ng-show="item.mobile" class="icon-padding"><i class="fa fa-phone"></i> </span>{{item.mobile}}</span>
-        </div>
-        <div class="col-sm-2">
-          <button class="btn btn-primary btn-block" style="margin-top: 5px;" ng-click="selectClient(item);">Select</button>
-        </div>
-        <div class="clearfix">
+
+  <div ng-if="search_complete" class="search-results">
+
+    <div class="bb-block" ng-show="clients.num_items > 0">
+
+      <div class="row">
+
+        <div class="col-sm-6">
+          <div class="bb-search-summary">{{clients.num_items}} customer<span ng-show="clients.num_items > 1">s</span> found</div>
+
+          <button class="btn btn-link" ng-click="clearSearch()">Clear</button>
 
         </div>
-      </div>
-    </div>
-    <pagination total-items="pagination.num_items"
-      ng-model="pagination.current_page" items-per-page="pagination.page_size"
-      max-size="pagination.max_size" boundary-links="true" rotate="false"
-      num-pages="pagination.num_pages"></pagination>
-  </div>
-  <hr />
 
-  <div ng-hide="client.name || search_triggered" class="admin-create-client">
-    <h3>New Customer</h3>
-    <div ng-form name="client_form" class="row">
-      <div class="col-xs-12 form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
-        <label for="first_name" class="control-label">First Name:</label><br />
-        <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control"/>
-      </div>
-      <div class="col-xs-12 form-group" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
-        <label for="last_name" class="control-label">Last Name:</label><br />
-        <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
-      </div>
-      <div class="col-xs-12 form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
-        <label for="email" class="control-label">E-mail:</label>
-        <input type="email" name="email" id="email" ng-required="!client.mobile" ng-model="client.email" class="form-control"/>
-      </div>
-      <div class="col-xs-12 form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
-        <label for="mobile" class="control-label">Mobile:</label>
-        <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email"/>
-      </div>
-      <div ng-show="bb.company_settings.ask_address" class="col-xs-12">
-         <div class="form-group" style="margin-top: 10px;" ng-class="{'has-error': client_form.address1.$invalid && ((client_form.address1.$dirty && !client_form.address1.$focused) || booking_form.submitted)}">
-            <label for="address1" class="control-label">Address:</label>
-            <div>
-              <input type="text" name="address1" id="address1" ng-model="client.address1" class="form-control"/>
+        <div class="col-sm-6">
+
+          <div class="form-inline bb-search-options">
+
+            <div class="form-group">
+              <label class="bb-label" for="sort_by">Sort by: </label>
+              <select ng-model="sort_by" id="sort_by" class="form-control" ng-options="option.key as option.name for option in sort_by_options" ng-change="sortChanged(sort_by)">
+              </select>
             </div>
-            <div class="col-sm-3 messages">
-              <div class="error-message" ng-show="client_form.address1.$invalid && booking_form.submitted">
-                Please enter your address
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bb-block text-center" ng-show="clients.num_items == 0">
+      <p>
+        No customers matching <strong>{{typehead_result}}</strong> found
+      </p>
+      <p>
+        <button class="btn btn-link" ng-click="clearSearch()">Create one instead?</button>
+      </p>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <ul class="bb-list bb-list-bordered bb-list-fade-in">
+
+      <li ng-repeat="client in clients.items | startFrom: (clients.current_page - 1) * clients.page_size | limitTo: clients.page_size track by $index">
+
+        <div class="typehead-item-wrapper">
+
+          <div class="row">
+            <div class="col-sm-10">
+
+              <h3>
+                <span ng-show="sort_by != 'last_name'">
+                  {{client.name}}
+                </span>
+                <span ng-show="sort_by == 'last_name'">
+                  {{client.last_name}}, {{client.first_name}}
+                </span>
+              </h3>
+
+              <ul class="bb-list bb-list-horizontal">
+                <li ng-show="client.email">
+                  <i class="fa fa-envelope-o fa-fw"></i>
+                  {{client.email}}
+                </li>
+                <li ng-show="client.mobile">
+                  <i class="fa fa-mobile fa-lg fa-fw"></i>
+                  {{client.mobile | local_phone_number}}
+                </li>
+                <li ng-show="client.phone">
+                  <i class="fa fa-phone fa-fw"></i> {{client.phone | local_phone_number}}
+                </li>
+              </ul>
+
+            </div>
+            <div class="col-sm-2">
+              <button class="btn btn-primary btn-block btn-select-client" ng-click="selectClient(client);">Select</button>
+            </div>
+          </div>
+
+        </div>
+
+      </li>
+
+    </ul>
+
+    <pagination total-items="clients.num_items"
+      ng-model="clients.current_page" items-per-page="clients.page_size"
+      max-size="clients.max_size" boundary-links="true" rotate="false"
+      num-pages="clients.num_pages" ng-show="clients.num_items > clients.page_size" ng-change="pageChanged()"></pagination>
+
+  </div>
+
+  <div ng-hide="search_complete" class="admin-create-client">
+
+    <hr />
+
+    <div class="panel panel-default">
+      <div class="panel-heading"><strong>Create Customer</strong></div>
+      <div class="panel-body">
+
+        <div ng-form name="client_form" bb-form>
+
+          <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
+            <label for="first_name" class="control-label">First Name:</label><br />
+            <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control"/>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
+            <label for="last_name" class="control-label">Last Name:</label><br />
+            <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
+            <label for="email" class="control-label">E-mail:</label>
+            <input type="email" name="email" id="email" ng-required="!client.mobile" ng-model="client.email" class="form-control"/>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
+            <label for="mobile" class="control-label">Mobile:</label>
+            <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email || bb.company.settings.ask_mobile_phone"/>
+          </div>
+
+          <div ng-show="bb.company_settings.ask_address">
+
+            <div class="form-group" ng-class="{'has-error': client_form.address1.$invalid && ((client_form.address1.$dirty && !client_form.address1.$focused) || booking_form.submitted)}">
+              <label for="address1" class="control-label">Address:</label>
+              <div>
+                <input type="text" name="address1" id="address1" ng-model="client.address1" class="form-control"/>
+              </div>
+              <div class="col-sm-3 messages">
+                <div class="error-message" ng-show="client_form.address1.$invalid && booking_form.submitted">
+                  Please enter your address
+                </div>
               </div>
             </div>
+
+            <div class="form-group" ng-class="{'has-error': client_form.address2.$invalid && ((client_form.address2.$dirty && !client_form.address2.$focused) || booking_form.submitted)}">
+              <label for="address2" class="control-label"></label>
+              <div>
+                <input type="text" name="address2" id="address2" ng-model="client.address2" class="form-control"/>
+              </div>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': client_form.address3.$invalid && ((client_form.address3.$dirty && !client_form.address3.$focused) || booking_form.submitted)}">
+              <label for="address3" class="control-label">Town:</label>
+              <div>
+                <input type="text" name="address3" id="address3" ng-model="client.address3" class="form-control"/>
+              </div>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': client_form.address4.$invalid && booking_form.submitted}">
+              <label for="address4" class="control-label">County:</label>
+              <div>
+                <input type="text" name="address4" id="address4" ng-model="client.address4" class="form-control"/>
+              </div>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error': client_form.postcode.$invalid && ((client_form.postcode.$dirty && !client_form.postcode.$focused) || booking_form.submitted)}">
+              <label for="postcode" class="control-label">Postcode:</label>
+              <div>
+                <input type="text" name="postcode" id="postcode" ng-model="client.postcode" class="form-control"/>
+              </div>
+            </div>
+
+
           </div>
 
-          <div class="form-group" ng-class="{'has-error': client_form.address2.$invalid && ((client_form.address2.$dirty && !client_form.address2.$focused) || booking_form.submitted)}">
-            <label for="address2" class="control-label"></label>
-            <div>
-              <input type="text" name="address2" id="address2" ng-model="client.address2" class="form-control"/>
+          <div class="row">
+            <div class="col-sm-3">
+              <button type="submit" class="btn btn-primary btn-block" ng-click="submitForm(client_form) && createClient()" bb-debounce>Create Customer</button>
             </div>
           </div>
 
-          <div class="form-group" ng-class="{'has-error': client_form.address3.$invalid && ((client_form.address3.$dirty && !client_form.address3.$focused) || booking_form.submitted)}">
-            <label for="address3" class="control-label">Town:</label>
-            <div>
-              <input type="text" name="address3" id="address3" ng-model="client.address3" class="form-control"/>
-            </div>
-          </div>
+        </div>
 
-          <div class="form-group" ng-class="{'has-error': client_form.address4.$invalid && booking_form.submitted}">
-            <label for="address4" class="control-label">County:</label>
-            <div>
-              <input type="text" name="address4" id="address4" ng-model="client.address4" class="form-control"/>
-            </div>
-          </div>
-
-          <div class="form-group" ng-class="{'has-error': client_form.postcode.$invalid && ((client_form.postcode.$dirty && !client_form.postcode.$focused) || booking_form.submitted)}">
-            <label for="postcode" class="control-label">Postcode:</label>
-            <div>
-              <input type="text" name="postcode" id="postcode" ng-model="client.postcode" class="form-control"/>
-            </div>
-          </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary col-sm-3" style="margin-top: 10px;" ng-click="validator.validateForm(client_form) && createClient()" bb-debounce>Create Customer</button>
+
   </div>
+
   <div class="bb-step-navigation">
     <div class="row">
       <div class="col-sm-9 col-sm-push-3 text-right">
@@ -131,4 +231,5 @@
       </div>
     </div>
   </div>
+
 </div>

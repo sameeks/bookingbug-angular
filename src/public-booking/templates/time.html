@@ -28,13 +28,13 @@
       </div>
 
       <div ng-if="slots">
-      
+
         <div accordion close-others="false">
 
           <div bb-accordion-range-group="{heading: 'Morning', range: [0, 720], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
           </div>
 
-          <div bb-accordion-range-group="{heading: 'Afternoon',range: [720, 1020], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div> 
+          <div bb-accordion-range-group="{heading: 'Afternoon',range: [720, 1020], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
 
           <div bb-accordion-range-group="{heading: 'Evening', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
 

@@ -222,14 +222,20 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
       $scope.notLoaded $scope
 
-      pslots = TimeService.query({company: $scope.bb.company, cItem: $scope.data_source, item_link: $scope.item_link_source, date: $scope.selected_day.date, client: $scope.client, available: 1})
+      pslots = TimeService.query
+        company: $scope.bb.company
+        cItem: $scope.data_source
+        item_link: $scope.item_link_source
+        date: $scope.selected_day.date
+        client: $scope.client
+        available: 1
 
       pslots.finally ->
         $scope.setLoaded $scope
-      pslots.then (time_slots) ->
+      pslots.then (time_slots) ->       
 
         $scope.slots = time_slots
-        $scope.$broadcast('slotsUpdated')
+        $scope.$broadcast('slotsUpdated', $scope.data_source, time_slots) # data_source is the BasketItem
         # padding is used to ensure that a list of time slots is always padded out with a certain of values, if it's a partial set of results
         if $scope.add_padding && time_slots.length > 0
           dtimes = {}
@@ -240,14 +246,21 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-        if $scope.data_source.defaults.time?
-          requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source)
+        requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
 
-          if requested_slot
+        if requested_slot and $scope.data_source.resource and $scope.data_source.person
+          if requested_slot && requested_slot.overbook
+            $scope.availability_conflict = true
+          else
             $scope.skipThisStep()
             $scope.selectSlot(requested_slot, $scope.selected_day)
-          else
+        else if requested_slot
+          if requested_slot.overbook
             $scope.availability_conflict = true
+          else
+            $scope.highlightSlot(requested_slot, $scope.selected_day)
+        else if requested_slot is null
+          $scope.availability_conflict = true
 
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 

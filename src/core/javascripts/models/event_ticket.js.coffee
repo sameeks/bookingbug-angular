@@ -70,6 +70,47 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
 
     ###**
     * @ngdoc method
+    * @name isAvailable
+    * @methodOf BB.Models:EventTicket
+    * @description
+    * Check if there is an availability for at least one of the pools
+    *
+    * @returns {boolean} true if there is an availibity for at least one pool
+    *                    false otherwise
+    ###
+    isAvailable: (event) ->
+      for ticket in event.tickets
+        if event.ticket_spaces[ticket.pool_id]
+          if event.ticket_spaces[ticket.pool_id].left > 0
+            return true
+      return false
+
+    ###**
+    * @ngdoc method
+    * @name getRangeTicketSpaces
+    * @methodOf BB.Models:EventTicket
+    * @description
+    * Get a range base on the minimum number of bookings and the tickets left. This method
+    * is useful when you have multiple spaces for an event in complex tickets. 
+    *
+    * @returns {array} The returned range
+    ###
+    getRangeTicketSpaces: (pool_id, event) ->
+      max_left = 0
+      min = @min_num_bookings
+      if @isAvailable(event)
+        if pool_id
+          max_left = event.ticket_spaces[pool_id].left
+
+        if max_left == 0
+          return [0]
+        else
+          return [0].concat [min..max_left]
+      else
+        return @getRange(20)
+
+    ###**
+    * @ngdoc method
     * @name totalQty
     * @methodOf BB.Models:EventTicket
     * @description

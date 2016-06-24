@@ -130,8 +130,8 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       else
         setTimeRange($scope.last_selected_date)
     # the current item already has a date
-    else if $scope.bb.current_item.date || $scope.bb.current_item.requested_date
-      date = if $scope.bb.current_item.date then $scope.bb.current_item.date.date else $scope.bb.current_item.requested_date
+    else if $scope.bb.current_item.date or $scope.bb.current_item.defaults.date
+      date = if $scope.bb.current_item.date then $scope.bb.current_item.date.date else $scope.bb.current_item.defaults.date
       setTimeRange(date)
     # selected day has been provided, use this to set the time
     else if $scope.selected_day
@@ -365,7 +365,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     current_item = $scope.bb.current_item
 
-    if slot && slot.availability() > 0
+    if slot && slot.availability() > 0 and !slot.disabled
       if day
         $scope.setLastSelectedDate(day.date)
         current_item.setDate(day)
@@ -473,7 +473,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
           requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item)
 
           if requested_slot
-            $scope.selectSlot(day, requested_slot)
+            $scope.selectSlot(requested_slot, day)
 
 
          $scope.$broadcast "time_slots:loaded", time_slots

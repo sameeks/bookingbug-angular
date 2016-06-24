@@ -16,7 +16,9 @@
 * scope: true
 * </pre>
 *
-* @param {hash}  bbResources   A hash of options
+* @param {hash} bbResources A hash of options
+* @param {BasketItem} bbItem The BasketItem that will be updated with the selected resource. If no item is provided, bb.current_item is used as the default
+# @param {array} bbItems An array of BasketItem's that will be updated with the selected resource.
 * @property {array} items An array of all resources
 * @property {array} bookable_items An array of all BookableItems - used if the current_item has already selected a services or person
 * @property {array} bookable_resources An array of Resources - used if the current_item has already selected a services or person
@@ -30,6 +32,16 @@ angular.module('BB.Directives').directive 'bbResources', () ->
   replace: true
   scope : true
   controller : 'ResourceList'
+  link : (scope, element, attrs) ->
+
+    scope.options = scope.$eval(attrs.bbResources) or {}
+
+    if attrs.bbItems
+      scope.booking_items = scope.$eval(attrs.bbItems) or []
+      scope.booking_item  = scope.booking_items[0]
+    else
+      scope.booking_item = scope.$eval(attrs.bbItem) or scope.bb.current_item
+      scope.booking_items = [scope.booking_item]
 
 
 angular.module('BB.Controllers').controller 'ResourceList',
@@ -40,38 +52,37 @@ angular.module('BB.Controllers').controller 'ResourceList',
   angular.extend(this, new PageControllerService($scope, $q))
 
 
-  $scope.options = $scope.$eval($attrs.bbResources) or {}
-
   $rootScope.connection_started.then () =>
     loadData()
+
 
   loadData = () =>
     # do nothing if nothing has changed
     unless ($scope.bb.steps and $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
-      if !$scope.bb.current_item.service or $scope.bb.current_item.service == $scope.change_watch_item
+      if !$scope.booking_item.service or $scope.booking_item.service == $scope.change_watch_item
         # if there's no service - we have to wait for one to be set - so we're done loading for now!
-        if !$scope.bb.current_item.service
+        if !$scope.booking_item.service
           $scope.setLoaded $scope
         return
 
-    $scope.change_watch_item = $scope.bb.current_item.service
+    $scope.change_watch_item = $scope.booking_item.service
     $scope.notLoaded $scope
 
     rpromise = ResourceService.query($scope.bb.company)
     rpromise.then (resources) =>
-      if $scope.bb.current_item.group  # check they're part of any currently selected group
-        resources = resources.filter (x) -> !x.group_id or x.group_id is $scope.bb.current_item.group
+      if $scope.booking_item.group  # check they're part of any currently selected group
+        resources = resources.filter (x) -> !x.group_id or x.group_id is $scope.booking_item.group
       $scope.all_resources = resources
 
     params =
       company: $scope.bb.company
-      cItem: $scope.bb.current_item
+      cItem: $scope.booking_item
       wait: rpromise
       item: 'resource'
     ItemService.query(params).then (items) =>
       promises = []
-      if $scope.bb.current_item.group # check they're part of any currently selected group
-        items = items.filter (x) -> !x.group_id or x.group_id is $scope.bb.current_item.group
+      if $scope.booking_item.group # check they're part of any currently selected group
+        items = items.filter (x) -> !x.group_id or x.group_id is $scope.booking_item.group
 
       for i in items
         promises.push(i.promise)
@@ -80,7 +91,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
         resources = []
         for i in items
           resources.push(i.item)
-          if $scope.bb.current_item and $scope.bb.current_item.resource and $scope.bb.current_item.resource.id is i.item.id
+          if $scope.booking_item and $scope.booking_item.resource and $scope.booking_item.resource.id is i.item.id
             $scope.resource = i.item
 
       # if there's only one resource and single pick hasn't been enabled, 
@@ -101,6 +112,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
       else
         $scope.setLoaded $scope
 
+
   ###**
   * @ngdoc method
   * @name getItemFromResource
@@ -118,6 +130,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
             return item
     return resource
 
+
   ###**
   * @ngdoc method
   * @name selectItem
@@ -134,21 +147,26 @@ angular.module('BB.Controllers').controller 'ResourceList',
       $scope.resource = item
       return false
     else
-      $scope.bb.current_item.setResource(getItemFromResource(item))
+      new_resource = getItemFromResource(item)
+      _.each $scope.booking_items, (item) -> item.setResource(new_resource)
       $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       return true
 
+
   $scope.$watch 'resource',(newval, oldval) =>
     if $scope.resource
-      $scope.bb.current_item.setResource(getItemFromResource($scope.resource))
+      new_resource = getItemFromResource($scope.resource)
+      _.each $scope.booking_items, (item) -> item.setResource(new_resource)
       $scope.broadcastItemUpdate()
     else if newval != oldval
-      $scope.bb.current_item.setResource(null)
+      _.each $scope.booking_items, (item) -> item.setResource(null)
       $scope.broadcastItemUpdate()
+
 
   $scope.$on "currentItemUpdate", (event) ->
     loadData()
+
 
     ###**
     * @ngdoc method
@@ -159,9 +177,10 @@ angular.module('BB.Controllers').controller 'ResourceList',
     ###
    $scope.setReady = () =>
     if $scope.resource
-      $scope.bb.current_item.setResource(getItemFromResource($scope.resource))
+      new_resource = getItemFromResource($scope.resource)
+      _.each $scope.booking_items, (item) -> item.setResource(new_resource)
       return true
     else
-      $scope.bb.current_item.setResource(null)
+      _.each $scope.booking_items, (item) -> item.setResource(null)
       return true
 
