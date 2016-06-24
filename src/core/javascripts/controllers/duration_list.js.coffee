@@ -45,7 +45,7 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $ro
   $scope.loadData = () =>
     id = $scope.bb.company_id
     service = $scope.bb.current_item.service
-    if service && !$scope.durations
+    if service
       $scope.durations =
         (for d in _.zip(service.durations, service.prices)
           {value: d[0], price: d[1]})
