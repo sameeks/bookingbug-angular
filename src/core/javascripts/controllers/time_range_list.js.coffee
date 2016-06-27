@@ -56,7 +56,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
 
 angular.module('BB.Controllers').controller 'TimeRangeList',
-($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, DateTimeUtilitiesService) ->
+($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
 
@@ -105,7 +105,22 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     else if $scope.options and $scope.options.time_range_length
       $scope.time_range_length = $scope.options.time_range_length
     else
-      $scope.time_range_length = 7
+      calculateDayNum = ()->
+        cal_days = {lg: 7, md: 5, sm: 3, xs: 1}
+
+        timeRange = 0
+
+        for size,days of cal_days
+          if size == ViewportSize.getViewportSize()
+            timeRange = days
+
+        return timeRange  
+
+      $scope.time_range_length = calculateDayNum()
+
+      $scope.$on 'ViewportSize:changed', ()->
+        $scope.time_range_length = null
+        $scope.initialise()
 
     if $attrs.bbDayOfWeek? or ($scope.options and $scope.options.day_of_week)
       $scope.day_of_week = if $attrs.bbDayOfWeek? then $scope.$eval($attrs.bbDayOfWeek) else $scope.options.day_of_week
@@ -443,6 +458,10 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
       promise.then (datetime_arr) ->
         $scope.days = []
+        if _.every(_.values(datetime_arr), _.isEmpty)
+          $scope.no_slots_in_week = true
+        else
+          $scope.no_slots_in_week = false
 
         # sort time slots to be in chronological order
         for pair in _.sortBy(_.pairs(datetime_arr), (pair) -> pair[0])
@@ -480,9 +499,15 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     else
-      $scope.setLoaded $scope
+      $scope.setLoaded $scope  
 
-
+  $scope.showFirstAvailableDay = ->
+    SlotDates.getFirstDayWithSlots($scope.data_source, $scope.selected_day).then (day)->
+        $scope.no_slots_in_week = false
+        setTimeRange day
+        $scope.loadData()
+      , (err)->  
+        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
   ###**
   * @ngdoc method
   * @name padTimes

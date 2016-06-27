@@ -1,4 +1,9 @@
 <div>
+
+  <div class="alert alert-info" ng-show="no_slots_in_week"><i class="fa fa-info-circle" aria-hidden="true"></i> Looks like there's no availability for the next {{time_range_length}} day<span ng-show="time_range_length > 1">s</span>.
+  <button type="button" class="btn btn-default" ng-click="showFirstAvailableDay()">Jump to Next Available Day</button>
+  </div>
+
   <div class="month-header hidden-xs">
     <h2 class="month-heading">{{pretty_month_title('MMMM', 'YYYY')}}</h2>
   </div>
