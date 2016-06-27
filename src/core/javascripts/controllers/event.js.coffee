@@ -136,18 +136,18 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       , true
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-    if $scope.bb.basket.timeItems()
-      $scope.multi_basket_grouping = _.groupBy($scope.bb.basket.timeItems(), 'event.description')
+    if $scope.bb.basket.timeItems() 
+      $scope.ticket_group = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
 
 
       # this is for repeating through only the tickets on the most recent item added to basket
 
-      $scope.multi_basket_grouping = _.values($scope.multi_basket_grouping)
+      $scope.ticket_group = _.values($scope.ticket_group)
 
-      if $scope.multi_basket_grouping.length is 1
-        $scope.shown_tickets = $scope.multi_basket_grouping[0]
+      if $scope.ticket_group.length is 1
+        $scope.shown_tickets = $scope.ticket_group[0]
       else 
-        $scope.shown_tickets = _.last($scope.multi_basket_grouping)
+        $scope.shown_tickets = _.last($scope.ticket_group)
 
 
 

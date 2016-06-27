@@ -52,9 +52,11 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
 
     $scope.bb.basket.setClient($scope.client) if $scope.client
 
-    if $scope.bb.basket.timeItems()
+    if $scope.bb.basket.timeItems() 
+      console.log $scope.bb.basket.timeItems()
       $scope.multi_basket_grouping = _.groupBy($scope.bb.basket.timeItems(), 'event.description')
-      console.log $scope.multi_basket_grouping
+      $scope.multi_basket_grouping = _.values($scope.multi_basket_grouping)
+      console.log 'basket group', $scope.multi_basket_grouping
 
     if $scope.client.$has('pre_paid_bookings') and $scope.bb.basket.timeItems().length > 0
 
