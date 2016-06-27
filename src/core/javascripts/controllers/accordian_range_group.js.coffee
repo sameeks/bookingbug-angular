@@ -47,7 +47,7 @@ angular.module('BB.Directives').directive 'bbAccordionRangeGroup', (PathSvc) ->
     PathSvc.directivePartial "_accordion_range_group"
 
 angular.module('BB.Controllers').controller 'AccordionRangeGroup',
-($scope, $attrs, $rootScope, $q, FormDataStoreService) ->
+($scope, $attrs, $rootScope, $q, FormDataStoreService, SettingsService, DateTimeUtilitiesService) ->
 
   $scope.controller = "public.controllers.AccordionRangeGroup"
 
@@ -112,7 +112,13 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
 
     if $scope.slots
       angular.forEach $scope.slots, (slot) ->
-        $scope.accordion_slots.push(slot) if slot.time >= $scope.start_time and slot.time < $scope.end_time and slot.avail is 1
+        if SettingsService.getUseLocalTimezone()
+          time = moment(slot.time_moment).tz(moment.tz.guess())
+          slot_time = DateTimeUtilitiesService.convertMomentToTime(time)
+        else 
+          slot_time = slot.time
+
+        $scope.accordion_slots.push(slot) if slot_time >= $scope.start_time and slot_time < $scope.end_time and slot.avail is 1
       updateAvailability()
 
 

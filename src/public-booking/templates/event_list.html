@@ -1,7 +1,11 @@
 <div bb-events="{mode: 2}" ng-init="bb.basket.clear()">
 
   <div class="page-header">
-    <h1>Events at {{company.name}}</h1>
+    <h1>Events at {{company.name}} das</h1>
+  </div>
+
+  <div class="alert alert-info" bb-time-zone ng-show="is_time_zone_diff">
+    All times are shown in {{time_zone_name}}.
   </div>
 
   <!-- <div bb-month-picker day-data="item_dates"></div> -->
@@ -160,15 +164,16 @@
                   <ul>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
                       <span class="fa fa-calendar-o"></span>
-                      <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date.format('dddd ')}}</span><span class="truncate-xs hidden-md hidden-lg">{{item.date.format('Do MMMM ')}}</span>
-                      <span class="truncate-xs hidden-xs hidden-sm">{{item.date.format('Do MMM ')}}</span>
-                      <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date.format('YYYY')}}</span>
+                      <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date | datetime: 'dddd '}}</span>
+                      <span class="truncate-xs hidden-md hidden-lg">{{item.date | datetime: 'Do MMMM '}}</span>
+                      <span class="truncate-xs hidden-xs hidden-sm">{{item.date | datetime: 'Do MMM '}}</span>
+                      <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date | datetime: 'YYYY'}}</span>
                     </li>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
                       <span class="fa fa-clock-o" aria-hidden="true"></span>
-                      <span ng-bind="item.date.format('h[:]mma')"></span>
+                      <span ng-bind="item.date | datetime: 'h[:]mma'"></span>
                       <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}">-</span>
-                      <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}" ng-bind="item.end_datetime.format('h[:]mma')"></span>
+                      <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}" ng-bind="item.end_datetime | datetime: 'h[:]mma'"></span>
                     </li>
                     <li class="hidden-xs truncate-xs" ng-class="{'col-sm-4':!$root.tiles, 'hidden-sm':$root.tiles, 'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">
                       <span class="fa fa-hourglass-half"></span>

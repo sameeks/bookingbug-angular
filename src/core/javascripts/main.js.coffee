@@ -75,6 +75,9 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
   if (msie && msie <= 9) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
+    
+  moment.fn.toISODate ||= -> this.locale('en').format('YYYY-MM-DD')
+
 
 app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig) ->
   # add methods to the rootscope if they are applicable to whole app
