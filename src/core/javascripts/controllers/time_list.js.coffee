@@ -247,14 +247,14 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-        slot_checks(time_slots) if options.check_requested_slot == true
+        checkRequestedSlots(time_slots) if options.check_requested_slot == true
 
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     else
       $scope.setLoaded $scope
 
-  slot_checks = (time_slots) ->
+  checkRequestedSlots = (time_slots) ->
     requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
     if requested_slot and $scope.data_source.resource and $scope.data_source.person
       if requested_slot && requested_slot.overbook
