@@ -1,6 +1,17 @@
-@import "bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "./bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "./bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url("fonts/glyphicons-halflings-regular.eot");
+  src: url("fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("fonts/glyphicons-halflings-regular.woff") format("woff"), url("fonts/glyphicons-halflings-regular.ttf") format("truetype");
+}
+
 $bb-gray: gray;
+$secondary-border-color: gray;
+$hyperlink-color: blue;
 $bb-border: $panel-default-border;
+
 @import "src/admin-booking/stylesheets/main";
 @import "src/admin-dashboard/stylesheets/main";
 @import "src/core/stylesheets/main";
