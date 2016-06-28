@@ -184,7 +184,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         # NOTE: date is not set as it might not be available
         defaults.date = moment(defaults.date)
       if defaults.time
-         # NOTE: time is not set as it might not be available
+        # NOTE: time is not set as it might not be available
         date = if defaults.date then defaults.date else moment()
         time = if defaults.time then parseInt(defaults.time) else 0
         defaults.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment({date: defaults.date}, {time: time})
@@ -647,11 +647,12 @@ angular.module('BB.Models').factory "BasketItemModel",
         @time.select()
 
         if @datetime
-          val = parseInt(time.time)
-          hours = parseInt(val / 60)
-          mins = val % 60
-          @datetime.hour(hours)
-          @datetime.minutes(mins)
+          @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(@datetime, @time)
+          # val = parseInt(time.time)
+          # hours = parseInt(val / 60)
+          # mins = val % 60
+          # @datetime.hour(hours)
+          # @datetime.minutes(mins)
 
         if @price && @time.price && (@price != @time.price)
           @setPrice(@time.price)
@@ -978,7 +979,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {string} The returned price
     ###
-    # prints the amount due - which might be different if it's a waitlist
     duePrice: () ->
       if @isWaitlist()
         return 0
@@ -1005,12 +1005,15 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {date} The returned start date time
     ###
-    # get booking start datetime
     start_datetime: () ->
       return null if !@date || !@time
-      start_datetime = moment(@date.date.toISODate())
-      start_datetime.minutes(@time.time)
-      start_datetime
+
+      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date, @time)
+
+      # start_datetime = moment(@date.date.toISODate())
+      # start_datetime.minutes(@time.time)
+      # start_datetime.tz(SettingsService.getTimeZone())
+      # start_datetime
 
 
     startDatetime: () ->
@@ -1025,13 +1028,19 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {date} The returned end date time
     ###
-    # get booking end datetime
+
     end_datetime: () ->
       return null if !@date || !@time || (!@listed_duration && !@duration)
       duration = if @listed_duration then @listed_duration else @duration
-      end_datetime = moment(@date.date.toISODate())
-      end_datetime.minutes(@time.time + duration)
-      end_datetime
+
+      time = @time.time + duration
+
+      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date, time)
+
+
+      # end_datetime = moment(@date.date.toISODate())
+      # end_datetime.minutes(@time.time + duration)
+      # end_datetime
 
 
     endDatetime: () ->

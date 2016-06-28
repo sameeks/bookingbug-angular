@@ -50,17 +50,18 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
                 all_days_def.push(day.elink.promise)
                 if day.$has('event_links')
                   day.$get('event_links').then (all_events) =>
-                    times = @merge_times(all_events, prms.cItem.service, prms.cItem)
+                    times = @merge_times(all_events, prms.cItem.service, prms.cItem, day)
                     times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
                     date_times[day.date] = times
                     day.elink.resolve()
                 else if day.times
-                  times = @merge_times([day], prms.cItem.service, prms.cItem)
+                  times = @merge_times([day], prms.cItem.service, prms.cItem, day)
                   times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
                   date_times[day.date] = times
                   day.elink.resolve()
 
             $q.all(all_days_def).then () ->
+              debugger
               deferred.resolve(date_times)
 
         else if results.$has('event_links')
@@ -68,11 +69,13 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
           results.$get('event_links').then (all_events) =>
             times = @merge_times(all_events, prms.cItem.service, prms.cItem)
             times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
+            debugger
             deferred.resolve(times)
 
         else if results.times
           times = @merge_times([results], prms.cItem.service, prms.cItem)
           times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
+          debugger
           deferred.resolve(times)
       , (err) ->
         deferred.reject(err)
@@ -107,7 +110,8 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
     return defer.promise
 
 
-  merge_times: (all_events, service, item) ->
+  merge_times: (all_events, service, item, day) ->
+    debugger
     return [] if !all_events || all_events.length == 0
 
     all_events = _.shuffle(all_events)
@@ -127,7 +131,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
     date_times = {}
     for i in sorted_times
       if i
-        times.push(new BBModel.TimeSlot(i, service))
+        times.push(new BBModel.TimeSlot(i, service, day.date))
     times
 
 
