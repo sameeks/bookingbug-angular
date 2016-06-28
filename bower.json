@@ -18,7 +18,7 @@
     "jquery": "~1.11.2",
     "jquery-ui": "~1.11.2",
     "moment": "~2.13.0",
-    "moment-timezone": "~0.4.1",
+    "moment-timezone": "~0.5.4",
     "accounting": "~0.3.2",
     "angular": "~1.2.25",
     "angular-mocks": "~1.2.25",
@@ -67,11 +67,10 @@
     "angular": "~1.2.25",
     "jquery-ui": "~1.11.2",
     "jquery": "~1.11.2",
-    "moment": "master",
-    "momentjs": "master",
     "fullcalendar": ">=2.4.0",
     "angular-translate": "~2.6.1",
     "humanize-duration": "~2.8.0",
-    "spectrum": "1.7.0"
+    "spectrum": "1.7.0",
+    "moment": "~2.13.0"
   }
 }
