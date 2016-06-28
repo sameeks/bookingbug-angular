@@ -60,8 +60,11 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
 
     getBookings = ($scope, member) ->
       params =
-        start_date: $scope.startDate.format('YYYY-MM-DD')
-        end_date: $scope.endDate.format('YYYY-MM-DD') if $scope.endDate
+        start_date : $scope.startDate.format('YYYY-MM-DD')
+        start_time : $scope.startTime.format('HH:mm') if $scope.startTime
+        end_date   : $scope.endDate.format('YYYY-MM-DD') if $scope.endDate
+        end_time   : $scope.endTime.format('HH:mm') if $scope.endTime
+
       MemberBookingService.query(member, params).then (bookings) ->
         $scope.booking_models = bookings
         $scope.setRows()
@@ -84,10 +87,12 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
     controller: controller
     templateUrl: 'member_bookings_table.html'
     scope:
-      apiUrl: '@'
-      fields: '=?'
-      member: '='
-      startDate: '=?'
-      endDate: '=?'
+      apiUrl:       '@'
+      fields:       '=?'
+      member:       '='
+      startDate:    '=?'
+      startTime:    '=?'
+      endDate:      '=?'
+      endTime:      '=?'
       defaultOrder: '=?'
   }
