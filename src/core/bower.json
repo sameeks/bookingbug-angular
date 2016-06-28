@@ -22,7 +22,7 @@
   "dependencies": {
     "jquery": "~1.11.2",
     "jquery-ui": "~1.11.2",
-    "moment": "https://github.com/BookingBug/moment.git#master",
+    "moment": "~2.13.0",
     "moment-timezone": "~0.4.1",
     "accounting": "~0.3.2",
     "angular": "1.2.28",
