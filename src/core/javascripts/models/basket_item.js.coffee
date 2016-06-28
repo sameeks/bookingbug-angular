@@ -36,8 +36,6 @@ angular.module('BB.Models').factory "BasketItemModel",
       @settings or= {}
       @has_questions = false
 
-      if bb
-        @reserve_without_questions = bb.reserve_without_questions
 
       # if we were given an id then the item is ready - we need to fake a few items
       if @time
@@ -46,7 +44,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @date = new BBModel.Day({date: @date, spaces: 1})
       if @datetime
         @date = new BBModel.Day({date: @datetime.toISODate(), spaces: 1})
-    
+
         t =  @datetime.hour() * 60 +  @datetime.minute()
         @time = new BBModel.TimeSlot({time: t, event_id: @event_id, selected: true, avail: 1, price: @price })
 
@@ -756,7 +754,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     checkReady: ->
       if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
         @ready = true
-      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))  && (@asked_questions || !@has_questions || @reserve_without_questions)
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))
         @reserve_ready = true
 
     ###**
