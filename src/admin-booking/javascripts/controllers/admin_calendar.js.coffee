@@ -63,3 +63,5 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
     if $scope.bb.current_item.reserve_ready
       $scope.addItemToBasket().then () =>
         $scope.decideNextPage()
+    else
+      $scope.decideNextPage()

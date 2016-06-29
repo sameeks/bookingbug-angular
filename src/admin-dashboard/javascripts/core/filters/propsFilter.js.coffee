@@ -15,7 +15,8 @@ angular.module('BBAdminDashboard.filters').filter 'propsFilter', ['$translate', 
         while i < keys.length
           prop = keys[i]
           text = props[prop].toLowerCase()
-          if $translate.instant(item[prop]).toString().toLowerCase().indexOf(text) != -1
+
+          if item[prop]? && $translate.instant(item[prop]).toString().toLowerCase().indexOf(text) != -1
             itemMatches = true
             break
           i++
@@ -26,4 +27,4 @@ angular.module('BBAdminDashboard.filters').filter 'propsFilter', ['$translate', 
       # Let the output be the input untouched
       out = items
     out
-]    
+]

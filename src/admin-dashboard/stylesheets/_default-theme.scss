@@ -23,12 +23,17 @@ $sidebar-light-submenu-hover-color : #000;
 $transition-speed                  : 0.3s;
 $transition-fn                     : ease-in-out;
 
-@import "adminlte-mixins";
 
-$theme-color            : #81bc00;
-$screen-header-collapse : $screen-xs-max;
+$theme-color                       : #81bc00;
+$screen-header-collapse            : $screen-xs-max;
 
-.skin-default {
+&.skin-default {
+  .bb-display-mode {
+    position: absolute;
+    bottom: 0;
+    z-index: -1;
+  }
+
   //Navbar
   .main-header {
     .navbar {
@@ -102,7 +107,7 @@ $screen-header-collapse : $screen-xs-max;
 }
 
 
-//login section 
+//login section
 .loginWrapper {
   //background: $gray-lighter;
   @include gradient-radial($gray-lighter, lighten($gray-light,10));

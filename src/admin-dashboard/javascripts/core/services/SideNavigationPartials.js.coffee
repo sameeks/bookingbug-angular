@@ -5,8 +5,8 @@
 * @name BBAdminDashboard.services.service:SideNavigationPartials
 *
 * @description
-* 
-* 
+* This service assembles the navigation partials for the side-navigation
+*
 ###
 angular.module('BBAdminDashboard.services').factory 'SideNavigationPartials', [
   'AdminCoreOptions',
@@ -17,11 +17,11 @@ angular.module('BBAdminDashboard.services').factory 'SideNavigationPartials', [
       addPartialTemplate: (identifier, partial)->
         if !_.find(templatesArray, (item)-> item.module == identifier )
           templatesArray.push {
-            module     : identifier, 
-            navPartial : partial 
+            module     : identifier,
+            navPartial : partial
           }
-        
-        return  
+
+        return
 
       getPartialTemplates: ()->
         templatesArray
@@ -64,9 +64,9 @@ angular.module('BBAdminDashboard.services').factory 'SideNavigationPartials', [
             items: orphanItems
           }
 
-        if flat 
-          flatOrderedList 
+        if flat
+          flatOrderedList
         else
-          orderedList  
+          orderedList
     }
 ]

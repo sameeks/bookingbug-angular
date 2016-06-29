@@ -1,7 +1,7 @@
 .bb-basket, div[bb-basket-list] {
 
-  table.table {
-    color: #000000;
+  table {
+    color: $gray-base;
   }
 
   .bb-coupon-box {
@@ -20,9 +20,9 @@
 }
 
 // Basket Summary List
-.bb-item-summary{
-  border-bottom: 1px $secondary-border-color solid;
-  padding-bottom: 0;
+.page-summary-var{
+  border-bottom: 1px $bb-border solid;
+  padding-bottom: 0px;
   margin-top: 20px;
   margin-bottom: 0;
 
@@ -60,7 +60,7 @@
   }
   .bb-item-summary-header {
     height: 1px;
-    border-bottom: 1px $secondary-border-color solid;
+    border-bottom: 1px $bb-border solid;
     margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;

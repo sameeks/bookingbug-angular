@@ -1,10 +1,10 @@
 app = angular.module 'BB.Directives'
 
-app.directive 'bbDisplayMode', ($compile, $window, $bbug) ->
+app.directive 'bbDisplayMode', ($compile, $window, $bbug, ViewportSize) ->
   {
     transclude: false,
     restrict: 'A',
-    template: '<span class="visible-xs"></span><span class="visible-sm"></span><span class="visible-md"></span><span class="visible-lg"></span>',
+    template: '<span class="visible-xs">&nbsp;</span><span class="visible-sm">&nbsp;</span><span class="visible-md">&nbsp;</span><span class="visible-lg">&nbsp;</span>',
     link: (scope, elem, attrs) ->
       markers = elem.find('span')
       $bbug(elem).addClass("bb-display-mode")
@@ -14,12 +14,14 @@ app.directive 'bbDisplayMode', ($compile, $window, $bbug) ->
         return element && element.style.display != 'none' && element.offsetWidth && element.offsetHeight
 
       getCurrentSize = () ->
+        currentSize = false
         for element in markers
           if isVisible(element)
-            return element.className[8..10]
-          scope.display = {}
-          scope.display[element.className[8..10]] = true
-          return false
+            currentSize = element.className[8..10]
+            ViewportSize.setViewportSize(element.className[8..10])
+            break
+
+        return currentSize
 
       update = () =>
         nsize = getCurrentSize()
