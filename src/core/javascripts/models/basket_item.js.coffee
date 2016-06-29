@@ -53,7 +53,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       if @id
         @reserve_ready = true # if it has an id - it must be held - so therefore it must already be 'reservable'
         # keep a note of a possibly held item - we might change this item - but we should know waht was possibly already selected
-        @held = {time: @time, date: @date, event_id: @event_id }
+        @held = {time: @time, date: @date, event_id: @event_id, id: @id}
 
 
       @promises = []
