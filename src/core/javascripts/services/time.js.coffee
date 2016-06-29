@@ -1,6 +1,7 @@
 
 
 angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
+
   query: (prms) ->
     deferred = $q.defer()
 
@@ -79,6 +80,31 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
     else
       deferred.reject("No day data")
     deferred.promise
+
+
+  # query a set of basket items for the same time data
+  queryItems: (prms) ->
+
+    defer = $q.defer()
+
+    pslots = []
+
+    for item in prms.items
+      pslots.push(@query({
+        company: prms.company
+        cItem: item
+        date: prms.start_date
+        end_date: prms.end_date
+        client: prms.client
+        available: 1
+      }))
+
+    $q.all(pslots).then (res) ->
+      defer.resolve(res)
+    , (err) ->
+      defer.reject()
+
+    return defer.promise
 
 
   merge_times: (all_events, service, item) ->

@@ -4,6 +4,7 @@ adminapp = angular.module('BBAdmin', [
   'BB',
   'BBAdmin.Services',
   'BBAdmin.Filters',
+  'BBAdmin.Directives',
   'BBAdmin.Controllers',
   'trNgGrid'
   # 'ui.state',

@@ -1,5 +1,5 @@
 angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
-    $rootScope, halClient, SlotCollections, BBModel, LoginService, $log) ->
+    $rootScope, halClient, SlotCollections, BookingCollections, BBModel, LoginService, $log) ->
 
   query: (params) ->
     company = params.company
@@ -19,17 +19,16 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
     defer.promise
 
   block: (company, person, data) ->
-    # Strip timezone
-    regex = /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/
-    if data.start_time && regex.test(data.start_time)
-      data.start_time = data.start_time.match(regex)[1]
-    if data.end_time && regex.test(data.end_time)
-      data.end_time = data.end_time.match(regex)[1]
     deferred = $q.defer()
-    person.$put('block', {}, data).then  (slot) =>
-      slot = new BBModel.Admin.Slot(slot)
-      SlotCollections.checkItems(slot)
-      deferred.resolve(slot)
+    person.$put('block', {}, data).then  (response) =>
+      if response.$href('self').indexOf('bookings') > -1
+        booking = new BBModel.Admin.Booking(response)
+        BookingCollections.checkItems(booking)
+        deferred.resolve(booking)
+      else
+        slot = new BBModel.Admin.Slot(response)
+        SlotCollections.checkItems(slot)
+        deferred.resolve(slot)
     , (err) =>
       deferred.reject(err)
 

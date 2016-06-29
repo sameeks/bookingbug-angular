@@ -17,9 +17,12 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
 
     deferred = $q.defer()
     existing = BookingCollections.find(prms)
-    if existing
+    if existing  && !prms.skip_cache
       deferred.resolve(existing)
     else if company
+      if prms.skip_cache
+        BookingCollections.delete(existing) if existing
+        company.$flush('bookings', prms)
       company.$get('bookings', prms).then (collection) ->
         collection.$get('bookings').then (bookings) -> 
           models = (new BBModel.Admin.Booking(b) for b in bookings)
@@ -33,7 +36,7 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     else      
       url = ""
       url = prms.url if prms.url
-      href = url + "/api/v1/admin/{company_id}/bookings{?slot_id,start_date,end_date,service_id,resource_id,person_id,page,per_page,include_cancelled}"
+      href = url + "/api/v1/admin/{company_id}/bookings{?slot_id,start_date,end_date,service_id,resource_id,person_id,page,per_page,include_cancelled,embed}"
       uri = new UriTemplate(href).fillFromObject(prms || {})
 
       halClient.$get(uri, {}).then  (found) =>

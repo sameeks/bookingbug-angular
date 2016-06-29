@@ -38,7 +38,7 @@ angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
   controller : 'TimeRangeListStackedController',
 
 
-angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, DateTimeUlititiesService) ->
+angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, DateTimeUtilitiesService) ->
 
   $scope.controller = "public.controllers.TimeRangeListStacked"
  
@@ -248,7 +248,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @param {date} day The day
   * @param {object} slot The slot of day in multi time range list
   ###
-  $scope.highlightSlot = (day, slot) ->
+  $scope.highlightSlot = (slot, day) ->
 
     if day and slot and slot.availability() > 0
       $scope.bb.clearStackedItemsDateTime()
@@ -258,7 +258,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       $scope.selected_day  = day.date
       $scope.selected_date = day.date.toDate()
 
-      # broadcast message to the accordian range groups
+      # broadcast message to the accordion range groups
       $scope.$broadcast 'slotChanged', day, slot
 
       # set the date and time on the stacked items
@@ -336,7 +336,6 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
         setEnabledSlots()
         updateHideStatus()
         $rootScope.$broadcast "TimeRangeListStacked:loadFinished"
-        $scope.$broadcast "dataReloaded"
       else
         # raise error
 
@@ -357,9 +356,9 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   spliceExistingDateTimes = (stacked_item, slots) ->
 
     return if !stacked_item.datetime and !stacked_item.date 
-    datetime = stacked_item.datetime or DateTimeUlititiesService.convertTimeSlotToMoment(stacked_item.date, stacked_item.time)
+    datetime = stacked_item.datetime or DateTimeUtilitiesService.convertTimeSlotToMoment(stacked_item.date, stacked_item.time)
     if $scope.start_date <= datetime && $scope.end_date >= datetime
-      time = DateTimeUlititiesService.convertMomentToTime(datetime)
+      time = DateTimeUtilitiesService.convertMomentToTime(datetime)
       time_slot = _.findWhere(slots[datetime.toISODate()], {time: time})
       if !time_slot
         time_slot = stacked_item.time

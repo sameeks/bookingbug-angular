@@ -14,13 +14,33 @@ angular.module('BB.Directives').directive 'bbContent', ($compile) ->
 
     $compile(element)(scope)
 
-angular.module('BB.Directives').directive 'bbLoading', ($compile) ->
-  transclude: false,
-  restrict: 'A',
+angular.module('BB.Directives').directive 'bbLoading', ($compile, $timeout, $bbug) ->
   link: (scope, element, attrs) ->
     scope.scopeLoaded = scope.areScopesLoaded(scope)
-    element.attr('ng-hide',"scopeLoaded")
-    element.attr('bb-loading',null)
+    element.attr("ng-hide", "scopeLoaded")
+    element.attr("bb-loading", null)
+
+    positionLoadingIcon = () ->
+      loading_icon = $bbug('.bb-loader').find('#loading_icon')
+      wait_graphic = $bbug('.bb-loader').find('#wait_graphic')
+      modal_open   = $bbug('[ng-app]').find('body').hasClass('modal-open')
+
+      if modal_open
+        $timeout ->
+          center = $bbug('[ng-app]').find('.modal-dialog').height() or $bbug('[ng-app]').find('.modal-content').height() or $bbug('[ng-app]').find('.modal').height()
+          center = (center / 2) - (wait_graphic.height() / 2)
+          loading_icon.css("padding-top", center + "px")
+        , 50
+      else
+        center = ($(window).innerHeight() / 2) - (wait_graphic.height() / 2)
+        loading_icon.css("padding-top", center + "px")
+
+    positionLoadingIcon()
+    $bbug(window).on "resize", ->
+      positionLoadingIcon()
+    scope.$on "page:loaded", ->
+      positionLoadingIcon()
+
     $compile(element)(scope)
     return
 
@@ -36,6 +56,8 @@ angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
     prom.then () ->
       scope[name] = true
     return
+
+
 
 # bbScrollTo
 # Allows you to scroll to a specific element
@@ -75,6 +97,8 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
                 scrollTop: scroll_to_element.offset().top - SettingsService.getScrollOffset()
                 , bb_transition_time
 
+
+
 # bbSlotGrouper
 # group time slots together based on a given start time and end time
 angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
@@ -88,42 +112,66 @@ angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
       scope.grouped_slots.push(slot) if slot.time >= scope.$eval(attrs.startTime) && slot.time < scope.$eval(attrs.endTime)
     scope.has_slots = scope.grouped_slots.length > 0
 
-# bbForm
-# Adds behaviour to select first invalid input
-# TODO more all form behaviour to this directive, initilising options as parmas
-angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService) ->
+
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbForm
+* @restrict A
+* @scope true
+*
+* @description
+* Use with forms to add enhanced validation. When using with ng-form, submitForm
+* needs to be called manually as submit event is not raised.
+
+*
+* @example
+* <div ng-form name="example_form" bb-form></div>
+* <form name="example_form" bb-form></form>
+*
+####
+angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService, ValidatorService, $timeout) ->
   restrict: 'A'
   require: '^form'
+  scope: true
   link: (scope, elem, attrs, ctrls) ->
 
-    form_controller = ctrls
+    scope.form = ctrls
 
     # set up event handler on the form element
     elem.on "submit", ->
-
-      form_controller.submitted = true
-
-      # mark nested forms as submitted too
-      for property of form_controller
-        if angular.isObject(form_controller[property]) and form_controller[property].hasOwnProperty('$valid')
-          form_controller[property].submitted = true
-
+      scope.submitForm()
       scope.$apply()
 
-      invalid_form_group = elem.find('.has-error:first')
 
-      if invalid_form_group && invalid_form_group.length > 0
-        if 'parentIFrame' of $window
-          parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
-        else
-          $bbug("html, body").animate
-            scrollTop: invalid_form_group.offset().top - SettingsService.getScrollOffset()
-            , 1000
+    scope.submitForm = () ->
 
-        invalid_input = invalid_form_group.find('.ng-invalid')
-        invalid_input.focus()
-        return false
-      return true
+      scope.form.submitted = true
+
+      # mark nested forms as submitted too
+      for property of scope.form
+        if angular.isObject(scope.form[property]) and scope.form[property].hasOwnProperty('$valid')
+          scope.form[property].submitted = true
+
+      $timeout ->
+        invalid_form_group = elem.find('.has-error:first')
+
+        if invalid_form_group and invalid_form_group.length > 0 and !scope.form.raise_alerts
+
+          if 'parentIFrame' of $window
+            parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
+          else
+            $bbug("html, body").animate
+              scrollTop: invalid_form_group.offset().top - SettingsService.getScrollOffset()
+              , 1000
+
+          invalid_input = invalid_form_group.find('.ng-invalid')
+          invalid_input.focus()
+      , 100
+
+      return ValidatorService.validateForm(scope.form)
+
+
 
 # bbAddressMap
 # Adds behaviour to select first invalid input
@@ -162,6 +210,8 @@ angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
         }
       }
 
+
+
 angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
   restrict: 'A'
   scope: true
@@ -185,11 +235,29 @@ angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
 
       $scope.has_questions = _.pluck($scope.questions, 'question').length > 0
 
-angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
+
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbModal
+* @restrict A
+* @scope true
+*
+* @description
+* Use with modal templates to ensure modal height does not exceed window height
+
+*
+* @example
+* <div bb-modal></div>
+####
+angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) ->
   restrict: 'A'
   scope: true
   link: (scope, elem, attrs) ->
 
+    $timeout ->
+      elem.parent().parent().parent().css("z-index", 999999)
+    ,
     # watch modal height to ensure it does not exceed window height
     deregisterWatcher = scope.$watch ->
       height = elem.height()
@@ -199,8 +267,13 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug) ->
         modal_padding = 20
       if height > $bbug(window).height()
         new_height = $bbug(window).height() - modal_padding
-        elem.attr( 'style', 'height: ' + (new_height) + 'px; overflow-y: scroll;' )
+        elem.css({
+          "height": new_height + "px"
+          "overflow-y": "scroll"
+          })
         deregisterWatcher()
+
+
 
 ###**
 * @ngdoc directive
@@ -227,6 +300,8 @@ angular.module('BB.Directives').directive('bbBackgroundImage', () ->
           killWatch()
           el.css('background-image', 'url("' + new_val + '")')
 )
+
+
 
 ###**
 * @ngdoc directive

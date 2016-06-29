@@ -1,3 +1,13 @@
+.calendar-filters {
+	.form-group {
+		margin-bottom: 5px;
+	}
+
+	.ui-select-multiple.ui-select-bootstrap {
+		padding: 2px 3px 0 3px;
+	}
+}
+
 .resource-calendar {
 	.fc-toolbar {
 		p.datepicker {
@@ -29,15 +39,15 @@
 		.fc-view {
 			&>table {
 				&>thead.fc-head {
-					border-left: 1px solid #ddd;
-					border-right: 1px solid #ddd;
+					border-left: 1px solid $bb-border;
+					border-right: 1px solid $bb-border;
 					border-top-left-radius: 4px;
 					border-top-right-radius: 4px;
 				}
 
 				&>tbody.fc-body {
-					border-left: 1px solid #ddd;
-					border-right: 1px solid #ddd;
+					border-left: 1px solid $bb-border;
+					border-right: 1px solid $bb-border;
 					border-bottom-left-radius: 4px;
 					border-bottom-right-radius: 4px;
 				}
@@ -48,7 +58,7 @@
   .fc-time-grid-event,
   .fc-timeline-event {
     .pre, .post {
-      background-color: #808080;
+      background-color: $gray-light;
     }
   }
 

@@ -22,7 +22,7 @@
 
 # This class contrains handy functions and variables used in building and displaying a booking widget
 
-angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope) ->
+angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope, PathHelper) ->
 
 
   class Widget
@@ -69,15 +69,17 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       pattern = $urlMatcherFactory.compile(@routeFormat)
       service_name = "-"
       event_group = "-"
+      event = "-"
       if @current_item
         service_name = @convertToDashSnakeCase(@current_item.service.name) if @current_item.service
         event_group = @convertToDashSnakeCase(@current_item.event_group.name) if @current_item.event_group
+        event =  @current_item.event.id if @current_item.event
         date = @current_item.date.date.toISODate() if @current_item.date
         time = @current_item.time.time if @current_item.time
         company = @convertToDashSnakeCase(@current_item.company.name) if @current_item.company 
       prms = angular.copy(@route_values) if @route_values
       prms ||= {}
-      angular.extend(prms,{page: page, company: company, service: service_name, event_group: event_group, date: date, time: time})
+      angular.extend(prms,{page: page, company: company, service: service_name, event_group: event_group, date: date, time: time, event: event})
       url = pattern.format(prms)
       url = url.replace(/\/+$/, "")
       $location.path(url)
@@ -99,26 +101,20 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
 
       @routing = true
 
-      path = $location.path()
+      match = PathHelper.matchRouteToPath(@routeFormat)
 
-      if path
-        parts = @routeFormat.split("/")
-        while parts.length > 0 && !match
-          match_test = parts.join("/")
-          pattern = $urlMatcherFactory.compile(match_test)
-          match = pattern.exec(path)
-          parts.pop()
+      if match
+        @item_defaults.company = decodeURIComponent(match.company) if match.company
+        @item_defaults.service = decodeURIComponent(match.service) if match.service && match.service != "-"
+        @item_defaults.event_group = match.event_group if match.event_group && match.event_group != "-"
+        @item_defaults.event = decodeURIComponent(match.event) if match.event && match.event != "-"
+        @item_defaults.person = decodeURIComponent(match.person) if match.person
+        @item_defaults.resource = decodeURIComponent(match.resource) if match.resource
+        @item_defaults.resources = decodeURIComponent(match.resoures) if match.resources
+        @item_defaults.date = match.date if match.date
+        @item_defaults.time = match.time if match.time
+        @route_matches = match
 
-        if match
-          @item_defaults.company = decodeURIComponent(match.company) if match.company
-          @item_defaults.service = decodeURIComponent(match.service) if match.service && match.service != "-"
-          @item_defaults.event_group = match.event_group if match.event_group && match.event_group != "-"
-          @item_defaults.person = decodeURIComponent(match.person) if match.person
-          @item_defaults.resource = decodeURIComponent(match.resource) if match.resource
-          @item_defaults.resources = decodeURIComponent(match.resoures) if match.resources
-          @item_defaults.date = match.date if match.date
-          @item_defaults.time = match.time if match.time
-          @route_matches = match
 
     ###**
     * @ngdoc method
@@ -131,9 +127,10 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     ###
 
     matchURLToStep: () ->
-      return null if !@routeFormat
-      path = $location.path()
-      step = _.findWhere(@allSteps, {page: path.replace(/\//g, '')})
+
+      page = PathHelper.matchRouteToPath(@routeFormat, 'page')
+      step = _.findWhere(@allSteps, {page: page})
+
       if step
         return step.number
       else
@@ -318,6 +315,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     stackItem: (item) =>
       @stacked_items.push(item)
       @sortStackedItems()
+      @current_item = item if @stacked_items.length is 1
 
     ###**
     * @ngdoc method

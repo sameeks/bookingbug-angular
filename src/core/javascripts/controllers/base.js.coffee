@@ -168,8 +168,6 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
         else
           element.html(clone).show()
           element.append('<style widget_css scoped></style>') if prms.design_mode
-          $compile(element.contents())(scope)
-
 
 
 # a controller used for the main page contents - just in case we need one here
@@ -280,8 +278,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.initWidget2()
       return
 
-
-
   $scope.initWidget2 = () =>
     $scope.init_widget_started = true
 
@@ -353,8 +349,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.bb.original_item_defaults = prms.item_defaults
       $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
     else if $scope.bb.original_item_defaults
-      # possibly reset the defails
+      # possibly reset the defails (yes, the defails!)
       $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
+
+    if $scope.bb.selected_service and $scope.bb.selected_service.company_id == company_id
+      $scope.bb.item_defaults.service = $scope.bb.selected_service.id
 
     if prms.route_format
       $scope.bb.setRouteFormat(prms.route_format)
@@ -374,14 +373,14 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if !prms.custom_partial_url
       $scope.bb.path_setup = true
 
-    if prms.reserve_without_questions
-      $scope.bb.reserve_without_questions = prms.reserve_without_questions
-
     if prms.extra_setup
       $scope.bb.extra_setup          = prms.extra_setup
       $scope.bb.starting_step_number = parseInt(prms.extra_setup.step) if prms.extra_setup.step
       $scope.bb.return_url           = prms.extra_setup.return_url if prms.extra_setup.return_url
       $scope.bb.destination          = prms.extra_setup.destination if prms.extra_setup.destination
+
+    if prms.booking_settings
+      $scope.bb.booking_settings = prms.booking_settings
 
     if prms.template
       $scope.bb.template = prms.template
@@ -586,9 +585,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-
-
-
   setupDefaults = (company_id) =>
     def = $q.defer()
 
@@ -618,7 +614,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         $scope.bb.default_setup_promises.push(person)
         person.then (res) =>
           $scope.bb.item_defaults.person = new BBModel.Person(res)
-
 
       if $scope.bb.item_defaults.person_ref
         if $scope.bb.isAdmin
@@ -687,8 +682,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         clinic.then (res) =>
           $scope.bb.item_defaults.clinic = new BBModel.Clinic(res)
 
-
-
       if $scope.bb.item_defaults.duration
         $scope.bb.item_defaults.duration = parseInt($scope.bb.item_defaults.duration)
 
@@ -710,18 +703,27 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   # $locationChangeStart is broadcast before a URL will change
   $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
-    # TODO dont need to handle this when widget is initialising
-    return if !$scope.bb.routeFormat and $scope.bb.routing
 
-    # Get the step number we want to load
-    step_number = $scope.bb.matchURLToStep()
+    return if !$scope.bb.routeFormat
 
-    # Load next page
-    if step_number? and step_number > $scope.bb.current_step
-      $scope.loadStep(step_number)
-    else if step_number? and step_number < $scope.bb.current_step
-      # Load previous page
-      $scope.loadPreviousStep('locationChangeStart')
+    # don't load any steps if route is being updated
+    if !$scope.bb.routing
+
+      # save the current lenght of browser history
+      $scope.history_at_widget_init = $scope.history_at_widget_init or window.parent.history.length
+
+      # Get the step number to load
+      step_number = $scope.bb.matchURLToStep()
+
+      # Load next page
+      if step_number? and step_number > $scope.bb.current_step
+        $scope.loadStep(step_number)
+      # else if step_number? and step_number < $scope.bb.current_step
+      #   # Load previous page
+      #   $scope.loadPreviousStep('locationChangeStart')
+      # else
+      else
+        $scope.loadPreviousStep('locationChangeStart')
 
     $scope.bb.routing = false
 
@@ -735,8 +737,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # don't load a new page if we are still loading an old one - helps prevent double clicks
     return if $scope.isLoadingPage()
 
-    if $window._gaq
-      $window._gaq.push(['_trackPageview', route])
     $scope.setLoadingPage(true)
     if $scope.bb.current_page == route
       $scope.bb_main = ""
@@ -838,7 +838,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     else if (!$scope.client.valid())
       return if $scope.setPageRoute($rootScope.Route.Client)
       return $scope.showPage('client')
-    else if ( !$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready ) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
+    else if (!$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
       return if $scope.setPageRoute($rootScope.Route.Summary)
       return $scope.showPage('check_items')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
@@ -892,7 +892,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     BasketService.updateBasket($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
-        item.reserve_without_questions = $scope.bb.reserve_without_questions
       # clear the currently cached time date
       halClient.clearCache("time_data")
       halClient.clearCache("events")
@@ -915,7 +914,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         halClient.clearCache("time_data")
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
-        $scope.bb.current_item.selected_person = null
         error_modal = $modal.open
           templateUrl: $scope.getPartial('_error_modal')
           controller: ($scope, $modalInstance) ->
@@ -963,7 +961,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.clearBasketItem = ->
     def = $q.defer()
     $scope.setBasketItem(new BBModel.BasketItem(null, $scope.bb))
-    $scope.bb.current_item.reserve_without_questions = $scope.bb.reserve_without_questions
     if $scope.bb.default_setup_promises
       $q.all($scope.bb.default_setup_promises)['finally'] () ->
         $scope.bb.current_item.setDefaults($scope.bb.item_defaults)
@@ -1085,6 +1082,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.company = company
     # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over
     $scope.company = company
+
     $scope.bb.item_defaults.company = $scope.bb.company
 
     SettingsService.setCountryCode($scope.bb.company.country_code)
@@ -1133,7 +1131,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.getCurrentStepTitle = ->
     steps = $scope.bb.steps
 
-    if !_.compact(steps).length
+    if !_.compact(steps).length or steps.length == 1 and steps[0].number != $scope.bb.current_step
       steps = $scope.bb.allSteps
 
     if $scope.bb.current_step
@@ -1141,7 +1139,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   # conditionally set the title of the current step - if it doesn't have one
   $scope.checkStepTitle = (title) ->
-    if !$scope.bb.steps[$scope.bb.current_step-1].title
+    if $scope.bb.steps[$scope.bb.current_step-1] and !$scope.bb.steps[$scope.bb.current_step-1].title
       $scope.setStepTitle(title)
 
   # reload a step
@@ -1181,29 +1179,34 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   * @param {string} caller: The method that called this function
   ###
   $scope.loadPreviousStep = (caller) ->
+
     past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
 
     # Find the last unskipped step
     step_to_load = 0
+
     while past_steps[0]
       last_step = past_steps.pop()
       if !last_step
-        break 
+        break
       if !last_step.skipped
         step_to_load = last_step.number
         break
 
     # Remove pages from browser history (sync browser history with routing)
-    pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
-    if caller == "locationChangeStart"
-      # Reduce number of pages to remove from browser history by one if this
-      # method was triggered by Angular's $locationChangeStart broadcast
-      # In this instance we can assume that the browser back button was used
-      # and one page has already been removed from the history by the browser
-      pages_to_remove_from_history--
+    if $scope.bb.routeFormat
+      pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
+      if caller is "locationChangeStart"
+        # Reduce number of pages to remove from browser history by one if this
+        # method was triggered by Angular's $locationChangeStart broadcast
+        # In this instance we can assume that the browser back button was used
+        # and one page has already been removed from the history by the browser
+        pages_to_remove_from_history--
 
-    if pages_to_remove_from_history? and pages_to_remove_from_history > 0
-      window.history.go(pages_to_remove_from_history*-1)
+      ignore_browser_history_sync = $scope.history_at_widget_init is window.history.length
+
+      if pages_to_remove_from_history > 0 and !ignore_browser_history_sync
+        window.history.go(pages_to_remove_from_history*-1)
 
     # Load step
     $scope.loadStep(step_to_load)
@@ -1267,13 +1270,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.client.setDefaults($window.bb_setup)
     if $scope.bb.client_defaults
       $scope.client.setDefaults($scope.bb.client_defaults)
-
-
-  #######################################################
-  # date helpers
-
-  $scope.today = moment().toDate()
-  $scope.tomorrow = moment().add(1, 'days').toDate()
 
   $scope.parseDate = (d) =>
     moment(d)

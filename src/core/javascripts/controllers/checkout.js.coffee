@@ -37,13 +37,15 @@ angular.module('BB.Directives').directive 'bbCheckout', () ->
 angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $attrs, BasketService, $q, $location, $window, $bbug, FormDataStoreService, $timeout) ->
   $scope.controller = "public.controllers.Checkout"
   $scope.notLoaded $scope
-
   $scope.options = $scope.$eval($attrs.bbCheckout) or {}
 
   # clear the form data store as we no longer need the data
   FormDataStoreService.destroy($scope)
 
   $rootScope.connection_started.then =>
+    $scope.checkout()
+
+  $scope.checkout = () ->
     $scope.bb.basket.setClient($scope.client)
     $scope.bb.no_notifications = $scope.options.no_notifications if $scope.options.no_notifications
     $scope.loadingTotal = BasketService.checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
@@ -69,7 +71,7 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
       $scope.checkoutFailed = true
       $scope.$emit("checkout:fail", err)
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
 
 
   ###**

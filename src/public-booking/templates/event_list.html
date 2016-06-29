@@ -4,7 +4,7 @@
     <h1>Events at {{company.name}}</h1>
   </div>
 
-  <div bb-month-picker day-data="item_dates"></div>
+  <!-- <div bb-month-picker day-data="item_dates"></div> -->
 
   <div class="events" ng-show="items" bb-scroll-to="page:changed" bb-always-scroll>
 
@@ -40,21 +40,17 @@
             </select>
           </div>
 
-          <div class="form-group">
+
+          <div class="form-group calendar">
             <label class="sr-only" for="date">Date</label>
             <div class="input-group date-picker">
-              <!-- date format: http://docs.angularjs.org/api/ng.filter:date" -->
-              <span class="input-group-btn" ng-click="filterDateChanged({reset:true})">
-                <button class="btn btn-default" type="submit" title="Reset Date">
-                   <span class="glyphicon glyphicon-remove"></span>
-                </button>
-              </span>
-              <input type="text" ng-model="filters.date" class="form-control"
+              <!-- date format: http://docfiddich.angularjs.org/api/ng.filter:date" -->
+              <input type="text" ng-model="selected_date" class="form-control"
                 bb-datepicker-popup="DD/MM/YYYY"
                 datepicker-popup="dd/MM/yyyy"
                 is-open="opened"
                 min-date="today"
-                on-date-change="filterDateChanged()"
+                on-date-change="selectedDateChanged()"
                 datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
                 show-weeks="false"
                 show-button-bar="false"
@@ -62,8 +58,11 @@
                 name="date"
                 id="date"
                 placeholder="&mdash; Any Date &mdash;"/>
-              <span class="input-group-btn" ng-click="$event.preventDefault();$event.stopPropagation();opened=true">
-                <button class="btn btn-default" type="submit" title="Pick date"><span class="glyphicon glyphicon-calendar"></span></button>
+              <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
+                <button class="btn btn-default" type="submit" title="Pick date">
+                  <span class="fa fa-calendar-o"></span>
+                  <span>Full Calendar</span>
+                </button>
               </span>
             </div>
           </div>
@@ -117,6 +116,7 @@
             <span class="hidden-xs">
               <button type="button" class="btn btn-icon" ng-disabled="!$root.tiles" ng-click="$root.tiles = !$root.tiles"><span class="glyphicon glyphicon-th-list" aria-hidden="true" ></span></button>
               <button type="button" class="btn btn-icon" ng-disabled="$root.tiles"  ng-click="$root.tiles = !$root.tiles"><span class="glyphicon glyphicon-th-large" aria-hidden="true" ></span></button>
+            </span>
             </div>
           </div>
         </div>
@@ -141,7 +141,6 @@
           <div class="panel-body" style="padding: 20px;">
             <div class="row">
               <div ng-class="{'col-sm-3':!$root.tiles}">
-               <!--  <div class="event-img" ng-init="item.getGroup();" ng-style="{'background-image': item.group.getImages()[0].url ? 'url(&quot;' + item.group.getImages()[0].url + '&quot;)' : 'none'}"> -->
                  <div class="event-img" bb-background-image="item.group.getImages()[0].url">
                   <time datetime="{{item.date | datetime: 'YY[-]MM[-]DD'}}" class="icon" ng-click="selectItem(item)">
                     <em>{{item.date | datetime: 'dddd' : false}}</em>
@@ -161,24 +160,24 @@
                 <div class="row event-details">
                   <ul>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
-                      <span class="bb-icon icon-calendar"></span>
+                      <span class="fa fa-calendar-o"></span>
                       <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date.format('dddd ')}}</span><span class="truncate-xs hidden-md hidden-lg">{{item.date.format('Do MMMM ')}}</span>
                       <span class="truncate-xs hidden-xs hidden-sm">{{item.date.format('Do MMM ')}}</span>
                       <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date.format('YYYY')}}</span>
                     </li>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
-                      <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                      <span class="fa fa-clock-o" aria-hidden="true"></span>
                       <span ng-bind="item.date.format('h[:]mma')"></span>
-                      <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}">&ndash;</span>
+                      <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}">-</span>
                       <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}" ng-bind="item.end_datetime.format('h[:]mma')"></span>
                     </li>
                     <li class="hidden-xs truncate-xs" ng-class="{'col-sm-4':!$root.tiles, 'hidden-sm':$root.tiles, 'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">
-                      <span class="glyphicon glyphicon-hourglass"></span>
+                      <span class="fa fa-hourglass-half"></span>
                       <span ng-bind="item.duration | time_period"></span>
                     </li>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
-                      <span ng-if="spaces_left > 0" class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                      <span ng-if="spaces_left < 1" class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+                      <span ng-if="spaces_left > 0" class="fa fa-users" aria-hidden="true"></span>
+                      <span ng-if="spaces_left < 1" class="fa fa-ban" aria-hidden="true"></span>
                       <span>
                         <span ng-if="spaces_left > 0" ng-bind="spaces_left"></span>
                         <span ng-if="spaces_left < 1" ng-bind="'No'"></span> space<span ng-if="spaces_left > 1 || spaces_left < 1" ng-bind="'s'"></span>
@@ -186,14 +185,15 @@
                       </span>
                     </li>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
-                      <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+                      <span class="fa fa-ticket" aria-hidden="true"></span>
                       <span>
-                        <span ng-show="item.price_range && (item.price_range.from != item.price_range.to)">From {{item.price_range.from | ipretty_price}}</span>
-                        <span ng-show="item.price_range && (item.price_range.from == item.price_range.to)">{{item.price_range.from | ipretty_price}}</span>
+                        <span ng-show="item.price_range && (item.price_range.from != item.price_range.to) && item.price_range.from && !item.price">From {{item.price_range.from | ipretty_price}}</span>
+
+                        <span ng-show="item.price_range && (item.price_range.from == item.price_range.to) || !item.price && !item.price_range.from">{{item.price_range.from | ipretty_price}}</span>
                       </span>
                     </li>
                     <li class="hidden-xs truncate-xs " ng-class="{'col-sm-4':!$root.tiles, 'col-sm-12':$root.tiles}">
-                      <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                      <span class="fa fa-map-marker" aria-hidden="true"></span>
                       <span>
                         {{bb.current_item.company.name}}
                       </span>

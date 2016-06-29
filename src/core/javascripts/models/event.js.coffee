@@ -14,15 +14,15 @@
 ####
 
 
-angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService) ->
+angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUtilitiesService) ->
 
 
   class Event extends BaseModel
-    
+
     constructor: (data) ->
-      super(data)     
-      @date = moment.parseZone(@datetime)   
-      @time = new BBModel.TimeSlot(time: DateTimeUlititiesService.convertMomentToTime(@date))
+      super(data)
+      @date = moment.parseZone(@datetime)
+      @time = new BBModel.TimeSlot(time: DateTimeUtilitiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
       @date_unix = @date.unix()
 
@@ -99,7 +99,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @name getNumBooked
     * @methodOf BB.Models:Event
     * @description
-    * Get the number booked 
+    * Get the number booked
     *
     * @returns {object} The returned number booked
     ###
@@ -115,12 +115,12 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     *
     * @returns {object} The returned spaces left
     ###
-    # get the number of spaces left (possibly limited by a specific ticket pool)
     getSpacesLeft: (pool = null) ->
       if pool && @ticket_spaces && @ticket_spaces[pool]
         return @ticket_spaces[pool].left
-      return @num_spaces - @getNumBooked()
-
+      else
+        return @num_spaces - @getNumBooked()
+        
     ###**
     * @ngdoc method
     * @name hasSpace
@@ -129,7 +129,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid space
     *
     * @returns {boolean} If this is a valid space
-    ### 
+    ###
     hasSpace: () ->
       (@getSpacesLeft() > 0)
 
@@ -141,7 +141,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid waiting list space
     *
     * @returns {boolean} If this is a valid waiting list space
-    ### 
+    ###
     hasWaitlistSpace: () ->
       (@getSpacesLeft() <= 0 && @getChain().waitlength > @spaces_wait)
 
@@ -153,7 +153,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the remaining description
     *
     * @returns {object} The returned remaining description
-    ### 
+    ###
     getRemainingDescription: () ->
       left = @getSpacesLeft()
       if left > 0 && left < 3
@@ -170,7 +170,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks is this considered a selected
     *
     * @returns {boolean} If this is a selected
-    ###  
+    ###
     select: ->
       @selected = true
 
@@ -238,3 +238,19 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           ticket.price = 0
         else
           ticket.price = ticket.old_price
+
+    ###**
+    * @ngdoc method
+    * @name numTicketsSelected
+    * @methodOf BB.Models:Event
+    * @description
+    * 
+    *
+    * @returns {object} get number of tickets selected
+    ###
+    numTicketsSelected: () ->
+      num = 0
+      for ticket in @tickets
+        num += ticket.qty
+      num
+

@@ -17,10 +17,12 @@
 * scope: true
 * </pre>
 *
-* @property {array} items The items of the person list
+* @param {BasketItem} bbItem The BasketItem that will be updated with the selected person. If no item is provided, bb.current_item is used as the default
+# @param {array} bbItems An array of BasketItem's that will be updated with the selected person.
+* @property {array} items A list of people
 * @property {array} bookable_people The bookable people from the person list
 * @property {array} bookable_items The bookable items from the person list
-* @property {array} booking_item The booking item from the person list
+* @property {array} booking_item The BasketItem used by the person list. If bbItems provided, this will be the first item
 ####
 
 
@@ -30,14 +32,17 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
   scope : true
   controller : 'PersonList'
   link : (scope, element, attrs) ->
-    if attrs.bbItem
-      scope.booking_item = scope.$eval( attrs.bbItem )
-    return
-
+  
+    if attrs.bbItems
+      scope.booking_items = scope.$eval(attrs.bbItems) or []
+      scope.booking_item  = scope.booking_items[0]
+    else
+      scope.booking_item = scope.$eval(attrs.bbItem) or scope.bb.current_item
+      scope.booking_items = [scope.booking_item]
 
 
 angular.module('BB.Controllers').controller 'PersonList',
-($scope,  $rootScope, PageControllerService, PersonService, ItemService, $q, BBModel, PersonModel, FormDataStoreService) ->
+($scope, $rootScope, PageControllerService, PersonService, ItemService, $q, BBModel, PersonModel, FormDataStoreService) ->
 
   $scope.controller = "public.controllers.PersonList"
 
@@ -50,12 +55,12 @@ angular.module('BB.Controllers').controller 'PersonList',
 
 
   loadData = () ->
-    $scope.booking_item ||= $scope.bb.current_item
+
     bi = $scope.booking_item
 
     # do nothing if nothing has changed
-    if !bi.service || bi.service == $scope.change_watch_item
-      # if there's no service - we have to wait for one to be set - so we're kind of done loadig for now!
+    if !bi.service or bi.service is $scope.change_watch_item
+      # if there's no service - we have to wait for one to be set - so we're kind of done loading for now!
       if !bi.service
         $scope.setLoaded $scope
       return
@@ -66,7 +71,7 @@ angular.module('BB.Controllers').controller 'PersonList',
     ppromise = PersonService.query($scope.bb.company)
     ppromise.then (people) ->
       if bi.group # check they're part of any currently selected group
-        people = people.filter (x) -> !x.group_id || x.group_id == bi.group
+        people = people.filter (x) -> !x.group_id or x.group_id is bi.group
       $scope.all_people = people
 
     ItemService.query(
@@ -75,8 +80,9 @@ angular.module('BB.Controllers').controller 'PersonList',
       wait: ppromise
       item: 'person'
     ).then (items) ->
+      
       if bi.group # check they're part of any currently selected group
-        items = items.filter (x) -> !x.group_id || x.group_id == bi.group
+        items = items.filter (x) -> !x.group_id or x.group_id is bi.group
 
       promises = []
       for i in items
@@ -86,14 +92,12 @@ angular.module('BB.Controllers').controller 'PersonList',
         people = []
         for i in items
           people.push(i.item)
-          if bi && bi.person && bi.person.self == i.item.self
+          if bi and bi.person and bi.person.id is i.item.id
             $scope.person = i.item
             $scope.selected_bookable_items = [i]
-          if bi && bi.selected_person && bi.selected_person.item.self == i.item.self
-            bi.selected_person = i
 
         # if there's only 1 person and combine resources/staff has been turned on, auto select the person
-        if (items.length == 1 && $scope.bb.company.settings && $scope.bb.company.settings.merge_people)
+        if (items.length is 1 and $scope.bb.company.settings and $scope.bb.company.settings.merge_people)
           if !$scope.selectItem(items[0], $scope.nextRoute )
             setPerson people
             $scope.bookable_items = items
@@ -128,6 +132,7 @@ angular.module('BB.Controllers').controller 'PersonList',
           if person.id is $scope.person.id
             $scope.person = person
 
+
   ###**
   * @ngdoc method
   * @name getItemFromPerson
@@ -141,9 +146,10 @@ angular.module('BB.Controllers').controller 'PersonList',
     if (person instanceof  PersonModel)
       if $scope.bookable_items
         for item in $scope.bookable_items
-          if item.item.self == person.self
+          if item.item.self is person.self
             return item
     return person
+
 
   ###**
   * @ngdoc method
@@ -160,9 +166,11 @@ angular.module('BB.Controllers').controller 'PersonList',
       $scope.person = item
       return false
     else
-      $scope.booking_item.setPerson(getItemFromPerson(item))
+      new_person = getItemFromPerson(item)
+      _.each $scope.booking_items, (bi) -> bi.setPerson(new_person)
       $scope.decideNextPage(route)
       return true
+
 
   ###**
   * @ngdoc method
@@ -172,39 +180,44 @@ angular.module('BB.Controllers').controller 'PersonList',
   * Select and route person from list in according of item and route parameters
   *
   * @param {array} item Selected item from the list of current people
-  * @param {string=} route A specific route to load
+  * @param {string} route A specific route to load
   ###
   $scope.selectAndRoute = (item, route) =>
-   $scope.booking_item.setPerson(getItemFromPerson(item))
-   $scope.decideNextPage(route)
-   return true
+    new_person = getItemFromPerson(item)
+    _.each $scope.booking_items, (bi) -> bi.setPerson(new_person)
+    $scope.decideNextPage(route)
+    return true
 
 
   $scope.$watch 'person',(newval, oldval) =>
     if $scope.person and $scope.booking_item
-      if !$scope.booking_item.person || $scope.booking_item.person.self != $scope.person.self
+      if !$scope.booking_item.person or $scope.booking_item.person.self != $scope.person.self
         # only set and broadcast if it's changed
-        $scope.booking_item.setPerson(getItemFromPerson($scope.person))
+        new_person = getItemFromPerson($scope.person)
+        _.each $scope.booking_items, (item) -> item.setPerson(new_person)
         $scope.broadcastItemUpdate()
     else if newval != oldval
-      $scope.booking_item.setPerson(null)
+      _.each $scope.booking_items, (item) -> item.setPerson(null)
       $scope.broadcastItemUpdate()
+
 
   $scope.$on "currentItemUpdate", (event) ->
     loadData()
+
 
   ###**
   * @ngdoc method
   * @name setReady
   * @methodOf BB.Directives:bbPeople
   * @description
-  * Set this page section as ready
+  * Called by bbPage to ready directive for transition to the next step
   ###
   $scope.setReady = () =>
     if $scope.person
-      $scope.booking_item.setPerson(getItemFromPerson($scope.person))
+      new_person = getItemFromPerson($scope.person)
+      _.each $scope.booking_items, (item) -> item.setPerson(new_person)
       return true
     else
-      $scope.booking_item.setPerson(null)
+      _.each $scope.booking_items, (item) -> item.setPerson(null)
       return true
 

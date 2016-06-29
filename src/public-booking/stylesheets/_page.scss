@@ -5,16 +5,9 @@
   }
 }
 
-/* Only used in the basket_wallet.html */
-.bb-content {
-  color: #000;
-  min-height: 400px;
+.bb-content, .content {
+  min-height: 600px;
 }
-
-.content {
-  min-height: 420px;
-}
-
 
 h1, h2, h3, h4, h5, h6 {
   padding: 0;
@@ -28,12 +21,7 @@ ul, ol {
 }
 
 a {
-  color: #333;
   text-decoration: underline;
-  &:hover, &:focus {
-    color: #333;
-    text-decoration: none;
-  }
 }
 
 p {
@@ -59,7 +47,7 @@ p {
   top:0;
   left:0;
   width:100%;
-  background-color:#FFF;
+  background-color: white;
   padding-top:100px;
   filter:alpha(opacity=70);
   -moz-opacity:0.7;
@@ -73,8 +61,8 @@ p {
 }
 #loading_icon #wait_graphic {
   background:url("images/BB_wait.gif");
-  width:118px;
-  height:118px;
+  width: 100px;
+  height: 100px;
 }
 
 .powered-by {
@@ -93,22 +81,17 @@ p {
 }
 
 .bb-section-title {
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid $gray-light;
   padding-bottom: 10px;
   margin-bottom: 20px;
   font-size: $font-size-h3;
 }
 
 .bb-step-navigation {
-  margin-top: 75px;
+  margin-top: 50px;
   margin-bottom: 20px;
-  border-top: 1px solid #999;
+  border-top: 1px solid $bb-border;
   padding-top: 20px;
-  @media (max-width: $screen-xs-max) {
-    margin-top: 60px;
-    border-top: 1px solid #666;
-    padding-top: 20px;
-  }
 
   .btn {
     @media (max-width: $screen-xs-max) {
@@ -119,11 +102,32 @@ p {
 
 }
 
+.bb-bordered {
+  border-top: 1px solid $gray-lighter;
+  border-bottom: 1px solid $gray-lighter;
+}
+
+.bb-block-heading {
+  padding-bottom: 5px;
+}
+
+/* use to wrap components just as lists */
+.bb-block {
+  padding-top: 15px;
+  padding-bottom: 0;
+  margin-bottom: 15px;
+
+  &.bb-block-sm {
+    padding-bottom: 10px;
+  }
+
+}
+
 @media (min-width: $screen-sm) {
 
   .row.bb-vertical-align-center {
     display: table;
-  } 
+  }
 
   .row.bb-vertical-align-center [class*="col-"] {
     float: none;
@@ -133,6 +137,6 @@ p {
 
 }
 
-.angular-google-map-container { 
-  height: 200px; 
+.angular-google-map-container {
+  height: 200px;
 }

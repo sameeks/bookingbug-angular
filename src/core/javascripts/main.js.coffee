@@ -36,9 +36,9 @@ app.value('AppConfig', {
 
 # airbrake-js authentication
 app.value('AirbrakeConfig', {
-  projectId: '34693',
-  projectKey: 'b4174c79b8b7dfb0111e45aa35c95b71',
-  environment: ''
+  projectId: '122836',
+  projectKey: 'e6d6710b2cf00be965e8452d6a384d37',
+  environment: if window.location.hostname is 'localhost' then 'development' else 'production'
 })
 
 if (window.use_no_conflict)
@@ -118,22 +118,6 @@ window.bookingbug =
     angular.injector(['BB.Services', 'BB.Models', 'ng'])
            .get('LoginService').logout(logout_opts)
     window.location.reload() if options.reload
-
-
-moment.locale('en', {
-    longDateFormat : {
-        LT: "h:mm A",
-        LTS: "h:mm:ss A",
-        L: "MM/DD/YYYY",
-        l: "M/D/YYYY",
-        LL: "MMMM Do YYYY",
-        ll: "MMM D YYYY",
-        LLL: "MMMM Do YYYY LT",
-        lll: "MMM D YYYY LT",
-        LLLL: "dddd Do MMMM[,] h.mma",
-        llll: "ddd, MMM D YYYY LT"
-    }
-  })
 
 # String::includes polyfill
 if !String::includes

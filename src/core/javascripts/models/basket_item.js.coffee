@@ -20,7 +20,7 @@
 
 
 angular.module('BB.Models').factory "BasketItemModel",
-($q, $window, BBModel, BookableItemModel, BaseModel, $bbug) ->
+($q, $window, BBModel, BookableItemModel, BaseModel, $bbug, DateTimeUtilitiesService, SettingsService) ->
 
   # A class that defines an item in a shopping basket
   # This could represent a time based service, a ticket for an event or class, or any other purchasable item
@@ -36,8 +36,6 @@ angular.module('BB.Models').factory "BasketItemModel",
       @settings or= {}
       @has_questions = false
 
-      if bb
-        @reserve_without_questions = bb.reserve_without_questions        
 
       # if we were given an id then the item is ready - we need to fake a few items
       if @time
@@ -46,6 +44,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @date = new BBModel.Day({date: @date, spaces: 1})
       if @datetime
         @date = new BBModel.Day({date: @datetime.toISODate(), spaces: 1})
+
         t =  @datetime.hour() * 60 +  @datetime.minute()
         @time = new BBModel.TimeSlot({time: t, event_id: @event_id, selected: true, avail: 1, price: @price })
 
@@ -162,7 +161,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {object} Default settings
     ###
-    # bookable slot based functions
     setDefaults: (defaults) ->
       if defaults.settings
         @settings = defaults.settings
@@ -180,10 +178,14 @@ angular.module('BB.Models').factory "BasketItemModel",
         @setService(defaults.service)
       if defaults.category
         @setCategory(defaults.category)
-      if defaults.time
-        @requested_time = parseInt(defaults.time)
       if defaults.date
-        @requested_date = moment(defaults.date)
+        # NOTE: date is not set as it might not be available
+        defaults.date = moment(defaults.date)
+      if defaults.time
+         # NOTE: time is not set as it might not be available
+        date = if defaults.date then defaults.date else moment()
+        time = if defaults.time then parseInt(defaults.time) else 0
+        defaults.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment({date: defaults.date}, {time: time})
       if defaults.service_ref
         @service_ref = defaults.service_ref
       if defaults.group
@@ -216,26 +218,19 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name defaultService
     * @methodOf BB.Models:BasketItem
     * @description
-    * Return the default service if existent
+    * Return the default service or event group
     *
-    * @returns {array} Default service
+    * @returns {Object} Default Service or EventGroup
     ###
     defaultService: () ->
-      return null if !@defaults
-      return @defaults.service
-      # @defaults = defaults
+      if @defaults and @defaults.service
+        return @defaults.service
+      else if @defaults and @defaults.event_group
+        return @defaults.event_group
+      else
+       return null
 
-    ###**
-    * @ngdoc method
-    * @name requestedTimeUnavailable
-    * @methodOf BB.Models:BasketItem
-    * @description
-    * Delete requested time and date if these are unavailable
-    ###
-    # if it turned out that a requested date or time was unavailablem, we'll have to clear it
-    requestedTimeUnavailable: ->
-      delete @requested_time
-      delete @requested_date
+
 
     ###**
     * @ngdoc method
@@ -414,7 +409,7 @@ angular.module('BB.Models').factory "BasketItemModel",
           return
       @event_chain = event_chain
       @base_price = parseFloat(event_chain.price)
-      if @price? and @price != @base_price 
+      if @price? and @price != @base_price
         @setPrice(@price)
       else
         @setPrice(@base_price)
@@ -478,10 +473,10 @@ angular.module('BB.Models').factory "BasketItemModel",
         @setEventGroup(group)
       if @event.getSpacesLeft() <= 0 && !@company.settings
         @status = 8 if @company.getSettings().has_waitlists
-      else if @event.getSpacesLeft() <= 0 && @company.settings && @company.settings.has_waitlists 
+      else if @event.getSpacesLeft() <= 0 && @company.settings && @company.settings.has_waitlists
         @status = 8
 
- 
+
 
     ###**
     * @ngdoc method
@@ -656,8 +651,8 @@ angular.module('BB.Models').factory "BasketItemModel",
           @datetime.hour(hours)
           @datetime.minutes(mins)
 
-        if @price && @time.price && (@price != @time.price) 
-          @setPrice(@price)
+        if @price && @time.price && (@price != @time.price)
+          @setPrice(@time.price)
         else if @price && !@time.price
          @setPrice(@price)
         else if @time.price && !@price
@@ -717,7 +712,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     clearTime: () ->
       delete @time
       @ready = false
-      @reserve_ready = false  
+      @reserve_ready = false
 
     ###**
     * @ngdoc method
@@ -759,7 +754,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     checkReady: ->
       if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
         @ready = true
-      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))  && (@asked_questions || !@has_questions || @reserve_without_questions)
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))
         @reserve_ready = true
 
     ###**
@@ -818,7 +813,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.pre_paid_booking_id = @pre_paid_booking_id if @pre_paid_booking_id?
       data.event_chain_id = @event_chain_id
       data.event_group_id = @event_group_id
-      data.qty = @qty   
+      data.qty = @qty
       data.status = @status if @status
       data.num_resources = parseInt(@num_resources) if @num_resources?
       data.package_id = @package_item.id if @package_item
@@ -909,8 +904,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @returns {object} The returned load step
     ###
     loadStep: (step) ->
-      # don't load the step - if we have an id
-      return if @id
       @service = step.service
       @category = step.category
       @person = step.person
@@ -971,7 +964,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     booking_time: (seperator = '-') ->
       return null if !@time
-      duration = if @listed_duration then @listed_duration else @duration 
+      duration = if @listed_duration then @listed_duration else @duration
       @time.print_time() + " " + seperator + " " +  @time.print_end_time(duration)
 
     ###**
@@ -1033,7 +1026,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     # get booking end datetime
     end_datetime: () ->
       return null if !@date || !@time || (!@listed_duration && !@duration)
-      duration = if @listed_duration then @listed_duration else @duration 
+      duration = if @listed_duration then @listed_duration else @duration
       end_datetime = moment(@date.date.toISODate())
       end_datetime.minutes(@time.time + duration)
       end_datetime
@@ -1068,7 +1061,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     anyPerson: () ->
       @person && (typeof @person == 'boolean')
- 
+
     ###**
     * @ngdoc method
     * @name anyResource
@@ -1290,10 +1283,10 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @description
     * Indicates if the basket item has a prepaid booking applied
     *
-    * @returns {boolean} boolean indicating if the BasketItem has a prepaid booking  
+    * @returns {boolean} boolean indicating if the BasketItem has a prepaid booking
     ###
     hasPrepaidBooking: () ->
-      return @pre_paid_booking_id?  
+      return @pre_paid_booking_id?
 
 
     ###**
@@ -1324,7 +1317,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @returns {boolean}
     ###
     isExternalPurchase: () ->
-      return @external_purchase?  
+      return @external_purchase?
 
 
     ###**

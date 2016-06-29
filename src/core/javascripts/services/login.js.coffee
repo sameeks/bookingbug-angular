@@ -65,7 +65,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
       params = {auth_token: login.auth_token}
       login.$get('member').then (member) =>
         member = new BBModel.Member.Member(member)
-        @setLogin(member)
+        @setLogin(member,true)
         deferred.resolve(member)
     , (err) =>
       deferred.reject(err)

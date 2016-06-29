@@ -219,7 +219,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
             m
         else
           [m,range].join()
-      , "")
+      , "").split(',')
 
     ###**
     * @ngdoc method

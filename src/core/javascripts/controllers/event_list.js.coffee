@@ -41,6 +41,10 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
     # 2 = Next 100 events and event summary (gets event summary, loads next 100 events, and gets more events if requested)
     scope.mode = if options and options.mode then options.mode else 0
     scope.mode = 0 if scope.summary
+
+    # set the total number of events loaded?
+    scope.per_page = options.per_page if options and options.per_page
+    
     return
 
 
@@ -56,6 +60,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   $scope.events = {}
   $scope.fully_booked = false
+  $scope.event_data_loaded = false
 
   FormDataStoreService.init 'EventList', $scope, [
     'selected_date',
@@ -65,8 +70,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   
   $rootScope.connection_started.then ->
     if $scope.bb.company
+      
       # if there's a default event, skip this step
-      if $scope.bb.item_defaults.event
+      if $scope.bb.current_item.defaults and $scope.bb.current_item.defaults.event
         $scope.skipThisStep()
         $scope.decideNextPage()
         return
@@ -168,6 +174,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       delete $scope.bb.current_item.event_chain_id
 
     comp = $scope.bb.company 
+
     params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
     params.event_chain_id = $scope.bb.item_defaults.event_chain if $scope.bb.item_defaults.event_chain
 
@@ -222,13 +229,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     if $scope.bb.item_defaults.event_chain
       deferred.resolve([])
     else
-      $scope.notLoaded $scope
       comp ||= $scope.bb.company 
 
       params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
 
       EventChainService.query(comp, params).then (event_chains) ->
-        $scope.setLoaded $scope
         deferred.resolve(event_chains)
       , (err) ->  deferred.reject()
 
@@ -245,6 +250,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   ###
   $scope.loadEventData = (comp) ->
 
+    $scope.notLoaded $scope
+
+    $scope.event_data_loaded = false
+
     # clear the items when in summary mode
     delete $scope.items if $scope.mode is 0
 
@@ -252,7 +261,6 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     current_event = $scope.current_item.event
 
-    $scope.notLoaded $scope
     comp ||= $scope.bb.company 
 
     # de-select the event chain if there's one already picked - as it's hiding other events in the same group
@@ -260,8 +268,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       delete $scope.bb.current_item.event_chain
       delete $scope.bb.current_item.event_chain_id
 
-    params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
+    params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate(), include_non_bookable: true}
     params.event_chain_id = $scope.bb.item_defaults.event_chain if $scope.bb.item_defaults.event_chain
+
+    params.per_page = $scope.per_page if $scope.per_page
 
     chains = $scope.loadEventChainData(comp)
     $scope.events = {}
@@ -324,7 +334,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         PaginationService.update($scope.pagination, $scope.filtered_items.length)
 
         $scope.setLoaded $scope
+        $scope.event_data_loaded = true
+
         deferred.resolve($scope.items)
+
       , (err) ->  deferred.reject()
     , (err) ->  deferred.reject()
     return deferred.promise
@@ -435,7 +448,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @param {array} item The Event or BookableItem to select
   ###
   $scope.filterEvents = (item) ->  
-    result = (item.date.isSame(moment($scope.filters.date), 'day') or !$scope.filters.date?) and
+    result = (moment($scope.filters.date).isSame(item.date, 'day') or !$scope.filters.date?) and
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and 
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
       (($scope.filters.hide_sold_out_events and item.getSpacesLeft() != 0) or !$scope.filters.hide_sold_out_events) and

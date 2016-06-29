@@ -15,6 +15,7 @@ module.exports = (config) ->
       'src/*/javascripts/**/*.js.coffee'
       'src/core/templates/*.html'
       'src/public-booking/templates/*.html'
+      'src/**/javascripts/**/**/**/**/*.js.coffee'
     ]
 
     exclude: [

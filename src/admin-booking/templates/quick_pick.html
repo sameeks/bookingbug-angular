@@ -18,37 +18,42 @@
     
     <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady('calendar')" bb-debounce ng-disabled="!bb.current_item.service">Book</button>
 
-  </div>
+    <hr>
 
-  <hr>
+  </div>
 
   <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
 
     <h1>Block Time</h1>
-    <div class="form-group">
+    <div class="form-group" ng-class="{'has-error': resourceError}">
       <label>For</label>
       <select id="resource" ng-model="picked_resource" ng-change="changeResource()" ng-options="item.identifier as item.name group by item.group for item in resources" class="form-control">
         <option value="">-- select --</option>
       </select>
+      <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError">Please select a resource or member of staff</p>
     </div>
-    <div class="row">
+    <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
+      <label>Block whole day &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" on-label="Yes" off-label="No"></toggle-switch></label>
+    </div>
+    <div class="row" ng-hide="blockWholeDay">
       <div class="col-md-6">
         <div class="form-group">
           <label>From</label>
-          <div bb-date-time-picker date="config.from_datetime"></div>
+          <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime" min-date="config.min_date"></div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label>To</label>
-          <div bb-date-time-picker date="config.to_datetime"></div>
+          <div bb-date-time-picker date="config.to_datetime" min-date="config.from_datetime" max-date="config.max_date"></div>
         </div>
       </div>
     </div>
 
     <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false">Block Time</button>
 
-
   </div>
+
+  <hr>
 
 </div>

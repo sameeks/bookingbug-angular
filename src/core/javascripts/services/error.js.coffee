@@ -86,6 +86,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: 'You need to select a time slot'
     },
     {
+      key: 'STORE_NOT_SELECTED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'You need to select a store'
+    },
+    {
       key: 'APPT_AT_SAME_TIME',
       type: 'warning',
       title: '',
@@ -140,6 +147,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'Sorry, your email or password was not recognised. Please try again or reset your password.'
+    },
+    {
+      key: 'SSO_LOGIN_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, the login process failed. Please try again.'
     },
     {
       key: 'PASSWORD_INVALID',
@@ -210,6 +224,20 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: "Sorry, we couldn't find a login linked with your Facebook account. You will need to sign up using Facebook first."
+    },
+    {
+      key: 'PHONE_NUMBER_ALREADY_REGISTERED_ADMIN',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: "There's already an account registered with this phone number. Use the search field to find the customers account."
+    },
+    {
+      key: 'EMAIL_ALREADY_REGISTERED_ADMIN',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: "There's already an account registered with this email. Use the search field to find the customers account."
     }
   ]
 

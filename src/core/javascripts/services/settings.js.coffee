@@ -17,6 +17,8 @@ angular.module('BB.Services').factory 'SettingsService', () ->
 
   setCountryCode: (value) ->
     country_code = value
+    cc = if value is 'us' then 'en' else 'en-gb'
+    moment.locale(cc)
 
   getCountryCode: () ->
     return country_code

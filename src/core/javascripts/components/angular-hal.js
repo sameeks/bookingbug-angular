@@ -66,8 +66,8 @@ angular
 
 })
 .factory('halClient', [
-  '$http', '$q', 'data_cache', 'shared_header', 'UriTemplate', '$cookies', '$sessionStorage', function(
-    $http, $q, data_cache, shared_header, UriTemplate, $cookies, $sessionStorage
+  '$http', '$q', 'data_cache', 'shared_header', 'UriTemplate', '$cookies', '$sessionStorage', '$localStorage', function(
+    $http, $q, data_cache, shared_header, UriTemplate, $cookies, $sessionStorage, $localStorage
   ){
 
     if ($sessionStorage.getItem('auth_token'))
@@ -330,11 +330,11 @@ angular
 
     function callService(method, href, options, data){
       if(!options) options = {};
-      headers = {
-        'Authorization': options.authorization
-        , 'Content-Type': 'application/json'
-        , 'Accept': 'application/hal+json,application/json'
-      }
+      var headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/hal+json,application/json'
+      };
+      if (options.authorization) headers.Authorization = options.authorization;
       if (options.app_id) shared_header.set('app_id', options.app_id, $sessionStorage);
       if (options.app_key) shared_header.set('app_key', options.app_key, $sessionStorage);
       if (options.auth_token) {
@@ -363,6 +363,9 @@ angular
           if (res.headers('auth-token') && res.status == 201){
             options.auth_token = res.headers('Auth-Token')
             shared_header.set('auth_token', res.headers('Auth-Token'), $sessionStorage)
+            // if auth token is present in local storage, set it there too
+            if ($localStorage.getItem('auth_token'))
+              $localStorage.setItem('auth_token', res.headers('Auth-Token'))
           }
           switch(res.status){
             case 200:
