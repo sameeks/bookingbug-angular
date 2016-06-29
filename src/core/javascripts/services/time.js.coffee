@@ -132,9 +132,9 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
 
 
   checkCurrentItem: (item, sorted_times, ev) ->
-    if item && item.id && item.event_id == ev.event_id && item.time && !sorted_times[item.time.time] && item.date && item.date.date.toISODate() == ev.date
+    if item && item.event_id == ev.event_id && item.time && !sorted_times[item.time.time] && item.date && item.date.date.toISODate() == ev.date
       sorted_times[item.time.time] = item.time
       # remote this entry from the cache - just in case - we know it has a held item in it so lets just not keep it in case that goes later!
       halClient.clearCache(ev.$href("self"))
-    else if item && item.id && item.event_id == ev.event_id && item.time && sorted_times[item.time.time] && item.date && item.date.date.toISODate() == ev.date
+    else if item  && item.event_id == ev.event_id && item.time && sorted_times[item.time.time] && item.date && item.date.date.toISODate() == ev.date
       sorted_times[item.time.time].avail = 1
