@@ -111,7 +111,9 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
 
 
     if $scope.slots
+
       angular.forEach $scope.slots, (slot) ->
+        
         if SettingsService.getUseLocalTimezone()
           time = moment(slot.time_moment).tz(moment.tz.guess())
           slot_time = DateTimeUtilitiesService.convertMomentToTime(time)
@@ -119,6 +121,7 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
           slot_time = slot.time
 
         $scope.accordion_slots.push(slot) if slot_time >= $scope.start_time and slot_time < $scope.end_time and slot.avail is 1
+      
       updateAvailability()
 
 
@@ -149,10 +152,20 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
           relevent_slot = _.findWhere($scope.slots, {time: $scope.disabled_slot.time})
           if relevent_slot
             relevent_slot.disabled = true
+    
     # if a day and slot has been provided, check if the slot is in range
     if day and slot
-      $scope.selected_slot = slot if day.date.isSame($scope.day.date) and slot.time >= $scope.start_time and slot.time < $scope.end_time
+
+      if SettingsService.getUseLocalTimezone()
+        time = moment(slot.time_moment).tz(moment.tz.guess())
+        slot_time = DateTimeUtilitiesService.convertMomentToTime(time)
+      else 
+        slot_time = slot.time
+
+      $scope.selected_slot = slot if day.date.isSame($scope.day.date) and slot_time >= $scope.start_time and slot_time < $scope.end_time
+    
     else
+      
       for slot in $scope.accordion_slots
         if slot.selected
           $scope.selected_slot = slot

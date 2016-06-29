@@ -1,11 +1,15 @@
-angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
+angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsService) ->
 
   # converts date and time belonging to BBModel.Day and BBModel.TimeSlot into
   # a valid moment object
   convertTimeSlotToMoment: (day, time_slot) ->
     return if !day and !time_slot
 
-    datetime = if time_slot.timezone then moment().tz(time_slot.timezone) else moment()
+    # HACK: remove once time slot has timezone from backend
+    time_zone = SettingsService.getTimeZone()
+    datetime = if time_zone then moment().tz(time_zone) else moment()
+    #datetime = moment()
+
     val = parseInt(time_slot.time)
     hours = parseInt(val / 60)
     mins = val % 60

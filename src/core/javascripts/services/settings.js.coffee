@@ -4,6 +4,7 @@ angular.module('BB.Services').factory 'SettingsService', () ->
   country_code = ""
   use_local_timezone = false
   currency = ""
+  time_zone = ""
 
   enableInternationalizaton: () ->
     i18n = true
@@ -37,3 +38,8 @@ angular.module('BB.Services').factory 'SettingsService', () ->
   getCurrency: ->
     currency
 
+  setTimeZone: (value) ->
+    time_zone = value
+
+  getTimeZone: ->
+    time_zone

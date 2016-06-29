@@ -352,6 +352,7 @@ angular.module('BB.Directives').directive 'bbCapacityView', () ->
 angular.module('BB.Directives').directive 'bbTimeZone', (SettingsService) ->
   restrict: 'A'
   link: (scope, el, attrs) ->
-    scope.time_zone_name = moment().format('zz')
-    if !SettingsService.getUseLocalTimezone() and moment.tz.guess() != moment().tz()
+    company_time_zone = SettingsService.getTimeZone()
+    scope.time_zone_name = moment().tz(company_time_zone).format('zz')
+    if !SettingsService.getUseLocalTimezone() and moment.tz.guess() != company_time_zone
       scope.is_time_zone_diff = true

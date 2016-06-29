@@ -36,8 +36,6 @@ angular.module('BB.Models').factory "BasketItemModel",
       @settings or= {}
       @has_questions = false
 
-      if bb
-        @reserve_without_questions = bb.reserve_without_questions
 
       # if we were given an id then the item is ready - we need to fake a few items
       if @time
@@ -46,7 +44,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @date = new BBModel.Day({date: @date, spaces: 1})
       if @datetime
         @date = new BBModel.Day({date: @datetime.toISODate(), spaces: 1})
-    
+
         t =  @datetime.hour() * 60 +  @datetime.minute()
         @time = new BBModel.TimeSlot({time: t, event_id: @event_id, selected: true, avail: 1, price: @price })
 
@@ -184,7 +182,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         # NOTE: date is not set as it might not be available
         defaults.date = moment(defaults.date)
       if defaults.time
-         # NOTE: time is not set as it might not be available
+        # NOTE: time is not set as it might not be available
         date = if defaults.date then defaults.date else moment()
         time = if defaults.time then parseInt(defaults.time) else 0
         defaults.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment({date: defaults.date}, {time: time})
@@ -647,11 +645,12 @@ angular.module('BB.Models').factory "BasketItemModel",
         @time.select()
 
         if @datetime
-          val = parseInt(time.time)
-          hours = parseInt(val / 60)
-          mins = val % 60
-          @datetime.hour(hours)
-          @datetime.minutes(mins)
+          @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(@datetime, @time)
+          # val = parseInt(time.time)
+          # hours = parseInt(val / 60)
+          # mins = val % 60
+          # @datetime.hour(hours)
+          # @datetime.minutes(mins)
 
         if @price && @time.price && (@price != @time.price)
           @setPrice(@time.price)
@@ -756,7 +755,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     checkReady: ->
       if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
         @ready = true
-      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))  && (@asked_questions || !@has_questions || @reserve_without_questions)
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))
         @reserve_ready = true
 
     ###**
@@ -978,7 +977,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {string} The returned price
     ###
-    # prints the amount due - which might be different if it's a waitlist
     duePrice: () ->
       if @isWaitlist()
         return 0
@@ -1005,12 +1003,15 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {date} The returned start date time
     ###
-    # get booking start datetime
     start_datetime: () ->
       return null if !@date || !@time
-      start_datetime = moment(@date.date.toISODate())
-      start_datetime.minutes(@time.time)
-      start_datetime
+
+      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date, @time)
+
+      # start_datetime = moment(@date.date.toISODate())
+      # start_datetime.minutes(@time.time)
+      # start_datetime.tz(SettingsService.getTimeZone())
+      # start_datetime
 
 
     startDatetime: () ->
@@ -1025,13 +1026,19 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {date} The returned end date time
     ###
-    # get booking end datetime
+
     end_datetime: () ->
       return null if !@date || !@time || (!@listed_duration && !@duration)
       duration = if @listed_duration then @listed_duration else @duration
-      end_datetime = moment(@date.date.toISODate())
-      end_datetime.minutes(@time.time + duration)
-      end_datetime
+
+      time = @time.time + duration
+
+      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date, time)
+
+
+      # end_datetime = moment(@date.date.toISODate())
+      # end_datetime.minutes(@time.time + duration)
+      # end_datetime
 
 
     endDatetime: () ->
