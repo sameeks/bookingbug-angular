@@ -3,11 +3,13 @@
 angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
 
   query: (prms) ->
+
     deferred = $q.defer()
 
     if prms.date
       date = prms.date.toISODate()
     else
+
       if !prms.cItem.date
         deferred.reject("No date set")
         return deferred.promise
@@ -20,10 +22,12 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
       prms.duration = prms.cItem.duration if prms.cItem && prms.cItem.duration
 
     item_link = prms.item_link
+
     if prms.cItem && prms.cItem.days_link && !item_link
       item_link = prms.cItem.days_link
 
     if item_link
+
       extra = {date: date}
       # extra.location = prms.client.addressCsvLine() if prms.client && prms.client.hasAddress()
       extra.location = prms.location if prms.location
@@ -37,27 +41,40 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
 
       # if we have an event - the the company link - so we don't add inb extra params
       item_link = prms.company if extra.event_id
+
       item_link.$get('times', extra).then (results) =>
+
         if results.$has('date_links')
           # it's a date range - we're expecting several dates - lets build up a hash of dates
           results.$get('date_links').then (all_days) =>
+
             date_times = {}
+            luke_time_slots = []
             all_days_def = []
+
             for day in all_days
+
               do (day) =>
+
                 # there's several days - get them all
                 day.elink = $q.defer()
                 all_days_def.push(day.elink.promise)
+                
                 if day.$has('event_links')
+
                   day.$get('event_links').then (all_events) =>
                     times = @merge_times(all_events, prms.cItem.service, prms.cItem, day)
                     times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
                     date_times[day.date] = times
+                    luke_time_slots.push(times)
                     day.elink.resolve()
+                
                 else if day.times
+
                   times = @merge_times([day], prms.cItem.service, prms.cItem, day)
                   times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
                   date_times[day.date] = times
+                  luke_time_slots.push(times)
                   day.elink.resolve()
 
             $q.all(all_days_def).then () ->
@@ -65,17 +82,20 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
               deferred.resolve(date_times)
 
         else if results.$has('event_links')
+
           # single day - but a list of bookable events
           results.$get('event_links').then (all_events) =>
             times = @merge_times(all_events, prms.cItem.service, prms.cItem)
             times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
             debugger
+            # returns array of time slots
             deferred.resolve(times)
 
         else if results.times
           times = @merge_times([results], prms.cItem.service, prms.cItem)
           times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
           debugger
+          # returns array of time slots
           deferred.resolve(times)
       , (err) ->
         deferred.reject(err)
@@ -111,7 +131,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
 
 
   merge_times: (all_events, service, item, day) ->
-    debugger
+
     return [] if !all_events || all_events.length == 0
 
     all_events = _.shuffle(all_events)
@@ -131,7 +151,10 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
     date_times = {}
     for i in sorted_times
       if i
-        times.push(new BBModel.TimeSlot(i, service, day.date))
+        if day and day.date
+          times.push(new BBModel.TimeSlot(i, service, day.date))
+        else
+          times.push(new BBModel.TimeSlot(i, service))
     times
 
 
