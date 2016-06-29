@@ -376,15 +376,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if !prms.custom_partial_url
       $scope.bb.path_setup = true
 
-    if prms.reserve_without_questions
-      $scope.bb.reserve_without_questions = prms.reserve_without_questions
-
     if prms.extra_setup
       $scope.bb.extra_setup          = prms.extra_setup
       $scope.bb.starting_step_number = parseInt(prms.extra_setup.step) if prms.extra_setup.step
       $scope.bb.return_url           = prms.extra_setup.return_url if prms.extra_setup.return_url
       $scope.bb.destination          = prms.extra_setup.destination if prms.extra_setup.destination
-    
+
     if prms.booking_settings
       $scope.bb.booking_settings = prms.booking_settings
 
@@ -898,7 +895,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     BasketService.updateBasket($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
-        item.reserve_without_questions = $scope.bb.reserve_without_questions
       # clear the currently cached time date
       halClient.clearCache("time_data")
       halClient.clearCache("events")
@@ -968,7 +964,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.clearBasketItem = ->
     def = $q.defer()
     $scope.setBasketItem(new BBModel.BasketItem(null, $scope.bb))
-    $scope.bb.current_item.reserve_without_questions = $scope.bb.reserve_without_questions
     if $scope.bb.default_setup_promises
       $q.all($scope.bb.default_setup_promises)['finally'] () ->
         $scope.bb.current_item.setDefaults($scope.bb.item_defaults)
@@ -1194,7 +1189,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     # Find the last unskipped step
     step_to_load = 0
-    
+
     while past_steps[0]
       last_step = past_steps.pop()
       if !last_step
