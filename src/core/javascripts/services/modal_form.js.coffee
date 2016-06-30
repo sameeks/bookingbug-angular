@@ -9,7 +9,7 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
     if $scope.company.$has(new_rel)
       $scope.company.$get(new_rel).then (schema) ->
         $scope.form = _.reject schema.form, (x) -> x.type == 'submit'
-        $scope.schema = schema.schema
+        $scope.schema = checkSchema(schema.schema)
         $scope.form_model = {}
         $scope.loading = false
     else
@@ -33,6 +33,22 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
       event.stopPropagation()
       $modalInstance.dismiss('cancel')
 
+
+
+  # THIS IS CRUFTY AND SHOULD BE REMOVE WITH AN API UPDATE THAT TIDIES UP THE SCEMA RESPONE
+  # fix the issues we have with the the sub client and question blocks being in doted notation, and not in child objects
+  checkSchema = (schema) ->
+    for k,v of schema.properties
+      vals = k.split(".")
+      if vals[0] == "questions" && vals.length > 1
+        schema.properties.questions ||= {type: "object", properties: {} }
+        schema.properties.questions.properties[vals[1]] ||= {type: "object", properties: {answer: v} }
+      if vals[0] == "client" && vals.length > 2
+        schema.properties.client ||= {type: "object", properties: {q: {type: "object", properties: {}}} }
+        schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v} }
+    return schema
+
+
   editForm = ($scope, $modalInstance, model, title, success, fail) ->
     $scope.loading = true
     $scope.title = title
@@ -40,7 +56,7 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
     if $scope.model.$has('edit')
       $scope.model.$get('edit').then (schema) ->
         $scope.form = _.reject schema.form, (x) -> x.type == 'submit'
-        $scope.schema = schema.schema
+        $scope.schema = checkSchema(schema.schema)
         $scope.form_model = $scope.model
         $scope.loading = false
     else
@@ -94,7 +110,7 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
     if $scope.model.$has('new_booking')
       $scope.model.$get('new_booking').then (schema) ->
         $scope.form = _.reject schema.form, (x) -> x.type == 'submit'
-        $scope.schema = schema.schema
+        $scope.schema = checkSchema(schema.schema)
         $scope.form_model = {}
         $scope.loading = false
     else
