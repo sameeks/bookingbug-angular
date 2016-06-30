@@ -354,5 +354,5 @@ angular.module('BB.Directives').directive 'bbTimeZone', (SettingsService) ->
   link: (scope, el, attrs) ->
     company_time_zone = SettingsService.getTimeZone()
     scope.time_zone_name = moment().tz(company_time_zone).format('zz')
-    if !SettingsService.getUseLocalTimezone() and SettingsService.getDisplayTimeZone() != company_time_zone
+    if !SettingsService.getUseLocalTimezone() and moment.tz.guess() != company_time_zone
       scope.is_time_zone_diff = true
