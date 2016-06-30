@@ -114,6 +114,7 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
 
       angular.forEach $scope.slots, (slot) ->
         
+        # use display time zone to ensure slots get added to the right range group
         if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()
           datetime = moment(slot.datetime).tz(SettingsService.getDisplayTimeZone())
           slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime)
@@ -156,6 +157,7 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
     # if a day and slot has been provided, check if the slot is in range and mark it as selected
     if day and slot
 
+      # use display time zone to ensure slots get added to the right range group
       if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()
         datetime = moment(slot.datetime).tz(SettingsService.getDisplayTimeZone())
         slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime)

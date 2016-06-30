@@ -646,11 +646,6 @@ angular.module('BB.Models').factory "BasketItemModel",
 
         if @datetime
           @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(@datetime, @time)
-          # val = parseInt(time.time)
-          # hours = parseInt(val / 60)
-          # mins = val % 60
-          # @datetime.hour(hours)
-          # @datetime.minutes(mins)
 
         if @price && @time.price && (@price != @time.price)
           @setPrice(@time.price)
@@ -982,6 +977,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         return 0
       return @price
 
+
     ###**
     * @ngdoc method
     * @name isWaitlist
@@ -994,6 +990,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     isWaitlist: () ->
       return @status && @status == 8 # 8 = waitlist
 
+
     ###**
     * @ngdoc method
     * @name start_datetime
@@ -1005,17 +1002,12 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     start_datetime: () ->
       return null if !@date || !@time
-
       return DateTimeUtilitiesService.convertTimeSlotToMoment(@date, @time)
-
-      # start_datetime = moment(@date.date.toISODate())
-      # start_datetime.minutes(@time.time)
-      # start_datetime.tz(SettingsService.getTimeZone())
-      # start_datetime
 
 
     startDatetime: () ->
       @start_datetime()
+
 
     ###**
     * @ngdoc method
@@ -1026,23 +1018,16 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {date} The returned end date time
     ###
-
     end_datetime: () ->
       return null if !@date || !@time || (!@listed_duration && !@duration)
       duration = if @listed_duration then @listed_duration else @duration
-
       time = @time.time + duration
-
       return DateTimeUtilitiesService.convertTimeSlotToMoment(@date, time)
-
-
-      # end_datetime = moment(@date.date.toISODate())
-      # end_datetime.minutes(@time.time + duration)
-      # end_datetime
 
 
     endDatetime: () ->
       @end_datetime()
+
 
     ###**
     * @ngdoc method
@@ -1059,6 +1044,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       # convert duration from seconds to minutes
       @duration = booking.duration
 
+
     ###**
     * @ngdoc method
     * @name anyPerson
@@ -1070,6 +1056,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     anyPerson: () ->
       @person && (typeof @person == 'boolean')
+
 
     ###**
     * @ngdoc method
@@ -1083,6 +1070,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     anyResource: () ->
       @resource && (typeof @resource == 'boolean')
 
+
     ###**
     * @ngdoc method
     * @name isMovingBooking
@@ -1095,6 +1083,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     isMovingBooking: ->
       (@srcBooking || @move_item_id)
 
+
     ###**
     * @ngdoc method
     * @name setCloneAnswers
@@ -1106,6 +1095,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     setCloneAnswers: (otherItem) ->
       @cloneAnswersItem = otherItem
+
 
     ###**
     * @ngdoc method
@@ -1121,6 +1111,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       return 0 if !@item_details
       return @item_details.questionPrice(@getQty())
 
+
     ###**
     * @ngdoc method
     * @name getQty
@@ -1135,6 +1126,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       return @tickets.qty if @tickets
       return 1
 
+
     ###**
     * @ngdoc method
     * @name totalPrice
@@ -1144,7 +1136,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {integer} The returned total price
     ###
-    # price including discounts
     totalPrice: =>
       if @tickets && @tickets.pre_paid_booking_id
         return 0
@@ -1157,6 +1148,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       pr = 0      if !angular.isNumber(pr)
       return pr + @questionPrice()
 
+
     ###**
     * @ngdoc method
     * @name fullPrice
@@ -1166,13 +1158,13 @@ angular.module('BB.Models').factory "BasketItemModel",
     *
     * @returns {integer} The returned full price
     ###
-    # price excluding discounts
     fullPrice: =>
       pr = @base_price
       pr ||= @total_price
       pr ||= @price
       pr ||= 0
       return pr + @questionPrice()
+
 
     ###**
     * @ngdoc method
@@ -1227,6 +1219,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       @external_purchase = external_purchase
       @book_link = @company
       @setPrice(external_purchase.price) if external_purchase.price
+
 
     ###**
     * @ngdoc method
