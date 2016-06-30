@@ -1,6 +1,6 @@
 
 
-angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
+angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, SettingsService) ->
 
   query: (prms) ->
 
@@ -39,17 +39,17 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
       extra.resource_ids = prms.resource_ids
       extra.num_resources = prms.num_resources
 
-      # if we have an event - the the company link - so we don't add inb extra params
+      # if we have an event - the the company link - so we don't add in extra params
       item_link = prms.company if extra.event_id
 
       item_link.$get('times', extra).then (results) =>
 
         if results.$has('date_links')
+
           # it's a date range - we're expecting several dates - lets build up a hash of dates
           results.$get('date_links').then (all_days) =>
 
             date_times = {}
-            luke_time_slots = []
             all_days_def = []
 
             for day in all_days
@@ -63,38 +63,47 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
                 if day.$has('event_links')
 
                   day.$get('event_links').then (all_events) =>
-                    times = @merge_times(all_events, prms.cItem.service, prms.cItem, day)
+                    times = @merge_times(all_events, prms.cItem.service, prms.cItem, day.date)
                     times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-                    date_times[day.date] = times
-                    luke_time_slots.push(times)
-                    day.elink.resolve()
+                    #date_times[day.date] = times
+                    day.elink.resolve(times)
                 
                 else if day.times
 
-                  times = @merge_times([day], prms.cItem.service, prms.cItem, day)
+                  times = @merge_times([day], prms.cItem.service, prms.cItem, day.date)
                   times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-                  date_times[day.date] = times
-                  luke_time_slots.push(times)
-                  day.elink.resolve()
+                  #date_times[day.date] = times
+                  day.elink.resolve(times)
 
-            $q.all(all_days_def).then () ->
-              debugger
+            $q.all(all_days_def).then (times) ->
+
+              # build day/slot array ensuring slots are grouped by the display time zone
+              date_times = _.chain(times)
+                .flatten()
+                .sortBy((slot) -> slot.time_moment.unix())
+                .each((slot) -> slot.display_time = moment(slot.time_moment).tz(SettingsService.getDisplayTimeZone()))
+                .groupBy((slot) -> slot.display_time.toISODate())
+                .value()
+
+              # add days back that don't have any availabiity
+              date_times[day.date] = [] for day in all_days when !date_times[day.date]
+
               deferred.resolve(date_times)
 
         else if results.$has('event_links')
 
           # single day - but a list of bookable events
           results.$get('event_links').then (all_events) =>
-            times = @merge_times(all_events, prms.cItem.service, prms.cItem)
+            times = @merge_times(all_events, prms.cItem.service, prms.cItem, prms.date)
             times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-            debugger
+
             # returns array of time slots
             deferred.resolve(times)
 
         else if results.times
-          times = @merge_times([results], prms.cItem.service, prms.cItem)
+          times = @merge_times([results], prms.cItem.service, prms.cItem, prms.date)
           times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-          debugger
+
           # returns array of time slots
           deferred.resolve(times)
       , (err) ->
@@ -130,7 +139,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
     return defer.promise
 
 
-  merge_times: (all_events, service, item, day) ->
+  merge_times: (all_events, service, item, date) ->
 
     return [] if !all_events || all_events.length == 0
 
@@ -151,10 +160,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
     date_times = {}
     for i in sorted_times
       if i
-        if day and day.date
-          times.push(new BBModel.TimeSlot(i, service, day.date))
-        else
-          times.push(new BBModel.TimeSlot(i, service))
+        times.push(new BBModel.TimeSlot(i, {service: service, date: date}))
     times
 
 

@@ -27,13 +27,14 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
 
   class TimeSlot extends BaseModel
 
-    constructor: (data, service) ->
+    constructor: (data, extra = {}) ->
       super(data)
-      @service = service
+      @service = extra.service
       @time_12 = @print_time12()
       @time_24 = @print_time()
-      @time_moment = DateTimeUtilitiesService.convertTimeSlotToMoment({date: moment()}, @)
-
+      date = if extra.date then moment(extra.date, 'YYYY-MM-DD') else moment()
+      @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment({date: date}, @)
+      @time_moment = @datetime
 
     ###**
     * @ngdoc method
