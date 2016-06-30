@@ -28,7 +28,7 @@ angular.module('BB.Services').factory 'SettingsService', () ->
     return country_code
 
   setUseLocalTimezone: (value) ->
-    use_local_timezone = value?
+    use_local_timezone = value
     display_time_zone  = moment.tz.guess()
 
   getUseLocalTimezone: ->

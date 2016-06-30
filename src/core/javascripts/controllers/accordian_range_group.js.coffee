@@ -114,9 +114,9 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
 
       angular.forEach $scope.slots, (slot) ->
         
-        if SettingsService.getUseLocalTimezone()
-          time = moment(slot.time_moment).tz(moment.tz.guess())
-          slot_time = DateTimeUtilitiesService.convertMomentToTime(time)
+        if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()
+          datetime = moment(slot.datetime).tz(SettingsService.getDisplayTimeZone())
+          slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime)
         else 
           slot_time = slot.time
 
@@ -153,19 +153,19 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup',
           if relevent_slot
             relevent_slot.disabled = true
     
-    # if a day and slot has been provided, check if the slot is in range
+    # if a day and slot has been provided, check if the slot is in range and mark it as selected
     if day and slot
 
-      if SettingsService.getUseLocalTimezone()
-        time = moment(slot.time_moment).tz(moment.tz.guess())
-        slot_time = DateTimeUtilitiesService.convertMomentToTime(time)
+      if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()
+        datetime = moment(slot.datetime).tz(SettingsService.getDisplayTimeZone())
+        slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime)
       else 
         slot_time = slot.time
 
       $scope.selected_slot = slot if day.date.isSame($scope.day.date) and slot_time >= $scope.start_time and slot_time < $scope.end_time
     
     else
-      
+
       for slot in $scope.accordion_slots
         if slot.selected
           $scope.selected_slot = slot

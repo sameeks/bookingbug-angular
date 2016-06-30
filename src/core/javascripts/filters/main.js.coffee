@@ -301,13 +301,10 @@ angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
 
     if date and moment.isMoment(date)
       new_date = date.clone()
-      if SettingsService.getUseLocalTimezone()
-        new_date.tz(moment.tz.guess())
-        format += ' zz' if show_time_zone
-        return new_date.format(format)
-      else
-        new_date.tz(SettingsService.getTimeZone())
-        return new_date.format(format)
+      new_date.tz(SettingsService.getDisplayTimeZone())
+      format += ' zz' if show_time_zone
+      return new_date.format(format)
+
 
 
 angular.module('BB.Filters').filter 'range', ->
