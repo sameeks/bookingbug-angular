@@ -1,12 +1,12 @@
 /* .summary-list used in survey only*/
 .summary-list {
   margin-bottom: 20px;
-  line-height: 1.4;
+  line-height: $line-height-base;
 }
 
 .bb-summary-list {
   margin-bottom: 20px;
-  line-height: 1.4;
+  line-height: $line-height-base;
 
   .bb-confirmation-summary-item {
     @include make-row();
@@ -127,7 +127,7 @@
   li {
     padding-bottom: 5px;
     .bb-icon, .glyphicon {
-      color: #666;
+      color: $gray;
     }
     &:last-child {
       padding-bottom: 0;

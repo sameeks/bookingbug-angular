@@ -18,6 +18,6 @@ angular.module('BBAdminDashboard.services').factory 'TemplateService', [
         else if $templateCache.get('/default' + template)?
           return $templateCache.get('/default' + template)
         else
-          $exceptionHandler(new Error('Template "' + template + '" not found'))
+          $exceptionHandler(new Error('Template "' + template + '" not found'), '', true)
     }
 ]

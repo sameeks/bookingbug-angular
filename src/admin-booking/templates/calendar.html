@@ -35,7 +35,7 @@
     <div class="page-summary" ng-show="!availability_conflict">
       Select a time for the booking.
     </div>
-      
+
     <!-- CALENDAR (with First available/Day/Week view)-->
     <div class="panel panel-default">
       <div class="panel-heading"><strong>Calendar</strong></div>
@@ -43,12 +43,12 @@
 
 
         <div class="row">
-          <div class="col-sm-9">
+          <div class="col-sm-8">
 
             <div class="form-inline">
 
               <div class="bb-label">
-                <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> 
+                <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
                 Filter by:
               </div>
 
@@ -67,7 +67,7 @@
             </div>
           </div>
 
-          <div class="col-sm-3">
+          <div class="col-sm-4">
             <div class="bb-view-switcher hidden-xs">
               <div class="btn-group pull-right">
                 <button class="btn btn-sm btn-default" ng-class="{active: calendar_view.next_available}" ng-click="switchView('next_available')" ng-if="bb.item_defaults.pick_first_time">
@@ -77,7 +77,7 @@
                   <i class="fa fa-calendar-times-o"></i> Day
                 </button>
                 <button class="btn btn-sm btn-default" ng-class="{active: calendar_view.multi_day}" ng-click="switchView('multi_day')">
-                  <i class="fa fa-calendar-o"></i> 
+                  <i class="fa fa-calendar-o"></i>
                   <span class="visible-sm-inline">3 day</span>
                   <span class="visible-md-inline">5 day</span>
                   <span class="visible-lg-inline">7 day</span>
@@ -203,7 +203,7 @@
             {{bb.current_item.defaults.resource.name}}
           </li>
         </ul>
-        
+
         <button type="button" class="btn btn-danger pull-right" ng-click="overBook()" bb-debounce>Overbook</button>
 
       </div>

@@ -1,28 +1,30 @@
-<div class="form-inline calendar-filters">
-	<div class="form-group">
-		<label>Show&nbsp;&nbsp;</label>
-		<toggle-switch 
-			ng-change="changeSelectedResources()"
-	    ng-model="showAll"
-	    on-label="all"
-	    off-label="some"
-	    class="switch-primary">
-	  </toggle-switch>
+<div>
+	<div class="form-inline calendar-filters">
+		<div class="form-group">
+			<label>Show&nbsp;&nbsp;</label>
+			<toggle-switch
+				ng-change="changeSelectedResources()"
+		    ng-model="showAll"
+		    on-label="all"
+		    off-label="some"
+		    class="switch-primary">
+		  </toggle-switch>
+		</div>
+		<div class="form-group" ng-hide="showAll">
+			<ui-select multiple ng-model="selectedResources.selected" ng-change="changeSelectedResources()" theme="bootstrap" close-on-select="true" title="Choose a person" style="min-width: 300px;">
+			  <ui-select-match placeholder="Select staff or resource...">{{$item.name}}</ui-select-match>
+			  <ui-select-choices repeat="asset in assets | propsFilter: {name: $select.search, email: $select.search}">
+			    <div ng-bind-html="asset.name | highlight: $select.search"></div>
+			    <small ng-show="asset.email">
+			      email: {{asset.email}}
+			    </small>
+			  </ui-select-choices>
+			</ui-select>
+		</div>
+		<div class="form-group" ng-show="loading || calendarLoading"><i class="fa fa-refresh fa-spin"></i></div>
 	</div>
-	<div class="form-group" ng-hide="showAll">
-		<ui-select multiple ng-model="selectedResources.selected" ng-change="changeSelectedResources()" theme="bootstrap" close-on-select="true" title="Choose a person" style="min-width: 300px;">
-		  <ui-select-match placeholder="Select staff or resource...">{{$item.name}}</ui-select-match>
-		  <ui-select-choices repeat="asset in assets | propsFilter: {name: $select.search, email: $select.search}">
-		    <div ng-bind-html="asset.name | highlight: $select.search"></div>
-		    <small ng-show="asset.email">
-		      email: {{asset.email}}
-		    </small>
-		  </ui-select-choices>
-		</ui-select>
-	</div>
-	<div class="form-group" ng-show="loading || calendarLoading"><i class="fa fa-refresh fa-spin"></i></div>  
-</div>
 
-<div id="uicalendar" ui-calendar="uiCalOptions.calendar" ng-model="eventSources"
-  ng-if="eventSources" calendar="resourceCalendar"
-  class="resource-calendar"></div>
+	<div id="uicalendar" ui-calendar="uiCalOptions.calendar" ng-model="eventSources"
+	  ng-if="eventSources" calendar="resourceCalendar"
+	  class="resource-calendar"></div>
+</div>

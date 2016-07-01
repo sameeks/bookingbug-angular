@@ -7,14 +7,14 @@
     padding: 0px;
   }
   .btn-primary {
-    color: #000;
+    color: $gray-base;
   }
   .btn-primary:hover {
-    background-color: #000;
-    color: #d33826;
+    background-color: $gray-base;
+    color: #d33826; //What O_o?
   }
   .item-name {
-    font-size: 14px;
+    font-size: $font-size-base;
     text-transform: uppercase;
     line-height: 35px;
   }
@@ -28,18 +28,18 @@
   }
   .item-img {
     padding: 0px;
-    background-color: #000;
+    background-color: $gray-base;
   }
   .item-description {
-    background: #000;
+    background: $gray-base;
   }
   .service-select {
-    background: #000;
+    background: $gray-base;
   }
 }
 .event-group .panel-default:hover  {
-  .btn-primary {
-    background-color: #000;
+  .btn-primary { //FIXIT: on panel hover or button hover
+    background-color: $gray-base;
     color: #d33826;
   }
   .item-desc {

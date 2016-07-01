@@ -1,60 +1,41 @@
 @charset "UTF-8";
-@import "bb-sass-3-3-1/bootstrap.scss";
-@import "animate";
-@import "fonts";
+
+// BookingBug mixins
 @import "mixins";
 
-// Modules & Variables
-$heading-text-color         : #222222;
-$page-background-color      : #FFFFFF;
-$hyperlink-color            : #609ABE;
-$placeholder-text           : #A5A5A5;
+//Animate.css
+@import "animate";
 
-$primary-text-color         : #222222;
-$primary-background-color   : #EEEEEE;
-$primary-border-color       : #666666;
+//Font-Awesome path and custom icons
+@import "fonts";
 
-$secondary-text-color       : #255B93;
-$secondary-background-color : #FAFAFA;
-$secondary-border-color     : #D5D5D5;
+// Print styles
+@import "print";
 
-#bb {
+// Theme
+//@import "bb_light_theme";
 
-  // font-family: 'Source Sans Pro', sans-serif;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 400;
-  font-size: $font-size-base;
-  color: $primary-text-color;
-  background-color: $page-background-color;
-  margin: 0; // remove default body margin
+// Page Elements
+@import "buttons";
+@import "form";
+@import "alerts";
+@import "helpers";
+@import "lists";
+@import "page";
 
-  //
-  // ADD THEME HERE
-  //
-
-
-  // Page Elements
-  @import "buttons";
-  @import "form";
-  @import "alerts";
-  @import "helpers";
-  @import "lists";
-  @import "page";
-
-  // Partials
-  @import "basket";
-  @import "basket_mini";
-  @import "calendar";
-  @import "confirmation";
-  @import "day";
-  @import "duration_list";
-  @import "event_group_list";
-  @import "event_list";
-  @import "map";
-  @import "service_list";
-  @import "event";
-  @import "time";
-  @import "filters";
-  @import "popovers";
-  @import "company_cards";
-}
+// Partials
+@import "basket";
+@import "basket_mini";
+@import "calendar";
+@import "confirmation";
+@import "day";
+@import "duration_list";
+@import "event_group_list";
+@import "event_list";
+@import "map";
+@import "service_list";
+@import "event";
+@import "time";
+@import "filters";
+@import "popovers";
+@import "company_cards";
