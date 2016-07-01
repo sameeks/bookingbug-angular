@@ -247,7 +247,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-        checkRequestedSlots(time_slots) if options.check_requested_slot == true
+        checkRequestedSlots(time_slots) if options.check_requested_slot == true and $scope.data_source.settings.resource != -1
 
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -257,11 +257,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   checkRequestedSlots = (time_slots) ->
     requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
     if requested_slot and $scope.data_source.resource and $scope.data_source.person
-      if requested_slot && requested_slot.overbook && !$scope.bb.dont_skip_step
+      if requested_slot && requested_slot.overbook
         $scope.availability_conflict = true
-      else if requested_slot and $scope.bb.dont_skip_step
+      else if requested_slot
         $scope.highlightSlot(requested_slot, $scope.selected_day)
-        $scope.bb.dont_skip_step = false
       else
         $scope.skipThisStep()
         $scope.selectSlot(requested_slot, $scope.selected_day)

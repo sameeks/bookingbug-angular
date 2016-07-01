@@ -1,5 +1,6 @@
 angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
 
+  slot_checked = false
   # converts date and time belonging to BBModel.Day and BBModel.TimeSlot into
   # a valid moment object
   convertTimeSlotToMoment: (day, time_slot) ->
@@ -25,11 +26,13 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
 
   checkDefaultTime: (date, time_slots, basket_item, item_defaults) ->
 
-    return if !(basket_item.defaults.time? and 
-    ((basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person) or !item_defaults.merge_people) and 
+    return if @slot_checked
+    return if !(basket_item.defaults.time? and
+    ((basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person) or !item_defaults.merge_people) and
       ((basket_item.defaults.resource and basket_item.defaults.resource.self is basket_item.resource.self) or _.isBoolean(basket_item.resource) or !item_defaults.merge_resources))
 
     found_time_slot = null
+    @slot_checked: true
 
     if basket_item.defaults.time and (basket_item.defaults.date and date.isSame(basket_item.defaults.date, 'day') or !basket_item.defaults.date)
 
