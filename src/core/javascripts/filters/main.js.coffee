@@ -282,8 +282,7 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
 # Checks if a format (option) is set if not checks the country and provides a default.
 # Additionally you can pass in date, time or datetime
 angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
-  local_time_regex = /LT|H/i
-  local_utc_offset = moment().utcOffset()
+  
   hardcoded_formats =
     datetime:
       us: 'MM/DD/YYYY, h:mm a'
@@ -295,17 +294,18 @@ angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
       us: 'h:mm a'
       uk: 'HH:mm'
 
-  (date, format="LLL") ->
+  (date, format="LLL", show_time_zone=false) ->
     if hardcoded_formats[format]
       cc = if SettingsService.getCountryCode() is 'us' then 'us' else 'uk'
       format = hardcoded_formats[format][cc]
 
     if date and moment.isMoment(date)
-      if SettingsService.getUseLocalTimezone() and format.match(local_time_regex)
-        delta = local_utc_offset - moment.tz(this.bb.company.timezone).utcOffset()
-        return date.add(delta, 'minutes').format(format + ' Z')
-      else
-        return date.format(format)
+      new_date = date.clone()
+      new_date.tz(SettingsService.getDisplayTimeZone())
+      format += ' zz' if show_time_zone
+      return new_date.format(format)
+
+
 
 angular.module('BB.Filters').filter 'range', ->
   (input, min, max) ->

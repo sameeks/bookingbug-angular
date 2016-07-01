@@ -1,13 +1,15 @@
 
 
-angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
+angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, SettingsService) ->
 
   query: (prms) ->
+
     deferred = $q.defer()
 
     if prms.date
       date = prms.date.toISODate()
     else
+
       if !prms.cItem.date
         deferred.reject("No date set")
         return deferred.promise
@@ -20,10 +22,12 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
       prms.duration = prms.cItem.duration if prms.cItem && prms.cItem.duration
 
     item_link = prms.item_link
+
     if prms.cItem && prms.cItem.days_link && !item_link
       item_link = prms.cItem.days_link
 
     if item_link
+
       extra = {date: date}
       # extra.location = prms.client.addressCsvLine() if prms.client && prms.client.hasAddress()
       extra.location = prms.location if prms.location
@@ -35,44 +39,72 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
       extra.resource_ids = prms.resource_ids
       extra.num_resources = prms.num_resources
 
-      # if we have an event - the the company link - so we don't add inb extra params
+      # if we have an event - the the company link - so we don't add in extra params
       item_link = prms.company if extra.event_id
+
       item_link.$get('times', extra).then (results) =>
+
         if results.$has('date_links')
+
           # it's a date range - we're expecting several dates - lets build up a hash of dates
           results.$get('date_links').then (all_days) =>
+
             date_times = {}
             all_days_def = []
+
             for day in all_days
+
               do (day) =>
+
                 # there's several days - get them all
                 day.elink = $q.defer()
                 all_days_def.push(day.elink.promise)
+                
                 if day.$has('event_links')
-                  day.$get('event_links').then (all_events) =>
-                    times = @merge_times(all_events, prms.cItem.service, prms.cItem)
-                    times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-                    date_times[day.date] = times
-                    day.elink.resolve()
-                else if day.times
-                  times = @merge_times([day], prms.cItem.service, prms.cItem)
-                  times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-                  date_times[day.date] = times
-                  day.elink.resolve()
 
-            $q.all(all_days_def).then () ->
+                  day.$get('event_links').then (all_events) =>
+                    times = @merge_times(all_events, prms.cItem.service, prms.cItem, day.date)
+                    times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
+                    #date_times[day.date] = times
+                    day.elink.resolve(times)
+                
+                else if day.times
+
+                  times = @merge_times([day], prms.cItem.service, prms.cItem, day.date)
+                  times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
+                  #date_times[day.date] = times
+                  day.elink.resolve(times)
+
+            $q.all(all_days_def).then (times) ->
+
+              # build day/slot array ensuring slots are grouped by the display time zone
+              date_times = _.chain(times)
+                .flatten()
+                .sortBy((slot) -> slot.time_moment.unix())
+                .each((slot) -> slot.display_time = moment(slot.time_moment).tz(SettingsService.getDisplayTimeZone()))
+                .groupBy((slot) -> slot.display_time.toISODate())
+                .value()
+
+              # add days back that don't have any availabiity
+              date_times[day.date] = [] for day in all_days when !date_times[day.date]
+
               deferred.resolve(date_times)
 
         else if results.$has('event_links')
+
           # single day - but a list of bookable events
           results.$get('event_links').then (all_events) =>
-            times = @merge_times(all_events, prms.cItem.service, prms.cItem)
+            times = @merge_times(all_events, prms.cItem.service, prms.cItem, prms.date)
             times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
+
+            # returns array of time slots
             deferred.resolve(times)
 
         else if results.times
-          times = @merge_times([results], prms.cItem.service, prms.cItem)
+          times = @merge_times([results], prms.cItem.service, prms.cItem, prms.date)
           times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
+
+          # returns array of time slots
           deferred.resolve(times)
       , (err) ->
         deferred.reject(err)
@@ -107,7 +139,8 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
     return defer.promise
 
 
-  merge_times: (all_events, service, item) ->
+  merge_times: (all_events, service, item, date) ->
+
     return [] if !all_events || all_events.length == 0
 
     all_events = _.shuffle(all_events)
@@ -127,7 +160,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient) ->
     date_times = {}
     for i in sorted_times
       if i
-        times.push(new BBModel.TimeSlot(i, service))
+        times.push(new BBModel.TimeSlot(i, {service: service, date: date}))
     times
 
 
