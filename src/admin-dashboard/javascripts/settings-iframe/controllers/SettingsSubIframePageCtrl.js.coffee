@@ -14,4 +14,11 @@ angular.module('BBAdminDashboard.settings-iframe.controllers')
     $scope.extra_params = "id=#{$stateParams.id}"
   else
     $scope.extra_params = ""
+
+  $scope.pageHeader = null
+
+  $scope.$emit 'iframeLoading',{}
+
+  $scope.onIframeLoad = ()->
+    $scope.$emit 'iframeLoaded',{}
 ]
