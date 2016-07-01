@@ -4,6 +4,7 @@
         on-data-required="getAppointments(currentPage, filterBy, filterByFields, orderBy, orderByReverse)" role="grid">
       <thead>
         <tr role="row">
+          <th field-name="icon" display-name="-" enable-sorting="false" style="width:1px"> </th>
           <th field-name="client_name" display-name="Customer" enable-sorting="true"></th>
           <th field-name="person_name" display-name="Staff Member" enable-sorting="true"></th>
           <th field-name="datetime" display-name="Due" enable-sorting="true"></th>
@@ -15,6 +16,9 @@
       </thead>
       <tbody>
         <tr role="row">
+          <td field-name="icon">
+            <a ng-click="edit(bmap[gridItem])"><i class="fa fa-calendar"></i></a>
+          </td>
           <td field-name="client_name">
             <a ui-sref="clients.edit({id: bmap[gridItem].client_id})">{{bmap[gridItem].client_name}}</a>
           </td>
@@ -67,7 +71,7 @@
             <td>
                 <span tr-ng-grid-pager=""></span>
             </td>
-        </tr> 
+        </tr>
       </tfoot>
       </table>
   </div>

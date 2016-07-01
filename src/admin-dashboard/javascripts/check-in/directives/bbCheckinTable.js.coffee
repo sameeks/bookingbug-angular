@@ -9,7 +9,7 @@ angular.module('BBAdminDashboard.check-in.directives').directive 'bbCheckinTable
     return
 
 angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsController', ($scope,  $rootScope,
-    BusyService, $q, $filter, AdminTimeService, AdminBookingService,
+    BusyService, $q, $filter, AdminTimeService, AdminBookingService, ModalForm,
     AdminSlotService, $timeout, AlertService) ->
 
   $scope.getAppointments = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
@@ -50,12 +50,24 @@ angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsContr
     defer.promise
 
   $scope.setStatus = (booking, status) =>
-    clone = _.clone(booking) 
+    clone = _.clone(booking)
     clone.current_multi_status = status
     booking.$update(clone).then (res) ->
       $scope.booking_collection.checkItem(res)
     , (err) ->
       AlertService.danger({msg: 'Something went wrong'})
+
+  $scope.edit = (booking) ->
+    booking.getAnswersPromise().then (answers) ->
+      for answer in answers.answers
+        booking["question#{answer.question_id}"] = answer.value
+      ModalForm.edit
+        model: booking
+        title: 'Booking Details'
+        templateUrl: 'edit_booking_modal_form.html'
+        success: (b) ->
+          b = new BBModel.Admin.Booking(b)
+          $scope.bmap[b.id] = b
 
 
   @checker = () =>
