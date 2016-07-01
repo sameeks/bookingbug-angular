@@ -54,7 +54,23 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   $scope.suppress_client_create = $attrs.bbSuppressCreate? or options.suppress_client_create
 
   $rootScope.connection_started.then =>
+    $scope.initClientDetails()
 
+  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+
+  $rootScope.$watch 'member', (oldmem, newmem) =>
+    if !$scope.client.valid() && LoginService.isLoggedIn()
+      $scope.setClient(new BBModel.Client(LoginService.member()._data))
+
+  ###**
+  * @ngdoc method
+  * @name initClientDetails
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * initialise the client object
+  ###
+  $scope.initClientDetails = () ->
     if !$scope.client.valid() && LoginService.isLoggedIn()
       # make sure we set the client to the currently logged in member
       # we should also just check the logged in member is a member of the company they are currently booking with
@@ -77,13 +93,6 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
         QuestionService.checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
         $scope.setLoaded $scope
       , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
-
-  $rootScope.$watch 'member', (oldmem, newmem) =>
-    if !$scope.client.valid() && LoginService.isLoggedIn()
-      $scope.setClient(new BBModel.Client(LoginService.member()._data))
 
   ###**
   * @ngdoc method
