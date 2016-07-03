@@ -49,42 +49,8 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       start_date: moment().format('YYYY-MM-DD')
     MemberBookingService.flush($scope.member, params)
 
-
-  $scope.edit = (booking) ->
-    booking.getAnswersPromise().then (answers) ->
-      for answer in answers.answers
-        booking["question#{answer.question_id}"] = answer.value
-      ModalForm.edit
-        model: booking
-        title: 'Booking Details'
-        templateUrl: 'edit_booking_modal_form.html'
-        windowClass: 'member_edit_booking_form'
-        success: updateBookings
-
-
   updateBookings = () ->
     $scope.getUpcomingBookings()
-
-
-  $scope.cancel = (booking) ->
-    modalInstance = $modal.open
-      templateUrl: "member_booking_delete_modal.html"
-      windowClass: "bbug"
-      controller: ($scope, $rootScope, $modalInstance, booking) ->
-        $scope.controller = "ModalDelete"
-        $scope.booking = booking
-
-        $scope.confirm_delete = () ->
-          $modalInstance.close(booking)
-
-        $scope.cancel = ->
-          $modalInstance.dismiss "cancel"
-      resolve:
-        booking: ->
-          booking
-    modalInstance.result.then (booking) ->
-      $scope.cancelBooking(booking)
-
 
   getBookings = (params) ->
     $scope.loading = true
@@ -133,29 +99,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     return defer.promise
 
 
-  $scope.book = (booking) ->
-
-    # TODO build actions lsit based on type of booking
-    
-    $scope.loading = true
-
-    params =
-      purchase_id: booking.purchase_ref
-      url_root: $rootScope.bb.api_url
-      booking: booking
-
-    PurchaseService.bookWaitlistItem(params).then (purchase_total) ->
-      if purchase_total.due_now > 0 
-        if purchase_total.$has('new_payment')
-          openPaymentModal(booking, purchase_total)
-        else
-          $log.error "total is missing new_payment link, this is usually caused by online payment not being configured correctly"
-      else
-        bookWaitlistSucces()
-
-      $scope.loading = false
-
-
   bookWaitlistSucces = () ->
     AlertService.raise('WAITLIST_ACCEPTED')
     updateBookings()
@@ -188,3 +131,55 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     modalInstance.result.then (booking) ->
       bookWaitlistSucces()
 
+
+  edit: (booking) ->
+    booking.getAnswersPromise().then (answers) ->
+      for answer in answers.answers
+        booking["question#{answer.question_id}"] = answer.value
+      ModalForm.edit
+        model: booking
+        title: 'Booking Details'
+        templateUrl: 'edit_booking_modal_form.html'
+        windowClass: 'member_edit_booking_form'
+        success: updateBookings
+
+
+  cancel: (booking) ->
+    modalInstance = $modal.open
+      templateUrl: "member_booking_delete_modal.html"
+      windowClass: "bbug"
+      controller: ($scope, $rootScope, $modalInstance, booking) ->
+        $scope.controller = "ModalDelete"
+        $scope.booking = booking
+
+        $scope.confirm_delete = () ->
+          $modalInstance.close(booking)
+
+        $scope.cancel = ->
+          $modalInstance.dismiss "cancel"
+      resolve:
+        booking: ->
+          booking
+    modalInstance.result.then (booking) ->
+      $scope.cancelBooking(booking)
+
+
+  book: (booking) ->
+   
+    $scope.loading = true
+
+    params =
+      purchase_id: booking.purchase_ref
+      url_root: $rootScope.bb.api_url
+      booking: booking
+
+    PurchaseService.bookWaitlistItem(params).then (purchase_total) ->
+      if purchase_total.due_now > 0 
+        if purchase_total.$has('new_payment')
+          openPaymentModal(booking, purchase_total)
+        else
+          $log.error "total is missing new_payment link, this is usually caused by online payment not being configured correctly"
+      else
+        bookWaitlistSucces()
+
+      $scope.loading = false
