@@ -33,8 +33,6 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
       @time_12 = @print_time12()
       @time_24 = @print_time()
       @datetime = moment.parseZone(@datetime)
-      # date = if extra.date then moment(extra.date, 'YYYY-MM-DD') else moment()
-      # @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment({date: date}, @)
       @time_moment = @datetime
 
     ###**

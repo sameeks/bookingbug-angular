@@ -9,19 +9,16 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
     start_date = null
     end_date   = null
 
-    if prms.date
-      #start_date = prms.date
-    else if prms.cItem.date
+    if prms.cItem.date
       prms.date = prms.cItem.date.date
-    else
+    else if !prms.date
       deferred.reject("No date set")
       return deferred.promise
 
     start_date = prms.date
     end_date   = prms.end_date if prms.end_date
 
-    # TODO request one date bhind or ahead based on time zone being behind or or ahread
-    debugger
+    # Adjust time range based on UTC offset between company time zone and display time zone
     if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone() 
       
       display_utc_offset = moment().tz(SettingsService.getDisplayTimeZone()).utcOffset()
@@ -34,8 +31,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
 
       prms.time_zone = SettingsService.getDisplayTimeZone()
 
-
-    # if there was no duration passed in get the default duration off the
+    # If there was no duration passed in get the default duration off the
     # current item
     if !prms.duration?
       prms.duration = prms.cItem.duration if prms.cItem && prms.cItem.duration
@@ -83,16 +79,14 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
                 if day.$has('event_links')
 
                   day.$get('event_links').then (all_events) =>
-                    times = @merge_times(all_events, prms.cItem.service, prms.cItem, day.date)
+                    times = @merge_times(all_events, prms.cItem.service, prms.cItem)
                     times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-                    #date_times[day.date] = times
                     day.elink.resolve(times)
                 
                 else if day.times
 
-                  times = @merge_times([day], prms.cItem.service, prms.cItem, day.date)
+                  times = @merge_times([day], prms.cItem.service, prms.cItem)
                   times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-                  #date_times[day.date] = times
                   day.elink.resolve(times)
 
             $q.all(all_days_def).then (times) ->
@@ -118,14 +112,14 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
 
           # single day - but a list of bookable events
           results.$get('event_links').then (all_events) =>
-            times = @merge_times(all_events, prms.cItem.service, prms.cItem, prms.date)
+            times = @merge_times(all_events, prms.cItem.service, prms.cItem)
             times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
 
             # returns array of time slots
             deferred.resolve(times)
 
         else if results.times
-          times = @merge_times([results], prms.cItem.service, prms.cItem, prms.date)
+          times = @merge_times([results], prms.cItem.service, prms.cItem)
           times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
 
           # returns array of time slots

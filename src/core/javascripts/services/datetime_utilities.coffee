@@ -5,10 +5,10 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsServi
   convertTimeSlotToMoment: (day, time_slot) ->
     return if !day and !time_slot
 
-    # HACK: remove once time slot has timezone from backend
-    time_zone = SettingsService.getTimeZone()
-    datetime = if time_zone then moment().tz(time_zone) else moment()
-    #datetime = moment()
+    # set datetime if not provided by the API
+    if !time_slot.datetime
+      time_zone = SettingsService.getTimeZone()
+      datetime = if time_zone then moment().tz(time_zone) else moment()
 
     val = parseInt(time_slot.time)
     hours = parseInt(val / 60)
