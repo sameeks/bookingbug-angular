@@ -6,15 +6,29 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
 
     deferred = $q.defer()
 
-    if prms.date
-      date = prms.date.toISODate()
-    else
+    date = null
 
-      if !prms.cItem.date
-        deferred.reject("No date set")
-        return deferred.promise
-      else
-        date = prms.cItem.date.date.toISODate()
+    if prms.date
+      date = prms.date
+    else if prms.cItem.date
+      date = prms.cItem.date.date
+    else
+      deferred.reject("No date set")
+      return deferred.promise
+
+    # TODO request one date bhind or ahead based on time zone being behind or or ahread
+    debugger
+    if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone() 
+      display_utc_offset = moment().tz(SettingsService.getDisplayTimeZone()).utcOffset()
+      company_utc_offset = moment().tz(SettingsService.getTimeZone()).utcOffset()
+
+      if company_utc_offset < display_utc_offset
+        date = date.clone().subtract(1, 'day')
+      else if company_utc_offset > display_utc_offset and prms.end_date 
+        prms.end_date = end_date.clone().add(1, 'day')
+
+      prms.time_zone = SettingsService.getDisplayTimeZone()
+
 
     # if there was no duration passed in get the default duration off the
     # current item
@@ -28,7 +42,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
 
     if item_link
 
-      extra = {date: date}
+      extra = {date: date.toISODate()}
       # extra.location = prms.client.addressCsvLine() if prms.client && prms.client.hasAddress()
       extra.location = prms.location if prms.location
       extra.event_id = prms.cItem.event_id if prms.cItem.event_id
@@ -38,6 +52,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
       extra.duration = prms.duration
       extra.resource_ids = prms.resource_ids
       extra.num_resources = prms.num_resources
+      extra.time_zone = prms.time_zone if prms.time_zone
 
       # if we have an event - the the company link - so we don't add in extra params
       item_link = prms.company if extra.event_id
@@ -81,13 +96,13 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
               date_times = _.chain(times)
                 .flatten()
                 .sortBy((slot) -> slot.time_moment.unix())
-                .each((slot) -> slot.display_time = moment(slot.time_moment).tz(SettingsService.getDisplayTimeZone()))
-                .groupBy((slot) -> slot.display_time.toISODate())
+                .groupBy((slot) -> slot.datetime.toISODate())
                 .value()
 
               # add days back that don't have any availabiity
               date_times[day.date] = [] for day in all_days when !date_times[day.date]
 
+              debugger
               deferred.resolve(date_times)
 
         else if results.$has('event_links')
