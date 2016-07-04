@@ -27,9 +27,9 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
 
   class TimeSlot extends BaseModel
 
-    constructor: (data, extra = {}) ->
+    constructor: (data, service) ->
       super(data)
-      @service = extra.service
+      @service = service
       @time_12 = @print_time12()
       @time_24 = @print_time()
       @datetime = moment.parseZone(@datetime)

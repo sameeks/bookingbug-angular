@@ -245,7 +245,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
           for pad, v in $scope.add_padding
             if (!dtimes[pad])
-              time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, {service: time_slots[0].service}))
+              time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
         checkRequestedSlots(time_slots) if options.check_requested_slot == true
 

@@ -6,26 +6,31 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
 
     deferred = $q.defer()
 
-    date = null
+    start_date = null
+    end_date   = null
 
     if prms.date
-      date = prms.date
+      #start_date = prms.date
     else if prms.cItem.date
-      date = prms.cItem.date.date
+      prms.date = prms.cItem.date.date
     else
       deferred.reject("No date set")
       return deferred.promise
 
+    start_date = prms.date
+    end_date   = prms.end_date if prms.end_date
+
     # TODO request one date bhind or ahead based on time zone being behind or or ahread
     debugger
     if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone() 
+      
       display_utc_offset = moment().tz(SettingsService.getDisplayTimeZone()).utcOffset()
       company_utc_offset = moment().tz(SettingsService.getTimeZone()).utcOffset()
 
       if company_utc_offset < display_utc_offset
-        date = date.clone().subtract(1, 'day')
+        start_date = prms.date.clone().subtract(1, 'day')
       else if company_utc_offset > display_utc_offset and prms.end_date 
-        prms.end_date = end_date.clone().add(1, 'day')
+        end_date = prms.end_date.clone().add(1, 'day')
 
       prms.time_zone = SettingsService.getDisplayTimeZone()
 
@@ -42,13 +47,13 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
 
     if item_link
 
-      extra = {date: date.toISODate()}
+      extra = {date: start_date.toISODate()}
       # extra.location = prms.client.addressCsvLine() if prms.client && prms.client.hasAddress()
       extra.location = prms.location if prms.location
       extra.event_id = prms.cItem.event_id if prms.cItem.event_id
       extra.person_id = prms.cItem.person.id if prms.cItem.person && !prms.cItem.anyPerson() && !item_link.event_id && !extra.event_id
       extra.resource_id = prms.cItem.resource.id if prms.cItem.resource && !prms.cItem.anyResource() && !item_link.event_id  && !extra.event_id
-      extra.end_date = prms.end_date.toISODate() if prms.end_date
+      extra.end_date = end_date.toISODate() if end_date
       extra.duration = prms.duration
       extra.resource_ids = prms.resource_ids
       extra.num_resources = prms.num_resources
@@ -95,15 +100,19 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
               # build day/slot array ensuring slots are grouped by the display time zone
               date_times = _.chain(times)
                 .flatten()
-                .sortBy((slot) -> slot.time_moment.unix())
+                .sortBy((slot) -> slot.datetime.unix())
                 .groupBy((slot) -> slot.datetime.toISODate())
                 .value()
 
-              # add days back that don't have any availabiity
-              date_times[day.date] = [] for day in all_days when !date_times[day.date]
+              # add days back that don't have any availabiity and return originally requested range only
+              new_date_times = {}
+              d = prms.date.clone()
+              while d <= prms.end_date
+                key = d.toISODate()
+                new_date_times[key] = if date_times[key] then date_times[key] or []
+                d = d.clone().add(1, 'day')
 
-              debugger
-              deferred.resolve(date_times)
+              deferred.resolve(new_date_times)
 
         else if results.$has('event_links')
 
@@ -126,7 +135,8 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
 
     else
       deferred.reject("No day data")
-    deferred.promise
+    
+    return deferred.promise
 
 
   # query a set of basket items for the same time data
@@ -154,7 +164,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
     return defer.promise
 
 
-  merge_times: (all_events, service, item, date) ->
+  merge_times: (all_events, service, item) ->
 
     return [] if !all_events || all_events.length == 0
 
@@ -175,7 +185,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
     date_times = {}
     for i in sorted_times
       if i
-        times.push(new BBModel.TimeSlot(i, {service: service, date: date}))
+        times.push(new BBModel.TimeSlot(i, service))
     times
 
 
