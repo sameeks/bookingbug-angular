@@ -16,7 +16,7 @@ app = angular.module('BB', [
   'ngLocalData',
   'ngAnimate',
   'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
-  'angularFileUpload',
+  'ngFileUpload',
   'schemaForm',
   'uiGmapgoogle-maps',
   'angular.filter',

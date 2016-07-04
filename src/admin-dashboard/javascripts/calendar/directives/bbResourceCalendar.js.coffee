@@ -265,7 +265,17 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
                 company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
-          $scope.currentDate = date.format()
+          # Convert to simple date because datepicker cant handle moment
+          dateDate = new Date();
+          dateDate.setFullYear(date.year())
+          dateDate.setMonth(date.month())
+          dateDate.setDate(date.date())
+          dateDate.setHours(0)
+          dateDate.setMinutes(0)
+          dateDate.setSeconds(0)
+
+          $scope.currentDate = dateDate
+
         eventResize: (event, delta, revertFunc, jsEvent, ui, view) ->
           event.duration = event.end.diff(event.start, 'minutes')
           $scope.updateBooking(event)
@@ -418,7 +428,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.datePickerOptions = {showButtonBar: false}
 
     $scope.$watch 'currentDate', (newDate, oldDate) ->
-      $scope.lazyUpdateDate(newDate)
+      if newDate != oldDate
+        $scope.lazyUpdateDate(newDate)
 
     $scope.$on 'refetchBookings', () ->
       uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')

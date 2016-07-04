@@ -12,7 +12,10 @@ angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsContr
     BusyService, $q, $filter, AdminTimeService, AdminBookingService, ModalForm,
     AdminSlotService, $timeout, AlertService) ->
 
-  $scope.getAppointments = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
+  $scope.$on 'refetchCheckin', (event, res) ->
+    $scope.getAppointments(null, null, null, null, null  ,true)
+
+  $scope.getAppointments = (currentPage, filterBy, filterByFields, orderBy, orderByReverse, skipCache = false) ->
     if filterByFields && filterByFields.name?
       filterByFields.name = filterByFields.name.replace(/\s/g, '')
     if filterByFields && filterByFields.mobile?
@@ -24,6 +27,8 @@ angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsContr
       company: $scope.company
       date: moment().format('YYYY-MM-DD')
       url: $scope.bb.api_url
+
+    params.skip_cache = true if skipCache
     params.filter_by = filterBy if filterBy
     params.filter_by_fields = filterByFields if filterByFields
     params.order_by = orderBy if orderBy
@@ -69,13 +74,6 @@ angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsContr
           b = new BBModel.Admin.Booking(b)
           $scope.bmap[b.id] = b
 
-
-  @checker = () =>
-    $timeout () =>
-      # do nothing - this will cause an apply anyway
-      @checker()
-    , 1000
-
-  $scope.getAppointments()
-
-  @checker()
+  # Make sure everytime we enter this view we skip the
+  # cache to get the latest state of appointments
+  $scope.getAppointments(null, null, null, null, null  ,true)
