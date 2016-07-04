@@ -354,7 +354,10 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     if slot and slot.availability() > 0
       $scope.bb.current_item.setTime(slot)
 
-      if day
+      if slot.datetime
+        $scope.setLastSelectedDate(slot.datetime)
+        $scope.bb.current_item.setDate({date: slot.datetime})
+      else if day
         $scope.setLastSelectedDate(day.date)
         $scope.bb.current_item.setDate(day)
 
@@ -382,7 +385,11 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     current_item = $scope.bb.current_item
 
     if slot and slot.availability() > 0 and !slot.disabled
-      if day
+
+      if slot.datetime
+        $scope.setLastSelectedDate(slot.datetime)
+        current_item.setDate({date: slot.datetime})
+      else if day
         $scope.setLastSelectedDate(day.date)
         current_item.setDate(day)
 
@@ -454,7 +461,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         $scope.setLoaded $scope
 
       promise.then (datetime_arr) ->
-        
+       
         $scope.days = []
 
         if _.every(_.values(datetime_arr), _.isEmpty)
