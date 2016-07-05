@@ -257,8 +257,11 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   checkRequestedSlots = (time_slots) ->
     requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
     if requested_slot and $scope.data_source.resource and $scope.data_source.person
-      if requested_slot && requested_slot.overbook
+      if requested_slot && requested_slot.overbook && !$scope.bb.dont_skip_step
         $scope.availability_conflict = true
+      else if requested_slot and $scope.bb.dont_skip_step
+        $scope.highlightSlot(requested_slot, $scope.selected_day)
+        $scope.bb.dont_skip_step = false
       else
         $scope.skipThisStep()
         $scope.selectSlot(requested_slot, $scope.selected_day)

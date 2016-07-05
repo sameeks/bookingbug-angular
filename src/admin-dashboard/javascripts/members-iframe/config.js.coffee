@@ -32,9 +32,9 @@ angular.module('BBAdminDashboard.members-iframe', [
 
       .state 'members.page',
         url: '/page/:path/:id'
-        templateUrl: 'iframe_page.html'
-        controller: 'MembersSubIframePageCtrl'  
+        templateUrl: 'core/boxed-iframe-page.html'
+        controller: 'MembersSubIframePageCtrl'
 
-  if AdminMembersIframeOptions.show_in_navigation 
-    SideNavigationPartials.addPartialTemplate('members-iframe', 'members-iframe/nav.html')        
-]  
+  if AdminMembersIframeOptions.show_in_navigation
+    SideNavigationPartials.addPartialTemplate('members-iframe', 'members-iframe/nav.html')
+]
