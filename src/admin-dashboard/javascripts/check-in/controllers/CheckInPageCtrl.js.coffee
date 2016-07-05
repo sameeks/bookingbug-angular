@@ -9,8 +9,6 @@
 ###
 angular.module('BBAdminDashboard.check-in.controllers')
 .controller 'CheckInPageCtrl',['$scope', '$state', '$log', ($scope, $state, $log) ->
-  $scope.adminlte.heading = ''
-
   pusher_channel = $scope.company.getPusherChannel('bookings')
   refetch = _.throttle (data) ->
     $log.info '== booking push received in checkin  == ', data

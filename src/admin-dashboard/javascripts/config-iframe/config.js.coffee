@@ -44,7 +44,7 @@ angular.module('BBAdminDashboard.config-iframe', [
         }
       .state 'config.business.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/iframe-page.html'
         controller: 'ConfigSubIframePageCtrl'
 
       .state 'config.event-settings',
@@ -61,7 +61,7 @@ angular.module('BBAdminDashboard.config-iframe', [
         }
       .state 'config.event-settings.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/iframe-page.html'
         controller: 'ConfigSubIframePageCtrl'
 
       .state 'config.promotions',
@@ -78,7 +78,7 @@ angular.module('BBAdminDashboard.config-iframe', [
         }
       .state 'config.promotions.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/iframe-page.html'
         controller: 'ConfigSubIframePageCtrl'
 
       .state 'config.booking-settings',
@@ -95,7 +95,7 @@ angular.module('BBAdminDashboard.config-iframe', [
         }
       .state 'config.booking-settings.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/iframe-page.html'
         controller: 'ConfigSubIframePageCtrl'
 
   if AdminConfigIframeOptions.show_in_navigation

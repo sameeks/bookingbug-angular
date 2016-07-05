@@ -27,7 +27,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
 
       .state 'settings.page',
         url: "/page/:path"
-        templateUrl: "iframe_page.html"
+        templateUrl: "core/boxed-iframe-page.html"
         controller: 'SettingsSubIframePageCtrl'
 
       .state 'settings.basic-settings',
@@ -44,7 +44,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
         }
       .state 'settings.basic-settings.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/iframe-page.html'
         controller: 'SettingsSubIframePageCtrl'
 
       .state 'settings.advanced-settings',
@@ -61,7 +61,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
         }
       .state 'settings.advanced-settings.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/iframe-page.html'
         controller: 'SettingsSubIframePageCtrl'
 
       .state 'settings.integrations',
@@ -78,7 +78,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
         }
       .state 'settings.integrations.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/iframe-page.html'
         controller: 'SettingsSubIframePageCtrl'
 
       .state 'settings.subscription',
@@ -95,7 +95,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
         }
       .state 'settings.subscription.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/iframe-page.html'
         controller: 'SettingsSubIframePageCtrl'
 
 

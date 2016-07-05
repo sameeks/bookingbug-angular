@@ -43,7 +43,7 @@ angular.module('BBAdminDashboard.directives').directive 'adminIframe', ['$window
 
       # Callback onload of the iframe
       element.find('iframe')[0].onload = () ->
-        $scope.$emit 'iframeLoaded',{}
+        scope.$emit 'iframeLoaded',{}
         if typeof scope.onLoad == 'function'
           scope.onLoad()
 

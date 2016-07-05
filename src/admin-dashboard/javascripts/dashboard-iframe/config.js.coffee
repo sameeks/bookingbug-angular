@@ -34,8 +34,8 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
       .state 'dashboard.page',
         url: "/page/:path"
         controller: 'DashboardSubIframePageCtrl'
-        templateUrl: "iframe_page.html"  
+        templateUrl: "core/iframe-page.html"
 
-  if AdminDashboardIframeOptions.show_in_navigation 
-    SideNavigationPartials.addPartialTemplate('dashboard-iframe', 'dashboard-iframe/nav.html')        
-]  
+  if AdminDashboardIframeOptions.show_in_navigation
+    SideNavigationPartials.addPartialTemplate('dashboard-iframe', 'dashboard-iframe/nav.html')
+]

@@ -17,8 +17,14 @@ angular.module('BBAdminDashboard.settings-iframe.controllers')
 
   $scope.pageHeader = null
 
+  # For iframe content in a tabbed context
   $scope.$emit 'iframeLoading',{}
-
   $scope.onIframeLoad = ()->
     $scope.$emit 'iframeLoaded',{}
+
+  # For iframe content in a stand-alone context
+  $scope.loading = true
+  $scope.$on 'iframeLoaded', ()->
+    $scope.loading = false
+    $scope.$apply()
 ]

@@ -32,9 +32,9 @@ angular.module('BBAdminDashboard.publish-iframe', [
 
       .state 'publish.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
-        controller: 'PublishSubIframePageCtrl'  
+        templateUrl: 'core/boxed-iframe-page.html'
+        controller: 'PublishSubIframePageCtrl'
 
-  if AdminPublishIframeOptions.show_in_navigation 
-    SideNavigationPartials.addPartialTemplate('publish-iframe', 'publish-iframe/nav.html')       
-]  
+  if AdminPublishIframeOptions.show_in_navigation
+    SideNavigationPartials.addPartialTemplate('publish-iframe', 'publish-iframe/nav.html')
+]
