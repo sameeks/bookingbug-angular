@@ -4,9 +4,9 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsServi
   # a valid moment object
   convertTimeSlotToMoment: (day, time_slot) ->
     return if !day and !time_slot
-
-    time_zone = SettingsService.getTimeZone()
-    datetime = moment().tz(time_zone)
+    datetime = moment()
+    if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()  
+      datetime = datetime.tz(SettingsService.getTimeZone())
     val = parseInt(time_slot.time)
     hours = parseInt(val / 60)
     mins = val % 60

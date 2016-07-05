@@ -671,7 +671,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     setDate: (date) ->
       @date = date
-      @date.date.tz(SettingsService.getTimeZone())
       if @date
         @date.date = moment(@date.date)
         if @datetime
