@@ -48,8 +48,6 @@ angular.module('BB.Services').factory "PurchaseService", ($q, halClient, BBModel
 
    bookWaitlistItem: (params) ->
 
-    debugger
-
     defer = $q.defer()
 
     if !params.purchase and !params.purchase_id

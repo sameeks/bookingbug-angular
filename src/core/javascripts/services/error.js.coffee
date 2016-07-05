@@ -44,6 +44,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: 'Sorry. The item you were trying to book is no longer available. Please try again.'
     },
     {
+      key: 'NO_WAITLIST_SPACES_LEFT',
+      type: 'error',
+      title: '',
+      persist: true,
+      msg: 'Sorry, the space has now been taken, you are still in the waitlist and we will notify you if more spaces become available'
+    },
+    {
       key: 'FORM_INVALID',
       type: 'warning',
       title: '',

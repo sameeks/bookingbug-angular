@@ -181,5 +181,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
           $log.error "total is missing new_payment link, this is usually caused by online payment not being configured correctly"
       else
         bookWaitlistSucces()
+    , (err) ->
+      AlertService.raise('NO_WAITLIST_SPACES_LEFT')
 
       $scope.loading = false
