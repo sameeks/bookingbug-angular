@@ -40,7 +40,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService, PurchaseService) ->
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $translate, SettingsService, PurchaseService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
 
@@ -340,35 +340,3 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   ###
   $scope.editItem = () ->
     $scope.item_details_updated = false
-
-  ###**
-  * @ngdoc method
-  * @name onFileSelect
-  * @methodOf BB.Directives:bbItemDetails
-  * @description
-  * Select file to upload in according of item, $file and existing parameters
-  *
-  * @param {array} item The item for uploading
-  * @param {boolean} existing Checks if file item exist or not
-  ###
-  $scope.onFileSelect = (item, $file, existing) ->
-    $scope.upload_progress = 0
-    file = $file
-    att_id = null
-    att_id = existing if existing
-    method = "POST"
-    method = "PUT" if att_id
-    url = item.$href('add_attachment')
-    $scope.upload = $upload.upload({
-      url: url,
-      method: method,
-      data: {attachment_id: att_id},
-      file: file,
-    }).progress (evt) ->
-      if $scope.upload_progress < 100
-        $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
-    .success (data, status, headers, config) ->
-      $scope.upload_progress = 100
-      if data && item
-        item.attachment = data
-        item.attachment_id = data.id
