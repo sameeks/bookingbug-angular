@@ -24,6 +24,12 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
     if $scope.bb.current_item.resource? and $scope.bb.current_item.resource.id?
       $scope.picked_resource = $scope.bb.current_item.resource.id  + '_r'
 
+
+    if $scope.bb.company_settings
+      console.log $scope.bb.company_settings, $scope.bb.company_settings.$link('block_questions')
+      $scope.bb.company_settings.$get("block_questions", {}).then (details) =>
+        $scope.block_questions = new BBModel.ItemDetails(details)
+
     # On select change update the right current_item variable depending
     # whether the selected item is a person or a resource
     $scope.changeResource = ()->
@@ -42,13 +48,18 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       if !isValid()
         return false
 
+
+      params = {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}
+      if $scope.block_questions
+        params.questions = $scope.block_questions.getPostData()
+
       if typeof $scope.bb.current_item.person == 'object'
         # Block call
-        AdminPersonService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
+        AdminPersonService.block($scope.bb.company, $scope.bb.current_item.person, params).then (response)->
           blockSuccess(response)
       else if typeof $scope.bb.current_item.resource == 'object'
         # Block call
-        AdminResourceService.block($scope.bb.company, $scope.bb.current_item.resource, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
+        AdminResourceService.block($scope.bb.company, $scope.bb.current_item.resource, params).then (response)->
           blockSuccess(response)
 
     isValid = ()->
