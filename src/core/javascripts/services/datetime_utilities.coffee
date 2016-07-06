@@ -25,8 +25,8 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
 
   checkDefaultTime: (date, time_slots, basket_item, item_defaults) ->
 
-    return if !(basket_item.defaults.time? and 
-    ((basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person) or !item_defaults.merge_people) and 
+    return if !(basket_item.defaults.time? and item_defaults? and
+    ((basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person) or !item_defaults.merge_people) and
       ((basket_item.defaults.resource and basket_item.defaults.resource.self is basket_item.resource.self) or _.isBoolean(basket_item.resource) or !item_defaults.merge_resources))
 
     found_time_slot = null

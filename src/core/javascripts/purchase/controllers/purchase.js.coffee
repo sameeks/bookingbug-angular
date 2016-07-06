@@ -7,7 +7,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     scope.init(scope.$eval( attrs.bbPurchase ))
     return
 
-angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage, SettingsService, $translate) ->
+angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, ServiceService, $sessionStorage, SettingsService, $translate) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -291,35 +291,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     if booking.min_cancellation_time
       return moment().isBefore(booking.min_cancellation_time)
     booking.datetime.isAfter(moment())
-
-
-  $scope.onFileSelect = (booking, $file, existing) ->
-    $scope.upload_progress = 0
-    file = $file
-    att_id = null
-    att_id = existing.id if existing
-    method = "POST"
-    method = "PUT" if att_id
-    $scope.upload = $upload.upload({
-      url: booking.$href('attachments'),
-      method: method,
-      # headers: {'header-key': 'header-value'},
-      # withCredentials: true,
-      data: {att_id: att_id},
-      file: file, # or list of files: $files for html5 only
-      # set the file formData name ('Content-Desposition'). Default is 'file'
-      # fileFormDataName: myFile, //or a list of names for multiple files (html5).
-      # customize how data is added to formData. See #40#issuecomment-28612000 for sample code
-      # formDataAppender: function(formData, key, val){}
-    }).progress (evt) ->
-      if $scope.upload_progress < 100
-        $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
-    .success (data, status, headers, config) ->
-      # file is uploaded successfully
-      $scope.upload_progress = 100
-      if data && data.attachments && booking
-        booking.attachments = data.attachments
-
 
   $scope.createBasketItem = (booking) ->
     item = new BBModel.BasketItem(booking, $scope.bb)
