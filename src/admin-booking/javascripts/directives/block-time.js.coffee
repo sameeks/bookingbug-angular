@@ -25,8 +25,7 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       $scope.picked_resource = $scope.bb.current_item.resource.id  + '_r'
 
 
-    if $scope.bb.company_settings
-      console.log $scope.bb.company_settings, $scope.bb.company_settings.$link('block_questions')
+    if $scope.bb.company_settings && $scope.bb.company_settings.$has('block_questions')
       $scope.bb.company_settings.$get("block_questions", {}).then (details) =>
         $scope.block_questions = new BBModel.ItemDetails(details)
 
