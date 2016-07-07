@@ -744,18 +744,36 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name checkReady
     * @methodOf BB.Models:BasketItem
     * @description
-    * Check if an item is ready for checking out
+    * Check if an item is fully ready for checkout
+    * @ready - means it's fully ready for checkout
+    * @reserve_ready - means the question still need asking - but it can be reserved
     *
-    * @returns {date} The returned item has been ready for checking out
+    * @returns {boolean} whether it's fully ready for checkout
     ###
-    # check if an item is ready for checking out
-    # @ready - means it's fully ready for checkout
-    # @reserve_ready - means the question still need asking - but it can be reserved
     checkReady: ->
-      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day')) && (@asked_questions || !@has_questions)
+      @ready = false
+
+      if @checkReserveReady() && (@asked_questions || !@has_questions)
         @ready = true
+
+      @ready
+
+    ###**
+    * @ngdoc method
+    * @name checkReserveReady
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Check if an item can be reserved
+    *
+    * @returns {boolean} whether it's ready to be reserved
+    ###
+    checkReserveReady: ->
+      @reserve_ready = false
+
       if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))
         @reserve_ready = true
+
+      @reserve_ready
 
     ###**
     * @ngdoc method
@@ -1325,11 +1343,27 @@ angular.module('BB.Models').factory "BasketItemModel",
     * @name getName
     * @methodOf BB.Models:BasketItem
     * @description
-    * Returns the name
+    * Returns the basket item name
     *
     * @returns {String}
     ###
-    getName: (client) ->
+    getName: () ->
+      if @session_name
+        return @session_name
+      else
+        return @service_name
+
+
+    ###**
+    * @ngdoc method
+    * @name getAttendeeName
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Returns the attendee name
+    *
+    * @returns {String}
+    ###
+    getAttendeeName: (client) ->
       if @first_name
         return "#{@first_name} #{@last_name}"
       else if client

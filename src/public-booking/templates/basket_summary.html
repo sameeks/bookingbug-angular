@@ -1,0 +1,36 @@
+<div bb-basket-summary>
+	<h2>Summary</h2>
+	<p>Please review the following information</p>
+
+	<div class="row">
+		<div class="col-md-12">
+			<accordion close-others="oneAtATime">
+		    <accordion-group ng-repeat="item in basket_items" is-open="$first">
+		    	<accordion-heading>
+		    		{{item.getName()}} <small>({{item.time.time_moment | datetime: 'llll'}})</small>
+		    	</accordion-heading>
+
+		      <h5>Details</h5>
+	      	<ul class="bb-list bb-list-bordered-in">
+	      		<li><b>Fullname:</b> {{}}</li>
+	      		<li>asdasdasd</li>
+	      		<li>asdasdasd</li>
+	      		<li>asdasdasd</li>
+	      	</ul>
+		    </accordion-group>
+		  </accordion>
+
+
+			<!-- <ul>
+				<li ng-repeat="item in basket_items">{{item.service_name + ', ' + item.person_name}}</li>
+			</ul> -->
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<button class="btn btn-primary pull-right" ng-click="confirm()">Confirm</button>
+      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+    </div>
+	</div>
+</div>

@@ -1,4 +1,4 @@
- 
+
 @import "skin_bb";
 
 .bb-page-frame {
@@ -21,3 +21,7 @@
 }
 
 @import "resource_calendar";
+
+#bb .modal-content .bb-content, .modal-content #bb .bb-content{
+	min-height: auto !important
+}

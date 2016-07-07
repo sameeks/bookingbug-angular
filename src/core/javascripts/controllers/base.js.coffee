@@ -239,6 +239,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     Slot: 12
     Event: 13
     Login: 14
+    Questions: 15
   $scope.Route = $rootScope.Route
 
 
@@ -838,9 +839,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     else if (!$scope.client.valid())
       return if $scope.setPageRoute($rootScope.Route.Client)
       return $scope.showPage('client')
-    else if (!$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
-      return if $scope.setPageRoute($rootScope.Route.Summary)
+    else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
+      return if $scope.setPageRoute($rootScope.Route.Questions)
       return $scope.showPage('check_items')
+    else if !$scope.bb.basket.readyToCheckout()
+      return if $scope.setPageRoute($rootScope.Route.Summary)
+      return $scope.showPage('basket_summary')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
       return if $scope.setPageRoute($rootScope.Route.Basket)
       return $scope.showPage('basket')
