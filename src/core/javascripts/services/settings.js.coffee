@@ -2,7 +2,7 @@ angular.module('BB.Services').factory 'SettingsService', () ->
   i18n = false
   scroll_offset = 0
   country_code = null
-  use_local_timezone = false
+  use_local_time_zone = false
   currency = null
   company_time_zone = null
   display_time_zone = null
@@ -27,12 +27,12 @@ angular.module('BB.Services').factory 'SettingsService', () ->
   getCountryCode: () ->
     return country_code
 
-  setUseLocalTimezone: (value) ->
-    use_local_timezone = value
+  setUseLocalTimeZone: (value) ->
+    use_local_time_zone = value
     display_time_zone  = moment.tz.guess()
 
-  getUseLocalTimezone: ->
-    use_local_timezone
+  getUseLocalTimeZone: ->
+    use_local_time_zone
 
   setCurrency: (value) ->
     currency = value
