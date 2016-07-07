@@ -290,7 +290,7 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) 
 * @example
 * <div bb-background-image='images/example.jpg'></div>
 ####
-angular.module('BB.Directives').directive('bbBackgroundImage', () ->
+angular.module('BB.Directives').directive 'bbBackgroundImage', () ->
     restrict: 'A'
     scope: true
     link: (scope, el, attrs) ->
@@ -299,8 +299,6 @@ angular.module('BB.Directives').directive('bbBackgroundImage', () ->
         if new_val
           killWatch()
           el.css('background-image', 'url("' + new_val + '")')
-)
-
 
 
 ###**
@@ -319,12 +317,12 @@ angular.module('BB.Directives').directive('bbBackgroundImage', () ->
 * @example_result
 * <span bb-capacity-view='event' ticket-type-singular='seat' class='ng-binding'>5 of 10 seats available</span>
 ####
-angular.module('BB.Directives').directive('bbCapacityView', () ->
+angular.module('BB.Directives').directive 'bbCapacityView', () ->
   restrict: 'A'
   template: '{{capacity_view_description}}'
   link: (scope, el, attrs) ->
     ticket_type = attrs.ticketTypeSingular || "ticket"
-    killWatch = scope.$watch(attrs.bbCapacityView, (item) ->
+    killWatch = scope.$watch attrs.bbCapacityView, (item) ->
       if item
         killWatch()
 
@@ -336,5 +334,25 @@ angular.module('BB.Directives').directive('bbCapacityView', () ->
           when "NUM_SPACES_LEFT" then scope.capacity_view_description = scope.ticket_spaces = item.spaces_left + " " + ticket_type + spaces_left_plural + " available"
           when "NUM_SPACES_AND_SPACES_LEFT" then scope.capacity_view_description = scope.ticket_spaces = item.spaces_left + " of " + item.num_spaces + " " + ticket_type + num_spaces_plural + " available"
 
-      )
-  )
+
+
+###**
+* @ngdoc directive
+* @name BB.Directives:bbTimeZone
+* @restrict A
+* @description
+* Timezone name helper
+* @param {String} time_zone_name The name of the time zone
+* @param {Boolean} is_time_zone_diff Indicates if the users time zone is different to the company time zone
+* @example
+* <span bb-time-zone ng-show="is_time_zone_diff">All times are shown in {{time_zone_name}}.</span>
+* @example_result
+* <span bb-time-zone ng-show="is_time_zone_diff">All times are shown in British Summer Time.</span>
+####
+angular.module('BB.Directives').directive 'bbTimeZone', (SettingsService) ->
+  restrict: 'A'
+  link: (scope, el, attrs) ->
+    company_time_zone = SettingsService.getTimeZone()
+    scope.time_zone_name = moment().tz(company_time_zone).format('zz')
+    if !SettingsService.getUseLocalTimezone() and moment.tz.guess() != company_time_zone
+      scope.is_time_zone_diff = true

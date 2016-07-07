@@ -45,7 +45,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
     transclude scope, (clone) =>
 
       # if there's content compile that or grab the week_calendar template
-      has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+      has_content = clone.length > 1 || (clone.length == 1 and (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
 
       if has_content
         element.html(clone).show()
@@ -133,7 +133,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     # initialise the time range
     # last selected day is set (i.e, a user has already selected a date)
-    if !$scope.start_date && $scope.last_selected_date
+    if !$scope.start_date and $scope.last_selected_date
       # if the time range list was initialised with a selected_day, restore the view so that
       # selected day remains relative to where the first day that was originally shown
       if $scope.original_start_date
@@ -219,6 +219,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   # when the current item is updated, reload the time data
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadData()
+
 
   ###**
   * @ngdoc method
@@ -328,7 +329,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   # to access the status
   $scope.status = (day, slot) ->
     return if !slot
-
     status = slot.status()
     return status
     # the view was originally calling the slot.status(). this logic below is for
@@ -350,10 +350,15 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * @param {string=} route A route of the selected slot
   ###
   $scope.selectSlot = (slot, day, route) ->
-    if slot && slot.availability() > 0
+
+    if slot and slot.availability() > 0
+      
       $scope.bb.current_item.setTime(slot)
 
-      if day
+      if slot.datetime
+        $scope.setLastSelectedDate(slot.datetime)
+        $scope.bb.current_item.setDate({date: slot.datetime})
+      else if day
         $scope.setLastSelectedDate(day.date)
         $scope.bb.current_item.setDate(day)
 
@@ -380,8 +385,12 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     current_item = $scope.bb.current_item
 
-    if slot && slot.availability() > 0 and !slot.disabled
-      if day
+    if slot and slot.availability() > 0 and !slot.disabled
+
+      if slot.datetime
+        $scope.setLastSelectedDate(slot.datetime)
+        current_item.setDate({date: slot.datetime})
+      else if day
         $scope.setLastSelectedDate(day.date)
         current_item.setDate(day)
 
@@ -407,7 +416,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   * Load the time data
   *
   ###
-  # load the time data
   $scope.loadData = ->
 
     current_item = $scope.bb.current_item
@@ -418,7 +426,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       $scope.min_date = current_item.service.min_advance_datetime
       $scope.max_date = current_item.service.max_advance_datetime
       # if the selected day is before the services min_advance_datetime, adjust the time range
-      setTimeRange(current_item.service.min_advance_datetime) if $scope.selected_day && $scope.selected_day.isBefore(current_item.service.min_advance_datetime, 'day') && !$scope.isAdmin()
+      setTimeRange(current_item.service.min_advance_datetime) if $scope.selected_day and $scope.selected_day.isBefore(current_item.service.min_advance_datetime, 'day') and !$scope.isAdmin()
 
 
     date = $scope.start_date
@@ -429,17 +437,14 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     # We may not want the current item duration to be the duration we query by
     # If min_duration is set, pass that into the api, else pass in the duration
     duration = $scope.bb.current_item.duration
-    if $scope.bb.current_item.min_duration
-      duration = $scope.bb.current_item.min_duration
+    duration = $scope.bb.current_item.min_duration if $scope.bb.current_item.min_duration
 
-    loc = null
-    if $scope.bb.postcode
-      loc = ",,,," + $scope.bb.postcode + ","
+    if $scope.data_source and $scope.data_source.days_link
 
-    if $scope.data_source && $scope.data_source.days_link
       $scope.notLoaded $scope
       loc = null
       loc = ",,,," + $scope.bb.postcode + "," if $scope.bb.postcode
+      
       promise = TimeService.query(
         company: $scope.bb.company
         resource_ids: $scope.bb.item_defaults.resources
@@ -457,7 +462,9 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         $scope.setLoaded $scope
 
       promise.then (datetime_arr) ->
+       
         $scope.days = []
+
         if _.every(_.values(datetime_arr), _.isEmpty)
           $scope.no_slots_in_week = true
         else
@@ -478,7 +485,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
           # padding is used to ensure that a list of time slots is always padded
           # out with a certain of values if it's a partial set of results
-          if $scope.add_padding && time_slots.length > 0
+          if $scope.add_padding and time_slots.length > 0
             dtimes = {}
             for slot in time_slots
               dtimes[slot.time] = 1
@@ -532,14 +539,14 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     if !$scope.bb.current_item.time
       AlertService.raise('TIME_SLOT_NOT_SELECTED')
       return false
-    else if $scope.bb.moving_booking && $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime) && ($scope.current_item.person_name == $scope.current_item.person.name)
+    else if $scope.bb.moving_booking and $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime) and ($scope.current_item.person_name == $scope.current_item.person.name)
       AlertService.raise('APPT_AT_SAME_TIME')
       return false
     else if $scope.bb.moving_booking
       # set a 'default' person and resource if we need them, but haven't picked any in moving
-      if $scope.bb.company.$has('resources') && !$scope.bb.current_item.resource
+      if $scope.bb.company.$has('resources') and !$scope.bb.current_item.resource
         $scope.bb.current_item.resource = true
-      if $scope.bb.company.$has('people') && !$scope.bb.current_item.person
+      if $scope.bb.company.$has('people') and !$scope.bb.current_item.person
         $scope.bb.current_item.person = true
       return true
     else
@@ -563,7 +570,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.pretty_month_title = (month_format, year_format, seperator = '-') ->
     return if !$scope.start_date or !$scope.end_date
     month_year_format = month_format + ' ' + year_format
-    if $scope.start_date && $scope.end_date && $scope.end_date.isAfter($scope.start_date, 'month')
+    if $scope.start_date and $scope.end_date and $scope.end_date.isAfter($scope.start_date, 'month')
       start_date = $scope.start_date.format(month_format)
       start_date = $scope.start_date.format(month_year_format) if $scope.start_date.month() == 11
       return start_date + ' ' + seperator + ' ' + $scope.end_date.format(month_year_format)
