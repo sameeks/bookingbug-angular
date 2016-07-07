@@ -49,14 +49,14 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
     # clear selected time to restore original state
     delete $scope.bb.current_item.time
     delete item.time for item in $scope.bb.stacked_items
-    
+
     if $scope.bb.current_item.defaults.date and !$scope.bb.current_item.date
       $scope.setDate($scope.bb.current_item.defaults.date)
     else if $scope.bb.current_item.date
       $scope.setDate($scope.bb.current_item.date.date)
     else
       $scope.setDate(moment())
-      
+
     $scope.loadDay()
 
   , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -109,7 +109,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
   # when the current item is updated, reload the time data
   $scope.$on "currentItemUpdate", (event) ->
-    $scope.loadDay()
+    $scope.loadDay({check_requested_slot: false})
 
 
   ###**
@@ -123,13 +123,20 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {string} A specific route to load
   ###
   $scope.selectSlot = (slot, day, route) =>
+
     if slot && slot.availability() > 0
+      
       # if this time cal was also for a specific item source (i.e.a person or resoure- make sure we've selected it)
       if $scope.item_link_source
         $scope.data_source.setItem($scope.item_link_source)
-      if day
+      
+      if slot.datetime
+        $scope.setLastSelectedDate(slot.datetime)
+        $scope.data_source.setDate({date: slot.datetime})
+      else if day
         $scope.setLastSelectedDate(day.date)
         $scope.data_source.setDate(day)
+      
       $scope.data_source.setTime(slot)
 
       if $scope.data_source.reserve_ready
@@ -151,9 +158,15 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
     if day and slot and slot.availability() > 0
 
-      $scope.setLastSelectedDate(day.date)
-      $scope.data_source.setDate(day)
+      if slot.datetime
+        $scope.setLastSelectedDate(slot.datetime)
+        $scope.data_source.setDate({date: slot.datetime})
+      else if day
+        $scope.setLastSelectedDate(day.date)
+        $scope.data_source.setDate(day)
+      
       $scope.data_source.setTime(slot)
+      
       # tell any accordion groups to update
       $scope.$broadcast 'slotChanged'
 
@@ -186,10 +199,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   ###
   # add unit of time to the selected day
   $scope.add = (type, amount) =>
-  
+
     # clear existing time
     delete $scope.bb.current_item.time
-    
+
     new_date = moment($scope.selected_day.date).add(amount, type)
     $scope.setDate(new_date)
     $scope.loadDay()
@@ -216,8 +229,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @description
   * Load day
   ###
-  $scope.loadDay = () =>
+  $scope.loadDay = (options) =>
 
+    options = {check_requested_slot: true} unless options
     if $scope.data_source and ($scope.data_source.days_link || $scope.item_link_source) and $scope.selected_day
 
       $scope.notLoaded $scope
@@ -232,7 +246,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
       pslots.finally ->
         $scope.setLoaded $scope
-      pslots.then (time_slots) ->       
+      pslots.then (time_slots) ->
 
         $scope.slots = time_slots
         $scope.$broadcast('slotsUpdated', $scope.data_source, time_slots) # data_source is the BasketItem
@@ -246,20 +260,31 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
             if (!dtimes[pad])
               time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-        requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
-
-        if requested_slot and $scope.data_source.resource and $scope.data_source.person
-          $scope.skipThisStep()
-          $scope.selectSlot(requested_slot, $scope.selected_day)
-        else if requested_slot
-          $scope.highlightSlot(requested_slot, $scope.selected_day)
-        else if requested_slot is null
-          $scope.availability_conflict = true
+        checkRequestedSlots(time_slots) if options.check_requested_slot == true
 
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     else
       $scope.setLoaded $scope
+
+  checkRequestedSlots = (time_slots) ->
+    requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
+    if requested_slot and $scope.data_source.resource and $scope.data_source.person
+      if requested_slot && requested_slot.overbook && !$scope.bb.dont_skip_step
+        $scope.availability_conflict = true
+      else if requested_slot and $scope.bb.dont_skip_step
+        $scope.highlightSlot(requested_slot, $scope.selected_day)
+        $scope.bb.dont_skip_step = false
+      else
+        $scope.skipThisStep()
+        $scope.selectSlot(requested_slot, $scope.selected_day)
+    else if requested_slot
+      if requested_slot.overbook
+        $scope.availability_conflict = true
+      else
+        $scope.highlightSlot(requested_slot, $scope.selected_day)
+    else if requested_slot is null
+      $scope.availability_conflict = true
 
   ###**
   * @ngdoc method

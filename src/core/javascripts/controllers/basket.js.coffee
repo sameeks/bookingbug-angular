@@ -169,7 +169,6 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
     BasketService.applyCoupon($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
-        item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
       $scope.setLoaded $scope
@@ -198,7 +197,6 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
 
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
-        item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
       $scope.items = $scope.bb.basket.items
@@ -223,7 +221,6 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
 
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
-        item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
       $scope.items = $scope.bb.basket.items

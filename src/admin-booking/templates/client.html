@@ -24,7 +24,7 @@
           {{match.model.name}}
         </li>
         <li ng-show="match.model.email">
-          <i class="fa fa-envelope-o fa-fw"></i> 
+          <i class="fa fa-envelope-o fa-fw"></i>
           {{match.model.email}}
         </li>
         <li ng-show="match.model.mobile && !match.model.email">
@@ -32,7 +32,7 @@
           {{match.model.mobile | local_phone_number}}
         </li>
         <li ng-show="match.model.phone && !match.model.email">
-          <i class="fa fa-phone fa-fw"></i> 
+          <i class="fa fa-phone fa-fw"></i>
           {{match.model.phone | local_phone_number}}
         </li>
       </ul>
@@ -55,9 +55,9 @@
         </div>
 
         <div class="col-sm-6">
-          
+
           <div class="form-inline bb-search-options">
-       
+
             <div class="form-group">
               <label class="bb-label" for="sort_by">Sort by: </label>
               <select ng-model="sort_by" id="sort_by" class="form-control" ng-options="option.key as option.name for option in sort_by_options" ng-change="sortChanged(sort_by)">
@@ -73,13 +73,13 @@
 
     <div class="bb-block text-center" ng-show="clients.num_items == 0">
       <p>
-        No customers matching <strong>{{typehead_result}}</strong> found 
+        No customers matching <strong>{{typehead_result}}</strong> found
       </p>
       <p>
         <button class="btn btn-link" ng-click="clearSearch()">Create one instead?</button>
       </p>
     </div>
- 
+
     <div class="clearfix"></div>
 
     <ul class="bb-list bb-list-bordered bb-list-fade-in">
@@ -87,7 +87,7 @@
       <li ng-repeat="client in clients.items | startFrom: (clients.current_page - 1) * clients.page_size | limitTo: clients.page_size track by $index">
 
         <div class="typehead-item-wrapper">
-        
+
           <div class="row">
             <div class="col-sm-10">
 
@@ -102,11 +102,11 @@
 
               <ul class="bb-list bb-list-horizontal">
                 <li ng-show="client.email">
-                  <i class="fa fa-envelope-o fa-fw"></i> 
+                  <i class="fa fa-envelope-o fa-fw"></i>
                   {{client.email}}
                 </li>
                 <li ng-show="client.mobile">
-                  <i class="fa fa-mobile fa-lg fa-fw"></i> 
+                  <i class="fa fa-mobile fa-lg fa-fw"></i>
                   {{client.mobile | local_phone_number}}
                 </li>
                 <li ng-show="client.phone">
@@ -160,7 +160,7 @@
 
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
             <label for="mobile" class="control-label">Mobile:</label>
-            <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email"/>
+            <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email || bb.company.settings.ask_mobile_phone"/>
           </div>
 
           <div ng-show="bb.company_settings.ask_address">

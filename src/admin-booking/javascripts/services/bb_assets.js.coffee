@@ -14,7 +14,9 @@ angular.module('BBAdminBooking').factory 'BBAssets', ['$q', ($q) ->
       promises.push company.getPeoplePromise().then (people)->
         for p in people
           p.title      = p.name
-          p.identifier = p.id + '_p'
+          # this is required in case the item comes from the cache and the item.id has been manipulated
+          if !p.identifier?
+            p.identifier = p.id + '_p'
           p.group      = 'Staff'
 
         assets = _.union assets, people
@@ -24,7 +26,9 @@ angular.module('BBAdminBooking').factory 'BBAssets', ['$q', ($q) ->
       promises.push company.getResourcesPromise().then (resources)->
         for r in resources
           r.title      = r.name
-          r.identifier = r.id + '_r'
+          # this is required in case the item comes from the cache and the item.id has been manipulated
+          if !r.identifier?
+            r.identifier = r.id + '_r'
           r.group      = 'Resources '
 
         assets = _.union assets, resources
@@ -34,5 +38,5 @@ angular.module('BBAdminBooking').factory 'BBAssets', ['$q', ($q) ->
       assets = _.sortBy assets, 'name'
       delay.resolve(assets);
 
-    delay.promise  
+    delay.promise
 ]

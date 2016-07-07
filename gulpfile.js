@@ -77,8 +77,13 @@ gulp.task('shims', function() {
 });
 
 gulp.task('stylesheets', function() {
-  css_stream = gulp.src(mainBowerFiles({filter: new RegExp('.css$')}))
-  sass_stream = gulp.src('src/*/stylesheets/main.scss')
+  css_stream = gulp.src(mainBowerFiles({filter: function(path) {
+    return (
+      path.match(new RegExp('.css$')) && 
+      path.indexOf('boostrap.') !== -1
+    );
+  }}));
+  sass_stream = gulp.src('all.scss')
     .pipe(sass({errLogToConsole: true}))
     .pipe(flatten())
   streamqueue({objectMode: true}, css_stream, sass_stream)

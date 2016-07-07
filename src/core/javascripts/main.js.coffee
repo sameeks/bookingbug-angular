@@ -16,7 +16,7 @@ app = angular.module('BB', [
   'ngLocalData',
   'ngAnimate',
   'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
-  'angularFileUpload',
+  'ngFileUpload',
   'schemaForm',
   'uiGmapgoogle-maps',
   'angular.filter',
@@ -75,6 +75,9 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
   if (msie && msie <= 9) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
+    
+  moment.fn.toISODate ||= -> this.locale('en').format('YYYY-MM-DD')
+
 
 app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig) ->
   # add methods to the rootscope if they are applicable to whole app
@@ -118,22 +121,6 @@ window.bookingbug =
     angular.injector(['BB.Services', 'BB.Models', 'ng'])
            .get('LoginService').logout(logout_opts)
     window.location.reload() if options.reload
-
-
-moment.locale('en', {
-    longDateFormat : {
-        LT: "h:mm A",
-        LTS: "h:mm:ss A",
-        L: "MM/DD/YYYY",
-        l: "M/D/YYYY",
-        LL: "MMMM Do YYYY",
-        ll: "MMM D YYYY",
-        LLL: "MMMM Do YYYY LT",
-        lll: "MMM D YYYY LT",
-        LLLL: "dddd Do MMMM[,] h.mma",
-        llll: "ddd, MMM D YYYY LT"
-    }
-  })
 
 # String::includes polyfill
 if !String::includes

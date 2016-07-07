@@ -1,11 +1,11 @@
 .bb-time, [bb-times] {
 
   td:hover {
-    background-color: #f1f1f1;
+    background-color: $gray-lighter;
   }
 
   p.bb-past {
-    color: #CCC;
+    color: $bb-gray;
   }
 
   li[bb-slot-grouper] {
@@ -19,7 +19,7 @@
   }
 
   .bb-service-unavailable {
-    color: #ccc;
+    color: $bb-gray;
     font-size: $font-size-large;
     text-align: center;
     border: 1px solid #ccc;
@@ -37,15 +37,15 @@
   }
 
   .bb-time-section-separator {
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-left: 1px solid $bb-gray;
+    border-right: 1px solid $bb-gray;
     @media ( max-width: $screen-xs-max ) {
       border: none;
     }
   }
 
   .btn-link {
-    color: #000000;
+    //color: #000000; TODO
   }
 
   .glyphicon-chevron-left {
@@ -72,7 +72,7 @@
       display: none;
     }
     .panel-title {
-      color: #CCC;
+      color: $bb-gray;
     }
 
     small {

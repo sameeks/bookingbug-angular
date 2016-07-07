@@ -364,6 +364,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.locale
       moment.locale(prms.locale)
 
+    if prms.use_local_time_zone
+      SettingsService.setUseLocalTimeZone(prms.use_local_time_zone)
+
     if prms.hide == true
       $scope.hide_page = true
     else
@@ -373,14 +376,14 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if !prms.custom_partial_url
       $scope.bb.path_setup = true
 
-    if prms.reserve_without_questions
-      $scope.bb.reserve_without_questions = prms.reserve_without_questions
-
     if prms.extra_setup
       $scope.bb.extra_setup          = prms.extra_setup
       $scope.bb.starting_step_number = parseInt(prms.extra_setup.step) if prms.extra_setup.step
       $scope.bb.return_url           = prms.extra_setup.return_url if prms.extra_setup.return_url
       $scope.bb.destination          = prms.extra_setup.destination if prms.extra_setup.destination
+
+    if prms.booking_settings
+      $scope.bb.booking_settings = prms.booking_settings
 
     if prms.template
       $scope.bb.template = prms.template
@@ -892,7 +895,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     BasketService.updateBasket($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
-        item.reserve_without_questions = $scope.bb.reserve_without_questions
       # clear the currently cached time date
       halClient.clearCache("time_data")
       halClient.clearCache("events")
@@ -964,7 +966,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.clearBasketItem = ->
     def = $q.defer()
     $scope.setBasketItem(new BBModel.BasketItem(null, $scope.bb))
-    $scope.bb.current_item.reserve_without_questions = $scope.bb.reserve_without_questions
     if $scope.bb.default_setup_promises
       $q.all($scope.bb.default_setup_promises)['finally'] () ->
         $scope.bb.current_item.setDefaults($scope.bb.item_defaults)
@@ -1089,7 +1090,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     $scope.bb.item_defaults.company = $scope.bb.company
 
-    SettingsService.setCountryCode($scope.bb.company.country_code)
+    SettingsService.setCountryCode(company.country_code)
+    SettingsService.setCurrency(company.currency_code)
+    SettingsService.setTimeZone(company.timezone)
 
     if company.$has('settings')
       company.getSettings().then (settings) =>

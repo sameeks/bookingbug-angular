@@ -22,7 +22,7 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       $scope.picked_resource = $scope.bb.current_item.person.id + '_p'
 
     if $scope.bb.current_item.resource? and $scope.bb.current_item.resource.id?
-      $scope.picked_resource = $scope.bb.current_item.resource.id  + '_r'  
+      $scope.picked_resource = $scope.bb.current_item.resource.id  + '_r'
 
     # On select change update the right current_item variable depending
     # whether the selected item is a person or a resource
@@ -48,7 +48,7 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
           blockSuccess(response)
       else if typeof $scope.bb.current_item.resource == 'object'
         # Block call
-        AdminResourceService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
+        AdminResourceService.block($scope.bb.company, $scope.bb.current_item.resource, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
           blockSuccess(response)
 
     isValid = ()->
@@ -68,5 +68,5 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
 
     $scope.changeBlockDay = (blockDay)->
       if blockDay
-        $scope.config.from_datetime = $scope.config.min_date.format() 
-        $scope.config.to_datetime = $scope.config.max_date.format() 
+        $scope.config.from_datetime = $scope.config.min_date.format()
+        $scope.config.to_datetime = $scope.config.max_date.format()

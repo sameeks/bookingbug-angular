@@ -1,11 +1,12 @@
-angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
+angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsService) ->
 
   # converts date and time belonging to BBModel.Day and BBModel.TimeSlot into
   # a valid moment object
   convertTimeSlotToMoment: (day, time_slot) ->
     return if !day and !time_slot
-
     datetime = moment()
+    if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()  
+      datetime = datetime.tz(SettingsService.getTimeZone())
     val = parseInt(time_slot.time)
     hours = parseInt(val / 60)
     mins = val % 60
@@ -25,8 +26,8 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", () ->
 
   checkDefaultTime: (date, time_slots, basket_item, item_defaults) ->
 
-    return if !(basket_item.defaults.time? and 
-    ((basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person) or !item_defaults.merge_people) and 
+    return if !(basket_item.defaults.time? and item_defaults? and
+    ((basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person) or !item_defaults.merge_people) and
       ((basket_item.defaults.resource and basket_item.defaults.resource.self is basket_item.resource.self) or _.isBoolean(basket_item.resource) or !item_defaults.merge_resources))
 
     found_time_slot = null

@@ -16,7 +16,7 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
         @className = "status_blocked"
       else if @status == 4
         @className = "status_booked"
- 
+
 
     useFullTime: () ->
       @using_full_time = true
@@ -36,10 +36,11 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
       data.pre_time = @pre_time
       data.post_time = @post_time
       data.person_id = @person_id
+      data.resource_id = @resource_id
       if @questions
         data.questions = (q.getPostData() for q in @questions)
       data
-      
+
     hasStatus: (status) ->
       @multi_status[status]?
 
@@ -74,7 +75,7 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
           if a.name == q
             return a.answer
       return null
- 
+
 
     $update: (data) ->
       if data
@@ -83,7 +84,7 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
         data.datetime = data.datetime.format()
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
-        @constructor(res) 
+        @constructor(res)
         if @using_full_time
           @useFullTime()
         BookingCollections.checkItems(@)
