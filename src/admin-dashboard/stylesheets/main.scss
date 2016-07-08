@@ -23,16 +23,15 @@
 @import "resource_calendar";
 
 #bb .modal-content .bb-content, .modal-content #bb .bb-content{
-	min-height: auto !important;
+	min-height: 100px !important;
 }
 
 .modal-content .modal-body #bb {
   &.container-fluid {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
+    padding-top: 10px;
 
-    .bb-display-mode {
-      line-height: 1px;
+    .bb-step-navigation {
+      margin-bottom: 0;
     }
   }
 }

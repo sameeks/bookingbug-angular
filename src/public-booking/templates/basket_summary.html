@@ -1,4 +1,6 @@
 <div bb-basket-summary>
+	<h2>Summary</h2>
+	<hr/>
 	<p>Please review the following information</p>
 
 	<div class="row">
@@ -29,12 +31,6 @@
 	      				<div class="col-sm-8">{{client.email}}</div>
 	      			</div>
       			</li>
-      			<li ng-if="item.price">
-	      			<div class="row">
-		      			<div class="col-sm-4"><b>Price:</b> </div>
-	      				<div class="col-sm-8">{{item.price | currency}}</div>
-	      			</div>
-      			</li>
 	      		<li ng-if="item.mobile">
 	      			<div class="row">
 		      			<div class="col-sm-4"><b>Mobile:</b> </div>
@@ -53,6 +49,12 @@
 	      				<div class="col-sm-8">{{question.answer | format_answer}}</div>
 	      			</div>
             </li>
+            <li ng-if="item.price">
+	      			<div class="row">
+		      			<div class="col-sm-4"><b>Price:</b> </div>
+	      				<div class="col-sm-8">{{item.price | currency}}</div>
+	      			</div>
+      			</li>
 	      	</ul>
 		    </accordion-group>
 		  </accordion>

@@ -16,11 +16,6 @@ angular.module('BBAdminBooking').factory 'AdminBookingPopup', ($modal, $timeout)
           merge_resources: AdminBookingOptions.merge_resources
           merge_people: AdminBookingOptions.merge_people
         , config.item_defaults
-
-
-        $scope.$on 'ParentModal:changeTitle', (event, data)->
-          $scope.title = data.title
-
         $scope.cancel = () ->
           $modalInstance.dismiss('cancel')
       templateUrl: 'admin_booking_popup.html'
