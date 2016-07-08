@@ -365,6 +365,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.locale
       moment.locale(prms.locale)
 
+    if prms.use_local_time_zone
+      SettingsService.setUseLocalTimeZone(prms.use_local_time_zone)
+
     if prms.hide == true
       $scope.hide_page = true
     else
@@ -1089,7 +1092,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     $scope.bb.item_defaults.company = $scope.bb.company
 
-    SettingsService.setCountryCode($scope.bb.company.country_code)
+    SettingsService.setCountryCode(company.country_code)
+    SettingsService.setCurrency(company.currency_code)
+    SettingsService.setTimeZone(company.timezone)
 
     if company.$has('settings')
       company.getSettings().then (settings) =>

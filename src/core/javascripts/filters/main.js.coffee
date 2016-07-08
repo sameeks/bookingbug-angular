@@ -107,9 +107,9 @@ angular.module('BB.Filters').filter 'currency', ($filter) ->
   (number, currencyCode) =>
     return $filter('icurrency')(number, currencyCode)
 
-angular.module('BB.Filters').filter 'icurrency', ($window, $rootScope) ->
+angular.module('BB.Filters').filter 'icurrency', ($window, SettingsService) ->
   (number, currencyCode) =>
-    currencyCode ||= $rootScope.bb_currency
+    currencyCode ||= SettingsService.getCurrency()
     currency = {
       USD: "$",
       GBP: "£",
@@ -143,7 +143,7 @@ angular.module('BB.Filters').filter 'pretty_price', ($filter) ->
     return $filter('ipretty_price')(price, symbol)
 
 
-angular.module('BB.Filters').filter 'ipretty_price', ($window, $rootScope) ->
+angular.module('BB.Filters').filter 'ipretty_price', ($window, SettingsService) ->
   (price, symbol) ->
     if !symbol
       currency = {
@@ -154,7 +154,7 @@ angular.module('BB.Filters').filter 'ipretty_price', ($window, $rootScope) ->
         CAD: "$",
         MIXED: "~"
       }
-      symbol = currency[$rootScope.bb_currency]
+      symbol = currency[SettingsService.getCurrency()]
 
     price /= 100.0
 
@@ -282,25 +282,29 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
 # Checks if a format (option) is set if not checks the country and provides a default.
 # Additionally you can pass in date, time or datetime
 angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
-  return (date, format) ->
+  
+  hardcoded_formats =
+    datetime:
+      us: 'MM/DD/YYYY, h:mm a'
+      uk: 'DD/MM/YYYY, HH:mm'
+    date:
+      us: 'MM/DD/YYYY'
+      uk: 'DD/MM/YYYY'
+    time:
+      us: 'h:mm a'
+      uk: 'HH:mm'
+
+  (date, format="LLL", show_time_zone=false) ->
+    if hardcoded_formats[format]
+      cc = if SettingsService.getCountryCode() is 'us' then 'us' else 'uk'
+      format = hardcoded_formats[format][cc]
+
     if date and moment.isMoment(date)
-      datestrings =
-        datetime_us : 'MM/DD/YYYY, h:mm a'
-        datetime_uk : 'DD/MM/YYYY, HH:mm'
-        date_us : 'MM/DD/YYYY'
-        date_uk : 'DD/MM/YYYY'
-        time_us : 'h:mm a'
-        time_uk : 'HH:mm'
-      cc = SettingsService.getCountryCode()
-      cc = "uk" if cc != "us"
-      if format and format.match(/(date(time_uk|time_us|_us|_uk)*|(time(_uk|_us)*))/)
-        return date.format(datestrings[format + "_" + cc])
-      else if format
-        return date.format(format)
-      else
-        return date.format(datestrings["date_" + cc])
-    else
-      return
+      new_date = date.clone()
+      new_date.tz(SettingsService.getDisplayTimeZone()) if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone() 
+      format += ' zz' if show_time_zone
+      return new_date.format(format)
+
 
 
 angular.module('BB.Filters').filter 'range', ->
