@@ -842,7 +842,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     else if (!$scope.client.valid())
       return if $scope.setPageRoute($rootScope.Route.Client)
       return $scope.showPage('client')
-    else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
+    else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions && !$scope.bb.current_item.asked_questions)
       return if $scope.setPageRoute($rootScope.Route.Questions)
       return $scope.showPage('check_items')
     else if !$scope.bb.basket.readyToCheckout()
