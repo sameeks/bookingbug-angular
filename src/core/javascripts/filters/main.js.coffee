@@ -173,19 +173,19 @@ angular.module('BB.Filters').filter 'time_period', ->
 
     hour_string = if options && options.abbr_units then "hr"  else "hour"
     min_string  = if options && options.abbr_units then "min" else "minute"
-    separator   = if options && angular.isString(options.separator) then options.separator else "and"  
+    separator   = if options && angular.isString(options.separator) then options.separator else "and"
 
     val = parseInt(v)
     if val < 60
       str = "#{val} #{min_string}"
       str += "s" if val > 1
       return str
-    
+
     hours = parseInt(val / 60)
     mins = val % 60
 
     if mins == 0
-      
+
       if hours == 1
         return "1 #{hour_string}"
       else
@@ -194,7 +194,7 @@ angular.module('BB.Filters').filter 'time_period', ->
       str = "#{hours} #{hour_string}"
       str += "s" if hours > 1
       return str if mins == 0
-      
+
       str += " #{separator}" if separator.length > 0
       str += " #{mins} #{min_string}"
       str += "s" if mins > 1
@@ -359,3 +359,11 @@ app.filter 'clearTimezone', ->
     if val != null and val.length > 19
       return val.substring(0, 19)
     val
+
+app.filter "format_answer", ->
+  (answer) ->
+    if typeof answer == "boolean"
+      answer = if answer is true then "Yes" else "No"
+    else if moment(answer, 'YYYY-MM-DD', true).isValid()
+      answer = moment(answer).format "D MMMM YYYY"
+    return answer
