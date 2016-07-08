@@ -1,7 +1,7 @@
 <div bb-page>
   <div bb-item-details>
 
-    <h1>Review</h1>
+    <h1>Additional Information</h1>
 
     <div bb-include="_basket_item_summary">
     </div>
@@ -29,7 +29,7 @@
               <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted">
                 Please enter your first name
               </div>
-            </div> 
+            </div>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (client_form.last_name.$dirty|| booking_form.submitted)}">
@@ -40,7 +40,7 @@
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="client_form.last_name.$invalid && booking_form.submitted">
                 Please enter your last name
-              </div>          
+              </div>
             </div>
           </div>
 
@@ -52,7 +52,7 @@
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="client_form.email.$invalid && booking_form.submitted">
                 Please enter a valid email address
-              </div>          
+              </div>
             </div>
           </div>
 
@@ -75,8 +75,8 @@
                 <div class="error-message" ng-show="client_form['q' + question.id].$invalid && ( client_form['q' + question.id].$dirty || booking_form.submitted )">
                   This field is required
                 </div>
-              </div> 
-            </div>   
+              </div>
+            </div>
 
           </div>
 
@@ -102,7 +102,7 @@
               <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )">
                 This field is required
               </div>
-            </div> 
+            </div>
           </div>
 
         </div><!--booking_questions_form-->
