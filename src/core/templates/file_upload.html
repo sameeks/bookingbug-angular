@@ -31,6 +31,9 @@
     <a ng-href="{{item.getAttachment().url}}">
       {{myFile.name}}
     </a>
+    <span class="btn btn-default" ng-click="item.deleteAttachment() && clearFileInput()">
+      Remove File
+    </span>
   </div>
 
   <span class="text-danger" ng-show="showError">
