@@ -1282,6 +1282,20 @@ angular.module('BB.Models').factory "BasketItemModel",
           @attachment = att
           @attachment
 
+    ###**
+    * @ngdoc method
+    * @name deleteAttachment
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Delete attachment of the basket item
+    *
+    * @returns {object} The attachment
+    ###
+
+    deleteAttachment: () ->
+      if @attachment_id
+        @_data.$del("del_attachment",{})
+        @attachment_id = null
 
     ###**
     * @ngdoc method
