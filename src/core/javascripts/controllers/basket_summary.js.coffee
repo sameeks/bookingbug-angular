@@ -22,10 +22,6 @@ angular.module('BB.Controllers').controller 'BasketSummary', ($scope) ->
 
   $scope.basket_items = $scope.bb.basket.items
 
-  $scope.$emit 'ParentModal:changeTitle', { title: 'Summary'}
-  $scope.$on '$destroy', () ->
-     $scope.$emit 'ParentModal:changeTitle', { title: ''}
-
   ###**
   * @ngdoc method
   * @name confirm

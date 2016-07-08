@@ -82,8 +82,6 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
       if @items.length > 0 && @reviewed
         ready = true
         for i in @items
-          i.ready = false
-          console.log 'checkready',i.checkReady()
           if not i.checkReady()
             ready = false
 
