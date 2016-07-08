@@ -28,6 +28,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
         @parent_client_id = scope.parent_client.id
       @items = []
       super(data)
+      @reviewed = false
 
     ###**
     * @ngdoc method
@@ -78,8 +79,13 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
     * @returns {boolean} Flag to indicate if basket is ready checkout
     ###
     readyToCheckout: ->
-      if @items.length > 0
-        return true
+      if @items.length > 0 && @reviewed
+        ready = true
+        for i in @items
+          if not i.checkReady()
+            ready = false
+
+        ready
       else
         return false
 
