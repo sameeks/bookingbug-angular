@@ -53,7 +53,7 @@
   }
 
   &.bb-list-fade-in {
-    
+
     .ng-enter {
       -webkit-animation: fadeIn 1s;
       -moz-animation: fadeIn 1s;
@@ -83,6 +83,24 @@
     > li {
       padding-top: 15px;
       border-top: 1px solid $table-border-color;
+    }
+
+  }
+
+  &.bb-list-bordered-in {
+
+    > li:last-child {
+      padding-bottom: 0;
+      border-bottom:none;
+    }
+
+    > li:first-child {
+      padding-top: 0;
+    }
+
+    > li {
+      padding-top: 15px;
+      border-bottom: 1px solid $table-border-color;
     }
 
   }

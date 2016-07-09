@@ -38,14 +38,14 @@ angular.module('BB.Directives').directive 'bbItemDetails', () ->
       scope.item_from_param = item
       delete scope.item_details if scope.item_details
       scope.loadItem(item) if item
-    return
+
     transclude scope, (clone) =>
       # if there's content compile that or grab the week_calendar template
       has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
       if has_content
         element.html(clone).show()
       else
-        $q.when($templateCache.get('item_details.html')).then (template) ->
+        $q.when($templateCache.get('_item_details.html')).then (template) ->
           element.html(template).show()
           $compile(element.contents())(scope)
 
