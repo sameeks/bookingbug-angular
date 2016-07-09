@@ -954,8 +954,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.deleteBasketItem = (item) ->
     BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
       $scope.setBasket(basket)
-      if $scope.basket.items.length == 1
-        $scope.selected_tickets = false
 
   $scope.deleteBasketItems = (items) ->
     for item in items

@@ -44,14 +44,7 @@ angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache
   controller : 'ClientDetails'
   link: (scope, element, attrs, controller, transclude) ->
 
-    # date helpers
-    scope.today = moment().toDate()
-    scope.tomorrow = moment().add(1, 'days').toDate()
-
-    scope.options = scope.$eval(attrs.bbTimeRanges) or {}
-
     transclude scope, (clone) =>
-
       # if there's content compile that or grab the week_calendar template
       has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
       if has_content
@@ -60,6 +53,8 @@ angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache
         $q.when($templateCache.get('client_form.html')).then (template) ->
           element.html(template).show()
           $compile(element.contents())(scope)
+
+
 angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $rootScope, ClientDetailsService, ClientService, LoginService, BBModel, ValidatorService, QuestionService, AlertService) ->
   $scope.controller = "public.controllers.ClientDetails"
   $scope.notLoaded $scope

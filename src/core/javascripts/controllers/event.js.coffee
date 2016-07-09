@@ -129,14 +129,15 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       $scope.setLoaded $scope
       $scope.selected_tickets = true
       $scope.stopTicketWatch()
-      $scope.tickets = (item.tickets for item in $scope.bb.basket.items)
+      $scope.tickets = (item.tickets for item in $scope.bb.basket.items)itms
+      $scope.current_ticket_items = {} # the current
       $scope.$watch 'bb.basket.items', (items, olditems) ->
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
         item.tickets.price = item.totalPrice()
       , true
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-    if $scope.bb.basket.timeItems() 
+    if $scope.bb.basket.timeItems()
       $scope.ticket_group = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
 
 
@@ -146,7 +147,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
       if $scope.ticket_group.length is 1
         $scope.shown_tickets = $scope.ticket_group[0]
-      else 
+      else
         $scope.shown_tickets = _.last($scope.ticket_group)
 
 
