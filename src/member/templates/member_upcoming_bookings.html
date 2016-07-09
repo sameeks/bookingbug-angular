@@ -1,27 +1,114 @@
-<div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
+<div ng-show="loading"><img src="images/BB_wait.gif" class="loader"></div>
+
 <div ng-hide="loading" class="bb-upcoming clearfix">
-  <div id="bookings">
+
+  <div>
+
     <div ng-show="upcoming_bookings.length == 0">
-      <h3>You don't currently have any upcoming bookings.</h3>
-    </div>
-    <div ng-repeat="booking in upcoming_bookings | filter:{deleted: false} | orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" class="booking-row">
-      <div class="datetime">
-        <div>{{booking.datetime.format('Do MMM YYYY h.mma')}}</div>
-      </div>
-      <div class="describe">
-        <div class="detail">{{booking.full_describe}}</div>
-      </div>
-      <div class="bb-bookings-action">
-        <button ng-click="cancel(booking)" class="btn btn-danger bb-push">Cancel</button>
-        <button ng-click="edit(booking)" class="btn bb-push">Details</button>
-      </div>
+      <h3>You don't have any upcoming bookings</h3>
     </div>
 
-    <pagination total-items="pagination.num_items"
-      ng-model="pagination.current_page" items-per-page="pagination.page_size"
-      max-size="pagination.max_size" boundary-links="true" rotate="false"
-      num-pages="pagination.num_pages" ng-show="upcoming_bookings && upcoming_bookings.length > 10"></pagination>
+    <div class="bb-section" ng-show="waitlist_bookings.length > 0">
 
+      <h3>On Waitlist</h3>
+
+      <ul class="bb-list bb-list-bordered" ng-repeat="booking in (waitlist_bookings = (upcoming_bookings | filter:{deleted: false, on_waitlist: false} | orderBy: 'datetime.unix()'))">
+
+        <li>
+
+          <h4>{{booking.full_describe}}</h4>
+
+          <div class="row">
+
+            <div class="col-sm-9">
+
+              <ul class="bb-list bb-list-horizontal bb-block bb-block-sm">
+                <li>
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                  {{booking.datetime | datetime: 'date'}}
+                </li>
+                <li>
+                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                  {{booking.datetime | datetime: 'time'}} - {{booking.end_datetime | datetime: 'time'}}
+                </li>
+                <li>
+                  <span class="bb-btn bb-btn-link">
+                    More
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                  </span>
+                  <span class="bb-btn bb-btn-link">
+                    Less
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                  </span>
+                </li>
+
+              </ul>
+
+            </div>
+
+            <div class="col-sm-3">
+
+              <div class="btn-group pull-right">
+                <!-- only have button enabled if email has been sent-->
+                <button type="button" ng-click="book(booking)" class="btn btn-default" ng-disabled="!booking.settings.sent_waitlist">Book</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li ng-click="edit(booking)"><a href="#">Edit</a></li>
+                  <li ng-click="cancel(booking)"><a href="#">Cancel</a></li>
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+
+        </li>
+
+      </ul>
+    </div>
+
+    <div class="bb-section" ng-show="confirmed_bookings.length > 0">
+
+      <h3>Confirmed</h3>
+
+      <ul class="bb-list bb-list-bordered" ng-repeat="booking in (confirmed_bookings = (upcoming_bookings | filter:{deleted: false, on_waitlist: true} | orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size))">
+
+        <li>
+
+          <h4>{{booking.full_describe}}</h4>
+
+          <ul class="bb-list bb-list-horizontal bb-block bb-block-sm">
+            <li>
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              {{booking.datetime | datetime: 'date'}}
+            </li>
+            <li>
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              {{booking.datetime | datetime: 'time'}}
+            </li>
+          </ul>
+
+
+          <div class="describe">
+            <div class="detail"></div>
+          </div>
+          <div class="bb-bookings-action">
+            <button ng-click="cancel(booking)" class="btn btn-danger bb-push">Cancel</button>
+            <button ng-click="edit(booking)" class="btn bb-push">Details</button>
+          </div>
+        </li>
+
+      </ul>
+
+      <pagination total-items="pagination.num_items"
+        ng-model="pagination.current_page" items-per-page="pagination.page_size"
+        max-size="pagination.max_size" boundary-links="true" rotate="false"
+        num-pages="pagination.num_pages" ng-show="upcoming_bookings && upcoming_bookings.length > 10"></pagination>
+
+    </div>
 
   </div>
 </div>

@@ -45,13 +45,12 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
 
   # bb.basket.options - added 10-11-2015 @16:19
   # For ex. bb-basket-list="{requires_deal: true}"
-  $scope.bb.basket.setSettings($scope.$eval $attrs.bbBasketList or {})
+  $scope.bb.basket.setSettings($scope.$eval($attrs.bbBasketList) or {})
 
 
   $rootScope.connection_started.then ->
 
     $scope.bb.basket.setClient($scope.client) if $scope.client
-
     if $scope.client.$has('pre_paid_bookings') and $scope.bb.basket.timeItems().length > 0
 
       $scope.notLoaded $scope
@@ -78,11 +77,27 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
                 booking_left[prepaid_booking.id] -= 1
                 break
 
-        $scope.updateBasket().then () ->
-          $scope.setLoaded $scope
+        if $scope.bb.basket.settings.auto_use_prepaid_bookings
+          $scope.updateBasket().then () ->
+            groupBasketItems($scope.bb.basket.timeItems())
+          , (err) ->
+            $scope.setLoaded $scope
+        else
+          groupBasketItems($scope.bb.basket.timeItems())
 
-      , (err) ->
-        $scope.setLoaded $scope
+
+
+  $scope.deleteGroupItem = (items) =>
+    $scope.deleteBasketItems(items)
+    $scope.multi_basket_grouping = _.without($scope.multi_basket_grouping, items)
+
+
+  groupBasketItems = (items) ->
+    $scope.multi_basket_grouping = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
+    $scope.multi_basket_grouping = _.values($scope.multi_basket_grouping)
+    console.log $scope.multi_basket_grouping
+
+    $scope.setLoaded $scope
 
   ###**
   * @ngdoc method
@@ -93,11 +108,13 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
   *
   * @param {string} route A route of the added another item
   ###
+  # THIS IS FOR SORTING FOR MULTI EVENTS
+
   $scope.addAnother = (route) =>
     $scope.clearBasketItem()
     $scope.bb.emptyStackedItems()
     $scope.bb.current_item.setCompany($scope.bb.company)
-    $scope.restart()
+    $scope.decideNextPage(route)
 
   ###**
   * @ngdoc method

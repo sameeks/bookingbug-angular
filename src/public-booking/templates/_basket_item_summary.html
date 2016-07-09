@@ -32,13 +32,13 @@
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.date">
       <div class="bb-summary-label">Date
       </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.date.date | datetime: 'dddd D MMMM'}}</span>
+      <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'dddd D MMMM'}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.time">
       <div class="bb-summary-label">Time
       </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.start_datetime() | datetime: 'time'}}</span>
+      <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'time'}}</span>
       </div>
     </li>
   </ul>

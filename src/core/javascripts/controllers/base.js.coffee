@@ -239,6 +239,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     Slot: 12
     Event: 13
     Login: 14
+    Questions: 15
   $scope.Route = $rootScope.Route
 
 
@@ -317,6 +318,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.app_id = 1
     $scope.bb.app_key = 1
     $scope.bb.clear_basket = true
+
     if prms.basket
       $scope.bb.clear_basket = false
     if prms.clear_basket == false
@@ -363,6 +365,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     if prms.locale
       moment.locale(prms.locale)
+
+    if prms.use_local_time_zone
+      SettingsService.setUseLocalTimeZone(prms.use_local_time_zone)
 
     if prms.hide == true
       $scope.hide_page = true
@@ -792,7 +797,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return $scope.showPage($scope.bb.nextSteps[$scope.bb.current_page])
     if !$scope.client.valid() && LoginService.isLoggedIn()
       # make sure we set the client to the currently logged in member
-      # we should also jsut check the logged in member is  a member of the company they are currently booking with
+      # we should also just check the logged in member is  a member of the company they are currently booking with
       $scope.client = new BBModel.Client(LoginService.member()._data)
 
     if ($scope.bb.company && $scope.bb.company.companies) || (!$scope.bb.company && $scope.affiliate)
@@ -838,9 +843,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     else if (!$scope.client.valid())
       return if $scope.setPageRoute($rootScope.Route.Client)
       return $scope.showPage('client')
-    else if (!$scope.bb.basket.readyToCheckout() || !$scope.bb.current_item.ready) && ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions)
-      return if $scope.setPageRoute($rootScope.Route.Summary)
+    else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions && !$scope.bb.current_item.asked_questions)
+      return if $scope.setPageRoute($rootScope.Route.Questions)
       return $scope.showPage('check_items')
+    else if !$scope.bb.basket.readyToCheckout()
+      return if $scope.setPageRoute($rootScope.Route.Summary)
+      return $scope.showPage('basket_summary')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
       return if $scope.setPageRoute($rootScope.Route.Basket)
       return $scope.showPage('basket')
@@ -1085,7 +1093,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     $scope.bb.item_defaults.company = $scope.bb.company
 
-    SettingsService.setCountryCode($scope.bb.company.country_code)
+    SettingsService.setCountryCode(company.country_code)
+    SettingsService.setCurrency(company.currency_code)
+    SettingsService.setTimeZone(company.timezone)
 
     if company.$has('settings')
       company.getSettings().then (settings) =>
@@ -1129,6 +1139,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.getCurrentStepTitle = ->
+    console.log steps
     steps = $scope.bb.steps
 
     if !_.compact(steps).length or steps.length == 1 and steps[0].number != $scope.bb.current_step
