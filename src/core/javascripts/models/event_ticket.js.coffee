@@ -63,8 +63,10 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
       if cap
         c = cap
         c = cap / @counts_as if @counts_as
-        c = if event and cap > event.spaces_left then event.spaces_left else cap
-        if c + @min_num_bookings < @max
+        c = if event and cap > event.getSpacesLeft() then event.getSpacesLeft() else cap
+        if c <= 0 && event.getWaitSpacesLeft() > 0
+          @max = event.getWaitSpacesLeft()
+        else if c + @min_num_bookings < @max
           @max = c + @min_num_bookings
 
       [0].concat [@min_num_bookings..@max]
