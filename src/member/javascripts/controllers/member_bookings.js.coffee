@@ -1,8 +1,5 @@
 angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope, AlertService, PurchaseService) ->
 
-  $scope.loading = true
-
-
   $scope.getUpcomingBookings = () ->
 
     defer = $q.defer()
@@ -53,14 +50,14 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     $scope.getUpcomingBookings()
 
   getBookings = (params) ->
-    $scope.loading = true
+    $scope.notLoaded $scope
     defer = $q.defer()
     MemberBookingService.query($scope.member, params).then (bookings) ->
-      $scope.loading = false
+      $scope.setLoaded $scope
       defer.resolve(bookings)
     , (err) ->
       $log.error err.data
-      $scope.loading = false
+      $scope.setLoaded $scope
     return defer.promise
 
 
@@ -84,17 +81,14 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
   $scope.getPrePaidBookings = (params) ->
     
-    $scope.loading = true
     defer = $q.defer()
 
     MemberPrePaidBookingService.query($scope.member, params).then (bookings) ->
-      $scope.loading = false
       $scope.pre_paid_bookings = bookings
       defer.resolve(bookings)
     , (err) ->
       defer.reject([])
       $log.error err.data
-      $scope.loading = false
 
     return defer.promise
 
@@ -166,7 +160,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
   book: (booking) ->
    
-    $scope.loading = true
+    $scope.notLoaded $scope
 
     params =
       purchase_id: booking.purchase_ref
@@ -184,4 +178,4 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     , (err) ->
       AlertService.raise('NO_WAITLIST_SPACES_LEFT')
 
-      $scope.loading = false
+      $scope.setLoaded $scope

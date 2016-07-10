@@ -63,7 +63,7 @@
 
   }
 
-  &.bb-list-banded {
+  &.bb-list-striped {
 
     > li:nth-child(even) {
       background-color: transparent;
@@ -125,6 +125,11 @@
     }
   }
 
+}
+
+.bb-list-table-header {
+  font-weight: bold;
+  padding-bottom: 10px;
 }
 
 
