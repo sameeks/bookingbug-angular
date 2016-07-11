@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2016-07-11
+### Changed
+- BREAKING: `src/core/javascripts/models/basket_item.js.coffee` renamed `getName` method to `getAttendeeName`. `getName` now returns the name of the service/event name associated with the basket_iten
+- Updated `src/core/javascripts/models/basket.js.coffee` `readyToCheckout` method to check whether each individual basket item is readyToCheckout
+
+###Added
+- A new step `Summary/Confirmation` was introduced in the default booking routing between the old 'summary' now 'booking questions' step and 'checkout' step
+
 ## [1.3.1] - 2016-07-07
 ### Changed
 - BREAKING: Fixed issue where form controller shared scope with login model. Templates where bbMemberLogin is invoked need to be updated to set the login object:
@@ -11,9 +19,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Introduced `use_local_timezone` option which instructs the widget to display times in users local time zone using `moment.tz.guess()`
 - Introduced bbTimeZone for displaying time zone information
-- Added `show_time_zone` option to the `datetime` filter to show the time zone abbreviation 
+- Added `show_time_zone` option to the `datetime` filter to show the time zone abbreviation
 
-### Changed 
+### Changed
 - Updated `datetime` filter to use display time zone to format time
 - Updated accordion range group to respect display mode (local time zone vs default company time zone
 * Updated time list directive and tiem range directive to use time slot datetime if available
