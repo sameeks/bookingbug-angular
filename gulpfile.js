@@ -186,7 +186,14 @@ gulp.task('test', ['dependencies'], function (done) {
 var buildSdk = require('./build.js');
 
 gulp.task('build', function() {
-  return buildSdk();
+  buildSdk()
+    .on('data', function(d) {
+    })
+    .on('error', function(e) {
+    })
+    .on('end', function() {
+      return
+    });
 });
 
 gulp.task('bowerWidget', ['build'], function() {
