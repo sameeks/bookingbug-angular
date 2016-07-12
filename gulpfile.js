@@ -196,8 +196,8 @@ gulp.task('bowerWidget', ['build'], function() {
 gulp.task('buildWidget', ['bowerWidget'], function () {
   return gulp.src(mainBowerFiles({filter: new RegExp('.js$'), paths: {bowerDirectory: './build/booking-widget/bower_components', bowerJson: './build/booking-widget/bower.json'}}))
     .pipe(concat('booking-widget.js'))
-    .pipe(gulp.dest('./build/booking-widget'))
+    .pipe(gulp.dest('./build/booking-widget/dist'))
     .pipe(uglify({mangle: false}))
     .pipe(concat('booking-widget.min.js'))
-    .pipe(gulp.dest('./build/booking-widget'));
+    .pipe(gulp.dest('./build/booking-widget/dist'));
 });
