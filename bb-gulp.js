@@ -18,7 +18,7 @@ var rename = require('gulp-rename');
 var plumber = require('gulp-plumber');
 
 process.env.srcpath = process.env.srcpath || './src'
-process.env.releasepath = process.env.releasepath || './release'
+process.env.releasepath = process.env.releasepath || './build'
 
 module.exports = {
   javascripts: function(module) {
