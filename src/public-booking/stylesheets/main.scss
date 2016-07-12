@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+$bb-gray: gray;
+$bb-border: $panel-default-border;
+
 // BookingBug mixins
 @import "mixins";
 

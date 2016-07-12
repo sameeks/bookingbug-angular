@@ -1,9 +1,15 @@
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+$bb-border: $panel-default-border;
+$secondary-border-color: black;
+$hyperlink-color: blue;
+
 @import "admin_calendar";
 @import "client_admin";
 @import "date_picker";
 
 //Module overwrite
-[bb-admin-booking], &[bb-admin-booking] {
+[bb-admin-booking], {
   .form-control {
     border-radius: 4px !important;
   }
