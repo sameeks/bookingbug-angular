@@ -13,6 +13,7 @@ cache:
 deploy:
   provider: s3
   bucket: angular.bookingbug.com
+  region: eu-west-1
   skip_cleanup: true
   local_dir: build/booking-widget
   upload_dir: head
