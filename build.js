@@ -6,8 +6,6 @@ var _ = require('underscore');
 var fs = require('fs');
 var path = require('path');
 
-var srcpath = './src'
-
 function getModules(srcpath) {
   return fs.readdirSync(srcpath).filter(function(file) {
     return fs.statSync(path.resolve(path.join(srcpath, file))).isDirectory();
@@ -49,7 +47,8 @@ function buildModule(streams, module) {
   return streams;
 }
 
-function run() {
+function run(srcpath) {
+  srcpath || (srcpath = './src');
   var streams = mergeStream();
   var modules = getModules(srcpath);
   _.each(modules, function(module) {

@@ -113,7 +113,7 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
   $scope.addAnother = (route) =>
     $scope.clearBasketItem()
     $scope.bb.emptyStackedItems()
-    $scope.bb.current_item.setCompany($scope.bb.company)
+#    $scope.bb.current_item.setCompany($scope.bb.company)
     $scope.decideNextPage(route)
 
   ###**
