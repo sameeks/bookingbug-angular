@@ -645,7 +645,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @time.select()
 
         if @datetime
-          @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(@datetime, @time)
+          @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(@date, @time)
 
         if @price && @time.price && (@price != @time.price)
           @setPrice(@time.price)
