@@ -1,7 +1,7 @@
 
 angular
 .module('angular-hal', []).provider('data_cache', function() {
- 
+
     this.$get = function() {
       data = [];
 
@@ -26,7 +26,7 @@ angular
         },
         delMatching: function(str)
         {
-          for (var k in data) {      
+          for (var k in data) {
             if (k.indexOf(str) != -1)
               delete data[k]
           }
@@ -34,7 +34,7 @@ angular
 
       }
     };
- 
+
 })
 .provider('shared_header', function() {
    this.$get = function() {
@@ -196,7 +196,7 @@ angular
         Object
         .keys(data._links)
         .forEach(function(rel){
-          var link = data._links[rel];          
+          var link = data._links[rel];
           link = normalizeLink(href, link);
           links[rel] = link;
         }, this)
@@ -234,7 +234,7 @@ angular
         if(angular.isArray(resource)) return resource.map(function(resource){
           return embedResource(resource);
         });
-        
+
         var href = resource.$href('self');
 
         embedded.set(href, $q.when(resource));
@@ -254,7 +254,7 @@ angular
         if (params == null) {
           params = {};
         }
-          
+
         if(angular.isArray(link)) return $q.all(link.map(function(link){
           if(method !== 'GET') throw 'method is not supported for arrays';
 
@@ -270,7 +270,7 @@ angular
           }
         }
         else {
-          return callService(method, linkHref, options, data);  
+          return callService(method, linkHref, options, data);
         }
 
       }//callLink
@@ -311,7 +311,7 @@ angular
         link.href = resolveUrl(baseHref, link.href);
       }
       else {
-        link = { href: baseHref };      
+        link = { href: baseHref };
       }
 
       return link;
@@ -348,7 +348,6 @@ angular
       if (shared_header.has('auth_token')) headers['Auth-Token'] = shared_header.get('auth_token');
 
       if (options.bypass_auth) headers['Bypass-Auth'] = options.bypass_auth;
-
       var resource = (
         $http({
           method: method
@@ -359,7 +358,7 @@ angular
         .then(function(res){
 
           // copy out the auth token from the header if the response is new resource
-          // Note: we only take the auth token from created responses as at the app layer, success responses might be cached results, thus we don't want to use the auth token from these 
+          // Note: we only take the auth token from created responses as at the app layer, success responses might be cached results, thus we don't want to use the auth token from these
           if (res.headers('auth-token') && res.status == 201){
             options.auth_token = res.headers('Auth-Token')
             shared_header.set('auth_token', res.headers('Auth-Token'), $sessionStorage)
