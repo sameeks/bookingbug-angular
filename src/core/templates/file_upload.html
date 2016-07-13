@@ -1,31 +1,40 @@
+<!-- label -->
 <label for="file_upload" class="control-label col-sm-4">
     File upload:
+    <p ng-show="maxSize">should be smaller then {{maxSize}}</p>
 </label>
 
 <div class="col-sm-5">
 
+  <!-- upload button -->
   <button
     type="file"
+    ngf-max-size="{{maxSize}}"
+    accept="{{accept}}"
+    ngf-model-invalid="errorFile"
     ngf-select="uploadFile(item, $file, $invalidFiles, item.attachment_id)"
     accept="">
       Select File
   </button>
 
-  <div class="progress" ng-show="myFile.progress >= 0 && myFile.progress < 100">
+  <!-- progress -->
+  <div class="progress"
+    ng-show="my_file.progress >= 0 && my_file.progress < 100">
     <div
       class="progress-bar"
       role="progressbar"
-      aria-valuenow="{{myFile.progress}}"
+      aria-valuenow="{{my_file.progress}}"
       aria-valuemin="0"
       aria-valuemax="100"
-      style="width:{{myFile.progress}}%">
+      style="width:{{my_file.progress}}%">
     </div>
   </div>
 
+  <!-- attachment -->
   <div ng-if="item.attachment_id">
     Currently uploaded file:
     <a ng-href="{{item.getAttachment().url}}">
-      {{myFile.name}}
+      {{my_file.name}}
     </a>
     <span class="btn btn-link" ng-click="item.deleteAttachment() && clearFileInput()">
       <i class="fa fa-times"></i>
@@ -35,10 +44,13 @@
 
 </div>
 
+<!-- messages -->
 <div class="col-sm-3 messages">
-
-  <span class="text-danger" ng-show="showError">
+  <p class="text-danger" ng-show="show_error">
     Upload failed
-  </span>
-
+  </p>
+  <p class="text-danger" ng-show="err_file">
+    File is larger then {{err_file.$errorParam}}
+  </p>
 </div>
+
