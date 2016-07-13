@@ -1,4 +1,5 @@
-angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $rootScope, AlertService, ErrorService) ->
+angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log,
+  $rootScope, AlertService, ErrorService) ->
 
   # create a trackable loader - this in theory allows multiple trackable loading objects in a scope - meaning we're not tied to a per-scope faction
   # currently it's still just using the scope to store the status, but we're encapsulating it away so that we can change it later

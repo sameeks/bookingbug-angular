@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -26,22 +26,35 @@
 ###
 
 
-angular.module('BB.Directives').directive 'bbItemDetails', () ->
+angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, $compile) ->
   restrict: 'AE'
   replace: true
   scope : true
+  transclude: true
   controller : 'ItemDetails'
-  link : (scope, element, attrs) ->
+  link: (scope, element, attrs, controller, transclude) ->
     if attrs.bbItemDetails
       item = scope.$eval(attrs.bbItemDetails)
       scope.item_from_param = item
       delete scope.item_details if scope.item_details
-      scope.loadItem(item)
-    return
+      scope.loadItem(item) if item
+
+    transclude scope, (clone) =>
+      # if there's content compile that or grab the week_calendar template
+      has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+      if has_content
+        element.html(clone).show()
+      else
+        $q.when($templateCache.get('_item_details.html')).then (template) ->
+          element.html(template).show()
+          $compile(element.contents())(scope)
 
 
-angular.module('BB.Controllers').controller 'ItemDetails',
-($scope, $attrs, $rootScope, $modal, $location, $upload, $translate, PurchaseBookingService, AlertService, FormDataStoreService, ValidatorService, SettingsService, PurchaseService, LoadingService,  BBModel) ->
+
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs,
+  $rootScope, ItemDetailsService, PurchaseBookingService, AlertService,
+  BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal,
+  $location, $translate, SettingsService, PurchaseService, LoadingService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
   loader = LoadingService.$loader($scope)
@@ -163,7 +176,10 @@ angular.module('BB.Controllers').controller 'ItemDetails',
   $scope.recalc_price = ->
     qprice = $scope.item_details.questionPrice($scope.item.getQty())
     bprice = $scope.item.base_price
+    bprice = $scope.item.price unless bprice
+
     $scope.item.setPrice(qprice + bprice)
+
 
 
   ###**
@@ -339,35 +355,3 @@ angular.module('BB.Controllers').controller 'ItemDetails',
   ###
   $scope.editItem = () ->
     $scope.item_details_updated = false
-
-  ###**
-  * @ngdoc method
-  * @name onFileSelect
-  * @methodOf BB.Directives:bbItemDetails
-  * @description
-  * Select file to upload in according of item, $file and existing parameters
-  *
-  * @param {array} item The item for uploading
-  * @param {boolean} existing Checks if file item exist or not
-  ###
-  $scope.onFileSelect = (item, $file, existing) ->
-    $scope.upload_progress = 0
-    file = $file
-    att_id = null
-    att_id = existing if existing
-    method = "POST"
-    method = "PUT" if att_id
-    url = item.$href('add_attachment')
-    $scope.upload = $upload.upload({
-      url: url,
-      method: method,
-      data: {attachment_id: att_id},
-      file: file,
-    }).progress (evt) ->
-      if $scope.upload_progress < 100
-        $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
-    .success (data, status, headers, config) ->
-      $scope.upload_progress = 100
-      if data && item
-        item.attachment = data
-        item.attachment_id = data.id

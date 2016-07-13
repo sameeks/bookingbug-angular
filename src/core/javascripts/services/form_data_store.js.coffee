@@ -35,7 +35,7 @@ angular.module('BB.Services').factory 'FormDataStoreService',
   resetValuesOnScope = (scope, props) ->
     for prop in props
       prop = $parse prop
-      setter = prop.assign;
+      setter = prop.assign
       setter scope, null
     return
 
@@ -235,10 +235,10 @@ angular.module('BB.Services').factory 'FormDataStoreService',
     # go up the scope chain to find the app's rootscope, which will be the scope
     # with the bbctrl property
 
-    # step down a scope first - just in case this is on the same as the widget and iot's isloated! 
+    # step down a scope first - just in case this is on the same as the widget and iot's isloated!
     if scope && scope.$$childHead
       scope = scope.$$childHead
-      
+
     while !_.has(scope, 'cid')
       scope = scope.$parent
 

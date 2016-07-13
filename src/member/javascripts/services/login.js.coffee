@@ -1,5 +1,5 @@
-angular.module('BBMember.Services').factory "MemberLoginService",
-($q, $rootScope, $sessionStorage, halClient,  BBModel) ->
+angular.module('BBMember.Services').factory "MemberLoginService", ($q,
+  $rootScope, $sessionStorage, halClient,  BBModel) ->
 
   login: (form, options) ->
     defer = $q.defer()

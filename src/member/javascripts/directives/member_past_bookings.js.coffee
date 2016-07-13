@@ -1,7 +1,10 @@
 angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, PaginationService) ->
+
   templateUrl: 'member_past_bookings.html'
   scope:
     member: '='
+    notLoaded: '='
+    setLoaded: '='
   controller: 'MemberBookings'
   link: (scope, element, attrs) ->
 

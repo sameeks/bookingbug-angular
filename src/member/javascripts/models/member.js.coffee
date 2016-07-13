@@ -1,5 +1,5 @@
-angular.module('BB.Models').factory "Member.MemberModel",
-($q, MemberService, BBModel, BaseModel, ClientModel) ->
+angular.module('BB.Models').factory "Member.MemberModel", ($q, MemberService,
+  BBModel, BaseModel, ClientModel) ->
 
   class Member_Member extends ClientModel
 

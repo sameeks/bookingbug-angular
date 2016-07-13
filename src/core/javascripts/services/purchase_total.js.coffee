@@ -1,5 +1,4 @@
 
-
 angular.module('BB.Services').factory "PurchaseTotalService", ($q, BBModel) ->
   query: (prms) ->
     deferred = $q.defer()

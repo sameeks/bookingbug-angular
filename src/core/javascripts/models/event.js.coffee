@@ -14,15 +14,16 @@
 ####
 
 
-angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService, EventService) ->
+angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel,
+  DateTimeUlititiesService, EventService) ->
 
 
   class Event extends BaseModel
 
     constructor: (data) ->
-      super(data)     
-      @date = moment.parseZone(@datetime)   
-      @time = new BBModel.TimeSlot(time: DateTimeUlititiesService.convertMomentToTime(@date))
+      super(data)
+      @date = moment.parseZone(@datetime)
+      @time = new BBModel.TimeSlot(time: DateTimeUtilitiesService.convertMomentToTime(@date))
       @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
       @date_unix = @date.unix()
 
@@ -182,11 +183,34 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     *
     * @returns {object} The returned spaces left
     ###
-    # get the number of spaces left (possibly limited by a specific ticket pool)
     getSpacesLeft: (pool = null) ->
       if pool && @ticket_spaces && @ticket_spaces[pool]
         return @ticket_spaces[pool].left
-      return @num_spaces - @getNumBooked()
+      else
+        x =  @num_spaces - @getNumBooked()
+        return 0 if x < 0
+        return x
+
+
+    ###**
+    * @ngdoc method
+    * @name getWaitSpacesLeft
+    * @methodOf BB.Models:Event
+    * @description
+    * Get the number of waitlist spaces left (possibly limited by a specific ticket pool)
+    *
+    * @returns {object} The returned spaces left
+    ###
+    getWaitSpacesLeft: (pool = null) ->
+      wait = @getChain().waitlength
+      wait ||= 0
+      wait = wait - @spaces_wait
+      return 0 if wait <= 0
+
+      if pool && @ticket_spaces && @ticket_spaces[pool]
+        pool_left =  @ticket_spaces[pool].left
+        return pool_left if wait > pool_left # use the pool if the pool has left that the wait list allowance
+      return wait
 
     ###**
     * @ngdoc method
@@ -311,4 +335,19 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
 
     @$summary: (company, params) ->
       EventService.summary(company, params)
+
+    ###**
+    * @ngdoc method
+    * @name numTicketsSelected
+    * @methodOf BB.Models:Event
+    * @description
+    *
+    *
+    * @returns {object} get number of tickets selected
+    ###
+    numTicketsSelected: () ->
+      num = 0
+      for ticket in @tickets
+        num += ticket.qty
+      num
 

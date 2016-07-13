@@ -1,7 +1,7 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.BookingModel",
-($q, AdminBookingService, BBModel, BaseModel, BookingCollections) ->
+angular.module('BB.Models').factory "Admin.BookingModel", ($q,
+  AdminBookingService, BBModel, BaseModel, BookingCollections) ->
 
   class Admin_Booking extends BaseModel
 
@@ -17,7 +17,7 @@ angular.module('BB.Models').factory "Admin.BookingModel",
         @className = "status_blocked"
       else if @status == 4
         @className = "status_booked"
- 
+
 
     useFullTime: () ->
       @using_full_time = true
@@ -37,6 +37,7 @@ angular.module('BB.Models').factory "Admin.BookingModel",
       data.pre_time = @pre_time
       data.post_time = @post_time
       data.person_id = @person_id
+      data.resource_id = @resource_id
       if @questions
         data.questions = (q.getPostData() for q in @questions)
       data
@@ -77,9 +78,13 @@ angular.module('BB.Models').factory "Admin.BookingModel",
       return null
 
     $update: (data) ->
+      if data
+        data.datetime = moment(data.datetime)
+        data.datetime.tz()
+        data.datetime = data.datetime.format()
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
-        @constructor(res) 
+        @constructor(res)
         if @using_full_time
           @useFullTime()
         BookingCollections.checkItems(@)

@@ -1,19 +1,22 @@
-angular.module('BBMember.Services').factory "MemberBookingService", ($q, SpaceCollections, $rootScope, MemberService, BBModel) ->
+angular.module('BBMember.Services').factory "MemberBookingService", ($q,
+  SpaceCollections, $rootScope, MemberService, BBModel) ->
 
   query: (member, params) ->
     deferred = $q.defer()
+    params ||= {}
+    params.no_cache = true
     if !member.$has('bookings')
       deferred.reject("member does not have bookings")
     else
       member.$get('bookings', params).then (bookings) =>
         if angular.isArray bookings
-          bookings = for booking in bookings
-            new BBModel.Member.Booking(booking)
+          # bookings embedded in member
+          bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
           deferred.resolve(bookings)
         else
+          params.no_cache = false
           bookings.$get('bookings', params).then (bookings) =>
-            bookings = for booking in bookings
-              new BBModel.Member.Booking(booking)
+            bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
             deferred.resolve(bookings)
           , (err) ->
             deferred.reject(err)

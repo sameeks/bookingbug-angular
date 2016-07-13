@@ -5,9 +5,6 @@ angular.module('BBAdminSettings', [
   'BBAdmin.Services',
   'BBAdmin.Filters',
   'BBAdmin.Controllers',
-  # 'ui.router',
-  # 'ui.state',
-  # 'ui.calendar',
   'trNgGrid'
 ])
 

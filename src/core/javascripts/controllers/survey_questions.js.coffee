@@ -27,10 +27,11 @@ angular.module('BB.Directives').directive 'bbSurveyQuestions', () ->
   scope: true
   controller : 'SurveyQuestions'
 
-angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootScope,
-    CompanyService, PurchaseService, ClientService, $modal, $location, $timeout,
-    BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService,
-    LoginService, $window, $upload, ServiceService, ValidatorService, PurchaseBookingService, LoadingService, $sessionStorage) ->
+angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
+  $rootScope, CompanyService, PurchaseService, ClientService, $modal,
+  $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService,
+  AlertService, LoginService, $window, ServiceService, ValidatorService,
+  PurchaseBookingService, LoginService $sessionStorage) ->
 
   $scope.controller = "SurveyQuestions"
 

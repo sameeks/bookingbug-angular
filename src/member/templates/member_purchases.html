@@ -1,38 +1,95 @@
-<div>
-  <div class="bb-head">
-    <span id="your_bookings">Your Purchases</span>
-  </div>
-  <div id="bookings">
-    <div ng-if="purchases.length == 0">
+<div class="bb-member-purchases">
+
+  <div>
+
+    <div ng-show="purchases.length == 0">
       <h3>You don't currently have any purchases.</h3>
     </div>
 
-    <div class="row headers  hidden-xs">
+    <div class="row bb-list-table-header">
 
-      <div class="col-sm-2">
-        Purchase Ref
+      <div class="col-xs-1">
+        #
       </div>
 
-      <div class="col-sm-8">
-        Date
+      <div class="col-xs-3">
+        Purchase Date
+      </div>
+
+      <div class="col-xs-offset-2 col-xs-2">
+        Items
+      </div>
+
+      <div class="col-xs-2">
+        Total Price
+      </div>
+
+      <div class="col-xs-2">
       </div>
 
     </div>
 
-    
-    <div ng-repeat="purchase in purchases | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
-      <div>
-        {{purchase.id}}
-      </div>
-      <div>
-        {{purchase.created_at | datetime}}
-      </div>
-      <div bb-member-purchase-items purchase="purchase">
-        <div ng-repeat="item in items">
-          {{item.full_describe}}
+    <ul class="bb-list bb-list-bordered">
+
+      <li ng-repeat="purchase in purchases | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
+
+        <div class="row">
+
+          <div class="col-xs-1">
+            {{purchase.id}}
+          </div>
+
+          <div class="col-xs-3">
+            {{purchase.created_at | datetime:'L'}}
+          </div>
+
+          <div class="col-xs-offset-2 col-xs-2">
+            {{purchase.purchase_items.length}}
+          </div>
+
+          <div class="col-xs-2">
+            {{purchase.total_price | pretty_price}}
+          </div>
+
+          <div class="col-xs-2">
+
+            <span class="bb-btn bb-btn-link" ng-hide="purchase.show_more" ng-click="purchase.show_more = true">
+            More
+              <i class="fa fa-chevron-down" aria-hidden="true"></i>
+            </span>
+            <span class="bb-btn bb-btn-link" ng-show="purchase.show_more" ng-click="purchase.show_more = false">
+              Less
+              <i class="fa fa-chevron-up" aria-hidden="true"></i>
+            </span>
+
+          </div>
+
         </div>
-      </div>
-    </div>
+
+        <ul class="bb-list bb-list-sm margin-top-10" ng-show="purchase.show_more">
+
+          <li ng-repeat="item in purchase.purchase_items">
+
+            <div class="row">
+
+              <div class="col-xs-8">
+                {{item.full_describe}}
+              </div>
+
+              <div class="col-xs-2">
+                {{item.price | pretty_price}}
+              </div>
+
+            </div>
+
+          </li>
+        </ul>
+
+        
+
+      </li>
+    </ul>
+
 
     <pagination total-items="pagination.num_items"
       ng-model="pagination.current_page" items-per-page="pagination.page_size"

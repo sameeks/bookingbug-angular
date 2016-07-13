@@ -1,0 +1,38 @@
+<div bb-companies ng-init="checkStepTitle('Select a Company')">
+  <div class="row">
+    <div ng-repeat="item in companies | orderBy: name">
+      <div class="col-sm-6 col-md-4">
+        <div class="card">
+          <div bb-address-map="item.address">
+            <ui-gmap-google-map center='map.center' zoom='map.zoom' options="options">
+              <ui-gmap-marker coords="marker.coords" idkey="marker.id">
+              </ui-gmap-marker>
+            </ui-gmap-google-map>
+            <div class="card-block">
+              <h4>{{item.name}}</h4>
+              <span ng-show="item.getAddress().address1">{{item.getAddress().address1}}<br /></span>
+              <span ng-show="item.getAddress().address2">{{item.getAddress().address2}}<br /></span>
+              <span ng-show="item.getAddress().address3">{{item.getAddress().address3}}<br /></span>
+              <span ng-show="item.getAddress().address4">{{item.getAddress().address4}}<br /></span>
+              <span ng-show="item.getAddress().address5">{{item.getAddress().address5}}<br /></span>
+              <span ng-show="item.getAddress().country">{{item.getAddress().country}}</span>
+              <span ng-show="item.description">{{item.description}}</span>
+              <a ng-click="selectItem(item)" class="btn btn-primary">Select</a>
+              <div class="clearfix">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="bb-step-navigation" ng-show="bb.current_step > 1">
+  <div class="row">
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-default pull-left" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+    </div>
+  </div>
+</div>

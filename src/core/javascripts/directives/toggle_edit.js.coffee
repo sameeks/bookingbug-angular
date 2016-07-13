@@ -13,6 +13,6 @@ angular.module('BB.Directives').directive 'bbToggleEdit', ($compile, $window, $d
         scope.$apply () ->
           scope.editing = false
 
-    true  
+    true
 
 

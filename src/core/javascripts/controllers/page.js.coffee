@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
   # dont' give this $scope a 'controller' property as it's used for controller
@@ -44,7 +44,7 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
   $scope.checkReady = () ->
     ready_list = isScopeReady($scope)
     checkread = $q.defer()
-    $scope.$checkingReady = checkread.promise;
+    $scope.$checkingReady = checkread.promise
 
 
     ready_list = ready_list.filter (v) -> !((typeof v == 'boolean') && v)
@@ -111,4 +111,3 @@ angular.module('BB.Directives').directive 'bbPage', () ->
 
 angular.module('BB.Controllers').controller 'PageController', BBBasicPageCtrl
 angular.module('BB.Services').value "PageControllerService", BBBasicPageCtrl
-

@@ -1,0 +1,9 @@
+@import "bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+$bb-gray: gray;
+$bb-border: $panel-default-border;
+@import "src/admin-booking/stylesheets/main";
+@import "src/admin-dashboard/stylesheets/main";
+@import "src/core/stylesheets/main";
+@import "src/member/stylesheets/main";
+@import "src/public-booking/stylesheets/main";
+@import "src/services/stylesheets/main";

@@ -12,7 +12,7 @@ module.exports = (config) ->
       'src/core/javascripts/ie8_http_backend.js'
       'src/core/javascripts/post_message.js'
       'src/core/javascripts/schema_form_config.js.coffee'
-      'src/*/javascripts/**/*.js.coffee'
+      'src/**/javascripts/**/**/**/**/*.js.coffee'
     ]
 
     exclude: [

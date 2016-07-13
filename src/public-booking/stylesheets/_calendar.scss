@@ -1,4 +1,4 @@
-.calendar, div[bb-time-ranges],  {
+.bb-calendar, [bb-time-ranges],  {
   padding-bottom: 30px;
 
   .week {
@@ -23,7 +23,7 @@
       font-size: $font-size-h2;
       color: inherit;
       float: left;
-      margin-top: 118px;
+      margin-top: 92px;
     }
     &:last-of-type {
       padding-right: 0;
@@ -35,8 +35,8 @@
      .month-heading {
       margin: 0;
       text-align: center;
-      //text-transform: uppercase;
-      font-size: $font-size-h2;
+      line-height: 33px;
+      font-size: $font-size-large;
     }
   }
 
@@ -63,6 +63,11 @@
 
   }
 
+  .date-picker {
+    @media (max-width: $screen-xs-max) {
+      padding-bottom: 15px;
+    }
+  }
 
   // panel styling
   .panel-group {
@@ -70,18 +75,18 @@
       border-radius: 0;
       margin: 0;
       border: none;
-      border-bottom: 1px rgb(221, 221, 221) solid;
+      border-bottom: 1px $bb-border solid;
       box-shadow: none;
     }
 
-    .accordian-group:first-child .panel {
-      border-top: 1px rgb(221, 221, 221) solid;
+    .accordion-group:first-child .panel {
+      border-top: 1px $bb-border solid;
     }
   }
 
   .panel-default > .panel-heading {
     background: none;
-    padding: 4px 4px 10px 4px;
+    padding: 10px 4px 10px 4px;
     position: relative;
     cursor: pointer;
     color: inherit;
@@ -98,7 +103,7 @@
     border: none;
   }
 
-   .panel-body {
+  .panel-body {
     padding: 0;
   }
 
@@ -127,7 +132,7 @@
     cursor: pointer;
     text-align: center;
     &:hover, &.selected {
-      background-color: #333;
+      background-color: $gray-darker;
       color: #FFF;
     }
   }
@@ -140,11 +145,11 @@
 
   // expanded or selected panel
   .panel-group .panel.expanded {
-    background-color: #EEE;
+    background-color: $gray-lighter;
   }
 
   .panel-group .panel.selected {
-    background-color: #777;
+    background-color: $gray-light;
     color: #FFF;
   }
 
@@ -163,7 +168,7 @@
       display: none;
     }
     .panel-title {
-      color: #CCC;
+      color: $bb-gray;
     }
   }
 
@@ -214,11 +219,11 @@
     span.glyphicon{
        font-size: 40px;
        width: 100%;
-      }   
+      }
     }
     button{
       width: 100%;
-    }  
+    }
   }
 }
 
@@ -231,7 +236,7 @@
   padding: 10px;
 }
 
-[datepicker]{
+[datepicker], [bb-events] .date-picker{
   &:active, &:focus{
     outline: none;
     border: none;
@@ -250,43 +255,39 @@
     button{
       background: transparent;
       border-radius: 0px;
-      border: solid 1px #ddd;
-      color: #777;
+      border: solid 1px $bb-border;
+      color: $gray-light;
       &:disabled{
         opacity: .5;
       }
       span{
-        color: #777;
+        color: $gray-light;
+      }
+    }
+
+    button.btn-default.active{
+      background-image: linear-gradient(to bottom, #eff3e9 0%, #fff 100%);
+      span{
+        font-weight: bold;
       }
     }
 
     button.btn-default{
-      background-color: transparent;
-      &:hover, &:active, &:focus{
-        background-color: #e6e6e6;
-        border-color: #adadad;
-        color: #777;
-      }
-
-    }
-
-    button.btn-info{
-      background-color: #31b0d5;
-      border-color: #269abc;
-      span{
-        color: #fff;
-      }
-
-      &:hover, &:active, &:focus{
-        background-color: #31b0d5;
-        span{
-          color: #fff;
+        &:hover, &:active, &:focus{
+           background-image: linear-gradient(to bottom, #eff3e9 0%, #fff 100%);
+           outline: none;
+           span{
+            font-weight: bold;
+           }
         }
-      }
     }
+
   }
 }
-
+// for the new time slot disabled method
+.time-slot.disabled{
+  opacity: 0.2;
+}
 
 // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 // DATEPICKER DEFAULT SCHEMA end

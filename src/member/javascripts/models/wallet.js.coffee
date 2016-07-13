@@ -1,5 +1,5 @@
-angular.module("BB.Models").factory "Member.WalletModel",
-(WalletService, BBModel, BaseModel) ->
+angular.module("BB.Models").factory "Member.WalletModel", (WalletService,
+  BBModel, BaseModel) ->
 
   class Member_Wallet extends BaseModel
     constructor: (data) ->

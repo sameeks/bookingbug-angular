@@ -2,7 +2,7 @@ angular.module('BB.Services').factory "ClientService",  ($q, BBModel, MutexServi
 
   create: (company, client) ->
     deferred = $q.defer()
-    
+
     if !company.$has('client')
       deferred.reject("Cannot create new people for this company")
     else

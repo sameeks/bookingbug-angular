@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 ###**
 * @ngdoc directive
@@ -59,8 +59,9 @@ angular.module('BB.Directives').directive 'bbBasketList', () ->
 
 
 
-angular.module('BB.Controllers').controller 'BasketList',
-($scope, $rootScope, $element, $attrs, $q, AlertService, FormDataStoreService, LoginService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'BasketList', ($scope, $rootScope,
+  $element, $attrs, $q, AlertService, FormDataStoreService, LoginService,
+  LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
@@ -69,13 +70,12 @@ angular.module('BB.Controllers').controller 'BasketList',
 
   # bb.basket.options - added 10-11-2015 @16:19
   # For ex. bb-basket-list="{requires_deal: true}"
-  $scope.bb.basket.setSettings($scope.$eval $attrs.bbBasketList or {})
+  $scope.bb.basket.setSettings($scope.$eval($attrs.bbBasketList) or {})
 
 
   $rootScope.connection_started.then ->
 
     $scope.bb.basket.setClient($scope.client) if $scope.client
-
     if $scope.client.$has('pre_paid_bookings') and $scope.bb.basket.timeItems().length > 0
 
       loader.notLoaded()
@@ -86,18 +86,43 @@ angular.module('BB.Controllers').controller 'BasketList',
         promises.push($scope.client.$getPrePaidBookings(params))
 
       $q.all(promises).then (result) ->
+        booking_left = {}
+
+        #populate the prepaid_booking available for all the bookings
+        for basket_item in result
+          for prepaid_booking in basket_item
+            booking_left[prepaid_booking.id] = prepaid_booking.number_of_bookings_remaining
 
         for basket_item, index in $scope.bb.basket.timeItems()
           prepaid_bookings = result[index]
+          if $scope.bb.basket.settings and $scope.bb.basket.settings.auto_use_prepaid_bookings and prepaid_bookings.length > 0 and basket_item.price > 0
+            for prepaid_booking, index in prepaid_bookings
+              if booking_left[prepaid_booking.id] > 0
+                basket_item.setPrepaidBooking(prepaid_booking)
+                booking_left[prepaid_booking.id] -= 1
+                break
 
-          if $scope.bb.basket.settings and $scope.bb.basket.settings.auto_use_prepaid_bookings and prepaid_bookings.length > 0
-            basket_item.setPrepaidBooking(prepaid_bookings[0])
+        if $scope.bb.basket.settings.auto_use_prepaid_bookings
+          $scope.updateBasket().then () ->
+            groupBasketItems($scope.bb.basket.timeItems())
+          , (err) ->
+            loader.setLoaded()
+        else
+          groupBasketItems($scope.bb.basket.timeItems())
 
-        $scope.updateBasket().then () ->
-          loader.setLoaded()
 
-      , (err) ->
-        loader.setLoaded()
+
+  $scope.deleteGroupItem = (items) =>
+    $scope.deleteBasketItems(items)
+    $scope.multi_basket_grouping = _.without($scope.multi_basket_grouping, items)
+
+
+  groupBasketItems = (items) ->
+    $scope.multi_basket_grouping = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
+    $scope.multi_basket_grouping = _.values($scope.multi_basket_grouping)
+    console.log $scope.multi_basket_grouping
+
+    loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -108,11 +133,13 @@ angular.module('BB.Controllers').controller 'BasketList',
   *
   * @param {string} route A route of the added another item
   ###
+  # THIS IS FOR SORTING FOR MULTI EVENTS
+
   $scope.addAnother = (route) =>
     $scope.clearBasketItem()
     $scope.bb.emptyStackedItems()
-    $scope.bb.current_item.setCompany($scope.bb.company)
-    $scope.restart()
+#    $scope.bb.current_item.setCompany($scope.bb.company)
+    $scope.decideNextPage(route)
 
   ###**
   * @ngdoc method
@@ -167,7 +194,6 @@ angular.module('BB.Controllers').controller 'BasketList',
     BBModel.Basket.$applyCoupon($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
-        item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
       loader.setLoaded()
@@ -196,7 +222,6 @@ angular.module('BB.Controllers').controller 'BasketList',
 
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
-        item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
       $scope.items = $scope.bb.basket.items
@@ -221,7 +246,6 @@ angular.module('BB.Controllers').controller 'BasketList',
 
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
-        item.reserve_without_questions = $scope.bb.reserve_without_questions
       basket.setSettings($scope.bb.basket.settings)
       $scope.setBasket(basket)
       $scope.items = $scope.bb.basket.items
@@ -233,6 +257,4 @@ angular.module('BB.Controllers').controller 'BasketList',
 
   $scope.topUpWallet = () ->
     $scope.decideNextPage("basket_wallet")
-
-
 

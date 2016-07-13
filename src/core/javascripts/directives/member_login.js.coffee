@@ -6,13 +6,17 @@ angular.module('BB').directive 'bbMemberLogin', (PathSvc) ->
       PathSvc.directivePartial "_member_login_form"
     else
       PathSvc.directivePartial "_member_login_schema_form"
-  
 
-angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService, ValidatorService) ->
 
-  $scope.login_form = {}
+angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
+  $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window,
+  AlertService, LoginService, ValidatorService, LoadingService) ->
+
+  $scope.login = {}
 
   $scope.validator = ValidatorService
+
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then () ->
 
@@ -21,7 +25,7 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootS
       if $scope.bb.destination
         $scope.redirectTo($scope.bb.destination)
       else
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.decideNextPage()
     else
       halClient.$get("#{$scope.bb.api_url}/api/v1").then (root) ->
@@ -34,11 +38,11 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootS
         console.log 'err ', err
 
 
-  $scope.submit = (form) ->
+  $scope.submit = () ->
 
-    form['role'] = 'member'
+    $scope.login.role = 'member'
 
-    $scope.company.$post('login', {}, form).then (login) ->
+    $scope.company.$post('login', {}, $scope.login).then (login) ->
       if login.$has('members')
         login.$get('members').then (members) ->
           $scope.handleLogin(members[0])
@@ -53,7 +57,7 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootS
 
 
   $scope.handleLogin = (member) ->
-    member = LoginService.setLogin(member, $scope.login_form.persist_login)
+    member = LoginService.setLogin(member, $scope.login.persist_login)
     $scope.setClient(member)
     if $scope.bb.destination
       $scope.redirectTo($scope.bb.destination)

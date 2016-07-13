@@ -1,5 +1,5 @@
-angular.module("BBMember").controller "Wallet",
-($scope, $rootScope, $q, $log, $modal, AlertService, LoadingService, BBModel) ->
+angular.module("BBMember").controller "Wallet", ($scope, $rootScope, $q, $log,
+  $modal, AlertService, LoadingService, BBModel) ->
 
   loader = LoadingService.$loader($scope)
 

@@ -44,6 +44,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: 'Sorry. The item you were trying to book is no longer available. Please try again.'
     },
     {
+      key: 'NO_WAITLIST_SPACES_LEFT',
+      type: 'error',
+      title: '',
+      persist: true,
+      msg: 'Sorry, the space has now been taken, you are still in the waitlist and we will notify you if more spaces become available'
+    },
+    {
       key: 'FORM_INVALID',
       type: 'warning',
       title: '',
@@ -84,6 +91,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'You need to select a time slot'
+    },
+    {
+      key: 'STORE_NOT_SELECTED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'You need to select a store'
     },
     {
       key: 'APPT_AT_SAME_TIME',
@@ -140,6 +154,13 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: true,
       msg: 'Sorry, your email or password was not recognised. Please try again or reset your password.'
+    },
+    {
+      key: 'SSO_LOGIN_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, the login process failed. Please try again.'
     },
     {
       key: 'PASSWORD_INVALID',
@@ -205,11 +226,39 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       msg: "Your account appears to be disabled. Please contact the business you're booking with if the problem persists."
     },
     {
-      key: 'FB-LOGIN-FAILED',
+      key: 'FB_LOGIN_NOT_A_MEMBER',
       type: 'warning',
       title: '',
       persist: true,
-      msg: "Sorry, we couldn't find a login associated with this Facebook account. You will need to sign up using Facebook first."
+      msg: "Sorry, we couldn't find a login linked with your Facebook account. You will need to sign up using Facebook first."
+    },
+    {
+      key: 'PHONE_NUMBER_ALREADY_REGISTERED_ADMIN',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: "There's already an account registered with this phone number. Use the search field to find the customers account."
+    },
+    {
+      key: 'EMAIL_ALREADY_REGISTERED_ADMIN',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: "There's already an account registered with this email. Use the search field to find the customers account."
+    },
+    {
+      key: 'WAITLIST_ACCEPTED',
+      type: 'success',
+      title: '',
+      persist: false,
+      msg: "Your booking is now confirmed!"
+    },
+    {
+      key: 'BOOKING_CANCELLED',
+      type: 'success',
+      title: '',
+      persist: false,
+      msg: "Your booking has been cancelled."
     }
   ]
 

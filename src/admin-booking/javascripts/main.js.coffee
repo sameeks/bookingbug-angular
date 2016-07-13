@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 adminbookingapp = angular.module('BBAdminBooking', [
   'BB',
@@ -22,7 +22,8 @@ angular.module('BBAdminBooking.Controllers', [
   'ngSanitize'
 ])
 
-adminbookingapp.run ($rootScope, $log, DebugUtilsService, $bbug, $document, $sessionStorage, FormDataStoreService, AppConfig, BBModel) ->
+adminbookingapp.run ($rootScope, $log, DebugUtilsService, $bbug, $document,
+  $sessionStorage, FormDataStoreService, AppConfig, BBModel) ->
 
   BBModel.Admin.Login.$checkLogin().then () ->
     if $rootScope.user && $rootScope.user.company_id

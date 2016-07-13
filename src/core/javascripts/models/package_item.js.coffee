@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 ###**
 * @ngdoc service
@@ -8,8 +8,8 @@
 * Representation of a PackageItem Object
 ####
 
-angular.module('BB.Models').factory "PackageItemModel",
-($q, PackageItemService, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "PackageItemModel", ($q,
+  PackageItemService, BBModel, BaseModel) ->
 
   class PackageItem extends BaseModel
 

@@ -1,11 +1,12 @@
-angular.module('BB.Services').factory "DateTimeUlititiesService", (AlertService) ->
+angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsService) ->
 
   # converts date and time belonging to BBModel.Day and BBModel.TimeSlot into
   # a valid moment object
   convertTimeSlotToMoment: (day, time_slot) ->
     return if !day and !time_slot
-
     datetime = moment()
+    if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()  
+      datetime = datetime.tz(SettingsService.getTimeZone())
     val = parseInt(time_slot.time)
     hours = parseInt(val / 60)
     mins = val % 60
@@ -18,31 +19,25 @@ angular.module('BB.Services').factory "DateTimeUlititiesService", (AlertService)
 
     return datetime
 
+
   convertMomentToTime: (datetime) ->
     return datetime.minutes() + datetime.hours() * 60
-	
-# <---------------------------------------------------->
 
 
-  checkRequestedTime: (day, time_slots, current_item) ->
-    # current_item = $scope.bb.current_item
+  checkDefaultTime: (date, time_slots, basket_item, item_defaults) ->
 
-    if (current_item.requested_time or current_item.time) and current_item.requested_date and day.date.isSame(current_item.requested_date)
-      found_time = false
+    return if !(basket_item.defaults.time? and item_defaults? and
+    ((basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person) or !item_defaults.merge_people) and
+      ((basket_item.defaults.resource and basket_item.defaults.resource.self is basket_item.resource.self) or _.isBoolean(basket_item.resource) or !item_defaults.merge_resources))
+
+    found_time_slot = null
+
+    if basket_item.defaults.time and (basket_item.defaults.date and date.isSame(basket_item.defaults.date, 'day') or !basket_item.defaults.date)
 
       for slot in time_slots
-        if (slot.time is current_item.requested_time)
-          current_item.requestedTimeUnavailable()
-          $scope.selectSlot(day, slot)
-          found_time = true
-          $scope.days = []
-          return  # hey if we just picked the day and routed - then move on!
 
-        if (current_item.time and current_item.time.time is slot.time and slot.avail is 1)
-          if $scope.selected_slot and $scope.selected_slot.time isnt current_item.time.time
-            $scope.selected_slot = current_item.time
-          current_item.setTime(slot)  # reset it - just in case this is really a new slot!
-          found_time = true
+        if (basket_item.defaults.time and basket_item.defaults.time is slot.time) and slot.avail is 1
+          found_time_slot = slot
+          break
 
-      if !found_time
-        current_item.requestedTimeUnavailable() 
+    return found_time_slot

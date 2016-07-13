@@ -1,4 +1,4 @@
-angular.module('BBQueue.Services').factory('QueuerService', ["$q", "$window", "halClient", "BBModel", ($q, UriTemplate, halClient, BBModel) ->
+angular.module('BBQueue.Services').factory 'QueuerService', ($q, UriTemplate, halClient, BBModel) ->
 
 	query: (params) ->
 		deferred = $q.defer()
@@ -25,6 +25,4 @@ angular.module('BBQueue.Services').factory('QueuerService', ["$q", "$window", "h
 			deferred.resolve(found)
 
 		deferred.promise
-
-])
 

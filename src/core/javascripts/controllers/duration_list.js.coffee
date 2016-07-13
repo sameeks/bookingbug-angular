@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -29,8 +29,8 @@ angular.module('BB.Directives').directive 'bbDurations', () ->
   controller : 'DurationList'
 
 
-angular.module('BB.Controllers').controller 'DurationList',
-($scope, $attrs, $rootScope, $q, $filter, PageControllerService, AlertService, LoadingService) ->
+angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs,
+  $rootScope, $q, $filter, PageControllerService, AlertService, LoadingService) ->
 
   $scope.controller = "public.controllers.DurationList"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -47,7 +47,7 @@ angular.module('BB.Controllers').controller 'DurationList',
   $scope.loadData = () =>
     id = $scope.bb.company_id
     service = $scope.bb.current_item.service
-    if service && !$scope.durations
+    if service
       $scope.durations =
         (for d in _.zip(service.durations, service.prices)
           {value: d[0], price: d[1]})

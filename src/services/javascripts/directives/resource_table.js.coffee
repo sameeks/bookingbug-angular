@@ -1,5 +1,5 @@
-angular.module('BBAdminServices').directive 'resourceTable',
-($modal, $log, ModalForm, AdminCompanyService) ->
+angular.module('BBAdminServices').directive 'resourceTable', ($modal, $log,
+  ModalForm, AdminCompanyService) ->
 
   controller = ($scope) ->
 
@@ -31,6 +31,12 @@ angular.module('BBAdminServices').directive 'resourceTable',
       ModalForm.edit
         model: resource
         title: 'Edit Resource'
+
+    $scope.schedule = (resource) ->
+      resource.$get('schedule').then (schedule) ->
+        ModalForm.edit
+          model: schedule
+          title: 'Edit Schedule'
 
   link = (scope, element, attrs) ->
     if scope.company

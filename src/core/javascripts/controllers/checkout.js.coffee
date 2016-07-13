@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -34,8 +34,9 @@ angular.module('BB.Directives').directive 'bbCheckout', () ->
   controller : 'Checkout'
 
 
-angular.module('BB.Controllers').controller 'Checkout',
-($scope, $rootScope, $attrs, $q, $location, $window, $timeout, $bbug, FormDataStoreService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope,
+  $attrs, $q, $location, $window, $timeout, $bbug, FormDataStoreService,
+  LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.Checkout"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -46,6 +47,9 @@ angular.module('BB.Controllers').controller 'Checkout',
   FormDataStoreService.destroy($scope)
 
   $rootScope.connection_started.then =>
+    $scope.checkout()
+
+  $scope.checkout = () ->
     $scope.bb.basket.setClient($scope.client)
     $scope.bb.no_notifications = $scope.options.no_notifications if $scope.options.no_notifications
     $scope.loadingTotal = BBModel.Basket.$checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
@@ -71,7 +75,6 @@ angular.module('BB.Controllers').controller 'Checkout',
       loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       $scope.checkoutFailed = true
       $scope.$emit("checkout:fail", err)
-  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   ###**

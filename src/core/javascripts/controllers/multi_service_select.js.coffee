@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -32,8 +32,9 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   scope : true
   controller : 'MultiServiceSelect'
 
-angular.module('BB.Controllers').controller 'MultiServiceSelect',
-($scope, $rootScope, $q, $attrs, $modal, AlertService, FormDataStoreService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope,
+  $rootScope, $q, $attrs, $modal, AlertService, FormDataStoreService,
+  LoadingService, BBModel) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selected_category_name'

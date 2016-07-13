@@ -1,5 +1,5 @@
-angular.module("BBMember").controller "MemberPurchases",
-($scope, $q, $log, LoadingService, BBModel) ->
+angular.module("BBMember").controller "MemberPurchases", ($scope, $q, $log,
+  LoadingService, BBModel) ->
 
   $scope.getPurchases = () ->
     loader = LoadingService.$loader($scope).notLoaded()

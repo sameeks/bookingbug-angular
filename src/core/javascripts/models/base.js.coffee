@@ -15,9 +15,10 @@ angular.module('BB.Models').run ($q, $injector, BBModel) ->
     'BookableItem', 'Category', 'Client', 'ClientDetails', 'Company',
     'CompanySettings', 'Day', 'Event', 'EventChain', 'EventGroup',
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
-    'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
-    'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
-    'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection', 'ExternalPurchase', 'PackageItem', 'BulkPurchase']
+    'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space',
+    'Clinic', 'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
+    'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection',
+    'ExternalPurchase', 'PackageItem', 'BulkPurchase', 'Pagination']
 
   for model in models
     BBModel[model] = $injector.get(model + "Model")
@@ -108,7 +109,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
       , (err) -> prom.reject(err)
 
       @__linkedPromises[link]
-    
+
 
     get: (ikey) ->
       return null if !@_data
@@ -116,7 +117,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
 
     set: (ikey, value) ->
       return null if !@_data
-      @_data[ikey] = value 
+      @_data[ikey] = value
 
 
     $href: (rel, params) ->

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 
@@ -143,10 +143,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
       if $scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))
         # the "bookable services" are the service unless we've pre-selected something!
-        $scope.bookable_services = $scope.items
-    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+        items = setServicesDisplayName(items)
+        $scope.bookable_services = items
+    , (err) ->
+      loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-    if $scope.booking_item.canLoadItem("service")
+    if ($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource())
+
       # if we've already picked a service or a resource - get a more limited service selection
       BBModel.BookableItem.$query({company: $scope.bb.company, cItem: $scope.booking_item, wait: ppromise, item: 'service'}).then (items) =>
         if $scope.booking_item.service_ref
@@ -160,11 +163,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
         services = (i.item for i in items when i.item?)
 
-        for item in services
-          if item.listed_durations and item.listed_durations.length is 1
-            item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
-          else
-            item.display_name = item.name
+        services = setServicesDisplayName(services)
 
         $scope.bookable_services = services
 
@@ -179,7 +178,16 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
 
         loader.setLoaded()
       , (err) ->
-        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+        loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+  setServicesDisplayName = (items)->
+    for item in items
+      if item.listed_durations and item.listed_durations.length is 1
+        item.display_name = item.name + ' - ' + $filter('time_period')(item.duration)
+      else
+        item.display_name = item.name
+
+    items
 
 
   # set the service item so the correct item is displayed in the dropdown menu.
@@ -217,6 +225,9 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
       $scope.routed = true
     else
       $scope.booking_item.setService(item)
+      # -----------------------------------------------------------
+      $scope.bb.selected_service = $scope.booking_item.service
+      # -----------------------------------------------------------
       $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       $scope.routed = true
@@ -228,6 +239,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
         # only set and broadcast if it's changed
         $scope.booking_item.setService($scope.service)
         $scope.broadcastItemUpdate()
+        $scope.bb.selected_service = $scope.service
 
   ###**
   * @ngdoc method
@@ -322,7 +334,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   * Filter changed
   ###
   $scope.filterChanged = () ->
-    $scope.filtered_items = $filter('filter')($scope.items, $scope.filterFunction);
+    $scope.filtered_items = $filter('filter')($scope.items, $scope.filterFunction)
 
 
 

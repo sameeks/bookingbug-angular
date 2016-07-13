@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -47,7 +47,6 @@ angular.module('BB.Controllers').controller 'PackagePicker',
   $scope.$watch 'selected_date', (newv, oldv) =>
     $scope.sel_date = moment(newv)
     $scope.loadDay()
-#    $scope.$broadcast('dateChanged', moment(newv));
 
   ###**
   * @ngdoc method

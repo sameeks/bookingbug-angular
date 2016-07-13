@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 ###**
 * @ngdoc service
@@ -16,8 +16,8 @@
 * @property {boolean} disabled Verify if resources is disabled or not
 ####
 
-angular.module('BB.Models').factory "Admin.ResourceModel",
-($q, AdminResourceService, BBModel, BaseModel, ResourceModel) ->
+angular.module('BB.Models').factory "Admin.ResourceModel", ($q,
+  AdminResourceService, BBModel, BaseModel, ResourceModel) ->
 
   class Admin_Resource extends ResourceModel
 

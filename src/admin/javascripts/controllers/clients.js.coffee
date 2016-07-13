@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
   restrict: 'AE'
@@ -9,8 +9,9 @@ angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
     return
 
 
-angular.module('BBAdmin.Controllers').controller 'AdminClients',
-($scope, $rootScope, $q, $log, AdminClientService, AlertService, LoadingService, BBModel) ->
+angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,
+  $rootScope, $q, $log, AdminClientService, AlertService, LoadingService,
+  BBModel) ->
 
   $scope.clientDef = $q.defer()
   $scope.clientPromise = $scope.clientDef.promise

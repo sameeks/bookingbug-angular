@@ -1,6 +1,11 @@
 .confirmation-header {
   font-size: $font-size-base;
   text-align: center;
+  button{
+    &:hover, &:focus{
+      box-shadow: 2px 2px 15px $bb-border;
+    }
+  }
 }
 
 .confirmation-heading {
@@ -9,16 +14,38 @@
 
 .confirmation-summary {
   font-size: $font-size-base;
-  border-bottom: 1px solid #dddddd;  
+  border-bottom: 1px solid $bb-border;
   margin: 6px 0 0px 0;
   padding: 20px 10px 10px 10px;
   &:first-child {
-    border-top: 1px solid #dddddd;
+    border-top: 1px solid $bb-border;
   }
 }
 
 .confirmation-summary-item {
   margin-bottom: 10px;
+}
+
+.confirmation-summary{
+  .confirmation-summary-item{
+    .bb-summary-label, .bb-summary-value{
+      float: left;
+      min-width: 115px;
+      padding: 0px 15px 5px 15px;
+      color: $gray;
+    }
+    .bb-summary-value{
+      width: auto;
+      color: inherit;
+    }
+  }
+}
+
+.confirmation-summary-address{
+  div{
+    padding-top: 5px;
+    font-size: 14px;
+  }
 }
 
 .address-item {
@@ -40,7 +67,7 @@
 
   .btn-link {
     margin-top: 25px;
-    color: #000;
+    color: $gray-base;
   }
 
   .bb-confirmation-border-margin {
@@ -56,7 +83,7 @@
     text-align: right;
     padding-top: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid $bb-border;
     margin-bottom: 15px;
   }
 

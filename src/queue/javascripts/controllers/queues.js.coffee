@@ -13,4 +13,3 @@ angular.module('BBQueue').controller 'bbQueues', ($scope, $log,
       $log.error err.data
       $scope.loading = false
 
-

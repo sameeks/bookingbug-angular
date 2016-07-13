@@ -1,4 +1,5 @@
-angular.module('BB.Services').factory "ProductService", ($q, $window, halClient, UriTemplate, BBModel, $log, $rootScope) ->
+angular.module('BB.Services').factory "ProductService", ($q, $window,
+  halClient, UriTemplate, BBModel, $log, $rootScope) ->
 
   getProduct: (prms) ->
 

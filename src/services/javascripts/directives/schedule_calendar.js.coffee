@@ -15,22 +15,25 @@ angular.module('BBAdminServices').directive 'scheduleCalendar', (uiCalendarConfi
           (start.isAfter(e.start) || start.isSame(e.start)) &&
             (end.isBefore(e.end) || end.isSame(e.end)))
 
-    options = $scope.$eval($attrs.scheduleCalendar) or {}
+    options = $scope.setOptions
+    options ||= {}
 
     $scope.options =
       calendar:
+        schedulerLicenseKey: '0598149132-fcs-1443104297'
+        height: options.height || "auto"
         editable: false
         selectable: true
-        defaultView: 'agendaSelectAcrossWeek'
+        defaultView: 'agendaWeek'
         header:
           left: 'today,prev,next'
           center: 'title'
-          right: 'month,agendaSelectAcrossWeek'
+          right: 'month,agendaWeek'
         selectHelper: false
         eventOverlap: false
         lazyFetching: false
         views:
-          agendaSelectAcrossWeek:
+          agendaWeek:
             duration:
               weeks: 1
             allDaySlot: false
@@ -91,4 +94,5 @@ angular.module('BBAdminServices').directive 'scheduleCalendar', (uiCalendarConfi
     require: 'ngModel'
     scope:
       render: '=?'
+      setOptions: '=options'
   }

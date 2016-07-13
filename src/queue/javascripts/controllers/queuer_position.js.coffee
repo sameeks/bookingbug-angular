@@ -1,6 +1,7 @@
-'use strict';
+'use strict'
 
-angular.module('BBQueue.Controllers').controller('QueuerPosition', ["QueuerService", "$scope", "$pusher", "QueryStringService", (QueuerService, $scope, $pusher, QueryStringService) ->
+angular.module('BBQueue.Controllers').controller 'QueuerPosition',
+  (QueuerService, $scope, $pusher, QueryStringService) ->
 
 	params =
 		id: QueryStringService('id')
@@ -24,10 +25,8 @@ angular.module('BBQueue.Controllers').controller('QueuerPosition', ["QueuerServi
 		console.log "Pusher: ", pusher
 		channel = pusher.subscribe("mobile-queue-#{$scope.queuer.spaceId}")
 		console.log "Channel: ", channel
-		channel.bind('notification', (data) ->
+		channel.bind 'notification', (data) ->
 			$scope.queuer.dueTime = data.due.valueOf()
 			$scope.queuer.ticketNumber = data.ticket_number
 			$scope.queuer.position = data.position
-		)
-])
 

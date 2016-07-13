@@ -1,5 +1,4 @@
-'use strict';
-
+'use strict'
 
 angular.module('BBAdmin.Directives').directive 'bbPeopleList', ($rootScope) ->
   restrict: 'AE'

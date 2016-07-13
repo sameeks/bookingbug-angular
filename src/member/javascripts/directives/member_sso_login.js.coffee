@@ -1,20 +1,22 @@
-angular.module('BBMember').directive 'memberSsoLogin', ($rootScope, LoginService, $sniffer, $timeout, QueryStringService) ->
+angular.module('BBMember').directive 'memberSsoLogin', ($rootScope,
+  LoginService, $sniffer, $timeout, QueryStringService) ->
 
-  link = (scope, element, attrs) ->
-    $rootScope.bb ||= {}
-    $rootScope.bb.api_url ||= scope.apiUrl
-    $rootScope.bb.api_url ||= "http://www.bookingbug.com"
-    scope.qs = QueryStringService
-
-    scope.member = null
+  scope:
+    token: '@memberSsoLogin'
+    company_id: '@companyId'
+  transclude: true
+  template: """
+<div ng-if='member' ng-transclude></div>
+"""
+  link: (scope, element, attrs) ->
     options =
       root: $rootScope.bb.api_url
-      company_id: scope.companyId
+      company_id: scope.company_id
     data = {}
     data.token = scope.token if scope.token
-    data.token ||= scope.qs('sso_token') if scope.qs
+    data.token ||= QueryStringService('sso_token')
 
-    if $sniffer.msie && $sniffer.msie < 10 && $rootScope.iframe_proxy_ready == false
+    if $sniffer.msie and $sniffer.msie < 10 and $rootScope.iframe_proxy_ready is false
       $timeout () ->
         LoginService.ssoLogin(options, data).then (member) ->
           scope.member = member
@@ -22,14 +24,3 @@ angular.module('BBMember').directive 'memberSsoLogin', ($rootScope, LoginService
     else
       LoginService.ssoLogin(options, data).then (member) ->
         scope.member = member
-
-  link: link
-  scope:
-    token: '@memberSsoLogin'
-    companyId: '@'
-    apiUrl: '@'
-    member: '='
-  transclude: true
-  template: """
-<div ng-if='member' ng-transclude></div>
-"""

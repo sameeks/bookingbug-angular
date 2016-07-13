@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -28,8 +28,9 @@ angular.module('BB.Directives').directive 'bbPurchaseTotal', () ->
   controller : 'PurchaseTotal'
 
 
-angular.module('BB.Controllers').controller 'PurchaseTotal',
-($scope, $rootScope, $window, BBModel, $q) ->
+angular.module('BB.Controllers').controller 'PurchaseTotal', ($scope,
+  $rootScope, $window, BBModel, $q) ->
+
   $scope.controller = "public.controllers.PurchaseTotal"
 
   angular.extend(this, new $window.PageController($scope, $q))

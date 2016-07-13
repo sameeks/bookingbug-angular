@@ -1,12 +1,13 @@
 
-angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope, BBModel, $sessionStorage, $localStorage) ->
+angular.module('BB.Services').factory "LoginService", ($q, halClient,
+  $rootScope, BBModel, $sessionStorage, $localStorage) ->
 
   companyLogin: (company, params, form) ->
     deferred = $q.defer()
     company.$post('login', params, form).then (login) =>
       login.$get('member').then (member) =>
         @setLogin(member)
-        deferred.resolve(member);
+        deferred.resolve(member)
       , (err) =>
         deferred.reject(err)
     , (err) =>
@@ -35,7 +36,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
         member = new BBModel.Member.Member(member)
         $sessionStorage.setItem("fb_user", true)
         @setLogin(member)
-        deferred.resolve(member);
+        deferred.resolve(member)
       , (err) =>
         deferred.reject(err)
     , (err) =>
@@ -65,7 +66,7 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient, $rootScope
       params = {auth_token: login.auth_token}
       login.$get('member').then (member) =>
         member = new BBModel.Member.Member(member)
-        @setLogin(member)
+        @setLogin(member,true)
         deferred.resolve(member)
     , (err) =>
       deferred.reject(err)

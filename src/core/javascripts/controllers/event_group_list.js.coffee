@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -37,14 +37,17 @@ angular.module('BB.Directives').directive 'bbEventGroups', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'EventGroupList',
-($scope,  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, PageControllerService, LoadingService, halClient) ->
+angular.module('BB.Controllers').controller 'EventGroupList', ($scope,
+  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
+  PageControllerService, LoadingService, halClient) ->
 
   $scope.controller = "public.controllers.EventGroupList"
+
   FormDataStoreService.init 'EventGroupList', $scope, [
     'event_group'
   ]
   loader = LoadingService.$loader($scope).notLoaded()
+
   angular.extend(this, new PageControllerService($scope, $q))
 
   $scope.validator = ValidatorService
@@ -80,9 +83,10 @@ angular.module('BB.Controllers').controller 'EventGroupList',
         setEventGroupItem items
 
       # if there's a default - pick it and move on
-      if $scope.booking_item.defaultService()
+      default_event_group = $scope.booking_item.defaultService()
+      if default_event_group
         for item in items
-          if item.self == $scope.booking_item.defaultService().self
+          if item.self is default_event_group.self
             $scope.selectItem(item, $scope.nextRoute )
 
       # if there's one selected - just select it

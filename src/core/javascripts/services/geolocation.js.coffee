@@ -1,7 +1,7 @@
 angular.module('BB.Services').factory 'GeolocationService', ($q) ->
 
   haversine: (position1, position2) ->
-    pi = Math.PI;
+    pi = Math.PI
     R = 6371  #equatorial radius
     distances = []
 
@@ -11,19 +11,19 @@ angular.module('BB.Services').factory 'GeolocationService', ($q) ->
     lat2 = position2.lat
     lon2 = position2.long
 
-    chLat = lat2-lat1;
-    chLon = lon2-lon1;
+    chLat = lat2-lat1
+    chLon = lon2-lon1
 
-    dLat = chLat*(pi/180);
-    dLon = chLon*(pi/180);
+    dLat = chLat*(pi/180)
+    dLon = chLon*(pi/180)
 
-    rLat1 = lat1*(pi/180);
-    rLat2 = lat2*(pi/180);
+    rLat1 = lat1*(pi/180)
+    rLat2 = lat2*(pi/180)
 
     a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2);
-    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    d = R * c;
+        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2)
+    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+    d = R * c
     # convert to miles
     d = d * 0.621371192
     distance = Math.round(d)

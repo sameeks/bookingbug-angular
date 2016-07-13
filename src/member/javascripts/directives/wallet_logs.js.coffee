@@ -1,4 +1,5 @@
 angular.module('BBMember').directive 'bbWalletLogs', ($rootScope, PaginationService) ->
+
   templateUrl: 'wallet_logs.html'
   scope: true
   controller: 'Wallet'
@@ -14,7 +15,7 @@ angular.module('BBMember').directive 'bbWalletLogs', ($rootScope, PaginationServ
     getWalletLogs = ()->
       scope.getWalletLogs().then (logs) ->
         PaginationService.update(scope.pagination, logs.length)
-    
+
 
     # listen to when the wallet is topped up
     scope.$on 'wallet:topped_up', (event) ->
@@ -28,7 +29,7 @@ angular.module('BBMember').directive 'bbWalletLogs', ($rootScope, PaginationServ
           if scope.wallet
             getWalletLogs()
             deregisterWatch()
-      else 
+      else
         scope.getWalletForMember(scope.member).then () ->
           getWalletLogs()
 

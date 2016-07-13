@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 #
 # Basket Directive
@@ -28,12 +28,12 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
     $scope.showBasketDetails = () ->
       if ($scope.bb.current_page == "basket") || ($scope.bb.current_page == "checkout")
         return false
-      else            
+      else
         modalInstance = $modal.open
           templateUrl: $scope.getPartial "_basket_details"
           scope: $scope
           controller: BasketInstanceCtrl
-          resolve: 
+          resolve:
             basket: ->
               $scope.bb.basket
 

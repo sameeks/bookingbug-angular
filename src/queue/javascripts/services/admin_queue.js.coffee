@@ -1,7 +1,6 @@
 angular.module('BBQueue.Services').factory 'AdminQueueService', ($q, $window, halClient, BBModel) ->
 
   query: (prms) ->
-      
     deferred = $q.defer()
     prms.company.$get('client_queues').then (collection) ->
       collection.$get('client_queues').then (client_queues) ->

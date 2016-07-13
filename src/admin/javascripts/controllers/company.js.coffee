@@ -1,12 +1,12 @@
-angular.module('BBAdmin.Controllers').controller 'CompanyList',
-($scope,  $rootScope, $location) ->
+angular.module('BBAdmin.Controllers').controller 'CompanyList', ($scope,
+  $rootScope, $location) ->
 
-  $scope.selectedCategory = null;
+  $scope.selectedCategory = null
 
   $rootScope.connection_started.then =>
-    date = moment();
+    date = moment()
     $scope.current_date = date
-    $scope.companies = $scope.bb.company.companies;
+    $scope.companies = $scope.bb.company.companies
     if !$scope.companies || $scope.companies.length == 0
       $scope.companies = [$scope.bb.company]
     $scope.dates = []
@@ -18,7 +18,7 @@ angular.module('BBAdmin.Controllers').controller 'CompanyList',
       d.add(1, 'days')
 
   $scope.selectCompany = (item) ->
-    window.location = "/view/dashboard/pick_company/" + item.id;
+    window.location = "/view/dashboard/pick_company/" + item.id
 #    $location.path(route)
 
   $scope.advance_date = (num) ->

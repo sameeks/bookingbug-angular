@@ -29,8 +29,9 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
   controller : 'Event'
 
 
-angular.module('BB.Controllers').controller 'Event',
-($scope, $attrs, $rootScope, $q, PageControllerService, ValidatorService, FormDataStoreService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
+  $rootScope, EventService, $q, PageControllerService, BBModel,
+  ValidatorService, FormDataStoreService, LoadingService) ->
 
   $scope.controller = "public.controllers.Event"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -84,6 +85,7 @@ angular.module('BB.Controllers').controller 'Event',
     , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
+
   ###**
   * @ngdoc method
   * @name selectTickets
@@ -130,11 +132,28 @@ angular.module('BB.Controllers').controller 'Event',
       $scope.selected_tickets = true
       $scope.stopTicketWatch()
       $scope.tickets = (item.tickets for item in $scope.bb.basket.items)
+      $scope.current_ticket_items = [] # the current
+      for item in $scope.bb.basket.timeItems()
+        $scope.current_ticket_items.push(item) if item.event_id == $scope.event.id
       $scope.$watch 'bb.basket.items', (items, olditems) ->
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
         item.tickets.price = item.totalPrice()
       , true
     , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+
+#    if $scope.bb.basket.timeItems()
+#      $scope.ticket_group = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
+
+
+      # this is for repeating through only the tickets on the most recent item added to basket
+
+ #     $scope.ticket_group = _.values($scope.ticket_group)
+
+ #     if $scope.ticket_group.length is 1
+ #       $scope.shown_tickets = $scope.ticket_group[0]
+ #     else
+ #       $scope.shown_tickets = _.last($scope.ticket_group)
+
 
 
   ###**
@@ -156,6 +175,7 @@ angular.module('BB.Controllers').controller 'Event',
       $scope.bb.current_item.ready = false
       $scope.decideNextPage(route)
       return true
+
 
   ###**
   * @ngdoc method
@@ -182,6 +202,7 @@ angular.module('BB.Controllers').controller 'Event',
       return true
     else
       return $scope.updateBasket()
+
 
 
   ###**
@@ -238,3 +259,4 @@ angular.module('BB.Controllers').controller 'Event',
       $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
       $scope.event.updatePrice()
     , true
+

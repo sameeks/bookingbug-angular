@@ -18,6 +18,10 @@
   font-size: 50px;
 }
 
+.bb-btn-link {
+  cursor: pointer;
+}
+
 .button-group{
   padding-top: 15px;
   .btn {
@@ -35,7 +39,18 @@
   }
 }
 
-.date-picker .input-group-btn .btn {
-  height: 36px;
-  margin-bottom: 15px;
+// .date-picker .input-group-btn .btn {
+//   height: 36px;
+//   margin-bottom: 15px;
+// }
+
+.btn {
+  .fa {
+    height: 18px;
+  }
+
+  &.btn-lg .fa {
+    height: 22px;
+  }
+
 }

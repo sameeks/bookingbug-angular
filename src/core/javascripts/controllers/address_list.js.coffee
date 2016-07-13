@@ -220,7 +220,7 @@ angular.module('BB.Controllers').controller 'AddressList',
             $scope.bb.address3 = address.addressLine3
           $scope.bb.address4 = address.town
           $scope.bb.address5 = address.county if address.county?
-          $scope.setLoaded($scope)
+          loader.setLoaded()
           return
         ,(err) ->
             $scope.show_complete_address = true

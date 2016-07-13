@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('BB.Services').factory 'QuestionService', ($window, QueryStringService, $bbug) ->
-  
+
   # grab url params
   defaults = QueryStringService() or {}
 
@@ -33,7 +33,7 @@ angular.module('BB.Services').factory 'QuestionService', ($window, QueryStringSe
         if !question.answer and defaults[id]
           question.answer = defaults[id]
     else
-      
+
       questions.answer = defaults[questions.id + ''] if defaults[questions.id + '']
 
 
@@ -92,7 +92,7 @@ angular.module('BB.Services').factory 'QuestionService', ($window, QueryStringSe
     for question in questions
       name = question.help_text
       question.answer = answers[name] if answers[name]
-      question.answer = answers[question.id + ''] if answers[question.id + ''] 
+      question.answer = answers[question.id + ''] if answers[question.id + '']
 
 
   storeDefaults = (obj) ->
@@ -102,7 +102,7 @@ angular.module('BB.Services').factory 'QuestionService', ($window, QueryStringSe
   checkConditionalQuestions = (questions) ->
     for q in questions
       if q.settings && q.settings.conditional_question
-        cond = findByQuestionId(questions, parseInt(q.settings.conditional_question)) 
+        cond = findByQuestionId(questions, parseInt(q.settings.conditional_question))
         if cond
           # check if the question has an answer which means "show"
           ans = cond.getAnswerId()

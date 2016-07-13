@@ -1,5 +1,5 @@
-angular.module('BBAdmin.Controllers').controller 'CategoryList',
-($scope,  $location,  $rootScope, BBModel) ->
+angular.module('BBAdmin.Controllers').controller 'CategoryList', ($scope,
+  $location,  $rootScope, BBModel) ->
 
   $rootScope.connection_started.then =>
     $scope.categories = BBModel.Category.$query($scope.bb.company)

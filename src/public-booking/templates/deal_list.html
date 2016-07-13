@@ -1,5 +1,5 @@
 <div bb-deals>
-  
+
   <h2 class="deal-list-heading">
     <span> Gift Certificates </span>
   </h2>
@@ -20,10 +20,10 @@
         <td>
           <p>
             {{item.deal.name}}
-            <br/> 
+            <br/>
              <form ng-if="!bb.company_settings.no_recipient" name="recipient_form" class="form-horizontal" role="form" bb-form-resettable bb-form novalidate>
               <div ng-hide="recipient_form.submitted && item.recipient">
-              <small> Add a Recipient <small>
+              <small> Add a Recipient </small>
               <br/>
               <p>
                 <label bb-question-label="question" for="recipient_name" class="control-label col-sm-4"> <small> Name: </small> </label> <input type="text" name="recipient_name" id="recipient_name" ng-model="recipient.name" ng-pattern="validator.alpha"/>
@@ -32,7 +32,7 @@
               <p>
                 <label bb-question-label="question" for="recipient_mail" class="control-label col-sm-4"><small> Email: </small> </label> <input type="email" name="recipient_mail" id="recipient_mail" ng-model="recipient.mail"/>
                 <br/>
-              </p> 
+              </p>
               <p>
                 <button ng-click="validator.validateForm(recipient_form) && addRecipient(item, recipient)"> Add </button>
                 <br/>
@@ -61,7 +61,7 @@
 </div>
 
 <div class="panel panel-default bb-event-card" ng-repeat="deal in deals">
-  <div class="panel-body">  
+  <div class="panel-body">
     <div class="row vertical-row-align">
 
       <div class="col-sm-9 col-xs-12 deal-details">

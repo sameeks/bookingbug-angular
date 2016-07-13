@@ -28,7 +28,8 @@ angular.module('BBQueue.Services', [
 angular.module('BBQueueMockE2E', ['BBQueue', 'BBAdminMockE2E'])
 
 
-queueapp.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig, AdminLoginService) ->
+queueapp.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug,
+  $document, $sessionStorage, AppConfig, AdminLoginService) ->
 
   # AdminLoginService.checkLogin()
   # if $rootScope.user && $rootScope.user.company_id

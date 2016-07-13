@@ -1,6 +1,6 @@
-<div bb-payment ng-non-bindable class="bb-payment" ng-init="checkStepTitle('Pay')">
+<div bb-payment class="bb-payment">
 
-  <iframe id="bb-widget-payment" width="100% "scrolling="no" frameborder="0" src="{{url}}" name="Payment Form"></iframe>
+  <iframe id="bb-widget-payment" width="100% "scrolling="no" frameborder="0" ng-src="{{url}}" name="Payment Form"></iframe>
   <script type="text/javascript">
     $('#bb-widget-payment').iFrameResize({checkOrigin:false, log: false, enablePublicMethods: true});
   </script>

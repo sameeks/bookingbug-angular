@@ -17,8 +17,6 @@ angular.module('BBQueue').directive 'bbIfLogin', ($modal, $log, $q,
   link = (scope, element, attrs) ->
   {
     compile: compile
-#    controller: 'bbQueuers'
-    # templateUrl: 'queuer_table.html'
   }
 
 
@@ -49,7 +47,6 @@ angular.module('BBQueue').directive 'bbQueues', ($modal, $log,
   {
     link: link
     controller: 'bbQueues'
-    # templateUrl: 'queuer_table.html'
   }
 
 
@@ -64,5 +61,4 @@ angular.module('BBQueue').directive 'bbQueueServers', ($modal, $log,
   {
     link: link
     controller: 'bbQueueServers'
-    # templateUrl: 'queuer_table.html'
   }

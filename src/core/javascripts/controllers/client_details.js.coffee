@@ -36,14 +36,28 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbClientDetails', () ->
+angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache, $compile) ->
   restrict: 'AE'
   replace: true
   scope : true
+  transclude: true
   controller : 'ClientDetails'
+  link: (scope, element, attrs, controller, transclude) ->
 
-angular.module('BB.Controllers').controller 'ClientDetails',
-($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
+    transclude scope, (clone) =>
+      # if there's content compile that or grab the week_calendar template
+      has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+      if has_content
+        element.html(clone).show()
+      else
+        $q.when($templateCache.get('client_form.html')).then (template) ->
+          element.html(template).show()
+          $compile(element.contents())(scope)
+
+
+angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
+  $rootScope, LoginService, ValidatorService, AlertService, LoadingService,
+  BBModel) ->
 
   $scope.controller = "public.controllers.ClientDetails"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -56,7 +70,23 @@ angular.module('BB.Controllers').controller 'ClientDetails',
   $scope.suppress_client_create = $attrs.bbSuppressCreate? or options.suppress_client_create
 
   $rootScope.connection_started.then =>
+    $scope.initClientDetails()
 
+  , (err) ->  loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+
+  $rootScope.$watch 'member', (oldmem, newmem) =>
+    if !$scope.client.valid() && LoginService.isLoggedIn()
+      $scope.setClient(new BBModel.Client(LoginService.member()._data))
+
+  ###**
+  * @ngdoc method
+  * @name initClientDetails
+  * @methodOf BB.Directives:bbClientDetails
+  * @description
+  * initialise the client object
+  ###
+  $scope.initClientDetails = () ->
     if !$scope.client.valid() && LoginService.isLoggedIn()
       # make sure we set the client to the currently logged in member
       # we should also just check the logged in member is a member of the company they are currently booking with
@@ -79,13 +109,6 @@ angular.module('BB.Controllers').controller 'ClientDetails',
         BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
         loader.setLoaded()
       , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-
-  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-
-
-  $rootScope.$watch 'member', (oldmem, newmem) =>
-    if !$scope.client.valid() && LoginService.isLoggedIn()
-      $scope.setClient(new BBModel.Client(LoginService.member()._data))
 
   ###**
   * @ngdoc method

@@ -1,4 +1,5 @@
 angular.module('BBMember').directive 'bbMemberPurchases', ($rootScope, PaginationService) ->
+
   templateUrl: 'member_purchases.html'
   scope: true
   controller: 'MemberPurchases'

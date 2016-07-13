@@ -4,7 +4,7 @@ angular.module('BB.Directives').directive 'pricepicker', ()->
 
     $scope.$watch 'price', (price) ->
       $scope.updateModel(price) if price?
-        
+
 
   link = (scope, element, attrs, ngModel) ->
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -40,7 +40,7 @@ angular.module('BB.Models').factory "PurchaseItemModel", ($q, BBModel, BaseModel
     * @returns {object} The returned describe
     ###
     describe: ->
-      @get('describe')    
+      @get('describe')
 
     ###**
     * @ngdoc method
@@ -52,7 +52,7 @@ angular.module('BB.Models').factory "PurchaseItemModel", ($q, BBModel, BaseModel
     * @returns {object} The returned full describe
     ###
     full_describe: ->
-      @get('full_describe')    
+      @get('full_describe')
 
     ###**
     * @ngdoc method
@@ -65,5 +65,5 @@ angular.module('BB.Models').factory "PurchaseItemModel", ($q, BBModel, BaseModel
     ###
     hasPrice: ->
       return (@price && @price > 0)
-      
+
 

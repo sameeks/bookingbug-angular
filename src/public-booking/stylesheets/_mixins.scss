@@ -25,6 +25,7 @@
    color: $c;
  }
  &:disabled{
+  border-color: darken($bc, 10%);
   background: darken($bc, 10%);
   opacity: .65;
   filter: alpha(opacity=65);

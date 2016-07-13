@@ -29,7 +29,7 @@ angular.module('BB.Services').factory 'QueryStringService', ($window) ->
 
 
     for hash in hashes
-      hash = hash.split('=');
+      hash = hash.split('=')
       # convert to number
       val = hash[1]
 
@@ -57,4 +57,4 @@ angular.module('BB.Services').factory 'QueryStringService', ($window) ->
 
     if keyName
       return varObj[keyName]
-    return varObj;
+    return varObj

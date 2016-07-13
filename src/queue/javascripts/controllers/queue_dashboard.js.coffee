@@ -1,5 +1,5 @@
-angular.module('BBQueue').controller 'bbQueueDashboardController',
-($scope, $log, $interval, $sessionStorage, ModalForm, AdminQueuerService, BBModel) ->
+angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope,
+  $log, $interval, $sessionStorage, ModalForm, AdminQueuerService, BBModel) ->
 
   $scope.loading = true
   $scope.waiting_for_queuers = false
@@ -17,8 +17,8 @@ angular.module('BBQueue').controller 'bbQueueDashboardController',
     , (err) ->
       $log.error err.data
       $scope.loading = false
-    $scope.pusherSubscribe();
-    $scope.getQueuers();
+    $scope.pusherSubscribe()
+    $scope.getQueuers()
 
   $scope.getQueuers = () ->
     return if $scope.waiting_for_queuers

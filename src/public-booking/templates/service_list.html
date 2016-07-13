@@ -1,8 +1,8 @@
 <div bb-services ng-init="checkStepTitle('Select a service')" class="bb-service-list">
   <div class="bb-subcontent">
 
-    <div ng-show="items.length > 8" bb-include="_service_list_filter">
-    </div>
+    <!-- <div ng-show="items.length > 8" bb-include="_service_list_filter">
+    </div> -->
 
     <div class="panel panel-default" ng-repeat="item in filtered_items">
       <div class="panel-body">
@@ -51,9 +51,9 @@
 </div>
 
 <div class="bb-step-navigation">
-  <div class="row"> 
+  <div class="row">
     <div class="col-sm-3">
       <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
     </div>
-  </div> 
+  </div>
 </div>

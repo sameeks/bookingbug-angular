@@ -217,7 +217,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
             m
         else
           [m,range].join()
-      , "")
+      , "").split(',')
 
     ###**
     * @ngdoc method
@@ -230,7 +230,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     ###
     filterRulesByDates: () ->
       _.pick @rules, (value, key) ->
-        key.match(/^\d{4}-\d{2}-\d{2}$/)
+        key.match(/^\d{4}-\d{2}-\d{2}$/) and value isnt "None"
 
     ###**
     * @ngdoc method
@@ -269,7 +269,7 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
     * @returns {array} Returns fullcalendar compatible events
     ###
     toEvents: (d) ->
-      if d
+      if d and @rules[d] isnt "None"
         _.map(@rules[d], (range) =>
           start: [d, @formatTime(range.split('-')[0])].join('T')
           end: [d, @formatTime(range.split('-')[1])].join('T')

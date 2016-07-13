@@ -1,4 +1,5 @@
-angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope, MemberLoginService, $templateCache, $q, $sessionStorage, halClient) ->
+angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope,
+  MemberLoginService, $templateCache, $q, $sessionStorage, halClient) ->
 
   loginMemberController = ($scope, $modalInstance, company_id) ->
     $scope.title = 'Login'

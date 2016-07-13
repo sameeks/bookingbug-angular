@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -15,7 +15,7 @@
 
 
 # helpful functions about a company
-angular.module('BB.Models').factory "AffiliateModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "AffiliateModel", ($q, BBModel, BaseModel, halClient, $rootScope) ->
 
   class Affiliate extends BaseModel
 
@@ -28,15 +28,25 @@ angular.module('BB.Models').factory "AffiliateModel", ($q, BBModel, BaseModel) -
     * @name getCompanyByRef
     * @methodOf BB.Models:Affiliate
     * @description
-    * Find a company in accordin to reference
+    * Find a company in according to reference
     *
     * @param {string} ref A reference to find a company based on it
     *
     * @returns {promise} A promise for the company reference
     ###
     getCompanyByRef: (ref) ->
+
+      prms = {
+        id: @cookie
+        reference: ref
+      }
+
+      href = "#{$rootScope.bb.api_url}/api/v1/affiliates/{id}/companies/{reference}"
+      uri = new UriTemplate(href).fillFromObject(prms || {})
+
       defer = $q.defer()
-      @$get('companies', {reference: ref}).then (company) ->
+
+      halClient.$get(uri, {}).then (company) ->
         if company
           defer.resolve(new BBModel.Company(company))
         else

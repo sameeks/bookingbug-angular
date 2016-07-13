@@ -12,11 +12,11 @@ app = angular.module('BB', [
   'ui.bootstrap',
   'ngSanitize',
   'ui.map',
-  'ui.router.util', 
+  'ui.router.util',
   'ngLocalData',
   'ngAnimate',
   'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
-  'angularFileUpload',
+  'ngFileUpload',
   'schemaForm',
   'uiGmapgoogle-maps',
   'angular.filter',
@@ -25,13 +25,20 @@ app = angular.module('BB', [
   'pascalprecht.translate',
   'vcRecaptcha',
   'slickCarousel'
-]);
+])
 
 
 # use this to inject application wide settings around the app
 app.value('AppConfig', {
   appId: 'f6b16c23',
   appKey: 'f0bc4f65f4fbfe7b4b3b7264b655f5eb'
+})
+
+# airbrake-js authentication
+app.value('AirbrakeConfig', {
+  projectId: '122836',
+  projectKey: 'e6d6710b2cf00be965e8452d6a384d37',
+  environment: if window.location.hostname is 'localhost' then 'development' else 'production'
 })
 
 if (window.use_no_conflict)
@@ -67,6 +74,9 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
 
   if (msie && msie <= 9) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
+
+
+  moment.fn.toISODate ||= -> this.locale('en').format('YYYY-MM-DD')
 
 
 app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig) ->
@@ -111,22 +121,6 @@ window.bookingbug =
     angular.injector(['BB.Services', 'BB.Models', 'ng'])
            .get('LoginService').logout(logout_opts)
     window.location.reload() if options.reload
-
-
-moment.locale('en', {
-    longDateFormat : {
-        LT: "h:mm A",
-        LTS: "h:mm:ss A",
-        L: "MM/DD/YYYY",
-        l: "M/D/YYYY",
-        LL: "MMMM Do YYYY",
-        ll: "MMM D YYYY",
-        LLL: "MMMM Do YYYY LT",
-        lll: "MMM D YYYY LT",
-        LLLL: "dddd Do MMMM[,] h.mma",
-        llll: "ddd, MMM D YYYY LT"
-    }
-  })
 
 # String::includes polyfill
 if !String::includes

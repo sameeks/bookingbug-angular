@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -18,6 +18,7 @@
 angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, BasketService) ->
 
   class Basket extends BaseModel
+
     constructor: (data, scope) ->
       if scope && scope.isAdmin
         @is_admin = scope.isAdmin
@@ -27,6 +28,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
         @parent_client_id = scope.parent_client.id
       @items = []
       super(data)
+      @reviewed = false
 
     ###**
     * @ngdoc method
@@ -37,11 +39,11 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     *
     ###
     addItem: (item) ->
-      # check if then item is already in the basket
+      # check if the item is already in the basket
       for i in @items
-        if i == item
+        if i is item
           return
-        if i.id && item.id && i.id == item.id
+        if i.id and item.id and i.id is item.id
           return
       @items.push(item)
 
@@ -72,14 +74,18 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name readyToCheckout
     * @methodOf BB.Models:Basket
     * @description
-    * Checks if items array is not empty, so it's ready for the checkout
+    * Use to check if the basket is ready to checkout
     *
-    * @returns {boolean} If items array is not empty
+    * @returns {boolean} Flag to indicate if basket is ready checkout
     ###
-    # should we try to checkout ?
     readyToCheckout: ->
-      if @items.length > 0
-        return true
+      if @items.length > 0 && @reviewed
+        ready = true
+        for i in @items
+          if not i.checkReady()
+            ready = false
+
+        ready
       else
         return false
 
@@ -88,7 +94,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @name timeItems
     * @methodOf BB.Models:Basket
     * @description
-    * Build an array of time items (i.e. event and appointment bookings)
+    * Returns an array of time items (i.e. event and appointment bookings)
     *
     * @returns {array}
     ###
@@ -515,3 +521,19 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
 
     $removeDeal: (company, params) ->
         BasketService.removeDeal(company, params)
+
+    ###**
+    * @ngdoc method
+    * @name voucherRemainder
+    * @methodOf BB.Models:Basket
+    * @description
+    * Remaining voucher value if used
+    *
+    * @returns {integer} remaining voucher value
+    ###
+    voucherRemainder : ->
+      amount = 0
+      for item in @items
+          amount += item.voucher_remainder if item.voucher_remainder
+      return amount
+

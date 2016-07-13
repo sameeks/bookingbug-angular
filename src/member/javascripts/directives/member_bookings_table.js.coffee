@@ -1,10 +1,12 @@
-angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $rootScope, MemberLoginService, MemberBookingService, $compile, $templateCache, ModalForm, BBModel, Dialog) ->
+angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log,
+  $rootScope, MemberLoginService, MemberBookingService, $compile,
+  $templateCache, ModalForm, BBModel, Dialog) ->
 
   controller = ($scope, $modal) ->
 
     $scope.loading = true
 
-    $scope.fields ||= ['datetime', 'details']
+    $scope.fields ||= ['date_order', 'details']
 
     $scope.$watch 'member', (member) ->
       getBookings($scope, member) if member?
@@ -54,14 +56,17 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
       $scope.bookings = _.map $scope.booking_models, (booking) ->
         id: booking.id
         date: moment(booking.datetime).format('YYYY-MM-DD')
-        datetime: moment(booking.datetime).format('ddd DD MMM YY HH:mm')
+        date_order: moment(booking.datetime).format('x')
+        datetime: moment(booking.datetime)
         details: booking.full_describe
 
     getBookings = ($scope, member) ->
       params =
-        start_date: $scope.startDate.format('YYYY-MM-DD')
-        end_date: $scope.endDate.format('YYYY-MM-DD') if $scope.endDate
-      BBModel.Member.Booking.$query(member, params).then (bookings) ->
+        start_date : $scope.startDate.format('YYYY-MM-DD')
+        start_time : $scope.startTime.format('HH:mm') if $scope.startTime
+        end_date   : $scope.endDate.format('YYYY-MM-DD') if $scope.endDate
+        end_time   : $scope.endTime.format('HH:mm') if $scope.endTime
+      member.$getBookings(params).then (bookings) ->
         $scope.booking_models = bookings
         $scope.setRows()
         $scope.loading = false
@@ -71,7 +76,9 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
 
     $scope.startDate ||= moment()
 
-    $scope.orderBy ||= 'datetime'
+    $scope.orderBy = $scope.defaultOrder
+    if not $scope.orderBy?
+      $scope.orderBy = 'date_order'
 
     $scope.now = moment().format('YYYY-MM-DD')
 
@@ -81,9 +88,12 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
     controller: controller
     templateUrl: 'member_bookings_table.html'
     scope:
-      apiUrl: '@'
-      fields: '=?'
-      member: '='
-      startDate: '=?'
-      endDate: '=?'
+      apiUrl:       '@'
+      fields:       '=?'
+      member:       '='
+      startDate:    '=?'
+      startTime:    '=?'
+      endDate:      '=?'
+      endTime:      '=?'
+      defaultOrder: '=?'
   }

@@ -20,8 +20,8 @@ angular.module('BB.Services').factory "DebugUtilsService",
 
     if data && data.$scope
       f = (scope) ->
-        console.log scope.$id;
-        console.log scope;
+        console.log scope.$id
+        console.log scope
 
         if scope.$$nextSibling
           f scope.$$nextSibling
@@ -46,7 +46,7 @@ angular.module('BB.Services').factory "DebugUtilsService",
 
         # display the element, scope and controller for the selected element
         $bbug($window).on 'dblclick', (e)->
-          scope = angular.element(e.target).scope();
+          scope = angular.element(e.target).scope()
           controller = scope.hasOwnProperty('controller')
           pscope = scope
 

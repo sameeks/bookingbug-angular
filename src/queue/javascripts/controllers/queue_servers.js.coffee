@@ -1,5 +1,5 @@
-angular.module('BBQueue').controller 'bbQueueServers',
-($scope, $log, AdminQueueService, ModalForm, BBModel) ->
+angular.module('BBQueue').controller 'bbQueueServers', ($scope, $log,
+  AdminQueueService, ModalForm, BBModel) ->
 
   $scope.loading = true
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -13,7 +13,8 @@
 ####
 
 
-angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel, BaseModel, ClientDetailsService) ->
+angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel,
+  BaseModel, ClientDetailsService) ->
 
   class ClientDetails extends BaseModel
 

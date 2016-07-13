@@ -1,9 +1,9 @@
-<form name="login_form" ng-submit="validator.validateForm(login_form) && submit(login_form)" class="form-horizontal" role="form" bb-form novalidate>
+<form name="login_form" ng-submit="validator.validateForm(login_form) && submit()" class="form-horizontal" role="form" bb-form novalidate>
 
     <div class="form-group" ng-class="{'has-error': login_form.email.$invalid && (!login_form.email.$pristine || login_form.submitted)}">
       <label for="email" class="control-label col-sm-4">Email:</label>
       <div class="col-sm-5">
-        <input type="text" name="email" id="email" required ng-model="login_form.email" class="form-control" ng-pattern="validator.getEmailPattern()" />
+        <input type="text" name="email" id="email" required ng-model="login.email" class="form-control" ng-pattern="validator.getEmailPattern()" />
       </div>
       <div class="col-sm-offset-4 messages">
         <div class="error-message" ng-show="login_form.email.$error.required && login_form.submitted">
@@ -18,7 +18,7 @@
     <div class="form-group" ng-class="{'has-error': login_form.password.$invalid && (!login_form.password.$pristine || login_form.submitted)}">
       <label for="password" class="control-label col-sm-4">Password:</label>
       <div class="col-sm-5">
-        <input type="password" name="password" id="password" required ng-model="login_form.password" class="form-control"  />
+        <input type="password" name="password" id="password" required ng-model="login.password" class="form-control"  />
       </div>
       <div class="col-sm-offset-4 messages">
         <div class="error-message" ng-show="login_form.password.$invalid && login_form.submitted">
@@ -31,7 +31,7 @@
       <div class="col-sm-offset-4 col-sm-5">
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="login_form.persist_login"> Remember me
+            <input type="checkbox" ng-model="login.persist_login"> Remember me
           </label>
         </div>
       </div> 

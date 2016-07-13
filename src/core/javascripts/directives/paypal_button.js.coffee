@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 # Directives
 app = angular.module 'BB.Directives'

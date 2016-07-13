@@ -1,6 +1,8 @@
-<div class="form-group" ng-class="{'has-error': hasError()}">
-
-  <div datetimepicker ng-model="$$value$$" schema-validate="form"></div>
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': !hasError()}">
+	<label class="control-label">{{form.title}}</label>
+	<p class="input-group">
+  	<div bb-date-time-picker date="$$value$$"></div>
+	</p>	
 
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>

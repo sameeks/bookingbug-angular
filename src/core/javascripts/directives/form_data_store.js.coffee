@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 # Form Data Store Directive  this does very little apart from register the
 # widget, so the user's form choices are stored.

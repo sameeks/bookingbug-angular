@@ -1,9 +1,8 @@
-angular.module('BB.Directives').directive 'bbMembershipLevels',
-($rootScope, BBModel) ->
+angular.module('BB.Directives').directive 'bbMembershipLevels', ($rootScope, BBModel) ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller = ($scope, $element, $attrs, LoadingService) ->
+  controller: ($scope, $element, $attrs, LoadingService) ->
 
     loader = LoadingService.$loader($scope)
 

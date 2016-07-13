@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 ###**
 * @ngdoc service
@@ -14,8 +14,8 @@
 * @property {integer} order The person order
 ####
 
-angular.module('BB.Models').factory "Admin.PersonModel",
-($q, AdminPersonService, BBModel, BaseModel, PersonModel) ->
+angular.module('BB.Models').factory "Admin.PersonModel", ($q,
+  AdminPersonService, BBModel, BaseModel, PersonModel) ->
 
   class Admin_Person extends PersonModel
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -33,8 +33,9 @@ angular.module('BB.Directives').directive 'bbGetAvailability', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'GetAvailability',
-($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, halClient) ->
+angular.module('BB.Controllers').controller 'GetAvailability', ($scope,
+  $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel,
+  halClient) ->
 
   ###**
   * @ngdoc method

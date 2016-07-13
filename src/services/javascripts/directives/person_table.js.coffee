@@ -1,5 +1,5 @@
-angular.module('BBAdminServices').directive 'personTable',
-($log, ModalForm, AdminCompanyService, BBModel) ->
+angular.module('BBAdminServices').directive 'personTable', ($log, ModalForm,
+  AdminCompanyService, BBModel) ->
 
   controller = ($scope) ->
 

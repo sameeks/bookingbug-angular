@@ -1,5 +1,9 @@
 .form-control, .form-question {
-  @include placeholder(#CCC);
+  @include placeholder($bb-gray);
+}
+
+.form-control[disabled]{
+  cursor: default;
 }
 
 .bb-question-heading {
@@ -16,7 +20,7 @@
 }
 
 .booking-form-header {
-  border-bottom: 1px solid #DDD;
+  border-bottom: 1px solid $bb-border;
   padding-bottom: 10px;
   margin-bottom: 20px;
   font-size: $font-size-h3;
@@ -100,19 +104,17 @@
   }
 }
 
+/* Bootstrap form-inline enhancements */
 .form-inline {
+  .bb-label {
+    padding-right: 5px;
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: normal;
+  }
 
   .input-group .input-group-btn {
     width: 1%;
-  }
-
-  .form-group {
-    padding-right: 15px;
-    padding-bottom: 15px;
-    @media (max-width: $screen-xs-max) {
-      padding-right: 0;
-      padding-bottom: 0;
-    }
   }
 
 }

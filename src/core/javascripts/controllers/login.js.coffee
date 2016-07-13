@@ -33,8 +33,9 @@ angular.module('BB.Directives').directive 'bbLogin', () ->
   controller : 'Login'
 
 
-angular.module('BB.Controllers').controller 'Login',
-($scope, $rootScope, $q, $location, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'Login', ($scope, $rootScope, $q,
+  $location, LoginService, ValidatorService, AlertService, LoadingService,
+  BBModel) ->
 
   $scope.controller = "public.controllers.Login"
   $scope.validator = ValidatorService
@@ -132,5 +133,5 @@ angular.module('BB.Controllers').controller 'Login',
         $scope.error = err
         AlertService.raise('PASSWORD_RESET_FAILED')
     else
-      $scope.password_error = true
       AlertService.raise('PASSWORD_MISMATCH')
+

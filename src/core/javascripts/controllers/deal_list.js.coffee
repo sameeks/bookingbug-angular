@@ -29,8 +29,9 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
   scope : true
   controller : 'DealList'
 
-angular.module('BB.Controllers').controller 'DealList',
-($scope, $rootScope, $q, $modal, AlertService, FormDataStoreService, ValidatorService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope,
+  $q, $modal, AlertService, FormDataStoreService, ValidatorService,
+  LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]

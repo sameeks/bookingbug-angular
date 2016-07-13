@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular.module('BB.Models').factory "ProductModel", ($q, BBModel, BaseModel) ->
 

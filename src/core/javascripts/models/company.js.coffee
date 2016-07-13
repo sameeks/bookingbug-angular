@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -24,7 +24,8 @@
 
 
 # helpful functions about a company
-angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, halClient, AppConfig, $sessionStorage, CompanyService) ->
+angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel,
+  halClient, AppConfig, $sessionStorage, CompanyService) ->
 
   class Company extends BaseModel
 
@@ -135,12 +136,19 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
               'App-Id' : AppConfig.appId
               'App-Key' : AppConfig.appKey
               'Auth-Token' : $sessionStorage.getItem('auth_token')
-        channelName = "private-c#{@id}-w#{@numeric_widget_id}"
-        unless @pusher.channel(channelName)?
-          @pusher_channel = @pusher.subscribe(channelName)
-          @pusher_channel.bind 'booking', callback
-          @pusher_channel.bind 'cancellation', callback
-          @pusher_channel.bind 'updating', callback
+
+      channelName = "private-c#{@id}-w#{@numeric_widget_id}"
+
+      # Nuke the channel if it exists, must be done if this is to be used in multiple pages
+      # this is being delt differently in the newer implementation
+      if @pusher.channel(channelName)?
+        @pusher.unsubscribe(channelName)
+
+      @pusher_channel = @pusher.subscribe(channelName)
+      @pusher_channel.bind 'booking', callback
+      @pusher_channel.bind 'cancellation', callback
+      @pusher_channel.bind 'updating', callback
+
 
     ###**
     * @ngdoc method

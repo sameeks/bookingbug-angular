@@ -1,5 +1,5 @@
-angular.module('BBAdminServices').directive 'serviceTable',
-( $modal, $log, ModalForm, AdminCompanyService, BBModel) ->
+angular.module('BBAdminServices').directive 'serviceTable', ($modal, $log,
+  ModalForm, AdminCompanyService, BBModel) ->
 
   controller = ($scope) ->
     $scope.fields = ['id', 'name']
@@ -28,6 +28,14 @@ angular.module('BBAdminServices').directive 'serviceTable',
       ModalForm.edit
         model: service
         title: 'Edit Service'
+
+    $scope.newBooking = (service) ->
+      ModalForm.book
+        model: service
+        company: $scope.company
+        title: 'New Booking'
+        success: (booking) ->
+          $log.info 'Created new booking ', booking
 
   link = (scope, element, attrs) ->
     if scope.company

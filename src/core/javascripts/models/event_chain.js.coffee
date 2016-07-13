@@ -1,6 +1,4 @@
-
-
-'use strict';
+'use strict'
 
 
 ###**
@@ -22,7 +20,8 @@
 ####
 
 
-angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, EventChainService) ->
+angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel,
+  EventChainService) ->
 
   class EventChain extends BaseModel
 

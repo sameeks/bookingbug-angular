@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -22,7 +22,7 @@ angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel
     item: null
 
     promise: null
-    
+
 
     constructor: (data) ->
       super

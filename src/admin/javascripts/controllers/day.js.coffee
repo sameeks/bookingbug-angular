@@ -1,15 +1,15 @@
-'use strict';
+'use strict'
 
-angular.module('BBAdmin.Controllers').controller 'DashDayList',
-($scope, $rootScope, $q, AdminDayService) ->
+angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,
+  $rootScope, $q, AdminDayService) ->
 
   $scope.init = (company_id) =>
-    $scope.inline_items = "";
+    $scope.inline_items = ""
     if company_id
       $scope.bb.company_id = company_id
     if !$scope.current_date
-      $scope.current_date = moment().startOf('month');
-    date = $scope.current_date;
+      $scope.current_date = moment().startOf('month')
+    date = $scope.current_date
     prms = {date:date.format('DD-MM-YYYY'), company_id:$scope.bb.company_id}
     if ($scope.service_id)
       prms.service_id = $scope.service_id

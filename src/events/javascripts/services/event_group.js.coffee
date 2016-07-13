@@ -13,5 +13,3 @@ angular.module('BBAdminEvents').factory 'AdminEventGroupService',  ($q, BBModel)
       defer.reject(err)
     defer.promise
 
-
-

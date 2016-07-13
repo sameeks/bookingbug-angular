@@ -1,5 +1,5 @@
-angular.module('BBAdmin.Controllers').controller 'DashboardContainer',
-($scope, $rootScope, $location, $modal) ->
+angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope,
+  $rootScope, $location, $modal) ->
 
   $scope.selectedBooking = null
   $scope.poppedBooking = null
@@ -16,12 +16,12 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer',
       scope: $scope,
       backdrop: true,
       resolve: {
-        items: () => {booking: booking};
+        items: () => {booking: booking}
       }
     }
 
     modalInstance.result.then (selectedItem) =>
-      $scope.selected = selectedItem;
+      $scope.selected = selectedItem
     , () =>
       console.log('Modal dismissed at: ' + new Date())
 
@@ -30,9 +30,9 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer',
     $scope.ok = () ->
       if items.booking && items.booking.self
         items.booking.$update()
-      $modalInstance.close();
+      $modalInstance.close()
     $scope.cancel = () ->
-      $modalInstance.dismiss('cancel');
+      $modalInstance.dismiss('cancel')
 
   # a popup performing an action on a time, possible blocking, or mkaing a new booking
   $scope.popupTimeAction = (prms) ->
@@ -43,6 +43,6 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer',
       scope: $scope,
       backdrop: false,
       resolve: {
-        items: () => prms;
+        items: () => prms
       }
     }
