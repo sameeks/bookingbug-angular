@@ -9,31 +9,31 @@
 ###
 angular.module('BBAdminDashboard.config-iframe.controllers')
 .controller 'ConfigIframeEventSettingsPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'CONFIG_PAGE.EVENT_SETTINGS.TITLE'
+  $scope.pageHeader = 'CONFIG_IFRAME_PAGE.EVENT_SETTINGS.TITLE'
 
   $scope.tabs = [
     {
-      name: 'CONFIG_PAGE.EVENT_SETTINGS.TAB_COURSES',
+      name: 'CONFIG_IFRAME_PAGE.EVENT_SETTINGS.TAB_COURSES',
       icon: 'fa fa-clipboard',
       path: 'config.event-settings.page({path: "sessions/courses"})'
     },
     {
-      name: 'CONFIG_PAGE.EVENT_SETTINGS.TAB_SINGLE_EVENTS',
+      name: 'CONFIG_IFRAME_PAGE.EVENT_SETTINGS.TAB_SINGLE_EVENTS',
       icon: 'fa fa-ticket',
       path: 'config.event-settings.page({path: "sessions/events"})'
     },
     {
-      name: 'CONFIG_PAGE.EVENT_SETTINGS.TAB_REGULAR_EVENTS',
+      name: 'CONFIG_IFRAME_PAGE.EVENT_SETTINGS.TAB_REGULAR_EVENTS',
       icon: 'fa fa-calendar',
       path: 'config.event-settings.page({path: "sessions/recurring"})'
     },
     {
-      name: 'CONFIG_PAGE.EVENT_SETTINGS.TAB_GROUPS',
+      name: 'CONFIG_IFRAME_PAGE.EVENT_SETTINGS.TAB_GROUPS',
       icon: 'fa fa-object-group',
       path: 'config.event-settings.page({path: "sessions/types"})'
     },
     {
-      name: 'CONFIG_PAGE.EVENT_SETTINGS.TAB_TEMPLATES',
+      name: 'CONFIG_IFRAME_PAGE.EVENT_SETTINGS.TAB_TEMPLATES',
       icon: 'fa fa-folder-open',
       path: 'config.event-settings.page({path: "sessions/template"})'
     }

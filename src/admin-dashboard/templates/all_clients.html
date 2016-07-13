@@ -1,7 +1,5 @@
 <section class="content-header">
-  <h1>
-      Customers
-  </h1>
+  <h1 translate>CLIENTS_PAGE.CLIENTS</h1>
 </section>
 <section class="content">
   <div class="box">
@@ -10,10 +8,10 @@
          filter-by="clientsOptions.search" items="clients" page-items="per_page" total-items="total_entries" on-data-required="getClients(currentPage, filterBy, filterByFields, orderBy, orderByReverse)" role="grid">
         <thead>
           <tr role="row">
-            <th field-name="name" ></th>
-            <th field-name="email"></th>
-            <th field-name="mobile"></th>
-            <th><div class="tr-ng-title">Actions</div></th>
+            <th field-name="name" display-name="{{'CLIENTS_PAGE.NAME' | translate}}"></th>
+            <th field-name="email" display-name="{{'CLIENTS_PAGE.EMAIL' | translate}}"></th>
+            <th field-name="mobile" display-name="{{'CLIENTS_PAGE.MOBILE' | translate}}"></th>
+            <th width="60" display-align="center"><div class="tr-ng-title">{{'CLIENTS_PAGE.ACTIONS' | translate}}</div></th>
           </tr>
         </thead>
         <tbody>
@@ -23,8 +21,8 @@
             </td>
             <td field-name="email" ng-bind-html="gridItem.email | linky" />
             <td field-name="mobile"></td>
-            <td class="text-center">
-              <a class="btn btn-xs btn-default" ui-sref="clients.edit({id: gridItem.id})"><i class="fa fa-pencil"></i> Edit</a>
+            <td display-align="center">
+              <a class="btn btn-xs btn-default" ui-sref="clients.edit({id: gridItem.id})"><i class="fa fa-pencil"></i> <span translate>CLIENTS_PAGE.EDIT</span></a>
             </td>
           </tr>
         </tbody>

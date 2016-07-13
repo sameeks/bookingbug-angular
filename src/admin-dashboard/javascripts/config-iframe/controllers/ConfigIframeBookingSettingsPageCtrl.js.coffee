@@ -9,26 +9,26 @@
 ###
 angular.module('BBAdminDashboard.config-iframe.controllers')
 .controller 'ConfigIframeBookingSettingsPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'CONFIG_PAGE.BOOKING_SETTINGS.TITLE'
+  $scope.pageHeader = 'CONFIG_IFRAME_PAGE.BOOKING_SETTINGS.TITLE'
 
   $scope.tabs = [
     {
-      name: 'CONFIG_PAGE.BOOKING_SETTINGS.TAB_QUESTIONS',
+      name: 'CONFIG_IFRAME_PAGE.BOOKING_SETTINGS.TAB_QUESTIONS',
       icon: 'fa fa-question-circle',
       path: 'config.booking-settings.page({path: "detail_type"})'
     },
     {
-      name: 'CONFIG_PAGE.BOOKING_SETTINGS.TAB_BOOKING_TEXT',
+      name: 'CONFIG_IFRAME_PAGE.BOOKING_SETTINGS.TAB_BOOKING_TEXT',
       icon: 'fa fa-file-text',
       path: 'config.booking-settings.page({path: "conf/text/text_edit"})'
     },
     {
-      name: 'CONFIG_PAGE.BOOKING_SETTINGS.TAB_ADDRESSES',
+      name: 'CONFIG_IFRAME_PAGE.BOOKING_SETTINGS.TAB_ADDRESSES',
       icon: 'fa fa-building-o',
       path: 'config.booking-settings.page({path: "address"})'
     },
     {
-      name: 'CONFIG_PAGE.BOOKING_SETTINGS.TAB_IMAGES',
+      name: 'CONFIG_IFRAME_PAGE.BOOKING_SETTINGS.TAB_IMAGES',
       icon: 'fa fa-picture-o',
       path: 'config.booking-settings.page({path: "media/image/all"})'
     }

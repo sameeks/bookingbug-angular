@@ -13,8 +13,8 @@
 angular.module('BBAdminDashboard.directives').directive 'adminLanguagePicker', [() ->
   {
     restrict: 'A'
-    templateUrl: 'core/admin-language-picker.html'  
-    controller: ['$scope', '$translate', 'AdminCoreOptions', ($scope, $translate, AdminCoreOptions) ->
+    templateUrl: 'core/admin-language-picker.html'
+    controller: ['$scope', '$translate', 'AdminCoreOptions', '$rootScope', ($scope, $translate, AdminCoreOptions, $rootScope) ->
       $scope.availableLanguages = []
       $scope.language = {
         selected: {
@@ -30,8 +30,9 @@ angular.module('BBAdminDashboard.directives').directive 'adminLanguagePicker', [
         }
 
       $scope.pickLanguage = (language) ->
-        $translate.use language    
-    ]  
+        $translate.use language
+        $rootScope.$broadcast 'LanguagePicker:changeLanguage'
+    ]
     link: (scope, element, attrs) ->
       # hide language picker if only one language is available
       if scope.availableLanguages.length <= 1

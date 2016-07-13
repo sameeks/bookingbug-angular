@@ -27,7 +27,7 @@ angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', [ ->
   options = {
     default_language      : 'en',
     use_browser_language  : true,
-    available_languages   : ['en','es'],
+    available_languages   : ['en'],
     available_language_associations: {
       'en_*': 'en'
     },

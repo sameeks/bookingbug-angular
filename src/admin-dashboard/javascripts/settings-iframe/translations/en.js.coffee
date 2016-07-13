@@ -10,7 +10,20 @@
 angular.module('BBAdminDashboard.settings-iframe.translations')
 .config ['$translateProvider', ($translateProvider)->
 	$translateProvider.translations('en',{
-    'SETTINGS_PAGE': {
+    'SIDE_NAV': {
+      'SETTINGS_IFRAME_PAGE': {
+        'ACCOUNT_SETTINGS'  : 'Account settings',
+        'MY_BUSINESS'       : 'My business',
+        'BASIC_SETTINGS'    : 'Basic settings',
+        'ADVANCED_SETTINGS' : 'Advanced settings',
+        'INTEGRATIONS'      : 'Integrations',
+        'IMAGES'            : 'Images',
+        'USERS_ADMINS'      : 'Users &amp; Admins',
+        'ANNOUNCEMENTS'     : 'Announcements',
+        'SUBSCRIPTION'      : 'Subscription'
+      }
+    },
+    'SETTINGS_IFRAME_PAGE': {
       'BASIC_SETTINGS': {
         'TITLE'              : 'Settings',
         'TAB_BUSINESS'       : 'Business',

@@ -9,26 +9,26 @@
 ###
 angular.module('BBAdminDashboard.settings-iframe.controllers')
 .controller 'SettingsIframeAdvancedSettingsPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'SETTINGS_PAGE.ADVANCED_SETTINGS.TITLE'
+  $scope.pageHeader = 'SETTINGS_IFRAME_PAGE.ADVANCED_SETTINGS.TITLE'
 
   $scope.tabs = [
     {
-      name: 'SETTINGS_PAGE.ADVANCED_SETTINGS.TAB_ONLINE_PAYMENTS',
+      name: 'SETTINGS_IFRAME_PAGE.ADVANCED_SETTINGS.TAB_ONLINE_PAYMENTS',
       icon: 'fa fa-credit-card',
       path: 'settings.advanced-settings.page({path: "conf/payment/payment_edit"})'
     },
     {
-      name: 'SETTINGS_PAGE.ADVANCED_SETTINGS.TAB_ACCOUNTING_INTEGRATIONS',
+      name: 'SETTINGS_IFRAME_PAGE.ADVANCED_SETTINGS.TAB_ACCOUNTING_INTEGRATIONS',
       icon: 'fa fa-pencil-square-o',
       path: 'settings.advanced-settings.page({path: "conf/accounting/accounting_integration"})'
     },
     {
-      name: 'SETTINGS_PAGE.ADVANCED_SETTINGS.TAB_BUSINESS_QUESTIONS',
+      name: 'SETTINGS_IFRAME_PAGE.ADVANCED_SETTINGS.TAB_BUSINESS_QUESTIONS',
       icon: 'fa fa-question',
       path: 'settings.advanced-settings.page({path: "conf/extra_question"})'
     },
     {
-      name: 'SETTINGS_PAGE.ADVANCED_SETTINGS.TAB_API_SETTINGS',
+      name: 'SETTINGS_IFRAME_PAGE.ADVANCED_SETTINGS.TAB_API_SETTINGS',
       icon: 'fa fa-code',
       path: 'settings.advanced-settings.page({path: "conf/developer/parameter"})'
     }

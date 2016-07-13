@@ -3,7 +3,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     AdminBookingPopup, $window, $bbug, ColorPalette, Dialog,
     $timeout, $compile, $templateCache, PrePostTime, $filter) ->
 
-  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources) ->
+  controller = ($scope, $rootScope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources, $translate) ->
 
     filters = {
       requestedAssets : ProcessAssetsFilter($state.params.assets)
@@ -57,6 +57,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         minTime: $scope.options.min_time
         maxTime: $scope.options.max_time
         height: 'auto'
+        buttonText: {
+          today: $translate.instant('CALENDAR_PAGE.TODAY')
+        }
         header:
           left: 'today,prev,next'
           center: 'title'
@@ -65,16 +68,16 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         views:
           agendaWeek:
             slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
-            buttonText: 'Week'
+            buttonText: $translate.instant('CALENDAR_PAGE.WEEK')
             groupByDateAndResource: false
           month:
             eventLimit: 5
-            buttonText: 'Month'
+            buttonText: $translate.instant('CALENDAR_PAGE.MONTH')
           timelineDay:
             slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
             eventOverlap: false
             slotWidth: 25
-            buttonText: 'Day (' + $scope.options.cal_slot_duration + 'm)'
+            buttonText: $translate.instant('CALENDAR_PAGE.DAY', {minutes: $scope.options.cal_slot_duration})
             resourceAreaWidth: '18%'
         resourceGroupField: 'group'
         resourceLabelText: ' '
@@ -238,6 +241,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           BBAssets(company).then((assets)->
             for asset in assets
               asset.id = asset.identifier
+              asset.group = $translate.instant('CALENDAR_PAGE.' + asset.group.toUpperCase())
 
             $scope.loading = false
             callback(assets)
@@ -318,6 +322,12 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
 
     $scope.$on 'newCheckout', () ->
       uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+
+    $rootScope.$on 'LanguagePicker:changeLanguage', () ->
+      # Horrible hack refresh page because FUllcalendar doesnt have a rerender method
+      #  we have to refresh the state to load new translation
+      $state.go($state.current, {}, {reload: true})
+
 
   link = (scope, element, attrs) ->
 

@@ -10,7 +10,16 @@
 angular.module('BBAdminDashboard.config-iframe.translations')
 .config ['$translateProvider', ($translateProvider)->
 	$translateProvider.translations('en',{
-    'CONFIG_PAGE': {
+    'SIDE_NAV': {
+      'CONFIG_IFRAME_PAGE': {
+        'CONFIG'           : 'Config',
+        'YOUR_BUSINESS'    : 'Your business',
+        'EVENT_SETTINGS'   : 'Event settings',
+        'PROMOTIONS'       : 'Promotions',
+        'BOOKING_SETTINGS' : 'Booking settings',
+      }
+    },
+    'CONFIG_IFRAME_PAGE': {
       'BUSINESS': {
         'TITLE'              : 'Configure: Business',
         'TAB_STAFF'          : 'Staff',
