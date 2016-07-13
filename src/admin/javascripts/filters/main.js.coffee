@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 
-bbAdminFilters = angular.module('BBAdmin.Filters', []);
+bbAdminFilters = angular.module('BBAdmin.Filters', [])
 
 
 bbAdminFilters.filter 'rag', ->

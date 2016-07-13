@@ -13,7 +13,6 @@ app = angular.module('BB', [
   'ngSanitize',
   'ui.map',
   'ui.router.util',
-  'ngLocalData',
   'ngAnimate',
   'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
   'ngFileUpload',
@@ -97,12 +96,10 @@ app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $docu
 
 angular.module('BB.Services', [
   'ngResource',
-  'ngSanitize',
-  'ngLocalData'
+  'ngSanitize'
 ])
 
 angular.module('BB.Controllers', [
-  'ngLocalData',
   'ngSanitize'
 ])
 

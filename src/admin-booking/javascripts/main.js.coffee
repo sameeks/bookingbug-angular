@@ -14,11 +14,9 @@ angular.module('BBAdminBooking.Directives', [])
 angular.module('BBAdminBooking.Services', [
   'ngResource',
   'ngSanitize'
-  'ngLocalData'
 ])
 
 angular.module('BBAdminBooking.Controllers', [
-  'ngLocalData',
   'ngSanitize'
 ])
 

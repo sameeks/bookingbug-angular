@@ -8,7 +8,7 @@
 * Controller for the publish page
 ###
 angular.module('BBAdminDashboard.publish-iframe.controllers')
-.controller 'PublishIframePageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
+.controller 'PublishIframePageCtrl', ($scope, $state, $rootScope) ->
 
   $scope.parent_state = $state.is("publish")
   $scope.path = "conf"
@@ -17,4 +17,4 @@ angular.module('BBAdminDashboard.publish-iframe.controllers')
     $scope.parent_state = false
     if (toState.name == "setting")
       $scope.parent_state = true
-]
+

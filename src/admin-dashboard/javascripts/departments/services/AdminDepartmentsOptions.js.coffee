@@ -22,7 +22,8 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.departments.services').provider 'AdminDepartmentsOptions', [ ->
+angular.module('BBAdminDashboard.departments.services').provider 'AdminDepartmentsOptions', ->
+
   # This list of options is meant to grow
   options = {
     use_default_states : true
@@ -43,4 +44,4 @@ angular.module('BBAdminDashboard.departments.services').provider 'AdminDepartmen
     options
 
   return
-]
+

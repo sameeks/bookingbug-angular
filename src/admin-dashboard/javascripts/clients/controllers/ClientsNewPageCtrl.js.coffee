@@ -8,6 +8,4 @@
 * Controller for the clients new page
 ###
 angular.module('BBAdminDashboard.clients.controllers')
-.controller 'ClientsNewPageCtrl',['$scope', '$state', ($scope, $state) ->
-
-]
+.controller 'ClientsNewPageCtrl', ($scope, $state) ->

@@ -38,8 +38,8 @@ angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
   controller : 'TimeRangeListStackedController',
 
 
-angular.module('BB.Controllers').controller 'TimeRangeListStackedController',
-  ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel,
+angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
+  $scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel,
   FormDataStoreService, PersonService, PurchaseService, DateTimeUtilitiesService,
   LoadingService) ->
 
@@ -100,14 +100,13 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController',
 
     $scope.loadData()
 
-  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
   * @name setTimeRange
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Set time range in according of selected_date
+  * Set time range in according of selected_date 
   *
   * @param {date} selected_date The selected date from multi time range list
   * @param {date} start_date The start date of range list

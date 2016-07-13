@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BBAdmin.Services').factory 'AdminDayService', ($q, $window,
     halClient, BBModel, UriTemplate) ->

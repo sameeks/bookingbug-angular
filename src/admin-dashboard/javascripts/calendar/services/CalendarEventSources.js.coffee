@@ -7,9 +7,8 @@
 * @description
 * This services exposes methods to get all event-type information to be shown in the calendar
 ###
-angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSources', [
-  '$exceptionHandler', '$q', 'TitleAssembler', 'AdminBookingService', 'AdminScheduleService'
-  ($exceptionHandler, $q, TitleAssembler, AdminBookingService, AdminScheduleService) ->
+angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSources', (
+  $exceptionHandler, $q, TitleAssembler, AdminBookingService, AdminScheduleService) ->
 
     bookingBelongsToSelectedResources = (resources, booking)->
       belongs = false
@@ -225,4 +224,4 @@ angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSourc
         deferred.reject err
 
       deferred.promise
-]
+

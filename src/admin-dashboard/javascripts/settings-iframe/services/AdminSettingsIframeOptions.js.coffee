@@ -22,7 +22,7 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.settings-iframe.services').provider 'AdminSettingsIframeOptions', [ ->
+angular.module('BBAdminDashboard.settings-iframe.services').provider 'AdminSettingsIframeOptions', ->
   # This list of options is meant to grow
   options = {
     use_default_states : true
@@ -43,4 +43,4 @@ angular.module('BBAdminDashboard.settings-iframe.services').provider 'AdminSetti
     options
 
   return
-]
+

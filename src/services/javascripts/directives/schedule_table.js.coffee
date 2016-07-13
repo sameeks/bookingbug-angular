@@ -1,5 +1,5 @@
-angular.module('BBAdminServices').directive 'scheduleTable',
-  (AdminCompanyService, $modal, $log, ModalForm) ->
+angular.module('BBAdminServices').directive 'scheduleTable', (
+  AdminCompanyService, $modal, $log, ModalForm) ->
 
   controller = ($scope) ->
 

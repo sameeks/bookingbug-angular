@@ -30,8 +30,9 @@ angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
   scope : true
   controller : 'DayList'
 
-angular.module('BB.Controllers').controller 'DayList',
-($scope, $rootScope, $q, AlertService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'DayList', (
+  $scope, $rootScope, $q, AlertService, LoadingService, BBModel) ->
+
   $scope.controller = "public.controllers.DayList"
   loader = LoadingService.$loader($scope).notLoaded()
 

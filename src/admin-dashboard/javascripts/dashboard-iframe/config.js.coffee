@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
   'BBAdminDashboard.dashboard-iframe.directives',
   'BBAdminDashboard.dashboard-iframe.translations'
 ])
-.run ['RuntimeStates', 'AdminDashboardIframeOptions', (RuntimeStates, AdminDashboardIframeOptions) ->
+.run (RuntimeStates, AdminDashboardIframeOptions) ->
   # Choose to opt out of the default routing
   if AdminDashboardIframeOptions.use_default_states
 
@@ -26,4 +26,4 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
         url: "/page/:path"
         controller: 'DashboardSubIframePageCtrl'
         templateUrl: "iframe_page.html"
-]
+

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     halClient, BookingCollections, BBModel, UriTemplate) ->
 

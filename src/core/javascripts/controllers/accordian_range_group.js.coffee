@@ -46,8 +46,9 @@ angular.module('BB.Directives').directive 'bbAccordionRangeGroup', (PathSvc) ->
   templateUrl : (element, attrs) ->
     PathSvc.directivePartial "_accordion_range_group"
 
-angular.module('BB.Controllers').controller 'AccordionRangeGroup',
-($scope, $attrs, $rootScope, $q, FormDataStoreService, SettingsService, DateTimeUtilitiesService) ->
+angular.module('BB.Controllers').controller 'AccordionRangeGroup', (
+  $scope, $attrs, $rootScope, $q, FormDataStoreService, SettingsService,
+  DateTimeUtilitiesService) ->
 
   $scope.controller = "public.controllers.AccordionRangeGroup"
 

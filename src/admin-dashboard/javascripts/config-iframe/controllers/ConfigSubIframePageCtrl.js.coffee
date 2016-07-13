@@ -8,6 +8,5 @@
 * Controller for the config sub page
 ###
 angular.module('BBAdminDashboard.config-iframe.controllers')
-.controller 'ConfigSubIframePageCtrl',['$scope', '$state', '$stateParams', ($scope, $state, $stateParams) ->
+.controller 'ConfigSubIframePageCtrl', ($scope, $state, $stateParams) ->
   $scope.path = $stateParams.path
-]

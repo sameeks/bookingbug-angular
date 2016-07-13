@@ -4,7 +4,7 @@
 * @description
 * Returns array of assets from a comma delimited string
 ###
-angular.module('BBAdminBooking').factory 'ProcessAssetsFilter', [() ->
+angular.module('BBAdminBooking').factory 'ProcessAssetsFilter', () ->
   return (string)->
     assets = []
 
@@ -16,4 +16,4 @@ angular.module('BBAdminBooking').factory 'ProcessAssetsFilter', [() ->
     )
 
   return assets
-]
+

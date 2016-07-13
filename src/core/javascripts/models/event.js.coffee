@@ -15,7 +15,7 @@
 
 
 angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel,
-  DateTimeUlititiesService, EventService) ->
+  DateTimeUtilitiesService, EventService) ->
 
 
   class Event extends BaseModel

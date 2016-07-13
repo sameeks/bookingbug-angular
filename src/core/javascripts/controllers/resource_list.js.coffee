@@ -115,15 +115,12 @@ angular.module('BB.Controllers').controller 'ResourceList',
             $scope.bookable_resources = resources
             $scope.bookable_items = items
           loader.setLoaded()
-        , (err) ->
-          loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       , (err) ->
-        unless err == "No service link found" and (($scope.bb.steps and $scope.bb.steps[0].page == 'resource_list') or $scope.options.resource_first)
-          loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-        else
-          loader.setLoaded()
-    else
-      rpromise['finally'] ->
+        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+    , (err) ->
+      unless err == "No service link found" and (($scope.bb.steps and $scope.bb.steps[0].page == 'resource_list') or $scope.options.resource_first)
+        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+      else
         loader.setLoaded()
 
 

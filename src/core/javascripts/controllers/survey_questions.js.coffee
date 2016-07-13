@@ -31,7 +31,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
   $rootScope, CompanyService, PurchaseService, ClientService, $modal,
   $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService,
   AlertService, LoginService, $window, ServiceService, ValidatorService,
-  PurchaseBookingService, LoginService $sessionStorage) ->
+  PurchaseBookingService, $sessionStorage) ->
 
   $scope.controller = "SurveyQuestions"
 

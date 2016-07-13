@@ -4,7 +4,7 @@
 * @description
 * Gets all the resources for the callendar
 ###
-angular.module('BBAdminBooking').factory 'BBAssets', ['$q', ($q) ->
+angular.module('BBAdminBooking').factory 'BBAssets', ($q) ->
   return (company)->
     delay = $q.defer()
     promises = []
@@ -39,4 +39,4 @@ angular.module('BBAdminBooking').factory 'BBAssets', ['$q', ($q) ->
       delay.resolve(assets)
 
     delay.promise
-]
+

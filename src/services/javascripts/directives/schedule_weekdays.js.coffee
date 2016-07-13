@@ -1,5 +1,5 @@
-angular.module('BBAdminServices').directive 'scheduleWeekdays',
-  (uiCalendarConfig, ScheduleRules) ->
+angular.module('BBAdminServices').directive 'scheduleWeekdays', (
+  uiCalendarConfig, ScheduleRules) ->
 
   controller = ($scope, $attrs) ->
 

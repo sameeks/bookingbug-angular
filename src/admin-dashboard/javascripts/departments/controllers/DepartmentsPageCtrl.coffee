@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 ###
 * @ngdoc controller
@@ -8,7 +8,9 @@
 * Controller for the departments page
 ###
 angular.module('BBAdminDashboard.departments.controllers')
-.controller 'DepartmentsPageCtrl',['$scope', 'company', 'departments', 'AdminLoginService', '$state', '$timeout', ($scope, company, departments, AdminLoginService, $state, $timeout) ->
+.controller 'DepartmentsPageCtrl', ($scope, company, departments,
+  AdminLoginService, $state, $timeout) ->
+
   $scope.company = company
   $scope.departments = departments
 
@@ -17,4 +19,3 @@ angular.module('BBAdminDashboard.departments.controllers')
       $timeout () ->
         $state.go 'calendar', {}, {reload: true}
 
-]

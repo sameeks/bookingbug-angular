@@ -30,8 +30,8 @@ angular.module('BB.Directives').directive 'bbCustomBookingText', () ->
   controller : 'CustomBookingText'
 
 
-angular.module('BB.Controllers').controller 'CustomBookingText',
-($scope, $rootScope, $q, CustomTextService, LoadingService) ->
+angular.module('BB.Controllers').controller 'CustomBookingText', (
+  $scope, $rootScope, $q, CustomTextService, LoadingService) ->
 
   $scope.controller = "public.controllers.CustomBookingText"
   loader = LoadingService.$loader($scope).notLoaded()

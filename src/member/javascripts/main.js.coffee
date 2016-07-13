@@ -25,12 +25,10 @@ angular.module('BBMember.Models', [])
 
 angular.module('BBMember.Services', [
   'ngResource',
-  'ngSanitize',
-  'ngLocalData'
+  'ngSanitize'
 ])
 
 angular.module('BBMember.Controllers', [
-  'ngLocalData',
   'ngSanitize'
 ])
 

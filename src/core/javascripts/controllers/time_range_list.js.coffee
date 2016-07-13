@@ -55,7 +55,9 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
           $compile(element.contents())(scope)
 
 
-angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, LoadingService, BBModel, FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize) ->
+angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
+  $attrs, $rootScope, $q, TimeService, AlertService, LoadingService, BBModel,
+  FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
 

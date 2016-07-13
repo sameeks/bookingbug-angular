@@ -1,5 +1,5 @@
 
-angular.module('BBAdminDashboard.calendar.services').factory "PrePostTime", ['$compile', ($compile) ->
+angular.module('BBAdminDashboard.calendar.services').factory "PrePostTime", ($compile) ->
 
   apply: (event, elements, view, scope) ->
     for e in elements
@@ -27,4 +27,4 @@ angular.module('BBAdminDashboard.calendar.services').factory "PrePostTime", ['$c
             postWidth = event.post_time*(element.width() + 2)/totalDuration
             post = $compile("<div class='post' style='width:#{postWidth}px'></div>")(scope)
             element.append(post)
-]
+

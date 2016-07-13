@@ -6,9 +6,8 @@
 *
 *
 ###
-angular.module('BBAdminDashboard.services').factory "BusyService", [
-  '$q', '$log', '$rootScope', 'AlertService', 'ErrorService',
-  ($q, $log, $rootScope, AlertService, ErrorService) ->
+angular.module('BBAdminDashboard.services').factory "BusyService", (
+  $q, $log, $rootScope, AlertService, ErrorService) ->
 
     notLoaded: (cscope) ->
       cscope.$emit 'show:loader', cscope
@@ -70,4 +69,4 @@ angular.module('BBAdminDashboard.services').factory "BusyService", [
           return false if !$scope.areScopesLoaded(child)
           child = child.$$nextSibling
         true
-]
+

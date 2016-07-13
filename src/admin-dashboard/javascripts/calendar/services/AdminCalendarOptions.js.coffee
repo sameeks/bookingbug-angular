@@ -22,7 +22,7 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.calendar.services').provider 'AdminCalendarOptions', [ ->
+angular.module('BBAdminDashboard.calendar.services').provider 'AdminCalendarOptions', ->
   # This list of options is meant to grow
   options = {
     use_default_states       : true
@@ -47,4 +47,4 @@ angular.module('BBAdminDashboard.calendar.services').provider 'AdminCalendarOpti
     options
 
   return
-]
+

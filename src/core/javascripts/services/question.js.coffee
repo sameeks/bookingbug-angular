@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular.module('BB.Services').factory 'QuestionService', ($window, QueryStringService, $bbug) ->
 

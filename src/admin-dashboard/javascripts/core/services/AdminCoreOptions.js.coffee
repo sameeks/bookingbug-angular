@@ -22,7 +22,7 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', [ ->
+angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', ->
   # This list of options is meant to grow
   options = {
     default_language: 'en',
@@ -46,4 +46,4 @@ angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', [ ->
     options
 
   return
-]
+

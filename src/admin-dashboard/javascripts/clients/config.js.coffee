@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.clients', [
   'BBAdminDashboard.clients.directives',
   'BBAdminDashboard.clients.translations'
 ])
-.run ['RuntimeStates', 'AdminClientsOptions', (RuntimeStates, AdminClientsOptions) ->
+.run (RuntimeStates, AdminClientsOptions) ->
   # Choose to opt out of the default routing
   if AdminClientsOptions.use_default_states
 
@@ -42,4 +42,4 @@ angular.module('BBAdminDashboard.clients', [
               id: $stateParams.id
             AdminClientService.query(params)
         controller: 'ClientsEditPageCtrl'
-]
+

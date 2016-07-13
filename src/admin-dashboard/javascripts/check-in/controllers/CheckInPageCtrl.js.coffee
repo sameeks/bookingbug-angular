@@ -8,7 +8,8 @@
 * Controller for the check-in page
 ###
 angular.module('BBAdminDashboard.check-in.controllers')
-.controller 'CheckInPageCtrl',['$scope', '$state', '$log', ($scope, $state, $log) ->
+.controller 'CheckInPageCtrl', ($scope, $state, $log) ->
+
   $scope.adminlte.heading = ''
 
   pusher_channel = $scope.company.getPusherChannel('bookings')
@@ -20,4 +21,4 @@ angular.module('BBAdminDashboard.check-in.controllers')
   pusher_channel.bind 'create', refetch
   pusher_channel.bind 'update', refetch
   pusher_channel.bind 'destroy', refetch
-]
+

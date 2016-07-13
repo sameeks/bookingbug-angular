@@ -11,8 +11,8 @@
 * second after the '|' (optional) is the filter and third after the ':' (optional) are the options for filter
 * if the requested property is not part of the given object it will be skipped
 ###
-angular.module('BBAdminDashboard.calendar.services').factory 'TitleAssembler', [
-  () ->
+angular.module('BBAdminDashboard.calendar.services').factory 'TitleAssembler', () ->
+
     expression = new RegExp("\\{([a-zA-z_-]+)\\|?([a-zA-z_-]+)?:?([a-zA-z0-9{}_-]+)?\\}", "g")
 
     {
@@ -52,4 +52,4 @@ angular.module('BBAdminDashboard.calendar.services').factory 'TitleAssembler', [
 
         label
     }
-]
+

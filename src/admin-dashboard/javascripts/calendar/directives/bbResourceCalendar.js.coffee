@@ -3,7 +3,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     AdminBookingPopup, $window, $bbug, ColorPalette, Dialog,
     $timeout, $compile, $templateCache, PrePostTime, $filter) ->
 
-  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources) ->
+  controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state,
+    GeneralOptions, AdminCalendarOptions, CalendarEventSources) ->
 
     filters = {
       requestedAssets : ProcessAssetsFilter($state.params.assets)

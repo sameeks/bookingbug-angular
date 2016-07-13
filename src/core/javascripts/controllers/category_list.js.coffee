@@ -43,8 +43,8 @@ angular.module('BB.Directives').directive 'bbCategories', () ->
   controller : 'CategoryList'
 
 
-angular.module('BB.Controllers').controller 'CategoryList',
-($scope, $rootScope, $q, PageControllerService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'CategoryList', (
+  $scope, $rootScope, $q, PageControllerService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.CategoryList"
   loader = LoadingService.$loader($scope).notLoaded()

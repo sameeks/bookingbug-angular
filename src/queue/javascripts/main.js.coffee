@@ -20,8 +20,7 @@ angular.module('BBQueue.Controllers', [])
 
 angular.module('BBQueue.Services', [
   'ngResource',
-  'ngSanitize',
-  'ngLocalData'
+  'ngSanitize'
 ])
 
 

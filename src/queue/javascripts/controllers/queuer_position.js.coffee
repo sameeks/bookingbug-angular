@@ -1,7 +1,7 @@
 'use strict'
 
-angular.module('BBQueue.Controllers').controller 'QueuerPosition',
-  (QueuerService, $scope, $pusher, QueryStringService) ->
+angular.module('BBQueue.Controllers').controller 'QueuerPosition', (
+  QueuerService, $scope, $pusher, QueryStringService) ->
 
 	params =
 		id: QueryStringService('id')

@@ -8,8 +8,8 @@ angular.module('BBAdminDashboard.check-in.directives').directive 'bbCheckinTable
   link : (scope, element, attrs) ->
     return
 
-angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsController',
-  ($scope,  $rootScope, BusyService, $q, $filter, AdminTimeService,
+angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsController', (
+  $scope,  $rootScope, BusyService, $q, $filter, AdminTimeService,
   AdminBookingService, AdminSlotService, $timeout, AlertService) ->
 
   $scope.$on 'refetchCheckin', (event, res) ->

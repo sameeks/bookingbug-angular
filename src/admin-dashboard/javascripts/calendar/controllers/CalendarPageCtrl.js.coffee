@@ -8,7 +8,7 @@
 * Controller for the calendar page
 ###
 angular.module('BBAdminDashboard.calendar.controllers')
-.controller 'CalendarPageCtrl',['$scope', '$state', '$log', ($scope, $state, $log) ->
+.controller 'CalendarPageCtrl', ($scope, $state, $log) ->
   $scope.adminlte.side_menu = false
   $scope.adminlte.heading = null
 
@@ -21,4 +21,4 @@ angular.module('BBAdminDashboard.calendar.controllers')
   pusher_channel.bind 'create', refetch
   pusher_channel.bind 'update', refetch
   pusher_channel.bind 'destroy', refetch
-]
+

@@ -8,6 +8,6 @@
 * Controller for the publish sub page
 ###
 angular.module('BBAdminDashboard.publish-iframe.controllers')
-.controller 'PublishSubIframePageCtrl',['$scope', '$state', '$stateParams', ($scope, $state, $stateParams) ->
+.controller 'PublishSubIframePageCtrl', ($scope, $state, $stateParams) ->
   $scope.path = $stateParams.path
-]
+

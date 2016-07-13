@@ -1,5 +1,5 @@
-angular.module('BBAdmin.Controllers').controller 'TimeOptions',
-($scope, $location, $rootScope, BBModel) ->
+angular.module('BBAdmin.Controllers').controller 'TimeOptions', (
+  $scope, $location, $rootScope, BBModel) ->
 
   BBModel.Admin.Resource.$query({company: $scope.bb.company}).then (resources) ->
     $scope.resources = resources

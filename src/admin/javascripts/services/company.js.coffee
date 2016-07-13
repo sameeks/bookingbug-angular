@@ -1,5 +1,7 @@
-angular.module('BBAdmin.Services').factory 'AdminCompanyService',
-($q, $rootScope, $sessionStorage, BBModel) ->
+'use strict'
+
+angular.module('BBAdmin.Services').factory 'AdminCompanyService', (
+  $q, $rootScope, $sessionStorage, BBModel) ->
 
   query: (params) ->
     defer = $q.defer()

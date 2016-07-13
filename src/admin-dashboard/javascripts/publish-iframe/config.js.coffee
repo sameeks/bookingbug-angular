@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.publish-iframe', [
   'BBAdminDashboard.publish-iframe.directives',
   'BBAdminDashboard.publish-iframe.translations'
 ])
-.run ['RuntimeStates', 'AdminPublishIframeOptions', (RuntimeStates, AdminPublishIframeOptions) ->
+.run (RuntimeStates, AdminPublishIframeOptions) ->
   # Choose to opt out of the default routing
   if AdminPublishIframeOptions.use_default_states
 
@@ -26,4 +26,4 @@ angular.module('BBAdminDashboard.publish-iframe', [
         url: '/page/:path'
         templateUrl: 'iframe_page.html'
         controller: 'PublishSubIframePageCtrl'
-]
+

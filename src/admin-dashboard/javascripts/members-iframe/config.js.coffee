@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.members-iframe', [
   'BBAdminDashboard.members-iframe.directives',
   'BBAdminDashboard.members-iframe.translations'
 ])
-.run ['RuntimeStates', 'AdminMembersIframeOptions', (RuntimeStates, AdminMembersIframeOptions) ->
+.run (RuntimeStates, AdminMembersIframeOptions) ->
   # Choose to opt out of the default routing
   if AdminMembersIframeOptions.use_default_states
 
@@ -26,4 +26,4 @@ angular.module('BBAdminDashboard.members-iframe', [
         url: '/page/:path/:id'
         templateUrl: 'iframe_page.html'
         controller: 'MembersSubIframePageCtrl'
-]
+

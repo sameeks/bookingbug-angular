@@ -22,7 +22,7 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.clients.services').provider 'AdminClientsOptions', [ ->
+angular.module('BBAdminDashboard.clients.services').provider 'AdminClientsOptions', ->
   # This list of options is meant to grow
   options = {
     use_default_states : true
@@ -43,4 +43,4 @@ angular.module('BBAdminDashboard.clients.services').provider 'AdminClientsOption
     options
 
   return
-]
+

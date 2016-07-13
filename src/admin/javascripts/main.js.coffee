@@ -25,11 +25,9 @@ angular.module('BBAdmin.Models', [])
 angular.module('BBAdmin.Services', [
   'ngResource',
   'ngSanitize',
-  'ngLocalData'
 ])
 
 angular.module('BBAdmin.Controllers', [
-  'ngLocalData',
   'ngSanitize'
 ])
 

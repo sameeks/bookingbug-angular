@@ -1,7 +1,7 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.LoginModel",
-($q, AdminLoginService, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "Admin.LoginModel", (
+  $q, AdminLoginService, BBModel, BaseModel) ->
 
   class Admin_Login extends BaseModel
 

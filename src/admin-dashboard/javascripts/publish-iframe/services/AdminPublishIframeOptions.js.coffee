@@ -22,7 +22,7 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.publish-iframe.services').provider 'AdminPublishIframeOptions', [ ->
+angular.module('BBAdminDashboard.publish-iframe.services').provider 'AdminPublishIframeOptions', ->
   # This list of options is meant to grow
   options = {
     use_default_states : true
@@ -43,4 +43,4 @@ angular.module('BBAdminDashboard.publish-iframe.services').provider 'AdminPublis
     options
 
   return
-]
+

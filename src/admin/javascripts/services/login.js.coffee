@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     $rootScope, BBModel, $sessionStorage, $cookies, UriTemplate, shared_header) ->

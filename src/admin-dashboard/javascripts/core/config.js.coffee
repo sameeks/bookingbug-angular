@@ -12,7 +12,6 @@ BBAdminDashboardDependencies = [
   'ngTouch',
   'ngSanitize',
   'ngIdle',
-  'ngLocalData',
   'ngInputDate',
   'ngCookies',
 

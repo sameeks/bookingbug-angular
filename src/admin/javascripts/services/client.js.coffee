@@ -1,5 +1,7 @@
+'use strict'
 
-angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window, $rootScope, halClient, ClientCollections, BBModel, UriTemplate) ->
+angular.module('BBAdmin.Services').factory 'AdminClientService', ($q, $window,
+  $rootScope, halClient, ClientCollections, BBModel, UriTemplate) ->
 
   query: (prms) ->
     if prms.company

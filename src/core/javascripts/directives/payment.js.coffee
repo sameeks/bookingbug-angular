@@ -1,4 +1,6 @@
-angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $http, $templateCache, $q, $log, TemplateSvc) ->
+angular.module('BB.Directives').directive 'bbPaymentButton', (
+  $compile, $sce, $http, $templateCache, $q, $log, TemplateSvc) ->
+
   restrict: 'EA'
   replace: true
   scope:

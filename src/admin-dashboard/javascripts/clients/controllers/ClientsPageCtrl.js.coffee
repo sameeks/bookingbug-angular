@@ -8,7 +8,7 @@
 * Controller for the clients page
 ###
 angular.module('BBAdminDashboard.clients.controllers')
-.controller 'ClientsPageCtrl',['$scope', '$state', ($scope, $state) ->
+.controller 'ClientsPageCtrl', ($scope, $state) ->
   
   $scope.adminlte.heading = null
   $scope.clientsOptions = {search: null}
@@ -17,4 +17,3 @@ angular.module('BBAdminDashboard.clients.controllers')
   $scope.set_current_client = (client) ->
     $scope.current_client = client
 
-]

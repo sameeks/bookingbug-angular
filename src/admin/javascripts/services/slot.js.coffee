@@ -1,4 +1,4 @@
-
+'use strict'
 
 angular.module('BBAdmin.Services').factory 'AdminSlotService', ($q, $window,
     halClient, SlotCollections, BBModel, UriTemplate) ->

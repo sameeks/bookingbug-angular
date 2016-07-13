@@ -8,7 +8,8 @@
 * Controller for the dashboard page
 ###
 angular.module('BBAdminDashboard.dashboard-iframe.controllers')
-.controller 'DashboardIframePageCtrl',['$scope', '$state', '$window', 'AdminBookingPopup', ($scope, $state, $window, AdminBookingPopup) ->
+.controller 'DashboardIframePageCtrl', ($scope, $state, $window, AdminBookingPopup) ->
+
   $scope.parent_state = $state.is("view")
   $scope.bb.side_menu = "dashboard_menu"
   $scope.path = "view/dashboard/index"
@@ -23,4 +24,4 @@ angular.module('BBAdminDashboard.dashboard-iframe.controllers')
             time: event.data.iarray * 5
             person: event.data.person
             resource: event.data.resource
-]
+

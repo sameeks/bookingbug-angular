@@ -22,7 +22,7 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.dashboard-iframe.services').provider 'AdminDashboardIframeOptions', [ ->
+angular.module('BBAdminDashboard.dashboard-iframe.services').provider 'AdminDashboardIframeOptions', ->
   # This list of options is meant to grow
   options = {
     use_default_states : true
@@ -43,4 +43,4 @@ angular.module('BBAdminDashboard.dashboard-iframe.services').provider 'AdminDash
     options
 
   return
-]
+

@@ -36,8 +36,9 @@ angular.module('BB.Directives').directive 'bbAddresses', () ->
   controller : 'AddressList'
 
 
-angular.module('BB.Controllers').controller 'AddressList',
-($scope, $rootScope, $filter, $sniffer, FormDataStoreService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'AddressList', (
+  $scope, $rootScope, $filter, $sniffer, FormDataStoreService, LoadingService,
+  BBModel) ->
 
   $scope.controller = "public.controllers.AddressList"
   $scope.manual_postcode_entry = false

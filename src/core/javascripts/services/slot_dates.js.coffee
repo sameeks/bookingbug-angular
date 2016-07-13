@@ -24,7 +24,7 @@ angular.module('BB.Services').factory 'SlotDates', ($q, DayService) ->
       params =
         cItem: cItem
         date: selected_day.format('YYYY-MM-DD')
-        edate endDate.format('YYYY-MM-DD')
+        edate: endDate.format('YYYY-MM-DD')
       DayService.query(params).then (days) ->
         cached.timesQueried++
 
