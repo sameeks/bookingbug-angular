@@ -77,9 +77,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
           auth_token = $sessionStorage.getItem('auth_token')
           params.auth_token = auth_token if auth_token
           PurchaseService.query(params).then (purchase) ->
-            unless $scope.bb.company?
-              purchase.$get('company').then (company) =>
-                setPurchaseCompany(company)
+            purchase.$get('company').then (company) =>
+              setPurchaseCompany(company)
             $scope.purchase = purchase
             $scope.bb.purchase = purchase
             $scope.price = !($scope.purchase.price == 0)
