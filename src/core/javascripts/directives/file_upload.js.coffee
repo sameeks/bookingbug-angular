@@ -13,6 +13,7 @@
   <example>
     <div
       bb-file-upload
+      item="item"
       max-size="100KB"
       accept="application/pdf,application/msword,image/*">
     </div>
