@@ -3,7 +3,7 @@ angular.module('BBAdminDashboard.check-in.directives').directive 'bbCheckinTable
   restrict: 'AE'
   replace: false
   scope : true
-  templateUrl: 'checkin_table.html'
+  templateUrl: 'check-in/checkin-table.html'
   controller : 'CheckinsController'
   link : (scope, element, attrs) ->
     return

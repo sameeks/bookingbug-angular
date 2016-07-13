@@ -17,11 +17,11 @@ angular.module('BBAdminDashboard.directives').directive 'adminSideNav', [() ->
   {
     restrict: 'A'
     scope: false
-    templateUrl: 'core/admin-side-nav.html'  
+    templateUrl: 'core/admin-side-nav.html'
     controller: ['$scope', 'SideNavigationPartials', ($scope, SideNavigationPartials) ->
       $scope.navigation = SideNavigationPartials.getOrderedPartialTemplates()
-    ]  
+    ]
     link: (scope, element, attrs) ->
-      
+
   }
 ]

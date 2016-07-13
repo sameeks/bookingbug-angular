@@ -19,9 +19,9 @@ angular.module('BBAdminDashboard.check-in', [
       .state 'checkin',
         parent: AdminCheckInOptions.parent_state
         url: "/check-in"
-        templateUrl: "checkin_page.html"
+        templateUrl: "check-in/index.html"
         controller: 'CheckInPageCtrl'
 
-  if AdminCheckInOptions.show_in_navigation 
-    SideNavigationPartials.addPartialTemplate('check-in', 'check-in/nav.html')      
-]  
+  if AdminCheckInOptions.show_in_navigation
+    SideNavigationPartials.addPartialTemplate('check-in', 'check-in/nav.html')
+]

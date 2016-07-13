@@ -19,7 +19,7 @@ angular.module('BBAdminDashboard.config-iframe', [
       .state 'config',
         parent: AdminConfigIframeOptions.parent_state
         url: '/config'
-        templateUrl: 'admin_config_page.html'
+        templateUrl: 'config-iframe/index.html'
         controller: 'ConfigIframePageCtrl'
         deepStateRedirect: {
           default: {
@@ -32,7 +32,7 @@ angular.module('BBAdminDashboard.config-iframe', [
 
       .state 'config.business',
         url: '/business'
-        templateUrl: 'core/tabbed_substates_page.html'
+        templateUrl: 'core/tabbed-substates-page.html'
         controller: 'ConfigIframeBusinessPageCtrl'
         deepStateRedirect: {
           default: {
@@ -49,7 +49,7 @@ angular.module('BBAdminDashboard.config-iframe', [
 
       .state 'config.event-settings',
         url: '/event-settings'
-        templateUrl: 'core/tabbed_substates_page.html'
+        templateUrl: 'core/tabbed-substates-page.html'
         controller: 'ConfigIframeEventSettingsPageCtrl'
         deepStateRedirect: {
           default: {
@@ -66,7 +66,7 @@ angular.module('BBAdminDashboard.config-iframe', [
 
       .state 'config.promotions',
         url: '/promotions'
-        templateUrl: 'core/tabbed_substates_page.html'
+        templateUrl: 'core/tabbed-substates-page.html'
         controller: 'ConfigIframePromotionsPageCtrl'
         deepStateRedirect: {
           default: {
@@ -83,7 +83,7 @@ angular.module('BBAdminDashboard.config-iframe', [
 
       .state 'config.booking-settings',
         url: '/booking-settings'
-        templateUrl: 'core/tabbed_substates_page.html'
+        templateUrl: 'core/tabbed-substates-page.html'
         controller: 'ConfigIframeBookingSettingsPageCtrl'
         deepStateRedirect: {
           default: {

@@ -8,13 +8,13 @@ angular.module('BBAdminDashboard.translations', [])
 
 BBAdminDashboardDependencies = [
   'ngStorage',
-  'ngResource', 
-  'ngTouch', 
+  'ngResource',
+  'ngTouch',
   'ngSanitize',
   'ngIdle',
-  'ngLocalData', 
-  'ngInputDate', 
-  'ngCookies', 
+  'ngLocalData',
+  'ngInputDate',
+  'ngCookies',
 
   'BBAdmin',
   'BBAdminServices',
@@ -22,13 +22,13 @@ BBAdminDashboardDependencies = [
   'BBAdmin.Directives',
   'BBMember',
 
-  'ui.calendar', 
+  'ui.calendar',
   'ui.bootstrap',
-  'ui.router', 
+  'ui.router',
   'ui.select',
   'ct.ui.router.extras',
   'trNgGrid',
-  'toggle-switch', 
+  'toggle-switch',
   'pascalprecht.translate',
   'angular-loading-bar',
   'ngScrollable',
@@ -60,24 +60,24 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
   $urlRouterProvider.otherwise("/" + $stateProvider.root_state)
   $stateProvider
     .state 'root',
-      templateUrl: "core/admin-layout.html"
+      templateUrl: "core/layout.html"
       resolve:
         sso: ($q, sso_token, AdminLoginService, $injector) ->
           defer = $q.defer()
 
-          AdminLoginService.isLoggedIn().then (loggedIn)-> 
+          AdminLoginService.isLoggedIn().then (loggedIn)->
             if not loggedIn and sso_token != false
-              # Use the injector to avoid errors for including a 
+              # Use the injector to avoid errors for including a
               # service with dependencies on construct (AdminSsoLogin requires company_id value)
               AdminSsoLogin = $injector.get 'AdminSsoLogin'
 
               AdminSsoLogin sso_token, (admin)->
                 AdminLoginService.setLogin admin
-                defer.resolve()  
-            else 
-              defer.resolve()   
+                defer.resolve()
+            else
+              defer.resolve()
 
-          defer.promise  
+          defer.promise
 
         user: ($q, AdminLoginService, $timeout, $state, sso) ->
           defer = $q.defer()
@@ -136,7 +136,7 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
   $translate.preferredLanguage AdminCoreOptions.default_language
 
   # Depending on configuration use the browser to decide prefered language
-  if AdminCoreOptions.use_browser_language 
+  if AdminCoreOptions.use_browser_language
     browserLocale = $translate.negotiateLocale($translate.resolveClientLocale())
 
     if _.contains(AdminCoreOptions.available_languages, browserLocale)

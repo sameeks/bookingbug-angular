@@ -19,9 +19,9 @@ angular.module('BBAdminDashboard.calendar', [
       .state 'calendar',
         parent: AdminCalendarOptions.parent_state
         url: "/calendar/:assets"
-        templateUrl: "calendar_page.html"
+        templateUrl: "calendar/index.html"
         controller: 'CalendarPageCtrl'
 
-  if AdminCalendarOptions.show_in_navigation 
-    SideNavigationPartials.addPartialTemplate('calendar', 'calendar/nav.html')    
-]    
+  if AdminCalendarOptions.show_in_navigation
+    SideNavigationPartials.addPartialTemplate('calendar', 'calendar/nav.html')
+]

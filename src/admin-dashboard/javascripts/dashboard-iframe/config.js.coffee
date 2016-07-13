@@ -20,7 +20,7 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
         parent: AdminDashboardIframeOptions.parent_state
         url: "/dashboard"
         controller: "DashboardIframePageCtrl"
-        templateUrl: "admin_dashboard_page.html"
+        templateUrl: "dashboard-iframe/index.html"
         deepStateRedirect: {
           default: {
             state:  'dashboard.page'

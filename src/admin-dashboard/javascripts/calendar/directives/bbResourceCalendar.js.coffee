@@ -351,7 +351,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
   {
     controller: controller
     link: link
-    templateUrl: 'resource_calendar_main.html'
+    templateUrl: 'calendar/resource-calendar.html'
     replace: true
     scope :
       labelAssembler : '@'

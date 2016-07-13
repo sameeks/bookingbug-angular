@@ -19,7 +19,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
       .state 'settings',
         parent: AdminSettingsIframeOptions.parent_state
         url: "/settings"
-        templateUrl: "admin_settings_page.html"
+        templateUrl: "settings-iframe/index.html"
         deepStateRedirect: {
           default: { state: "settings.page", params: { path: "company/mycompany" } }
           params: true
@@ -32,7 +32,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
 
       .state 'settings.basic-settings',
         url: '/basic-settings'
-        templateUrl: 'core/tabbed_substates_page.html'
+        templateUrl: 'core/tabbed-substates-page.html'
         controller: 'SettingsIframeBasicSettingsPageCtrl'
         deepStateRedirect: {
           default: {
@@ -49,7 +49,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
 
       .state 'settings.advanced-settings',
         url: '/advanced-settings'
-        templateUrl: 'core/tabbed_substates_page.html'
+        templateUrl: 'core/tabbed-substates-page.html'
         controller: 'SettingsIframeAdvancedSettingsPageCtrl'
         deepStateRedirect: {
           default: {
@@ -66,7 +66,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
 
       .state 'settings.integrations',
         url: '/integrations'
-        templateUrl: 'core/tabbed_substates_page.html'
+        templateUrl: 'core/tabbed-substates-page.html'
         controller: 'SettingsIframeIntegrationsPageCtrl'
         deepStateRedirect: {
           default: {
@@ -83,7 +83,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
 
       .state 'settings.subscription',
         url: '/subscription'
-        templateUrl: 'core/tabbed_substates_page.html'
+        templateUrl: 'core/tabbed-substates-page.html'
         controller: 'SettingsIframeSubscriptionPageCtrl'
         deepStateRedirect: {
           default: {

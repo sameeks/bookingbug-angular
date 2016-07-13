@@ -18,5 +18,5 @@ angular.module('BBAdminDashboard.login', [
       .state 'login',
         url: "/login"
         controller: "LoginPageCtrl"
-        templateUrl: "admin_login_page.html"  
-]  
+        templateUrl: "login/index.html"
+]
