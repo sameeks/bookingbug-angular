@@ -970,11 +970,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     def = $q.defer()
     $scope.setBasketItem(new BBModel.BasketItem(null, $scope.bb))
     if $scope.bb.default_setup_promises
-      $q.all($scope.bb.default_setup_promises)['finally'] () ->
+      $q.all($scope.bb.default_setup_promises).finally () ->
         $scope.bb.current_item.setDefaults($scope.bb.item_defaults)
-        $q.all($scope.bb.current_item.promises)['finally'] () ->
+        $q.all($scope.bb.current_item.promises).finally () ->
           def.resolve()
     else
+      $scope.bb.current_item.setDefaults({})
       def.resolve()
     return def.promise
 

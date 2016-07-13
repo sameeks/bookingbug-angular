@@ -12,7 +12,7 @@ function getModules(srcpath) {
   });
 }
 
-function buildModule(streams, module) {
+function buildModule(streams, module, srcpath) {
   try {
     fs.statSync(path.join(srcpath, module, 'javascripts'))
     streams.add(bbGulp.javascripts(module));
@@ -52,7 +52,7 @@ function run(srcpath) {
   var streams = mergeStream();
   var modules = getModules(srcpath);
   _.each(modules, function(module) {
-    streams = buildModule(streams, module);
+    streams = buildModule(streams, module, srcpath);
   });
   return streams;
 }

@@ -186,18 +186,34 @@ gulp.task('test', ['dependencies'], function (done) {
 var buildSdk = require('./build.js');
 
 gulp.task('build', function() {
-  return buildSdk();
+  buildSdk()
+    .on('data', function(d) {
+    })
+    .on('error', function(e) {
+    })
+    .on('end', function() {
+      return
+    });
 });
 
 gulp.task('bowerWidget', ['build'], function() {
   return bower({cwd: './build/booking-widget', directory: './bower_components'});
 });
 
-gulp.task('buildWidget', ['bowerWidget'], function () {
+gulp.task('buildWidgetScript', ['bowerWidget'], function () {
   return gulp.src(mainBowerFiles({filter: new RegExp('.js$'), paths: {bowerDirectory: './build/booking-widget/bower_components', bowerJson: './build/booking-widget/bower.json'}}))
     .pipe(concat('booking-widget.js'))
-    .pipe(gulp.dest('./build/booking-widget'))
+    .pipe(gulp.dest('./build/booking-widget/dist'))
     .pipe(uglify({mangle: false}))
     .pipe(concat('booking-widget.min.js'))
-    .pipe(gulp.dest('./build/booking-widget'));
+    .pipe(gulp.dest('./build/booking-widget/dist'));
 });
+
+gulp.task('buildWidgetStyle', ['bowerWidget'], function() {
+  return gulp.src(mainBowerFiles({filter: new RegExp('.css$'), paths: {bowerDirectory: './build/booking-widget/bower_components', bowerJson: './build/booking-widget/bower.json'}}))
+    .pipe(concat('booking-widget.css'))
+    .pipe(gulp.dest('./build/booking-widget/dist'));
+
+});
+
+gulp.task('buildWidget', ['buildWidgetScript', 'buildWidgetStyle']);

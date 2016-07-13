@@ -26,7 +26,7 @@
 ###
 
 
-angular.module('BB.Directives').directive 'bbItemDetails', () ->
+angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, $compile) ->
   restrict: 'AE'
   replace: true
   scope : true
