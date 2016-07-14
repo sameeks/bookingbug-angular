@@ -1,4 +1,7 @@
+'use strict'
+
 angular.module('BB.Services').factory "EventGroupService",  ($q, BBModel) ->
+
   query: (company, params) ->
     deferred = $q.defer()
     if !company.$has('event_groups')
@@ -12,3 +15,4 @@ angular.module('BB.Services').factory "EventGroupService",  ($q, BBModel) ->
       , (err) =>
         deferred.reject(err)
     deferred.promise
+

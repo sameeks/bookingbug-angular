@@ -27,7 +27,6 @@
 * @property {string} init_params Initialization of basic parameters
 ####
 
-
 angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
     $templateCache, $compile, $q, AppConfig, $timeout, $bbug,$rootScope) ->
 
@@ -180,7 +179,7 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
 
 
 angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
-    $rootScope, halClient, $window, $http, $localCache, $q, $timeout, BasketService,
+    $rootScope, halClient, $window, $http, $q, $timeout, BasketService,
     LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
@@ -417,7 +416,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     widget_started.resolve()
 
-  #  halClient.setCache($localCache)
 
     #########################################################
     # we're going to load a bunch of default stuff which we will vary by the widget
@@ -1140,7 +1138,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.getCurrentStepTitle = ->
-    console.log steps
     steps = $scope.bb.steps
 
     if !_.compact(steps).length or steps.length == 1 and steps[0].number != $scope.bb.current_step
@@ -1373,3 +1370,4 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.redirectTo = (url) ->
     $window.location.href = url
+

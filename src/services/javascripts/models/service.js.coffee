@@ -24,3 +24,4 @@ angular.module('BB.Models').factory "Admin.ServiceModel", (
 
     @$query: (params) ->
       AdminServiceService.query(params)
+

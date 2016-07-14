@@ -60,3 +60,4 @@ angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel
 
     @$query: (params) ->
       ItemService.query(params)
+

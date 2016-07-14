@@ -204,3 +204,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel,
       return "disabled" if @disabled
       return "enabled" if @availability() > 0
       return "disabled"
+
+    @$query: (params) ->
+      TimeService.query(params)
+

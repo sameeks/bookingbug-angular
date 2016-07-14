@@ -66,4 +66,3 @@ angular.module('BB.Models').factory "PurchaseItemModel", ($q, BBModel, BaseModel
     hasPrice: ->
       return (@price && @price > 0)
 
-

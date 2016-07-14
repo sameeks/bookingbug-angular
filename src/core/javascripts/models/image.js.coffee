@@ -18,3 +18,4 @@ angular.module('BB.Models').factory "ImageModel", ($q, $filter, BBModel, BaseMod
 
     constructor: (data) ->
       super(data)
+

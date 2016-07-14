@@ -18,3 +18,4 @@ angular.module('BB.Models').factory "EventSequenceModel", ($q, BBModel, BaseMode
   class EventSequence extends BaseModel
     name: () ->
       @_data.name
+

@@ -1,4 +1,4 @@
-
+'use strict'
 
 angular.module('BB.Directives').directive 'bbToggleEdit', ($compile, $window, $document) ->
   restrict: 'AE',
@@ -14,5 +14,4 @@ angular.module('BB.Directives').directive 'bbToggleEdit', ($compile, $window, $d
           scope.editing = false
 
     true
-
 

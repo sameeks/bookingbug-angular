@@ -30,7 +30,7 @@ angular.module('BB.Directives').directive 'bbTotal', () ->
   controller : 'Total'
 
 angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
-    $location, $window, PurchaseService, QueryStringService, LoadingService) ->
+    $location, $window, QueryStringService, LoadingService) ->
 
   $scope.controller = "public.controllers.Total"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -41,7 +41,7 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
     id = QueryStringService('purchase_id')
 
     if id and !$scope.bb.total
-      PurchaseService.query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
+      BBModel.Purchase.Total.$query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
         $scope.total = total
         loader.setLoaded()
 
@@ -71,3 +71,4 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
     $window.open($scope.bb.partial_url+'print_purchase.html?id='+$scope.total.long_id,'_blank',
                 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0')
     return true
+

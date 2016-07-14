@@ -13,3 +13,4 @@ app.directive 'bbContentNew', (PathSvc) ->
     $scope.initPage = ->
       $scope.$eval('setPageLoaded()')
     return
+

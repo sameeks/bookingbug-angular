@@ -21,3 +21,4 @@ angular.module('BB.Models').factory "Admin.SlotModel", ($q, BBModel, BaseModel,
         @className = "status_booked"
       else if @status == 0
         @className = "status_available"
+

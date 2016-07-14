@@ -9,8 +9,6 @@ angular.module('BBAdmin', [
   'BBAdmin.Models',
   'BBAdmin.Directives',
   'trNgGrid'
-  # 'ui.state',
-#  'ui.calendar',
 ])
 
 angular.module('BBAdmin').config ($logProvider) ->
@@ -33,16 +31,11 @@ angular.module('BBAdmin.Controllers', [
 
 angular.module('BBAdmin.Services').run ($q, $injector, BBModel) ->
   models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
-    'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup', 'Event', 'Queuer', 'ClientQueue', 'Clinic']
+    'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup',
+    'Event', 'Clinic', 'Company', 'Client']
 
   afuncs = {}
   for model in models
     afuncs[model] = $injector.get("Admin." + model + "Model")
   BBModel['Admin'] = afuncs
 
-angular.module('BBAdmin').run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $injector, $sessionStorage, AppConfig, BBModel) ->
-  # add methods to the rootscope if they are applicable to whole app
-  BBModel.Admin.Login.$checkLogin().then () ->
-    if $rootScope.user && $rootScope.user.company_id
-      $rootScope.bb ||= {}
-      $rootScope.bb.company_id = $rootScope.user.company_id

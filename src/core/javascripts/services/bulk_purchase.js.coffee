@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "BulkPurchaseService", ($q, BBModel) ->
 
   query: (company) ->
@@ -10,5 +12,5 @@ angular.module('BB.Services').factory "BulkPurchaseService", ($q, BBModel) ->
           deferred.resolve(new BBModel.BulkPurchase(i) for i in bulk_purchases)
       , (err) =>
         deferred.reject(err)
-
     deferred.promise
+

@@ -1,7 +1,6 @@
 'use strict'
 
 
-
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbServices
@@ -60,7 +59,10 @@ angular.module('BB.Directives').directive 'bbServices', () ->
     scope.options.hide_disabled = attrs.hideDisabled if attrs.hideDisabled
     scope.directives = "public.ServiceList"
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, LoadingService) ->
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope,
+  $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService,
+  PageControllerService, halClient, AlertService, ErrorService, $filter,
+  LoadingService) ->
 
   FormDataStoreService.init 'ServiceList', $scope, [
     'service'
@@ -335,6 +337,4 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   ###
   $scope.filterChanged = () ->
     $scope.filtered_items = $filter('filter')($scope.items, $scope.filterFunction)
-
-
 

@@ -369,3 +369,4 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope,
 
       modalInstance.result.then (result) ->
         $scope.addItem(result.service, result.duration)
+

@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc directive
 * @name BB.Directives.directive:bbDateTimePicker
@@ -114,3 +116,4 @@ angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
 
     $scope.minDateClean = filterDate($scope.minDate)
     $scope.maxDateClean = filterDate($scope.maxDate)
+

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Directives').directive 'bbMembershipLevels', ($rootScope, BBModel) ->
   restrict: 'AE'
   replace: true
@@ -40,3 +42,4 @@ angular.module('BB.Directives').directive 'bbMembershipLevels', ($rootScope, BBM
 
     $scope.getMembershipLevel = (member_level_id) ->
       return _.find $scope.membership_levels, (level) -> level.id is member_level_id
+

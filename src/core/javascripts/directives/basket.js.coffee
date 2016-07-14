@@ -88,3 +88,4 @@ angular.module('BB.Directives').directive 'bbMinSpend', () ->
         price = $filter('ipretty_price')($scope.min_spend)
         AlertService.add("warning", { msg: "You need to spend at least #{price} to make a booking."})
         return false
+

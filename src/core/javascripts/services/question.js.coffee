@@ -42,7 +42,7 @@ angular.module('BB.Services').factory 'QuestionService', ($window, QueryStringSe
   # question names into snake case so they can be accessed using the object dot
   # notation and match any values set using $window.bb_set_up
   convertToSnakeCase = (str) ->
-    str = str.toLowerCase();
+    str = str.toLowerCase()
     str = $.trim(str)
     # replace all punctuation and special chars
     str = str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|'’!<>;:,.~`=+-@£&%"]/g, '')
@@ -140,3 +140,4 @@ angular.module('BB.Services').factory 'QuestionService', ($window, QueryStringSe
     convertToSnakeCase        : convertToSnakeCase
     checkConditionalQuestions : checkConditionalQuestions
   }
+

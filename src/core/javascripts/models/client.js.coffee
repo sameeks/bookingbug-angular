@@ -373,3 +373,4 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel,
 
     @$query_by_email: (company, email) ->
       ClientService.query_by_email(company, email)
+

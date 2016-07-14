@@ -1,5 +1,7 @@
+'use strict'
 
 angular.module('BB.Services').factory "PurchaseTotalService", ($q, BBModel) ->
+
   query: (prms) ->
     deferred = $q.defer()
     if !prms.company.$has('total')
@@ -9,5 +11,5 @@ angular.module('BB.Services').factory "PurchaseTotalService", ($q, BBModel) ->
         deferred.resolve(new BBModel.PurchaseTotal(total))
       , (err) =>
         deferred.reject(err)
- 
     deferred.promise
+

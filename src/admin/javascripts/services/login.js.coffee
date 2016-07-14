@@ -12,6 +12,7 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     halClient.$post(url, options, form).then (login) =>
       if login.$has('administrator')
         login.$get('administrator').then (user) =>
+          # user.setOption('auth_token', login.getOption('auth_token'))
           user = @setLogin(user)
           deferred.resolve(user)
       else if login.$has('administrators')
@@ -55,8 +56,8 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
 
 
   setLogin: (user) ->
-    auth_token = user.getOption('auth_token')
     user = new BBModel.Admin.User(user)
+    auth_token = user.getOption('auth_token')
     $sessionStorage.setItem("user", user.$toStore())
     $sessionStorage.setItem("auth_token", auth_token)
     $rootScope.user = user

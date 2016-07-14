@@ -9,5 +9,6 @@
 ###
 angular.module('BBAdminDashboard.publish-iframe.controllers')
 .controller 'PublishSubIframePageCtrl', ($scope, $state, $stateParams) ->
+
   $scope.path = $stateParams.path
 

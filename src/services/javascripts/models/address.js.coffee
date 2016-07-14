@@ -36,3 +36,4 @@ angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseMode
       @dists ||= []
       @dists[address] ||= Math.round(Math.random() * 50, 0)
       return @dists[address]
+

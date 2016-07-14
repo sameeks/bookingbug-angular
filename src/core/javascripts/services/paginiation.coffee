@@ -1,8 +1,15 @@
+'use strict'
+
 angular.module('BB.Services').factory "PaginationService", () ->
 
   initialise: (options) ->
     return if !options
-    paginator = {current_page: 1, page_size: options.page_size, num_pages: null, max_size: options.max_size, num_items: null}
+    paginator =
+      current_page: 1
+      page_size: options.page_size
+      num_pages: null
+      max_size: options.max_size
+      num_items: null
     return paginator
 
 

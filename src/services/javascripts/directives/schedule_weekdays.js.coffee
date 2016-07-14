@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdminServices').directive 'scheduleWeekdays', (
   uiCalendarConfig, ScheduleRules) ->
 
@@ -94,3 +96,4 @@ angular.module('BBAdminServices').directive 'scheduleWeekdays', (
       render: '=?'
       setOptions: '=options'
   }
+

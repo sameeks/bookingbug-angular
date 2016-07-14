@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
 
   newForm = ($scope, $modalInstance, company, title, new_rel, post_rel,

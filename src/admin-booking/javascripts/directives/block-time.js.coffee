@@ -1,8 +1,9 @@
+
 angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
   scope: true
   restrict: 'A'
-  controller: ($scope, $element, $attrs, AdminPersonService,
-    AdminResourceService, BBModel, BookingCollections, $rootScope, BBAssets) ->
+  controller: ($scope, $element, $attrs, BBModel, BookingCollections,
+    $rootScope, BBAssets) ->
 
     # All options (resources, people) go to the same select
     $scope.resources = []
@@ -46,11 +47,11 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
 
       if typeof $scope.bb.current_item.person == 'object'
         # Block call
-        AdminPersonService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
+        BBModel.Admin.Person.$block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
           blockSuccess(response)
       else if typeof $scope.bb.current_item.resource == 'object'
         # Block call
-        AdminResourceService.block($scope.bb.company, $scope.bb.current_item.resource, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
+        BBModel.Admin.Resource.$block($scope.bb.company, $scope.bb.current_item.resource, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
           blockSuccess(response)
 
     isValid = ()->
@@ -72,3 +73,4 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       if blockDay
         $scope.config.from_datetime = $scope.config.min_date.format()
         $scope.config.to_datetime = $scope.config.max_date.format()
+

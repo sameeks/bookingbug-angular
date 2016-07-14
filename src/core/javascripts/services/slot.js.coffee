@@ -1,4 +1,7 @@
+'use strict'
+
 angular.module('BB.Services').factory "SlotService", ($q, BBModel) ->
+
   query: (company, params) ->
     deferred = $q.defer()
     if !company.$has('slots')

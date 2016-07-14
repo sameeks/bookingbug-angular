@@ -47,7 +47,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log,
         params =
           notify: booking.notify
         booking.$post('cancel', params).then () ->
-          i =_.findIndex($scope.booking_models, (b) -> console.log(b); b.id == booking.id)
+          i =_.findIndex($scope.booking_models, (b) -> b.id == booking.id)
           $scope.booking_models.splice(i, 1)
           $scope.setRows()
           $scope.loading = false

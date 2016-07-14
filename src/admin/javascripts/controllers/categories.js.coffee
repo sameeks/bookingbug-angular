@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Controllers').controller 'CategoryList', ($scope,
   $location,  $rootScope, BBModel) ->
 
@@ -5,7 +7,6 @@ angular.module('BBAdmin.Controllers').controller 'CategoryList', ($scope,
     $scope.categories = BBModel.Category.$query($scope.bb.company)
 
     $scope.categories.then (items) =>
-
 
   $scope.$watch 'selectedCategory', (newValue, oldValue) =>
     $rootScope.category = newValue
@@ -15,3 +16,4 @@ angular.module('BBAdmin.Controllers').controller 'CategoryList', ($scope,
 
   $scope.$on "Refresh_Cat", (event, message) =>
     $scope.$apply()
+

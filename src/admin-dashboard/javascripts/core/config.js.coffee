@@ -50,7 +50,7 @@ BBAdminDashboardDependencies = [
 ]
 
 adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencies)
-.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
+.config ($stateProvider, $urlRouterProvider) ->
 
   $stateProvider.root_state = "dashboard"
 
@@ -59,10 +59,10 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
     .state 'root',
       template: "<div ui-view></div>"
       resolve:
-        sso: ($q, sso_token, AdminLoginService, $injector) ->
+        sso: ($q, sso_token, BBModel, $injector) ->
           defer = $q.defer()
 
-          AdminLoginService.isLoggedIn().then (loggedIn)->
+          BBModel.Admin.Login.$isLoggedIn().then (loggedIn)->
             if not loggedIn and sso_token != false
               # Use the injector to avoid errors for including a
               # service with dependencies on construct (AdminSsoLogin requires company_id value)
@@ -76,9 +76,9 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
 
           defer.promise
 
-        user: ($q, AdminLoginService, $timeout, $state, sso) ->
+        user: ($q, BBModel, $timeout, $state, sso) ->
           defer = $q.defer()
-          AdminLoginService.user().then (user) ->
+          BBModel.Admin.Login.$user().then (user) ->
             if user
               defer.resolve(user)
             else
@@ -90,7 +90,7 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
           defer.promise
         company: (user, $q, $timeout, $state) ->
           defer = $q.defer()
-          user.getCompanyPromise().then (company) ->
+          user.$getCompany().then (company) ->
             if company.companies && company.companies.length > 0
               $timeout () ->
                 $state.go 'departments', {}, {reload: true}
@@ -102,7 +102,7 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
               $state.go 'login', {}, {reload: true}
           defer.promise
       controller: 'CorePageController'
-]
+
 .config ($logProvider, $httpProvider) ->
   $logProvider.debugEnabled(true)
   $httpProvider.defaults.withCredentials = true
@@ -119,7 +119,7 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
 # Translatition Configuration
 .config ['$translateProvider', 'AdminCoreOptionsProvider', ($translateProvider, AdminCoreOptionsProvider) ->
   # Sanitisation strategy
-  $translateProvider.useSanitizeValueStrategy('sanitize');
+  $translateProvider.useSanitizeValueStrategy('sanitize')
   # Persist language selection in localStorage
   $translateProvider.useLocalStorage()
   # # Register available languages and their associations
@@ -128,7 +128,7 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
     # Set fallbacklanguage
     .fallbackLanguage(AdminCoreOptionsProvider.getOption('available_languages'))
 ]
-.run ['$translate', 'AdminCoreOptions', ($translate, AdminCoreOptions) ->
+.run ($translate, AdminCoreOptions) ->
   # define fallback
   $translate.preferredLanguage AdminCoreOptions.default_language
 
@@ -138,4 +138,4 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
 
     if _.contains(AdminCoreOptions.available_languages, browserLocale)
       $translate.preferredLanguage browserLocale
-]
+

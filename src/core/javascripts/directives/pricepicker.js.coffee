@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Directives').directive 'pricepicker', ()->
 
   controller = ($scope) ->

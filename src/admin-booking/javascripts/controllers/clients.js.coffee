@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   restrict: 'AE'
@@ -8,8 +8,8 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
 
 
 angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,
-  $rootScope, $q, AdminClientService, AlertService, ClientService,
-  ValidatorService, ErrorService, $log, BBModel, $timeout, LoadingService) ->
+  $rootScope, $q, AlertService, ClientService, ValidatorService, ErrorService,
+  $log, BBModel, $timeout, LoadingService) ->
 
   $scope.validator  = ValidatorService
   $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 10})
@@ -79,7 +79,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,
 
     $scope.notLoaded $scope
 
-    AdminClientService.query($scope.params).then (result) ->
+    BBModel.Admin.Client.$query($scope.params).then (result) ->
 
       $scope.search_complete = true
 
@@ -92,18 +92,13 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,
 
 
   $scope.searchClients = (search_text) ->
-
     defer = $q.defer()
-
     params =
       filter_by: search_text
       company: $scope.bb.company
-
-    AdminClientService.query(params).then (clients) =>
-      defer.resolve(clients.items)
-      clients.items
-
-    return defer.promise
+    BBModel.Admin.Client.$query(params).then (clients) =>
+      defer.resolve(clients)
+    defer.promise
 
 
   $scope.typeHeadResults = ($item, $model, $label) ->

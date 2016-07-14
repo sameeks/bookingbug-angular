@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc service
 * @name BB.Services:Airbrake
@@ -27,3 +29,4 @@ angular.module('BB.Services').factory '$exceptionHandler', ($log, AirbrakeConfig
       error: exception
       params: angular_cause: cause, from_sdk: sdkError
     return
+

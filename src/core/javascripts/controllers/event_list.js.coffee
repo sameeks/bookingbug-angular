@@ -477,7 +477,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope,
               filter = ($scope.dynamic_filters.values[dynamic_filter.name] and i is $scope.dynamic_filters.values[dynamic_filter.name].name) or !$scope.dynamic_filters.values[dynamic_filter.name]?
               break if filter
           else if (item.chain.extra[name] is undefined && (_.isEmpty($scope.dynamic_filters.values) || !$scope.dynamic_filters.values[dynamic_filter.name]?))
-            filter = true;
+            filter = true
           result = result and filter
       else
         for dynamic_filter in $scope.dynamic_filters[type]
@@ -568,3 +568,4 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope,
   #   if last_month_shown.start_date.isSame(last_event, 'month')
   #     $scope.start_date = last_month_shown.start_date
   #     $scope.loadEventData()
+

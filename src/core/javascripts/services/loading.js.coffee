@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log,
   $rootScope, AlertService, ErrorService) ->
 
@@ -24,7 +26,7 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log,
     # set the scope loaded to true...
     cscope.isLoaded = true
     # then walk up the scope chain looking for the 'loading' scope...
-    loadingFinished = true;
+    loadingFinished = true
 
     while cscope
       if cscope.hasOwnProperty('scopeLoaded')
@@ -70,11 +72,10 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log,
     cscope.isLoaded = false
     # then look through all the scopes for the 'loading' scope, which is the
     # scope which has a 'scopeLoaded' property and set it to false, which makes
-    # the ladoing gif show;
+    # the ladoing gif show
     while cscope
       if cscope.hasOwnProperty('scopeLoaded')
         cscope.scopeLoaded = false
       cscope = cscope.$parent
     return
-
 

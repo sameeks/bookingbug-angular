@@ -178,3 +178,4 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel,
 
     @$query: (company_id, options) ->
       CompanyService.query(company_id, options)
+

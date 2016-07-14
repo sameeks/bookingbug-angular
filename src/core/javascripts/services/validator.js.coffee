@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc service
 * @name BB.Services:Validator
@@ -240,7 +242,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
       if prms.bounds
         sw = new google.maps.LatLng(prms.bounds.sw.x, prms.bounds.sw.y)
         ne = new google.maps.LatLng(prms.bounds.ne.x, prms.bounds.ne.y)
-        req.bounds = new google.maps.LatLngBounds(sw, ne);
+        req.bounds = new google.maps.LatLngBounds(sw, ne)
       geocoder = new google.maps.Geocoder()
       geocoder.geocode req, (results, status) ->
         if results.length == 1 && status == 'OK'
@@ -304,3 +306,4 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
       for form in forms
         form.submitted = false
         form.$setPristine()
+

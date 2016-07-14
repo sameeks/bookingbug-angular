@@ -2,7 +2,6 @@
 
 angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel, BaseModel, $sce) ->
 
-
   class Purchase_Total extends BaseModel
     constructor: (data) ->
       super(data)

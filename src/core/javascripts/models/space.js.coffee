@@ -14,3 +14,4 @@ angular.module('BB.Models').factory "SpaceModel", ($q, BBModel, BaseModel, Space
 
     $query: (company) ->
       SpaceService.query(company)
+

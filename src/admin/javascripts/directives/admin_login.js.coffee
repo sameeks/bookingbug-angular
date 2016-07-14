@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log,
   $rootScope, $q, BBModel) ->
 

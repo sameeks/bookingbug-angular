@@ -11,15 +11,15 @@ angular.module('BBAdminDashboard.departments', [
   'BBAdminDashboard.departments.directives',
   'BBAdminDashboard.departments.translations'
 ])
-.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
+.config ($stateProvider, $urlRouterProvider) ->
   $stateProvider
     .state 'departments',
       url: "/departments"
       templateUrl: "admin_departments_page.html"
       resolve:
-        user: ($q, AdminLoginService, $timeout, $state) ->
+        user: ($q, BBModel, $timeout, $state) ->
           defer = $q.defer()
-          AdminLoginService.user().then (user) ->
+          BBModel.Admin.Login.$user().then (user) ->
             if user
               defer.resolve(user)
             else
@@ -29,7 +29,7 @@ angular.module('BBAdminDashboard.departments', [
             $timeout () ->
               $state.go 'login', {}, {reload: true}
           defer.promise
-        company: (user) -> user.getCompanyPromise()
+        company: (user) -> user.$getCompany()
         departments: (company, $q, $timeout, $state) ->
           defer = $q.defer()
           if company.companies && company.companies.length > 0
@@ -39,4 +39,4 @@ angular.module('BBAdminDashboard.departments', [
               $state.go $stateProvider.root_state, {}, {reload: true}
           defer.promise
       controller: 'DepartmentsPageCtrl'
-]
+

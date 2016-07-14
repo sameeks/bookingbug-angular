@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module("BB.Services").factory "RecaptchaService", ($q, halClient, UriTemplate) ->
 
   validateResponse: (params) ->

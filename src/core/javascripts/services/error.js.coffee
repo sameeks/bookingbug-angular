@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
 
   alerts = [
@@ -289,3 +291,4 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       return alert
     else
       return null
+

@@ -20,8 +20,6 @@ angular.module('BBAdmin.Directives').directive 'bbPeopleList', ($rootScope) ->
     return
 
 
-
-
 angular.module('BBAdmin.Directives').directive 'bbBookingList', ->
   restrict: 'AE'
   replace: true
@@ -58,3 +56,4 @@ angular.module('BBAdmin.Directives').directive 'bbBookingList', ->
         $scope.relevantBookings = $filter('orderBy')(bookings, 'datetime')
 
       $scope.relevantBookings ?= []
+

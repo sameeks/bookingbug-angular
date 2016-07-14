@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdminBooking').factory 'AdminBookingPopup', ($modal, $timeout) ->
 
   open: (config) ->
@@ -21,3 +23,4 @@ angular.module('BBAdminBooking').factory 'AdminBookingPopup', ($modal, $timeout)
       templateUrl: 'admin_booking_popup.html'
       resolve:
         config: () -> config
+

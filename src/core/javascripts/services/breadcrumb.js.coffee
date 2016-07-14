@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "BreadcrumbService",  () ->
 
   current_step = 1
@@ -7,3 +9,4 @@ angular.module('BB.Services').factory "BreadcrumbService",  () ->
 
   getCurrentStep: () ->
     return current_step
+

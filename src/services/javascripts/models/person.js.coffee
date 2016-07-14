@@ -209,3 +209,4 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q,
 
     @$signup: (user, data) ->
       AdminPersonService.signup(user, data)
+

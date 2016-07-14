@@ -22,7 +22,6 @@ angular.module('BBAdminDashboard.members-iframe.controllers')
       $scope.clearCurrentClient()
 
   $scope.setCurrentClient = (client) ->
-    console.log "set current", client
     if client
       $rootScope.client_id = client
       $scope.extra_params = "id=#{client}"

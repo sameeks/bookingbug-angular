@@ -1,3 +1,5 @@
+'use strict'
+
 ###
 * @ngdoc service
 * @name BBAdminBooking.service:ProcessAssetsFilter

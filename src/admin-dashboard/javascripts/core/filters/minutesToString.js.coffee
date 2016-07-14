@@ -1,3 +1,5 @@
+'use strict'
+
 ###
 * @ngdoc filter
 * @name BBAdminDashboard.filters.filter:minutesToString
@@ -7,3 +9,4 @@
 angular.module('BBAdminDashboard.filters').filter 'minutesToString', ->
   (minutes, format = 'HH:mm') ->
     return moment(moment.duration(minutes, 'minutes')._data).format(format)
+

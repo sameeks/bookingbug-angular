@@ -1,5 +1,7 @@
+'use strict'
+
 angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope,
-  $log, $interval, $sessionStorage, ModalForm, AdminQueuerService, BBModel) ->
+  $log, $interval, $sessionStorage, ModalForm, BBModel) ->
 
   $scope.loading = true
   $scope.waiting_for_queuers = false
@@ -25,7 +27,7 @@ angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope,
     $scope.waiting_for_queuers = true
     params =
       company: $scope.company
-    AdminQueuerService.query(params).then (queuers) ->
+    BBModel.Admin.Queuer.$query(params).then (queuers) ->
       $scope.queuers = queuers
       $scope.waiting_queuers = []
       for queuer in queuers
@@ -44,7 +46,6 @@ angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope,
       $scope.trash_hover = set
 
    $scope.hoverOver = (event, ui, obj, set) ->
-    console.log event, ui, obj, set
     $scope.$apply () ->
       obj.hover = set
 
@@ -98,3 +99,4 @@ angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope,
       for queuer in $scope.queuers
         queuer.remaining()
   , 5000)
+

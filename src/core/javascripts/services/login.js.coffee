@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BB.Services').factory "LoginService", ($q, halClient,
   $rootScope, BBModel, $sessionStorage, $localStorage) ->
@@ -154,3 +155,4 @@ angular.module('BB.Services').factory "LoginService", ($q, halClient,
       , (err) =>
         deferred.reject(err)
       deferred.promise
+

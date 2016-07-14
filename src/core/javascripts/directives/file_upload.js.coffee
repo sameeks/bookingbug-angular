@@ -72,3 +72,4 @@ angular.module('BB.Controllers').controller 'FileUpload', ($scope, Upload) ->
         file: file
       )
       file.upload.then onSuccess, onError, onProgress
+

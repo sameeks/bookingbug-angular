@@ -3,24 +3,12 @@
 angular.module('BBAdmin.Controllers').controller 'CalendarCtrl', ($scope,
   BBModel, $rootScope) ->
 
-  ### event source that pulls from google.com
-  $scope.eventSource = {
-          url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-          className: 'gcal-event',           // an option!
-          currentTimezone: 'America/Chicago' // an option!
-  }
-  ###
-
   $scope.eventsF = (start, end, tz, callback) ->
-    console.log start, end, callback
-
     prms = {company_id: 21}
     prms.start_date = start.format("YYYY-MM-DD")
     prms.end_date = end.format("YYYY-MM-DD")
-
     bookings = BBModel.Admin.Booking.$query(prms)
     bookings.then (s) =>
-      console.log s.items
       callback(s.items)
       s.addCallback (booking) =>
         $scope.myCalendar.fullCalendar('renderEvent',booking, true)
@@ -28,7 +16,6 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl', ($scope,
 
   $scope.dayClick = ( date, allDay, jsEvent, view ) ->
     $scope.$apply =>
-      console.log(date, allDay, jsEvent, view)
       $scope.alertMessage = ('Day Clicked ' + date)
 
   # alert on Drop
@@ -102,3 +89,4 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl', ($scope,
   }
   # event sources array*
   $scope.eventSources = [$scope.eventsF]
+

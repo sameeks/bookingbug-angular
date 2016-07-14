@@ -1,3 +1,5 @@
+'use strict'
+
 ###
 * @ngdoc filter
 * @name BBAdminDashboard.filters.filter:propsFilter
@@ -5,6 +7,7 @@
 * Does an OR operation
 ###
 angular.module('BBAdminDashboard.filters').filter 'propsFilter', ->
+
   (items, props) ->
     out = []
     if angular.isArray(items)
@@ -27,3 +30,4 @@ angular.module('BBAdminDashboard.filters').filter 'propsFilter', ->
       # Let the output be the input untouched
       out = items
     out
+

@@ -23,14 +23,10 @@ angular.module('BBQueue.Services', [
   'ngSanitize'
 ])
 
-
 angular.module('BBQueueMockE2E', ['BBQueue', 'BBAdminMockE2E'])
 
+angular.module('BBQueue.Services').run () ->
+  models = ['Queuer', 'ClientQueue']
+  for model in models
+    BBModel['Admin'][model] = $injector.get("Admin.#{model}Model")
 
-queueapp.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug,
-  $document, $sessionStorage, AppConfig, AdminLoginService) ->
-
-  # AdminLoginService.checkLogin()
-  # if $rootScope.user && $rootScope.user.company_id
-  #   $rootScope.bb ||= {}
-  #   $rootScope.bb.company_id = $rootScope.user.company_id

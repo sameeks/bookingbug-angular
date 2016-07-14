@@ -9,4 +9,6 @@
 ###
 angular.module('BBAdminDashboard.config-iframe.controllers')
 .controller 'ConfigSubIframePageCtrl', ($scope, $state, $stateParams) ->
+
   $scope.path = $stateParams.path
+

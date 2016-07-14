@@ -22,7 +22,7 @@ angular.module('BBAdmin.Services').factory 'AdminClientService', ($q, $window,
         resource.$get('clients').then (items) =>
           people = (new BBModel.Client(i) for i in items)
           clients  = new $window.Collection.Client(resource, people, prms)
-          clients.total_entries = resource.total_entries 
+          clients.total_entries = resource.total_entries
           ClientCollections.add(clients)
           deferred.resolve(clients)
       else
@@ -41,5 +41,4 @@ angular.module('BBAdmin.Services').factory 'AdminClientService', ($q, $window,
     , (err) =>
       deferred.reject(err)
     deferred.promise
-
 

@@ -52,7 +52,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
   getBookings = (params) ->
     loader.notLoaded()
     defer = $q.defer()
-    $scope.member.getBookingsPromise(params).then (bookings) ->
+    $scope.member.$getBookings(params).then (bookings) ->
       loader.setLoaded()
       defer.resolve(bookings)
     , (err) ->
@@ -123,7 +123,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
 
 
   edit: (booking) ->
-    booking.getAnswersPromise().then (answers) ->
+    booking.$getAnswers().then (answers) ->
       for answer in answers.answers
         booking["question#{answer.question_id}"] = answer.value
       ModalForm.edit

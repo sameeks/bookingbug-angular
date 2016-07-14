@@ -631,3 +631,4 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     $scope.loc = null
     $scope.reverse_geocode_address = null
     $scope.address = null
+

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBQueue').directive 'bbIfLogin', ($modal, $log, $q,
   $rootScope, AdminQueueService, AdminCompanyService, $compile, $templateCache,
   ModalForm, BBModel) ->
@@ -22,8 +24,7 @@ angular.module('BBQueue').directive 'bbIfLogin', ($modal, $log, $q,
 
 
 angular.module('BBQueue').directive 'bbQueueDashboard', ($modal, $log,
-  $rootScope, $compile, $templateCache,
-  ModalForm, BBModel) ->
+  $rootScope, $compile, $templateCache, ModalForm, BBModel) ->
 
   link = (scope, element, attrs) ->
     scope.loggedin.then () ->
@@ -37,8 +38,7 @@ angular.module('BBQueue').directive 'bbQueueDashboard', ($modal, $log,
 
 
 angular.module('BBQueue').directive 'bbQueues', ($modal, $log,
-  $rootScope, $compile, $templateCache,
-  ModalForm, BBModel) ->
+  $rootScope, $compile, $templateCache, ModalForm, BBModel) ->
 
   link = (scope, element, attrs) ->
     scope.loggedin.then () ->
@@ -51,8 +51,7 @@ angular.module('BBQueue').directive 'bbQueues', ($modal, $log,
 
 
 angular.module('BBQueue').directive 'bbQueueServers', ($modal, $log,
-  $rootScope, $compile, $templateCache,
-  ModalForm, BBModel) ->
+  $rootScope, $compile, $templateCache, ModalForm, BBModel) ->
 
   link = (scope, element, attrs) ->
     scope.loggedin.then () ->
@@ -62,3 +61,4 @@ angular.module('BBQueue').directive 'bbQueueServers', ($modal, $log,
     link: link
     controller: 'bbQueueServers'
   }
+

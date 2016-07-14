@@ -1,5 +1,6 @@
-angular.module('BB.Services').factory "MutexService", ($q, $window, $rootScope) ->
+'use strict'
 
+angular.module('BB.Services').factory "MutexService", ($q, $window, $rootScope) ->
 
  getLock: (prms) ->
     # create 2 local promises - one to pass back, to the link on
@@ -22,7 +23,6 @@ angular.module('BB.Services').factory "MutexService", ($q, $window, $rootScope) 
       # push the new promise and resolve
       $rootScope.mutexes.push({mprom: mprom, iprom: iprom})
       return iprom.promise
-
 
 
   unlock: (mutex) ->

@@ -133,3 +133,4 @@ if !String::includes
 # Extend String with parameterise method
 String::parameterise = (seperator = '-') ->
   @trim().replace(/\s/g,seperator).toLowerCase()
+

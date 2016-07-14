@@ -8,8 +8,8 @@
 * Translations for the admin settings-iframe module
 ###
 angular.module('BBAdminDashboard.settings-iframe.translations')
-.config ['$translateProvider', ($translateProvider)->
+.config ($translateProvider)->
 	$translateProvider.translations('en',{
     'TEXT_1': 'Hello here!',
   })
-]
+

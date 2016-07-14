@@ -120,3 +120,4 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
 
     @$getAddress: (prms) ->
       AddressListService.getAddress(prms)
+

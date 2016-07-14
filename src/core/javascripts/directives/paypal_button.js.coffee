@@ -25,6 +25,3 @@ app.directive 'bbPaypal', (PathSvc) ->
       }
       scope.inputs.push obj
 
-
-
-

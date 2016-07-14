@@ -21,23 +21,20 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,
 
   loader = LoadingService.$loader($scope)
 
-#  $rootScope.connection_started.then ->
-#    $scope.notLoaded $scope
-#    AdminClientService.query({company_id:$scope.bb.company_id}).then (clients) =>
-#      $scope.clients = clients
-#      $scope.clientDef.resolve(clients)
-#      $scope.setLoaded $scope
-#    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-#    BBModel.ClientDetails.$query($scope.bb.company).then (details) =>
-#      $scope.client_details = details
-#      $scope.setLoaded $scope
-
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
     clientDef = $q.defer()
 
     $rootScope.connection_started.then ->
       loader.notLoaded()
-      AdminClientService.query({company_id:$scope.bb.company_id, per_page: $scope.per_page, page: currentPage+1, filter_by: filterBy, filter_by_fields: filterByFields, order_by: orderBy, order_by_reverse: orderByReverse    }).then (clients) =>
+      params =
+        company_id: $scope.bb.company_id
+        per_page: $scope.per_page
+        page: currentPage + 1
+        filter_by: filterBy
+        filter_by_fields: filterByFields
+        order_by: orderBy
+        order_by_reverse: orderByReverse
+      BBModel.Admin.Client.$query(params).then (clients) =>
         $scope.clients = clients.items
         loader.setLoaded()
         $scope.setPageLoaded()
@@ -50,3 +47,4 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,
 
   $scope.edit = (item) ->
     $log.info("not implemented")
+

@@ -99,3 +99,4 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q,
 
     @$query: (prms) ->
       AdminBookingService.query(prms)
+

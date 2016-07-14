@@ -420,3 +420,4 @@ app.directive "bbMatchInput", ->
       value
 
     ctrl.$parsers.push compare
+

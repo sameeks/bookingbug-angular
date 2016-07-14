@@ -1,8 +1,11 @@
+'use strict'
+
 angular.module('BB.Directives').directive 'bbAttendees', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller: ($scope, $rootScope, $q, PurchaseService, AlertService, ValidatorService, LoadingService, BBModel) ->
+  controller: ($scope, $rootScope, $q, PurchaseService, AlertService,
+    ValidatorService, LoadingService, BBModel) ->
 
     $scope.validator = ValidatorService
     loader = LoadingService.$loader($scope)
@@ -107,3 +110,4 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
     ###
     $scope.setReady = () ->
       return $scope.changeAttendees()
+

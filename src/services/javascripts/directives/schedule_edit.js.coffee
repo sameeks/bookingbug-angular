@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdminServices').directive 'scheduleEdit', () ->
 
   link = (scope, element, attrs, ngModel) ->
@@ -30,3 +32,4 @@ angular.module('schemaForm').config (schemaFormProvider,
     'schedule'
     'schedule_edit_form.html'
   )
+

@@ -8,9 +8,8 @@
 * Translations for the admin core module
 ###
 angular.module('BBAdminDashboard.translations')
-.config ['$translateProvider', ($translateProvider)->
+.config ($translateProvider)->
 	$translateProvider.translations('en',{
     'TEXT_1': 'Hello here!',
   })
-  
-]
+

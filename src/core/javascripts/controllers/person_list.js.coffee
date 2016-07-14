@@ -55,8 +55,8 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
 
 
 angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
-  PageControllerService, PersonService, ItemService, $q, BBModel, PersonModel,
-  FormDataStoreService, LoadingService) ->
+  PageControllerService, $q, BBModel, PersonModel, FormDataStoreService,
+  LoadingService) ->
 
   $scope.controller = "public.controllers.PersonList"
 

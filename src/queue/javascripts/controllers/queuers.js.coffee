@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBQueue').controller 'bbQueuers', ($scope, $log,
     AdminQueuerService, ModalForm, $interval) ->
 
@@ -34,3 +36,4 @@ angular.module('BBQueue').controller 'bbQueuers', ($scope, $log,
       for queuer in $scope.queuers
         queuer.remaining()
   , 5000)
+

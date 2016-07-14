@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory 'Dialog', ($modal, $log) ->
 
   controller = ($scope, $modalInstance, model, title, success, fail, body) ->

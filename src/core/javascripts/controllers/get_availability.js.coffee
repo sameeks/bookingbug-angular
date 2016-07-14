@@ -59,3 +59,4 @@ angular.module('BB.Controllers').controller 'GetAvailability', ($scope,
             $scope.earliest_day = moment(day.date)
             if day.first
               $scope.earliest_day.add(day.first, "minutes")
+

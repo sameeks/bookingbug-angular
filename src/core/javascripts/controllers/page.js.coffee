@@ -111,3 +111,4 @@ angular.module('BB.Directives').directive 'bbPage', () ->
 
 angular.module('BB.Controllers').controller 'PageController', BBBasicPageCtrl
 angular.module('BB.Services').value "PageControllerService", BBBasicPageCtrl
+

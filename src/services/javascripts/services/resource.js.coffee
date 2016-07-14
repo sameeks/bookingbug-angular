@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Services').factory 'AdminResourceService', ($q,
   UriTemplate, halClient, SlotCollections, BBModel) ->
 
@@ -27,5 +29,5 @@ angular.module('BBAdmin.Services').factory 'AdminResourceService', ($q,
         deferred.resolve(slot)
     , (err) =>
       deferred.reject(err)
-
     deferred.promise
+

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory 'LocaleService', ($window) ->
 
   locale = $window.getURIparam('locale')
@@ -9,3 +11,4 @@ angular.module('BB.Services').factory 'LocaleService', ($window) ->
   else
     # US a default locale
     return "en"
+

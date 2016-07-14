@@ -1,5 +1,7 @@
+'use strict'
+
 angular.module('BBAdminServices').directive 'personTable', ($log, ModalForm,
-  AdminCompanyService, BBModel) ->
+  BBModel) ->
 
   controller = ($scope) ->
 
@@ -39,7 +41,7 @@ angular.module('BBAdminServices').directive 'personTable', ($log, ModalForm,
     if scope.company
       scope.getPeople()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         scope.getPeople()
 
@@ -48,3 +50,4 @@ angular.module('BBAdminServices').directive 'personTable', ($log, ModalForm,
     link: link
     templateUrl: 'person_table_main.html'
   }
+

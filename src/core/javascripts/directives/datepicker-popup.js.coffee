@@ -1,4 +1,4 @@
-
+'use strict'
 
 
 # replaces the date parse method for the angular-ui datepicker popup. the picker
@@ -125,7 +125,7 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
       viewValue = mDate.format('MM/DD/YYYY')
 
       # test year format is not /0201, /0202 etc
-      viewValue = viewValue.replace(/\/00/, '/20');
+      viewValue = viewValue.replace(/\/00/, '/20')
       if /\/02\d{2}$/.test(viewValue)
         return
 
@@ -149,3 +149,4 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
       else
         setTimeout f, 10
     f()
+

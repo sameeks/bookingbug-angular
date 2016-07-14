@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,
-  $rootScope, $q, AdminDayService) ->
+  $rootScope, $q, BBModel) ->
 
   $scope.init = (company_id) =>
     $scope.inline_items = ""
@@ -23,7 +23,7 @@ angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,
     $scope.weeks = weekListDef.promise
     prms.url = $scope.bb.api_url
 
-    AdminDayService.query(prms).then (days) =>
+    BBModel.Admin.Day.$query(prms).then (days) =>
       $scope.sdays = days
       dayListDef.resolve()
       if $scope.category
@@ -67,5 +67,4 @@ angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,
   $rootScope.$watch 'category', (newValue, oldValue) =>
     if newValue &&  $scope.sdays
       $scope.update_days()
-
 

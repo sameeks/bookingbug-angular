@@ -15,3 +15,4 @@ angular.module('BB.Models').factory "BulkPurchaseModel", ($q, BBModel,
 
     @$query: (company) ->
       BulkPurchaseService.query(company)
+

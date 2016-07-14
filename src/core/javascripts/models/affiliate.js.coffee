@@ -55,3 +55,4 @@ angular.module('BB.Models').factory "AffiliateModel", ($q, BBModel, BaseModel, h
         console .log 'err ', err
         defer.reject(err)
       defer.promise
+

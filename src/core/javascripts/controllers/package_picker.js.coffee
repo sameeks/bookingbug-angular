@@ -25,8 +25,6 @@
 ####
 
 
-
-
 angular.module('BB.Directives').directive 'bbPackagePicker', () ->
   restrict: 'AE'
   replace: true

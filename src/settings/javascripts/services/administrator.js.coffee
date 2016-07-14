@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Services').factory 'AdminAdministratorService', ($q, BBModel) ->
 
   query: (params) ->

@@ -1,5 +1,7 @@
+'use strict'
+
 angular.module('BBAdminServices').directive 'resourceTable', ($modal, $log,
-  ModalForm, AdminCompanyService) ->
+  ModalForm) ->
 
   controller = ($scope) ->
 
@@ -42,7 +44,7 @@ angular.module('BBAdminServices').directive 'resourceTable', ($modal, $log,
     if scope.company
       scope.getResources()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         scope.getResources()
 
@@ -51,3 +53,4 @@ angular.module('BBAdminServices').directive 'resourceTable', ($modal, $log,
     link: link
     templateUrl: 'resource_table_main.html'
   }
+

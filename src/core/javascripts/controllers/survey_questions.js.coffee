@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbSurveyQuestions
@@ -28,10 +30,9 @@ angular.module('BB.Directives').directive 'bbSurveyQuestions', () ->
   controller : 'SurveyQuestions'
 
 angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
-  $rootScope, CompanyService, PurchaseService, ClientService, $modal,
-  $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService,
-  AlertService, LoginService, $window, ServiceService, ValidatorService,
-  PurchaseBookingService, $sessionStorage) ->
+  $rootScope, PurchaseService, $modal, $location, $timeout, BBWidget, BBModel,
+  $q, QueryStringService, SSOService, AlertService, $window, ValidatorService,
+  $sessionStorage) ->
 
   $scope.controller = "SurveyQuestions"
 
@@ -66,7 +67,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
   * Check if logged in
   ###
   $scope.checkIfLoggedIn = () =>
-    LoginService.checkLogin()
+    BBModel.Login.$checkLogin()
 
   ###**
   * @ngdoc method
@@ -124,8 +125,12 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
   ###
   $scope.submitSurveyLogin = (form) =>
     return if !ValidatorService.validateForm(form)
-    LoginService.companyLogin($scope.company, {}, {email: $scope.login.email, password: $scope.login.password, id: $scope.company.id}).then (member) =>
-      LoginService.setLogin(member)
+    params =
+      email: $scope.login.email
+      password: $scope.login.password
+      id: $scope.company_id
+    BBModel.Login.$companyLogin($scope.company, {}, params).then (member) =>
+      BBModel.Login.$setLogin(member)
       getBookingAndSurvey()
     , (err) ->
       showLoginError()
@@ -144,7 +149,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
     params = {purchase_id: id, url_root: $scope.bb.api_url}
     auth_token = $sessionStorage.getItem('auth_token')
     params.auth_token = auth_token if auth_token
-    PurchaseService.query(params).then (purchase) =>
+    BBModel.Purchase.Total.$query(params).then (purchase) =>
       $scope.purchase = purchase
       $scope.total = $scope.purchase
       $scope.loadSurvey($scope.purchase)
@@ -164,7 +169,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
     params = {booking_ref: id, url_root: $scope.bb.api_url, raw: true}
     auth_token = $sessionStorage.getItem('auth_token')
     params.auth_token = auth_token if auth_token
-    PurchaseService.bookingRefQuery(params).then (purchase) =>
+    BBModel.Purchase.Total.$bookingRefQuery(params).then (purchase) =>
       $scope.purchase = purchase
       $scope.total = $scope.purchase
       $scope.loadSurvey($scope.purchase)
@@ -189,7 +194,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
         loader.notLoaded()
         booking.client_id = $scope.client.id
         params = (booking)
-        PurchaseBookingService.addSurveyAnswersToBooking(params).then (booking) ->
+        BBModel.Purchase.Booking.$addSurveyAnswersToBooking(params).then (booking) ->
           loader.setLoaded()
           $scope.completed = true
         , (err) ->
@@ -212,7 +217,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
     params = {booking_ref: $scope.booking_ref, url_root: $scope.bb.api_url, raw: true}
     auth_token = $sessionStorage.getItem('auth_token')
     params.auth_token = auth_token if auth_token
-    PurchaseService.bookingRefQuery(params).then (purchase) =>
+    BBModel.Purchase.Total.$bookingRefQuery(params).then (purchase) =>
       $scope.purchase = purchase
       $scope.total = $scope.purchase
       $scope.loadSurvey($scope.purchase)
@@ -249,7 +254,7 @@ angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,
   ###
   getMember = () =>
     params = {member_id: $scope.member_id, company_id: $scope.company_id}
-    LoginService.memberQuery(params).then (member) =>
+    BBModel.Login.$memberQuery(params).then (member) =>
       $scope.member = member
 
   ###**

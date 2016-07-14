@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel, MutexService) ->
 
   addItem: (company, params) ->
@@ -259,3 +261,4 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
           MutexService.unlock(mutex)
           deferred.reject(err)
       deferred.promise
+

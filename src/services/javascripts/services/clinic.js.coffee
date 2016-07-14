@@ -1,10 +1,11 @@
+'use strict'
+
 angular.module('BBAdmin.Services').factory 'AdminClinicService',  ($q, BBModel,
   ClinicCollections, $window) ->
 
   query: (params) ->
     company = params.company
     defer = $q.defer()
-
     if params.id # reuqest for a single one
       company.$get('clinics', params).then (clinic) ->
         clinic = new BBModel.Admin.Clinic(clinic)
@@ -40,7 +41,6 @@ angular.module('BBAdmin.Services').factory 'AdminClinicService',  ($q, BBModel,
       deferred.resolve(clinic)
     , (err) =>
       deferred.reject(err)
-
     deferred.promise
 
   cancel: (clinic) ->
@@ -51,7 +51,6 @@ angular.module('BBAdmin.Services').factory 'AdminClinicService',  ($q, BBModel,
       deferred.resolve(clinic)
     , (err) =>
       deferred.reject(err)
-
     deferred.promise
 
   update: (clinic) ->
@@ -62,5 +61,5 @@ angular.module('BBAdmin.Services').factory 'AdminClinicService',  ($q, BBModel,
       deferred.resolve(clinic)
     , (err) =>
       deferred.reject(err)
-
     deferred.promise
+

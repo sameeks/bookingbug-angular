@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc service
 * @name BB.Services:PathHelper
@@ -37,3 +39,4 @@ angular.module('BB.Services').factory 'PathHelper', ($urlMatcherFactory, $locati
       return match[param]
     else
       return match
+

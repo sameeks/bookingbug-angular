@@ -117,3 +117,4 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, $bbug,
 
     @$query: (prms) ->
       ItemDetailsService.query(prms)
+

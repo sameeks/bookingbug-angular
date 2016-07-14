@@ -4,8 +4,8 @@ app = angular.module 'BB.Directives'
 
 app.directive 'ngConfirmClick', () ->
   link: (scope, element, attr) ->
-    msg = attr.ngConfirmClick || "Are you sure?";
-    clickAction = attr.ngConfirmedClick;
+    msg = attr.ngConfirmClick || "Are you sure?"
+    clickAction = attr.ngConfirmedClick
     element.bind 'click', (event) =>
       if window.confirm(msg)
         scope.$eval(clickAction)
@@ -506,3 +506,4 @@ angular.module('BB.Directives').directive('bbBlurOnReturn', ($timeout) ->
         )
     )
 )
+

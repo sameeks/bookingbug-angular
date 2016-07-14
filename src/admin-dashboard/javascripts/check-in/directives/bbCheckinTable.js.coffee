@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BBAdminDashboard.check-in.directives').directive 'bbCheckinTable', () ->
   restrict: 'AE'
@@ -8,9 +9,10 @@ angular.module('BBAdminDashboard.check-in.directives').directive 'bbCheckinTable
   link : (scope, element, attrs) ->
     return
 
+
 angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsController', (
-  $scope,  $rootScope, BusyService, $q, $filter, AdminTimeService,
-  AdminBookingService, AdminSlotService, $timeout, AlertService) ->
+  $scope,  $rootScope, BusyService, $q, $filter, BBModel, $timeout,
+  AlertService) ->
 
   $scope.$on 'refetchCheckin', (event, res) ->
     $scope.getAppointments(null, null, null, null, null  ,true)
@@ -33,7 +35,7 @@ angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsContr
     params.filter_by_fields = filterByFields if filterByFields
     params.order_by = orderBy if orderBy
     params.order_by_reverse = orderByReverse if orderByReverse
-    AdminBookingService.query(params).then (res) =>
+    BBModel.Admin.Booking.$query(params).then (res) =>
       $scope.booking_collection = res
       $scope.bookings = []
       $scope.bmap = {}
@@ -65,3 +67,4 @@ angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsContr
   # Make sure everytime we enter this view we skip the
   # cache to get the latest state of appointments
   $scope.getAppointments(null, null, null, null, null  ,true)
+

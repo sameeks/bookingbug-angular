@@ -84,3 +84,4 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel) ->
         @end_time = moment(@end_time)
         @end = @end_time
       @title = @name
+

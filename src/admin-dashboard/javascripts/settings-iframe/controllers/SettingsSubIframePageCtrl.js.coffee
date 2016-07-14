@@ -9,6 +9,7 @@
 ###
 angular.module('BBAdminDashboard.settings-iframe.controllers')
 .controller 'SettingsSubIframePageCtrl', ($scope, $state, $stateParams) ->
+
   $scope.path = $stateParams.path
   if $stateParams.id
     $scope.extra_params = "id=#{$stateParams.id}"

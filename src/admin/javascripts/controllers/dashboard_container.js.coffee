@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope,
   $rootScope, $location, $modal) ->
 
@@ -46,3 +48,4 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope,
         items: () => prms
       }
     }
+

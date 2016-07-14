@@ -56,7 +56,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
 
 angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
-  $attrs, $rootScope, $q, TimeService, AlertService, LoadingService, BBModel,
+  $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
   FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
@@ -445,7 +445,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
       loc = null
       loc = ",,,," + $scope.bb.postcode + "," if $scope.bb.postcode
 
-      promise = TimeService.query(
+      promise = BBModel.TimeSlot.query(
         company: $scope.bb.company
         resource_ids: $scope.bb.item_defaults.resources
         cItem: $scope.data_source
@@ -589,3 +589,4 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
     if day and slot
       $scope.bb.current_item.earliest_time_slot.selected = true
       $scope.highlightSlot(day, slot)
+

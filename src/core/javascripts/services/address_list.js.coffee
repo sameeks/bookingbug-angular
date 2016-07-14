@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "AddressListService", ($q, $window, halClient, UriTemplate) ->
 
   query: (prms) ->
@@ -19,3 +21,4 @@ angular.module('BB.Services').factory "AddressListService", ($q, $window, halCli
     , (err) =>
      deferred.reject(err)
     deferred.promise
+

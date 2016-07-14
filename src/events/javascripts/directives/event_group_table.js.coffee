@@ -1,12 +1,14 @@
-angular.module('BBAdminEvents').directive 'eventGroupTable', (AdminCompanyService,
-    AdminEventGroupService, $modal, $log, ModalForm) ->
+'use strict'
+
+angular.module('BBAdminEvents').directive 'eventGroupTable', (BBModel, $modal,
+  $log, ModalForm) ->
 
   controller = ($scope) ->
 
     $scope.getEventGroups = () ->
       params =
         company: $scope.company
-      AdminEventGroupService.query(params).then (event_groups) ->
+      BBModel.Admin.EventGroup.$query(params).then (event_groups) ->
         $scope.event_groups_models = event_groups
         $scope.event_groups = _.map event_groups, (event_group) ->
           _.pick event_group, 'id', 'name', 'mobile'
@@ -37,7 +39,7 @@ angular.module('BBAdminEvents').directive 'eventGroupTable', (AdminCompanyServic
     if scope.company
       scope.getEventGroups()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         scope.getEventGroups()
 
@@ -46,3 +48,4 @@ angular.module('BBAdminEvents').directive 'eventGroupTable', (AdminCompanyServic
     link: link
     templateUrl: 'event_group_table_main.html'
   }
+

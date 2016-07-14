@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Controllers').controller 'CompanyList', ($scope,
   $rootScope, $location) ->
 
@@ -18,8 +20,7 @@ angular.module('BBAdmin.Controllers').controller 'CompanyList', ($scope,
       d.add(1, 'days')
 
   $scope.selectCompany = (item) ->
-    window.location = "/view/dashboard/pick_company/" + item.id
-#    $location.path(route)
+    $location = "/view/dashboard/pick_company/" + item.id
 
   $scope.advance_date = (num) ->
     date = $scope.current_date.add(num, 'days')

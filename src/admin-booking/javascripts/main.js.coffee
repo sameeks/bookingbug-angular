@@ -27,3 +27,4 @@ adminbookingapp.run ($rootScope, $log, DebugUtilsService, $bbug, $document,
     if $rootScope.user && $rootScope.user.company_id
       $rootScope.bb ||= {}
       $rootScope.bb.company_id = $rootScope.user.company_id
+

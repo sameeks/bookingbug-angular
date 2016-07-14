@@ -58,8 +58,10 @@ angular.module('BB.Directives').directive 'bbResources', () ->
       scope.booking_items = [scope.booking_item]
 
 
-angular.module('BB.Controllers').controller 'ResourceList',
-($scope,  $rootScope, $attrs, PageControllerService, $q, BBModel, ResourceModel, LoadingService) ->
+angular.module('BB.Controllers').controller 'ResourceList', ($scope,
+  $rootScope, $attrs, PageControllerService, $q, BBModel, ResourceModel,
+  LoadingService) ->
+
   loader = LoadingService.$loader($scope).notLoaded()
 
   angular.extend(this, new PageControllerService($scope, $q))

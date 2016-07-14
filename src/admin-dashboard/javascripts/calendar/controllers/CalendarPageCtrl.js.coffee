@@ -9,12 +9,13 @@
 ###
 angular.module('BBAdminDashboard.calendar.controllers')
 .controller 'CalendarPageCtrl', ($scope, $state, $log) ->
+
   $scope.adminlte.side_menu = false
   $scope.adminlte.heading = null
 
   pusher_channel = $scope.company.getPusherChannel('bookings')
   refetch = _.throttle (data) ->
-    $log.info '== booking push received in bookins == ', data
+    $log.info '== booking push received == ', data
     $scope.$broadcast 'refetchBookings' , data
   , 1000, {leading: false}
 

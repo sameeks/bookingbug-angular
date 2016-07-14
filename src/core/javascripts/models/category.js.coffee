@@ -17,3 +17,4 @@ angular.module('BB.Models').factory "CategoryModel", ($q, BBModel, BaseModel,
 
     @$query: (company) ->
       CategoryService.query(company)
+

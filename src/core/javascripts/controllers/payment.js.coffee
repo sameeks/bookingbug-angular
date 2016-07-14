@@ -85,7 +85,8 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location,
     , false
 
 
-angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q, $location, $window, $sce, $log, $timeout, LoadingService) ->
+angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope,
+  $q, $location, $window, $sce, $log, $timeout, LoadingService) ->
 
   $scope.controller = "public.controllers.Payment"
 
@@ -134,3 +135,4 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
 
   $scope.error = (message) ->
     $log.warn("Payment Failure: " + message)
+

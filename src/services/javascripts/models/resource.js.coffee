@@ -56,3 +56,4 @@ angular.module('BB.Models').factory "Admin.ResourceModel", ($q,
 
     @$block: (company, resource, data) ->
       block(company, resource, data)
+

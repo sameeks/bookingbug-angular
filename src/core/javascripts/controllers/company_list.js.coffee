@@ -157,12 +157,12 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   ###
   $scope.getNearestCompany = ({center}) =>
 
-    pi = Math.PI;
+    pi = Math.PI
     R = 6371  #equatorial radius
     distances = []
 
-    lat1 = center.lat();
-    lon1 = center.lng();
+    lat1 = center.lat()
+    lon1 = center.lng()
 
     for company in $scope.items
       if company.address.lat && company.address.long && company.live
@@ -171,19 +171,19 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
         lat2 = latlong.lat()
         lon2 = latlong.lng()
 
-        chLat = lat2-lat1;
-        chLon = lon2-lon1;
+        chLat = lat2-lat1
+        chLon = lon2-lon1
 
-        dLat = chLat*(pi/180);
-        dLon = chLon*(pi/180);
+        dLat = chLat*(pi/180)
+        dLon = chLon*(pi/180)
 
-        rLat1 = lat1*(pi/180);
-        rLat2 = lat2*(pi/180);
+        rLat1 = lat1*(pi/180)
+        rLat2 = lat2*(pi/180)
 
         a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2);
-        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        d = R * c;
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2)
+        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+        d = R * c
 
         company.distance = d
         distances.push company

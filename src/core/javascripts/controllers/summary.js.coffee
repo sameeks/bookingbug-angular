@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbSummary
@@ -57,3 +59,4 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Load
       $scope.decideNextPage()
 
     , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+

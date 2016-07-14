@@ -9,3 +9,4 @@ angular.module('BBQueue.Directives').directive 'bbQueuerPosition', () ->
 	scope:
 		id: '='
 		apiUrl: '@'
+

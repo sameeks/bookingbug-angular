@@ -1,3 +1,4 @@
+'use strict'
 
 # returns a object literal version of the querystring. you can pass in a key
 # name and it will return a value i.e. QueryStringService('ref')
@@ -58,3 +59,4 @@ angular.module('BB.Services').factory 'QueryStringService', ($window) ->
     if keyName
       return varObj[keyName]
     return varObj
+

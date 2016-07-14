@@ -468,3 +468,4 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService,
       delete @address3
       delete @address4
       delete @address5
+

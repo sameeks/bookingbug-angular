@@ -172,3 +172,4 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     , (err) =>
       deferred.reject(err)
     deferred.promise
+

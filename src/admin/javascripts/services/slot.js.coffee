@@ -79,3 +79,4 @@ angular.module('BBAdmin.Services').factory 'AdminSlotService', ($q, $window,
       deferred.reject(err)
 
     deferred.promise
+

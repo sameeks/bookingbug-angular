@@ -202,3 +202,4 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', (
       updateAvailability(day, slot)
     else
       updateAvailability()
+

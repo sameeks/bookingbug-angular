@@ -1,5 +1,7 @@
+'use strict'
+
 angular.module('BBQueue').controller 'bbQueueServers', ($scope, $log,
-  AdminQueueService, ModalForm, BBModel) ->
+  ModalForm, BBModel) ->
 
   $scope.loading = true
 
@@ -67,3 +69,4 @@ angular.module('BBQueue').controller 'bbQueueServers', ($scope, $log,
     $scope.$apply () ->
       $scope.selectQueuer(null)
     return false
+

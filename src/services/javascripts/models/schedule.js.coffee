@@ -48,3 +48,4 @@ angular.module('BB.Models').factory "Admin.ScheduleModel", ($q,
 
     @$update: (schedule) ->
       AdminScheduleService.update(schedule)
+

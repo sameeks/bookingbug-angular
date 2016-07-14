@@ -1,5 +1,7 @@
+'use strict'
 
 angular.module('BB.Services').factory "ClientDetailsService", ($q, BBModel) ->
+
   query: (company) ->
     deferred = $q.defer()
     if !company.$has('client_details')
@@ -10,3 +12,4 @@ angular.module('BB.Services').factory "ClientDetailsService", ($q, BBModel) ->
       , (err) =>
         deferred.reject(err)
     deferred.promise
+

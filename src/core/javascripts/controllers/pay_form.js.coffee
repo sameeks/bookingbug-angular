@@ -180,5 +180,3 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
       sendSubmittingEvent()
       submitPaymentForm()
 
-
-

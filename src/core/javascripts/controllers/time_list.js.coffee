@@ -319,3 +319,4 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
         return $scope.addItemToBasket()
       else
         return true
+

@@ -133,3 +133,4 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope,
       true
     else
       AlertService.add('danger', msg: 'You need to select at least one Gift Certificate to continue')
+

@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) ->
   restrict: 'AE'

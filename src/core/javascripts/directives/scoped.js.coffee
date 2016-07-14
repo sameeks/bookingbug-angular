@@ -1,3 +1,5 @@
+'use strict'
+
 # Adapted from https://github.com/PM5544/scoped-polyfill
 
 angular.module("BB.Directives").directive  'scoped', ($document, $timeout) ->
@@ -79,3 +81,4 @@ angular.module("BB.Directives").directive  'scoped', ($document, $timeout) ->
             scopeIt($element)
       return
   }
+

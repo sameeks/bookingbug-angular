@@ -129,3 +129,4 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope,
         mywindow.close()
       , 100
     , 2000
+

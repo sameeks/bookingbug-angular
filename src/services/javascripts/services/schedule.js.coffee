@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
   BBModel, ScheduleRules, BBAssets) ->
 
@@ -60,3 +62,4 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
       BBAssets(company).then (assets)->
         $q.all(localMethod(start, end, assets)).then (schedules) ->
           _.flatten(schedules)
+

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB').directive 'bbMemberLogin', (PathSvc) ->
   restrict: 'A'
   controller: 'MemberLogin'
@@ -10,7 +12,7 @@ angular.module('BB').directive 'bbMemberLogin', (PathSvc) ->
 
 angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
   $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window,
-  AlertService, LoginService, ValidatorService, LoadingService) ->
+  AlertService, ValidatorService, LoadingService) ->
 
   $scope.login = {}
 
@@ -20,7 +22,7 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
 
   $rootScope.connection_started.then () ->
 
-    if LoginService.checkLogin()
+    if BBModel.Login.$checkLogin()
       $scope.setClient($rootScope.member)
       if $scope.bb.destination
         $scope.redirectTo($scope.bb.destination)
@@ -57,10 +59,11 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
 
 
   $scope.handleLogin = (member) ->
-    member = LoginService.setLogin(member, $scope.login.persist_login)
+    member = BBModel.Login.$setLogin(member, $scope.login.persist_login)
     $scope.setClient(member)
     if $scope.bb.destination
       $scope.redirectTo($scope.bb.destination)
     else
       $scope.skipThisStep()
       $scope.decideNextPage()
+

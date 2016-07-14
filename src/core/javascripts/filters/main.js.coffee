@@ -1,3 +1,5 @@
+'use strict'
+
 # Filters
 app = angular.module 'BB.Filters'
 
@@ -371,3 +373,4 @@ app.filter "format_answer", ->
     else if moment(answer, 'YYYY-MM-DD', true).isValid()
       answer = moment(answer).format "D MMMM YYYY"
     return answer
+

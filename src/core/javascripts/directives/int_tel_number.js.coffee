@@ -1,3 +1,5 @@
+'use strict'
+
 app = angular.module 'BB.Directives'
 
 # International Telephone Input directive
@@ -44,3 +46,4 @@ app.directive "bbIntTelNumber", ($parse) ->
 
     ctrl.$formatters.push format
     ctrl.$parsers.push parse
+

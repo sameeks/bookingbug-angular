@@ -22,3 +22,4 @@ angular.module('BB.Models').factory "EventGroupModel", ($q, BBModel, BaseModel) 
 
     colour: () ->
       @_data.colour
+

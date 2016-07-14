@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdminServices').directive 'scheduleTable', (
   AdminCompanyService, $modal, $log, ModalForm) ->
 
@@ -37,7 +39,7 @@ angular.module('BBAdminServices').directive 'scheduleTable', (
     if scope.company
       scope.getSchedules()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.query(attrs).then (company) ->
         scope.company = company
         scope.getSchedules()
 
@@ -46,3 +48,4 @@ angular.module('BBAdminServices').directive 'scheduleTable', (
     link: link
     templateUrl: 'schedule_table_main.html'
   }
+

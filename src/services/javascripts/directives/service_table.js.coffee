@@ -1,5 +1,7 @@
+'use strict'
+
 angular.module('BBAdminServices').directive 'serviceTable', ($modal, $log,
-  ModalForm, AdminCompanyService, BBModel) ->
+  ModalForm, BBModel) ->
 
   controller = ($scope) ->
     $scope.fields = ['id', 'name']
@@ -41,7 +43,7 @@ angular.module('BBAdminServices').directive 'serviceTable', ($modal, $log,
     if scope.company
       scope.getServices()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.query(attrs).then (company) ->
         scope.company = company
         scope.getServices()
 
@@ -50,3 +52,4 @@ angular.module('BBAdminServices').directive 'serviceTable', ($modal, $log,
     link: link
     templateUrl: 'service_table_main.html'
   }
+

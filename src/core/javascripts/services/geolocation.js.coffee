@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory 'GeolocationService', ($q) ->
 
   haversine: (position1, position2) ->
@@ -49,3 +51,4 @@ angular.module('BB.Services').factory 'GeolocationService', ($q) ->
         deferred.reject(status)
 
     deferred.promise
+

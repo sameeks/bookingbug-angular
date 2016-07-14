@@ -9,5 +9,6 @@
 ###
 angular.module('BBAdminDashboard.clients.controllers')
 .controller 'ClientsAllPageCtrl', ($scope, $state) ->
+
   $scope.set_current_client(null)
 

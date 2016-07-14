@@ -9,6 +9,7 @@
 ###
 angular.module('BBAdminDashboard.clients.controllers')
 .controller 'ClientsEditPageCtrl', ($scope, client, $state, company, AdminClientService) ->
+
   $scope.client = client
   $scope.historicalStartDate = moment().add(-1, 'years')
   $scope.historicalEndDate = moment()

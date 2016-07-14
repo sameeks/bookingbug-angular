@@ -65,3 +65,4 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayServ
 
     @$query: (prms) ->
       DayService.query(prms)
+

@@ -1,8 +1,9 @@
+'use strict'
+
 angular.module('BB.Services').factory "ProductService", ($q, $window,
   halClient, UriTemplate, BBModel, $log, $rootScope) ->
 
   getProduct: (prms) ->
-
     deferred = $q.defer()
 
     if prms.id
@@ -24,9 +25,7 @@ angular.module('BB.Services').factory "ProductService", ($q, $window,
 
 
   query: (company) ->
-
     deferred = $q.defer()
-
     if !company.$has('products')
       deferred.reject("No products found")
     else
@@ -38,5 +37,5 @@ angular.module('BB.Services').factory "ProductService", ($q, $window,
           deferred.resolve(resources)
       , (err) =>
         deferred.reject(err)
-
     deferred.promise
+

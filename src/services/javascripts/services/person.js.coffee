@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
     $rootScope, halClient, SlotCollections, BookingCollections, BBModel,
     LoginService, $log) ->
@@ -32,9 +34,7 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
         deferred.resolve(slot)
     , (err) =>
       deferred.reject(err)
-
     deferred.promise
-
 
   signup: (user, data) ->
     defer = $q.defer()

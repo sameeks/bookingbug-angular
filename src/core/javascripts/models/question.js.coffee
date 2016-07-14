@@ -154,3 +154,4 @@ angular.module('BB.Models').factory "QuestionModel", ($q, $filter, BBModel,
 
     @$checkConditionalQuestions: (questions) ->
       QuestionService.checkConditionalQuestions(questions)
+

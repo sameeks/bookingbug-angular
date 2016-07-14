@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module("BB.Directives").directive "bbFbLogin", (LoginService,
     $rootScope, AlertService, $window) ->
 
@@ -56,3 +58,4 @@ angular.module("BB.Directives").directive "bbFbLogin", (LoginService,
           AlertService.raise('LOGIN_FAILED')
         return
       ), scope: 'public_profile,email'
+

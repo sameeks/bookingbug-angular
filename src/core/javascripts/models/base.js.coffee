@@ -1,4 +1,4 @@
-
+'use strict'
 
 # build a dynamic injector for each of the models!
 # This creates a service that is capable of creating any given model
@@ -119,6 +119,14 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
       return null if !@_data
       @_data[ikey] = value
 
+    getOption: (ikey) ->
+      return null if !@_data
+      return @_data.getOption(ikey)
+
+    setOption: (ikey, value) ->
+      return null if !@_data
+      return @_data.setOption(ikey, value)
+
 
     $href: (rel, params) ->
       @_data.$href(rel, params) if @_data
@@ -147,5 +155,9 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
     $links: () ->
       @_data.$links() if @_data
 
+    $link: (rel) ->
+      @_data.$link(rel) if @_data
+
     $toStore: () ->
       @_data.$toStore() if @_data
+

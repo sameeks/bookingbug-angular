@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB').config ($logProvider, $injector) ->
     $logProvider.debugEnabled true
 

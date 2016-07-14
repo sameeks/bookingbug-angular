@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbClientDetails
@@ -154,7 +156,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
       , (err) ->
         $scope.login_error = true
         loader.setLoaded()
-        AlertService.raise('LOGIN_FAILED');
+        AlertService.raise('LOGIN_FAILED')
 
   ###**
   * @ngdoc method
@@ -265,3 +267,4 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
     else if error.data.error == "Invalid Password"
       AlertService.raise('PASSWORD_INVALID')
     loader.setLoaded()
+

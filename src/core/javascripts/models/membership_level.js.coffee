@@ -7,3 +7,4 @@ angular.module('BB.Models').factory "MembershipLevelModel", ($q, BBModel,
 
     $getMembershipLevels: (company) ->
       MembershipLevelsService.getMembershipLevels(company)
+

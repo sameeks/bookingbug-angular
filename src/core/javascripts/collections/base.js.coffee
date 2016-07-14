@@ -1,7 +1,6 @@
-
+'use strict'
 
 class window.Collection
-
 
 class window.Collection.Base
 

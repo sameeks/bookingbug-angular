@@ -1,5 +1,7 @@
-angular.module('BBAdminSettings').directive 'adminTable', ($modal, $log,
-  ModalForm, AdminCompanyService, BBModel) ->
+'use strict'
+
+angular.module('BBAdminSettings').directive 'adminTable', ($log,
+  ModalForm, BBModel) ->
 
   controller = ($scope) ->
 
@@ -30,7 +32,7 @@ angular.module('BBAdminSettings').directive 'adminTable', ($modal, $log,
     if scope.company
       scope.getAdministrators()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         scope.getAdministrators()
 
@@ -39,3 +41,4 @@ angular.module('BBAdminSettings').directive 'adminTable', ($modal, $log,
     link: link
     templateUrl: 'admin_table_main.html'
   }
+

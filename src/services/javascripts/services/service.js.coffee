@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Services').factory 'AdminServiceService', ($q, BBModel, $log) ->
 
   query: (params) ->
@@ -12,3 +14,4 @@ angular.module('BBAdmin.Services').factory 'AdminServiceService', ($q, BBModel, 
     , (err) ->
       defer.reject(err)
     defer.promise
+

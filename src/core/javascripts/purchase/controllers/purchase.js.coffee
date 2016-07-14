@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Directives').directive 'bbPurchase', () ->
   restrict: 'AE'
   replace: true
@@ -331,3 +333,4 @@ ModalDeleteAll = ($scope,  $rootScope, $modalInstance, purchase) ->
 
   $scope.cancel = ->
     $modalInstance.dismiss "cancel"
+

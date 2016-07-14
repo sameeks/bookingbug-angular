@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Controllers').controller 'TimeOptions', (
   $scope, $location, $rootScope, BBModel) ->
 
@@ -14,3 +16,4 @@ angular.module('BBAdmin.Controllers').controller 'TimeOptions', (
         end_time: $scope.end_time
       BBModel.Admin.Person.$block($scope.bb.company, $scope.person, params)
     $scope.ok()
+

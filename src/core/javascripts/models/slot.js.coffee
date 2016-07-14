@@ -23,3 +23,4 @@ angular.module('BB.Models').factory "SlotModel", ($q, BBModel, BaseModel, SlotSe
 
     @$query: (company, params) ->
       SlotService.query(company, params)
+

@@ -27,3 +27,4 @@ angular.module('BBAdmin.Services').factory 'AdminDayService', ($q, $window,
       deferred.reject(err)
 
     deferred.promise
+

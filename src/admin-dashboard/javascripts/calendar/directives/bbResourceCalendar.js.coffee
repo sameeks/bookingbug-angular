@@ -227,9 +227,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           assets.push asset.id
         )
 
-        params = $state.params;
+        params = $state.params
         params.assets = assets.join()
-        $state.go($state.current.name, params, { notify:false, reload:false});
+        $state.go($state.current.name, params, { notify:false, reload:false})
 
     getCalendarAssets = (callback) ->
       $scope.loading = true

@@ -16,7 +16,7 @@ angular.module('BBAdmin.Services').factory 'AdminCompanyService', (
         $rootScope.bb ||= {}
         $rootScope.bb.company_id = $rootScope.user.company_id
         $rootScope.user.$get('company').then (company) ->
-          defer.resolve(new BBModel.Company(company))
+          defer.resolve(new BBModel.Admin.Company(company))
         , (err) ->
           defer.reject(err)
       else
@@ -27,7 +27,7 @@ angular.module('BBAdmin.Services').factory 'AdminCompanyService', (
           company_id: params.companyId
         BBModel.Admin.Login.$login(login_form, options).then (user) ->
           user.$get('company').then (company) ->
-            defer.resolve(new BBModel.Company(company))
+            defer.resolve(new BBModel.Admin.Company(company))
           , (err) ->
             defer.reject(err)
         , (err) ->

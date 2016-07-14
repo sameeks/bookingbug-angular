@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BB.Services').factory "ResourceService", ($q, BBModel) ->
 
@@ -14,5 +15,5 @@ angular.module('BB.Services').factory "ResourceService", ($q, BBModel) ->
           deferred.resolve(resources)
       , (err) =>
         deferred.reject(err)
-
     deferred.promise
+

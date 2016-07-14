@@ -26,7 +26,6 @@ app.directive 'bbLoader', ($rootScope, $compile, PathSvc, TemplateSvc) ->
      # if scope which is emitting 'show:loader' event is child of this bbLoader
     # instance, then store it's id so we can check when it's finished loading.
     addScopeId = (id) ->
-      # console.log 'add', id
       scopeIdArr.push id
       scopeIdArr = _.uniq scopeIdArr
       return
@@ -35,7 +34,6 @@ app.directive 'bbLoader', ($rootScope, $compile, PathSvc, TemplateSvc) ->
     # remove scope ids when they emit the 'hide:loader' event. return the array
     # length so we can see if we need to hide the loading icon.
     removeScopeId = (id) ->
-      # console.log 'remove', id
       scopeIdArr = _.without scopeIdArr, id
       scopeIdArr.length
 
@@ -44,16 +42,16 @@ app.directive 'bbLoader', ($rootScope, $compile, PathSvc, TemplateSvc) ->
     # has emitted the 'show:loader' event. if it is then show the loading
     # icon and store it's id.
     showLoader = (e, cscope) ->
-      sid = cscope.$id;
+      sid = cscope.$id
 
       while cscope
         if cscope.$id is parentScopeId
           # store scope id so we can check when it's finished loading
           addScopeId sid
           # show loading icon
-          $scope.scopeLoaded = false;
-          break;
-        cscope = cscope.$parent;
+          $scope.scopeLoaded = false
+          break
+        cscope = cscope.$parent
       return
 
 
@@ -61,15 +59,14 @@ app.directive 'bbLoader', ($rootScope, $compile, PathSvc, TemplateSvc) ->
     # removeScopeId() function returns the array length
     hideLoader = (e, cscope) ->
       if (!removeScopeId cscope.$id)
-        # console.log 'hide loading icon.'
-        $scope.scopeLoaded = true;
+        $scope.scopeLoaded = true
         return
 
     # start listening for events emitted by other scopes
     $rootScope.$on 'show:loader', showLoader
     $rootScope.$on 'hide:loader', hideLoader
     # show loader by default
-    $scope.scopeLoaded = false;
+    $scope.scopeLoaded = false
     return
 
   link: (scope, element, attrs) ->
@@ -90,7 +87,7 @@ app.directive 'bbLoader', ($rootScope, $compile, PathSvc, TemplateSvc) ->
         else if /^\./.test(attrs.bbLoader)
           html.addClass(str)
 
-      element.prepend(html);
+      element.prepend(html)
       $compile(html)(scope)
       return
     return

@@ -17,3 +17,4 @@ angular.module('BB.Models').factory "BusinessQuestionModel", ($q, $filter,
 
     constructor: (data) ->
       super(data)
+

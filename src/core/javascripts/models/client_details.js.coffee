@@ -65,3 +65,4 @@ angular.module('BB.Models').factory "ClientDetailsModel", ($q, BBModel,
 
     @$query: (company) ->
       ClientDetailsService.query(company)
+

@@ -1,5 +1,8 @@
+'use strict'
+
 # Service for loading templates and partials. return rasterized dom elements
 angular.module('BB.Services').factory "TemplateSvc", ($q, $http, $templateCache, BBModel) ->
+
   get: (path) ->
     deferred = $q.defer()
     cacheTmpl = $templateCache.get(path)

@@ -67,4 +67,3 @@ angular.module('BB.Controllers').controller 'SpaceList',
     $scope.currentItem.setService(item)
     $scope.decide_next_page(route)
 
-

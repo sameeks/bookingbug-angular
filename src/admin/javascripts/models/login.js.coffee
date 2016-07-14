@@ -31,3 +31,10 @@ angular.module('BB.Models').factory "Admin.LoginModel", (
 
     @$getLogin: (options) ->
       AdminLoginService.getLogin(options)
+
+    @$companyLogin: (company, params) ->
+      AdminLoginService.companyLogin(company, params)
+
+    @$memberQuery: (params) ->
+      AdminLoginService.memberQuery(params)
+

@@ -1,5 +1,7 @@
+'use strict'
 
-angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, SettingsService, DateTimeUtilitiesService) ->
+angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
+  SettingsService, DateTimeUtilitiesService) ->
 
   query: (prms) ->
 
@@ -200,3 +202,4 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
       halClient.clearCache(ev.$href("self"))
     else if item && item.id && item.event_id == ev.event_id && item.time && sorted_times[item.time.time] && item.date && item.date.date.toISODate() == ev.date
       sorted_times[item.time.time].avail = 1
+

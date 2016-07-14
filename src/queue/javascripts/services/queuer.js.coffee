@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBQueue.Services').factory 'QueuerService', ($q, UriTemplate, halClient, BBModel) ->
 
 	query: (params) ->

@@ -1,7 +1,6 @@
-
+'use strict'
 
 class window.Collection.Day extends window.Collection.Base
-
 
   checkItem: (item) ->
     super
@@ -10,7 +9,4 @@ class window.Collection.Day extends window.Collection.Base
 angular.module('BB.Services').provider "DayCollections", () ->
   $get: ->
     new  window.BaseCollections()
-  
-
-
 

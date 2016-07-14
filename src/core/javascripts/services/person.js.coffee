@@ -1,8 +1,9 @@
+'use strict'
 
 angular.module('BB.Services').factory "PersonService", ($q, BBModel) ->
+
   query: (company) ->
     deferred = $q.defer()
-    
     if !company.$has('people')
       deferred.reject("No people found")
     else
@@ -14,5 +15,5 @@ angular.module('BB.Services').factory "PersonService", ($q, BBModel) ->
           deferred.resolve(people)
       , (err) =>
         deferred.reject(err)
-
     deferred.promise
+

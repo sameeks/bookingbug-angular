@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsService) ->
 
   # converts date and time belonging to BBModel.Day and BBModel.TimeSlot into
@@ -41,3 +43,4 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsServi
           break
 
     return found_time_slot
+

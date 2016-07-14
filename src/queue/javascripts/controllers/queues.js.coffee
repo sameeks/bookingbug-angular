@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBQueue').controller 'bbQueues', ($scope, $log,
     AdminQueueService, ModalForm) ->
 

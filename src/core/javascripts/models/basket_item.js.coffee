@@ -1419,3 +1419,4 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     ###
     isTimeItem: () ->
       return @service or @event
+

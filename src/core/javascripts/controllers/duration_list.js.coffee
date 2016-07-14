@@ -121,3 +121,4 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs,
   # when the current item is updated, reload the duration data
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadData()
+

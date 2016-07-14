@@ -1,8 +1,8 @@
 # Filters
 "use strict"
 
-angular.module('BB.Services').factory 'FormDataStoreService',
-($rootScope, $window, $log, $parse) ->
+angular.module('BB.Services').factory 'FormDataStoreService', ($rootScope,
+  $window, $log, $parse) ->
 
   registeredWidgetArr = []
   dataStore = {}
@@ -274,3 +274,4 @@ angular.module('BB.Services').factory 'FormDataStoreService',
     register : register
     setIfUndefined : setIfUndefined
   }
+

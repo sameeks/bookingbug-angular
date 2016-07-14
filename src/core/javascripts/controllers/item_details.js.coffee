@@ -355,3 +355,4 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs,
   ###
   $scope.editItem = () ->
     $scope.item_details_updated = false
+

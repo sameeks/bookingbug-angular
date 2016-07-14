@@ -120,8 +120,6 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $rootScope,
   groupBasketItems = (items) ->
     $scope.multi_basket_grouping = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
     $scope.multi_basket_grouping = _.values($scope.multi_basket_grouping)
-    console.log $scope.multi_basket_grouping
-
     loader.setLoaded()
 
   ###**

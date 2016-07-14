@@ -83,5 +83,9 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel,
     id: ->
       @get('id')
 
-    @$query: (prms) ->
-      PurchaseTotalService.query (prms)
+    @$query: (params) ->
+      PurchaseService.query (params)
+
+    @$bookingRefQuery: (params) ->
+      PurchaseService.query (params)
+

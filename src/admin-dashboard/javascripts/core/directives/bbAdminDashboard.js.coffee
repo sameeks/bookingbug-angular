@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdminDashboard.directives').directive 'bbAdminDashboard', () ->
   
   controller = ($scope, $rootScope, $element, $window, $compile, $localStorage,
@@ -25,6 +27,7 @@ angular.module('BBAdminDashboard.directives').directive 'bbAdminDashboard', () -
       $scope.isLoading = false
 
     $scope.$on '$stateChangeError', (event, toState, toParams, fromState, fromParams, error) ->
+      console.error error
       $scope.isLoading = false
 
     $scope.$on '$stateChangeNotFound', (event, toState, toParams, fromState, fromParams) ->
