@@ -80,7 +80,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log,
     if not $scope.orderBy?
       $scope.orderBy = 'date_order'
 
-    $scope.now = moment().format('YYYY-MM-DD')
+    $scope.now = moment()
 
     getBookings($scope, $scope.member) if $scope.member
 

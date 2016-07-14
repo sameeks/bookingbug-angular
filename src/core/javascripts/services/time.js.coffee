@@ -186,7 +186,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
 
         # add datetime if not provided by the API (versions < 1.5.4-1 )
         if !i.datetime
-          i.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment({date: moment(date)}, i)
+          i.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(moment(date), i)
 
         times.push(new BBModel.TimeSlot(i, service))
 
@@ -196,7 +196,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
   checkCurrentItem: (item, sorted_times, ev) ->
     if item && item.id && item.event_id == ev.event_id && item.time && !sorted_times[item.time.time] && item.date && item.date.date.toISODate() == ev.date
       # calculate the correct datetime for time slot
-      item.time.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(item.date, item.time)
+      item.time.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(item.date.date, item.time)
       sorted_times[item.time.time] = item.time
       # remote this entry from the cache - just in case - we know it has a held item in it so lets just not keep it in case that goes later!
       halClient.clearCache(ev.$href("self"))

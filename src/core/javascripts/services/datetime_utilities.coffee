@@ -4,8 +4,8 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsServi
 
   # converts date and time belonging to BBModel.Day and BBModel.TimeSlot into
   # a valid moment object
-  convertTimeSlotToMoment: (day, time_slot) ->
-    return if !day and !time_slot
+  convertTimeSlotToMoment: (date, time_slot) ->
+    return unless date and moment.isMoment(date) and time_slot
     datetime = moment()
     if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()  
       datetime = datetime.tz(SettingsService.getTimeZone())
@@ -15,9 +15,9 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsServi
     datetime.hour(hours)
     datetime.minutes(mins)
     datetime.seconds(0)
-    datetime.date(day.date.date())
-    datetime.month(day.date.month())
-    datetime.year(day.date.year())
+    datetime.date(date.date())
+    datetime.month(date.month())
+    datetime.year(date.year())
 
     return datetime
 

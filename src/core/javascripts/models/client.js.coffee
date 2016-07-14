@@ -86,7 +86,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel,
       @postcode = values.postcode if values.postcode
       @country = values.country if values.country
       @default_answers = values.answers if values.answers
-      @member_timezone = values.member_timezone if values.member_timezone
+      @time_zone = values.time_zone if values.time_zone
 
     ###**
     * @ngdoc method
@@ -237,7 +237,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel,
       x.member_level_id = @member_level_id if @member_level_id
       x.send_welcome_email = @send_welcome_email if @send_welcome_email
       x.default_company_id = @default_company_id if @default_company_id
-      x.member_timezone = @member_timezone if @member_timezone
+      x.time_zone = @time_zone if @time_zone
 
       if @phone
         x.phone = @phone

@@ -11,17 +11,25 @@
 *
 * @example
   <example>
-  <div bb-file-upload class="form-group"></div>
+    <div
+      bb-file-upload
+      item="item"
+      max-size="100KB"
+      accept="application/pdf,application/msword,image/*">
+    </div>
   </example>
 ###
 
 angular.module('BB.Directives').directive 'bbFileUpload', () ->
-  restrict: 'AE'
+  restrict: 'A'
   replace: false
-  scope : true
+  scope: {
+    accept: '@',
+    maxSize: '@',
+    item: '='
+  }
   controller : 'FileUpload',
   templateUrl: 'file_upload.html'
-  link : (scope, element, attrs) ->
 
 angular.module('BB.Controllers').controller 'FileUpload', ($scope, Upload) ->
 
@@ -41,16 +49,17 @@ angular.module('BB.Controllers').controller 'FileUpload', ($scope, Upload) ->
   * @param {number} existing attachment id
   * @param {array} errFiles errors array
   ###
-  $scope.uploadFile = (item, file, errFiles, existing) ->
+  $scope.uploadFile = (item, file, err_files, existing) ->
+    $scope.err_file = err_files and err_files[0]
+    $scope.show_error = false
+
     if file
-      $scope.myFile = file
+      $scope.my_file = file
       if existing  then att_id = existing else att_id = null
 
       method = "POST"
       method = "PUT" if att_id
       url = item.$href('add_attachment')
-
-      $scope.errFile = errFiles and errFiles[0]
 
       onSuccess = (response) ->
         file.result = response.data
@@ -59,7 +68,7 @@ angular.module('BB.Controllers').controller 'FileUpload', ($scope, Upload) ->
         file.progress = 100
 
       onError = (response) ->
-        $scope.showError = true
+        $scope.show_error = true
         file.progress = 100
 
       onProgress = (evt) ->
@@ -71,5 +80,6 @@ angular.module('BB.Controllers').controller 'FileUpload', ($scope, Upload) ->
         data: {attachment_id: att_id},
         file: file
       )
+
       file.upload.then onSuccess, onError, onProgress
 
