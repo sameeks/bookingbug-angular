@@ -24,7 +24,7 @@
 
 
 angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel,
-    BaseModel, DateTimeUtilitiesService) ->
+    BaseModel, DateTimeUtilitiesService, TimeService) ->
 
   class TimeSlot extends BaseModel
 

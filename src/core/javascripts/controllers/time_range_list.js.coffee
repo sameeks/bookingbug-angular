@@ -445,7 +445,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
       loc = null
       loc = ",,,," + $scope.bb.postcode + "," if $scope.bb.postcode
 
-      promise = BBModel.TimeSlot.query(
+      promise = BBModel.TimeSlot.$query(
         company: $scope.bb.company
         resource_ids: $scope.bb.item_defaults.resources
         cItem: $scope.data_source
