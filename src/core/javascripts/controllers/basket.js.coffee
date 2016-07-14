@@ -91,11 +91,14 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
     $scope.deleteBasketItems(items)
     $scope.multi_basket_grouping = _.without($scope.multi_basket_grouping, items)
 
+  $scope.editGroupItem = (items, route) =>
+    $scope.bb.current_item = items[0]
+    $scope.decideNextPage(route)
+
 
   groupBasketItems = (items) ->
     $scope.multi_basket_grouping = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
     $scope.multi_basket_grouping = _.values($scope.multi_basket_grouping)
-    console.log $scope.multi_basket_grouping
 
     $scope.setLoaded $scope
 
