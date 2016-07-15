@@ -125,13 +125,15 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
   $translateProvider.useSanitizeValueStrategy('sanitize');
   # Persist language selection in localStorage
   $translateProvider.useLocalStorage()
-  # # Register available languages and their associations
+
   $translateProvider
-    .registerAvailableLanguageKeys(AdminCoreOptionsProvider.getOption('available_languages'),AdminCoreOptionsProvider.getOption('available_language_associations'))
-    # Set fallbacklanguage
     .fallbackLanguage(AdminCoreOptionsProvider.getOption('available_languages'))
 ]
-.run ['$translate', 'AdminCoreOptions', ($translate, AdminCoreOptions) ->
+.run ['$translate', 'AdminCoreOptions', 'RuntimeTranslate', ($translate, AdminCoreOptions, RuntimeTranslate) ->
+
+  # Register available languages and their associations
+  RuntimeTranslate.registerAvailableLanguageKeys(AdminCoreOptions.available_languages,AdminCoreOptions.available_language_associations)
+
   # define fallback
   $translate.preferredLanguage AdminCoreOptions.default_language
 

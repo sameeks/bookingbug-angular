@@ -100,10 +100,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           if event.$has('edit')
             $scope.editBooking(event)
         eventRender: (event, element) ->
-          # If its a blocked timeslot add colored overlay
-          if event.status == 3 || event.type == 'external'
-            element.find('.fc-bg').css({'background-color':'#000'})
-
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
             element.css('background-color', service.color)

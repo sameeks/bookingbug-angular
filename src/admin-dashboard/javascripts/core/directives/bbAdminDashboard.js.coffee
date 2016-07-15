@@ -1,11 +1,13 @@
 angular.module('BBAdminDashboard.directives').directive 'bbAdminDashboard', () ->
   restrict: 'AE'
   template: '<div ui-view></div>'
-  controller: ['$scope', '$rootScope', '$element', '$window', '$compile', '$localStorage', 'AdminLoginService', '$state', 'AlertService',
-    ($scope, $rootScope, $element, $window, $compile, $localStorage, AdminLoginService, $state, AlertService)->
+  controller: ['$scope', '$rootScope', '$element', '$window', '$compile', '$localStorage', 'AdminLoginService', '$state', 'AlertService', 'AdminCoreOptions',
+    ($scope, $rootScope, $element, $window, $compile, $localStorage, AdminLoginService, $state, AlertService, AdminCoreOptions)->
       $scope.page = {
-        sideMenuOn : true,
-        boxed      : false,
+        hideSideMenuControl    : AdminCoreOptions.deactivate_sidenav,
+        hideBoxedLayoutControl : AdminCoreOptions.deactivate_boxed_layout,
+        sideMenuOn             : (AdminCoreOptions.sidenav_start_open && !AdminCoreOptions.deactivate_sidenav),
+        boxed                  : AdminCoreOptions.boxed_layout_start,
       }
 
       $scope.openSideMenu = ()->
@@ -15,7 +17,7 @@ angular.module('BBAdminDashboard.directives').directive 'bbAdminDashboard', () -
         $scope.page.sideMenuOn = false
 
       $scope.toggleSideMenu = ()->
-        $scope.page.sideMenuOn = !$scope.page.sideMenuOn    
+        $scope.page.sideMenuOn = !$scope.page.sideMenuOn
 
 
       api_url = $localStorage.getItem("api_url")

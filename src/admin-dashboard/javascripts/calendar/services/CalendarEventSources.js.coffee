@@ -120,7 +120,8 @@ angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSourc
               if options.externalLabelAssembler?
                 booking.title = TitleAssembler.getTitle(booking, options.externalLabelAssembler)
 
-              booking.type = 'external'
+              booking.className = 'status_external'
+              booking.type      = 'external'
 
             deferred.resolve bookings
           , (err)->

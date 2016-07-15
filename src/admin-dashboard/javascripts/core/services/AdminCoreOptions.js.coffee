@@ -25,9 +25,13 @@
 angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', [ ->
   # This list of options is meant to grow
   options = {
-    default_language      : 'en',
-    use_browser_language  : true,
-    available_languages   : ['en'],
+    default_language        : 'en',
+    use_browser_language    : true,
+    available_languages     : ['en'],
+    deactivate_sidenav      : false,
+    deactivate_boxed_layout : false,
+    sidenav_start_open      : true,
+    boxed_layout_start      : false,
     available_language_associations: {
       'en_*': 'en'
     },

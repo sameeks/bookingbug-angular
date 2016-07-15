@@ -13,7 +13,8 @@ html,body {
 }
 
 #bb {
-	@import "ng-scrollable";
+  @import "ng-scrollable";
+  @import "switch";
 
 	/*BB specific CSS*/
 	@import "animations";

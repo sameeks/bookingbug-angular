@@ -34,6 +34,11 @@ $screen-header-collapse            : $screen-xs-max;
     z-index: -1;
   }
 
+  .ui-select-bootstrap .ui-select-choices-row.active>a {
+    color: $btn-primary-color;
+    background-color: $brand-primary;
+  }
+
   //Navbar
   .main-header {
     .navbar {
@@ -94,6 +99,36 @@ $screen-header-collapse            : $screen-xs-max;
 
   //Create the sidebar skin
   @include skin-light-sidebar($theme-color);
+
+  // Calendar
+  .fc {
+    .fc-button-group {
+      .fc-button.fc-state-active {
+        background-color: $brand-primary;
+        color: $btn-primary-color;
+        box-shadow: none;
+        text-shadow: none;
+        border-color: $brand-primary;
+      }
+    }
+
+    .fc-bgevent {
+      background: $brand-primary;
+      opacity: 0.1;
+    }
+
+    .fc-event {
+      border: none;
+      padding: 7px 0;
+      &.status_blocked {
+        background-color: $gray;
+      }
+
+      .fc-bg {
+        background: none;
+      }
+    }
+  }
 }
 
 
