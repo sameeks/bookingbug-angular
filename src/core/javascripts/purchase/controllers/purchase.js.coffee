@@ -7,7 +7,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     scope.init(scope.$eval( attrs.bbPurchase ))
     return
 
-angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage, SettingsService, $translate) ->
+angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, ServiceService, $sessionStorage, SettingsService, $translate) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -77,9 +77,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
           auth_token = $sessionStorage.getItem('auth_token')
           params.auth_token = auth_token if auth_token
           PurchaseService.query(params).then (purchase) ->
-            unless $scope.bb.company?
-              purchase.$get('company').then (company) =>
-                setPurchaseCompany(company)
+            purchase.$get('company').then (company) =>
+              setPurchaseCompany(company)
             $scope.purchase = purchase
             $scope.bb.purchase = purchase
             $scope.price = !($scope.purchase.price == 0)
@@ -231,21 +230,30 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
 
   $scope.bookWaitlistItem = (booking) ->
+
     $scope.notLoaded $scope
-    params = { purchase: $scope.purchase, booking: booking }
+
+    params =
+      purchase: $scope.purchase
+      booking: booking
+
     PurchaseService.bookWaitlistItem(params).then (purchase) ->
+
       $scope.purchase = purchase
       $scope.total = $scope.purchase
       $scope.bb.purchase = purchase
+
       $scope.purchase.getBookingsPromise().then (bookings) ->
         $scope.bookings = bookings
-        $scope.waitlist_bookings = (booking for booking in $scope.bookings when (booking.on_waitlist && booking.settings.sent_waitlist == 1))
-        if $scope.purchase.$has('new_payment') && $scope.purchase.due_now > 0
+        $scope.waitlist_bookings = (booking for booking in $scope.bookings when (booking.on_waitlist and booking.settings.sent_waitlist is 1))
+        if $scope.purchase.$has('new_payment') and $scope.purchase.due_now > 0
           $scope.make_payment = true
         $scope.setLoaded $scope
+
       , (err) ->
         $scope.setLoaded $scope
         failMsg()
+
     , (err) =>
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -256,8 +264,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDelete
       resolve:
-        booking: ->
-          booking    
+        booking: -> booking    
    
     modalInstance.result.then (booking) ->
       booking.$del('self').then (service) =>
@@ -271,8 +278,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDeleteAll
       resolve:
-        purchase: ->
-          $scope.purchase
+        purchase: -> $scope.purchase
     modalInstance.result.then (purchase) ->
       PurchaseService.deleteAll(purchase).then (purchase) ->
         $scope.purchase = purchase
@@ -284,35 +290,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     if booking.min_cancellation_time
       return moment().isBefore(booking.min_cancellation_time)
     booking.datetime.isAfter(moment())
-
-
-  $scope.onFileSelect = (booking, $file, existing) ->
-    $scope.upload_progress = 0
-    file = $file
-    att_id = null
-    att_id = existing.id if existing
-    method = "POST"
-    method = "PUT" if att_id
-    $scope.upload = $upload.upload({
-      url: booking.$href('attachments'),
-      method: method,
-      # headers: {'header-key': 'header-value'},
-      # withCredentials: true,
-      data: {att_id: att_id},
-      file: file, # or list of files: $files for html5 only
-      # set the file formData name ('Content-Desposition'). Default is 'file'
-      # fileFormDataName: myFile, //or a list of names for multiple files (html5).
-      # customize how data is added to formData. See #40#issuecomment-28612000 for sample code
-      # formDataAppender: function(formData, key, val){}
-    }).progress (evt) ->
-      if $scope.upload_progress < 100
-        $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
-    .success (data, status, headers, config) ->
-      # file is uploaded successfully
-      $scope.upload_progress = 100
-      if data && data.attachments && booking
-        booking.attachments = data.attachments
-
 
   $scope.createBasketItem = (booking) ->
     item = new BBModel.BasketItem(booking, $scope.bb)

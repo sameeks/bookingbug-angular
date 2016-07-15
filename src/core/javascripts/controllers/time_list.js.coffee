@@ -123,13 +123,20 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {string} A specific route to load
   ###
   $scope.selectSlot = (slot, day, route) =>
+
     if slot && slot.availability() > 0
+      
       # if this time cal was also for a specific item source (i.e.a person or resoure- make sure we've selected it)
       if $scope.item_link_source
         $scope.data_source.setItem($scope.item_link_source)
-      if day
+      
+      if slot.datetime
+        $scope.setLastSelectedDate(slot.datetime)
+        $scope.data_source.setDate({date: slot.datetime})
+      else if day
         $scope.setLastSelectedDate(day.date)
         $scope.data_source.setDate(day)
+      
       $scope.data_source.setTime(slot)
 
       if $scope.data_source.reserve_ready
@@ -151,9 +158,15 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
     if day and slot and slot.availability() > 0
 
-      $scope.setLastSelectedDate(day.date)
-      $scope.data_source.setDate(day)
+      if slot.datetime
+        $scope.setLastSelectedDate(slot.datetime)
+        $scope.data_source.setDate({date: slot.datetime})
+      else if day
+        $scope.setLastSelectedDate(day.date)
+        $scope.data_source.setDate(day)
+      
       $scope.data_source.setTime(slot)
+      
       # tell any accordion groups to update
       $scope.$broadcast 'slotChanged'
 
@@ -257,8 +270,11 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   checkRequestedSlots = (time_slots) ->
     requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
     if requested_slot and $scope.data_source.resource and $scope.data_source.person
-      if requested_slot && requested_slot.overbook
+      if requested_slot && requested_slot.overbook && !$scope.bb.dont_skip_step
         $scope.availability_conflict = true
+      else if requested_slot and $scope.bb.dont_skip_step
+        $scope.highlightSlot(requested_slot, $scope.selected_day)
+        $scope.bb.dont_skip_step = false
       else
         $scope.skipThisStep()
         $scope.selectSlot(requested_slot, $scope.selected_day)

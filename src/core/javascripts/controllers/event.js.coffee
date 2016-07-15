@@ -30,7 +30,7 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
 
 
 angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService, FormDataStoreService) ->
-  
+
   $scope.controller = "public.controllers.Event"
   $scope.notLoaded $scope
   angular.extend(this, new PageControllerService($scope, $q))
@@ -57,6 +57,8 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
     $scope.event_options.use_my_details = if !$scope.event_options.use_my_details? then true else $scope.event_options.use_my_details
 
+
+
     promises = [
       $scope.current_item.event_group.getImagesPromise(),
       $scope.event.prepEvent()
@@ -74,6 +76,23 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
       initImage(images) if images
 
+
+      if $scope.bb.current_item.tickets
+        # all cready added to the basket
+        $scope.setLoaded $scope
+        $scope.selected_tickets = true
+        $scope.tickets = (item.tickets for item in $scope.bb.basket.items)
+        $scope.current_ticket_items = [] # the current
+        for item in $scope.bb.basket.timeItems()
+          $scope.current_ticket_items.push(item) if item.event_id == $scope.event.id
+        $scope.$watch 'bb.basket.items', (items, olditems) ->
+          $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
+          item.tickets.price = item.totalPrice()
+        , true
+        return
+
+
+
       initTickets()
 
       $scope.$broadcast "bbEvent:initialised"
@@ -81,6 +100,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       $scope.setLoaded $scope
 
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
 
 
   ###**
@@ -129,11 +149,28 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       $scope.selected_tickets = true
       $scope.stopTicketWatch()
       $scope.tickets = (item.tickets for item in $scope.bb.basket.items)
+      $scope.current_ticket_items = [] # the current
+      for item in $scope.bb.basket.timeItems()
+        $scope.current_ticket_items.push(item) if item.event_id == $scope.event.id
       $scope.$watch 'bb.basket.items', (items, olditems) ->
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
         item.tickets.price = item.totalPrice()
       , true
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+#    if $scope.bb.basket.timeItems()
+#      $scope.ticket_group = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
+
+
+      # this is for repeating through only the tickets on the most recent item added to basket
+
+ #     $scope.ticket_group = _.values($scope.ticket_group)
+
+ #     if $scope.ticket_group.length is 1
+ #       $scope.shown_tickets = $scope.ticket_group[0]
+ #     else
+ #       $scope.shown_tickets = _.last($scope.ticket_group)
+
 
 
   ###**
@@ -155,6 +192,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       $scope.bb.current_item.ready = false
       $scope.decideNextPage(route)
       return true
+
 
   ###**
   * @ngdoc method
@@ -183,6 +221,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       return $scope.updateBasket()
 
 
+
   ###**
   * @ngdoc method
   * @name getPrePaidsForEvent
@@ -190,7 +229,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * @description
   * Get pre paids for event in according of client and event parameter
   *
-  * @param {array} client The client 
+  * @param {array} client The client
   * @param {array} event The event
   ###
   $scope.getPrePaidsForEvent = (client, event) ->
@@ -207,7 +246,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
   initImage = (images) ->
     image = images[0]
-    if image 
+    if image
       image.background_css = {'background-image': 'url(' + image.url + ')'}
       $scope.event.image = image
       # TODO pick most promiment image
@@ -217,7 +256,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
   initTickets = () ->
 
-    # no need to init tickets if some have been selected already 
+    # no need to init tickets if some have been selected already
     return if $scope.selected_tickets
 
     # if a default number of tickets is provided, set only the first ticket type to that default
@@ -230,10 +269,11 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
     # lock the ticket number dropdown box if only 1 ticket is available to puchase at a time (one-on-one training etc)
     $scope.selectTickets() if $scope.event_options.default_num_tickets and $scope.event_options.auto_select_tickets and $scope.event.tickets.length is 1 and $scope.event.tickets[0].max_num_bookings is 1
-    
+
     $scope.tickets = $scope.event.tickets
     $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
     $scope.stopTicketWatch = $scope.$watch 'tickets', (tickets, oldtickets) ->
       $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
       $scope.event.updatePrice()
-    , true    
+    , true
+

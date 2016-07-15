@@ -4,3 +4,11 @@ npm-debug.log
 .DS_Store
 release/*
 docs/*
+build/*
+!build/booking-widget
+build/booking-widget/*
+!build/booking-widget/bower.json
+/.idea/
+**/*.js.js
+**/*.js.map
+unit-tests-reports

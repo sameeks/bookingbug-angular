@@ -17,9 +17,8 @@
   "dependencies": {
     "jquery": "~1.11.2",
     "jquery-ui": "~1.11.2",
-    "moment": "https://github.com/BookingBug/moment.git#master",
-    "momentjs": "https://github.com/BookingBug/moment.git#master",
-    "moment-timezone": "~0.4.1",
+    "moment": "~2.13.0",
+    "moment-timezone": "~0.5.4",
     "accounting": "~0.3.2",
     "angular": "~1.2.25",
     "angular-mocks": "~1.2.25",
@@ -62,17 +61,18 @@
     "angular-recaptcha": "~2.2.3",
     "angular-slick-carousel": "~3.1.4",
     "lodash": "3.10.1",
-    "airbrake-js-client": "^0.5.8"
+    "airbrake-js-client": "^0.5.8",
+    "ng-file-upload": "^12.0.4",
+    "animate.css": "~3.5.2"
   },
   "resolutions": {
     "angular": "~1.2.25",
     "jquery-ui": "~1.11.2",
     "jquery": "~1.11.2",
-    "moment": "master",
-    "momentjs": "master",
     "fullcalendar": ">=2.4.0",
     "angular-translate": "~2.6.1",
     "humanize-duration": "~2.8.0",
-    "spectrum": "1.7.0"
+    "spectrum": "1.7.0",
+    "moment": "~2.13.0"
   }
 }

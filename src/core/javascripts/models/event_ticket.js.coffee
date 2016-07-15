@@ -59,11 +59,14 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     *
     * @returns {array} The returned range
     ###
-    getRange: (cap) ->
+    getRange: (cap, event) ->
       if cap
         c = cap
         c = cap / @counts_as if @counts_as
-        if c + @min_num_bookings < @max
+        c = if event and cap > event.getSpacesLeft() then event.getSpacesLeft() else cap
+        if c <= 0 && event.getWaitSpacesLeft() > 0
+          @max = event.getWaitSpacesLeft()
+        else if c + @min_num_bookings < @max
           @max = c + @min_num_bookings
 
       [0].concat [@min_num_bookings..@max]
@@ -80,8 +83,8 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     ###
     isAvailable: (event) ->
       for ticket in event.tickets
-        if event.ticket_spaces[ticket.pool_id]
-          if event.ticket_spaces[ticket.pool_id].left > 0
+        if event.ticket_spaces[@pool_id]
+          if event.ticket_spaces[@pool_id].left > 0
             return true
       return false
 
@@ -95,19 +98,19 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     *
     * @returns {array} The returned range
     ###
-    getRangeTicketSpaces: (pool_id, event) ->
+    getRangeTicketSpaces: (event, range = 10) ->
       max_left = 0
       min = @min_num_bookings
       if @isAvailable(event)
-        if pool_id
-          max_left = event.ticket_spaces[pool_id].left
+        if @pool_id
+          max_left = event.ticket_spaces[@pool_id].left
 
         if max_left == 0
           return [0]
         else
           return [0].concat [min..max_left]
       else
-        return @getRange(20)
+        return @getRange(range, event)
 
     ###**
     * @ngdoc method

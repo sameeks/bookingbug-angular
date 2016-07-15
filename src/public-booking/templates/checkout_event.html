@@ -6,11 +6,13 @@
       <ul class="row event-summary-list">
         <li class="col-xs-6 col-sm-3 date truncate-xs">
           <span class="bb-icon icon-calendar"></span>
-          <span class="hidden-xs">{{bb.event_details.datetime.format('dddd ')}}</span><span>{{bb.event_details.datetime.format('Do MMMM YYYY')}}</span>
+          <span class="hidden-xs">{{bb.event_details.datetime | datetime: 'dddd '}}</span>
+          <span>{{bb.event_details.datetime | datetime: 'Do MMMM YYYY'}}</span>
         </li>
         <li class="col-xs-6 col-sm-3 time truncate-xs">
           <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-          <span class="event-time" ng-bind="bb.event_details.datetime.format('h[:]mma')"></span>&ndash;<span ng-bind="bb.event_details.end_datetime.format('h[:]mma')"></span>
+          <span class="event-time" ng-bind="bb.event_details.datetime | datetime: 'h[:]mma'"></span>
+          &ndash;<span ng-bind="bb.event_details.end_datetime | datetime: 'h[:]mma'"></span>
         </li>
         <li class="hidden-xs col-sm-3 duration truncate-xs">
           <span class="glyphicon glyphicon-hourglass"></span>

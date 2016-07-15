@@ -45,20 +45,37 @@ angular.module('BB.Services').factory "PurchaseService", ($q, halClient, BBModel
       defer.reject(err)
     defer.promise
 
+
    bookWaitlistItem: (params) ->
+
     defer = $q.defer()
-    if !params.purchase
-      defer.reject("No purchase present")
-      return defer.promise
+
+    if !params.purchase and !params.purchase_id
+      defer.reject("No purchase or purchase_id present")
+
     data = {}
-    data.booking = params.booking.getPostData()  if params.booking
-    data.booking_id = data.booking.id
-    params.purchase.$put('book_waitlist_item', {}, data).then (purchase) =>
-      purchase = new BBModel.Purchase.Total(purchase)
-      defer.resolve(purchase)
-    , (err) =>
-      defer.reject(err)
-    defer.promise
+    #data.booking = params.booking.getPostData() if params.booking
+    data.booking_id = params.booking.id
+
+    if params.purchase
+
+      params.purchase.$put('book_waitlist_item', {}, data).then (purchase) =>
+        purchase = new BBModel.Purchase.Total(purchase)
+        defer.resolve(purchase)
+      , (err) ->
+        defer.reject(err)
+    
+    else if params.purchase_id and params.url_root
+
+      uri = params.url_root + "/api/v1/purchases/" + params.purchase_id + '/book_waitlist_item'
+      
+      halClient.$put(uri, {}, data).then (purchase) ->
+        purchase = new BBModel.Purchase.Total(purchase)
+        defer.resolve(purchase)
+      , (err) ->
+        defer.reject(err)
+    
+    return defer.promise
 
 
   deleteAll: (purchase) ->
@@ -77,7 +94,8 @@ angular.module('BB.Services').factory "PurchaseService", ($q, halClient, BBModel
 
     defer.promise
 
-  delete_item: (params) ->
+
+  deleteItem: (params) ->
     defer = $q.defer()
     uri = params.api_url + "/api/v1/purchases/" + params.long_id + "/purchase_item/" + params.purchase_item_id
     halClient.$del(uri, {}).then (purchase) ->
