@@ -14,32 +14,32 @@ function getModules(srcpath) {
 
 function buildModule(streams, module, srcpath) {
   try {
-    fs.statSync(path.join(srcpath, module, 'javascripts'))
+    fs.statSync(path.join(srcpath, module, 'javascripts'));
     streams.add(bbGulp.javascripts(module));
   } catch (e) {
   }
   try {
-    fs.statSync(path.join(srcpath, module, 'i18n'))
+    fs.statSync(path.join(srcpath, module, 'i18n'));
     streams.add(bbGulp.i18n(module));
   } catch (e) {
   }
   try {
-    fs.statSync(path.join(srcpath, module, 'stylesheets'))
+    fs.statSync(path.join(srcpath, module, 'stylesheets'));
     streams.add(bbGulp.stylesheets(module));
   } catch (e) {
   }
   try {
-    fs.statSync(path.join(srcpath, module, 'images'))
+    fs.statSync(path.join(srcpath, module, 'images'));
     streams.add(bbGulp.images(module));
   } catch (e) {
   }
   try {
-    fs.statSync(path.join(srcpath, module, 'fonts'))
+    fs.statSync(path.join(srcpath, module, 'fonts'));
     streams.add(bbGulp.fonts(module));
   } catch (e) {
   }
   try {
-    fs.statSync(path.join(srcpath, module, 'templates'))
+    fs.statSync(path.join(srcpath, module, 'templates'));
     streams.add(bbGulp.templates(module));
   } catch (e) {
   }

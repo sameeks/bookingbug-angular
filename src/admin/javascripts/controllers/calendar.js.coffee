@@ -32,7 +32,7 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl',
       $scope.alertMessage = ('Day Clicked ' + date);
 
   # alert on Drop
-   $scope.alertOnDrop = (event, revertFunc, jsEvent, ui, view) ->
+  $scope.alertOnDrop = (event, revertFunc, jsEvent, ui, view) ->
     $scope.$apply =>
       $scope.popupTimeAction({action: "move", booking: event, newdate: event.start, onCancel: revertFunc})
 
