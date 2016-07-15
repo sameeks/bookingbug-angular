@@ -2,42 +2,36 @@ describe "Standard booking journey:", ->
   waitFor = (selector) ->
     browser.wait protractor.ExpectedConditions.presenceOf($(selector)), 8000
 
-  browser.ignoreSynchronization = true
+  browser.ignoreSynchronization = false
   browser.driver.manage().window().setSize(1024, 768)
 
-  ###
-  #TODO: work out why mock modules never get injected even when ignoreSynchronization = false.
-  #Temporary fix: examples/checkout_mock.js
-  browser.ignoreSynchronization = false
-  checkoutResponse = require './mocks/checkout.json'
-  checkoutMock = ->
-    checkoutResponse = arguments[0]
-    angular.module('checkoutMock', ['ngMockE2E']).run ($httpBackend) ->
-      $httpBackend.whenPOST(/.*checkout/).respond(checkoutResponse)
-      $httpBackend.whenPOST(/.* /).passThrough()
-      $httpBackend.whenGET(/.* /).passThrough()
+  mockModule = require './mocks/checkout.js'
 
-    angular.module('BB').requires.push('checkoutMock')
-  browser.addMockModule 'checkoutMock', checkoutMock
-  ###
+  beforeEach ->
+    browser.addMockModule 'bbCheckoutMock', mockModule.bbCheckoutMock
+    return
+
   it "Widget should load", ->
     browser.get 'http://localhost:8888/new_booking.html'
+    browser.pause()
     waitFor '[bb-widget] .content'
 
+
   describe "Services", ->
-    item = null
+    panel = null
     it "should be loaded and displayed", ->
-      waitFor "[bb-services] .item"
-      items = element.all(By.css "[bb-services] .item")
-      expect(items.count()).toEqual 4
-      item = items.first()
-      expect(item.element(By.tagName('h2')).getText()).toEqual 'Club Fitting'
+      waitFor "[bb-services] .panel"
+
+      panels = element.all(By.css "[bb-services] .panel")
+      expect(panels.count()).toEqual 4
+      panel = panels.first()
+      expect(panel.element(By.tagName('h2')).getText()).toEqual 'Club Fitting'
 
     it "should have formatted prices", ->
-      expect(item.element(By.css ".bb-service-price").getText()).toEqual '£50.00'
+      expect(panel.element(By.css ".bb-service-price").getText()).toEqual '£50.00'
 
     it "should move to people", ->
-      item.element(By.tagName('button')).click()
+      panel.element(By.tagName('button')).click()
       waitFor "[bb-people]"
 
   describe "People", ->
@@ -48,21 +42,22 @@ describe "Standard booking journey:", ->
       expect(items.first().element(By.tagName 'h2').getText()).toEqual 'Derrick C'
 
     it "should have formatted duration", ->
-      expect(element.all(By.css "ul.bb-summary-list .bb-summary-value").first().getText()).toEqual '1 hour'
-  
+      expect(element.all(By.css "ul.bb-item-summary-list .bb-summary-value").first().getText()).toEqual '1 hour'
+
     it "should move to calendar", ->
       element.all(By.css '[bb-people] .panel button').first().click()
       waitFor "[bb-time-ranges]"
+      browser.driver.manage().window().setSize(1024, 769) #for some reason not showing available dates if not getting resized
 
   describe "Calendar", ->
     it "should load 7 days on big screens", ->
       waitFor 'li.day[ng-repeat]'
       days = element.all(By.css "li.day[ng-repeat]")
-      expect(days.count()).toEqual(7)
+      expect(days.count()).toEqual(5)
 
     accordion = null
     it "should expand accordions", ->
-      accordion = element.all(By.css "[bb-accordian-range-group]>.panel:not([disabled]").first()
+      accordion = element.all(By.css "[bb-accordion-range-group]>.panel:not([disabled]").first()
       accordion.click()
 
     it "should select a time slot and move to questions", ->
@@ -86,7 +81,8 @@ describe "Standard booking journey:", ->
       element(By.css 'input[name=q19515]').sendKeys('180cm')
       element(By.cssContainingText('option', 'Both')).click()
       element(By.buttonText 'Confirm').click()
-      waitFor '[bb-total]'
+      waitFor '[bb-basket-summary]'
+      element(By.buttonText 'Confirm').click()
 
   describe "Confirmation", ->
     it "Should show the address on a map", ->

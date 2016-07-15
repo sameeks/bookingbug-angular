@@ -27,3 +27,10 @@ module.exports = (gulp, plugins)->
       'test:unit-ci:settings'
       cb
     )
+
+  gulp.task 'test:e2e', (cb)->
+    plugins.sequence(
+      'test:e2e:prepare',
+      'test:e2e:run'
+      cb
+    )
