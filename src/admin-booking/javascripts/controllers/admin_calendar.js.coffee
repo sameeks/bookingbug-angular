@@ -30,7 +30,7 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
     else if $scope.bb.current_item.defaults.time?
       $scope.switchView('day')
     else
-      $scope.switchView('multi_day')
+      $scope.switchView($scope.bb.item_defaults.day_view or 'multi_day')
 
     $scope.person_name   = $scope.bb.current_item.person.name if $scope.bb.current_item.person
     $scope.resource_name = $scope.bb.current_item.resource.name if $scope.bb.current_item.resource
