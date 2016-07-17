@@ -114,7 +114,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
           if size == ViewportSize.getViewportSize()
             timeRange = days
 
-        return timeRange  
+        return timeRange
 
       $scope.time_range_length = calculateDayNum()
 
@@ -496,24 +496,27 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
               if (!dtimes[pad])
                 time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-          requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item)
+          requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item, $scope.bb.item_defaults)
 
-          if requested_slot
-            $scope.selectSlot(requested_slot, day)
+          if requested_slot.slot and requested_slot.match == "full"
+            $scope.selectSlot requested_slot.slot, day
+          else if requested_slot.slot
+            $scope.highlightSlot requested_slot.slot, day
+
 
 
          $scope.$broadcast "time_slots:loaded", time_slots
 
       , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     else
-      $scope.setLoaded $scope  
+      $scope.setLoaded $scope
 
   $scope.showFirstAvailableDay = ->
     SlotDates.getFirstDayWithSlots($scope.data_source, $scope.selected_day).then (day)->
         $scope.no_slots_in_week = false
         setTimeRange day
         $scope.loadData()
-      , (err)->  
+      , (err)->
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
   ###**
   * @ngdoc method

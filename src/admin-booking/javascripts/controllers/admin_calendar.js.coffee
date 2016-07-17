@@ -6,7 +6,6 @@ angular.module('BB.Directives').directive 'bbAdminCalendar', () ->
   scope : true
   controller : 'adminCalendarCtrl'
 
-
 angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $element, $controller, $attrs, $modal, BBModel, $rootScope) ->
 
   angular.extend(this, $controller('TimeList', {
@@ -39,6 +38,13 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
 
   $scope.switchView = (view) ->
 
+    if view == "day"
+      if $scope.slots and $scope.bb.current_item.time
+        for slot in $scope.slots
+          if slot.time == $scope.bb.current_item.time.time
+            $scope.highlightSlot(slot, $scope.bb.current_item.date)
+            break
+
     # reset views
     for key, value of $scope.calendar_view
       $scope.calendar_view[key] = false
@@ -51,14 +57,14 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
 
     new_timeslot = new BBModel.TimeSlot({time: $scope.bb.current_item.defaults.time, avail: 1})
     new_day = new BBModel.Day({date: $scope.bb.current_item.defaults.datetime, spaces: 1})
-    
+
     $scope.setLastSelectedDate(new_day.date)
     $scope.bb.current_item.setDate(new_day)
 
     $scope.bb.current_item.setTime(new_timeslot)
 
     $scope.bb.current_item.setPerson($scope.bb.current_item.defaults.person)
-    $scope.bb.current_item.setResource($scope.bb.current_item.defaults.resource) 
+    $scope.bb.current_item.setResource($scope.bb.current_item.defaults.resource)
 
     if $scope.bb.current_item.reserve_ready
       $scope.addItemToBasket().then () =>

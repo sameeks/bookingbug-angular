@@ -54,6 +54,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @held = {time: @time, date: @date, event_id: @event_id, id: @id}
 
 
+
       @promises = []
 
       if data
