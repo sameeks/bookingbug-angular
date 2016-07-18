@@ -49,12 +49,8 @@ module.exports = {
       .pipe(gulp.dest(process.env.releasepath+'/core/i18n'));
   },
   stylesheets: function(module) {
-    return gulp.src(process.env.srcpath+'/'+module+'/stylesheets/main.scss')
-      .pipe(plumber())
-      .pipe(sass({errLogToConsole: true}))
-      .pipe(flatten())
-      .pipe(concat('bookingbug-angular-'+module+'.css'))
-      .pipe(gulp.dest(process.env.releasepath+'/'+module));
+    return gulp.src(process.env.srcpath+'/'+module+'/stylesheets/**')
+      .pipe(gulp.dest(process.env.releasepath+'/'+module+'/src/stylesheets'));
   },
   images: function(module) {
     return gulp.src(process.env.srcpath+'/'+module+'/images/*')
