@@ -191,14 +191,15 @@
 
     var buildSdk = require('../../build.js');
 
-    gulp.task('build', function () {
+    gulp.task('build', function (cb) {
       buildSdk()
         .on('data', function (d) {
         })
         .on('error', function (e) {
+          return cb(e);
         })
         .on('end', function () {
-          return
+          return cb();
         });
     });
 
