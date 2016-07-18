@@ -22,15 +22,40 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', ->
+angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', [ ->
   # This list of options is meant to grow
   options = {
-    default_language: 'en',
-    use_browser_language: true,
-    available_languages: ['en','es'],
+    default_language        : 'en',
+    use_browser_language    : true,
+    available_languages     : ['en'],
+    deactivate_sidenav      : false,
+    deactivate_boxed_layout : false,
+    sidenav_start_open      : true,
+    boxed_layout_start      : false,
     available_language_associations: {
       'en_*': 'en'
-    }
+    },
+    # Order in which the menu items in the side-nav appear
+    side_navigation : [
+      {
+        group_name: 'SIDE_NAV_BOOKINGS'
+        items:[
+          'calendar',
+          'clients',
+          'check-in',
+          'dashboard-iframe',
+          'members-iframe',
+        ]
+      },
+      {
+        group_name: 'SIDE_NAV_CONFIG'
+        items: [
+          'config-iframe',
+          'publish-iframe',
+          'settings-iframe'
+        ]
+      }
+    ]
   }
 
   @setOption = (option, value) ->
@@ -46,4 +71,4 @@ angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', ->
     options
 
   return
-
+]

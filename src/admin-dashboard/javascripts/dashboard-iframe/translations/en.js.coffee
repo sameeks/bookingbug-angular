@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 ###
 * @ngdoc overview
@@ -10,6 +10,14 @@
 angular.module('BBAdminDashboard.dashboard-iframe.translations')
 .config ['$translateProvider', ($translateProvider)->
 	$translateProvider.translations('en',{
-    'TEXT_1': 'Hello here!',
+    'SIDE_NAV': {
+      'DASHBOARD_IFRAME_PAGE': {
+        'DASHBOARD'       : 'Dashboard',
+        'UPCOMING_RECENT' : 'Upcoming &amp; Recent',
+        'SEARCH'          : 'Search',
+        'BULK_BOOKINGS'   : 'Bulk bookings',
+        'INSIGHTS'        : 'Insights'
+      }
+    }
   })
 ]

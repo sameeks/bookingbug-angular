@@ -1,5 +1,3 @@
-'use strict'
-
 ###**
 * @ngdoc service
 * @name BBAdminDashboard.services.service:AdminSsoLogin
@@ -10,9 +8,9 @@
 * @property {string} sso_token The sso_token to be used
 * @property {function} callback (optional) funtion to be called after the successfull login, receives UserAdmin (BaseResource) obj as input 
 ###
-angular.module('BBAdminDashboard.services').factory 'AdminSsoLogin', (
-  halClient, AdminSsoLoginUrl) ->
-
+angular.module('BBAdminDashboard.services').factory 'AdminSsoLogin', [
+  'halClient', 'AdminSsoLoginUrl',
+  (halClient, AdminSsoLoginUrl) ->
     return (sso_token, callback)->
       data = {
         token: sso_token
@@ -22,4 +20,4 @@ angular.module('BBAdminDashboard.services').factory 'AdminSsoLogin', (
         login.$get('administrator', params).then (admin) ->
           if typeof callback == 'function'
             callback admin
-
+]

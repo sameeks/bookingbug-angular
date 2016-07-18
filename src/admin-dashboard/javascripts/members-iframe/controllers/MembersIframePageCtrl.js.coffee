@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 ###
 * @ngdoc controller
@@ -8,20 +8,18 @@
 * Controller for the members page
 ###
 angular.module('BBAdminDashboard.members-iframe.controllers')
-.controller 'MembersIframePageCtrl', ($scope, $state, $rootScope, $window) ->
+.controller 'MembersIframePageCtrl',['$scope', '$state', '$rootScope', '$window', ($scope, $state, $rootScope, $window) ->
 
   $scope.parent_state = $state.is("members")
-  $scope.bb.side_menu = "member_menu"
-  $scope.path = "client"
 
   $rootScope.$on '$stateChangeStart', (event, toState, toParams, fromState, fromParams) ->
-    $scope.adminlte.fixed_page = toParams.fixed
     $scope.parent_state = false
     if (toState.name == "members")
       $scope.parent_state = true
       $scope.clearCurrentClient()
 
   $scope.setCurrentClient = (client) ->
+    console.log "set current", client
     if client
       $rootScope.client_id = client
       $scope.extra_params = "id=#{client}"
@@ -39,4 +37,4 @@ angular.module('BBAdminDashboard.members-iframe.controllers')
           $scope.setCurrentClient(event.data.id)
         if event.data.action == "single"
           $state.go "members.page", {path: 'client/single', id: event.data.id}
-
+]

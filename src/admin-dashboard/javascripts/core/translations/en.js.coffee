@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 ###
 * @ngdoc overview
@@ -8,8 +8,14 @@
 * Translations for the admin core module
 ###
 angular.module('BBAdminDashboard.translations')
-.config ($translateProvider)->
-	$translateProvider.translations('en',{
-    'TEXT_1': 'Hello here!',
+.config ['$translateProvider', ($translateProvider)->
+  $translateProvider.translations('en',{
+    'SIDE_NAV_BOOKINGS' : 'BOOKINGS',
+    'SIDE_NAV_CONFIG'   : 'CONFIGURATION',
+    'LANGUAGE_EN'       : 'English',
+    'GREETING'          : 'Hi',
+    'LOGOUT'            : 'Logout'
+    'VERSION'           : 'Version',
+    'COPYRIGHT'         : 'Copyright'
   })
-
+]

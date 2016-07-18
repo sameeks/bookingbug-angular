@@ -1,0 +1,62 @@
+<!-- Site wrapper -->
+<div class="wrapper">
+    <header class="main-header">
+        <a ui-sref="admin.dashboard" class="logo"></a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a class="sidebar-toggle" ng-if="!page.hideSideMenuControl" ng-class="{off: page.sideMenuOn}" ng-click="page.sideMenuOn = !page.sideMenuOn" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown" dropdown is-open="isopen">
+                        <a href class="dropdown-toggle" dropdown-toggle>
+                            <span class="hidden-xs">&nbsp;<span translate>GREETING</span>, {{user.name}} <span class="caret"></span></span>
+                        </a>
+                        <ul class="dropdown-menu user-dropdown">
+                            <li><a ui-sref="logout" class="btn btn-default btn-sm btn-block"><i class="fa fa-lock"></i> <span translate>LOGOUT</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span class="language-picker" admin-language-picker></span>
+                    </li>
+                    <li ng-if="!page.hideBoxedLayoutControl">
+                        <a href ng-click="page.boxed = !page.boxed" class="visible-lg-inline-block">
+                            <span ng-show="!page.boxed" class="glyphicon glyphicon-resize-small"></span>
+                            <span ng-show="page.boxed" class="glyphicon glyphicon-resize-full"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- =============================================== -->
+
+    <!-- Left side column. contains the sidebar -->
+    <aside class="main-sidebar" ng-scrollable="{scrollX:'none',scrollY:'right'}" content-height include-header="false" include-footer="false">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar" admin-side-nav></section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- =============================================== -->
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" id="content-wrapper" content-height>
+        <div ui-view class="animated"></div>
+    </div><!-- /.content-wrapper -->
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b translate>VERSION</b> 2.0
+        </div>
+        <strong><span translate>COPYRIGHT</span> &copy; 2016 <a href="http://bookingbug.com" target="_blank">BookingBug</a>.</strong>
+    </footer>
+</div><!-- ./wrapper -->

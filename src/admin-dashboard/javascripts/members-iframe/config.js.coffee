@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.members-iframe', [
   'BBAdminDashboard.members-iframe.directives',
   'BBAdminDashboard.members-iframe.translations'
 ])
-.run (RuntimeStates, AdminMembersIframeOptions) ->
+.run ['RuntimeStates', 'AdminMembersIframeOptions', 'SideNavigationPartials', (RuntimeStates, AdminMembersIframeOptions, SideNavigationPartials) ->
   # Choose to opt out of the default routing
   if AdminMembersIframeOptions.use_default_states
 
@@ -19,11 +19,22 @@ angular.module('BBAdminDashboard.members-iframe', [
       .state 'members',
         parent: AdminMembersIframeOptions.parent_state
         url: '/members'
-        templateUrl: 'admin_members_page.html'
+        templateUrl: 'members-iframe/index.html'
         controller: 'MembersIframePageCtrl'
+        deepStateRedirect: {
+          default: {
+            state:  'members.page'
+            params: {
+              path: 'client'
+            }
+          }
+        }
 
       .state 'members.page',
         url: '/page/:path/:id'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/boxed-iframe-page.html'
         controller: 'MembersSubIframePageCtrl'
 
+  if AdminMembersIframeOptions.show_in_navigation
+    SideNavigationPartials.addPartialTemplate('members-iframe', 'members-iframe/nav.html')
+]

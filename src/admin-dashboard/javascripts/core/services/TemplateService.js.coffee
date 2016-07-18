@@ -8,9 +8,9 @@
 * Checks if a custom version of the requested template exists in the templateCache,
 * otherwise returns the default version (which should be compiled with the module)
 ###
-angular.module('BBAdminDashboard.services').factory 'TemplateService', (
-  $templateCache, $exceptionHandler) ->
-
+angular.module('BBAdminDashboard.services').factory 'TemplateService', [
+  '$templateCache','$exceptionHandler',
+  ($templateCache, $exceptionHandler) ->
     {
       get: (template)->
         if $templateCache.get(template)?
@@ -20,4 +20,4 @@ angular.module('BBAdminDashboard.services').factory 'TemplateService', (
         else
           $exceptionHandler(new Error('Template "' + template + '" not found'), '', true)
     }
-
+]

@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.publish-iframe', [
   'BBAdminDashboard.publish-iframe.directives',
   'BBAdminDashboard.publish-iframe.translations'
 ])
-.run (RuntimeStates, AdminPublishIframeOptions) ->
+.run ['RuntimeStates', 'AdminPublishIframeOptions', 'SideNavigationPartials', (RuntimeStates, AdminPublishIframeOptions, SideNavigationPartials) ->
   # Choose to opt out of the default routing
   if AdminPublishIframeOptions.use_default_states
 
@@ -19,11 +19,22 @@ angular.module('BBAdminDashboard.publish-iframe', [
       .state 'publish',
         parent: AdminPublishIframeOptions.parent_state
         url: '/publish'
-        templateUrl: 'admin_publish_page.html'
+        templateUrl: 'publish-iframe/index.html'
         controller: 'PublishIframePageCtrl'
+        deepStateRedirect: {
+          default: {
+            state:  'publish.page'
+            params: {
+              path: 'conf/inset/intro'
+            }
+          }
+        }
 
       .state 'publish.page',
         url: '/page/:path'
-        templateUrl: 'iframe_page.html'
+        templateUrl: 'core/boxed-iframe-page.html'
         controller: 'PublishSubIframePageCtrl'
 
+  if AdminPublishIframeOptions.show_in_navigation
+    SideNavigationPartials.addPartialTemplate('publish-iframe', 'publish-iframe/nav.html')
+]

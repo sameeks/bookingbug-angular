@@ -22,7 +22,7 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.check-in.services').provider 'AdminCheckInOptions', ->
+angular.module('BBAdminDashboard.check-in.services').provider 'AdminCheckInOptions', [ ->
   # This list of options is meant to grow
   options = {
     use_default_states : true
@@ -43,4 +43,4 @@ angular.module('BBAdminDashboard.check-in.services').provider 'AdminCheckInOptio
     options
 
   return
-
+]

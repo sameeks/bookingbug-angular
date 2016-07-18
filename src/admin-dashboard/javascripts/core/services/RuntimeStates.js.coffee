@@ -22,12 +22,11 @@
   ]
   </example>
 ###
-angular.module('BBAdminDashboard.services').provider 'RuntimeStates', ($stateProvider)->
-
+angular.module('BBAdminDashboard.services').provider 'RuntimeStates', ['$stateProvider', ($stateProvider)->
   stateProvider  = $stateProvider
   @setProvider = (provider)->
     stateProvider = provider
   @$get = ->
     stateProvider
   return
-
+]

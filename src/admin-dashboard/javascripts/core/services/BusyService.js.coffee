@@ -1,22 +1,21 @@
-'use strict'
-
 ###**
 * @ngdoc service
 * @name BBAdminDashboard.services.service:BusyService
 *
 * @description
-*
+* 
 *
 ###
-angular.module('BBAdminDashboard.services').factory "BusyService", (
-  $q, $log, $rootScope, AlertService, ErrorService) ->
+angular.module('BBAdminDashboard.services').factory "BusyService", [
+  '$q', '$log', '$rootScope', 'AlertService', 'ErrorService', 
+  ($q, $log, $rootScope, AlertService, ErrorService) ->
 
     notLoaded: (cscope) ->
       cscope.$emit 'show:loader', cscope
       cscope.isLoaded = false
       # then look through all the scopes for the 'loading' scope, which is the
       # scope which has a 'scopeLoaded' property and set it to false, which makes
-      # the ladoing gif show
+      # the ladoing gif show;
       while cscope
         if cscope.hasOwnProperty('scopeLoaded')
           cscope.scopeLoaded = false
@@ -29,7 +28,7 @@ angular.module('BBAdminDashboard.services').factory "BusyService", (
       # set the scope loaded to true...
       cscope.isLoaded = true
       # then walk up the scope chain looking for the 'loading' scope...
-      loadingFinished = true
+      loadingFinished = true;
 
       while cscope
         if cscope.hasOwnProperty('scopeLoaded')
@@ -71,4 +70,4 @@ angular.module('BBAdminDashboard.services').factory "BusyService", (
           return false if !$scope.areScopesLoaded(child)
           child = child.$$nextSibling
         true
-
+]

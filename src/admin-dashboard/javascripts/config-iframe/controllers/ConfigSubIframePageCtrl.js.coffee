@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 ###
 * @ngdoc controller
@@ -8,7 +8,13 @@
 * Controller for the config sub page
 ###
 angular.module('BBAdminDashboard.config-iframe.controllers')
-.controller 'ConfigSubIframePageCtrl', ($scope, $state, $stateParams) ->
-
+.controller 'ConfigSubIframePageCtrl',['$scope', '$state', '$stateParams', ($scope, $state, $stateParams) ->
   $scope.path = $stateParams.path
+  $scope.pageHeader = null
 
+  $scope.$emit 'iframeLoading',{}
+
+  $scope.onIframeLoad = ()->
+    $scope.$emit 'iframeLoaded',{}
+
+]

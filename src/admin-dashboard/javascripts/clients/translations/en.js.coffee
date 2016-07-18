@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 ###
 * @ngdoc overview
@@ -8,8 +8,27 @@
 * Translations for the admin clients module
 ###
 angular.module('BBAdminDashboard.clients.translations')
-.config ($translateProvider)->
+.config ['$translateProvider', ($translateProvider)->
 	$translateProvider.translations('en',{
-    'TEXT_1': 'Hello here!',
+    'SIDE_NAV': {
+      'CLIENTS_PAGE': {
+        'CLIENTS' : 'Customers'
+      }
+    }
+    'CLIENTS_PAGE': {
+      'CLIENTS'           : 'Customers',
+      'CLIENT'            : 'Customer',
+      'NAME'              : 'Name',
+      'EMAIL'             : 'Email',
+      'MOBILE'            : 'Mobile',
+      'PHONE'             : 'Phone',
+      'ACTIONS'           : 'Actions',
+      'EDIT' 		          : 'Edit',
+      'ABOUT'             : 'About',
+      'ADDRESS'           : 'Address',
+      'UPCOMING_BOOKINGS' : 'Upcoming Bookings',
+      'PAST_BOOKINGS'     : 'Past Bookings',
+      'CUSTOMER_DETAILS'  : 'Customer Details'
+    }
   })
-
+]

@@ -9,9 +9,9 @@ angular.module('BBAdminDashboard.logout', [
   'BBAdminDashboard.logout.services',
   'BBAdminDashboard.logout.directives'
 ])
-.config ($stateProvider, $urlRouterProvider) ->
+.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
   $stateProvider
     .state 'logout',
       url: '/logout'
       controller: 'LogoutPageCtrl'
-
+]

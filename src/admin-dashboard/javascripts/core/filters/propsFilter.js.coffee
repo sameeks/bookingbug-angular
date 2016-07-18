@@ -1,13 +1,10 @@
-'use strict'
-
 ###
 * @ngdoc filter
 * @name BBAdminDashboard.filters.filter:propsFilter
 * @description
 * Does an OR operation
 ###
-angular.module('BBAdminDashboard.filters').filter 'propsFilter', ->
-
+angular.module('BBAdminDashboard.filters').filter 'propsFilter', ['$translate', ($translate)->
   (items, props) ->
     out = []
     if angular.isArray(items)
@@ -19,7 +16,7 @@ angular.module('BBAdminDashboard.filters').filter 'propsFilter', ->
           prop = keys[i]
           text = props[prop].toLowerCase()
 
-          if item[prop]? && item[prop].toString().toLowerCase().indexOf(text) != -1
+          if item[prop]? && $translate.instant(item[prop]).toString().toLowerCase().indexOf(text) != -1
             itemMatches = true
             break
           i++
@@ -30,4 +27,4 @@ angular.module('BBAdminDashboard.filters').filter 'propsFilter', ->
       # Let the output be the input untouched
       out = items
     out
-
+]

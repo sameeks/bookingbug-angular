@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 ###
 * @ngdoc controller
@@ -8,4 +8,6 @@
 * Controller for the clients new page
 ###
 angular.module('BBAdminDashboard.clients.controllers')
-.controller 'ClientsNewPageCtrl', ($scope, $state) ->
+.controller 'ClientsNewPageCtrl',['$scope', '$state', ($scope, $state) ->
+
+]

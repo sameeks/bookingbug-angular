@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 ###
 * @ngdoc overview
@@ -8,8 +8,15 @@
 * Translations for the admin members module
 ###
 angular.module('BBAdminDashboard.members-iframe.translations')
-.config ($translateProvider)->
+.config ['$translateProvider', ($translateProvider)->
 	$translateProvider.translations('en',{
-    'TEXT_1': 'Hello here!',
+    'SIDE_NAV': {
+      'MEMBERS_IFRAME_PAGE': {
+        'MEMBERS'           	: 'Members',
+        'ALL_CLIENTS'    			: 'All clients',
+        'QUESTIONS'    				: 'Questions',
+        'EXPORT_TO_MAILCHIMP' : 'Export to Mailchimp'
+      }
+    },
   })
-
+]
