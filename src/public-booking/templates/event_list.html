@@ -211,7 +211,7 @@
                   <div class="event-description col-xs-12" ng-bind="item.chain.description" style="max-height: none; line-height: 1em; height:3em; margin-bottom: 20px; overflow:hidden"  ng-class="{'col-sm-8':!$root.tiles}"></div>
                   <div class="event-select col-xs-12"  ng-class="{'col-sm-4':!$root.tiles}">
                     <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" ng-disabled="spaces_left == 0 && !bb.company.settings.has_waitlists">
-                      <span ng-show="spaces_left > 0">Book Course</span>
+                      <span ng-show="spaces_left > 0">Book Event</span>
                       <div ng-show="spaces_left <= 0 && !bb.company.settings.has_waitlists">
                         <span class="status-sold-out">Sold out</span>
                       </div>
@@ -243,3 +243,12 @@
   </div>
 
 </div>
+
+<div class="bb-step-navigation">
+  <div class="row">
+    <div class="col-sm-3">
+      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+    </div>
+  </div>
+</div>
+
