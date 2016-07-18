@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.4.0] - 2016-07-19
+## [1.4.10] - 2016-07-19
 ###Added
 - Added helper methods to bbBasketList for displaying total price and tickety qty for grouped BasketItem objects that have events assoicated to them
 - Added capability to edit BasketItem objects with events assoicated to them
