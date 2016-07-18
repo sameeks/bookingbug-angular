@@ -25,7 +25,8 @@ angular.module('BBAdminDashboard.config-iframe.translations')
         'TAB_STAFF'          : 'Staff',
         'TAB_RESOURCES'      : 'Resource',
         'TAB_SERVICES'       : 'Services',
-        'TAB_WHO_WHAT_WHERE' : 'Who / What / Where'
+        'TAB_WHO_WHAT_WHERE' : 'Who / What / Where',
+        'TAB_CLIENT_QUEUE'  : 'Queues'
       },
       'EVENT_SETTINGS': {
         'TITLE'              : 'Event settings',

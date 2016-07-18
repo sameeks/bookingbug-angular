@@ -32,6 +32,11 @@ angular.module('BBAdminDashboard.config-iframe.controllers')
       icon: 'fa fa-question-circle',
       path: 'config.business.page({path: "grid"})'
     },
+    {
+      name: 'CONFIG_IFRAME_PAGE.BUSINESS.TAB_CLIENT_QUEUE',
+      icon: 'fa fa-users',
+      path: 'config.business.page({path: "client_queue"})'
+    },
   ]
 
   $scope.contentsLoading = false
