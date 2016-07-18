@@ -17,17 +17,21 @@ var path = require('path');
 var rename = require('gulp-rename');
 var plumber = require('gulp-plumber');
 
-process.env.srcpath = process.env.srcpath || './src'
-process.env.releasepath = process.env.releasepath || './build'
+process.env.srcpath = process.env.srcpath || './src';
+process.env.releasepath = process.env.releasepath || './build';
 
 module.exports = {
   javascripts: function(module) {
     return gulp.src([
-          process.env.srcpath+'/'+module+'/javascripts/main.js.coffee',
-          process.env.srcpath+'/'+module+'/javascripts/**/*',
-          process.env.srcpath+'/'+module+'/i18n/en.js',
-          '!'+process.env.srcpath+'/'+module+'/javascripts/**/*~',
-          '!'+process.env.srcpath+'/**/*_test.js.coffee'
+        process.env.srcpath+'/'+module+'/javascripts/main.js.coffee',
+        process.env.srcpath+'/'+module+'/javascripts/core/main.js.coffee',
+        process.env.srcpath+'/'+module+'/javascripts/**/*',
+        process.env.srcpath+'/'+module+'/i18n/en.js',
+        '!'+process.env.srcpath+'/'+module+'/javascripts/**/*~',
+        '!'+process.env.srcpath+'/'+module+'/javascripts/**/*.js.js',
+        '!'+process.env.srcpath+'/'+module+'/javascripts/**/*.js.js.map',
+        '!'+process.env.srcpath+'/**/*_test.js.coffee',
+        '!'+process.env.srcpath+'/**/*.spec.js.coffee'
         ],
         {allowEmpty: true}
       )

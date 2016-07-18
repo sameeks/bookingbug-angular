@@ -46,10 +46,6 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
   $rootScope.connection_started.then ->
 
-    # clear selected time to restore original state
-    delete $scope.bb.current_item.time
-    delete item.time for item in $scope.bb.stacked_items
-
     if $scope.bb.current_item.defaults.date and !$scope.bb.current_item.date
       $scope.setDate($scope.bb.current_item.defaults.date)
     else if $scope.bb.current_item.date
@@ -155,21 +151,18 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * @param {TimeSlot} slot The slot
   ###
   $scope.highlightSlot = (slot, day) =>
-
     if day and slot and slot.availability() > 0
-
       if slot.datetime
         $scope.setLastSelectedDate(slot.datetime)
         $scope.data_source.setDate({date: slot.datetime})
       else if day
         $scope.setLastSelectedDate(day.date)
         $scope.data_source.setDate(day)
-      
+
       $scope.data_source.setTime(slot)
       
       # tell any accordion groups to update
       $scope.$broadcast 'slotChanged'
-
 
   ###**
   * @ngdoc method
@@ -230,7 +223,6 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   * Load day
   ###
   $scope.loadDay = (options) =>
-
     options = {check_requested_slot: true} unless options
     if $scope.data_source and ($scope.data_source.days_link || $scope.item_link_source) and $scope.selected_day
 
@@ -269,22 +261,14 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
   checkRequestedSlots = (time_slots) ->
     requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
-    if requested_slot and $scope.data_source.resource and $scope.data_source.person
-      if requested_slot && requested_slot.overbook && !$scope.bb.dont_skip_step
-        $scope.availability_conflict = true
-      else if requested_slot and $scope.bb.dont_skip_step
-        $scope.highlightSlot(requested_slot, $scope.selected_day)
-        $scope.bb.dont_skip_step = false
-      else
-        $scope.skipThisStep()
-        $scope.selectSlot(requested_slot, $scope.selected_day)
-    else if requested_slot
-      if requested_slot.overbook
-        $scope.availability_conflict = true
-      else
-        $scope.highlightSlot(requested_slot, $scope.selected_day)
-    else if requested_slot is null
+
+    if requested_slot.slot and requested_slot.slot.overbook or requested_slot.slot is null or requested_slot.match is null
       $scope.availability_conflict = true
+    else if requested_slot.slot and requested_slot.match == "full"
+      $scope.skipThisStep()
+      $scope.selectSlot requested_slot.slot, $scope.selected_day
+    else if requested_slot.slot and requested_slot.match == "partial"
+      $scope.highlightSlot requested_slot.slot, $scope.selected_day
 
   ###**
   * @ngdoc method
