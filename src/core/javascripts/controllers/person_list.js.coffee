@@ -107,7 +107,7 @@ angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
         for i in items
           people.push(i.item)
           if bi and bi.person and bi.person.id is i.item.id
-            $scope.person = i.item
+            $scope.person = i.item if $scope.bb.current_item.settings.person isnt -1
             $scope.selected_bookable_items = [i]
 
         # if there's only 1 person and combine resources/staff has been turned on, auto select the person

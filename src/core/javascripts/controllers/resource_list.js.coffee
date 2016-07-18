@@ -108,8 +108,8 @@ angular.module('BB.Controllers').controller 'ResourceList', ($scope,
         for i in items
           resources.push(i.item)
           if $scope.booking_item and $scope.booking_item.resource and $scope.booking_item.resource.id is i.item.id
-            $scope.resource = i.item
-
+            # set the resource unless the resource was automatically set
+            $scope.resource = i.item if $scope.bb.current_item.settings.resource isnt -1
       # if there's only one resource and single pick hasn't been enabled,
       # automatically select the resource.
         if resources.length is 1 and !$scope.options.allow_single_pick
@@ -168,12 +168,12 @@ angular.module('BB.Controllers').controller 'ResourceList', ($scope,
       return true
 
 
-  $scope.$watch 'resource',(newval, oldval) =>
+  $scope.$watch 'resource', (new_val, old_val) =>
     if $scope.resource
       new_resource = getItemFromResource($scope.resource)
       _.each $scope.booking_items, (item) -> item.setResource(new_resource)
       $scope.broadcastItemUpdate()
-    else if newval != oldval
+    else if new_val and newval != oldval
       _.each $scope.booking_items, (item) -> item.setResource(null)
       $scope.broadcastItemUpdate()
 

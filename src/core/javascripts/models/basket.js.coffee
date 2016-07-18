@@ -71,10 +71,30 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
 
     ###**
     * @ngdoc method
-    * @name readyToCheckout
+    * @name itemsReady
     * @methodOf BB.Models:Basket
     * @description
     * Use to check if the basket is ready to checkout
+    *
+    * @returns {boolean} Flag to indicate if basket is ready checkout
+    ###
+    itemsReady: ->
+      if @items.length > 0
+        ready = true
+        for i in @items
+          if not i.checkReady()
+            ready = false
+
+        ready
+      else
+        return false
+
+    ###**
+    * @ngdoc method
+    * @name readyToCheckout
+    * @methodOf BB.Models:Basket
+    * @description
+    * Use to check if the basket is ready to checkout - and has been reviews
     *
     * @returns {boolean} Flag to indicate if basket is ready checkout
     ###

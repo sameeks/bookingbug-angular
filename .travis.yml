@@ -1,15 +1,28 @@
 language: node_js
+
 node_js:
-- '0.10'
+  - '5.11'
+
+install: ./travis/install.sh
+
 before_script:
-- npm install -g gulp
-script:
-- gulp test
-- gulp buildWidget
+  - npm install -g gulp
+
+script: ./travis/script.sh
+
 cache:
   directories:
-  - node_modules
-  - bower_components
+    - node_modules
+    - bower_components
+    - src/core/bower_components
+    - src/admin/bower_components
+    - src/admin-booking/bower_components
+    - src/admin-dashboard/bower_components
+    - src/events/bower_components
+    - src/member/bower_components
+    - src/services/bower_components
+    - src/settings/bower_components
+
 deploy:
   provider: s3
   bucket: angular.bookingbug.com

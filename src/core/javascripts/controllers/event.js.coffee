@@ -59,6 +59,8 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
 
     $scope.event_options.use_my_details = if !$scope.event_options.use_my_details? then true else $scope.event_options.use_my_details
 
+
+
     promises = [
       $scope.current_item.event_group.$getImages(),
       $scope.event.prepEvent()
@@ -75,6 +77,23 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
       $scope.event = event
 
       initImage(images) if images
+
+
+      if $scope.bb.current_item.tickets
+        # all cready added to the basket
+        $scope.setLoaded $scope
+        $scope.selected_tickets = true
+        $scope.tickets = (item.tickets for item in $scope.bb.basket.items)
+        $scope.current_ticket_items = [] # the current
+        for item in $scope.bb.basket.timeItems()
+          $scope.current_ticket_items.push(item) if item.event_id == $scope.event.id
+        $scope.$watch 'bb.basket.items', (items, olditems) ->
+          $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
+          item.tickets.price = item.totalPrice()
+        , true
+        return
+
+
 
       initTickets()
 
