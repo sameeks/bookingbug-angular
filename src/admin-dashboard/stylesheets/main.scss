@@ -3,7 +3,6 @@ html,body {
   height: 100%;
 }
 
-@import "skin_bb";
 
 .bb-page-frame {
   width:100%;
@@ -25,8 +24,6 @@ html,body {
 	@import "default-theme";
 	@import "resource-calendar";
 }
-
-@import "resource_calendar";
 
 #bb .modal-content .bb-content, .modal-content #bb .bb-content{
 	min-height: 100px !important;
