@@ -62,10 +62,10 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
     .state 'root',
       templateUrl: "core/layout.html"
       resolve:
-        sso: ($q, sso_token, AdminLoginService, $injector) ->
+        sso: ($q, sso_token, BBModel, $injector) ->
           defer = $q.defer()
 
-          AdminLoginService.isLoggedIn().then (loggedIn)->
+          BBModel.Admin.Login.$isLoggedIn().then (loggedIn)->
             if not loggedIn and sso_token != false
               # Use the injector to avoid errors for including a
               # service with dependencies on construct (AdminSsoLogin requires company_id value)
@@ -79,9 +79,9 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
 
           defer.promise
 
-        user: ($q, AdminLoginService, $timeout, $state, sso) ->
+        user: ($q, BBModel, $timeout, $state, sso) ->
           defer = $q.defer()
-          AdminLoginService.user().then (user) ->
+          BBModel.Admin.Login.$user().then (user) ->
             if user
               defer.resolve(user)
             else
@@ -93,7 +93,7 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
           defer.promise
         company: (user, $q, $timeout, $state) ->
           defer = $q.defer()
-          user.getCompanyPromise().then (company) ->
+          user.$getCompany().then (company) ->
             if company.companies && company.companies.length > 0
               $timeout () ->
                 $state.go 'login', {}, {reload: true}
