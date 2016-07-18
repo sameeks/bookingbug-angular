@@ -18,6 +18,6 @@ describe 'BB.Controllers, adminCalendarCtrl', () ->
 
   it 'dummy test', ->
     expect true
-    .toBe true
+    .toBe false
 
   return
