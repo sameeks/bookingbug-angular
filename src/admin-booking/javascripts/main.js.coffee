@@ -1,8 +1,9 @@
 'use strict';
 
 adminbookingapp = angular.module('BBAdminBooking', [
-  'BB',
-  'BBAdmin.Services',
+  'BB'
+  'BBAdmin.Services'
+  'BBAdminServices'
   'trNgGrid'
 ])
 
@@ -12,13 +13,13 @@ angular.module('BBAdminBooking').config ($logProvider) ->
 angular.module('BBAdminBooking.Directives', [])
 
 angular.module('BBAdminBooking.Services', [
-  'ngResource',
+  'ngResource'
   'ngSanitize'
   'ngLocalData'
 ])
 
 angular.module('BBAdminBooking.Controllers', [
-  'ngLocalData',
+  'ngLocalData'
   'ngSanitize'
 ])
 
