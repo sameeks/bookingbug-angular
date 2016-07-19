@@ -1242,7 +1242,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $rootScope.$broadcast 'clear:formData'
     $rootScope.$broadcast 'widget:restart'
     $scope.setLastSelectedDate(null)
-    $scope.client =  new BBModel.Client()
+    $scope.client =  new BBModel.Client() if !LoginService.isLoggedIn()
     $scope.bb.last_step_reached = false
     # This is to remove the current step you are on.
     $scope.bb.steps.splice(1)
