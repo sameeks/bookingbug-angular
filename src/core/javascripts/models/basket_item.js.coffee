@@ -37,6 +37,9 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
       @settings or= {}
       @has_questions = false
 
+      # give the basket item a unique reference so that we can track it
+      @ref = Math.ceil(moment().unix() * Math.random()) if !@ref
+
       # if we were given an id then the item is ready - we need to fake a few items
       if @time
         @time = new BBModel.TimeSlot({time: @time, event_id: @event_id, selected: true, avail: 1, price: @price })
@@ -864,6 +867,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
       data.attachment_id = @attachment_id if @attachment_id
       data.vouchers = @deal_codes if @deal_codes
       data.product_id = @product.id if @product
+      data.ref = @ref
 
       data.email = @email if @email
       data.first_name = @first_name if @first_name
