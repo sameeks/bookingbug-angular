@@ -1,17 +1,33 @@
-ServiceConstructor = () ->
-  init = ()->
+ServiceConstructor = (BbTeBlogArticleTextSanitizer, $http, $q) ->
+
+  endpoint = 'http://some.endpoint.com'
+
+  getArticles = () ->
     return
 
-  someMethod1 = () ->
+  getArticle = (articleId) ->
+
+    defer = $q.defer()
+
+    $http.get(endpoint + '/article/' + articleId)
+    .then (response) ->
+      article = BbTeBlogArticleTextSanitizer.sanitize response.data
+      defer.resolve article
+    .catch (response) ->
+      defer.reject('could not load article with id:' + articleId )
+
+    return defer.promise
+
+  updateArticle = (article) ->
     return
 
-  someMethod2 = () ->
+  deleteArticle = (articleId) ->
     return
 
-  init()
-
-  someMethod1: someMethod1
-  someMethod2: someMethod2
+  getArticles: getArticles
+  getArticle: getArticle
+  updateArticle: updateArticle
+  deleteArticle: deleteArticle
 
 angular
 .module('bbTe.blogArticle')

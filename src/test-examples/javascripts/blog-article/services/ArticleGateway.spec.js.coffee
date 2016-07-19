@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'bbTe.blogArticle, BbTeBlogArticleGateway factory', () ->
+describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
   ArticleGateway = null
 
   setup = () ->
@@ -15,12 +15,10 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway factory', () ->
 
   beforeEach setup
 
-  it 'service expose proper methods', () ->
-    expect ArticleGateway.someMethod1
-    .toBeDefined()
+  xit 'can load article', () ->
 
-    expect ArticleGateway.someMethod2
-    .toBeDefined()
+    console.log ArticleGateway.getArticle(1)
+
     return
 
 
