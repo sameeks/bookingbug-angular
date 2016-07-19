@@ -82,8 +82,9 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
             groupBasketItems($scope.bb.basket.timeItems())
           , (err) ->
             $scope.setLoaded $scope
-        else
-          groupBasketItems($scope.bb.basket.timeItems())
+            
+    else
+      groupBasketItems($scope.bb.basket.timeItems())
 
 
 
