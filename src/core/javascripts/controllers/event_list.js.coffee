@@ -452,11 +452,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
       (($scope.filters.hide_sold_out_events and item.bookable) or !$scope.filters.hide_sold_out_events) and
-      filterEventsWithDynamicFilters(item)
+      $scope.filterEventsWithDynamicFilters(item)
     return result
 
 
-  filterEventsWithDynamicFilters = (item) ->
+  $scope.filterEventsWithDynamicFilters = (item) ->
 
     return true if !$scope.has_company_questions or !$scope.dynamic_filters
 
