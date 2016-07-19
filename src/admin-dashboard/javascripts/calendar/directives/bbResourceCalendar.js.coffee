@@ -1,9 +1,19 @@
 angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCalendar', (
     uiCalendarConfig, AdminCompanyService, $q, ModalForm, BBModel,
-    AdminBookingPopup, $window, $bbug, ColorPalette, Dialog,
+    AdminBookingPopup, AdminMoveBookingPopup, $window, $bbug, ColorPalette, Dialog,
     $timeout, $compile, $templateCache, PrePostTime, $filter) ->
 
   controller = ($scope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources) ->
+
+    setTimeToMoment = (date, time)->
+      newDate = moment(time,'HH:mm')
+      newDate.set({
+        'year'   : parseInt(date.get('year'))
+        'month'  : parseInt(date.get('month'))
+        'date'   : parseInt(date.get('date'))
+        'second' : 0
+      })
+      newDate
 
     filters = {
       requestedAssets : ProcessAssetsFilter($state.params.assets)
@@ -86,6 +96,19 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         eventDragStop: (event, jsEvent, ui, view) ->
           event.oldResourceIds = event.resourceIds
         eventDrop: (event, delta, revertFunc) ->
+          if event.person_id && event.resource_id
+            $scope.getCompanyPromise().then (company) ->
+              AdminMoveBookingPopup.open
+                min_date: setTimeToMoment(event.start,$scope.options.min_time)
+                max_date: setTimeToMoment(event.end,$scope.options.max_time)
+                from_datetime: event.start
+                to_datetime: event.end
+                item_defaults: {}
+                company_id: company.id
+                booking_id: event.id
+            return
+
+            # if it's got a person and resource - then it
           Dialog.confirm
             model: event
             body: "Are you sure you want to move this booking?"
@@ -118,15 +141,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           view.calendar.unselect()
 
           if isTimeRangeAvailable(start, end, resource) || (Math.abs(start.diff(end, 'days')) == 1 && dayHasAvailability(start))
-            setTimeToMoment = (date, time)->
-              newDate = moment(time,'HH:mm')
-              newDate.set({
-                'year'   : parseInt(date.get('year'))
-                'month'  : parseInt(date.get('month'))
-                'date'   : parseInt(date.get('date'))
-                'second' : 0
-              })
-              newDate
 
             if Math.abs(start.diff(end, 'days')) > 0
               end.subtract(1,'days')
