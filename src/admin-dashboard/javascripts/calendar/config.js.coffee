@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.calendar', [
     RuntimeStates
       .state 'calendar',
         parent: AdminCalendarOptions.parent_state
-        url: "/calendar/:assets"
+        url: "calendar/:assets"
         templateUrl: "calendar/index.html"
         controller: 'CalendarPageCtrl'
 

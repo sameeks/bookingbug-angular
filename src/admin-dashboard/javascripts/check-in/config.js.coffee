@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.check-in', [
     RuntimeStates
       .state 'checkin',
         parent: AdminCheckInOptions.parent_state
-        url: "/check-in"
+        url: "check-in"
         templateUrl: "check-in/index.html"
         controller: 'CheckInPageCtrl'
 

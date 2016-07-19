@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.config-iframe', [
     RuntimeStates
       .state 'config',
         parent: AdminConfigIframeOptions.parent_state
-        url: '/config'
+        url: 'config'
         templateUrl: 'config-iframe/index.html'
         controller: 'ConfigIframePageCtrl'
         deepStateRedirect: {
