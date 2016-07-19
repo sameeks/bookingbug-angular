@@ -154,11 +154,11 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     $scope.bb.pushStackToBasket()
 
     $scope.updateBasket().then () =>
-
+      console.log "In bbEvent updaateBasket()"
       # basket has been saved
       $scope.setLoaded $scope
       $scope.selected_tickets = true
-      $scope.stopTicketWatch()
+      $scope.stopTicketWatch
 
       # set tickets and current tickets items as the newly created basket items
       $scope.current_ticket_items = _.filter $scope.bb.basket.timeItems(), (item) ->
@@ -274,6 +274,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     $scope.tickets = $scope.event.tickets
     $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
     $scope.stopTicketWatch = $scope.$watch 'tickets', (tickets, oldtickets) ->
+      console.log "in bbEvent initTickets"
       $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
       $scope.event.updatePrice()
     , true
