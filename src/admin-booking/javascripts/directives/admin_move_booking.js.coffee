@@ -33,9 +33,7 @@ angular.module('BBAdminBooking').directive 'bbAdminMoveBooking', (AdminCompanySe
     if attrs.companyId
       AdminCompanyService.query(attrs).then (company) ->
 
-        console.log scope, scope.bb
         scope.initWidget(config)
-        console.log scope.bb.api_url
         AdminBookingService.getBooking({company_id: company.id, id: config.booking_id, url: scope.bb.api_url}).then (booking) ->
           scope.company = company
           scope.bb.moving_booking = booking
@@ -43,8 +41,15 @@ angular.module('BBAdminBooking').directive 'bbAdminMoveBooking', (AdminCompanySe
           proms = []
           new_item = new BBModel.BasketItem(booking, scope.bb)
           new_item.setSrcBooking(booking, scope.bb)
+          new_item.clearDateTime()
           new_item.ready = false
-          console.log(new_item)
+
+          if booking.$has('client')
+            client_prom = booking.$get('client')
+            proms.push(client_prom)
+            client_prom.then (client) =>
+              scope.setClient(new BBModel.Client(client))
+
           Array::push.apply proms, new_item.promises
           scope.bb.basket.addItem(new_item)
           scope.setBasketItem(new_item)

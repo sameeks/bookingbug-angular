@@ -18,8 +18,8 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
 
   funcs = {}
   for model in models
-    do (model) =>  
-      funcs[model] = (p1, p2) => 
+    do (model) =>
+      funcs[model] = (p1, p2) =>
         new ($injector.get(model + "Model"))(p1, p2)
 
 
@@ -27,8 +27,8 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
   purchase_models = ['Booking', 'Total', 'CourseBooking']
   pfuncs = {}
   for model in purchase_models
-    do (model) =>  
-      pfuncs[model] = (init) => 
+    do (model) =>
+      pfuncs[model] = (init) =>
         new ($injector.get("Purchase." + model + "Model"))(init)
   funcs['Purchase'] = pfuncs
 
@@ -36,8 +36,8 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
   member_models = ['Member', 'Booking', 'PrePaidBooking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand']
   mfuncs = {}
   for model in member_models
-    do (model) =>  
-      mfuncs[model] = (init) => 
+    do (model) =>
+      mfuncs[model] = (init) =>
         new ($injector.get("Member." + model + "Model"))(init)
   funcs['Member'] = mfuncs
 
@@ -46,8 +46,8 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
     'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup', 'Event', 'Queuer', 'ClientQueue', 'Clinic']
   afuncs = {}
   for model in admin_models
-    do (model) =>  
-      afuncs[model] = (init) => 
+    do (model) =>
+      afuncs[model] = (init) =>
         new ($injector.get("Admin." + model + "Model"))(init)
   funcs['Admin'] = afuncs
 
@@ -75,7 +75,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
         @_data = data
       if data
         for n,m of data
-          @[n] = m
+          @[n] ||= m
       if @_data && @_data.$href
         @self = @_data.$href("self")
         # append get functions for all links...
@@ -131,7 +131,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
       , (err) -> prom.reject(err)
 
       @__linkedPromises[link]
-    
+
 
     get: (ikey) ->
       return null if !@_data
@@ -139,7 +139,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
 
     set: (ikey, value) ->
       return null if !@_data
-      @_data[ikey] = value 
+      @_data[ikey] = value
 
 
     $href: (rel, params) ->

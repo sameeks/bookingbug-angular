@@ -121,18 +121,18 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   $scope.selectSlot = (slot, day, route) =>
 
     if slot && slot.availability() > 0
-      
+
       # if this time cal was also for a specific item source (i.e.a person or resoure- make sure we've selected it)
       if $scope.item_link_source
         $scope.data_source.setItem($scope.item_link_source)
-      
+
       if slot.datetime
         $scope.setLastSelectedDate(slot.datetime)
         $scope.data_source.setDate({date: slot.datetime})
       else if day
         $scope.setLastSelectedDate(day.date)
         $scope.data_source.setDate(day)
-      
+
       $scope.data_source.setTime(slot)
 
       if $scope.data_source.reserve_ready
@@ -160,7 +160,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         $scope.data_source.setDate(day)
 
       $scope.data_source.setTime(slot)
-      
+
       # tell any accordion groups to update
       $scope.$broadcast 'slotChanged'
 
@@ -260,6 +260,8 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
       $scope.setLoaded $scope
 
   checkRequestedSlots = (time_slots) ->
+    return if !$scope.bb.item_defaults || !$scope.bb.item_defaults.time
+
     requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
 
     if requested_slot.slot and requested_slot.slot.overbook or requested_slot.slot is null or requested_slot.match is null

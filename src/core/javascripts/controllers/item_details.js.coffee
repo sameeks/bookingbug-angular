@@ -233,6 +233,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @param {string=} route A specific route to load
   ###
   $scope.confirm_move = (route) ->
+
     confirming = true
     $scope.item ||= $scope.bb.current_item
     $scope.item.moved_booking = false
@@ -268,6 +269,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
               $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
 
           $scope.setLoaded $scope
+          $scope.bb.moved_booking = booking
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)

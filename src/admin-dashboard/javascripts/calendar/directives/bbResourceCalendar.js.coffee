@@ -97,13 +97,25 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           event.oldResourceIds = event.resourceIds
         eventDrop: (event, delta, revertFunc) ->
           if event.person_id && event.resource_id
+            start = event.start
+            end = event.end
+            item_defaults =
+              date: start.format('YYYY-MM-DD')
+              time: (start.hour() * 60 + start.minute())
+
+            newAssetId = event.resourceId.substring(0, event.resourceId.indexOf('_'))
+            if event.resourceId.indexOf('_p') > -1
+              item_defaults.person = newAssetId
+            else if event.resourceId.indexOf('_r') > -1
+              item_defaults.resource = newAssetId
+
             $scope.getCompanyPromise().then (company) ->
               AdminMoveBookingPopup.open
-                min_date: setTimeToMoment(event.start,$scope.options.min_time)
-                max_date: setTimeToMoment(event.end,$scope.options.max_time)
-                from_datetime: event.start
-                to_datetime: event.end
-                item_defaults: {}
+                min_date: setTimeToMoment(start,$scope.options.min_time)
+                max_date: setTimeToMoment(end,$scope.options.max_time)
+                from_datetime: start
+                to_datetime: end
+                item_defaults: item_defaults
                 company_id: company.id
                 booking_id: event.id
             return
