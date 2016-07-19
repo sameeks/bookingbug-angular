@@ -11,9 +11,11 @@ All notable changes to this project will be documented in this file.
 - Fixed issue where selecting more tickets for the same event would make already entered ticket details available for edit again
 - BREAKING: Updated `EventTicket` model with improved `getRange` method that takes account of tickets the user has selected when determing the valid number of tickets. Templates will need to be updated to pass the event to `getRange` method:
 
+```
     <select ng-if="!selected_tickets" ng-model="ticket.qty" ng-options="n as n for n in ticket.getRange(event)">
       <option value="">-</option>
     </select>
+```
 
 ## [1.4.0] - 2016-07-11
 ###Added
@@ -27,7 +29,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - BREAKING: Fixed issue in bbMemberLogin where form controller shared scope with login model. Templates where bbMemberLogin is invoked need to be updated to use the login object:
 
+```
     <input type="password" name="password" id="password" required ng-model="login.password" class="form-control" />
+```
 
 ## [1.3.0] - 2016-07-07
 ### Added
