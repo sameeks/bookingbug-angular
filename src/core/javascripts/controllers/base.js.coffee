@@ -895,6 +895,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   # add several items at once
   $scope.updateBasket = () ->
+
+    # save the current item ref so that we can restore the current item after the basket has been updated
+    current_item_ref = $scope.bb.current_item.ref
+
     add_defer = $q.defer()
     params = {member_id: $scope.client.id, member: $scope.client, items: $scope.bb.basket.items, bb: $scope.bb }
     BasketService.updateBasket($scope.bb.company, params).then (basket) ->
@@ -906,7 +910,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       basket.setSettings($scope.bb.basket.settings)
 
       $scope.setBasket(basket)
-      $scope.setBasketItem(basket.items[0])
+
+      # restore the current item using the ref
+      current_item = _.find basket.items, (item) -> item.ref is current_item_ref
+      $scope.setBasketItem(current_item)
+
       # check if item has been added to the basket
       if !$scope.bb.current_item
         # not added to basket, clear the item

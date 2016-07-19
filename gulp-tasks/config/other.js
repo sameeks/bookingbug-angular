@@ -20,7 +20,9 @@
       gulpDocs = require('gulp-ngdocs'),
       KarmaServer = require('karma').Server,
       bower = require('gulp-bower'),
-      argv = require('yargs').argv;
+      argv = require('yargs').argv,
+      sourcemaps = require('gulp-sourcemaps'),
+      cssSelectorLimit = require('gulp-css-selector-limit');
 
     gulp.task('clean', function (cb) {
       del.sync(['release']);
@@ -189,14 +191,15 @@
 
     var buildSdk = require('../../build.js');
 
-    gulp.task('build', function () {
+    gulp.task('build', function (cb) {
       buildSdk()
         .on('data', function (d) {
         })
         .on('error', function (e) {
+          return cb(e);
         })
         .on('end', function () {
-          return
+          return cb();
         });
     });
 
@@ -219,17 +222,42 @@
         .pipe(gulp.dest('./build/booking-widget/dist'));
     });
 
-    gulp.task('buildWidgetStyle', ['bowerWidget'], function () {
-      return gulp.src(mainBowerFiles({
-        filter: new RegExp('.css$'),
-        paths: {
-          bowerDirectory: './build/booking-widget/bower_components',
-          bowerJson: './build/booking-widget/bower.json'
-        }
-      }))
-        .pipe(concat('booking-widget.css'))
-        .pipe(gulp.dest('./build/booking-widget/dist'));
+    function filterStylesheets(path) {
+      // Temporary exclude the compiled booking bug css files if they exist
+      // until the new build process (as discussed) allows for their generation
+      return (
+        path.match(new RegExp('.css$'))
+        &&
+        !path.match(new RegExp('(bower_components\/bookingbug-angular-).+(\.css)'))
+        &&
+        path.indexOf('boostrap.') == -1
+      );
+    }
 
+    gulp.task('buildWidgetStyle', ['bowerWidget'], function () {
+      var src = mainBowerFiles({
+          includeDev : true,
+          filter: filterStylesheets,
+          paths: {
+            bowerDirectory: './build/booking-widget/bower_components',
+            bowerJson: './build/booking-widget/bower.json'
+          }
+      });
+      var bootstrapSCSS, appSCSS;
+      bootstrapSCSS = gulp.src('./build/booking-widget/src/stylesheets/bootstrap.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass({onError: function(e) { console.log(e); }, outputStyle: 'compressed'}).on('error', gutil.log));
+      appSCSS = gulp.src('./build/booking-widget/src/stylesheets/main.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass({onError: function(e) { console.log(e); }, outputStyle: 'compressed'}).on('error', gutil.log));
+      dependenciesCSS = gulp.src(src)
+        .pipe(sourcemaps.init())
+      return streamqueue({objectMode: true }, bootstrapSCSS, dependenciesCSS, appSCSS)
+        .pipe(flatten())
+        .pipe(concat('booking-widget.css'))
+        .pipe(cssSelectorLimit.reporter('fail'))
+        .pipe(sourcemaps.write('maps', {includeContent: false}))
+        .pipe(gulp.dest('./build/booking-widget/dist'));
     });
 
     gulp.task('buildWidget', ['buildWidgetScript', 'buildWidgetStyle']);

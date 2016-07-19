@@ -82,8 +82,9 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
             groupBasketItems($scope.bb.basket.timeItems())
           , (err) ->
             $scope.setLoaded $scope
-        else
-          groupBasketItems($scope.bb.basket.timeItems())
+            
+    else
+      groupBasketItems($scope.bb.basket.timeItems())
 
 
 
@@ -96,8 +97,22 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $element, $at
     $scope.decideNextPage(route)
 
 
+  $scope.groupPrice = (items) ->
+    group_price = 0
+    group_price += item.total_price for item in items
+    return group_price
+
+
+  $scope.groupTicketQty = (items) ->
+    group_ticket_qty = 0
+    group_ticket_qty += item.tickets.qty for item in items
+    return group_ticket_qty
+
+
   groupBasketItems = (items) ->
-    $scope.multi_basket_grouping = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
+    # TODO only group events
+    $scope.multi_basket_grouping = _.groupBy $scope.bb.basket.timeItems(), 'event_id'
+    # (item) -> "#{item.event.date.unix()}_#{item.event_id}"
     $scope.multi_basket_grouping = _.values($scope.multi_basket_grouping)
 
     $scope.setLoaded $scope
