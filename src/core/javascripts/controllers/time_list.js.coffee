@@ -35,12 +35,12 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
 
 angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
   $scope,  $rootScope, $q, TimeService, AlertService, BBModel,
-  DateTimeUtilitiesService, PageControllerService, LoadingService) ->
+  DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService) ->
 
   $scope.controller = "public.controllers.TimeList"
   loader = LoadingService.$loader($scope).notLoaded()
 
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.data_source = $scope.bb.current_item if !$scope.data_source
   $scope.options = $scope.$eval($attrs.bbTimes) or {}

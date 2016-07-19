@@ -50,12 +50,12 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
 
 angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope,
   EventService, EventChainService, $q, PageControllerService,
-  FormDataStoreService, $filter, PaginationService, $timeout, LoadingService,
+  FormDataStoreService, $filter, PaginationService, $timeout, ValidatorService, LoadingService,
   BBModel) ->
 
   $scope.controller = "public.controllers.EventList"
   loader = LoadingService.$loader($scope).notLoaded()
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
   $scope.pick = {}
   $scope.start_date = moment()
   $scope.end_date = moment().add(1, 'year')

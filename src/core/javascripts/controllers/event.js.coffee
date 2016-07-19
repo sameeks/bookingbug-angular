@@ -35,7 +35,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
 
   $scope.controller = "public.controllers.Event"
   loader = LoadingService.$loader($scope).notLoaded()
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.validator = ValidatorService
   $scope.event_options = $scope.$eval($attrs.bbEvent) or {}

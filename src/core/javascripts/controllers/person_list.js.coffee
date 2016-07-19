@@ -56,12 +56,12 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
 
 angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
   PageControllerService, $q, BBModel, PersonModel, FormDataStoreService,
-  LoadingService) ->
+  ValidatorService, LoadingService) ->
 
   $scope.controller = "public.controllers.PersonList"
 
   loader = LoadingService.$loader($scope).notLoaded()
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $rootScope.connection_started.then ->
     loadData()

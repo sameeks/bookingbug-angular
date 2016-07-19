@@ -60,11 +60,11 @@ angular.module('BB.Directives').directive 'bbResources', () ->
 
 angular.module('BB.Controllers').controller 'ResourceList', ($scope,
   $rootScope, $attrs, PageControllerService, $q, BBModel, ResourceModel,
-  LoadingService) ->
+  ValidatorService, LoadingService) ->
 
   loader = LoadingService.$loader($scope).notLoaded()
 
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
 
   $rootScope.connection_started.then () =>
