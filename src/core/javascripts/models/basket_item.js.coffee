@@ -36,6 +36,8 @@ angular.module('BB.Models').factory "BasketItemModel",
       @settings or= {}
       @has_questions = false
 
+      # give the basket item a unique reference so that we can track it
+      @ref = Math.ceil(moment().unix() * Math.random()) if !@ref
 
       # if we were given an id then the item is ready - we need to fake a few items
       if @time
@@ -52,6 +54,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @reserve_ready = true # if it has an id - it must be held - so therefore it must already be 'reservable'
         # keep a note of a possibly held item - we might change this item - but we should know waht was possibly already selected
         @held = {time: @time, date: @date, event_id: @event_id, id: @id}
+
 
 
       @promises = []
@@ -185,7 +188,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         # NOTE: time is not set as it might not be available
         date = if defaults.date then defaults.date else moment()
         time = if defaults.time then parseInt(defaults.time) else 0
-        defaults.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment({date: defaults.date}, {time: time})
+        defaults.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(defaults.date, {time: time})
       if defaults.service_ref
         @service_ref = defaults.service_ref
       if defaults.group
@@ -645,7 +648,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @time.select()
 
         if @datetime
-          @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(@datetime, @time)
+          @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(@date.date, @time)
 
         if @price && @time.price && (@price != @time.price)
           @setPrice(@time.price)
@@ -841,6 +844,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.attachment_id = @attachment_id if @attachment_id
       data.vouchers = @deal_codes if @deal_codes
       data.product_id = @product.id if @product
+      data.ref = @ref
 
       data.email = @email if @email
       data.first_name = @first_name if @first_name
@@ -1020,7 +1024,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     start_datetime: () ->
       return null if !@date || !@time
-      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date, @time)
+      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date.date, @time)
 
 
     startDatetime: () ->
@@ -1040,7 +1044,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       return null if !@date || !@time || (!@listed_duration && !@duration)
       duration = if @listed_duration then @listed_duration else @duration
       time = @time.time + duration
-      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date, time)
+      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date.date, time)
 
 
     endDatetime: () ->

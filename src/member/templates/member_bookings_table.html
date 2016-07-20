@@ -13,12 +13,12 @@
       <td field-name="details"><span>{{gridItem.details}}</span></td>
       <td>
         <button class="btn btn-default btn-sm"
-          ng-hide="gridItem.date < now"
+          ng-hide="gridItem.datetime.format('X') < now.format('X')"
           ng-click="cancel(gridItem.id)">
             Cancel
         </button>
         <button class="btn btn-default btn-sm"
-          ng-hide="gridItem.date < now"
+          ng-hide="gridItem.datetime.format('X') < now.format('X')"
           ng-click="edit(gridItem.id)">
             Details
         </button>

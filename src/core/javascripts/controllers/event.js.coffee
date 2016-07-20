@@ -38,7 +38,9 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   $scope.validator = ValidatorService
   $scope.event_options = $scope.$eval($attrs.bbEvent) or {}
 
-  FormDataStoreService.init 'ItemDetails', $scope, [
+  ticket_refs = []
+
+  FormDataStoreService.init 'Event', $scope, [
     'selected_tickets',
     'event_options'
   ]
@@ -74,7 +76,26 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
       initImage(images) if images
 
-      initTickets()
+      if $scope.bb.current_item.tickets and $scope.bb.current_item.tickets.qty > 0
+        
+        # already added to the basket
+        $scope.setLoaded $scope
+        $scope.selected_tickets = true
+        
+        # set tickets and current tickets items as items with the same event id
+        $scope.current_ticket_items = _.filter $scope.bb.basket.timeItems(), (item) ->
+          item.event_id is $scope.event.id
+
+        $scope.tickets = (item.tickets for item in $scope.current_ticket_items)
+
+        $scope.$watch 'current_ticket_items', (items, olditems) ->
+          $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
+        , true
+        return
+
+      else
+
+        initTickets()
 
       $scope.$broadcast "bbEvent:initialised"
 
@@ -92,25 +113,33 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   * Processes the selected tickets and adds them to the basket
   ###
   $scope.selectTickets = () ->
-    # process the selected tickets - this may mean adding multiple basket items - add them all to the basket
+
     $scope.notLoaded $scope
     $scope.bb.emptyStackedItems()
     # NOTE: basket is not cleared here as we might already have one!
+
     base_item = $scope.current_item
+
     for ticket in $scope.event.tickets
       if ticket.qty
         switch ($scope.event.chain.ticket_type)
           when "single_space"
             for c in [1..ticket.qty]
               item = new BBModel.BasketItem()
+              ref = item.ref
               angular.extend(item, base_item)
+              item.ref = ref
+              ticket_refs.push(item.ref)
               delete item.id
               item.tickets = angular.copy(ticket)
               item.tickets.qty = 1
               $scope.bb.stackItem(item)
           when "multi_space"
             item = new BBModel.BasketItem()
+            ref = item.ref
             angular.extend(item, base_item)
+            item.ref = ref
+            ticket_refs.push(item.ref)
             item.tickets = angular.copy(ticket)
             delete item.id
             item.tickets.qty = ticket.qty
@@ -125,33 +154,24 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     $scope.bb.pushStackToBasket()
 
     $scope.updateBasket().then () =>
+
       # basket has been saved
       $scope.setLoaded $scope
       $scope.selected_tickets = true
       $scope.stopTicketWatch()
-      $scope.tickets = (item.tickets for item in $scope.bb.basket.items)
-      $scope.current_ticket_items = [] # the current
-      for item in $scope.bb.basket.timeItems()
-        $scope.current_ticket_items.push(item) if item.event_id == $scope.event.id
-      $scope.$watch 'bb.basket.items', (items, olditems) ->
+
+      # set tickets and current tickets items as the newly created basket items
+      $scope.current_ticket_items = _.filter $scope.bb.basket.timeItems(), (item) ->
+        _.contains(ticket_refs, item.ref)
+
+      $scope.tickets = (item.tickets for item in $scope.current_ticket_items)
+            
+      # watch the basket items so the price is updated
+      $scope.$watch 'current_ticket_items', (items, olditems) ->
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
-        item.tickets.price = item.totalPrice()
       , true
+
     , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
-#    if $scope.bb.basket.timeItems()
-#      $scope.ticket_group = _.groupBy($scope.bb.basket.timeItems(), 'event_id')
-
-
-      # this is for repeating through only the tickets on the most recent item added to basket
-
- #     $scope.ticket_group = _.values($scope.ticket_group)
-
- #     if $scope.ticket_group.length is 1
- #       $scope.shown_tickets = $scope.ticket_group[0]
- #     else
- #       $scope.shown_tickets = _.last($scope.ticket_group)
-
 
 
   ###**
@@ -184,7 +204,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   ###
   $scope.setReady = () =>
 
-    $scope.bb.current_item.setEvent($scope.event)
+    item.setEvent($scope.event) for item in $scope.current_ticket_items
 
     $scope.bb.event_details = {
       name         : $scope.event.chain.name,

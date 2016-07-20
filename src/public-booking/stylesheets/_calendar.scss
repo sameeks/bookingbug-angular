@@ -1,4 +1,4 @@
-.bb-calendar, [bb-time-ranges],  {
+.bb-calendar, [bb-time-ranges]  {
   padding-bottom: 30px;
 
   .week {
@@ -96,7 +96,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    cursor: position;
+    cursor: inherit;
   }
 
   .panel-default > .panel-heading + .panel-collapse .panel-body {
