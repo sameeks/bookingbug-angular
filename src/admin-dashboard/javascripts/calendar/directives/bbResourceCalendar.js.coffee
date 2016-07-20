@@ -96,18 +96,22 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         eventDragStop: (event, jsEvent, ui, view) ->
           event.oldResourceIds = event.resourceIds
         eventDrop: (event, delta, revertFunc) ->
-          if event.person_id && event.resource_id
+          # we need a full move cal if either it has a person and resource, or they've dragged over multiple days
+          if event.person_id && event.resource_id || delta.days() > 0
             start = event.start
             end = event.end
             item_defaults =
               date: start.format('YYYY-MM-DD')
               time: (start.hour() * 60 + start.minute())
 
-            newAssetId = event.resourceId.substring(0, event.resourceId.indexOf('_'))
-            if event.resourceId.indexOf('_p') > -1
-              item_defaults.person = newAssetId
-            else if event.resourceId.indexOf('_r') > -1
-              item_defaults.resource = newAssetId
+            if event.resourceId
+              newAssetId = event.resourceId.substring(0, event.resourceId.indexOf('_'))
+              if event.resourceId.indexOf('_p') > -1
+                item_defaults.person = newAssetId
+                orginal_resource = "" + event.person_id + "_p"
+              else if event.resourceId.indexOf('_r') > -1
+                item_defaults.resource = newAssetId
+                orginal_resource = "" + event.resource_id + "_r"
 
             $scope.getCompanyPromise().then (company) ->
               AdminMoveBookingPopup.open
@@ -118,6 +122,11 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
                 item_defaults: item_defaults
                 company_id: company.id
                 booking_id: event.id
+                success: (model) =>
+                  $scope.updateBooking(event)
+                fail: () ->
+                  event.resourceId = orginal_resource if orginal_resource
+                  revertFunc()
             return
 
             # if it's got a person and resource - then it
