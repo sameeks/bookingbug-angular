@@ -113,8 +113,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
               AdminMoveBookingPopup.open
                 min_date: setTimeToMoment(start,$scope.options.min_time)
                 max_date: setTimeToMoment(end,$scope.options.max_time)
-                from_datetime: start
-                to_datetime: end
+                from_datetime: moment(start.toISOString())
+                to_datetime: moment(end.toISOString())
                 item_defaults: item_defaults
                 company_id: company.id
                 booking_id: event.id
@@ -171,8 +171,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
               AdminBookingPopup.open
                 min_date: setTimeToMoment(start,$scope.options.min_time)
                 max_date: setTimeToMoment(end,$scope.options.max_time)
-                from_datetime: start
-                to_datetime: end
+                from_datetime: moment(start.toISOString())
+                to_datetime: moment(end.toISOString())
                 item_defaults: item_defaults
                 first_page: "quick_pick"
                 company_id: company.id
