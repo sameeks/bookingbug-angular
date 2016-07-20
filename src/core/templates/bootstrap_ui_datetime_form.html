@@ -1,7 +1,7 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': !hasError()}">
 	<label class="control-label">{{form.title}}</label>
 	<p class="input-group">
-  	<div bb-date-time-picker date="$$value$$"></div>
+  	<div bb-date-time-picker date="$$value$$" bb-disabled="form.readonly"></div>
 	</p>	
 
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
