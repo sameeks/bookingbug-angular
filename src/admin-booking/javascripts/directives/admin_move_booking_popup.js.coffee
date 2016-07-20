@@ -1,7 +1,7 @@
 angular.module('BBAdminBooking').factory 'AdminMoveBookingPopup', ($modal, $timeout) ->
 
   open: (config) ->
-    $modal.open
+    modal = $modal.open
       size: 'lg'
       controller: ($scope, $modalInstance, config, $window, AdminBookingOptions) ->
         $scope.Math = $window.Math
@@ -21,3 +21,10 @@ angular.module('BBAdminBooking').factory 'AdminMoveBookingPopup', ($modal, $time
       templateUrl: 'admin_move_booking_popup.html'
       resolve:
         config: () -> config
+    modal.result.then (result) ->
+      # success
+      return result;
+    , (err) ->
+      if config.fail
+        config.fail()
+      return err
