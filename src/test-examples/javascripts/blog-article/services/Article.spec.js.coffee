@@ -1,23 +1,23 @@
 'use strict';
 
-describe 'bbTe.blogArticle, bbTeBlogArticle factory', () ->
-  bbTeBlogArticle = null
+describe 'bbTe.blogArticle, BbTeBlogArticle service', () ->
+  BbTeBlogArticle = null
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      bbTeBlogArticle = $injector.get 'bbTeBlogArticle'
+      BbTeBlogArticle = $injector.get 'BbTeBlogArticle'
       return
     return
 
   beforeEach beforeEachFn
 
   it 'can create new articles and change their names', ->
-    ar1 = new bbTeBlogArticle()
+    ar1 = new BbTeBlogArticle.model()
     ar1.setTitle 'ar1 title'
 
-    ar2 = new bbTeBlogArticle()
+    ar2 = new BbTeBlogArticle.model()
 
     expect ar1.getTitle()
     .toBe 'ar1 title'

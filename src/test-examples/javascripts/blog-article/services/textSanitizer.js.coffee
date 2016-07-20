@@ -1,4 +1,4 @@
-ServiceConstructor = () ->
+factory = () ->
 
   currentText = null;
 
@@ -24,4 +24,4 @@ ServiceConstructor = () ->
 
 angular
 .module('bbTe.blogArticle')
-.service('BbTeBlogArticleTextSanitizer', ServiceConstructor)
+.factory('bbTeBlogArticleTextSanitizer', factory)

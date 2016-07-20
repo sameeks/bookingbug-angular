@@ -1,4 +1,5 @@
-ServiceConstructor = (BbTeBlogArticleTextSanitizer, $http, $log, $q) ->
+### @ngInject ###
+factory = (bbTeBlogArticleTextSanitizer, $http, $log, $q) ->
   endpoint = 'http://some.endpoint.com'
 
   getArticles = () ->
@@ -62,7 +63,7 @@ ServiceConstructor = (BbTeBlogArticleTextSanitizer, $http, $log, $q) ->
     return
 
   sanitizeArticle = (article) ->
-    article.content = BbTeBlogArticleTextSanitizer.sanitize article.content
+    article.content = bbTeBlogArticleTextSanitizer.sanitize article.content
     return
 
 
@@ -72,4 +73,5 @@ ServiceConstructor = (BbTeBlogArticleTextSanitizer, $http, $log, $q) ->
 
 angular
 .module('bbTe.blogArticle')
-.service('BbTeBlogArticleGateway', ServiceConstructor)
+.factory('bbTeBlogArticleGateway', factory)
+

@@ -1,6 +1,6 @@
-factory = () ->
+service = () ->
 
-  model = ->
+  @model = ->
     @id = null
     @title = 'default title'
     @content = 'default content'
@@ -17,8 +17,8 @@ factory = () ->
     @title = title
     return
 
-  return model #because factory by default returns constructor function
+  return #because service by default returns object
 
 angular
 .module('bbTe.blogArticle')
-.factory('bbTeBlogArticle', factory)
+.service('BbTeBlogArticle', service)
