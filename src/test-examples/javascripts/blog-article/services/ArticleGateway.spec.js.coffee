@@ -164,8 +164,8 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
 
       return
 
-    it 'does not delete article & reject promise & and log error in console', () ->
-      $httpBackend.expectDELETE(getArticleEndpoint).respond(5200, 'some reason of failure')
+    it 'does not delete article if 500 returend from server', () ->
+      $httpBackend.expectDELETE(getArticleEndpoint).respond(500, 'some reason of failure')
 
       isDeleted = null
       promise = ArticleGateway.deleteArticle(articleId)
@@ -185,6 +185,17 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
 
       expect $log.error
       .toHaveBeenCalledWith jasmine.stringMatching(/could not/), jasmine.stringMatching(/reaso/)
+
+      return
+
+
+    it 'does not delete article if unexpected message returned', () ->
+      $httpBackend.expectDELETE(getArticleEndpoint).respond(200, 'NOT OK')
+      ArticleGateway.deleteArticle(articleId)
+      $httpBackend.flush()
+
+      expect $log.error
+      .toHaveBeenCalledWith jasmine.stringMatching(/could not/), jasmine.stringMatching(/NOT/)
 
       return
 
