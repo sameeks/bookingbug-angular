@@ -135,7 +135,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
       @_data.$has(rel) if @_data
 
     $flush: (rel, params) ->
-      @_data.$href(rel, params) if @_data
+      @_data.$flush(rel, params) if @_data
 
     $get: (rel, params) ->
       @_data.$get(rel, params) if @_data
