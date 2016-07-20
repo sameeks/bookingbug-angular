@@ -1,9 +1,13 @@
+'use strict'
+
 angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCalendar', (
     uiCalendarConfig, AdminCompanyService, $q, ModalForm, BBModel,
     AdminBookingPopup, $window, $bbug, ColorPalette, Dialog,
     $timeout, $compile, $templateCache, PrePostTime, $filter) ->
 
-  controller = ($scope, $rootScope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources, $translate) ->
+  controller = ($scope, $rootScope, $attrs, BBAssets, ProcessAssetsFilter,
+    $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources,
+    $translate) ->
 
     filters = {
       requestedAssets : ProcessAssetsFilter($state.params.assets)
@@ -225,9 +229,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           assets.push asset.id
         )
 
-        params = $state.params;
+        params = $state.params
         params.assets = assets.join()
-        $state.go($state.current.name, params, { notify:false, reload:false});
+        $state.go($state.current.name, params, { notify:false, reload:false})
 
     getCalendarAssets = (callback) ->
       $scope.loading = true
@@ -354,3 +358,4 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       blockLabelAssembler: '@'
       externalLabelAssembler: '@'
   }
+
