@@ -138,8 +138,6 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
             item.selected = true
             $scope.booking_item.setService($scope.service)
 
-      $scope.setLoaded $scope
-
       if $scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))
         # the "bookable services" are the service unless we've pre-selected something!
         items = setServicesDisplayName(items)
