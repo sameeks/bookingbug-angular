@@ -264,7 +264,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
     requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
 
-    if requested_slot.slot and requested_slot.slot.overbook or requested_slot.slot is null or requested_slot.match is null
+    if requested_slot.slot is null or requested_slot.match is null
       $scope.availability_conflict = true
     else if requested_slot.slot and requested_slot.match == "full"
       $scope.skipThisStep()
