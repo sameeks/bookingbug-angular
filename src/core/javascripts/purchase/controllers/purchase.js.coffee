@@ -268,7 +268,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
   # delete a single booking
   $scope.delete = (booking) ->
-    $scope.cancel_reason = null
     modalInstance = $modal.open
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDelete

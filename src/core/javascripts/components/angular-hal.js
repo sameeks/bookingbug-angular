@@ -108,8 +108,8 @@ angular
       , $patch: function(href, options, data){
         return callService('PATCH', href, options, data);
       }//patch
-      , $del: function(href, options){
-        return callService('DELETE', href, options);
+      , $del: function(href, options, data){
+        return callService('DELETE', href, options, data);
       }//del
       , $parse: function(data){
         return parseHal(data)
@@ -157,9 +157,9 @@ angular
         var link = links[rel];
         return callLink('PATCH', link, params, data);
       });
-      defineHiddenProperty(this, '$del', function(rel, params){
+      defineHiddenProperty(this, '$del', function(rel, params, data){
         var link = links[rel];
-        return callLink('DELETE', link, params);
+        return callLink('DELETE', link, params, data);
       });
       defineHiddenProperty(this, '$links', function(){
         return links
@@ -329,6 +329,9 @@ angular
 
 
     function callService(method, href, options, data){
+      console.log(href);
+      console.log(options);
+      console.log(data);
       if(!options) options = {};
       var headers = {
         'Content-Type': 'application/json',
