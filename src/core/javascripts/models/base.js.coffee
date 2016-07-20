@@ -75,7 +75,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
         @_data = data
       if data
         for n,m of data
-          @[n] ||= m
+          @[n] = m
       if @_data && @_data.$href
         @self = @_data.$href("self")
         # append get functions for all links...
