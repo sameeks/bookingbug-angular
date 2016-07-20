@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
   scope: true
@@ -12,13 +13,22 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       $scope.resources = assets
     )
 
-    if !moment.isMoment($scope.config.to_datetime)
-      $scope.config.to_datetime = moment($scope.config.to_datetime)
+    if !moment.isMoment($scope.bb.to_datetime)
+      $scope.bb.to_datetime = moment($scope.bb.to_datetime)
 
-    if !moment.isMoment($scope.config.from_datetime)
-      $scope.config.from_datetime = moment($scope.config.from_datetime)
+    if !moment.isMoment($scope.bb.from_datetime)
+      $scope.bb.from_datetime = moment($scope.bb.from_datetime)
 
-    $scope.hideBlockAllDay = Math.abs($scope.config.from_datetime.diff($scope.config.to_datetime, 'days')) > 0
+    if !moment.isMoment($scope.bb.to_datetime)
+      $scope.bb.to_datetime = moment($scope.bb.to_datetime)
+
+    if $scope.bb.min_date && !moment.isMoment($scope.bb.min_date)
+      $scope.bb.min_date = moment($scope.bb.min_date)
+
+    if $scope.bb.max_date && !moment.isMoment($scope.bb.max_date)
+      $scope.bb.max_date = moment($scope.bb.max_date)
+
+    $scope.hideBlockAllDay = Math.abs($scope.bb.from_datetime.diff($scope.bb.to_datetime, 'days')) > 0
 
     # If in "Day" view a person or resource will have been passed in
     if $scope.bb.current_item.person? and $scope.bb.current_item.person.id?
@@ -47,11 +57,19 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
 
       if typeof $scope.bb.current_item.person == 'object'
         # Block call
-        BBModel.Admin.Person.$block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
+        params =
+          start_time: $scope.bb.from_datetime
+          end_time: $scope.bb.to_datetime
+          booking: true
+        BBModel.Admin.Person.$block($scope.bb.company, $scope.bb.current_item.person, params).then (response)->
           blockSuccess(response)
       else if typeof $scope.bb.current_item.resource == 'object'
         # Block call
-        BBModel.Admin.Resource.$block($scope.bb.company, $scope.bb.current_item.resource, {start_time: $scope.config.from_datetime, end_time: $scope.config.to_datetime, booking: true}).then (response)->
+        params =
+          start_time: $scope.bb.from_datetime
+          end_time: $scope.bb.to_datetime
+          booking: true
+        BBModel.Admin.Resource.$block($scope.bb.company, $scope.bb.current_item.resource, params).then (response)->
           blockSuccess(response)
 
     isValid = ()->
@@ -59,7 +77,7 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       if  (typeof $scope.bb.current_item.person != 'object' && typeof $scope.bb.current_item.resource != 'object')
         $scope.resourceError = true
 
-      if  (typeof $scope.bb.current_item.person != 'object' && typeof $scope.bb.current_item.resource != 'object') || !$scope.config.from_datetime? || !$scope.config.to_datetime
+      if  (typeof $scope.bb.current_item.person != 'object' && typeof $scope.bb.current_item.resource != 'object') || !$scope.bb.from_datetime? || !$scope.bb.to_datetime
         return false
 
       return true
@@ -71,6 +89,6 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
 
     $scope.changeBlockDay = (blockDay)->
       if blockDay
-        $scope.config.from_datetime = $scope.config.min_date.format()
-        $scope.config.to_datetime = $scope.config.max_date.format()
+        $scope.bb.from_datetime = $scope.bb.min_date.format()
+        $scope.bb.to_datetime = $scope.bb.max_date.format()
 

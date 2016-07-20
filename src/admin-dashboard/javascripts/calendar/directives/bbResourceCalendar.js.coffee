@@ -2,12 +2,22 @@
 
 angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCalendar', (
     uiCalendarConfig, AdminCompanyService, $q, ModalForm, BBModel,
-    AdminBookingPopup, $window, $bbug, ColorPalette, Dialog,
+    AdminBookingPopup, AdminMoveBookingPopup, $window, $bbug, ColorPalette, Dialog,
     $timeout, $compile, $templateCache, PrePostTime, $filter) ->
 
   controller = ($scope, $rootScope, $attrs, BBAssets, ProcessAssetsFilter,
     $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources,
     $translate) ->
+
+    setTimeToMoment = (date, time)->
+      newDate = moment(time,'HH:mm')
+      newDate.set({
+        'year'   : parseInt(date.get('year'))
+        'month'  : parseInt(date.get('month'))
+        'date'   : parseInt(date.get('date'))
+        'second' : 0
+      })
+      newDate
 
     filters = {
       requestedAssets : ProcessAssetsFilter($state.params.assets)
@@ -93,6 +103,40 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         eventDragStop: (event, jsEvent, ui, view) ->
           event.oldResourceIds = event.resourceIds
         eventDrop: (event, delta, revertFunc) ->
+          # we need a full move cal if either it has a person and resource, or they've dragged over multiple days
+          if event.person_id && event.resource_id || delta.days() > 0
+            start = event.start
+            end = event.end
+            item_defaults =
+              date: start.format('YYYY-MM-DD')
+              time: (start.hour() * 60 + start.minute())
+
+            if event.resourceId
+              newAssetId = event.resourceId.substring(0, event.resourceId.indexOf('_'))
+              if event.resourceId.indexOf('_p') > -1
+                item_defaults.person = newAssetId
+                orginal_resource = "" + event.person_id + "_p"
+              else if event.resourceId.indexOf('_r') > -1
+                item_defaults.resource = newAssetId
+                orginal_resource = "" + event.resource_id + "_r"
+
+            $scope.getCompanyPromise().then (company) ->
+              AdminMoveBookingPopup.open
+                min_date: setTimeToMoment(start,$scope.options.min_time)
+                max_date: setTimeToMoment(end,$scope.options.max_time)
+                from_datetime: moment(start.toISOString())
+                to_datetime: moment(end.toISOString())
+                item_defaults: item_defaults
+                company_id: company.id
+                booking_id: event.id
+                success: (model) =>
+                  $scope.updateBooking(event)
+                fail: () ->
+                  event.resourceId = orginal_resource if orginal_resource
+                  revertFunc()
+            return
+
+            # if it's got a person and resource - then it
           Dialog.confirm
             model: event
             body: "Are you sure you want to move this booking?"
@@ -121,15 +165,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           view.calendar.unselect()
 
           if isTimeRangeAvailable(start, end, resource) || (Math.abs(start.diff(end, 'days')) == 1 && dayHasAvailability(start))
-            setTimeToMoment = (date, time)->
-              newDate = moment(time,'HH:mm')
-              newDate.set({
-                'year'   : parseInt(date.get('year'))
-                'month'  : parseInt(date.get('month'))
-                'date'   : parseInt(date.get('date'))
-                'second' : 0
-              })
-              newDate
 
             if Math.abs(start.diff(end, 'days')) > 0
               end.subtract(1,'days')
@@ -148,8 +183,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
               AdminBookingPopup.open
                 min_date: setTimeToMoment(start,$scope.options.min_time)
                 max_date: setTimeToMoment(end,$scope.options.max_time)
-                from_datetime: start
-                to_datetime: end
+                from_datetime: moment(start.toISOString())
+                to_datetime: moment(end.toISOString())
                 item_defaults: item_defaults
                 first_page: "quick_pick"
                 company_id: company.id

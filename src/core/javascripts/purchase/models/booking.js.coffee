@@ -81,7 +81,6 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
 
     getPostData: () ->
-
       data = {}
 
       data.attended = @attended

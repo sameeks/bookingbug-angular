@@ -203,16 +203,12 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel,
     *
     * @returns {object} The returned spaces left
     ###
-    getWaitSpacesLeft: (pool = null) ->
-      wait = @getChain().waitlength
+    getWaitSpacesLeft: () ->
+      wait = @chain.waitlength
       wait ||= 0
       wait = wait - @spaces_wait
       return 0 if wait <= 0
 
-      if pool && @ticket_spaces && @ticket_spaces[pool]
-        pool_left =  @ticket_spaces[pool].left
-        return pool_left if wait > pool_left # use the pool if the pool has left that the wait list allowance
-      return wait
 
     ###**
     * @ngdoc method
@@ -225,6 +221,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel,
     ###
     hasSpace: () ->
       (@getSpacesLeft() > 0)
+
 
     ###**
     * @ngdoc method
