@@ -23,6 +23,8 @@ angular.module('BBAdminBooking').factory 'AdminMoveBookingPopup', ($modal, $time
         config: () -> config
     modal.result.then (result) ->
       # success
+      if config.success
+        config.success()
       return result;
     , (err) ->
       if config.fail
