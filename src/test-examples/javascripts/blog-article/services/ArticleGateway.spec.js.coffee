@@ -3,7 +3,7 @@
 describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
   endpoint = 'http://some.endpoint.com'
 
-  articleGateway = null
+  ArticleGateway = null
   TextSanitizer = null
   $http = null
   $httpBackend = null
@@ -19,8 +19,8 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      articleGateway = $injector.get 'bbTeBlogArticleGateway'
-      TextSanitizer = $injector.get 'bbTeBlogArticleTextSanitizer'
+      ArticleGateway = $injector.get 'BbTeBlogArticleGateway'
+      TextSanitizer = $injector.get 'BbTeBlogArticleTextSanitizer'
       $http = $injector.get '$http'
       $httpBackend = $injector.get '$httpBackend'
       $log = $injector.get '$log'
@@ -32,7 +32,6 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
     return
 
   beforeEach beforeEachFn
-
 
   describe '"getArticles" method', ->
     getArticlesEndpoint = endpoint + '/article'
@@ -52,7 +51,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
     it 'load articles & resolves promise', () ->
       $httpBackend.expectGET(getArticlesEndpoint).respond(200, articlesMock)
 
-      articlesPromise = articleGateway.getArticles()
+      articlesPromise = ArticleGateway.getArticles()
       testArticles = null
 
       articlesPromise
@@ -72,7 +71,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
 
     it 'reject promise if server error occurred', () ->
       $httpBackend.expectGET(getArticlesEndpoint).respond(500)
-      articlesPromise = articleGateway.getArticles()
+      articlesPromise = ArticleGateway.getArticles()
 
       rejectionMsg = null
 
@@ -100,7 +99,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
       $httpBackend.expectGET(getArticleEndpoint).respond(200, articleMock)
 
       expectedArticle = null
-      articleGateway.getArticle(1)
+      ArticleGateway.getArticle(1)
       .then (response) ->
         expectedArticle = response
 
@@ -118,7 +117,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
       $httpBackend.expectGET(getArticleEndpoint).respond(500)
 
       expectedMsg = null
-      articleGateway.getArticle(1)
+      ArticleGateway.getArticle(1)
       .catch (msg) ->
         expectedMsg = msg
 
@@ -148,7 +147,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
       $httpBackend.expectDELETE(getArticleEndpoint).respond(200, 'OK')
 
       isDeleted = null
-      articleGateway.deleteArticle(articleId)
+      ArticleGateway.deleteArticle(articleId)
       .then (response) ->
         isDeleted = response
       .catch (response) ->
@@ -168,7 +167,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
       $httpBackend.expectDELETE(getArticleEndpoint).respond(500, 'some reason of failure')
 
       isDeleted = null
-      promise = articleGateway.deleteArticle(articleId)
+      promise = ArticleGateway.deleteArticle(articleId)
 
       promise
       .then (response) ->
@@ -191,7 +190,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
 
     it 'does not delete article if unexpected message returned', () ->
       $httpBackend.expectDELETE(getArticleEndpoint).respond(200, 'NOT OK')
-      articleGateway.deleteArticle(articleId)
+      ArticleGateway.deleteArticle(articleId)
       $httpBackend.flush()
 
       expect $log.error

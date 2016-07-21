@@ -1,2 +1,1 @@
-angular
-.module('bbTe', ['bbTe.blogArticle', 'bbTe.blogAuthor'])
+angular.module('bbTe', ['bbTe.blogArticle', 'bbTe.blogAuthor'])

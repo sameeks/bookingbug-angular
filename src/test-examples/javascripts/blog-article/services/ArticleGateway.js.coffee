@@ -1,5 +1,6 @@
-### @ngInject ###
-factory = (bbTeBlogArticleTextSanitizer, $http, $log, $q) ->
+service = (BbTeBlogArticleTextSanitizer, $http, $log, $q) ->
+  'ngInject'
+
   endpoint = 'http://some.endpoint.com'
 
   getArticles = () ->
@@ -63,15 +64,16 @@ factory = (bbTeBlogArticleTextSanitizer, $http, $log, $q) ->
     return
 
   sanitizeArticle = (article) ->
-    article.content = bbTeBlogArticleTextSanitizer.sanitize article.content
+    article.content = BbTeBlogArticleTextSanitizer.sanitize article.content
     return
 
-
-  getArticles: getArticles
-  getArticle: getArticle
-  deleteArticle: deleteArticle
+  return {
+    getArticles: getArticles
+    getArticle: getArticle
+    deleteArticle: deleteArticle
+  }
 
 angular
 .module('bbTe.blogArticle')
-.factory('bbTeBlogArticleGateway', factory)
+.service('BbTeBlogArticleGateway', service)
 

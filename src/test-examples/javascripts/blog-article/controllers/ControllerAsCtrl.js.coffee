@@ -1,4 +1,5 @@
-ControllerConstructor = ($scope) ->
+controller = ($scope) ->
+  'ngInject'
 
   ###jshint validthis: true ###
   vm = @
@@ -23,4 +24,4 @@ ControllerConstructor = ($scope) ->
 
 angular
 .module('bbTe.blogArticle')
-.controller('BbTeBlogArticleControllerAsCtrl', ControllerConstructor)
+.controller('BbTeBlogArticleControllerAsCtrl', controller)

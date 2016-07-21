@@ -1,4 +1,6 @@
 directive = () ->
+  'ngInject'
+
   templateUrl: '/templates/blog-article/defaults.html'
 
 angular

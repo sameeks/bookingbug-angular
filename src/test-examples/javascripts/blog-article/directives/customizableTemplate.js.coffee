@@ -1,4 +1,6 @@
 directive = () ->
+  'ngInject'
+
   templateUrl = (tElem, tAttrs) ->
     defaultTemplateUrl = '/templates/blog-article/display.html'
     if angular.isString tAttrs.templateUrl

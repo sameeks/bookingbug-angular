@@ -1,4 +1,5 @@
-factory = () ->
+service = ($log) ->
+  'ngInject'
 
   currentText = null;
 
@@ -20,8 +21,10 @@ factory = () ->
 
     currentText
 
-  sanitize: sanitize
+  return {
+    sanitize: sanitize
+  }
 
 angular
 .module('bbTe.blogArticle')
-.factory('bbTeBlogArticleTextSanitizer', factory)
+.service('BbTeBlogArticleTextSanitizer', service)

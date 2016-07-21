@@ -22,6 +22,7 @@
       bower = require('gulp-bower'),
       argv = require('yargs').argv,
       sourcemaps = require('gulp-sourcemaps'),
+      ngAnnotate = require('gulp-ng-annotate'),
       cssSelectorLimit = require('gulp-css-selector-limit');
 
     gulp.task('clean', function (cb) {
@@ -52,6 +53,7 @@
         './src/*/models/**/*',
         './src/*/services/**/*',
         '!./src/**/*_test.js.coffee',
+        '!./src/**/*spec.js.coffee',
         '!./**/*~']))
       // .pipe(filelog())
         .pipe(gulpif(/.*coffee$/, coffee().on('error', function (e) {

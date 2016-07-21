@@ -13,17 +13,36 @@ describe 'bbTe.blogArticle, BbTeBlogArticle service', () ->
 
   beforeEach beforeEachFn
 
-  it 'can create new articles and change their names', ->
-    ar1 = new BbTeBlogArticle.model()
-    ar1.setTitle 'ar1 title'
+  it 'can instantiate using defaults', ->
 
-    ar2 = new BbTeBlogArticle.model()
+    article = new BbTeBlogArticle
 
-    expect ar1.getTitle()
-    .toBe 'ar1 title'
-
-    expect ar2.getTitle()
+    expect article.title
     .toBe 'default title'
+
+    expect article.content
+    .toBe 'default content'
+
+    return
+
+  it 'can instantiate with custom title and content', ->
+    article1 = new BbTeBlogArticle 'some custom title', 'some custom content'
+
+    expect article1.title
+    .toMatch /custom/
+
+    expect article1.content
+    .toMatch /custom/
+
+    return
+
+  it 'can can change title', ->
+    article = new BbTeBlogArticle 'aaa'
+
+    article.setTitle 'changed'
+
+    expect article.getTitle()
+    .toBe 'changed'
 
     return
 
