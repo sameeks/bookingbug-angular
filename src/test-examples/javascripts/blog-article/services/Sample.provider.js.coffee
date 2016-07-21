@@ -10,11 +10,12 @@ provider = ($logProvider) ->
     companyName = name
     return
 
-  introduceEmployee = (employeeName) ->
-    return employeeName + ' works at ' + companyName
-
   @$get = () ->
     'ngInject'
+
+    introduceEmployee = (employeeName) ->
+      return employeeName + ' works at ' + companyName
+
     introduceEmployee: introduceEmployee
 
   return
