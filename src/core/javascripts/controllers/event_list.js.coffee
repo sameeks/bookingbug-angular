@@ -48,7 +48,7 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService, $timeout) ->
+angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, BBModel, $timeout) ->
 
   $scope.controller = "public.controllers.EventList"
   $scope.notLoaded $scope
@@ -57,7 +57,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.start_date = moment()
   $scope.end_date = moment().add(1, 'year')
   $scope.filters = {hide_sold_out_events: true}
-  $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
+  $scope.pagination = BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 100})
   $scope.events = {}
   $scope.fully_booked = false
   $scope.event_data_loaded = false
@@ -331,7 +331,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         $scope.filterChanged()
 
         # update the paging
-        PaginationService.update($scope.pagination, $scope.filtered_items.length)
+        $scope.pagination.update()
 
         $scope.setLoaded $scope
         $scope.event_data_loaded = true
@@ -541,7 +541,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.filtered_items = $filter('filter')($scope.items, $scope.filterEvents)
       $scope.pagination.num_items = $scope.filtered_items.length
       $scope.filter_active = $scope.filtered_items.length != $scope.items.length
-      PaginationService.update($scope.pagination, $scope.filtered_items.length)
+      $scope.pagination.update()
 
   ###**
   * @ngdoc method
@@ -551,7 +551,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Change page of the event list
   ###
   $scope.pageChanged = () ->
-    PaginationService.update($scope.pagination, $scope.filtered_items.length)
+    $scope.pagination.update()
     $rootScope.$broadcast "page:changed"
 
 

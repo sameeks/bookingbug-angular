@@ -1,4 +1,4 @@
-angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope, PaginationService, PurchaseService) ->
+angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope, BBModel, PurchaseService) ->
   templateUrl: 'member_upcoming_bookings.html'
   scope:
     member: '='
@@ -6,12 +6,12 @@ angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope, Pa
     setLoaded: '='
   controller: 'MemberBookings'
   link: (scope, element, attrs) ->
-  
-    scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
+
+    scope.pagination = BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 100})
 
     getBookings = () ->
       scope.getUpcomingBookings().then (upcoming_bookings) ->
-        PaginationService.update(scope.pagination, upcoming_bookings.length)
+        scope.pagination.num_items = upcoming_bookings.length
 
 
     scope.$on 'updateBookings', () ->
