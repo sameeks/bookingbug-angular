@@ -264,8 +264,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDelete
       resolve:
-        booking: -> booking    
-   
+        booking: -> booking
+
     modalInstance.result.then (booking) ->
       booking.$del('self').then (service) =>
         $scope.bookings = _.without($scope.bookings, booking)

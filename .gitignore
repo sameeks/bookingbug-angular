@@ -8,6 +8,7 @@ build/*
 !build/booking-widget
 build/booking-widget/*
 !build/booking-widget/bower.json
+!build/booking-widget/src
 /.idea/
 **/*.js.js
 **/*.js.map

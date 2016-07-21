@@ -153,15 +153,17 @@ angular.module('BB.Controllers').controller 'ResourceList',
       $scope.decideNextPage(route)
       return true
 
-
-  $scope.$watch 'resource', (new_val, old_val) =>
-    if $scope.resource
-      new_resource = getItemFromResource($scope.resource)
-      _.each $scope.booking_items, (item) -> item.setResource(new_resource)
-      $scope.broadcastItemUpdate()
-    else if new_val and newval != oldval
+  $scope.$watch 'resource',(newval, oldval) =>
+    if $scope.resource and $scope.booking_item
+      if !$scope.booking_item.resource or $scope.booking_item.resource.self != $scope.resource.self
+        # only set and broadcast if it's changed
+        new_resource = getItemFromResource($scope.resource)
+        _.each $scope.booking_items, (item) -> item.setResource(new_resource)
+        $scope.broadcastItemUpdate()
+    else if newval != oldval
       _.each $scope.booking_items, (item) -> item.setResource(null)
       $scope.broadcastItemUpdate()
+
 
 
   $scope.$on "currentItemUpdate", (event) ->
