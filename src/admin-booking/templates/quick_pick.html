@@ -22,7 +22,7 @@
 
   </div>
 
-  <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
+  <div ng-form name="block_time_form" class="bb-block-time" ng-show="!bb.hide_block" bb-block-time>
 
     <h1>Block Time</h1>
     <div class="form-group" ng-class="{'has-error': resourceError}">

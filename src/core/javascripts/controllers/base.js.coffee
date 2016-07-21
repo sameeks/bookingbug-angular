@@ -378,6 +378,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $scope.bb.to_datetime =  prms.to_datetime if prms.to_datetime
     $scope.bb.min_date =  prms.min_date if prms.min_date
     $scope.bb.max_date =  prms.max_date if prms.max_date
+    $scope.bb.hide_block =  prms.hide_block if prms.hide_block
 
     # say we've setup the path - so other partials that are relying on it at can trigger
     if !prms.custom_partial_url
