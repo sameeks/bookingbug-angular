@@ -1,8 +1,10 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': !hasError()}">
 	<label class="control-label">{{form.title}}</label>
-	<p class="input-group">
-  	<div bb-date-time-picker date="$$value$$" bb-disabled="form.readonly"></div>
-	</p>	
+  <input ng-if="form.readonly" ng-show="form.key" type="text" step="any" sf-changed="form" placeholder="" class="form-control" id="datetime" ng-model-options="form.ngModelOptions" ng-model="model.datetime" ng-disabled="form.readonly" schema-validate="form" name="datetime" aria-describedby="serviceStatus" disabled="disabled"/>
+
+  <div class="input-group" ng-if="!form.readonly">
+   	<div bb-date-time-picker  date="$$value$$"  bb-disabled="form.readonly" ></div>
+	</div>
 
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>

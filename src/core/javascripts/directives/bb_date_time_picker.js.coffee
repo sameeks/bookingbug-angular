@@ -118,4 +118,3 @@ angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
 
     $scope.minDateClean = filterDate($scope.minDate)
     $scope.maxDateClean = filterDate($scope.maxDate)
-
