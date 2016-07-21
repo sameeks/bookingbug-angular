@@ -25,6 +25,7 @@
 angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', [ ->
   # This list of options is meant to grow
   options = {
+    default_state           : 'calendar'
     default_language        : 'en',
     use_browser_language    : true,
     available_languages     : ['en'],

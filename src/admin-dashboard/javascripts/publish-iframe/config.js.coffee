@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.publish-iframe', [
     RuntimeStates
       .state 'publish',
         parent: AdminPublishIframeOptions.parent_state
-        url: '/publish'
+        url: 'publish'
         templateUrl: 'publish-iframe/index.html'
         controller: 'PublishIframePageCtrl'
         deepStateRedirect: {

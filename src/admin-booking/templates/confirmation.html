@@ -1,0 +1,60 @@
+<div bb-total ng-init="checkStepTitle('Confirmed')" class="bb-checkout">
+  <div class="row">
+    <div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
+
+      <div class="bb-subcontent">
+        <div class="confirmation-header bb-confirmation-border-margin">
+          <div ng-if="!total.containsWaitlistItems()">
+            <h2>Booking Confirmation</h2>
+            <p class="bb-confirmation-p-alignment">Booking is now confirmed. An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</p>
+          </div>
+           <div ng-if="total.containsWaitlistItems()">
+            <h2>Confirmation</h2>
+            <p class="bb-confirmation-p-alignment">You have successfully made the following bookings. An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</p>
+          </div>
+        </div>
+
+        <div>
+          <ul class="confirmation-summary">
+            <li class="row confirmation-summary-item">
+              <div class="col-sm-3 bb-summary-label">Reference:</div>
+              <div class="col-sm-9 bb-summary-value">   {{ total.id }}</div>
+            </li>
+            <li class="row confirmation-summary-item">
+              <div class="col-sm-3 bb-summary-label">Customer:</div>
+              <div class="col-sm-9 bb-summary-value">   {{ total.client.first_name  }}  {{ total.client.last_name }}</div>
+            </li>
+          </ul>
+          <ul class="confirmation-summary" ng-repeat="i in total.items">
+            <li ng-if="i.full_describe" class="row confirmation-summary-item">
+              <div class="col-sm-3 bb-summary-label">Service:</div>
+              <div class="col-sm-9 bb-summary-value">   {{ i.full_describe }}</div>
+            </li>
+            <li ng-if="i.describe" class="row confirmation-summary-item">
+              <div class="col-sm-3 bb-summary-label">Date/Time:</div>
+              <div class="col-sm-9 bb-summary-value">   {{ i.describe }}</div>
+            </li>
+            <li ng-if="i.price" class="row confirmation-summary-item">
+              <div class="col-sm-3 bb-summary-label">Price:</div>
+              <div class="col-sm-9 bb-summary-value">   {{ i.price | currency }}</div>
+            </li>
+          </ul>
+
+          <div class="row hidden-print pull-right">
+            <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span> Print</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- <div class="bb-step-navigation"></div> -->
+
+<div ng-show="isLoaded" class="powered-by visible-print">
+  <p>Bookings powered by <span style="color:#087f94">booking</span><span style="color:#88c66f">bug</p>
+  <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"></a>
+</div>

@@ -130,10 +130,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
                 company_id: company.id
                 booking_id: event.id
                 success: (model) =>
-                  $scope.updateBooking(event)
+                  $scope.refreshBooking(event)
                 fail: () ->
-                  event.resourceId = orginal_resource if orginal_resource
-                  revertFunc()
+                  $scope.refreshBooking(event)
             return
 
             # if it's got a person and resource - then it
@@ -284,6 +283,20 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         else
           $scope.loading = false
           callback($scope.selectedResources.selected)
+
+    $scope.refreshBooking = (booking) ->
+
+      booking.$refetch().then (response) ->
+        console.log("reloading")
+        booking.resourceIds = []
+        booking.resourceId = null
+        if booking.person_id?
+          booking.resourceIds.push booking.person_id + '_p'
+        if booking.resource_id?
+          booking.resourceIds.push booking.resource_id + '_r'
+
+        uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+
 
     $scope.updateBooking = (booking) ->
       newAssetId = booking.resourceId.substring(0, booking.resourceId.indexOf('_'))

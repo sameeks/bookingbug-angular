@@ -90,8 +90,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             # else if there is an associated company
             else if user.$has('company')
               $scope.login.selected_admin = user
-              user.$getCompany().then (company) ->
 
+              user.$getCompany().then (company) ->
                 # if departments are available show departments selector
                 if company.companies && company.companies.length > 0
                   $scope.template_vars.show_loading = false

@@ -53,18 +53,17 @@ BBAdminDashboardDependencies = [
 ]
 
 adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencies)
-.config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
+.run ['RuntimeStates', 'AdminCoreOptions', 'RuntimeRoutes', (RuntimeStates, AdminCoreOptions, RuntimeRoutes) ->
 
-  $stateProvider.root_state = "dashboard"
+  RuntimeRoutes.otherwise('/')
 
-  $urlRouterProvider.otherwise("/" + $stateProvider.root_state)
-  $stateProvider
+  RuntimeStates
     .state 'root',
+      url: '/'
       templateUrl: "core/layout.html"
       resolve:
         sso: ($q, sso_token, BBModel, $injector) ->
           defer = $q.defer()
-
           BBModel.Admin.Login.$isLoggedIn().then (loggedIn)->
             if not loggedIn and sso_token != false
               # Use the injector to avoid errors for including a
@@ -105,6 +104,12 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
               $state.go 'login', {}, {reload: true}
           defer.promise
       controller: 'CorePageController'
+      deepStateRedirect: {
+        default: {
+          state: AdminCoreOptions.default_state
+        }
+      }
+
 ]
 .config ($logProvider, $httpProvider) ->
   $logProvider.debugEnabled(true)

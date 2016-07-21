@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.members-iframe', [
     RuntimeStates
       .state 'members',
         parent: AdminMembersIframeOptions.parent_state
-        url: '/members'
+        url: 'members'
         templateUrl: 'members-iframe/index.html'
         controller: 'MembersIframePageCtrl'
         deepStateRedirect: {
