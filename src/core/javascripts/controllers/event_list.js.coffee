@@ -286,9 +286,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         item.spaces_left = item.getSpacesLeft()
 
       # Add address prop from the company to the item
-      $scope.bb.company.getAddressPromise().then (address) ->
-        for item in $scope.items
-          item.address = address
+      if $scope.bb.company.$has('address')
+        $scope.bb.company.getAddressPromise().then (address) ->
+          for item in $scope.items
+            item.address = address
 
       # TODO make this behave like the frame timetable
       # get all data then process events
