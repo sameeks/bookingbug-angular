@@ -163,8 +163,8 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
     $patch: (rel, params, dat) ->
       @_data.$patch(rel, params, dat) if @_data
 
-    $del: (rel, params) ->
-      @_data.$del(rel, params) if @_data
+    $del: (rel, params, dat) ->
+      @_data.$del(rel, params, dat) if @_data
 
     $links: () ->
       @_data.$links() if @_data

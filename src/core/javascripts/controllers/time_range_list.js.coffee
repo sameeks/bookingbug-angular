@@ -108,7 +108,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       calculateDayNum = ()->
         cal_days = {lg: 7, md: 5, sm: 3, xs: 1}
 
-        timeRange = 0
+        timeRange = 7
 
         for size,days of cal_days
           if size == ViewportSize.getViewportSize()
@@ -352,7 +352,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.selectSlot = (slot, day, route) ->
 
     if slot and slot.availability() > 0
-      
+
       $scope.bb.current_item.setTime(slot)
 
       if slot.datetime
@@ -444,7 +444,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       $scope.notLoaded $scope
       loc = null
       loc = ",,,," + $scope.bb.postcode + "," if $scope.bb.postcode
-      
+
       promise = TimeService.query(
         company: $scope.bb.company
         resource_ids: $scope.bb.item_defaults.resources
@@ -462,7 +462,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         $scope.setLoaded $scope
 
       promise.then (datetime_arr) ->
-       
+
         $scope.days = []
 
         if _.every(_.values(datetime_arr), _.isEmpty)

@@ -250,7 +250,10 @@ angular
       }//hrefLink
 
       function callLink(method, link, params, data) {
-
+         console.log("callLink")
+         console.log(link)
+         console.log(params)
+         console.log(data)
         if (params == null) {
           params = {};
         }
@@ -270,6 +273,9 @@ angular
           }
         }
         else {
+          console.log("callService in callLink");
+          console.log(options);
+          console.log(data);
           return callService(method, linkHref, options, data);
         }
 

@@ -12,9 +12,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
   $scope.make_payment = false
-  $scope.company_reasons = []
-  $scope.cancel_reasons = []
-  $scope.move_reasons = []
+  # $scope.company_reasons = []
+  # $scope.cancel_reasons = []
+  # $scope.move_reasons = []
 
   setPurchaseCompany = (company) ->
     $scope.bb.company_id = company.id
@@ -47,11 +47,15 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
     # is there a purchase total already in scope?
     if $scope.bb.total
+      console.log("i get called - already a total")
       $scope.load($scope.bb.total.long_id)
     else if $scope.bb.purchase
+      console.log("i get called - already a purchase")
       $scope.purchase = $scope.bb.purchase
       $scope.bookings = $scope.bb.purchase.bookings
       $scope.messages = $scope.purchase.confirm_messages if $scope.purchase.confirm_messages
+      $scope.cancel_reasons = $scope.bb.cancel_reasons unless $scope.cancel_reasons
+      $scope.move_reasons = $scope.bb.move_reasons unless $scope.move_reasons
       $scope.setLoaded $scope
     else
       if options.member_sso
@@ -94,8 +98,10 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
                   $scope.purchase.bookings[0].company = company
                   if company.$has("reasons")
                     getReasons(company).then (reasons) ->
-                      getCancelReasons()
-                      getMoveReasons()
+                      setCancelReasons()
+                      setMoveReasons()
+                      setMoveReasonsToBB()
+                      setCancelReasonsToBB()
                   company.getAddressPromise().then (address) ->
                     $scope.purchase.bookings[0].company.address = address
 
@@ -275,9 +281,12 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
         cancel_reasons: -> $scope.cancel_reasons
 
     modalInstance.result.then (booking) ->
+      console.log(booking)
       cancel_reason = null
       cancel_reason = booking.cancel_reason if booking.cancel_reason
-      booking.$del('self', {}, {cancel_reason: cancel_reason}).then (service) =>
+      console.log(cancel_reason)
+      data = {cancel_reason: cancel_reason}
+      booking.$del('self', {}, data).then (service) =>
         $scope.bookings = _.without($scope.bookings, booking)
         $rootScope.$broadcast "booking:cancelled"
 
@@ -321,13 +330,19 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     , (err) ->
       $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong retrieving reasons')
 
-  getCancelReasons = () ->
+  setCancelReasons = () ->
     $scope.cancel_reasons = _.filter($scope.company_reasons, (r) -> r.reason_type == 3)
     $scope.cancel_reasons
 
-  getMoveReasons = () ->
+  setMoveReasons = () ->
     $scope.move_reasons = _.filter($scope.company_reasons, (r) -> r.reason_type == 5)
     $scope.move_reasons
+
+  setMoveReasonsToBB = () ->
+    $scope.bb.move_reasons = $scope.move_reasons if $scope.move_reasons
+
+  setCancelReasonsToBB = () ->
+    $scope.bb.cancel_reasons = $scope.cancel_reasons if $scope.cancel_reasons
 
 
 
