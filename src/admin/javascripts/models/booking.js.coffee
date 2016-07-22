@@ -24,13 +24,21 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel, BaseMode
       @end = @datetime.clone().add(@duration + @post_time, 'minutes') if @post_time
 
     getPostData: () ->
-      @datetime = @start.clone()
-      if (@using_full_time)
-        # we need to make sure if @start has changed - that we're adjusting for a possible pre-time
-        @datetime.add(@pre_time, 'minutes')
       data = {}
-      data.date = @datetime.format("YYYY-MM-DD")
-      data.time = @datetime.hour() * 60 + @datetime.minute()
+      if @date && @time
+        data.date = @date.date.toISODate()
+        data.time = @time.time
+        if @time.event_id
+          data.event_id = @time.event_id
+        else if @time.event_ids # what's this about?
+          data.event_ids = @time.event_ids
+      else
+        @datetime = @start.clone()
+        if (@using_full_time)
+          # we need to make sure if @start has changed - that we're adjusting for a possible pre-time
+          @datetime.add(@pre_time, 'minutes')
+        data.date = @datetime.format("YYYY-MM-DD")
+        data.time = @datetime.hour() * 60 + @datetime.minute()
       data.duration = @duration
       data.id = @id
       data.pre_time = @pre_time

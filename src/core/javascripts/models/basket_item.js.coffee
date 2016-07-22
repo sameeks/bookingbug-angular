@@ -769,7 +769,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     checkReserveReady: ->
       @reserve_ready = false
 
-      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || @is_coupon || (@date && @service && @service.duration_unit == 'day'))
         @reserve_ready = true
 
       @reserve_ready

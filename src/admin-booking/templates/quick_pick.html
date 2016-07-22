@@ -7,22 +7,22 @@
     <div bb-services>
       <div class="form-group">
         <label>Service</label>
-        
+
         <!-- TODO use display_name -->
         <select id="service" ng-model="service" ng-options="s.name for s in bookable_services | orderBy: 'order'" class="form-control">
           <option value="">-- select a service --</option>
         </select>
-        
+
       </div>
     </div>
-    
+
     <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady('calendar')" bb-debounce ng-disabled="!bb.current_item.service">Book</button>
 
     <hr>
 
   </div>
 
-  <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
+  <div ng-form name="block_time_form" class="bb-block-time" ng-show="!bb.hide_block" bb-block-time>
 
     <h1>Block Time</h1>
     <div class="form-group" ng-class="{'has-error': resourceError}">
@@ -39,13 +39,13 @@
       <div class="col-md-6">
         <div class="form-group">
           <label>From</label>
-          <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime" min-date="config.min_date"></div>
+          <div bb-date-time-picker date="bb.from_datetime" max-date="bb.to_datetime" min-date="bb.min_date"></div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label>To</label>
-          <div bb-date-time-picker date="config.to_datetime" min-date="config.from_datetime" max-date="config.max_date"></div>
+          <div bb-date-time-picker date="bb.to_datetime" min-date="bb.from_datetime" max-date="bb.max_date"></div>
         </div>
       </div>
     </div>

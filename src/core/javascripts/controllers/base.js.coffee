@@ -374,6 +374,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     else
       $scope.hide_page = false
 
+    $scope.bb.from_datetime =  prms.from_datetime if prms.from_datetime
+    $scope.bb.to_datetime =  prms.to_datetime if prms.to_datetime
+    $scope.bb.min_date =  prms.min_date if prms.min_date
+    $scope.bb.max_date =  prms.max_date if prms.max_date
+    $scope.bb.hide_block =  prms.hide_block if prms.hide_block
+
     # say we've setup the path - so other partials that are relying on it at can trigger
     if !prms.custom_partial_url
       $scope.bb.path_setup = true
@@ -846,14 +852,14 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions && !$scope.bb.current_item.asked_questions)
       return if $scope.setPageRoute($rootScope.Route.Questions)
       return $scope.showPage('check_items')
+    else if $scope.bb.moving_booking && $scope.bb.basket.itemsReady()
+      return $scope.showPage('purchase')
     else if !$scope.bb.basket.readyToCheckout()
       return if $scope.setPageRoute($rootScope.Route.Summary)
       return $scope.showPage('basket_summary')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
       return if $scope.setPageRoute($rootScope.Route.Basket)
       return $scope.showPage('basket')
-    else if $scope.bb.moving_booking && $scope.bb.basket.readyToCheckout()
-      return $scope.showPage('purchase')
     else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null && !$scope.bb.basket.waiting_for_checkout)
       return if $scope.setPageRoute($rootScope.Route.Checkout)
       return $scope.showPage('checkout')
@@ -1148,7 +1154,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.getCurrentStepTitle = ->
-    console.log steps
     steps = $scope.bb.steps
 
     if !_.compact(steps).length or steps.length == 1 and steps[0].number != $scope.bb.current_step
@@ -1242,7 +1247,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $rootScope.$broadcast 'clear:formData'
     $rootScope.$broadcast 'widget:restart'
     $scope.setLastSelectedDate(null)
-    $scope.client =  new BBModel.Client()
+    $scope.client =  new BBModel.Client() if !LoginService.isLoggedIn()
     $scope.bb.last_step_reached = false
     # This is to remove the current step you are on.
     $scope.bb.steps.splice(1)
