@@ -8,4 +8,4 @@ service = ($log) ->
 
 angular
 .module('bbTe.blogArticle')
-.service('BbTeBlogArticleConceptualService', service)
+.service('BbTeBaConceptualService', service)

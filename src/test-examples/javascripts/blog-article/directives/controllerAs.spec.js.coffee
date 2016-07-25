@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'bbTe.blogArticle, bbTeBlogArticleControllerAs directive', () ->
+describe 'bbTe.blogArticle, bbTeBaControllerAs directive', () ->
   $compile = null
   $httpBackend = null
   $rootScope = null
@@ -8,7 +8,7 @@ describe 'bbTe.blogArticle, bbTeBlogArticleControllerAs directive', () ->
   compiled = null
 
   directiveDefaultTemplatePath = '/templates/blog-article/bindsToController.html';
-  directiveDefaultHtml = '<bb-te-blog-article-controller-as some-data="anyData"></bb-te-blog-article-controller-as>'
+  directiveDefaultHtml = '<bb-te-ba-controller-as some-data="anyData"></bb-te-ba-controller-as>'
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')

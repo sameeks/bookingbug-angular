@@ -1,13 +1,13 @@
 'use strict';
 
-describe 'bbTe.blogArticle, BbTeBlogArticleConceptualService service', () ->
+describe 'bbTe.blogArticle, BbTeBaConceptualService service', () ->
   ConceptualService = null
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      ConceptualService = $injector.get 'BbTeBlogArticleConceptualService'
+      ConceptualService = $injector.get 'BbTeBaConceptualService'
       return
     return
 

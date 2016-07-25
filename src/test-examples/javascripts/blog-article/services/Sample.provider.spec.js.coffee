@@ -1,18 +1,18 @@
 'use strict';
 
-describe 'bbTe.blogArticle, Sample provider', () ->
+describe 'bbTe.blogArticle, BbTeBaSample provider', () ->
   SampleProviderObj = null
   Sample = null
 
   beforeEachFn = () ->
     module 'bbTe.blogArticle'
 
-    module (SampleProvider) ->
-      SampleProviderObj = SampleProvider
+    module (BbTeBaSampleProvider) ->
+      SampleProviderObj = BbTeBaSampleProvider
       return
 
     inject ($injector) ->
-      Sample = $injector.get 'Sample'
+      Sample = $injector.get 'BbTeBaSample'
       return
 
     return

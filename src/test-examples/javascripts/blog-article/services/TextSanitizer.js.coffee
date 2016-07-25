@@ -27,4 +27,4 @@ service = ($log) ->
 
 angular
 .module('bbTe.blogArticle')
-.service('BbTeBlogArticleTextSanitizer', service)
+.service('BbTeBaTextSanitizer', service)

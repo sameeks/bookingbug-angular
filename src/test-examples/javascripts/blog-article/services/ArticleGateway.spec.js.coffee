@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
+describe 'bbTe.blogArticle, BbTeBaArticleGateway service', () ->
   endpoint = 'http://some.endpoint.com'
 
   ArticleGateway = null
@@ -19,8 +19,8 @@ describe 'bbTe.blogArticle, BbTeBlogArticleGateway service', () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      ArticleGateway = $injector.get 'BbTeBlogArticleGateway'
-      TextSanitizer = $injector.get 'BbTeBlogArticleTextSanitizer'
+      ArticleGateway = $injector.get 'BbTeBaArticleGateway'
+      TextSanitizer = $injector.get 'BbTeBaTextSanitizer'
       $http = $injector.get '$http'
       $httpBackend = $injector.get '$httpBackend'
       $log = $injector.get '$log'

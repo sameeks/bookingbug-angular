@@ -15,4 +15,4 @@ factory = ($log) ->
 
 angular
 .module('bbTe.blogArticle')
-.factory('bbTeBlogArticleConceptualFactory', factory)
+.factory('bbTeBaConceptualFactory', factory)

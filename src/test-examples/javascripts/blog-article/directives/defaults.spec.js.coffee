@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'bbTe.blogArticle, bbTeBlogArticleDefaults directive', () ->
+describe 'bbTe.blogArticle, bbTeBaDefaults directive', () ->
   $compile = null
   $httpBackend = null
   $rootScope = null
@@ -8,12 +8,12 @@ describe 'bbTe.blogArticle, bbTeBlogArticleDefaults directive', () ->
   compiled = null
 
   directiveTemplatePath = '/templates/blog-article/defaults.html';
-  directiveHtmlAttribute = '<span bb-te-blog-article-defaults></span>'
-  directiveHtmlElement = '<bb-te-blog-article-defaults></bb-te-blog-article-defaults>'
-  directiveHtmlClass = '<span class="bb-te-blog-article-defaults"></span>'
-  directiveHtmlComment = '<!-- directive: bb-te-blog-article-defaults  -->'
+  directiveHtmlAttribute = '<span bb-te-ba-defaults></span>'
+  directiveHtmlElement = '<bb-te-ba-defaults></bb-te-ba-defaults>'
+  directiveHtmlClass = '<span class="bb-te-ba-defaults"></span>'
+  directiveHtmlComment = '<!-- directive: bb-te-ba-defaults  -->'
 
-  htmlScopeTest = '<div class="app-level"><span bb-te-blog-article-defaults></span></div>'
+  htmlScopeTest = '<div class="app-level"><span bb-te-ba-defaults></span></div>'
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')

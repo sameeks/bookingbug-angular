@@ -1,13 +1,13 @@
 'use strict';
 
-describe 'bbTe.blogArticle, bbTeBlogArticleConceptualFactory factory', () ->
+describe 'bbTe.blogArticle, bbTeBaConceptualFactory factory', () ->
   ConceptualFactory = null
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      ConceptualFactory = $injector.get 'bbTeBlogArticleConceptualFactory'
+      ConceptualFactory = $injector.get 'bbTeBaConceptualFactory'
       return
     return
 

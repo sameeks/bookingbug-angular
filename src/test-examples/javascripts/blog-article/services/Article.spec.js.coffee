@@ -1,13 +1,13 @@
 'use strict';
 
-describe 'bbTe.blogArticle, BbTeBlogArticle service', () ->
-  BbTeBlogArticle = null
+describe 'bbTe.blogArticle, BbTeBaBlogArticle service', () ->
+  BlogArticle = null
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      BbTeBlogArticle = $injector.get 'BbTeBlogArticle'
+      BlogArticle = $injector.get 'BbTeBaBlogArticle'
       return
     return
 
@@ -15,7 +15,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticle service', () ->
 
   it 'can instantiate using defaults', ->
 
-    article = new BbTeBlogArticle
+    article = new BlogArticle
 
     expect article.title
     .toBe 'default title'
@@ -26,7 +26,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticle service', () ->
     return
 
   it 'can instantiate with custom title and content', ->
-    article1 = new BbTeBlogArticle 'some custom title', 'some custom content'
+    article1 = new BlogArticle 'some custom title', 'some custom content'
 
     expect article1.title
     .toMatch /custom/
@@ -37,7 +37,7 @@ describe 'bbTe.blogArticle, BbTeBlogArticle service', () ->
     return
 
   it 'can can change title', ->
-    article = new BbTeBlogArticle 'aaa'
+    article = new BlogArticle 'aaa'
 
     article.setTitle 'changed'
 

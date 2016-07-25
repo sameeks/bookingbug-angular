@@ -5,4 +5,4 @@ directive = () ->
 
 angular
 .module('bbTe.blogArticle')
-.directive('bbTeBlogArticleDefaults', directive)
+.directive('bbTeBaDefaults', directive)

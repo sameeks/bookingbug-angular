@@ -7,7 +7,7 @@
 ##### Below you can find more recommended style guides - Please feel free to contribute if have some suggestions on how to write clean and testable CS/AngularJS code 
 
 
-1) Always use `return` explicitly - don't rely on CS adding `return` automatically as you can run into troubles easily _see example below_
+1) Always use `return` explicitly - don't rely on CS adding `return` automatically as you can run into troubles easily. See the example below
 
 ``` coffeescript
 controller = () ->
@@ -20,12 +20,12 @@ app.module('test').controller 'MyController', controller
 ```
 
 > Angular treats controllers as constructors so code above will return vm.hello method from constructor function which is totally wrong. To fix it just add simply ```return``` as the last line of controller (transpiled js code will have no return statement at all)
-CS supposed to make code more readable - implicit `return` doesn't makes code more readable it makes it vulnerable. 
+CS supposed to make code more readable - implicit `return` makes it only more vulnerable. 
       
 
 2) Use 'ngInject' string literals to assure safe minification process when creating sdk builds. *Bespoke* repository project has to start using gulp-ng-annotate node package when processing sdk scripts.
  
-In AngularJS any injectable function can be made minification-safe by creating **$inject** property on it with an ordered array of 'dependencies' as a value. See example below.
+In AngularJS any injectable function can be made minification-safe by creating **$inject** property on it with an ordered array of 'dependencies' as a value. See the example below.
 
 ``` coffeescript
 controller = ($log, $uibModal, $state) -> 
@@ -36,9 +36,9 @@ app.module('test').controller 'MyController', controller
 controller.$inject = ['$log', '$uibModal', '$state']
 ```
 
-> Unfortunately doing it manually is hard to maintain (especially if you have many dependencies being injected)
+> Unfortunately doing it manually is hard to maintain (especially if you have many dependencies injected)
 
-*ngAnnotate* package allows as to use 'ngInject' string literal as a first line of injectable function. See example below.
+*ngAnnotate* package allows as to use 'ngInject' string literal as a first line of injectable function. See the example below.
 
 ``` coffeescript
 controller = ($log, $uibModal, $state) ->
@@ -68,9 +68,9 @@ app.module('test').controller 'MyController', ($log, someService, otherService) 
     return
 ```
 
-> By not using named functions you can get easily in callback hell. It's very simple example but it has already the pyramid created by 4 levels of indentation at `$log.info` line - it reduces code readability a lot.
+> By not using named functions you can get easily into callback hell. It's very simple example but it has already the pyramid created by 4 levels of indentation at `$log.info` line - it reduces code readability a lot.
 
-Proper way of doing it
+Proper way
 ``` coffeescript
 controller = ($log, someService, otherService) ->
     'ngInject'
@@ -104,13 +104,7 @@ app.module('test').controller 'MyController', controller
 
 > By using named functions we reduced indentation pyramid to 2 levels only - code is much more readable right now
 
-4) Modularization
-
-  * Create modules around features and not file types - it simply makes sense.
-  
-  * Module file name should be post fixed with *.module.js.coffee* `someFeatureName.module.js.coffee` - might be useful when creating gulp globs
-
-5) Controllers
+4) Controllers
 
   * If you need to pass anything to thew view do it by using `controllerAs` syntax. Example below   
   
@@ -118,6 +112,7 @@ app.module('test').controller 'MyController', controller
       app.module('test').controller 'MyController', () ->
         'ngInject'
     
+        /* jshint validthis: true */
         vm = this
         vm.someProperty = 'someValue'
         
@@ -146,18 +141,34 @@ app.module('test').controller 'MyController', controller
       - move all possible logic to services
       - do it even if new service won't be used anywhere else (the situation may change in the future and it's much easier to refactor service than bloated controller)
   
+5) Modularization
+
+  * Create modules around features and not file types - it simply makes sense.
+  
 6) Naming conventions
 
-Element | Example element name | Example filename | Notes
-:---|:---|:---
-Modules | bbTe |	bbTe.module.js.coffee | keep element name as short as possible - should end with module.js.coffee  
-Modules | bbTe.blogArticle | 	bbTeBlogArticle.module.js.coffee | keep element name as short as possible - should end with module.js.coffee
-Directives | bbTeSomeSample | bbTeSomeSample.js.coffee | |       
-Filters | bbTeSomeSample | bbTeSomeSample.js.coffee | |
-Factories | bbTeSomeSample | bbTeSomeSample.js.coffee | |
-Providers | BbTeSomeSample | BbTeSomeSample.js.coffee |  should end with provider.js.coffee to distinguish
-Controllers|	BbTeSomeSampleCtrl | BbTeSomeSampleCtrl.js.coffee | postfix element name with 'Ctrl' as it's done in example
-Services | BbTeSomeSample | BbTeSomeSample.js.coffee | |
+  * All names should starts with feature name prefixed with 'parent module' + 'current module' camel-cased acronym (it's the best way to avoid name collisions across all business modules)
+      - example1: if we want to create Article service within bbTe.someFeature module whe should actually name it **bbTeSfArticle** 
+      - example2: if we want to create Article service within bbTe.anotherFeature module whe should actually name it **bbTeAfArticle**
+
+  * _feature.type.js.coffee_ is a recommended pattern for file names.
+      - it provides consistent way to quickly identify components 
+      - **it provides pattern matching for any automated tasks**
+            
+  * *_.spec.js.coffee_ is a pattern for unit test file names. They should be named the same way and stay at the same place as the files they test.      
+    
+| Component | Registerd Component Name | Component File Name |
+| :--- | :--- | :--- |
+| Modules                                | bbTe               |	bbTe.module.js.coffee |
+| Sub Modules                            | bbTe.blogArticle   | bbTeBlogArticle.module.js.coffee |
+| bbTe.blogArticle module: Configuration | N/A                | bbTeBlogArticle.config.js.coffee |
+| bbTe.blogArticle module: Routes        | N/A                | bbTeBlogArticle.routes.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Directive    | bbTeBaSomeSample              | someSample.directive.js.coffee |       
+| bbTe.blogArticle module: _SomeSample_ Filter       | bbTeBaSomeSample              | someSample.filter.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Factory      | bbTeBaSomeSample              | someSample.factory.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Provider     | **B**bTeBaSomeSample          | someSample.provider.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Controller   |	**B**bTeBaSomeSample**Ctrl** | someSample**Ctrl**.controller.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Service      | **B**bTeBaSomeSample          | someSample.service.js.coffee |
 
    
  

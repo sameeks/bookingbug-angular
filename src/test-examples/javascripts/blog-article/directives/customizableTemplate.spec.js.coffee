@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'bbTe.blogArticle, bbTeBlogArticleCustomizableTemplate directive', () ->
+describe 'bbTe.blogArticle, bbTeBaCustomizableTemplate directive', () ->
   $compile = null
   $httpBackend = null
   $scope = null
@@ -8,10 +8,10 @@ describe 'bbTe.blogArticle, bbTeBlogArticleCustomizableTemplate directive', () -
   directive = null
 
   directiveDefaultTemplatePath = '/templates/blog-article/display.html';
-  directiveDefaultHtml = '<bb-te-blog-article-customizable-template some-data="anyData"></bb-te-blog-article-customizable-template>'
+  directiveDefaultHtml = '<bb-te-ba-customizable-template some-data="anyData"></bb-te-ba-customizable-template>'
 
   directiveCustomizedTemplatePath = '/templates/blog-article/display-customized.html';
-  directiveCustomizedHtml = '<bb-te-blog-article-customizable-template template-url="' + directiveCustomizedTemplatePath + '"></bb-te-blog-article-customizable-template>'
+  directiveCustomizedHtml = '<bb-te-ba-customizable-template template-url="' + directiveCustomizedTemplatePath + '"></bb-te-ba-customizable-template>'
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')

@@ -1,18 +1,18 @@
 'use strict';
 
-describe 'bbTe.blogArticle, Greeter provider', () ->
+describe 'bbTe.blogArticle, BbTeBaGreeter provider', () ->
   GreeterProviderObj = null
   Greeter = null
 
   beforeEachFn = () ->
     module 'bbTe.blogArticle'
 
-    module (GreeterProvider) ->
-      GreeterProviderObj = GreeterProvider
+    module (BbTeBaGreeterProvider) ->
+      GreeterProviderObj = BbTeBaGreeterProvider
       return
 
     inject ($injector) ->
-      Greeter = $injector.get 'Greeter'
+      Greeter = $injector.get 'BbTeBaGreeter'
       return
 
     return

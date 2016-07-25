@@ -5,7 +5,7 @@ directive = () ->
     ###some dome manipulation###
     return
 
-  controller: 'BbTeBlogArticleControllerAsCtrl'
+  controller: 'BbTeBaControllerAsCtrl'
   controllerAs: 'vm'
   link: link
   restrict: 'E'
@@ -15,4 +15,4 @@ directive = () ->
 
 angular
 .module('bbTe.blogArticle')
-.directive('bbTeBlogArticleControllerAs', directive)
+.directive('bbTeBaControllerAs', directive)

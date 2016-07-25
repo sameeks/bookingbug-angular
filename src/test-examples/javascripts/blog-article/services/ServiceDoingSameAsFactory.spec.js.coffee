@@ -1,13 +1,13 @@
 'use strict';
 
-describe 'bbTe.blogArticle, BbTeBlogArticleServiceDoingSameAsFactory service', () ->
+describe 'bbTe.blogArticle, BbTeBaServiceDoingSameAsFactory service', () ->
   ServiceDoingSameAsFactory = null
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      ServiceDoingSameAsFactory = $injector.get 'BbTeBlogArticleServiceDoingSameAsFactory'
+      ServiceDoingSameAsFactory = $injector.get 'BbTeBaServiceDoingSameAsFactory'
       return
     return
 

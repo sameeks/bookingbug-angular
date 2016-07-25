@@ -23,4 +23,4 @@ provider = ($logProvider) ->
 
 angular
 .module('bbTe.blogArticle')
-.provider('Greeter', provider)
+.provider('BbTeBaGreeter', provider)

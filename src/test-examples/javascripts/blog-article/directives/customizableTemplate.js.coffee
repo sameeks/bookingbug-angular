@@ -12,4 +12,4 @@ directive = () ->
 
 angular
 .module('bbTe.blogArticle')
-.directive('bbTeBlogArticleCustomizableTemplate', directive)
+.directive('bbTeBaCustomizableTemplate', directive)
