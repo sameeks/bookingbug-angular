@@ -33,7 +33,7 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   scope : true
   controller : 'TimeList'
 
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService, ErrorService) ->
 
   $scope.controller = "public.controllers.TimeList"
   $scope.notLoaded $scope
@@ -254,7 +254,18 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
         checkRequestedSlots(time_slots) if options.check_requested_slot == true
 
-      , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> 
+        if err.status == 404  && err.data && err.data.error && err.data.error == "No bookable events found"
+          if $scope.data_source && $scope.data_source.person
+            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'))
+            $scope.setLoaded $scope        
+          else if  $scope.data_source && $scope.data_source.resource
+            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'))
+            $scope.setLoaded $scope        
+          else
+            $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        else
+          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     else
       $scope.setLoaded $scope
@@ -263,6 +274,9 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
     return if !$scope.bb.item_defaults || !$scope.bb.item_defaults.time
 
     requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
+
+    console.log $scope.bb.item_defaults
+    console.log requested_slot
 
     if requested_slot.slot is null or requested_slot.match is null
       $scope.availability_conflict = true
