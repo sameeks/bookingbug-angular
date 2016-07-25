@@ -7,6 +7,7 @@ module.exports = (gulp, plugins, growl, path)->
   memberModulePath = 'src/member'
   servicesModulePath = 'src/services'
   settingsModulePath = 'src/settings'
+  examplesModulePath = 'src/test-examples'
 
   getFiles = (path) ->
     bowerDependencies = require('main-bower-files')(
@@ -18,6 +19,7 @@ module.exports = (gulp, plugins, growl, path)->
 
     commonFiles = [
       'templates/**/*.html'
+      'templates/*.html'
       'javascripts/*.coffee'
       'javascripts/*.js'
       'javascripts/**/*.coffee'
@@ -94,3 +96,9 @@ module.exports = (gulp, plugins, growl, path)->
 
   gulp.task 'test:unit-ci:settings', (cb)->
     return new plugins.karma.Server(getKarmaServerSettings(false, settingsModulePath), cb).start()
+
+  gulp.task 'test:unit:test-examples', (cb)->
+    return new plugins.karma.Server(getKarmaServerSettings(true, examplesModulePath), cb).start()
+
+  gulp.task 'test:unit-ci:test-examples', (cb)->
+    return new plugins.karma.Server(getKarmaServerSettings(false, examplesModulePath), cb).start()
