@@ -25,6 +25,7 @@ describe 'bbTe.blogArticle, BbTeBaListController', () ->
       'BbTeBaListController'
       '$scope': $scope
     )
+
     return
 
 

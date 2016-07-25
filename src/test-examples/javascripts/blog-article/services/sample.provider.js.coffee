@@ -16,10 +16,12 @@ provider = ($logProvider) ->
     introduceEmployee = (employeeName) ->
       return employeeName + ' works at ' + companyName
 
-    introduceEmployee: introduceEmployee
+    return {
+      introduceEmployee: introduceEmployee
+    }
 
   return
 
 angular
 .module('bbTe.blogArticle')
-.provider('BbTeBaSample', provider)
+.provider('bbTeBaSample', provider)

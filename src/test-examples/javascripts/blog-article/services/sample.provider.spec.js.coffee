@@ -1,18 +1,18 @@
 'use strict';
 
-describe 'bbTe.blogArticle, BbTeBaSample provider', () ->
-  SampleProviderObj = null
-  Sample = null
+describe 'bbTe.blogArticle, bbTeBaSample provider', () ->
+  sampleProviderObj = null
+  sample = null
 
   beforeEachFn = () ->
     module 'bbTe.blogArticle'
 
-    module (BbTeBaSampleProvider) ->
-      SampleProviderObj = BbTeBaSampleProvider
+    module (bbTeBaSampleProvider) ->
+      sampleProviderObj = bbTeBaSampleProvider
       return
 
     inject ($injector) ->
-      Sample = $injector.get 'BbTeBaSample'
+      sample = $injector.get 'bbTeBaSample'
       return
 
     return
@@ -20,25 +20,25 @@ describe 'bbTe.blogArticle, BbTeBaSample provider', () ->
   beforeEach beforeEachFn
 
   it 'use default company name to introduce employee', ->
-    expect Sample.introduceEmployee 'B'
+    expect sample.introduceEmployee 'B'
     .toBe 'B works at Default Company'
 
     return
 
   it 'use specific company name to introduce employee - by using provider method', ->
-    SampleProviderObj.setCompanyName 'BookingBug'
+    sampleProviderObj.setCompanyName 'BookingBug'
 
-    expect Sample.introduceEmployee 'B'
+    expect sample.introduceEmployee 'B'
     .toBe 'B works at BookingBug'
 
-    expect Sample.introduceEmployee 'C'
+    expect sample.introduceEmployee 'C'
     .toBe 'C works at BookingBug'
 
     return
 
 
   it 'use specific company name to introduce employee - by using provider method', ->
-    expect Sample.introduceEmployee 'B'
+    expect sample.introduceEmployee 'B'
     .toBe 'B works at Default Company'
 
     return

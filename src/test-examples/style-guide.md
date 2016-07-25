@@ -19,7 +19,7 @@ controller = () ->
 app.module('test').controller 'MyController', controller  
 ```
 
-> Angular treats controllers as constructors so code above will return vm.hello method from constructor function which is totally wrong. To fix it just add simply ```return``` as the last line of controller (transpiled js code will have no return statement at all)
+> Angular treats controllers as constructors so code above will return vm.hello method from constructor function which is wrong. To fix it just add simply ```return``` as the last line of controller (transpiled js code will have no return statement at all)
 CS supposed to make code more readable - implicit `return` makes it only more vulnerable. 
       
 
@@ -147,31 +147,31 @@ app.module('test').controller 'MyController', controller
   
 6) Naming conventions
 
-  * All names should starts with feature name prefixed with 'parent module' + 'current module' camel-cased acronym (it's the best way to avoid name collisions across all business modules)
-      - example1: if we want to create Article service within bbTe.someFeature module whe should actually name it **bbTeSfArticle** 
-      - example2: if we want to create Article service within bbTe.anotherFeature module whe should actually name it **bbTeAfArticle**
+  * Directories and file names should be lower-cased & hyphenated.
 
-  * _feature.type.js.coffee_ is a recommended pattern for file names.
+  * **feature-name.type.js.coffee** is a recommended pattern for _file names_.
       - it provides consistent way to quickly identify components 
-      - **it provides pattern matching for any automated tasks**
+      - it provides pattern matching for any automated tasks
             
-  * *_.spec.js.coffee_ is a pattern for unit test file names. They should be named the same way and stay at the same place as the files they test.      
+  * **feature-name.type.spec.js.coffee** is a recommended pattern for _unit test file names_. They should be named the same way and stay at the same place as the files they test.
+                    
+  * **modulesAcronymFeatureName** is a recommended pattern for _registered components names_.
+      - controllers should always be capitalized as they return constructor function
+      - services should be capitalized only if they return constructor function
+      - it's the best way to avoid name collisions across all business modules
+          - example1: if we want to create Article service within bbTe.someFeature module whe should actually name it **bbTeSfArticle** 
+          - example2: if we want to create Article service within bbTe.anotherFeature module whe should actually name it **bbTeAfArticle**
+             
     
 | Component | Registerd Component Name | Component File Name |
 | :--- | :--- | :--- |
-| Modules                                | bbTe               |	bbTe.module.js.coffee |
-| Sub Modules                            | bbTe.blogArticle   | bbTeBlogArticle.module.js.coffee |
-| bbTe.blogArticle module: Configuration | N/A                | bbTeBlogArticle.config.js.coffee |
-| bbTe.blogArticle module: Routes        | N/A                | bbTeBlogArticle.routes.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Directive    | bbTeBaSomeSample              | someSample.directive.js.coffee |       
-| bbTe.blogArticle module: _SomeSample_ Filter       | bbTeBaSomeSample              | someSample.filter.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Factory      | bbTeBaSomeSample              | someSample.factory.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Provider     | **B**bTeBaSomeSample          | someSample.provider.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Controller   |	**B**bTeBaSomeSample**Ctrl** | someSample**Ctrl**.controller.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Service      | **B**bTeBaSomeSample          | someSample.service.js.coffee |
-
-   
- 
-
-
-
+| Modules                                | bbTe               |	bb-te.module.js.coffee |
+| Sub Modules                            | bbTe.blogArticle   | bb-te.blog-article.module.js.coffee |
+| bbTe.blogArticle module: Configuration | N/A                | bb-te.blog-article.config.js.coffee |
+| bbTe.blogArticle module: Routes        | N/A                | bb-te.blog-article.routes.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Directive  | bbTeBaSomeSample     | some-sample.directive.js.coffee |       
+| bbTe.blogArticle module: _SomeSample_ Filter     | bbTeBaSomeSample     | some-sample.filter.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Service    | bbTeBaSomeSample     | some-sample.service.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Factory    | bbTeBaSomeSample     | some-sample.factory.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Provider   | bbTeBaSomeSample     | some-sample.provider.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Controller | **B**bTeBaSomeSample | some-sample.controller.js.coffee |

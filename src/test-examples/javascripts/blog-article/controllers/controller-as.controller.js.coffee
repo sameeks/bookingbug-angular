@@ -24,4 +24,4 @@ controller = ($scope) ->
 
 angular
 .module('bbTe.blogArticle')
-.controller('BbTeBaControllerAsCtrl', controller)
+.controller('BbTeBaControllerAsController', controller)

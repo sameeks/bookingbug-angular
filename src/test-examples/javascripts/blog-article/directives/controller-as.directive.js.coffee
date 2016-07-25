@@ -5,7 +5,7 @@ directive = () ->
     ###some dome manipulation###
     return
 
-  controller: 'BbTeBaControllerAsCtrl'
+  controller: 'BbTeBaControllerAsController'
   controllerAs: 'vm'
   link: link
   restrict: 'E'
