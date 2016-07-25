@@ -31,4 +31,4 @@ service = ($log) ->
 
 angular
 .module('bbTe.blogArticle')
-.factory('BbTeBaServiceDoingSameAsFactory', service)
+.factory('bbTeBaServiceDoingSameAsFactory', service)

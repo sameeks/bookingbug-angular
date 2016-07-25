@@ -5,4 +5,4 @@ controller = () ->
 
 angular
 .module('bbTe.blogArticle')
-.controller('BbTeBaListCtrl', controller)
+.controller('BbTeBaDisplayController', controller)

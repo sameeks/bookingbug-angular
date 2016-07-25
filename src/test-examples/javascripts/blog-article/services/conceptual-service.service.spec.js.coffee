@@ -1,21 +1,20 @@
 'use strict';
 
-describe 'bbTe.blogArticle, BbTeBaConceptualService service', () ->
-  ConceptualService = null
+describe 'bbTe.blogArticle, bbTeBaConceptualService service', () ->
+  conceptualService = null
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      ConceptualService = $injector.get 'BbTeBaConceptualService'
+      conceptualService = $injector.get 'bbTeBaConceptualService'
       return
     return
 
   beforeEach beforeEachFn
 
   it 'can say hello', ->
-
-    expect ConceptualService.sayHello('test')
+    expect conceptualService.sayHello('test')
     .toBe 'Hi test!'
 
   return

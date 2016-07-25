@@ -1,4 +1,4 @@
-service = (BbTeBaTextSanitizer, $http, $log, $q) ->
+service = (bbTeBaTextSanitizer, $http, $log, $q) ->
   'ngInject'
 
   endpoint = 'http://some.endpoint.com'
@@ -64,7 +64,7 @@ service = (BbTeBaTextSanitizer, $http, $log, $q) ->
     return
 
   sanitizeArticle = (article) ->
-    article.content = BbTeBaTextSanitizer.sanitize article.content
+    article.content = bbTeBaTextSanitizer.sanitize article.content
     return
 
   return {
@@ -75,5 +75,5 @@ service = (BbTeBaTextSanitizer, $http, $log, $q) ->
 
 angular
 .module('bbTe.blogArticle')
-.service('BbTeBaArticleGateway', service)
+.service('bbTeBaArticleGateway', service)
 

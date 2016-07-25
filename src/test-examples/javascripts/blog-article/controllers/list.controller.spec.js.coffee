@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'bbTe.blogArticle, BbTeBaListCtrl', () ->
+describe 'bbTe.blogArticle, BbTeBaListController', () ->
   $controller = null
   $rootScope = null
 
@@ -22,7 +22,7 @@ describe 'bbTe.blogArticle, BbTeBaListCtrl', () ->
 
   it 'initialise controller', () ->
     controllerInstance = $controller(
-      'BbTeBaListCtrl'
+      'BbTeBaListController'
       '$scope': $scope
     )
     return

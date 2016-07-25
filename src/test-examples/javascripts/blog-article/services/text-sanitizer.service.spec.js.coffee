@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'bbTe.blogArticle, BbTeBaTextSanitizer service', () ->
+describe 'bbTe.blogArticle, bbTeBaTextSanitizer service', () ->
   ArticleSanitizer = null
 
   sampleText = ' SomE Sample text, SomE Sample text    ';
@@ -10,7 +10,7 @@ describe 'bbTe.blogArticle, BbTeBaTextSanitizer service', () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      ArticleSanitizer = $injector.get 'BbTeBaTextSanitizer'
+      ArticleSanitizer = $injector.get 'bbTeBaTextSanitizer'
 
       return
 

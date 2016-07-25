@@ -1,20 +1,21 @@
 'use strict';
 
 describe 'bbTe.blogArticle, bbTeBaConceptualFactory factory', () ->
-  ConceptualFactory = null
+  conceptualFactory = null
 
   beforeEachFn = () ->
     module('bbTe.blogArticle')
 
     inject ($injector) ->
-      ConceptualFactory = $injector.get 'bbTeBaConceptualFactory'
+      conceptualFactory = $injector.get 'bbTeBaConceptualFactory'
       return
     return
 
   beforeEach beforeEachFn
 
   it 'can say hello', ->
-    expect ConceptualFactory.sayHello('test')
+
+    expect conceptualFactory.sayHello('test')
     .toBe 'Hi test!'
   return
 
