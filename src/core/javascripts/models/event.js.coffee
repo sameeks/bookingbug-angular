@@ -104,7 +104,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * @returns {object} The returned number booked
     ###
     getNumBooked: () ->
-      @spaces_blocked + @spaces_booked + @spaces_reserved + @spaces_held
+      @spaces_blocked + @spaces_booked + @spaces_reserved #+ @spaces_held
 
     ###**
     * @ngdoc method
