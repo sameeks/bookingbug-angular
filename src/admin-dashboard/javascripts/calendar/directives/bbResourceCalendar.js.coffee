@@ -133,8 +133,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
 
             # if it's got a person and resource - then it
           Dialog.confirm
+            title: $translate.instant('CALENDAR_PAGE.MOVE_MODAL_TITLE')
             model: event
-            body: "Are you sure you want to move this booking?"
+            body: $translate.instant('CALENDAR_PAGE.MOVE_MODAL_BODY')
             success: (model) =>
               $scope.updateBooking(event)
             fail: () ->
