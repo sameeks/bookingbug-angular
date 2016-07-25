@@ -283,7 +283,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.refreshBooking = (booking) ->
 
       booking.$refetch().then (response) ->
-        console.log("reloading")
         booking.resourceIds = []
         booking.resourceId = null
         if booking.person_id?
