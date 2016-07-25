@@ -12,7 +12,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
 angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   PurchaseService, ClientService, $modal, $location, $timeout, BBWidget,
   BBModel, $q, QueryStringService, SSOService, AlertService, LoginService,
-  $window, $upload, ServiceService, $sessionStorage, LoadingService,
+  $window, ServiceService, $sessionStorage, LoadingService,
   SettingsService, $translate) ->
 
   $scope.controller = "Purchase"

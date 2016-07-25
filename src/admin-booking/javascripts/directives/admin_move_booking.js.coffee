@@ -1,4 +1,7 @@
-angular.module('BBAdminBooking').directive 'bbAdminMoveBooking', (AdminCompanyService, $log, $compile, $q, PathSvc, $templateCache, $http, BBModel, AdminBookingService, $rootScope) ->
+'use strict'
+
+angular.module('BBAdminBooking').directive 'bbAdminMoveBooking', ($log,
+  $compile, $q, PathSvc, $templateCache, $http, BBModel, $rootScope) ->
 
   getTemplate = (template) ->
     partial = if template then template else 'main'
@@ -31,10 +34,9 @@ angular.module('BBAdminBooking').directive 'bbAdminMoveBooking', (AdminCompanySe
       else if scope.company
         attrs.companyId = scope.company.id
     if attrs.companyId
-      AdminCompanyService.query(attrs).then (company) ->
-
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.initWidget(config)
-        AdminBookingService.getBooking({company_id: company.id, id: config.booking_id, url: scope.bb.api_url}).then (booking) ->
+        company.getBooking(config.booking_id).then (booking) ->
           scope.company = company
           scope.bb.moving_booking = booking
           scope.quickEmptybasket()
@@ -63,9 +65,8 @@ angular.module('BBAdminBooking').directive 'bbAdminMoveBooking', (AdminCompanySe
             failMsg()
 
 
-
-
   {
     link: link
     controller: 'BBCtrl'
   }
+
