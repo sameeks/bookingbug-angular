@@ -3,6 +3,7 @@ module.exports = (gulp, plugins)->
   gulp.task 'test:unit', (cb)->
     plugins.sequence(
       [
+        'test:unit:test-examples'
         'test:unit:core'
         'test:unit:admin'
         'test:unit:admin-booking'
@@ -17,6 +18,7 @@ module.exports = (gulp, plugins)->
 
   gulp.task 'test:unit-ci', (cb)->
     plugins.sequence(
+      'test:unit-ci:test-examples'
       'test:unit-ci:core'
       'test:unit-ci:admin'
       'test:unit-ci:admin-booking'
