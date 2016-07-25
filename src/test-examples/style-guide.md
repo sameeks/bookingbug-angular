@@ -3,7 +3,7 @@
  
 
 ##### The best pure JS style guide is the one created by [Papa John](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md) 
-##### There's available CS shift of above created by [*Plateful*](https://github.com/polarmobile/coffeescript-style-guide)
+##### There's available CS shift of above created by [*Plateful*](https://github.com/Plateful/plateful-mobile/wiki/AngularJS-CoffeeScript-Style-Guide)
 ##### Below you can find more recommended style guides - Please feel free to contribute if have some suggestions on how to write clean and testable CS/AngularJS code 
 
 
