@@ -255,7 +255,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope,
   ###
   $scope.loadEventData = (comp) ->
 
-    loader.noLoaded()
+    loader.notLoaded()
 
     $scope.event_data_loaded = false
 
@@ -291,7 +291,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope,
         item.spaces_left = item.getSpacesLeft()
 
       # Add address prop from the company to the item
-      $scope.bb.company.$getAddress().then (address) ->
+      $scope.bb.company.$getAddresses().then (address) ->
         for item in $scope.items
           item.address = address
 
