@@ -1,5 +1,5 @@
 angular.module('BBAdminSettings').directive 'adminTable', (AdminCompanyService,
-    AdminAdministratorService, $modal, $log, ModalForm) ->
+    AdminAdministratorService, $log, ModalForm) ->
 
   controller = ($scope) ->
 

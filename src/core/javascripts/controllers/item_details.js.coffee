@@ -51,7 +51,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, 
 
 
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $translate, SettingsService, PurchaseService) ->
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $uibModal, $location, $translate, SettingsService, PurchaseService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
 
@@ -297,7 +297,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * Display terms and conditions view
   ###
   $scope.openTermsAndConditions = () ->
-    modalInstance = $modal.open(
+    modalInstance = $uibModal.open(
       templateUrl: $scope.getPartial "terms_and_conditions"
       scope: $scope
     )

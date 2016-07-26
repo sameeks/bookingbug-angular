@@ -1,5 +1,5 @@
 
-angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope,  $rootScope, $location, $modal) ->
+angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope,  $rootScope, $location, $uibModal) ->
 
   $scope.selectedBooking = null
   $scope.poppedBooking = null
@@ -10,7 +10,7 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
   $scope.popupBooking = (booking) ->
     $scope.poppedBooking = booking
 
-    modalInstance = $modal.open {
+    modalInstance = $uibModal.open {
       templateUrl: 'full_booking_details',
       controller: ModalInstanceCtrl,
       scope: $scope,
@@ -19,25 +19,25 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
         items: () => {booking: booking};
       }
     }
-    
+
     modalInstance.result.then (selectedItem) =>
       $scope.selected = selectedItem;
     , () =>
       console.log('Modal dismissed at: ' + new Date())
 
-  ModalInstanceCtrl = ($scope, $modalInstance, items) ->
+  ModalInstanceCtrl = ($scope, $uibModalInstance, items) ->
     angular.extend($scope, items)
     $scope.ok = () ->
       if items.booking && items.booking.self
         items.booking.$update()
-      $modalInstance.close();
+      $uibModalInstance.close();
     $scope.cancel = () ->
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
 
   # a popup performing an action on a time, possible blocking, or mkaing a new booking
   $scope.popupTimeAction = (prms) ->
 
-    modalInstance = $modal.open {
+    modalInstance = $uibModal.open {
       templateUrl: $scope.partial_url + 'time_popup',
       controller: ModalInstanceCtrl,
       scope: $scope,
@@ -46,4 +46,3 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
         items: () => prms;
       }
     }
-    

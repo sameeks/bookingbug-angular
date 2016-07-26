@@ -14,7 +14,7 @@
 * @param {function}  onValidationError   On validation fail callback
 *
 ###
-angular.module('BBMember').directive 'memberForm', ($modal, $log, $rootScope, MemberLoginService, MemberBookingService, AlertService, PathSvc) ->
+angular.module('BBMember').directive 'memberForm', ($log, $rootScope, MemberLoginService, MemberBookingService, AlertService, PathSvc) ->
     templateUrl: (el, attrs) ->
       if attrs.bbCustomMemberForm?
         PathSvc.directivePartial "_member_form"

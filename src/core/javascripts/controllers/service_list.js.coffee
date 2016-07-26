@@ -49,7 +49,7 @@ angular.module('BB.Directives').directive 'bbServices', () ->
   scope : true
   controller : 'ServiceList'
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $modal, $sce, ItemService, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService) ->
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $uibModal, $sce, ItemService, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService) ->
 
   $scope.controller = "public.controllers.ServiceList"
 
@@ -269,12 +269,12 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   * Display error message in modal
   ###
   $scope.errorModal = () ->
-    error_modal = $modal.open
+    error_modal = $uibModal.open
       templateUrl: $scope.getPartial('_error_modal')
-      controller: ($scope, $modalInstance) ->
+      controller: ($scope, $uibModalInstance) ->
         $scope.message = ErrorService.getError('GENERIC').msg
         $scope.ok = () ->
-          $modalInstance.close()
+          $uibModalInstance.close()
 
   ###**
   * @ngdoc method

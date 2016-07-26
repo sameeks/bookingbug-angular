@@ -181,7 +181,7 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
 
 angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $rootScope, halClient, $window, $http, $localCache, $q, $timeout, BasketService,
-    LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
+    LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log,
     BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
     QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
     SettingsService, UriTemplate, $anchorScroll, $localStorage) ->
@@ -936,12 +936,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         halClient.clearCache("time_data")
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
-        error_modal = $modal.open
+        error_modal = $uibModal.open
           templateUrl: $scope.getPartial('_error_modal')
-          controller: ($scope, $modalInstance) ->
+          controller: ($scope, $uibModalInstance) ->
             $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg
             $scope.ok = () ->
-              $modalInstance.close()
+              $uibModalInstance.close()
         error_modal.result.finally () ->
           if $scope.bb.nextSteps
             # either go back to the Date/Event routes or load the previous step

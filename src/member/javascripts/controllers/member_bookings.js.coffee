@@ -1,4 +1,4 @@
-angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope, AlertService, PurchaseService) ->
+angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope, AlertService, PurchaseService) ->
 
   $scope.getUpcomingBookings = () ->
 
@@ -80,7 +80,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
 
   $scope.getPrePaidBookings = (params) ->
-    
+
     defer = $q.defer()
 
     MemberPrePaidBookingService.query($scope.member, params).then (bookings) ->
@@ -99,23 +99,23 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
 
   openPaymentModal = (booking, total) ->
-    modalInstance = $modal.open
+    modalInstance = $uibModal.open
       templateUrl: "booking_payment_modal.html"
       windowClass: "bbug"
       size: "lg"
-      controller: ($scope, $rootScope, $modalInstance, booking, total, notLoaded, setLoaded) ->
-        
+      controller: ($scope, $rootScope, $uibModalInstance, booking, total, notLoaded, setLoaded) ->
+
         $scope.booking = booking
         $scope.total = total
         $scope.notLoaded = notLoaded
         $scope.setLoaded = setLoaded
 
         $scope.handlePaymentSuccess = () ->
-          $modalInstance.close(booking)
+          $uibModalInstance.close(booking)
 
         $scope.cancel = ->
-          $modalInstance.dismiss "cancel"
-    
+          $uibModalInstance.dismiss "cancel"
+
       resolve:
         booking: -> booking
         total: -> total
@@ -139,18 +139,18 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
 
   cancel: (booking) ->
-    modalInstance = $modal.open
+    modalInstance = $uibModal.open
       templateUrl: "member_booking_delete_modal.html"
       windowClass: "bbug"
-      controller: ($scope, $rootScope, $modalInstance, booking) ->
+      controller: ($scope, $rootScope, $uibModalInstance, booking) ->
         $scope.controller = "ModalDelete"
         $scope.booking = booking
 
         $scope.confirm_delete = () ->
-          $modalInstance.close(booking)
+          $uibModalInstance.close(booking)
 
         $scope.cancel = ->
-          $modalInstance.dismiss "cancel"
+          $uibModalInstance.dismiss "cancel"
       resolve:
         booking: ->
           booking
@@ -159,7 +159,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
 
 
   book: (booking) ->
-   
+
     $scope.notLoaded $scope
 
     params =
@@ -168,7 +168,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       booking: booking
 
     PurchaseService.bookWaitlistItem(params).then (purchase_total) ->
-      if purchase_total.due_now > 0 
+      if purchase_total.due_now > 0
         if purchase_total.$has('new_payment')
           openPaymentModal(booking, purchase_total)
         else

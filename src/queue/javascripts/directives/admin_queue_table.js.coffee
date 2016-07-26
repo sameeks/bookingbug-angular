@@ -1,4 +1,4 @@
-angular.module('BBQueue').directive 'bbAdminQueueTable', ($modal, $log,
+angular.module('BBQueue').directive 'bbAdminQueueTable', ($log,
   $rootScope, AdminQueueService, AdminCompanyService, $compile, $templateCache,
   ModalForm, BBModel) ->
 

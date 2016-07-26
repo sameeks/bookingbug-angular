@@ -1,6 +1,6 @@
-angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $rootScope, AdminLoginService, $templateCache, $q) ->
+angular.module('BBAdmin.Directives').directive 'adminLogin', ($uibModal, $log, $rootScope, AdminLoginService, $templateCache, $q) ->
 
-  loginAdminController = ($scope, $modalInstance, company_id) ->
+  loginAdminController = ($scope, $uibModalInstance, company_id) ->
     $scope.title = 'Login'
     $scope.schema =
       type: 'object'
@@ -25,15 +25,15 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
       AdminLoginService.login(form, options).then (admin) ->
         admin.email = form.email
         admin.password = form.password
-        $modalInstance.close(admin)
+        $uibModalInstance.close(admin)
       , (err) ->
-        $modalInstance.dismiss(err)
+        $uibModalInstance.dismiss(err)
 
     $scope.cancel = () ->
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
 
-  pickCompanyController = ($scope, $modalInstance, companies) ->
+  pickCompanyController = ($scope, $uibModalInstance, companies) ->
     $scope.title = 'Pick Company'
     $scope.schema =
       type: 'object'
@@ -49,10 +49,10 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
     $scope.pick_company_form = {}
 
     $scope.submit = (form) ->
-      $modalInstance.close(form.company_id)
+      $uibModalInstance.close(form.company_id)
 
     $scope.cancel = () ->
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
 
   link = (scope, element, attrs) ->
@@ -61,7 +61,7 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
     $rootScope.bb.api_url ||= "http://www.bookingbug.com"
 
     loginModal = () ->
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
         templateUrl: 'login_modal_form.html'
         controller: loginAdminController
         resolve:
@@ -80,7 +80,7 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
         loginModal()
 
     pickCompanyModal = (companies) ->
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
         templateUrl: 'pick_company_modal_form.html'
         controller: pickCompanyController
         resolve:

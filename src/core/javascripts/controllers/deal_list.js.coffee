@@ -29,7 +29,7 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
   scope : true
   controller : 'DealList'
 
-angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, DealService, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal) ->
+angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, DealService, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $uibModal) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
@@ -60,7 +60,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
     iitem.setDefaults $scope.bb.item_defaults
     iitem.setDeal deal
     if !$scope.bb.company_settings.no_recipient
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
         templateUrl: $scope.getPartial('_add_recipient')
         scope: $scope
         controller: ModalInstanceCtrl
@@ -83,7 +83,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
       , (err) ->
         $scope.setLoadedAndShowError $scope, err, 'Sorry, something went wrong'
 
-  ModalInstanceCtrl = ($scope, $modalInstance, item, ValidatorService) ->
+  ModalInstanceCtrl = ($scope, $uibModalInstance, item, ValidatorService) ->
     $scope.controller = 'ModalInstanceCtrl'
     $scope.item = item
     $scope.recipient = false
@@ -96,14 +96,14 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
     * Add to basket in according of form parameter
     *
     * @param {object} form The form where is added deal list to basket
-    ###    
+    ###
     $scope.addToBasket = (form) ->
       if !ValidatorService.validateForm(form)
         return
-      $modalInstance.close($scope.item)
+      $uibModalInstance.close($scope.item)
 
     $scope.cancel = ->
-      $modalInstance.dismiss 'cancel'
+      $uibModalInstance.dismiss 'cancel'
 
   ###**
   * @ngdoc method

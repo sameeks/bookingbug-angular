@@ -1,5 +1,5 @@
 angular.module('BBAdminEvents').directive 'eventGroupTable', (AdminCompanyService,
-    AdminEventGroupService, $modal, $log, ModalForm) ->
+    AdminEventGroupService, $log, ModalForm) ->
 
   controller = ($scope) ->
 

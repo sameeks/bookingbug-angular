@@ -28,7 +28,7 @@ angular.module('BB.Directives').directive 'bbSurveyQuestions', () ->
   controller : 'SurveyQuestions'
 
 angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope,  $rootScope,
-    CompanyService, PurchaseService, ClientService, $modal, $location, $timeout,
+    CompanyService, PurchaseService, ClientService, $location, $timeout,
     BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService,
     LoginService, $window, ServiceService, ValidatorService, PurchaseBookingService, $sessionStorage) ->
 

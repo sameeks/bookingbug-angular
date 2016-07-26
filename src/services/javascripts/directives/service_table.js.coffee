@@ -1,5 +1,5 @@
 angular.module('BBAdminServices').directive 'serviceTable', (AdminCompanyService,
-    AdminServiceService, $modal, $log, ModalForm) ->
+    AdminServiceService, $log, ModalForm) ->
 
   controller = ($scope) ->
     $scope.fields = ['id', 'name']

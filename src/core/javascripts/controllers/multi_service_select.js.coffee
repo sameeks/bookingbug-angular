@@ -33,7 +33,7 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   controller : 'MultiServiceSelect'
 
 angular.module('BB.Controllers').controller 'MultiServiceSelect',
-($scope, $rootScope, $q, $attrs, BBModel, AlertService, CategoryService, FormDataStoreService, $modal) ->
+($scope, $rootScope, $q, $attrs, BBModel, AlertService, CategoryService, FormDataStoreService, $uibModal) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selected_category_name'
@@ -51,7 +51,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
         initialise()
     else
       $scope.company = $scope.bb.company
- 
+
     # wait for services before we begin initialisation
     $scope.$watch $scope.options.services, (newval, oldval) ->
       if newval and angular.isArray(newval)
@@ -70,7 +70,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
 
     # company question promise
     promises.push($scope.company.getCompanyQuestionsPromise()) if $scope.company.$has('company_questions')
-    
+
     $q.all(promises).then (result) ->
 
       $scope.company_questions = result[1]
@@ -131,13 +131,13 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       for category in categories
           category.order = parseInt(category.name.slice(0,2))
           category.name  = category.name.slice(3)
-    
+
     # index categories by their id
     $scope.all_categories = _.indexBy(categories, 'id')
 
     # group services by category id
     all_categories = _.groupBy($scope.items, (item) -> item.category_id)
-    
+
     # find any sub categories
     sub_categories = _.findWhere($scope.company_questions, {name: 'Extra Category'})
     sub_categories = _.map(sub_categories.question_items, (sub_category) -> sub_category.name) if sub_categories
@@ -160,7 +160,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
         for sub_category in sub_categories
           grouped_sub_category = {
             name: sub_category,
-            services: _.filter(services, (service) -> service.extra.extra_category is sub_category) 
+            services: _.filter(services, (service) -> service.extra.extra_category is sub_category)
           }
 
           # only add the sub category if it has some services
@@ -173,9 +173,9 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       category_details = {name: $scope.all_categories[category_id].name, description: $scope.all_categories[category_id].description} if $scope.all_categories[category_id]
 
       # set the category
-      category.name = category_details.name 
-      category.description = category_details.description 
-      
+      category.name = category_details.name
+      category.description = category_details.description
+
       # get the order if instruccted
       category.order = $scope.all_categories[category_id].order if $scope.options.ordered_categories && $scope.all_categories[category_id]
 
@@ -185,7 +185,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       if $scope.selected_category_name and $scope.selected_category_name is category_details.name
         $scope.selected_category = $scope.categories[$scope.categories.length - 1]
       # or if there's a default category
-      else if $scope.bb.item_defaults.category and $scope.bb.item_defaults.category.name is category_details.name and !$scope.selected_category 
+      else if $scope.bb.item_defaults.category and $scope.bb.item_defaults.category.name is category_details.name and !$scope.selected_category
         $scope.selected_category = $scope.categories[$scope.categories.length - 1]
         $scope.selected_category_name = $scope.selected_category.name
 
@@ -340,7 +340,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
   * @description
   * Select duration in according of service parameter and display the modal
   *
-  * @params {object} service The service 
+  * @params {object} service The service
   ###
   $scope.selectDuration = (service) ->
 
@@ -348,18 +348,18 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect',
       $scope.addItem(service)
     else
 
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
         templateUrl: $scope.getPartial('_select_duration_modal')
         scope: $scope
-        controller: ($scope, $modalInstance, service) ->
+        controller: ($scope, $uibModalInstance, service) ->
           $scope.durations = service.durations
           $scope.duration = $scope.durations[0]
           $scope.service = service
 
           $scope.cancel = ->
-            $modalInstance.dismiss 'cancel'
+            $uibModalInstance.dismiss 'cancel'
           $scope.setDuration = () ->
-            $modalInstance.close({service: $scope.service, duration: $scope.duration})
+            $uibModalInstance.close({service: $scope.service, duration: $scope.duration})
         resolve:
           service: ->
             service

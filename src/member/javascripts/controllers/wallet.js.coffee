@@ -1,5 +1,5 @@
-angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log, $modal, $rootScope, AlertService) ->
-  
+angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log, $rootScope, AlertService) ->
+
 
   $scope.getWalletForMember = (member, params) ->
     defer = $q.defer()
@@ -52,7 +52,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       $scope.setLoaded $scope
       $log.error err.data
 
-  
+
   $scope.updateWallet = (member, amount, band = null) ->
     $scope.notLoaded $scope
     if member
@@ -96,7 +96,7 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       , (err) ->
         $scope.setLoaded $scope
         $log.error err.date
-  
+
 
   $scope.purchaseBand = (band) ->
     $scope.selected_band = band
@@ -108,9 +108,9 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
       AlertService.raise('TOPUP_SUCCESS')
       $rootScope.$broadcast("wallet:topped_up", wallet)
       $scope.wallet_topped_up = true
-      
 
-  # TODO don't route to next page automatically, first alert user 
+
+  # TODO don't route to next page automatically, first alert user
   # topup was successful and show new wallet balance + the 'next' button
   $scope.basketWalletPaymentDone = () ->
     $scope.callSetLoaded()
@@ -129,12 +129,12 @@ angular.module("BBMember").controller "Wallet", ($scope, $q, WalletService, $log
   $scope.subtract = (value) ->
     value = value or $scope.amount_increment
     $scope.add(-value)
-    
+
 
   $scope.isSubtractValid = (value) ->
     return false if !$scope.wallet
     value = value or $scope.amount_increment
-    new_amount = $scope.amount - value 
+    new_amount = $scope.amount - value
     return new_amount >= $scope.wallet.min_amount
 
 

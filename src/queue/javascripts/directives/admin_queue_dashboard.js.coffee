@@ -1,4 +1,4 @@
-angular.module('BBQueue').directive 'bbIfLogin', ($modal, $log, $q,
+angular.module('BBQueue').directive 'bbIfLogin', ($log, $q,
   $rootScope, AdminQueueService, AdminCompanyService, $compile, $templateCache,
   ModalForm, BBModel) ->
 
@@ -23,7 +23,7 @@ angular.module('BBQueue').directive 'bbIfLogin', ($modal, $log, $q,
 
 
 
-angular.module('BBQueue').directive 'bbQueueDashboard', ($modal, $log,
+angular.module('BBQueue').directive 'bbQueueDashboard', ($log,
   $rootScope, $compile, $templateCache,
   ModalForm, BBModel) ->
 
@@ -38,7 +38,7 @@ angular.module('BBQueue').directive 'bbQueueDashboard', ($modal, $log,
 
 
 
-angular.module('BBQueue').directive 'bbQueues', ($modal, $log,
+angular.module('BBQueue').directive 'bbQueues', ($log,
   $rootScope, $compile, $templateCache,
   ModalForm, BBModel) ->
 
@@ -53,7 +53,7 @@ angular.module('BBQueue').directive 'bbQueues', ($modal, $log,
   }
 
 
-angular.module('BBQueue').directive 'bbQueueServers', ($modal, $log,
+angular.module('BBQueue').directive 'bbQueueServers', ($log,
   $rootScope, $compile, $templateCache,
   ModalForm, BBModel) ->
 

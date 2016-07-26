@@ -1,5 +1,5 @@
 angular.module('BBAdmin').directive 'bookingTable', (AdminCompanyService,
-    AdminBookingService, $modal, $log, ModalForm) ->
+    AdminBookingService, $log, ModalForm) ->
 
   controller = ($scope) ->
 

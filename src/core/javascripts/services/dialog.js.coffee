@@ -1,19 +1,19 @@
-angular.module('BB.Services').factory 'Dialog', ($modal, $log) ->
+angular.module('BB.Services').factory 'Dialog', ($uibModal, $log) ->
 
-  controller = ($scope, $modalInstance, model, title, success, fail, body) ->
+  controller = ($scope, $uibModalInstance, model, title, success, fail, body) ->
 
     $scope.body = body
     $scope.title = title
 
     $scope.ok = () ->
-      $modalInstance.close(model)
+      $uibModalInstance.close(model)
 
     $scope.cancel = () ->
       event.preventDefault()
       event.stopPropagation()
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
-    $modalInstance.result.then () ->
+    $uibModalInstance.result.then () ->
       success(model) if success
     , () ->
       fail() if fail
@@ -21,7 +21,7 @@ angular.module('BB.Services').factory 'Dialog', ($modal, $log) ->
   confirm: (config) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'dialog.html'
-    $modal.open
+    $uibModal.open
       templateUrl: templateUrl
       controller: controller
       size: config.size || 'sm'

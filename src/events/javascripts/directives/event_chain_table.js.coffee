@@ -1,5 +1,5 @@
 angular.module('BBAdminEvents').directive 'eventChainTable', (AdminCompanyService,
-    AdminEventChainService, $modal, $log, ModalForm, $timeout) ->
+    AdminEventChainService, $log, ModalForm, $timeout) ->
 
   controller = ($scope) ->
 
