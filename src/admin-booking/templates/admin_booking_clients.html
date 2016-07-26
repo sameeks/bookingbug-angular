@@ -128,7 +128,7 @@
 
           <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
             <label for="email" class="control-label">E-mail:</label>
-            <input type="email" name="email" id="email" ng-required="!client.mobile" ng-model="client.email" class="form-control"/>
+            <input type="email" name="email" id="email" ng-required="!client.mobile" ng-model="client.email" class="form-control"  ng-pattern="validator.getEmailPattern()"/>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">

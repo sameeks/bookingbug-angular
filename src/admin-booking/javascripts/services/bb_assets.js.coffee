@@ -35,7 +35,16 @@ angular.module('BBAdminBooking').factory 'BBAssets', ['$q', ($q) ->
 
     # Resolve all promises together
     $q.all(promises).then ->
-      assets = _.sortBy assets, 'name'
+      assets.sort (a,b) ->
+        if a.type == "person" && b.type == "resource"
+          return -1
+        if a.type == "resource" && b.type == "person"
+          return 1
+        if a.name > b.name
+          return 1
+        if a.name < b.name
+          return -1
+        return 0
       delay.resolve(assets);
 
     delay.promise
