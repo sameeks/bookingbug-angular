@@ -250,10 +250,6 @@ angular
       }//hrefLink
 
       function callLink(method, link, params, data) {
-         console.log("callLink")
-         console.log(link)
-         console.log(params)
-         console.log(data)
         if (params == null) {
           params = {};
         }
@@ -273,9 +269,6 @@ angular
           }
         }
         else {
-          console.log("callService in callLink");
-          console.log(options);
-          console.log(data);
           return callService(method, linkHref, options, data);
         }
 
@@ -335,9 +328,6 @@ angular
 
 
     function callService(method, href, options, data){
-      console.log(href);
-      console.log(options);
-      console.log(data);
       if(!options) options = {};
       var headers = {
         'Content-Type': 'application/json',

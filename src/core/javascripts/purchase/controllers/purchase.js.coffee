@@ -12,9 +12,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
   $scope.make_payment = false
-  # $scope.company_reasons = []
-  # $scope.cancel_reasons = []
-  # $scope.move_reasons = []
 
   setPurchaseCompany = (company) ->
     $scope.bb.company_id = company.id
@@ -47,10 +44,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
     # is there a purchase total already in scope?
     if $scope.bb.total
-      console.log("i get called - already a total")
       $scope.load($scope.bb.total.long_id)
     else if $scope.bb.purchase
-      console.log("i get called - already a purchase")
       $scope.purchase = $scope.bb.purchase
       $scope.bookings = $scope.bb.purchase.bookings
       $scope.messages = $scope.purchase.confirm_messages if $scope.purchase.confirm_messages
@@ -281,10 +276,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
         cancel_reasons: -> $scope.cancel_reasons
 
     modalInstance.result.then (booking) ->
-      console.log(booking)
       cancel_reason = null
       cancel_reason = booking.cancel_reason if booking.cancel_reason
-      console.log(cancel_reason)
       data = {cancel_reason: cancel_reason}
       booking.$del('self', {}, data).then (service) =>
         $scope.bookings = _.without($scope.bookings, booking)
