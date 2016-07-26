@@ -31,7 +31,7 @@ module.exports = {
           '!'+srcpath+'/'+module+'/javascripts/**/*.js.js',
           '!'+srcpath+'/'+module+'/javascripts/**/*.js.js.map',
           '!'+srcpath+'/**/*_test.js.coffee',
-          '!'+srcpath+'/**/*_spec.js.coffee'
+          '!'+srcpath+'/**/*.spec.js.coffee'
         ],
         {allowEmpty: true}
       )
