@@ -72,7 +72,7 @@ module.exports = {
       .pipe(flatten())
       .pipe(gulp.dest(releasepath+'/'+module));
   },
-  templates: function(module, mod_name, keep_path_info, srcpath, releasepath) {
+  templates: function(module, srcpath, releasepath, mod_name, keep_path_info) {
     srcpath || (srcpath = './src');
     releasepath || (releasepath = './build');
     if (keep_path_info === undefined) {
