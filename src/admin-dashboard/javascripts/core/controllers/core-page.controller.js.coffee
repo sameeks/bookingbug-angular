@@ -24,5 +24,3 @@ controller = ($scope, $state, company) ->
 angular.module('BBAdminDashboard.controllers').controller 'CorePageController', controller
 
 controller.$inject = ['$scope', '$state', 'company']
-
-

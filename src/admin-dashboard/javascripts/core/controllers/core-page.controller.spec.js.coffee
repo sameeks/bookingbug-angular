@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'BBAdminDashboard.calendar.controllers, CalendarPageCtrl', () ->
+describe 'BBAdminDashboard.calendar.controllers, CorePageController', () ->
   $controller = null
   $state = null
   company = null
@@ -66,9 +66,3 @@ describe 'BBAdminDashboard.calendar.controllers, CalendarPageCtrl', () ->
     .toHaveBeenCalledWith(testStateName)
 
     return
-
-
-
-
-
-
