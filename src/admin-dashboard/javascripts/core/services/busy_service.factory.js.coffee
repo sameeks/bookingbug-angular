@@ -1,13 +1,11 @@
-###**
+###*
 * @ngdoc service
 * @name BBAdminDashboard.services.service:BusyService
 *
 * @description
-* 
-*
 ###
 angular.module('BBAdminDashboard.services').factory "BusyService", [
-  '$q', '$log', '$rootScope', 'AlertService', 'ErrorService', 
+  '$q', '$log', '$rootScope', 'AlertService', 'ErrorService',
   ($q, $log, $rootScope, AlertService, ErrorService) ->
 
     notLoaded: (cscope) ->

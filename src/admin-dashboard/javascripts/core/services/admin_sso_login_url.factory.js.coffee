@@ -1,4 +1,4 @@
-###**
+###*
 * @ngdoc service
 * @name BBAdminDashboard.services.service:AdminSsoLoginUrl
 *

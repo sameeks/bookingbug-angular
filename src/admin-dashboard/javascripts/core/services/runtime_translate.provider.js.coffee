@@ -1,6 +1,6 @@
 'use strict'
 
-###
+###*
 * @ngdoc service
 * @name BBAdminDashboard.services.service:RuntimeTranslate
 *
@@ -8,7 +8,7 @@
 * Returns an instance of $translateProvider that allows late language binding (on runtime)
 ###
 
-###
+###*
 * @ngdoc service
 * @name BBAdminDashboard.services.service:RuntimeTranslateProvider
 *
@@ -16,11 +16,11 @@
 * Provider
 *
 * @example
-  <example>
+  <pre>
   angular.module('ExampleModule').config ['RuntimeTranslateProvider', '$translateProvider', (RuntimeTranslateProvider, $translateProvider) ->
     RuntimeTranslateProvider.setProvider($translateProvider)
   ]
-  </example>
+  </pre>
 ###
 angular.module('BBAdminDashboard.services').provider 'RuntimeTranslate', ['$translateProvider', ($translateProvider)->
   translateProvider  = $translateProvider

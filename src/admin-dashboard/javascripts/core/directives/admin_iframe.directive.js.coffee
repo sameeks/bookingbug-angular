@@ -1,6 +1,6 @@
 'use strict'
 
-###
+###*
  * @ngdoc directive
  * @name BBAdminDashboard.directives.directive:adminIframe
  * @scope

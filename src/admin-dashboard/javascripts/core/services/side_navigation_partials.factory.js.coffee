@@ -1,6 +1,6 @@
 'use strict'
 
-###
+###*
 * @ngdoc service
 * @name BBAdminDashboard.services.service:SideNavigationPartials
 *

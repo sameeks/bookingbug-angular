@@ -1,4 +1,4 @@
-###
+###*
 * @ngdoc filter
 * @name BBAdminDashboard.filters.filter:propsFilter
 * @description

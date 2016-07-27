@@ -159,7 +159,7 @@
         ]
       };
       return gulp.src([
-        './src/*/javascripts/**',
+        './src/*/javascripts/**/*.js.coffee',
         '!./src/*/javascripts/*.spec.js.coffee'
       ])
         .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))

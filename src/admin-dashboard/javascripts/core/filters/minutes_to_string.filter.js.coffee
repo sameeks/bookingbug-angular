@@ -1,8 +1,8 @@
-###
-* @ngdoc filter
-* @name BBAdminDashboard.filters.filter:minutesToString
-* @description
-* Converts a number to the desired format (default is hour minute(HH:mm))
+###*
+@ngdoc filter
+@name BBAdminDashboard.filters.filter:minutesToString
+@description
+Converts a number to the desired format (default is hour minute(HH:mm))
 ###
 angular.module('BBAdminDashboard.filters').filter 'minutesToString', ->
   (minutes, format = 'HH:mm') ->
