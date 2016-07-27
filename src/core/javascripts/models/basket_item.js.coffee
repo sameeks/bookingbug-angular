@@ -845,6 +845,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.vouchers = @deal_codes if @deal_codes
       data.product_id = @product.id if @product
       data.ref = @ref
+      data.move_reason = @move_reason if @move_reason
 
       data.email = @email if @email
       data.first_name = @first_name if @first_name
