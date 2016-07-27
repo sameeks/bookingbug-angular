@@ -3,12 +3,12 @@
 ###
 * @ngdoc controller
 * @name BBAdminDashboard.controllers.controller:CorePageController
-#
 * @description
 * Controller for the layout (root state)
 ###
-angular.module('BBAdminDashboard.controllers')
-.controller 'CorePageController',['$scope', '$state', 'company', 'SideNavigationPartials', ($scope, $state, company, SideNavigationPartials) ->
+controller = ($scope, $state, company) ->
+  'ngInject'
+
   $scope.company = company
   $scope.bb.company = company
 
@@ -19,4 +19,10 @@ angular.module('BBAdminDashboard.controllers')
   $scope.isState = (states)->
     return $state.includes states
 
-]
+  return
+
+angular.module('BBAdminDashboard.controllers').controller 'CorePageController', controller
+
+controller.$inject = ['$scope', '$state', 'company']
+
+
