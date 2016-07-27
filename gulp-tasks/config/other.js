@@ -157,8 +157,11 @@
         scripts: [
           'examples/booking-widget.js'
         ]
-      }
-      return gulp.src('src/*/javascripts/**')
+      };
+      return gulp.src([
+        './src/*/javascripts/**',
+        '!./src/*/javascripts/*.spec.js.coffee'
+      ])
         .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
         .pipe(gulpDocs.process(options))
         .pipe(gulp.dest('./docs'));
