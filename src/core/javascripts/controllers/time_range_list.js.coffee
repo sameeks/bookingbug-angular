@@ -108,7 +108,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       calculateDayNum = ()->
         cal_days = {lg: 7, md: 5, sm: 3, xs: 1}
 
-        timeRange = 0
+        timeRange = 7
 
         for size,days of cal_days
           if size == ViewportSize.getViewportSize()
