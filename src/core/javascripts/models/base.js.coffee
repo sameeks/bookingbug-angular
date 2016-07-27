@@ -14,7 +14,7 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
     'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
     'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
-    'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection', 'ExternalPurchase', 'PackageItem', 'BulkPurchase', 'Pagination']
+    'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection', 'ExternalPurchase', 'PackageItem', 'BulkPurchase', 'Pagination', 'Reason']
 
   funcs = {}
   for model in models
@@ -163,8 +163,8 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
     $patch: (rel, params, dat) ->
       @_data.$patch(rel, params, dat) if @_data
 
-    $del: (rel, params) ->
-      @_data.$del(rel, params) if @_data
+    $del: (rel, params, dat) ->
+      @_data.$del(rel, params, dat) if @_data
 
     $links: () ->
       @_data.$links() if @_data
