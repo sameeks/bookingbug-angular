@@ -286,7 +286,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       end_date             : $scope.end_date.toISODate()
       include_non_bookable : true
 
-    params.event_chain_id = $scope.bb.item_defaults.event_chain if $scope.bb.item_defaults.event_chain
+    params.event_chain_id = $scope.bb.item_defaults.event_chain.id if $scope.bb.item_defaults.event_chain
 
     params.per_page = $scope.per_page if $scope.per_page
 
