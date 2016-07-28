@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.settings-iframe', [
     RuntimeStates
       .state 'settings',
         parent: AdminSettingsIframeOptions.parent_state
-        url: "/settings"
+        url: "settings"
         templateUrl: "settings-iframe/index.html"
         deepStateRedirect: {
           default: { state: "settings.page", params: { path: "company/mycompany" } }

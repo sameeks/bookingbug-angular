@@ -5,11 +5,11 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<accordion close-others="oneAtATime">
-		    <accordion-group ng-repeat="item in basket_items" is-open="$first">
-		    	<accordion-heading>
+			<div accordion close-others="oneAtATime">
+		    <div bb-accordion-group ng-repeat="item in basket_items" is-open="$first">
+		    	<div bb-accordion-heading>
 		    		{{item.getName()}} <small>({{item.time.time_moment | datetime: 'llll'}})</small>
-		    	</accordion-heading>
+		    	</div>
 
 
 	      	<ul class="bb-list bb-list-bordered-in">
@@ -56,8 +56,8 @@
 	      			</div>
       			</li>
 	      	</ul>
-		    </accordion-group>
-		  </accordion>
+		    </div>
+		  </div>
 
 		</div>
 	</div>

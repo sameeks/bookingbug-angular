@@ -2,9 +2,10 @@
 
 angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   restrict: 'AE'
-  replace: true
+  replace: false
   scope : true
   controller : 'adminBookingClients'
+  templateUrl: 'admin_booking_clients.html'
 
 
 angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, $timeout) ->

@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
     RuntimeStates
       .state 'dashboard',
         parent: AdminDashboardIframeOptions.parent_state
-        url: "/dashboard"
+        url: "dashboard"
         controller: "DashboardIframePageCtrl"
         templateUrl: "dashboard-iframe/index.html"
         deepStateRedirect: {

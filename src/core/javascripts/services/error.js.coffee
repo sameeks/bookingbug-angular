@@ -259,6 +259,20 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: false,
       msg: "Your booking has been cancelled."
+    },
+    {
+      key: 'NOT_BOOKABLE_PERSON',
+      type: 'warning',
+      title: '',
+      persist: false,
+      msg: "Sorry, this person does not offer this service, please select another"
+    },
+    {
+      key: 'NOT_BOOKABLE_RESOURCE',
+      type: 'warning',
+      title: '',
+      persist: false,
+      msg: "Sorry, resource does not offer this service, pelase select another"
     }
   ]
 

@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.clients', [
     RuntimeStates
       .state 'clients',
         parent: AdminClientsOptions.parent_state
-        url: "/clients"
+        url: "clients"
         templateUrl: "clients/index.html"
         controller: 'ClientsPageCtrl'
 

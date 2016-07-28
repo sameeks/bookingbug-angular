@@ -1,77 +1,85 @@
 <div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store bb-page>
+  <tabset>
+    <tab>
+      <tab-heading>
+        <i class="fa fa-calendar-plus-o"></i> Make booking
+      </tab-heading>
+      <br/>
 
-  <div ng-form name="appointment-booking-form">
+      <!-- Make booking tab START -->
+      <div ng-form name="appointment-booking-form">
+        <div bb-services>
+          <div class="form-group">
+            <label>Service</label>
 
-    <h1>Make a Booking</h1>
-
-    <div bb-services>
-      <div class="form-group">
-        <label>Service</label>
-
-        <!-- TODO use display_name -->
-        <select id="service" ng-model="service" ng-options="s.name for s in bookable_services | orderBy: 'order'" class="form-control">
-          <option value="">-- select a service --</option>
-        </select>
-
-      </div>
-    </div>
-
-    <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady('calendar')" bb-debounce ng-disabled="!bb.current_item.service">Book</button>
-
-    <hr>
-
-  </div>
-
-  <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
-
-    <h1>Block Time</h1>
-    <div class="form-group" ng-class="{'has-error': resourceError}">
-      <label>For</label>
-      <select id="resource" ng-model="picked_resource" ng-change="changeResource()" ng-options="item.identifier as item.name group by item.group for item in resources" class="form-control">
-        <option value="">-- select --</option>
-      </select>
-      <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError">Please select a resource or member of staff</p>
-    </div>
-    <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
-      <label>Block whole day &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" on-label="Yes" off-label="No"></toggle-switch></label>
-    </div>
-    <div class="row" ng-hide="blockWholeDay">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>From</label>
-          <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime" min-date="config.min_date"></div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>To</label>
-          <div bb-date-time-picker date="config.to_datetime" min-date="config.from_datetime" max-date="config.max_date"></div>
-        </div>
-      </div>
-    </div>
-
-
-    <div ng-show="block_questions && block_questions.hasQuestions" ng-form name="booking_questions_form" class="bb-form" role="form" novalidate>
-
-      <div class="form-group row" ng-repeat="question in block_questions.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
-        <label for="{{question.id}}" class="control-label col-sm-4" ng-hide="question.detail_type == 'check'">{{question.name}}<span ng-show="question.required">*</span></label>
-        <div ng-show="question.detail_type == 'check'" class="col-sm-4 hidden-xs">&nbsp;</div>
-        <div class="col-sm-5">
-          <input bb-question="question"/><span ng-show="question.detail_type == 'check' && question.required">*</span>
-        </div>
-        <div class="col-sm-offset-4 messages">
-          <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )">
-            This field is required
+            <!-- TODO use display_name -->
+            <select id="service" ng-model="service" ng-options="s.name for s in bookable_services | orderBy: 'order'" class="form-control">
+              <option value="">-- select a service --</option>
+            </select>
           </div>
         </div>
+
+        <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady('calendar')" bb-debounce ng-disabled="!bb.current_item.service">Book</button>
       </div>
+      <!-- Make booking tab END -->
 
-    </div><!--booking_questions_form-->
+    </tab>
+    <tab ng-show="!bb.hide_block">
+      <tab-heading>
+        <i class="fa fa-calendar-minus-o"></i> Block time
+      </tab-heading>
+      <br/>
+      <!-- Block time tab START -->
+      <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
 
-    <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false">Block Time</button>
+        <div class="form-group" ng-class="{'has-error': resourceError}">
+          <label>For</label>
+          <select id="resource" ng-model="picked_resource" ng-change="changeResource()" ng-options="item.identifier as item.name group by item.group for item in resources" class="form-control">
+            <option value="">-- select --</option>
+          </select>
+          <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError">Please select a resource or member of staff</p>
+        </div>
+        <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
+          <label>Block whole day &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" on-label="Yes" off-label="No"></toggle-switch></label>
+        </div>
+        <div class="row" ng-hide="blockWholeDay">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>From</label>
+              <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime" min-date="config.min_date"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>To</label>
+              <div bb-date-time-picker date="config.to_datetime" min-date="config.from_datetime" max-date="config.max_date"></div>
+            </div>
+          </div>
+        </div>
 
-  </div>
 
-  <hr>
+        <div ng-show="block_questions && block_questions.hasQuestions" ng-form name="booking_questions_form" class="bb-form" role="form" novalidate>
 
+          <div class="form-group row" ng-repeat="question in block_questions.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
+            <label for="{{question.id}}" class="control-label col-sm-4" ng-hide="question.detail_type == 'check'">{{question.name}}<span ng-show="question.required">*</span></label>
+            <div ng-show="question.detail_type == 'check'" class="col-sm-4 hidden-xs">&nbsp;</div>
+            <div class="col-sm-5">
+              <input bb-question="question"/><span ng-show="question.detail_type == 'check' && question.required">*</span>
+            </div>
+            <div class="col-sm-offset-4 messages">
+              <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )">
+                This field is required
+              </div>
+            </div>
+          </div>
+
+        </div><!--booking_questions_form-->
+
+        <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false">Block Time</button>
+
+      </div>
+      <!-- Block time tab END -->
+
+    </tab>
+  </tabset>
 </div>
