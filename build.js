@@ -12,48 +12,52 @@ function getModules(srcpath) {
   });
 }
 
-function buildModule(streams, module, srcpath) {
+function buildModule(streams, module, srcpath, releasepath) {
   try {
     fs.statSync(path.join(srcpath, module, 'javascripts'));
-    streams.add(bbGulp.javascripts(module));
+    streams.add(bbGulp.javascripts(module, srcpath, releasepath));
   } catch (e) {
   }
   try {
     fs.statSync(path.join(srcpath, module, 'i18n'));
-    streams.add(bbGulp.i18n(module));
+    streams.add(bbGulp.i18n(module, srcpath, releasepath));
   } catch (e) {
   }
   try {
     fs.statSync(path.join(srcpath, module, 'stylesheets'));
-    streams.add(bbGulp.stylesheets(module));
+    streams.add(bbGulp.stylesheets(module, srcpath, releasepath));
   } catch (e) {
   }
   try {
     fs.statSync(path.join(srcpath, module, 'images'));
-    streams.add(bbGulp.images(module));
+    streams.add(bbGulp.images(module, srcpath, releasepath));
   } catch (e) {
   }
   try {
     fs.statSync(path.join(srcpath, module, 'fonts'));
-    streams.add(bbGulp.fonts(module));
+    streams.add(bbGulp.fonts(module, srcpath, releasepath));
   } catch (e) {
   }
   try {
     fs.statSync(path.join(srcpath, module, 'templates'));
-    streams.add(bbGulp.templates(module));
+    streams.add(bbGulp.templates(module, srcpath, releasepath));
   } catch (e) {
   }
-  streams.add(bbGulp.bower(module));
+  streams.add(bbGulp.bower(module, srcpath, releasepath));
   return streams;
 }
 
-function run(srcpath) {
+function run(srcpath, releasepath, module) {
   srcpath || (srcpath = './src');
   var streams = mergeStream();
-  var modules = getModules(srcpath);
-  _.each(modules, function(module) {
-    streams = buildModule(streams, module, srcpath);
-  });
+  if (module) {
+    streams = buildModule(streams, module, srcpath, releasepath);
+  } else {
+    var modules = getModules(srcpath);
+    _.each(modules, function(module) {
+      streams = buildModule(streams, module, srcpath, releasepath);
+    });
+  }
   return streams;
 }
 

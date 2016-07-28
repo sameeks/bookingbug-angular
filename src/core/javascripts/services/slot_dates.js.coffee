@@ -14,7 +14,7 @@ angular.module('BB.Services').factory 'SlotDates', [
       firstSlotDate : null
       timesQueried  : 0
  
-    getFirstDayWithSlots: (cItem, selected_day) ->
+    getFirstDayWithSlots = (cItem, selected_day) ->
       deferred = $q.defer()
 
       if cached.firstSlotDate?
@@ -32,7 +32,7 @@ angular.module('BB.Services').factory 'SlotDates', [
           deferred.resolve cached.firstSlotDate
         else
           if cached.timesQueried <= 4
-            @getFirstDayWithSlots(cItem, endDate).then (day)->
+            getFirstDayWithSlots(cItem, endDate).then (day)->
               deferred.resolve cached.firstSlotDate
             , (err)->
               deferred.reject err
@@ -42,5 +42,8 @@ angular.module('BB.Services').factory 'SlotDates', [
         deferred.reject new Error('ERROR.COULDNT_GET_AVAILABLE_DATES')
 
       return deferred.promise
+
+    return getFirstDayWithSlots: getFirstDayWithSlots
+      
 ]
 
