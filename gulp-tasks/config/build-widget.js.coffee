@@ -44,7 +44,7 @@ module.exports = (gulp, plugins, growl, path) ->
     !path.match(new RegExp('(bower_components\/bookingbug-angular-).+(\.css)')) &&
     path.indexOf('bootstrap.') == -1
 
-  gulp.task 'build:widget-dependency-style', () ->
+  gulp.task 'build:widget-dependency-style', ['bower-widget'], () ->
     gulp.src(mainBowerFiles(
       includeDev: true
       filter: filterStylesheets
