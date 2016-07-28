@@ -2,7 +2,7 @@
 
 ###*
 * @ngdoc service
-* @name BBAdminDashboard.services.service:RuntimeTranslate
+* @name BBAdminDashboard.RuntimeTranslate
 *
 * @description
 * Returns an instance of $translateProvider that allows late language binding (on runtime)
@@ -10,7 +10,7 @@
 
 ###*
 * @ngdoc service
-* @name BBAdminDashboard.services.service:RuntimeTranslateProvider
+* @name BBAdminDashboard.RuntimeTranslateProvider
 *
 * @description
 * Provider
@@ -22,7 +22,7 @@
   ]
   </pre>
 ###
-angular.module('BBAdminDashboard.services').provider 'RuntimeTranslate', ['$translateProvider', ($translateProvider)->
+angular.module('BBAdminDashboard').provider 'RuntimeTranslate', ['$translateProvider', ($translateProvider)->
   translateProvider  = $translateProvider
   @setProvider = (provider)->
     translateProvider = provider

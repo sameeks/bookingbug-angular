@@ -1,8 +1,8 @@
 'use strict';
 
-###
+###*
 * @ngdoc controller
-* @name BBAdminDashboard.controllers.controller:CorePageController
+* @name BBAdminDashboard.controller:CorePageController
 * @description
 * Controller for the layout (root state)
 ###
@@ -21,6 +21,6 @@ controller = ($scope, $state, company) ->
 
   return
 
-angular.module('BBAdminDashboard.controllers').controller 'CorePageController', controller
+angular.module('BBAdminDashboard').controller 'CorePageController', controller
 
 controller.$inject = ['$scope', '$state', 'company']

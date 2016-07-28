@@ -2,7 +2,7 @@
 
 ###*
 * @ngdoc service
-* @name BBAdminDashboard.services.service:AdminCoreOptions
+* @name BBAdminDashboard.AdminCoreOptions
 *
 * @description
 * Returns a set of General configuration options
@@ -10,12 +10,11 @@
 
 ###*
 * @ngdoc service
-* @name BBAdminDashboard.services.service:AdminCoreOptionsProvider
+* @name BBAdminDashboard.AdminCoreOptionsProvider
 *
 * @description
 *
 * @example
-* <example module='BBAdminDashboard.services'>
 <pre>
 
   config = (AdminCoreOptionsProvider) ->
@@ -27,7 +26,6 @@
 
   angular.module('ExampleModule').config config
 </pre>
-* </example>
 ###
 
 provider = () ->
@@ -80,4 +78,4 @@ provider = () ->
 
   return
 
-angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', provider
+angular.module('BBAdminDashboard').provider 'AdminCoreOptions', provider

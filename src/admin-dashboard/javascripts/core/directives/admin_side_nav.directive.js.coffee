@@ -2,7 +2,7 @@
 
 ###*
  * @ngdoc directive
- * @name BBAdminDashboard.directives.directive:adminSideNav
+ * @name BBAdminDashboard.directive:adminSideNav
  * @scope
  * @restrict A
  *
@@ -13,7 +13,7 @@
  * @param {string}  apiUrl       A string that contains the ApiUrl
  * @param {object}  extraParams  An object that contains extra params for the url (optional)
 ###
-angular.module('BBAdminDashboard.directives').directive 'adminSideNav', [() ->
+angular.module('BBAdminDashboard').directive 'adminSideNav', [() ->
   {
     restrict: 'A'
     scope: false

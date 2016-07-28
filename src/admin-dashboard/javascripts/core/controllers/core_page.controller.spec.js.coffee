@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'BBAdminDashboard.calendar.controllers, CorePageController', () ->
+describe 'BBAdminDashboard, CorePageController', () ->
   $controller = null
   $state = null
   company = null

@@ -2,13 +2,13 @@
 
 ###*
 * @ngdoc service
-* @name BBAdminDashboard.services.service:SideNavigationPartials
+* @name BBAdminDashboard.SideNavigationPartials
 *
 * @description
 * This service assembles the navigation partials for the side-navigation
 *
 ###
-angular.module('BBAdminDashboard.services').factory 'SideNavigationPartials', [
+angular.module('BBAdminDashboard').factory 'SideNavigationPartials', [
   'AdminCoreOptions',
   (AdminCoreOptions) ->
     templatesArray = []

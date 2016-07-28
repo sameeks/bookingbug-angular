@@ -1,6 +1,6 @@
 'use strict';
 
-describe 'BBAdminDashboard.services, AdminCoreOptions provider', () ->
+describe 'BBAdminDashboard, AdminCoreOptions provider', () ->
   AdminCoreOptionsProviderObj = null
   AdminCoreOptions = null
 
