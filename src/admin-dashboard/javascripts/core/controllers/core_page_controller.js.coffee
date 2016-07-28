@@ -2,7 +2,7 @@
 
 ###*
 * @ngdoc controller
-* @name BBAdminDashboard.CorePageController
+* @name BBAdminDashboard.controller:CorePageController
 * @description
 * Controller for the layout (root state)
 ###
@@ -22,5 +22,3 @@ controller = ($scope, $state, company) ->
   return
 
 angular.module('BBAdminDashboard').controller 'CorePageController', controller
-
-controller.$inject = ['$scope', '$state', 'company']
