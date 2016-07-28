@@ -36,7 +36,7 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     else
       url = ""
       url = prms.url if prms.url
-      href = url + "/api/v1/admin/{company_id}/bookings{?slot_id,start_date,end_date,service_id,resource_id,person_id,page,per_page,include_cancelled,embed}"
+      href = url + "/api/v1/admin/{company_id}/bookings{?slot_id,start_date,end_date,service_id,resource_id,person_id,page,per_page,include_cancelled,embed,client_id}"
       uri = new UriTemplate(href).fillFromObject(prms || {})
 
       halClient.$get(uri, {}).then  (found) =>
