@@ -25,6 +25,6 @@ config = ($translateProvider) ->
   return
 
 
-angular.module('BBAdminDashboard.translations').config config
+angular.module('BBAdminDashboard').config config
 
 config.$inject = ['$translateProvider']
