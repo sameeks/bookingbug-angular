@@ -2,7 +2,7 @@
 
 ###*
 * @ngdoc controller
-* @name BBAdminDashboard.controller:CorePageController
+* @name BBAdminDashboard.CorePageController
 * @description
 * Controller for the layout (root state)
 ###
