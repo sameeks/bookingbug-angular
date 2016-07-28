@@ -5,7 +5,7 @@
   </div> -->
 
   <div class="alerts" bb-scroll-to="alert:raised">
-   <div alert ng-repeat="alert in $root.alerts" type="{{alert.type}}">
+   <div uib-alert  ng-repeat="alert in $root.alerts" type="{{alert.type}}">
      <ul>
        <li ng-bind-html="alert.msg"></li>
      </ul>

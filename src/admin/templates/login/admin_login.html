@@ -10,7 +10,7 @@
                         <h3 class="panel-title"><i ng-show="template_vars.show_loading" class="pull-right fa fa-circle-o-notch" ng-class="{'fa-spin': template_vars.show_loading}"></i><span translate>LOGIN_PAGE.HEADING</span></h3>
                     </div>
                     <div class="panel-body">
-                        <alert  ng-repeat="alert in formErrors" type="danger" close="formErrors.splice($index, 1)">{{alert.message | translate}}</alert>
+                        <uib-alert   ng-repeat="alert in formErrors" type="danger" close="formErrors.splice($index, 1)">{{alert.message | translate}}</uib-alert >
                         <div class="form-group" ng-show="template_vars.show_api_field">
                             <label for="site"><span translate>LOGIN_PAGE.SITE</span></label>
                             <input type="text" name="site" ng-model="login.site" ng-required="template_vars.show_api_field" class="form-control" id="site" placeholder="www.bookingbug.com">
@@ -66,7 +66,7 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
-                        
+
                     </div>
                     <div class="panel-footer">
                         <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="!login.selected_company"><span translate>LOGIN_PAGE.SELECT</span></button>
