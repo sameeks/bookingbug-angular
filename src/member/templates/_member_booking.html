@@ -42,13 +42,13 @@
 
     <button type="button" ng-click="actions[0].action(booking)" class="btn btn-default pull-right" ng-disabled="actions[0].disabled" ng-show="actions.length == 1">{{actions[0].label}}</button>
 
-    <div class="btn-group pull-right" dropdown ng-show="actions.length > 1">
+    <div class="btn-group pull-right" uib-dropdown ng-show="actions.length > 1">
       <button type="button" ng-click="actions[0].action(booking)" class="btn btn-default" ng-disabled="actions[0].disabled">{{actions[0].label}}</button>
-      <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
+      <button type="button" class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
       </button>
-      <ul class="dropdown-menu" role="menu">
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu">
         <li ng-click="action.action(booking)" ng-disabled="action.disabled" ng-repeat="action in actions | startFrom: 1"><a href="#">{{action.label}}</a></li>
       </ul>
     </div>
