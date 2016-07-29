@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     halClient, BookingCollections, BBModel, UriTemplate) ->
 
@@ -56,6 +58,7 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     deferred = $q.defer()
     if prms.company && !prms.company_id
       prms.company_id = prms.company.id
+
     url = ""
     url = prms.url if prms.url
     href = url + "/api/v1/admin/{company_id}/bookings/{id}{?embed}"

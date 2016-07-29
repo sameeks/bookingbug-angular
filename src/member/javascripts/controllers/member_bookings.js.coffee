@@ -173,5 +173,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
         bookWaitlistSucces()
     , (err) ->
       AlertService.raise('NO_WAITLIST_SPACES_LEFT')
-      loader.setLoaded()
+
+    loader.setLoaded()
 

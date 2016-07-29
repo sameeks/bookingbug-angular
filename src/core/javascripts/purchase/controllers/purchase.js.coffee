@@ -13,7 +13,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   PurchaseService, ClientService, $modal, $location, $timeout, BBWidget,
   BBModel, $q, QueryStringService, SSOService, AlertService, LoginService,
   $window, ServiceService, $sessionStorage, LoadingService,
-  SettingsService, $translate,CompanyService, ReasonService) ->
+  SettingsService, $translate, ReasonService) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false

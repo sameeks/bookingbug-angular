@@ -21,11 +21,7 @@ angular.module('BB.Services').factory 'SlotDates', ($q, DayService) ->
 
       endDate = selected_day.clone().add(3, 'month')
 
-      params =
-        cItem: cItem
-        date: selected_day.format('YYYY-MM-DD')
-        edate: endDate.format('YYYY-MM-DD')
-      DayService.query(params).then (days) ->
+      DayService.query(cItem: cItem, date: selected_day.format('YYYY-MM-DD'), edate: endDate.format('YYYY-MM-DD')).then (days) ->
         cached.timesQueried++
 
         firstAvailableSlots = _.find days, (day) -> day.spaces > 0
@@ -46,6 +42,3 @@ angular.module('BB.Services').factory 'SlotDates', ($q, DayService) ->
       return deferred.promise
 
     return getFirstDayWithSlots: getFirstDayWithSlots
-
-]
-
