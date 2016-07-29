@@ -16,6 +16,8 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
       deferred.reject("No date set")
       return deferred.promise
 
+
+
     start_date = prms.start_date
     end_date   = prms.end_date if prms.end_date
 
@@ -55,7 +57,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
       extra.resource_ids = prms.resource_ids
       extra.num_resources = prms.num_resources
       extra.time_zone = prms.time_zone if prms.time_zone
-
+      extra.ignore_booking = prms.cItem.id if prms.cItem.id
       # if we have an event - the the company link - so we don't add in extra params
       item_link = prms.company if extra.event_id
 

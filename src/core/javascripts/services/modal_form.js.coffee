@@ -91,6 +91,13 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $log, Dialog) ->
       event.stopPropagation()
       $uibModalInstance.dismiss('cancel')
 
+    $scope.success = (response) ->
+      event.preventDefault()
+      event.stopPropagation()
+      $modalInstance.close()
+      success(response) if success
+
+
     $scope.cancelEvent = (event, type = 'booking') ->
       event.preventDefault()
       event.stopPropagation()

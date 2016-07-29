@@ -22,4 +22,3 @@ describe 'BBAdminEvents, eventChainTable directive', () ->
     .toBe true
 
   return
-

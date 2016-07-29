@@ -2,16 +2,17 @@
 
 angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   restrict: 'AE'
-  replace: true
+  replace: false
   scope : true
   controller : 'adminBookingClients'
+  templateUrl: 'admin_booking_clients.html'
 
 
 angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, $timeout) ->
 
   $scope.validator  = ValidatorService
   $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 10})
-  
+
   $scope.sort_by_options = [
     {key: 'first_name', name: 'First Name'},
     {key: 'last_name', name: 'Last Name'},
@@ -85,7 +86,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
         $scope.clients.add(params.page, result.items)
       else
         $scope.clients.initialise(result.items, result.total_entries)
-      
+
       $scope.setLoaded $scope
 
 

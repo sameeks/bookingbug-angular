@@ -38,6 +38,10 @@ angular.module('BB.Services').factory "PurchaseService", ($q, halClient, BBModel
         bdata.push(booking.getPostData())
       data.bookings = bdata
 
+    if params.move_reason
+      for booking in data.bookings
+        booking.move_reason = params.move_reason
+
     params.purchase.$put('self', {}, data).then (purchase) =>
       purchase = new BBModel.Purchase.Total(purchase)
       defer.resolve(purchase)
@@ -64,17 +68,17 @@ angular.module('BB.Services').factory "PurchaseService", ($q, halClient, BBModel
         defer.resolve(purchase)
       , (err) ->
         defer.reject(err)
-    
+
     else if params.purchase_id and params.url_root
 
       uri = params.url_root + "/api/v1/purchases/" + params.purchase_id + '/book_waitlist_item'
-      
+
       halClient.$put(uri, {}, data).then (purchase) ->
         purchase = new BBModel.Purchase.Total(purchase)
         defer.resolve(purchase)
       , (err) ->
         defer.reject(err)
-    
+
     return defer.promise
 
 

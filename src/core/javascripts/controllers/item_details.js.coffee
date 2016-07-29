@@ -245,6 +245,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
         params =
           purchase: $scope.bb.moving_purchase
           bookings: $scope.bb.basket.items
+        if $scope.bb.current_item.move_reason
+          params.move_reason = $scope.bb.current_item.move_reason
         PurchaseService.update(params).then (purchase) ->
           $scope.bb.purchase = purchase
           $scope.bb.purchase.getBookingsPromise().then (bookings)->
@@ -261,6 +263,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
            $scope.setLoaded $scope
            AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
       else
+        if $scope.bb.current_item.move_reason
+          $scope.item.move_reason = $scope.bb.current_item.move_reason
         PurchaseBookingService.update($scope.item).then (booking) ->
           b = new BBModel.Purchase.Booking(booking)
 
