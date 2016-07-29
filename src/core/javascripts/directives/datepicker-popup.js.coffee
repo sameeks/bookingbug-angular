@@ -102,7 +102,6 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
 
 
     replacementDateParser = (viewValue, returnKey) ->
-      console.log viewValue
       # if date user has selected a date from popup then update the picker
       if callDateHandler(viewValue)
         return viewValue
@@ -137,17 +136,15 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
           mDate.year(mDate.year() + 2000)
         callDateHandler(mDate._d)
       else
-        console.log origDateParser.call(@, viewValue)
-
         origDateParser.call(this, viewValue)
 
     # wait until the data object for the popup element has been initialised by
     # angular-ui and then override the $parser with our parse function
-    f = ->
-      if _.isFunction data.$parsers[0]
-        origDateParser = data.$parsers[0]
-        data.$parsers[0] = replacementDateParser
-        return
-      else
-        setTimeout f, 10
-    f()
+    # f = ->
+    #   if _.isFunction data.$parsers[0]
+    #     origDateParser = data.$parsers[0]
+    #     data.$parsers[0] = replacementDateParser
+    #     return
+    #   else
+    #     setTimeout f, 10
+    # f()

@@ -186,7 +186,11 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
                 company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
-          $scope.currentDate = date.format('YYYY-MM-DD') + 'T00:00:00'
+          date.set('hour', 0);
+          date.set('minute', 0);
+          date.set('second', 0);
+
+          $scope.currentDate = date.toDate()
         eventResize: (event, delta, revertFunc, jsEvent, ui, view) ->
           event.duration = event.end.diff(event.start, 'minutes')
           $scope.updateBooking(event)
@@ -284,7 +288,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.refreshBooking = (booking) ->
 
       booking.$refetch().then (response) ->
-        console.log("reloading")
         booking.resourceIds = []
         booking.resourceId = null
         if booking.person_id?
@@ -352,14 +355,24 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
 
     $scope.updateDate = (date) ->
       if uiCalendarConfig.calendars.resourceCalendar
-        uiCalendarConfig.calendars.resourceCalendar.fullCalendar('gotoDate', date)
+        assembledDate = moment()
+        assembledDate.set({
+          'year': parseInt(date.getFullYear())
+          'month': parseInt(date.getMonth())
+          'date': parseInt(date.getDate())
+          'hour': 0
+          'minute': 0
+          'second': 0,
+        })
+
+        uiCalendarConfig.calendars.resourceCalendar.fullCalendar('gotoDate', assembledDate)
 
     $scope.lazyUpdateDate = _.debounce($scope.updateDate, 400)
 
     $scope.datePickerOptions = {showButtonBar: false}
 
     $scope.$watch 'currentDate', (newDate, oldDate) ->
-      if newDate != oldDate
+      if newDate != oldDate && oldDate?
         $scope.lazyUpdateDate(newDate)
 
     $scope.$on 'refetchBookings', () ->
