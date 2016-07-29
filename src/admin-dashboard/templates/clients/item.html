@@ -35,39 +35,39 @@
   <div class="row">
     <div class="col-md-12">
 
-      <tabset class="bb-tabs nav-tabs-custom">
+      <uib-tabset class="bb-tabs nav-tabs-custom">
 
-        <tab id="client-upcoming-booking-tab">
-          <tab-heading translate>
+        <uib-tab id="client-upcoming-booking-tab">
+          <uib-tab-heading translate>
             CLIENTS_PAGE.UPCOMING_BOOKINGS
-          </tab-heading>
+          </uib-tab-heading>
 
           <div member-bookings-table member="client"></div>
 
-        </tab>
+        </uib-tab>
 
-        <tab  id="client-past-booking-tab">
-          <tab-heading translate>
+        <uib-tab  id="client-past-booking-tab">
+          <uib-tab-heading translate>
             CLIENTS_PAGE.PAST_BOOKINGS
-          </tab-heading>
+          </uib-tab-heading>
 
           <div member-bookings-table member="client"
             start-date="historicalStartDate"
             end-date="historicalEndDate"></div>
 
-        </tab>
+        </uib-tab>
 
-        <tab id="client-details-tab" >
-          <tab-heading translate>
+        <uib-tab id="client-details-tab" >
+          <uib-tab-heading translate>
             CLIENTS_PAGE.CUSTOMER_DETAILS
-          </tab-heading>
+          </uib-tab-heading>
 
           <div member-form member="client" on-success-save="memberSaveCallback"></div>
 
-        </tab>
+        </uib-tab>
 
 
-      </tabset>
+      </uib-tabset>
 
     </div>
   </div>
