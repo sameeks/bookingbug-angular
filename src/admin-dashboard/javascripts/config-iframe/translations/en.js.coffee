@@ -46,6 +46,7 @@ angular.module('BBAdminDashboard.config-iframe.translations')
       'BOOKING_SETTINGS': {
         'TITLE'            : 'Booking settings',
         'TAB_QUESTIONS'    : 'Questions',
+        'TAB_QUESTION_GROUPS': 'Question Groups',
         'TAB_BOOKING_TEXT' : 'Booking text',
         'TAB_ADDRESSES'    : 'Addresses',
         'TAB_IMAGES'       : 'Images'

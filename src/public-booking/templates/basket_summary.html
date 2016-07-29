@@ -8,7 +8,7 @@
 			<div accordion close-others="oneAtATime">
 		    <div bb-accordion-group ng-repeat="item in basket_items" is-open="$first">
 		    	<div bb-accordion-heading>
-		    		{{item.getName()}} <small>({{item.time.time_moment | datetime: 'llll'}})</small>
+		    		{{item.getName()}} <small>({{item.startDatetime() | datetime: 'llll'}})</small>
 		    	</div>
 
 
