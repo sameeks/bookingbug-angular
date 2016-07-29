@@ -126,10 +126,10 @@
 
     </ul>
 
-    <pagination total-items="clients.num_items"
+    <uib-pagination total-items="clients.num_items"
       ng-model="clients.current_page" items-per-page="clients.page_size"
       max-size="clients.max_size" boundary-links="true" rotate="false"
-      num-pages="clients.num_pages" ng-show="clients.num_items > clients.page_size" ng-change="pageChanged()"></pagination>
+      num-pages="clients.num_pages" ng-show="clients.num_items > clients.page_size" ng-change="pageChanged()"></uib-pagination>
 
   </div>
 
