@@ -27,6 +27,8 @@ angular.module('BBAdminDashboard.calendar.translations')
       'DAY'                     : 'Day ({{minutes}}m)',
       'STAFF'                   : 'Staff',
       'RESOURCES'               : 'Resources',
+      'MOVE_MODAL_TITLE'        : 'Move',
+      'MOVE_MODAL_BODY'         : 'Are you sure you want to move this booking?',
     }
   })
 ]

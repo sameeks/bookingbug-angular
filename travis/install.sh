@@ -7,7 +7,10 @@ echo "TRAVIS BRANCH: $TRAVIS_BRANCH"
 npm install
 bower install
 
-cd src/core
+cd src/test-examples
+bower install
+
+cd ../core
 bower install
 
 cd ../admin

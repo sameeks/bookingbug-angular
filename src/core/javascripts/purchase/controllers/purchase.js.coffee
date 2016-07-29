@@ -13,7 +13,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   PurchaseService, ClientService, $modal, $location, $timeout, BBWidget,
   BBModel, $q, QueryStringService, SSOService, AlertService, LoginService,
   $window, ServiceService, $sessionStorage, LoadingService,
-  SettingsService, $translate) ->
+  SettingsService, $translate,CompanyService, ReasonService) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -56,6 +56,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
       $scope.purchase = $scope.bb.purchase
       $scope.bookings = $scope.bb.purchase.bookings
       $scope.messages = $scope.purchase.confirm_messages if $scope.purchase.confirm_messages
+      $scope.cancel_reasons = $scope.bb.cancel_reasons unless $scope.cancel_reasons
+      $scope.move_reasons = $scope.bb.move_reasons unless $scope.move_reasons
       loader.setLoaded()
     else
       if options.member_sso
@@ -96,6 +98,12 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
               if bookings[0]
                 bookings[0].$getCompany().then (company) ->
                   $scope.purchase.bookings[0].company = company
+                  if company.$has("reasons")
+                    getReasons(company).then (reasons) ->
+                      setCancelReasons()
+                      setMoveReasons()
+                      setMoveReasonsToBB()
+                      setCancelReasonsToBB()
                   company.$getAddress().then (address) ->
                     $scope.purchase.bookings[0].company.address = address
 
@@ -267,9 +275,13 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
       controller: ModalDelete
       resolve:
         booking: -> booking
+        cancel_reasons: -> $scope.cancel_reasons
 
     modalInstance.result.then (booking) ->
-      booking.$del('self').then (service) =>
+      cancel_reason = null
+      cancel_reason = booking.cancel_reason if booking.cancel_reason
+      data = {cancel_reason: cancel_reason}
+      booking.$del('self', {}, data).then (service) =>
         $scope.bookings = _.without($scope.bookings, booking)
         $rootScope.$broadcast "booking:cancelled"
 
@@ -306,14 +318,38 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   $scope.changeAttendees = (route) ->
     $scope.moveAll(route)
 
+  getReasons = (company) ->
+    ReasonService.query(company).then (reasons) ->
+      $scope.company_reasons = reasons
+      $scope.company_reasons
+    , (err) ->
+      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong retrieving reasons')
+
+  setCancelReasons = () ->
+    $scope.cancel_reasons = _.filter($scope.company_reasons, (r) -> r.reason_type == 3)
+    $scope.cancel_reasons
+
+  setMoveReasons = () ->
+    $scope.move_reasons = _.filter($scope.company_reasons, (r) -> r.reason_type == 5)
+    $scope.move_reasons
+
+  setMoveReasonsToBB = () ->
+    $scope.bb.move_reasons = $scope.move_reasons if $scope.move_reasons
+
+  setCancelReasonsToBB = () ->
+    $scope.bb.cancel_reasons = $scope.cancel_reasons if $scope.cancel_reasons
+
+
+
 
 
 
 
 # Simple modal controller for handling the 'delete' modal
-ModalDelete = ($scope,  $rootScope, $modalInstance, booking, AlertService) ->
+ModalDelete = ($scope,  $rootScope, $modalInstance, booking, AlertService, cancel_reasons) ->
   $scope.controller = "ModalDelete"
   $scope.booking = booking
+  $scope.cancel_reasons = cancel_reasons
 
   $scope.confirmDelete = () ->
     AlertService.clear()

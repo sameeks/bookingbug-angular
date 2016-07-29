@@ -109,7 +109,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
       calculateDayNum = ()->
         cal_days = {lg: 7, md: 5, sm: 3, xs: 1}
 
-        timeRange = 0
+        timeRange = 7
 
         for size,days of cal_days
           if size == ViewportSize.getViewportSize()
@@ -508,7 +508,17 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
          $scope.$broadcast "time_slots:loaded", time_slots
 
       , (err) ->
-        loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        if err.status == 404  && err.data && err.data.error && err.data.error == "No bookable events found"
+          if $scope.data_source && $scope.data_source.person
+            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'))
+            $scope.setLoaded $scope
+          else if  $scope.data_source && $scope.data_source.resource
+            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'))
+            $scope.setLoaded $scope
+          else
+          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        else
+          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     else
       loader.setLoaded()
 

@@ -428,3 +428,29 @@ angular.module('BB.Services').factory "BB.Service.purchase_items", ($q, BBModel)
 
     deferred.promise
 
+
+
+angular.module('BB.Services').factory "BB.Service.events", ($q, BBModel) ->
+  promise: true
+  unwrap: (resource) ->
+
+    deferred = $q.defer()
+
+     # if the resource is embedded, return the array of models
+    if angular.isArray(resource)
+
+      models = (new BBModel.Event(event) for event in resource)
+      deferred.resolve(models)
+
+    else
+
+      resource.$get('events').then (items) =>
+        models = []
+        for i in items
+          models.push(new BBModel.Event(i))
+        deferred.resolve(models)
+      , (err) =>
+        deferred.reject(err)
+
+    deferred.promise
+

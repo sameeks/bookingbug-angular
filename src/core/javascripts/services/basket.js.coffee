@@ -130,6 +130,7 @@ angular.module('BB.Services').factory "BasketService", ($q, $rootScope, BBModel,
 
   deleteItem: (item, company, params) ->
     params = {} if !params
+    params.basket.clearItem(item) if params.basket
     deferred = $q.defer()
     if !item.$has('self')
       deferred.reject("rel self not found for item")

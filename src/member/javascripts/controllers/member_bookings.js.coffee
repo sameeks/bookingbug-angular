@@ -80,7 +80,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
 
 
   $scope.getPrePaidBookings = (params) ->
-    
+
     defer = $q.defer()
 
     $scope.member.$getPrePaidBookings(params).then (bookings) ->
@@ -104,7 +104,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
       windowClass: "bbug"
       size: "lg"
       controller: ($scope, $rootScope, $modalInstance, booking, total) ->
-        
+
         $scope.booking = booking
         $scope.total = total
 
@@ -113,7 +113,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
 
         $scope.cancel = ->
           $modalInstance.dismiss "cancel"
-    
+
       resolve:
         booking: -> booking
         total: -> total
@@ -155,7 +155,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
 
 
   book: (booking) ->
-   
+
     loader.notLoaded()
 
     params =
@@ -164,7 +164,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
       booking: booking
 
     PurchaseService.bookWaitlistItem(params).then (purchase_total) ->
-      if purchase_total.due_now > 0 
+      if purchase_total.due_now > 0
         if purchase_total.$has('new_payment')
           openPaymentModal(booking, purchase_total)
         else
