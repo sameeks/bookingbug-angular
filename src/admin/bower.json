@@ -19,7 +19,8 @@
     "tests"
   ],
   "dependencies": {
-    "bookingbug-angular-core": "master"
+    "bookingbug-angular-core": "master",
+    "bookingbug-angular-services": "master"
   },
   "resolutions": {
     "angular": "1.2.28"
