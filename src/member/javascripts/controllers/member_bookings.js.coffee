@@ -1,4 +1,4 @@
-angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope, AlertService, PurchaseService) ->
+angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal, $document, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope, AlertService, PurchaseService) ->
 
   $scope.getUpcomingBookings = () ->
 
@@ -100,6 +100,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal, $log
 
   openPaymentModal = (booking, total) ->
     modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: "booking_payment_modal.html"
       windowClass: "bbug"
       size: "lg"
@@ -140,6 +141,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal, $log
 
   cancel: (booking) ->
     modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: "member_booking_delete_modal.html"
       windowClass: "bbug"
       controller: ($scope, $rootScope, $uibModalInstance, booking) ->

@@ -1,4 +1,4 @@
-angular.module('BBMember').directive 'loginMember', ($uibModal, $log, $rootScope, MemberLoginService, $templateCache, $q, $sessionStorage, halClient) ->
+angular.module('BBMember').directive 'loginMember', ($uibModal, $document, $log, $rootScope, MemberLoginService, $templateCache, $q, $sessionStorage, halClient) ->
 
   loginMemberController = ($scope, $uibModalInstance, company_id) ->
     $scope.title = 'Login'
@@ -62,6 +62,7 @@ angular.module('BBMember').directive 'loginMember', ($uibModal, $log, $rootScope
 
     loginModal = () ->
       modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'login_modal_form.html'
         controller: loginMemberController
         resolve:
@@ -81,6 +82,7 @@ angular.module('BBMember').directive 'loginMember', ($uibModal, $log, $rootScope
 
     pickCompanyModal = (companies) ->
       modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'pick_company_modal_form.html'
         controller: pickCompanyController
         resolve:

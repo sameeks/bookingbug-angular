@@ -16,7 +16,7 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
     else PathSvc.directivePartial "basket"
   controllerAs : 'BasketCtrl'
 
-  controller : ($scope, $uibModal, BasketService) ->
+  controller : ($scope, $uibModal, $document, BasketService) ->
     $scope.setUsingBasket true
 
     this.empty = () ->
@@ -30,6 +30,7 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
         return false
       else
         modalInstance = $uibModal.open
+          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: $scope.getPartial "_basket_details"
           scope: $scope
           controller: BasketInstanceCtrl

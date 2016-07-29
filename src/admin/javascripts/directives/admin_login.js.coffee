@@ -1,4 +1,4 @@
-angular.module('BBAdmin.Directives').directive 'adminLogin', ($uibModal, $log, $rootScope, AdminLoginService, $templateCache, $q) ->
+angular.module('BBAdmin.Directives').directive 'adminLogin', ($uibModal, $log, $rootScope, AdminLoginService, $templateCache, $q, $document) ->
 
   loginAdminController = ($scope, $uibModalInstance, company_id) ->
     $scope.title = 'Login'
@@ -62,6 +62,7 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($uibModal, $log, $
 
     loginModal = () ->
       modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'login_modal_form.html'
         controller: loginAdminController
         resolve:
@@ -81,6 +82,7 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($uibModal, $log, $
 
     pickCompanyModal = (companies) ->
       modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'pick_company_modal_form.html'
         controller: pickCompanyController
         resolve:

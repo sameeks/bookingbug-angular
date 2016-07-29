@@ -1,7 +1,8 @@
-angular.module('BBAdminBooking').factory 'AdminMoveBookingPopup', ($uibModal, $timeout) ->
+angular.module('BBAdminBooking').factory 'AdminMoveBookingPopup', ($uibModal, $timeout, $document) ->
 
   open: (config) ->
     modal = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       size: 'lg'
       controller: ($scope, $uibModalInstance, config, $window, AdminBookingOptions) ->
         $scope.Math = $window.Math

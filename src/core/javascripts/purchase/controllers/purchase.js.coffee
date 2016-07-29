@@ -7,7 +7,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     scope.init(scope.$eval( attrs.bbPurchase ))
     return
 
-angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $uibModal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, ServiceService, $sessionStorage, SettingsService, $translate) ->
+angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $uibModal, $document, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, ServiceService, $sessionStorage, SettingsService, $translate) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -261,6 +261,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   # delete a single booking
   $scope.delete = (booking) ->
     modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDelete
       resolve:
@@ -275,6 +276,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   # delete all bookings assoicated to the purchase
   $scope.deleteAll = () ->
     modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDeleteAll
       resolve:

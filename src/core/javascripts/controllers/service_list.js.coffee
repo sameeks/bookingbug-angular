@@ -49,7 +49,7 @@ angular.module('BB.Directives').directive 'bbServices', () ->
   scope : true
   controller : 'ServiceList'
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $uibModal, $sce, ItemService, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService) ->
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $uibModal, $document, $sce, ItemService, FormDataStoreService, ValidatorService, PageControllerService, halClient, AlertService, ErrorService, $filter, CategoryService) ->
 
   $scope.controller = "public.controllers.ServiceList"
 
@@ -270,6 +270,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   ###
   $scope.errorModal = () ->
     error_modal = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial('_error_modal')
       controller: ($scope, $uibModalInstance) ->
         $scope.message = ErrorService.getError('GENERIC').msg

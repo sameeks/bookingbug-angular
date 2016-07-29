@@ -1,4 +1,4 @@
-angular.module('BB.Services').factory 'ModalForm', ($uibModal, $log, Dialog) ->
+angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog) ->
 
   newForm = ($scope, $uibModalInstance, company, title, new_rel, post_rel,
       success, fail) ->
@@ -96,7 +96,8 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $log, Dialog) ->
       event.stopPropagation()
       $uibModalInstance.close()
       Dialog.confirm
-        model: model
+        model: model,
+        title: 'Cancel'
         body: "Are you sure you want to cancel this #{type}?"
         success: (model) ->
           model.$del('self').then (response) ->
@@ -142,6 +143,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $log, Dialog) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: newForm
       size: config.size
@@ -157,6 +159,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $log, Dialog) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: editForm
       size: config.size
@@ -170,6 +173,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $log, Dialog) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: bookForm
       size: config.size

@@ -1,6 +1,6 @@
 angular.module('BBMember').directive 'memberBookingsTable', ($uibModal, $log, $rootScope, MemberLoginService, MemberBookingService, $compile, $templateCache, ModalForm, BBModel, Dialog) ->
 
-  controller = ($scope, $uibModal) ->
+  controller = ($scope, $uibModal, $document) ->
 
     $scope.loading = true
 
@@ -28,6 +28,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($uibModal, $log, $r
       booking = _.find $scope.booking_models, (b) -> b.id == id
 
       modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'member_bookings_table_cancel_booking.html'
         controller: ($scope, $uibModalInstance, booking) ->
           $scope.booking = booking
