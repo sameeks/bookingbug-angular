@@ -17,5 +17,6 @@ angular.module('BBAdminDashboard.translations')
     'LOGOUT'            : 'Logout'
     'VERSION'           : 'Version',
     'COPYRIGHT'         : 'Copyright'
+    'SWITCH_TO_CLASSIC' : 'Switch to Classic'
   })
 ]
