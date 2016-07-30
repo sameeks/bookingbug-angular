@@ -30,6 +30,12 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         show_pick_department: false
         show_loading: false
 
+      AdminLoginService.user().then (user) ->
+        console.log ("here")
+        if user
+          selectUser(user)
+        else if AdminLoginService.isLoggedIn()
+           AdminLoginService.logout()
       $scope.login =
         email: null
         password: null
@@ -54,67 +60,73 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             email: $scope.login.email
             password: $scope.login.password
           AdminLoginService.login(params).then (user) ->
-
-            # if user is admin
-            if user.$has('administrators')
-              user.getAdministratorsPromise().then (administrators) ->
-                $scope.administrators = administrators
-
-                # if user is admin in more than one company show select company
-                if administrators.length > 1
-                  $scope.template_vars.show_loading = false
-                  $scope.template_vars.show_login = false
-                  $scope.template_vars.show_pick_company = true
-                else
-                # else automatically select the first admin
-                  params =
-                    email: $scope.login.email
-                    password: $scope.login.password
-
-                  $scope.login.selected_admin = _.first(administrators)
-
-                  $scope.login.selected_admin.$post('login', {}, params).then (login) ->
-                    $scope.login.selected_admin.getCompanyPromise().then (company) ->
-                      $scope.template_vars.show_loading = false
-                      # if there are departments show department selector
-                      if company.companies && company.companies.length > 0
-                        $scope.template_vars.show_pick_department = true
-                        $scope.departments = company.companies
-                      else
-                      # else select that company directly and move on
-                        $scope.login.selected_company = company
-                        AdminLoginService.setLogin($scope.login.selected_admin)
-                        AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
-                          $scope.onSuccess($scope.login.selected_company)
-
-            # else if there is an associated company
-            else if user.$has('company')
-              $scope.login.selected_admin = user
-              user.getCompanyPromise().then (company) ->
-
-                # if departments are available show departments selector
-                if company.companies && company.companies.length > 0
-                  $scope.template_vars.show_loading = false
-                  $scope.template_vars.show_pick_department = true
-                  $scope.template_vars.show_login = false
-                  $scope.departments = company.companies
-                else
-                # else select that company directly and move on
-                  $scope.login.selected_company = company
-                  AdminLoginService.setLogin($scope.login.selected_admin)
-                  AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
-                    $scope.onSuccess($scope.login.selected_company)
-              , (err) ->
-                $scope.template_vars.show_loading = false
-                $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
-
-            else
-              $scope.template_vars.show_loading = false
-              $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"}
-
+            selectUser(user)
           , (err) ->
             $scope.template_vars.show_loading = false
             $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_INCORRECT_CREDS"}
+
+
+
+      selectUser = (user) ->
+        console.log user
+
+        # if user is admin
+        if user.$has('administrators')
+          user.getAdministratorsPromise().then (administrators) ->
+            $scope.administrators = administrators
+
+            # if user is admin in more than one company show select company
+            if administrators.length > 1
+              $scope.template_vars.show_loading = false
+              $scope.template_vars.show_login = false
+              $scope.template_vars.show_pick_company = true
+            else
+            # else automatically select the first admin
+              params =
+                email: $scope.login.email
+                password: $scope.login.password
+
+              $scope.login.selected_admin = _.first(administrators)
+
+              $scope.login.selected_admin.$post('login', {}, params).then (login) ->
+                $scope.login.selected_admin.getCompanyPromise().then (company) ->
+                  $scope.template_vars.show_loading = false
+                  # if there are departments show department selector
+                  if company.companies && company.companies.length > 0
+                    $scope.template_vars.show_pick_department = true
+                    $scope.departments = company.companies
+                  else
+                  # else select that company directly and move on
+                    $scope.login.selected_company = company
+                    AdminLoginService.setLogin($scope.login.selected_admin)
+                    AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
+                      $scope.onSuccess($scope.login.selected_company)
+
+        # else if there is an associated company
+        else if user.$has('company')
+          $scope.login.selected_admin = user
+          user.getCompanyPromise().then (company) ->
+
+            # if departments are available show departments selector
+            if company.companies && company.companies.length > 0
+              $scope.template_vars.show_loading = false
+              $scope.template_vars.show_pick_department = true
+              $scope.template_vars.show_login = false
+              $scope.departments = company.companies
+            else
+            # else select that company directly and move on
+              $scope.login.selected_company = company
+              AdminLoginService.setLogin($scope.login.selected_admin)
+              AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
+                $scope.onSuccess($scope.login.selected_company)
+          , (err) ->
+            $scope.template_vars.show_loading = false
+            $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
+
+        else
+          $scope.template_vars.show_loading = false
+          $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"}
+
 
       $scope.pickCompany = ()->
         $scope.template_vars.show_loading = true
