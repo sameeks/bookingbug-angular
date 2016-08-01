@@ -4,6 +4,8 @@
 //Changes the color and the hovering properties of the navbar
 @mixin navbar-variant($color, $font-color: rgba(255, 255, 255, 0.8), $hover-color: #f6f6f6, $hover-bg: rgba(0, 0, 0, 0.1)) {
   background-color: $color;
+  border: none;
+  margin-bottom: 0;
   //Navbar links
   .nav > li > a {
     color: $font-color;

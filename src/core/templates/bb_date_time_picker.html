@@ -2,14 +2,12 @@
   <div class="col-sm-7">
     <div class="input-group">
       <input type="text" ng-model="datetimeWithNoTz" class="form-control"
-        datepicker-popup="{{format}}"
+        uib-datepicker-popup="{{format}}"
         is-open="opened"
-        min-date="minDateClean"
-        max-date="maxDateClean"
-        datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-        show-weeks="false"
+        datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'maxDate': maxDateClean, 'minDate': minDateClean}"
         show-button-bar="false"
         ng-disabled="bbDisabled"
+        ng-focus="opened=true"
       />
       <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
         <button class="btn btn-default" title="Select date"><span class="fa fa-calendar"></span></button>
@@ -17,7 +15,7 @@
     </div>
   </div>
   <div class="col-sm-5">
-    <div timepicker ng-model="datetimeWithNoTz" show-meridian="showMeridian"
-      minute-step="minuteStep" readonly-input="bbDisabled"></div>
+    <div uib-timepicker ng-model="datetimeWithNoTz" show-meridian="showMeridian"
+      minute-step="minuteStep" max="maxDateClean" min="minDateClean" readonly-input="bbDisabled"></div>
   </div>
 </div>

@@ -1,6 +1,6 @@
-angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
-  MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope,
-  BBModel, AlertService, PurchaseService, LoadingService) ->
+angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
+  $document, $log, $q, ModalForm, $rootScope, AlertService, PurchaseService,
+  LoadingService) ->
 
   loader = LoadingService.$loader($scope).notLoaded()
 
@@ -99,20 +99,21 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
 
 
   openPaymentModal = (booking, total) ->
-    modalInstance = $modal.open
+    modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: "booking_payment_modal.html"
       windowClass: "bbug"
       size: "lg"
-      controller: ($scope, $rootScope, $modalInstance, booking, total) ->
+      controller: ($scope, $uibModalInstance, booking, total) ->
 
         $scope.booking = booking
         $scope.total = total
 
         $scope.handlePaymentSuccess = () ->
-          $modalInstance.close(booking)
+          $uibModalInstance.close(booking)
 
         $scope.cancel = ->
-          $modalInstance.dismiss "cancel"
+          $uibModalInstance.dismiss "cancel"
 
       resolve:
         booking: -> booking
@@ -135,18 +136,19 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
 
 
   cancel: (booking) ->
-    modalInstance = $modal.open
+    modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: "member_booking_delete_modal.html"
       windowClass: "bbug"
-      controller: ($scope, $rootScope, $modalInstance, booking) ->
+      controller: ($scope, $rootScope, $uibModalInstance, booking) ->
         $scope.controller = "ModalDelete"
         $scope.booking = booking
 
         $scope.confirm_delete = () ->
-          $modalInstance.close(booking)
+          $uibModalInstance.close(booking)
 
         $scope.cancel = ->
-          $modalInstance.dismiss "cancel"
+          $uibModalInstance.dismiss "cancel"
       resolve:
         booking: ->
           booking
@@ -155,7 +157,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log,
 
 
   book: (booking) ->
-
     loader.notLoaded()
 
     params =

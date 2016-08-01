@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BBAdminEvents').directive 'eventChainTable', (BBModel, $modal, $log, ModalForm, $timeout) ->
+angular.module('BBAdminEvents').directive 'eventChainTable', (BBModel, $log, ModalForm) ->
 
   controller = ($scope) ->
 

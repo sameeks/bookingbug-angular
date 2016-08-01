@@ -37,7 +37,7 @@
     <div class="row filter-by-service" ng-show="can_filter_by_service">
       <div class="col-xs-12">
         <label>
-          <span>Hide stores with no availability</span>   
+          <span>Hide stores with no availability</span>
           &nbsp;&nbsp;<input type='checkbox' ng-model="filter_by_service" ng-change="filterByService()" />
         </label>
       </div>
@@ -65,17 +65,17 @@
 
           <br />
           <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.has_service">Select</button>
-          
+
         </div>
       </div>
 
 
       <div class="bb-company-block col-sm-4 col-sm-pull-8">
 
-        <div accordion close-others="true">
-          <div accordion-group is-open="marker.is_open" ng-class="{'expanded': marker.is_open, 'selected': is_selected}" ng-repeat="marker in shownMarkers" class="store-body" ng-click="openMarkerInfo(marker)">
-            
-            <div accordion-heading class="store-header">
+        <div uib-accordion close-others="true">
+          <div uib-accordion-group is-open="marker.is_open" ng-class="{'expanded': marker.is_open, 'selected': is_selected}" ng-repeat="marker in shownMarkers" class="store-body" ng-click="openMarkerInfo(marker)">
+
+            <div uib-accordion-heading class="store-header">
               <span><strong>{{$index+1}}.</strong> {{marker.company.name}}</span>
               <span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': marker.is_open, 'glyphicon-chevron-right': !marker.is_open}"></span>
             </div>

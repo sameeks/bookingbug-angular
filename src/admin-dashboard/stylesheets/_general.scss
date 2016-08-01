@@ -172,3 +172,18 @@
     padding-top:20px;
   }
 }
+
+.panel {
+  h4.panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: ceil(($font-size-base * 1.125));
+  }
+}
+
+.modal-header {
+  h1,h2,h3,h4,h5, .modal-title {
+    margin-bottom: 0;
+    display: inline-block;
+  }
+}

@@ -1,8 +1,8 @@
 'use strict'
 
-angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
+angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog) ->
 
-  newForm = ($scope, $modalInstance, company, title, new_rel, post_rel,
+  newForm = ($scope, $uibModalInstance, company, title, new_rel, post_rel,
       success, fail) ->
 
     $scope.loading = true
@@ -22,18 +22,18 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
       $scope.loading = true
       $scope.company.$post(post_rel, {}, $scope.form_model).then (model) ->
         $scope.loading = false
-        $modalInstance.close(model)
+        $uibModalInstance.close(model)
         success(model) if success
       , (err) ->
         $scope.loading = false
-        $modalInstance.close(err)
+        $uibModalInstance.close(err)
         $log.error 'Failed to create'
         fail(err) if fail
 
     $scope.cancel = (event) ->
       event.preventDefault()
       event.stopPropagation()
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
 
 
@@ -51,7 +51,7 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
     return schema
 
 
-  editForm = ($scope, $modalInstance, model, title, success, fail) ->
+  editForm = ($scope, $uibModalInstance, model, title, success, fail) ->
     $scope.loading = true
     $scope.title = title
     $scope.model = model
@@ -70,28 +70,28 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
       if $scope.model.$update
         $scope.model.$update($scope.form_model).then () ->
           $scope.loading = false
-          $modalInstance.close($scope.model)
+          $uibModalInstance.close($scope.model)
           success($scope.model) if success
         , (err) ->
           $scope.loading = false
-          $modalInstance.close(err)
+          $uibModalInstance.close(err)
           $log.error 'Failed to create'
           fail() if fail
       else
         $scope.model.$put('self', {}, $scope.form_model).then (model) ->
           $scope.loading = false
-          $modalInstance.close(model)
+          $uibModalInstance.close(model)
           success(model) if success
         , (err) ->
           $scope.loading = false
-          $modalInstance.close(err)
+          $uibModalInstance.close(err)
           $log.error 'Failed to create'
           fail() if fail
 
     $scope.cancel = (event) ->
       event.preventDefault()
       event.stopPropagation()
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
     $scope.success = (response) ->
       event.preventDefault()
@@ -103,15 +103,16 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
     $scope.cancelEvent = (event, type = 'booking') ->
       event.preventDefault()
       event.stopPropagation()
-      $modalInstance.close()
+      $uibModalInstance.close()
       Dialog.confirm
-        model: model
+        model: model,
+        title: 'Cancel'
         body: "Are you sure you want to cancel this #{type}?"
         success: (model) ->
           model.$del('self').then (response) ->
             success(response) if success
 
-  bookForm = ($scope, $modalInstance, model, company, title, success, fail) ->
+  bookForm = ($scope, $uibModalInstance, model, company, title, success, fail) ->
     $scope.loading = true
     $scope.title = title
     $scope.model = model
@@ -131,11 +132,11 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
         $scope.loading = true
         $scope.company.$post('bookings', {}, $scope.form_model).then (booking) ->
           $scope.loading = false
-          $modalInstance.close(booking)
+          $uibModalInstance.close(booking)
           success(booking) if success
         , (err) ->
           $scope.loading = false
-          $modalInstance.close(err)
+          $uibModalInstance.close(err)
           $log.error 'Failed to create'
           fail() if fail
       else
@@ -144,13 +145,14 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
     $scope.cancel = (event) ->
       event.preventDefault()
       event.stopPropagation()
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
 
   new: (config) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
-    $modal.open
+    $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: newForm
       size: config.size
@@ -165,7 +167,8 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
   edit: (config) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
-    $modal.open
+    $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: editForm
       size: config.size
@@ -178,7 +181,8 @@ angular.module('BB.Services').factory 'ModalForm', ($modal, $log, Dialog) ->
   book: (config) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
-    $modal.open
+    $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: bookForm
       size: config.size

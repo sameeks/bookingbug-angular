@@ -1,7 +1,6 @@
 'use strict'
 
-angular.module('BBAdmin').directive 'bookingTable', (BBModel, $modal, $log,
-  ModalForm) ->
+angular.module('BBAdmin').directive 'bookingTable', (BBModel, ModalForm) ->
 
   controller = ($scope) ->
 

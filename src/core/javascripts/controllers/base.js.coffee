@@ -178,12 +178,13 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
 
 
 
-angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
-    $rootScope, halClient, $window, $http, $q, $timeout, BasketService,
-    LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
-    BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
-    QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate, LoadingService, $anchorScroll, $localStorage) ->
+angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,
+  halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService,
+  $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService,
+  ErrorService, AppConfig, QueryStringService, QuestionService, LocaleService,
+  PurchaseService, $sessionStorage, $bbug, SettingsService, UriTemplate, LoadingService,
+  $anchorScroll, $localStorage, $document) ->
+
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -937,12 +938,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         halClient.clearCache("time_data")
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
-        error_modal = $modal.open
+        error_modal = $uibModal.open
+          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: $scope.getPartial('_error_modal')
-          controller: ($scope, $modalInstance) ->
+          controller: ($scope, $uibModalInstance) ->
             $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg
             $scope.ok = () ->
-              $modalInstance.close()
+              $uibModalInstance.close()
         error_modal.result.finally () ->
           if $scope.bb.nextSteps
             # either go back to the Date/Event routes or load the previous step

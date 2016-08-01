@@ -1,9 +1,9 @@
 <div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store bb-page>
-  <tabset>
-    <tab>
-      <tab-heading>
+  <uib-tabset>
+    <uib-tab>
+      <uib-tab-heading>
         <i class="fa fa-calendar-plus-o"></i> Make booking
-      </tab-heading>
+      </uib-tab-heading>
       <br/>
 
       <!-- Make booking tab START -->
@@ -23,11 +23,11 @@
       </div>
       <!-- Make booking tab END -->
 
-    </tab>
-    <tab ng-show="!bb.hide_block">
-      <tab-heading>
+    </uib-tab>
+    <uib-tab ng-show="!bb.hide_block">
+      <uib-tab-heading>
         <i class="fa fa-calendar-minus-o"></i> Block time
-      </tab-heading>
+      </uib-tab-heading>
       <br/>
       <!-- Block time tab START -->
       <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
@@ -80,6 +80,6 @@
       </div>
       <!-- Block time tab END -->
 
-    </tab>
-  </tabset>
+    </uib-tab>
+  </uib-tabset>
 </div>

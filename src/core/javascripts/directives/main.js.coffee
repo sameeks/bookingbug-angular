@@ -24,7 +24,7 @@ angular.module('BB.Directives').directive 'bbLoading', ($compile, $timeout, $bbu
     positionLoadingIcon = () ->
       loading_icon = $bbug('.bb-loader').find('#loading_icon')
       wait_graphic = $bbug('.bb-loader').find('#wait_graphic')
-      modal_open   = $bbug('[ng-app]').find('body').hasClass('modal-open')
+      modal_open   = $bbug('[ng-app]').find('#bb').hasClass('modal-open')
 
       if modal_open
         $timeout ->

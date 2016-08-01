@@ -1,5 +1,4 @@
-angular.module('BBQueue').directive 'bbAdminQueueTable', ($modal, $log,
-  BBModel) ->
+angular.module('BBQueue').directive 'bbAdminQueueTable', (BBModel) ->
 
   link = (scope, element, attrs) ->
     scope.fields ||= ['ticket_number', 'first_name', 'last_name', 'email']

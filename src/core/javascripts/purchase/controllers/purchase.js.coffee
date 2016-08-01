@@ -10,10 +10,9 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     return
 
 angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
-  PurchaseService, ClientService, $modal, $location, $timeout, BBWidget,
-  BBModel, $q, QueryStringService, SSOService, AlertService, LoginService,
-  $window, ServiceService, $sessionStorage, LoadingService,
-  SettingsService, $translate, ReasonService) ->
+  PurchaseService, $uibModal, $location, $timeout, BBModel, $q, QueryStringService,
+  SSOService, AlertService, LoginService, $window, $sessionStorage, LoadingService,
+  SettingsService, $translate, ReasonService, $document) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -270,7 +269,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
 
   # delete a single booking
   $scope.delete = (booking) ->
-    modalInstance = $modal.open
+    modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDelete
       resolve:
@@ -288,7 +288,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
 
   # delete all bookings assoicated to the purchase
   $scope.deleteAll = () ->
-    modalInstance = $modal.open
+    modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDeleteAll
       resolve:
@@ -346,26 +347,25 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
 
 
 # Simple modal controller for handling the 'delete' modal
-ModalDelete = ($scope,  $rootScope, $modalInstance, booking, AlertService, cancel_reasons) ->
+ModalDelete = ($scope,  $rootScope, $uibModalInstance, booking, AlertService, cancel_reasons) ->
   $scope.controller = "ModalDelete"
   $scope.booking = booking
   $scope.cancel_reasons = cancel_reasons
 
   $scope.confirmDelete = () ->
     AlertService.clear()
-    $modalInstance.close(booking)
+    $uibModalInstance.close(booking)
 
   $scope.cancel = ->
-    $modalInstance.dismiss "cancel"
+    $uibModalInstance.dismiss "cancel"
 
 # Simple modal controller for handling the 'delete all' modal
-ModalDeleteAll = ($scope,  $rootScope, $modalInstance, purchase) ->
+ModalDeleteAll = ($scope,  $rootScope, $uibModalInstance, purchase) ->
   $scope.controller = "ModalDeleteAll"
   $scope.purchase = purchase
 
   $scope.confirmDelete = () ->
-    $modalInstance.close(purchase)
+    $uibModalInstance.close(purchase)
 
   $scope.cancel = ->
-    $modalInstance.dismiss "cancel"
-
+    $uibModalInstance.dismiss "cancel"
