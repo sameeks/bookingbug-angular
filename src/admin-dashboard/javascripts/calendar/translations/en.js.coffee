@@ -9,6 +9,7 @@
 ###
 angular.module('BBAdminDashboard.calendar.translations')
 .config ['$translateProvider', ($translateProvider)->
+  console.log "load1"
   $translateProvider.translations('en',{
     'SIDE_NAV': {
       'CALENDAR_PAGE': {

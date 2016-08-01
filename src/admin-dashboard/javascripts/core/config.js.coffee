@@ -45,6 +45,7 @@ BBAdminDashboardDependencies = [
   'BBAdminDashboard.login',
   'BBAdminDashboard.logout',
   'BBAdminDashboard.calendar',
+  'BBAdminDashboard.bookings',
   'BBAdminDashboard.dashboard-iframe',
   'BBAdminDashboard.members-iframe',
   'BBAdminDashboard.settings-iframe',

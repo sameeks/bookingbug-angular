@@ -43,6 +43,7 @@ angular.module('BBAdminDashboard.services').provider 'AdminCoreOptions', [ ->
         items:[
           'calendar',
           'clients',
+          'bookings',
           'check-in',
           'dashboard-iframe',
           'members-iframe',
