@@ -132,11 +132,11 @@
     </div>
 
    <!--  Gift Cert Button (Needs Styling) -->
-   <div ng-if="bb.company_settings.has_vouchers">
+   <!-- <div ng-if="bb.company_settings.has_vouchers">
       <button type="button" ng-click="showPage('deal_list')" class="btn btn-primary btn-block">
         <span>Buy Gift Certificates </span>
       </button>
-    </div>
+    </div> -->
 
     <div class="bb-events-list row">
       <div ng-repeat="item in filtered_items | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" ng-init="spaces_left = item.getSpacesLeft()" ng-show="pagination.num_items > 0">
