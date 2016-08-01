@@ -31,7 +31,7 @@
   </div> -->
 
   <div class="alerts" bb-scroll-to="alert:raised" bb-always-scroll>
-    <div uib-alert ng-repeat="alert in $root.alerts" type="{{alert.type}}" >
+    <div uib-alert ng-repeat="alert in $root.alerts" ng-class="'alert-' + alert.type" >
       <ul>
         <li ng-bind-html="alert.msg"></li>
       </ul>

@@ -179,5 +179,4 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal, $doc
         bookWaitlistSucces()
     , (err) ->
       AlertService.raise('NO_WAITLIST_SPACES_LEFT')
-
-      $scope.setLoaded $scope
+    $scope.setLoaded $scope

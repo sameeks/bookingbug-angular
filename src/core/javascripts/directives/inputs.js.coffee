@@ -106,6 +106,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
                     id='#{question.id}'
                     bb-datepicker-popup='#{date_format}'
                     uib-datepicker-popup='#{date_format_2}'
+                    ng-change='recalc()'
                     ng-model='question.answer'
                     ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))'
                     datepicker-options='{\"starting-day\": 1, \"showButtonBar\": false, \"showWeeks\": false}'
