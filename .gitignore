@@ -12,4 +12,4 @@ build/booking-widget/*
 /.idea/
 **/*.js.js
 **/*.js.map
-unit-tests-reports
+/src/*/unit-tests/

@@ -29,6 +29,18 @@ plugins = require("gulp-load-plugins")(
 plugins.config =
   destPath: "./tmp/"
   env: process.env.ENV_VARIABLE || "development"
+  modulePath: {
+    adminDashbaord: 'src/admin-dashboard'
+    core: 'src/core'
+    admin: 'src/admin'
+    adminBooking: 'src/admin-booking'
+    events: 'src/events'
+    member: 'src/member'
+    services: 'src/services'
+    settings: 'src/settings'
+    testExamples: 'src/test-examples'
+  }
+
 plugins.colors = require "colors"
 
 path = require "path"

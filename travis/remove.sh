@@ -1,37 +1,28 @@
 #!/usr/bin/env bash
 
-npm install -g bower
-
-echo "TRAVIS BRANCH: $TRAVIS_BRANCH"
-
-npm install
-bower install
-
-gulp test:unit-dependencies
-
 cd src/test-examples/unit-tests
-bower install
+rm -rf bower_components
 
 cd ../../core/unit-tests
-bower install
+rm -rf bower_components
 
 cd ../../admin/unit-tests
-bower install
+rm -rf bower_components
 
 cd ../../admin-booking/unit-tests
-bower install
+rm -rf bower_components
 
 cd ../../admin-dashboard/unit-tests
-bower install
+rm -rf bower_components
 
 cd ../../events/unit-tests
-bower install
+rm -rf bower_components
 
 cd ../../member/unit-tests
-bower install
+rm -rf bower_components
 
 cd ../../services/unit-tests
-bower install
+rm -rf bower_components
 
 cd ../../settings/unit-tests
-bower install
+rm -rf bower_components

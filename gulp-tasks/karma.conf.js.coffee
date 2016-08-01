@@ -24,17 +24,13 @@ module.exports = (config) ->
       reporters: [
         {
           type: 'lcov'
-          dir: './unit-tests-reports/coverage-lcov/'
+          dir: './unit-tests/reports/coverage-lcov/'
           file: 'lcov.info'
           subdir: '.'
         }
       ]
 
     colors: true
-
-    exclude: [
-      'javascripts/collections/**'
-    ]
 
     frameworks: ['jasmine']
 
