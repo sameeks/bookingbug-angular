@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd ../../core/unit-tests
+cd src/core/unit-tests
 rm -rf bower_components
 
 cd ../../admin/unit-tests
@@ -24,5 +24,5 @@ rm -rf bower_components
 cd ../../settings/unit-tests
 rm -rf bower_components
 
-cd src/test-examples/unit-tests
+cd ../../test-examples/unit-tests
 rm -rf bower_components

@@ -7,7 +7,7 @@ npm install
 
 gulp test:unit-dependencies
 
-cd ../../core/unit-tests
+cd src/core/unit-tests
 bower install
 
 cd ../../admin/unit-tests
@@ -31,5 +31,5 @@ bower install
 cd ../../settings/unit-tests
 bower install
 
-cd src/test-examples/unit-tests
+cd ../../test-examples/unit-tests
 bower install
