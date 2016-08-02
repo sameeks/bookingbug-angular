@@ -36,7 +36,8 @@ deploy:
       secure: MVr4KWXdegYPDE9XJ+sMKf5Qd6OG+8SuVYKBCLOrOV9L8HSZ0hG6gCnP5k71K6z+Pa5YbLblXDbifs4vY2Bgq3vn7uPIeBVfrLyZdcIGlaGhWK047D7RvEse4JUO7vwv4HPPhzpPF/vz6isoUjeZUfqHhNC53L9E+RR/EOUGNhA=
   - provider: script
     script: ./travis/deploy.sh
-    tags: true
+    on:
+      tags: true
     access_key_id:
       secure: VisIawQs/YP5A9bkZA1W1cIvPn0cI8dZm4QezEhMq1yCphJYnQI/x9U/vEP3P50OqNKefmMVyYLenDO6rj2RfEcprG8K6TmyIl29PEqswlXR7CtVVedBKMfWu4S3+KNkeBC/EoB4nC1ApkkDRjcDHUg56V6oDhYb1mrix0biU9Y=
     secret_access_key:
