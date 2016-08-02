@@ -14,14 +14,15 @@ cache:
   directories:
     - node_modules
     - bower_components
-    - src/core/bower_components
-    - src/admin/bower_components
-    - src/admin-booking/bower_components
-    - src/admin-dashboard/bower_components
-    - src/events/bower_components
-    - src/member/bower_components
-    - src/services/bower_components
-    - src/settings/bower_components
+    - src/core/unit_tests/bower_components
+    - src/admin/unit_tests/bower_components
+    - src/admin-booking/unit_tests/bower_components
+    - src/admin-dashboard/unit_tests/bower_components
+    - src/events/unit_tests/bower_components
+    - src/member/unit_tests/bower_components
+    - src/services/unit_tests/bower_components
+    - src/settings/unit_tests/bower_components
+    - src/test-examples/unit_tests/bower_components
 
 deploy:
   provider: s3
