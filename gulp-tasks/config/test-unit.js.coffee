@@ -1,5 +1,4 @@
 module.exports = (gulp, plugins, growl, path)->
-
   fs = require('fs')
   jsonFile = require('jsonfile')
   mkDirP = require('mkdirp')
@@ -23,17 +22,27 @@ module.exports = (gulp, plugins, growl, path)->
     return
 
   ###
-  * @param {String} subModulePath
+  * @param {Object}
+  * @returns {Object.<String, String>}
   ###
-  prepareBowerUnitTestsFile = (subModulePath) ->
-    newNonBBDependencies = {}
+  findBBDependencies = (bowerJson) ->
     bbDependencies = {}
 
-    originBower = JSON.parse(fs.readFileSync(subModulePath + '/bower.json', 'utf8'))
-    for depName,depVersion of originBower.dependencies
+    for depName,depVersion of bowerJson.dependencies
       if isBBDependency depName
         subModuleName = depName.replace 'bookingbug-angular-', ''
         bbDependencies[subModuleName] = depVersion
+
+    return bbDependencies
+
+  ###
+  * @param {String} modulePath
+  ###
+  prepareBowerUnitTestsFile = (modulePath) ->
+    newNonBBDependencies = {}
+
+    originBower = JSON.parse(fs.readFileSync(modulePath + '/bower.json', 'utf8'))
+    bbDependencies = findBBDependencies(originBower)
 
     filterOutNonBBDependencies originBower.dependencies, newNonBBDependencies
 
@@ -43,118 +52,88 @@ module.exports = (gulp, plugins, growl, path)->
 
     originBower.dependencies = newNonBBDependencies
 
-    mkDirP.sync  subModulePath + '/unit-tests'
-    jsonFile.writeFile subModulePath + '/unit-tests/bower.json', originBower, (err) ->
+    mkDirP.sync modulePath + '/unit-tests'
+    jsonFile.writeFile modulePath + '/unit-tests/bower.json', originBower, (err) ->
       console.log err if err isnt null
 
-    return
+    return bbDependencies
 
 
-  commonFiles = [
-    '../core/templates/**/*.html'
-    '../core/templates/*.html'
-    '../core/javascripts/*.coffee'
-    '../core/javascripts/*.js'
-    '../core/javascripts/**/*.coffee'
-    '../core/javascripts/**/*.js'
+  ###
+  * @param {String} moduleName
+  ###
+  moduleFiles = (moduleName) ->
+    return [
+      '../' + moduleName + '/templates/**/*.html'
+      '../' + moduleName + '/templates/*.html'
+      '../' + moduleName + '/javascripts/*.coffee'
+      '../' + moduleName + '/javascripts/*.js'
+      '../' + moduleName + '/javascripts/**/*.coffee'
+      '../' + moduleName + '/javascripts/**/*.js'
+    ]
 
-    '../admin/templates/**/*.html'
-    '../admin/templates/*.html'
-    '../admin/javascripts/*.coffee'
-    '../admin/javascripts/*.js'
-    '../admin/javascripts/**/*.coffee'
-    '../admin/javascripts/**/*.js'
+  ###
+  * @param {String} moduleName
+  ###
+  moduleSpecFiles = (moduleName) ->
+    return [
+      '../' + moduleName + '/javascripts/*.spec.js.coffee'
+      '../' + moduleName + '/javascripts/*.spec.js'
+      '../' + moduleName + '/javascripts/**/*.spec.js.coffee'
+      '../' + moduleName + '/javascripts/**/*.spec.js'
+    ]
 
-
-    '../settings/templates/**/*.html'
-    '../settings/templates/*.html'
-    '../settings/javascripts/*.coffee'
-    '../settings/javascripts/*.js'
-    '../settings/javascripts/**/*.coffee'
-    '../settings/javascripts/**/*.js'
-
-    '../test-examples/templates/**/*.html'
-    '../test-examples/templates/*.html'
-    '../test-examples/javascripts/*.coffee'
-    '../test-examples/javascripts/*.js'
-    '../test-examples/javascripts/**/*.coffee'
-    '../test-examples/javascripts/**/*.js'
-  ]
-
-  other = [
-    '../admin-dashboard/templates/**/*.html'
-    '../admin-dashboard/templates/*.html'
-    '../admin-dashboard/javascripts/*.coffee'
-    '../admin-dashboard/javascripts/*.js'
-    '../admin-dashboard/javascripts/**/*.coffee'
-    '../admin-dashboard/javascripts/**/*.js'
-
-    '../events/templates/**/*.html'
-    '../events/templates/*.html'
-    '../events/javascripts/*.coffee'
-    '../events/javascripts/*.js'
-    '../events/javascripts/**/*.coffee'
-    '../events/javascripts/**/*.js'
-
-    '../member/templates/**/*.html'
-    '../member/templates/*.html'
-    '../member/javascripts/*.coffee'
-    '../member/javascripts/*.js'
-    '../member/javascripts/**/*.coffee'
-    '../member/javascripts/**/*.js'
-
-    '../services/templates/**/*.html'
-    '../services/templates/*.html'
-    '../services/javascripts/*.coffee'
-    '../services/javascripts/*.js'
-    '../services/javascripts/**/*.coffee'
-    '../services/javascripts/**/*.js'
-
-
-
-    '../test-examples/templates/**/*.html'
-    '../test-examples/templates/*.html'
-    '../test-examples/javascripts/*.coffee'
-    '../test-examples/javascripts/*.js'
-    '../test-examples/javascripts/**/*.coffee'
-    '../test-examples/javascripts/**/*.js'
-
-    '../admin-booking/templates/**/*.html'
-    '../admin-booking/templates/*.html'
-    '../admin-booking/javascripts/*.coffee'
-    '../admin-booking/javascripts/*.js'
-    '../admin-booking/javascripts/**/*.coffee'
-    '../admin-booking/javascripts/**/*.js'
-
-    '../services/templates/**/*.html'
-    '../services/templates/*.html'
-    '../services/javascripts/*.coffee'
-    '../services/javascripts/*.js'
-    '../services/javascripts/**/*.coffee'
-    '../services/javascripts/**/*.js'
-  ]
-
-  getFiles = (path) ->
-    bowerDependencies = require('main-bower-files')(
+  ###
+  * @param {String} modulePath
+  * @param {Object.<String, String>} bbDependencies
+  ###
+  prepareKarmaFiles = (modulePath, bbDependencies) ->
+    bowerFiles = require('main-bower-files')(
       filter: [
         '**/*.js'
       ]
       paths:
-        bowerDirectory: path + '/unit-tests/bower_components',
-        bowerJson: path + '/unit-tests/bower.json'
+        bowerDirectory: modulePath + '/unit-tests/bower_components',
+        bowerJson: modulePath + '/unit-tests/bower.json'
     )
 
-    deps = bowerDependencies.concat commonFiles
+    projectFiles = []
 
-    console.log deps
+    #projectFiles = projectFiles.concat(moduleFiles('core'))
 
-    return deps
+    for bbModuleName of bbDependencies
+      console.log bbModuleName
+      projectFiles = projectFiles.concat(moduleFiles(bbModuleName))
 
-  getKarmaServerSettings = (isDev, path) ->
+    console.log projectFiles
+
+    return bowerFiles.concat projectFiles
+
+  ###
+  * @param {String} modulePath
+  * @param {Object.<String, String>} bbDependencies
+  ###
+  prepareKarmaExclude = (modulePath, bbDependencies) ->
+    projectFiles = moduleSpecFiles('test-examples')
+
+    return projectFiles
+
+  ###
+  * @param {Boolean} isDev
+  * @param {String} path
+  ###
+  getKarmaServerSettings = (isDev, modulePath) ->
+
+    originBower = JSON.parse(fs.readFileSync(modulePath + '/bower.json', 'utf8'))
+    bbDependencies = findBBDependencies(originBower)
+
+    bbDependencies[originBower.name.replace 'bookingbug-angular-', ''] = 'master'
+
     serverSettings =
       configFile: __dirname + '/../karma.conf.js',
-      basePath: '../' + path
-      files: getFiles path
+      basePath: '../' + modulePath
+      files: prepareKarmaFiles modulePath, bbDependencies
+      exclude: prepareKarmaExclude modulePath, bbDependencies
       autoWatch: true
       singleRun: false
 
