@@ -23,11 +23,10 @@ cache:
     - src/services/bower_components
     - src/settings/bower_components
 
+env:
+  - secure: "EOLSkOnWNqKODETqXwoRK+KbxyR11YCTi8kRX0+q21KQKaTqqt39UzSOoD0qlfKXPU+D23kvWSYWcGbHQw6DiVHtenVbn9ktik3lJkscXpJmNJmaregclSYJpaK7GC5vJU0av4Q0lDASxrqBv9FftrAEoC7fTfdoZgJ8t29huoU="
+
 deploy:
   provider: script
   script: ./travis/deploy.sh
   skip_cleanup: true
-  on:
-    tags: true
-  env:
-    - secure: "EOLSkOnWNqKODETqXwoRK+KbxyR11YCTi8kRX0+q21KQKaTqqt39UzSOoD0qlfKXPU+D23kvWSYWcGbHQw6DiVHtenVbn9ktik3lJkscXpJmNJmaregclSYJpaK7GC5vJU0av4Q0lDASxrqBv9FftrAEoC7fTfdoZgJ8t29huoU="
