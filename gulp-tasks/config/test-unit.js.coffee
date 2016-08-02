@@ -16,19 +16,19 @@ module.exports = (gulp, plugins, path)->
 
     testBowerJson = JSON.parse(fs.readFileSync('unit-tests/bower.json', 'utf8'))
 
-    subModulesNames = [
+    orderedSubModulesNames = [
       'core'
       'admin'
       'admin-booking'
-      'admin-dashboard'
       'events'
       'member'
       'services'
       'settings'
       'test-examples'
+      'admin-dashboard'
     ]
 
-    for subModuleName in subModulesNames
+    for subModuleName in orderedSubModulesNames
       bowerJson = JSON.parse(fs.readFileSync(path.join('src', subModuleName, '/bower.json'), 'utf8'))
 
       for depName,depVersion of bowerJson.dependencies

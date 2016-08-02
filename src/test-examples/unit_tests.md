@@ -2,24 +2,16 @@
 ###### This module contains unit tests samples. Please feel free to contribute if have some interesting unit test samples you want to share with others.
  
 #### Preset 
+
 SDK consists of many submodules that have it's own bower.json files.
 
-Each submodules will be tested separately by running new Karma servers. 
-We cannot test submodules all together:
-  - application behaviour may be modified just by loading dependencies (for example angular modules config/run time)
-  - they may have different dependencies
+All submodules should use same versions of 3rd party dependencies - so if you update a version of some dependencies - you need to apply required changes to all submodules.
+Ideally only core module should have 3rd party dependencies.
 
-If you want to run unit tests locally you need to ensure that you have installed bower components for each submodule.
-You can do it easily by going to sdk project root folder and running bash script that is being used by travis.
+You can do it by running
    
 ```
 bash travis/install.sh
-```
-
-If for any reason you want to remove existing bower_modules in all submodules you can do it easily by running following.
-  
-```
-bash travis/remove.sh
 ```
 
 #### Test Driven Development 
@@ -27,29 +19,11 @@ bash travis/remove.sh
 1. To run sdk submodules unit tests all together execute following in root of sdk repository
 
     `gulp test:unit`
-
-    > It will start for each sub-module separate karma servers.
+    
     > Tests are run in watch mode which means any code or tests modifications should rerun appropriate tests again.
     > Note that any bower dependencies changes require task restart 
 
-2. If you work only on one particular sub-module than you can run just one of following
-
-    ``` bash
-    gulp test:unit:test-examples
-    gulp test:unit:core
-    gulp test:unit:admin
-    gulp test:unit:admin-booking
-    gulp test:unit:admin-dashboard
-    gulp test:unit:events
-    gulp test:unit:member
-    gulp test:unit:services
-    gulp test:unit:settings
-    ```
-
-    > Tests are run in watch mode which means any code or tests modifications should rerun appropriate tests again.
-    > Note that any bower dependencies changes require task restart
-
-3. To see test coverage html report for given sdk sub-module please cd to given sub-module 
+2. To see test coverage html report for given sdk sub-module please cd to given sub-module 
    and open `unit-tests/reports/coverage-lcov/lcov-report/index.html` in browser of your preference.
 
 #### Continuous Integration

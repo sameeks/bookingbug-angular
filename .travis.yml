@@ -14,15 +14,7 @@ cache:
   directories:
     - node_modules
     - bower_components
-    - src/core/unit_tests/bower_components
-    - src/admin/unit_tests/bower_components
-    - src/admin-booking/unit_tests/bower_components
-    - src/admin-dashboard/unit_tests/bower_components
-    - src/events/unit_tests/bower_components
-    - src/member/unit_tests/bower_components
-    - src/services/unit_tests/bower_components
-    - src/settings/unit_tests/bower_components
-    - src/test-examples/unit_tests/bower_components
+    - unit_tests/bower_components
 
 env:
   - secure: "EOLSkOnWNqKODETqXwoRK+KbxyR11YCTi8kRX0+q21KQKaTqqt39UzSOoD0qlfKXPU+D23kvWSYWcGbHQw6DiVHtenVbn9ktik3lJkscXpJmNJmaregclSYJpaK7GC5vJU0av4Q0lDASxrqBv9FftrAEoC7fTfdoZgJ8t29huoU="
