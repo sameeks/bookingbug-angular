@@ -252,6 +252,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.initWidget = (prms = {}) =>
 
+    $scope.history_at_widget_init = window.history.length
+
     @$init_prms = prms
     # remark the connection as starting again
     con_started = $q.defer()
@@ -714,6 +716,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   # $locationChangeStart is broadcast before a URL will change
   $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
+    debugger
+    console.log "locationChangeStart triggered!"
 
     return if !$scope.bb.routeFormat
 
@@ -721,20 +725,28 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if !$scope.bb.routing
 
       # save the current lenght of browser history
-      $scope.history_at_widget_init = $scope.history_at_widget_init or window.parent.history.length
+      # $scope.history_at_widget_init = $scope.history_at_widget_init or window.parent.history.length
 
       # Get the step number to load
       step_number = $scope.bb.matchURLToStep()
 
       # Load next page
       if step_number? and step_number > $scope.bb.current_step
-        $scope.loadStep(step_number)
-      # else if step_number? and step_number < $scope.bb.current_step
-      #   # Load previous page
-      #   $scope.loadPreviousStep('locationChangeStart')
-      # else
+        console.log "step_number, scope.bb.current_step", step_number, $scope.bb.current_step
+        $scope.loadStep(step_number)    
       else
         $scope.loadPreviousStep('locationChangeStart')
+    # else
+    #   step_number = $scope.bb.matchURLToStep()
+    #   steps_to_go_back_in_history = 0     
+
+    #   if step_number < $scope.bb.current_step
+    #     while step_number > 0
+    #       if $scope.bb.steps[step_number-1].skipped
+    #         steps_to_go_back_in_history++
+    #         step_number--
+    #     window.history.go(steps_to_go_back_in_history*-1)
+    #     console.log "steps to go back in history", steps_to_go_back_in_history
 
     $scope.bb.routing = false
 
@@ -1180,7 +1192,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     st = prev_step if !st
     if st && !$scope.bb.last_step_reached
       $scope.bb.stacked_items = [] if !st.stacked_length ||  st.stacked_length == 0
-      $scope.bb.current_item.loadStep(st.current_item)
+      $scope.bb.current_item.loadStep(st.current_item)      
       if $scope.bb.steps.length > 1
         $scope.bb.steps.splice(step, $scope.bb.steps.length-step)
       $scope.bb.current_step = step
@@ -1192,7 +1204,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       if $scope.bb.allSteps[$scope.bb.current_step-1]
         $scope.bb.allSteps[$scope.bb.current_step-1].active = true
 
-
   ###**
   * @ngdoc method
   * @name loadPreviousStep
@@ -1203,7 +1214,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   * @param {integer} steps_to_go_back: The number of steps to go back
   * @param {string} caller: The method that called this function
   ###
-  $scope.loadPreviousStep = (caller) ->
+  $scope.loadPreviousStep = (caller) ->   
 
     past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
 
@@ -1222,19 +1233,21 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if $scope.bb.routeFormat
       pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
       if caller is "locationChangeStart"
+        # -------------------------------------------------------------------------
         # Reduce number of pages to remove from browser history by one if this
         # method was triggered by Angular's $locationChangeStart broadcast
         # In this instance we can assume that the browser back button was used
         # and one page has already been removed from the history by the browser
+        # -------------------------------------------------------------------------
         pages_to_remove_from_history--
 
       ignore_browser_history_sync = $scope.history_at_widget_init is window.history.length
 
       if pages_to_remove_from_history > 0 and !ignore_browser_history_sync
-        window.history.go(pages_to_remove_from_history*-1)
+        window.history.go(pages_to_remove_from_history*-1)      
 
-    # Load step
-    $scope.loadStep(step_to_load)
+      # Load step
+      $scope.loadStep(step_to_load) if step_to_load > 0
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps
