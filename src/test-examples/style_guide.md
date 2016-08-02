@@ -13,6 +13,7 @@
 controller = () ->
   'ngInject' 
   
+  ### jshint validthis: true ###
   vm = this
   vm.hello = () ->  alert "hello!"
   
@@ -56,6 +57,7 @@ Wrong way
 app.module('test').controller 'MyController', ($log, someService, otherService) ->
     'ngInject'
 
+    ### jshint validthis: true ###
     vm = this
     vm.func1 = (param1) ->
         alert "hello " + param1
@@ -75,6 +77,7 @@ Proper way
 controller = ($log, someService, otherService) ->
     'ngInject'
 
+    ### jshint validthis: true ###
     vm = this
 
     init = () ->
@@ -109,28 +112,30 @@ app.module('test').controller 'MyController', controller
   * If you need to pass anything to thew view do it by using `controllerAs` syntax. Example below   
   
     ``` coffeescript
-      app.module('test').controller 'MyController', () ->
-        'ngInject'
-    
-        /* jshint validthis: true */
-        vm = this
-        vm.someProperty = 'someValue'
-        
-        init = () ->
+      controller = () ->
+          'ngInject'
+      
+          ### jshint validthis: true ###
+          vm = this
+          vm.someProperty = 'someValue'
+          
+          init = () ->                      
+            return
+            
+          someFunc = () ->
+            return
+                                   
+          someFunc2 = () ->
+            return
+          
+          init()
+          
           vm.someFunc = someFun
           vm.someFunc2 = someFun2
-        
+      
           return
-          
-        someFunc = () ->
-          return
-          
-        someFunc2 = () ->
-          return
-        
-        init()
     
-        return
+      app.module('test').controller 'MyController', controller
     ```    
     > you can choose whatever name you like for *controllerAs* value but conventionally *vm* is being used and we should stick to it
        
@@ -147,13 +152,15 @@ app.module('test').controller 'MyController', controller
   
 6) Naming conventions
 
-  * Directories and file names should be lower-cased & hyphenated.
+  * Variables and methods should be camelCased.
 
-  * **feature-name.type.js.coffee** is a recommended pattern for _file names_.
+  * Directories and file names should be lower_snake_cased.
+
+  * **feature_name.type.js.coffee** is a recommended pattern for _file names_.
       - it provides consistent way to quickly identify components 
       - it provides pattern matching for any automated tasks
             
-  * **feature-name.type.spec.js.coffee** is a recommended pattern for _unit test file names_. They should be named the same way and stay at the same place as the files they test.
+  * **feature_name.type.spec.js.coffee** is a recommended pattern for _unit test file names_. They should be named the same way and stay at the same place as the files they test.
                     
   * **modulesAcronymFeatureName** is a recommended pattern for _registered components names_.
       - controllers should always be capitalized as they return constructor function
@@ -165,13 +172,13 @@ app.module('test').controller 'MyController', controller
     
 | Component | Registerd Component Name | Component File Name |
 | :--- | :--- | :--- |
-| Modules                                | bbTe               |	bb-te.module.js.coffee |
-| Sub Modules                            | bbTe.blogArticle   | bb-te.blog-article.module.js.coffee |
-| bbTe.blogArticle module: Configuration | N/A                | bb-te.blog-article.config.js.coffee |
-| bbTe.blogArticle module: Routes        | N/A                | bb-te.blog-article.routes.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Directive  | bbTeBaSomeSample     | some-sample.directive.js.coffee |       
-| bbTe.blogArticle module: _SomeSample_ Filter     | bbTeBaSomeSample     | some-sample.filter.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Service    | bbTeBaSomeSample     | some-sample.service.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Factory    | bbTeBaSomeSample     | some-sample.factory.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Provider   | bbTeBaSomeSample     | some-sample.provider.js.coffee |
-| bbTe.blogArticle module: _SomeSample_ Controller | **B**bTeBaSomeSample | some-sample.controller.js.coffee |
+| Modules                                | bbTe               |	bb_te.module.js.coffee |
+| Sub Modules                            | bbTe.blogArticle   | bb_te.blog_article.module.js.coffee |
+| bbTe.blogArticle module: Configuration | N/A                | bb_te.blog_article.config.js.coffee |
+| bbTe.blogArticle module: Routes        | N/A                | bb_te.blog_article.routes.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Directive  | bbTeBaSomeSample     | some_sample.directive.js.coffee |       
+| bbTe.blogArticle module: _SomeSample_ Filter     | bbTeBaSomeSample     | some_sample.filter.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Service    | bbTeBaSomeSample     | some_sample.service.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Factory    | bbTeBaSomeSample     | some_sample.factory.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Provider   | bbTeBaSomeSample     | some_sample.provider.js.coffee |
+| bbTe.blogArticle module: _SomeSample_ Controller | **B**bTeBaSomeSample | some_sample.controller.js.coffee |
