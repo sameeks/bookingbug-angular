@@ -4,16 +4,14 @@ module.exports = (gulp, plugins, path) ->
   awspublishRouter = require('gulp-awspublish-router')
   rename = require('gulp-rename')
 
-  gulp.task 'deploy', () ->
+  gulp.task 'deploy', ['build','build:widget'], () ->
     publisher = awspublish.create
-      key: process.env.AWS_ACCESS_KEY_ID
-      secret: process.env.AWS_SECRET_ACCESS_KEY
       params:
         Bucket: 'angular.bookingbug.com'
       region: 'eu-west-1'
     gulp.src(['./build/**','!./build/*/bower_components/**'])
       .pipe(rename((path) ->
-        path.dirname = "/#{process.env.TRAVIS_TAG}/#{path.dirname}"
+        path.dirname = "/#{process.env.TRAVIS_BRANCH}/#{path.dirname}"
       ))
       .pipe(publisher.publish())
       .pipe(publisher.cache())
