@@ -56,7 +56,7 @@ module.exports = (gulp, plugins, path)->
     projectFiles = [
       'src/core/javascripts/main.js.coffee'
       'src/*/javascripts/main.js.coffee'
-      'src/*/javascripts/core/core.js.coffee'
+      'src/*/javascripts/core/config.js.coffee'
       'src/*/templates/**/*.html'
       'src/*/templates/*.html'
       'src/core/javascripts/collections/*.coffee'
