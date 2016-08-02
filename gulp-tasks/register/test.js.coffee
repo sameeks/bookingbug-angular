@@ -1,4 +1,4 @@
-module.exports = (gulp, plugins)->
+module.exports = (gulp, plugins, path)->
   gulp.task 'test:unit-dependencies', (cb)->
     plugins.sequence(
       [

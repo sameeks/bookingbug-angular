@@ -1,4 +1,4 @@
-module.exports = (gulp, plugins, growl, path) ->
+module.exports = (gulp, plugins, path) ->
 
   bbGulp = require('../../bb-gulp.js')
 

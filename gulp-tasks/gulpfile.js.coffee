@@ -1,33 +1,12 @@
-growl = false
-
-loadTasks = (path)->
-  includeAll(
-    dirname: require("path").resolve __dirname, path
-    filter: /(.+)\.(js|coffee)$/
-  ) or {}
-
-invokeConfigFn = (tasks) ->
-  for taskName of tasks
-    plugins.error = (error)->
-      plugins.util.log error.toString()
-    tasks[taskName] gulp, plugins, growl, path  if tasks.hasOwnProperty(taskName)
-
+color = require "colors"
 gulp = require "gulp"
-plugins = require("gulp-load-plugins")(
-  pattern: [
-    "gulp-*"
-    "merge-*"
-    "run-*"
-    "main*"
-    "karma*"
-  ]
-  replaceString: /\bgulp[\-.]|run[\-.]|merge[\-.]|main[\-.]/
-  camelizePluginName: true
-  lazy: true
-)
+gulpLoadPlugins = require("gulp-load-plugins")
+includeAll = require "include-all"
+path = require "path"
 
-plugins.config =
-  destPath: "./tmp/"
+plugins = null
+
+configuration =
   env: process.env.ENV_VARIABLE || "development"
   modulePath: {
     adminDashbaord: 'src/admin-dashboard'
@@ -41,19 +20,55 @@ plugins.config =
     testExamples: 'src/test-examples'
   }
 
-plugins.colors = require "colors"
+init = () ->
+  preparePlugins()
+  prepareTasks()
+  return
 
-path = require "path"
-includeAll = require "include-all"
+preparePlugins = () ->
+  plugins = gulpLoadPlugins(
+    pattern: [
+      "gulp-*"
+      "merge-*"
+      "run-*"
+      "main*"
+      "karma*"
+    ]
+    replaceString: /\bgulp[\-.]|run[\-.]|merge[\-.]|main[\-.]/
+    camelizePluginName: true
+    lazy: true
+  )
 
-taskConfigurations = loadTasks "./config"
-registerDefinitions = loadTasks "./register"
+  plugins.config = configuration
+  plugins.colors = color
 
-if not registerDefinitions['default.js']
-  registerDefinitions.default = (gulp)->
-    gulp.task 'default', []
+  return
 
-invokeConfigFn taskConfigurations
-invokeConfigFn registerDefinitions
+loadTasks = (taskPath)->
+  includeAll(
+    dirname: path.resolve __dirname, taskPath
+    filter: /(.+)\.(js|coffee)$/
+  ) or {}
+
+invokeConfigFn = (tasks) ->
+  for taskName of tasks
+    plugins.error = (error)->
+      plugins.util.log error.toString()
+    tasks[taskName] gulp, plugins, path  if tasks.hasOwnProperty(taskName)
+  return
+
+prepareTasks = ()->
+  taskConfigurations = loadTasks "./config"
+  registerDefinitions = loadTasks "./register"
+
+  if not registerDefinitions['default.js']
+    registerDefinitions.default = (gulp)->
+      gulp.task 'default', []
+
+  invokeConfigFn taskConfigurations
+  invokeConfigFn registerDefinitions
+  return
+
+init()
 
 module.exports = gulp

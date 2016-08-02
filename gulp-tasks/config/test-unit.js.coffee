@@ -1,4 +1,4 @@
-module.exports = (gulp, plugins, growl, path)->
+module.exports = (gulp, plugins, path)->
   fs = require('fs')
   jsonFile = require('jsonfile')
   mkDirP = require('mkdirp')
@@ -41,19 +41,19 @@ module.exports = (gulp, plugins, growl, path)->
   prepareBowerUnitTestsFile = (modulePath) ->
     newNonBBDependencies = {}
 
-    originBower = JSON.parse(fs.readFileSync(modulePath + '/bower.json', 'utf8'))
+    originBower = JSON.parse(fs.readFileSync(path.join(modulePath, '/bower.json'), 'utf8'))
     bbDependencies = findBBDependencies(originBower)
 
     filterOutNonBBDependencies originBower.dependencies, newNonBBDependencies
 
     for depName,depVersion of bbDependencies
-      subModuleBower = JSON.parse(fs.readFileSync('src/' + depName + '/bower.json', 'utf8'))
+      subModuleBower = JSON.parse(fs.readFileSync(path.join('src/', depName, '/bower.json'), 'utf8'))
       filterOutNonBBDependencies subModuleBower.dependencies, newNonBBDependencies
 
     originBower.dependencies = newNonBBDependencies
 
-    mkDirP.sync modulePath + '/unit-tests'
-    jsonFile.writeFile modulePath + '/unit-tests/bower.json', originBower, (err) ->
+    mkDirP.sync path.join(modulePath, '/unit-tests')
+    jsonFile.writeFile path.join(modulePath, '/unit-tests/bower.json'), originBower, (err) ->
       console.log err if err isnt null
 
     return bbDependencies
@@ -77,10 +77,10 @@ module.exports = (gulp, plugins, growl, path)->
   ###
   moduleSpecFiles = (moduleName) ->
     return [
-      '../' + moduleName + '/javascripts/*.spec.js.coffee'
-      '../' + moduleName + '/javascripts/*.spec.js'
-      '../' + moduleName + '/javascripts/**/*.spec.js.coffee'
-      '../' + moduleName + '/javascripts/**/*.spec.js'
+      '../!(' + moduleName + ')/javascripts/*.spec.js.coffee'
+      '../!' + moduleName + ')/javascripts/*.spec.js'
+      '../!(' + moduleName + ')/javascripts/**/*.spec.js.coffee'
+      '../!(' + moduleName + ')/javascripts/**/*.spec.js'
     ]
 
   ###
@@ -93,28 +93,26 @@ module.exports = (gulp, plugins, growl, path)->
         '**/*.js'
       ]
       paths:
-        bowerDirectory: modulePath + '/unit-tests/bower_components',
-        bowerJson: modulePath + '/unit-tests/bower.json'
+        bowerDirectory: path.join(modulePath, '/unit-tests/bower_components'),
+        bowerJson: path.join(modulePath, '/unit-tests/bower.json')
     )
 
     projectFiles = []
 
-    #projectFiles = projectFiles.concat(moduleFiles('core'))
-
     for bbModuleName of bbDependencies
-      console.log bbModuleName
       projectFiles = projectFiles.concat(moduleFiles(bbModuleName))
-
-    console.log projectFiles
 
     return bowerFiles.concat projectFiles
 
   ###
-  * @param {String} modulePath
-  * @param {Object.<String, String>} bbDependencies
+  * @param {String} testModuleName
   ###
-  prepareKarmaExclude = (modulePath, bbDependencies) ->
-    projectFiles = moduleSpecFiles('test-examples')
+  prepareKarmaExclude = (testModuleName) ->
+    for bbModuleName of bbDependencies
+      projectFiles = projectFiles.concat(moduleSpecFiles(bbModuleName))
+
+
+    projectFiles = []
 
     return projectFiles
 
@@ -123,17 +121,19 @@ module.exports = (gulp, plugins, growl, path)->
   * @param {String} path
   ###
   getKarmaServerSettings = (isDev, modulePath) ->
-
-    originBower = JSON.parse(fs.readFileSync(modulePath + '/bower.json', 'utf8'))
+    originBower = JSON.parse(fs.readFileSync(path.join(modulePath, '/bower.json'), 'utf8'))
     bbDependencies = findBBDependencies(originBower)
 
-    bbDependencies[originBower.name.replace 'bookingbug-angular-', ''] = 'master'
+
+    moduleName = originBower.name.replace 'bookingbug-angular-', ''
+
+    bbDependencies[moduleName] = 'master'
 
     serverSettings =
-      configFile: __dirname + '/../karma.conf.js',
+      configFile: path.join(__dirname, '/../karma.conf.js'),
       basePath: '../' + modulePath
       files: prepareKarmaFiles modulePath, bbDependencies
-      exclude: prepareKarmaExclude modulePath, bbDependencies
+      exclude: moduleSpecFiles moduleName
       autoWatch: true
       singleRun: false
 
