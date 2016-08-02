@@ -13,3 +13,4 @@ build/booking-widget/*
 **/*.js.js
 **/*.js.map
 unit-tests-reports
+.awspublish-angular.bookingbug.com
