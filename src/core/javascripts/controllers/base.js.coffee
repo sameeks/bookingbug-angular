@@ -721,22 +721,19 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     # don't load any steps if route is being updated
     if !$scope.bb.routing
-
       # save the current length of browser history
       $scope.history_at_widget_init = $scope.history_at_widget_init or window.parent.history.length
-
       # Get the step number to load
       step_number = $scope.bb.matchURLToStep()
-
       # Load next page
       if step_number? and step_number > $scope.bb.current_step
         $scope.loadStep(step_number)
       else
         $scope.loadPreviousStep('locationChangeStart')
-
-    else if $scope.bb.matchURLToStep() is 1 and $scope.bb.matchURLToStep() < $scope.bb.current_step
-      $scope.loadPreviousStep('locationChangeStart')
-
+    else
+      step = $scope.bb.matchURLToStep()
+      if step is 1 and $scope.bb.steps[step-1].skipped and step < $scope.bb.current_step
+        $scope.loadPreviousStep('locationChangeStart')
 
     $scope.bb.routing = false
 
