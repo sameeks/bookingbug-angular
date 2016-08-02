@@ -734,6 +734,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       else
         $scope.loadPreviousStep('locationChangeStart')
 
+    else if $scope.bb.matchURLToStep() is 1 and $scope.bb.matchURLToStep() < $scope.bb.current_step
+      $scope.loadPreviousStep('locationChangeStart')
+
+
     $scope.bb.routing = false
 
   $scope.showPage = (route, dont_record_page) =>
@@ -1231,7 +1235,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
       ignore_browser_history_sync = $scope.history_at_widget_init is window.history.length
 
-      if pages_to_remove_from_history > 0 and !ignore_browser_history_sync
+      if pages_to_remove_from_history > 0 and (!ignore_browser_history_sync or step_to_load is 0)
         window.history.go(pages_to_remove_from_history*-1)
 
       # Load step
