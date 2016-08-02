@@ -36,6 +36,7 @@ deploy:
       secure: MVr4KWXdegYPDE9XJ+sMKf5Qd6OG+8SuVYKBCLOrOV9L8HSZ0hG6gCnP5k71K6z+Pa5YbLblXDbifs4vY2Bgq3vn7uPIeBVfrLyZdcIGlaGhWK047D7RvEse4JUO7vwv4HPPhzpPF/vz6isoUjeZUfqHhNC53L9E+RR/EOUGNhA=
   - provider: script
     script: ./travis/deploy.sh
+    skip_cleanup: true
     on:
       tags: true
     access_key_id:
