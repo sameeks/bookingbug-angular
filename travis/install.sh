@@ -2,15 +2,10 @@
 
 npm install -g bower
 
-echo "TRAVIS BRANCH: $TRAVIS_BRANCH"
-
 npm install
-bower install
+#bower install
 
 gulp test:unit-dependencies
-
-cd src/test-examples/unit-tests
-bower install
 
 cd ../../core/unit-tests
 bower install
@@ -34,4 +29,7 @@ cd ../../services/unit-tests
 bower install
 
 cd ../../settings/unit-tests
+bower install
+
+cd src/test-examples/unit-tests
 bower install

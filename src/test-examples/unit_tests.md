@@ -1,6 +1,26 @@
 ### CoffeeScript|AngularJS Unit Tests
 ###### This module contains unit tests samples. Please feel free to contribute if have some interesting unit test samples you want to share with others.
  
+#### Preset 
+SDK consists of many submodules that have it's own bower.json files.
+
+Each submodules will be tested separately by running new Karma servers. 
+We cannot test submodules all together:
+  - application behaviour may be modified just by loading dependencies (for example angular modules config/run time)
+  - they may have different dependencies
+
+If you want to run unit tests locally you need to ensure that you have installed bower components for each submodule.
+You can do it easily by going to sdk project root folder and running bash script that is being used by travis.
+   
+```
+bash travis/install.sh
+```
+
+If for any reason you want to remove existing bower_modules in all submodules you can do it easily by running following.
+  
+```
+bash travis/remove.sh
+```
 
 #### Test Driven Development 
  
@@ -30,7 +50,7 @@
     > Note that any bower dependencies changes require task restart
 
 3. To see test coverage html report for given sdk sub-module please cd to given sub-module 
-   and open `unit-tests-reports/coverage-lcov/lcov-report/index.html` in browser of your preference.
+   and open `unit-tests/reports/coverage-lcov/lcov-report/index.html` in browser of your preference.
 
 #### Continuous Integration
 
