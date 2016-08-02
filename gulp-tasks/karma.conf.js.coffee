@@ -4,8 +4,6 @@ module.exports = (config) ->
 
     autoWatch: true
 
-    basePath: '../'
-
     browsers: ['PhantomJS']
 
     coffeeCoverage: {
@@ -41,12 +39,12 @@ module.exports = (config) ->
     port: 9876
 
     preprocessors: {
-      '../*/javascripts/*.html': 'html2js'
-      '../*/javascripts/**/*.html': 'html2js'
-      '../*/javascripts/*.spec.js.coffee': ['coffee']
-      '../*/javascripts/**/*.spec.js.coffee': ['coffee']
-      '../*/javascripts/!(*.spec).js.coffee': ['coffee-coverage']
-      '../*/javascripts/**/!(*.spec).js.coffee': ['coffee-coverage']
+      'src/*/javascripts/*.html': 'html2js'
+      'src/*/javascripts/**/*.html': 'html2js'
+      'src/*/javascripts/*.spec.js.coffee': ['coffee']
+      'src/*/javascripts/**/*.spec.js.coffee': ['coffee']
+      'src/*/javascripts/!(*.spec).js.coffee': ['coffee-coverage']
+      'src/*/javascripts/**/!(*.spec).js.coffee': ['coffee-coverage']
     }
 
     reporters: ['dots', 'coverage']
