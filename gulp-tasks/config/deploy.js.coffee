@@ -1,4 +1,4 @@
-module.exports = (gulp, plugins, growl, path) ->
+module.exports = (gulp, plugins, path) ->
 
   awspublish = require('gulp-awspublish')
   awspublishRouter = require('gulp-awspublish-router')
