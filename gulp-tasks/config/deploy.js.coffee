@@ -6,8 +6,8 @@ module.exports = (gulp, plugins, growl, path) ->
 
   gulp.task 'deploy', () ->
     publisher = awspublish.create
-      key: process.env.AWS_ACCESS_KEY_ID
-      secret: process.env.AWS_SECRET_ACCESS_KEY
+      key: process.env.ACCESS_KEY_ID
+      secret: process.env.SECRET_ACCESS_KEY
       params:
         Bucket: 'angular.bookingbug.com'
       region: 'eu-west-1'
