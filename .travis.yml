@@ -25,12 +25,13 @@ cache:
     - src/test-examples/unit_tests/bower_components
 
 deploy:
+  tags: true
   provider: s3
   bucket: angular.bookingbug.com
   region: eu-west-1
   skip_cleanup: true
   local_dir: build/booking-widget/dist
-  upload_dir: head
+  upload_dir: $TRAVIS_TAG
   access_key_id:
     secure: VisIawQs/YP5A9bkZA1W1cIvPn0cI8dZm4QezEhMq1yCphJYnQI/x9U/vEP3P50OqNKefmMVyYLenDO6rj2RfEcprG8K6TmyIl29PEqswlXR7CtVVedBKMfWu4S3+KNkeBC/EoB4nC1ApkkDRjcDHUg56V6oDhYb1mrix0biU9Y=
   secret_access_key:
