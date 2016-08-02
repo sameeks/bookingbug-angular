@@ -283,7 +283,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.refreshBooking = (booking) ->
 
       booking.$refetch().then (response) ->
-        console.log("reloading")
         booking.resourceIds = []
         booking.resourceId = null
         if booking.person_id?
@@ -323,6 +322,18 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         model: booking
         title: title
         success: (response) =>
+          if typeof response == 'string'
+            if response == "move"
+              item_defaults = {person:booking.person_id, resource:booking.resource_id}
+              $scope.getCompanyPromise().then (company) ->
+                AdminMoveBookingPopup.open
+                  item_defaults: item_defaults
+                  company_id: company.id
+                  booking_id: booking.id
+                  success: (model) =>
+                    $scope.refreshBooking(booking)
+                  fail: () ->
+                    $scope.refreshBooking(booking)
           if response.is_cancelled
             uiCalendarConfig.calendars.resourceCalendar.fullCalendar('removeEvents', [response.id])
           else

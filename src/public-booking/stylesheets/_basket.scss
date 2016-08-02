@@ -20,61 +20,82 @@
 }
 
 // Basket Summary List
+.bb-item-summary-header-text{
+  position: absolute;
+  top: -17px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 5px;
+  h3{
+    span{
+      padding-left: 10px;
+      padding-right: 10px;
+      background-color: white;
+    }
+  }
+}
+.bb-item-summary{
+  border-top: 1px solid $table-border-color;
+  border-bottom: 1px solid $table-border-color;
+  position: relative;
+  padding-bottom: 15px;
+}
 .page-summary-var{
-  border-bottom: 1px $bb-border solid;
-  padding-bottom: 0px;
+  border-bottom: 1px $table-border-color solid;
+  padding-bottom: 15px;
   margin-top: 20px;
-  margin-bottom: 0;
-
-  .bb-summary-label{
-    padding-top: 10px;
-    color: $brand-primary;
-    margin-right: 10px;
-    width: 100%;
-    @media (max-width: $screen-xs-max) {
-      padding-top: 15px;
-      width: auto;
-      margin-right: 0;
-      display: inline-block;
-    }
-  }
-  .bb-summary-value{
-    padding-bottom: 10px;
-    color: #909090;
-    @media (max-width: $screen-xs-max) {
-      width: auto;
-      display: inline-block;
-      padding: 0;
-    }
-  }
-  .bb-confirmation-summary-item {
+  margin-bottom: 40px;
+}
+.bb-summary-label{
+  font-size: $font-size-large;
+  padding-top: 10px;
+  color: $brand-primary;
+  margin-right: 10px;
+  width: 100%;
+  @media (max-width: $screen-xs-max) {
+    padding-top: 15px;
+    width: auto;
+    margin-right: 0;
     display: inline-block;
-    margin-right: 50px;
-    padding: 10px 0 10px 0;
-    font-weight: bold;
-    @media (max-width: $screen-xs-max) {
-      float: none;
-      width: auto;
-      padding: 0;
-    }
   }
-  .bb-item-summary-header {
-    height: 1px;
-    border-bottom: 1px $bb-border solid;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  .bb-item-summary-header-text{
-    padding-left: 20px;
-    padding-right: 20px;
-    position: relative;
+}
+.bb-summary-value{
+  padding-bottom: 10px;
+  @media (max-width: $screen-xs-max) {
+    width: auto;
     display: inline-block;
-    bottom: 12px;
-    color: $brand-primary;
-    background-color: white;
-    font-size: $font-size-large;
-    text-align: center;
-    margin: 0 auto;
+    padding: 0;
   }
+}
+.bb-confirmation-summary-item{
+  display: block;
+  float: left;
+  margin-right: 40px;
+  padding: 10px 0 10px 0;
+  font-weight: bold;
+  @media (max-width: $screen-xs-max) {
+    float: none;
+    width: auto;
+    padding: 0;
+  }
+}
+.page-summary-header{
+  height: 1px;
+  border-bottom: 1px $table-border-color solid;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.page-summary-header-text{
+  padding-left: 20px;
+  padding-right: 20px;
+  position: relative;
+  display: inline-block;
+  bottom: 12px;
+  color: $brand-primary;
+  background-color: white;
+  font-size: 27px;
+  text-align: center;
+  margin: 0 auto;
 }
