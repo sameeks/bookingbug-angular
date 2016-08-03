@@ -27,7 +27,7 @@
 
   .event-datetime {
     text-transform: uppercase;
-    
+
     .event-date {
       font-size: 0.8em;
       display: block;
@@ -83,7 +83,7 @@
 
 
     td {
-      
+
       text-align: center;
       padding: 1px;
       height: 36px;
@@ -117,14 +117,14 @@
         .circle {
           background-color: transparent;
           color: #AAA;
-          cursor: auto;         
+          cursor: auto;
         }
       }
       &.selected.available {
         .circle {
           background-color: rgb(25, 169, 115);
         }
-      }       
+      }
     }
 
     th {
@@ -247,7 +247,7 @@
 
     .panel-heading {
       @include gradient-vertical(#fff,#eff3e9);
-     
+
       text-align: center;
       padding: 15px;
       cursor: pointer;
@@ -308,7 +308,7 @@
         }
       }
     }
-    
+
   }
 
 
@@ -411,6 +411,14 @@
 
   .event-img:hover time {
     background-color: rgba(83,86,90,0.9);
+  }
+
+  // Show the arrows but make them grey as if they would have the .slick-disabled class
+  .slick-arrow.slick-hidden {
+    cursor: default !important;
+    pointer-events: none !important;
+    opacity: 0.2 !important;
+    filter: alpha(opacity=20)!important;
   }
 
   // .fully-booked time.icon {

@@ -41,6 +41,10 @@ angular.module('BB.Services').factory "PurchaseService", ($q, halClient,
         bdata.push(booking.getPostData())
       data.bookings = bdata
 
+    if params.move_reason
+      for booking in data.bookings
+        booking.move_reason = params.move_reason
+
     params.purchase.$put('self', {}, data).then (purchase) =>
       purchase = new BBModel.Purchase.Total(purchase)
       defer.resolve(purchase)
