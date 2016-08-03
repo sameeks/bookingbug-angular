@@ -1,4 +1,4 @@
-module.exports = (gulp, plugins, growl, path) ->
+module.exports = (gulp, plugins, path) ->
 
   bbGulp = require('../../bb-gulp.js')
 
@@ -201,7 +201,7 @@ module.exports = (gulp, plugins, growl, path) ->
     'build:settings'
   ]
 
-  gulp.task 'build:watch', () ->
+  gulp.task 'build:watch', ['build'], () ->
     gulp.watch(['src/core/javascripts/**/*'], ['build:core:javascripts'])
     gulp.watch(['src/core/stylesheets/**/*'], ['build:core:stylesheets'])
     gulp.watch(['src/core/templates/**/*'], ['build:core:templates'])

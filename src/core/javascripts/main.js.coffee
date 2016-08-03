@@ -7,6 +7,8 @@ app = angular.module('BB', [
   'BB.Services',
   'BB.Directives',
 
+  'BBAdminBooking'
+
   'ngStorage',
   'angular-hal',
   'ui.bootstrap',
