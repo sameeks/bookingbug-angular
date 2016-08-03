@@ -266,7 +266,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope,
   ###
   $scope.loadEventData = (comp) ->
 
-    loader.noLoaded()
+    loader.notLoaded()
 
     $scope.event_data_loaded = false
 
