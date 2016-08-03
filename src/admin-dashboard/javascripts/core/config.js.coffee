@@ -5,9 +5,7 @@ BBAdminDashboardDependencies = [
   'ngResource',
   'ngTouch',
   'ngSanitize',
-  'ngIdle',
   'ngLocalData',
-  'ngInputDate',
   'ngCookies',
 
   'BBAdmin',
@@ -103,14 +101,8 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
   $logProvider.debugEnabled(true)
   $httpProvider.defaults.withCredentials = true
 
-.constant('idleTimeout', 600)
-.constant('idleStart', 300)
 .value 'company_id', null
 .value 'sso_token', false
-
-.config ($idleProvider, idleStart, idleTimeout) ->
-  $idleProvider.idleDuration(idleStart)
-  $idleProvider.warningDuration(idleTimeout)
 
 # Translatition Configuration
 .config ['$translateProvider', 'AdminCoreOptionsProvider', ($translateProvider, AdminCoreOptionsProvider) ->
