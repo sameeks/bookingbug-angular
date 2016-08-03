@@ -6,6 +6,8 @@ angular.module('BB.Services').factory 'SettingsService', () ->
   currency = null
   company_time_zone = null
   display_time_zone = null
+  
+  update_document_title: false
 
   enableInternationalizaton: () ->
     i18n = true

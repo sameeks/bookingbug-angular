@@ -22,7 +22,7 @@
 
 # This class contrains handy functions and variables used in building and displaying a booking widget
 
-angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope, PathHelper) ->
+angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope, PathHelper, SettingsService ) ->
 
 
   class Widget
@@ -84,6 +84,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       url = url.replace(/\/+$/, "")
       $location.path(url)
       @routing = true
+
       return url
 
     ###**
@@ -166,6 +167,10 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @returns {string} The returned record step
     ###
     recordCurrentPage: () =>
+
+      setDocumentTitle = (title) ->
+        document.title = title if SettingsService.update_document_title and title
+
       if !@current_step
         @current_step = 0
       match = false
@@ -175,12 +180,14 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
         for step in @allSteps
           if step.page == @current_page
             @current_step = step.number
+            setDocumentTitle(step.title)
             match = true
       # now check the previously visited steps
       if !match
         for step in @steps
           if step && step.page == @current_page
             @current_step = step.number
+            setDocumentTitle(step.title)
             match = true
       # if still not found - assume it's a new 'next' page and add 1 to the step count
       if !match

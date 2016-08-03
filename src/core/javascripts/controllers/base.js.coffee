@@ -415,6 +415,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if prms.scroll_offset
       SettingsService.setScrollOffset(prms.scroll_offset)
 
+    SettingsService.update_document_title = SettingsService.update_document_title or prms.update_document_title or false
+
     @waiting_for_conn_started_def = $q.defer()
     $scope.waiting_for_conn_started = @waiting_for_conn_started_def.promise
 
