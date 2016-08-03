@@ -1,4 +1,4 @@
-angular.module('BB.Services').factory 'SettingsService', () ->
+angular.module('BB.Services').factory 'SettingsService', ($modalStack) ->
   i18n = false
   scroll_offset = 0
   country_code = null
@@ -56,3 +56,6 @@ angular.module('BB.Services').factory 'SettingsService', () ->
       display_time_zone
     else 
       company_time_zone
+
+  isModalOpen: ->
+    !!$modalStack.getTop()
