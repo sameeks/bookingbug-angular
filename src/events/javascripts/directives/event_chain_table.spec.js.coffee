@@ -6,6 +6,7 @@ describe 'BBAdminEvents, eventChainTable directive', () ->
 
   setup = () ->
 
+    module 'BBAdminBooking'
     module 'BBAdminEvents'
 
     inject ($injector) ->
