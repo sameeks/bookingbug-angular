@@ -23,8 +23,7 @@ angular.module('BB.Services').factory 'SettingsService', ($modalStack) ->
 
   setCountryCode: (value) ->
     country_code = value
-    if country_code is 'gb'
-      moment.locale('en-gb')
+    moment.locale 'en-' + country_code if country_code and country_code.match /^(gb|au)$/
 
   getCountryCode: () ->
     return country_code
