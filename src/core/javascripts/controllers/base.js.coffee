@@ -717,10 +717,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
 
     # don't react to URL changes if we're not in control of the URL
-    return if !$scope.bb.routeFormat or SettingsService.isModalOpen()
+    return if !$scope.bb.routeFormat
 
-    # don't load any steps if route is being updated
-    if !$scope.bb.routing
+    # don't load any steps if route is being updated or a modal is open
+    if !$scope.bb.routing or SettingsService.isModalOpen()
       # Get the step number to load
       step_number = $scope.bb.matchURLToStep()
       # Load next page
