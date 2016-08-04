@@ -27,8 +27,8 @@
 * @property {string} init_params Initialization of basic parameters
 ####
 
-angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log,
-    $templateCache, $compile, $q, AppConfig, $timeout, $bbug,$rootScope) ->
+
+angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope) ->
 
   ###**
   * @ngdoc method
@@ -413,6 +413,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     if prms.scroll_offset
       SettingsService.setScrollOffset(prms.scroll_offset)
 
+    SettingsService.update_document_title = SettingsService.update_document_title or prms.update_document_title or false
+
     @waiting_for_conn_started_def = $q.defer()
     $scope.waiting_for_conn_started = @waiting_for_conn_started_def.promise
 
@@ -714,29 +716,20 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   # $locationChangeStart is broadcast before a URL will change
   $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
 
+    # don't react to URL changes if we're not in control of the URL
     return if !$scope.bb.routeFormat
 
-    # don't load any steps if route is being updated
-    if !$scope.bb.routing
-
-      # save the current lenght of browser history
-      $scope.history_at_widget_init = $scope.history_at_widget_init or window.parent.history.length
-
+    # don't load any steps if route is being updated or a modal is open
+    if !$scope.bb.routing or SettingsService.isModalOpen()
       # Get the step number to load
       step_number = $scope.bb.matchURLToStep()
-
       # Load next page
       if step_number? and step_number > $scope.bb.current_step
         $scope.loadStep(step_number)
-      # else if step_number? and step_number < $scope.bb.current_step
-      #   # Load previous page
-      #   $scope.loadPreviousStep('locationChangeStart')
-      # else
       else
         $scope.loadPreviousStep('locationChangeStart')
 
     $scope.bb.routing = false
-
 
   $scope.showPage = (route, dont_record_page) =>
 
@@ -871,6 +864,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   $scope.showCheckout = ->
     $scope.bb.current_item.ready
 
+
   # add the current item to the basket service
   $scope.addItemToBasket = ->
     add_defer = $q.defer()
@@ -958,6 +952,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
             $scope.decideNextPage()
     add_defer.promise
 
+
   $scope.emptyBasket = ->
     return if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
 
@@ -973,9 +968,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
     return defer.promise
 
+
   $scope.deleteBasketItem = (item) ->
     BBModel.Basket.$deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
       $scope.setBasket(basket)
+
 
   $scope.deleteBasketItems = (items) ->
     for item in items
@@ -1002,12 +999,15 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     # for now also set a variable in the scope - for old views that we've not tidied up yet
     $scope.current_item = $scope.bb.current_item
 
+
   # say that the basket is ready to checkout
   $scope.setReadyToCheckout = (ready) ->
     $scope.bb.confirmCheckout = ready
 
+
   $scope.moveToBasket = ->
     $scope.bb.basket.addItem($scope.bb.current_item)
+
 
   $scope.quickEmptybasket = (options) ->
     preserve_stacked_items = if options && options.preserve_stacked_items then true else false
@@ -1102,6 +1102,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         restore_basket_defer.resolve()
     restore_basket_defer.promise
 
+
   $scope.setCompany = (company, keep_basket) ->
     defer = $q.defer()
     $scope.bb.company_id = company.id
@@ -1151,6 +1152,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   $scope.recordStep = (step, title) ->
     $scope.bb.recordStep(step, title)
 
+
   # set the title fo the current step
   $scope.setStepTitle = (title) ->
     $scope.bb.steps[$scope.bb.current_step-1].title = title
@@ -1165,10 +1167,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     if $scope.bb.current_step
         return steps[$scope.bb.current_step-1].title
 
+
   # conditionally set the title of the current step - if it doesn't have one
   $scope.checkStepTitle = (title) ->
     if $scope.bb.steps[$scope.bb.current_step-1] and !$scope.bb.steps[$scope.bb.current_step-1].title
       $scope.setStepTitle(title)
+
 
   # reload a step
   $scope.loadStep = (step) ->
@@ -1194,7 +1198,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         step.passed = step.number < $scope.bb.current_step
       if $scope.bb.allSteps[$scope.bb.current_step-1]
         $scope.bb.allSteps[$scope.bb.current_step-1].active = true
-
 
   ###**
   * @ngdoc method
@@ -1223,21 +1226,21 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
     # Remove pages from browser history (sync browser history with routing)
     if $scope.bb.routeFormat
+
       pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
-      if caller is "locationChangeStart"
-        # Reduce number of pages to remove from browser history by one if this
-        # method was triggered by Angular's $locationChangeStart broadcast
-        # In this instance we can assume that the browser back button was used
-        # and one page has already been removed from the history by the browser
-        pages_to_remove_from_history--
 
-      ignore_browser_history_sync = $scope.history_at_widget_init is window.history.length
+      # -------------------------------------------------------------------------
+      # Reduce number of pages to remove from browser history by one if this
+      # method was triggered by Angular's $locationChangeStart broadcast
+      # In this instance we can assume that the browser back button was used
+      # and one page has already been removed from the history by the browser
+      # -------------------------------------------------------------------------
+      pages_to_remove_from_history-- if caller is "locationChangeStart"
 
-      if pages_to_remove_from_history > 0 and !ignore_browser_history_sync
-        window.history.go(pages_to_remove_from_history*-1)
+      window.history.go(pages_to_remove_from_history*-1) if pages_to_remove_from_history > 0
 
-    # Load step
-    $scope.loadStep(step_to_load)
+    $scope.loadStep(step_to_load) if step_to_load > 0
+
 
   $scope.loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps

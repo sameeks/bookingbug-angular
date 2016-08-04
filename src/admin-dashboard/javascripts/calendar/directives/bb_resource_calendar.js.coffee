@@ -5,9 +5,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     AdminBookingPopup, AdminMoveBookingPopup, $window, $bbug, ColorPalette, Dialog,
     $timeout, $compile, $templateCache, PrePostTime, $filter) ->
 
-  controller = ($scope, $rootScope, $attrs, BBAssets, ProcessAssetsFilter,
-    $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources,
-    $translate) ->
+  controller = ($scope, $rootScope, $attrs, BBAssets, ProcessAssetsFilter, $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources, TitleAssembler, $translate) ->
 
     setTimeToMoment = (date, time)->
       newDate = moment(time,'HH:mm')
@@ -289,6 +287,17 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           $scope.loading = false
           callback($scope.selectedResources.selected)
 
+    getBookingTitle = (booking)->
+      labelAssembler      = if $scope.labelAssembler then $scope.labelAssembler else AdminCalendarOptions.bookings_label_assembler
+      blockLabelAssembler = if $scope.blockLabelAssembler then $scope.blockLabelAssembler else AdminCalendarOptions.block_label_assembler
+
+      if booking.status != 3 && labelAssembler
+        return TitleAssembler.getTitle(booking, labelAssembler)
+      else if booking.status == 3 && blockLabelAssembler
+        return TitleAssembler.getTitle(booking, blockLabelAssembler)
+
+      booking.title
+
     $scope.refreshBooking = (booking) ->
 
       booking.$refetch().then (response) ->
@@ -298,6 +307,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           booking.resourceIds.push booking.person_id + '_p'
         if booking.resource_id?
           booking.resourceIds.push booking.resource_id + '_r'
+
+        booking.title = getBookingTitle(booking)
 
         uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
 
@@ -316,6 +327,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           booking.resourceIds.push booking.person_id + '_p'
         if booking.resource_id?
           booking.resourceIds.push booking.resource_id + '_r'
+
+        booking.title = getBookingTitle(booking)
 
         uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
 
@@ -346,6 +359,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           if response.is_cancelled
             uiCalendarConfig.calendars.resourceCalendar.fullCalendar('removeEvents', [response.id])
           else
+            booking.title = getBookingTitle(booking)
             uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
 
     pusherBooking = (res) ->
@@ -353,6 +367,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))
         if booking && booking.$refetch
           booking.$refetch().then () ->
+            booking.title = getBookingTitle(booking)
             uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
         else
           uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')

@@ -6,7 +6,7 @@
 * @description
 * Controller for the layout (root state)
 ###
-controller = ($scope, $state, company) ->
+controller = ($scope, $state, company, $uibModalStack, $rootScope) ->
   'ngInject'
 
   $scope.company = company
@@ -18,6 +18,9 @@ controller = ($scope, $state, company) ->
   # checks to see if passed in state is part of the active chain
   $scope.isState = (states)->
     return $state.includes states
+
+  $rootScope.$on '$stateChangeStart', () ->
+    $uibModalStack.dismissAll()
 
   return
 
