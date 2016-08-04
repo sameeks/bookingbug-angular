@@ -1,0 +1,77 @@
+  <div class="panel">
+    <table class="table table-bordered table-hover dataTable" tr-ng-grid=""
+        items="bookings" page-items="per_page" total-items="total_entries" enable-filtering="false"
+        on-data-required="getAppointments(currentPage, filterBy, filterByFields, orderBy, orderByReverse)" role="grid">
+      <thead>
+        <tr role="row">
+          <th field-name="icon" display-name="-" enable-sorting="false" width="10"></th>
+          <th field-name="client_name" display-name="{{'CHECK_IN_PAGE.CUSTOMER' | translate}}" enable-sorting="true"></th>
+          <th field-name="person_name" display-name="{{'CHECK_IN_PAGE.STAFF_MEMBER' | translate}}" enable-sorting="true"></th>
+          <th field-name="datetime" display-name="{{'CHECK_IN_PAGE.DUE' | translate}}" enable-sorting="true"></th>
+
+          <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.ARRIVED' | translate}}</div></th>
+          <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.BEEING_SEEN' | translate}}</div></th>
+          <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.COMPLETED' | translate}}</div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr role="row">
+          <td field-name="icon" display-align="center">
+            <div class="text-center"><a ng-click="edit(bmap[gridItem])"><i class="fa fa-calendar"></i></a></div>
+          </td>
+          <td field-name="client_name">
+            <a ui-sref="clients.edit({id: bmap[gridItem].client_id})">{{bmap[gridItem].client_name}}</a>
+          </td>
+          <td field-name="person_name">
+            <span>{{bmap[gridItem].person_name}}</span>
+          </td>
+          <td field-name="datetime">
+            <span>{{bmap[gridItem].datetime.format("HH:mm")}}</span>
+          </td>
+          <td>
+            <span ng-if="bmap[gridItem].hasStatus('checked_in')">
+              {{bmap[gridItem].statusTime("checked_in").format("HH:mm")}}
+            </span>
+            <span ng-if="!bmap[gridItem].hasStatus('checked_in')">
+              <button ng-click="setStatus(bmap[gridItem], 'checked_in')" class="btn btn-default btn-xs btn-block">
+                <i class="fa fa-check-square-o"></i>
+                <span translate>CHECK_IN_PAGE.CHECK_IN_BUTTON</span>
+              </button>
+            </span>
+          </td>
+          <td>
+            <span ng-if="bmap[gridItem].hasStatus('being_seen')">
+              {{bmap[gridItem].statusTime("being_seen").format("HH:mm")}}
+            </span>
+            <span ng-if="!bmap[gridItem].hasStatus('being_seen') && !bmap[gridItem].hasStatus('checked_in') && bmap[gridItem].sinceStart() > 0" ng-class="bmap[gridItem].sinceStart() | gar:1000:10000">
+               <span translate translate-values="{period: '{{ bmap[gridItem].sinceStart() | time_period }}'}">CHECK_IN_PAGE.WAS_DUE</span>
+            </span>
+            <span ng-if="!bmap[gridItem].hasStatus('being_seen') && bmap[gridItem].hasStatus('checked_in')">
+              <button ng-click="setStatus(bmap[gridItem], 'being_seen')" class="btn btn-default btn-xs pull-right">
+                <i class="fa fa-check-square"></i>
+                <span translate>CHECK_IN_PAGE.SERVE</span>
+              </button>
+              <span ng-class="bmap[gridItem].sinceStart({later: 'checked_in'}) | gar:1000:10000" > <span translate translate-values="{period: '{{bmap[gridItem].sinceStart({later: 'checked_in'}) | time_period}}'}">CHECK_IN_PAGE.WAITING_FOR</span></span>
+            </span>
+          </td>
+
+          <td>
+            <span ng-if="bmap[gridItem].hasStatus('completed')">
+              {{bmap[gridItem].statusTime("completed").format("HH:mm")}}
+            </span>
+            <span ng-if="!bmap[gridItem].hasStatus('completed') && bmap[gridItem].hasStatus('being_seen')">
+              <span ng-class="bmap[gridItem].sinceStatus('being_seen') | gar:100:10" > <span translate translate-values="{period: '{{bmap[gridItem].sinceStatus('being_seen') | time_period}}'}">CHECK_IN_PAGE.BEING_SEEN_FOR</span> </span><br/>
+              <button ng-click="setStatus(bmap[gridItem], 'completed')" class="btn btn-default"><span translate>CHECK_IN_PAGE.COMPLETED_BUTTON</span></button>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+            <td>
+                <span tr-ng-grid-pager=""></span>
+            </td>
+        </tr>
+      </tfoot>
+      </table>
+  </div>

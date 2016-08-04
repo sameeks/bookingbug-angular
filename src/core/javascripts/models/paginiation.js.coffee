@@ -106,7 +106,7 @@ angular.module('BB.Models').factory "PaginationModel", () ->
     ###
     initialise: (items, total_items) ->
       @current_page = 1
-      @items = items
+      @items = items or []
       @num_items = total_items or 0
       @update()
 

@@ -6,6 +6,7 @@ describe 'BBAdminEvents, eventChainTable directive', () ->
 
   setup = () ->
 
+    module 'BBAdminBooking'
     module 'BBAdminEvents'
 
     inject ($injector) ->
@@ -22,4 +23,3 @@ describe 'BBAdminEvents, eventChainTable directive', () ->
     .toBe true
 
   return
-

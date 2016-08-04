@@ -1,7 +1,7 @@
 <div bb-events="{mode: 2}" ng-init="bb.basket.clear()">
 
   <div class="page-header">
-    <h1>Events at {{company.name}} das</h1>
+    <h1>Events at {{company.name}}</h1>
   </div>
 
   <div class="alert alert-info" bb-time-zone ng-show="is_time_zone_diff">
@@ -14,9 +14,9 @@
 
   <div class="bb-filters" ng-show="items">
 
-    <div accordion>
-      <div accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" class="store-body">
-        <div accordion-heading class="filter-header">
+    <div uib-accordion>
+      <div uib-accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" class="store-body">
+        <div uib-accordion-heading class="filter-header">
           <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
           <span>Filter</span>
         </div>
@@ -51,12 +51,11 @@
               <!-- date format: http://docfiddich.angularjs.org/api/ng.filter:date" -->
               <input type="text" ng-model="selected_date" class="form-control"
                 bb-datepicker-popup="DD/MM/YYYY"
-                datepicker-popup="dd/MM/yyyy"
+                uib-datepicker-popup="dd/MM/yyyy"
                 is-open="opened"
-                min-date="today"
+                ng-focus="opened=true"
                 on-date-change="selectedDateChanged()"
-                datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-                show-weeks="false"
+                datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
                 show-button-bar="false"
                 ng-readonly="true"
                 name="date"
@@ -132,11 +131,11 @@
     </div>
 
    <!--  Gift Cert Button (Needs Styling) -->
-   <div ng-if="bb.company_settings.has_vouchers">
+   <!-- <div ng-if="bb.company_settings.has_vouchers">
       <button type="button" ng-click="showPage('deal_list')" class="btn btn-primary btn-block">
         <span>Buy Gift Certificates </span>
       </button>
-    </div>
+    </div> -->
 
     <div class="bb-events-list row">
       <div ng-repeat="item in filtered_items | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" ng-init="spaces_left = item.getSpacesLeft()" ng-show="pagination.num_items > 0">
@@ -238,7 +237,7 @@
       </div>
     </div>
 
-    <pagination total-items="pagination.num_items" ng-model="pagination.current_page" items-per-page="pagination.page_size" max-size="pagination.max_size" boundary-links="true" rotate="false" num-pages="pagination.num_pages" ng-show="filtered_items" ng-change="pageChanged()"></pagination>
+    <uib-pagination total-items="pagination.num_items" ng-model="pagination.current_page" items-per-page="pagination.page_size" max-size="pagination.max_size" boundary-links="true" rotate="false" num-pages="pagination.num_pages" ng-show="filtered_items" ng-change="pageChanged()"></uib-pagination>
 
   </div>
 
@@ -251,4 +250,3 @@
     </div>
   </div>
 </div>
-

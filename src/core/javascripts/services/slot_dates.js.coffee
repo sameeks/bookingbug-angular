@@ -12,7 +12,7 @@ angular.module('BB.Services').factory 'SlotDates', ($q, DayService) ->
       firstSlotDate : null
       timesQueried  : 0
 
-    getFirstDayWithSlots: (cItem, selected_day) ->
+    getFirstDayWithSlots = (cItem, selected_day) ->
       deferred = $q.defer()
 
       if cached.firstSlotDate?
@@ -21,11 +21,7 @@ angular.module('BB.Services').factory 'SlotDates', ($q, DayService) ->
 
       endDate = selected_day.clone().add(3, 'month')
 
-      params =
-        cItem: cItem
-        date: selected_day.format('YYYY-MM-DD')
-        edate: endDate.format('YYYY-MM-DD')
-      DayService.query(params).then (days) ->
+      DayService.query(cItem: cItem, date: selected_day.format('YYYY-MM-DD'), edate: endDate.format('YYYY-MM-DD')).then (days) ->
         cached.timesQueried++
 
         firstAvailableSlots = _.find days, (day) -> day.spaces > 0
@@ -34,7 +30,7 @@ angular.module('BB.Services').factory 'SlotDates', ($q, DayService) ->
           deferred.resolve cached.firstSlotDate
         else
           if cached.timesQueried <= 4
-            @getFirstDayWithSlots(cItem, endDate).then (day)->
+            getFirstDayWithSlots(cItem, endDate).then (day)->
               deferred.resolve cached.firstSlotDate
             , (err)->
               deferred.reject err
@@ -45,3 +41,4 @@ angular.module('BB.Services').factory 'SlotDates', ($q, DayService) ->
 
       return deferred.promise
 
+    return getFirstDayWithSlots: getFirstDayWithSlots

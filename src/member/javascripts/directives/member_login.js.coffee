@@ -1,7 +1,8 @@
-angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope,
-  MemberLoginService, $templateCache, $q, $sessionStorage, halClient) ->
+angular.module('BBMember').directive 'loginMember', ($uibModal, $document, $log,
+  $rootScope, MemberLoginService, $templateCache, $q, $sessionStorage, halClient
+) ->
 
-  loginMemberController = ($scope, $modalInstance, company_id) ->
+  loginMemberController = ($scope, $uibModalInstance, company_id) ->
     $scope.title = 'Login'
     $scope.schema =
       type: 'object'
@@ -26,15 +27,15 @@ angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope,
       MemberLoginService.login(form, options).then (member) ->
         member.email = form.email
         member.password = form.password
-        $modalInstance.close(member)
+        $uibModalInstance.close(member)
       , (err) ->
-        $modalInstance.dismiss(err)
+        $uibModalInstance.dismiss(err)
 
     $scope.cancel = () ->
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
 
-  pickCompanyController = ($scope, $modalInstance, companies) ->
+  pickCompanyController = ($scope, $uibModalInstance, companies) ->
     $scope.title = 'Pick Company'
     $scope.schema =
       type: 'object'
@@ -50,10 +51,10 @@ angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope,
     $scope.pick_company_form = {}
 
     $scope.submit = (form) ->
-      $modalInstance.close(form.company_id)
+      $uibModalInstance.close(form.company_id)
 
     $scope.cancel = () ->
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
 
   link = (scope, element, attrs) ->
@@ -62,7 +63,8 @@ angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope,
     $rootScope.bb.api_url ||= "http://www.bookingbug.com"
 
     loginModal = () ->
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'login_modal_form.html'
         controller: loginMemberController
         resolve:
@@ -81,7 +83,8 @@ angular.module('BBMember').directive 'loginMember', ($modal, $log, $rootScope,
         loginModal()
 
     pickCompanyModal = (companies) ->
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'pick_company_modal_form.html'
         controller: pickCompanyController
         resolve:

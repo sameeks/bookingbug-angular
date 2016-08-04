@@ -32,9 +32,8 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   scope : true
   controller : 'MultiServiceSelect'
 
-angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope,
-  $rootScope, $q, $attrs, $modal, AlertService, FormDataStoreService,
-  LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $rootScope,
+  $q, $attrs, BBModel, $uibModal, $document, AlertService, FormDataStoreService, LoadingService) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selected_category_name'
@@ -351,18 +350,19 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope,
       $scope.addItem(service)
     else
 
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: $scope.getPartial('_select_duration_modal')
         scope: $scope
-        controller: ($scope, $modalInstance, service) ->
+        controller: ($scope, $uibModalInstance, service) ->
           $scope.durations = service.durations
           $scope.duration = $scope.durations[0]
           $scope.service = service
 
           $scope.cancel = ->
-            $modalInstance.dismiss 'cancel'
+            $uibModalInstance.dismiss 'cancel'
           $scope.setDuration = () ->
-            $modalInstance.close({service: $scope.service, duration: $scope.duration})
+            $uibModalInstance.close({service: $scope.service, duration: $scope.duration})
         resolve:
           service: ->
             service

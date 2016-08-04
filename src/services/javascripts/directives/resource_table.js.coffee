@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BBAdminServices').directive 'resourceTable', ($modal, $log,
+angular.module('BBAdminServices').directive 'resourceTable', (BBModel, $log,
   ModalForm) ->
 
   controller = ($scope) ->

@@ -35,7 +35,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
 
   $scope.controller = "public.controllers.Event"
   loader = LoadingService.$loader($scope).notLoaded()
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.validator = ValidatorService
   $scope.event_options = $scope.$eval($attrs.bbEvent) or {}
@@ -79,11 +79,11 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
       initImage(images) if images
 
       if $scope.bb.current_item.tickets and $scope.bb.current_item.tickets.qty > 0
-        
+
         # already added to the basket
         $scope.setLoaded $scope
         $scope.selected_tickets = true
-        
+
         # set tickets and current tickets items as items with the same event id
         $scope.current_ticket_items = _.filter $scope.bb.basket.timeItems(), (item) ->
           item.event_id is $scope.event.id
@@ -167,7 +167,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
         _.contains(ticket_refs, item.ref)
 
       $scope.tickets = (item.tickets for item in $scope.current_ticket_items)
-            
+
       # watch the basket items so the price is updated
       $scope.$watch 'current_ticket_items', (items, olditems) ->
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()

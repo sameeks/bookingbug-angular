@@ -107,7 +107,9 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $rootScope,
             groupBasketItems($scope.bb.basket.timeItems())
           , (err) ->
             loader.setLoaded()
-            
+        else
+          groupBasketItems($scope.bb.basket.timeItems())
+
     else
       groupBasketItems($scope.bb.basket.timeItems())
 

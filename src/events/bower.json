@@ -1,6 +1,6 @@
 {
   "name": "bookingbug-angular-events",
-  "version": "0.0.0",
+  "version": "master",
   "homepage": "https://github.com/BookingBug/bookingbug-angular-events-bower",
   "authors": [
     "Glenn Shoosmith <glenn@bookingbug.com>",
@@ -21,9 +21,5 @@
   "dependencies": {
     "bookingbug-angular-core": "master",
     "bookingbug-angular-admin": "master"
-  },
-  "resolutions": {
-    "bookingbug-angular-core": "master",
-    "angular": "1.2.28"
   }
 }

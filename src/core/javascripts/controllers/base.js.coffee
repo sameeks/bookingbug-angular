@@ -178,12 +178,13 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
 
 
 
-angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
-    $rootScope, halClient, $window, $http, $q, $timeout, BasketService,
-    LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
-    BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
-    QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate, LoadingService, $anchorScroll, $localStorage) ->
+angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,
+  halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService,
+  $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService,
+  ErrorService, AppConfig, QueryStringService, QuestionService, LocaleService,
+  PurchaseService, $sessionStorage, $bbug, SettingsService, UriTemplate, LoadingService,
+  $anchorScroll, $localStorage, $document) ->
+
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -372,6 +373,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       $scope.hide_page = true
     else
       $scope.hide_page = false
+
+    $scope.bb.from_datetime =  prms.from_datetime if prms.from_datetime
+    $scope.bb.to_datetime =  prms.to_datetime if prms.to_datetime
+    $scope.bb.min_date =  prms.min_date if prms.min_date
+    $scope.bb.max_date =  prms.max_date if prms.max_date
+    $scope.bb.hide_block =  prms.hide_block if prms.hide_block
 
     # say we've setup the path - so other partials that are relying on it at can trigger
     if !prms.custom_partial_url
@@ -844,14 +851,14 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions && !$scope.bb.current_item.asked_questions)
       return if $scope.setPageRoute($rootScope.Route.Questions)
       return $scope.showPage('check_items')
+    else if $scope.bb.moving_booking && $scope.bb.basket.itemsReady()
+      return $scope.showPage('purchase')
     else if !$scope.bb.basket.readyToCheckout()
       return if $scope.setPageRoute($rootScope.Route.Summary)
       return $scope.showPage('basket_summary')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
       return if $scope.setPageRoute($rootScope.Route.Basket)
       return $scope.showPage('basket')
-    else if $scope.bb.moving_booking && $scope.bb.basket.readyToCheckout()
-      return $scope.showPage('purchase')
     else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null && !$scope.bb.basket.waiting_for_checkout)
       return if $scope.setPageRoute($rootScope.Route.Checkout)
       return $scope.showPage('checkout')
@@ -911,6 +918,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
       # restore the current item using the ref
       current_item = _.find basket.items, (item) -> item.ref is current_item_ref
+      # use last item if there is no ref
+      current_item = _.last basket.items if !current_item
+
       $scope.setBasketItem(current_item)
 
       # check if item has been added to the basket
@@ -928,12 +938,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         halClient.clearCache("time_data")
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
-        error_modal = $modal.open
+        error_modal = $uibModal.open
+          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: $scope.getPartial('_error_modal')
-          controller: ($scope, $modalInstance) ->
+          controller: ($scope, $uibModalInstance) ->
             $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg
             $scope.ok = () ->
-              $modalInstance.close()
+              $uibModalInstance.close()
         error_modal.result.finally () ->
           if $scope.bb.nextSteps
             # either go back to the Date/Event routes or load the previous step
@@ -1239,7 +1250,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $rootScope.$broadcast 'clear:formData'
     $rootScope.$broadcast 'widget:restart'
     $scope.setLastSelectedDate(null)
-    $scope.client =  new BBModel.Client()
+    $scope.client =  new BBModel.Client() if !LoginService.isLoggedIn()
     $scope.bb.last_step_reached = false
     # This is to remove the current step you are on.
     $scope.bb.steps.splice(1)

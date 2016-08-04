@@ -63,7 +63,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel,
     *
     * @returns {promise} A promise for the chains event
     ###
-    getChain: () ->
+    getChain: (params) ->
       defer = $q.defer()
       if @chain
         defer.resolve(@chain)
@@ -71,7 +71,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel,
         if @$has('event_chains') or @$has('event_chain')
           event_chain = 'event_chain'
           event_chain = 'event_chains' if @$has('event_chains')
-          @$get(event_chain).then (chain) =>
+          @$get(event_chain, params).then (chain) =>
             @chain = new BBModel.EventChain(chain)
             defer.resolve(@chain)
         else
@@ -210,7 +210,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel,
       return 0 if wait <= 0
 
       return wait
-        
+
 
     ###**
     * @ngdoc method
@@ -288,10 +288,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel,
     *
     * @returns {promise} A promise for the event
     ###
-    prepEvent: () ->
+    prepEvent: (params) ->
       # build out some useful event stuff
       def = $q.defer()
-      @getChain().then () =>
+      @getChain(params).then () =>
 
         if @chain.$has('address')
           @chain.$getAddress().then (address) =>

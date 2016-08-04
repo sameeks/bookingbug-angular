@@ -48,7 +48,7 @@ angular.module('BB.Controllers').controller 'EventGroupList', ($scope,
   ]
   loader = LoadingService.$loader($scope).notLoaded()
 
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.validator = ValidatorService
 

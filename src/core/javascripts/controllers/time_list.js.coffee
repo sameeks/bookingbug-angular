@@ -35,12 +35,12 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
 
 angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
   $scope,  $rootScope, $q, TimeService, AlertService, BBModel,
-  DateTimeUtilitiesService, PageControllerService, LoadingService) ->
+  DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService, ErrorService) ->
 
   $scope.controller = "public.controllers.TimeList"
   loader = LoadingService.$loader($scope).notLoaded()
 
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.data_source = $scope.bb.current_item if !$scope.data_source
   $scope.options = $scope.$eval($attrs.bbTimes) or {}
@@ -257,15 +257,30 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
         checkRequestedSlots(time_slots) if options.check_requested_slot == true
 
       , (err) ->
-        loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        if err.status == 404  && err.data && err.data.error && err.data.error == "No bookable events found"
+          if $scope.data_source && $scope.data_source.person
+            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'))
+            $scope.setLoaded $scope
+          else if  $scope.data_source && $scope.data_source.resource
+            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'))
+            $scope.setLoaded $scope
+          else
+            $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        else
+          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     else
       loader.setLoaded()
 
   checkRequestedSlots = (time_slots) ->
+    return if !$scope.bb.item_defaults || !$scope.bb.item_defaults.time
+
     requested_slot = DateTimeUtilitiesService.checkDefaultTime($scope.selected_date, time_slots, $scope.data_source, $scope.bb.item_defaults)
 
-    if requested_slot.slot and requested_slot.slot.overbook or requested_slot.slot is null or requested_slot.match is null
+    console.log $scope.bb.item_defaults
+    console.log requested_slot
+
+    if requested_slot.slot is null or requested_slot.match is null
       $scope.availability_conflict = true
     else if requested_slot.slot and requested_slot.match == "full"
       $scope.skipThisStep()

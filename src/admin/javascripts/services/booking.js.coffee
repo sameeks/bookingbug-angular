@@ -38,7 +38,7 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     else
       url = ""
       url = prms.url if prms.url
-      href = url + "/api/v1/admin/{company_id}/bookings{?slot_id,start_date,end_date,service_id,resource_id,person_id,page,per_page,include_cancelled,embed}"
+      href = url + "/api/v1/admin/{company_id}/bookings{?slot_id,start_date,end_date,service_id,resource_id,person_id,page,per_page,include_cancelled,embed,client_id}"
       uri = new UriTemplate(href).fillFromObject(prms || {})
 
       halClient.$get(uri, {}).then  (found) =>
@@ -58,7 +58,10 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     deferred = $q.defer()
     if prms.company && !prms.company_id
       prms.company_id = prms.company.id
-    href = "/api/v1/admin/{company_id}/bookings/{id}{?embed}"
+
+    url = ""
+    url = prms.url if prms.url
+    href = url + "/api/v1/admin/{company_id}/bookings/{id}{?embed}"
     uri = new UriTemplate(href).fillFromObject(prms || {})
     halClient.$get(uri, { no_cache: true }).then (item) ->
       booking  = new BBModel.Admin.Booking(item)
@@ -172,4 +175,3 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     , (err) =>
       deferred.reject(err)
     deferred.promise
-

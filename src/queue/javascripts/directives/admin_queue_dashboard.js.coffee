@@ -1,15 +1,13 @@
 'use strict'
 
-angular.module('BBQueue').directive 'bbIfLogin', ($modal, $log, $q,
-  $rootScope, AdminQueueService, AdminCompanyService, $compile, $templateCache,
-  ModalForm, BBModel) ->
+angular.module('BBQueue').directive 'bbIfLogin', ($q, $compile, BBModel) ->
 
   compile = () ->
     {
       pre: ( scope, element, attributes ) ->
         @whenready = $q.defer()
         scope.loggedin = @whenready.promise
-        AdminCompanyService.query(attributes).then (company) ->
+        BBModel.Admin.Company.$query(attributes).then (company) ->
           scope.company = company
           @whenready.resolve()
       ,
@@ -18,13 +16,11 @@ angular.module('BBQueue').directive 'bbIfLogin', ($modal, $log, $q,
 
   link = (scope, element, attrs) ->
   {
-    compile: compile
+    compile: $compile
   }
 
 
-
-angular.module('BBQueue').directive 'bbQueueDashboard', ($modal, $log,
-  $rootScope, $compile, $templateCache, ModalForm, BBModel) ->
+angular.module('BBQueue').directive 'bbQueueDashboard', () ->
 
   link = (scope, element, attrs) ->
     scope.loggedin.then () ->
@@ -36,9 +32,7 @@ angular.module('BBQueue').directive 'bbQueueDashboard', ($modal, $log,
   }
 
 
-
-angular.module('BBQueue').directive 'bbQueues', ($modal, $log,
-  $rootScope, $compile, $templateCache, ModalForm, BBModel) ->
+angular.module('BBQueue').directive 'bbQueues', () ->
 
   link = (scope, element, attrs) ->
     scope.loggedin.then () ->
@@ -49,9 +43,7 @@ angular.module('BBQueue').directive 'bbQueues', ($modal, $log,
     controller: 'bbQueues'
   }
 
-
-angular.module('BBQueue').directive 'bbQueueServers', ($modal, $log,
-  $rootScope, $compile, $templateCache, ModalForm, BBModel) ->
+angular.module('BBQueue').directive 'bbQueueServers', () ->
 
   link = (scope, element, attrs) ->
     scope.loggedin.then () ->

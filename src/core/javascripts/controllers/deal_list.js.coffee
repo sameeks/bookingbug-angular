@@ -29,9 +29,8 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
   scope : true
   controller : 'DealList'
 
-angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope,
-  $q, $modal, AlertService, FormDataStoreService, ValidatorService,
-  LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $uibModal,
+  $document, AlertService, FormDataStoreService, ValidatorService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
@@ -63,7 +62,8 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope,
     iitem.setDefaults $scope.bb.item_defaults
     iitem.setDeal deal
     if !$scope.bb.company_settings.no_recipient
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: $scope.getPartial('_add_recipient')
         scope: $scope
         controller: ModalInstanceCtrl
@@ -86,7 +86,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope,
       , (err) ->
         loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
-  ModalInstanceCtrl = ($scope, $modalInstance, item, ValidatorService) ->
+  ModalInstanceCtrl = ($scope, $uibModalInstance, item, ValidatorService) ->
     $scope.controller = 'ModalInstanceCtrl'
     $scope.item = item
     $scope.recipient = false
@@ -103,10 +103,10 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope,
     $scope.addToBasket = (form) ->
       if !ValidatorService.validateForm(form)
         return
-      $modalInstance.close($scope.item)
+      $uibModalInstance.close($scope.item)
 
     $scope.cancel = ->
-      $modalInstance.dismiss 'cancel'
+      $uibModalInstance.dismiss 'cancel'
 
   ###**
   * @ngdoc method

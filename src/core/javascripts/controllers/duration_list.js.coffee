@@ -30,12 +30,12 @@ angular.module('BB.Directives').directive 'bbDurations', () ->
 
 
 angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs,
-  $rootScope, $q, $filter, PageControllerService, AlertService, LoadingService) ->
+  $rootScope, $q, $filter, PageControllerService, AlertService, ValidatorService, LoadingService) ->
 
   $scope.controller = "public.controllers.DurationList"
   loader = LoadingService.$loader($scope).notLoaded()
 
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   options = $scope.$eval($attrs.bbDurations) or {}
 

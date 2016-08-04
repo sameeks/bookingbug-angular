@@ -6,6 +6,7 @@ describe 'BBAdmin.Controllers, CalendarCtrl', () ->
   $scope = null
 
   setup = () ->
+    module 'BBAdminBooking'
     module 'BBAdmin'
 
     inject ($injector) ->

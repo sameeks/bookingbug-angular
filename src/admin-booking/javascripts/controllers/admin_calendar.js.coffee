@@ -6,9 +6,8 @@ angular.module('BB.Directives').directive 'bbAdminCalendar', () ->
   scope : true
   controller : 'adminCalendarCtrl'
 
-
-angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope,
-  $element, $controller, $attrs, $modal, BBModel, $rootScope) ->
+angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $element,
+  $controller, $attrs, BBModel, $rootScope) ->
 
   angular.extend(this, $controller('TimeList', {
     $scope: $scope,

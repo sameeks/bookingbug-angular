@@ -51,29 +51,32 @@ angular.module('BB.Directives').directive 'bbServices', () ->
   scope : true
   controller : 'ServiceList'
   link : (scope, element, attrs) ->
-    if attrs.bbItem
-      scope.booking_item = scope.$eval( attrs.bbItem )
-    scope.options = scope.$eval(attrs.bbServices) or {}
-    scope.options.show_all = attrs.bbShowAll if attrs.bbShowAll
-    scope.options.allow_single_pick = attrs.allowSinglePick if attrs.allowSinglePick
-    scope.options.hide_disabled = attrs.hideDisabled if attrs.hideDisabled
     scope.directives = "public.ServiceList"
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope,
-  $q, $attrs, $modal, $sce, BBModel, FormDataStoreService, ValidatorService,
-  PageControllerService, halClient, AlertService, ErrorService, $filter,
-  LoadingService) ->
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q,
+  $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,
+  PageControllerService, ErrorService, $filter, LoadingService) ->
+
+  $scope.controller = "public.controllers.ServiceList"
 
   FormDataStoreService.init 'ServiceList', $scope, [
     'service'
   ]
 
   loader = LoadingService.$loader($scope).notLoaded()
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.validator = ValidatorService
   $scope.filters = {category_name: null, service_name: null, price: { min: 0, max: 100}, custom_array_value: null}
   $scope.show_custom_array = false
+
+  $scope.options = $scope.$eval($attrs.bbServices) or {}
+
+  $scope.booking_item = $scope.$eval($attrs.bbItem) if $attrs.bbItem
+  $scope.show_all = true if $attrs.bbShowAll or $scope.options.show_all
+  $scope.allowSinglePick = true if $scope.options.allow_single_pick
+  $scope.hide_disabled = true if $scope.options.hide_disabled
+
   $scope.price_options = {min: 0, max: 100}
 
   $rootScope.connection_started.then () =>
@@ -97,6 +100,8 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope,
       $scope.service = null
 
     ppromise = comp.$getServices()
+
+    all_loaded = [ppromise]
 
     ppromise.then (items) =>
       if $scope.options.hide_disabled
@@ -151,9 +156,10 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope,
       loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     if ($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource())
-
       # if we've already picked a service or a resource - get a more limited service selection
-      BBModel.BookableItem.$query({company: $scope.bb.company, cItem: $scope.booking_item, wait: ppromise, item: 'service'}).then (items) =>
+      ispromise = BBModel.BookableItem.$query({company: $scope.bb.company, cItem: $scope.booking_item, wait: ppromise, item: 'service'})
+      all_loaded.push(ispromise)
+      ispromise.then (items) =>
         if $scope.booking_item.service_ref
           items = items.filter (x) -> x.api_ref == $scope.booking_item.service_ref
         if $scope.booking_item.group
@@ -181,6 +187,10 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope,
         loader.setLoaded()
       , (err) ->
         loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+    $q.all(all_loaded).then () ->
+      $scope.setLoaded($scope)
+
 
   setServicesDisplayName = (items)->
     for item in items
@@ -267,12 +277,13 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope,
   * Display error message in modal
   ###
   $scope.errorModal = () ->
-    error_modal = $modal.open
+    error_modal = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial('_error_modal')
-      controller: ($scope, $modalInstance) ->
+      controller: ($scope, $uibModalInstance) ->
         $scope.message = ErrorService.getError('GENERIC').msg
         $scope.ok = () ->
-          $modalInstance.close()
+          $uibModalInstance.close()
 
   ###**
   * @ngdoc method

@@ -11,19 +11,31 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
   'BBAdminDashboard.dashboard-iframe.directives',
   'BBAdminDashboard.dashboard-iframe.translations'
 ])
-.run (RuntimeStates, AdminDashboardIframeOptions) ->
+.run ['RuntimeStates', 'AdminDashboardIframeOptions', 'SideNavigationPartials', (RuntimeStates, AdminDashboardIframeOptions, SideNavigationPartials) ->
   # Choose to opt out of the default routing
   if AdminDashboardIframeOptions.use_default_states
 
     RuntimeStates
       .state 'dashboard',
         parent: AdminDashboardIframeOptions.parent_state
-        url: "/dashboard"
+        url: "dashboard"
         controller: "DashboardIframePageCtrl"
-        templateUrl: "admin_dashboard_page.html"
+        templateUrl: "dashboard-iframe/index.html"
+        deepStateRedirect: {
+          default: {
+            state:  'dashboard.page'
+            params: {
+              path: 'view/dashboard/index'
+              fixed: true
+            }
+          }
+        }
 
       .state 'dashboard.page',
         url: "/page/:path"
         controller: 'DashboardSubIframePageCtrl'
-        templateUrl: "iframe_page.html"
+        templateUrl: "core/iframe-page.html"
 
+  if AdminDashboardIframeOptions.show_in_navigation
+    SideNavigationPartials.addPartialTemplate('dashboard-iframe', 'dashboard-iframe/nav.html')
+]

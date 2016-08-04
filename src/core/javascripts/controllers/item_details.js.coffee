@@ -50,11 +50,9 @@ angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, 
           $compile(element.contents())(scope)
 
 
-
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs,
-  $rootScope, ItemDetailsService, PurchaseBookingService, AlertService,
-  BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal,
-  $location, $translate, SettingsService, PurchaseService, LoadingService) ->
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope,
+  PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService,
+  $uibModal, $document, $translate, SettingsService, PurchaseService, LoadingService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
   loader = LoadingService.$loader($scope)
@@ -237,6 +235,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs,
   * @param {string=} route A specific route to load
   ###
   $scope.confirm_move = (route) ->
+
     confirming = true
     $scope.item ||= $scope.bb.current_item
     $scope.item.moved_booking = false
@@ -248,6 +247,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs,
         params =
           purchase: $scope.bb.moving_purchase
           bookings: $scope.bb.basket.items
+        if $scope.bb.current_item.move_reason
+          params.move_reason = $scope.bb.current_item.move_reason
         PurchaseService.update(params).then (purchase) ->
           $scope.bb.purchase = purchase
           $scope.bb.purchase.$getBookings().then (bookings)->
@@ -264,6 +265,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs,
            loader.setLoaded()
            AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
       else
+        if $scope.bb.current_item.move_reason
+          $scope.item.move_reason = $scope.bb.current_item.move_reason
         PurchaseBookingService.update($scope.item).then (booking) ->
           b = new BBModel.Purchase.Booking(booking)
 
@@ -272,6 +275,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs,
               $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
 
           loader.setLoaded()
+          $scope.bb.moved_booking = booking
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
@@ -299,7 +303,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs,
   * Display terms and conditions view
   ###
   $scope.openTermsAndConditions = () ->
-    modalInstance = $modal.open(
+    modalInstance = $uibModal.open(
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "terms_and_conditions"
       scope: $scope
     )

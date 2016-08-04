@@ -18,7 +18,7 @@ angular.module('BB.Models').run ($q, $injector, BBModel) ->
     'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space',
     'Clinic', 'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
     'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection',
-    'ExternalPurchase', 'PackageItem', 'BulkPurchase', 'Pagination']
+    'ExternalPurchase', 'PackageItem', 'BulkPurchase', 'Pagination', 'Reason']
 
   for model in models
     BBModel[model] = $injector.get(model + "Model")
@@ -135,7 +135,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
       @_data.$has(rel) if @_data
 
     $flush: (rel, params) ->
-      @_data.$href(rel, params) if @_data
+      @_data.$flush(rel, params) if @_data
 
     $get: (rel, params) ->
       @_data.$get(rel, params) if @_data
@@ -149,8 +149,8 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
     $patch: (rel, params, dat) ->
       @_data.$patch(rel, params, dat) if @_data
 
-    $del: (rel, params) ->
-      @_data.$del(rel, params) if @_data
+    $del: (rel, params, dat) ->
+      @_data.$del(rel, params, dat) if @_data
 
     $links: () ->
       @_data.$links() if @_data

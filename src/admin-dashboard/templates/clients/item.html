@@ -1,0 +1,74 @@
+<section class="content-header">
+  <h1>
+      <span translate>CLIENTS_PAGE.CLIENT</span>: {{client.name}}
+  </h1>
+</section>
+<section class="content">
+  <div class="row">
+    <div class="col-lg-12">
+      <!-- About Me Box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title"><span translate>CLIENTS_PAGE.ABOUT</span> {{client.first_name}}</h3>
+        </div><!-- /.box-header -->
+        <table class="table table-striped">
+          <tr>
+            <td width="100"><b translate>CLIENTS_PAGE.EMAIL</b></td>
+            <td ng-bind-html="(client.email || 'empty') | linky"></td>
+          </tr>
+          <tr ng-if="client.mobile">
+            <td><b translate>CLIENTS_PAGE.MOBILE</b></td>
+            <td><a ng-href="tel:{{client.mobile}}" target=_blank>{{client.mobile}}</a></td>
+          </tr>
+          <tr ng-if="client.phone">
+            <td><b translate>CLIENTS_PAGE.PHONE</b></td>
+            <td><a ng-href="tel:{{client.phone}}" target=_blank>{{client.phone}}</a></td>
+          </tr>
+          <tr ng-if="client.addressMultiLine()">
+            <td><b translate>CLIENTS_PAGE.ADDRESS</b></td>
+            <td><span ng-bind-html="client.addressMultiLine()"></span></td>
+          </tr>
+        </table>
+      </div><!-- /.box -->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+
+      <uib-tabset class="bb-tabs nav-tabs-custom">
+
+        <uib-tab id="client-upcoming-booking-tab">
+          <uib-tab-heading translate>
+            CLIENTS_PAGE.UPCOMING_BOOKINGS
+          </uib-tab-heading>
+
+          <div member-bookings-table member="client"></div>
+
+        </uib-tab>
+
+        <uib-tab  id="client-past-booking-tab">
+          <uib-tab-heading translate>
+            CLIENTS_PAGE.PAST_BOOKINGS
+          </uib-tab-heading>
+
+          <div member-bookings-table member="client"
+            start-date="historicalStartDate"
+            end-date="historicalEndDate"></div>
+
+        </uib-tab>
+
+        <uib-tab id="client-details-tab" >
+          <uib-tab-heading translate>
+            CLIENTS_PAGE.CUSTOMER_DETAILS
+          </uib-tab-heading>
+
+          <div member-form member="client" on-success-save="memberSaveCallback"></div>
+
+        </uib-tab>
+
+
+      </uib-tabset>
+
+    </div>
+  </div>
+</section>

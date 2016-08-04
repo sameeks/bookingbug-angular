@@ -1,7 +1,6 @@
 'use strict'
 
-angular.module('BBAdminEvents').directive 'eventGroupTable', (BBModel, $modal,
-  $log, ModalForm) ->
+angular.module('BBAdminEvents').directive 'eventGroupTable', (BBModel, $log, ModalForm) ->
 
   controller = ($scope) ->
 

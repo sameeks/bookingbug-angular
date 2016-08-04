@@ -25,14 +25,14 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
   link : (scope, element, attrs, ngModel) ->
     origDateParser = null
     data = element.controller('ngModel')
-    if attrs.datepickerPopup?
+    if attrs.uibDatepickerPopup?
       format =
         date_us: "MM/dd/yyyy"
         date_uk: "dd/MM/yyyy"
       if scope.bb.company.country_code == "us"
-        attrs.datepickerPopup = format.date_us
+        attrs.uibDatepickerPopup = format.date_us
       else
-        attrs.datepickerPopup = format.date_uk
+        attrs.uibDatepickerPopup = format.date_uk
 
     dateFormat = if !!attrs.bbDatepickerPopup then attrs.bbDatepickerPopup else 'DD/MM/YYYY'
     yearNow = moment(new Date()).year()
@@ -134,19 +134,17 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
       if returnKey
         if mDate.year().toString().length is 2
           mDate.year(mDate.year() + 2000)
-
         callDateHandler(mDate._d)
       else
         origDateParser.call(this, viewValue)
 
     # wait until the data object for the popup element has been initialised by
     # angular-ui and then override the $parser with our parse function
-    f = ->
-      if _.isFunction data.$parsers[0]
-        origDateParser = data.$parsers[0]
-        data.$parsers[0] = replacementDateParser
-        return
-      else
-        setTimeout f, 10
-    f()
-
+    # f = ->
+    #   if _.isFunction data.$parsers[0]
+    #     origDateParser = data.$parsers[0]
+    #     data.$parsers[0] = replacementDateParser
+    #     return
+    #   else
+    #     setTimeout f, 10
+    # f()

@@ -81,7 +81,6 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
 
     getPostData: () ->
-
       data = {}
 
       data.attended = @attended
@@ -120,6 +119,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
       data.service_id = @service.id if @service
       data.resource_id = @resource.id if @resource
       data.questions = @item_details.getPostData() if @item_details
+      data.move_reason = @move_reason if @move_reason
       data.service_name = @service_name
       data.settings = @settings
       data.status = @status if @status

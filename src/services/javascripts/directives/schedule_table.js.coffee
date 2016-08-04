@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('BBAdminServices').directive 'scheduleTable', (
-  AdminCompanyService, $modal, $log, ModalForm) ->
+  BBModel, $log, ModalForm) ->
 
   controller = ($scope) ->
 

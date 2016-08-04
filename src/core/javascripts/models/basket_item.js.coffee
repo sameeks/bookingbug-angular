@@ -792,7 +792,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     checkReserveReady: ->
       @reserve_ready = false
 
-      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || @is_coupon || (@date && @service && @service.duration_unit == 'day'))
         @reserve_ready = true
 
       @reserve_ready
@@ -868,6 +868,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
       data.vouchers = @deal_codes if @deal_codes
       data.product_id = @product.id if @product
       data.ref = @ref
+      data.move_reason = @move_reason if @move_reason
 
       data.email = @email if @email
       data.first_name = @first_name if @first_name
