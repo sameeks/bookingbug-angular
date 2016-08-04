@@ -68,6 +68,60 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
       else
         $scope.load()
 
+  getPurchase = (params) ->
+    deferred = $q.defer()
+    PurchaseService.query(params).then (purchase) ->
+      deferred.resolve(purchase)
+      purchase.$get('company').then (company) =>
+        setPurchaseCompany(company)
+      $scope.purchase = purchase
+      $scope.bb.purchase = purchase
+      $scope.price = !($scope.purchase.price == 0)
+    , (err) -> #get purchase
+      loader.setLoaded()
+      if err && err.status == 401
+        if LoginService.isLoggedIn()
+          # TODO don't show fail message, display message that says you're logged in as someone else and offer switch user function (logout and show login)
+          failMsg()
+        else
+          loginRequired()
+      else
+        failMsg()
+    return deferred.promise
+
+  getBookings = (purchase) ->
+    $scope.purchase.$getBookings().then (bookings) ->
+      $scope.bookings = bookings
+
+      if bookings[0]
+        bookings[0].$getCompany().then (company) ->
+          $scope.purchase.bookings[0].company = company
+          if company.$has("reasons")
+            getReasons(company).then (reasons) ->
+              setCancelReasons()
+              setMoveReasons()
+              setMoveReasonsToBB()
+              setCancelReasonsToBB()
+          company.$getAddress().then (address) ->
+            $scope.purchase.bookings[0].company.address = address
+
+      loader.setLoaded()
+      checkIfMoveBooking(bookings)
+      checkIfWaitlistBookings(bookings)
+
+      for booking in $scope.bookings
+        booking.$getAnswers().then (answers) ->
+          booking.answers = answers
+    , (err) -> #get booking
+      loader.setLoaded()
+      failMsg()
+
+    if purchase.$has('client')
+      purchase.$get('client').then (client) =>
+        $scope.setClient(new BBModel.Client(client))
+    $scope.purchase.getConfirmMessages().then (messages) ->
+      $scope.purchase.confirm_messages = messages
+      $scope.messages = messages
 
   $scope.load = (id) ->
     loader.notLoaded()
@@ -84,57 +138,12 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
           params = {purchase_id: id, url_root: $scope.bb.api_url}
           auth_token = $sessionStorage.getItem('auth_token')
           params.auth_token = auth_token if auth_token
-          PurchaseService.query(params).then (purchase) ->
-            purchase.$get('company').then (company) =>
-              setPurchaseCompany(company)
-            $scope.purchase = purchase
-            $scope.bb.purchase = purchase
-            $scope.price = !($scope.purchase.price == 0)
 
-            $scope.purchase.$getBookings().then (bookings) ->
-              $scope.bookings = bookings
+          getPurchase(params).then (purchase) ->
+            getBookings(purchase)
 
-              if bookings[0]
-                bookings[0].$getCompany().then (company) ->
-                  $scope.purchase.bookings[0].company = company
-                  if company.$has("reasons")
-                    getReasons(company).then (reasons) ->
-                      setCancelReasons()
-                      setMoveReasons()
-                      setMoveReasonsToBB()
-                      setCancelReasonsToBB()
-                  company.$getAddress().then (address) ->
-                    $scope.purchase.bookings[0].company.address = address
-
-              loader.setLoaded()
-              checkIfMoveBooking(bookings)
-              checkIfWaitlistBookings(bookings)
-
-              for booking in $scope.bookings
-                booking.$getAnswers().then (answers) ->
-                  booking.answers = answers
-            , (err) ->
-              loader.setLoaded()
-              failMsg()
-
-            if purchase.$has('client')
-              purchase.$get('client').then (client) =>
-                $scope.setClient(new BBModel.Client(client))
-            $scope.purchase.getConfirmMessages().then (messages) ->
-              $scope.purchase.confirm_messages = messages
-              $scope.messages = messages
-          , (err) ->
-            loader.setLoaded()
-            if err && err.status == 401
-              if LoginService.isLoggedIn()
-                # TODO don't show fail message, display message that says you're logged in as someone else and offer switch user function (logout and show login)
-                failMsg()
-              else
-                loginRequired()
-            else
-              failMsg()
-        , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+        , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+      , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
     $scope.loaded = true
 
@@ -324,7 +333,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
       $scope.company_reasons = reasons
       $scope.company_reasons
     , (err) ->
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong retrieving reasons')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong retrieving reasons')
 
   setCancelReasons = () ->
     $scope.cancel_reasons = _.filter($scope.company_reasons, (r) -> r.reason_type == 3)

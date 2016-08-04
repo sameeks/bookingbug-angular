@@ -1211,7 +1211,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   ###
   $scope.loadPreviousStep = (caller) ->
 
-    past_steps = _.without($scope.bb.steps, _.last($scope.bb.steps))
+    past_steps = _.reject($scope.bb.steps, (s) -> s.number >= $scope.bb.current_step)
 
     # Find the last unskipped step
     step_to_load = 0

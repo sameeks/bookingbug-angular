@@ -80,8 +80,11 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
 
       if $scope.bb.current_item.tickets and $scope.bb.current_item.tickets.qty > 0
 
+        # flag that we're editing tickets already in the basket so that view can indicate this
+        $scope.edit_mode = true
+
         # already added to the basket
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.selected_tickets = true
 
         # set tickets and current tickets items as items with the same event id
