@@ -80,6 +80,8 @@ angular.module('BB.Controllers').controller 'FileUpload', ($scope, Upload) ->
       onProgress = (evt) ->
         file.progress = Math.min(100, parseInt(99.0 * evt.loaded / evt.total))
 
+      Upload.rename(file, file.name.replace(/[^\x00-\x7F]/g, ''))
+
       file.upload = Upload.upload(
         url: url,
         method: method
