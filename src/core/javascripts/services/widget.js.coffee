@@ -231,7 +231,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
           step.passed = step.number < @current_step
           step.active = step.number == @current_step
 
-        if step.number is step_number
+        if step and step.number is step_number
           @calculatePercentageComplete(step.number)
 
       # check if we're at the last step
