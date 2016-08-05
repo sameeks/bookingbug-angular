@@ -1,4 +1,4 @@
-module.exports = (gulp, plugins, growl, path)->
+module.exports = (gulp, plugins, path)->
   protractor = require 'gulp-protractor'
   sauceConnectLauncher = require 'sauce-connect-launcher'
 

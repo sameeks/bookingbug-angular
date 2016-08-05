@@ -13,7 +13,7 @@
     "tests"
   ],
   "dependencies": {
-    "bookingbug-angular-public-booking": null,
+    "bookingbug-angular-public-booking": "../../../public-booking",
     "font-awesome": "~4.6.3"
   },
   "resolutions": {
@@ -22,7 +22,7 @@
     "angular": "~1.5.8",
     "fullcalendar": "~2.9.1",
     "components-font-awesome": "~4.5",
-    "bookingbug-angular-admin-booking": "1.4.44"
+    "bookingbug-angular-admin-booking": "../../../admin-booking"
   },
   "overrides": {
     "lodash": {
