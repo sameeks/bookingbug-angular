@@ -29,6 +29,8 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
     constructor: (data) ->
       super
       @capacity_view = setCapacityView(@capacity_view)
+      @start_date = moment(@start_date) if @start_date
+      @end_date = moment(@end_date) if @end_date
 
     name: () ->
       @_data.name
@@ -75,6 +77,8 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
           @$get('ticket_sets').then (tickets) =>
             @tickets = []
             for ticket in tickets
+              # mark that this ticket is part of ticket set so that the range can be calculated correctly
+              ticket.ticket_set = true
               @tickets.push(new BBModel.EventTicket(ticket))
             @adjustTicketsForRemaining()
             def.resolve(@tickets)
@@ -99,7 +103,6 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
     *
     * @returns {object} The returned adjust tickets for remaining
     ###
-    # for each ticket set - adjust the number of tickets that can be booked due to changes in the number of remaining spaces
     adjustTicketsForRemaining: () ->
       if @tickets
         for @ticket in @tickets

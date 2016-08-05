@@ -60,7 +60,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     *
     * @returns {promise} A promise for the chains event
     ###
-    getChain: () ->
+    getChain: (params) ->
       defer = $q.defer()
       if @chain
         defer.resolve(@chain)
@@ -68,7 +68,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
         if @$has('event_chains') or @$has('event_chain')
           event_chain = 'event_chain'
           event_chain = 'event_chains' if @$has('event_chains')
-          @$get(event_chain).then (chain) =>
+          @$get(event_chain, params).then (chain) =>
             @chain = new BBModel.EventChain(chain)
             defer.resolve(@chain)
         else
@@ -133,17 +133,15 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     *
     * @returns {object} The returned spaces left
     ###
-    getWaitSpacesLeft: (pool = null) ->
-      wait = @getChain().waitlength
+    getWaitSpacesLeft: () ->
+      wait = @chain.waitlength
       wait ||= 0
       wait = wait - @spaces_wait
       return 0 if wait <= 0
 
-      if pool && @ticket_spaces && @ticket_spaces[pool]
-        pool_left =  @ticket_spaces[pool].left
-        return pool_left if wait > pool_left # use the pool if the pool has left that the wait list allowance
-      return wait       
+      return wait
         
+
     ###**
     * @ngdoc method
     * @name hasSpace
@@ -155,6 +153,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     ###
     hasSpace: () ->
       (@getSpacesLeft() > 0)
+
 
     ###**
     * @ngdoc method
@@ -219,10 +218,10 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     *
     * @returns {promise} A promise for the event
     ###
-    prepEvent: () ->
+    prepEvent: (params) ->
       # build out some useful event stuff
       def = $q.defer()
-      @getChain().then () =>
+      @getChain(params).then () =>
 
         if @chain.$has('address')
           @chain.getAddressPromise().then (address) =>

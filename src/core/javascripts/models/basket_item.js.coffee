@@ -36,6 +36,8 @@ angular.module('BB.Models').factory "BasketItemModel",
       @settings or= {}
       @has_questions = false
 
+      # give the basket item a unique reference so that we can track it
+      @ref = Math.ceil(moment().unix() * Math.random()) if !@ref
 
       # if we were given an id then the item is ready - we need to fake a few items
       if @time
@@ -52,6 +54,7 @@ angular.module('BB.Models').factory "BasketItemModel",
         @reserve_ready = true # if it has an id - it must be held - so therefore it must already be 'reservable'
         # keep a note of a possibly held item - we might change this item - but we should know waht was possibly already selected
         @held = {time: @time, date: @date, event_id: @event_id, id: @id}
+
 
 
       @promises = []
@@ -766,7 +769,7 @@ angular.module('BB.Models').factory "BasketItemModel",
     checkReserveReady: ->
       @reserve_ready = false
 
-      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || (@date && @service && @service.duration_unit == 'day'))
+      if ((@date && @time && @service) || @event || @product || @package_item || @bulk_purchase || @external_purchase || @deal || @is_coupon || (@date && @service && @service.duration_unit == 'day'))
         @reserve_ready = true
 
       @reserve_ready
@@ -841,6 +844,8 @@ angular.module('BB.Models').factory "BasketItemModel",
       data.attachment_id = @attachment_id if @attachment_id
       data.vouchers = @deal_codes if @deal_codes
       data.product_id = @product.id if @product
+      data.ref = @ref
+      data.move_reason = @move_reason if @move_reason
 
       data.email = @email if @email
       data.first_name = @first_name if @first_name

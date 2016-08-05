@@ -12,9 +12,13 @@
     <div class="modal-footer">
       <button class="btn btn-danger pull-left"
         ng-click="cancelEvent($event)">Cancel Booking</button>
+      <button class="btn btn-caution pull-left"
+        ng-click="success('move')">Move Booking</button>
+      <button class="btn btn-caution pull-left" ng-mouseup="cancel($event)"
+        ui-sref="clients.edit({id: form_model.client_id})">Edit Client</button>
       <input type="submit" class="btn btn-primary" ng-disabled="loading"
       value="Save Booking">
       <button class="btn btn-default" ng-click="cancel($event)">Close</button>
     </div>
   </form>
-</div>  
+</div>

@@ -33,17 +33,17 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
   link : (scope, element, attrs) ->
 
     scope.summary = attrs.summary?
-    options = scope.$eval(attrs.bbEvents) or {}
+    scope.events_options = scope.$eval(attrs.bbEvents) or {}
 
     # set the mode
     # 0 = Event summary (gets year summary and loads events a day at a time)
     # 1 = Next 100 events (gets next 100 events)
     # 2 = Next 100 events and event summary (gets event summary, loads next 100 events, and gets more events if requested)
-    scope.mode = if options and options.mode then options.mode else 0
+    scope.mode = if scope.events_options and scope.events_options.mode then scope.events_options.mode else 0
     scope.mode = 0 if scope.summary
 
     # set the total number of events loaded?
-    scope.per_page = options.per_page if options and options.per_page
+    scope.per_page = scope.events_options.per_page if scope.events_options and scope.events_options.per_page
 
     return
 
@@ -165,6 +165,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Load event summary
   ###
   $scope.loadEventSummary = () ->
+    
     deferred = $q.defer()
     current_event = $scope.current_item.event
 
@@ -175,7 +176,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     comp = $scope.bb.company
 
-    params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
+    params = 
+      item       : $scope.bb.current_item
+      start_date : $scope.start_date.toISODate()
+      end_date   : $scope.end_date.toISODate()
+    
     params.event_chain_id = $scope.bb.item_defaults.event_chain.id if $scope.bb.item_defaults.event_chain
 
     EventService.summary(comp, params).then (items) ->
@@ -224,6 +229,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @param {array} comp The company
   ###
   $scope.loadEventChainData = (comp) ->
+
     deferred = $q.defer()
 
     if $scope.bb.item_defaults.event_chain
@@ -231,9 +237,15 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     else
       comp ||= $scope.bb.company
 
-      params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}
+      params =
+        item       : $scope.bb.current_item
+        start_date : $scope.start_date.toISODate()
+        end_date   : $scope.end_date.toISODate()
+        
+      params.embed = $scope.events_options.embed if $scope.events_options.embed
 
       EventChainService.query(comp, params).then (event_chains) ->
+
         deferred.resolve(event_chains)
       , (err) ->  deferred.reject()
 
@@ -268,7 +280,12 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       delete $scope.bb.current_item.event_chain
       delete $scope.bb.current_item.event_chain_id
 
-    params = {item: $scope.bb.current_item, start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate(), include_non_bookable: true}
+    params =
+      item                 : $scope.bb.current_item
+      start_date           : $scope.start_date.toISODate()
+      end_date             : $scope.end_date.toISODate()
+      include_non_bookable : true
+
     params.event_chain_id = $scope.bb.item_defaults.event_chain.id if $scope.bb.item_defaults.event_chain
 
     params.per_page = $scope.per_page if $scope.per_page
@@ -286,9 +303,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         item.spaces_left = item.getSpacesLeft()
 
       # Add address prop from the company to the item
-      $scope.bb.company.getAddressPromise().then (address) ->
-        for item in $scope.items
-          item.address = address
+      if $scope.bb.company.$has('address')
+        $scope.bb.company.getAddressPromise().then (address) ->
+          for item in $scope.items
+            item.address = address
 
       # TODO make this behave like the frame timetable
       # get all data then process events
@@ -296,7 +314,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
         # get more event details
         for item in $scope.items
-          item.prepEvent()
+          item.prepEvent {embed: 'events'}
           # check if the current item already has the same event selected
           if $scope.mode is 0 and current_event and current_event.self == item.self
             item.select()
@@ -452,11 +470,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
       (($scope.filters.hide_sold_out_events and item.bookable) or !$scope.filters.hide_sold_out_events) and
-      filterEventsWithDynamicFilters(item)
+      $scope.filterEventsWithDynamicFilters(item)
     return result
 
 
-  filterEventsWithDynamicFilters = (item) ->
+  $scope.filterEventsWithDynamicFilters = (item) ->
 
     return true if !$scope.has_company_questions or !$scope.dynamic_filters
 

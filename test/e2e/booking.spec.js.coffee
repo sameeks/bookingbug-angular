@@ -1,4 +1,4 @@
-describe "Standard booking journey:", ->
+xdescribe "Standard booking journey:", ->
   waitFor = (selector) ->
     browser.wait protractor.ExpectedConditions.presenceOf($(selector)), 8000
 

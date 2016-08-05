@@ -1,0 +1,53 @@
+{
+  "name": "demo-widget",
+  "version": "0.0.0",
+  "authors": [
+    "BookingBug <dev@bookingbug.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bookingbug-angular-public-booking": null,
+    "font-awesome": "~4.6.3"
+  },
+  "resolutions": {
+    "jquery": "~1.11.3",
+    "moment": "~2.14.0",
+    "angular": "~1.5.8",
+    "fullcalendar": "~2.9.1",
+    "components-font-awesome": "~4.5",
+    "bookingbug-angular-admin-booking": "1.4.44"
+  },
+  "overrides": {
+    "lodash": {
+      "ignore": true
+    },
+    "bootstrap-sass-official": {
+      "ignore": true
+    },
+    "bootstrap-sass": {
+      "main": [
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.eot",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.svg",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.ttf",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.woff",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.woff2"
+      ]
+    },
+    "bootstrap": {
+      "ignore": true
+    },
+    "moment": {
+      "main": [
+        "moment.js",
+        "locale/en-gb.js"
+      ]
+    }
+  }
+}

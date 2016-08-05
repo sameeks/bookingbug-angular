@@ -1,7 +1,7 @@
 <div bb-events="{mode: 2}" ng-init="bb.basket.clear()">
 
   <div class="page-header">
-    <h1>Events at {{company.name}} das</h1>
+    <h1>Events at {{company.name}}</h1>
   </div>
 
   <div class="alert alert-info" bb-time-zone ng-show="is_time_zone_diff">
@@ -132,11 +132,11 @@
     </div>
 
    <!--  Gift Cert Button (Needs Styling) -->
-   <div ng-if="bb.company_settings.has_vouchers">
+   <!-- <div ng-if="bb.company_settings.has_vouchers">
       <button type="button" ng-click="showPage('deal_list')" class="btn btn-primary btn-block">
         <span>Buy Gift Certificates </span>
       </button>
-    </div>
+    </div> -->
 
     <div class="bb-events-list row">
       <div ng-repeat="item in filtered_items | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" ng-init="spaces_left = item.getSpacesLeft()" ng-show="pagination.num_items > 0">
@@ -211,7 +211,7 @@
                   <div class="event-description col-xs-12" ng-bind="item.chain.description" style="max-height: none; line-height: 1em; height:3em; margin-bottom: 20px; overflow:hidden"  ng-class="{'col-sm-8':!$root.tiles}"></div>
                   <div class="event-select col-xs-12"  ng-class="{'col-sm-4':!$root.tiles}">
                     <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" ng-disabled="spaces_left == 0 && !bb.company.settings.has_waitlists">
-                      <span ng-show="spaces_left > 0">Book Course</span>
+                      <span ng-show="spaces_left > 0">Book Event</span>
                       <div ng-show="spaces_left <= 0 && !bb.company.settings.has_waitlists">
                         <span class="status-sold-out">Sold out</span>
                       </div>
@@ -242,4 +242,12 @@
 
   </div>
 
+</div>
+
+<div class="bb-step-navigation">
+  <div class="row">
+    <div class="col-sm-3">
+      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+    </div>
+  </div>
 </div>

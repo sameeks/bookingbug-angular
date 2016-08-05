@@ -92,9 +92,9 @@ angular.module('BB.Controllers').controller 'ResourceList',
         for i in items
           resources.push(i.item)
           if $scope.booking_item and $scope.booking_item.resource and $scope.booking_item.resource.id is i.item.id
-            $scope.resource = i.item
-
-      # if there's only one resource and single pick hasn't been enabled, 
+            # set the resource unless the resource was automatically set
+            $scope.resource = i.item if $scope.bb.current_item.settings.resource isnt -1
+      # if there's only one resource and single pick hasn't been enabled,
       # automatically select the resource.
         if resources.length is 1 and !$scope.options.allow_single_pick
           if !$scope.selectItem(items[0].item, $scope.nextRoute, {skip_step: true})
@@ -120,7 +120,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
   * @description
   * Get item from resource in according of resource parameter
   *
-  * @param {object} resource The resource 
+  * @param {object} resource The resource
   ###
   getItemFromResource = (resource) =>
     if (resource instanceof  ResourceModel)
@@ -153,15 +153,17 @@ angular.module('BB.Controllers').controller 'ResourceList',
       $scope.decideNextPage(route)
       return true
 
-
   $scope.$watch 'resource',(newval, oldval) =>
-    if $scope.resource
-      new_resource = getItemFromResource($scope.resource)
-      _.each $scope.booking_items, (item) -> item.setResource(new_resource)
-      $scope.broadcastItemUpdate()
+    if $scope.resource and $scope.booking_item
+      if !$scope.booking_item.resource or $scope.booking_item.resource.self != $scope.resource.self
+        # only set and broadcast if it's changed
+        new_resource = getItemFromResource($scope.resource)
+        _.each $scope.booking_items, (item) -> item.setResource(new_resource)
+        $scope.broadcastItemUpdate()
     else if newval != oldval
       _.each $scope.booking_items, (item) -> item.setResource(null)
       $scope.broadcastItemUpdate()
+
 
 
   $scope.$on "currentItemUpdate", (event) ->

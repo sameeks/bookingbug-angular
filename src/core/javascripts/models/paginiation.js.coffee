@@ -14,7 +14,7 @@
 * @property {integer} items The items to be paginated
 * @property {String} summary Summary of current page, i.e. 1 - 10 of 16
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div bb-widget='{company_id:21}'>
@@ -67,7 +67,7 @@
 * });
 *       </file>
 *  </example>
-* 
+*
 ###
 angular.module('BB.Models').factory "PaginationModel", () ->
 
@@ -86,7 +86,7 @@ angular.module('BB.Models').factory "PaginationModel", () ->
       @current_page = 1
       @page_size = options.page_size or 10
       @request_page_size = options.request_page_size or @page_size
-      @max_size = options.max_size or 5 
+      @max_size = options.max_size or 5
       @num_pages = null
       @num_items = null
       @items = []
@@ -104,7 +104,7 @@ angular.module('BB.Models').factory "PaginationModel", () ->
     ###
     initialise: (items, total_items) ->
       @current_page = 1
-      @items = items
+      @items = items or []
       @num_items = total_items or 0
       @update()
 
@@ -114,10 +114,10 @@ angular.module('BB.Models').factory "PaginationModel", () ->
     * @name update
     * @methodOf BB.Models:Service
     * @description
-    * Updates the pagination summary when the page changes 
+    * Updates the pagination summary when the page changes
     *
     * @returns {boolean} Flag to indicate if items in current page are present
-    * @returns {integer} The page to load based on 
+    * @returns {integer} The page to load based on
     ###
     update: () ->
       start = ((@current_page - 1) * @page_size) + 1

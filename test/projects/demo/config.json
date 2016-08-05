@@ -1,0 +1,27 @@
+{
+  "development":
+  {
+    "name": "development config",
+    "company_id": "41284",
+    "api_url": "https://uk.bookingbug.com",
+    "assets_url": "http://localhost:8000",
+    "description": "for testing and deploying to development server"
+  },
+  "staging":
+  {
+    "name": "staging config",
+    "company_id": "41284",
+    "api_url": "https://uk.bookingbug.com",
+    "assets_url": "https://bespoke.bookingbug.com/demo/staging",
+    "description": "for testing and deploying to staging server"
+  },
+  "production":
+  {
+    "name": "production config",
+    "company_id": "41284",
+    "api_url": "https://uk.bookingbug.com",
+    "assets_url": "https://bespoke.bookingbug.com/demo",
+    "description": "for deploying to production server"
+  },
+  "googlemaps_api_key": ""
+}

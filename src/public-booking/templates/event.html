@@ -35,7 +35,7 @@
     <div class="panel panel-default" ng-show="event.chain.long_description">
       <div class="panel-body">
         <div>
-          <h2 class="heading">Course details</h2>
+          <h2 class="heading">Event details</h2>
           <p ng-bind-html="event.chain.long_description"></p>
         </div>
 
@@ -45,8 +45,128 @@
       </div>
     </div>
 
+    <div class="panel panel-default event-tickets">
+      <div class="panel-body">
+        <h2 ng-show="bb.basket.hasWaitlistItem()" class="heading" ng-bind="!selected_tickets ? 'Waitlist' : 'Waitlist summary'"></h2>
+        <h2 ng-show="!bb.basket.hasWaitlistItem()" class="heading" ng-bind="!selected_tickets ? 'Tickets' : 'Ticket summary'"></h2>
+        <div ng-form name="ticket_form" role="form">
+
+          <ul class="ticket-list">
+            <li class="header">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6">Type</div>
+                <div class="col-sm-3 col-xs-4">Price</div>
+                <div class="col-sm-3 col-xs-2">Qty</div>
+              </div> 
+            </li>
+            <li ng-repeat="ticket in event.tickets">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6">
+                  <span>{{ticket.fullName()}}</span>
+                </div>
+                <div class="col-sm-3 col-xs-4">
+                  <span ng-show="ticket.price > 0">{{ticket.price | currency}}</span><span ng-show="ticket.price == 0">Free</span>
+                  <small ng-show="ticket.counts_as"><i>(for {{ticket.counts_as}})</i></small>
+                </div>
+                <div ng-show="event.getSpacesLeft() > 0 || event.getWaitSpacesLeft() > 0" class="col-sm-3 col-xs-2">
+                  <span ng-show="selected_tickets">{{ticket.qty}}</span>
+                  <select ng-if="!selected_tickets" ng-model="ticket.qty" ng-options="n as n for n in ticket.getRange(event)">
+                    <option value="">-</option>
+                  </select>
+                </div>
+                <div ng-show="event.getSpacesLeft() == 0 && event.getWaitSpacesLeft() == 0" class="col-sm-3 col-xs-2">
+                  <span>Sold Out</span>
+                </div>
+              </div>
+            </li>
+            <li ng-show="selected_tickets && bb.basket.questionPrice()">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 text-right">Add-ons</div>
+                <div class="col-sm-3 col-xs-6">{{bb.basket.questionPrice() | currency}}</div>
+              </div>
+            </li>
+            <li ng-show="selected_tickets && (bb.basket.hasCoupon() || bb.basket.hasDeal())">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 total-label">Subtotal</div>
+                <div class="col-sm-3 col-xs-6">{{bb.basket.fullPrice() | currency}}</div>
+              </div>
+            </li>
+
+            <li ng-show="selected_tickets && bb.basket.hasDeal()">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 text-right">
+                  <div>Gift Certificate</div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                  <div>{{bb.basket.totalDealPaid() | currency}}</div>
+                </div>
+              </div>
+            </li>
+            <li ng-show="selected_tickets && bb.basket.hasCoupon()">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 text-right">Discount</div>
+                <div class="col-sm-3 col-xs-6">-{{bb.basket.totalCoupons() | currency }} <!-- <span>(10%)</span></div> -->
+                </div>
+              </div>
+            </li>
+            <li ng-show="selected_tickets">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 total-label">Total</div>
+                <div class="col-sm-3 col-xs-6"><strong>{{bb.basket.totalPrice() | currency}}</strong></div>
+              </div>
+            </li>
+            <li ng-show="selected_tickets">
+              <div class="row">
+                <div class="col-sm-6 col-xs-6 total-label">Due Total</div>
+                <div class="col-sm-3 col-xs-6"><strong>{{bb.basket.dueTotal() | currency}}</strong>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+        </div>
+
+        <!-- <div bb-basket-list class="row" ng-if="selected_tickets">
+          <div class="col-sm-6">
+
+            <div class="gift-certifcates ">
+              <div ng-form class="form-inline">
+                <div ng-show="!show_voucher_box">
+                  <button type="button" class="btn btn-link" ng-click="show_voucher_box = true">Have a gift certificate?</button>
+                </div>
+                <div ng-show="show_voucher_box" class="form-group">
+                  <label for="deal_code">Apply a gift certificate:</label>
+                  <div class=" input-group">
+                    <input type="text" class="form-control input-sm" id="deal_code" name="deal_code" ng-model="deal_code" placeholder="Enter your certificate code">
+                    <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!deal_code" ng-click="applyDeal(deal_code)">Apply</button>
+                  </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="deals-applied-wrapper" ng-if="bb.basket.hasDeal()">
+                <h3>Gift Certificates applied</h3>
+                <ul class="deals-applied">
+                  <li ng-repeat="deal in bb.basket.getDealCodes()">
+                    {{deal.description}} ({{deal.deal_code}})
+                    <button  type="button" class="btn btn-link btn-red" ng-click="removeDeal(deal)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</button>
+                  </li>
+                </ul>
+                <p>Remaining Gift Certificate balance: {{bb.basket.remainingDealBalance() | currency}}</p>
+              </div>
+            </div>
+
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+
     <form name="booking_form" role="form" novalidate bb-form>
+
       <div class="panel panel-default event-client-details" ng-if="selected_tickets">
+
         <div class="panel-body">
 
           <h2>Your details</h2>
@@ -164,11 +284,11 @@
           </div>
 
           <div accordion close-others="false" ng-init="use_my_details = true">
-            <div ng-repeat="item in bb.basket.timeItems()" bb-count-ticket-types="bb.basket.timeItems()">
+            <div ng-repeat="item in current_ticket_items" bb-count-ticket-types="current_ticket_items">
               <div ng-form name="client_ticket_form" class="form-horizontal" role="form" novalidate>
                 <div ticket-accordion accordion-group is-open="is_open" ng-init="is_open = $first">
                   <div accordion-heading>
-                    <h2>Ticket <span ng-if="bb.basket.timeItems().length != 1">{{$index + 1}}</span> details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i></h2>
+                    <h2>Ticket <span ng-show="current_ticket_items.length != 1">{{$index + 1}}</span> details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i></h2>
                   </div>
 
 
@@ -222,7 +342,7 @@
                     <div ng-form name="booking_questions_form">
                       <div ng-repeat="question in item_details.questions">
                         <div class="form-group" ng-if="question.currentlyShown" bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
-                          <label for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-if="question.required">*</span>:</label>
+                          <label for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-show="question.required">*</span>:</label>
                           <div class="col-sm-5">
                             <input bb-question="question" />
                           </div>
@@ -247,168 +367,64 @@
         </div>
       </div>
 
-      <div class="panel panel-default event-tickets">
-        <div class="panel-body">
-          <h2 ng-if="bb.basket.hasWaitlistItem()" class="heading" ng-bind="!selected_tickets ? 'Waitlist' : 'Waitlist summary'"></h2>
-          <h2 ng-if="!bb.basket.hasWaitlistItem()" class="heading" ng-bind="!selected_tickets ? 'Tickets' : 'Ticket summary'"></h2>
-          <div ng-form name="ticket_form" role="form">
-
-            <ul class="ticket-list">
-              <li class="header">
-                <div class="row">
-                  <div class="col-sm-6 col-xs-6">Type</div>
-                  <div class="col-sm-3 col-xs-4">Price</div>
-                  <div class="col-sm-3 col-xs-2">Qty</div>
-                </div>
-              </li>
-              <li ng-repeat="ticket in event.tickets">
-                <div class="row">
-                  <div class="col-sm-6 col-xs-6">
-                    <span>{{ticket.fullName()}}</span>
-                  </div>
-                  <div class="col-sm-3 col-xs-4">
-                    <span ng-if="ticket.price > 0">{{ticket.price | currency}}</span><span ng-if="ticket.price == 0">Free</span>
-                    <small ng-if="ticket.counts_as"><i>(for {{ticket.counts_as}})</i></small>
-                  </div>
-                  <div class="col-sm-3 col-xs-2">
-                    <span ng-if="selected_tickets">{{ticket.qty}}</span>
-                    <select ng-if="!selected_tickets" ng-model="ticket.qty" ng-options="n as n for n in ticket.getRange(20)"></select>
-                  </div>
-                </div>
-              </li>
-              <li ng-if="selected_tickets && bb.basket.questionPrice()">
-                <div class="row">
-                  <div class="col-sm-6 col-xs-6 text-right">Add-ons</div>
-                  <div class="col-sm-3 col-xs-6">{{bb.basket.questionPrice() | currency}}</div>
-                </div>
-              </li>
-              <li ng-if="selected_tickets && (bb.basket.hasCoupon() || bb.basket.hasDeal())">
-                <div class="row">
-                  <div class="col-sm-6 col-xs-6 total-label">Subtotal</div>
-                  <div class="col-sm-3 col-xs-6">{{bb.basket.fullPrice() | currency}}</div>
-                </div>
-              </li>
-
-              <li ng-if="selected_tickets && bb.basket.hasDeal()">
-                <div class="row">
-                  <div class="col-sm-6 col-xs-6 text-right">
-                    <div>Gift Certificate</div>
-                  </div>
-                  <div class="col-sm-3 col-xs-6">
-                    <div>{{bb.basket.totalDealPaid() | currency}}</div>
-                  </div>
-                </div>
-              </li>
-              <li ng-if="selected_tickets && bb.basket.hasCoupon()">
-                <div class="row">
-                  <div class="col-sm-6 col-xs-6 text-right">Discount</div>
-                  <div class="col-sm-3 col-xs-6">-{{bb.basket.totalCoupons() | currency }} <!-- <span>(10%)</span></div> -->
-                  </div>
-                </div>
-              </li>
-              <!-- <li ng-if="selected_tickets">
-                <div class="row">
-                  <div class="col-sm-6 col-xs-6 total-label">Total</div>
-                  <div class="col-sm-3 col-xs-6"><strong>{{bb.basket.totalPrice() | currency}}</strong></div>
-                </div>
-              </li> -->
-              <li ng-if="selected_tickets">
-                <div class="row">
-                  <div class="col-sm-6 col-xs-6 total-label">Total</div>
-                  <div class="col-sm-3 col-xs-6"><strong>{{bb.basket.dueTotal() | currency}}</strong>
-                  </div>
-                </div>
-              </li>
-            </ul>
-
-            <div class="button-group" ng-if="!selected_tickets">
-              <div class="row">
-                <div class="col-sm-offset-9 col-sm-3" ng-show="event.getSpacesLeft() > 0">
-                  <button type="button" class="btn btn-primary btn-block" ng-disabled="event.tickets[0].qty <= 0 " ng-click="selectTickets()">Reserve Ticket<span ng-if="event.tickets[0].qty > 1">s</span></button>
-                </div>
-                <div class="col-sm-offset-9 col-sm-3" ng-show="event.getSpacesLeft() <= 0 && bb.company.settings.has_waitlists">
-                  <button type="button" class="btn btn-primary btn-block" ng-disabled="event.tickets[0].qty <= 0 " ng-click="selectTickets()">Join Waitlist</button>
-                </div>
-              </div>
-            </div>
+      <div ng-if="!bb.isAdmin && selected_tickets" ng-form name="terms_and_conditons_form" id="terms_and_conditons_form" role="form" novalidate class="form-horizontal">
+        <div class="form-group check" ng-class="{'has-error': terms_and_conditons_form.tandc.$invalid && booking_form.submitted}">
+          <div class="col-sm-4 hidden-xs">&nbsp;</div>
+          <div class="col-sm-5">
+            <label>
+              <input type="checkbox" required ng-model="tandc" id="tandc" name="tandc" /> I agree to the <a href="#" target="_blank">terms and conditions</a>.
+            </label>
           </div>
-
-          <div bb-basket-list class="row" ng-if="selected_tickets">
-            <div class="col-sm-6">
-
-              <div class="gift-certifcates ">
-                <div ng-form class="form-inline">
-                  <div ng-show="!show_voucher_box">
-                    <button type="button" class="btn btn-link" ng-click="show_voucher_box = true">Have a gift certificate?</button>
-                  </div>
-                  <div ng-show="show_voucher_box" class="form-group">
-                    <label for="deal_code">Apply a gift certificate:</label>
-                    <div class=" input-group">
-                      <input type="text" class="form-control input-sm" id="deal_code" name="deal_code" ng-model="deal_code" placeholder="Enter your certificate code">
-                      <span class="input-group-btn">
-                      <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!deal_code" ng-click="applyDeal(deal_code)">Apply</button>
-                    </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="deals-applied-wrapper" ng-if="bb.basket.hasDeal()">
-                  <h3>Gift Certificates applied</h3>
-                  <ul class="deals-applied">
-                    <li ng-repeat="deal in bb.basket.getDealCodes()">
-                      {{deal.description}} ({{deal.deal_code}})
-                      <button  type="button" class="btn btn-link btn-red" ng-click="removeDeal(deal)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</button>
-                    </li>
-                  </ul>
-                  <p>Remaining Gift Certificate balance: {{bb.basket.remainingDealBalance() | currency}}</p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div ng-show="selected_tickets">
-        <div ng-if="!bb.isAdmin" ng-form name="terms_and_conditons_form" id="terms_and_conditons_form" role="form" novalidate>
-          <div class="form-group check" ng-class="{'has-error': terms_and_conditons_form.tandc.$invalid && booking_form.submitted}">
-            <div class="col-sm-4 hidden-xs">&nbsp;</div>
-            <div class="col-sm-5">
-              <label>
-                <input type="checkbox" required ng-model="tandc" id="tandc" name="tandc" /> I agree to the <a href="#" target="_blank">terms and conditions</a>.
-              </label>
-            </div>
-            <div class="col-sm-3 messages">
-              <div class="error-message" ng-show="terms_and_conditons_form.tandc.$invalid && booking_form.submitted">
-                You must agree to the terms and conditions
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="button-group">
-          <div class="row">
-            <div class="col-sm-offset-9 col-sm-3" ng-show="event.getSpacesLeft() > 0">
-              <button type="submit" class="btn btn-primary btn-block" ng-click="validator.validateForm(booking_form) && checkReady() && routeReady()">Book Ticket<span ng-show="event.tickets[0].qty > 1">s</span></button>
-            </div>
-            <div class="col-sm-offset-9 col-sm-3" ng-show="event.getSpacesLeft() <= 0 && bb.company.settings.has_waitlists">
-              <button type="submit" class="btn btn-primary btn-block" ng-click="validator.validateForm(booking_form) && checkReady() && routeReady()">Confirm Details</button>
+          <div class="col-sm-3 messages">
+            <div class="error-message" ng-show="terms_and_conditons_form.tandc.$invalid && booking_form.submitted">
+              You must agree to the terms and conditions
             </div>
           </div>
         </div>
       </div>
+
+      <div class="button-group">
+
+        <div class="row">
+
+          <div class="col-sm-push-9 col-sm-3">
+
+            <div ng-if="!selected_tickets">
+
+              <button type="button" class="btn btn-primary btn-block" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() > 0">
+                Reserve Ticket<span ng-show="event.numTicketsSelected() > 1">s</span>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </button>
+
+              <button type="button" class="btn btn-primary btn-block" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() <= 0 && bb.company.settings.has_waitlists">
+                Join Waitlist
+              </button>
+
+            </div>
+
+            <div ng-if="selected_tickets">
+
+              <button type="submit" class="btn btn-primary btn-block" ng-click="validator.validateForm(booking_form) && checkReady() && routeReady()">
+                Book Ticket
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="col-sm-3 col-sm-pull-3">
+
+            <button type="button" class="btn btn-default" bb-debounce ng-click="decideNextPage('event_list')">
+              Back
+            </button>
+
+          </div>
+
+        </div>
+
+      </div><!-- button group -->
 
     </form>
-
-    <div class="step-navigation">
-      <div class="row">
-        <div class="col-sm-3 back">
-          <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()">
-            &lt; Back</button>
-        </div>
-      </div>
-    </div>
 
   </div>
 </div>

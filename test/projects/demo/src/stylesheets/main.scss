@@ -1,0 +1,24 @@
+// @todo add back when new admin gets merged into master
+// Font awesome
+// $fa-font-path: "fonts";
+// @import "../../bower_components/fontawesome/scss/font-awesome";
+
+#bb {
+  @import "bootstrap-variables";
+  @import "bb-variables";
+  @import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
+  // BB SDK styles
+  @import "../../bower_components/bookingbug-angular-core/src/stylesheets/main";
+  @import "../../bower_components/bookingbug-angular-public-booking/src/stylesheets/main";
+
+  // Bespoke project styles
+  margin: 0;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $text-color;
+  background-color: $body-bg;
+
+  @import "theme";
+}

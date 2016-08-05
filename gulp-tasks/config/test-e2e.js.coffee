@@ -12,7 +12,10 @@ module.exports = (gulp, plugins, growl, path)->
 
   gulp.task 'test:e2e:prepare', if process.env.TRAVIS then launchSauceConnect else protractor.webdriver_update
   gulp.task 'test:e2e:run', ['webserver'], ->
-    gulp.src ['../e2e-tests/**/*.spec.js.coffee']
+    gulp.src [
+      '../test/e2e/**/*.spec.js.coffee'
+      '../test/e2e/*.spec.js.coffee'
+    ]
     .pipe protractor.protractor configFile: 'gulp-tasks/protractor.conf.js'
     .on 'end', ->
       process.exit 0

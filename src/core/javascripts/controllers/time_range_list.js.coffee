@@ -108,13 +108,13 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       calculateDayNum = ()->
         cal_days = {lg: 7, md: 5, sm: 3, xs: 1}
 
-        timeRange = 0
+        timeRange = 7
 
         for size,days of cal_days
           if size == ViewportSize.getViewportSize()
             timeRange = days
 
-        return timeRange  
+        return timeRange
 
       $scope.time_range_length = calculateDayNum()
 
@@ -352,7 +352,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   $scope.selectSlot = (slot, day, route) ->
 
     if slot and slot.availability() > 0
-      
+
       $scope.bb.current_item.setTime(slot)
 
       if slot.datetime
@@ -444,7 +444,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       $scope.notLoaded $scope
       loc = null
       loc = ",,,," + $scope.bb.postcode + "," if $scope.bb.postcode
-      
+
       promise = TimeService.query(
         company: $scope.bb.company
         resource_ids: $scope.bb.item_defaults.resources
@@ -462,7 +462,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
         $scope.setLoaded $scope
 
       promise.then (datetime_arr) ->
-       
+
         $scope.days = []
 
         if _.every(_.values(datetime_arr), _.isEmpty)
@@ -496,24 +496,38 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
               if (!dtimes[pad])
                 time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-          requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item)
+          requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item, $scope.bb.item_defaults)
 
-          if requested_slot
-            $scope.selectSlot(requested_slot, day)
+          if requested_slot.slot and requested_slot.match == "full"
+            $scope.selectSlot requested_slot.slot, day
+          else if requested_slot.slot
+            $scope.highlightSlot requested_slot.slot, day
+
 
 
          $scope.$broadcast "time_slots:loaded", time_slots
 
-      , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> 
+        if err.status == 404  && err.data && err.data.error && err.data.error == "No bookable events found"
+          if $scope.data_source && $scope.data_source.person
+            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'))
+            $scope.setLoaded $scope        
+          else if  $scope.data_source && $scope.data_source.resource
+            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'))
+            $scope.setLoaded $scope        
+          else
+          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        else
+          $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     else
-      $scope.setLoaded $scope  
+      $scope.setLoaded $scope
 
   $scope.showFirstAvailableDay = ->
     SlotDates.getFirstDayWithSlots($scope.data_source, $scope.selected_day).then (day)->
         $scope.no_slots_in_week = false
         setTimeRange day
         $scope.loadData()
-      , (err)->  
+      , (err)->
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
   ###**
   * @ngdoc method
