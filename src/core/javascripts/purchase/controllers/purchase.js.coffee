@@ -126,7 +126,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   $scope.load = (id) ->
     loader.notLoaded()
 
-    id = getPurchaseID()
+    id = getPurchaseID() if !id
 
     unless $scope.loaded || !id
       $rootScope.widget_started.then () =>

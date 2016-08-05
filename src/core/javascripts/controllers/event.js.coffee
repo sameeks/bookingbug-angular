@@ -62,7 +62,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
     $scope.event_options.use_my_details = if !$scope.event_options.use_my_details? then true else $scope.event_options.use_my_details
 
     promises = [
-      $scope.current_item.event_group.$getImages(),
+      $scope.bb.current_item.event_group.$getImages(),
       $scope.event.prepEvent()
     ]
 
@@ -123,7 +123,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
     $scope.bb.emptyStackedItems()
     # NOTE: basket is not cleared here as we might already have one!
 
-    base_item = $scope.current_item
+    base_item = $scope.bb.current_item
 
     for ticket in $scope.event.tickets
       if ticket.qty

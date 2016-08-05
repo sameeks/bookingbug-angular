@@ -545,7 +545,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
           $scope.bb.admin = admin
         setup_promises.push sso_admin_login
 
-      total_id = QueryStringService('total_id')
+      if $scope.bb.item_defaults and $scope.bb.item_defaults.long_id
+        total_id = $scope.bb.item_defaults.long_id
+      else total_id = QueryStringService('total_id')
+
       if total_id
         params =
           purchase_id: total_id
