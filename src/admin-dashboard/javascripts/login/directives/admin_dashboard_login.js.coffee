@@ -20,9 +20,10 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
       onCancel: '='
       onError: '='
       bb: '='
+      user: '=?'
     }
     templateUrl: 'login/admin-dashboard-login.html'
-    controller: ['$scope', '$rootScope', 'AdminLoginService', '$q', '$localStorage', 'AdminLoginOptions', ($scope, $rootScope, AdminLoginService, $q, $localStorage, AdminLoginOptions)->
+    controller: ['$scope', '$rootScope', 'BBModel', '$q', '$localStorage', 'AdminLoginOptions', ($scope, $rootScope, BBModel, $q, $localStorage, AdminLoginOptions)->
       $scope.template_vars =
         show_api_field: AdminLoginOptions.show_api_field
         show_login: true
@@ -37,10 +38,75 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         selected_company: null
         site: $localStorage.getItem("api_url")
 
+      $scope.formErrors = []
+
+      companySelection = (user)->
+        # if user is admin
+        if user.$has('administrators')
+          user.getAdministratorsPromise().then (administrators) ->
+            $scope.administrators = administrators
+
+            # if user is admin in more than one company show select company
+            if administrators.length > 1
+              $scope.template_vars.show_loading = false
+              $scope.template_vars.show_login = false
+              $scope.template_vars.show_pick_company = true
+            else
+            # else automatically select the first admin
+              params =
+                email: $scope.login.email
+                password: $scope.login.password
+
+              $scope.login.selected_admin = _.first(administrators)
+
+              $scope.login.selected_admin.$post('login', {}, params).then (login) ->
+                $scope.login.selected_admin.getCompanyPromise().then (company) ->
+                  $scope.template_vars.show_loading = false
+                  # if there are departments show department selector
+                  if company.companies && company.companies.length > 0
+                    $scope.template_vars.show_pick_department = true
+                    $scope.departments = company.companies
+                  else
+                  # else select that company directly and move on
+                    $scope.login.selected_company = company
+                    BBModel.Admin.Login.$setLogin($scope.login.selected_admin)
+                    BBModel.Admin.Login.$setCompany($scope.login.selected_company.id).then (user) ->
+                      $scope.onSuccess($scope.login.selected_company)
+
+        # else if there is an associated company
+        else if user.$has('company')
+          $scope.login.selected_admin = user
+
+          user.$getCompany().then (company) ->
+            # if departments are available show departments selector
+            if company.companies && company.companies.length > 0
+              $scope.template_vars.show_loading = false
+              $scope.template_vars.show_pick_department = true
+              $scope.template_vars.show_login = false
+              $scope.departments = company.companies
+            else
+            # else select that company directly and move on
+              $scope.login.selected_company = company
+              BBModel.Admin.Login.$setLogin($scope.login.selected_admin)
+              BBModel.Admin.Login.$setCompany($scope.login.selected_company.id).then (user) ->
+                $scope.onSuccess($scope.login.selected_company)
+          , (err) ->
+            $scope.template_vars.show_loading = false
+            $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
+
+        else
+          $scope.template_vars.show_loading = false
+          $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"}
+
+      # If a User is available at this stages SSO login is implied
+      if $scope.user
+        $scope.template_vars.show_pick_department = true
+        $scope.template_vars.show_login = false
+        companySelection($scope.user)
+
       $scope.login = (isValid) ->
         if isValid
           $scope.template_vars.show_loading = true
-          $scope.formErrors = []
 
           #if the site field is used set the api url to the submmited url
           if AdminLoginOptions.show_api_field
@@ -53,64 +119,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
           params =
             email: $scope.login.email
             password: $scope.login.password
-          AdminLoginService.login(params).then (user) ->
-
-            # if user is admin
-            if user.$has('administrators')
-              user.getAdministratorsPromise().then (administrators) ->
-                $scope.administrators = administrators
-
-                # if user is admin in more than one company show select company
-                if administrators.length > 1
-                  $scope.template_vars.show_loading = false
-                  $scope.template_vars.show_login = false
-                  $scope.template_vars.show_pick_company = true
-                else
-                # else automatically select the first admin
-                  params =
-                    email: $scope.login.email
-                    password: $scope.login.password
-
-                  $scope.login.selected_admin = _.first(administrators)
-
-                  $scope.login.selected_admin.$post('login', {}, params).then (login) ->
-                    $scope.login.selected_admin.getCompanyPromise().then (company) ->
-                      $scope.template_vars.show_loading = false
-                      # if there are departments show department selector
-                      if company.companies && company.companies.length > 0
-                        $scope.template_vars.show_pick_department = true
-                        $scope.departments = company.companies
-                      else
-                      # else select that company directly and move on
-                        $scope.login.selected_company = company
-                        AdminLoginService.setLogin($scope.login.selected_admin)
-                        AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
-                          $scope.onSuccess($scope.login.selected_company)
-
-            # else if there is an associated company
-            else if user.$has('company')
-              $scope.login.selected_admin = user
-
-              user.$getCompany().then (company) ->
-                # if departments are available show departments selector
-                if company.companies && company.companies.length > 0
-                  $scope.template_vars.show_loading = false
-                  $scope.template_vars.show_pick_department = true
-                  $scope.template_vars.show_login = false
-                  $scope.departments = company.companies
-                else
-                # else select that company directly and move on
-                  $scope.login.selected_company = company
-                  AdminLoginService.setLogin($scope.login.selected_admin)
-                  AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
-                    $scope.onSuccess($scope.login.selected_company)
-              , (err) ->
-                $scope.template_vars.show_loading = false
-                $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
-
-            else
-              $scope.template_vars.show_loading = false
-              $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"}
+          BBModel.Admin.Login.$login(params).then (user) ->
+            companySelection(user)
 
           , (err) ->
             $scope.template_vars.show_loading = false
@@ -138,8 +148,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         $scope.template_vars.show_loading = true
         if isValid
           $scope.bb.company = $scope.login.selected_company
-          AdminLoginService.setLogin($scope.login.selected_admin)
-          AdminLoginService.setCompany($scope.login.selected_company.id).then (user) ->
+          BBModel.Admin.Login.$setLogin($scope.login.selected_admin)
+          BBModel.Admin.Login.$setCompany($scope.login.selected_company.id).then (user) ->
             $scope.onSuccess($scope.login.selected_company)
     ]
   }

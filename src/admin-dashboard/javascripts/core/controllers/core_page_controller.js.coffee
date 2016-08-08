@@ -6,11 +6,12 @@
 * @description
 * Controller for the layout (root state)
 ###
-controller = ($scope, $state, company) ->
+controller = ($scope, $rootScope, $state, company) ->
   'ngInject'
 
   $scope.company = company
   $scope.bb.company = company
+  $scope.user = $rootScope.user
 
   #Set timezone globally per company basis (company contains timezone info)
   moment.tz.setDefault(company.timezone)

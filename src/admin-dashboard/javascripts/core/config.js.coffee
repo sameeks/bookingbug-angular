@@ -39,7 +39,7 @@ BBAdminDashboardDependencies = [
 ]
 
 adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencies)
-.run ['RuntimeStates', 'AdminCoreOptions', 'RuntimeRoutes', (RuntimeStates, AdminCoreOptions, RuntimeRoutes) ->
+.run ['RuntimeStates', 'AdminCoreOptions', 'RuntimeRoutes','AdminLoginService', (RuntimeStates, AdminCoreOptions, RuntimeRoutes, AdminLoginService) ->
 
   RuntimeRoutes.otherwise('/')
 
@@ -48,47 +48,38 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
       url: '/'
       templateUrl: "core/layout.html"
       resolve:
-        sso: ($q, sso_token, BBModel, $injector) ->
-          defer = $q.defer()
-          BBModel.Admin.Login.$isLoggedIn().then (loggedIn)->
-            if not loggedIn and sso_token != false
-              # Use the injector to avoid errors for including a
-              # service with dependencies on construct (AdminSsoLogin requires company_id value)
-              AdminSsoLogin = $injector.get 'AdminSsoLogin'
-
-              AdminSsoLogin sso_token, (admin)->
-                AdminLoginService.setLogin admin
-                defer.resolve()
-            else
-              defer.resolve()
-
-          defer.promise
-
-        user: ($q, BBModel, $timeout, $state, sso) ->
+        user: ($q, BBModel, AdminSsoLogin) ->
           defer = $q.defer()
           BBModel.Admin.Login.$user().then (user) ->
             if user
               defer.resolve(user)
             else
-              $timeout () ->
-                $state.go 'login', {}, {reload: true}
+              AdminSsoLogin.ssoLoginPromise().then (admin)->
+                BBModel.Admin.Login.$setLogin admin
+                BBModel.Admin.Login.$user().then (user) ->
+                  defer.resolve(user)
+                , (err) ->
+                  defer.reject({reason: 'GET_USER_ERROR', error: err})
+              , (err) ->
+                defer.reject({reason: 'NOT_LOGGABLE_ERROR'})
           , (err) ->
-            $timeout () ->
-              $state.go 'login', {}, {reload: true}
+            defer.reject({reason: 'LOGIN_SERVICE_ERROR', error: err})
           defer.promise
-        company: (user, $q, $timeout, $state) ->
+
+        company: (user, $q, BBModel) ->
           defer = $q.defer()
           user.$getCompany().then (company) ->
             if company.companies && company.companies.length > 0
-              $timeout () ->
-                $state.go 'login', {}, {reload: true}
+              defer.reject({reason: 'COMPANY_IS_PARENT'})
             else
               defer.resolve(company)
           , (err) ->
-            $timeout () ->
-              console.log('failed to get company')
-              $state.go 'login', {}, {reload: true}
+            BBModel.Admin.Login.$logout().then ()->
+              defer.reject({reason: 'GET_COMPANY_ERROR'})
+            , (err)->
+              defer.reject({reason: 'LOGOUT_ERROR'})
           defer.promise
+
       controller: 'CorePageController'
       deepStateRedirect: {
         default: {
@@ -100,9 +91,6 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
 .config ($logProvider, $httpProvider) ->
   $logProvider.debugEnabled(true)
   $httpProvider.defaults.withCredentials = true
-
-.value 'company_id', null
-.value 'sso_token', false
 
 # Translatition Configuration
 .config ['$translateProvider', 'AdminCoreOptionsProvider', ($translateProvider, AdminCoreOptionsProvider) ->

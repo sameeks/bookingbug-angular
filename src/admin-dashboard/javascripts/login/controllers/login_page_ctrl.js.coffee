@@ -8,9 +8,8 @@
 * Controller for the login page
 ###
 angular.module('BBAdminDashboard.login.controllers')
-.controller 'LoginPageCtrl',['$scope', '$state', 'AdminLoginService', 'AdminCoreOptions', ($scope, $state, AdminLoginService, AdminCoreOptions) ->
-  if AdminLoginService.isLoggedIn()
-    AdminLoginService.logout()
+.controller 'LoginPageCtrl',['$scope', '$state', 'AdminLoginService', 'AdminCoreOptions','user', ($scope, $state, AdminLoginService, AdminCoreOptions, user) ->
+  $scope.user = user
 
   $scope.loginSuccess = (company) ->
     $scope.company = company

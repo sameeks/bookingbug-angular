@@ -29,6 +29,9 @@ angular.module('BBAdminDashboard.login.services').provider 'AdminLoginOptions', 
     use_default_states : true
     show_in_navigation : true
     parent_state       : 'root'
+    sso_token          : null
+    company_id         : null
+
   }
 
   @setOption = (option, value) ->
