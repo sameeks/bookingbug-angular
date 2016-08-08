@@ -47,6 +47,7 @@
     "gulp-ngdocs": "^0.2.13",
     "gulp-ngmin": "^0.3.0",
     "gulp-notify": "^2.2.0",
+    "gulp-open": "^2.0.0",
     "gulp-plumber": "^1.1.0",
     "gulp-print": "^2.0.1",
     "gulp-protractor": "2.3.0",
