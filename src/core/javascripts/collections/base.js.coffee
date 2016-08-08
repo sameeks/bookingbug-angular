@@ -6,7 +6,6 @@ class window.Collection
 class window.Collection.Base
 
   constructor: (res, items, params) ->
-    @additional = true
     @res = res
     @items = items
     @params = params
