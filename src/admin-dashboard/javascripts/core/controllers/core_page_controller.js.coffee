@@ -11,6 +11,7 @@ controller = ($scope, $state, company, $uibModalStack, $rootScope) ->
 
   $scope.company = company
   $scope.bb.company = company
+  $scope.user = $rootScope.user
 
   #Set timezone globally per company basis (company contains timezone info)
   moment.tz.setDefault(company.timezone)

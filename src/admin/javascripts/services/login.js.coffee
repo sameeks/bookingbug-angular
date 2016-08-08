@@ -2,7 +2,7 @@
 
 angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     $rootScope, BBModel, $sessionStorage, $cookies, UriTemplate, shared_header) ->
- 
+
   login: (form, options) ->
     deferred = $q.defer()
     url = "#{$rootScope.bb.api_url}/api/v1/login/admin"
@@ -99,6 +99,7 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     defer.promise
 
   logout: () ->
+    defer = $q.defer()
     url = "#{$rootScope.bb.api_url}/api/v1/login"
     halClient.$del(url).finally () ->
       $rootScope.user = null
@@ -106,6 +107,10 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
       $sessionStorage.removeItem("auth_token")
       $cookies['Auth-Token'] = null
       shared_header.del('auth_token')
+      defer.resolve()
+    , () ->
+      defer.reject()
+    defer.promise
 
   getLogin: (options) ->
     defer = $q.defer()

@@ -5,19 +5,31 @@
 * @description
 * Responsible for loging in the admin user via the sso token
 *
-* @property {string} sso_token The sso_token to be used
-* @property {function} callback (optional) funtion to be called after the successfull login, receives UserAdmin (BaseResource) obj as input
 ###
 angular.module('BBAdminDashboard').factory 'AdminSsoLogin', [
-  'halClient', 'AdminSsoLoginUrl',
-  (halClient, AdminSsoLoginUrl) ->
-    return (sso_token, callback)->
+  'halClient', '$q'
+  (halClient, $q) ->
+    ssoToken  : null
+    companyId : null
+    apiUrl    : null
+    ssoLoginPromise : (ssoToken = @ssoToken, companyId = @companyId, apiUrl = @apiUrl) ->
+      defer = $q.defer()
+
+      # if something is missing reject the promise
+      if !ssoToken? || !companyId? || !apiUrl?
+        defer.reject()
+        return defer.promise
+
       data = {
-        token: sso_token
+        token: ssoToken
       }
-      halClient.$post(AdminSsoLoginUrl, {}, data).then (login) ->
+      halClient.$post("#{apiUrl}/api/v1/login/admin_sso/#{companyId}", {}, data).then (login) ->
         params = {auth_token: login.auth_token}
         login.$get('administrator', params).then (admin) ->
-          if typeof callback == 'function'
-            callback admin
+          defer.resolve(admin)
+        , (err) ->
+          defer.reject(err)
+      , (err) ->
+        defer.reject(err)
+      defer.promise
 ]

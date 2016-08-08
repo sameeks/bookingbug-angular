@@ -11,7 +11,7 @@
  *
  * @param {object}  field   A field object
 ###
-angular.module('BBAdminDashboard').directive 'bodyResize', ['$window', '$timeout', 'AdminCoreOptions', ($window, $timeout, AdminCoreOptions) ->
+angular.module('BBAdminDashboard').directive 'bodyResize', ['$window', '$timeout', 'AdminCoreOptions', 'PageLayout', ($window, $timeout, AdminCoreOptions, PageLayout) ->
   {
     restrict: 'A'
     link: (scope, element) ->
@@ -25,10 +25,9 @@ angular.module('BBAdminDashboard').directive 'bodyResize', ['$window', '$timeout
 
       _sideMenuSetup = (firstLoad = false) ->
         if $window.innerWidth > 768 && (!firstLoad || AdminCoreOptions.sidenav_start_open) && !AdminCoreOptions.deactivate_sidenav
-          scope.page.sideMenuOn = true
+          PageLayout.sideMenuOn = true
         else
-          scope.page.sideMenuOn = false
-        scope.$apply()
+          PageLayout.sideMenuOn = false
         return
 
       return

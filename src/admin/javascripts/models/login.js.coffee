@@ -38,3 +38,6 @@ angular.module('BB.Models').factory "Admin.LoginModel", (
     @$memberQuery: (params) ->
       AdminLoginService.memberQuery(params)
 
+    @$setCompany: (company_id) ->
+      AdminLoginService.setCompany(company_id)
+

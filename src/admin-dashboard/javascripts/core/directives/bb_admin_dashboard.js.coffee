@@ -1,47 +1,60 @@
-angular.module('BBAdminDashboard').directive 'bbAdminDashboard', () ->
+angular.module('BBAdminDashboard').directive 'bbAdminDashboard', (PageLayout) ->
   restrict: 'AE'
+  scope:
+    bb: '='
+    companyId: '@'
+    ssoToken: '@'
   template: '<div ui-view></div>'
-  controller: ['$scope', '$rootScope', '$element', '$window', '$compile', '$localStorage', 'AdminLoginService', '$state', 'AlertService', 'AdminCoreOptions',
-    ($scope, $rootScope, $element, $window, $compile, $localStorage, AdminLoginService, $state, AlertService, AdminCoreOptions)->
-      $scope.page = {
-        hideSideMenuControl    : AdminCoreOptions.deactivate_sidenav,
-        hideBoxedLayoutControl : AdminCoreOptions.deactivate_boxed_layout,
-        sideMenuOn             : (AdminCoreOptions.sidenav_start_open && !AdminCoreOptions.deactivate_sidenav),
-        boxed                  : AdminCoreOptions.boxed_layout_start,
-      }
+  controller: ['$scope', '$rootScope', '$element', '$compile', '$localStorage', '$state', 'PageLayout', 'BBModel', 'AdminSsoLogin', 'AdminLoginOptions'
+    ($scope, $rootScope, $element, $compile, $localStorage, $state, PageLayout, BBModel, AdminSsoLogin, AdminLoginOptions)->
 
-      $scope.openSideMenu = ()->
-        $scope.page.sideMenuOn = true
-
-      $scope.closeSideMenu = ()->
-        $scope.page.sideMenuOn = false
-
-      $scope.toggleSideMenu = ()->
-        $scope.page.sideMenuOn = !$scope.page.sideMenuOn
-
+      $rootScope.bb = $scope.bb
 
       api_url = $localStorage.getItem("api_url")
       if !$scope.bb.api_url && api_url
         $scope.bb.api_url = api_url
 
-      $rootScope.bb = $scope.bb
+      # Set this up globally for everyone
+      AdminSsoLogin.apiUrl    = $scope.bb.api_url
+      AdminSsoLogin.ssoToken  = if $scope.ssoToken? then $scope.ssoToken else AdminLoginOptions.sso_token
+      AdminSsoLogin.companyId = if $scope.companyId? then $scope.companyId else AdminLoginOptions.company_id
 
-      $compile("<span bb-display-mode></span>") $scope, (cloned, scope) =>
-        $($element).append(cloned)
+      $scope.$on '$stateChangeError', (evt, to, toParams, from, fromParams, error) ->
+        switch error.reason
+          when 'NOT_LOGGABLE_ERROR'
+            evt.preventDefault()
+            $state.go 'login'
+          when 'COMPANY_IS_PARENT'
+            evt.preventDefault()
+            $state.go 'login'
 
-      $scope.$on '$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) ->
-        $scope.isLoading = false
+      $scope.openSideMenu = ()->
+        PageLayout.sideMenuOn = true
 
-      $scope.$on '$stateChangeError', (event, toState, toParams, fromState, fromParams, error) ->
-        $scope.isLoading = false
+      $scope.closeSideMenu = ()->
+        PageLayout.sideMenuOn = false
 
-      $scope.$on '$stateChangeNotFound', (event, toState, toParams, fromState, fromParams) ->
-        $scope.isLoading = false
+      $scope.toggleSideMenu = ()->
+        PageLayout.sideMenuOn = !PageLayout.sideMenuOn
 
-      $scope.logout = () ->
-        $scope.isLoading = true
-        AdminLoginService.logout()
+      return
 
-      $scope.closeAlert = (alert) ->
-        AlertService.closeAlert(alert)
   ]
+  link: (scope, element, attrs)->
+
+    scope.page = PageLayout
+
+    scope.$watch 'page', (newPage,oldPage)->
+      if newPage.sideMenuOn
+        element.addClass('sidebar-open')
+        element.removeClass('sidebar-collapse')
+      else
+        element.addClass('sidebar-collapse')
+        element.removeClass('sidebar-open')
+
+      if newPage.boxed
+        element.addClass('layout-boxed')
+      else
+        element.removeClass('layout-boxed')
+
+    , true
