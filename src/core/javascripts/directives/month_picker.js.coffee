@@ -93,7 +93,19 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
 
       
     # listen to date changes from the date filter and clear the selected day
-    $scope.$on 'event_list_filter_date:changed', (event, date) ->    
+    $scope.$on 'event_list_filter_date:changed', (event, date) ->
+      if $scope.selected_day
+        if $scope.selected_day.date.isSame(date)
+          $scope.selected_day.selected = !$scope.selected_day.selected
+        else
+          $scope.selected_day.selected = false
+          $scope.selected_day = $scope.getDay(date)
+          $scope.selected_day.selected = true
+      else
+        $scope.selected_day = $scope.getDay(date)
+        $scope.selected_day.selected = true
+
+    $scope.$on 'event_list_filter_date:cleared', () ->
       $scope.selected_day.selected = false if $scope.selected_day
 
       
@@ -101,13 +113,28 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
 
       return if !day || day.data and (day.data.spaces == 0 or day.disabled or !day.available) or (!day.data and !day._d)
 
-      $scope.selected_day.selected = false if $scope.selected_day
+      # toggle when same day selected
+      if $scope.selected_day and $scope.selected_day.date.isSame(day.date)
+        $scope.selected_day.selected = !$scope.selected_day.selected
 
-      if !$scope.selected_day or ($scope.selected_day and !day.date.isSame($scope.selected_day.date, 'day'))
-
-        day.selected = true
+      # swap when new day selected
+      if $scope.selected_day and !$scope.selected_day.date.isSame(day.date)
+        $scope.selected_day.selected = false
         $scope.selected_day = day
-       
+        $scope.selected_day.selected = true
+
+      # set new selected day
+      if !$scope.selected_day
+        $scope.selected_day = day
+        $scope.selected_day.selected = true
+
       # TODO refactor to call showDay via controller
       $scope.showDay(day.date)
 
+
+    $scope.getDay = (date) ->
+      for month in $scope.months
+        for week in month.weeks
+          for day in week.days
+            if day.date.isSame(date) and !day.disabled
+              return day

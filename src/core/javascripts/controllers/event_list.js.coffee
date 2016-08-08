@@ -530,6 +530,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     $scope.dynamic_filters.values = {} if $scope.has_company_questions
     $scope.filterChanged()
 
+    delete $scope.selected_date
+    $rootScope.$broadcast "event_list_filter_date:cleared"
+
 
   # build dynamic filters using company questions
   buildDynamicFilters = (questions) ->
