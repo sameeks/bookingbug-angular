@@ -1,19 +1,25 @@
 module.exports = (gulp, plugins, path) ->
+  gulpAwsPublish = require('gulp-awspublish')
+  awsPublishRouter = require('gulp-awspublish-router')
+  gulpRename = require('gulp-rename')
 
-  awspublish = require('gulp-awspublish')
-  awspublishRouter = require('gulp-awspublish-router')
-  rename = require('gulp-rename')
-
-  gulp.task 'deploy', ['build','build:widget'], () ->
-    publisher = awspublish.create
+  gulp.task 'deploy', ['build', 'build:widget'], () ->
+    publisher = gulpAwsPublish.create
       params:
         Bucket: 'angular.bookingbug.com'
       region: 'eu-west-1'
-    gulp.src(['./build/**','!./build/*/bower_components/**'])
-      .pipe(rename((path) ->
-        path.dirname = "/#{process.env.TRAVIS_BRANCH}/#{path.dirname}"
-      ))
-      .pipe(publisher.publish())
-      .pipe(publisher.cache())
-      .pipe(awspublish.reporter())
+
+    return gulp.src([
+      './build/**'
+      '!./build/*/bower_components/**'
+      './test/projects/booking-widget/**'
+      '!./test/projects/booking-widget/bower_components/**'
+      '!./test/projects/booking-widget/dist/**'
+    ])
+    .pipe(gulpRename((path) ->
+      path.dirname = "/#{process.env.TRAVIS_BRANCH}/#{path.dirname}"
+    ))
+    .pipe(publisher.publish())
+    .pipe(publisher.cache())
+    .pipe(gulpAwsPublish.reporter())
 
