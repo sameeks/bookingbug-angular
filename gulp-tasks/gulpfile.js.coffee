@@ -21,11 +21,11 @@ configuration =
   }
 
 init = () ->
-  preparePlugins()
-  prepareTasks()
+  loadPlugins()
+  loadTasks()
   return
 
-preparePlugins = () ->
+loadPlugins = () ->
   plugins = gulpLoadPlugins(
     pattern: [
       "gulp-*"
@@ -44,29 +44,16 @@ preparePlugins = () ->
 
   return
 
-loadTasks = (taskPath)->
-  includeAll(
-    dirname: path.resolve __dirname, taskPath
+loadTasks = () ->
+  tasks = includeAll(
+    dirname: path.resolve __dirname, "./tasks"
     filter: /(.+)\.(js|coffee)$/
   ) or {}
 
-invokeConfigFn = (tasks) ->
   for taskName of tasks
     plugins.error = (error)->
       plugins.util.log error.toString()
     tasks[taskName] gulp, plugins, path  if tasks.hasOwnProperty(taskName)
-  return
-
-prepareTasks = ()->
-  taskConfigurations = loadTasks "./config"
-  registerDefinitions = loadTasks "./register"
-
-  if not registerDefinitions['default.js']
-    registerDefinitions.default = (gulp)->
-      gulp.task 'default', []
-
-  invokeConfigFn taskConfigurations
-  invokeConfigFn registerDefinitions
   return
 
 init()

@@ -16,3 +16,5 @@ test/unit/bower_components
 test/unit/reports
 
 .awspublish-angular.bookingbug.com
+
+test/projects/*/dist/
