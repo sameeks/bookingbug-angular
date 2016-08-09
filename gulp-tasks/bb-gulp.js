@@ -10,7 +10,6 @@ var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var flatten = require('gulp-flatten');
 var imagemin = require('gulp-imagemin');
-var flatten = require('gulp-flatten');
 var filter = require('gulp-filter');
 var templateCache = require('gulp-angular-templatecache');
 var path = require('path');

@@ -1,4 +1,6 @@
 module.exports = (gulp, plugins, path)->
+
+  gulpCoffee = require('gulp-coffee')
   gulpConnect = require('gulp-connect')
   args = require('../args.js')
   del = require('del')
@@ -18,6 +20,7 @@ module.exports = (gulp, plugins, path)->
   gulpConcat = require('gulp-concat')
   streamqueue = require('streamqueue')
   mkdirp = require('mkdirp')
+  gulpIf = require('gulp-if');
 
   config = null
 
@@ -51,37 +54,34 @@ module.exports = (gulp, plugins, path)->
     return gulpBower({cwd: args.getTestProjectRootPath(), directory: './bower_components'})
 
   gulp.task 'build-project:scripts', () ->
-    gulp.src(mainBowerFiles(
+
+    dependenciesFiles = mainBowerFiles(
       filter: new RegExp('.js$')
       paths:
         bowerDirectory: path.join args.getTestProjectRootPath(), 'bower_components'
         bowerrc: path.join args.getTestProjectRootPath(), '.bowerrc'
         bowerJson: path.join args.getTestProjectRootPath(), 'bower.json'
-    ))
+    )
+
+    projectFiles = [
+      path.join(args.getTestProjectRootPath(), 'src/javascripts/**/*.js')
+      path.join(args.getTestProjectRootPath(), 'src/javascripts/**/*.js.coffee')
+      path.join('!**/*.spec.js')
+      path.join('!**/*.spec.js.coffee')
+      path.join('!**/*.js.js')
+      path.join('!**/*.js.map')
+    ]
+
+    gulp.src(dependenciesFiles.concat projectFiles)
+    .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
     .pipe(gulpConcat('scripts.js'))
     .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')))
     .pipe(gulpUglify({mangle: false}))
     .pipe(gulpConcat('scripts.min.js'))
     .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')))
 
-
-  ###gulp.task 'build:widget-style', () ->
-    gulp.src(path.join(args.getTestProjectRootPath(),'src/stylesheets/main.scss'))
-    .pipe(sourcemaps.init())
-    .pipe(plumber())
-    .pipe(sass(
-      includePaths: [path.join(args.getTestProjectRootPath(),'bower_components/bootstrap-sass/assets/stylesheets')]
-      outputStyle: 'compressed'
-      errLogToConsole: true
-    ))
-    .pipe(concat('booking-widget.css'))
-    .pipe(cssSelectorLimit.reporter('fail'))
-    .pipe(sourcemaps.write('maps', { includeContent: false }))
-    .pipe(gulp.dest(path.join(args.getTestProjectRootPath(),'dist')))###
-
   gulp.task 'build-project:stylesheets', ['build-project:config'], () ->
     src = path.join args.getTestProjectRootPath(), 'src/stylesheets/main.scss'
-    srcBootstrap = path.join args.getTestProjectRootPath(), 'src/stylesheets/bootstrap.scss'
     dest = path.join args.getTestProjectRootPath(), 'dist'
 
     dependenciesCssFiles = mainBowerFiles {
@@ -103,17 +103,12 @@ module.exports = (gulp, plugins, path)->
     ##TODO do we need compressed in this case
     #.pipe(gulpSass({outputStyle: 'compressed', onError: (e) -> console.log(e) }).on('error', gulpUtil.log))
 
-    bootstrapSCSSStream = gulp.src(srcBootstrap)
-    .pipe(gulpSourcemaps.init())
-    .pipe(gulpTemplate(config))
-    .pipe(gulpSass({onError: (e) -> console.log(e)}).on('error', gulpUtil.log))
-
     appSCSSStream = gulp.src(src)
     .pipe(gulpSourcemaps.init())
     .pipe(gulpTemplate(config))
     .pipe(gulpSass({onError: (e) -> console.log(e)}).on('error', gulpUtil.log))
 
-    return streamqueue({objectMode: true}, bootstrapSCSSStream, dependenciesCssStream, appSCSSStream)
+    return streamqueue({objectMode: true}, dependenciesCssStream, appSCSSStream)
     .pipe(gulpPlumber())
     .pipe(gulpFlatten())
     .pipe(gulpConcat('styles.css'))
