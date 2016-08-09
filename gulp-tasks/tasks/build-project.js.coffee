@@ -158,10 +158,8 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project', (cb) ->
     return plugins.sequence(
       'build-project:clean'
-      [
-        'build-sdk'
-        'build-project:install-bower'
-      ]
+      'build-sdk'
+      'build-project:install-bower'
       [
         'build-project:scripts'
         'build-project:stylesheets'
