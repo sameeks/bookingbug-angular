@@ -94,16 +94,21 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
       
     # listen to date changes from the date filter and clear the selected day
     $scope.$on 'event_list_filter_date:changed', (event, date) ->
+
+      newDay = $scope.getDay(date)
+
       if $scope.selected_day
         if $scope.selected_day.date.isSame(date)
           $scope.selected_day.selected = !$scope.selected_day.selected
         else
           $scope.selected_day.selected = false
-          $scope.selected_day = $scope.getDay(date)
-          $scope.selected_day.selected = true
+          if newDay
+            $scope.selected_day = newDay
+            $scope.selected_day.selected = true
       else
-        $scope.selected_day = $scope.getDay(date)
-        $scope.selected_day.selected = true
+        if newDay
+          $scope.selected_day = newDay
+          $scope.selected_day.selected = true
 
     $scope.$on 'event_list_filter_date:cleared', () ->
       $scope.selected_day.selected = false if $scope.selected_day
