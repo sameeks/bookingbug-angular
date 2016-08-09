@@ -9,7 +9,7 @@ angular.module('BBAdminDashboard.bookings.directives').directive 'bbBookingsTabl
     return
 
 
-angular.module('BBAdminDashboard.bookings.directives').controller 'TabletBookings', ($scope,  $rootScope, $q, AdminBookingsService, AlertService) ->
+angular.module('BBAdminDashboard.bookings.directives').controller 'TabletBookings', ($scope,  $rootScope, $q, AdminBookingService, AlertService) ->
   $scope.clientDef = $q.defer()
   $scope.clientPromise = $scope.clientDef.promise
   $scope.per_page = 15

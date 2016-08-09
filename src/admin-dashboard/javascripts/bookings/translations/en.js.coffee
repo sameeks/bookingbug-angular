@@ -1,23 +1,24 @@
 'use strict';
 
+
 ###
 * @ngdoc overview
-* @name BBAdminDashboard.clients.translations
+* @name BBAdminDashboard.bookings.translations
 #
 * @description
-* Translations for the admin clients module
+* Translations for the admin bookings module
 ###
-angular.module('BBAdminDashboard.clients.translations')
+angular.module('BBAdminDashboard.bookings.translations')
 .config ['$translateProvider', ($translateProvider)->
   $translateProvider.translations('en',{
     'SIDE_NAV': {
-      'CLIENTS_PAGE': {
-        'CLIENTS' : 'Customers'
+      'BOOKINGS_PAGE': {
+        'BOOKINGS' : 'Bookings'
       }
     }
-    'CLIENTS_PAGE': {
-      'CLIENTS'           : 'Customers',
-      'CLIENT'            : 'Customer',
+    'BOOKINGS_PAGE': {
+      'BOOKINGS'           : 'Bookings',
+      'BOOKING'            : 'Booking',
       'NAME'              : 'Name',
       'EMAIL'             : 'Email',
       'MOBILE'            : 'Mobile',
@@ -27,8 +28,7 @@ angular.module('BBAdminDashboard.clients.translations')
       'ABOUT'             : 'About',
       'ADDRESS'           : 'Address',
       'UPCOMING_BOOKINGS' : 'Upcoming Bookings',
-      'PAST_BOOKINGS'     : 'Past Bookings',
-      'CUSTOMER_DETAILS'  : 'Customer Details'
+      'PAST_BOOKINGS'     : 'Past Bookings'
     }
   })
 ]
