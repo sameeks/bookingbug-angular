@@ -5,6 +5,6 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'default', (cb) ->
     return plugins.sequence(
       'build-project'
-      'build-project:webserver'
+      'webserver'
       cb
     )

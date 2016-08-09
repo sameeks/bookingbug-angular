@@ -1,8 +1,4 @@
 exports.config =
-  specs: [
-    '../test/e2e/*.spec.js.coffee'
-    '../test/e2e/**/*.spec.js.coffee'
-  ],
   capabilities:
     browserName: 'chrome'
 

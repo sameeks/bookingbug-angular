@@ -8,6 +8,8 @@ echo "TRAVIS BRANCH: $TRAVIS_BRANCH"
 
 gulp test:unit-ci # !!! generates lcov reports per module - can be used with Climate
 
+gulp test:e2e --project=demo
+
 if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" = 'true' ] ; then
   gulp test:e2e
 fi

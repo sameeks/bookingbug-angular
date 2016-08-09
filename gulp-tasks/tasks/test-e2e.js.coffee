@@ -1,6 +1,7 @@
 module.exports = (gulp, plugins, path)->
   protractor = require 'gulp-protractor'
   sauceConnectLauncher = require 'sauce-connect-launcher'
+  args = require '../args.js'
 
   launchSauceConnect = (cb) ->
     sauceConnectLauncher
@@ -9,16 +10,14 @@ module.exports = (gulp, plugins, path)->
       cb
     return
 
-
   gulp.task 'test:e2e:prepare', if process.env.TRAVIS then launchSauceConnect else protractor.webdriver_update
 
-  gulp.task 'test:e2e:run', ['webserver'], ->
-    gulp.src [
-      '../test/e2e/**/*.spec.js.coffee'
-      '../test/e2e/*.spec.js.coffee'
+  gulp.task 'test:e2e:run', () ->
+    return gulp.src [
+      path.join args.getTestProjectSpecsRootPath(), '**/*.spec.js.coffee'
     ]
     .pipe protractor.protractor configFile: 'gulp-tasks/protractor.conf.js'
-    .on 'end', ->
+    .on 'end', () ->
       process.exit 0
       return
     .on 'error', (message) ->
@@ -28,9 +27,13 @@ module.exports = (gulp, plugins, path)->
 
   gulp.task 'test:e2e', (cb)->
     plugins.sequence(
-      'test:e2e:prepare',
+      'build-project'
+      'webserver'
+      'test:e2e:prepare'
       'test:e2e:run'
       cb
     )
+
+    return
 
   return

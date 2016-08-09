@@ -20,8 +20,13 @@ getTestProjectRootPath = () ->
 
   return defaultDestPath
 
+getTestProjectSpecsRootPath = () ->
+  specRootPath = getTestProjectRootPath()
+  return specRootPath.replace '/projects/', '/e2e/'
+
 module.exports =
   getTestProjectRootPath: getTestProjectRootPath
+  getTestProjectSpecsRootPath: getTestProjectSpecsRootPath
 
 
 

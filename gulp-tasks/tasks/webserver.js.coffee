@@ -2,7 +2,7 @@ module.exports = (gulp, plugins, path)->
   gulpConnect = require('gulp-connect')
   args = require('../args.js')
 
-  gulp.task 'build-project:webserver', () ->
+  gulp.task 'webserver', () ->
     gulpConnect.server {
       root: [
         path.join args.getTestProjectRootPath(), 'dist'
