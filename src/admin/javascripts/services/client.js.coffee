@@ -11,7 +11,7 @@ angular.module('BBAdmin.Services').factory 'AdminClientService',  ($q, $window, 
     uri = new UriTemplate(href).fillFromObject(prms || {})
     deferred = $q.defer()
 
-    # If params flush is bool true clear cash before attempting to resolve the resource
+    # If params flush is bool true clear cache before attempting to resolve the resource
     if prms.flush
       halClient.clearCache(uri)
 

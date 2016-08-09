@@ -1,13 +1,14 @@
 angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope, AlertService, PurchaseService) ->
 
-  $scope.getUpcomingBookings = () ->
+  $scope.getUpcomingBookings = (params) ->
 
     defer = $q.defer()
 
-    params =
-      start_date: moment().format('YYYY-MM-DD')
+    params = params or {}
+    params.start_date = moment().format('YYYY-MM-DD')
+    
     getBookings(params).then (upcoming_bookings) ->
-      $scope.upcoming_bookings = upcoming_bookings
+      #$scope.upcoming_bookings = upcoming_bookings
       defer.resolve(upcoming_bookings)
     , (err) ->
       defer.reject([])
@@ -46,13 +47,16 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       start_date: moment().format('YYYY-MM-DD')
     MemberBookingService.flush($scope.member, params)
 
+
   updateBookings = () ->
     $scope.getUpcomingBookings()
+
 
   getBookings = (params) ->
     $scope.notLoaded $scope
     defer = $q.defer()
     MemberBookingService.query($scope.member, params).then (bookings) ->
+      console.log "bookings", bookings
       $scope.setLoaded $scope
       defer.resolve(bookings)
     , (err) ->
@@ -61,13 +65,14 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     return defer.promise
 
 
-  $scope.cancelBooking = (booking) ->
+  $scope.cancelBooking = (booking, bookings) ->
 
-    index = _.indexOf($scope.upcoming_bookings, booking)
+    index = _.indexOf(bookings, booking)
 
     return false if index is -1
 
-    $scope.upcoming_bookings.splice(index, 1)
+    bookings.splice(index, 1)
+    
     AlertService.raise('BOOKING_CANCELLED')
 
     MemberBookingService.cancel($scope.member, booking).then () ->
@@ -76,7 +81,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       $scope.removeBooking(booking) if $scope.removeBooking
     , (err) ->
       AlertService.raise('GENERIC')
-      $scope.upcoming_bookings.splice(index, 0, booking)
+      bookings.splice(index, 0, booking)
 
 
   $scope.getPrePaidBookings = (params) ->

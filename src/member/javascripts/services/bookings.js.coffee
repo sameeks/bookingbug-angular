@@ -1,5 +1,4 @@
-angular.module('BBMember.Services').factory "MemberBookingService", ($q,
-    SpaceCollections, $rootScope, MemberService, BBModel) ->
+angular.module('BBMember.Services').factory "MemberBookingService", ($q, SpaceCollections, $rootScope, MemberService, BBModel) ->
 
   query: (member, params) ->
     deferred = $q.defer()
@@ -8,21 +7,31 @@ angular.module('BBMember.Services').factory "MemberBookingService", ($q,
     if !member.$has('bookings')
       deferred.reject("member does not have bookings")
     else
-      member.$get('bookings', params).then (bookings) =>
-        if angular.isArray bookings
-          # bookings embedded in member
-          bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
-          deferred.resolve(bookings)
-        else
-          params.no_cache = false
-          bookings.$get('bookings', params).then (bookings) =>
-            bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
-            deferred.resolve(bookings)
-          , (err) ->
-            deferred.reject(err)
-      , (err) ->
-        deferred.reject(err)
+      member.$get('bookings', params).then (resource) =>
+
+        debugger
+        collection = new BBModel.MemberBookingCollection(resource)
+        collection.promise.then (collection) ->
+          deferred.resolve(collection)
+
+      #   debugger
+      #   if angular.isArray resource
+      #     # bookings embedded in member
+      #     bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
+      #     deferred.resolve(bookings)
+      #   else
+      #     params.no_cache = false
+      #     resource.$get('bookings', params).then (bookings) =>
+      #       debugger
+      #       bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
+      #       collection = new BBModel.Base_Collecttion(resource, bookings)
+      #       deferred.resolve(collection)
+      #     , (err) ->
+      #       deferred.reject(err)
+      # , (err) ->
+      #   deferred.reject(err)
     deferred.promise
+
 
   cancel: (member, booking) ->
     deferred = $q.defer()
@@ -37,6 +46,7 @@ angular.module('BBMember.Services').factory "MemberBookingService", ($q,
       deferred.reject(err)
     deferred.promise
 
+
   update: (booking) ->
     deferred = $q.defer()
     $rootScope.member.flushBookings()
@@ -50,6 +60,7 @@ angular.module('BBMember.Services').factory "MemberBookingService", ($q,
           booking[key] = booking.data[key]
       deferred.reject(err, new BBModel.Member.Booking(booking))
     deferred.promise
+
 
   flush: (member, params) ->
     if member.$has('bookings')
