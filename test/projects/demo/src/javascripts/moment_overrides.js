@@ -7,7 +7,7 @@ var abbrs = {
     MDT : 'Mountain Daylight Time',
     PST : 'Pacific Standard Time',
     PDT : 'Pacific Daylight Time',
-    BST : 'British Summer Time',
+    BST : 'British Summer Time'
 };
 
 moment.fn.zoneName = function () {
