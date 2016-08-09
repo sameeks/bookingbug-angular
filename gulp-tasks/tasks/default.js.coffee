@@ -3,8 +3,9 @@ module.exports = (gulp, plugins, path)->
   args = require('../args.js')
 
   gulp.task 'default', (cb) ->
-    return plugins.sequence(
+    plugins.sequence(
       'build-project'
       'webserver'
       cb
     )
+    return

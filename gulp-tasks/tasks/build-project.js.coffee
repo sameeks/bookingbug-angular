@@ -1,5 +1,4 @@
 module.exports = (gulp, plugins, path)->
-
   gulpCoffee = require('gulp-coffee')
   args = require('../args.js')
   del = require('del')
@@ -28,9 +27,19 @@ module.exports = (gulp, plugins, path)->
     cb()
     return
 
-  gulp.task 'build-project:config', () ->
-    src = path.join args.getTestProjectRootPath(), 'config.json'
-    config = jsonFile.readFileSync(src);
+  gulp.task 'build-project:config', (cb) ->
+    configPath = path.join args.getTestProjectRootPath(), 'config.json'
+
+    try
+      config = jsonFile.readFileSync(configPath);
+    catch error
+      console.log 'No config file specified for project'
+      return
+
+    if config is null
+      config = {}
+      return
+
     configEnv = 'development'
 
     if plugins.config.env.match /stag/
@@ -45,6 +54,8 @@ module.exports = (gulp, plugins, path)->
     delete config['staging']
     delete config['production']
 
+    cb()
+
     return
 
   gulp.task 'build-project:install-bower', () ->
@@ -52,7 +63,6 @@ module.exports = (gulp, plugins, path)->
     return gulpBower({cwd: args.getTestProjectRootPath(), directory: './bower_components'})
 
   gulp.task 'build-project:scripts', () ->
-
     dependenciesFiles = mainBowerFiles(
       filter: new RegExp('.js$')
       paths:
@@ -149,7 +159,7 @@ module.exports = (gulp, plugins, path)->
 
   #['assets', 'html-files-in-www-folder', 'watch', 'webserver'],
   gulp.task 'build-project', (cb) ->
-    return plugins.sequence(
+    plugins.sequence(
       'build-project:clean'
       'build-sdk'
       'build-project:install-bower'
@@ -162,3 +172,6 @@ module.exports = (gulp, plugins, path)->
       ]
       cb
     )
+    return
+
+  return

@@ -92,4 +92,4 @@ module.exports = {
     return gulp.src(path.join(srcpath, module, 'bower.json'))
       .pipe(gulp.dest(path.join(releasepath, module)));
   }
-}
+};

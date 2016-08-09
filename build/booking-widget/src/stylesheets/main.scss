@@ -1,8 +1,9 @@
 #bb {
-  @import "bootstrap";
   @import "bootstrap-variables";
   @import "bb-variables";
-  @import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
+  @import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+  //@import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
 
   // BB SDK styles
   @import "../../bower_components/bookingbug-angular-core/src/stylesheets/main";
@@ -17,5 +18,5 @@
   background-color: $body-bg;
 
   // All custom styles and overrides should be stored in the following .scss file:
-  //@import "<%= project_name %>_theme";
+  //@import "< % = project_name %>_theme";
 }

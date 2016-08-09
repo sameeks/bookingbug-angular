@@ -3,7 +3,7 @@ module.exports = (gulp, plugins, path) ->
   awsPublishRouter = require('gulp-awspublish-router')
   gulpRename = require('gulp-rename')
 
-  gulp.task 'deploy', ['build', 'build:widget'], () ->
+  gulp.task 'deploy', ['build-sdk', 'build-project'], () ->
     publisher = gulpAwsPublish.create
       params:
         Bucket: 'angular.bookingbug.com'
@@ -12,9 +12,6 @@ module.exports = (gulp, plugins, path) ->
     return gulp.src([
       './build/**'
       '!./build/*/bower_components/**'
-      './test/projects/booking-widget/**'
-      '!./test/projects/booking-widget/bower_components/**'
-      '!./test/projects/booking-widget/dist/**'
     ])
     .pipe(gulpRename((path) ->
       path.dirname = "/#{process.env.TRAVIS_BRANCH}/#{path.dirname}"

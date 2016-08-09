@@ -3,7 +3,7 @@ module.exports = (gulp, plugins, path)->
   args = require('../args.js')
 
   gulp.task 'webserver', () ->
-    gulpConnect.server {
+    return gulpConnect.server {
       root: [
         path.join args.getTestProjectRootPath(), 'dist'
       ]
@@ -11,4 +11,5 @@ module.exports = (gulp, plugins, path)->
       livereload: true
     }
 
-    return
+  return
+

@@ -17,9 +17,9 @@
     "tests"
   ],
   "dependencies": {
-    "bookingbug-angular-core": "../../../build/core",
-    "bookingbug-angular-public-booking": "../../../build/public-booking",
-    "bookingbug-angular-member": "../../../build/member"
+    "bookingbug-angular-core": "../core",
+    "bookingbug-angular-public-booking": "../public-booking",
+    "bookingbug-angular-member": "../member"
   },
   "resolutions": {
     "angular": "1.2.28",

@@ -2,7 +2,7 @@ argv = require('yargs').argv
 path = require('path')
 fs = require('fs')
 
-defaultDestPath = './test/projects/booking-widget'
+defaultDestPath = './build/booking-widget'
 customDestSubPath = './test/projects'
 
 getTestProjectRootPath = () ->
