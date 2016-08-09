@@ -47,7 +47,7 @@ module.exports = (gulp, plugins, path)->
     return
 
   gulp.task 'build-project:install-bower', () ->
-    mkdirp.sync('bower_components');
+    mkdirp.sync(path.join args.getTestProjectRootPath(), 'bower_components');
     gulpBower({cwd: args.getTestProjectRootPath(), directory: './bower_components'})
     return
 
