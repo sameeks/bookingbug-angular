@@ -1,10 +1,8 @@
 module.exports = (gulp, plugins, path)->
 
   gulpCoffee = require('gulp-coffee')
-  gulpConnect = require('gulp-connect')
   args = require('../args.js')
   del = require('del')
-  gulpOpen = require('gulp-open')
   gulpUglify = require('gulp-uglify')
   gulpFlatten = require('gulp-flatten')
   fs = require('fs')
