@@ -17,13 +17,9 @@ cache:
     - test/unit/bower_components
 
 env:
-  - secure: "EOLSkOnWNqKODETqXwoRK+KbxyR11YCTi8kRX0+q21KQKaTqqt39UzSOoD0qlfKXPU+D23kvWSYWcGbHQw6DiVHtenVbn9ktik3lJkscXpJmNJmaregclSYJpaK7GC5vJU0av4Q0lDASxrqBv9FftrAEoC7fTfdoZgJ8t29huoU="
-
-addons:
-  sauce_connect:
-    username: "bookingbug-angular"
-    access_key:
-      secure: "JjeAjs+rZnrsIfBYo1OSszSnzRQ6Zy/BBfAvb3mE9Qf0fjDjeMy6rVbbFh/CzgJz84EuQf2iCNjWgpvoPatZfYhosiILGxRN7V35HODlenTkxuU/TSkmkkTdjDt1ijjf5dM/Er1ygrgnQO6wxyyOi9hzL70pZ3RNX6MwBn87j6A="
+  - secure:
+    - "EOLSkOnWNqKODETqXwoRK+KbxyR11YCTi8kRX0+q21KQKaTqqt39UzSOoD0qlfKXPU+D23kvWSYWcGbHQw6DiVHtenVbn9ktik3lJkscXpJmNJmaregclSYJpaK7GC5vJU0av4Q0lDASxrqBv9FftrAEoC7fTfdoZgJ8t29huoU="
+    - "JjeAjs+rZnrsIfBYo1OSszSnzRQ6Zy/BBfAvb3mE9Qf0fjDjeMy6rVbbFh/CzgJz84EuQf2iCNjWgpvoPatZfYhosiILGxRN7V35HODlenTkxuU/TSkmkkTdjDt1ijjf5dM/Er1ygrgnQO6wxyyOi9hzL70pZ3RNX6MwBn87j6A="
 
 deploy:
   - provider: script
