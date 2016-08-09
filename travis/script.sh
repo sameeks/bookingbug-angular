@@ -6,7 +6,7 @@ set -ev
 
 echo "TRAVIS BRANCH: $TRAVIS_BRANCH"
 
-gulp test:unit-ci # !!! generates lcov reports per module - can be used with Climate
+gulp test:unit-ci # !!! generates lcov report - can be used with Climate or Coverall
 
 gulp test:e2e --project=demo
 
