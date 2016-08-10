@@ -21,8 +21,9 @@ angular.module('BB.Services').factory "EventChainService",  ($q, BBModel) ->
       deferred.resolve([])
     else
       company.$get('event_chains', params).then (resource) =>
-        collection = new BBModel.BBCollection(resource)
-        deferred.resolve(collection)
+        collection = new BBModel.EventChainCollection(resource)
+        collection.promise.then (collection) ->
+          deferred.resolve(collection)
       , (err) =>
         deferred.reject(err)
     deferred.promise
