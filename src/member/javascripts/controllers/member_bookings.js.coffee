@@ -7,9 +7,9 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     params = params or {}
     params.start_date = moment().format('YYYY-MM-DD')
     
-    getBookings(params).then (upcoming_bookings) ->
-      #$scope.upcoming_bookings = upcoming_bookings
-      defer.resolve(upcoming_bookings)
+    getBookings(params).then (bookings_collection) ->
+      $scope.upcoming_bookings = bookings_collection
+      defer.resolve(bookings_collection)
     , (err) ->
       defer.reject([])
 
@@ -28,14 +28,16 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     params =
       start_date: date.format('YYYY-MM-DD')
       end_date: moment().add(1,'day').format('YYYY-MM-DD')
-    getBookings(params).then (past_bookings) ->
+    getBookings(params).then (bookings_collection) ->
 
-      $scope.past_bookings = _.chain(past_bookings)
+      bookings_collection.items = _.chain(bookings_collection.items)
         .filter((b) -> b.datetime.isBefore(moment()))
         .sortBy((b) -> -b.datetime.unix())
         .value()
 
-      defer.resolve(past_bookings)
+      $scope.past_bookings = bookings_collection
+
+      defer.resolve(bookings_collection)
     , (err) ->
       defer.reject([])
 
@@ -55,24 +57,21 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
   getBookings = (params) ->
     $scope.notLoaded $scope
     defer = $q.defer()
-    MemberBookingService.query($scope.member, params).then (bookings) ->
-      console.log "bookings", bookings
+    MemberBookingService.query($scope.member, params).then (bookings_collection) ->
       $scope.setLoaded $scope
-      defer.resolve(bookings)
+      defer.resolve(bookings_collection)
     , (err) ->
       $log.error err.data
       $scope.setLoaded $scope
     return defer.promise
 
 
-  $scope.cancelBooking = (booking, bookings) ->
+  $scope.cancelBooking = (booking) ->
 
-    index = _.indexOf(bookings, booking)
-
+    index = _.indexOf($scope.upcoming_bookings.items, booking)
     return false if index is -1
+    $scope.upcoming_bookings.items.splice(index, 1)
 
-    bookings.splice(index, 1)
-    
     AlertService.raise('BOOKING_CANCELLED')
 
     MemberBookingService.cancel($scope.member, booking).then () ->
@@ -81,7 +80,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       $scope.removeBooking(booking) if $scope.removeBooking
     , (err) ->
       AlertService.raise('GENERIC')
-      bookings.splice(index, 0, booking)
+      $scope.upcoming_bookings.items.splice(index, 0, booking)
 
 
   $scope.getPrePaidBookings = (params) ->

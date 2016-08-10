@@ -5,67 +5,41 @@ angular.module('BB.Models').factory "BaseCollectionModel", ($q, BBModel, BaseMod
   class BaseCollection extends BaseModel
 
 
-    # TODO write base collection and then extend it where needed 
-    # extended classe will know the resource name (key) and the model they need to use to instanite the object 
-
-    # TODO mapping bookings to model type
-    #
-    # inoput one: the array and model to instantiate
-    # input two: the resource
     constructor: (resource) ->
+      super(resource)
 
-      @total_items = @total_entries 
-
-
-    # getNextPage: (params) =>
-
-    #   deferred = $q.defer()
-
-    #   @$get('next', params).then (collection) ->
-    #     deferred.resolve(new BBModel.BBCollection(collection))
-    #   , () ->
-    #     deferred.reject()
-
-    #   return deferred.promise
+      @total_items = resource.total_entries
+      @items = []
 
 
     initialise: (key, model) ->
 
-      debugger
-
-      @promise = $q.defer()
+      deferred = $q.defer()
 
       if key and model and angular.isObject(@)
         
-        @$get(key).then (items) ->
+        @$get(key).then (items) =>
+
           @items = (new model(item) for item in items)
-          @promise.resolve(@)
+          deferred.resolve(@)
 
       else if angular.isArray(@)
 
         @items = (new model(item) for item in items)
-        @promise.resolve(@)
+        deferred.resolve(@)
 
-      return @promise.promise
-
-
-angular.module('BB.Models').factory "Member.MemberBookingCollectionModel", ($q, BBModel, BaseModel) ->
-
-  class Member_MemberBookingCollection extends BaseCollection
+       @promise = deferred.promise
 
 
-    # TODO write base collection and then extend it where needed 
-    # extended classe will know the resource name (key) and the model they need to use to instanite the object 
+    getNext: (model) ->
 
-    # TODO mapping bookings to model type
-    #
-    # inoput one: the array and model to instantiate
-    # input two: the resource
-    constructor: (resource) ->
+      deferred = $q.defer()
 
-      debugger
+      @$get('next', {}).then (resource) =>
+        collection = new model(resource)
+        collection.promise.then (collection) ->
+          deferred.resolve(collection)
+      , () ->
+        deferred.reject()
 
-      super(resource)
-
-      @initialse('bookings', BBModel.Member.Booking)
-
+      return deferred.promise

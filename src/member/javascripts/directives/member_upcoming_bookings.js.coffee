@@ -7,11 +7,16 @@ angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope, BB
   controller: 'MemberBookings'
   link: (scope, element, attrs) ->
   
-    scope.upcoming_bookings = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 10})
+    scope.paginator = new BBModel.Pagination({page_size: 10, max_size: 5})
 
-    getBookings = (params) ->
+    getBookings = (params, options = {}) ->
+      params = params or {}
+      params.per_page = params.per_page or scope.paginator.request_page_size
       scope.getUpcomingBookings(params).then (collection) ->
-        scope.upcoming_bookings.initialise(collection.items, collection.total_entries)
+        if options.add
+          scope.paginator.add(params.page, collection.items)
+        else
+          scope.paginator.initialise(collection.items, collection.total_entries)
 
 
     scope.$on 'updateBookings', () ->
@@ -20,7 +25,7 @@ angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope, BB
 
 
     scope.$watch 'member', () ->
-      getBookings() if !scope.upcoming_bookings.items
+      getBookings() if !scope.paginator.items
 
 
     $rootScope.connection_started.then () ->
@@ -29,9 +34,9 @@ angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope, BB
 
     scope.pageChanged = () ->
 
-      [items_present, page_to_load] = scope.upcoming_bookings.update()
+      [items_present, page_to_load] = scope.paginator.update()
 
       if !items_present
         params =
           page: page_to_load
-        scope.getBookings(params, {add: true})
+        getBookings(params, {add: true})

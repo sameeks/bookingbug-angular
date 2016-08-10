@@ -147,3 +147,6 @@ angular.module('BB.Models').factory "PaginationModel", () ->
       for item, index in new_items
         @items[start + index] = item
 
+
+    hasItems: () ->
+      @items and @items.length > 0

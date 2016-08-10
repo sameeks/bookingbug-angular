@@ -9,27 +9,10 @@ angular.module('BBMember.Services').factory "MemberBookingService", ($q, SpaceCo
     else
       member.$get('bookings', params).then (resource) =>
 
-        debugger
-        collection = new BBModel.MemberBookingCollection(resource)
+        collection = new BBModel.Member.BookingCollection(resource)
         collection.promise.then (collection) ->
           deferred.resolve(collection)
 
-      #   debugger
-      #   if angular.isArray resource
-      #     # bookings embedded in member
-      #     bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
-      #     deferred.resolve(bookings)
-      #   else
-      #     params.no_cache = false
-      #     resource.$get('bookings', params).then (bookings) =>
-      #       debugger
-      #       bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
-      #       collection = new BBModel.Base_Collecttion(resource, bookings)
-      #       deferred.resolve(collection)
-      #     , (err) ->
-      #       deferred.reject(err)
-      # , (err) ->
-      #   deferred.reject(err)
     deferred.promise
 
 
