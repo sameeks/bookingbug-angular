@@ -48,4 +48,59 @@ module.exports = (gulp, plugins, path)->
     .pipe(gulpSourcemaps.write('maps', {includeContent: false}))
     .pipe(gulp.dest(dest))
 
+  gulp.task 'build-project:stylesheets:sdk-admin-booking:rebuild', (cb) ->
+    plugins.sequence(
+      'build-sdk:admin-booking:stylesheets'
+      'build-project:stylesheets'
+      cb
+    )
+    return
+
+  gulp.task 'build-project:templates:sdk-admin-dashboard:rebuild', (cb) ->
+    plugins.sequence(
+      'build-sdk:admin-dashboard:templates'
+      'build-project:templates'
+      cb
+    )
+    return
+
+  gulp.task 'build-project:stylesheets:sdk-core:rebuild', (cb) ->
+    plugins.sequence(
+      'build-sdk:core:stylesheets'
+      'build-project:stylesheets'
+      cb
+    )
+    return
+
+  gulp.task 'build-project:stylesheets:sdk-member:rebuild', (cb) ->
+    plugins.sequence(
+      'build-sdk:member:stylesheets'
+      'build-project:stylesheets'
+      cb
+    )
+    return
+
+  gulp.task 'build-project:stylesheets:sdk-public-booking:rebuild', (cb) ->
+    plugins.sequence(
+      'build-sdk:public-booking:stylesheets'
+      'build-project:stylesheets'
+      cb
+    )
+    return
+
+  gulp.task 'build-project:stylesheets:watch', (cb) ->
+
+    src = path.join args.getTestProjectRootPath(), 'src/stylesheets/main.scss'
+    gulp.watch(src, ['build-project:stylesheets'])
+
+    gulp.watch(['src/admin-booking/stylesheets/**/*'], ['build-project:stylesheets:sdk-admin-booking:rebuild'])
+    gulp.watch(['src/admin-dashboard/stylesheets/**/*'], ['build-project:stylesheets:sdk-admin-dashboard:rebuild'])
+    gulp.watch(['src/core/stylesheets/**/*'], ['build-project:stylesheets:sdk-core:rebuild'])
+    gulp.watch(['src/member/stylesheets/**/*'], ['build-project:stylesheets:sdk-member:rebuild'])
+    gulp.watch(['src/public-booking/stylesheets/**/*'], ['build-project:stylesheets:sdk-public-booking:rebuild'])
+
+    cb()
+    return
+
+
   return
