@@ -1,7 +1,10 @@
 module.exports = (gulp, plugins, path)->
 
-  gulp.task 'build-project:process-top-files', (cb) ->
+  gulp.task 'build-project', (cb) ->
     plugins.sequence(
+      'build-sdk'
+      'build-project:clean'
+      'build-project:bower-install'
       'build-project:scripts'
       'build-project:stylesheets'
       'build-project:fonts'
@@ -10,26 +13,13 @@ module.exports = (gulp, plugins, path)->
       'build-project:www'
       cb
     )
-
-    return
-
-  gulp.task 'build-project', (cb) ->
-    plugins.sequence(
-      'build-sdk'
-      'build-project:clean'
-      'build-project:bower-install'
-      'build-project:process-top-files'
-      cb
-    )
     return
 
   gulp.task 'build-project:watch', (cb) ->
     plugins.sequence(
-      'build-sdk'
-      'build-project:clean'
-      'build-project:bower-install'
-      'build-project:process-top-files'
+      'build-project'
       'build-project:scripts:watch'
+      'build-project:templates:watch'
       cb
     )
     return
