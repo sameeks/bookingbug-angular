@@ -24,7 +24,7 @@ module.exports = (gulp, plugins, path) ->
     'build-sdk:admin-dashboard:bower'
   ]
 
-  gulp.task 'build-sdk:admin-dashboard:watch', ['build-sdk:admin-dashboard'], () ->
+  gulp.task 'build-sdk:admin-dashboard:watch', () ->
     gulp.watch(['src/admin-dashboard/javascripts/**/*'], ['build-sdk:admin-dashboard:javascripts'])
     gulp.watch(['src/admin-dashboard/stylesheets/**/*'], ['build-sdk:admin-dashboard:stylesheets'])
     gulp.watch(['src/admin-dashboard/images/**/*'], ['build-sdk:admin-dashboard:images'])

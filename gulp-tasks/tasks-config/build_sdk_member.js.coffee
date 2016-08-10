@@ -20,7 +20,7 @@ module.exports = (gulp, plugins, path) ->
     'build-sdk:member:bower'
   ]
 
-  gulp.task 'build-sdk:member:watch', ['build-sdk:member'], () ->
+  gulp.task 'build-sdk:member:watch', () ->
     gulp.watch(['src/member/javascripts/**/*'], ['build-sdk:member:javascripts'])
     gulp.watch(['src/member/stylesheets/**/*'], ['build-sdk:member:stylesheets'])
     gulp.watch(['src/member/templates/**/*'], ['build-sdk:member:templates'])

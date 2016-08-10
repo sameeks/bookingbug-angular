@@ -22,7 +22,8 @@ configuration =
 
 init = () ->
   loadPlugins()
-  loadTasks()
+  loadTasks('tasks-config')
+  loadTasks('tasks-register')
   return
 
 loadPlugins = () ->
@@ -44,9 +45,9 @@ loadPlugins = () ->
 
   return
 
-loadTasks = () ->
+loadTasks = (directory) ->
   tasks = includeAll(
-    dirname: path.resolve __dirname, "./tasks"
+    dirname: path.resolve __dirname, directory
     filter: /(.+)\.(js|coffee)$/
   ) or {}
 

@@ -16,6 +16,6 @@ module.exports = (gulp, plugins, path) ->
     'build-sdk:queue:bower'
   ]
 
-  gulp.task 'build-sdk:queue:watch', ['build-sdk:queue'], () ->
+  gulp.task 'build-sdk:queue:watch', () ->
     gulp.watch(['src/queue/javascripts/**/*'], ['build-sdk:queue:javascripts'])
     gulp.watch(['src/queue/templates/**/*'], ['build-sdk:queue:templates'])

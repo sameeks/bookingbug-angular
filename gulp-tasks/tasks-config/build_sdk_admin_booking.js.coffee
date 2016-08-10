@@ -20,7 +20,7 @@ module.exports = (gulp, plugins, path) ->
     'build-sdk:admin-booking:bower'
   ]
 
-  gulp.task 'build-sdk:admin-booking:watch', ['build-sdk:admin-booking'], () ->
+  gulp.task 'build-sdk:admin-booking:watch', () ->
     gulp.watch(['src/admin-booking/javascripts/**/*'], ['build-sdk:admin-booking:javascripts'])
     gulp.watch(['src/admin-booking/stylesheets/**/*'], ['build-sdk:admin-booking:stylesheets'])
     gulp.watch(['src/admin-booking/templates/**/*'], ['build-sdk:admin-booking:templates'])

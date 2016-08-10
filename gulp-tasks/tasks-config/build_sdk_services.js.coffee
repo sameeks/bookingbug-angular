@@ -16,6 +16,6 @@ module.exports = (gulp, plugins, path) ->
     'build-sdk:services:bower'
   ]
 
-  gulp.task 'build-sdk:services:watch', ['build-sdk:services'], () ->
+  gulp.task 'build-sdk:services:watch', () ->
     gulp.watch(['src/services/javascripts/**/*'], ['build-sdk:services:javascripts'])
     gulp.watch(['src/services/templates/**/*'], ['build-sdk:services:templates'])

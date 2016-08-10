@@ -20,7 +20,7 @@ module.exports = (gulp, plugins, path) ->
     'build-sdk:core:bower'
   ]
 
-  gulp.task 'build-sdk:core:watch', ['build-sdk:core'], () ->
+  gulp.task 'build-sdk:core:watch', () ->
     gulp.watch(['src/core/javascripts/**/*'], ['build-sdk:core:javascripts'])
     gulp.watch(['src/core/stylesheets/**/*'], ['build-sdk:core:stylesheets'])
     gulp.watch(['src/core/templates/**/*'], ['build-sdk:core:templates'])

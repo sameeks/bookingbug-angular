@@ -28,7 +28,7 @@ module.exports = (gulp, plugins, path) ->
     'build-sdk:public-booking:bower'
   ]
 
-  gulp.task 'build-sdk:public-booking:watch', ['build-sdk:public-booking'], () ->
+  gulp.task 'build-sdk:public-booking:watch', () ->
     gulp.watch(['src/public-booking/javascripts/**/*'], ['build-sdk:public-booking:javascripts'])
     gulp.watch(['src/public-booking/stylesheets/**/*'], ['build-sdk:public-booking:stylesheets'])
     gulp.watch(['src/public-booking/fonts/**/*'], ['build-sdk:public-booking:fonts'])

@@ -16,6 +16,6 @@ module.exports = (gulp, plugins, path) ->
     'build-sdk:events:bower'
   ]
 
-  gulp.task 'build-sdk:events:watch', ['build-sdk:events'], () ->
+  gulp.task 'build-sdk:events:watch', () ->
     gulp.watch(['src/events/javascripts/**/*'], ['build-sdk:events:javascripts'])
     gulp.watch(['src/events/templates/**/*'], ['build-sdk:events:templates'])
