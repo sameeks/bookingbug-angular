@@ -9,10 +9,10 @@ module.exports = (gulp, plugins, path)->
       html5Mode: false,
       editExample: true,
       sourceLink: true,
-      image: "gulp-tasks/ngdoc-templates/logo.png",
-      imageLink: "gulp-tasks/ngdoc-templates/logo.png",
-      navTemplate: 'gulp-tasks/ngdoc-templates/custom-head.html',
-      styles: "gulp-tasks/ngdoc-templates/custom-style.css",
+      image: "gulp-tasks/helpers/ngdoc-templates/logo.png",
+      imageLink: "gulp-tasks/helpers/ngdoc-templates/logo.png",
+      navTemplate: 'gulp-tasks/helpers/ngdoc-templates/custom-head.html',
+      styles: "gulp-tasks/helpers/ngdoc-templates/custom-style.css",
       loadDefaults: {
         angular: false,
         angularAnimate: false
@@ -23,7 +23,7 @@ module.exports = (gulp, plugins, path)->
       ]
     }
 
-    return gulp.src('src/admin/javascripts/**')
+    return gulp.src('src/*/javascripts/**')
     .pipe(gulpIf(/.*coffee$/, gulpCoffee().on('error', gulpUtil.log)))
     .pipe(gulpDocs.process(options))
     .pipe(gulp.dest('./docs'));
