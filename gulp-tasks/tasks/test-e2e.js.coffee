@@ -10,9 +10,9 @@ module.exports = (gulp, plugins, path)->
       cb
     return
 
-  gulp.task 'test:e2e:prepare', if process.env.TRAVIS then launchSauceConnect else protractor.webdriver_update
+  gulp.task 'test-e2e:prepare', if process.env.TRAVIS then launchSauceConnect else protractor.webdriver_update
 
-  gulp.task 'test:e2e:run', () ->
+  gulp.task 'test-e2e:run', () ->
     return gulp.src [
       path.join args.getTestProjectSpecsRootPath(), '**/*.spec.js.coffee'
     ]
@@ -25,12 +25,12 @@ module.exports = (gulp, plugins, path)->
       process.exit 1
       return
 
-  gulp.task 'test:e2e', (cb)->
+  gulp.task 'test-e2e', (cb)->
     plugins.sequence(
       'build-project'
       'webserver'
-      'test:e2e:prepare'
-      'test:e2e:run'
+      'test-e2e:prepare'
+      'test-e2e:run'
       cb
     )
 

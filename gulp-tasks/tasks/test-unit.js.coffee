@@ -85,15 +85,15 @@ module.exports = (gulp, plugins, path)->
 
     return serverSettings
 
-  gulp.task 'test:unit-dependencies', (cb)->
+  gulp.task 'test-unit:dependencies', (cb)->
     prepareTestBowerJson()
     cb()
     return
 
-  gulp.task 'test:unit', (cb)->
+  gulp.task 'test-unit', (cb)->
     return new plugins.karma.Server(getKarmaServerSettings(true), cb).start()
 
-  gulp.task 'test:unit-ci', (cb)->
+  gulp.task 'test-unit:ci', (cb)->
     return new plugins.karma.Server(getKarmaServerSettings(false), cb).start()
 
   return

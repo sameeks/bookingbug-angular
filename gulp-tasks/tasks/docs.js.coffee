@@ -14,10 +14,10 @@ module.exports = (gulp, plugins, path)->
       html5Mode: false,
       editExample: true,
       sourceLink: true,
-      image: "gulp-tasks/ngdoc/custom-template/logo.png",
-      imageLink: "gulp-tasks/ngdoc/custom-template/logo.png",
-      navTemplate: 'gulp-tasks/ngdoc/custom-template/custom-head.html',
-      styles: "gulp-tasks/ngdoc/custom-template/custom-style.css",
+      image: "gulp-tasks/ngdoc-templates/logo.png",
+      imageLink: "gulp-tasks/ngdoc-templates/logo.png",
+      navTemplate: 'gulp-tasks/ngdoc-templates/custom-head.html',
+      styles: "gulp-tasks/ngdoc-templates/custom-style.css",
       loadDefaults: {
         angular: false,
         angularAnimate: false

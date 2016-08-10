@@ -4,6 +4,6 @@ npm install -g bower
 
 npm install
 
-gulp test:unit-dependencies
+gulp test-unit:dependencies
 cd test/unit
 bower install

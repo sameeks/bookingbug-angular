@@ -11,35 +11,24 @@ describe "Standard booking journey:", ->
   it "Widget should load", ->
     browser.get 'http://localhost:8000/new_booking.html'
     waitFor '[bb-widget] .content'
+    return
 
-  describe "Companies", ->
-    panel = null
-    it "should be loaded and displayed", ->
-      waitFor "[bb-companies] .panel"
-      panels = element.all(By.css "[bb-companies] .panel")
-      expect(panels.count()).toEqual 5
-      panel = panels.first()
-      expect(panel.element(By.tagName('h2')).getText()).toEqual 'BB Golf - London'
+  describe "Can load stores", ->
+    it "in London", ->
+      waitFor "[bb-map] form"
 
-    it "should move to events", ->
-      panel.element(By.tagName('button')).click()
-      waitFor "[bb-events]"
+      form = element(By.css("[bb-map] form"))
+      stores = element.all(By.css("[accordion-group]"))
 
-  describe "Events", ->
-    eventCard = null
-    it "should be loaded and displayed", ->
-      waitFor "[bb-events] .bb-event-card"
-      eventCards = element.all(By.css "[bb-events] .bb-event-card")
-      expect(eventCards.count()).toEqual 10
-      eventCard = eventCards.first()
-      expect(eventCards.first().element(By.tagName 'h3').getText()).toEqual 'Improve your handicap'
+      expect(stores.count()).toBe 0
 
-    it "should have formatted duration", ->
-      expect(eventCard.element(By.binding('item.duration')).getText()).toEqual '1 hour'
+      form.element(By.model('address')).sendKeys 'London'
+      form.element(By.tagName('button')).click()
 
-    it "should have formatted duration", ->
-      expect(eventCard.element(By.binding('item.duration')).getText()).toEqual '1 hour'
+      expect(stores.count()).toBe 5
+      expect(stores.first().element(By.tagName 'h4').getText()).toEqual "1. BB Golf - London"
+      return
 
-    it "should move to Event", ->
-      eventCard.element(By.tagName('button')).click()
-      waitFor "[bb-event]"
+    return
+
+  return

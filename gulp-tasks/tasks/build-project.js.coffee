@@ -17,6 +17,7 @@ module.exports = (gulp, plugins, path)->
   gulpConcat = require('gulp-concat')
   streamqueue = require('streamqueue')
   mkdirp = require('mkdirp')
+  gulpAngularTemplateCache = require('gulp-angular-templatecache')
   gulpIf = require('gulp-if');
 
   config = null
@@ -149,15 +150,23 @@ module.exports = (gulp, plugins, path)->
     .pipe(gulpFlatten())
     .pipe(gulp.dest(dist))
 
+  gulp.task 'build-project:templates', ['build-project:config'], () ->
+    templatesSrcGlob = path.join args.getTestProjectRootPath(), 'src/templates/*.html'
+    templatesDest = path.join args.getTestProjectRootPath(), 'dist'
+
+    return gulp.src(templatesSrcGlob)
+    .pipe(gulpAngularTemplateCache('templates.js', {module: 'BB'}))
+    .pipe(gulpFlatten())
+    .pipe(gulpTemplate(config))
+    .pipe(gulp.dest(templatesDest));
+
   gulp.task 'build-project:www', ['build-project:config'], () ->
     src = path.join args.getTestProjectRootPath(), 'src/www/*.*'
     dist = path.join args.getTestProjectRootPath(), 'dist'
-
     return gulp.src(src)
     .pipe(gulpTemplate(config))
     .pipe(gulp.dest(dist))
 
-  #['assets', 'html-files-in-www-folder', 'watch', 'webserver'],
   gulp.task 'build-project', (cb) ->
     plugins.sequence(
       'build-project:clean'
@@ -168,6 +177,7 @@ module.exports = (gulp, plugins, path)->
         'build-project:stylesheets'
         'build-project:fonts'
         'build-project:images'
+        'build-project:templates'
         'build-project:www'
       ]
       cb
