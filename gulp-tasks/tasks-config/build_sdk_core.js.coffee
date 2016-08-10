@@ -1,5 +1,5 @@
 module.exports = (gulp, plugins, path) ->
-  bbGulp = require('../bb-gulp.js')
+  bbGulp = require('../helpers/bb-gulp.js')
 
   gulp.task 'build-sdk:core:javascripts', () ->
     bbGulp.javascripts('core')

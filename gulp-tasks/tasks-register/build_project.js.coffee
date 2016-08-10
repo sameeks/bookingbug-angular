@@ -3,7 +3,7 @@ module.exports = (gulp, plugins, path)->
     plugins.sequence(
       'build-project:clean'
       'build-sdk'
-      'build-project:install-bower'
+      'build-project:bower-install'
       [
         'build-project:scripts'
         'build-project:stylesheets'

@@ -1,15 +1,10 @@
 module.exports = (gulp, plugins, path)->
-  del = require('del')
-  gulpif = require('gulp-if')
+  gulpCoffee = require('gulp-coffee')
   gulpDocs = require('gulp-ngdocs')
-  coffee = require('gulp-coffee')
-  gutil = require('gulp-util')
+  gulpIf = require('gulp-if')
+  gulpUtil = require('gulp-util')
 
-  gulp.task 'docs:cleanup', (cb) ->
-    del.sync(['docs']);
-    cb()
-
-  gulp.task 'docs:ng', () ->
+  gulp.task 'docs:sdk-generate', () ->
     options = {
       html5Mode: false,
       editExample: true,
@@ -24,20 +19,11 @@ module.exports = (gulp, plugins, path)->
       },
       title: "BookingBug SDK Docs",
       scripts: [
-        'examples/booking-widget.js'
+        'test/examples-archive/booking-widget.js'
       ]
     }
 
-    return gulp.src('src/*/javascripts/**')
-    .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
+    return gulp.src('src/admin/javascripts/**')
+    .pipe(gulpIf(/.*coffee$/, gulpCoffee().on('error', gulpUtil.log)))
     .pipe(gulpDocs.process(options))
     .pipe(gulp.dest('./docs'));
-
-
-  gulp.task 'docs', ['docs:cleanup', 'docs:ng'], (cb) ->
-    gulp.watch('src/*/javascripts/**', ['docs:ng']);
-
-    return connect.server({
-      root: ['docs'],
-      port: 8000
-    })
