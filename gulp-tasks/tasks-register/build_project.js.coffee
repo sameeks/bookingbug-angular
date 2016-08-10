@@ -26,10 +26,10 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project:watch', (cb) ->
     plugins.sequence(
       'build-sdk'
-      'build-sdk:watch'
       'build-project:clean'
       'build-project:bower-install'
       'build-project:process-top-files'
+      'build-project:scripts:watch'
       cb
     )
     return
