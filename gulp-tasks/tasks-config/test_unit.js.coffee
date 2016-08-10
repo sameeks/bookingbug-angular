@@ -90,10 +90,10 @@ module.exports = (gulp, plugins, path)->
     cb()
     return
 
-  gulp.task 'test-unit', (cb)->
+  gulp.task 'test-unit:watch', (cb)->
     return new plugins.karma.Server(getKarmaServerSettings(true), cb).start()
 
-  gulp.task 'test-unit:ci', (cb)->
+  gulp.task 'test-unit', (cb)->
     return new plugins.karma.Server(getKarmaServerSettings(false), cb).start()
 
   return
