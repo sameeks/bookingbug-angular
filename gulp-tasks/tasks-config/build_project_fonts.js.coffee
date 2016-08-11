@@ -20,4 +20,21 @@ module.exports = (gulp, plugins, path)->
     .pipe(gulpFlatten())
     .pipe(gulp.dest(dist))
 
+    gulp.task 'build-project-fonts:sdk-public-booking:rebuild', (cb) ->
+      plugins.sequence(
+        'build-sdk:public-booking:fonts'
+        'build-project-fonts'
+        cb
+      )
+      return
+
+  gulp.task 'build-project-fonts:watch', (cb) ->
+    fontsSrcGlob = path.join args.getTestProjectRootPath(), 'src/fonts/*.*'
+    gulp.watch(fontsSrcGlob, ['build-project-fonts'])
+
+    gulp.watch(['src/public-booking/fonts/**/*'], ['build-project-fonts:sdk-public-booking:rebuild'])
+
+    cb()
+    return
+
   return

@@ -21,6 +21,8 @@ module.exports = (gulp, plugins, path)->
       'build-project-scripts:watch'
       'build-project-templates:watch'
       'build-project-stylesheets:watch'
+      'build-project-images:watch'
+      'build-project-fonts:watch'
       cb
     )
     return
