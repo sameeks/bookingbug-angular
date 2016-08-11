@@ -35,11 +35,16 @@ angular.module('BB.Models').factory "BaseCollectionModel", ($q, BBModel, BaseMod
 
       deferred = $q.defer()
 
-      @$get('next', {}).then (resource) =>
-        collection = new model(resource)
-        collection.promise.then (collection) ->
-          deferred.resolve(collection)
-      , () ->
+      if @$has('next')
+
+        @$get('next', {}).then (resource) =>
+          collection = new model(resource)
+          collection.promise.then (collection) ->
+            deferred.resolve(collection)
+        , () ->
+          deferred.reject()
+
+      else
         deferred.reject()
 
       return deferred.promise
