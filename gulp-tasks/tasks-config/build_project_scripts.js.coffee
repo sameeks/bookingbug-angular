@@ -16,22 +16,64 @@ module.exports = (gulp, plugins, path)->
     path.join('!**/*.js.map')
   ]
 
-  gulp.task 'build-project-scripts', () ->
+  ###
+  * @param {Array.<String>} files
+  * @param {String} filename
+  ###
+  buildScriptsStream = (files, filename) ->
+    return gulp.src(files)
+    .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
+    .pipe(gulpConcat(filename + '.js'))
+    .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')))
+    .pipe(gulpUglify({mangle: false}))
+    .pipe(gulpConcat(filename + '.min.js'))
+    .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')))
+
+  ###
+  * @param {Function} filter
+  * @param {String} filename
+  * @returns {Object}
+  ###
+  buildVendorScripts = (filter, filename) ->
     dependenciesFiles = mainBowerFiles(
-      filter: new RegExp('.js$')
       paths:
         bowerDirectory: path.join args.getTestProjectRootPath(), 'bower_components'
         bowerrc: path.join args.getTestProjectRootPath(), '.bowerrc'
         bowerJson: path.join args.getTestProjectRootPath(), 'bower.json'
+      filter: filter
     )
 
-    return gulp.src(dependenciesFiles.concat projectFiles)
-    .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
-    .pipe(gulpConcat('scripts.js'))
-    .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')))
-    .pipe(gulpUglify({mangle: false}))
-    .pipe(gulpConcat('scripts.min.js'))
-    .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')))
+    return buildScriptsStream dependenciesFiles, filename
+
+  ###
+  * @param {String} filename
+  * @returns {Object}
+  ###
+  buildProjectScripts = (filename) ->
+    return buildScriptsStream projectFiles, filename
+
+  ###
+  * @param {String} path
+  * @returns {Boolean}
+  ###
+  nonBbDependenciesFilter = (path) ->
+    return ( path.match(new RegExp('.js$')) ) and ( path.indexOf('bookingbug-angular-') is -1 )
+
+  ###
+  * @param {String} path
+  * @returns {Boolean}
+  ###
+  bbDependenciesFilter = (path) ->
+    return ( path.match(new RegExp('.js$')) ) and ( path.indexOf('bookingbug-angular-') isnt -1 )
+
+  gulp.task 'build-project-scripts:vendors', () ->
+    return buildVendorScripts nonBbDependenciesFilter, 'vendors'
+
+  gulp.task 'build-project-scripts:sdk', () ->
+    return buildVendorScripts bbDependenciesFilter, 'sdk'
+
+  gulp.task 'build-project-scripts:client', () ->
+    return buildProjectScripts 'client'
 
   gulp.task 'build-project-scripts:sdk-admin:rebuild', (cb) ->
     plugins.sequence(
@@ -44,7 +86,7 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project-scripts:sdk-admin-booking:rebuild', (cb) ->
     plugins.sequence(
       'build-sdk:admin-booking:javascripts'
-      'build-project-scripts'
+      'build-project-scripts:sdk'
       cb
     )
     return
@@ -52,7 +94,7 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project-scripts:sdk-admin-dashboard:rebuild', (cb) ->
     plugins.sequence(
       'build-sdk:admin-dashboard:javascripts'
-      'build-project-scripts'
+      'build-project-scripts:sdk'
       cb
     )
     return
@@ -60,7 +102,7 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project-scripts:sdk-core:rebuild', (cb) ->
     plugins.sequence(
       'build-sdk:core:javascripts'
-      'build-project-scripts'
+      'build-project-scripts:sdk'
       cb
     )
     return
@@ -68,7 +110,7 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project-scripts:sdk-events:rebuild', (cb) ->
     plugins.sequence(
       'build-sdk:events:javascripts'
-      'build-project-scripts'
+      'build-project-scripts:sdk'
       cb
     )
     return
@@ -76,7 +118,7 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project-scripts:sdk-member:rebuild', (cb) ->
     plugins.sequence(
       'build-sdk:member:javascripts'
-      'build-project-scripts'
+      'build-project-scripts:sdk'
       cb
     )
     return
@@ -84,7 +126,7 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project-scripts:sdk-public-booking:rebuild', (cb) ->
     plugins.sequence(
       'build-sdk:public-booking:javascripts'
-      'build-project-scripts'
+      'build-project-scripts:sdk'
       cb
     )
     return
@@ -92,7 +134,7 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project-scripts:sdk-services:rebuild', (cb) ->
     plugins.sequence(
       'build-sdk:services:javascripts'
-      'build-project-scripts'
+      'build-project-scripts:sdk'
       cb
     )
     return
@@ -100,13 +142,13 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project-scripts:sdk-settings:rebuild', (cb) ->
     plugins.sequence(
       'build-sdk:settings:javascripts'
-      'build-project-scripts'
+      'build-project-scripts:sdk'
       cb
     )
     return
 
   gulp.task 'build-project-scripts:watch', (cb) ->
-    gulp.watch(projectFiles, ['build-project-scripts'])
+    gulp.watch(projectFiles, ['build-project-scripts:client'])
 
     gulp.watch(['src/admin/javascripts/**/*'], ['build-project-scripts:sdk-admin:rebuild'])
     gulp.watch(['src/admin-booking/javascripts/**/*'], ['build-project-scripts:sdk-admin-booking:rebuild'])
