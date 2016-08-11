@@ -3,7 +3,7 @@ module.exports = (gulp, plugins, path)->
   gulpFlatten = require('gulp-flatten')
   mainBowerFiles = require('main-bower-files')
 
-  gulp.task 'build-project:fonts', () ->
+  gulp.task 'build-project-fonts', () ->
     src = path.join args.getTestProjectRootPath(), 'src/fonts/*.*'
     dist = path.join args.getTestProjectRootPath(), 'dist/fonts'
 

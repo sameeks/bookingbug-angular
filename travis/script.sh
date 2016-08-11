@@ -10,6 +10,6 @@ gulp test-unit # !!! Generates html & lcov reports. Lcov can be easily used with
 
 gulp test-e2e --project=demo
 
-if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" = 'true' ] ; then
-  gulp test-e2e --project=demo
-fi
+#if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" = 'true' ] ; then
+#  gulp test-e2e --project=demo
+#fi

@@ -1,8 +1,15 @@
 module.exports = (gulp, plugins, path)->
+  del = require('del')
   gulpCoffee = require('gulp-coffee')
+  gulpConnect = require('gulp-connect')
   gulpDocs = require('gulp-ngdocs')
   gulpIf = require('gulp-if')
   gulpUtil = require('gulp-util')
+
+  gulp.task 'docs:clean', (cb) ->
+    del.sync(['docs']);
+    cb()
+    return
 
   gulp.task 'docs:sdk-generate', () ->
     options = {
@@ -27,3 +34,12 @@ module.exports = (gulp, plugins, path)->
     .pipe(gulpIf(/.*coffee$/, gulpCoffee().on('error', gulpUtil.log)))
     .pipe(gulpDocs.process(options))
     .pipe(gulp.dest('./docs'));
+
+  gulp.task 'docs:sdk-watch', () ->
+    gulp.watch('src/*/javascripts/**', ['docs:sdk-generate']);
+
+    return gulpConnect.server({
+      root: ['docs']
+      port: 8888
+      livereload: true
+    })

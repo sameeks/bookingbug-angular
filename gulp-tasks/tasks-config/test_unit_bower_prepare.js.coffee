@@ -10,7 +10,7 @@ module.exports = (gulp, plugins, path)->
   isBBDependency = (dependencyName) ->
     return new RegExp(/^bookingbug-angular.*/).test dependencyName
 
-  gulp.task 'test-unit:bower-prepare', (cb)->
+  gulp.task 'test-unit-bower-prepare', (cb)->
     nonBBDependencies = {}
 
     testBowerJson = JSON.parse(fs.readFileSync('test/unit/bower.json', 'utf8'))

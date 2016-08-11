@@ -43,10 +43,10 @@ module.exports = (gulp, plugins, path)->
 
     return serverSettings
 
-  gulp.task 'test-unit:start-karma:watch', (cb)->
+  gulp.task 'test-unit-start-karma:watch', (cb)->
     return new plugins.karma.Server(getKarmaServerSettings(true), cb).start()
 
-  gulp.task 'test-unit:start-karma', (cb)->
+  gulp.task 'test-unit-start-karma', (cb)->
     return new plugins.karma.Server(getKarmaServerSettings(false), cb).start()
 
   return

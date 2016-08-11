@@ -3,7 +3,7 @@ module.exports = (gulp, plugins, path)->
   gulpBower = require('gulp-bower')
   mkdirp = require('mkdirp')
 
-  gulp.task 'test-unit:bower-install', (cb)->
+  gulp.task 'test-unit-bower-install', (cb)->
     mkdirp.sync('test/unit/bower_components');
     return gulpBower({cwd: 'test/unit', directory: './bower_components'})
 
