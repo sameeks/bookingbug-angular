@@ -1,4 +1,4 @@
-angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, PaginationService) ->
+angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, BBModel) ->
   templateUrl: 'member_past_bookings.html'
   scope:
     member: '='
@@ -17,7 +17,6 @@ angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, Pagina
           scope.paginator.add(params.page, collection.items)
         else
           scope.paginator.initialise(collection.items, collection.total_entries)
-
 
 
     scope.$watch 'member', () ->

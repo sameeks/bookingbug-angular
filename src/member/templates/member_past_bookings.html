@@ -8,7 +8,7 @@
 
     <ul class="bb-list bb-list-bordered">
 
-      <li bb-member-booking="booking" ng-repeat="booking in past_bookings | startFrom: (paginator.current_page - 1) * paginator.page_size | limitTo: paginator.page_size"></li>
+      <li bb-member-booking="booking" ng-repeat="booking in paginator.items | startFrom: (paginator.current_page - 1) * paginator.page_size | limitTo: paginator.page_size track by $index""></li>
 
     </ul>
 

@@ -1,10 +1,9 @@
 angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope, AlertService, PurchaseService) ->
 
-  $scope.getUpcomingBookings = (params) ->
+  $scope.getUpcomingBookings = (params={}) ->
 
     defer = $q.defer()
 
-    params = params or {}
     params.start_date = moment().format('YYYY-MM-DD')
     
     getBookings(params).then (bookings_collection) ->
@@ -16,7 +15,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
     return defer.promise
 
 
-  $scope.getPastBookings = (num, type) ->
+  $scope.getPastBookings = (num, type, params={}) ->
 
     defer = $q.defer()
 
@@ -25,9 +24,10 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       date = moment().subtract(num, type)
     else
       date = moment().subtract(1, 'year')
-    params =
-      start_date: date.format('YYYY-MM-DD')
-      end_date: moment().add(1,'day').format('YYYY-MM-DD')
+    
+    params.start_date = date.format('YYYY-MM-DD')
+    params.end_date = moment().add(1,'day').format('YYYY-MM-DD')
+    
     getBookings(params).then (bookings_collection) ->
 
       $scope.past_bookings = bookings_collection
