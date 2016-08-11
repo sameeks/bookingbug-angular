@@ -43,7 +43,3 @@ module.exports =
   getEnvironment: getEnvironment
   getTestProjectRootPath: getTestProjectRootPath
   getTestProjectSpecsRootPath: getTestProjectSpecsRootPath
-
-
-
-

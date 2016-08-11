@@ -10,7 +10,6 @@ module.exports = (gulp, plugins, path)->
     )
     return
 
-
   gulp.task 'run-project:watch', (cb) ->
     plugins.sequence(
       'build-project:watch'
@@ -18,3 +17,5 @@ module.exports = (gulp, plugins, path)->
       cb
     )
     return
+
+  return

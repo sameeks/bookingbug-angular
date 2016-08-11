@@ -26,5 +26,3 @@ module.exports = (gulp, plugins, path)->
       return
 
   return
-
-  return

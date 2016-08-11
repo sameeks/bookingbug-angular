@@ -8,5 +8,3 @@ if process.env.TRAVIS
   exports.config.sauceSeleniumAddress = 'localhost:4445/wd/hub'
 else
   exports.config.seleniumServerJar = '../node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-2.53.0.jar'
-
-
