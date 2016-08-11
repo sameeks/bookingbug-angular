@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.clients', [
   'BBAdminDashboard.clients.directives',
   'BBAdminDashboard.clients.translations'
 ])
-.run ['RuntimeStates', 'AdminClientsOptions', 'SideNavigationPartials', (RuntimeStates, AdminClientsOptions, SideNavigationPartials) ->
+.run ['RuntimeStates', 'AdminClientsOptions', 'SideNavigationPartials', '$templateCache', (RuntimeStates, AdminClientsOptions, SideNavigationPartials, $templateCache) ->
   # Choose to opt out of the default routing
   if AdminClientsOptions.use_default_states
 
@@ -19,30 +19,36 @@ angular.module('BBAdminDashboard.clients', [
       .state 'clients',
         parent: AdminClientsOptions.parent_state
         url: "clients"
-        templateUrl: "clients/index.html"
+        templateUrl: 'clients/index.html'
         controller: 'ClientsPageCtrl'
-
-      .state 'clients.new',
-        url: "/new"
-        templateUrl: "client_new.html"
-        controller: 'ClientsNewPageCtrl'
+        resolve: {
+          loadModule: ['$ocLazyLoad', '$rootScope', ($ocLazyLoad, $rootScope) ->
+            if $rootScope.environment == 'development'
+              script = 'bb-angular-admin-dashboard-clients.lazy.js'
+            else
+              script = 'bb-angular-admin-dashboard-clients.lazy.min.js'
+            $ocLazyLoad.load(script);
+          ]
+        }
 
       .state 'clients.all',
         url: "/all"
-        templateUrl: "clients/listing.html"
+        templateUrl: 'clients/listing.html'
         controller: 'ClientsAllPageCtrl'
 
       .state 'clients.edit',
         url: "/edit/:id"
-        templateUrl: "clients/item.html"
+        template: ()->
+          $templateCache.get('clients/item.html')
         resolve:
           client: (company, $stateParams, AdminClientService) ->
             params =
               company_id: company.id
               id: $stateParams.id
             AdminClientService.query(params)
+
         controller: 'ClientsEditPageCtrl'
 
   if AdminClientsOptions.show_in_navigation
-    SideNavigationPartials.addPartialTemplate('clients', 'clients/nav.html')
+    SideNavigationPartials.addPartialTemplate('clients', 'core/nav/clients.html')
 ]

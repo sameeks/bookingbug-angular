@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.members-iframe', [
   'BBAdminDashboard.members-iframe.directives',
   'BBAdminDashboard.members-iframe.translations'
 ])
-.run ['RuntimeStates', 'AdminMembersIframeOptions', 'SideNavigationPartials', (RuntimeStates, AdminMembersIframeOptions, SideNavigationPartials) ->
+.run ['RuntimeStates', 'AdminMembersIframeOptions', 'SideNavigationPartials', '$templateCache', (RuntimeStates, AdminMembersIframeOptions, SideNavigationPartials, $templateCache) ->
   # Choose to opt out of the default routing
   if AdminMembersIframeOptions.use_default_states
 
@@ -19,8 +19,18 @@ angular.module('BBAdminDashboard.members-iframe', [
       .state 'members',
         parent: AdminMembersIframeOptions.parent_state
         url: 'members'
-        templateUrl: 'members-iframe/index.html'
+        template: ()->
+          $templateCache.get('members-iframe/index.html')
         controller: 'MembersIframePageCtrl'
+        resolve: {
+          loadModule: ['$ocLazyLoad', '$rootScope', ($ocLazyLoad, $rootScope) ->
+            if $rootScope.environment == 'development'
+              script = 'bb-angular-admin-dashboard-members-iframe.lazy.js'
+            else
+              script = 'bb-angular-admin-dashboard-members-iframe.lazy.min.js'
+            $ocLazyLoad.load(script);
+          ]
+        }
         deepStateRedirect: {
           default: {
             state:  'members.page'
@@ -32,9 +42,10 @@ angular.module('BBAdminDashboard.members-iframe', [
 
       .state 'members.page',
         url: '/page/:path/:id'
-        templateUrl: 'core/boxed-iframe-page.html'
+        template: ()->
+          $templateCache.get('core/boxed-iframe-page.html')
         controller: 'MembersSubIframePageCtrl'
 
   if AdminMembersIframeOptions.show_in_navigation
-    SideNavigationPartials.addPartialTemplate('members-iframe', 'members-iframe/nav.html')
+    SideNavigationPartials.addPartialTemplate('members-iframe', 'core/nav/members-iframe.html')
 ]

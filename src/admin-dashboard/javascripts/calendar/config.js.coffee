@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.calendar', [
   'BBAdminDashboard.calendar.directives',
   'BBAdminDashboard.calendar.translations'
 ])
-.run ['RuntimeStates', 'AdminCalendarOptions', 'SideNavigationPartials', (RuntimeStates, AdminCalendarOptions, SideNavigationPartials) ->
+.run ['RuntimeStates', 'AdminCalendarOptions', 'SideNavigationPartials', '$templateCache', (RuntimeStates, AdminCalendarOptions, SideNavigationPartials, $templateCache) ->
   # Choose to opt out of the default routing
   if AdminCalendarOptions.use_default_states
 
@@ -19,9 +19,18 @@ angular.module('BBAdminDashboard.calendar', [
       .state 'calendar',
         parent: AdminCalendarOptions.parent_state
         url: "calendar/:assets"
-        templateUrl: "calendar/index.html"
+        templateUrl: 'calendar/index.html'
         controller: 'CalendarPageCtrl'
+        resolve: {
+          loadModule: ['$ocLazyLoad', '$rootScope', ($ocLazyLoad, $rootScope) ->
+            if $rootScope.environment == 'development'
+              script = 'bb-angular-admin-dashboard-calendar.lazy.js'
+            else
+              script = 'bb-angular-admin-dashboard-calendar.lazy.min.js'
+            $ocLazyLoad.load(script);
+          ]
+        }
 
   if AdminCalendarOptions.show_in_navigation
-    SideNavigationPartials.addPartialTemplate('calendar', 'calendar/nav.html')
+    SideNavigationPartials.addPartialTemplate('calendar', 'core/nav/calendar.html')
 ]

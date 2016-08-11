@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
   'BBAdminDashboard.dashboard-iframe.directives',
   'BBAdminDashboard.dashboard-iframe.translations'
 ])
-.run ['RuntimeStates', 'AdminDashboardIframeOptions', 'SideNavigationPartials', (RuntimeStates, AdminDashboardIframeOptions, SideNavigationPartials) ->
+.run ['RuntimeStates', 'AdminDashboardIframeOptions', 'SideNavigationPartials', '$templateCache', (RuntimeStates, AdminDashboardIframeOptions, SideNavigationPartials, $templateCache) ->
   # Choose to opt out of the default routing
   if AdminDashboardIframeOptions.use_default_states
 
@@ -20,7 +20,17 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
         parent: AdminDashboardIframeOptions.parent_state
         url: "dashboard"
         controller: "DashboardIframePageCtrl"
-        templateUrl: "dashboard-iframe/index.html"
+        template: ()->
+          $templateCache.get('dashboard-iframe/index.html')
+        resolve: {
+          loadModule: ['$ocLazyLoad', '$rootScope', ($ocLazyLoad, $rootScope) ->
+            if $rootScope.environment == 'development'
+              script = 'bb-angular-admin-dashboard-dashboard-iframe.lazy.js'
+            else
+              script = 'bb-angular-admin-dashboard-dashboard-iframe.lazy.min.js'
+            $ocLazyLoad.load(script);
+          ]
+        }
         deepStateRedirect: {
           default: {
             state:  'dashboard.page'
@@ -34,8 +44,9 @@ angular.module('BBAdminDashboard.dashboard-iframe', [
       .state 'dashboard.page',
         url: "/page/:path"
         controller: 'DashboardSubIframePageCtrl'
-        templateUrl: "core/iframe-page.html"
+        template: ()->
+          $templateCache.get('core/iframe-page.html')
 
   if AdminDashboardIframeOptions.show_in_navigation
-    SideNavigationPartials.addPartialTemplate('dashboard-iframe', 'dashboard-iframe/nav.html')
+    SideNavigationPartials.addPartialTemplate('dashboard-iframe', 'core/nav/dashboard-iframe.html')
 ]

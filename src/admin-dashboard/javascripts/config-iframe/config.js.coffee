@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.config-iframe', [
   'BBAdminDashboard.config-iframe.directives',
   'BBAdminDashboard.config-iframe.translations'
 ])
-.run ['RuntimeStates', 'AdminConfigIframeOptions', 'SideNavigationPartials', (RuntimeStates, AdminConfigIframeOptions, SideNavigationPartials) ->
+.run ['RuntimeStates', 'AdminConfigIframeOptions', 'SideNavigationPartials', '$templateCache', (RuntimeStates, AdminConfigIframeOptions, SideNavigationPartials, $templateCache) ->
   # Choose to opt out of the default routing
   if AdminConfigIframeOptions.use_default_states
 
@@ -19,8 +19,18 @@ angular.module('BBAdminDashboard.config-iframe', [
       .state 'config',
         parent: AdminConfigIframeOptions.parent_state
         url: 'config'
-        templateUrl: 'config-iframe/index.html'
+        template: ()->
+          $templateCache.get('config-iframe/index.html')
         controller: 'ConfigIframePageCtrl'
+        resolve: {
+          loadModule: ['$ocLazyLoad', '$rootScope', ($ocLazyLoad, $rootScope) ->
+            if $rootScope.environment == 'development'
+              script = 'bb-angular-admin-dashboard-config-iframe.lazy.js'
+            else
+              script = 'bb-angular-admin-dashboard-config-iframe.lazy.min.js'
+            $ocLazyLoad.load(script);
+          ]
+        }
         deepStateRedirect: {
           default: {
             state: 'config.business.page'
@@ -32,7 +42,8 @@ angular.module('BBAdminDashboard.config-iframe', [
 
       .state 'config.business',
         url: '/business'
-        templateUrl: 'core/tabbed-substates-page.html'
+        template: ()->
+          $templateCache.get('core/tabbed-substates-page.html')
         controller: 'ConfigIframeBusinessPageCtrl'
         deepStateRedirect: {
           default: {
@@ -44,12 +55,14 @@ angular.module('BBAdminDashboard.config-iframe', [
         }
       .state 'config.business.page',
         url: '/page/:path'
-        templateUrl: 'core/iframe-page.html'
+        template: ()->
+          $templateCache.get('core/iframe-page.html')
         controller: 'ConfigSubIframePageCtrl'
 
       .state 'config.event-settings',
         url: '/event-settings'
-        templateUrl: 'core/tabbed-substates-page.html'
+        template: ()->
+          $templateCache.get('core/tabbed-substates-page.html')
         controller: 'ConfigIframeEventSettingsPageCtrl'
         deepStateRedirect: {
           default: {
@@ -61,12 +74,14 @@ angular.module('BBAdminDashboard.config-iframe', [
         }
       .state 'config.event-settings.page',
         url: '/page/:path'
-        templateUrl: 'core/iframe-page.html'
+        template: ()->
+          $templateCache.get('core/iframe-page.html')
         controller: 'ConfigSubIframePageCtrl'
 
       .state 'config.promotions',
         url: '/promotions'
-        templateUrl: 'core/tabbed-substates-page.html'
+        template: ()->
+          $templateCache.get('core/tabbed-substates-page.html')
         controller: 'ConfigIframePromotionsPageCtrl'
         deepStateRedirect: {
           default: {
@@ -78,12 +93,14 @@ angular.module('BBAdminDashboard.config-iframe', [
         }
       .state 'config.promotions.page',
         url: '/page/:path'
-        templateUrl: 'core/iframe-page.html'
+        template: ()->
+          $templateCache.get('core/iframe-page.html')
         controller: 'ConfigSubIframePageCtrl'
 
       .state 'config.booking-settings',
         url: '/booking-settings'
-        templateUrl: 'core/tabbed-substates-page.html'
+        template: ()->
+          $templateCache.get('core/tabbed-substates-page.html')
         controller: 'ConfigIframeBookingSettingsPageCtrl'
         deepStateRedirect: {
           default: {
@@ -95,9 +112,10 @@ angular.module('BBAdminDashboard.config-iframe', [
         }
       .state 'config.booking-settings.page',
         url: '/page/:path'
-        templateUrl: 'core/iframe-page.html'
+        template: ()->
+          $templateCache.get('core/iframe-page.html')
         controller: 'ConfigSubIframePageCtrl'
 
   if AdminConfigIframeOptions.show_in_navigation
-    SideNavigationPartials.addPartialTemplate('config-iframe', 'config-iframe/nav.html')
+    SideNavigationPartials.addPartialTemplate('config-iframe', 'core/nav/config-iframe.html')
 ]

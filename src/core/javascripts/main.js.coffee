@@ -52,6 +52,27 @@ app.config (uiGmapGoogleMapApiProvider) ->
     v: '3.20',
     libraries: 'weather,geometry,visualization'
   })
+
+# Extending the templatecache service to allow for lazyloading templates
+app.config ($provide)->
+  $provide.decorator '$templateCache', ($delegate)->
+    keys = []
+    origPut = $delegate.put
+    $delegate.put = (key, value)->
+      origPut(key, value)
+      keys.push(key)
+
+    $delegate.getKeys = ()-> keys
+
+    origGet = $delegate.get
+    $delegate.get = (key)->
+      if origGet(key)
+        return origGet(key)
+
+      defaultKey = 'default/' + key
+      origGet(defaultKey)
+
+    return $delegate
 app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) ->
 
   $httpProvider.defaults.headers.common =
