@@ -5,6 +5,7 @@ set -ev
 # The -v flag makes the shell print all lines in the script before executing them, which helps identify which steps failed.
 
 echo "TRAVIS BRANCH: $TRAVIS_BRANCH"
+echo "TRAVIS_PULL_REQUEST: $TRAVIS_PULL_REQUEST"
 
 gulp test-unit # !!! Generates html & lcov reports. Lcov can be easily used with Climate or Coverall
 
