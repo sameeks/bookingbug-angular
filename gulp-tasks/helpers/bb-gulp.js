@@ -16,32 +16,39 @@ var path = require('path');
 var rename = require('gulp-rename');
 var plumber = require('gulp-plumber');
 var clone = require('gulp-clone');
+var args = require('../helpers/args.js');
 
 module.exports = {
   javascripts: function(module, srcpath, releasepath) {
-    var cloneSink = clone.sink();
+
     srcpath || (srcpath = './src');
     releasepath || (releasepath = './build');
-    return gulp.src([
-          srcpath+'/'+module+'/javascripts/main.js.coffee',
-          srcpath+'/'+module+'/javascripts/**/*',
-          srcpath+'/'+module+'/i18n/en.js',
-          '!'+srcpath+'/'+module+'/javascripts/**/*~',
-          '!'+srcpath+'/'+module+'/javascripts/**/*.js.js',
-          '!'+srcpath+'/'+module+'/javascripts/**/*.js.js.map',
-          '!'+srcpath+'/**/*_test.js.coffee',
-          '!'+srcpath+'/**/*.spec.js.coffee'
-        ],
-        {allowEmpty: true}
-      )
+
+    var files = [
+      srcpath+'/'+module+'/javascripts/main.js.coffee',
+      srcpath+'/'+module+'/javascripts/**/*',
+      srcpath+'/'+module+'/i18n/en.js',
+      '!'+srcpath+'/'+module+'/javascripts/**/*~',
+      '!'+srcpath+'/'+module+'/javascripts/**/*.js.js',
+      '!'+srcpath+'/'+module+'/javascripts/**/*.js.js.map',
+      '!'+srcpath+'/**/*_test.js.coffee',
+      '!'+srcpath+'/**/*.spec.js.coffee'
+    ];
+
+    var stream = gulp.src(files,{allowEmpty: true})
       .pipe(plumber())
       .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
       .pipe(concat('bookingbug-angular-'+module+'.js'))
-      .pipe(cloneSink)
-      .pipe(uglify({mangle: false})).on('error', gutil.log)
-      .pipe(rename({extname: '.min.js'}))
-      .pipe(cloneSink.tap())
-      .pipe(gulp.dest(releasepath+'/'+module));
+
+    if(args.getEnvironment() !== 'dev'){
+      var cloneSink = clone.sink();
+        stream.pipe(cloneSink)
+        .pipe(uglify({mangle: false})).on('error', gutil.log)
+        .pipe(rename({extname: '.min.js'}))
+        .pipe(cloneSink.tap())
+    }
+
+    stream.pipe(gulp.dest(releasepath+'/'+module));
   },
   i18n: function(module, srcpath, releasepath) {
     srcpath || (srcpath = './src');
