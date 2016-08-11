@@ -7,16 +7,33 @@ angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, Pagina
   controller: 'MemberBookings'
   link: (scope, element, attrs) ->
 
-    scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
+    scope.paginator = new BBModel.Pagination({page_size: 10, max_size: 5})
 
-    getBookings = () ->
-      scope.getPastBookings().then (past_bookings) ->
-        PaginationService.update(scope.pagination, past_bookings.length)
+    getBookings = (params, options = {}) ->
+      params = params or {}
+      params.per_page = params.per_page or scope.paginator.request_page_size
+      scope.getPastBookings(params).then (collection) ->
+        if options.add
+          scope.paginator.add(params.page, collection.items)
+        else
+          scope.paginator.initialise(collection.items, collection.total_entries)
+
 
 
     scope.$watch 'member', () ->
-      getBookings() if !scope.past_bookings
+      getBookings() if !scope.paginator.items
 
 
     $rootScope.connection_started.then () ->
       getBookings()
+
+
+    scope.pageChanged = () ->
+
+      [items_present, page_to_load] = scope.paginator.update()
+
+      if !items_present
+        params =
+          page: page_to_load
+        getBookings(params, {add: true})
+

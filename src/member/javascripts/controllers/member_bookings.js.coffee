@@ -30,11 +30,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       end_date: moment().add(1,'day').format('YYYY-MM-DD')
     getBookings(params).then (bookings_collection) ->
 
-      bookings_collection.items = _.chain(bookings_collection.items)
-        .filter((b) -> b.datetime.isBefore(moment()))
-        .sortBy((b) -> -b.datetime.unix())
-        .value()
-
       $scope.past_bookings = bookings_collection
 
       defer.resolve(bookings_collection)

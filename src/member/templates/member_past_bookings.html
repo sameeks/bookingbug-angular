@@ -1,23 +1,23 @@
 <div>
 
-  <div ng-show="past_bookings.length == 0">
-    <h3>You don't currently have any past bookings.</h3>
+  <div ng-show="!paginator.hasItems()">
+    <h3>Nothing to show</h3>
   </div>
 
-  <div class="bb-section">
+  <div class="bb-section" bb-scroll-to="page:changed" ng-show="paginator.hasItems()">>
 
     <ul class="bb-list bb-list-bordered">
 
-      <li bb-member-booking="booking" ng-repeat="booking in past_bookings | filter:{deleted: false} | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size"></li>
+      <li bb-member-booking="booking" ng-repeat="booking in past_bookings | startFrom: (paginator.current_page - 1) * paginator.page_size | limitTo: paginator.page_size"></li>
 
     </ul>
 
   </div>
 
-  <pagination total-items="pagination.num_items"
-    ng-model="pagination.current_page" items-per-page="pagination.page_size"
-    max-size="pagination.max_size" boundary-links="true" rotate="false"
-    num-pages="pagination.num_pages" ng-show="past_bookings && past_bookings.length > 10"></pagination>
+  <pagination total-items="paginator.num_items"
+    ng-model="paginator.current_page" items-per-page="paginator.page_size"
+    max-size="paginator.max_size" boundary-links="true" rotate="false"
+    num-pages="paginator.num_pages" ng-show="paginator.num_items > paginator.page_size" ng-change="pageChanged()"></pagination>
 
 </div>
 

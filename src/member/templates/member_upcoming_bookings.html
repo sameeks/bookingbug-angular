@@ -1,35 +1,40 @@
 <div>
 
-  <div ng-show="upcoming_bookings.length == 0">
-    <h3>You don't have any upcoming bookings</h3>
+  <div ng-show="!paginator.hasItems()">
+    <h3>Nothing to show</h3>
   </div>
 
-  <div class="bb-section" ng-show="waitlist_bookings.length > 0">
+  <!-- <div class="bb-section" ng-show="waitlist_bookings.length > 0">
 
     <h3>On Waitlist</h3>
 
     <ul class="bb-list bb-list-bordered">
 
-      <li bb-member-booking="booking" ng-repeat="booking in (waitlist_bookings = (upcoming_bookings | filter:{deleted: false, on_waitlist: true} | orderBy: 'datetime.unix()'))"></li>
+      <li bb-member-booking="booking" ng-repeat="booking in (waitlist_bookings = (paginator.items | filter:{deleted: false, on_waitlist: true} | orderBy: 'datetime.unix()'))"></li>
 
     </ul>
 
   </div>
+ -->
+  <div class="bb-section" bb-scroll-to="page:changed" ng-show="paginator.hasItems()">
 
-  <div class="bb-section" ng-show="confirmed_bookings.length > 0" bb-scroll-to="page:changed">
+    <!--
 
-    <h3>Confirmed</h3>
+    TODO: Once BW-113 has been addressed, we can just show confirmed bookings
+
+    <h3>Confirmed Bookings</h3> 
+    -->
 
     <ul class="bb-list bb-list-bordered">
 
-      <li bb-member-booking="booking" ng-repeat="booking in (confirmed_bookings = (upcoming_bookings | filter:{deleted: false, on_waitlist: false} | orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size))"></li>
+      <li bb-member-booking="booking" ng-repeat="booking in paginator.items | startFrom: (paginator.current_page - 1) * paginator.page_size | limitTo: paginator.page_size track by $index""></li>
 
     </ul>
 
-    <pagination total-items="pagination.num_items"
-      ng-model="pagination.current_page" items-per-page="pagination.page_size"
-      max-size="pagination.max_size" boundary-links="true" rotate="false"
-      num-pages="pagination.num_pages" ng-show="upcoming_bookings && upcoming_bookings.length > 10"></pagination>
+    <pagination total-items="paginator.num_items"
+      ng-model="paginator.current_page" items-per-page="paginator.page_size"
+      max-size="paginator.max_size" boundary-links="true" rotate="false"
+      num-pages="paginator.num_pages" ng-show="paginator.num_items > paginator.page_size" ng-change="pageChanged()"></pagination>
 
   </div>
 
