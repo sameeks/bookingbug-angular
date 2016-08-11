@@ -20,7 +20,7 @@ module.exports = (gulp, plugins, path)->
     .pipe(gulpFlatten())
     .pipe(gulp.dest(dist))
 
-    gulp.task 'build-project-fonts:sdk-public-booking:rebuild', (cb) ->
+  gulp.task 'build-project-fonts:sdk-public-booking:rebuild', (cb) ->
       plugins.sequence(
         'build-sdk:public-booking:fonts'
         'build-project-fonts'
