@@ -10,37 +10,23 @@ module.exports = (gulp, plugins, path)->
     .pipe(gulpFlatten())
     .pipe(gulp.dest(dist))
 
-  gulp.task 'build-project-images:sdk-admin:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin:images'
-      'build-project-images'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-images:sdk-admin-dashboard:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin-dashboard:images'
-      'build-project-images'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-images:sdk-public-booking:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:public-booking:images'
-      'build-project-images'
-      cb
-    )
-    return
-
   gulp.task 'build-project-images:watch', (cb) ->
     imagesSrcGlob = path.join args.getTestProjectRootPath(), 'src/images/*.*'
     gulp.watch(imagesSrcGlob, ['build-project-images'])
 
-    gulp.watch(['src/admin/images/**/*'], ['build-project-images:sdk-admin:rebuild'])
-    gulp.watch(['src/admin-dashboard/images/**/*'], ['build-project-images:sdk-admin-dashboard:rebuild'])
-    gulp.watch(['src/public-booking/images/**/*'], ['build-project-images:sdk-public-booking:rebuild'])
+    gulp.watch(['src/admin/images/**/*'], ['build-sdk:admin:images'])
+
+    gulp.watch(['src/admin-dashboard/images/**/*'], ['build-sdk:admin-dashboard:images'])
+    gulp.watch(['src/public-booking/images/**/*'], ['build-sdk:public-booking:images'])
+
+    ###
+    gulp.watch([
+      path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-* /**'
+      '!' + path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-* /** /*.{eot,svg,ttf,woff,woff2,otf}'
+      '!' + path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-* /** /*.js'
+      '!' + path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-* /** /*.scss'
+    ], [''])
+    ###
 
     cb()
     return

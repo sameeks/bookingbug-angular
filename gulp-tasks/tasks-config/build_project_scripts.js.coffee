@@ -21,13 +21,17 @@ module.exports = (gulp, plugins, path)->
   * @param {String} filename
   ###
   buildScriptsStream = (files, filename) ->
-    return gulp.src(files)
+    stream = gulp.src(files)
     .pipe(gulpIf(/.*js.coffee$/, gulpCoffee().on('error', gulpUtil.log)))
     .pipe(gulpConcat(filename + '.js'))
-    .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')))
-    .pipe(gulpUglify({mangle: false}))
-    .pipe(gulpConcat(filename + '.min.js'))
-    .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')))
+    .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')));
+
+    if args.getEnvironment() isnt 'dev'
+      stream.pipe(gulpUglify({mangle: false}))
+      .pipe(gulpConcat(filename + '.min.js'))
+      .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')));
+
+    return stream
 
   ###
   * @param {Function} filter
@@ -63,14 +67,26 @@ module.exports = (gulp, plugins, path)->
   * @param {String} path
   * @returns {Boolean}
   ###
-  bbDependenciesFilter = (path) ->
-    return ( path.match(new RegExp('.js$')) ) and ( path.indexOf('bookingbug-angular-') isnt -1 )
+  bbDependenciesNoTemplatesFilter = (path) ->
+    isBookingBugDependency = path.indexOf('bookingbug-angular-') isnt -1
+    return isBookingBugDependency and path.match(new RegExp('.js$')) and !path.match(new RegExp('-templates.js$'))
+
+  ###
+  * @param {String} path
+  * @returns {Boolean}
+  ###
+  bbDependenciesOnlyTemplatesFilter = (path) ->
+    isBookingBugDependency = path.indexOf('bookingbug-angular-') isnt -1
+    return isBookingBugDependency and path.match(new RegExp('-templates.js$'))
 
   gulp.task 'build-project-scripts:vendors', () ->
     return buildVendorScripts nonBbDependenciesFilter, 'vendors'
 
-  gulp.task 'build-project-scripts:sdk', () ->
-    return buildVendorScripts bbDependenciesFilter, 'sdk'
+  gulp.task 'build-project-scripts:sdk-no-templates', () ->
+    return buildVendorScripts bbDependenciesNoTemplatesFilter, 'sdk'
+
+  gulp.task 'build-project-scripts:sdk-only-templates', () ->
+    return buildVendorScripts bbDependenciesOnlyTemplatesFilter, 'sdk_templates'
 
   gulp.task 'build-project-scripts:client', () ->
     return buildProjectScripts 'client'
@@ -88,7 +104,10 @@ module.exports = (gulp, plugins, path)->
     gulp.watch(['src/services/javascripts/**/*'], ['build-sdk:services:javascripts'])
     gulp.watch(['src/settings/javascripts/**/*'], ['build-sdk:settings:javascripts'])
 
-    gulp.watch([ path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-*/*.js'], ['build-project-scripts:sdk'])
+    gulp.watch([
+      path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-*/*.js'
+      '!' + path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-*/*-templates.js'
+    ], ['build-project-scripts:sdk-no-templates'])
 
     cb()
     return

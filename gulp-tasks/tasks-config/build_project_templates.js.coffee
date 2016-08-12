@@ -1,7 +1,9 @@
 module.exports = (gulp, plugins, path)->
   args = require('../helpers/args.js')
   gulpAngularTemplateCache = require('gulp-angular-templatecache')
+  gulpConcat = require('gulp-concat')
   gulpFlatten = require('gulp-flatten')
+  gulpUglify = require('gulp-uglify')
   gulpTemplate = require('gulp-template')
   projectConfig = require('../helpers/project_config.js')
 
@@ -9,98 +11,36 @@ module.exports = (gulp, plugins, path)->
     templatesSrcGlob = path.join args.getTestProjectRootPath(), 'src/templates/*.html'
     templatesDest = path.join args.getTestProjectRootPath(), 'dist'
 
-    return gulp.src(templatesSrcGlob)
-    .pipe(gulpAngularTemplateCache('templates.js', {module: 'BB'}))
+    stream = gulp.src(templatesSrcGlob)
+    .pipe(gulpAngularTemplateCache('client_templates.js', {module: 'BB'}))
     .pipe(gulpFlatten())
     .pipe(gulpTemplate(projectConfig.getConfig()))
-    .pipe(gulp.dest(templatesDest));
+    .pipe(gulp.dest(templatesDest))
 
-  gulp.task 'build-project-templates:sdk-admin:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin:templates'
-      'build-project-templates'
-      cb
-    )
-    return
+    if args.getEnvironment() isnt 'dev'
+      stream.pipe(gulpUglify({mangle: false}))
+      .pipe(gulpConcat('client_templates.min.js'))
+      .pipe(gulp.dest(path.join(args.getTestProjectRootPath(), 'dist')));
 
-  gulp.task 'build-project-templates:sdk-admin-booking:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin-booking:templates'
-      'build-project-templates'
-      cb
-    )
-    return
+    return stream
 
-  gulp.task 'build-project-templates:sdk-admin-dashboard:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin-dashboard:templates'
-      'build-project-templates'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-templates:sdk-core:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:core:templates'
-      'build-project-templates'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-templates:sdk-events:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:events:templates'
-      'build-project-templates'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-templates:sdk-member:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:member:templates'
-      'build-project-templates'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-templates:sdk-public-booking:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:public-booking:templates'
-      'build-project-templates'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-templates:sdk-services:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:services:templates'
-      'build-project-templates'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-templates:sdk-settings:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:settings:templates'
-      'build-project-templates'
-      cb
-    )
-    return
 
   gulp.task 'build-project-templates:watch', (cb) ->
-
     templatesSrcGlob = path.join args.getTestProjectRootPath(), 'src/templates/*.html'
     gulp.watch(templatesSrcGlob, ['build-project-templates'])
 
-    gulp.watch(['src/admin/templates/**/*'], ['build-project-templates:sdk-admin:rebuild'])
-    gulp.watch(['src/admin-booking/templates/**/*'], ['build-project-templates:sdk-admin-booking:rebuild'])
-    gulp.watch(['src/admin-dashboard/templates/**/*'], ['build-project-templates:sdk-admin-dashboard:rebuild'])
-    gulp.watch(['src/core/templates/**/*'], ['build-project-templates:sdk-core:rebuild'])
-    gulp.watch(['src/events/templates/**/*'], ['build-project-templates:sdk-events:rebuild'])
-    gulp.watch(['src/member/templates/**/*'], ['build-project-templates:sdk-member:rebuild'])
-    gulp.watch(['src/public-booking/templates/**/*'], ['build-project-templates:sdk-public-booking:rebuild'])
-    gulp.watch(['src/services/templates/**/*'], ['build-project-templates:sdk-services:rebuild'])
-    gulp.watch(['src/settings/templates/**/*'], ['build-project-templates:sdk-settings:rebuild'])
+    gulp.watch(['src/admin/templates/**/*'], ['build-sdk:admin:templates'])
+    gulp.watch(['src/admin-booking/templates/**/*'], ['build-sdk:admin-booking:templates'])
+    gulp.watch(['src/admin-dashboard/templates/**/*'], ['build-sdk:admin-dashboard/:templates'])
+    gulp.watch(['src/core/templates/**/*'], ['build-sdk:core:templates'])
+    gulp.watch(['src/events/templates/**/*'], ['build-sdk:events:templates'])
+    gulp.watch(['src/member/templates/**/*'], ['build-sdk:member:templates'])
+    gulp.watch(['src/public-booking/templates/**/*'], ['build-sdk:public-booking:templates'])
+    gulp.watch(['src/services/templates/**/*'], ['build-sdk:services:templates'])
+    gulp.watch(['src/settings/templates/**/*'], ['build-sdk:settings:templates'])
+
+    gulp.watch([path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-*/*templates.js'], ['build-project-scripts:sdk-only-templates'])
+
 
     cb()
     return

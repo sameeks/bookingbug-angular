@@ -32,13 +32,17 @@ module.exports = (gulp, plugins, path)->
 
     dependenciesCssStream = gulp.src(dependenciesCssFiles).pipe(gulpSourcemaps.init())
 
-    ##TODO do we need compressed in this case
-    #.pipe(gulpSass({outputStyle: 'compressed', onError: (e) -> console.log(e) }).on('error', gulpUtil.log))
+    gulpSassOptions =
+      onError: (e) -> console.log(e)
+
+    if args.getEnvironment() isnt 'dev'
+      gulpSassOptions.outputStyle = 'compressed'
 
     appSCSSStream = gulp.src(src)
     .pipe(gulpSourcemaps.init())
     .pipe(gulpTemplate(projectConfig.getConfig()))
-    .pipe(gulpSass({onError: (e) -> console.log(e)}).on('error', gulpUtil.log))
+    .pipe(gulpSass(gulpSassOptions).on('error', gulpUtil.log))
+
 
     return streamqueue({objectMode: true}, dependenciesCssStream, appSCSSStream)
     .pipe(gulpPlumber())
@@ -48,56 +52,17 @@ module.exports = (gulp, plugins, path)->
     .pipe(gulpSourcemaps.write('maps', {includeContent: false}))
     .pipe(gulp.dest(dest))
 
-  gulp.task 'build-project-stylesheets:sdk-admin-booking:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin-booking:stylesheets'
-      'build-project-stylesheets'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-templates:sdk-admin-dashboard:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin-dashboard:templates'
-      'build-project-templates'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-stylesheets:sdk-core:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:core:stylesheets'
-      'build-project-stylesheets'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-stylesheets:sdk-member:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:member:stylesheets'
-      'build-project-stylesheets'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-stylesheets:sdk-public-booking:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:public-booking:stylesheets'
-      'build-project-stylesheets'
-      cb
-    )
-    return
-
   gulp.task 'build-project-stylesheets:watch', (cb) ->
-
     src = path.join args.getTestProjectRootPath(), 'src/stylesheets/main.scss'
     gulp.watch(src, ['build-project-stylesheets'])
 
-    gulp.watch(['src/admin-booking/stylesheets/**/*'], ['build-project-stylesheets:sdk-admin-booking:rebuild'])
-    gulp.watch(['src/admin-dashboard/stylesheets/**/*'], ['build-project-stylesheets:sdk-admin-dashboard:rebuild'])
-    gulp.watch(['src/core/stylesheets/**/*'], ['build-project-stylesheets:sdk-core:rebuild'])
-    gulp.watch(['src/member/stylesheets/**/*'], ['build-project-stylesheets:sdk-member:rebuild'])
-    gulp.watch(['src/public-booking/stylesheets/**/*'], ['build-project-stylesheets:sdk-public-booking:rebuild'])
+    gulp.watch(['src/admin-booking/stylesheets/**/*'], ['build-sdk:admin-booking:stylesheets'])
+    gulp.watch(['src/admin-dashboard/stylesheets/**/*'], ['build-sdk:admin-dashboard:stylesheets'])
+    gulp.watch(['src/core/stylesheets/**/*'], ['build-sdk:core:stylesheets'])
+    gulp.watch(['src/member/stylesheets/**/*'], ['build-sdk:member:stylesheets'])
+    gulp.watch(['src/public-booking/stylesheets/**/*'], ['build-sdk:public-booking:stylesheets'])
+
+    gulp.watch([path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-*/**/*.scss'], ['build-project-stylesheets'])
 
     cb()
     return
