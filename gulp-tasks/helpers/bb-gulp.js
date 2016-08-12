@@ -38,14 +38,14 @@ module.exports = {
     var stream = gulp.src(files,{allowEmpty: true})
       .pipe(plumber())
       .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
-      .pipe(concat('bookingbug-angular-'+module+'.js'))
+      .pipe(concat('bookingbug-angular-'+module+'.js'));
 
     if(args.getEnvironment() !== 'dev'){
       var cloneSink = clone.sink();
         stream.pipe(cloneSink)
         .pipe(uglify({mangle: false})).on('error', gutil.log)
         .pipe(rename({extname: '.min.js'}))
-        .pipe(cloneSink.tap())
+        .pipe(cloneSink.tap());
     }
 
     stream.pipe(gulp.dest(releasepath+'/'+module));

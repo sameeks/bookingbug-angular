@@ -75,90 +75,20 @@ module.exports = (gulp, plugins, path)->
   gulp.task 'build-project-scripts:client', () ->
     return buildProjectScripts 'client'
 
-  gulp.task 'build-project-scripts:sdk-admin:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin:javascripts'
-      'build-project-scripts'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-scripts:sdk-admin-booking:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin-booking:javascripts'
-      'build-project-scripts:sdk'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-scripts:sdk-admin-dashboard:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:admin-dashboard:javascripts'
-      'build-project-scripts:sdk'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-scripts:sdk-core:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:core:javascripts'
-      'build-project-scripts:sdk'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-scripts:sdk-events:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:events:javascripts'
-      'build-project-scripts:sdk'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-scripts:sdk-member:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:member:javascripts'
-      'build-project-scripts:sdk'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-scripts:sdk-public-booking:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:public-booking:javascripts'
-      'build-project-scripts:sdk'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-scripts:sdk-services:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:services:javascripts'
-      'build-project-scripts:sdk'
-      cb
-    )
-    return
-
-  gulp.task 'build-project-scripts:sdk-settings:rebuild', (cb) ->
-    plugins.sequence(
-      'build-sdk:settings:javascripts'
-      'build-project-scripts:sdk'
-      cb
-    )
-    return
-
   gulp.task 'build-project-scripts:watch', (cb) ->
     gulp.watch(projectFiles, ['build-project-scripts:client'])
 
-    gulp.watch(['src/admin/javascripts/**/*'], ['build-project-scripts:sdk-admin:rebuild'])
-    gulp.watch(['src/admin-booking/javascripts/**/*'], ['build-project-scripts:sdk-admin-booking:rebuild'])
-    gulp.watch(['src/admin-dashboard/javascripts/**/*'], ['build-project-scripts:sdk-admin-dashboard:rebuild'])
-    gulp.watch(['src/core/javascripts/**/*'], ['build-project-scripts:sdk-core:rebuild'])
-    gulp.watch(['src/events/javascripts/**/*'], ['build-project-scripts:sdk-events:rebuild'])
-    gulp.watch(['src/member/javascripts/**/*'], ['build-project-scripts:sdk-member:rebuild'])
-    gulp.watch(['src/public-booking/javascripts/**/*'], ['build-project-scripts:sdk-public-booking:rebuild'])
-    gulp.watch(['src/services/javascripts/**/*'], ['build-project-scripts:sdk-services:rebuild'])
-    gulp.watch(['src/settings/javascripts/**/*'], ['build-project-scripts:sdk-settings:rebuild'])
+    gulp.watch(['src/admin/javascripts/**/*'], ['build-sdk:admin:javascripts'])
+    gulp.watch(['src/admin-booking/javascripts/**/*'], ['build-sdk:admin-booking:javascripts'])
+    gulp.watch(['src/admin-dashboard/javascripts/**/*'], ['build-sdk:admin-dashboard:javascripts'])
+    gulp.watch(['src/core/javascripts/**/*'], ['build-sdk:core:javascripts'])
+    gulp.watch(['src/events/javascripts/**/*'], ['build-sdk:events:javascripts'])
+    gulp.watch(['src/member/javascripts/**/*'], ['build-sdk:member:javascripts'])
+    gulp.watch(['src/public-booking/javascripts/**/*'], ['build-sdk:public-booking:javascripts'])
+    gulp.watch(['src/services/javascripts/**/*'], ['build-sdk:services:javascripts'])
+    gulp.watch(['src/settings/javascripts/**/*'], ['build-sdk:settings:javascripts'])
+
+    gulp.watch([ path.join args.getTestProjectRootPath(), 'bower_components/bookingbug-angular-*/*.js'], ['build-project-scripts:sdk'])
 
     cb()
     return
