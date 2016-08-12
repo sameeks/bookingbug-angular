@@ -9,7 +9,9 @@ angular.module('BBAdminDashboard.clients.directives').directive 'bbClientsTable'
     return
 
 
-angular.module('BBAdminDashboard.clients.directives').controller 'TabletClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService) ->
+angular.module('BBAdminDashboard.clients.directives').controller 'TabletClients', (
+  $scope,  $rootScope, $q, BBModel, AlertService) ->
+
   $scope.clientDef = $q.defer()
   $scope.clientPromise = $scope.clientDef.promise
   $scope.per_page = 15
@@ -26,14 +28,18 @@ angular.module('BBAdminDashboard.clients.directives').controller 'TabletClients'
       
     clientDef = $q.defer()
 
-    # BusyService.notLoaded $scope
-    AdminClientService.query({company_id:$scope.bb.company.id, per_page: $scope.per_page, page: currentPage+1, filter_by: filterBy, filter_by_fields: filterByFields, order_by: orderBy, order_by_reverse: orderByReverse    }).then (clients) =>
+    params =
+      company_id: $scope.bb.company_id
+      per_page: $scope.per_page
+      page: currentPage + 1
+      filter_by: filterBy
+      filter_by_fields: filterByFields
+      order_by: orderBy
+      order_by_reverse: orderByReverse
+    BBModel.Admin.Client.$query(params).then (clients) =>
       $scope.clients = clients.items
-      # BusyService.setLoaded $scope
-      # BusyService.setPageLoaded()
       $scope.total_entries = clients.total_entries
       clientDef.resolve(clients.items)
     , (err) ->
       clientDef.reject(err)
-      # BusyService.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
   

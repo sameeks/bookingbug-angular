@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 ###
 * @ngdoc controller
@@ -8,7 +8,8 @@
 * Controller for the clients edit page
 ###
 angular.module('BBAdminDashboard.clients.controllers')
-.controller 'ClientsEditPageCtrl',['$scope', 'client', '$state', 'company', 'AdminClientService', ($scope, client, $state, company, AdminClientService) ->
+.controller 'ClientsEditPageCtrl', ($scope, client, $state, company, BBModel) ->
+
   $scope.client = client
   $scope.historicalStartDate = moment().add(-1, 'years')
   $scope.historicalEndDate = moment()
@@ -19,7 +20,6 @@ angular.module('BBAdminDashboard.clients.controllers')
       id: $state.params.id
       flush: true
 
-    AdminClientService.query(params).then (client)->
+    BBModelAdmin.Client.$query(params).then (client)->
       $scope.client = client
 
-]

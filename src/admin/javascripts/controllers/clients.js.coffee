@@ -10,8 +10,7 @@ angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
 
 
 angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,
-  $rootScope, $q, $log, AdminClientService, AlertService, LoadingService,
-  BBModel) ->
+  $rootScope, $q, $log, AlertService, LoadingService, BBModel) ->
 
   $scope.clientDef = $q.defer()
   $scope.clientPromise = $scope.clientDef.promise

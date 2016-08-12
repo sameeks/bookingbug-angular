@@ -11,7 +11,7 @@ angular.module('BB.Models').factory "Admin.ClientModel", (ClientModel, $q, BBMod
       company = params.company
       defer = $q.defer()
       if company.$has('client')
-        company.$get('client').then (collection) ->
+        company.$get('client', params).then (collection) ->
           collection.$get('clients').then (clients) ->
             models = (new BBModel.Admin.Client(c) for c in clients)
             defer.resolve(models)

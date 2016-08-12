@@ -36,11 +36,11 @@ angular.module('BBAdminDashboard.clients', [
         url: "/edit/:id"
         templateUrl: "clients/item.html"
         resolve:
-          client: (company, $stateParams, AdminClientService) ->
+          client: (company, $stateParams, BBModel) ->
             params =
               company_id: company.id
               id: $stateParams.id
-            AdminClientService.query(params)
+            BBModel.Admin.Client.$query(params)
         controller: 'ClientsEditPageCtrl'
 
   if AdminClientsOptions.show_in_navigation
