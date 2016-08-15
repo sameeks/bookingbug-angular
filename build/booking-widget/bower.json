@@ -16,22 +16,14 @@
     "test",
     "tests"
   ],
+  "resolutions": {
+    "angular": "1.2.28",
+    "moment": "master",
+    "bookingbug-angular-core": "*"
+  },
   "dependencies": {
     "bookingbug-angular-core": "../core",
     "bookingbug-angular-public-booking": "../public-booking",
     "bookingbug-angular-member": "../member"
-  },
-  "resolutions": {
-    "angular": "1.2.28",
-    "bookingbug-angular-admin": "*",
-    "bookingbug-angular-admin-booking": "*",
-    "bookingbug-angular-admin-dashboard": "*",
-    "bookingbug-angular-core": "*",
-    "bookingbug-angular-events": "*",
-    "bookingbug-angular-member": "*",
-    "bookingbug-angular-public-booking": "*",
-    "bookingbug-angular-services": "*",
-    "bookingbug-angular-settings": "*",
-    "moment": "master"
   }
 }

@@ -3,8 +3,7 @@ module.exports = (gulp, plugins, path) ->
   gulp.task 'deploy', (cb) ->
 
     plugins.sequence(
-     'build-sdk',
-     'build-project'
+     'build-widget'
      'deploy-aws'
      cb
     )
