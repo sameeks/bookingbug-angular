@@ -1,17 +1,21 @@
 module.exports = (gulp, plugins, path) ->
   bbGulp = require('../helpers/bb-gulp.js')
+  path = require('path')
+
+  srcPath = path.join plugins.config.sdkRootPath, 'src'
+  destPath = path.join plugins.config.sdkRootPath, 'build'
 
   gulp.task 'build-sdk:admin:javascripts', () ->
-    bbGulp.javascripts('admin')
+    bbGulp.javascripts('admin', srcPath, destPath)
 
   gulp.task 'build-sdk:admin:images', () ->
-    bbGulp.images('admin')
+    bbGulp.images('admin', srcPath, destPath)
 
   gulp.task 'build-sdk:admin:templates', () ->
-    bbGulp.templates('admin')
+    bbGulp.templates('admin', srcPath, destPath)
 
   gulp.task 'build-sdk:admin:bower', () ->
-    bbGulp.bower('admin')
+    bbGulp.bower('admin', srcPath, destPath)
 
   gulp.task 'build-sdk:admin', [
     'build-sdk:admin:javascripts'
@@ -23,16 +27,16 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:admin-booking:javascripts', () ->
-    bbGulp.javascripts('admin-booking')
+    bbGulp.javascripts('admin-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-booking:stylesheets', () ->
-    bbGulp.stylesheets('admin-booking')
+    bbGulp.stylesheets('admin-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-booking:templates', () ->
-    bbGulp.templates('admin-booking', false, false, 'BBAdminBooking')
+    bbGulp.templates('admin-booking', srcPath, false, 'BBAdminBooking')
 
   gulp.task 'build-sdk:admin-booking:bower', () ->
-    bbGulp.bower('admin-booking')
+    bbGulp.bower('admin-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-booking', [
     'build-sdk:admin-booking:javascripts'
@@ -44,19 +48,19 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:admin-dashboard:javascripts', () ->
-    bbGulp.javascripts('admin-dashboard')
+    bbGulp.javascripts('admin-dashboard', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-dashboard:stylesheets', () ->
-    bbGulp.stylesheets('admin-dashboard')
+    bbGulp.stylesheets('admin-dashboard', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-dashboard:images', () ->
-    bbGulp.images('admin-dashboard')
+    bbGulp.images('admin-dashboard', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-dashboard:templates', () ->
-    bbGulp.templates('admin-dashboard', false, false, false, false)
+    bbGulp.templates('admin-dashboard', srcPath, false, false, false)
 
   gulp.task 'build-sdk:admin-dashboard:bower', () ->
-    bbGulp.bower('admin-dashboard')
+    bbGulp.bower('admin-dashboard', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-dashboard', [
     'build-sdk:admin-dashboard:javascripts'
@@ -69,16 +73,16 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:core:javascripts', () ->
-    bbGulp.javascripts('core')
+    bbGulp.javascripts('core', srcPath, destPath)
 
   gulp.task 'build-sdk:core:stylesheets', () ->
-    bbGulp.stylesheets('core')
+    bbGulp.stylesheets('core', srcPath, destPath)
 
   gulp.task 'build-sdk:core:templates', () ->
-    bbGulp.templates('core')
+    bbGulp.templates('core', srcPath, destPath)
 
   gulp.task 'build-sdk:core:bower', () ->
-    bbGulp.bower('core')
+    bbGulp.bower('core', srcPath, destPath)
 
   gulp.task 'build-sdk:core', [
     'build-sdk:core:javascripts'
@@ -90,13 +94,13 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:events:javascripts', () ->
-    bbGulp.javascripts('events')
+    bbGulp.javascripts('events', srcPath, destPath)
 
   gulp.task 'build-sdk:events:templates', () ->
-    bbGulp.templates('events')
+    bbGulp.templates('events', srcPath, destPath)
 
   gulp.task 'build-sdk:events:bower', () ->
-    bbGulp.bower('events')
+    bbGulp.bower('events', srcPath, destPath)
 
   gulp.task 'build-sdk:events', [
     'build-sdk:events:javascripts'
@@ -107,16 +111,16 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:member:javascripts', () ->
-    bbGulp.javascripts('member')
+    bbGulp.javascripts('member', srcPath, destPath)
 
   gulp.task 'build-sdk:member:stylesheets', () ->
-    bbGulp.stylesheets('member')
+    bbGulp.stylesheets('member', srcPath, destPath)
 
   gulp.task 'build-sdk:member:templates', () ->
-    bbGulp.templates('member')
+    bbGulp.templates('member', srcPath, destPath)
 
   gulp.task 'build-sdk:member:bower', () ->
-    bbGulp.bower('member')
+    bbGulp.bower('member', srcPath, destPath)
 
   gulp.task 'build-sdk:member', [
     'build-sdk:member:javascripts'
@@ -128,22 +132,22 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:public-booking:javascripts', () ->
-    bbGulp.javascripts('public-booking')
+    bbGulp.javascripts('public-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:public-booking:stylesheets', () ->
-    bbGulp.stylesheets('public-booking')
+    bbGulp.stylesheets('public-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:public-booking:fonts', () ->
-    bbGulp.fonts('public-booking')
+    bbGulp.fonts('public-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:public-booking:images', () ->
-    bbGulp.images('public-booking')
+    bbGulp.images('public-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:public-booking:templates', () ->
-    bbGulp.templates('public-booking')
+    bbGulp.templates('public-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:public-booking:bower', () ->
-    bbGulp.bower('public-booking')
+    bbGulp.bower('public-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:public-booking', [
     'build-sdk:public-booking:javascripts'
@@ -157,13 +161,13 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:queue:javascripts', () ->
-    bbGulp.javascripts('queue')
+    bbGulp.javascripts('queue', srcPath, destPath)
 
   gulp.task 'build-sdk:queue:templates', () ->
-    bbGulp.templates('queue')
+    bbGulp.templates('queue', srcPath, destPath)
 
   gulp.task 'build-sdk:queue:bower', () ->
-    bbGulp.bower('queue')
+    bbGulp.bower('queue', srcPath, destPath)
 
   gulp.task 'build-sdk:queue', [
     'build-sdk:queue:javascripts'
@@ -174,13 +178,13 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:services:javascripts', () ->
-    bbGulp.javascripts('services')
+    bbGulp.javascripts('services', srcPath, destPath)
 
   gulp.task 'build-sdk:services:templates', () ->
-    bbGulp.templates('services')
+    bbGulp.templates('services', srcPath, destPath)
 
   gulp.task 'build-sdk:services:bower', () ->
-    bbGulp.bower('services')
+    bbGulp.bower('services', srcPath, destPath)
 
   gulp.task 'build-sdk:services', [
     'build-sdk:services:javascripts'
@@ -191,13 +195,13 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:settings:javascripts', () ->
-    bbGulp.javascripts('settings')
+    bbGulp.javascripts('settings', srcPath, destPath)
 
   gulp.task 'build-sdk:settings:templates', () ->
-    bbGulp.templates('settings')
+    bbGulp.templates('settings', srcPath, destPath)
 
   gulp.task 'build-sdk:settings:bower', () ->
-    bbGulp.bower('settings')
+    bbGulp.bower('settings', srcPath, destPath)
 
   gulp.task 'build-sdk:settings', [
     'build-sdk:settings:javascripts'
