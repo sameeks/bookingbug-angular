@@ -33,7 +33,7 @@ module.exports = (gulp, plugins, path) ->
     bbGulp.stylesheets('admin-booking', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-booking:templates', () ->
-    bbGulp.templates('admin-booking', srcPath, false, 'BBAdminBooking')
+    bbGulp.templates('admin-booking', srcPath, destPath, 'BBAdminBooking')
 
   gulp.task 'build-sdk:admin-booking:bower', () ->
     bbGulp.bower('admin-booking', srcPath, destPath)
@@ -57,7 +57,7 @@ module.exports = (gulp, plugins, path) ->
     bbGulp.images('admin-dashboard', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-dashboard:templates', () ->
-    bbGulp.templates('admin-dashboard', srcPath, false, false, false)
+    bbGulp.templates('admin-dashboard', srcPath, destPath, false, false)
 
   gulp.task 'build-sdk:admin-dashboard:bower', () ->
     bbGulp.bower('admin-dashboard', srcPath, destPath)
