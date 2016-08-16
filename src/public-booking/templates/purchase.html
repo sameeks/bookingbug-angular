@@ -60,8 +60,8 @@
               </div>
 
               <div class="confirmation-summary-address">
-                <div><span class='fa fa-map-marker'></span> {{purchase.bookings[0].company.address | address_single_line}}</div>
-                <div> <span class='fa fa-phone'></span> {{purchase.bookings[0].company.address.phone | local_phone_number}}</div>
+                <div ng-show="purchase.bookings[0].company.address"><span class='fa fa-map-marker'></span> {{purchase.bookings[0].company.address | address_single_line}}</div>
+                <div ng-show="purchase.bookings[0].company.address.phone"><span class='fa fa-phone'></span> {{purchase.bookings[0].company.address.phone | local_phone_number}}</div>
               </div>
 
             </div>
