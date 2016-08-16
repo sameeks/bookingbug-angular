@@ -1,6 +1,6 @@
-angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $rootScope, MemberLoginService, MemberBookingService, $compile, $templateCache, ModalForm, BBModel, Dialog) ->
+angular.module('BBMember').directive 'memberBookingsTable', ($uibModal, $log, ModalForm, BBModel) ->
 
-  controller = ($scope, $modal) ->
+  controller = ($scope, $uibModal, $document) ->
 
     $scope.loading = true
 
@@ -11,7 +11,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
 
     $scope.edit = (id) ->
       booking = _.find $scope.booking_models, (b) -> b.id == id
-      booking.getAnswersPromise().then (answers) ->
+      booking.$getAnswers().then (answers) ->
         for answer in answers.answers
           booking["question#{answer.question_id}"] = answer.value
         ModalForm.edit
@@ -27,15 +27,16 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
     $scope.cancel = (id) ->
       booking = _.find $scope.booking_models, (b) -> b.id == id
 
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'member_bookings_table_cancel_booking.html'
-        controller: ($scope, $modalInstance, booking) ->
+        controller: ($scope, $uibModalInstance, booking) ->
           $scope.booking = booking
           $scope.booking.notify = true
           $scope.ok = () ->
-            $modalInstance.close($scope.booking)
+            $uibModalInstance.close($scope.booking)
           $scope.close = () ->
-            $modalInstance.dismiss()
+            $uibModalInstance.dismiss()
         scope: $scope
         resolve:
           booking: () -> booking
@@ -45,7 +46,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
         params =
           notify: booking.notify
         booking.$post('cancel', params).then () ->
-          i =_.findIndex($scope.booking_models, (b) -> console.log(b); b.id == booking.id)
+          i =_.findIndex($scope.booking_models, (b) -> b.id == booking.id)
           $scope.booking_models.splice(i, 1)
           $scope.setRows()
           $scope.loading = false
@@ -64,8 +65,7 @@ angular.module('BBMember').directive 'memberBookingsTable', ($modal, $log, $root
         start_time : $scope.startTime.format('HH:mm') if $scope.startTime
         end_date   : $scope.endDate.format('YYYY-MM-DD') if $scope.endDate
         end_time   : $scope.endTime.format('HH:mm') if $scope.endTime
-
-      MemberBookingService.query(member, params).then (bookings) ->
+      member.$getBookings(params).then (bookings) ->
         $scope.booking_models = bookings
         $scope.setRows()
         $scope.loading = false

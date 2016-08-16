@@ -1,11 +1,9 @@
-
+'use strict'
 
 class window.Collection.Slot extends window.Collection.Base
 
-
   checkItem: (item) ->
     super
-
 
   matchesParams: (item) ->
     if @params.start_date
@@ -19,8 +17,5 @@ class window.Collection.Slot extends window.Collection.Base
 
 angular.module('BB.Services').provider "SlotCollections", () ->
   $get: ->
-    new  window.BaseCollections()
-
-
-
+    new window.BaseCollections()
 

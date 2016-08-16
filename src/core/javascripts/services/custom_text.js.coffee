@@ -1,5 +1,7 @@
+'use strict'
 
 angular.module('BB.Services').factory "CustomTextService",  ($q, BBModel) ->
+
   BookingText: (company, basketItem) ->
     deferred = $q.defer()
     company.$get('booking_text').then (emb) =>
@@ -25,3 +27,4 @@ angular.module('BB.Services').factory "CustomTextService",  ($q, BBModel) ->
     , (err) ->
       deferred.reject(err)
     deferred.promise
+

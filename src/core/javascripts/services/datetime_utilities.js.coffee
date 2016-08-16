@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsService) ->
 
   checkPerson = (basket_item, item_defaults) ->

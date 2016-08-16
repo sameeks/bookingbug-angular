@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "EventService", ($q, BBModel) ->
 
   query: (company, params) ->
@@ -48,8 +50,9 @@ angular.module('BB.Services').factory "EventService", ($q, BBModel) ->
         params.resource_id = params.item.resource.id if params.item.resource
         params.person_id = params.item.person.id if params.item.person
       company.$get('events', params).then (resource) =>
-        collection = new BBModel.BBCollection(resource)        
+        collection = new BBModel.BBCollection(resource)
         deferred.resolve(collection)
       , (err) =>
         deferred.reject(err)
     deferred.promise
+

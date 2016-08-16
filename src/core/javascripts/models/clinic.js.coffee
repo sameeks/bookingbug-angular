@@ -9,7 +9,7 @@
 * Representation of an Clinic Object
 *
 * @property {string} setTimes Set times for the clinic
-* @property {string} setResourcesAndPeople Set resources and people for the clinic 
+* @property {string} setResourcesAndPeople Set resources and people for the clinic
 * @property {object} settings Clinic settings
 * @property {string} resources Clinic resources
 * @property {integer} resource_ids Clinic resources ids
@@ -36,7 +36,7 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel) ->
       @setTimes()
       @setResourcesAndPeople()
       @settings ||= {}
- 
+
 
     ###**
     * @ngdoc method
@@ -62,9 +62,9 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel) ->
       , {})
       @uncovered = !@person_ids || @person_ids.length == 0
       if @uncovered
-        @className = "clinic_uncovered" 
+        @className = "clinic_uncovered"
       else
-        @className = "clinic_covered" 
+        @className = "clinic_covered"
 
 
     ###**
@@ -84,3 +84,4 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel) ->
         @end_time = moment(@end_time)
         @end = @end_time
       @title = @name
+

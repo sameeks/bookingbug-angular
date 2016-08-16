@@ -1,3 +1,5 @@
+'use strict'
+
 app = angular.module 'BB.Directives'
 
 app.directive 'bbDisplayMode', ($compile, $window, $bbug, ViewportSize) ->
@@ -9,6 +11,7 @@ app.directive 'bbDisplayMode', ($compile, $window, $bbug, ViewportSize) ->
       markers = elem.find('span')
       $bbug(elem).addClass("bb-display-mode")
       scope.display = {}
+      currentSize = null
 
       isVisible = (element) ->
         return element && element.style.display != 'none' && element.offsetWidth && element.offsetHeight
@@ -25,8 +28,8 @@ app.directive 'bbDisplayMode', ($compile, $window, $bbug, ViewportSize) ->
 
       update = () =>
         nsize = getCurrentSize()
-        if nsize != @currentSize
-          @currentSize = nsize
+        if nsize != currentSize
+          currentSize = nsize
           scope.display.xs = false
           scope.display.sm = false
           scope.display.md = false

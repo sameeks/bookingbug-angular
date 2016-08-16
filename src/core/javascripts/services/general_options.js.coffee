@@ -1,3 +1,5 @@
+'use strict'
+
 ###
 * @ngdoc service
 * @module BB.Services
@@ -22,7 +24,8 @@
   ]
   </example>
 ###
-angular.module('BB.Services').provider 'GeneralOptions', [ ->
+angular.module('BB.Services').provider 'GeneralOptions', ->
+
   # This list of default options is meant to grow
   options = {
     twelve_hour_format : false,
@@ -41,4 +44,4 @@ angular.module('BB.Services').provider 'GeneralOptions', [ ->
     options
 
   return
-]
+

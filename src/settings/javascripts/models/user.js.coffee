@@ -1,5 +1,4 @@
-
-'use strict';
+'use strict'
 
 angular.module('BB.Models').factory "Admin.UserModel", ($q, BBModel, BaseModel) ->
 
@@ -12,5 +11,4 @@ angular.module('BB.Models').factory "Admin.UserModel", ($q, BBModel, BaseModel) 
         if @$has('companies')
           @$get('companies').then (comps) =>
             @companies = comps
-
 

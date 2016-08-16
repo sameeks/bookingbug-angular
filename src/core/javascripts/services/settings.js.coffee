@@ -1,4 +1,6 @@
-angular.module('BB.Services').factory 'SettingsService', ($modalStack) ->
+'use strict'
+
+angular.module('BB.Services').factory 'SettingsService', ($uibModalStack) ->
   i18n = false
   scroll_offset = 0
   country_code = null
@@ -6,7 +8,7 @@ angular.module('BB.Services').factory 'SettingsService', ($modalStack) ->
   currency = null
   company_time_zone = null
   display_time_zone = null
-  
+
   update_document_title: false
 
   enableInternationalizaton: () ->
@@ -53,8 +55,8 @@ angular.module('BB.Services').factory 'SettingsService', ($modalStack) ->
   getDisplayTimeZone: ->
     if display_time_zone
       display_time_zone
-    else 
+    else
       company_time_zone
 
   isModalOpen: ->
-    !!$modalStack.getTop()
+    !!$uibModalStack.getTop()

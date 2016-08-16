@@ -283,11 +283,11 @@
 
           </div>
 
-          <div accordion close-others="false" ng-init="use_my_details = true">
+          <div uib-accordion close-others="false" ng-init="use_my_details = true">
             <div ng-repeat="item in current_ticket_items" bb-count-ticket-types="current_ticket_items">
               <div ng-form name="client_ticket_form" class="form-horizontal" role="form" novalidate>
-                <div ticket-accordion accordion-group is-open="is_open" ng-init="is_open = $first">
-                  <div accordion-heading>
+                <div ticket-accordion uib-accordion-group is-open="is_open" ng-init="is_open = $first">
+                  <div uib-accordion-heading>
                     <h2>Ticket <span ng-show="current_ticket_items.length != 1">{{$index + 1}}</span> details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i></h2>
                   </div>
 

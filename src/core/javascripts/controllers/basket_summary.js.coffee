@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbBasketSummary
@@ -32,3 +34,4 @@ angular.module('BB.Controllers').controller 'BasketSummary', ($scope) ->
   $scope.confirm = () =>
     $scope.bb.basket.reviewed = true
     $scope.decideNextPage()
+

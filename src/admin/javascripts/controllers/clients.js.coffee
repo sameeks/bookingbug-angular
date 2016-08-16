@@ -1,7 +1,4 @@
-'use strict';
-
-
-
+'use strict'
 
 angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
   restrict: 'AE'
@@ -12,41 +9,41 @@ angular.module('BBAdmin.Directives').directive 'bbAdminClients', () ->
     return
 
 
-angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,  $rootScope, $q, AdminClientService, ClientDetailsService, AlertService, $log) ->
+angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,
+  $rootScope, $q, $log, AlertService, LoadingService, BBModel) ->
 
   $scope.clientDef = $q.defer()
-  $scope.clientPromise = $scope.clientDef.promise 
+  $scope.clientPromise = $scope.clientDef.promise
   $scope.per_page = 15
   $scope.total_entries = 0
   $scope.clients = []
 
-#  $rootScope.connection_started.then ->
-#    $scope.notLoaded $scope
-#    AdminClientService.query({company_id:$scope.bb.company_id}).then (clients) =>
-#      $scope.clients = clients
-#      $scope.clientDef.resolve(clients)
-#      $scope.setLoaded $scope
-#    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-#    ClientDetailsService.query($scope.bb.company).then (details) =>
-#      $scope.client_details = details
-#      $scope.setLoaded $scope
-
+  loader = LoadingService.$loader($scope)
 
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
     clientDef = $q.defer()
 
     $rootScope.connection_started.then ->
-      $scope.notLoaded $scope
-      AdminClientService.query({company_id:$scope.bb.company_id, per_page: $scope.per_page, page: currentPage+1, filter_by: filterBy, filter_by_fields: filterByFields, order_by: orderBy, order_by_reverse: orderByReverse    }).then (clients) =>
+      loader.notLoaded()
+      params =
+        company: $scope.bb.company
+        per_page: $scope.per_page
+        page: currentPage + 1
+        filter_by: filterBy
+        filter_by_fields: filterByFields
+        order_by: orderBy
+        order_by_reverse: orderByReverse
+      BBModel.Admin.Client.$query(params).then (clients) =>
         $scope.clients = clients.items
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.setPageLoaded()
         $scope.total_entries = clients.total_entries
         clientDef.resolve(clients.items)
-      , (err) ->  
+      , (err) ->
         clientDef.reject(err)
-        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     true
 
   $scope.edit = (item) ->
     $log.info("not implemented")
+

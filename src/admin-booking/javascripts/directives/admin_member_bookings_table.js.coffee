@@ -1,6 +1,6 @@
-angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($modal, $log, $rootScope, AdminBookingService, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup) ->
+angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibModal, $log, $rootScope, AdminBookingService, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup) ->
 
-  controller = ($scope, $modal) ->
+  controller = ($scope, $uibModal) ->
 
     $scope.loading = true
 
@@ -44,15 +44,15 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($modal
     $scope.cancel = (id) ->
       booking = _.find $scope.booking_models, (b) -> b.id == id
 
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
         templateUrl: 'member_bookings_table_cancel_booking.html'
-        controller: ($scope, $modalInstance, booking) ->
+        controller: ($scope, $uibModalInstance, booking) ->
           $scope.booking = booking
           $scope.booking.notify = true
           $scope.ok = () ->
-            $modalInstance.close($scope.booking)
+            $uibModalInstance.close($scope.booking)
           $scope.close = () ->
-            $modalInstance.dismiss()
+            $uibModalInstance.dismiss()
         scope: $scope
         resolve:
           booking: () -> booking

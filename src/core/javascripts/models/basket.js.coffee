@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -15,7 +15,7 @@
 ####
 
 
-angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, BasketService) ->
 
   class Basket extends BaseModel
 
@@ -521,6 +521,27 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
         @take_from_wallet = false
         return false
 
+    $applyCoupon: (company, params) ->
+        BasketService.applyCoupon(company, params)
+
+    @$updateBasket: (company, params) ->
+      BasketService.updateBasket(company, params)
+
+    $deleteItem: (item, company, params) ->
+        BasketService.deleteItem(item, company, params)
+
+    @$checkout: (company, basket, params) ->
+        BasketService.checkout(company, basket, params)
+
+    $empty: (bb) ->
+        BasketService.empty (bb)
+
+    $applyDeal: (company, params) ->
+        BasketService.applyDeal(company, params)
+
+    $removeDeal: (company, params) ->
+        BasketService.removeDeal(company, params)
+
     ###**
     * @ngdoc method
     * @name voucherRemainder
@@ -535,3 +556,4 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel) ->
       for item in @items
           amount += item.voucher_remainder if item.voucher_remainder
       return amount
+

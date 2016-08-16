@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -26,7 +26,8 @@
 ####
 
 
-angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, LocaleService) ->
+angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel,
+  ClientService, LocaleService) ->
 
   class Client extends BaseModel
 
@@ -335,16 +336,17 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
         @mobile.replace pref_arr[0], ""
         @mobile_prefix = pref_arr[0]
 
+
     ###**
     * @ngdoc method
-    * @name getPrePaidBookingsPromise
+    * @name $getPrePaidBookings
     * @methodOf BB.Models:Address
     * @description
     * Get pre paid bookings promise of the client
     *
     * @returns {promise} A promise for client pre paid bookings
     ###
-    getPrePaidBookingsPromise: (params) ->
+    $getPrePaidBookings: (params) ->
       defer = $q.defer()
       if @$has('pre_paid_bookings')
         @$get('pre_paid_bookings', params).then (collection) ->
@@ -365,3 +367,10 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Loca
       else
         defer.resolve([])
       defer.promise
+
+    @$create_or_update: (company, client) ->
+      ClientService.create_or_update(company, client)
+
+    @$query_by_email: (company, email) ->
+      ClientService.query_by_email(company, email)
+

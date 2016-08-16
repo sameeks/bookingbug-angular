@@ -13,7 +13,6 @@ app = angular.module('BB', [
   'ngSanitize',
   'ui.map',
   'ui.router.util',
-  'ngLocalData',
   'ngAnimate',
   'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
   'ngFileUpload',
@@ -25,7 +24,7 @@ app = angular.module('BB', [
   'pascalprecht.translate',
   'vcRecaptcha',
   'slickCarousel'
-]);
+])
 
 
 # use this to inject application wide settings around the app
@@ -48,7 +47,11 @@ else
   app.value '$bbug', jQuery
 
 app.constant('UriTemplate', window.UriTemplate)
-
+app.config (uiGmapGoogleMapApiProvider) ->
+  uiGmapGoogleMapApiProvider.configure({
+    v: '3.20',
+    libraries: 'weather,geometry,visualization'
+  })
 app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) ->
 
   $httpProvider.defaults.headers.common =
@@ -75,7 +78,7 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
   if (msie && msie <= 9) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
-    
+
   moment.fn.toISODate ||= -> this.locale('en').format('YYYY-MM-DD')
 
 
@@ -97,12 +100,10 @@ app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $docu
 
 angular.module('BB.Services', [
   'ngResource',
-  'ngSanitize',
-  'ngLocalData'
+  'ngSanitize'
 ])
 
 angular.module('BB.Controllers', [
-  'ngLocalData',
   'ngSanitize'
 ])
 
@@ -136,3 +137,4 @@ if !String::includes
 # Extend String with parameterise method
 String::parameterise = (seperator = '-') ->
   @trim().replace(/\s/g,seperator).toLowerCase()
+

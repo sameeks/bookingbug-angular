@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory 'TimeSlotService', ($q, BBModel) ->
 
   query: (params) ->

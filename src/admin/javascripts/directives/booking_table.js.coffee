@@ -1,5 +1,6 @@
-angular.module('BBAdmin').directive 'bookingTable', (AdminCompanyService,
-    AdminBookingService, $modal, $log, ModalForm) ->
+'use strict'
+
+angular.module('BBAdmin').directive 'bookingTable', (BBModel, ModalForm) ->
 
   controller = ($scope) ->
 
@@ -8,8 +9,8 @@ angular.module('BBAdmin').directive 'bookingTable', (AdminCompanyService,
     $scope.getBookings = () ->
       params =
         company: $scope.company
-      AdminBookingService.query(params).then (bookings) ->
-        $scope.bookings = bookings
+      BBModel.Admin.Booking.$query(params).then (bookings) ->
+        $scope.bookings = bookings.items
 
     $scope.newBooking = () ->
       ModalForm.new
@@ -29,7 +30,7 @@ angular.module('BBAdmin').directive 'bookingTable', (AdminCompanyService,
     if scope.company
       scope.getBookings()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         scope.getBookings()
 
@@ -38,3 +39,4 @@ angular.module('BBAdmin').directive 'bookingTable', (AdminCompanyService,
     link: link
     templateUrl: 'booking_table_main.html'
   }
+

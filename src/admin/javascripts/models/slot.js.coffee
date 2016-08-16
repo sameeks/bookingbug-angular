@@ -1,6 +1,7 @@
-'use strict';
+'use strict'
 
-angular.module('BB.Models').factory "Admin.SlotModel", ($q, BBModel, BaseModel, TimeSlotModel) ->
+angular.module('BB.Models').factory "Admin.SlotModel", ($q, BBModel, BaseModel,
+  TimeSlotModel) ->
 
   class Admin_Slot extends TimeSlotModel
 
@@ -20,3 +21,4 @@ angular.module('BB.Models').factory "Admin.SlotModel", ($q, BBModel, BaseModel, 
         @className = "status_booked"
       else if @status == 0
         @className = "status_available"
+

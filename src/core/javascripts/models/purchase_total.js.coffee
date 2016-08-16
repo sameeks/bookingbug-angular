@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -11,11 +11,12 @@
 * @property {float} total_price The total price of items
 * @property {float} price Price of items
 * @property {float} tax_payable_on_price The tax payable on price of the item
-* @property {float} due_now The due now 
+* @property {float} due_now The due now
 ####
 
 
-angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel,
+  BaseModel, PurchaseTotalService) ->
 
   class PurchaseTotal extends BaseModel
 
@@ -68,7 +69,7 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel, BaseMode
     * @returns {object} The returned gcalLink
     ###
     gcalLink: ->
-      @_data.$href('gcal')  
+      @_data.$href('gcal')
 
     ###**
     * @ngdoc method
@@ -82,4 +83,9 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel, BaseMode
     id: ->
       @get('id')
 
+    @$query: (params) ->
+      PurchaseService.query (params)
+
+    @$bookingRefQuery: (params) ->
+      PurchaseService.query (params)
 

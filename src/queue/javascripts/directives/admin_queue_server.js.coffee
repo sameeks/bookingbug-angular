@@ -1,5 +1,7 @@
-angular.module('BBQueue').directive 'bbQueueServer', (BBModel,
-    AdminCompanyService, PusherQueue, ModalForm) ->
+'use strict'
+
+angular.module('BBQueue').directive 'bbQueueServer', (BBModel, PusherQueue,
+  ModalForm) ->
 
   pusherListen = (scope) ->
     PusherQueue.subscribe(scope.company)
@@ -25,7 +27,7 @@ angular.module('BBQueue').directive 'bbQueueServer', (BBModel,
       pusherListen(scope)
       scope.server.getQueuers()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         if scope.user.$has('person')
           scope.user.$get('person').then (person) ->

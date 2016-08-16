@@ -17,12 +17,12 @@
 * scope: true
 * </pre>
 *
-* @property {array} booking_item The booking item 
+* @property {array} booking_item The booking item
 * @property {date} start_date The start date
 * @property {date} end_date The end date
 * @property {array} slots The slots
 * @property {object} validator The validator service - see {@link BB.Services:Validator validator Service}
-* 
+*
 ####
 
 
@@ -39,28 +39,32 @@ angular.module('BB.Directives').directive 'bbTimeSlots', () ->
     return
 
 angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
-    $rootScope, $q, $attrs, SlotService, FormDataStoreService, ValidatorService,
-    PageControllerService, halClient, BBModel) ->
+    $rootScope, $q, $attrs, FormDataStoreService, ValidatorService,
+    PageControllerService, LoadingService, halClient, BBModel) ->
 
   $scope.controller = "public.controllers.SlotList"
 
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
   $rootScope.connection_started.then ->
     if $scope.bb.company
       $scope.init($scope.bb.company)
   , (err) ->
-    $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (company) ->
     $scope.booking_item ||= $scope.bb.current_item
     $scope.start_date = moment()
     $scope.end_date = moment().add(1, 'month')
 
-    SlotService.query($scope.bb.company, {item: $scope.booking_item,  start_date:$scope.start_date.toISODate(), end_date:$scope.end_date.toISODate()}).then (slots) ->
+    params =
+      item: $scope.booking_item
+      start_date: $scope.start_date.toISODate()
+      end_date: $scope.end_date.toISODate()
+    BBModel.Slot.$query($scope.bb.company, params).then (slots) ->
       $scope.slots = slots
-      $scope.setLoaded $scope
+      loader.setLoaded()
     , (err) ->
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   setItem = (slot) ->
     $scope.booking_item.setSlot(slot)

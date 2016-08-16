@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbSummary
@@ -7,7 +9,7 @@
 * @description
 * Loads a summary of the booking
 *
-* 
+*
 ####
 
 
@@ -17,7 +19,7 @@ angular.module('BB.Directives').directive 'bbSummary', () ->
   scope : true
   controller : 'Summary'
 
-angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, ClientService, $q) ->
+angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, LoadingService, BBModel, $q) ->
 
   $scope.controller = "public.controllers.Summary"
 
@@ -26,7 +28,7 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Clie
     $scope.item  = $scope.bb.current_item
     $scope.items = $scope.bb.basket.timeItems()
 
-  
+
   ###**
   * @ngdoc method
   * @name confirm
@@ -36,10 +38,10 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Clie
   ###
   $scope.confirm = () =>
 
-    $scope.notLoaded $scope
+    loader = LoadingService.$loader($scope).notLoaded()
 
     promises = [
-      ClientService.create_or_update($scope.bb.company, $scope.client),
+      BBModel.Client.$create_or_update($scope.bb.company, $scope.client),
     ]
 
     if $scope.bb.current_item.service
@@ -53,7 +55,8 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Clie
         client.gotQuestions.then () ->
           $scope.client_details = client.client_details
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.decideNextPage()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+

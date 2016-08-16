@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc service
 * @name BB.Models:Event
@@ -14,7 +16,8 @@
 ####
 
 
-angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUtilitiesService) ->
+angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel,
+  DateTimeUtilitiesService, EventService) ->
 
 
   class Event extends BaseModel
@@ -94,6 +97,73 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           defer.resolve(@duration)
       defer.promise
 
+
+    ###**
+    * @ngdoc method
+    * @name getDescription
+    * @methodOf BB.Models:Event
+    * @description
+    * Get duration of the event
+    *
+    * @returns {object} The returned description
+    ###
+    getDescription: () ->
+      @getChain().description
+
+    ###**
+    * @ngdoc method
+    * @name getColour
+    * @methodOf BB.Models:Event
+    * @description
+    * Get the colour
+    *
+    * @returns {string} The returned colour
+    ###
+    getColour: () ->
+      if @getGroup()
+        return @getGroup().colour
+      else
+        return "#FFFFFF"
+
+
+    ###**
+    * @ngdoc method
+    * @name getPounds
+    * @methodOf BB.Models:Event
+    * @description
+    * Get pounts
+    *
+    * @returns {integer} The returned pounts
+    ###
+    getPounds: () ->
+      if @chain
+        Math.floor(@getPrice()).toFixed(0)
+
+    ###**
+    * @ngdoc method
+    * @name getPrice
+    * @methodOf BB.Models:Event
+    * @description
+    * Get price
+    *
+    * @returns {integer} The returned price
+    ###
+    getPrice: () ->
+      0
+
+    ###**
+    * @ngdoc method
+    * @name getPence
+    * @methodOf BB.Models:Event
+    * @description
+    * Get price
+    *
+    * @returns {integer} The returned pence
+    ###
+    getPence: () ->
+      if @chain
+        (@getPrice() % 1).toFixed(2)[-2..-1]
+
     ###**
     * @ngdoc method
     * @name getNumBooked
@@ -140,7 +210,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       return 0 if wait <= 0
 
       return wait
-        
+
 
     ###**
     * @ngdoc method
@@ -224,7 +294,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       @getChain(params).then () =>
 
         if @chain.$has('address')
-          @chain.getAddressPromise().then (address) =>
+          @chain.$getAddress().then (address) =>
             @chain.address = address
 
         @chain.getTickets().then (tickets) =>
@@ -261,12 +331,18 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
         else
           ticket.price = ticket.old_price
 
+    @$query: (company, params) ->
+      EventService.query(company, params)
+
+    @$summary: (company, params) ->
+      EventService.summary(company, params)
+
     ###**
     * @ngdoc method
     * @name numTicketsSelected
     * @methodOf BB.Models:Event
     * @description
-    * 
+    *
     *
     * @returns {object} get number of tickets selected
     ###

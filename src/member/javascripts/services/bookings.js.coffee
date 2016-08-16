@@ -1,5 +1,5 @@
 angular.module('BBMember.Services').factory "MemberBookingService", ($q,
-    SpaceCollections, $rootScope, MemberService, BBModel) ->
+  SpaceCollections, $rootScope, MemberService, BBModel) ->
 
   query: (member, params) ->
     deferred = $q.defer()
@@ -29,7 +29,7 @@ angular.module('BBMember.Services').factory "MemberBookingService", ($q,
     booking.$del('self').then (b) =>
       booking.deleted = true
       b = new BBModel.Member.Booking(b)
-      MemberService.refresh(member).then (member) =>
+      BBModel.Member.Member.$refresh(member).then (member) =>
         member = member
       , (err) =>
       deferred.resolve(b)

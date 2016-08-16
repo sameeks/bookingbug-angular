@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -15,14 +15,14 @@
 ####
 
 
-angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel, ItemService) ->
 
   class BookableItem extends BaseModel
 
     item: null
 
     promise: null
-    
+
 
     constructor: (data) ->
       super
@@ -57,4 +57,7 @@ angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel
             @ready.resolve()
           else
             @ready.resolve()
+
+    @$query: (params) ->
+      ItemService.query(params)
 

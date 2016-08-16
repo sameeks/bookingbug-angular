@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc service
 * @name BB.Services:Validator
@@ -19,7 +21,8 @@
 ###
 
 
-angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, SettingsService, BBModel, $q, $bbug) ->
+angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
+  AlertService, SettingsService, BBModel, $q, $bbug) ->
 
   # Use http://regex101.com/ to test patterns
 
@@ -27,10 +30,10 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   # http://regexlib.com/REDetails.aspx?regexp_id=260
   # uk_postcode_regex = /^([A-PR-UWYZ0-9][A-HK-Y0-9][AEHMNPRTVXY0-9]?[ABEHMNPRVWXY0-9]? {1,2}[0-9][ABD-HJLN-UW-Z]{2}|GIR 0AA)$/i
   uk_postcode_regex = /^(((([A-PR-UWYZ][0-9][0-9A-HJKS-UW]?)|([A-PR-UWYZ][A-HK-Y][0-9][0-9ABEHMNPRV-Y]?))\s{0,1}[0-9]([ABD-HJLNP-UW-Z]{2}))|(GIR\s{0,2}0AA))$/i
-  
+
   # US postcode regex used for getMailingPattern
   us_postcode_regex = /^\d{5}(?:[-\s]\d{4})?$/
-  
+
   # UK postcode regex (lenient) - this checks for a postcode like string
   # https://gist.github.com/simonwhitaker/5748487
   uk_postcode_regex_lenient = /^[A-Z]{1,2}[0-9][0-9A-Z]?\s*[0-9][A-Z]{2}$/i
@@ -239,7 +242,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
       if prms.bounds
         sw = new google.maps.LatLng(prms.bounds.sw.x, prms.bounds.sw.y)
         ne = new google.maps.LatLng(prms.bounds.ne.x, prms.bounds.ne.y)
-        req.bounds = new google.maps.LatLngBounds(sw, ne);
+        req.bounds = new google.maps.LatLngBounds(sw, ne)
       geocoder = new google.maps.Geocoder()
       geocoder.geocode req, (results, status) ->
         if results.length == 1 && status == 'OK'
@@ -303,3 +306,4 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
       for form in forms
         form.submitted = false
         form.$setPristine()
+

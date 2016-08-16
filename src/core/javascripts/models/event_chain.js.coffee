@@ -1,6 +1,4 @@
-
-
-'use strict';
+'use strict'
 
 
 ###**
@@ -9,7 +7,7 @@
 *
 * @description
 * Representation of an EventChain Object
-* 
+*
 * @property {integer} id The id of event chain
 * @property {string} name Name of the event chain
 * @property {string} description The description of the event
@@ -22,7 +20,8 @@
 ####
 
 
-angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel,
+  EventChainService) ->
 
   class EventChain extends BaseModel
 
@@ -108,7 +107,6 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
         for @ticket in @tickets
           @ticket.max_spaces = @spaces
 
-
     ###**
     * @ngdoc method
     * @name setCapacityView
@@ -125,3 +123,8 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
         when 3 then capacity_view_str = "NUM_SPACES_AND_SPACES_LEFT"
         else capacity_view_str = "NUM_SPACES_AND_SPACES_LEFT"
       return capacity_view_str
+
+
+    @$query: (prms) ->
+      EventChainService.query(prms)
+

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Models').factory "Purchase.CourseBookingModel", ($q, BBModel, BaseModel) ->
 
   class Purchase_Course_Booking extends BaseModel
@@ -16,3 +18,4 @@ angular.module('BB.Models').factory "Purchase.CourseBookingModel", ($q, BBModel,
         @bookings = []
         defer.resolve(@bookings)
       defer.promise
+

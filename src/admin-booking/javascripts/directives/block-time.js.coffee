@@ -1,7 +1,11 @@
+'use strict'
+
 angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
   scope: true
   restrict: 'A'
-  controller: ($scope, $element, $attrs, AdminPersonService, AdminResourceService, BBModel, BookingCollections, $rootScope, BBAssets) ->
+  controller: ($scope, $element, $attrs, BBModel, BookingCollections,
+    $rootScope, BBAssets) ->
+
     # All options (resources, people) go to the same select
     $scope.resources = []
 
@@ -33,6 +37,11 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
     if $scope.bb.current_item.resource? and $scope.bb.current_item.resource.id?
       $scope.picked_resource = $scope.bb.current_item.resource.id  + '_r'
 
+
+    if $scope.bb.company_settings && $scope.bb.company_settings.$has('block_questions')
+      $scope.bb.company_settings.$get("block_questions", {}).then (details) =>
+        $scope.block_questions = new BBModel.ItemDetails(details)
+
     # On select change update the right current_item variable depending
     # whether the selected item is a person or a resource
     $scope.changeResource = ()->
@@ -51,13 +60,22 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       if !isValid()
         return false
 
+
+      params =
+        start_time: $scope.bb.from_datetime
+        end_time: $scope.bb.to_datetime
+        booking: true
+
+      if $scope.block_questions
+        params.questions = $scope.block_questions.getPostData()
+
       if typeof $scope.bb.current_item.person == 'object'
         # Block call
-        AdminPersonService.block($scope.bb.company, $scope.bb.current_item.person, {start_time: $scope.bb.from_datetime, end_time: $scope.bb.to_datetime, booking: true}).then (response)->
+        BBModel.Admin.Person.$block($scope.bb.company, $scope.bb.current_item.person, params).then (response)->
           blockSuccess(response)
       else if typeof $scope.bb.current_item.resource == 'object'
         # Block call
-        AdminResourceService.block($scope.bb.company, $scope.bb.current_item.resource, {start_time: $scope.bb.from_datetime, end_time: $scope.bb.to_datetime, booking: true}).then (response)->
+        BBModel.Admin.Resource.$block($scope.bb.company, $scope.bb.current_item.resource, params).then (response)->
           blockSuccess(response)
 
     isValid = ()->
@@ -79,3 +97,4 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       if blockDay
         $scope.bb.from_datetime = $scope.bb.min_date.format()
         $scope.bb.to_datetime = $scope.bb.max_date.format()
+

@@ -21,8 +21,5 @@
   ],
   "dependencies": {
     "bookingbug-angular-core": "master"
-  },
-  "resolutions": {
-    "angular": "1.2.28"
   }
 }

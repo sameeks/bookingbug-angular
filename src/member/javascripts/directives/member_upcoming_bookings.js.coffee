@@ -1,4 +1,6 @@
-angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope, PaginationService, PurchaseService) ->
+angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope,
+  PaginationService, PurchaseService) ->
+
   templateUrl: 'member_upcoming_bookings.html'
   scope:
     member: '='
@@ -6,7 +8,7 @@ angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope, Pa
     setLoaded: '='
   controller: 'MemberBookings'
   link: (scope, element, attrs) ->
-  
+
     scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
 
     getBookings = () ->

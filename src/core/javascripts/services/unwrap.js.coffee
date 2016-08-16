@@ -1,4 +1,4 @@
-
+'use strict'
 
 angular.module('BB.Services').factory "BB.Service.address", ($q, BBModel) ->
   unwrap: (resource) ->
@@ -63,7 +63,7 @@ angular.module('BB.Services').factory "BB.Service.services", ($q, BBModel) ->
       deferred.resolve(models)
 
     else
-    
+
       resource.$get('services').then (items) =>
         models = []
         for i in items
@@ -113,7 +113,7 @@ angular.module('BB.Services').factory "BB.Service.bulk_purchases", ($q, BBModel)
       deferred.resolve(models)
 
     else
-    
+
       resource.$get('bulk_purchases').then (bulk_purchases) =>
         models = []
         for i in bulk_purchases
@@ -261,8 +261,8 @@ angular.module('BB.Services').factory "BB.Service.company", ($q, BBModel) ->
 angular.module('BB.Services').factory "BB.Service.parent", ($q, BBModel) ->
   unwrap: (resource) ->
     return new BBModel.Company(resource)
-    
-    
+
+
 angular.module('BB.Services').factory "BB.Service.company_questions", ($q, BBModel) ->
   promise: true
   unwrap: (resource) ->
@@ -357,7 +357,7 @@ angular.module('BB.Services').factory "BB.Service.pre_paid_bookings", ($q, BBMod
       deferred.resolve(models)
 
     else
-    
+
       resource.$get('pre_paid_bookings').then (items) =>
         models = []
         for i in items
@@ -387,7 +387,7 @@ angular.module('BB.Services').factory "BB.Service.external_purchases", ($q, BBMo
       deferred.resolve(models)
 
     else
-    
+
       resource.$get('external_purchases').then (items) =>
         models = []
         for i in items
@@ -417,7 +417,7 @@ angular.module('BB.Services').factory "BB.Service.purchase_items", ($q, BBModel)
       deferred.resolve(models)
 
     else
-    
+
       resource.$get('purchase_items').then (items) =>
         models = []
         for i in items
@@ -443,7 +443,7 @@ angular.module('BB.Services').factory "BB.Service.events", ($q, BBModel) ->
       deferred.resolve(models)
 
     else
-    
+
       resource.$get('events').then (items) =>
         models = []
         for i in items

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').config ($provide) ->
 
   $provide.decorator '$sniffer', ($delegate) ->
@@ -9,3 +11,4 @@ angular.module('BB.Services').config ($provide) ->
     _.extend($delegate, {webkit: webkit_version})
 
     $delegate
+

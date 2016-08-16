@@ -1,5 +1,4 @@
-'use strict';
-
+'use strict'
 
 angular.module('BBAdmin.Directives').directive 'bbPeopleList', ($rootScope) ->
   restrict: 'AE'
@@ -7,7 +6,7 @@ angular.module('BBAdmin.Directives').directive 'bbPeopleList', ($rootScope) ->
   scope : true
   controller : ($scope,  $rootScope, PersonService, $q, BBModel, PersonModel) ->
     $rootScope.connection_started.then ->
-      $scope.bb.company.getPeoplePromise().then (people) ->
+      $scope.bb.company.$getPeople().then (people) ->
         $scope.people = people
         for person in people
           person.show = true
@@ -19,8 +18,6 @@ angular.module('BBAdmin.Directives').directive 'bbPeopleList', ($rootScope) ->
         x.show = false
   link : (scope, element, attrs) ->
     return
-
-
 
 
 angular.module('BBAdmin.Directives').directive 'bbBookingList', ->
@@ -38,14 +35,14 @@ angular.module('BBAdmin.Directives').directive 'bbBookingList', ->
   controller: ($scope, $filter) ->
     $scope.title = $scope.params.title
     status = $scope.params.status
-    
+
     $scope.$watch ->
       $scope.bookings
     , ->
       bookings = $scope.bookings
       cancelled = $scope.cancelled
       cancelled ?= false
-      
+
       if (bookings?)
         bookings = $filter('filter') bookings, (booking) ->
           ret = (booking.is_cancelled == cancelled)
@@ -55,7 +52,8 @@ angular.module('BBAdmin.Directives').directive 'bbBookingList', ->
             ret &= (!booking.multi_status? || Object.keys(booking.multi_status).length == 0)
           ret &= (booking.status == 4)
           return ret
-        
+
         $scope.relevantBookings = $filter('orderBy')(bookings, 'datetime')
-      
+
       $scope.relevantBookings ?= []
+

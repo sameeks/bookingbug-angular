@@ -1,26 +1,14 @@
-'use strict';
+'use strict'
 
-angular.module('BBAdmin.Controllers').controller 'CalendarCtrl',
-($scope, AdminBookingService, $rootScope) ->
-
-  ### event source that pulls from google.com
-  $scope.eventSource = {
-          url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-          className: 'gcal-event',           // an option!
-          currentTimezone: 'America/Chicago' // an option!
-  };
-  ###
+angular.module('BBAdmin.Controllers').controller 'CalendarCtrl', ($scope,
+  BBModel, $rootScope) ->
 
   $scope.eventsF = (start, end, tz, callback) ->
-    console.log start, end, callback
-
     prms = {company_id: 21}
     prms.start_date = start.format("YYYY-MM-DD")
     prms.end_date = end.format("YYYY-MM-DD")
-
-    bookings = AdminBookingService.query(prms)
+    bookings = BBModel.Admin.Booking.$query(prms)
     bookings.then (s) =>
-      console.log s.items
       callback(s.items)
       s.addCallback (booking) =>
         $scope.myCalendar.fullCalendar('renderEvent',booking, true)
@@ -28,8 +16,7 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl',
 
   $scope.dayClick = ( date, allDay, jsEvent, view ) ->
     $scope.$apply =>
-      console.log(date, allDay, jsEvent, view)
-      $scope.alertMessage = ('Day Clicked ' + date);
+      $scope.alertMessage = ('Day Clicked ' + date)
 
   # alert on Drop
   $scope.alertOnDrop = (event, revertFunc, jsEvent, ui, view) ->
@@ -40,17 +27,17 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl',
   # alert on Resize
   $scope.alertOnResize = (event, revertFunc, jsEvent, ui, view ) ->
     $scope.$apply =>
-      $scope.alertMessage = ('Event Resized ');
+      $scope.alertMessage = ('Event Resized ')
 
   # add and removes an event source of choice
   $scope.addRemoveEventSource = (sources,source) ->
-    canAdd = 0;
+    canAdd = 0
     angular.forEach sources, (value, key) =>
       if sources[key] == source
         sources.splice(key,1)
         canAdd = 1
     if canAdd == 0
-      sources.push(source);
+      sources.push(source)
 
   # add custom event
   $scope.addEvent = () ->
@@ -78,7 +65,7 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl',
   $scope.selectTime = (start, end, allDay) ->
     $scope.$apply =>
       $scope.popupTimeAction({start_time: moment(start), end_time: moment(end), allDay: allDay})
-      $scope.myCalendar.fullCalendar('unselect');
+      $scope.myCalendar.fullCalendar('unselect')
 
   # config object
   $scope.uiConfig = {
@@ -102,3 +89,4 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl',
   }
   # event sources array*
   $scope.eventSources = [$scope.eventsF]
+

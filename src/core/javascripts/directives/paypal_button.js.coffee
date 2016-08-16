@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 # Directives
 app = angular.module 'BB.Directives'
@@ -24,7 +24,4 @@ app.directive 'bbPaypal', (PathSvc) ->
         value : scope.ppDetails[keyName]
       }
       scope.inputs.push obj
-
-
-
 

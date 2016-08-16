@@ -21,12 +21,7 @@
   ],
   "dependencies": {
     "bookingbug-angular-core": "master",
-    "angular-recaptcha": "~2.2.3",
     "iframe-resizer": "~3.5.5",
     "animate.css": "~3.5.2"
-  },
-  "resolutions": {
-    "angular": "1.2.28",
-    "moment": ">= 2.6.0"
   }
 }

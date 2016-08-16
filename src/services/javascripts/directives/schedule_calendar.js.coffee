@@ -1,4 +1,7 @@
-angular.module('BBAdminServices').directive 'scheduleCalendar', (uiCalendarConfig, ScheduleRules) ->
+'use strict'
+
+angular.module('BBAdminServices').directive 'scheduleCalendar', (
+  uiCalendarConfig, ScheduleRules) ->
 
   controller = ($scope, $attrs) ->
 
@@ -96,3 +99,4 @@ angular.module('BBAdminServices').directive 'scheduleCalendar', (uiCalendarConfi
       render: '=?'
       setOptions: '=options'
   }
+

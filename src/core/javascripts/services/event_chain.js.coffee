@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "EventChainService",  ($q, BBModel) ->
 
   query: (company, params) ->
@@ -26,3 +28,4 @@ angular.module('BB.Services').factory "EventChainService",  ($q, BBModel) ->
       , (err) =>
         deferred.reject(err)
     deferred.promise
+

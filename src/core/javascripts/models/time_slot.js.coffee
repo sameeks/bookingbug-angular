@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -23,7 +23,8 @@
 ###
 
 
-angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, BaseModel, DateTimeUtilitiesService) ->
+angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel,
+    BaseModel, DateTimeUtilitiesService, TimeService) ->
 
   class TimeSlot extends BaseModel
 
@@ -203,3 +204,7 @@ angular.module('BB.Models').factory "TimeSlotModel", ($q, $window, BBModel, Base
       return "disabled" if @disabled
       return "enabled" if @availability() > 0
       return "disabled"
+
+    @$query: (params) ->
+      TimeService.query(params)
+

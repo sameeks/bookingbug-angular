@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 #
 # Basket Directive
@@ -16,7 +16,7 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
     else PathSvc.directivePartial "basket"
   controllerAs : 'BasketCtrl'
 
-  controller : ($scope, $modal, BasketService) ->
+  controller : ($scope, $uibModal, $document, BasketService) ->
     $scope.setUsingBasket true
 
     this.empty = () ->
@@ -28,20 +28,21 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
     $scope.showBasketDetails = () ->
       if ($scope.bb.current_page == "basket") || ($scope.bb.current_page == "checkout")
         return false
-      else            
-        modalInstance = $modal.open
+      else
+        modalInstance = $uibModal.open
+          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: $scope.getPartial "_basket_details"
           scope: $scope
           controller: BasketInstanceCtrl
-          resolve: 
+          resolve:
             basket: ->
               $scope.bb.basket
 
-    BasketInstanceCtrl = ($scope,  $rootScope, $modalInstance, basket) ->
+    BasketInstanceCtrl = ($scope,  $rootScope, $uibModalInstance, basket) ->
       $scope.basket = basket
 
       $scope.cancel = () ->
-        $modalInstance.dismiss "cancel"
+        $uibModalInstance.dismiss "cancel"
 
     $scope.$watch ->
       $scope.basketItemCount = len = if $scope.bb.basket then $scope.bb.basket.length() else 0
@@ -88,3 +89,4 @@ angular.module('BB.Directives').directive 'bbMinSpend', () ->
         price = $filter('ipretty_price')($scope.min_spend)
         AlertService.add("warning", { msg: "You need to spend at least #{price} to make a booking."})
         return false
+

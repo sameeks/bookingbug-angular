@@ -1,4 +1,6 @@
-angular.module('BBQueue.Services').factory 'AdminQueuerService', ($q, $window, halClient, BBModel) ->
+'use strict'
+
+angular.module('BBQueue.Services').factory 'AdminQueuerService', ($q, BBModel) ->
 
   query: (params) ->
     defer = $q.defer()
@@ -12,3 +14,4 @@ angular.module('BBQueue.Services').factory 'AdminQueuerService', ($q, $window, h
     , (err) ->
       defer.reject(err)
     defer.promise
+

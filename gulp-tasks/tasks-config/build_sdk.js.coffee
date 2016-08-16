@@ -36,7 +36,7 @@ module.exports = (gulp, plugins, path) ->
     bbGulp.templates('admin-booking', srcPath, destPath, 'BBAdminBooking')
 
   gulp.task 'build-sdk:admin-booking:bower', () ->
-    bbGulp.bower('admin-booking', srcPath, destPath)
+    bbGulp.bower('admin-booking', srcPath, destPath, 'BBAdminBooking')
 
   gulp.task 'build-sdk:admin-booking', [
     'build-sdk:admin-booking:javascripts'
@@ -180,6 +180,9 @@ module.exports = (gulp, plugins, path) ->
   gulp.task 'build-sdk:services:javascripts', () ->
     bbGulp.javascripts('services', srcPath, destPath)
 
+  gulp.task 'build-sdk:services:stylesheets', () ->
+    bbGulp.stylesheets('services', srcPath, destPath)
+
   gulp.task 'build-sdk:services:templates', () ->
     bbGulp.templates('services', srcPath, destPath)
 
@@ -188,6 +191,7 @@ module.exports = (gulp, plugins, path) ->
 
   gulp.task 'build-sdk:services', [
     'build-sdk:services:javascripts'
+    'build-sdk:services:stylesheets'
     'build-sdk:services:templates'
     'build-sdk:services:bower'
   ]

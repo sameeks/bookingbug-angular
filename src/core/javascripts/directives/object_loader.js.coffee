@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 # Directives
 app = angular.module 'BB.Directives'
@@ -12,3 +12,4 @@ app.directive 'script', ($compile, halClient) ->
       body = element[0].innerText
       json = $bbug.parseJSON(body)
       res = halClient.$parse(json)
+

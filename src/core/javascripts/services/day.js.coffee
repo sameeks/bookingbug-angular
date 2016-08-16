@@ -1,12 +1,14 @@
+'use strict'
 
 angular.module('BB.Services').factory "DayService", ($q, BBModel) ->
+
   query: (prms) ->
     deferred = $q.defer()
 
     if prms.cItem.days_link
       extra = {}
       extra.month = prms.month
-      extra.date = prms.date 
+      extra.date = prms.date
       extra.edate = prms.edate
       extra.location = prms.client.addressCsvLine() if prms.client
       extra.person_id = prms.cItem.person.id if prms.cItem.person && !prms.cItem.anyPerson()
@@ -17,7 +19,7 @@ angular.module('BB.Services').factory "DayService", ($q, BBModel) ->
         days = []
         for i in afound
           if (i.type == prms.item)
-            days.push(new BBModel.Day(i))  
+            days.push(new BBModel.Day(i))
         deferred.resolve(days)
       , (err) =>
         deferred.reject(err)
@@ -25,3 +27,4 @@ angular.module('BB.Services').factory "DayService", ($q, BBModel) ->
       deferred.reject("No Days Link found")
 
     deferred.promise
+

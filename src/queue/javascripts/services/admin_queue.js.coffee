@@ -1,7 +1,8 @@
-angular.module('BBQueue.Services').factory 'AdminQueueService', ($q, $window, halClient, BBModel) ->
+'use strict'
+
+angular.module('BBQueue.Services').factory 'AdminQueueService', ($q, BBModel) ->
 
   query: (prms) ->
-      
     deferred = $q.defer()
     prms.company.$get('client_queues').then (collection) ->
       collection.$get('client_queues').then (client_queues) ->
@@ -11,6 +12,5 @@ angular.module('BBQueue.Services').factory 'AdminQueueService', ($q, $window, ha
         deferred.reject(err)
     , (err) ->
       deferred.reject(err)
-
     deferred.promise
 

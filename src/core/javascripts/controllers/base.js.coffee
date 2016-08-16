@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 ###**
 * @ngdoc directive
@@ -178,12 +178,13 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
 
 
 
-angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
-    $rootScope, halClient, $window, $http, $localCache, $q, $timeout, BasketService,
-    LoginService, AlertService, $sce, $element, $compile, $sniffer, $modal, $log,
-    BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService,
-    QuestionService, LocaleService, PurchaseService, $sessionStorage, $bbug,
-    SettingsService, UriTemplate, $anchorScroll, $localStorage) ->
+angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,
+  halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService,
+  $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService,
+  ErrorService, AppConfig, QueryStringService, QuestionService, LocaleService,
+  PurchaseService, $sessionStorage, $bbug, SettingsService, UriTemplate, LoadingService,
+  $anchorScroll, $localStorage, $document) ->
+
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
   $scope.cid = "BBCtrl"
@@ -424,7 +425,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     widget_started.resolve()
 
-  #  halClient.setCache($localCache)
 
     #########################################################
     # we're going to load a bunch of default stuff which we will vary by the widget
@@ -903,7 +903,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     add_defer = $q.defer()
     params = {member_id: $scope.client.id, member: $scope.client, items: $scope.bb.basket.items, bb: $scope.bb }
-    BasketService.updateBasket($scope.bb.company, params).then (basket) ->
+    BBModel.Basket.$updateBasket($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
       # clear the currently cached time date
@@ -935,12 +935,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         halClient.clearCache("time_data")
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
-        error_modal = $modal.open
+        error_modal = $uibModal.open
+          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: $scope.getPartial('_error_modal')
-          controller: ($scope, $modalInstance) ->
+          controller: ($scope, $uibModalInstance) ->
             $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg
             $scope.ok = () ->
-              $modalInstance.close()
+              $uibModalInstance.close()
         error_modal.result.finally () ->
           if $scope.bb.nextSteps
             # either go back to the Date/Event routes or load the previous step
@@ -960,7 +961,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
     defer = $q.defer()
 
-    BasketService.empty($scope.bb).then (basket) ->
+    BBModel.Basket.$empty($scope.bb).then (basket) ->
       if $scope.bb.current_item.id
         delete $scope.bb.current_item.id
       $scope.setBasket(basket)
@@ -972,13 +973,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
 
   $scope.deleteBasketItem = (item) ->
-    BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
+    BBModel.Basket.$deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
       $scope.setBasket(basket)
 
 
   $scope.deleteBasketItems = (items) ->
     for item in items
-      BasketService.deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
+      BBModel.Basket.$deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
         $scope.setBasket(basket)
 
 
@@ -1230,7 +1231,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if $scope.bb.routeFormat
 
       pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
-      
+
       # -------------------------------------------------------------------------
       # Reduce number of pages to remove from browser history by one if this
       # method was triggered by Angular's $locationChangeStart broadcast
@@ -1320,66 +1321,21 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
   # TODO: Get rid of these 'scope loading' methods when they are no longer
   # called from the scopes
   $scope.setLoaded = (cscope) ->
-    cscope.$emit 'hide:loader', cscope
-    # set the scope loaded to true...
-    cscope.isLoaded = true
-    # then walk up the scope chain looking for the 'loading' scope...
-    loadingFinished = true;
-
-    while cscope
-      if cscope.hasOwnProperty('scopeLoaded')
-        # then check all the scope objects looking to see if any scopes are
-        # still loading
-        if $scope.areScopesLoaded(cscope)
-          cscope.scopeLoaded = true
-        else
-          loadingFinished = false
-      cscope = cscope.$parent
-
-    if loadingFinished
-      $rootScope.$broadcast 'loading:finished'
-    return
+    LoadingService.setLoaded(cscope)
 
 
   $scope.setLoadedAndShowError = (scope, err, error_string) ->
-    $log.warn(err, error_string)
-    scope.setLoaded(scope)
-    if err and err.status is 409
-      AlertService.danger(ErrorService.getError('ITEM_NO_LONGER_AVAILABLE'))
-    else if err and err.data and err.data.error is "Number of Bookings exceeds the maximum"
-      AlertService.danger(ErrorService.getError('MAXIMUM_TICKETS'))
-    else
-      AlertService.danger(ErrorService.getError('GENERIC'))
+    LoadingService.setLoadedAndShowError(scope, err, error_string)
 
 
   # go around schild scopes - return false if *any* child scope is marked as
   # isLoaded = false
   $scope.areScopesLoaded = (cscope) ->
-    if cscope.hasOwnProperty('isLoaded') && !cscope.isLoaded
-      false
-    else
-      child = cscope.$$childHead
-      while (child)
-        return false if !$scope.areScopesLoaded(child)
-        child = child.$$nextSibling
-      true
+    LoadingService.areScopesLoaded(cscope)
 
   #set scope not loaded...
   $scope.notLoaded = (cscope) ->
-    $scope.$emit 'show:loader', $scope
-    cscope.isLoaded = false
-    # then look through all the scopes for the 'loading' scope, which is the
-    # scope which has a 'scopeLoaded' property and set it to false, which makes
-    # the ladoing gif show;
-    while cscope
-      if cscope.hasOwnProperty('scopeLoaded')
-        cscope.scopeLoaded = false
-      cscope = cscope.$parent
-    return
-
-
-
-
+    LoadingService.notLoaded(cscope)
 
 
   $scope.broadcastItemUpdate = () =>
@@ -1439,3 +1395,4 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
 
   $scope.redirectTo = (url) ->
     $window.location.href = url
+

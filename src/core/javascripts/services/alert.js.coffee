@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc service
 * @name BB.Services:Alert
@@ -166,3 +168,4 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
       alert = ErrorService.getAlert(key)
       if alert
         @add(alert.type, {title: alert.title, msg: alert.msg, persist: alert.persist})
+

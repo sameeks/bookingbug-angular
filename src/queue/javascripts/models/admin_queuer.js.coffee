@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.QueuerModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "Admin.QueuerModel", ($q, BaseModel, AdminQueuerService) ->
 
   class Admin_Queuer extends BaseModel
 
@@ -13,7 +13,7 @@ angular.module('BB.Models').factory "Admin.QueuerModel", ($q, BBModel, BaseModel
 
     remaining: () ->
       d = @due.diff(moment.utc(), 'seconds')
-      @remaining_signed = Math.abs(d);
+      @remaining_signed = Math.abs(d)
       @remaining_unsigned = d
 
 
@@ -57,4 +57,7 @@ angular.module('BB.Models').factory "Admin.QueuerModel", ($q, BBModel, BaseModel
       , (err) ->
         defer.reject(err)
       defer.promise
+
+    @$query: (params) ->
+      AdminQueuerService.query(params)
 

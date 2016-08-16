@@ -1,4 +1,8 @@
-angular.module('BBAdmin.Directives').directive 'bbAdminSsoLogin', ($rootScope, AdminLoginService, QueryStringService, halClient) ->
+'use strict'
+
+angular.module('BBAdmin.Directives').directive 'bbAdminSsoLogin', ($rootScope,
+  BBModel, QueryStringService, halClient) ->
+
   restrict: 'EA'
   scope:
     token: '@bbAdminSsoLogin'
@@ -21,5 +25,5 @@ angular.module('BBAdmin.Directives').directive 'bbAdminSsoLogin', ($rootScope, A
       params = {auth_token: login.auth_token}
       login.$get('administrator', params).then (admin) ->
         scope.admin = admin
-        AdminLoginService.setLogin(admin)
+        BBModel.Admin.Login.$setLogin(admin)
 

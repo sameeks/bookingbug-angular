@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBModel, BaseModel, $bbug) ->
 
@@ -42,7 +42,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           @company
 
 
-    getAnswersPromise: () =>
+    $getAnswers: () =>
       defer = $q.defer()
       if @answers?
         defer.resolve(@answers)
@@ -56,7 +56,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           defer.resolve([])
       defer.promise
 
-    getSurveyAnswersPromise: () =>
+    $getSurveyAnswers: () =>
       defer = $q.defer()
       defer.resolve(@survey_answers) if @survey_answers
       if @_data.$has('survey_answers')
@@ -76,7 +76,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           if a.question_text && a.question_text == q
             return a.value
       else
-        @getAnswersPromise()
+        @$getAnswers()
       return null
 
 
@@ -180,3 +180,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
     isEvent: () ->
       return @event_chain?
+
+    @$addSurveyAnswersToBooking: (booking) ->
+      PurchaseBookingService.addSurveyAnswersToBooking(booking)
+

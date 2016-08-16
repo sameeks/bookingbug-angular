@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -38,10 +38,13 @@ angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
   controller : 'TimeRangeListStackedController',
 
 
-angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, DateTimeUtilitiesService) ->
+angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
+  $scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel,
+  FormDataStoreService, PersonService, PurchaseService, DateTimeUtilitiesService,
+  LoadingService) ->
 
   $scope.controller = "public.controllers.TimeRangeListStacked"
- 
+
   FormDataStoreService.init 'TimeRangeListStacked', $scope, [
     'selected_slot'
     'original_start_date'
@@ -49,7 +52,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   ]
 
   # show the loading icon
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
   $scope.available_times = 0
 
   $rootScope.connection_started.then ->
@@ -67,7 +70,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
 
     if $attrs.bbDayOfWeek? or ($scope.options and $scope.options.day_of_week)
       $scope.day_of_week = if $attrs.bbDayOfWeek? then $scope.$eval($attrs.bbDayOfWeek) else $scope.options.day_of_week
- 
+
     if $attrs.bbSelectedDay? or ($scope.options and $scope.options.selected_day)
       selected_day        = if $attrs.bbSelectedDay? then moment($scope.$eval($attrs.bbSelectedDay)) else moment($scope.options.selected_day)
       $scope.selected_day = selected_day if moment.isMoment(selected_day)
@@ -75,10 +78,10 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
     # initialise the time range
     # last selected day is set (i.e, a user has already selected a date)
     if !$scope.start_date && $scope.last_selected_date
-      if $scope.original_start_date 
+      if $scope.original_start_date
         diff = $scope.last_selected_date.diff($scope.original_start_date, 'days')
         diff = diff % $scope.time_range_length
-        diff = if diff is 0 then diff else diff + 1 
+        diff = if diff is 0 then diff else diff + 1
         start_date = $scope.last_selected_date.clone().subtract(diff, 'days')
         setTimeRange($scope.last_selected_date, start_date)
       else
@@ -97,7 +100,6 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
 
     $scope.loadData()
 
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -124,7 +126,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
     # to be saved as a variable as functions cannot be passed into the
     # AngluarUI date picker
     $scope.selected_date = $scope.selected_day.toDate()
-    
+
     isSubtractValid()
 
   ###**
@@ -180,7 +182,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       $scope.subtract_string = "Prev day"
     else
       $scope.subtract_string = "Prev"
- 
+
   ###**
   * @ngdoc method
   * @name selectedDateChanged
@@ -269,7 +271,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
             item.setTime(slot)
             slot = slot.next
             break
-   
+
       updateHideStatus()
       $rootScope.$broadcast "time:selected"
 
@@ -283,12 +285,12 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   # load the time data
   $scope.loadData = ->
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     # if the selected date has already been loaded, there's no need to call the API
     if $scope.request and $scope.request.start.twix($scope.request.end).contains($scope.selected_day)
       updateHideStatus()
-      $scope.setLoaded $scope
+      loader.setLoaded()
       return
 
     $scope.start_date = moment($scope.start_date)
@@ -339,9 +341,9 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       else
         # raise error
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -382,7 +384,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       day_data.slots = {}
 
       if $scope.bb.stacked_items.length > 1
-          
+
           for time, slot of $scope.bb.stacked_items[0].slots[day]
 
             slot = angular.copy(slot)
@@ -473,35 +475,35 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
 
     if $scope.bb.moving_booking
       # if we're moving - confirm everything in the basket right now
-      $scope.notLoaded $scope
+      loader.notLoaded()
 
       prom = PurchaseService.update({purchase: $scope.bb.moving_booking, bookings: $scope.bb.basket.items})
 
       prom.then  (purchase) ->
-        purchase.getBookingsPromise().then (bookings) ->
+        purchase.$getBookings().then (bookings) ->
           for booking in bookings
             # update bookings
             if $scope.bookings
               for oldb, _i in $scope.bookings
                 if oldb.id == booking.id
                   $scope.bookings[_i] = booking
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.bb.current_item.move_done = true
         $scope.decideNextPage()
       , (err) ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
         AlertService.add("danger", { msg: "Failed to move booking" })
       return
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     if options.do_not_route
       return $scope.updateBasket()
     else
       $scope.updateBasket().then ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.decideNextPage(route)
-      , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method

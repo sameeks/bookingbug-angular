@@ -1,4 +1,8 @@
-angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $http, $templateCache, $q, $log, TemplateSvc) ->
+'use strict'
+
+angular.module('BB.Directives').directive 'bbPaymentButton', (
+  $compile, $sce, $http, $templateCache, $q, $log, TemplateSvc) ->
+
   restrict: 'EA'
   replace: true
   scope:
@@ -56,7 +60,9 @@ angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $h
 
 
 
-angular.module('BB.Directives').directive 'bbPaypalExpressButton', ($compile, $sce, $http, $templateCache, $q, $log, $window, UriTemplate) ->
+angular.module('BB.Directives').directive 'bbPaypalExpressButton', ($compile,
+  $sce, $http, $templateCache, $q, $log, $window, UriTemplate) ->
+
   restrict: 'EA'
   replace: true
   template: """
@@ -76,5 +82,4 @@ angular.module('BB.Directives').directive 'bbPaypalExpressButton', ($compile, $s
 
     scope.showLoader = () ->
       scope.notLoaded scope if scope.notLoaded
-
 

@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+<a name="2.0.0-alpha"></a>
+# 2.0.0-alpha (2015-11-21)
+### Changed
+- **Resource:** Change resource form being wait_for_service by default, you now need to add a wait-for-service=true to the directive
+- **Models** Moved Member and Admin injector to their specific bower deps and changed them all to inject directly at run time
+- **Models** Removed functions from being copied from BaseResource objects - which helps simplify all Models
+- **Models ** change getxxxPromise to just $getxxx as the promise version
+
 ## [1.4.10] - 2016-07-19
 ###Added
 - Added helper methods to bbBasketList for displaying total price and tickety qty for grouped BasketItem objects that have events assoicated to them

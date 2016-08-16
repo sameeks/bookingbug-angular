@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -34,9 +34,13 @@ angular.module('BB.Directives').directive 'bbCheckout', () ->
   controller : 'Checkout'
 
 
-angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $attrs, BasketService, $q, $location, $window, $bbug, FormDataStoreService, $timeout) ->
+angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope,
+  $attrs, $q, $location, $window, $timeout, $bbug, FormDataStoreService,
+  LoadingService, BBModel) ->
+
   $scope.controller = "public.controllers.Checkout"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
+
   $scope.options = $scope.$eval($attrs.bbCheckout) or {}
 
   # clear the form data store as we no longer need the data
@@ -48,7 +52,7 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
   $scope.checkout = () ->
     $scope.bb.basket.setClient($scope.client)
     $scope.bb.no_notifications = $scope.options.no_notifications if $scope.options.no_notifications
-    $scope.loadingTotal = BasketService.checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
+    $scope.loadingTotal = BBModel.Basket.$checkout($scope.bb.company, $scope.bb.basket, {bb: $scope.bb})
     $scope.loadingTotal.then (total) =>
       $scope.total = total
 
@@ -65,13 +69,12 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
           $scope.reset()
 
       $scope.checkoutSuccess = true
-      $scope.setLoaded $scope
+      loader.setLoaded()
       # currently just close the window and refresh the parent if we're in an admin popup
     , (err) ->
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       $scope.checkoutFailed = true
       $scope.$emit("checkout:fail", err)
-
 
 
   ###**
@@ -126,3 +129,4 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope, $at
         mywindow.close()
       , 100
     , 2000
+

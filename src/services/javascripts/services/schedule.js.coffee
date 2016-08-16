@@ -1,4 +1,7 @@
-angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel, ScheduleRules, BBAssets) ->
+'use strict'
+
+angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
+  BBModel, ScheduleRules, BBAssets) ->
 
   query: (params) ->
     company = params.company
@@ -32,13 +35,6 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel
     , (err) =>
       deferred.reject(err)
 
-  # DEPRICATED use getAssetsScheduleEvents
-  getPeopleScheduleEvents: (company, start, end) ->
-     @getAssetsScheduleEvents(company, start, end)   
-  # DEPRICATED use mapAssetsToScheduleEvents
-  mapPeopleToScheduleEvents : (start, end, assets) ->
-    @mapAssetsToScheduleEvents(start, end, assets)  
-
   mapAssetsToScheduleEvents: (start, end, assets) ->
     assets_with_schedule = _.filter assets, (asset)->
       asset.$has('schedule')
@@ -47,7 +43,7 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel
       params =
         start_date: start.format('YYYY-MM-DD')
         end_date: end.format('YYYY-MM-DD')
-         
+
       asset.$get('schedule', params).then (schedules) ->
         rules = new ScheduleRules(schedules.dates)
         events = rules.toEvents()
@@ -61,8 +57,9 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel
     if filtered
       $q.all(@mapAssetsToScheduleEvents(start, end, requested)).then (schedules) ->
         _.flatten(schedules)
-    else 
+    else
       localMethod = @mapAssetsToScheduleEvents
       BBAssets(company).then (assets)->
         $q.all(localMethod(start, end, assets)).then (schedules) ->
           _.flatten(schedules)
+

@@ -1,4 +1,6 @@
-angular.module('BBAdminBooking').directive 'bbAdminBooking', (AdminCompanyService, $log, $compile, $q, PathSvc, $templateCache, $http) ->
+
+angular.module('BBAdminBooking').directive 'bbAdminBooking', (
+  BBModel, $log, $compile, $q, PathSvc, $templateCache, $http) ->
 
   getTemplate = (template) ->
     partial = if template then template else 'main'
@@ -26,7 +28,7 @@ angular.module('BBAdminBooking').directive 'bbAdminBooking', (AdminCompanyServic
       else if scope.company
         attrs.companyId = scope.company.id
     if attrs.companyId
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         scope.initWidget(config)
         renderTemplate(scope, element, config.design_mode, config.template)
@@ -35,3 +37,4 @@ angular.module('BBAdminBooking').directive 'bbAdminBooking', (AdminCompanyServic
     link: link
     controller: 'BBCtrl'
   }
+

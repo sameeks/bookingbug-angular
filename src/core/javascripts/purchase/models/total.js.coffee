@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel, BaseModel, $sce) ->
-
 
   class Purchase_Total extends BaseModel
     constructor: (data) ->
@@ -29,8 +28,8 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
       defer = $q.defer()
       defer.resolve(@items) if @items
       $q.all([
-        @getBookingsPromise(),
-        @getCourseBookingsPromise(),
+        @$getBookings(),
+        @$getCourseBookings(),
         @getPackages(),
         @getProducts(),
         @getDeals()
@@ -39,7 +38,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve(items)
       defer.promise
 
-    getBookingsPromise: =>
+    $getBookings: =>
       defer = $q.defer()
       defer.resolve(@bookings) if @bookings
       if @_data.$has('bookings')
@@ -51,7 +50,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
-    getCourseBookingsPromise: =>
+    $getCourseBookings: =>
       defer = $q.defer()
       defer.resolve(@course_bookings) if @course_bookings
       if @_data.$has('course_bookings')
@@ -127,7 +126,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
       defer = $q.defer()
       if @_data.$has('member')
         @_data.$get('member').then (member) =>
-          @member = new BBModel.Member.Member(member)
+          @member = new BBModel.Client(member)
           defer.resolve(@member)
       else
         defer.reject('No member')
@@ -142,7 +141,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
       else
         defer.reject('no messages')
       defer.promise
-      
+
     printed_total_price: () ->
       return "£" + parseInt(@total_price) if parseFloat(@total_price) % 1 == 0
       return $window.sprintf("£%.2f", parseFloat(@total_price))

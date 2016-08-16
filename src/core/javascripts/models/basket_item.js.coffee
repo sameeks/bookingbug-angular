@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -19,8 +19,9 @@
 ###
 
 
-angular.module('BB.Models').factory "BasketItemModel",
-($q, $window, BBModel, BookableItemModel, BaseModel, $bbug, DateTimeUtilitiesService, SettingsService) ->
+angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
+  BookableItemModel, BaseModel, $bbug, DateTimeUtilitiesService,
+  SettingsService) ->
 
   # A class that defines an item in a shopping basket
   # This could represent a time based service, a ticket for an event or class, or any other purchasable item
@@ -40,7 +41,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       @ref = Math.ceil(moment().unix() * Math.random()) if !@ref
 
       # if we were given an id then the item is ready - we need to fake a few items
-      if @time
+      if _.isNumber(@time)
         @time = new BBModel.TimeSlot({time: @time, event_id: @event_id, selected: true, avail: 1, price: @price })
       if @date
         @date = new BBModel.Day({date: @date, spaces: 1})
@@ -216,6 +217,28 @@ angular.module('BB.Models').factory "BasketItemModel",
     storeDefaults: (defaults) ->
       @defaults = defaults
 
+
+
+    ###**
+    * @ngdoc method
+    * @name canLoadItem
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * See if this item is read to have a specific object type loads - i.e. services, resources, or people
+    * @param {object} company a hash representing a company object
+    *
+    * @returns {boolean} if this item can be loaded
+    ###
+    canLoadItem: (item) ->
+      if @service && @item != 'service'
+        return true # we have a service and we want something else
+      else if @resource && !@anyResource() && item != 'resource'
+        return true # we have a resource and we want something else
+      else if @person && !@anyPerson() && item != 'person'
+        return true # we have a person and we want something else
+      else
+        return false
+
     ###**
     * @ngdoc method
     * @name defaultService
@@ -370,7 +393,7 @@ angular.module('BB.Models').factory "BasketItemModel",
 
       if @service.$has('category')
         # we have a category?
-        prom = @service.getCategoryPromise()
+        prom = @service.$getCategory()
         if prom
           @promises.push(prom)
 
@@ -393,7 +416,7 @@ angular.module('BB.Models').factory "BasketItemModel",
 
       if @event_group.$has('category')
         # we have a category?
-        prom = @event_group.getCategoryPromise()
+        prom = @event_group.$getCategory()
         if prom
           @promises.push(prom)
 
@@ -1080,7 +1103,6 @@ angular.module('BB.Models').factory "BasketItemModel",
     anyPerson: () ->
       @person && (typeof @person == 'boolean')
 
-
     ###**
     * @ngdoc method
     * @name anyResource
@@ -1403,3 +1425,4 @@ angular.module('BB.Models').factory "BasketItemModel",
     ###
     isTimeItem: () ->
       return @service or @event
+

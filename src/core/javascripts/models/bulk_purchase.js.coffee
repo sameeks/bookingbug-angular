@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 ###**
 * @ngdoc service
@@ -8,7 +8,11 @@
 * Representation of a BulkPurchase Object
 ####
 
-angular.module('BB.Models').factory "BulkPurchaseModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "BulkPurchaseModel", ($q, BBModel,
+  BaseModel, BulkPurchaseService) ->
 
   class BulkPurchase extends BaseModel
+
+    @$query: (company) ->
+      BulkPurchaseService.query(company)
 

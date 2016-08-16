@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -40,8 +40,9 @@ angular.module('BB.Directives').directive 'bbMap', () ->
   scope : true
   controller : 'MapCtrl'
 
-angular.module('BB.Controllers').controller 'MapCtrl',
-($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, $q, $window, $timeout, SettingsService) ->
+angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
+  $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q,
+  $window, $timeout, SettingsService) ->
 
   $scope.controller = "public.controllers.MapCtrl"
 
@@ -52,7 +53,6 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   ]
 
   # init vars
-  # options = $scope.$eval($attrs.bbMap) or {}
   $scope.options = $scope.$eval($attrs.bbMap) or {}
 
   $scope.num_search_results = $scope.options.num_search_results or 6
@@ -61,14 +61,14 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   $scope.can_filter_by_service = $scope.options.filter_by_service or false # If set to true then the checkbox toggle for showing stores with/without the selected service will be shown in the template
   $scope.filter_by_service = $scope.options.filter_by_service or false # The aforementioned checkbox is bound to this value which can be true or false depending on checked state, hence why we cannot use filter_by_service to show/hide the checkbox
   $scope.default_zoom = $scope.options.default_zoom or 6
-  
-  cc = SettingsService.getCountryCode() 
+
+  cc = SettingsService.getCountryCode()
   if _.contains ["gb", "us", "jp"], cc
     du = "miles"
   else
     du = "km"
   $scope.distance_unit = du
-  
+
   map_ready_def               = $q.defer()
   $scope.mapLoaded            = $q.defer()
   $scope.mapReady             = map_ready_def.promise
@@ -79,17 +79,17 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   $scope.numberedPin          ||= null
   $scope.defaultPin           ||= null
   $scope.address              = $scope.$eval $attrs.bbAddress if !$scope.address and $attrs.bbAddress
-  $scope.notLoaded $scope
-  
+  loader = LoadingService.$loader($scope).notLoaded()
+
   # setup geolocation shim
   webshim.setOptions({'waitReady': false, 'loadStyles': false})
   webshim.polyfill("geolocation")
- 
-  $rootScope.connection_started.then ->   
-    $scope.setLoaded $scope if !$scope.selectedStore
+
+  $rootScope.connection_started.then ->
+    loader.setLoaded() if !$scope.selectedStore
     if $scope.bb.company.companies
-      $rootScope.parent_id = $scope.bb.company.id      
-    else if $rootScope.parent_id     
+      $rootScope.parent_id = $scope.bb.company.id
+    else if $rootScope.parent_id
       $scope.initWidget(
         company_id:$rootScope.parent_id
         first_page: $scope.bb.current_page
@@ -104,8 +104,8 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     $scope.companies = $scope.bb.company.companies
     if !$scope.companies or $scope.companies.length is 0
       $scope.companies = [$scope.bb.company]
-   
-    if $scope.bb.current_item.service and $scope.options and $scope.options.filter_by_service    
+
+    if $scope.bb.current_item.service and $scope.options and $scope.options.filter_by_service
       $scope.notLoaded $scope
 
       filterByService().then ->
@@ -122,13 +122,13 @@ angular.module('BB.Controllers').controller 'MapCtrl',
         $scope.mapBounds.extend(latlong)
 
     $scope.mapOptions =  {
-        center: $scope.mapBounds.getCenter(), 
-        zoom: $scope.default_zoom, 
+        center: $scope.mapBounds.getCenter(),
+        zoom: $scope.default_zoom,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControl:true, 
-      mapTypeControlOptions: { 
-          style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU 
-      } 
+      mapTypeControl:true,
+      mapTypeControlOptions: {
+          style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU
+      }
     }
 
     if $scope.options and $scope.options.map_options
@@ -137,7 +137,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
 
     map_ready_def.resolve(true)
 
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   ###**
@@ -151,12 +151,12 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   filterByService = () ->
     deferred = $q.defer()
     if $scope.bb.selected_service.$has('all_children')
-      $scope.bb.selected_service.$get('all_children').then (resource) ->   
+      $scope.bb.selected_service.$get('all_children').then (resource) ->
         resource.$get('services').then (services) ->
           company_ids = _.map services, (service) ->
-            service.company_id    
- 
-          for company in $scope.companies           
+            service.company_id
+
+          for company in $scope.companies
             company.has_service = _.contains(company_ids, company.id)
             service = _.find services, (service) ->
               service.company_id == company.id
@@ -173,40 +173,41 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @methodOf BB.Directives:bbMap
   * @description
   * Set $scope.shownMarkers to include / exclude
-  * companies without the selected service 
+  * companies without the selected service
   ###
   $scope.filterByService = () ->
-    
+
     for marker in $scope.shownMarkers
-      marker.setMap null    
+      marker.setMap null
 
     if $scope.options and $scope.filter_by_service
-      $scope.shownMarkers = $scope.shown_markers_with_services     
+      $scope.shownMarkers = $scope.shown_markers_with_services
     else
-      $scope.shownMarkers = $scope.shown_markers   
+      $scope.shownMarkers = $scope.shown_markers
 
-    $timeout ->     
+    $timeout ->
       setMarkers()
 
-  mapInit = () ->   
+  mapInit = () ->
     for comp in $scope.companies
       if comp.address and comp.address.lat and comp.address.long
         latlong = new google.maps.LatLng(comp.address.lat,comp.address.long)
         marker = new google.maps.Marker({
           map: $scope.myMap
-          position: latlong         
+          position: latlong
           visible: $scope.showAllMarkers
           icon: $scope.defaultPin
         })
-        marker.company = comp        
+        marker.company = comp
         $scope.mapMarkers.push(marker) unless $scope.hide_not_live_stores and !comp.live
 
     $timeout ->
       $scope.myMap.fitBounds($scope.mapBounds)
       $scope.myMap.setZoom(15)
-      $scope.setLoaded $scope if $scope.bb.current_item.service and $scope.options and $scope.filter_by_service
+      if $scope.bb.current_item.service and $scope.options and $scope.filter_by_service
+        loader.setLoaded()
     checkDataStore()
- 
+
   ###**
   * @ngdoc method
   * @name checkDataStore
@@ -216,10 +217,10 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   ###
   checkDataStore = ->
     if $scope.selectedStore
-      $scope.notLoaded $scope
+      loader.notLoaded()
       if $scope.search_prms
         $scope.searchAddress $scope.search_prms
-      else 
+      else
         $scope.geolocate()
       google.maps.event.addListenerOnce($scope.myMap, 'idle', ->
         _.each $scope.mapMarkers, (marker) ->
@@ -255,7 +256,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   ###
   $scope.searchAddress = (prms) ->
 
-    # if a reverse geocode has been performed and the address 
+    # if a reverse geocode has been performed and the address
     # is no  different to one the entered, abort the search
     return false if $scope.reverse_geocode_address and $scope.reverse_geocode_address == $scope.address
 
@@ -282,14 +283,14 @@ angular.module('BB.Controllers').controller 'MapCtrl',
 
           if !$scope.geocoder_result or ($scope.geocoder_result and $scope.geocoder_result.partial_match)
             searchPlaces(req)
-            return 
+            return
           else if $scope.geocoder_result
             searchSuccess($scope.geocoder_result)
           else
             searchFailed()
-          $scope.setLoaded $scope
+          loader.setLoaded()
 
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -301,17 +302,17 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @param {object} prms The parameters of the places
   ###
   searchPlaces = (prms) ->
-    
+
     req = {
       query : prms.address
       types: ['shopping_mall', 'store', 'embassy']
     }
 
-    req.bounds = prms.bounds if prms.bounds 
+    req.bounds = prms.bounds if prms.bounds
 
     service = new google.maps.places.PlacesService($scope.myMap)
     service.textSearch req, (results, status) ->
-      if results.length > 0 and status is 'OK'      
+      if results.length > 0 and status is 'OK'
         searchSuccess(results[0])
       else if $scope.geocoder_result
         searchSuccess($scope.geocoder_result)
@@ -323,7 +324,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name searchSuccess
   * @methodOf BB.Directives:bbMap
   * @description
-  * Search has been succeeded, and return 
+  * Search has been succeeded, and return
   *
   * @param {object} result The result of the search
   ###
@@ -401,21 +402,21 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   *
   * @param {array} latlong Using for determinate the closest markers
   ###
-  $scope.showClosestMarkers = (latlong) ->   
+  $scope.showClosestMarkers = (latlong) ->
 
     distances = []
     distances_with_services = []
 
     for marker in $scope.mapMarkers
 
-      km = haversine(latlong, marker)     
+      km = haversine(latlong, marker)
 
       if !$scope.showAllMarkers
-        marker.setVisible false        
+        marker.setVisible false
 
       # set distance to kilometres or convert to miles
-      marker.distance = km     
-      marker.distance *= 0.621371192 if $scope.distance_unit == "miles"  
+      marker.distance = km
+      marker.distance *= 0.621371192 if $scope.distance_unit == "miles"
 
       if marker.distance < $scope.range_limit
         distances.push marker
@@ -426,14 +427,14 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       a.distance - b.distance
 
     $scope.shown_markers = distances.slice(0, $scope.num_search_results)
-    $scope.shown_markers_with_services = distances_with_services.slice(0, $scope.num_search_results)   
+    $scope.shown_markers_with_services = distances_with_services.slice(0, $scope.num_search_results)
 
     if $scope.options and $scope.filter_by_service
       $scope.shownMarkers = $scope.shown_markers_with_services
     else
-      $scope.shownMarkers = $scope.shown_markers  
+      $scope.shownMarkers = $scope.shown_markers
 
-    $timeout ->    
+    $timeout ->
       setMarkers()
 
   setMarkers = () ->
@@ -455,20 +456,20 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       index += 1
 
     $scope.$emit 'map:shown_markers_updated', $scope.shownMarkers
-    
+
     google.maps.event.trigger($scope.myMap, 'resize')
-    $scope.myMap.fitBounds(localBounds)  
-    
+    $scope.myMap.fitBounds(localBounds)
+
     open_marker_index = 0
     open_marker = _.find $scope.shownMarkers, (obj) ->
-      open_marker_index++     
+      open_marker_index++
       obj.company.id == $scope.bb.current_item.company.id
     if open_marker
       open_marker_index--
     else
       open_marker_index = 0
     $scope.shownMarkers[open_marker_index].is_open = true
-    $scope.openMarkerInfo $scope.shownMarkers[open_marker_index]   
+    $scope.openMarkerInfo $scope.shownMarkers[open_marker_index]
 
   ###**
   * @ngdoc method
@@ -479,9 +480,9 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   *
   * @param {object} marker The marker
   ###
-  $scope.openMarkerInfo = (marker) ->   
-    $timeout ->      
-      $scope.currentMarker = marker     
+  $scope.openMarkerInfo = (marker) ->
+    $timeout ->
+      $scope.currentMarker = marker
       $scope.myInfoWindow.open($scope.myMap, marker)
     , 250
 
@@ -502,7 +503,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       AlertService.warning(ErrorService.getError('STORE_NOT_SELECTED'))
       return
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     # if the selected store changes, emit an event. the form data store uses
     # this to clear data, but it can be used to action anything.
@@ -516,12 +517,12 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       setAnswers()
 
     if company.service
-      $scope.bb.item_defaults.service = company.service.id    
-    
+      $scope.bb.item_defaults.service = company.service.id
+
     init_obj =
       company_id: company.id
-      item_defaults: $scope.bb.item_defaults      
-    init_obj.first_page = route if route   
+      item_defaults: $scope.bb.item_defaults
+    init_obj.first_page = route if route
 
     $scope.initWidget init_obj
 
@@ -536,7 +537,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @name roundNumberUp
   * @methodOf BB.Directives:bbMap
   * @description
-  * Calculate the round number up 
+  * Calculate the round number up
   *
   * @param {integer} num The number of places
   * @param {object} places The places
@@ -554,7 +555,7 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   $scope.geolocate = () ->
     return false if !navigator.geolocation || ($scope.reverse_geocode_address and $scope.reverse_geocode_address == $scope.address)
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     webshim.ready 'geolocation', ->
       # set timeout as 5 seconds and max age as 1 hour
@@ -568,16 +569,16 @@ angular.module('BB.Controllers').controller 'MapCtrl',
   * @description
   * Geolocation fail and display an error message
   *
-  * @param {object} error The error 
+  * @param {object} error The error
   ###
   geolocateFail = (error) ->
     switch error.code
       # if the geocode failed because the position was unavailable or the request timed out, raise an alert
-      when 2, 3 
-        $scope.setLoaded $scope
+      when 2, 3
+        loader.setLoaded()
         AlertService.raise('GEOLOCATION_ERROR')
       else
-        $scope.setLoaded $scope
+        loader.setLoaded()
     $scope.$apply()
 
   ###**
@@ -598,12 +599,12 @@ angular.module('BB.Controllers').controller 'MapCtrl',
       if results.length > 0 and status is 'OK'
         $scope.geocoder_result = results[0]
 
-        for ac in $scope.geocoder_result.address_components 
-          $scope.reverse_geocode_address = ac.long_name if ac.types.indexOf("route") >= 0  
+        for ac in $scope.geocoder_result.address_components
+          $scope.reverse_geocode_address = ac.long_name if ac.types.indexOf("route") >= 0
           $scope.reverse_geocode_address += ', ' + ac.long_name if ac.types.indexOf("locality") >= 0
           $scope.address = $scope.reverse_geocode_address
         searchSuccess($scope.geocoder_result)
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
 
   ###**
@@ -630,3 +631,4 @@ angular.module('BB.Controllers').controller 'MapCtrl',
     $scope.loc = null
     $scope.reverse_geocode_address = null
     $scope.address = null
+

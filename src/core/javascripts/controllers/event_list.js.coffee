@@ -48,11 +48,14 @@ angular.module('BB.Directives').directive 'bbEvents', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService, $timeout) ->
+angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope,
+  EventService, EventChainService, $q, PageControllerService,
+  FormDataStoreService, $filter, PaginationService, $timeout, ValidatorService, LoadingService,
+  BBModel) ->
 
   $scope.controller = "public.controllers.EventList"
-  $scope.notLoaded $scope
-  angular.extend(this, new PageControllerService($scope, $q))
+  loader = LoadingService.$loader($scope).notLoaded()
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
   $scope.pick = {}
   $scope.start_date = moment()
   $scope.end_date = moment().add(1, 'year')
@@ -77,19 +80,19 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         $scope.decideNextPage()
         return
       else if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
-        $scope.bb.company.getParentPromise().then (parent) ->
+        $scope.bb.company.$getParent().then (parent) ->
           $scope.company_parent = parent
           $scope.initialise()
-        , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       else
         $scope.initialise()
 
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $scope.initialise = () ->
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     delete $scope.selected_date if $scope.mode != 0
 
@@ -109,9 +112,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     # company question promise
     if $scope.bb.company.$has('company_questions')
-      promises.push($scope.bb.company.getCompanyQuestionsPromise())
+      promises.push($scope.bb.company.$getCompanyQuestions())
     else if $scope.company_parent? && $scope.company_parent.$has('company_questions')
-      promises.push($scope.company_parent.getCompanyQuestionsPromise())
+      promises.push($scope.company_parent.$getCompanyQuestions())
     else
       promises.push($q.when([]))
       $scope.has_company_questions = false
@@ -120,7 +123,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     if $scope.bb.item_defaults and $scope.bb.item_defaults.event_group
       $scope.bb.current_item.setEventGroup($scope.bb.item_defaults.event_group)
     else if !$scope.current_item.event_group and $scope.bb.company.$has('event_groups')
-      promises.push($scope.bb.company.getEventGroupsPromise())
+      promises.push($scope.bb.company.$getEventGroups())
     else
       promises.push($q.when([]))
 
@@ -155,9 +158,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
           item.group = event_groups_collection[item.service_id]
 
       # Remove loading icon
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -167,7 +170,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Load event summary
   ###
   $scope.loadEventSummary = () ->
-    
+
     deferred = $q.defer()
     current_event = $scope.current_item.event
 
@@ -178,14 +181,14 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     comp = $scope.bb.company
 
-    params = 
+    params =
       item       : $scope.bb.current_item
       start_date : $scope.start_date.toISODate()
       end_date   : $scope.end_date.toISODate()
-    
+
     params.event_chain_id = $scope.bb.item_defaults.event_chain.id if $scope.bb.item_defaults.event_chain
 
-    EventService.summary(comp, params).then (items) ->
+    BBModel.Event.$summary(comp, params).then (items) ->
 
       if items and items.length > 0
 
@@ -237,17 +240,18 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     if $scope.bb.item_defaults.event_chain
       deferred.resolve([])
     else
+      loader.notLoaded()
       comp ||= $scope.bb.company
 
       params =
         item       : $scope.bb.current_item
         start_date : $scope.start_date.toISODate()
         end_date   : $scope.end_date.toISODate()
-        
+
       params.embed = $scope.events_options.embed if $scope.events_options.embed
 
-      EventChainService.query(comp, params).then (event_chains) ->
-
+      BBModel.EventChain.$query(comp, params).then (event_chains) ->
+        loader.setLoaded()
         deferred.resolve(event_chains)
       , (err) ->  deferred.reject()
 
@@ -264,7 +268,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   ###
   $scope.loadEventData = (comp) ->
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     $scope.event_data_loaded = false
 
@@ -295,7 +299,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     chains = $scope.loadEventChainData(comp)
     $scope.events = {}
 
-    EventService.query(comp, params).then (events) ->
+    BBModel.Event.$query(comp, params).then (events) ->
 
       # Flatten events array
       $scope.items = _.flatten(events)
@@ -306,7 +310,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
       # Add address prop from the company to the item
       if $scope.bb.company.$has('address')
-        $scope.bb.company.getAddressPromise().then (address) ->
+        $scope.bb.company.$getAddress().then (address) ->
           for item in $scope.items
             item.address = address
 
@@ -353,7 +357,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         # update the paging
         PaginationService.update($scope.pagination, $scope.filtered_items.length)
 
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.event_data_loaded = true
 
         deferred.resolve($scope.items)
@@ -427,12 +431,12 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   ###
   $scope.selectItem = (item, route) =>
     return false unless (item.getSpacesLeft() <= 0 && $scope.bb.company.settings.has_waitlists) || item.hasSpace()
-    $scope.notLoaded $scope
+    loader.notLoaded()
     if $scope.$parent.$has_page_control
       $scope.event.unselect() if $scope.event
       $scope.event = item
       $scope.event.select()
-      $scope.setLoaded $scope
+      loader.setLoaded()
       return false
     else
       if $scope.bb.moving_purchase
@@ -441,7 +445,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.bb.current_item.ready = false
       $q.all($scope.bb.current_item.promises).then () ->
         $scope.decideNextPage(route)
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       return true
 
 
@@ -492,7 +496,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
               filter = ($scope.dynamic_filters.values[dynamic_filter.name] and i is $scope.dynamic_filters.values[dynamic_filter.name].name) or !$scope.dynamic_filters.values[dynamic_filter.name]?
               break if filter
           else if (item.chain.extra[name] is undefined && (_.isEmpty($scope.dynamic_filters.values) || !$scope.dynamic_filters.values[dynamic_filter.name]?))
-            filter = true;
+            filter = true
           result = result and filter
       else
         for dynamic_filter in $scope.dynamic_filters[type]
@@ -583,3 +587,4 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   #   if last_month_shown.start_date.isSame(last_event, 'month')
   #     $scope.start_date = last_month_shown.start_date
   #     $scope.loadEventData()
+

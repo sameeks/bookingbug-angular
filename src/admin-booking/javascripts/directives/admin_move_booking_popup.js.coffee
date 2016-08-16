@@ -1,9 +1,10 @@
-angular.module('BBAdminBooking').factory 'AdminMoveBookingPopup', ($modal, $timeout) ->
+angular.module('BBAdminBooking').factory 'AdminMoveBookingPopup', ($uibModal, $timeout, $document) ->
 
   open: (config) ->
-    modal = $modal.open
+    modal = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       size: 'lg'
-      controller: ($scope, $modalInstance, config, $window, AdminBookingOptions) ->
+      controller: ($scope, $uibModalInstance, config, $window, AdminBookingOptions) ->
         $scope.Math = $window.Math
         if $scope.bb && $scope.bb.current_item
           delete $scope.bb.current_item
@@ -17,7 +18,7 @@ angular.module('BBAdminBooking').factory 'AdminMoveBookingPopup', ($modal, $time
           merge_people: AdminBookingOptions.merge_people
         , config.item_defaults
         $scope.cancel = () ->
-          $modalInstance.dismiss('cancel')
+          $uibModalInstance.dismiss('cancel')
       templateUrl: 'admin_move_booking_popup.html'
       resolve:
         config: () -> config

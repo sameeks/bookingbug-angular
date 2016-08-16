@@ -1,5 +1,7 @@
-angular.module('BBAdmin.Services').factory 'AdminCompanyService', ($q,
-    BBModel, AdminLoginService, $rootScope, $sessionStorage) ->
+'use strict'
+
+angular.module('BBAdmin.Services').factory 'AdminCompanyService', (
+  $q, $rootScope, $sessionStorage, BBModel) ->
 
   query: (params) ->
     defer = $q.defer()
@@ -9,12 +11,12 @@ angular.module('BBAdmin.Services').factory 'AdminCompanyService', ($q,
     $rootScope.bb.api_url ||= params.apiUrl
     $rootScope.bb.api_url ||= ""
 
-    AdminLoginService.checkLogin(params).then () ->
+    BBModel.Admin.Login.$checkLogin(params).then () ->
       if $rootScope.user && $rootScope.user.company_id
         $rootScope.bb ||= {}
         $rootScope.bb.company_id = $rootScope.user.company_id
         $rootScope.user.$get('company').then (company) ->
-          defer.resolve(BBModel.Company(company))
+          defer.resolve(new BBModel.Admin.Company(company))
         , (err) ->
           defer.reject(err)
       else
@@ -23,9 +25,9 @@ angular.module('BBAdmin.Services').factory 'AdminCompanyService', ($q,
           password: params.adminPassword
         options =
           company_id: params.companyId
-        AdminLoginService.login(login_form, options).then (user) ->
+        BBModel.Admin.Login.$login(login_form, options).then (user) ->
           user.$get('company').then (company) ->
-            defer.resolve(BBModel.Company(company))
+            defer.resolve(new BBModel.Admin.Company(company))
           , (err) ->
             defer.reject(err)
         , (err) ->

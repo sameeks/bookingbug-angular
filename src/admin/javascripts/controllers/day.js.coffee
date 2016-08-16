@@ -1,16 +1,15 @@
+'use strict'
 
-'use strict';
-
-angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,  $rootScope, $q, AdminDayService) ->
-
+angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,
+  $rootScope, $q, BBModel) ->
 
   $scope.init = (company_id) =>
-    $scope.inline_items = "";
+    $scope.inline_items = ""
     if company_id
       $scope.bb.company_id = company_id
     if !$scope.current_date
-      $scope.current_date = moment().startOf('month');
-    date = $scope.current_date;
+      $scope.current_date = moment().startOf('month')
+    date = $scope.current_date
     prms = {date:date.format('DD-MM-YYYY'), company_id:$scope.bb.company_id}
     if ($scope.service_id)
       prms.service_id = $scope.service_id
@@ -24,7 +23,7 @@ angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,  $rootS
     $scope.weeks = weekListDef.promise
     prms.url = $scope.bb.api_url
 
-    AdminDayService.query(prms).then (days) =>
+    BBModel.Admin.Day.$query(prms).then (days) =>
       $scope.sdays = days
       dayListDef.resolve()
       if $scope.category
@@ -32,7 +31,7 @@ angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,  $rootS
 
   $scope.format_date = (fmt) =>
     $scope.current_date.format(fmt)
- 
+
   $scope.selectDay = (day, dayBlock, e) =>
     if (day.spaces == 0)
       return false
@@ -47,9 +46,9 @@ angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,  $rootS
     $scope.service_id = dayBlock.service_id
     $scope.service = {id: dayBlock.service_id, name: dayBlock.name}
     $scope.selected_day = day
-    if xelm.length== 0 
+    if xelm.length== 0
       $scope.inline_items = "/view/dash/time_small"
-    else   
+    else
       xelm.scope().init(day)
 
   $scope.$watch 'current_date', (newValue, oldValue) =>
@@ -65,9 +64,7 @@ angular.module('BBAdmin.Controllers').controller 'DashDayList', ($scope,  $rootS
         $scope.dayList.push(day)
         $scope.service_id = day.id
 
-
   $rootScope.$watch 'category', (newValue, oldValue) =>
     if newValue &&  $scope.sdays
       $scope.update_days()
-
 

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular.module('BB.Directives').directive 'bbContent', ($compile) ->
   transclude: false,
@@ -14,16 +14,17 @@ angular.module('BB.Directives').directive 'bbContent', ($compile) ->
 
     $compile(element)(scope)
 
-angular.module('BB.Directives').directive 'bbLoading', ($compile, $timeout, $bbug) ->
+
+angular.module('BB.Directives').directive 'bbLoading', ($compile, $timeout, $bbug, LoadingService) ->
   link: (scope, element, attrs) ->
-    scope.scopeLoaded = scope.areScopesLoaded(scope)
+    scope.scopeLoaded = LoadingService.areScopesLoaded(scope)
     element.attr("ng-hide", "scopeLoaded")
     element.attr("bb-loading", null)
 
     positionLoadingIcon = () ->
       loading_icon = $bbug('.bb-loader').find('#loading_icon')
       wait_graphic = $bbug('.bb-loader').find('#wait_graphic')
-      modal_open   = $bbug('[ng-app]').find('body').hasClass('modal-open')
+      modal_open   = $bbug('[ng-app]').find('#bb').hasClass('modal-open')
 
       if modal_open
         $timeout ->
@@ -179,36 +180,38 @@ angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
   restrict: 'A'
   scope: true
   replace: true
-  controller: ($scope, $element, $attrs) ->
+  controller: ($scope, $element, $attrs, uiGmapGoogleMapApi) ->
 
     $scope.isDraggable = $document.width() > 480
 
-    $scope.$watch $attrs.bbAddressMap, (new_val, old_val) ->
+    uiGmapGoogleMapApi.then (maps)->
+      maps.visualRefresh = true
+      $scope.$watch $attrs.bbAddressMap, (new_val, old_val) ->
 
-      return if !new_val
+        return if !new_val
 
-      map_item = new_val
+        map_item = new_val
 
-      $scope.map = {
-        center: {
-          latitude: map_item.lat,
-          longitude: map_item.long
-        },
-        zoom: 15
-      }
-
-      $scope.options = {
-        scrollwheel: false,
-        draggable: $scope.isDraggable
-      }
-
-      $scope.marker = {
-        id: 0,
-        coords: {
-          latitude: map_item.lat,
-          longitude: map_item.long
+        $scope.map = {
+          center: {
+            latitude: map_item.lat,
+            longitude: map_item.long
+          },
+          zoom: 15
         }
-      }
+
+        $scope.options = {
+          scrollwheel: false,
+          draggable: $scope.isDraggable
+        }
+
+        $scope.marker = {
+          id: 0,
+          coords: {
+            latitude: map_item.lat,
+            longitude: map_item.long
+          }
+        }
 
 
 
@@ -356,3 +359,4 @@ angular.module('BB.Directives').directive 'bbTimeZone', (SettingsService) ->
     scope.time_zone_name = moment().tz(company_time_zone).format('zz')
     if !SettingsService.getUseLocalTimeZone() and moment.tz.guess() != company_time_zone
       scope.is_time_zone_diff = true
+

@@ -5,6 +5,7 @@ describe 'BBAdminServices, personTable directive', () ->
   $scope = null
 
   setup = () ->
+    module 'BBAdminBooking'
     module 'BBAdminServices'
 
     inject ($injector) ->

@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BBAdmin.Services').factory 'AdminDayService', ($q, $window,
     halClient, BBModel, UriTemplate) ->
@@ -26,3 +27,4 @@ angular.module('BBAdmin.Services').factory 'AdminDayService', ($q, $window,
       deferred.reject(err)
 
     deferred.promise
+

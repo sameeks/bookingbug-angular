@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular.module('BB.Services').factory "PurchaseBookingService", ($q, halClient, BBModel) ->
 
@@ -21,3 +21,4 @@ angular.module('BB.Services').factory "PurchaseBookingService", ($q, halClient, 
     , (err) =>
       deferred.reject(err, new BBModel.Purchase.Booking(booking))
     deferred.promise
+

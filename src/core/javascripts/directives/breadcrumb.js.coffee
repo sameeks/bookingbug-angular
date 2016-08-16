@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 # Breadcrumb Directive
 
@@ -52,3 +52,4 @@ angular.module('BB.Controllers').controller 'Breadcrumbs', ($scope) ->
       return true
     else
       return false
+

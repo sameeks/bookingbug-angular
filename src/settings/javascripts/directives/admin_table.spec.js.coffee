@@ -5,6 +5,7 @@ describe 'BBAdminSettings, adminTable directive', () ->
   $scope = null
 
   setup = () ->
+    module 'BBAdminBooking'
     module 'BBAdminSettings'
 
     inject ($injector) ->

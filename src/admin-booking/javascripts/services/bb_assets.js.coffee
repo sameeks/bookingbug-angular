@@ -1,17 +1,19 @@
+'use strict'
+
 ###
 * @ngdoc service
 * @name BBAdminBooking.service:BBAssets
 * @description
 * Gets all the resources for the callendar
 ###
-angular.module('BBAdminBooking').factory 'BBAssets', ['$q', ($q) ->
+angular.module('BBAdminBooking').factory 'BBAssets', ($q) ->
   return (company)->
     delay = $q.defer()
     promises = []
     assets   = []
     # If company setup with people add people to select
     if company.$has('people')
-      promises.push company.getPeoplePromise().then (people)->
+      promises.push company.$getPeople().then (people) ->
         for p in people
           p.title      = p.name
           # this is required in case the item comes from the cache and the item.id has been manipulated
@@ -23,7 +25,7 @@ angular.module('BBAdminBooking').factory 'BBAssets', ['$q', ($q) ->
 
     # If company is setup with resources add them to select
     if company.$has('resources')
-      promises.push company.getResourcesPromise().then (resources)->
+      promises.push company.$getResources().then (resources) ->
         for r in resources
           r.title      = r.name
           # this is required in case the item comes from the cache and the item.id has been manipulated
@@ -48,4 +50,4 @@ angular.module('BBAdminBooking').factory 'BBAssets', ['$q', ($q) ->
       delay.resolve(assets);
 
     delay.promise
-]
+

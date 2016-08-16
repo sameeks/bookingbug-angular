@@ -1,4 +1,3 @@
-<div id="bb">
   <div class="modal-header">
     <button type="button" class="close" ng-click="cancel($event)">&times;</button>
     <h3 class="modal-title">{{title}}</h3>
@@ -18,7 +17,6 @@
         ui-sref="clients.edit({id: form_model.client_id})">Edit Client</button>
       <input type="submit" class="btn btn-primary" ng-disabled="loading"
       value="Save Booking">
-      <button class="btn btn-default" ng-click="cancel($event)">Close</button>
+      <!-- <button class="btn btn-default" ng-click="cancel($event)">Close</button> -->
     </div>
   </form>
-</div>

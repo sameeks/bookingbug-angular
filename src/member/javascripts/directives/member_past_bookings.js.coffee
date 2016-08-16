@@ -1,4 +1,5 @@
 angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, PaginationService) ->
+
   templateUrl: 'member_past_bookings.html'
   scope:
     member: '='

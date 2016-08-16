@@ -1,16 +1,18 @@
+'use strict'
 
 angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     $rootScope, BBModel, $sessionStorage, $cookies, UriTemplate, shared_header) ->
- 
+
   login: (form, options) ->
     deferred = $q.defer()
     url = "#{$rootScope.bb.api_url}/api/v1/login/admin"
     if (options? && options.company_id?)
       url = "#{url}/#{options.company_id}"
-    
+
     halClient.$post(url, options, form).then (login) =>
       if login.$has('administrator')
         login.$get('administrator').then (user) =>
+          # user.setOption('auth_token', login.getOption('auth_token'))
           user = @setLogin(user)
           deferred.resolve(user)
       else if login.$has('administrators')
@@ -43,7 +45,7 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     , (err) =>
       deferred.reject(err)
     deferred.promise
-      
+
 
   isLoggedIn: ->
     @checkLogin().then () ->
@@ -54,8 +56,8 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
 
 
   setLogin: (user) ->
-    auth_token = user.getOption('auth_token')
     user = new BBModel.Admin.User(user)
+    auth_token = user.getOption('auth_token')
     $sessionStorage.setItem("user", user.$toStore())
     $sessionStorage.setItem("auth_token", auth_token)
     $rootScope.user = user
@@ -97,6 +99,7 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
     defer.promise
 
   logout: () ->
+    defer = $q.defer()
     url = "#{$rootScope.bb.api_url}/api/v1/login"
     halClient.$del(url).finally () ->
       $rootScope.user = null
@@ -104,6 +107,10 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
       $sessionStorage.removeItem("auth_token")
       $cookies['Auth-Token'] = null
       shared_header.del('auth_token')
+      defer.resolve()
+    , () ->
+      defer.reject()
+    defer.promise
 
   getLogin: (options) ->
     defer = $q.defer()

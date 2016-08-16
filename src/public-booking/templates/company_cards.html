@@ -4,7 +4,7 @@
       <div class="col-sm-6 col-md-4">
         <div class="card">
           <div bb-address-map="item.address">
-            <ui-gmap-google-map center='map.center' zoom='map.zoom' options="options">
+            <ui-gmap-google-map ng-if='map.center' center='map.center' zoom='map.zoom' options="options">
               <ui-gmap-marker coords="marker.coords" idkey="marker.id">
               </ui-gmap-marker>
             </ui-gmap-google-map>

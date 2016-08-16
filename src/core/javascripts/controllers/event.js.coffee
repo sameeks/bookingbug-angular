@@ -29,11 +29,13 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
   controller : 'Event'
 
 
-angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService, FormDataStoreService) ->
+angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
+  $rootScope, EventService, $q, PageControllerService, BBModel,
+  ValidatorService, FormDataStoreService, LoadingService) ->
 
   $scope.controller = "public.controllers.Event"
-  $scope.notLoaded $scope
-  angular.extend(this, new PageControllerService($scope, $q))
+  loader = LoadingService.$loader($scope).notLoaded()
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.validator = ValidatorService
   $scope.event_options = $scope.$eval($attrs.bbEvent) or {}
@@ -47,7 +49,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
   $rootScope.connection_started.then ->
     init($scope.bb.company) if $scope.bb.company
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   init = (comp) ->
@@ -60,7 +62,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     $scope.event_options.use_my_details = if !$scope.event_options.use_my_details? then true else $scope.event_options.use_my_details
 
     promises = [
-      $scope.bb.current_item.event_group.getImagesPromise(),
+      $scope.bb.current_item.event_group.$getImages(),
       $scope.event.prepEvent()
     ]
 
@@ -77,14 +79,14 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
       initImage(images) if images
 
       if $scope.bb.current_item.tickets and $scope.bb.current_item.tickets.qty > 0
-        
+
         # flag that we're editing tickets already in the basket so that view can indicate this
         $scope.edit_mode = true
 
         # already added to the basket
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.selected_tickets = true
-        
+
         # set tickets and current tickets items as items with the same event id
         $scope.current_ticket_items = _.filter $scope.bb.basket.timeItems(), (item) ->
           item.event_id is $scope.event.id
@@ -102,9 +104,9 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
       $scope.$broadcast "bbEvent:initialised"
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
-    , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
 
@@ -117,7 +119,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   ###
   $scope.selectTickets = () ->
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
     $scope.bb.emptyStackedItems()
     # NOTE: basket is not cleared here as we might already have one!
 
@@ -151,7 +153,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     # ok so we have them as stacked items
     # now push the stacked items to a basket
     if $scope.bb.stacked_items.length == 0
-      $scope.setLoaded $scope
+      loader.setLoaded()
       return
 
     $scope.bb.pushStackToBasket()
@@ -159,7 +161,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
     $scope.updateBasket().then () =>
 
       # basket has been saved
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.selected_tickets = true
       $scope.stopTicketWatch()
 
@@ -168,7 +170,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
         _.contains(ticket_refs, item.ref)
 
       $scope.tickets = (item.tickets for item in $scope.current_ticket_items)
-            
+
       # watch the basket items so the price is updated
       $scope.$watch 'current_ticket_items', (items, olditems) ->
         $scope.bb.basket.total_price = $scope.bb.basket.totalPrice()
@@ -239,7 +241,7 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
   $scope.getPrePaidsForEvent = (client, event) ->
     defer = $q.defer()
     params = {event_id: event.id}
-    client.getPrePaidBookingsPromise(params).then (prepaids) ->
+    client.$getPrePaidBookings(params).then (prepaids) ->
       $scope.pre_paid_bookings = prepaids
       defer.resolve(prepaids)
     , (err) ->

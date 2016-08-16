@@ -1,5 +1,4 @@
-
-
+'use strict'
 
 angular.module('BB.Services').factory "BB.Service.login", ($q, BBModel) ->
   unwrap: (resource) ->

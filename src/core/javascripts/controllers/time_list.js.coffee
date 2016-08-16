@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -33,12 +33,14 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   scope : true
   controller : 'TimeList'
 
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService, ErrorService) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
+  $scope,  $rootScope, $q, TimeService, AlertService, BBModel,
+  DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService, ErrorService) ->
 
   $scope.controller = "public.controllers.TimeList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.data_source = $scope.bb.current_item if !$scope.data_source
   $scope.options = $scope.$eval($attrs.bbTimes) or {}
@@ -54,8 +56,8 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
       $scope.setDate(moment())
 
     $scope.loadDay()
-
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) ->
+    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   ###**
@@ -237,7 +239,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         available: 1
 
       pslots.finally ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
       pslots.then (time_slots) ->
 
         $scope.slots = time_slots
@@ -254,21 +256,21 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
 
         checkRequestedSlots(time_slots) if options.check_requested_slot == true
 
-      , (err) -> 
+      , (err) ->
         if err.status == 404  && err.data && err.data.error && err.data.error == "No bookable events found"
           if $scope.data_source && $scope.data_source.person
             AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'))
-            $scope.setLoaded $scope        
+            $scope.setLoaded $scope
           else if  $scope.data_source && $scope.data_source.resource
             AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'))
-            $scope.setLoaded $scope        
+            $scope.setLoaded $scope
           else
             $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
         else
           $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     else
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   checkRequestedSlots = (time_slots) ->
     return if !$scope.bb.item_defaults || !$scope.bb.item_defaults.time
@@ -316,3 +318,4 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
         return $scope.addItemToBasket()
       else
         return true
+

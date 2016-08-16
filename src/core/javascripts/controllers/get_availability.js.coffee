@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -33,8 +33,9 @@ angular.module('BB.Directives').directive 'bbGetAvailability', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'GetAvailability',
-($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, halClient) ->
+angular.module('BB.Controllers').controller 'GetAvailability', ($scope,
+  $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel,
+  halClient) ->
 
   ###**
   * @ngdoc method
@@ -58,3 +59,4 @@ angular.module('BB.Controllers').controller 'GetAvailability',
             $scope.earliest_day = moment(day.date)
             if day.first
               $scope.earliest_day.add(day.first, "minutes")
+

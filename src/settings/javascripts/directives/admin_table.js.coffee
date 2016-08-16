@@ -1,12 +1,14 @@
-angular.module('BBAdminSettings').directive 'adminTable', (AdminCompanyService,
-    AdminAdministratorService, $modal, $log, ModalForm) ->
+'use strict'
+
+angular.module('BBAdminSettings').directive 'adminTable', ($log,
+  ModalForm, BBModel) ->
 
   controller = ($scope) ->
 
     $scope.getAdministrators = () ->
       params =
         company: $scope.company
-      AdminAdministratorService.query(params).then (administrators) ->
+      BBModel.Admin.Administrator.$query(params).then (administrators) ->
         $scope.admin_models = administrators
         $scope.administrators = _.map administrators, (administrator) ->
           _.pick administrator, 'id', 'name', 'email', 'role'
@@ -30,7 +32,7 @@ angular.module('BBAdminSettings').directive 'adminTable', (AdminCompanyService,
     if scope.company
       scope.getAdministrators()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         scope.getAdministrators()
 
@@ -39,3 +41,4 @@ angular.module('BBAdminSettings').directive 'adminTable', (AdminCompanyService,
     link: link
     templateUrl: 'admin_table_main.html'
   }
+

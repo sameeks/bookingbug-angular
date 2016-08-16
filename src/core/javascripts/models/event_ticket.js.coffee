@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -13,7 +13,7 @@
 * @property {integer} max_spaces The maximum spaces of the evenet
 * @property {integer} counts_as The counts as
 * @property {string} pool_name The pool name
-* @property {string} name The name 
+* @property {string} name The name
 * @property {string} min_num_bookings The minimum number of the bookings
 * @property {string} qty The quantity of the event ticket
 * @property {string} totalQty The total quantity of the event ticket
@@ -152,7 +152,7 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     ###
     totalQty: () ->
       return 0 if !@qty
-      return @qty if !@counts_as  
+      return @qty if !@counts_as
       return @qty * @counts_as
 
 
@@ -168,7 +168,7 @@ angular.module('BB.Models').factory "EventTicketModel", ($q, BBModel, BaseModel)
     add: (value) ->
       @qty = 0 if !@qty
       @qty = parseInt(@qty)
-      
+
       return if angular.isNumber(@qty) and (@qty >= @max and value > 0) or (@qty is 0 and value < 0)
       @qty += value
 

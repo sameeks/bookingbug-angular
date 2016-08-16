@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB').directive 'bbMemberLogin', (PathSvc) ->
   restrict: 'A'
   controller: 'MemberLogin'
@@ -8,20 +10,24 @@ angular.module('BB').directive 'bbMemberLogin', (PathSvc) ->
       PathSvc.directivePartial "_member_login_schema_form"
 
 
-angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, LoginService, ValidatorService) ->
+angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
+  $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window,
+  AlertService, ValidatorService, LoadingService) ->
 
   $scope.login = {}
 
   $scope.validator = ValidatorService
 
+  loader = LoadingService.$loader($scope).notLoaded()
+
   $rootScope.connection_started.then () ->
 
-    if LoginService.checkLogin()
+    if BBModel.Login.$checkLogin()
       $scope.setClient($rootScope.member)
       if $scope.bb.destination
         $scope.redirectTo($scope.bb.destination)
       else
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.skipThisStep()
         $scope.decideNextPage()
     else
@@ -54,10 +60,11 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootS
 
 
   $scope.handleLogin = (member) ->
-    member = LoginService.setLogin(member, $scope.login.persist_login)
+    member = BBModel.Login.$setLogin(member, $scope.login.persist_login)
     $scope.setClient(member)
     if $scope.bb.destination
       $scope.redirectTo($scope.bb.destination)
     else
       $scope.skipThisStep()
       $scope.decideNextPage()
+

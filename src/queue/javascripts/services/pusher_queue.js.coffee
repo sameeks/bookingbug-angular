@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBQueue.Services').factory 'PusherQueue', ($sessionStorage, $pusher, AppConfig) ->
 
   class PusherQueue

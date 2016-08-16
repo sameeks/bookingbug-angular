@@ -1,4 +1,5 @@
 <div>
+
   <div class="page-header">
     <h1>Select a customer</h1>
   </div>
@@ -6,7 +7,7 @@
   <div class="admin-typehead-wrapper" ng-form bb-form name="client_search_form">
     <div class="form-group" ng-class="{'has-error': client_search_form.result.$invalid && (client_search_form.result.$dirty || client_search_form.submitted)}">
       <div class="input-group" ng-class="{'animated shake': !typehead_result && search_triggered}">
-        <input class="input-lg form-control" name="result" ng-model="typehead_result" placeholder="Search by email or name" required typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="customer_typeahead_loading" typeahead-no-results="no_results" class="form-control" typeahead-on-select="typeHeadResults($item, $modal, $label)" typeahead-focus-first="false" typeahead-min-length="2">
+        <input class="input-lg form-control" name="result" ng-model="typehead_result" placeholder="Search by email or name" required uib-typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="customer_typeahead_loading" typeahead-no-results="no_results" class="form-control" typeahead-on-select="typeHeadResults($item, $uibModal, $label)" typeahead-focus-first="false" typeahead-min-length="2">
         <span class="input-group-btn">
           <button type="button" class="btn btn-primary btn-lg" ng-click="submitForm(); getClients({filter_by: typehead_result})"><i class="fa fa-search"></i></button>
         </span>
@@ -99,10 +100,10 @@
 
     </ul>
 
-    <pagination total-items="clients.num_items"
+    <uib-pagination total-items="clients.num_items"
       ng-model="clients.current_page" items-per-page="clients.page_size"
       max-size="clients.max_size" boundary-links="true" rotate="false"
-      num-pages="clients.num_pages" ng-show="clients.num_items > clients.page_size" ng-change="pageChanged()"></pagination>
+      num-pages="clients.num_pages" ng-show="clients.num_items > clients.page_size" ng-change="pageChanged()"></uib-pagination>
 
   </div>
 
@@ -128,7 +129,7 @@
 
           <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
             <label for="email" class="control-label">E-mail:</label>
-            <input type="email" name="email" id="email" ng-required="!client.mobile" ng-model="client.email" class="form-control"  ng-pattern="validator.getEmailPattern()"/>
+            <input type="email" name="email" id="email" ng-required="!client.mobile" ng-model="client.email" class="form-control"/>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
@@ -204,4 +205,5 @@
       </div>
     </div>
   </div>
+
 </div>

@@ -22,7 +22,8 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout, $sce, $http, $compile, $document, $location, SettingsService) ->
+angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout,
+  $sce, $http, $compile, $document, $location, SettingsService) ->
 
 
   ###**
@@ -70,11 +71,11 @@ angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout, $sce,
       link.href = href
       link.media = 'all'
       head.appendChild link
-      
+
       # listen to load of css and trigger resize
       link.onload = ->
         parentIFrame.size() if 'parentIFrame' of $window
-      
+
 
   linker = (scope, element, attributes) ->
 
@@ -178,6 +179,4 @@ angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
     else
       sendSubmittingEvent()
       submitPaymentForm()
-
-
 

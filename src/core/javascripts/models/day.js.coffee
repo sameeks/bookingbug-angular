@@ -1,5 +1,4 @@
-
-'use strict';
+'use strict'
 
 ###**
 * @ngdoc service
@@ -12,7 +11,7 @@
 * @property {date} date Second The date
 ####
 
-angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayService) ->
 
   class Day extends BaseModel
 
@@ -63,3 +62,7 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel) ->
       if @spaces == 0
         str += " not-avail"
       str
+
+    @$query: (prms) ->
+      DayService.query(prms)
+

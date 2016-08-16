@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 ###**
 * @ngdoc service
@@ -14,35 +14,13 @@
 * @property {integer} order The person order
 ####
 
-angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel, PersonModel, AdminPersonService) ->
+angular.module('BB.Models').factory "Admin.PersonModel", ($q,
+  AdminPersonService, BBModel, BaseModel, PersonModel) ->
 
   class Admin_Person extends PersonModel
 
     constructor: (data) ->
       super(data)
-      unless @queuing_disabled
-        @setCurrentCustomer()
-
-    ###**
-    * @ngdoc method
-    * @name setCurrentCustomer
-    * @methodOf BB.Models:AdminPerson
-    * @description
-    * Set current customer
-    *
-    * @returns {Promise} Returns a promise that rezolve the current customer
-    ###
-    setCurrentCustomer: () ->
-      defer = $q.defer()
-      if @$has('queuer')
-        @$get('queuer').then (queuer) =>
-          @serving = new BBModel.Admin.Queuer(queuer)
-          defer.resolve(@serving)
-        , (err) ->
-          defer.reject(err)
-      else
-        defer.resolve()
-      defer.promise
 
     ###**
     * @ngdoc method
@@ -95,14 +73,14 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Look up a schedule for a time range to see if this available.
     *
-    * @returns {string} Returns yes if schedule is available or not. 
+    * @returns {string} Returns yes if schedule is available or not.
     ###
     # look up a schedule for a time range to see if this available
     # currently just checks the date - but chould really check the time too
     isAvailable: (start, end) ->
       str = start.format("YYYY-MM-DD") + "-" + end.format("YYYY-MM-DD")
       @availability ||= {}
-      
+
       return @availability[str] == "Yes" if @availability[str]
       @availability[str] = "-"
 
@@ -114,7 +92,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
       else
         @availability[str] = "Yes"
 
-      return @availability[str] == "Yes" 
+      return @availability[str] == "Yes"
 
     ###**
     * @ngdoc method
@@ -124,7 +102,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Start serving in according of the queuer parameter
     *
-    * @returns {Promise} Returns a promise that rezolve the start serving link 
+    * @returns {Promise} Returns a promise that rezolve the start serving link
     ###
     startServing: (queuer) ->
       defer = $q.defer()
@@ -149,7 +127,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Get the queuers
     *
-    * @returns {Promise} Returns a promise that rezolve the queuer links 
+    * @returns {Promise} Returns a promise that rezolve the queuer links
     ###
     getQueuers: () ->
       defer = $q.defer()
@@ -175,7 +153,7 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Get post data
     *
-    * @returns {array} Returns data 
+    * @returns {array} Returns data
     ###
     getPostData: () ->
       data = {}
@@ -193,39 +171,19 @@ angular.module('BB.Models').factory "Admin.PersonModel", ($q, BBModel, BaseModel
     * @description
     * Update the data in according of the data parameter
     *
-    * @returns {array} Returns the updated array 
+    * @returns {array} Returns the updated array
     ###
-    $update: (data) -> 
+    $update: (data) ->
       data ||= @getPostData()
       @$put('self', {}, data).then (res) =>
-        @constructor(res) 
+        @constructor(res)
 
+    @$query: (params) ->
+      AdminPersonService.query(params)
 
-    ###**
-    * @ngdoc method
-    * @name query
-    * @param {Company} company The company model.
-    * @param {integer=} page Specifies particular page of paginated response.
-    * @param {integer=} per_page Number of items per page of paginated response.
-    * @param {string=} filter_by_fields Comma separated list of field, value pairs to filter results by.
-    * @param {string=} order_by Specifies field to order results by.
-    * @param {boolean=} order_by_reverse Reverses the ordered results if true.
-    * @methodOf BB.Models:AdminPerson
-    * @description
-    * Gets a filtered collection of people.
-    *
-    * @returns {Promise} Returns a promise that resolves to the filtered collection of people.
-    ###
-    @query: (company, page, per_page, filter_by_fields, order_by, order_by_reverse) ->
-      AdminPersonService.query
-        company: company
-        page: page
-        per_page: per_page
-        filter_by_fields: filter_by_fields
-        order_by: order_by
-        order_by_reverse: order_by_reverse
+    @$block: (company, person, data) ->
+      AdminPersonService.block(company, person, data)
 
-
-angular.module('BB.Models').factory 'AdminPerson', ($injector) ->
-  $injector.get('Admin.PersonModel')
+    @$signup: (user, data) ->
+      AdminPersonService.signup(user, data)
 

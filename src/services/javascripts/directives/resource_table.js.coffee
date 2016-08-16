@@ -1,5 +1,7 @@
-angular.module('BBAdminServices').directive 'resourceTable', (AdminCompanyService,
-    AdminResourceService, $modal, $log, ModalForm) ->
+'use strict'
+
+angular.module('BBAdminServices').directive 'resourceTable', (BBModel, $log,
+  ModalForm) ->
 
   controller = ($scope) ->
 
@@ -8,7 +10,7 @@ angular.module('BBAdminServices').directive 'resourceTable', (AdminCompanyServic
     $scope.getResources = () ->
       params =
         company: $scope.company
-      AdminResourceService.query(params).then (resources) ->
+      BBModel.Admin.Resource.$query(params).then (resources) ->
         $scope.resources = resources
 
     $scope.newResource = () ->
@@ -42,7 +44,7 @@ angular.module('BBAdminServices').directive 'resourceTable', (AdminCompanyServic
     if scope.company
       scope.getResources()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         scope.getResources()
 
@@ -51,3 +53,4 @@ angular.module('BBAdminServices').directive 'resourceTable', (AdminCompanyServic
     link: link
     templateUrl: 'resource_table_main.html'
   }
+

@@ -1,4 +1,7 @@
-angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $rootScope, AlertService) ->
+'use strict'
+
+angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log,
+  $rootScope, AlertService, ErrorService) ->
 
   # create a trackable loader - this in theory allows multiple trackable loading objects in a scope - meaning we're not tied to a per-scope faction
   # currently it's still just using the scope to store the status, but we're encapsulating it away so that we can change it later
@@ -23,7 +26,7 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
     # set the scope loaded to true...
     cscope.isLoaded = true
     # then walk up the scope chain looking for the 'loading' scope...
-    loadingFinished = true;
+    loadingFinished = true
 
     while cscope
       if cscope.hasOwnProperty('scopeLoaded')
@@ -69,11 +72,10 @@ angular.module('BB.Services').factory 'LoadingService',  ($q, $window, $log, $ro
     cscope.isLoaded = false
     # then look through all the scopes for the 'loading' scope, which is the
     # scope which has a 'scopeLoaded' property and set it to false, which makes
-    # the ladoing gif show;
+    # the ladoing gif show
     while cscope
       if cscope.hasOwnProperty('scopeLoaded')
         cscope.scopeLoaded = false
       cscope = cscope.$parent
     return
-
 

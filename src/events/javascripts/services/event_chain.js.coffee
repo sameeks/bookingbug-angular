@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdminEvents').factory 'AdminEventChainService',  ($q, BBModel) ->
 
   query: (params) ->

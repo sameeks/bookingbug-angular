@@ -1,5 +1,4 @@
-'use strict';
-
+'use strict'
 
 ###**
 * @ngdoc service
@@ -19,14 +18,12 @@
 * @property {string} payment_status The payment status
 ####
 
-
 # This class contrains handy functions and variables used in building and displaying a booking widget
 
 angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope, PathHelper, SettingsService ) ->
 
 
   class Widget
-
 
     constructor: () ->
       # uid used to store form data for user journeys
@@ -39,7 +36,6 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       @confirmCheckout = false
       @isAdmin = false
       @payment_status = null
-
 
     ###**
     * @ngdoc method
@@ -147,7 +143,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @returns {string} The returned str
     ###
     convertToDashSnakeCase: (str) ->
-        str = str.toLowerCase();
+        str = str.toLowerCase()
         str = $.trim(str)
         # replace all punctuation and special chars
         str = str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|'’!<>;:,.~`=+-@£&%"]/g, '')
@@ -378,7 +374,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     ###
     deleteStackedItem: (item) =>
       if item && item.id
-        BasketService.deleteItem(item, @company, {bb: @})
+        BBModel.Basket.$deleteItem(item, @company, {bb: @})
 
       @stacked_items = @stacked_items.filter (i) -> i isnt item
 
@@ -406,7 +402,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     deleteStackedItemByService: (item) =>
       for i in @stacked_items
         if i && i.service && i.service.self == item.self && i.id
-          BasketService.deleteItem(i, @company, {bb: @})
+          BBModel.Basket.$deleteItem(i, @company, {bb: @})
       @stacked_items = @stacked_items.filter (i) -> (i && i.service && i.service.self isnt item.self)
 
     ###**
@@ -480,3 +476,4 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       delete @address3
       delete @address4
       delete @address5
+

@@ -5,9 +5,9 @@
 * @name BB.Services.service:ViewportSize
 *
 * @description
-* Stores the current screen size breakpoint. 
+* Stores the current screen size breakpoint.
 ###
-angular.module('BB.Services').factory 'ViewportSize', ['$rootScope',($rootScope) ->
+angular.module('BB.Services').factory 'ViewportSize', ($rootScope) ->
 
   viewport_size = null
 
@@ -18,5 +18,4 @@ angular.module('BB.Services').factory 'ViewportSize', ['$rootScope',($rootScope)
 
   getViewportSize: () ->
     return viewport_size
-]
-  
+

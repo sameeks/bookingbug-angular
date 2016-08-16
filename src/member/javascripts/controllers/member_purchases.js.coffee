@@ -1,16 +1,16 @@
-angular.module("BBMember").controller "MemberPurchases", ($scope, $q, MemberPurchaseService, $log) ->
+angular.module("BBMember").controller "MemberPurchases", ($scope, $q, $log,
+  LoadingService, BBModel) ->
 
   $scope.getPurchases = () ->
-    $scope.notLoaded $scope
+    loader = LoadingService.$loader($scope).notLoaded()
     defer = $q.defer()
-    MemberPurchaseService.query($scope.member, {}).then (purchases) ->
+    BBModel.Member.Purchase.$query($scope.member, {}).then (purchases) ->
       $scope.purchases = purchases
-      $scope.setLoaded $scope
+      loader.setLoaded()
       defer.resolve(purchases)
     , (err) ->
       $log.error err.data
-      $scope.setLoaded $scope
+      loader.setLoaded()
       defer.reject([])
-    
+
     return defer.promise
-    

@@ -1,7 +1,6 @@
-
+'use strict'
 
 class window.Collection.Clinic extends window.Collection.Base
-
 
   checkItem: (item) ->
     super
@@ -24,9 +23,7 @@ class window.Collection.Clinic extends window.Collection.Base
 
 
 angular.module('BBAdmin.Services').provider "ClinicCollections", () ->
+
   $get: ->
     new  window.BaseCollections()
-
-
-
 

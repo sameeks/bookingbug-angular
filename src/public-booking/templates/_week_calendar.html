@@ -27,11 +27,11 @@
       <input type="text" ng-model="selected_date" class="form-control"
         bb-datepicker-popup="DD/MM/YYYY"
         on-date-change="selectedDateChanged()"
-        datepicker-popup="dd/MM/yyyy"
+        uib-datepicker-popup="dd/MM/yyyy"
         is-open="opened"
+        ng-focus="opened=true"
         min-date="today"
-        datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-        show-weeks="false"
+        datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
         show-button-bar="false"
         ng-readonly="false"/>
       <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
@@ -51,12 +51,12 @@
         <!-- date format: http://docs.angularjs.org/api/ng.filter:date" -->
         <input type="text" ng-model="selected_date" class="form-control"
           bb-datepicker-popup="DD/MM/YYYY"
-          datepicker-popup="dd/MM/yyyy"
+          uib-datepicker-popup="dd/MM/yyyy"
           is-open="opened"
+          ng-focus="opened=true"
           min-date="today"
           on-date-change="selectedDateChanged()"
-          datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-          show-weeks="false"
+          datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
           show-button-bar="false"
           ng-readonly="true"
           name="date"
@@ -80,12 +80,12 @@
       <div class="input-group date-picker">
         <input type="text" ng-model="filters.date" class="form-control"
           bb-datepicker-popup="DD/MM/YYYY"
-          datepicker-popup="dd/MM/yyyy"
+          uib-datepicker-popup="dd/MM/yyyy"
           is-open="opened"
+          ng-focus="opened=true"
           min-date="today"
           on-date-change="filterDateChanged()"
-          datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-          show-weeks="false"
+          datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
           show-button-bar="false"
           ng-readonly="true"
           name="date"
@@ -140,7 +140,7 @@
         <div class="times">
 
           <!-- if time list has slots -->
-          <div accordion close-others="false">
+          <div uib-accordion close-others="false">
 
             <div bb-accordion-range-group="{heading: 'Morning', range: [0, 720], collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
             </div>

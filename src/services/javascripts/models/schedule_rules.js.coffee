@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:ScheduleRules
@@ -10,7 +9,6 @@
 *
 * @property {object} rules The schedule rules
 ####
-
 
 angular.module('BB.Models').factory "ScheduleRules", () ->
 

@@ -1,5 +1,6 @@
-angular.module('BBAdminEvents').directive 'eventChainTable', (AdminCompanyService,
-    AdminEventChainService, $modal, $log, ModalForm, $timeout) ->
+'use strict'
+
+angular.module('BBAdminEvents').directive 'eventChainTable', (BBModel, $log, ModalForm) ->
 
   controller = ($scope) ->
 
@@ -8,7 +9,7 @@ angular.module('BBAdminEvents').directive 'eventChainTable', (AdminCompanyServic
     $scope.getEventChains = () ->
       params =
         company: $scope.company
-      AdminEventChainService.query(params).then (event_chains) ->
+      BBModel.Admin.EventChain.$query(params).then (event_chains) ->
         $scope.event_chains = event_chains
 
     $scope.newEventChain = () ->
@@ -49,7 +50,7 @@ angular.module('BBAdminEvents').directive 'eventChainTable', (AdminCompanyServic
     if scope.company
       scope.getEventChains()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.$query(attrs).then (company) ->
         scope.company = company
         scope.getEventChains()
 
@@ -58,3 +59,4 @@ angular.module('BBAdminEvents').directive 'eventChainTable', (AdminCompanyServic
     link: link
     templateUrl: 'event_chain_table_main.html'
   }
+

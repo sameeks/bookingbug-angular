@@ -1,5 +1,6 @@
-class window.Collection.Booking extends window.Collection.Base
+'use strict'
 
+class window.Collection.Booking extends window.Collection.Base
 
   checkItem: (item) ->
     super
@@ -18,3 +19,4 @@ class window.Collection.Booking extends window.Collection.Base
 angular.module('BB.Services').provider "BookingCollections", () ->
   $get: ->
     new  window.BaseCollections()
+

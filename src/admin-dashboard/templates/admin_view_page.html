@@ -1,9 +1,0 @@
-<div>
-  <div ng-if="parent_state" bb-frame>
-    <iframe class="bb-page-frame" seamless="seamless" lte-pin-bottom scrolling="no"
-      ng-style="iframe_style" ng-src="{{frame_src}}" allowtransparency="true"
-      style="display:none" onload="this.style.display = 'block';">
-    </iframe>
-  </div>
-  <div ng-if="!parent_state" ui-view></div>
-</div>

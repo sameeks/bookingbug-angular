@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -10,7 +10,7 @@
 *
 * @constructor
 * @param {HALobject=} data A HAL object to initialise the company from
-* 
+*
 * @property {string} name The company name
 * @property {string} description The company description
 * @property {string} country_code the Country code for thie company
@@ -24,7 +24,8 @@
 
 
 # helpful functions about a company
-angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, halClient, AppConfig, $sessionStorage) ->
+angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel,
+  halClient, AppConfig, $sessionStorage, CompanyService) ->
 
   class Company extends BaseModel
 
@@ -36,7 +37,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
       if @companies
         all_companies = []
         @child_companies = []
-        for comp in @companies 
+        for comp in @companies
           c = new BBModel.Company(halClient.$parse(comp))
           @child_companies.push(c)
           if c.companies
@@ -76,7 +77,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     * @description
     * Find a child company by id
     *
-    * @returns {object} The child company 
+    * @returns {object} The child company
     ###
     findChildCompany: (id) ->
       return null if !@companies
@@ -87,12 +88,12 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
           return c
       # failed to find by id - maybe by name ?
       if typeof id == "string"
-        name = id.replace(/[\s\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|'’!<>;:,.~`=+-@£&%"]/g, '').toLowerCase()  
+        name = id.replace(/[\s\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|'’!<>;:,.~`=+-@£&%"]/g, '').toLowerCase()
         for c in @companies
           cname = c.name.replace(/[\s\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|'’!<>;:,.~`=+-@£&%"]/g, '').toLowerCase()
           if name == cname
             return c
-      return null      
+      return null
 
     ###**
     * @ngdoc method
@@ -147,7 +148,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
       @pusher_channel.bind 'booking', callback
       @pusher_channel.bind 'cancellation', callback
       @pusher_channel.bind 'updating', callback
-        
+
 
     ###**
     * @ngdoc method
@@ -174,4 +175,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
         else
           @pusher.subscribe(channelName)
           @pusher.channel(channelName)
+
+    @$query: (company_id, options) ->
+      CompanyService.query(company_id, options)
 

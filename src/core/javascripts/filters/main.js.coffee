@@ -1,3 +1,5 @@
+'use strict'
+
 # Filters
 app = angular.module 'BB.Filters'
 
@@ -282,7 +284,7 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
 # Checks if a format (option) is set if not checks the country and provides a default.
 # Additionally you can pass in date, time or datetime
 angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
-  
+
   hardcoded_formats =
     datetime:
       us: 'MM/DD/YYYY, h:mm a'
@@ -371,3 +373,4 @@ app.filter "format_answer", ->
     else if moment(answer, 'YYYY-MM-DD', true).isValid()
       answer = moment(answer).format "D MMMM YYYY"
     return answer
+

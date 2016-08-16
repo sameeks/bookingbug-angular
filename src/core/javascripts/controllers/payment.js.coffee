@@ -16,11 +16,13 @@
 * scope: true
 * </pre>
 *
-* @property {array} total The total of payment 
+* @property {array} total The total of payment
 ####
 
 
-angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService, AlertService) ->
+angular.module('BB.Directives').directive 'bbPayment', ($window, $location,
+  $sce, SettingsService, AlertService) ->
+
   restrict: 'AE'
   replace: true
   scope: true
@@ -83,18 +85,19 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
     , false
 
 
-angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q, $location, $window, $sce, $log, $timeout) ->
+angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope,
+  $q, $location, $window, $sce, $log, $timeout, LoadingService) ->
 
   $scope.controller = "public.controllers.Payment"
 
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.bb.total = $scope.purchase if $scope.purchase
 
   $rootScope.connection_started.then ->
     $scope.bb.total = $scope.total if $scope.total
     $scope.url = $sce.trustAsResourceUrl($scope.bb.total.$href('new_payment')) if $scope.bb and $scope.bb.total and $scope.bb.total.$href('new_payment')
-  
+
   ###**
   * @ngdoc method
   * @name callNotLoaded
@@ -103,7 +106,7 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   * Set not loaded state
   ###
   $scope.callNotLoaded = () =>
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
 
   ###**
@@ -114,7 +117,7 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
   * Set loaded state
   ###
   $scope.callSetLoaded = () =>
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
 
   ###**
@@ -132,3 +135,4 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q,
 
   $scope.error = (message) ->
     $log.warn("Payment Failure: " + message)
+

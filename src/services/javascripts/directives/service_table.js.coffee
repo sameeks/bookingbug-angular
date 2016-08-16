@@ -1,12 +1,14 @@
-angular.module('BBAdminServices').directive 'serviceTable', (AdminCompanyService,
-    AdminServiceService, $modal, $log, ModalForm) ->
+'use strict'
+
+angular.module('BBAdminServices').directive 'serviceTable', ($uibModal, $log,
+  ModalForm, BBModel) ->
 
   controller = ($scope) ->
     $scope.fields = ['id', 'name']
     $scope.getServices = () ->
       params =
         company: $scope.company
-      AdminServiceService.query(params).then (services) ->
+      BBModel.Admin.Service.$query(params).then (services) ->
         $scope.services = services
 
     $scope.newService = () ->
@@ -41,7 +43,7 @@ angular.module('BBAdminServices').directive 'serviceTable', (AdminCompanyService
     if scope.company
       scope.getServices()
     else
-      AdminCompanyService.query(attrs).then (company) ->
+      BBModel.Admin.Company.query(attrs).then (company) ->
         scope.company = company
         scope.getServices()
 
@@ -50,3 +52,4 @@ angular.module('BBAdminServices').directive 'serviceTable', (AdminCompanyService
     link: link
     templateUrl: 'service_table_main.html'
   }
+

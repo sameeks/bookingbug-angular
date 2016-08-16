@@ -7,13 +7,11 @@
 * @description
 * checks for the first date with available spaces
 ###
-angular.module('BB.Services').factory 'SlotDates', [
-  '$q','DayService',
-  ($q, DayService) ->
-    cached = 
+angular.module('BB.Services').factory 'SlotDates', ($q, DayService) ->
+    cached =
       firstSlotDate : null
       timesQueried  : 0
- 
+
     getFirstDayWithSlots = (cItem, selected_day) ->
       deferred = $q.defer()
 
@@ -38,12 +36,9 @@ angular.module('BB.Services').factory 'SlotDates', [
               deferred.reject err
           else
             deferred.reject new Error('ERROR.NO_SLOT_AVAILABLE')
-      , (err) -> 
+      , (err) ->
         deferred.reject new Error('ERROR.COULDNT_GET_AVAILABLE_DATES')
 
       return deferred.promise
 
     return getFirstDayWithSlots: getFirstDayWithSlots
-      
-]
-
