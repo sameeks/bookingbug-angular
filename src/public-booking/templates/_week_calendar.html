@@ -127,8 +127,8 @@
             </button>
           </span>
           <h3 class="day-heading col-xs-8 col-sm-12">
-            <span class="visible-xs">{{day.date | datetime: "ddd"}} <strong>{{day.date | datetime: "D"}} </strong>{{day.date | datetime: "MMM"}}</span>
-            <span class="hidden-xs">{{day.date | datetime: "ddd"}} <strong>{{day.date | datetime: "D"}} </strong></span>
+            <span class="visible-xs">{{day.date.format("ddd")} <strong>{{day.date.format("D")} </strong>{{day.date.format("MMM")}</span>
+            <span class="hidden-xs">{{day.date.format("ddd")} <strong>{{day.date.format("D")} </strong></span>
           </h3>
           <span class="col-xs-2 next visible-xs">
             <button type="button" class="btn btn-icon visible-xs pull-right" ng-click="add('days', 1)" ng-disabled="!isLoaded">
