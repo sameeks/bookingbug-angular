@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog) ->
+angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog, FormTransform) ->
 
   newForm = ($scope, $uibModalInstance, company, title, new_rel, post_rel,
       success, fail) ->
@@ -56,8 +56,11 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     $scope.title = title
     $scope.model = model
     if $scope.model.$has('edit')
-      $scope.model.$get('edit').then (schema) ->
+      $scope.model.$get('edit').then (schema) =>
         $scope.form = _.reject schema.form, (x) -> x.type == 'submit'
+        model_type = model.constructor.name
+        if FormTransform['edit'][model_type]
+          $scope.form = FormTransform['edit'][model_type]($scope.form)
         $scope.schema = checkSchema(schema.schema)
         $scope.form_model = $scope.model
         $scope.loading = false
@@ -192,4 +195,5 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
         title: () -> config.title
         success: () -> config.success
         fail: () -> config.fail
+
 

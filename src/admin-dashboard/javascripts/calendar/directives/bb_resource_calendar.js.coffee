@@ -144,7 +144,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
               revertFunc()
         eventClick: (event, jsEvent, view) ->
           if event.$has('edit')
-            $scope.editBooking(event)
+            $scope.editBooking(new BBModel.Admin.Booking(event))
         eventRender: (event, element) ->
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
