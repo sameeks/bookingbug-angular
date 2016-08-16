@@ -40,7 +40,7 @@ angular.module('BB.Models').factory "BasketItemModel",
       @ref = Math.ceil(moment().unix() * Math.random()) if !@ref
 
       # if we were given an id then the item is ready - we need to fake a few items
-      if @time
+      if _.isNumber(@time)
         @time = new BBModel.TimeSlot({time: @time, event_id: @event_id, selected: true, avail: 1, price: @price })
       if @date
         @date = new BBModel.Day({date: @date, spaces: 1})
