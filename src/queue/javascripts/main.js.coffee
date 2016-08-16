@@ -29,4 +29,5 @@ angular.module('BBQueue.Services').run () ->
   models = ['Queuer', 'ClientQueue']
   for model in models
     BBModel['Admin'][model] = $injector.get("Admin.#{model}Model")
+  BBModel['Admin']['Person'] = $injector.get("Admin.QueuerPersonModel")
 

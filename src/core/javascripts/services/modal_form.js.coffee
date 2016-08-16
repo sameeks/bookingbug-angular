@@ -96,7 +96,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     $scope.success = (response) ->
       event.preventDefault()
       event.stopPropagation()
-      $modalInstance.close()
+      $uibModalInstance.close()
       success(response) if success
 
 
