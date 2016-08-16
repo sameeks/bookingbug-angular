@@ -13,7 +13,7 @@ describe "Standard booking journey:", ->
     waitFor '[bb-widget] .content'
     return
 
-  describe "Can load stores", ->
+  xdescribe "Can load stores", ->
     it "in London", ->
       waitFor "[bb-map] form"
 
