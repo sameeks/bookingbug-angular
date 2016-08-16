@@ -69,8 +69,11 @@
     }
   }
 
-  // panel styling
+  // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+  // Panel overrides
+  // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   .panel-group {
+
     .panel {
       border-radius: 0;
       margin: 0;
@@ -110,6 +113,10 @@
   .panel-title {
     font-size: inherit;
     padding-bottom: 0;
+  }
+
+  .panel-group .panel-heading+.panel-collapse>.panel-body {
+    border-top: none;
   }
 
   .period-label {
@@ -172,7 +179,9 @@
     }
   }
 
-// calendar hidden column functionality
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// Calendar hidden column functionality
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 @media (max-width: $screen-md-max) {
   .cal-col-6, .cal-col-7{
     display: none;
