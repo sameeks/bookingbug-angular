@@ -25,6 +25,7 @@ angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
     maxDate: '=?'
     format: '=?'
     bbDisabled: '=?'
+    form: '=?'
   restrict: 'A'
   templateUrl : 'bb_date_time_picker.html'
   controller: ($scope, $filter, $timeout, GeneralOptions) ->

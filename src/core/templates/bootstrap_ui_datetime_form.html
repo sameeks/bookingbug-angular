@@ -3,7 +3,8 @@
   <input ng-if="form.readonly" ng-show="form.key" type="text" placeholder="" class="form-control" id="datetime" ng-model="model.datetime" ng-disabled="form.readonly" name="datetime" disabled="disabled"/>
 
   <div class="input-group" ng-if="!form.readonly">
-   	<div bb-date-time-picker  date="$$value$$"  bb-disabled="form.readonly" ></div>
+   	<div bb-date-time-picker  date="$$value$$"  bb-disabled="form.readonly"
+      form="form" ></div>
 	</div>
 
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
