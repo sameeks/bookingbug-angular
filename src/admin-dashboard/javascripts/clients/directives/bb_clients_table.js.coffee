@@ -17,7 +17,7 @@ angular.module('BBAdminDashboard.clients.directives').controller 'TabletClients'
   $scope.per_page = 15
   $scope.total_entries = 0
   $scope.clients = []
-  
+
   $scope.getClients = (currentPage, filterBy, filterByFields, orderBy, orderByReverse) ->
     if filterByFields.name?
       filterByFields.name = filterByFields.name.replace(/\s/g, '')
@@ -25,11 +25,11 @@ angular.module('BBAdminDashboard.clients.directives').controller 'TabletClients'
       mobile = filterByFields.mobile
       if mobile.indexOf('0') == 0
         filterByFields.mobile = mobile.substring(1)
-      
+
     clientDef = $q.defer()
 
     params =
-      company_id: $scope.bb.company_id
+      company: $scope.bb.company
       per_page: $scope.per_page
       page: currentPage + 1
       filter_by: filterBy
@@ -37,9 +37,11 @@ angular.module('BBAdminDashboard.clients.directives').controller 'TabletClients'
       order_by: orderBy
       order_by_reverse: orderByReverse
     BBModel.Admin.Client.$query(params).then (clients) =>
+      console.log clients
       $scope.clients = clients.items
       $scope.total_entries = clients.total_entries
       clientDef.resolve(clients.items)
     , (err) ->
+      console.log err
       clientDef.reject(err)
-  
+

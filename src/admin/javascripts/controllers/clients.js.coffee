@@ -26,7 +26,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminClients', ($scope,
     $rootScope.connection_started.then ->
       loader.notLoaded()
       params =
-        company_id: $scope.bb.company_id
+        company: $scope.bb.company
         per_page: $scope.per_page
         page: currentPage + 1
         filter_by: filterBy
