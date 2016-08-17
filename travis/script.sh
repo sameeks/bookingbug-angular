@@ -10,6 +10,7 @@ echo "TRAVIS_PULL_REQUEST: $TRAVIS_PULL_REQUEST"
 gulp test-unit # !!! Generates html & lcov reports. Lcov can be easily used with Climate or Coverall
 
 if [ ! "$TRAVIS_PULL_REQUEST" = 'false' ] ; then
-  gulp test-e2e --project=demo
+  echo "E2E tests - temporarily blocked"
+  #gulp test-e2e --project=demo
 fi
 
