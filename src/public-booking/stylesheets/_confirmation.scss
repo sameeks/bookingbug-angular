@@ -1,11 +1,6 @@
 .confirmation-header {
   font-size: $font-size-base;
   text-align: center;
-  button{
-    &:hover, &:focus{
-      box-shadow: 2px 2px 15px $bb-border;
-    }
-  }
 }
 
 .confirmation-heading {

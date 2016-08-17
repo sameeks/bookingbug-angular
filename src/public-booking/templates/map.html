@@ -1,8 +1,8 @@
-<div id="map" bb-map="{default_zoom: 6, filter_by_service: true}" class="bb-store-search" ng-init="checkStepTitle('Select a company')">
+<div id="map" bb-map="{default_zoom: 6}" class="bb-store-search">
 
-  <div class="page-summary">
+  <!-- <div class="page-summary">
     <p>Search for a store to begin your booking.</p>
-  </div>
+  </div> -->
 
   <div class="panel panel-default">
     <div class="panel-body" >
@@ -51,20 +51,26 @@
         <div ui-map-info-window="myInfoWindow" class="clearfix">
           <p><strong>{{currentMarker.company.name}}</strong></p>
 
-          <div ng-show="currentMarker.company.has_service">
+          <div ng-show="currentMarker.company.has_service || !can_filter_by_service">
             <p ng-bind-html="currentMarker.company.address | address_multi_line"></p>
-            <p><strong>Phone:</strong> {{currentMarker.company.address.phone | local_phone_number}}</p>
-            <p>
-              <span class="distance">{{roundNumberUp(currentMarker.distance,1) + distance_unit}}</span>
-            </p>
+            <ul>
+              <li>
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                {{currentMarker.company.address.phone | local_phone_number}}
+              </li>
+              <li>
+                <i class="fa fa-location-arrow" aria-hidden="true"></i>
+                <span class="distance">{{roundNumberUp(currentMarker.distance,1)}} {{distance_unit}}</span>
+              </li>
+            </ul>
           </div>
 
-          <div ng-show="!currentMarker.company.has_service">
+          <div ng-show="!currentMarker.company.has_service && can_filter_by_service">
             Sorry, but {{currentMarker.company.service.name}} is not<br />available at this location
           </div>
 
           <br />
-          <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.has_service">Select</button>
+          <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.has_service || !can_filter_by_service">Select</button>
 
         </div>
       </div>
@@ -81,17 +87,21 @@
             </div>
 
 
-            <ul ng-show="marker.company.has_service" class="store-details" ng-click="openMarkerInfo(marker)">
+            <ul ng-show="marker.company.has_service || !can_filter_by_service" class="store-details" ng-click="openMarkerInfo(marker)">
               <li ng-bind-html="marker.company.address | address_multi_line"></li>
-              <li><strong>Phone:</strong> {{marker.company.address.phone | local_phone_number}}</li>
               <li>
-                <span class="distance">{{roundNumberUp(marker.distance,1) + distance_unit}}</span>
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                {{marker.company.address.phone | local_phone_number}}</li>
+              <li>
+                <i class="fa fa-location-arrow" aria-hidden="true"></i>
+                <span class="distance">{{roundNumberUp(marker.distance,1)}} {{distance_unit}}</span>
               </li>
             </ul>
 
-            <div ng-show="!marker.company.has_service">Sorry, but {{marker.company.service.name}} is not available at this location</div>
+            <div ng-show="!marker.company.has_service && can_filter_by_service">Sorry, but {{marker.company.service.name}} is not available at this location</div>
 
-            <button type="button" ng-show="marker.company.has_service" ng-click="selectItem(marker.company)" ng-show="currentMarker.company.has_service" class="btn btn-primary pull-right">Select</button>
+            <button type="button" ng-show="marker.company.has_service || !can_filter_by_service" ng-click="selectItem(marker.company)" ng-show="currentMarker.company.has_service" class="btn btn-primary pull-right">Select</button>
+
           </div>
         </div>
 
@@ -99,6 +109,6 @@
 
     </div>
   </div>
-  <div ng-show="loc"class="bb-step-navigation">
+  <div ng-show="loc" class="bb-step-navigation">
   </div>
 </div>
