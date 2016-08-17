@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.SlotModel", ($q, BBModel, BaseModel,
+angular.module('BB.Models').factory "AdminSlotModel", ($q, BBModel, BaseModel,
   TimeSlotModel) ->
 
   class Admin_Slot extends TimeSlotModel

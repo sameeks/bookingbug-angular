@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.EventGroupModel", ($q, BBModel,
+angular.module('BB.Models').factory "AdminEventGroupModel", ($q, BBModel,
   BaseModel, EventGroupService) ->
 
   class Admin_EventGroup extends BaseModel

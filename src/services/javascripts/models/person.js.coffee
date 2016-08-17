@@ -14,7 +14,7 @@
 * @property {integer} order The person order
 ####
 
-angular.module('BB.Models').factory "Admin.PersonModel", ($q,
+angular.module('BB.Models').factory "AdminPersonModel", ($q,
   AdminPersonService, BBModel, BaseModel, PersonModel) ->
 
   class Admin_Person extends PersonModel

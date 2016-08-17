@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel,
+angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
   BaseModel, BookingCollections, $window) ->
 
   class Admin_Booking extends BaseModel

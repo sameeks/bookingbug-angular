@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.UserModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "AdminUserModel", ($q, BBModel, BaseModel) ->
 
   class User extends BaseModel
 
