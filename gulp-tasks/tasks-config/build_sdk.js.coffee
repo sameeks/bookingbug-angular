@@ -6,7 +6,7 @@ module.exports = (gulp, plugins, path) ->
   destPath = path.join plugins.config.sdkRootPath, 'build'
 
   gulp.task 'build-sdk:admin:javascripts', () ->
-    bbGulp.javascripts('admin', srcPath, destPath)
+    bbGulp.javascripts('admin', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:admin:images', () ->
     bbGulp.images('admin', srcPath, destPath)
@@ -27,7 +27,7 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:admin-booking:javascripts', () ->
-    bbGulp.javascripts('admin-booking', srcPath, destPath)
+    bbGulp.javascripts('admin-booking', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:admin-booking:stylesheets', () ->
     bbGulp.stylesheets('admin-booking', srcPath, destPath)
@@ -48,10 +48,10 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:admin-dashboard:javascripts', () ->
-    bbGulp.coreJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard')
-    bbGulp.lazyJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard')
+    bbGulp.coreJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard', plugins.config.uglify)
+    bbGulp.lazyJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard', plugins.config.uglify)
     # bbutil.lazyJavascripts('admin-dashboard', 'BBAdminDashboard')
-    # bbGulp.javascripts('admin-dashboard', srcPath, destPath)
+    # bbGulp.javascripts('admin-dashboard', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:admin-dashboard:stylesheets', () ->
     bbGulp.stylesheets('admin-dashboard', srcPath, destPath)
@@ -77,7 +77,7 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:core:javascripts', () ->
-    bbGulp.javascripts('core', srcPath, destPath)
+    bbGulp.javascripts('core', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:core:stylesheets', () ->
     bbGulp.stylesheets('core', srcPath, destPath)
@@ -98,7 +98,7 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:events:javascripts', () ->
-    bbGulp.javascripts('events', srcPath, destPath)
+    bbGulp.javascripts('events', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:events:templates', () ->
     bbGulp.templates('events', srcPath, destPath)
@@ -115,7 +115,7 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:member:javascripts', () ->
-    bbGulp.javascripts('member', srcPath, destPath)
+    bbGulp.javascripts('member', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:member:stylesheets', () ->
     bbGulp.stylesheets('member', srcPath, destPath)
@@ -136,7 +136,7 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:public-booking:javascripts', () ->
-    bbGulp.javascripts('public-booking', srcPath, destPath)
+    bbGulp.javascripts('public-booking', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:public-booking:stylesheets', () ->
     bbGulp.stylesheets('public-booking', srcPath, destPath)
@@ -165,7 +165,7 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:queue:javascripts', () ->
-    bbGulp.javascripts('queue', srcPath, destPath)
+    bbGulp.javascripts('queue', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:queue:templates', () ->
     bbGulp.templates('queue', srcPath, destPath)
@@ -182,7 +182,7 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:services:javascripts', () ->
-    bbGulp.javascripts('services', srcPath, destPath)
+    bbGulp.javascripts('services', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:services:stylesheets', () ->
     bbGulp.stylesheets('services', srcPath, destPath)
@@ -203,7 +203,7 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:settings:javascripts', () ->
-    bbGulp.javascripts('settings', srcPath, destPath)
+    bbGulp.javascripts('settings', srcPath, destPath, plugins.config.uglify)
 
   gulp.task 'build-sdk:settings:templates', () ->
     bbGulp.templates('settings', srcPath, destPath)

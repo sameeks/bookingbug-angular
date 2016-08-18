@@ -1,10 +1,17 @@
 module.exports = (gulp, sdkRootPath, uglify) ->
+  args = require "./helpers/args.js.coffee"
   color = require "colors"
   gulpLoadPlugins = require("gulp-load-plugins")
   includeAll = require "include-all"
   path = require "path"
 
   plugins = null
+
+  ###
+  @returns {Boolean}
+  ###
+  shouldUglify = () ->
+    return (typeof uglify isnt "undefined" and uglify is true) or (["local", "dev"].indexOf(args.getEnvironment()) isnt -1)
 
   configuration =
     env: process.env.ENV_VARIABLE || "development"
@@ -18,9 +25,9 @@ module.exports = (gulp, sdkRootPath, uglify) ->
       services: 'src/services'
       settings: 'src/settings'
       testExamples: 'src/test-examples'
-      uglify: uglify
     }
     sdkRootPath: sdkRootPath
+    uglify: shouldUglify()
 
   init = () ->
     loadPlugins()
