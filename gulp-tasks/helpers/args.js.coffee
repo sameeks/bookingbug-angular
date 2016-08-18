@@ -10,7 +10,7 @@ customDestSubPath = './test/projects'
 ###
 getEnvironment = () ->
   environment = 'dev'
-  environmentOptions = ['dev', 'staging', 'prod']
+  environmentOptions = ['local', 'dev', 'staging', 'prod']
   if typeof argv.env isnt 'undefined'
     if environmentOptions.indexOf(argv.env) is -1
       console.log 'env can has one of following values: ' + environmentOptions
