@@ -48,7 +48,10 @@ module.exports = (gulp, plugins, path) ->
   # ***
 
   gulp.task 'build-sdk:admin-dashboard:javascripts', () ->
-    bbGulp.javascripts('admin-dashboard', srcPath, destPath)
+    bbGulp.coreJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard')
+    bbGulp.lazyJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard')
+    # bbutil.lazyJavascripts('admin-dashboard', 'BBAdminDashboard')
+    # bbGulp.javascripts('admin-dashboard', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-dashboard:stylesheets', () ->
     bbGulp.stylesheets('admin-dashboard', srcPath, destPath)
@@ -57,7 +60,8 @@ module.exports = (gulp, plugins, path) ->
     bbGulp.images('admin-dashboard', srcPath, destPath)
 
   gulp.task 'build-sdk:admin-dashboard:templates', () ->
-    bbGulp.templates('admin-dashboard', srcPath, destPath, false, false)
+    return;
+  #   bbGulp.templates('admin-dashboard', srcPath, destPath, false, false)
 
   gulp.task 'build-sdk:admin-dashboard:bower', () ->
     bbGulp.bower('admin-dashboard', srcPath, destPath)

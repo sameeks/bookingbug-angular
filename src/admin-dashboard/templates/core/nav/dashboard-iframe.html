@@ -1,0 +1,12 @@
+<ul class="sidebar-menu">
+	<li ng-class="{active: isState('dashboard')}">
+		<a ui-sref="dashboard"><i class="fa fa-calendar"></i> <span translate>SIDE_NAV.DASHBOARD_IFRAME_PAGE.DASHBOARD</span></a>
+		<ul class="treeview-menu">
+			<li ui-sref-active="active"><a ui-sref="dashboard.page({path: 'view/dashboard/index', fixed:true})"><i class="fa fa-calendar"></i> <span translate>SIDE_NAV.DASHBOARD_IFRAME_PAGE.DASHBOARD</span></a></li>
+	    <li ui-sref-active="active"><a ui-sref="dashboard.page({path: 'space/activity'})"><i class="fa fa-hand-o-right"></i> <span translate>SIDE_NAV.DASHBOARD_IFRAME_PAGE.UPCOMING_RECENT</span></a></li>
+	    <li ui-sref-active="active"><a ui-sref="dashboard.page({path: 'view/search'})"><i class="fa fa-search"></i> <span translate>SIDE_NAV.DASHBOARD_IFRAME_PAGE.SEARCH</span></a></li>
+	    <li ui-sref-active="active"><a ui-sref="dashboard.page({path: 'view/repeat_booking/all'})"><i class="fa fa-repeat"></i> <span translate>SIDE_NAV.DASHBOARD_IFRAME_PAGE.BULK_BOOKINGS</span></a></li>
+	    <li ui-sref-active="active"><a ui-sref="dashboard.page({path: 'view/reports'})"><i class="fa fa-line-chart"></i> <span translate>SIDE_NAV.DASHBOARD_IFRAME_PAGE.INSIGHTS</span></a></li>
+    </ul>
+	</li>
+</ul>

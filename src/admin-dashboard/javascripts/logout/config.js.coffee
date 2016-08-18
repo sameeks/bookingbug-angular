@@ -14,4 +14,13 @@ angular.module('BBAdminDashboard.logout', [
     .state 'logout',
       url: '/logout'
       controller: 'LogoutPageCtrl'
+      resolve: {
+        loadModule: ['$ocLazyLoad', '$rootScope', ($ocLazyLoad, $rootScope) ->
+          if $rootScope.minified == false
+            script = 'bookingbug-angular-admin-dashboard-logout.lazy.js'
+          else
+            script = 'bookingbug-angular-admin-dashboard-logout.lazy.min.js'
+          $ocLazyLoad.load(script);
+        ]
+      }
 ]

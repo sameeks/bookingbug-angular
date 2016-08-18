@@ -25,6 +25,7 @@ BBAdminDashboardDependencies = [
   'angular-loading-bar',
   'ngScrollable',
   'toastr',
+  'oc.lazyLoad',
 
   'BBAdminDashboard.check-in',
   'BBAdminDashboard.clients',
@@ -39,14 +40,15 @@ BBAdminDashboardDependencies = [
 ]
 
 adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencies)
-.run ['RuntimeStates', 'AdminCoreOptions', 'RuntimeRoutes','AdminLoginService', (RuntimeStates, AdminCoreOptions, RuntimeRoutes, AdminLoginService) ->
+.run ['RuntimeStates', 'AdminCoreOptions', 'RuntimeRoutes','AdminLoginService', '$templateCache', (RuntimeStates, AdminCoreOptions, RuntimeRoutes, AdminLoginService, $templateCache) ->
 
   RuntimeRoutes.otherwise('/')
 
   RuntimeStates
     .state 'root',
       url: '/'
-      templateUrl: "core/layout.html"
+      template: ()->
+        $templateCache.get("core/layout.html")
       resolve:
         user: ($q, BBModel, AdminSsoLogin) ->
           defer = $q.defer()

@@ -1,4 +1,4 @@
-module.exports = (gulp, sdkRootPath) ->
+module.exports = (gulp, sdkRootPath, uglify) ->
   color = require "colors"
   gulpLoadPlugins = require("gulp-load-plugins")
   includeAll = require "include-all"
@@ -18,6 +18,7 @@ module.exports = (gulp, sdkRootPath) ->
       services: 'src/services'
       settings: 'src/settings'
       testExamples: 'src/test-examples'
+      uglify: uglify
     }
     sdkRootPath: sdkRootPath
 

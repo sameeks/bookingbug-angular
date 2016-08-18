@@ -4,11 +4,13 @@ angular.module('BBAdminDashboard').directive 'bbAdminDashboard', (PageLayout) ->
     bb: '='
     companyId: '@'
     ssoToken: '@'
+    minified: '@'
   template: '<div ui-view></div>'
-  controller: ['$scope', '$rootScope', '$element', '$compile', '$localStorage', '$state', 'PageLayout', 'BBModel', 'AdminSsoLogin', 'AdminLoginOptions'
-    ($scope, $rootScope, $element, $compile, $localStorage, $state, PageLayout, BBModel, AdminSsoLogin, AdminLoginOptions)->
+  controller: ['$scope', '$rootScope', '$localStorage', '$state', 'PageLayout', 'AdminSsoLogin', 'AdminLoginOptions'
+    ($scope, $rootScope, $localStorage, $state, PageLayout, AdminSsoLogin, AdminLoginOptions)->
 
       $rootScope.bb = $scope.bb
+      $rootScope.minified = $scope.$eval($scope.minified)
 
       api_url = $localStorage.getItem("api_url")
       if !$scope.bb.api_url && api_url

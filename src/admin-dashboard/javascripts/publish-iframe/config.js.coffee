@@ -11,7 +11,7 @@ angular.module('BBAdminDashboard.publish-iframe', [
   'BBAdminDashboard.publish-iframe.directives',
   'BBAdminDashboard.publish-iframe.translations'
 ])
-.run ['RuntimeStates', 'AdminPublishIframeOptions', 'SideNavigationPartials', (RuntimeStates, AdminPublishIframeOptions, SideNavigationPartials) ->
+.run ['RuntimeStates', 'AdminPublishIframeOptions', 'SideNavigationPartials', '$templateCache', (RuntimeStates, AdminPublishIframeOptions, SideNavigationPartials, $templateCache) ->
   # Choose to opt out of the default routing
   if AdminPublishIframeOptions.use_default_states
 
@@ -19,8 +19,18 @@ angular.module('BBAdminDashboard.publish-iframe', [
       .state 'publish',
         parent: AdminPublishIframeOptions.parent_state
         url: 'publish'
-        templateUrl: 'publish-iframe/index.html'
+        template: ()->
+          $templateCache.get('publish-iframe/index.html')
         controller: 'PublishIframePageCtrl'
+        resolve: {
+          loadModule: ['$ocLazyLoad', '$rootScope', ($ocLazyLoad, $rootScope) ->
+            if $rootScope.minified == false
+              script = 'bookingbug-angular-admin-dashboard-publish-iframe.lazy.js'
+            else
+              script = 'bookingbug-angular-admin-dashboard-publish-iframe.lazy.min.js'
+            $ocLazyLoad.load(script);
+          ]
+        }
         deepStateRedirect: {
           default: {
             state:  'publish.page'
@@ -32,9 +42,10 @@ angular.module('BBAdminDashboard.publish-iframe', [
 
       .state 'publish.page',
         url: '/page/:path'
-        templateUrl: 'core/boxed-iframe-page.html'
+        template: ()->
+          $templateCache.get('core/boxed-iframe-page.html')
         controller: 'PublishSubIframePageCtrl'
 
   if AdminPublishIframeOptions.show_in_navigation
-    SideNavigationPartials.addPartialTemplate('publish-iframe', 'publish-iframe/nav.html')
+    SideNavigationPartials.addPartialTemplate('publish-iframe', 'core/nav/publish-iframe.html')
 ]

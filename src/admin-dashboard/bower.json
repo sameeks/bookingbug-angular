@@ -9,8 +9,26 @@
   ],
   "main": [
     "bookingbug-angular-admin-dashboard.js",
-    "bookingbug-angular-admin-dashboard-templates.js",
-    "bookingbug-angular-admin-dashboard.css"
+    "bookingbug-angular-admin-dashboard-calendar.lazy.js",
+    "bookingbug-angular-admin-dashboard-calendar.lazy.min.js",
+    "bookingbug-angular-admin-dashboard-check-in.lazy.js",
+    "bookingbug-angular-admin-dashboard-check-in.lazy.min.js",
+    "bookingbug-angular-admin-dashboard-clients.lazy.js",
+    "bookingbug-angular-admin-dashboard-clients.lazy.min.js",
+    "bookingbug-angular-admin-dashboard-config-iframe.lazy.js",
+    "bookingbug-angular-admin-dashboard-config-iframe.lazy.min.js",
+    "bookingbug-angular-admin-dashboard-dashboard-iframe.lazy.js",
+    "bookingbug-angular-admin-dashboard-dashboard-iframe.lazy.min.js",
+    "bookingbug-angular-admin-dashboard-login.lazy.js",
+    "bookingbug-angular-admin-dashboard-login.lazy.min.js",
+    "bookingbug-angular-admin-dashboard-logout.lazy.js",
+    "bookingbug-angular-admin-dashboard-logout.lazy.min.js",
+    "bookingbug-angular-admin-dashboard-members-iframe.lazy.js",
+    "bookingbug-angular-admin-dashboard-members-iframe.lazy.min.js",
+    "bookingbug-angular-admin-dashboard-publish-iframe.lazy.js",
+    "bookingbug-angular-admin-dashboard-publish-iframe.lazy.min.js",
+    "bookingbug-angular-admin-dashboard-settings-iframe.lazy.js",
+    "bookingbug-angular-admin-dashboard-settings-iframe.lazy.min.js"
   ],
   "license": "MIT",
   "ignore": [
@@ -38,6 +56,7 @@
     "ngScrollable": "ng-scrollable#^0.2.5",
     "angular-bootstrap-checkbox": "^0.4.0",
     "angular-toastr": "^1.7.0",
-    "angular-loading-bar": "^0.9.0"
+    "angular-loading-bar": "^0.9.0",
+    "oclazyload": "^1.0.9"
   }
 }
