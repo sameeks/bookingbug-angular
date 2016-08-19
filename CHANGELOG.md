@@ -1,5 +1,5 @@
 # Change Log
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file using [CHANGELOG](http://keepachangelog.com/en/0.3.0/) convention.
 
 <a name="2.0.0-alpha"></a>
 # 2.0.0-alpha (2015-11-21)
