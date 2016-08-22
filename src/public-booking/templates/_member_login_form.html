@@ -3,7 +3,7 @@
     <div class="form-group" ng-class="{'has-error': login_form.email.$invalid && (!login_form.email.$pristine || login_form.submitted)}">
       <label for="email" class="control-label col-sm-4">Email:</label>
       <div class="col-sm-5">
-        <input type="text" name="email" id="email" required ng-model="login.email" class="form-control" ng-pattern="validator.getEmailPattern()" />
+        <input type="text" name="email" id="email" required ng-model="login.email" class="form-control" ng-pattern="validator.getEmailPattern()" autocomplete="email"/>
       </div>
       <div class="col-sm-offset-4 messages">
         <div class="error-message" ng-show="login_form.email.$error.required && login_form.submitted">
