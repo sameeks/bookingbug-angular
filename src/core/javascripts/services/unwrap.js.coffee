@@ -1,238 +1,140 @@
+angular.module('BB.Services').factory "UnwrapService", ($q, BBModel) ->
 
-
-angular.module('BB.Services').factory "BB.Service.address", ($q, BBModel) ->
-  unwrap: (resource) ->
-    return new BBModel.Address(resource)
-
-
-angular.module('BB.Services').factory "BB.Service.person", ($q, BBModel) ->
-  unwrap: (resource) ->
-    return new BBModel.Person(resource)
-
-
-angular.module('BB.Services').factory "BB.Service.people", ($q, BBModel) ->
-  promise: true
-  unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('people').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.Person(i))
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
-
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.resource", ($q, BBModel) ->
-  unwrap: (resource) ->
-    return new BBModel.Resource(resource)
-
-
-angular.module('BB.Services').factory "BB.Service.resources", ($q, BBModel) ->
-  promise: true
-  unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('resources').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.Resource(i))
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
-
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.service", ($q, BBModel) ->
-  unwrap: (resource) ->
-    return new BBModel.Service(resource)
-
-
-angular.module('BB.Services').factory "BB.Service.services", ($q, BBModel) ->
-  promise: true
-  unwrap: (resource) ->
-
+  unwrapCollection: (model, key, resource) ->
     deferred = $q.defer()
 
      # if the resource is embedded, return the array of models
     if angular.isArray(resource)
 
-      models = (new BBModel.Service(service) for service in resource)
+      models = (new model(service) for service in resource)
       deferred.resolve(models)
 
-    else
-    
-      resource.$get('services').then (items) =>
+    else if resource.$has(key)
+      resource.$get(key).then (items) =>
         models = []
         for i in items
-          models.push(new BBModel.Service(i))
+          models.push(new model(i))
         deferred.resolve(models)
       , (err) =>
         deferred.reject(err)
-
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.package_item", ($q, BBModel) ->
-  unwrap: (resource) ->
-    return new BBModel.PackageItem(resource)
-
-
-angular.module('BB.Services').factory "BB.Service.package_items", ($q, BBModel) ->
-  promise: true
-  unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('package_items').then (package_items) =>
-      models = []
-      for i in package_items
-        models.push(new BBModel.PackageItem(i))
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
-
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.bulk_purchase", ($q, BBModel) ->
-  unwrap: (resource) ->
-    return new BBModel.BulkPurchase(resource)
-
-
-angular.module('BB.Services').factory "BB.Service.bulk_purchases", ($q, BBModel) ->
-  promise: true
-  unwrap: (resource) ->
-
-    deferred = $q.defer()
-
-    # if the resource is embedded, return the array of models
-    if angular.isArray(resource)
-
-      models = (new BBModel.BulkPurchase(bulk_purchase) for bulk_purchase in resource)
-      deferred.resolve(models)
-
     else
-    
-      resource.$get('bulk_purchases').then (bulk_purchases) =>
-        models = []
-        for i in bulk_purchases
-          models.push(new BBModel.BulkPurchase(i))
-        deferred.resolve(models)
-      , (err) =>
-        deferred.reject(err)
+      defer.reject()
 
     deferred.promise
 
+  unwrapResource: (model, resource) ->
+    return new model(resource)
 
-angular.module('BB.Services').factory "BB.Service.event_group", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.address", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.EventGroup(resource)
+    UnwrapService.unwrapResource(BBModel.Address, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.event_groups", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.person", ($q, BBModel, UnwrapService) ->
+  unwrap: (resource) ->
+    UnwrapService.unwrapResource(BBModel.Person, resource)
+
+
+angular.module('BB.Services').factory "BB.Service.people", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('event_groups').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.EventGroup(i))
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+    UnwrapService.unwrapCollection(BBModel.Person, 'people', resource)
 
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.event_chain", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.resource", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.EventChain(resource)
+    UnwrapService.unwrapResource(BBModel.Resource, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.event_chains", ($q, BBModel) ->
-  unwrap: (resource) ->
-    return new BBModel.EventChain(resource)
-
-
-angular.module('BB.Services').factory "BB.Service.category", ($q, BBModel) ->
-  unwrap: (resource) ->
-    return new BBModel.Category(resource)
-
-
-angular.module('BB.Services').factory "BB.Service.categories", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.resources", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('categories').then (items) =>
-      models = []
-      for i in items
-        cat = new BBModel.Category(i)
-        cat.order ||= _i
-        models.push(cat)
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+    UnwrapService.unwrapCollection(BBModel.Resource, 'resources', resource)
 
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.client", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.service", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.Client(resource)
+    UnwrapService.unwrapResource(BBModel.Service, resource)
 
-
-angular.module('BB.Services').factory "BB.Service.child_clients", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.services", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('clients').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.Client(i))
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+    UnwrapService.unwrapCollection(BBModel.Service, 'services', resource)
 
-    deferred.promise
+angular.module('BB.Services').factory "BB.Service.package_item", ($q, BBModel, UnwrapService) ->
+  unwrap: (resource) ->
+    UnwrapService.unwrapResource(BBModel.PackageItem, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.clients", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.package_items", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('clients').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.Client(i))
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+    UnwrapService.unwrapCollection(BBModel.PackageItem, 'package_items', resource)
 
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.questions", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.bulk_purchase", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    if resource.questions
-      (new BBModel.Question(i) for i in resource.questions)
-    else if resource.$has('questions')
-      defer = $q.defer()
-      resource.$get('questions').then (items) ->
-        defer.resolve((new BBModel.Question(i) for i in items))
-      , (err) ->
-        defer.reject(err)
-      defer.promise
-    else
-      (new BBModel.Question(i) for i in resource)
+    UnwrapService.unwrapResource(BBModel.BulkPurchase, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.question", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.bulk_purchases", ($q, BBModel, UnwrapService) ->
+  promise: true
   unwrap: (resource) ->
-    return new BBModel.Question(resource)
+    UnwrapService.unwrapCollection(BBModel.BulkPurchase, 'bulk_purchases', resource)
+
+angular.module('BB.Services').factory "BB.Service.event_group", ($q, BBModel, UnwrapService) ->
+  unwrap: (resource) ->
+    UnwrapService.unwrapResource(BBModel.EventGroup, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.answers", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.event_groups", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.EventGroup, 'event_groups', resource)
+
+
+angular.module('BB.Services').factory "BB.Service.event_chain", ($q, BBModel, UnwrapService) ->
+  unwrap: (resource) ->
+    UnwrapService.unwrapResource(BBModel.EventChain, resource)
+
+
+angular.module('BB.Services').factory "BB.Service.event_chains", ($q, BBModel, UnwrapService) ->
+  unwrap: (resource) ->
+    UnwrapService.unwrapResource(BBModel.EventChain, resource)
+
+
+angular.module('BB.Services').factory "BB.Service.category", ($q, BBModel, UnwrapService) ->
+  unwrap: (resource) ->
+    UnwrapService.unwrapResource(BBModel.Category, resource)
+
+
+angular.module('BB.Services').factory "BB.Service.categories", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.Category, 'categories', resource)
+
+angular.module('BB.Services').factory "BB.Service.client", ($q, BBModel, UnwrapService) ->
+  unwrap: (resource) ->
+    UnwrapService.unwrapResource(BBModel.Client, resource)
+
+
+angular.module('BB.Services').factory "BB.Service.child_clients", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.Client, 'clients', resource)
+
+angular.module('BB.Services').factory "BB.Service.clients", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.Client, 'clients', resource)
+
+angular.module('BB.Services').factory "BB.Service.questions", ($q, BBModel, UnwrapService) ->
+  unwrap: (resource) ->
+    unwrapCollection(BBModel.Question, 'questions', resource)
+
+angular.module('BB.Services').factory "BB.Service.question", ($q, BBModel, UnwrapService) ->
+  unwrap: (resource) ->
+    UnwrapService.unwrapResource(BBModel.Question, resource)
+
+
+angular.module('BB.Services').factory "BB.Service.answers", ($q, BBModel, UnwrapService) ->
   promise: false
   unwrap: (items) ->
     models = []
@@ -248,82 +150,52 @@ angular.module('BB.Services').factory "BB.Service.answers", ($q, BBModel) ->
     return answers
 
 
-angular.module('BB.Services').factory "BB.Service.administrators", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.administrators", ($q, BBModel, UnwrapService) ->
   unwrap: (items) ->
     new BBModel.Admin.User(i) for i in items
 
 
-angular.module('BB.Services').factory "BB.Service.company", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.company", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.Company(resource)
+    UnwrapService.unwrapResource(BBModel.Company, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.parent", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.parent", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.Company(resource)
-    
-    
-angular.module('BB.Services').factory "BB.Service.company_questions", ($q, BBModel) ->
+    UnwrapService.unwrapResource(BBModel.Company, resource)
+
+
+angular.module('BB.Services').factory "BB.Service.company_questions", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('company_questions').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.BusinessQuestion(i))
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+    UnwrapService.unwrapCollection(BBModel.BusinessQuestion, 'company_questions', resource)
 
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.company_question", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.company_question", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.BusinessQuestion(resource)
+    UnwrapService.unwrapResource(BBModel.BusinessQuestion, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.images", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.images", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('images').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.Image(i))
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+    UnwrapService.unwrapCollection(BBModel.Image, 'images', resource)
 
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.bookings", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.bookings", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
-    deferred = $q.defer()
-    resource.$get('bookings').then (items) =>
-      models = []
-      for i in items
-        models.push(new BBModel.Member.Booking(i))
-      deferred.resolve(models)
-    , (err) =>
-      deferred.reject(err)
+    UnwrapService.unwrapCollection(BBModel.Member.Booking, 'bookings', resource)
 
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.wallet", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.wallet", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.Member.Wallet(resource)
+    UnwrapService.unwrapResource(BBModel.Member.Wallet, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.product", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.product", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.Product(resource)
+    UnwrapService.unwrapResource(BBModel.Product, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.products", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.products", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
     deferred = $q.defer()
@@ -340,117 +212,47 @@ angular.module('BB.Services').factory "BB.Service.products", ($q, BBModel) ->
     deferred.promise
 
 
-angular.module('BB.Services').factory "BB.Service.pre_paid_booking", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.pre_paid_booking", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.PrePaidBooking(resource)
+    UnwrapService.unwrapResource(BBModel.PrePaidBooking, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.pre_paid_bookings", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.pre_paid_bookings", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.PrePaidBooking, 'pre_paid_bookings', resource)
 
-    deferred = $q.defer()
-
-    if angular.isArray(resource)
-
-      models = (new BBModel.PrePaidBooking(pre_paid_booking) for pre_paid_booking in resource)
-      deferred.resolve(models)
-
-    else
-    
-      resource.$get('pre_paid_bookings').then (items) =>
-        models = []
-        for i in items
-          models.push(new BBModel.PrePaidBooking(i))
-        deferred.resolve(models)
-      , (err) =>
-        deferred.reject(err)
-
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.external_purchase", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.external_purchase", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.ExternalPurchase(resource)
+    UnwrapService.unwrapResource(BBModel.ExternalPurchase, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.external_purchases", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.external_purchases", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.ExternalPurchase, 'external_purchases', resource)
 
-    deferred = $q.defer()
-
-    # if the resource is embedded, return the array of models
-    if angular.isArray(resource)
-
-      models = (new BBModel.ExternalPurchase(external_purchase) for external_purchase in resource)
-      deferred.resolve(models)
-
-    else
-    
-      resource.$get('external_purchases').then (items) =>
-        models = []
-        for i in items
-          models.push(new BBModel.ExternalPurchase(i))
-        deferred.resolve(models)
-      , (err) =>
-        deferred.reject(err)
-
-    deferred.promise
-
-
-angular.module('BB.Services').factory "BB.Service.purchase_item", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.purchase_item", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
-    return new BBModel.PurchaseItem(resource)
+    UnwrapService.unwrapResource(BBModel.PurchaseItem, resource)
 
 
-angular.module('BB.Services').factory "BB.Service.purchase_items", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.purchase_items", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
+    unwrapCollection(BBModel.PurchaseItem, 'purchase_items', resource)
 
-    deferred = $q.defer()
-
-     # if the resource is embedded, return the array of models
-    if angular.isArray(resource)
-
-      models = (new BBModel.PurchaseItem(purchase_item) for purchase_item in resource)
-      deferred.resolve(models)
-
-    else
-    
-      resource.$get('purchase_items').then (items) =>
-        models = []
-        for i in items
-          models.push(new BBModel.PurchaseItem(i))
-        deferred.resolve(models)
-      , (err) =>
-        deferred.reject(err)
-
-    deferred.promise
-
-
-
-angular.module('BB.Services').factory "BB.Service.events", ($q, BBModel) ->
+angular.module('BB.Services').factory "BB.Service.events", ($q, BBModel, UnwrapService) ->
   promise: true
   unwrap: (resource) ->
+    unwrapCollection(BModel.Event, 'events', resource)
 
-    deferred = $q.defer()
+angular.module('BB.Services').factory "BB.Service.all_children", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.Service, 'services', resource)
 
-     # if the resource is embedded, return the array of models
-    if angular.isArray(resource)
-
-      models = (new BBModel.Event(event) for event in resource)
-      deferred.resolve(models)
-
-    else
-    
-      resource.$get('events').then (items) =>
-        models = []
-        for i in items
-          models.push(new BBModel.Event(i))
-        deferred.resolve(models)
-      , (err) =>
-        deferred.reject(err)
-
-    deferred.promise
-
+angular.module('BB.Services').factory "BB.Service.child_services", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.Service, 'child_services', resource)
