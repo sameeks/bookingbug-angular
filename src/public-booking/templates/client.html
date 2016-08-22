@@ -19,7 +19,7 @@
     <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && (!client_form.first_name.$pristine || client_form.submitted)}">
       <label bb-question-label="question" for="first_name" class="control-label col-sm-4">First Name*:</label>
       <div class="col-sm-5">
-        <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" autofocus bb-resettable ng-pattern="validator.alpha" />
+        <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" autofocus bb-resettable ng-pattern="validator.alpha" autocomplete="given-name"/>
       </div>
       <div class="col-sm-offset-4 messages">
         <div class="error-message" ng-show="client_form.first_name.$invalid && client_form.submitted">
@@ -30,7 +30,7 @@
     <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (!client_form.last_name.$pristine || client_form.submitted)}">
       <label bb-question-label="question" class="control-label col-sm-4" for="last_name">Last Name*:</label>
       <div class="bb-field col-sm-5">
-        <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" bb-resettable ng-pattern="validator.alpha" />
+        <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" bb-resettable ng-pattern="validator.alpha" autocomplete="family-name"/>
       </div>
       <div class="col-sm-offset-4 messages">
         <div class="error-message" ng-show="client_form.last_name.$invalid && client_form.submitted">
@@ -41,7 +41,7 @@
     <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && (!client_form.email.$pristine || client_form.submitted)}">
       <label bb-question-label="question" class="control-label col-sm-4" for="email">Email*:</label>
       <div class="bb-field col-sm-5">
-        <input type="email" name="email" id="email" required ng-model="client.email" class="form-control" bb-resettable  ng-pattern="validator.getEmailPattern()" />
+        <input type="email" name="email" id="email" required ng-model="client.email" class="form-control" bb-resettable  ng-pattern="validator.getEmailPattern()" autocomplete="email"/>
       </div>
       <div class="col-sm-offset-4 messages">
         <div class="error-message" ng-show="client_form.email.$invalid && client_form.submitted">
@@ -52,7 +52,7 @@
     <div class="form-group" ng-class="{'has-error': (client_form.mobile.$invalid && (!client_form.mobile.$pristine || client_form.submitted)) && (!client_form.mobile.$focused || client_form.mobile.$error.required)}">
       <label bb-question-label="question" class="control-label col-sm-4" for="mobile">Mobile:</label>
       <div class="bb-field col-sm-5">
-        <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" bb-resettable ng-pattern="validator.getMobilePattern()" />
+        <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" bb-resettable ng-pattern="validator.getMobilePattern()" autocomplete="tel"/>
       </div>
     </div>
     <div ng-show="client_details.hasQuestions" ng-form name="client_questions_form" class="bb-form" role="form" nonvalidate>
