@@ -1,8 +1,10 @@
-module.exports = (gulp, plugins, path) ->
+module.exports = (gulp, configuration) ->
+
+  runSequence = require('run-sequence')
 
   gulp.task 'build-widget', (cb) ->
 
-    plugins.sequence(
+    runSequence(
       'build-sdk'
       'build-widget:bower-install'
       'build-widget:script'

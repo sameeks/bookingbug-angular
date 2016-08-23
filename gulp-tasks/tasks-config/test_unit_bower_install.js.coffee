@@ -1,4 +1,4 @@
-module.exports = (gulp, plugins, path)->
+module.exports = (gulp, configuration)->
   fs = require('fs')
   gulpBower = require('gulp-bower')
   mkdirp = require('mkdirp')

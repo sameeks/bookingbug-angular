@@ -1,4 +1,4 @@
-module.exports = (gulp, plugins, path)->
+module.exports = (gulp, configuration)->
   del = require('del')
   gulpCoffee = require('gulp-coffee')
   gulpConnect = require('gulp-connect')

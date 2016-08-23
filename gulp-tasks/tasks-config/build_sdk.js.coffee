@@ -1,9 +1,9 @@
-module.exports = (gulp, plugins, path) ->
+module.exports = (gulp, configuration) ->
   bbGulp = require('../helpers/bb-gulp.js')
   path = require('path')
 
-  srcPath = path.join plugins.config.sdkRootPath, 'src'
-  destPath = path.join plugins.config.sdkRootPath, 'build'
+  srcPath = path.join configuration.rootPath, 'src'
+  destPath = path.join configuration.rootPath, 'build'
 
   gulp.task 'build-sdk:admin:javascripts', () ->
     bbGulp.javascripts('admin', srcPath, destPath)

@@ -1,4 +1,4 @@
-module.exports = (gulp, plugins, path) ->
+module.exports = (gulp, configuration) ->
   gulp.task 'build-sdk', [
     'build-sdk:core'
     'build-sdk:public-booking'

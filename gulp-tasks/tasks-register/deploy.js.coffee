@@ -1,8 +1,10 @@
-module.exports = (gulp, plugins, path) ->
+module.exports = (gulp, configuration) ->
+
+  runSequence = require('run-sequence')
 
   gulp.task 'deploy', (cb) ->
 
-    plugins.sequence(
+    runSequence(
      'build-widget'
      'deploy-aws'
      cb

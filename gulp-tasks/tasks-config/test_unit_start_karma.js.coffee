@@ -1,5 +1,7 @@
-module.exports = (gulp, plugins, path)->
+module.exports = (gulp, configuration)->
   fs = require('fs')
+  karma = require('karma')
+  path = require('path')
 
   prepareKarmaFiles = () ->
     bowerFiles = require('main-bower-files')(
@@ -44,9 +46,9 @@ module.exports = (gulp, plugins, path)->
     return serverSettings
 
   gulp.task 'test-unit-start-karma:watch', (cb)->
-    return new plugins.karma.Server(getKarmaServerSettings(true), cb).start()
+    return new karma.Server(getKarmaServerSettings(true), cb).start()
 
   gulp.task 'test-unit-start-karma', (cb)->
-    return new plugins.karma.Server(getKarmaServerSettings(false), cb).start()
+    return new karma.Server(getKarmaServerSettings(false), cb).start()
 
   return

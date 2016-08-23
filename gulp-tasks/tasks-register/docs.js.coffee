@@ -1,6 +1,9 @@
-module.exports = (gulp, plugins, path)->
+module.exports = (gulp, configuration)->
+
+  runSequence = require('run-sequence')
+
   gulp.task 'docs', (cb) ->
-    plugins.sequence(
+    runSequence(
       'docs:clean'
       'docs:sdk-generate'
       cb
@@ -8,7 +11,7 @@ module.exports = (gulp, plugins, path)->
     return
 
   gulp.task 'docs:watch', (cb) ->
-    plugins.sequence(
+    runSequence(
       'docs:clean'
       'docs:sdk-generate'
       'docs:sdk-watch'

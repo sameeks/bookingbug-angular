@@ -1,7 +1,10 @@
-module.exports = (gulp, plugins, path)->
+module.exports = (gulp, configuration)->
+
+  runSequence = require('run-sequence')
+
   gulp.task 'test-e2e', (cb)->
-    plugins.sequence(
-      'run-project'
+    runSequence(
+      'sdk:run-for-e2e'
       'test-e2e:prepare'
       'test-e2e:run'
       cb

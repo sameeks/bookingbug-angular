@@ -1,5 +1,6 @@
-module.exports = (gulp, plugins, path)->
+module.exports = (gulp, configuration)->
   args = require '../helpers/args.js'
+  path = require 'path'
   protractor = require 'gulp-protractor'
   sauceConnectLauncher = require 'sauce-connect-launcher'
 

@@ -1,6 +1,9 @@
-module.exports = (gulp, plugins, path)->
+module.exports = (gulp, configuration)->
+
+  runSequence = require('run-sequence')
+
   gulp.task 'test-unit', (cb) ->
-    plugins.sequence(
+    runSequence(
       'test-unit-bower-prepare'
       'test-unit-bower-install'
       'test-unit-start-karma'
@@ -9,7 +12,7 @@ module.exports = (gulp, plugins, path)->
     return
 
   gulp.task 'test-unit:watch', (cb) ->
-    plugins.sequence(
+    runSequence(
       'test-unit-bower-prepare'
       'test-unit-bower-install'
       'test-unit-start-karma:watch'

@@ -1,7 +1,8 @@
-module.exports = (gulp, plugins, path)->
+module.exports = (gulp, configuration)->
   fs = require('fs')
   jsonFile = require('jsonfile')
   mkDirP = require('mkdirp')
+  path = require('path')
 
   ###
   * @param {String} dependencyName
@@ -38,7 +39,7 @@ module.exports = (gulp, plugins, path)->
     testBowerJson.dependencies = nonBBDependencies
 
     mkDirP.sync 'test/unit'
-    jsonFile.writeFile 'test/unit/bower.json', testBowerJson, (err) ->
+    jsonFile.writeFile 'test/unit/bower.json', testBowerJson, spaces: 2,  (err) ->
       console.log err if err isnt null
 
     cb()
