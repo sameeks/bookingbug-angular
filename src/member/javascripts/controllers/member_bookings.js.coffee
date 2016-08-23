@@ -178,3 +178,8 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
     loader.setLoaded()
 
+
+
+  pay: (booking) ->
+    PurchaseService.query({url_root: $scope.$root.bb.api_url, purchase_id: booking.purchase_ref}).then (total) ->
+      openPaymentModal(booking, total)
