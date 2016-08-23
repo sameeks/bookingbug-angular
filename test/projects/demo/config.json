@@ -1,7 +1,7 @@
 {
   "app_name": "demo",
-  "api_url": "https://uk.bookingbug.com",
-  "company_id": "41284",
+  "api_url": "https://qauk-staging.bookingbug.com",
+  "company_id": "36990",
   "default_html": "/new_booking.html",
   "googlemaps_api_key": "",
   "server_port": 8000
