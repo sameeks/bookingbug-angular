@@ -27,11 +27,5 @@ _**--env**_
 ### SDK - unit tests
 `gulp test-unit:watch`
 `gulp test-unit` (one time run, used by CI)
-
-
-### DEPLOY SDK & BOOKING-WIDGET BUILD  
-`gulp deploy --env=prod`
-
-Don't forget *--env=prod* otherwise build will not contain uglified/minified script files
    
 
