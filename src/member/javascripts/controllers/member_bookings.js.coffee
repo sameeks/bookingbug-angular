@@ -35,7 +35,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
         .filter((b) -> b.datetime.isBefore(moment()))
         .sortBy((b) -> -b.datetime.unix())
         .value()
-      console.log "past", $scope.past_bookings
 
       defer.resolve(past_bookings)
     , (err) ->

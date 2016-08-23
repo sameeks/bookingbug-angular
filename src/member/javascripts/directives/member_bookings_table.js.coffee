@@ -58,7 +58,6 @@ angular.module('BBMember').directive 'memberBookingsTable', ($uibModal, $log, Mo
         date_order: moment(booking.datetime).format('x')
         datetime: moment(booking.datetime)
         details: booking.full_describe
-      console.log "set row!", $scope.bookings
 
     getBookings = ($scope, member) ->
       params =
@@ -68,7 +67,6 @@ angular.module('BBMember').directive 'memberBookingsTable', ($uibModal, $log, Mo
         end_date   : $scope.endDate.format('YYYY-MM-DD') if $scope.endDate
         end_time   : $scope.endTime.format('HH:mm') if $scope.endTime
       BBModel.Admin.Booking.$query(params).then (bookings) ->
-        console.log bookings
         $scope.booking_models = bookings.items
         $scope.setRows()
         $scope.loading = false
