@@ -41,7 +41,7 @@
                 .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
                 .pipe(concat('bookingbug-angular-' + module + '.js'));
 
-            if (args.getEnvironment() !== 'dev') {
+            if (args.getEnvironment() !== 'local' && args.getEnvironment() !== 'dev') {
                 var cloneSink = clone.sink();
                 stream.pipe(cloneSink)
                     .pipe(uglify({mangle: false})).on('error', gutil.log)
