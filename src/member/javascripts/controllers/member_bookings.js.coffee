@@ -35,6 +35,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
         .filter((b) -> b.datetime.isBefore(moment()))
         .sortBy((b) -> -b.datetime.unix())
         .value()
+      console.log "past", $scope.past_bookings
 
       defer.resolve(past_bookings)
     , (err) ->
@@ -53,9 +54,10 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
   getBookings = (params) ->
     loader.notLoaded()
     defer = $q.defer()
-    $scope.member.$getBookings(params).then (bookings) ->
+    params.src = $scope.member
+    BBModel.Admin.Booking.$query(params).then (bookings) ->
       loader.setLoaded()
-      defer.resolve(bookings)
+      defer.resolve(bookings.items)
     , (err) ->
       $log.error err.data
       loader.setLoaded()

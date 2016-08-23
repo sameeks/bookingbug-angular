@@ -15,7 +15,8 @@ angular.module('BBAdminDashboard.calendar.controllers')
     $scope.$broadcast 'refetchBookings' , data
   , 1000, {leading: false}
 
-  pusher_channel.bind 'create', refetch
-  pusher_channel.bind 'update', refetch
-  pusher_channel.bind 'destroy', refetch
+  if pusher_channel
+    pusher_channel.bind 'create', refetch
+    pusher_channel.bind 'update', refetch
+    pusher_channel.bind 'destroy', refetch
 ]

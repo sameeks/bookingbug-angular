@@ -17,7 +17,8 @@ config = ($translateProvider) ->
     'GREETING': 'Hi',
     'LOGOUT': 'Logout'
     'VERSION': 'Version',
-    'COPYRIGHT': 'Copyright'
+    'COPYRIGHT': 'Copyright',
+    'SWITCH_TO_CLASSIC' : 'Switch to Classic'
   }
 
   $translateProvider.translations('en', enTranslations)

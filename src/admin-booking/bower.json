@@ -9,7 +9,8 @@
   "main": [
     "bookingbug-angular-admin-booking.js",
     "bookingbug-angular-admin-booking-templates.js",
-    "bookingbug-angular-admin-booking.css"
+    "bookingbug-angular-admin-booking.css",
+    "src/stylesheets/*"
   ],
   "license": "MIT",
   "ignore": [

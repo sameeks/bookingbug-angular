@@ -36,6 +36,6 @@ angular.module('BBAdmin.Services').run ($q, $injector, BBModel) ->
 
   afuncs = {}
   for model in models
-    afuncs[model] = $injector.get("Admin." + model + "Model")
+    afuncs[model] = $injector.get("Admin" + model + "Model")
   BBModel['Admin'] = afuncs
 
