@@ -44,7 +44,7 @@
                     configuration.testProjectRootPath + '/bower_components/bookingbug-angular-*/*.js',
                     '!' + configuration.testProjectRootPath + '/bower_components/bookingbug-angular-*/*-templates.js'
                 ],
-                ['sdk:scripts:client']
+                ['sdk-test-project:scripts:client']
             );
         }
 
@@ -58,7 +58,7 @@
 
             gulp.watch(
                 [configuration.testProjectRootPath + '/bower_components/bookingbug-angular-*/**/*.scss'],
-                ['sdk:stylesheets:client']
+                ['sdk-test-project:stylesheets:client']
             );
         }
 
@@ -76,7 +76,7 @@
 
             gulp.watch(
                 [configuration.testProjectRootPath + '/bower_components/bookingbug-angular-*/*templates.js'],
-                ['sdk:scripts:client']
+                ['sdk-test-project:scripts:client']
             );
         }
     };

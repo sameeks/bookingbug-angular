@@ -21,17 +21,17 @@
         }
 
         function www() {
-            gulp.watch(configuration.testProjectRootPath + '/src/www/*.html', ['sdk:www']);
+            gulp.watch(configuration.testProjectRootPath + '/src/www/*.html', ['sdk-test-project:www']);
         }
 
         function templates() {
 
-            gulp.watch(configuration.testProjectRootPath + '/src/templates/*.html', ['sdk:templates']);
+            gulp.watch(configuration.testProjectRootPath + '/src/templates/*.html', ['sdk-test-project:templates']);
         }
 
         function stylesheets() {
 
-            gulp.watch(path.join(configuration.testProjectRootPath, '/src/stylesheets/main.scss'), ['sdk:stylesheets:client']);
+            gulp.watch(path.join(configuration.testProjectRootPath, '/src/stylesheets/main.scss'), ['sdk-test-project:stylesheets:client']);
 
             gulp
                 .watch(path.join(configuration.testProjectReleasePath, 'booking-widget.css'))
@@ -50,17 +50,17 @@
                 '!**/*.js.map'
             ];
 
-            gulp.watch(projectFiles, ['sdk:scripts:client']);
+            gulp.watch(projectFiles, ['sdk-test-project:scripts:client']);
         }
 
         function images() {
 
-            gulp.watch(configuration.testProjectRootPath + '/src/images/*.*', ['sdk:images']);
+            gulp.watch(configuration.testProjectRootPath + '/src/images/*.*', ['sdk-test-project:images']);
         }
 
         function fonts() {
 
-            gulp.watch(configuration.testProjectRootPath + '/src/fonts/*.*', ['sdk:fonts']);
+            gulp.watch(configuration.testProjectRootPath + '/src/fonts/*.*', ['sdk-test-project:fonts']);
         }
     };
 
