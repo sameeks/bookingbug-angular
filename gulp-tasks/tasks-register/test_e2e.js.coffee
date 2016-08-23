@@ -4,7 +4,7 @@ module.exports = (gulp, configuration)->
 
   gulp.task 'test-e2e', (cb)->
     runSequence(
-      'sdk:run-for-e2e'
+      'sdk-test-project:run-for-e2e'
       'test-e2e:prepare'
       'test-e2e:run'
       cb

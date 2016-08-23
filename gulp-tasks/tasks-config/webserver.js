@@ -6,8 +6,8 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:webserver', webServerTask);
-        gulp.task('sdk:webserver:open-browser', openBrowserTask);
+        gulp.task('sdk-test-project:webserver', webServerTask);
+        gulp.task('sdk-test-project:webserver:open-browser', openBrowserTask);
 
         function webServerTask() {
             return gulpConnect.server({

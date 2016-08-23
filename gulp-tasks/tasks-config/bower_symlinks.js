@@ -9,7 +9,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:bower-symlinks', bowerSymlinksTask);
+        gulp.task('sdk-test-project:bower-symlinks', bowerSymlinksTask);
 
         function bowerSymlinksTask(cb) {
 

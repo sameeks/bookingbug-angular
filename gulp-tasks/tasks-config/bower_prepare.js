@@ -7,7 +7,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:bower-prepare', bowerPrepareTask);
+        gulp.task('sdk-test-project:bower-prepare', bowerPrepareTask);
 
         function bowerPrepareTask(cb) {
 

@@ -7,7 +7,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:images', imagesTask);
+        gulp.task('sdk-test-project:images', imagesTask);
 
         function imagesTask() {
 

@@ -7,7 +7,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:clean', cleanTask);
+        gulp.task('sdk-test-project:clean', cleanTask);
 
         function cleanTask(cb) {
 

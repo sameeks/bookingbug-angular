@@ -5,7 +5,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:watch-sdk', watchSdkTask);
+        gulp.task('sdk-test-project:watch-sdk', watchSdkTask);
 
         function watchSdkTask() {
             fonts();

@@ -9,7 +9,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:templates', templatesTask);
+        gulp.task('sdk-test-project:templates', templatesTask);
 
         function templatesTask() {
 

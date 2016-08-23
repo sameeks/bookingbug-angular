@@ -5,23 +5,23 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:run', runTask);
-        gulp.task('sdk:run:watch', runWatchTask);
-        gulp.task('sdk:run-for-e2e', runForE2ETask);
+        gulp.task('sdk-test-project:run', runTask);
+        gulp.task('sdk-test-project:run:watch', runWatchTask);
+        gulp.task('sdk-test-project:run-for-e2e', runForE2ETask);
 
         function runTask(cb) {
 
-            runSequence('sdk:release', 'sdk:webserver', 'sdk:webserver:open-browser', cb);
+            runSequence('sdk-test-project:release', 'sdk-test-project:webserver', 'sdk-test-project:webserver:open-browser', cb);
         }
 
         function runForE2ETask(cb) {
 
-            runSequence('sdk:release', 'sdk:webserver', cb);
+            runSequence('sdk-test-project:release', 'sdk-test-project:webserver', cb);
         }
 
         function runWatchTask(cb) {
 
-            runSequence('sdk:release:watch', 'sdk:webserver', 'sdk:webserver:open-browser', cb);
+            runSequence('sdk-test-project:release:watch', 'sdk-test-project:webserver', 'sdk-test-project:webserver:open-browser', cb);
         }
 
     };

@@ -8,7 +8,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:fonts', fontsTask);
+        gulp.task('sdk-test-project:fonts', fontsTask);
 
         function fontsTask() {
 

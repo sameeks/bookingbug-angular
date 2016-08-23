@@ -6,7 +6,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:watch', watchTask);
+        gulp.task('sdk-test-project:watch', watchTask);
 
         function watchTask() {
 

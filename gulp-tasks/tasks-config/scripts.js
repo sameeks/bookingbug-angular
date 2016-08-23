@@ -12,8 +12,8 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:scripts:vendors', scriptsVendorsTask);
-        gulp.task('sdk:scripts:client', scriptsClient);
+        gulp.task('sdk-test-project:scripts:vendors', scriptsVendorsTask);
+        gulp.task('sdk-test-project:scripts:client', scriptsClient);
 
 
         function scriptsVendorsTask() {

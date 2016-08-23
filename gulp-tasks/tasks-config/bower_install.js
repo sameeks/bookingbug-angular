@@ -5,7 +5,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:bower-install', bowerInstallTask);
+        gulp.task('sdk-test-project:bower-install', bowerInstallTask);
 
         function bowerInstallTask() {
 

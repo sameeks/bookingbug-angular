@@ -5,25 +5,25 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:release', releaseTask);
-        gulp.task('sdk:release:watch', releaseWatchTask);
+        gulp.task('sdk-test-project:release', releaseTask);
+        gulp.task('sdk-test-project:release:watch', releaseWatchTask);
 
         function releaseTask(cb) {
 
             var tasks = [
                 'build-sdk',
-                'sdk:clean',
-                'sdk:bower-prepare',
-                'sdk:bower-symlinks',
-                'sdk:bower-install',
-                'sdk:scripts:vendors',
-                'sdk:scripts:client',
-                'sdk:templates',
-                'sdk:stylesheets:vendors',
-                'sdk:stylesheets:client',
-                'sdk:fonts',
-                'sdk:images',
-                'sdk:www',
+                'sdk-test-project:clean',
+                'sdk-test-project:bower-prepare',
+                'sdk-test-project:bower-symlinks',
+                'sdk-test-project:bower-install',
+                'sdk-test-project:scripts:vendors',
+                'sdk-test-project:scripts:client',
+                'sdk-test-project:templates',
+                'sdk-test-project:stylesheets:vendors',
+                'sdk-test-project:stylesheets:client',
+                'sdk-test-project:fonts',
+                'sdk-test-project:images',
+                'sdk-test-project:www',
                 cb
             ];
 
@@ -33,9 +33,9 @@
         function releaseWatchTask(cb) {
 
             runSequence(
-                'sdk:release',
-                'sdk:watch',
-                'sdk:watch-sdk',
+                'sdk-test-project:release',
+                'sdk-test-project:watch',
+                'sdk-test-project:watch-sdk',
                 cb
             );
         }

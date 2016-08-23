@@ -12,8 +12,8 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:stylesheets:vendors', stylesheetsVendorsTask);
-        gulp.task('sdk:stylesheets:client', stylesheetsClientTask);
+        gulp.task('sdk-test-project:stylesheets:vendors', stylesheetsVendorsTask);
+        gulp.task('sdk-test-project:stylesheets:client', stylesheetsClientTask);
 
         function filterStylesheets(path) {
             return (

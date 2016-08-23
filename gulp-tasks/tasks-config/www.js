@@ -7,7 +7,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        gulp.task('sdk:www', wwwTask);
+        gulp.task('sdk-test-project:www', wwwTask);
 
         function wwwTask() {
 
