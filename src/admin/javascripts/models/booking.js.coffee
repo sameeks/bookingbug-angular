@@ -124,9 +124,11 @@ angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
       else
         src = company
         src ||= params.src
+        delete params.src if params.src
         if params.skip_cache
           BookingCollections.delete(existing) if existing
           src.$flush('bookings', params)
+
         src.$get('bookings', params).then (collection) ->
           collection.$get('bookings').then (bookings) ->
             models = (new BBModel.Admin.Booking(b) for b in bookings)
