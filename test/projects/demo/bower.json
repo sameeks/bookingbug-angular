@@ -1,0 +1,74 @@
+{
+  "name": "demo-widget",
+  "version": "0.0.0",
+  "authors": [
+    "BookingBug <dev@bookingbug.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bookingbug-angular-core": "../../../build/core/",
+    "bookingbug-angular-public-booking": "../../../build/public-booking/",
+    "angular": "1.5.8",
+    "angular-animate": "1.5.8",
+    "moment-timezone": "~0.5.4",
+    "moment": "~2.14.0",
+    "font-awesome": "~4.6.3",
+    "ng-file-upload": "~12.0.4"
+  },
+  "overrides": {
+    "lodash": {
+      "ignore": true
+    },
+    "bootstrap-sass-official": {
+      "ignore": true
+    },
+    "bootstrap-sass": {
+      "main": [
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.eot",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.svg",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.ttf",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.woff",
+        "assets/fonts/bootstrap/glyphicons-halflings-regular.woff2"
+      ]
+    },
+    "bootstrap": {
+      "ignore": true
+    },
+    "moment": {
+      "main": [
+        "moment.js",
+        "locale/en-gb.js"
+      ]
+    }
+  },
+  "resolutions": {
+    "bookingbug-angular-admin": "*",
+    "bookingbug-angular-admin-booking": "*",
+    "bookingbug-angular-admin-dashboard": "*",
+    "bookingbug-angular-core": "*",
+    "bookingbug-angular-events": "*",
+    "bookingbug-angular-member": "*",
+    "bookingbug-angular-public-booking": "*",
+    "bookingbug-angular-services": "*",
+    "bookingbug-angular-settings": "*",
+    "jquery": ">=1.6",
+    "angular": "~1.5.8",
+    "fullcalendar": "~2.9.1",
+    "moment": "~2.14.0",
+    "angular-animate": "~1.5.8",
+    "angular-bootstrap": "~2.0.0",
+    "angular-cookies": "~1.5.8",
+    "angular-google-maps": "2.3.2",
+    "angular-mocks": "~1.5.8",
+    "angular-resource": "~1.5.8",
+    "angular-sanitize": "~1.5.8",
+    "fontawesome": "~4.6.3"
+  }
+}
