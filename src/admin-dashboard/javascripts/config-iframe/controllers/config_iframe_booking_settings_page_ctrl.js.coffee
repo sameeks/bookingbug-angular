@@ -18,6 +18,11 @@ angular.module('BBAdminDashboard.config-iframe.controllers')
       path: 'config.booking-settings.page({path: "detail_type"})'
     },
     {
+       name: 'CONFIG_IFRAME_PAGE.BOOKING_SETTINGS.TAB_QUESTION_GROUPS',
+       icon: 'fa fa-question-circle',
+       path: 'config.booking-settings.page({path: "detail_group"})'
+    },
+    {
       name: 'CONFIG_IFRAME_PAGE.BOOKING_SETTINGS.TAB_BOOKING_TEXT',
       icon: 'fa fa-file-text',
       path: 'config.booking-settings.page({path: "conf/text/text_edit"})'

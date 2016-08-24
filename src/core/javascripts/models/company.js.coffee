@@ -128,6 +128,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel,
     ###
     pusherSubscribe: (callback, options = {}) =>
       if Pusher? && !@pusher?
+        return if !@$has('pusher')
         @pusher = new Pusher 'c8d8cea659cc46060608',
           encrypted: if options.hasOwnProperty('encrypted') then options.encrypted else true
           authEndpoint: @$link('pusher').href
@@ -159,6 +160,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel,
     ###
     getPusherChannel: (model, options = {}) =>
       unless @pusher
+        return if !@$has('pusher')
         @pusher = new Pusher 'c8d8cea659cc46060608',
           encrypted: if options.hasOwnProperty('encrypted') then options.encrypted else true
           authEndpoint: @$link('pusher').href

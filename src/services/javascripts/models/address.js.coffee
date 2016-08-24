@@ -16,7 +16,7 @@
 * @property {string} country The country
 ####
 
-angular.module('BB.Models').factory "Admin.AddressModel", ($q, BBModel, BaseModel, AddressModel) ->
+angular.module('BB.Models').factory "AdminAddressModel", ($q, BBModel, BaseModel, AddressModel) ->
 
   ###**
   * @ngdoc method

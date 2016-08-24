@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel,
+angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
   BaseModel, BookingCollections, $window) ->
 
   class Admin_Booking extends BaseModel
@@ -121,11 +121,13 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel,
       existing = BookingCollections.find(params)
       if existing  && !params.skip_cache
         defer.resolve(existing)
-      else if company
+      else
+        src = company
+        src ||= params.src
         if params.skip_cache
           BookingCollections.delete(existing) if existing
-          company.$flush('bookings', params)
-        company.$get('bookings', params).then (collection) ->
+          src.$flush('bookings', params)
+        src.$get('bookings', params).then (collection) ->
           collection.$get('bookings').then (bookings) ->
             models = (new BBModel.Admin.Booking(b) for b in bookings)
             spaces = new $window.Collection.Booking(collection, models, params)

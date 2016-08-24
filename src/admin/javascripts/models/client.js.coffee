@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.ClientModel", (ClientModel, $q, BBModel, $log,$window,ClientCollections) ->
+angular.module('BB.Models').factory "AdminClientModel", (ClientModel, $q, BBModel, $log,$window,ClientCollections) ->
 
   class Admin_Client extends ClientModel
 

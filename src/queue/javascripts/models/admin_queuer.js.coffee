@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.QueuerModel", ($q, BaseModel, AdminQueuerService) ->
+angular.module('BB.Models').factory "AdminQueuerModel", ($q, BaseModel, AdminQueuerService) ->
 
   class Admin_Queuer extends BaseModel
 

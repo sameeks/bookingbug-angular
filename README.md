@@ -10,3 +10,4 @@ to start a new project that uses the BookingBug modules.
 1. [Usage Guide](http://docs.bookingbug.com/docs/javascript-sdk)
 2. [Reference](http://platform.bookingbug.com/sdkdocs)
 3. [Wiki](https://github.com/BookingBug/bookingbug-angular/wiki)
+

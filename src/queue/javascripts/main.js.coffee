@@ -28,6 +28,6 @@ angular.module('BBQueueMockE2E', ['BBQueue', 'BBAdminMockE2E'])
 angular.module('BBQueue.Services').run () ->
   models = ['Queuer', 'ClientQueue']
   for model in models
-    BBModel['Admin'][model] = $injector.get("Admin.#{model}Model")
-  BBModel['Admin']['Person'] = $injector.get("Admin.QueuerPersonModel")
+    BBModel['Admin'][model] = $injector.get("Admin#{model}Model")
+  BBModel['Admin']['Person'] = $injector.get("AdminQueuerPersonModel")
 

@@ -53,9 +53,10 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
   getBookings = (params) ->
     loader.notLoaded()
     defer = $q.defer()
-    $scope.member.$getBookings(params).then (bookings) ->
+    params.src = $scope.member
+    BBModel.Admin.Booking.$query(params).then (bookings) ->
       loader.setLoaded()
-      defer.resolve(bookings)
+      defer.resolve(bookings.items)
     , (err) ->
       $log.error err.data
       loader.setLoaded()
@@ -178,3 +179,8 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
     loader.setLoaded()
 
+
+
+  pay: (booking) ->
+    PurchaseService.query({url_root: $scope.$root.bb.api_url, purchase_id: booking.purchase_ref}).then (total) ->
+      openPaymentModal(booking, total)

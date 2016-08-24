@@ -380,9 +380,10 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.pusherSubscribe = () =>
       if $scope.company
         pusher_channel = $scope.company.getPusherChannel('bookings')
-        pusher_channel.bind 'create', pusherBooking
-        pusher_channel.bind 'update', pusherBooking
-        pusher_channel.bind 'destroy', pusherBooking
+        if pusher_channel
+          pusher_channel.bind 'create', pusherBooking
+          pusher_channel.bind 'update', pusherBooking
+          pusher_channel.bind 'destroy', pusherBooking
 
     $scope.openDatePicker = ($event) ->
         $event.preventDefault()

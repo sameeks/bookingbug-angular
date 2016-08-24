@@ -1,4 +1,4 @@
-angular.module('BB.Models').factory "Admin.QueuerPersonModel", ($q,
+angular.module('BB.Models').factory "AdminQueuerPersonModel", ($q,
   AdminPersonService, BBModel, BaseModel, PersonModel) ->
 
   class Admin_Person extends PersonModel

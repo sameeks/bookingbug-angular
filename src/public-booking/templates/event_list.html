@@ -12,14 +12,16 @@
 
   <div class="events" bb-scroll-to="page:changed" bb-always-scroll>
 
-  <div class="bb-filters" ng-show="items">
+    <div class="bb-filters" ng-show="items">
 
-    <div uib-accordion>
-      <div uib-accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" class="store-body">
-        <div uib-accordion-heading class="filter-header">
-          <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
-          <span>Filter</span>
-        </div>
+      <div uib-accordion>
+
+        <div uib-accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" class="store-body">
+          
+          <div uib-accordion-heading class="filter-header">
+            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+            <span>Filter</span>
+          </div>
 
           <form class="form-inline">
 
@@ -30,44 +32,43 @@
               </select>
             </div>
 
-          <div class="form-group" ng-repeat="check_filter in dynamic_filters.check">
-            <label class="sr-only" for="event_group">{{select_filter.name}}</label>
-            <select class="form-control" name="check_filter" id="check_filter" ng-model="dynamic_filters.values[check_filter.name]" ng-options="answer.name for answer in check_filter.question_items | orderBy: 'name'" ng-change="filterChanged()">
-              <option value="">&mdash; Any {{check_filter.name}} &mdash;</option>
-            </select>
-          </div>
-
-          <div class="form-group" ng-repeat="select_filter in dynamic_filters.select" ng-show="has_company_questions">
-            <label class="sr-only" for="event_group">{{select_filter.name}}</label>
-            <select class="form-control" name="select_filter" id="select_filter" ng-model="dynamic_filters.values[select_filter.name]" ng-options="answer.name for answer in select_filter.question_items" ng-change="filterChanged()">
-              <option value="">&mdash; Any {{select_filter.name}} &mdash;</option>
-            </select>
-          </div>
-
-
-          <div class="form-group calendar">
-            <label class="sr-only" for="date">Date</label>
-            <div class="input-group date-picker">
-              <!-- date format: http://docfiddich.angularjs.org/api/ng.filter:date" -->
-              <input type="text" ng-model="selected_date" class="form-control"
-                bb-datepicker-popup="DD/MM/YYYY"
-                uib-datepicker-popup="dd/MM/yyyy"
-                is-open="opened"
-                ng-focus="opened=true"
-                on-date-change="selectedDateChanged()"
-                datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
-                show-button-bar="false"
-                ng-readonly="true"
-                name="date"
-                id="date"
-                placeholder="&mdash; Any Date &mdash;"/>
-              <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
-                <button class="btn btn-default" type="submit" title="Pick date">
-                  <span class="fa fa-calendar-o"></span>
-                </button>
-              </span>
+            <div class="form-group" ng-repeat="check_filter in dynamic_filters.check">
+              <label class="sr-only" for="event_group">{{select_filter.name}}</label>
+              <select class="form-control" name="check_filter" id="check_filter" ng-model="dynamic_filters.values[check_filter.name]" ng-options="answer.name for answer in check_filter.question_items | orderBy: 'name'" ng-change="filterChanged()">
+                <option value="">&mdash; Any {{check_filter.name}} &mdash;</option>
+              </select>
             </div>
-          </div>
+
+            <div class="form-group" ng-repeat="select_filter in dynamic_filters.select" ng-show="has_company_questions">
+              <label class="sr-only" for="event_group">{{select_filter.name}}</label>
+              <select class="form-control" name="select_filter" id="select_filter" ng-model="dynamic_filters.values[select_filter.name]" ng-options="answer.name for answer in select_filter.question_items" ng-change="filterChanged()">
+                <option value="">&mdash; Any {{select_filter.name}} &mdash;</option>
+              </select>
+            </div>
+
+            <div class="form-group calendar">
+              <label class="sr-only" for="date">Date</label>
+              <div class="input-group date-picker">
+                <!-- date format: http://docfiddich.angularjs.org/api/ng.filter:date" -->
+                <input type="text" ng-model="selected_date" class="form-control"
+                  bb-datepicker-popup="DD/MM/YYYY"
+                  uib-datepicker-popup="dd/MM/yyyy"
+                  is-open="opened"
+                  ng-focus="opened=true"
+                  on-date-change="selectedDateChanged()"
+                  datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
+                  show-button-bar="false"
+                  ng-readonly="true"
+                  name="date"
+                  id="date"
+                  placeholder="&mdash; Any Date &mdash;"/>
+                <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
+                  <button class="btn btn-default" type="submit" title="Pick date">
+                    <span class="fa fa-calendar-o"></span>
+                  </button>
+                </span>
+              </div>
+            </div>
 
             <div class="form-group">
               <label class="sr-only" for="price">Price</label>
@@ -75,7 +76,6 @@
                 <option value="">Any Price</option>
               </select>
             </div>
-
 
             <div class="form-group">
               <button type="button" class="btn btn-link" ng-click="filters.hide_sold_out_events =! filters.hide_sold_out_events; filterChanged()">
@@ -130,15 +130,10 @@
       </div>
     </div>
 
-   <!--  Gift Cert Button (Needs Styling) -->
-   <!-- <div ng-if="bb.company_settings.has_vouchers">
-      <button type="button" ng-click="showPage('deal_list')" class="btn btn-primary btn-block">
-        <span>Buy Gift Certificates </span>
-      </button>
-    </div> -->
-
     <div class="bb-events-list row">
+
       <div ng-repeat="item in filtered_items | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" ng-init="spaces_left = item.getSpacesLeft()" ng-show="pagination.num_items > 0">
+      
         <div class="panel panel-default bb-event-card" ng-class="{'col-sm-6 col-md-4 col-lg-3':$root.tiles}">
           <div class="panel-body" style="padding: 20px;">
             <div class="row">
