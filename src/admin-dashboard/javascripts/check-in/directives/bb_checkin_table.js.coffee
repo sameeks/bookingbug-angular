@@ -16,6 +16,7 @@ angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsContr
   $scope.$on 'refetchCheckin', (event, res) ->
     $scope.getAppointments(null, null, null, null, null  ,true)
 
+
   $scope.getAppointments = (currentPage, filterBy, filterByFields, orderBy, orderByReverse, skipCache = false) ->
     if filterByFields && filterByFields.name?
       filterByFields.name = filterByFields.name.replace(/\s/g, '')
@@ -64,7 +65,7 @@ angular.module('BBAdminDashboard.check-in.directives').controller 'CheckinsContr
       AlertService.danger({msg: 'Something went wrong'})
 
   $scope.edit = (booking) ->
-    booking.getAnswersPromise().then (answers) ->
+    booking.$getAnswers().then (answers) ->
       for answer in answers.answers
         booking["question#{answer.question_id}"] = answer.value
       ModalForm.edit

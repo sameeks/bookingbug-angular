@@ -17,6 +17,7 @@ angular.module('BBAdminDashboard.check-in.translations')
     }
     'CHECK_IN_PAGE': {
       'CHECK_IN'              : 'Check in',
+      'WALK_IN'               : 'Walk in',
       'CUSTOMER'              : 'Customer',
       'STAFF_MEMBER'          : 'Staff Member',
       'DUE'                   : 'Due',
