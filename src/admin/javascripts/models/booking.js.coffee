@@ -9,14 +9,26 @@ angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
       super
       @datetime = moment(@datetime)
       @start = @datetime
-      @end = @datetime.clone().add(@duration, 'minutes')
+      @end = @end_datetime
+      @end ||= @datetime.clone().add(@duration, 'minutes')
       @title = @full_describe
       @time = @start.hour()* 60 + @start.minute()
+      @startEditable  = false
+      @durationEditable  = false
+      # set to all day if it's a 24 hours span
       @allDay = false
+      @allDay = true if (@duration_span && @duration_span == 86400)
       if @status == 3
+        @startEditable  = true
+        @durationEditable  = true
         @className = "status_blocked"
       else if @status == 4
         @className = "status_booked"
+      else if @status == 0
+        @className = "status_available"
+      if @multi_status
+        for k,v of @multi_status
+          @className += " status_" + k
 
 
     useFullTime: () ->

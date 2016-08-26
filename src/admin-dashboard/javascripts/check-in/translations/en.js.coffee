@@ -17,6 +17,7 @@ angular.module('BBAdminDashboard.check-in.translations')
     }
     'CHECK_IN_PAGE': {
       'CHECK_IN'              : 'Check in',
+      'NO_SHOW'               : 'No Show',
       'WALK_IN'               : 'Walk in',
       'CUSTOMER'              : 'Customer',
       'STAFF_MEMBER'          : 'Staff Member',
@@ -24,6 +25,7 @@ angular.module('BBAdminDashboard.check-in.translations')
       'ARRIVED'               : 'Arrived',
       'BEEING_SEEN'           : 'Being Seen',
       'COMPLETED'             : 'Completed',
+      'NO_SHOW_BUTTON'        : 'Mark No Show',
       'CHECK_IN_BUTTON'       : 'Check in',
       'CHECK_IN_PAGE.WAS_DUE' : 'Was due at',
       'SERVE'                 : 'Serve',
