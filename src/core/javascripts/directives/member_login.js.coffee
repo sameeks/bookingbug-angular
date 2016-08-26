@@ -35,6 +35,7 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
         root.$get("new_login").then (new_login) ->
           $scope.form = new_login.form
           $scope.schema = new_login.schema
+          loader.setLoaded()
         , (err) ->
           console.log 'err ', err
       , (err) ->
