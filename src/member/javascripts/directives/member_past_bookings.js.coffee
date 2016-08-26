@@ -12,7 +12,8 @@ angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, Pagina
 
     getBookings = () ->
       scope.getPastBookings().then (past_bookings) ->
-        PaginationService.update(scope.pagination, past_bookings.length)
+        if past_bookings
+          PaginationService.update(scope.pagination, past_bookings.length)
 
 
     scope.$watch 'member', () ->
