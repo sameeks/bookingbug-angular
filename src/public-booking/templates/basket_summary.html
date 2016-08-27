@@ -11,7 +11,7 @@
 			<uib-accordion close-others="oneAtATime">
 		    <div uib-accordion-group class="panel-default" ng-repeat="item in basket_items" is-open="$first">
 		    	<uib-accordion-heading>
-		    		{{item.getName()}} <small>({{item.time.time_moment | datetime: 'llll'}})</small>
+		    		{{item.getName()}} <small>({{item.startDatetime() | datetime: 'llll'}})</small>
 		    	</uib-accordion-heading>
 
 

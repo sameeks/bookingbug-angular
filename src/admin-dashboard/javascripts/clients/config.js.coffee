@@ -43,7 +43,7 @@ angular.module('BBAdminDashboard.clients', [
         resolve:
           client: (company, $stateParams, BBModel) ->
             params =
-              company_id: company.id
+              company: company
               id: $stateParams.id
             BBModel.Admin.Client.$query(params)
         controller: 'ClientsEditPageCtrl'

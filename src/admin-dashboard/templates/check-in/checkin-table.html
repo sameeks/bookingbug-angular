@@ -9,13 +9,14 @@
           <th field-name="person_name" display-name="{{'CHECK_IN_PAGE.STAFF_MEMBER' | translate}}" enable-sorting="true"></th>
           <th field-name="datetime" display-name="{{'CHECK_IN_PAGE.DUE' | translate}}" enable-sorting="true"></th>
 
+          <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.NO_SHOW' | translate}}</div></th>
           <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.ARRIVED' | translate}}</div></th>
           <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.BEEING_SEEN' | translate}}</div></th>
           <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.COMPLETED' | translate}}</div></th>
         </tr>
       </thead>
       <tbody>
-        <tr role="row">
+        <tr role="row" class="{{bmap[gridItem].className}}" >
           <td field-name="icon" display-align="center">
             <div class="text-center"><a ng-click="edit(bmap[gridItem])"><i class="fa fa-calendar"></i></a></div>
           </td>
@@ -27,6 +28,17 @@
           </td>
           <td field-name="datetime">
             <span>{{bmap[gridItem].datetime.format("HH:mm")}}</span>
+          </td>
+          <td>
+            <span ng-if="bmap[gridItem].hasStatus('no_show')">
+              {{bmap[gridItem].statusTime("no_show").format("HH:mm")}}
+            </span>
+            <span ng-if="!bmap[gridItem].hasStatus('no_show') && !bmap[gridItem].hasStatus('checked_in')">
+              <button ng-click="setStatus(bmap[gridItem], 'no_show')" class="btn btn-default btn-xs btn-block">
+                <i class="fa fa-check-square-o"></i>
+                <span translate>CHECK_IN_PAGE.NO_SHOW_BUTTON</span>
+              </button>
+            </span>
           </td>
           <td>
             <span ng-if="bmap[gridItem].hasStatus('checked_in')">

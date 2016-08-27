@@ -18,3 +18,6 @@ build/booking-widget/*
 !build/booking-widget/bower.json
 !build/booking-widget/config.json
 !build/booking-widget/src
+/gulp-tasks-old/
+
+/test/projects/*/release/

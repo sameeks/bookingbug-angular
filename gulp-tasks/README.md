@@ -1,19 +1,19 @@
 #### OPTIONS 
-_**--project**_ 
 
- + default value is './build/booking-widget' and it's being used to build booking-widget 
- + can be used to run web server or e2e tests for sample project, value should be sample project directory name within '.test/projects/' directory
- 
 _**--env**_
 
  + default value is 'dev'
- + available options ['dev', 'staging', 'prod'] 
-  
+ + available options ['local', 'dev', 'staging', 'prod'] 
+
+_**--project**_ 
+
+ + default value is 'demo' 
+ + can be used to run web server or e2e tests for sample project, value should be sample project directory name within '.test/projects/' directory
+ 
  
 ### SAMPLE PROJECT - run web server
-`gulp run-project:watch --project=demo`
-`gulp --project=demo` (default task, runs "run-project:watch")
-`gulp run-project --project=demo` (one time run, used by CI)
+`gulp sdk-test-project:watch --project=demo`
+`gulp` (default task, runs "run-project:watch --project=demo")
 
 --project option is required
 
@@ -27,11 +27,5 @@ _**--env**_
 ### SDK - unit tests
 `gulp test-unit:watch`
 `gulp test-unit` (one time run, used by CI)
-
-
-### DEPLOY SDK & BOOKING-WIDGET BUILD  
-`gulp deploy --env=prod`
-
-Don't forget *--env=prod* otherwise build will not contain uglified/minified script files
    
 

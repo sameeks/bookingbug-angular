@@ -22,7 +22,7 @@
 * @property {string} end_time The clinic end time
 ####
 
-angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel, ClinicModel) ->
+angular.module('BB.Models').factory "AdminClinicModel", ($q, BBModel, BaseModel, ClinicModel) ->
 
   class Admin_Clinic extends ClinicModel
 

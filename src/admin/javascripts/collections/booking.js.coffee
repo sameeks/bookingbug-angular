@@ -6,10 +6,10 @@ class window.Collection.Booking extends window.Collection.Base
     super
 
   matchesParams: (item) ->
-    if @params.start_date?
+    if @params.start_date? && item.start
       @start_date ?= moment(@params.start_date)
       return false if @start_date.isAfter(item.start)
-    if @params.end_date?
+    if @params.end_date? && item.start
       @end_date ?= moment(@params.end_date)
       return false if @end_date.isBefore(item.start.clone().startOf('day'))
     return false if !@params.include_cancelled && item.is_cancelled

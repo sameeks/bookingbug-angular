@@ -18,12 +18,12 @@
             <div class="col-sm-offset-4 col-sm-5">
                <p class="form-control-static">*Required fields</p>
             </div>
-          </div>
+          </div> 
 
           <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && (client_form.first_name.$dirty || booking_form.submitted)}">
             <label for="first_name" class="control-label col-sm-4">First Name*:</label>
             <div class="col-sm-5">
-              <input type="text" name="first_name" id"first_name" required ng-model="client.first_name" class="form-control"/>
+              <input type="text" name="first_name" id"first_name" required ng-model="client.first_name" class="form-control" autocomplete="given-name"/>
             </div>
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted">
@@ -35,7 +35,7 @@
           <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (client_form.last_name.$dirty|| booking_form.submitted)}">
             <label for="last_name" class="control-label col-sm-4">Last Name*:</label>
             <div class="col-sm-5">
-              <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
+              <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" autocomplete="family-name"/>
             </div>
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="client_form.last_name.$invalid && booking_form.submitted">
@@ -47,7 +47,7 @@
           <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && (client_form.email.$dirty|| booking_form.submitted)}">
             <label for="email" class="control-label col-sm-4">E-mail*:</label>
             <div class="col-sm-5">
-              <input type="email" name="email" id="email" required ng-model="client.email" class="form-control"/>
+              <input type="email" name="email" id="email" required ng-model="client.email" class="form-control" autocomplete="email"/>
             </div>
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="client_form.email.$invalid && booking_form.submitted">
@@ -59,7 +59,7 @@
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && ((client_form.mobile.$dirty && !client_form.mobile.$focused) || booking_form.submitted)}">
             <label for="mobile" class="control-label col-sm-4">Mobile:</label>
             <div class="col-sm-5">
-              <input type="text" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern(true)" ng-model="client.mobile" class="form-control" bb-focus/>
+              <input type="text" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern(true)" ng-model="client.mobile" class="form-control" bb-focus autocomplete="tel"/>
             </div>
           </div>
 

@@ -144,7 +144,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
               revertFunc()
         eventClick: (event, jsEvent, view) ->
           if event.$has('edit')
-            $scope.editBooking(event)
+            $scope.editBooking(new BBModel.Admin.Booking(event))
         eventRender: (event, element) ->
           service = _.findWhere($scope.services, {id: event.service_id})
           if service
@@ -188,11 +188,16 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
                 company_id: company.id
         viewRender: (view, element) ->
           date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
-          date.set('hour', 0);
-          date.set('minute', 0);
-          date.set('second', 0);
-
-          $scope.currentDate = date.toDate()
+          newDate = moment().tz(moment.tz.guess())
+          newDate.set({
+            'year'   : parseInt(date.get('year'))
+            'month'  : parseInt(date.get('month'))
+            'date'   : parseInt(date.get('date'))
+            'hour' : 0
+            'minute' : 0
+            'second' : 0
+          })
+          $scope.currentDate = newDate.toDate()
         eventResize: (event, delta, revertFunc, jsEvent, ui, view) ->
           event.duration = event.end.diff(event.start, 'minutes')
           $scope.updateBooking(event)
@@ -375,9 +380,10 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.pusherSubscribe = () =>
       if $scope.company
         pusher_channel = $scope.company.getPusherChannel('bookings')
-        pusher_channel.bind 'create', pusherBooking
-        pusher_channel.bind 'update', pusherBooking
-        pusher_channel.bind 'destroy', pusherBooking
+        if pusher_channel
+          pusher_channel.bind 'create', pusherBooking
+          pusher_channel.bind 'update', pusherBooking
+          pusher_channel.bind 'destroy', pusherBooking
 
     $scope.openDatePicker = ($event) ->
         $event.preventDefault()
@@ -386,7 +392,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
 
     $scope.updateDate = (date) ->
       if uiCalendarConfig.calendars.resourceCalendar
-        assembledDate = moment()
+        assembledDate = moment.utc()
         assembledDate.set({
           'year': parseInt(date.getFullYear())
           'month': parseInt(date.getMonth())

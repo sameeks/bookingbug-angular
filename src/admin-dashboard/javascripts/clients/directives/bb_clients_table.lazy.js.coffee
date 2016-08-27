@@ -37,7 +37,6 @@ angular.module('BBAdminDashboard.clients.directives').controller 'TabletClients'
       order_by: orderBy
       order_by_reverse: orderByReverse
     BBModel.Admin.Client.$query(params).then (clients) =>
-      console.log clients
       $scope.clients = clients.items
       $scope.total_entries = clients.total_entries
       clientDef.resolve(clients.items)

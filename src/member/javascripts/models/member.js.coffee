@@ -14,3 +14,7 @@ angular.module('BB.Models').factory "Member.MemberModel", ($q, MemberService,
 
     @$sendWelcomeEmail: (member, params) ->
       MemberService.sendWelcomeEmail(member, params)
+
+    getBookings: (params) ->
+      BBModel.Member.Booking.$query(@, params)
+

@@ -9,7 +9,8 @@
   "main": [
     "bookingbug-angular-core.js",
     "bookingbug-angular-core-templates.js",
-    "bookingbug-angular-core.css"
+    "bookingbug-angular-core.css",
+    "src/stylesheets/*"
   ],
   "license": "MIT",
   "ignore": [
@@ -51,7 +52,7 @@
     "angular-translate-storage-cookie": "^2.11.0",
     "angular-translate-storage-local": "^2.11.0",
     "angular-translate-loader-partial": "^2.11.0",
-    "angular-schema-form": "~0.7.6",
+    "angular-schema-form": "~0.8.13",
     "angular-cache": "~3.2.5",
     "angular-spectrum-colorpicker": "~1.4.2",
     "bootstrap-sass": "~3.3.6",

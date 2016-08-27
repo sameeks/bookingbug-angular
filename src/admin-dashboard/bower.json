@@ -28,7 +28,8 @@
     "bookingbug-angular-admin-dashboard-publish-iframe.lazy.js",
     "bookingbug-angular-admin-dashboard-publish-iframe.lazy.min.js",
     "bookingbug-angular-admin-dashboard-settings-iframe.lazy.js",
-    "bookingbug-angular-admin-dashboard-settings-iframe.lazy.min.js"
+    "bookingbug-angular-admin-dashboard-settings-iframe.lazy.min.js",
+    "src/stylesheets/*"
   ],
   "license": "MIT",
   "ignore": [
@@ -46,7 +47,7 @@
     "bookingbug-angular-services": "master",
     "bookingbug-angular-events": "master",
     "AdminLTE-angular-sass": "~0.0.1",
-    "fullcalendar-scheduler": "~1.3.1",
+    "fullcalendar-scheduler": "~1.3.3",
     "jqueryui-touch-punch": "*",
     "pusher": "~2.2.4",
     "angular-ui-calendar": "~1.0.1",

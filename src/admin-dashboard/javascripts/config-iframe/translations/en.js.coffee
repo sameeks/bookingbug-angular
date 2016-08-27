@@ -25,7 +25,8 @@ angular.module('BBAdminDashboard.config-iframe.translations')
         'TAB_STAFF'          : 'Staff',
         'TAB_RESOURCES'      : 'Resource',
         'TAB_SERVICES'       : 'Services',
-        'TAB_WHO_WHAT_WHERE' : 'Who / What / Where'
+        'TAB_WHO_WHAT_WHERE' : 'Who / What / Where',
+        'TAB_QUEUES'         : 'Queues'
       },
       'EVENT_SETTINGS': {
         'TITLE'              : 'Event settings',
@@ -45,6 +46,7 @@ angular.module('BBAdminDashboard.config-iframe.translations')
       'BOOKING_SETTINGS': {
         'TITLE'            : 'Booking settings',
         'TAB_QUESTIONS'    : 'Questions',
+        'TAB_QUESTION_GROUPS': 'Question Groups',
         'TAB_BOOKING_TEXT' : 'Booking text',
         'TAB_ADDRESSES'    : 'Addresses',
         'TAB_IMAGES'       : 'Images'

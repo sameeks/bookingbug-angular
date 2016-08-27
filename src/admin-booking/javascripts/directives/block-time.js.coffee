@@ -28,6 +28,8 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
     if $scope.bb.max_date && !moment.isMoment($scope.bb.max_date)
       $scope.bb.max_date = moment($scope.bb.max_date)
 
+    $scope.all_day = false
+
     $scope.hideBlockAllDay = Math.abs($scope.bb.from_datetime.diff($scope.bb.to_datetime, 'days')) > 0
 
     # If in "Day" view a person or resource will have been passed in
@@ -65,6 +67,7 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
         start_time: $scope.bb.from_datetime
         end_time: $scope.bb.to_datetime
         booking: true
+        allday: $scope.all_day
 
       if $scope.block_questions
         params.questions = $scope.block_questions.getPostData()
@@ -94,7 +97,8 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       $scope.cancel()
 
     $scope.changeBlockDay = (blockDay)->
-      if blockDay
-        $scope.bb.from_datetime = $scope.bb.min_date.format()
-        $scope.bb.to_datetime = $scope.bb.max_date.format()
+      $scope.all_day = blockDay
+   #   if blockDay
+   #     $scope.bb.from_datetime = $scope.bb.min_date.format()
+   #     $scope.bb.to_datetime = $scope.bb.max_date.format()
 

@@ -22,6 +22,8 @@
 			</ui-select>
 		</div>
 		<div class="form-group" ng-show="loading || calendarLoading"><i class="fa fa-refresh fa-spin"></i></div>
+	  <button bb-new-booking type="button" class="btn btn-primary pull-right"
+      ng-click="newBooking()" bb-debounce="" translate>CALENDAR_PAGE.ADD_BOOKING</button>
 	</div>
 
 	<div id="uicalendar" ui-calendar="uiCalOptions.calendar" ng-model="eventSources"

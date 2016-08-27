@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel,
+angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
   BaseModel, BookingCollections, $window) ->
 
   class Admin_Booking extends BaseModel
@@ -9,14 +9,26 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel,
       super
       @datetime = moment(@datetime)
       @start = @datetime
-      @end = @datetime.clone().add(@duration, 'minutes')
+      @end = @end_datetime
+      @end ||= @datetime.clone().add(@duration, 'minutes')
       @title = @full_describe
       @time = @start.hour()* 60 + @start.minute()
+      @startEditable  = false
+      @durationEditable  = false
+      # set to all day if it's a 24 hours span
       @allDay = false
+      @allDay = true if (@duration_span && @duration_span == 86400)
       if @status == 3
+        @startEditable  = true
+        @durationEditable  = true
         @className = "status_blocked"
       else if @status == 4
         @className = "status_booked"
+      else if @status == 0
+        @className = "status_available"
+      if @multi_status
+        for k,v of @multi_status
+          @className += " status_" + k
 
 
     useFullTime: () ->
@@ -121,11 +133,15 @@ angular.module('BB.Models').factory "Admin.BookingModel", ($q, BBModel,
       existing = BookingCollections.find(params)
       if existing  && !params.skip_cache
         defer.resolve(existing)
-      else if company
+      else
+        src = company
+        src ||= params.src
+        delete params.src if params.src
         if params.skip_cache
           BookingCollections.delete(existing) if existing
-          company.$flush('bookings', params)
-        company.$get('bookings', params).then (collection) ->
+          src.$flush('bookings', params)
+
+        src.$get('bookings', params).then (collection) ->
           collection.$get('bookings').then (bookings) ->
             models = (new BBModel.Admin.Booking(b) for b in bookings)
             spaces = new $window.Collection.Booking(collection, models, params)

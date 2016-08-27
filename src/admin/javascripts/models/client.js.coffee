@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "Admin.ClientModel", (ClientModel, $q, BBModel, $log,$window,ClientCollections) ->
+angular.module('BB.Models').factory "AdminClientModel", (ClientModel, $q, BBModel, $log,$window,ClientCollections, $rootScope, UriTemplate, halClient) ->
 
   class Admin_Client extends ClientModel
 
@@ -13,10 +13,22 @@ angular.module('BB.Models').factory "Admin.ClientModel", (ClientModel, $q, BBMod
 
       if company.$has('client')
 
-        if params.flush
-          company.$flush('client', params)
+        #if params.flush
+        #  company.$flush('client', params)
 
-        company.$get('client', params).then (resource) ->
+        # have to use a hard coded api ref for now until all servers also have the {/id} in the href
+
+        url = ""
+        url = $rootScope.bb.api_url if $rootScope.bb.api_url
+        href = url + "/api/v1/admin/{company_id}/client{/id}{?page,per_page,filter_by,filter_by_fields,order_by,order_by_reverse,search_by_fields}"
+        params.company_id = company.id
+        uri = new UriTemplate(href).fillFromObject(params || {})
+
+        if params.flush
+          halClient.clearCache(uri)
+
+        #company.$get('client', params).then (resource) ->
+        halClient.$get(uri, {}).then  (resource) =>
           if resource.$has('clients')
             resource.$get('clients').then (clients) ->
               models = (new BBModel.Admin.Client(c) for c in clients)

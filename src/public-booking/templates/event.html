@@ -175,8 +175,8 @@
             <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && (client_form.first_name.$dirty || booking_form.submitted)}">
               <label for="first_name" class="control-label col-sm-4">First Name:</label>
               <div class="col-sm-5">
-                <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" />
-              </div>
+                <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" autocomplete="given-name"/>
+              </div> 
               <div class="col-sm-3 messages">
                 <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted">
                   Please enter your first name
@@ -187,7 +187,7 @@
             <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (client_form.last_name.$dirty|| booking_form.submitted)}">
               <label for="last_name" class="control-label col-sm-4">Last Name:</label>
               <div class="col-sm-5">
-                <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" />
+                <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" autocomplete="family-name"/>
               </div>
               <div class="col-sm-3 messages">
                 <div class="error-message" ng-show="client_form.last_name.$invalid && booking_form.submitted">
@@ -199,7 +199,7 @@
             <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && (client_form.email.$dirty|| booking_form.submitted)}">
               <label for="email" class="control-label col-sm-4">Email*:</label>
               <div class="col-sm-5">
-                <input type="email" name="email" id="email" required ng-model="client.email" class="form-control" />
+                <input type="email" name="email" id="email" required ng-model="client.email" class="form-control" autocomplete="email"/>
               </div>
               <div class="col-sm-3 messages">
                 <div class="error-message" ng-show="client_form.email.$invalid && booking_form.submitted">
@@ -211,7 +211,7 @@
             <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && ((client_form.mobile.$dirty && !client_form.mobile.$focused) || booking_form.submitted)}">
               <label for="mobile" class="control-label col-sm-4">Mobile:</label>
               <div class="col-sm-5">
-                <input type="tel" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern()" ng-model="client.mobile" class="form-control"/>
+                <input type="tel" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern()" ng-model="client.mobile" class="form-control" autocomplete="tel"/>
               </div>
               <div class="col-sm-3 messages">
                 <div class="error-message" ng-show="client_form.mobile.$dirty && client_form.email.$invalid && booking_form.submitted">
@@ -223,7 +223,7 @@
             <div class="form-group" ng-class="{'has-error': client_form.address1.$invalid && ((client_form.address1.$dirty && !client_form.address1.$focused) || booking_form.submitted)}">
               <label for="address1" class="control-label col-sm-4">Address:</label>
               <div class="col-sm-5">
-                <input type="text" name="address1" id="address1" ng-model="client.address1" class="form-control"/>
+                <input type="text" name="address1" id="address1" ng-model="client.address1" class="form-control" autocomplete="address-line1"/>
               </div>
               <div class="col-sm-3 messages">
                 <div class="error-message" ng-show="client_form.address1.$invalid && booking_form.submitted">
@@ -235,28 +235,28 @@
             <div class="form-group" ng-class="{'has-error': client_form.address2.$invalid && ((client_form.address2.$dirty && !client_form.address2.$focused) || booking_form.submitted)}">
               <label for="address2" class="control-label col-sm-4"></label>
               <div class="col-sm-5">
-                <input type="text" name="address2" id="address2" ng-model="client.address2" class="form-control"/>
+                <input type="text" name="address2" id="address2" ng-model="client.address2" class="form-control" autocomplete="address-line2"/>
               </div>
             </div>
 
             <div class="form-group" ng-class="{'has-error': client_form.address3.$invalid && ((client_form.address3.$dirty && !client_form.address3.$focused) || booking_form.submitted)}">
               <label for="address3" class="control-label col-sm-4">Town:</label>
               <div class="col-sm-5">
-                <input type="text" name="address3" id="address3" ng-model="client.address3" class="form-control"/>
+                <input type="text" name="address3" id="address3" ng-model="client.address3" class="form-control" autocomplete="address-level2"/>
               </div>
             </div>
 
             <div class="form-group" ng-class="{'has-error': client_form.address4.$invalid && booking_form.submitted}">
               <label for="address4" class="control-label col-sm-4">County:</label>
               <div class="col-sm-5">
-                <input type="text" name="address4" id="address4" ng-model="client.address4" class="form-control"/>
+                <input type="text" name="address4" id="address4" ng-model="client.address4" class="form-control" autocomplete="address-level1"/>
               </div>
             </div>
 
             <div class="form-group" ng-class="{'has-error': client_form.postcode.$invalid && ((client_form.postcode.$dirty && !client_form.postcode.$focused) || booking_form.submitted)}">
               <label for="postcode" class="control-label col-sm-4">Postcode:</label>
               <div class="col-sm-5">
-                <input type="text" name="postcode" id="postcode" ng-pattern="validator.getUKPostcodePattern()" ng-model="client.postcode" class="form-control" onBlur="javascript:this.value=this.value.toUpperCase()" style="text-transform:uppercase"/>
+                <input type="text" name="postcode" id="postcode" ng-pattern="validator.getUKPostcodePattern()" ng-model="client.postcode" class="form-control" onBlur="javascript:this.value=this.value.toUpperCase()" style="text-transform:uppercase" autocomplete="postal-code"/>
               </div>
               <div class="col-sm-3 messages">
                 <div class="error-message" ng-show="client_form.postcode.$invalid && booking_form.submitted">
@@ -362,8 +362,6 @@
 
           </div><!-- accordion close -->
 
-          <div class='accordion-bottom-border'></div>
-
         </div>
       </div>
 
@@ -391,12 +389,12 @@
 
             <div ng-if="!selected_tickets">
 
-              <button type="button" class="btn btn-primary btn-block" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() > 0">
+              <button type="button" class="btn btn-primary btn-block pull-right" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() > 0">
                 Reserve Ticket<span ng-show="event.numTicketsSelected() > 1">s</span>
                 <span class="glyphicon glyphicon-chevron-right"></span>
               </button>
 
-              <button type="button" class="btn btn-primary btn-block" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() <= 0 && bb.company.settings.has_waitlists">
+              <button type="button" class="btn btn-primary btn-block pull-right" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() <= 0 && bb.company.settings.has_waitlists">
                 Join Waitlist
               </button>
 
@@ -404,7 +402,7 @@
 
             <div ng-if="selected_tickets">
 
-              <button type="submit" class="btn btn-primary btn-block" ng-click="validator.validateForm(booking_form) && checkReady() && routeReady()">
+              <button type="submit" class="btn btn-primary btn-block pull-right" ng-click="validator.validateForm(booking_form) && checkReady() && routeReady()">
                 Book Ticket
               </button>
 
