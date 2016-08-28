@@ -29,7 +29,8 @@
     "fullcalendar": "~2.9.1",
     "angular-mocks": "~1.5.8",
     "angular-google-maps": "2.3.2",
-    "angular-schema-form": "~0.8.13"
+    "angular-schema-form": "~0.8.13",
+    "trNgGrid": "~3.1.7"
   },
   "dependencies": {
     "bookingbug-angular-core": "../core",
