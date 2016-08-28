@@ -74,6 +74,7 @@
         ]);
 
         gulp.task('build-sdk', [
+            'clean-sdk',
             'build-sdk:core',
             'build-sdk:public-booking',
             'build-sdk:member',

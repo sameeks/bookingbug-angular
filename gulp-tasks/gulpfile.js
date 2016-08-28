@@ -38,6 +38,7 @@
                     'services',
                     'settings'
                 ],
+                buildPath: path.join(sdkRootPath, 'build'),
                 environment: args.getEnvironment(),
                 rootPath: sdkRootPath,
                 testProjectConfig: projectConfig.getConfig(path.join(sdkRootPath, args.getTestProjectRootPath())),
