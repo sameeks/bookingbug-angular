@@ -33,10 +33,7 @@
         ]);
 
         gulp.task('build-sdk:admin-booking:javascripts', function () {
-            bbGulp.coreJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard', configuration.uglify);
-            return bbGulp.lazyJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard', configuration.uglify);
-            //bbutil.lazyJavascripts('admin-dashboard', 'BBAdminDashboard')
-            //bbGulp.javascripts('admin-dashboard', srcPath, destPath, plugins.config.uglify)
+            bbGulp.javascripts('admin-booking', srcPath, destPath, configuration.uglify);
         });
 
         gulp.task('build-sdk:admin-booking:stylesheets', function () {
@@ -44,8 +41,7 @@
         });
 
         gulp.task('build-sdk:admin-booking:templates', function () {
-            return;
-            //return bbGulp.templates('admin-booking', srcPath, destPath, 'BBAdminBooking');
+            return bbGulp.templates('admin-booking', srcPath, destPath, 'BBAdminBooking');
         });
 
         gulp.task('build-sdk:admin-booking:bower', function () {
@@ -60,7 +56,10 @@
         ]);
 
         gulp.task('build-sdk:admin-dashboard:javascripts', function () {
-            return bbGulp.javascripts('admin-dashboard', srcPath, destPath, configuration.uglify);
+            bbGulp.coreJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard', configuration.uglify);
+            return bbGulp.lazyJavascripts('admin-dashboard', srcPath, destPath, 'BBAdminDashboard', configuration.uglify);
+            //bbutil.lazyJavascripts('admin-dashboard', 'BBAdminDashboard')
+            //bbGulp.javascripts('admin-dashboard', srcPath, destPath, plugins.config.uglify)
         });
 
         gulp.task('build-sdk:admin-dashboard:stylesheets', function () {
@@ -72,7 +71,8 @@
         });
 
         gulp.task('build-sdk:admin-dashboard:templates', function () {
-            return bbGulp.templates('admin-dashboard', srcPath, destPath, false, false);
+            return;
+            //return bbGulp.templates('admin-dashboard', srcPath, destPath, false, false);
         });
 
         gulp.task('build-sdk:admin-dashboard:bower', function () {
