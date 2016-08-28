@@ -1,25 +1,184 @@
 (function () {
     'use strict';
 
+    var args = require('../helpers/args.js');
     var fs = require('fs');
     var gulp = require('gulp');
-    var gutil = require('gulp-util');
-    var gulpif = require('gulp-if');
+    var gulpAngularTemplateCache = require('gulp-angular-templatecache');
+    var gulpClone = require('gulp-clone');
+    var gulpCoffee = require('gulp-coffee');
+    var gulpConcat = require('gulp-concat');
+    var gulpFlatten = require('gulp-flatten');
+    var gulpIf = require('gulp-if');
+    var gulpImageMin = require('gulp-imagemin');
+    var gulpNgAnnotate = require('gulp-ng-annotate');
+    var gulpPlumber = require('gulp-plumber');
+    var gulpRename = require('gulp-rename');
     var gulpUglify = require('gulp-uglify');
-    var coffee = require('gulp-coffee');
-    var concat = require('gulp-concat');
-    var sass = require('gulp-sass');
-    var flatten = require('gulp-flatten');
-    var imagemin = require('gulp-imagemin');
-    var filter = require('gulp-filter');
-    var templateCache = require('gulp-angular-templatecache');
+    var gulpUtil = require('gulp-util');
     var path = require('path');
-    var rename = require('gulp-rename');
-    var plumber = require('gulp-plumber');
-    var clone = require('gulp-clone');
-    var args = require('../helpers/args.js');
     var streamqueue = require('streamqueue');
-    var ngAnnotate = require('gulp-ng-annotate');
+
+    module.exports = {
+        bower: bower,
+        fonts: fonts,
+        images: images,
+        javascripts: javascripts,
+        javascriptsCore: javascriptsCore,
+        javascriptsLazy: javascriptsLazy,
+        stylesheets: stylesheets,
+        templates: templates
+    };
+
+    function bower(moduleDirName, srcPath, releasePath) {
+        srcPath || (srcPath = './src');
+        releasePath || (releasePath = './build');
+
+        return gulp.src(path.join(srcPath, moduleDirName, 'bower.json'))
+            .pipe(gulp.dest(path.join(releasePath, moduleDirName)));
+    }
+
+    function fonts(moduleDirName, srcpath, releasepath) {
+        srcpath || (srcpath = './src');
+        releasepath || (releasepath = './build');
+        return gulp.src(srcpath + '/' + moduleDirName + '/fonts/*')
+            .pipe(gulpFlatten())
+            .pipe(gulp.dest(releasepath + '/' + moduleDirName));
+    }
+
+    function images(moduleDirName, srcPath, releasePath) {
+        srcPath || (srcPath = './src');
+        releasePath || (releasePath = './build');
+
+        return gulp.src(srcPath + '/' + moduleDirName + '/images/*')
+            .pipe(gulpImageMin())
+            .pipe(gulpFlatten())
+            .pipe(gulp.dest(releasePath + '/' + moduleDirName));
+    }
+
+    function javascripts(moduleDirName, srcPath, releasePath, uglify) {
+        srcPath || (srcPath = './src');
+        releasePath || (releasePath = './build');
+
+        var files = [
+            srcPath + '/' + moduleDirName + '/javascripts/main.js.coffee',
+            srcPath + '/' + moduleDirName + '/javascripts/**/*',
+            srcPath + '/' + moduleDirName + '/i18n/en.js',
+            '!' + srcPath + '/' + moduleDirName + '/javascripts/**/*~',
+            '!' + srcPath + '/' + moduleDirName + '/javascripts/**/*.js.js',
+            '!' + srcPath + '/' + moduleDirName + '/javascripts/**/*.js.js.map',
+            '!' + srcPath + '/**/*_test.js.coffee',
+            '!' + srcPath + '/**/*.spec.js.coffee'
+        ];
+
+        var stream = gulp.src(files, {allowEmpty: true})
+            .pipe(gulpPlumber())
+            .pipe(gulpIf(/.*coffee$/, gulpCoffee().on('error', gulpUtil.log)))
+            .pipe(gulpConcat('bookingbug-angular-' + moduleDirName + '.js'))
+            .pipe(gulp.dest(releasePath + '/' + moduleDirName));
+
+        if ((uglify === true) || (args.getEnvironment() !== 'local' && args.getEnvironment() !== 'dev')) {
+            var cloneSink = gulpClone.sink();
+            stream.pipe(cloneSink)
+                .pipe(gulpUglify({mangle: false})).on('error', gulpUtil.log)
+                .pipe(gulpRename({extname: '.min.js'}))
+                .pipe(cloneSink.tap())
+                .pipe(gulp.dest(releasePath + '/' + moduleDirName));
+        }
+    }
+
+    function javascriptsCore(moduleDirName, srcPath, releasePath, templatesModule, uglify) {
+        srcPath || (srcPath = './src');
+        releasePath || (releasePath = './build');
+
+        if (templatesModule === undefined || templatesModule == '' || !templatesModule) {
+            templatesModule = 'BB';
+        }
+
+        var scripts = gulp.src([
+            srcPath + '/' + moduleDirName + '/javascripts/**/**/**/*.js.coffee',
+            '!' + srcPath + '/' + moduleDirName + '/javascripts/**/**/**/*.lazy.js.coffee',
+            '!' + srcPath + '/' + moduleDirName + '/javascripts/**/*~',
+            '!' + srcPath + '/' + moduleDirName + '/javascripts/**/*.js.js',
+            '!' + srcPath + '/' + moduleDirName + '/javascripts/**/*.js.js.map',
+            '!' + srcPath + '/**/*_test.js.coffee',
+            '!' + srcPath + '/**/*.spec.js.coffee'
+        ])
+            .pipe(gulpIf(/.*coffee$/, gulpCoffee().on('error', gulpUtil.log)));
+
+        // Add templates to the mix
+        var templates = gulp.src([
+            path.join(srcPath + '/' + moduleDirName, 'templates/core/**/**/*.html')
+        ])
+            .pipe(gulpAngularTemplateCache({
+                module: templatesModule,
+                root: 'default/core'
+            }));
+
+        var orphanTemplates = gulp.src([
+            path.join(srcPath + '/' + moduleDirName, 'templates/*.html')
+        ])
+            .pipe(gulpAngularTemplateCache({
+                module: templatesModule,
+                root: 'default'
+            }));
+
+        var stream = streamqueue({objectMode: true}, scripts, templates, orphanTemplates)
+            .pipe(gulpNgAnnotate({add: true, remove: true}))
+            .pipe(gulpConcat('bookingbug-angular-' + moduleDirName + '.js'))
+            .pipe(gulp.dest(releasePath + '/' + moduleDirName));
+
+        if ((uglify === true) || (args.getEnvironment() !== 'local' && args.getEnvironment() !== 'dev')) {
+            var cloneSink = gulpClone.sink();
+            stream.pipe(cloneSink)
+                .pipe(gulpUglify({mangle: false})).on('error', gulpUtil.log)
+                .pipe(gulpRename({extname: '.min.js'}))
+                .pipe(cloneSink.tap())
+                .pipe(gulp.dest(releasePath + '/' + moduleDirName));
+        }
+    }
+
+    function javascriptsLazy(moduleDirName, srcPath, releasePath, templatesModule, uglify) {
+        srcPath || (srcPath = './src');
+        releasePath || (releasePath = './build');
+
+        var folders = getFolders(srcPath + '/' + moduleDirName + '/javascripts');
+
+        if (templatesModule === undefined || templatesModule == '' || !templatesModule) {
+            templatesModule = 'BB';
+        }
+
+        return folders.map(function (folder) {
+            if (folder == 'core') {
+                return;
+            }
+
+            var scripts = gulp.src(path.join(srcPath + '/' + moduleDirName, 'javascripts/' + folder + '/**/**/*.lazy.js.coffee'))
+                .pipe(gulpIf(/.*coffee$/, gulpCoffee().on('error', gulpUtil.log)));
+
+            // Add templates to the mix
+            var templates = gulp.src(path.join(srcPath + '/' + moduleDirName, 'templates/' + folder + '/**/**/*.html'))
+                .pipe(gulpAngularTemplateCache({
+                    module: templatesModule + '.' + folder + '-tpls', //lazyloaded run blocks only run for new modules
+                    standalone: true,
+                    root: 'default/' + folder
+                }));
+
+            var stream = streamqueue({objectMode: true}, scripts, templates)
+                .pipe(gulpNgAnnotate({add: true, remove: true}))
+                .pipe(gulpConcat('bookingbug-angular-' + moduleDirName + '-' + folder + '.lazy.js'))
+                .pipe(gulp.dest(releasePath + '/' + moduleDirName));
+
+            if ((uglify === true) || (args.getEnvironment() !== 'local' && args.getEnvironment() !== 'dev')) {
+                var cloneSink = gulpClone.sink();
+                stream.pipe(cloneSink)
+                    .pipe(gulpUglify({mangle: false})).on('error', gulpUtil.log)
+                    .pipe(gulpRename({extname: '.min.js'}))
+                    .pipe(cloneSink.tap())
+                    .pipe(gulp.dest(releasePath + '/' + moduleDirName));
+            }
+        });
+    }
 
     /**
      * @param {String} dir
@@ -32,178 +191,29 @@
             });
     }
 
-    module.exports = {
-        javascripts: function (module, srcpath, releasepath, uglify) {
+    function stylesheets(moduleDirName, srcPath, releasePath) {
+        srcPath || (srcPath = './src');
+        releasePath || (releasePath = './build');
 
-            srcpath || (srcpath = './src');
-            releasepath || (releasepath = './build');
+        return gulp.src(srcPath + '/' + moduleDirName + '/stylesheets/**')
+            .pipe(gulp.dest(releasePath + '/' + moduleDirName + '/src/stylesheets'))
+    }
 
-            var files = [
-                srcpath + '/' + module + '/javascripts/main.js.coffee',
-                srcpath + '/' + module + '/javascripts/**/*',
-                srcpath + '/' + module + '/i18n/en.js',
-                '!' + srcpath + '/' + module + '/javascripts/**/*~',
-                '!' + srcpath + '/' + module + '/javascripts/**/*.js.js',
-                '!' + srcpath + '/' + module + '/javascripts/**/*.js.js.map',
-                '!' + srcpath + '/**/*_test.js.coffee',
-                '!' + srcpath + '/**/*.spec.js.coffee'
-            ];
+    function templates(moduleDirName, srcPath, releasePath, moduleName, keepPathInfo) {
+        srcPath || (srcPath = './src');
+        releasePath || (releasePath = './build');
 
-            var stream = gulp.src(files, {allowEmpty: true})
-                .pipe(plumber())
-                .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
-                .pipe(concat('bookingbug-angular-' + module + '.js'))
-                .pipe(gulp.dest(releasepath + '/' + module));
-
-            if ((uglify === true) || (args.getEnvironment() !== 'local' && args.getEnvironment() !== 'dev')) {
-                var cloneSink = clone.sink();
-                stream.pipe(cloneSink)
-                    .pipe(gulpUglify({mangle: false})).on('error', gutil.log)
-                    .pipe(rename({extname: '.min.js'}))
-                    .pipe(cloneSink.tap())
-                    .pipe(gulp.dest(releasepath + '/' + module));
-            }
-        },
-        coreJavascripts: function (module, srcpath, releasepath, templatesModule, uglify) {
-            srcpath || (srcpath = './src');
-            releasepath || (releasepath = './build');
-
-            if (templatesModule === undefined || templatesModule == '' || !templatesModule) {
-                templatesModule = 'BB';
-            }
-
-            var scripts = gulp.src([
-                srcpath + '/' + module + '/javascripts/**/**/**/*.js.coffee',
-                '!' + srcpath + '/' + module + '/javascripts/**/**/**/*.lazy.js.coffee',
-                '!' + srcpath + '/' + module + '/javascripts/**/*~',
-                '!' + srcpath + '/' + module + '/javascripts/**/*.js.js',
-                '!' + srcpath + '/' + module + '/javascripts/**/*.js.js.map',
-                '!' + srcpath + '/**/*_test.js.coffee',
-                '!' + srcpath + '/**/*.spec.js.coffee'
-            ])
-                .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)));
-
-            // Add templates to the mix
-            var templates = gulp.src([
-                path.join(srcpath + '/' + module, 'templates/core/**/**/*.html')
-            ])
-                .pipe(templateCache({
-                    module: templatesModule,
-                    root: 'default/core'
-                }));
-
-            var orphanTemplates = gulp.src([
-                path.join(srcpath + '/' + module, 'templates/*.html')
-            ])
-                .pipe(templateCache({
-                    module: templatesModule,
-                    root: 'default'
-                }));
-
-            var stream = streamqueue({objectMode: true}, scripts, templates, orphanTemplates)
-                .pipe(ngAnnotate({add: true, remove: true}))
-                .pipe(concat('bookingbug-angular-' + module + '.js'))
-                .pipe(gulp.dest(releasepath + '/' + module));
-
-            if ((uglify === true) || (args.getEnvironment() !== 'local' && args.getEnvironment() !== 'dev')) {
-                var cloneSink = clone.sink();
-                stream.pipe(cloneSink)
-                    .pipe(gulpUglify({mangle: false})).on('error', gutil.log)
-                    .pipe(rename({extname: '.min.js'}))
-                    .pipe(cloneSink.tap())
-                    .pipe(gulp.dest(releasepath + '/' + module));
-            }
-
-
-        },
-        lazyJavascripts: function (module, srcpath, releasepath, templatesModule, uglify) {
-            srcpath || (srcpath = './src');
-            releasepath || (releasepath = './build');
-            var folders = getFolders(srcpath + '/' + module + '/javascripts');
-
-            if (templatesModule === undefined || templatesModule == '' || !templatesModule) {
-                templatesModule = 'BB';
-            }
-
-            return folders.map(function (folder) {
-                if (folder == 'core') {
-                    return;
-                }
-
-                var scripts = gulp.src(path.join(srcpath + '/' + module, 'javascripts/' + folder + '/**/**/*.lazy.js.coffee'))
-                    .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)));
-
-                // Add templates to the mix
-                var templates = gulp.src(path.join(srcpath + '/' + module, 'templates/' + folder + '/**/**/*.html'))
-                    .pipe(templateCache({
-                        module: templatesModule + '.' + folder + '-tpls', //lazyloaded run blocks only run for new modules
-                        standalone: true,
-                        root: 'default/' + folder
-                    }));
-
-                var stream = streamqueue({objectMode: true}, scripts, templates)
-                    .pipe(ngAnnotate({add: true, remove: true}))
-                    .pipe(concat('bookingbug-angular-' + module + '-' + folder + '.lazy.js'))
-                    .pipe(gulp.dest(releasepath + '/' + module));
-
-                if ((uglify === true) || (args.getEnvironment() !== 'local' && args.getEnvironment() !== 'dev')) {
-                    var cloneSink = clone.sink();
-                    stream.pipe(cloneSink)
-                        .pipe(gulpUglify({mangle: false})).on('error', gutil.log)
-                        .pipe(rename({extname: '.min.js'}))
-                        .pipe(cloneSink.tap())
-                        .pipe(gulp.dest(releasepath + '/' + module));
-                }
-            });
-        },
-        i18n: function (module, srcpath, releasepath) {
-            srcpath || (srcpath = './src');
-            releasepath || (releasepath = './build');
-            return gulp
-                .src(srcpath + '/core/i18n/**/*')
-                .pipe(gulp.dest(releasepath + '/core/i18n'));
-        },
-        stylesheets: function (module, srcpath, releasepath) {
-            srcpath || (srcpath = './src');
-            releasepath || (releasepath = './build');
-            return gulp.src(srcpath + '/' + module + '/stylesheets/**')
-                .pipe(gulp.dest(releasepath + '/' + module + '/src/stylesheets'))
-        },
-        images: function (module, srcpath, releasepath) {
-            srcpath || (srcpath = './src');
-            releasepath || (releasepath = './build');
-            return gulp.src(srcpath + '/' + module + '/images/*')
-                .pipe(imagemin())
-                .pipe(flatten())
-                .pipe(gulp.dest(releasepath + '/' + module));
-        },
-        fonts: function (module, srcpath, releasepath) {
-            srcpath || (srcpath = './src');
-            releasepath || (releasepath = './build');
-            return gulp.src(srcpath + '/' + module + '/fonts/*')
-                .pipe(flatten())
-                .pipe(gulp.dest(releasepath + '/' + module));
-        },
-        templates: function (module, srcpath, releasepath, mod_name, keep_path_info) {
-            srcpath || (srcpath = './src');
-            releasepath || (releasepath = './build');
-            if (keep_path_info === undefined) {
-                keep_path_info = true;
-            }
-            if (mod_name === undefined || mod_name == '' || !mod_name) {
-                mod_name = 'BB';
-            }
-            return gulp.src(srcpath + '/' + module + '/templates/**/*.html')
-                .pipe(gulpif(keep_path_info, flatten()))
-                .pipe(templateCache({module: mod_name, root: 'default'}))
-                .pipe(concat('bookingbug-angular-' + module + '-templates.js'))
-                .pipe(gulp.dest(releasepath + '/' + module));
-        },
-        bower: function (module, srcpath, releasepath) {
-            srcpath || (srcpath = './src');
-            releasepath || (releasepath = './build');
-            return gulp.src(path.join(srcpath, module, 'bower.json'))
-                .pipe(gulp.dest(path.join(releasepath, module)));
+        if (keepPathInfo === undefined) {
+            keepPathInfo = true;
         }
-    };
+        if (moduleName === undefined || moduleName == '' || !moduleName) {
+            moduleName = 'BB';
+        }
+        return gulp.src(srcPath + '/' + moduleDirName + '/templates/**/*.html')
+            .pipe(gulpIf(keepPathInfo, gulpFlatten()))
+            .pipe(gulpAngularTemplateCache({module: moduleName, root: 'default'}))
+            .pipe(gulpConcat('bookingbug-angular-' + moduleDirName + '-templates.js'))
+            .pipe(gulp.dest(releasePath + '/' + moduleDirName));
+    }
+
 }).call(this);
