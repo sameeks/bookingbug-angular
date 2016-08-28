@@ -10,9 +10,10 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
 
 angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,
   $rootScope, $q, AlertService, ValidatorService, ErrorService, $log, BBModel,
-  $timeout, LoadingService) ->
+  $timeout, LoadingService, AdminBookingOptions) ->
 
   $scope.validator  = ValidatorService
+  $scope.admin_options = AdminBookingOptions
   $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 10})
   loader = LoadingService.$loader($scope)
 

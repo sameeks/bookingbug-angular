@@ -146,8 +146,6 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
             item.selected = true
             $scope.booking_item.setService($scope.service)
 
-      loader.setLoaded()
-
       if $scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))
         # the "bookable services" are the service unless we've pre-selected something!
         items = setServicesDisplayName(items)
@@ -184,12 +182,11 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
           # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages.
           setServiceItem services
 
-        loader.setLoaded()
       , (err) ->
         loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     $q.all(all_loaded).then () ->
-      $scope.setLoaded($scope)
+      loader.setLoaded()
 
 
   setServicesDisplayName = (items)->

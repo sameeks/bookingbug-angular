@@ -134,7 +134,7 @@
 
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
             <label for="mobile" class="control-label">Mobile:</label>
-            <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email || bb.company.settings.ask_mobile_phone"/>
+            <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email || bb.company.settings.ask_mobile_phone" ng-pattern="admin_options.mobile_pattern"/>
           </div>
 
           <div ng-show="bb.company_settings.ask_address">
