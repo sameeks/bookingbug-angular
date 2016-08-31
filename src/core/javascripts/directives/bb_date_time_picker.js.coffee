@@ -27,7 +27,11 @@ angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
     bbDisabled: '=?'
     form: '=?'
   restrict: 'A'
+  require: 'ngModel'
   templateUrl : 'bb_date_time_picker.html'
+  link: (scope, element, attrs, ngModel) ->
+    ngModel.$render = () ->
+      console.log 'dt render'
   controller: ($scope, $filter, $timeout, GeneralOptions) ->
     if !$scope.format?
       $scope.format = 'dd/MM/yyyy'

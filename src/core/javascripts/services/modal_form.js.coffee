@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog, FormTransform) ->
+angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog, FormTransform, $rootScope, $q) ->
 
   newForm = ($scope, $uibModalInstance, company, title, new_rel, post_rel,
       success, fail) ->
@@ -67,29 +67,63 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     else
       $log.warn("model does not have 'edit' rel")
 
+    fullFormValidate = (form) ->
+      defer = $q.defer()
+      console.log 'validate'
+      console.log form
+      console.log $scope.form_model
+      console.log form.datetime
+      console.log $scope.modal_form
+      console.log $scope.form_model.datetime.format()
+      console.log $scope.form_model.service_id
+      console.log $scope.form_model.person_id
+      console.log $scope.company
+      console.log $rootScope.company
+      console.log $rootScope.bb.company
+      datetime = $scope.form_model.datetime.format('YYYY-MM-DD')
+      params =
+        company: $rootScope.bb.company
+        service_id: $scope.form_model.service_id
+        person_id: $scope.form_model.person_id
+        date: $scope.form_model.datetime.format('YYYY-MM-DD')
+        end_date: $scope.form_model.datetime.format('YYYY-MM-DD')
+      $rootScope.bb.company.$get('times', params).then (collection) ->
+        collection.$get('events').then (events) ->
+          if _.find(events[0].times, (t) -> t.datetime[0..9] == datetime)
+            defer.resolve()
+          else
+            defer.reject()
+      defer.promise
+
     $scope.submit = (form) ->
+      console.log 'submit form'
       $scope.$broadcast('schemaFormValidate')
-      $scope.loading = true
-      if $scope.model.$update
-        $scope.model.$update($scope.form_model).then () ->
-          $scope.loading = false
-          $uibModalInstance.close($scope.model)
-          success($scope.model) if success
-        , (err) ->
-          $scope.loading = false
-          $uibModalInstance.close(err)
-          $log.error 'Failed to create'
-          fail() if fail
-      else
-        $scope.model.$put('self', {}, $scope.form_model).then (model) ->
-          $scope.loading = false
-          $uibModalInstance.close(model)
-          success(model) if success
-        , (err) ->
-          $scope.loading = false
-          $uibModalInstance.close(err)
-          $log.error 'Failed to create'
-          fail() if fail
+      fullFormValidate(form).then () ->
+        console.log 'ok'
+      , () ->
+        console.log 'datetime invalid'
+        form.$setValidity("The service and resources are not available for that time", false)
+      # $scope.loading = true
+      # if $scope.model.$update
+      #   $scope.model.$update($scope.form_model).then () ->
+      #     $scope.loading = false
+      #     $uibModalInstance.close($scope.model)
+      #     success($scope.model) if success
+      #   , (err) ->
+      #     $scope.loading = false
+      #     $uibModalInstance.close(err)
+      #     $log.error 'Failed to create'
+      #     fail() if fail
+      # else
+      #   $scope.model.$put('self', {}, $scope.form_model).then (model) ->
+      #     $scope.loading = false
+      #     $uibModalInstance.close(model)
+      #     success(model) if success
+      #   , (err) ->
+      #     $scope.loading = false
+      #     $uibModalInstance.close(err)
+      #     $log.error 'Failed to create'
+      #     fail() if fail
 
     $scope.cancel = (event) ->
       event.preventDefault()

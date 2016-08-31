@@ -1,11 +1,14 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': !hasError()}">
+<div class="form-group" ng-class="{'has-error': form.disableErrorState !== true && hasError(), 'has-success': form.disableSuccessState !== true && hasSuccess(), 'has-feedback': form.feedback !== false}">
 	<label class="control-label">{{form.title}}</label>
-  <input ng-if="form.readonly" ng-show="form.key" type="text" placeholder="" class="form-control" id="datetime" ng-model="model.datetime" ng-disabled="form.readonly" name="datetime" disabled="disabled"/>
+  <input ng-if="form.readonly" ng-show="form.key" type="text" placeholder=""
+  class="form-control" id="datetime" ng-model="model.datetime"
+  ng-disabled="form.readonly" name="datetime" disabled="disabled"/>
 
   <div class="input-group" ng-if="!form.readonly">
    	<div bb-date-time-picker  date="$$value$$"  bb-disabled="form.readonly"
-      form="form" ></div>
+      form="form" schema-validate="form" ng-model="$$value$$"
+      sf-field-model="replaceAll"></div>
 	</div>
 
-  <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
+  <span class="help-block" sf-message="form.description"></span>
 </div>
