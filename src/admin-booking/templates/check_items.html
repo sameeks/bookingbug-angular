@@ -15,7 +15,7 @@
         <div ng-form="booking_questions_form" role="form" novalidate>
           <h3 class="booking-form-header">Questions</h3>
 
-          <div ng-repeat="question in item_details.questions" bb-question-line ng-show="question.currentlyShown">
+          <div ng-repeat="question in ::item_details.questions" bb-question-line ng-show="question.currentlyShown">
             <div class="form-group" ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].dirty || booking_form.submitted)}">
               <label bb-question-label="question" class="control-label col-sm-offset-1 col-sm-3" ng-show="question.name" for="{{question.id}}"
               >{{question.name}}<span ng-show="question.required">*</span>:
@@ -40,8 +40,8 @@
           <textarea ng-model="item.private_note" name="note" id="note" rows="3" class="form-question form-control"></textarea><br>
          </span>
       </div>
-      
-    
+
+
 
     </div>
 

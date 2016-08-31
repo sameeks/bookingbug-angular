@@ -49,7 +49,7 @@
         <span class="sr-only">Toggle Dropdown</span>
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu role="menu">
-        <li ng-click="action.action(booking)" ng-disabled="action.disabled" ng-repeat="action in actions | startFrom: 1"><a href="#">{{action.label}}</a></li>
+        <li ng-click="action.action(booking)" ng-disabled="action.disabled" ng-repeat="action in ::actions | startFrom: 1"><a href="#">{{action.label}}</a></li>
       </ul>
     </div>
 

@@ -9,7 +9,7 @@
 
 
 			<uib-accordion close-others="oneAtATime">
-		    <div uib-accordion-group class="panel-default" ng-repeat="item in basket_items" is-open="$first">
+		    <div uib-accordion-group class="panel-default" ng-repeat="item in ::basket_items" is-open="$first">
 		    	<uib-accordion-heading>
 		    		{{item.getName()}} <small>({{item.startDatetime() | datetime: 'llll'}})</small>
 		    	</uib-accordion-heading>
@@ -46,7 +46,7 @@
 	      				<div class="col-sm-8">{{client.address1}} {{client.address2}} {{client.address3}} {{client.address4}} {{client.postcode}}</div>
 	      			</div>
       			</li>
-      			<li ng-repeat="question in item.item_details.questions" ng-if="item.has_questions && question.answer && !question.important">
+      			<li ng-repeat="question in ::item.item_details.questions" ng-if="item.has_questions && question.answer && !question.important">
               <div class="row" ng-if="item.price">
 		      			<div class="col-sm-4"><b>{{question.name}}:</b> </div>
 	      				<div class="col-sm-8">{{question.answer | format_answer}}</div>

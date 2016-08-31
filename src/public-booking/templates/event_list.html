@@ -1,11 +1,11 @@
 <div bb-events="{mode: 2}" ng-init="bb.basket.clear()">
 
   <div class="page-header">
-    <h1>Events at {{company.name}}</h1>
+    <h1>Events at {{::company.name}}</h1>
   </div>
 
   <div class="alert alert-info" bb-time-zone ng-show="is_time_zone_diff">
-    All times are shown in {{time_zone_name}}.
+    All times are shown in {{::time_zone_name}}.
   </div>
 
   <!-- <div bb-month-picker day-data="item_dates"></div> -->
@@ -17,7 +17,7 @@
       <div uib-accordion>
 
         <div uib-accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" class="store-body">
-          
+
           <div uib-accordion-heading class="filter-header">
             <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
             <span>Filter</span>
@@ -133,7 +133,7 @@
     <div class="bb-events-list row">
 
       <div ng-repeat="item in filtered_items | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" ng-init="spaces_left = item.getSpacesLeft()" ng-show="pagination.num_items > 0">
-      
+
         <div class="panel panel-default bb-event-card" ng-class="{'col-sm-6 col-md-4 col-lg-3':$root.tiles}">
           <div class="panel-body" style="padding: 20px;">
             <div class="row">

@@ -4,7 +4,7 @@
 
     <div class="event-header" bb-background-image="event.image.url">
       <div class="event-details">
-        <h1 class="truncate-sm">{{event.chain.name}}</h1>
+        <h1 class="truncate-sm">{{::event.chain.name}}</h1>
         <ul class="row event-summary-list">
           <li class="col-xs-6 col-sm-4 date truncate-xs">
             <span class='fa fa-calendar-o'></span>
@@ -57,7 +57,7 @@
                 <div class="col-sm-6 col-xs-6">Type</div>
                 <div class="col-sm-3 col-xs-4">Price</div>
                 <div class="col-sm-3 col-xs-2">Qty</div>
-              </div> 
+              </div>
             </li>
             <li ng-repeat="ticket in event.tickets">
               <div class="row">
@@ -65,7 +65,7 @@
                   <span>{{ticket.fullName()}}</span>
                 </div>
                 <div class="col-sm-3 col-xs-4">
-                  <span ng-show="ticket.price > 0">{{ticket.price | currency}}</span><span ng-show="ticket.price == 0">Free</span>
+                  <span ng-show="ticket.price > 0">{{::ticket.price | currency}}</span><span ng-show="ticket.price == 0">Free</span>
                   <small ng-show="ticket.counts_as"><i>(for {{ticket.counts_as}})</i></small>
                 </div>
                 <div ng-show="event.getSpacesLeft() > 0 || event.getWaitSpacesLeft() > 0" class="col-sm-3 col-xs-2">
@@ -176,7 +176,7 @@
               <label for="first_name" class="control-label col-sm-4">First Name:</label>
               <div class="col-sm-5">
                 <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" autocomplete="given-name"/>
-              </div> 
+              </div>
               <div class="col-sm-3 messages">
                 <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted">
                   Please enter your first name
@@ -267,7 +267,7 @@
 
             <div bb-client-details ng-show="client_details.hasQuestions">
 
-              <div class="form-group" ng-repeat="question in client_details.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{ 'check': question.detail_type == 'check', 'has-error': client_form['q' + question.id].$invalid && (client_form['q' + question.id].$dirty || booking_form.submitted)}">
+              <div class="form-group" ng-repeat="question in ::client_details.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{ 'check': question.detail_type == 'check', 'has-error': client_form['q' + question.id].$invalid && (client_form['q' + question.id].$dirty || booking_form.submitted)}">
                 <label ng-hide="question.detail_type == 'check'" for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-show="question.required">*</span></label>
                 <div ng-show="question.detail_type == 'check'" class="col-sm-4 hidden-xs">&nbsp;</div>
                 <div class="col-sm-5">
@@ -340,7 +340,7 @@
 
                   <div bb-item-details="item" bb-suppress-basket-update="$index">
                     <div ng-form name="booking_questions_form">
-                      <div ng-repeat="question in item_details.questions">
+                      <div ng-repeat="question in ::item_details.questions">
                         <div class="form-group" ng-if="question.currentlyShown" bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
                           <label for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-show="question.required">*</span>:</label>
                           <div class="col-sm-5">

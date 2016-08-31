@@ -4,7 +4,7 @@
     <thead>
     </thead>
     <tbody>
-      <tr ng-repeat="band in bands">
+      <tr ng-repeat="band in ::bands">
         <td class="text-left">
           {{band.wallet_amount | icurrency}} for {{band.actual_amount | icurrency}}
         </td>

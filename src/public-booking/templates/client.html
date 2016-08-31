@@ -60,7 +60,7 @@
       <h2 class="booking-form-header">Other Information</h2>
 
       <div>
-        <div class="form-group" ng-repeat="question in client_details.questions" bb-question-line ng-show="question.currentlyShown" ng-class="{'has-error': client_questions_form['q' + question.id].$invalid && (client_questions_form['q' + question.id].dirty || client_form.submitted), 'bb-check-space': (question.detail_type == 'check')}">
+        <div class="form-group" ng-repeat="question in ::client_details.questions" bb-question-line ng-show="question.currentlyShown" ng-class="{'has-error': client_questions_form['q' + question.id].$invalid && (client_questions_form['q' + question.id].dirty || client_form.submitted), 'bb-check-space': (question.detail_type == 'check')}">
           <label class="control-label col-sm-4" bb-question-label="question" for="{{question.id}}">{{question.name}}<span ng-show="question.required">*</span>:</label>
           <div class="col-sm-5">
             <input bb-question="question" class="form-control"/><br/>

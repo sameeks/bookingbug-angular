@@ -1,6 +1,6 @@
 <form name="pick_company_form" ng-submit="selectedCompany()" role="form">
   <p>Pick Company</p>
-  <div ng-repeat="admin in administrators" class="radio">
+  <div ng-repeat="admin in ::administrators" class="radio">
     <label>
       <input id="company{{admin.company_id}}" type="radio"
         ng-model="login.selected_admin" ng-value="admin" required

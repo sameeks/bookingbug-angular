@@ -25,7 +25,7 @@
               <div class="col-sm-9 bb-summary-value">   {{ total.client.first_name  }}  {{ total.client.last_name }}</div>
             </li>
           </ul>
-          <ul class="confirmation-summary" ng-repeat="i in total.items">
+          <ul class="confirmation-summary" ng-repeat="i in ::total.items">
             <li ng-if="i.full_describe" class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Service:</div>
               <div class="col-sm-9 bb-summary-value">   {{ i.full_describe }}</div>

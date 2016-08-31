@@ -1,6 +1,6 @@
-<div ng-repeat="group in navigation">
+<div ng-repeat="group in ::navigation">
 	<ul class="sidebar-menu" ng-if="group.group_name">
 		<li class="header" translate>{{group.group_name}}</li>
 	</ul>
-	<div ng-repeat="partialNav in group.items" ng-include="partialNav.navPartial"></div>
+	<div ng-repeat="partialNav in ::group.items" ng-include="partialNav.navPartial"></div>
 </div>

@@ -6,11 +6,11 @@
         <div class="confirmation-header bb-confirmation-border-margin">
           <div ng-show="!total.containsWaitlistItems()">
             <h2>Booking Confirmation</h2>
-            <p class="bb-confirmation-p-alignment">Thanks {{ total.client.first_name }}. Your booking is now confirmed. We have emailed you the details below.</p>
+            <p class="bb-confirmation-p-alignment">Thanks {{ ::total.client.first_name }}. Your booking is now confirmed. We have emailed you the details below.</p>
           </div>
            <div ng-show="total.containsWaitlistItems()">
             <h2>Confirmation</h2>
-            <p class="bb-confirmation-p-alignment">Thanks {{ total.client.first_name }}. You have successfully made the following bookings. We have you emailed you the details below.</p>
+            <p class="bb-confirmation-p-alignment">Thanks {{ ::total.client.first_name }}. You have successfully made the following bookings. We have you emailed you the details below.</p>
           </div>
           <div class="row hidden-print text-right print-row">">
             <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print"></span> Print</button>
@@ -26,18 +26,18 @@
             </li>
           </ul>
 
-          <ul class="confirmation-summary" ng-repeat="booking in total.bookings">
+          <ul class="confirmation-summary" ng-repeat="booking in ::total.bookings">
             <li ng-show="booking.full_describe" class="row confirmation-summary-item">
               <div class="bb-summary-label">Service: </div>
-              <div class="bb-summary-value">{{booking.full_describe}}</div>
+              <div class="bb-summary-value">{{::booking.full_describe}}</div>
             </li>
             <li ng-show="booking.describe" class="row confirmation-summary-item">
               <div class="bb-summary-label">Date/Time:</div>
-              <div class="bb-summary-value">{{booking.describe}}</div>
+              <div class="bb-summary-value">{{::booking.describe}}</div>
             </li>
             <li ng-show="booking.price" class="row confirmation-summary-item">
               <div class="bb-summary-label">Price:</div>
-              <div class="bb-summary-value">{{booking.price | currency}}</div>
+              <div class="bb-summary-value">{{::booking.price | currency}}</div>
             </li>
           </ul>
 
@@ -56,8 +56,8 @@
             </li>
 
             <div class="confirmation-summary-address">
-              <div ng-show="total.bookings[0].address"><span class='fa fa-map-marker'></span> {{total.bookings[0].address | address_single_line}}</div>
-              <div ng-show="total.bookings[0].address.phone"> <span class='fa fa-phone'></span> {{total.bookings[0].address.phone | local_phone_number}}</div>
+              <div ng-show="total.bookings[0].address"><span class='fa fa-map-marker'></span> {{::total.bookings[0].address | address_single_line}}</div>
+              <div ng-show="total.bookings[0].address.phone"> <span class='fa fa-phone'></span> {{::total.bookings[0].address.phone | local_phone_number}}</div>
             </div>
 
           </ul>

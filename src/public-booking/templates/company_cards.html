@@ -1,6 +1,6 @@
 <div bb-companies ng-init="checkStepTitle('Select a Company')">
   <div class="row">
-    <div ng-repeat="item in companies | orderBy: name">
+    <div ng-repeat="item in ::companies | orderBy: name">
       <div class="col-sm-6 col-md-4">
         <div class="card">
           <div bb-address-map="item.address">

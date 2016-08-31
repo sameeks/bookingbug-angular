@@ -34,7 +34,7 @@
 *   <div  bb-widget='{company_id:37167}'>
 *     <div bb-services>
 *        <ul>
-*          <li ng-repeat='service in all_services'> {{service.name}}</li>
+*          <li ng-repeat='service in ::all_services'> {{service.name}}</li>
 *        </ul>
 *     </div>
 *     </div>

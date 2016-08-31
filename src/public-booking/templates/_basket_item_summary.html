@@ -1,38 +1,38 @@
 <div class="bb-item-summary">
   <div class="bb-item-summary-header">
     <div class="bb-item-summary-header-text hidden-xs">
-      <h3><span>{{bb.current_item.service.name}}</span></h3>
+      <h3><span>{{::bb.current_item.service.name}}</span></h3>
     </div>
   </div>
   <ul class="bb-item-summary-list">
     <li class="visible-xs bb-confirmation-summary-item">
         <div class="bb-summary-label">Service
         </div>
-        <div class="bb-summary-value">{{bb.current_item.service.name}}
+        <div class="bb-summary-value">{{::bb.current_item.service.name}}
         </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.duration">
       <div class="bb-summary-label">Duration
       </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.duration | time_period}}</span>
+      <div class="bb-summary-value"><span>{{::bb.current_item.duration | time_period}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.resource && bb.current_item.resource.name">
       <div class="bb-summary-label">Resource
       </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.resource.name}}</span>
+      <div class="bb-summary-value"><span>{{::bb.current_item.resource.name}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.person && bb.current_item.person.name">
       <div class="bb-summary-label">Person
       </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.person.name}}</span>
+      <div class="bb-summary-value"><span>{{::bb.current_item.person.name}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.price">
       <div class="bb-summary-label">Price
       </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.price | currency}}</span>
+      <div class="bb-summary-value"><span>{{::bb.current_item.price | currency}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.date">

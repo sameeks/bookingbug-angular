@@ -30,7 +30,7 @@
 *   <div  bb-widget='{company_id:37167}'>
 *     <div bb-people>
 *        <ul>
-*          <li ng-repeat='person in all_people'> {{person.name}}</li>
+*          <li ng-repeat='person in ::all_people'> {{person.name}}</li>
 *        </ul>
 *     </div>
 *     </div>

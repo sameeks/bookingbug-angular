@@ -32,7 +32,7 @@
 
   <div ng-show="loc">
 
-    <h2 class="company-map-header">{{shownMarkers.length}} results for stores near {{address}}</h2>
+    <h2 class="company-map-header">{{::shownMarkers.length}} results for stores near {{address}}</h2>
 
     <div class="row filter-by-service" ng-show="can_filter_by_service">
       <div class="col-xs-12">
@@ -47,7 +47,7 @@
 
       <div class="bb-map-block col-sm-8 col-sm-push-4">
         <div ng-delayed="ui-map" ng-delayed-value="myMap" ng-delayed-watch="mapReady" ng-delayed-ready="mapLoaded" ui-options="mapOptions" class="map-canvas"></div>
-        <div ng-repeat="marker in mapMarkers" ui-map-marker="mapMarkers[$index]" ui-event="{'map-click': 'openMarkerInfo(marker)'}"> </div>
+        <div ng-repeat="marker in ::mapMarkers" ui-map-marker="mapMarkers[$index]" ui-event="{'map-click': 'openMarkerInfo(marker)'}"> </div>
         <div ui-map-info-window="myInfoWindow" class="clearfix">
           <p><strong>{{currentMarker.company.name}}</strong></p>
 
@@ -79,7 +79,7 @@
       <div class="bb-company-block col-sm-4 col-sm-pull-8">
 
         <div uib-accordion close-others="true">
-          <div uib-accordion-group is-open="marker.is_open" ng-class="{'expanded': marker.is_open, 'selected': is_selected}" ng-repeat="marker in shownMarkers" class="store-body" ng-click="openMarkerInfo(marker)">
+          <div uib-accordion-group is-open="marker.is_open" ng-class="{'expanded': marker.is_open, 'selected': is_selected}" ng-repeat="marker in ::shownMarkers" class="store-body" ng-click="openMarkerInfo(marker)">
 
             <div uib-accordion-heading class="store-header">
               <span><strong>{{$index+1}}.</strong> {{marker.company.name}}</span>

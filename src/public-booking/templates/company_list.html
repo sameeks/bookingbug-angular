@@ -1,6 +1,6 @@
 <div bb-companies ng-init="checkStepTitle('Select a Company')">
 
-  <div class="panel panel-default" ng-repeat="item in companies | orderBy: name">
+  <div class="panel panel-default" ng-repeat="item in ::companies | orderBy: name">
     <div class="panel-body">
       <!-- add bb-vertical-align-center class below or something similar -->
       <div class="row">

@@ -32,7 +32,7 @@
 *   <div  bb-widget='{company_id:37167}'>
 *     <div bb-resources>
 *        <ul>
-*          <li ng-repeat='resource in all_resources'> {{resource.name}}</li>
+*          <li ng-repeat='resource in ::all_resources'> {{resource.name}}</li>
 *        </ul>
 *     </div>
 *     </div>

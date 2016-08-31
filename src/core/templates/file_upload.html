@@ -1,7 +1,7 @@
 <!-- label -->
 <label for="file_upload" class="control-label col-sm-4">
     File upload:
-    <p ng-show="maxSize">should be smaller then {{maxSize}}</p>
+    <p ng-show="maxSize">should be smaller then {{::maxSize}}</p>
 </label>
 
 <div class="col-sm-5">
@@ -53,7 +53,7 @@
     The file should be no bigger than {{err_file.$errorParam}}
   </p>
   <p class="text-danger" ng-show="file_type_error">
-    The file must be one the following file types: <b>{{prettyAccept}}</b>
+    The file must be one the following file types: <b>{{::prettyAccept}}</b>
   </p>
 </div>
 

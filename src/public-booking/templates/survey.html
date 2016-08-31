@@ -32,13 +32,13 @@
         <ul class="summary-list">
           <li class="row">
             <div class="col-xs-3 col-sm-2 summary-label">Session:</div>
-            <div class="col-xs-9 col-sm-10 summary-value"><span class="bold-small">{{bookings[0].service_name}}</span>
+            <div class="col-xs-9 col-sm-10 summary-value"><span class="bold-small">{{::bookings[0].service_name}}</span>
             </div>
           </li>
           <li class="row">
             <div class="col-xs-3 col-sm-2 summary-label">Date:</div>
             <div class="col-xs-9 col-sm-10 summary-value">
-              <span class="bold-small">{{bookings[0].pretty_date}}</span>
+              <span class="bold-small">{{::bookings[0].pretty_date}}</span>
             </div>
           </li>
         </ul>
@@ -46,7 +46,7 @@
         <div ng-show="bookings[0].survey_questions && bookings[0].survey_questions.length > 0">
           <h2 class="booking-form-header">Survey Questions</h2>
 
-          <div class="form-group" ng-repeat="question in bookings[0].survey_questions" bb-question-line ng-class="{'check': question.detail_type == 'check', 'has-error': survey_form['q' + question.id].$invalid && (survey_form['q' + question.id].$dirty || survey_form.submitted)}">
+          <div class="form-group" ng-repeat="question in ::bookings[0].survey_questions" bb-question-line ng-class="{'check': question.detail_type == 'check', 'has-error': survey_form['q' + question.id].$invalid && (survey_form['q' + question.id].$dirty || survey_form.submitted)}">
             <label ng-if="question.detail_type != 'check'" for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-if="question.required" class="text-warning">*</span>:</label>
             <div ng-if="question.detail_type == 'check'" class="col-sm-4 hidden-xs">&nbsp;</div>
             <div class="col-sm-8">

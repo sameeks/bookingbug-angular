@@ -2,11 +2,11 @@
 
   <div class="event-header" ng-style="{'background-image': bb.event_details.image.url ? 'url(&quot;' + bb.event_details.image.url + '&quot;)' : 'none', 'background-size' : 'cover', 'background-position' : 'center'}">
     <div class="event-details">
-      <h1 class="truncate-sm">{{bb.event_details.name}}</h1>
+      <h1 class="truncate-sm">{{::bb.event_details.name}}</h1>
       <ul class="row event-summary-list">
         <li class="col-xs-6 col-sm-3 date truncate-xs">
           <span class="bb-icon icon-calendar"></span>
-          <span class="hidden-xs">{{bb.event_details.datetime | datetime: 'dddd '}}</span>
+          <span class="hidden-xs">{{::bb.event_details.datetime | datetime: 'dddd '}}</span>
           <span>{{bb.event_details.datetime | datetime: 'Do MMMM YYYY'}}</span>
         </li>
         <li class="col-xs-6 col-sm-3 time truncate-xs">
@@ -50,11 +50,11 @@
                 <span>{{ticket.fullName()}}</span>
               </div>
               <div class="col-sm-3 col-xs-4">
-                <span ng-if="ticket.price > 0">{{ticket.price | currency}}</span><span ng-if="ticket.price == 0">Free</span>
+                <span ng-if="ticket.price > 0">{{::ticket.price | currency}}</span><span ng-if="ticket.price == 0">Free</span>
                 <small ng-if="ticket.counts_as"><i>(for {{ticket.counts_as}})</i></small>
               </div>
               <div class="col-sm-3 col-xs-2">
-                <span>{{ticket.qty}}</span>
+                <span>{{::ticket.qty}}</span>
               </div>
             </div>
           </li>
@@ -67,7 +67,7 @@
           <li>
             <div class="row">
               <div class="col-sm-6 col-xs-6 total-label">Total</div>
-              <div class="col-sm-3 col-xs-6"><strong ng-show="total.due_now">{{total.due_now | currency}}</strong></div>
+              <div class="col-sm-3 col-xs-6"><strong ng-show="total.due_now">{{::total.due_now | currency}}</strong></div>
             </div>
           </li>
         </ul>
@@ -76,9 +76,9 @@
           <div class="row">
             <div class="col-sm-offset-9 col-sm-3">
                <div ng-if="total.$has('new_payment')" class="bb-checkout-pay-button-div">
-                <div bb-payment-button 
-                  class="btn btn-primary btn-block" 
-                  total="total" 
+                <div bb-payment-button
+                  class="btn btn-primary btn-block"
+                  total="total"
                   bb="bb"
                   decide-next-page="decideNextPage"
                   value="Pay with WorldPay">
@@ -86,7 +86,7 @@
               </div>
             </div>
           </div>
-        </div> 
+        </div>
 
       </div>
     </div>
