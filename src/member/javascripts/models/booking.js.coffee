@@ -66,6 +66,9 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, $bbug,
     canMove: () ->
       return @canCancel()
 
+    $update: () ->
+      MemberBookingService.update(@)
+
     @$query: (member, params) ->
       MemberBookingService.query(member, params)
 
