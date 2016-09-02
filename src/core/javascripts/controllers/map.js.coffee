@@ -63,11 +63,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   $scope.default_zoom = $scope.options.default_zoom or 6
 
   cc = SettingsService.getCountryCode()
-  if _.contains ["gb", "us", "jp"], cc
-    du = "miles"
-  else
-    du = "km"
-  $scope.distance_unit = du
+  $scope.distance_unit = if _.contains(["gb", "us", "jp"], cc) then "miles" else "km"
 
   map_ready_def               = $q.defer()
   $scope.mapLoaded            = $q.defer()
@@ -79,6 +75,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   $scope.numberedPin          ||= null
   $scope.defaultPin           ||= null
   $scope.address              = $scope.$eval $attrs.bbAddress if !$scope.address and $attrs.bbAddress
+  
   loader = LoadingService.$loader($scope).notLoaded()
 
   # setup geolocation shim

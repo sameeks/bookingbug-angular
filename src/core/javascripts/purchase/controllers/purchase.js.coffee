@@ -144,6 +144,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
 
         , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
       , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+    else
+      loader.setLoaded()
 
     $scope.loaded = true
 

@@ -39,7 +39,6 @@ angular.module('BBMember.Services').factory "MemberBookingService", ($q,
 
   update: (booking) ->
     deferred = $q.defer()
-    $rootScope.member.flushBookings()
     booking.$put('self', {}, booking).then (booking) =>
       book = new BBModel.Member.Booking(booking)
       SpaceCollections.checkItems(book)
