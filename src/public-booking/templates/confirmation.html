@@ -22,27 +22,27 @@
           <ul class="confirmation-summary">
             <li class="row confirmation-summary-item">
               <div class="bb-summary-label">Reference: </div>
-              <div class="bb-summary-value">{{total.id}}</div>
+              <div class="bb-summary-value">{{::total.id}}</div>
             </li>
           </ul>
 
           <ul class="confirmation-summary" ng-repeat="booking in ::total.bookings">
             <li ng-show="booking.full_describe" class="row confirmation-summary-item">
               <div class="bb-summary-label">Service: </div>
-              <div class="bb-summary-value">{{::booking.full_describe}}</div>
+              <div class="bb-summary-value">{{booking.full_describe}}</div>
             </li>
             <li ng-show="booking.describe" class="row confirmation-summary-item">
               <div class="bb-summary-label">Date/Time:</div>
-              <div class="bb-summary-value">{{::booking.describe}}</div>
+              <div class="bb-summary-value">{{booking.describe}}</div>
             </li>
             <li ng-show="booking.price" class="row confirmation-summary-item">
               <div class="bb-summary-label">Price:</div>
-              <div class="bb-summary-value">{{::booking.price | currency}}</div>
+              <div class="bb-summary-value">{{booking.price | currency}}</div>
             </li>
           </ul>
 
 
-          <ul ng-show="total.bookings[0].address.lat" class="confirmation-summary">
+          <ul ng-show="::total.bookings[0].address.lat" class="confirmation-summary">
 
             <li class="row confirmation-summary-item">
               <div class="col-sm-12">
@@ -56,8 +56,8 @@
             </li>
 
             <div class="confirmation-summary-address">
-              <div ng-show="total.bookings[0].address"><span class='fa fa-map-marker'></span> {{::total.bookings[0].address | address_single_line}}</div>
-              <div ng-show="total.bookings[0].address.phone"> <span class='fa fa-phone'></span> {{::total.bookings[0].address.phone | local_phone_number}}</div>
+              <div ng-show="::total.bookings[0].address"><span class='fa fa-map-marker'></span> {{::total.bookings[0].address | address_single_line}}</div>
+              <div ng-show="::total.bookings[0].address.phone"> <span class='fa fa-phone'></span> {{::total.bookings[0].address.phone | local_phone_number}}</div>
             </div>
 
           </ul>

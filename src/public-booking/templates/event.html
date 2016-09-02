@@ -8,11 +8,11 @@
         <ul class="row event-summary-list">
           <li class="col-xs-6 col-sm-4 date truncate-xs">
             <span class='fa fa-calendar-o'></span>
-            <span class="hidden-xs">{{event.date.format('dddd ')}}</span><span>{{event.date.format('Do MMMM YYYY')}}</span>
+            <span class="hidden-xs">{{::event.date.format('dddd ')}}</span><span>{{::event.date.format('Do MMMM YYYY')}}</span>
           </li>
           <li class="col-xs-6 col-sm-4 time truncate-xs">
             <span class="fa fa-clock-o" aria-hidden="true"></span>
-            <span class="event-time" ng-bind="event.date.format('h[:]mma')"></span>&ndash;<span ng-bind="event.end_datetime.format('h[:]mma')"></span>
+            <span class="event-time" ng-bind="::event.date.format('h[:]mma')"></span>&ndash;<span ng-bind="::event.end_datetime.format('h[:]mma')"></span>
           </li>
           <li class="hidden-xs col-sm-4 duration truncate-xs">
             <span class="fa fa-hourglass-half"></span>
@@ -59,13 +59,13 @@
                 <div class="col-sm-3 col-xs-2">Qty</div>
               </div>
             </li>
-            <li ng-repeat="ticket in event.tickets">
+            <li ng-repeat="ticket in ::event.tickets">
               <div class="row">
                 <div class="col-sm-6 col-xs-6">
                   <span>{{ticket.fullName()}}</span>
                 </div>
                 <div class="col-sm-3 col-xs-4">
-                  <span ng-show="ticket.price > 0">{{::ticket.price | currency}}</span><span ng-show="ticket.price == 0">Free</span>
+                  <span ng-show="ticket.price > 0">{{ticket.price | currency}}</span><span ng-show="ticket.price == 0">Free</span>
                   <small ng-show="ticket.counts_as"><i>(for {{ticket.counts_as}})</i></small>
                 </div>
                 <div ng-show="event.getSpacesLeft() > 0 || event.getWaitSpacesLeft() > 0" class="col-sm-3 col-xs-2">
@@ -126,7 +126,7 @@
 
         </div>
 
-        <!-- <div bb-basket-list class="row" ng-if="selected_tickets">
+        <!-- <div bb-basket-list class="row" ng-if="::selected_tickets">
           <div class="col-sm-6">
 
             <div class="gift-certifcates ">
@@ -284,7 +284,7 @@
           </div>
 
           <div uib-accordion close-others="false" ng-init="use_my_details = true">
-            <div ng-repeat="item in current_ticket_items" bb-count-ticket-types="current_ticket_items">
+            <div ng-repeat="item in ::current_ticket_items" bb-count-ticket-types="current_ticket_items">
               <div ng-form name="client_ticket_form" class="form-horizontal" role="form" novalidate>
                 <div ticket-accordion uib-accordion-group is-open="is_open" ng-init="is_open = $first">
                   <div uib-accordion-heading>

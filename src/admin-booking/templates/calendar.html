@@ -1,5 +1,4 @@
 <div bb-page>
-
   <div bb-admin-calendar class="bb-admin-calendar">
 
     <div class="page-header">
@@ -52,7 +51,7 @@
                 Filter by:
               </div>
 
-              <div class="form-group" ng-if="bb.company.$has('people')">
+              <div class="form-group" ng-if="::bb.company.$has('people')">
                 <select bb-people class=" form-control" id="person" ng-model="person" ng-options="p.name for p in bookable_people | orderBy: 'name'">
                   <option value="">Any person</option>
                 </select>
