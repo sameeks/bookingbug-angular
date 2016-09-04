@@ -107,7 +107,8 @@ angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSourc
           no_cache : if options.noCache? and options.noCache then true else false
 
         company.$get('external_bookings', params).then (collection) ->
-          collection.$get('external_bookings').then (bookings) ->
+          bookings = collection.external_bookings
+          if bookings
             for booking in bookings
               booking.resourceIds = []
               if booking.person_id?
@@ -123,9 +124,6 @@ angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSourc
               booking.type      = 'external'
 
             deferred.resolve bookings
-          , (err)->
-            # Handle errors
-            deferred.reject err
         , (err)->
           # Handle errors
           deferred.reject err
