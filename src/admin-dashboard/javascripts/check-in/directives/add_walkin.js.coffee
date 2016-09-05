@@ -18,4 +18,3 @@ angular.module('BBAdminDashboard.check-in.directives').directive 'bbAddWalkin', 
           date: moment().format('YYYY-MM-DD')
         company_id: $scope.bb.company.id
 
-

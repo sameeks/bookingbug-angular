@@ -100,10 +100,10 @@
 
     </ul>
 
-    <uib-pagination total-items="clients.num_items"
+    <div uib-pagination total-items="clients.num_items"
       ng-model="clients.current_page" items-per-page="clients.page_size"
       max-size="clients.max_size" boundary-links="true" rotate="false"
-      num-pages="clients.num_pages" ng-show="clients.num_items > clients.page_size" ng-change="pageChanged()"></uib-pagination>
+      num-pages="clients.num_pages" ng-show="clients.num_items > clients.page_size" ng-change="pageChanged()"></div>
 
   </div>
 
@@ -134,7 +134,7 @@
 
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
             <label for="mobile" class="control-label">Mobile:</label>
-            <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email || bb.company.settings.ask_mobile_phone"/>
+            <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email || bb.company.settings.ask_mobile_phone" ng-pattern="admin_options.mobile_pattern"/>
           </div>
 
           <div ng-show="bb.company_settings.ask_address">
