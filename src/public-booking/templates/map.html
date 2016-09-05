@@ -47,7 +47,7 @@
 
       <div class="bb-map-block col-sm-8 col-sm-push-4">
         <div ng-delayed="ui-map" ng-delayed-value="myMap" ng-delayed-watch="mapReady" ng-delayed-ready="mapLoaded" ui-options="mapOptions" class="map-canvas"></div>
-        <div ng-repeat="marker in ::mapMarkers" ui-map-marker="mapMarkers[$index]" ui-event="{'map-click': 'openMarkerInfo(marker)'}"> </div>
+        <div ng-repeat="marker in mapMarkers" ui-map-marker="mapMarkers[$index]" ui-event="{'map-click': 'openMarkerInfo(marker)'}"> </div>
         <div ui-map-info-window="myInfoWindow" class="clearfix">
           <p><strong>{{currentMarker.company.name}}</strong></p>
 
