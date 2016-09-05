@@ -39,3 +39,16 @@ angular.module('BBAdmin.Services').run ($q, $injector, BBModel) ->
     afuncs[model] = $injector.get("Admin" + model + "Model")
   BBModel['Admin'] = afuncs
 
+
+angular.module('BB').config (FormTransformProvider) ->
+  FormTransformProvider.setTransform 'edit', 'Admin_Booking', (form) ->
+    if form[0].tabs
+      _.each form[0].tabs[0].items, (item) ->
+        if _.indexOf(['datetime', 'service', 'person_id', 'current_multi_status'], item.key) > -1
+          item.readonly = true
+    else
+      _.each form, (item) ->
+        if _.indexOf(['datetime', 'service', 'person_id'], item.key) > -1
+          item.readonly = true
+    form
+
