@@ -112,7 +112,6 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
           templateUrl: 'cancel_booking_modal_form.html'
           controller: ($scope, booking) ->
             $scope.booking = booking
-            console.log booking
             $scope.model =
               notify: false
               cancel_reason: null
