@@ -2,11 +2,11 @@
 
   <div>
 
-    <div ng-show="purchases.length == 0">
+    <div ng-show="purchases && purchases.length == 0">
       <h3>You don't currently have any purchases.</h3>
     </div>
 
-    <div class="row bb-list-table-header">
+    <div ng-show="purchases && purchases.length != 0" class="row bb-list-table-header">
 
       <div class="col-xs-1">
         #
