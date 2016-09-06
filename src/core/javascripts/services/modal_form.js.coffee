@@ -107,13 +107,27 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
       event.preventDefault()
       event.stopPropagation()
       $uibModalInstance.close()
-      Dialog.confirm
-        model: model,
-        title: 'Cancel'
-        body: "Are you sure you want to cancel this #{type}?"
-        success: (model) ->
-          model.$del('self').then (response) ->
-            success(response) if success
+      if type == 'booking'
+        modal_instance = $uibModal.open
+          templateUrl: 'cancel_booking_modal_form.html'
+          controller: ($scope, booking) ->
+            $scope.booking = booking
+            $scope.model =
+              notify: false
+              cancel_reason: null
+          resolve:
+            booking: () -> model
+        modal_instance.result.then (params) ->
+          model.$post('cancel', params).then (booking) ->
+            success(booking) if success
+      else
+        Dialog.confirm
+          model: model,
+          title: 'Cancel'
+          body: "Are you sure you want to cancel this #{type}?"
+          success: (model) ->
+            model.$del('self').then (response) ->
+              success(response) if success
 
   bookForm = ($scope, $uibModalInstance, model, company, title, success, fail) ->
     $scope.loading = true

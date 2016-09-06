@@ -22,7 +22,7 @@
             </span>
           </div>
           <br>
-          <small> Minimum top up amount must be greater than {{wallet.min_amount | icurrency }} </small>
+          <small> Minimum top up amount must be greater than {{::wallet.min_amount | icurrency }} </small>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
         </div>
         <script type="text/javascript">
           iFrameResize([{log:true, checkOrigin:false}],['#bb-widget']);
-       </script> 
+       </script>
       </div>
 
     </div>
@@ -43,7 +43,7 @@
           <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()">Back</button>
         </div>
       </div>
-    </div> 
+    </div>
 
   </div>
 </div>

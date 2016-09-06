@@ -99,13 +99,11 @@ angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSourc
     ###
     getExternalBookings: (company, start, end, options = {})->
       deferred = $q.defer()
-
       if company.$has('external_bookings')
         params =
           start    : start.format()
           end      : end.format()
           no_cache : if options.noCache? and options.noCache then true else false
-
         company.$get('external_bookings', params).then (collection) ->
           bookings = collection.external_bookings
           if bookings
@@ -124,12 +122,12 @@ angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSourc
               booking.type      = 'external'
 
             deferred.resolve bookings
+          else
+            deferred.resolve []
         , (err)->
-          # Handle errors
           deferred.reject err
       else
         deferred.resolve []
-
       deferred.promise
 
     ###
