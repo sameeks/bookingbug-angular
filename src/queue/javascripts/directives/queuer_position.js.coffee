@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular.module('BBQueue.Directives').directive 'bbQueuerPosition', () ->
 
@@ -9,3 +9,4 @@ angular.module('BBQueue.Directives').directive 'bbQueuerPosition', () ->
 	scope:
 		id: '='
 		apiUrl: '@'
+

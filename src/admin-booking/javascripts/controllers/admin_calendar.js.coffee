@@ -6,8 +6,8 @@ angular.module('BB.Directives').directive 'bbAdminCalendar', () ->
   scope : true
   controller : 'adminCalendarCtrl'
 
-
-angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $element, $controller, $attrs, $modal, BBModel, $rootScope) ->
+angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $element,
+  $controller, $attrs, BBModel, $rootScope) ->
 
   angular.extend(this, $controller('TimeList', {
     $scope: $scope,
@@ -31,13 +31,20 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
     else if $scope.bb.current_item.defaults.time?
       $scope.switchView('day')
     else
-      $scope.switchView('multi_day')
+      $scope.switchView($scope.bb.item_defaults.day_view or 'multi_day')
 
     $scope.person_name   = $scope.bb.current_item.person.name if $scope.bb.current_item.person
     $scope.resource_name = $scope.bb.current_item.resource.name if $scope.bb.current_item.resource
 
 
   $scope.switchView = (view) ->
+
+    if view == "day"
+      if $scope.slots and $scope.bb.current_item.time
+        for slot in $scope.slots
+          if slot.time == $scope.bb.current_item.time.time
+            $scope.highlightSlot(slot, $scope.bb.current_item.date)
+            break
 
     # reset views
     for key, value of $scope.calendar_view
@@ -51,15 +58,18 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
 
     new_timeslot = new BBModel.TimeSlot({time: $scope.bb.current_item.defaults.time, avail: 1})
     new_day = new BBModel.Day({date: $scope.bb.current_item.defaults.datetime, spaces: 1})
-    
+
     $scope.setLastSelectedDate(new_day.date)
     $scope.bb.current_item.setDate(new_day)
 
     $scope.bb.current_item.setTime(new_timeslot)
 
     $scope.bb.current_item.setPerson($scope.bb.current_item.defaults.person)
-    $scope.bb.current_item.setResource($scope.bb.current_item.defaults.resource) 
+    $scope.bb.current_item.setResource($scope.bb.current_item.defaults.resource)
 
     if $scope.bb.current_item.reserve_ready
       $scope.addItemToBasket().then () =>
         $scope.decideNextPage()
+    else
+      $scope.decideNextPage()
+

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBAdminEvents').factory 'AdminEventGroupService',  ($q, BBModel) ->
 
   query: (params) ->
@@ -12,6 +14,4 @@ angular.module('BBAdminEvents').factory 'AdminEventGroupService',  ($q, BBModel)
     , (err) ->
       defer.reject(err)
     defer.promise
-
-
 

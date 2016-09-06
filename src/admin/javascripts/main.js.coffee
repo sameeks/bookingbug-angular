@@ -1,14 +1,14 @@
 'use strict'
 
-adminapp = angular.module('BBAdmin', [
+angular.module('BBAdmin', [
   'BB',
   'BBAdmin.Services',
   'BBAdmin.Filters',
   'BBAdmin.Directives',
   'BBAdmin.Controllers',
+  'BBAdmin.Models',
+  'BBAdmin.Directives',
   'trNgGrid'
-  # 'ui.state',
-#  'ui.calendar',
 ])
 
 angular.module('BBAdmin').config ($logProvider) ->
@@ -18,21 +18,37 @@ angular.module('BBAdmin.Directives', [])
 
 angular.module('BBAdmin.Filters', [])
 
+angular.module('BBAdmin.Models', [])
+
 angular.module('BBAdmin.Services', [
   'ngResource',
   'ngSanitize',
-  'ngLocalData'
 ])
 
 angular.module('BBAdmin.Controllers', [
-  'ngLocalData',
   'ngSanitize'
 ])
 
+angular.module('BBAdmin.Services').run ($q, $injector, BBModel) ->
+  models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
+    'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup',
+    'Event', 'Clinic', 'Company', 'Client']
 
-adminapp.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig, AdminLoginService) ->
-  # add methods to the rootscope if they are applicable to whole app
-  AdminLoginService.checkLogin().then () ->
-    if $rootScope.user && $rootScope.user.company_id
-      $rootScope.bb ||= {}
-      $rootScope.bb.company_id = $rootScope.user.company_id
+  afuncs = {}
+  for model in models
+    afuncs[model] = $injector.get("Admin" + model + "Model")
+  BBModel['Admin'] = afuncs
+
+
+angular.module('BB').config (FormTransformProvider) ->
+  FormTransformProvider.setTransform 'edit', 'Admin_Booking', (form) ->
+    if form[0].tabs
+      _.each form[0].tabs[0].items, (item) ->
+        if _.indexOf(['datetime', 'service', 'person_id', 'current_multi_status'], item.key) > -1
+          item.readonly = true
+    else
+      _.each form, (item) ->
+        if _.indexOf(['datetime', 'service', 'person_id'], item.key) > -1
+          item.readonly = true
+    form
+

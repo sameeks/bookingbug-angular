@@ -1,8 +1,9 @@
+'use strict'
+
 angular.module('BB.Services').factory "ClientService",  ($q, BBModel, MutexService) ->
 
   create: (company, client) ->
     deferred = $q.defer()
-    
     if !company.$has('client')
       deferred.reject("Cannot create new people for this company")
     else
@@ -13,13 +14,11 @@ angular.module('BB.Services').factory "ClientService",  ($q, BBModel, MutexServi
         , (err) =>
           deferred.reject(err)
           MutexService.unlock(mutex)
-
     deferred.promise
 
 
   update: (company, client) ->
     deferred = $q.defer()
-
     MutexService.getLock().then (mutex) ->
       client.$put('self', {}, client.getPostData()).then (cl) =>
         deferred.resolve(new BBModel.Client(cl))
@@ -27,7 +26,6 @@ angular.module('BB.Services').factory "ClientService",  ($q, BBModel, MutexServi
       , (err) =>
         deferred.reject(err)
         MutexService.unlock(mutex)
-
     deferred.promise
 
   create_or_update: (company, client) ->
@@ -49,3 +47,4 @@ angular.module('BB.Services').factory "ClientService",  ($q, BBModel, MutexServi
     else
       deferred.reject("No company or email defined")
     deferred.promise
+

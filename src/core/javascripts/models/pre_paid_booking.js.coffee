@@ -1,4 +1,4 @@
-
+'use strict'
 
 ###**
 * @ngdoc service
@@ -32,3 +32,4 @@ angular.module('BB.Models').factory "PrePaidBookingModel", ($q, BBModel, BaseMod
         false
       else
         true
+

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "SSOService", ($q, $rootScope, halClient, LoginService) ->
 
   memberLogin: (options) ->
@@ -26,3 +28,4 @@ angular.module('BB.Services').factory "SSOService", ($q, $rootScope, halClient, 
     , (err) =>
       deferred.reject(err)
     deferred.promise
+

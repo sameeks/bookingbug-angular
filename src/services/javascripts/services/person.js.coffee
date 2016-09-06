@@ -1,5 +1,8 @@
+'use strict'
+
 angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
-    $rootScope, halClient, SlotCollections, BookingCollections, BBModel, LoginService, $log) ->
+    $rootScope, halClient, SlotCollections, BookingCollections, BBModel,
+    LoginService, $log) ->
 
   query: (params) ->
     company = params.company
@@ -21,7 +24,6 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
   block: (company, person, data) ->
     deferred = $q.defer()
     person.$put('block', {}, data).then  (response) =>
-      console.log 'response ', response
       if response.$href('self').indexOf('bookings') > -1
         booking = new BBModel.Admin.Booking(response)
         BookingCollections.checkItems(booking)
@@ -32,9 +34,7 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
         deferred.resolve(slot)
     , (err) =>
       deferred.reject(err)
-
     deferred.promise
-
 
   signup: (user, data) ->
     defer = $q.defer()

@@ -1,6 +1,5 @@
 'use strict'
 
-
 ###**
 * @ngdoc service
 * @name BB.Models:AdminClinic
@@ -9,7 +8,7 @@
 * Representation of an Clinic Object
 *
 * @property {string} setTimes Set times for the clinic
-* @property {string} setResourcesAndPeople Set resources and people for the clinic 
+* @property {string} setResourcesAndPeople Set resources and people for the clinic
 * @property {object} settings Clinic settings
 * @property {string} resources Clinic resources
 * @property {integer} resource_ids Clinic resources ids
@@ -23,11 +22,10 @@
 * @property {string} end_time The clinic end time
 ####
 
-
-angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel, ClinicModel) ->
+angular.module('BB.Models').factory "AdminClinicModel", ($q, BBModel, BaseModel, ClinicModel) ->
 
   class Admin_Clinic extends ClinicModel
- 
+
     constructor: (data) ->
       super(data)
       @repeat_rule ||= {}
@@ -40,7 +38,7 @@ angular.module('BB.Models').factory "Admin.ClinicModel", ($q, BBModel, BaseModel
     * @description
     * Calculate the repeat rule
     *
-    * @returns {array} Returns an array of repeat rules 
+    * @returns {array} Returns an array of repeat rules
     ###
     calcRepeatRule: () ->
       vals = {}

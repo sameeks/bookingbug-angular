@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-angular.module('BBAdmin.Controllers').controller 'DashTimeList', ($scope,  $rootScope, $location, $q, $element, AdminTimeService) ->
+angular.module('BBAdmin.Controllers').controller 'DashTimeList', ($scope, $rootScope, $location, $q, $element, AdminTimeService) ->
 
   $loaded = null # has somethign been loaded
 
@@ -9,7 +9,7 @@ angular.module('BBAdmin.Controllers').controller 'DashTimeList', ($scope,  $root
     $scope.selected_day = day
     elem = angular.element($element)
     elem.attr('id', "tl_" + $scope.bb.company_id)
-    angular.element($element).show();
+    angular.element($element).show()
 
     prms = {company_id:$scope.bb.company_id, day: day}
     if $scope.service_id
@@ -80,22 +80,3 @@ angular.module('BBAdmin.Controllers').controller 'DashTimeList', ($scope,  $root
       overlay: { opacity: 0.1, background: "black" },
     }
 
-
-
-###
-  var sprice = "&price=" + price;
-  var slen = "&len=" + len
-  var sid = "&event_id=" + id
-  var str = pop_click_str + sid + slen + sprice + "&width=800"; // + "&style=wide";
-= "/booking/new_checkout?" + siarray + sjd + sitime ;
-
-function show_IFrame(myUrl, options, width, height){
-  if (!height) height = 500;
-  if (!width) width = 790;
-  opts = Object.extend({className: "white", pctHeight:1, width:width+20,top:'5%', height:'90%',closable:true, recenterAuto:false}, options || {});
-  x = Dialog.info("", opts);
-    x.setHTMLContent("<iframe frameborder=0 id='mod_dlg' onload='nowait();setTimeout(set_iframe_focus, 100);' width=" + width + " height=96%" + " src='" + myUrl + "'></iframe>");
-  x.element.setStyle({top:'5%'});
-  x.element.setStyle({height:'90%'});
-}
-###

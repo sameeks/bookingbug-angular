@@ -1,27 +1,26 @@
-angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, MemberBookingService, $q, ModalForm, MemberPrePaidBookingService, $rootScope) ->
+'use strict'
 
-  $scope.loading = true
+angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
+  $document, $log, $q, ModalForm, $rootScope, AlertService, PurchaseService,
+  LoadingService) ->
 
+  loader = LoadingService.$loader($scope)
 
   $scope.getUpcomingBookings = () ->
-
     defer = $q.defer()
-
+    now = moment()
     params =
-      start_date: moment().format('YYYY-MM-DD')
-    getBookings(params).then (upcoming_bookings) ->
-      $scope.upcoming_bookings = upcoming_bookings
-      defer.resolve(upcoming_bookings)
+      start_date: now.toISODate()
+    getBookings(params).then (results) ->
+      $scope.upcoming_bookings = _.filter results, (result) -> result.datetime.isAfter(now)
+      defer.resolve($scope.upcoming_bookings)
     , (err) ->
       defer.reject([])
-
-    return defer.promise
+    defer.promise
 
 
   $scope.getPastBookings = (num, type) ->
-
     defer = $q.defer()
-
     # default to year in the past if no amount is specified
     if num and type
       date = moment().subtract(num, type)
@@ -31,27 +30,95 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       start_date: date.format('YYYY-MM-DD')
       end_date: moment().add(1,'day').format('YYYY-MM-DD')
     getBookings(params).then (past_bookings) ->
-
       $scope.past_bookings = _.chain(past_bookings)
         .filter((b) -> b.datetime.isBefore(moment()))
         .sortBy((b) -> -b.datetime.unix())
         .value()
-
       defer.resolve(past_bookings)
     , (err) ->
       defer.reject([])
-
-    return defer.promise
+    defer.promise
 
 
   $scope.flushBookings = () ->
     params =
       start_date: moment().format('YYYY-MM-DD')
-    MemberBookingService.flush($scope.member, params)
+    $scope.member.$flush('bookings', params)
 
 
-  $scope.edit = (booking) ->
-    booking.getAnswersPromise().then (answers) ->
+  updateBookings = () ->
+    $scope.getUpcomingBookings()
+
+
+  getBookings = (params) ->
+    loader.notLoaded()
+    defer = $q.defer()
+    $scope.member.getBookings(params).then (bookings) ->
+      loader.setLoaded()
+      defer.resolve(bookings)
+    , (err) ->
+      $log.error err.data
+      loader.setLoaded()
+    defer.promise
+
+
+  $scope.cancelBooking = (booking) ->
+    index = _.indexOf($scope.upcoming_bookings, booking)
+    return false if index is -1
+    $scope.upcoming_bookings.splice(index, 1)
+    AlertService.raise('BOOKING_CANCELLED')
+    $scope.booking.$del('self').then () ->
+      $rootScope.$broadcast("booking:cancelled")
+      # does a removeBooking method exist in the scope chain?
+      $scope.removeBooking(booking) if $scope.removeBooking
+    , (err) ->
+      AlertService.raise('GENERIC')
+      $scope.upcoming_bookings.splice(index, 0, booking)
+
+
+  $scope.getPrePaidBookings = (params) ->
+    defer = $q.defer()
+    $scope.member.$getPrePaidBookings(params).then (bookings) ->
+      $scope.pre_paid_bookings = bookings
+      defer.resolve(bookings)
+    , (err) ->
+      defer.reject([])
+      $log.error err.data
+    defer.promise
+
+
+  bookWaitlistSucces = () ->
+    AlertService.raise('WAITLIST_ACCEPTED')
+    updateBookings()
+
+
+  openPaymentModal = (booking, total) ->
+    modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
+      templateUrl: "booking_payment_modal.html"
+      windowClass: "bbug"
+      size: "lg"
+      controller: ($scope, $uibModalInstance, booking, total) ->
+
+        $scope.booking = booking
+        $scope.total = total
+
+        $scope.handlePaymentSuccess = () ->
+          $uibModalInstance.close(booking)
+
+        $scope.cancel = ->
+          $uibModalInstance.dismiss "cancel"
+
+      resolve:
+        booking: -> booking
+        total: -> total
+
+    modalInstance.result.then (booking) ->
+      bookWaitlistSucces()
+
+
+  edit: (booking) ->
+    booking.$getAnswers().then (answers) ->
       for answer in answers.answers
         booking["question#{answer.question_id}"] = answer.value
       ModalForm.edit
@@ -62,23 +129,20 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
         success: updateBookings
 
 
-  updateBookings = () ->
-    $scope.getUpcomingBookings()
-
-
-  $scope.cancel = (booking) ->
-    modalInstance = $modal.open
+  cancel: (booking) ->
+    modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: "member_booking_delete_modal.html"
       windowClass: "bbug"
-      controller: ($scope, $rootScope, $modalInstance, booking) ->
+      controller: ($scope, $rootScope, $uibModalInstance, booking) ->
         $scope.controller = "ModalDelete"
         $scope.booking = booking
 
         $scope.confirm_delete = () ->
-          $modalInstance.close(booking)
+          $uibModalInstance.close(booking)
 
         $scope.cancel = ->
-          $modalInstance.dismiss "cancel"
+          $uibModalInstance.dismiss "cancel"
       resolve:
         booking: ->
           booking
@@ -86,47 +150,30 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $modal, $log, M
       $scope.cancelBooking(booking)
 
 
-  getBookings = (params) ->
-    $scope.loading = true
-    defer = $q.defer()
-    MemberBookingService.query($scope.member, params).then (bookings) ->
-      $scope.loading = false
-      defer.resolve(bookings)
+  book: (booking) ->
+    loader.notLoaded()
+    params =
+      purchase_id: booking.purchase_ref
+      url_root: $rootScope.bb.api_url
+      booking: booking
+    PurchaseService.bookWaitlistItem(params).then (purchase_total) ->
+      if purchase_total.due_now > 0
+        if purchase_total.$has('new_payment')
+          openPaymentModal(booking, purchase_total)
+        else
+          $log.error "total is missing new_payment link, this is usually caused \
+          by online payment not being configured correctly"
+      else
+        bookWaitlistSucces()
     , (err) ->
-      $log.error err.data
-      $scope.loading = false
-    return defer.promise
+      AlertService.raise('NO_WAITLIST_SPACES_LEFT')
+    loader.setLoaded()
 
 
-  $scope.cancelBooking = (booking) ->
-    $scope.loading = true
-    MemberBookingService.cancel($scope.member, booking).then () ->
-      
-      $rootScope.$broadcast("booking:cancelled")
+  pay: (booking) ->
+    params =
+      url_root: $scope.$root.bb.api_url
+      purchase_id: booking.purchase_ref
+    PurchaseService.query(params).then (total) ->
+      openPaymentModal(booking, total)
 
-      removeBooking = (booking, bookings) ->
-        return bookings.filter (b) -> b.id != booking.id
-
-      $scope.past_bookings = removeBooking(booking, $scope.past_bookings) if $scope.past_bookings
-      $scope.upcoming_bookings = removeBooking(booking, $scope.upcoming_bookings) if $scope.upcoming_bookings
-
-      # does a removeBooking method exist in the scope chain?
-      $scope.removeBooking(booking) if $scope.removeBooking
-      $scope.loading = false
-
-
-  $scope.getPrePaidBookings = (params) ->
-    
-    $scope.loading = true
-    defer = $q.defer()
-
-    MemberPrePaidBookingService.query($scope.member, params).then (bookings) ->
-      $scope.loading = false
-      $scope.pre_paid_bookings = bookings
-      defer.resolve(bookings)
-    , (err) ->
-      defer.reject([])
-      $log.error err.data
-      $scope.loading = false
-
-    return defer.promise

@@ -31,9 +31,9 @@
     </tbody>
   </table>
 
-  <pagination total-items="pagination.num_items"
+  <div uib-pagination total-items="pagination.num_items"
     ng-model="pagination.current_page" items-per-page="pagination.page_size"
     max-size="pagination.max_size" boundary-links="true" rotate="false"
-    num-pages="pagination.num_pages" ng-show="logs && logs.length > 10"></pagination>
-  
+    num-pages="pagination.num_pages" ng-show="logs && logs.length > 10"></div>
+
 </div>

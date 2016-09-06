@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBModel, BaseModel, $bbug) ->
 
@@ -6,9 +6,9 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
   class Purchase_Booking extends BaseModel
     constructor: (data) ->
       super(data)
-      @ready = false      
-      
-      @datetime = moment.parseZone(@datetime)    
+      @ready = false
+
+      @datetime = moment.parseZone(@datetime)
       @datetime.tz(@time_zone) if @time_zone
 
       @original_datetime = moment(@datetime)
@@ -42,10 +42,10 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           @company
 
 
-    getAnswersPromise: () =>
+    $getAnswers: () =>
       defer = $q.defer()
       if @answers?
-        defer.resolve(@answers) 
+        defer.resolve(@answers)
       else
         @answers = []
         if @_data.$has('answers')
@@ -56,7 +56,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           defer.resolve([])
       defer.promise
 
-    getSurveyAnswersPromise: () =>
+    $getSurveyAnswers: () =>
       defer = $q.defer()
       defer.resolve(@survey_answers) if @survey_answers
       if @_data.$has('survey_answers')
@@ -76,31 +76,30 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           if a.question_text && a.question_text == q
             return a.value
       else
-        @getAnswersPromise()
+        @$getAnswers()
       return null
 
 
     getPostData: () ->
-
       data = {}
 
       data.attended = @attended
       data.client_id = @client_id
       data.company_id = @company_id
       data.time = (@datetime.hour() * 60) + @datetime.minute()
-      data.date = @datetime.toISODate() 
+      data.date = @datetime.toISODate()
       data.deleted = @deleted
       data.describe = @describe
       data.duration = @duration
       data.end_datetime = @end_datetime
 
-      # is the booking being moved (i.e. new time/new event) or are we just updating 
+      # is the booking being moved (i.e. new time/new event) or are we just updating
       # the existing booking
       if @time and @time.event_id and !@isEvent()
         data.event_id = @time.event_id
       else if @event
         data.event_id = @event.id
-      else 
+      else
         data.event_id = @slot_id
 
       data.full_describe = @full_describe
@@ -120,6 +119,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
       data.service_id = @service.id if @service
       data.resource_id = @resource.id if @resource
       data.questions = @item_details.getPostData() if @item_details
+      data.move_reason = @move_reason if @move_reason
       data.service_name = @service_name
       data.settings = @settings
       data.status = @status if @status
@@ -134,7 +134,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
       if @survey_questions
         data.survey_questions = @survey_questions
         for q in @survey_questions
-          formatted_survey_answers.push({value: q.answer, outcome: q.outcome, detail_type_id: q.id, price: q.price}) 
+          formatted_survey_answers.push({value: q.answer, outcome: q.outcome, detail_type_id: q.id, price: q.price})
         data.survey_answers = formatted_survey_answers
 
       return data
@@ -171,7 +171,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
 
     canMove: () ->
-      return @canCancel()  
+      return @canCancel()
 
 
     getAttendeeName: () ->
@@ -180,3 +180,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
 
     isEvent: () ->
       return @event_chain?
+
+    @$addSurveyAnswersToBooking: (booking) ->
+      PurchaseBookingService.addSurveyAnswersToBooking(booking)
+

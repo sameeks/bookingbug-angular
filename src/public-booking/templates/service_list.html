@@ -3,7 +3,7 @@
     <!-- <div ng-show="items.length > 8" bb-include="_service_list_filter">
     </div> -->
 
-    <div class="panel panel-default" ng-repeat="item in filtered_items">
+    <div class="panel panel-default" ng-repeat="item in filtered_items | orderBy: 'order'">
       <div class="panel-body">
         <div class="row">
           <div class="col-sm-8 col-xs-6">
@@ -18,7 +18,7 @@
             </div>
           </div>
           <div class="col-sm-2 col-xs-6">
-            <div class="bb-service-price">
+            <div class="bb-service-price">&nbsp;
               <span ng-show="item.price > 0">{{item.price | currency: bb.company.currency_code}}</span>
               <span ng-show="item.price == 0" translate="ITEM_FREE"></span>
             </div>

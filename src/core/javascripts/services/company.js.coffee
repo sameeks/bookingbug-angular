@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "CompanyService",  ($q, halClient, BBModel) ->
   
   query: (company_id, options) ->
@@ -8,7 +10,6 @@ angular.module('BB.Services').factory "CompanyService",  ($q, halClient, BBModel
       deferred.resolve(company)
     , (err) =>
       deferred.reject(err)
-
     deferred.promise
 
   queryChildren: (company) ->
@@ -24,5 +25,5 @@ angular.module('BB.Services').factory "CompanyService",  ($q, halClient, BBModel
           deferred.resolve(companies)
       , (err) =>
         deferred.reject(err)
-
     deferred.promise
+

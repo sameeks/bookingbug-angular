@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "PackageItemService", ($q, BBModel) ->
 
   query: (company) ->
@@ -10,7 +12,6 @@ angular.module('BB.Services').factory "PackageItemService", ($q, BBModel) ->
           deferred.resolve(new BBModel.PackageItem(i) for i in package_items)
       , (err) ->
         deferred.reject(err)
-
     deferred.promise
 
   getPackageServices: (package_item) ->
@@ -22,5 +23,5 @@ angular.module('BB.Services').factory "PackageItemService", ($q, BBModel) ->
         deferred.resolve((new BBModel.Service(s) for s in services))
       , (err) =>
         deferred.reject(err)
-
     deferred.promise
+

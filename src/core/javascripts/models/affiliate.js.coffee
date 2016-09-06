@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -40,7 +40,7 @@ angular.module('BB.Models').factory "AffiliateModel", ($q, BBModel, BaseModel, h
         id: @cookie
         reference: ref
       }
-      
+
       href = "#{$rootScope.bb.api_url}/api/v1/affiliates/{id}/companies/{reference}"
       uri = new UriTemplate(href).fillFromObject(prms || {})
 
@@ -55,3 +55,4 @@ angular.module('BB.Models').factory "AffiliateModel", ($q, BBModel, BaseModel, h
         console .log 'err ', err
         defer.reject(err)
       defer.promise
+

@@ -1,4 +1,6 @@
-angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, $window, $location, SettingsService, AlertService) ->
+angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope,
+  $window, $location, SettingsService, AlertService) ->
+
   restrict: 'A'
   controller: 'Wallet'
   scope: true
@@ -23,7 +25,7 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
       referrer = $location.protocol() + "://" + $location.host()
       if $location.port()
         referrer += ":" + $location.port()
-      
+
       custom_stylesheet = if scope.wallet_payment_options.custom_stylesheet then scope.wallet_payment_options.custom_stylesheet else null
       custom_partial_url = if scope.bb and scope.bb.custom_partial_url then scope.bb.custom_partial_url else null
 
@@ -43,7 +45,7 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
       if scope.wallet_payment_options.basket_topup
 
         amount_due = scope.bb.basket.dueTotal() - scope.wallet.amount
-        
+
         if amount_due > scope.wallet.min_amount
           scope.amount = Math.ceil(amount_due / scope.amount_increment ) * scope.amount_increment
         else
@@ -66,14 +68,14 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope, 
           if scope.wallet
             calculateAmount()
             deregisterWatch()
-      else 
+      else
         scope.getWalletForMember(scope.member).then () ->
           calculateAmount()
 
 
     # listen to when the wallet is updated
     scope.$on 'wallet:updated', (event, wallet, band = null) ->
-     
+
       # load iframe using payment link
       if wallet.$has('new_payment')
         scope.notLoaded scope

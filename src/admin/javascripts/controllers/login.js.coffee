@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BBAdmin.Directives').directive 'bbAdminLogin', () ->
 
@@ -14,7 +15,7 @@ angular.module('BBAdmin.Directives').directive 'bbAdminLogin', () ->
 
 
 angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
-    $rootScope, AdminLoginService, $q, $sessionStorage) ->
+  $rootScope, $q, $sessionStorage, BBModel) ->
 
   $scope.login =
     host: $sessionStorage.getItem('host')
@@ -29,12 +30,12 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
     params =
       email: $scope.login.email
       password: $scope.login.password
-    AdminLoginService.login(params).then (user) ->
+    BBModel.Admin.Login.$login(params).then (user) ->
       if user.company_id?
         $scope.user = user
         $scope.onSuccess() if $scope.onSuccess
       else
-        user.getAdministratorsPromise().then (administrators) ->
+        user.$getAdministrators().then (administrators) ->
           $scope.administrators = administrators
           $scope.pickCompany()
     , (err) ->
@@ -49,8 +50,8 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
       email: $scope.login.email
       password: $scope.login.password
     $scope.login.selected_admin.$post('login', {}, params).then (login) ->
-      $scope.login.selected_admin.getCompanyPromise().then (company) ->
+      $scope.login.selected_admin.$getCompany().then (company) ->
         $scope.bb.company = company
-        AdminLoginService.setLogin($scope.login.selected_admin)
+        BBModel.Admin.Login.$setLogin($scope.login.selected_admin)
         $scope.onSuccess(company)
 

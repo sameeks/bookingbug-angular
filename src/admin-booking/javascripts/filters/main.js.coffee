@@ -1,4 +1,6 @@
+
 angular.module('BB.Filters').filter 'in_the_future', ->
+
   (slots) ->
 
     tim = moment()
@@ -7,6 +9,7 @@ angular.module('BB.Filters').filter 'in_the_future', ->
 
 
 angular.module('BB.Filters').filter 'tod_from_now', ->
+
   (tod, options) ->
 
     tim = moment()
@@ -36,3 +39,4 @@ angular.module('BB.Filters').filter 'tod_from_now', ->
       str += " #{mins} #{min_string}s"
 
     return str
+

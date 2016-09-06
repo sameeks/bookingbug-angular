@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BBQueue').controller 'bbQueuers', ($scope, $log,
     AdminQueuerService, ModalForm, $interval) ->
 
@@ -27,10 +29,11 @@ angular.module('BBQueue').controller 'bbQueuers', ($scope, $log,
       success: (queuer) ->
         $scope.queuers.push(queuer)
 
-  
+
     # this is used to retrigger a scope check that will update service time
   $interval(->
     if $scope.queuers
       for queuer in $scope.queuers
         queuer.remaining()
   , 5000)
+

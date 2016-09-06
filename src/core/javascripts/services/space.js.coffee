@@ -1,4 +1,7 @@
-angular.module('BB.Services').factory "SpaceService", ['$q',  ($q, BBModel) ->
+'use strict'
+
+angular.module('BB.Services').factory "SpaceService", ($q, BBModel) ->
+
   query: (company) ->
     deferred = $q.defer()
     if !company.$has('spaces')
@@ -12,6 +15,5 @@ angular.module('BB.Services').factory "SpaceService", ['$q',  ($q, BBModel) ->
           deferred.resolve(spaces)
       , (err) =>
         deferred.reject(err)
-
     deferred.promise
-]
+

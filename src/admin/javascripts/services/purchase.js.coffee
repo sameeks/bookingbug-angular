@@ -1,6 +1,6 @@
+'use strict'
 
-
-angular.module('BBAdmin.Services').factory 'AdminPurchaseService',  ($q, halClient, BBModel) ->
+angular.module('BBAdmin.Services').factory 'AdminPurchaseService', ($q, halClient, BBModel) ->
 
   query: (params) ->
     defer = $q.defer()

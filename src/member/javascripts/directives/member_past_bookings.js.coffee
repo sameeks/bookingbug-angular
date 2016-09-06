@@ -1,7 +1,10 @@
 angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, PaginationService) ->
+
   templateUrl: 'member_past_bookings.html'
   scope:
     member: '='
+    notLoaded: '='
+    setLoaded: '='
   controller: 'MemberBookings'
   link: (scope, element, attrs) ->
 
@@ -9,7 +12,8 @@ angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, Pagina
 
     getBookings = () ->
       scope.getPastBookings().then (past_bookings) ->
-        PaginationService.update(scope.pagination, past_bookings.length)
+        if past_bookings
+          PaginationService.update(scope.pagination, past_bookings.length)
 
 
     scope.$watch 'member', () ->

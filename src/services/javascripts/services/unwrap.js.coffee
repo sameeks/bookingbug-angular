@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BBAdminServices').factory "BB.Service.schedule", ($q, BBModel) ->
   unwrap: (resource) ->
@@ -65,3 +66,4 @@ angular.module('BBAdminServices').factory "BB.Service.services", ($q, BBModel) -
       deferred.reject(err)
 
     deferred.promise
+

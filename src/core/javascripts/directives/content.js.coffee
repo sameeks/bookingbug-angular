@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 # Directives
 app = angular.module 'BB.Directives'
@@ -13,3 +13,4 @@ app.directive 'bbContentNew', (PathSvc) ->
     $scope.initPage = ->
       $scope.$eval('setPageLoaded()')
     return
+

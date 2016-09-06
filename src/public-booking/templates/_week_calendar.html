@@ -1,4 +1,13 @@
 <div>
+
+  <div class="alert alert-info" bb-time-zone ng-show="is_time_zone_diff">
+    All times are shown in {{time_zone_name}}.
+  </div>
+
+  <div class="alert alert-info" ng-show="no_slots_in_week"><i class="fa fa-info-circle" aria-hidden="true"></i> Looks like there's no availability for the next {{time_range_length}} day<span ng-show="time_range_length > 1">s</span>.
+  <button type="button" class="btn btn-default" ng-click="showFirstAvailableDay()">Jump to Next Available Day</button>
+  </div>
+
   <div class="month-header hidden-xs">
     <h2 class="month-heading">{{pretty_month_title('MMMM', 'YYYY')}}</h2>
   </div>
@@ -18,11 +27,11 @@
       <input type="text" ng-model="selected_date" class="form-control"
         bb-datepicker-popup="DD/MM/YYYY"
         on-date-change="selectedDateChanged()"
-        datepicker-popup="dd/MM/yyyy"
+        uib-datepicker-popup="dd/MM/yyyy"
         is-open="opened"
+        ng-focus="opened=true"
         min-date="today"
-        datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-        show-weeks="false"
+        datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
         show-button-bar="false"
         ng-readonly="false"/>
       <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
@@ -42,12 +51,12 @@
         <!-- date format: http://docs.angularjs.org/api/ng.filter:date" -->
         <input type="text" ng-model="selected_date" class="form-control"
           bb-datepicker-popup="DD/MM/YYYY"
-          datepicker-popup="dd/MM/yyyy"
+          uib-datepicker-popup="dd/MM/yyyy"
           is-open="opened"
+          ng-focus="opened=true"
           min-date="today"
           on-date-change="selectedDateChanged()"
-          datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-          show-weeks="false"
+          datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
           show-button-bar="false"
           ng-readonly="true"
           name="date"
@@ -71,12 +80,12 @@
       <div class="input-group date-picker">
         <input type="text" ng-model="filters.date" class="form-control"
           bb-datepicker-popup="DD/MM/YYYY"
-          datepicker-popup="dd/MM/yyyy"
+          uib-datepicker-popup="dd/MM/yyyy"
           is-open="opened"
+          ng-focus="opened=true"
           min-date="today"
           on-date-change="filterDateChanged()"
-          datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-          show-weeks="false"
+          datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
           show-button-bar="false"
           ng-readonly="true"
           name="date"
@@ -131,7 +140,7 @@
         <div class="times">
 
           <!-- if time list has slots -->
-          <div accordion close-others="false">
+          <div uib-accordion close-others="false">
 
             <div bb-accordion-range-group="{heading: 'Morning', range: [0, 720], collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
             </div>

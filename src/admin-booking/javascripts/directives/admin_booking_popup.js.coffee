@@ -1,3 +1,4 @@
+
 angular.module('BBAdminBooking').directive 'bbAdminBookingPopup', (AdminBookingPopup) ->
   restrict: 'A'
   link: (scope, element, attrs) ->
@@ -9,3 +10,4 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingPopup', (AdminBookingP
 
     $scope.open = () ->
       AdminBookingPopup.open()
+

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -30,9 +30,12 @@ angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
   scope : true
   controller : 'MonthAvailability'
 
-angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $rootScope, $q, $translate, DayService, AlertService) ->
+angular.module('BB.Controllers').controller 'MonthAvailability', (
+  $scope, $rootScope, $q, AlertService, LoadingService, BBModel) ->
+
   $scope.controller = "public.controllers.MonthAvailability"
-  $scope.notLoaded $scope
+  
+  loader = LoadingService.$loader($scope).notLoaded()
 
 
   $scope.WeekHeaders = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -49,7 +52,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
     else if !$scope.current_date
       $scope.current_date = moment().startOf($scope.type)
     $scope.loadData()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadData()
@@ -145,7 +148,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
   * Set month
   *
   * @param {date} month The month
-  * @param {date} year The year 
+  * @param {date} year The year
   ###
   $scope.setMonth = (month, year) =>
     $scope.current_date = moment().startOf('month').year(year).month(month-1)
@@ -160,7 +163,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
   * Set month
   *
   * @param {date} week The week
-  * @param {date} year The year 
+  * @param {date} year The year
   ###
   $scope.setWeek = (week, year) =>
     $scope.current_date = moment().year(year).isoWeek(week).startOf('week')
@@ -175,7 +178,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
   * Add the current date in according of type and amount parameters
   *
   * @param {string} type The type
-  * @param {string} amount The amount 
+  * @param {string} amount The amount
   ###
   $scope.add = (type, amount) =>
     $scope.current_date.add(amount, type)
@@ -189,7 +192,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
   * Substract the current date in according of type and amount
   *
   * @param {string} type The type
-  * @param {string} amount The amount 
+  * @param {string} amount The amount
   ###
   $scope.subtract = (type, amount) =>
     $scope.add(type, -amount)
@@ -199,7 +202,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
   * @name isPast
   * @methodOf BB.Directives:bbMonthAvailability
   * @description
-  * Calculate if the current earlist date is in the past - in which case we might want to disable going backwards 
+  * Calculate if the current earlist date is in the past - in which case we might want to disable going backwards
   ###
   # calculate if the current earlist date is in the past - in which case we might want to disable going backwards
   $scope.isPast = () =>
@@ -230,12 +233,12 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
     date = $scope.current_date
 
     $scope.month = date.month()
-    $scope.notLoaded $scope
+    loader.notLoaded()
     edate = moment(date).add(1, 'months')
     $scope.end_date = moment(edate).add(-1, 'days')
 
     if $scope.data_source
-      DayService.query({company: $scope.bb.company, cItem: $scope.data_source, 'month':date.format("MMYY"), client: $scope.client }).then (days) =>
+      BBModel.Day.$query({company: $scope.bb.company, cItem: $scope.data_source, 'month':date.format("MMYY"), client: $scope.client }).then (days) =>
         $scope.days = days
         for day in days
           $scope.day_data[day.string_date] = day
@@ -246,11 +249,11 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
             week.push(days[w*7+d])
           weeks.push(week)
         $scope.weeks = weeks
-        $scope.setLoaded $scope
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoaded()
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
-      $scope.setLoaded $scope
-   
+      loader.setLoaded()
+
   ###**
   * @ngdoc method
   * @name loadWeek
@@ -260,19 +263,19 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope,  $root
   ###
   $scope.loadWeek = =>
     date = $scope.current_date
-    $scope.notLoaded $scope
- 
+    loader.notLoaded()
+
     edate = moment(date).add(7, 'days')
     $scope.end_date = moment(edate).add(-1, 'days')
     if $scope.data_source
-      DayService.query({company: $scope.bb.company, cItem: $scope.data_source, date: date.toISODate(), edate: edate.toISODate(), client: $scope.client  }).then (days) =>
+      BBModel.Day.$query({company: $scope.bb.company, cItem: $scope.data_source, date: date.toISODate(), edate: edate.toISODate(), client: $scope.client  }).then (days) =>
         $scope.days = days
         for day in days
           $scope.day_data[day.string_date] = day
-        $scope.setLoaded $scope
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoaded()
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
   ###**
   * @ngdoc method

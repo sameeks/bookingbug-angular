@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -26,23 +26,36 @@
 ###
 
 
-angular.module('BB.Directives').directive 'bbItemDetails', () ->
+angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, $compile) ->
   restrict: 'AE'
   replace: true
   scope : true
+  transclude: true
   controller : 'ItemDetails'
-  link : (scope, element, attrs) ->
+  link: (scope, element, attrs, controller, transclude) ->
     if attrs.bbItemDetails
       item = scope.$eval(attrs.bbItemDetails)
       scope.item_from_param = item
       delete scope.item_details if scope.item_details
-      scope.loadItem(item)
-    return
+      scope.loadItem(item) if item
+
+    transclude scope, (clone) =>
+      # if there's content compile that or grab the week_calendar template
+      has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+      if has_content
+        element.html(clone).show()
+      else
+        $q.when($templateCache.get('_item_details.html')).then (template) ->
+          element.html(template).show()
+          $compile(element.contents())(scope)
 
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, ItemDetailsService, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, QuestionService, $modal, $location, $upload, $translate, SettingsService, PurchaseService) ->
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope,
+  PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService,
+  $uibModal, $document, $translate, SettingsService, PurchaseService, LoadingService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
+  loader = LoadingService.$loader($scope)
 
   $scope.suppress_basket_update = $attrs.bbSuppressBasketUpdate?
   $scope.item_details_id = $scope.$eval $attrs.bbSuppressBasketUpdate
@@ -57,7 +70,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   # populate object with values stored in the question store. addAnswersByName()
   # is good for populating a single object. for dynamic question/answers see
   # addDynamicAnswersByName()
-  QuestionService.addAnswersByName($scope.client, [
+  BBModel.Question.$addAnswersByName($scope.client, [
     'first_name'
     'last_name'
     'email'
@@ -70,7 +83,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
   $rootScope.connection_started.then () ->
     $scope.loadItem($scope.bb.current_item) if !confirming
-  , (err) -> $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -83,7 +96,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   ###
   $scope.loadItem = (item) ->
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     confirming = true
     $scope.item = item
@@ -93,26 +106,26 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     if $scope.item.item_details
       setItemDetails $scope.item.item_details
       # this will add any values in the querystring
-      QuestionService.addDynamicAnswersByName($scope.item_details.questions)
-      QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
+      BBModel.Question.$addDynamicAnswersByName($scope.item_details.questions)
+      BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
       $scope.recalc_price()
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.$emit "item_details:loaded", $scope.item_details
 
     else
 
       params = {company: $scope.bb.company, cItem: $scope.item}
-      ItemDetailsService.query(params).then (details) ->
+      BBModel.ItemDetails.$query(params).then (details) ->
         if details
           setItemDetails details
           $scope.item.item_details = $scope.item_details
-          QuestionService.addDynamicAnswersByName($scope.item_details.questions)
-          QuestionService.addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
+          BBModel.Question.$addDynamicAnswersByName($scope.item_details.questions)
+          BBModel.Question.$addAnswersFromDefaults($scope.item_details.questions, $scope.bb.item_defaults.answers) if $scope.bb.item_defaults.answers
           $scope.recalc_price()
           $scope.$emit "item_details:loaded", $scope.item_details
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   ###**
@@ -189,12 +202,12 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
 
     if $scope.item.ready
-      $scope.notLoaded $scope
+      loader.notLoaded()
       $scope.addItemToBasket().then () ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
         $scope.decideNextPage(route)
       , (err) ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
     else
       $scope.decideNextPage(route)
 
@@ -222,22 +235,25 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * @param {string=} route A specific route to load
   ###
   $scope.confirm_move = (route) ->
+
     confirming = true
     $scope.item ||= $scope.bb.current_item
     $scope.item.moved_booking = false
     # we need to validate the question information has been correctly entered here
     $scope.item.setAskedQuestions()
     if $scope.item.ready
-      $scope.notLoaded $scope
+      loader.notLoaded()
       if $scope.bb.moving_purchase
         params =
           purchase: $scope.bb.moving_purchase
           bookings: $scope.bb.basket.items
+        if $scope.bb.current_item.move_reason
+          params.move_reason = $scope.bb.current_item.move_reason
         PurchaseService.update(params).then (purchase) ->
           $scope.bb.purchase = purchase
-          $scope.bb.purchase.getBookingsPromise().then (bookings)->
+          $scope.bb.purchase.$getBookings().then (bookings)->
             $scope.purchase = purchase
-            $scope.setLoaded $scope
+            loader.setLoaded()
             $scope.item.move_done = true
             $scope.item.moved_booking = true
             $rootScope.$broadcast "booking:moved"
@@ -246,9 +262,11 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
 
         , (err) ->
-           $scope.setLoaded $scope
+           loader.setLoaded()
            AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
       else
+        if $scope.bb.current_item.move_reason
+          $scope.item.move_reason = $scope.bb.current_item.move_reason
         PurchaseBookingService.update($scope.item).then (booking) ->
           b = new BBModel.Purchase.Booking(booking)
 
@@ -256,13 +274,14 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
             for oldb, _i in $scope.bb.purchase.bookings
               $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
 
-          $scope.setLoaded $scope
+          loader.setLoaded()
+          $scope.bb.moved_booking = booking
           $scope.item.move_done = true
           $rootScope.$broadcast "booking:moved"
           $scope.decideNextPage(route)
           $scope.showMoveMessage(b.datetime)
          , (err) =>
-          $scope.setLoaded $scope
+          loader.setLoaded()
           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
     else
       $scope.decideNextPage(route)
@@ -284,7 +303,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * Display terms and conditions view
   ###
   $scope.openTermsAndConditions = () ->
-    modalInstance = $modal.open(
+    modalInstance = $uibModal.open(
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "terms_and_conditions"
       scope: $scope
     )
@@ -314,7 +334,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   $scope.updateItem = () ->
     $scope.item.setAskedQuestions()
     if $scope.item.ready
-      $scope.notLoaded $scope
+      loader.notLoaded()
 
       PurchaseBookingService.update($scope.item).then (booking) ->
 
@@ -326,10 +346,10 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
         $scope.purchase.bookings = $scope.bookings
         $scope.item_details_updated = true
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
        , (err) =>
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -341,34 +361,3 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   $scope.editItem = () ->
     $scope.item_details_updated = false
 
-  ###**
-  * @ngdoc method
-  * @name onFileSelect
-  * @methodOf BB.Directives:bbItemDetails
-  * @description
-  * Select file to upload in according of item, $file and existing parameters
-  *
-  * @param {array} item The item for uploading
-  * @param {boolean} existing Checks if file item exist or not
-  ###
-  $scope.onFileSelect = (item, $file, existing) ->
-    $scope.upload_progress = 0
-    file = $file
-    att_id = null
-    att_id = existing if existing
-    method = "POST"
-    method = "PUT" if att_id
-    url = item.$href('add_attachment')
-    $scope.upload = $upload.upload({
-      url: url,
-      method: method,
-      data: {attachment_id: att_id},
-      file: file,
-    }).progress (evt) ->
-      if $scope.upload_progress < 100
-        $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
-    .success (data, status, headers, config) ->
-      $scope.upload_progress = 100
-      if data && item
-        item.attachment = data
-        item.attachment_id = data.id

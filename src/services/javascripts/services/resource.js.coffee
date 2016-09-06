@@ -1,5 +1,7 @@
-angular.module('BBAdmin.Services').factory 'AdminResourceService',
-($q, UriTemplate, halClient, SlotCollections, BBModel) ->
+'use strict'
+
+angular.module('BBAdmin.Services').factory 'AdminResourceService', ($q,
+  UriTemplate, halClient, SlotCollections, BBModel, BookingCollections) ->
 
   query: (params) ->
     company = params.company
@@ -15,17 +17,17 @@ angular.module('BBAdmin.Services').factory 'AdminResourceService',
     defer.promise
 
   block: (company, resource, data) ->
-    prms = {id:  resource.id, company_id: company.id}
-
     deferred = $q.defer()
-    href = "/api/v1/admin/{company_id}/resource/{id}/block"
-    uri = new UriTemplate(href).fillFromObject(prms || {})
-
-    halClient.$put(uri, {}, data).then  (slot) =>
-      slot = new BBModel.Admin.Slot(slot)
-      SlotCollections.checkItems(slot)
-      deferred.resolve(slot)
+    resource.$put('block', {}, data).then  (response) =>
+      if response.$href('self').indexOf('bookings') > -1
+        booking = new BBModel.Admin.Booking(response)
+        BookingCollections.checkItems(booking)
+        deferred.resolve(booking)
+      else
+        slot = new BBModel.Admin.Slot(response)
+        SlotCollections.checkItems(slot)
+        deferred.resolve(slot)
     , (err) =>
       deferred.reject(err)
-
     deferred.promise
+

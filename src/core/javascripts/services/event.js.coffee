@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Services').factory "EventService", ($q, BBModel) ->
 
   query: (company, params) ->
@@ -10,7 +12,9 @@ angular.module('BB.Services').factory "EventService", ($q, BBModel) ->
         params.event_chain_id = params.item.event_chain.id if params.item.event_chain
         params.resource_id = params.item.resource.id if params.item.resource
         params.person_id = params.item.person.id if params.item.person
+      params.no_cache = true
       company.$get('events', params).then (resource) =>
+        params.no_cache = false
         resource.$get('events', params).then (events) =>
           events = (new BBModel.Event(event) for event in events)
           deferred.resolve(events)
@@ -46,8 +50,9 @@ angular.module('BB.Services').factory "EventService", ($q, BBModel) ->
         params.resource_id = params.item.resource.id if params.item.resource
         params.person_id = params.item.person.id if params.item.person
       company.$get('events', params).then (resource) =>
-        collection = new BBModel.BBCollection(resource)        
+        collection = new BBModel.BBCollection(resource)
         deferred.resolve(collection)
       , (err) =>
         deferred.reject(err)
     deferred.promise
+

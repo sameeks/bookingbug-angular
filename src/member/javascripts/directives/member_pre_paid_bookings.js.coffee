@@ -1,4 +1,5 @@
 angular.module('BBMember').directive 'bbMemberPrePaidBookings', ($rootScope, PaginationService) ->
+
   templateUrl: 'member_pre_paid_bookings.html'
   scope:
     member: '='

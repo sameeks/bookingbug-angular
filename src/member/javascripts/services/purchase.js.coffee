@@ -2,19 +2,25 @@ angular.module('BBMember.Services').factory "MemberPurchaseService", ($q, $rootS
 
   query: (member, params) ->
     params ||= {}
-     # TODO - need to find a a means to specify that the collection should be not cached, but the individual totals should be
-    params["no_cache"] = true
+    params.no_cache = true
     deferred = $q.defer()
     if !member.$has('purchase_totals')
       deferred.reject("member does not have any purchases")
     else
       member.$get('purchase_totals', params).then (purchases) =>
+        params.no_cache = false
         purchases.$get('purchase_totals', params).then (purchases) =>
           purchases = for purchase in purchases
             new BBModel.PurchaseTotal(purchase)
           deferred.resolve(purchases)
         , (err) ->
-          deferred.reject(err)
+          if err.status == 404
+            deferred.resolve([])
+          else
+            deferred.reject(err)
       , (err) ->
-        deferred.reject(err)
+        if err.status == 404
+          deferred.resolve([])
+        else
+          deferred.reject(err)
     deferred.promise

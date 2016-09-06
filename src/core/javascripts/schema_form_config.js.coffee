@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('schemaForm').config (schemaFormProvider,
     schemaFormDecoratorsProvider, sfPathProvider) ->
 
@@ -96,3 +98,4 @@ angular.module('schemaForm').config (schemaFormProvider,
     'radiobuttons'
     'radio-buttons.html'
   )
+

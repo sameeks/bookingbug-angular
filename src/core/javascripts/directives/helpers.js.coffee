@@ -4,8 +4,8 @@ app = angular.module 'BB.Directives'
 
 app.directive 'ngConfirmClick', () ->
   link: (scope, element, attr) ->
-    msg = attr.ngConfirmClick || "Are you sure?";
-    clickAction = attr.ngConfirmedClick;
+    msg = attr.ngConfirmClick || "Are you sure?"
+    clickAction = attr.ngConfirmedClick
     element.bind 'click', (event) =>
       if window.confirm(msg)
         scope.$eval(clickAction)
@@ -149,7 +149,7 @@ app.directive 'bbDate', () ->
         scope.max_date = scope.bb.current_item.service.max_advance_datetime
 
         # if the bb_date is before/after the min/max date, move it to the min/max date
-        scope.bb_date.setDate(scope.min_date.clone()) if scope.bb_date.date.isBefore(scope.min_date, 'day') 
+        scope.bb_date.setDate(scope.min_date.clone()) if scope.bb_date.date.isBefore(scope.min_date, 'day')
         scope.bb_date.setDate(scope.max_date.clone()) if scope.bb_date.date.isAfter(scope.max_date, 'day')
 
     # if the js_date has changed, update the moment date representation
@@ -166,7 +166,7 @@ app.directive 'bbDebounce', ($timeout) ->
   restrict: 'A',
   link: (scope, element, attrs) ->
     delay = 400
-    delay = attrs.bbDebounce if attrs.bbDebounce 
+    delay = attrs.bbDebounce if attrs.bbDebounce
 
     element.bind 'click', () =>
       $timeout () =>
@@ -179,20 +179,29 @@ app.directive 'bbDebounce', ($timeout) ->
 
 
 # bbLocalNumber
-# Adds a formatter that prepends the model value with zero. This is useful for
+# Adds a formatter that prepends the model value with an appropriate prefix. This is useful for
 # nicely formatting numbers where the prefix has been stripped, i.e. '7875123456'
-app.directive 'bbLocalNumber', () ->
+# Adds a parser to store the user entered value which is then used in the formatter
+app.directive 'bbLocalNumber', ($filter) ->
   restrict: 'A',
+  scope: {},
   require: 'ngModel',
   link: (scope, element, attrs, ctrl) ->
 
-    prettyifyNumber = (value) ->
-      if value and value[0] != "0"
-        value = "0" + value
-      else
-        value
+    scope.userinput_mobile = null
+
+    storeNumber = (value) ->
+      if value
+        scope.userinput_mobile = value
       return value
 
+    prettyifyNumber = (value) ->
+      if scope.userinput_mobile
+        value = scope.userinput_mobile
+      else
+        return $filter('local_phone_number')(value)
+
+    ctrl.$parsers.push(storeNumber)
     ctrl.$formatters.push(prettyifyNumber)
 
 
@@ -219,7 +228,7 @@ app.directive 'bbPadWithZeros', () ->
 
 
 # bbFormResettable
-# Adds field clearing behaviour to forms.  
+# Adds field clearing behaviour to forms.
 app.directive 'bbFormResettable', ($parse) ->
   restrict: 'A'
   controller: ($scope, $element, $attrs) ->
@@ -267,12 +276,12 @@ app.directive 'bbDateSplit', ($parse) ->
 
       joinDate:  ->
         if @day && @month && @year
-          date_string = @day + '/' + @month + '/' + @year 
+          date_string = @day + '/' + @month + '/' + @year
           @date = moment(date_string, "DD/MM/YYYY")
           date_string = @date.toISODate()
 
           ngModel.$setViewValue(date_string)
-          ngModel.$render()     
+          ngModel.$render()
 
       splitDate: (date) ->
         if date && date.isValid()
@@ -285,8 +294,8 @@ app.directive 'bbDateSplit', ($parse) ->
     # split the date if it's already set
     question.date.splitDate(moment(question.answer)) if question.answer
     question.date.splitDate(moment(ngModel.$viewValue)) if ngModel.$viewValue
- 
-    # watch self to split date when it changes  
+
+    # watch self to split date when it changes
     # scope.$watch attrs.ngModel, (newval) ->
     #   if newval
     #     new_date = moment(newval)
@@ -302,7 +311,7 @@ app.directive 'bbCommPref', () ->
 
     ng_model_ctrl = ctrls[0]
 
-    # get the default communication preference 
+    # get the default communication preference
     comm_pref = scope.$eval(attrs.bbCommPref) or false
 
     # check if it's already been set
@@ -413,10 +422,10 @@ app.directive 'bbPriceFilter', (PathSvc) ->
       $scope.price_array.sort (a, b) ->
         return a - b
       suitable_max()
-      
+
     suitable_max = () ->
       top_number = _.last($scope.price_array)
-      max_number = switch 
+      max_number = switch
         when top_number < 1 then 0
         when top_number < 11 then 10
         when top_number < 51 then 50
@@ -446,7 +455,7 @@ angular.module('BB.Directives').directive 'bbBookingExport', () ->
     scope.$watch 'purchase', (new_val, old_val) ->
       setHTML(new_val) if new_val
     setHTML = (purchase_total) ->
-      scope.html = 
+      scope.html =
         "<div class='text-center'><a href='#{purchase_total.webcalLink()}'><img src='images/outlook.png' alt='outlook calendar icon' height='30' width='30' /><div class='clearfix'></div><span>Outlook</span></a></div><p></p>" +
         "<div class='text-center'><a href='#{purchase_total.gcalLink()}'><img src='images/google.png' alt='google calendar icon' height='30' width='30' /><div class='clearfix'></div><span>Google</span></a></div><p></p>" +
         "<div class='text-center'><a href='#{purchase_total.icalLink()}'><img src='images/ical.png' alt='ical calendar icon' height='30' width='30' /><div class='clearfix'></div><span>iCal</span></a></div>"
@@ -460,13 +469,13 @@ angular.module('BB.Directives').directive 'bbDynamicFooter', ($timeout, $bbug) -
 
     scope.$watch -> $bbug('.content')[0].scrollHeight,
     (new_val, old_val) ->
-      if new_val != old_val       
+      if new_val != old_val
         scope.setContentHeight()
 
     scope.setContentHeight = ->
       $bbug('.content').css('height', 'auto')
       content_height = $bbug('.content')[0].scrollHeight
-      min_content_height = $bbug(window).innerHeight() - $bbug('.content').offset().top - $bbug('.footer').height()     
+      min_content_height = $bbug(window).innerHeight() - $bbug('.content').offset().top - $bbug('.footer').height()
       if content_height < min_content_height
         $bbug('.content').css('height', min_content_height + 'px')
 
@@ -497,3 +506,4 @@ angular.module('BB.Directives').directive('bbBlurOnReturn', ($timeout) ->
         )
     )
 )
+

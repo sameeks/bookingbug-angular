@@ -20,7 +20,7 @@
             <div class="confirmation-header">
               <h3 class="confirmation-heading" translate="CONFIRMATION_PURCHASE_TITLE" translate-values="{service_name: purchase.bookings[0].service_name}"></h3>
               <div class="row hidden-print text-right" >
-                <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span><span translate="PRINT"></span></button>
+              <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print"></span><span translate="PRINT"></span></button>
                 <div bb-booking-export class="bb-booking-export"></div>
               </div>
             </div>
@@ -50,18 +50,19 @@
               </ul>
 
               <div bb-address-map="purchase.bookings[0].company.address" class="view-booking-map">
+                <ui-gmap-google-map ng-if='map.center' center='map.center' zoom='map.zoom' options="options">
+                  <ui-gmap-marker coords="marker.coords" idkey="marker.id">
+                  </ui-gmap-marker>
+                </ui-gmap-google-map>
+              </div>
 
               <div class="confirmation-summary-address">
-                <div>
-                  <span class='fa fa-map-marker'></span>
-                  {{purchase.bookings[0].company.address | address_single_line}}
-                </div>
-                <div>
-                  <span class='fa fa-phone'></span>
-                  {{purchase.bookings[0].company.address.phone | local_phone_number}}
-                </div>
+                <div ng-show="purchase.bookings[0].company.address"><span class='fa fa-map-marker'></span> {{purchase.bookings[0].company.address | address_single_line}}</div>
+                <div ng-show="purchase.bookings[0].company.address.phone"><span class='fa fa-phone'></span> {{purchase.bookings[0].company.address.phone | local_phone_number}}</div>
               </div>
+
             </div>
+
 
             <div class="payment">
               <div bb-custom-confirmation-text class="text-block-sml bb-message-buffer" ng-show="messages">

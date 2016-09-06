@@ -4,12 +4,15 @@
 
   <!-- BREADCRUMB ROUTE
   <div bb-breadcrumbs class="breadcrumbs_holder" ng-init="setRoute([
-    {page:'event_list', title: 'Select an event'},
-    {page:'event', title: 'Event'},
-    {page:'checkout', title: 'Confirmation'}
+    {page:'map', title: 'Select a store'},
+    {page:'service_list', title: 'Select a service'},
+    {page:'person_list', title: 'Select a person'},
+    {page:'calendar', title: 'Select a time'},
+    {page:'checkout', title: 'Checkout'},
+    {page:'confirmation', title: 'Confirmation'},
     ])">
 
-    <ol class="breadcrumb"> 
+    <ol class="breadcrumb">
       <li ng-repeat="step in bb.allSteps" ng-class="{'active': step.active, 'passed': step.passed, 'disabled': isDisabledStep(step)}">
         <button type="button" ng-click="loadStep(step.number)" ng-class="{'active': step.active, 'passed': step.passed}" ng-disabled="isDisabledStep(step)">
           <span class="step-num">{{step.number}}.</span>
@@ -17,11 +20,11 @@
         </button>
       </li>
     </ol>
-  </div> 
+  </div>
   -->
 
   <!-- PROGRESSBAR
-  <div progressbar value="bb.percentage_complete" type="primary"></div>
+  <div uib-progressbar value="bb.percentage_complete" type="primary"></div>
   -->
 
   <!-- STEP INDICATOR
@@ -30,15 +33,10 @@
     <span ng-if="bb.current_step == bb.allSteps.length" ng-bind="'Complete'"></span>
   </div> -->
 
-  <div ng-if="i18n" class="row hidden-print">
-    <div class="col-sm-12">
-      <div bb-locale-switcher></div>
-    </div>
-  </div>
   <div class="alerts" bb-scroll-to="alert:raised" bb-always-scroll>
-    <div alert ng-repeat="alert in $root.alerts" type="{{alert.type}}" >
+    <div uib-alert ng-repeat="alert in $root.alerts" ng-class="'alert-' + alert.type">
       <ul>
-        <li><span translate="{{alert.msg}}"></span></li>
+        <li ng-bind-html="alert.msg"></li>
       </ul>
     </div>
   </div>
@@ -60,6 +58,6 @@
 
 <div bb-dynamic-footer class="footer">
   <div ng-show="isLoaded" class="powered-by">
-    <span><span translate="POWERED_BY"></span> <a href="http://www.bookingbug.com" style="text-decoration:none" target="_blank"><span class="bb-primary-brand-color">booking</span><span class="bb-secondary-brand-color">bug</span></a></span>
+    <span><span translate="POWERED_BY"></span> by <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"><span style="color:#087f94">booking</span><span style="color:#88c66f">bug</span></a></span>
   </div>
 </div>

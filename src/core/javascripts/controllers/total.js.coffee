@@ -29,10 +29,11 @@ angular.module('BB.Directives').directive 'bbTotal', () ->
   scope : true
   controller : 'Total'
 
-angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q, $location, $window, PurchaseService, QueryStringService) ->
+angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
+    $location, $window, QueryStringService, LoadingService) ->
 
   $scope.controller = "public.controllers.Total"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then =>
     $scope.bb.payment_status = null
@@ -40,15 +41,15 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q, $
     id = QueryStringService('purchase_id')
 
     if id and !$scope.bb.total
-      PurchaseService.query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
+      BBModel.Purchase.Total.$query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
         $scope.total = total
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
         # emit checkout:success event if the amount paid matches the total price
         $scope.$emit("checkout:success", total) if total.paid == total.total_price
     else
       $scope.total = $scope.bb.total
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
       # emit checkout:success event if the amount paid matches the total price
       $scope.$emit("checkout:success", $scope.total) if $scope.total.paid == $scope.total.total_price
@@ -57,7 +58,7 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q, $
     $scope.reset()
 
   , (err) ->
-    $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -70,3 +71,4 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q, $
     $window.open($scope.bb.partial_url+'print_purchase.html?id='+$scope.total.long_id,'_blank',
                 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0')
     return true
+

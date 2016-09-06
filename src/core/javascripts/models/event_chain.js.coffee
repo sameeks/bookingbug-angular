@@ -1,6 +1,4 @@
-
-
-'use strict';
+'use strict'
 
 
 ###**
@@ -9,7 +7,7 @@
 *
 * @description
 * Representation of an EventChain Object
-* 
+*
 * @property {integer} id The id of event chain
 * @property {string} name Name of the event chain
 * @property {string} description The description of the event
@@ -22,13 +20,16 @@
 ####
 
 
-angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel,
+  EventChainService) ->
 
   class EventChain extends BaseModel
 
     constructor: (data) ->
       super
       @capacity_view = setCapacityView(@capacity_view)
+      @start_date = moment(@start_date) if @start_date
+      @end_date = moment(@end_date) if @end_date
 
     name: () ->
       @_data.name
@@ -75,6 +76,8 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
           @$get('ticket_sets').then (tickets) =>
             @tickets = []
             for ticket in tickets
+              # mark that this ticket is part of ticket set so that the range can be calculated correctly
+              ticket.ticket_set = true
               @tickets.push(new BBModel.EventTicket(ticket))
             @adjustTicketsForRemaining()
             def.resolve(@tickets)
@@ -99,12 +102,10 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
     *
     * @returns {object} The returned adjust tickets for remaining
     ###
-    # for each ticket set - adjust the number of tickets that can be booked due to changes in the number of remaining spaces
     adjustTicketsForRemaining: () ->
       if @tickets
         for @ticket in @tickets
           @ticket.max_spaces = @spaces
-
 
     ###**
     * @ngdoc method
@@ -122,3 +123,8 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel) 
         when 3 then capacity_view_str = "NUM_SPACES_AND_SPACES_LEFT"
         else capacity_view_str = "NUM_SPACES_AND_SPACES_LEFT"
       return capacity_view_str
+
+
+    @$query: (prms) ->
+      EventChainService.query(prms)
+

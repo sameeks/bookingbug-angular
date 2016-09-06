@@ -4,18 +4,16 @@
 
       <div class="bb-subcontent">
         <div class="confirmation-header bb-confirmation-border-margin">
-          <div ng-if="!total.containsWaitlistItems()">
+          <div ng-show="!total.containsWaitlistItems()">
             <h2 translate="CONFIRMATION_BOOKING_TITLE"></h2>
-            <p class="bb-confirmation-p-alignment" translate="CONFIRMATION_BOOKING_SUBHEADER"
-               translate-values="{member_name: total.client.first_name}"></p>
+            <p class="bb-confirmation-p-alignment"  translate="CONFIRMATION_BOOKING_SUBHEADER" translate-values="{member_name: total.client.first_name}"></p>
           </div>
-           <div ng-if="total.containsWaitlistItems()">
+           <div ng-show="total.containsWaitlistItems()">
             <h2 translate="ITEM_CONFIRMATION"></h2>
-            <p class="bb-confirmation-p-alignment" translate="CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST"
-               translate-values="{member_name: total.client.first_name}"></p>
+            <p class="bb-confirmation-p-alignment" translate="CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST" translate-values="{member_name: total.client.first_name}"></p>
           </div>
-          <div class="row hidden-print text-right">
-            <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span><span translate="PRINT"></span></button>
+          <div class="row hidden-print text-right print-row">">
+            <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print"></span><span translate="PRINT"></span></button>
             <div bb-booking-export class="bb-booking-export"></div>
           </div>
         </div>
@@ -29,15 +27,15 @@
           </ul>
 
           <ul class="confirmation-summary" ng-repeat="booking in total.bookings">
-            <li ng-if="booking.full_describe" class="row confirmation-summary-item">
+            <li ng-show="booking.full_describe" class="row confirmation-summary-item">
               <div class="bb-summary-label"><span translate="ITEM_SERVICE"></span>:</div>
               <div class="bb-summary-value">{{ booking.full_describe }}</div>
             </li>
-            <li ng-if="booking.describe" class="row confirmation-summary-item">
+            <li ng-show="booking.describe" class="row confirmation-summary-item">
               <div class="bb-summary-label"><span translate="ITEM_DATE"></span>/<span translate="ITEM_TIME"></span>:</div>
               <div class="bb-summary-value">{{booking.describe}}</div>
             </li>
-            <li ng-if="booking.price" class="row confirmation-summary-item">
+            <li ng-show="booking.price" class="row confirmation-summary-item">
               <div class="bb-summary-label"><span translate="ITEM_PRICE"></span>:</div>
               <div class="bb-summary-value">{{booking.price | currency}}</div>
             </li>
@@ -48,14 +46,18 @@
 
             <li class="row confirmation-summary-item">
               <div class="col-sm-12">
-                <div bb-address-map="total.items[0].address">
+                <div bb-address-map="total.bookings[0].address">
+                  <div ng-if='map.center' ui-gmap-google-map center='map.center' zoom='map.zoom' options="options">
+                    <div ui-gmap-marker coords="marker.coords" idkey="marker.id">
+                    </div>
+                  </div>
                 </div>
               </div>
             </li>
 
             <div class="confirmation-summary-address">
-              <div><span class='fa fa-map-marker'></span> {{total.bookings[0].address | address_single_line}}</div>
-              <div><span class='fa fa-phone'></span> {{total.bookings[0].address.phone | local_phone_number}}</div>
+              <div ng-show="total.bookings[0].address"><span class='fa fa-map-marker'></span> {{total.bookings[0].address | address_single_line}}</div>
+              <div ng-show="total.bookings[0].address.phone"> <span class='fa fa-phone'></span> {{total.bookings[0].address.phone | local_phone_number}}</div>
             </div>
 
           </ul>

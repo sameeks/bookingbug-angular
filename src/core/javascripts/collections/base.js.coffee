@@ -1,7 +1,6 @@
-
+'use strict'
 
 class window.Collection
-
 
 class window.Collection.Base
 
@@ -18,15 +17,15 @@ class window.Collection.Base
           clean_params[key+ "_id"] = val.id
         else
           clean_params[key] = val
-    @jparams = JSON.stringify(clean_params) 
+    @jparams = JSON.stringify(clean_params)
     if res
-      for n,m of res 
+      for n,m of res
         @[n] = m
 
   checkItem: (item) ->
     if !@matchesParams(item)
       @deleteItem(item)  #delete if it is in the collection at the moment
-      return true    
+      return true
     else
       for existingItem, index in @items
         if item.self == existingItem.self
@@ -35,9 +34,9 @@ class window.Collection.Base
             call[1](item, "update")
           return true
 
-    @items.push(item)    
+    @items.push(item)
     for call in @callbacks
-      call[1](item, "add") 
+      call[1](item, "add")
 
   deleteItem: (item) ->
     len = @items.length
@@ -72,12 +71,12 @@ class window.BaseCollections
 
   checkItems: (item) ->
    for col in @collections
-     col.checkItem(item)  
+     col.checkItem(item)
 
   deleteItems: (item) ->
    for col in @collections
-     col.deleteItem(item) 
- 
+     col.deleteItem(item)
+
   find: (prms) ->
     clean_params = {}
     for key,val of prms
@@ -86,10 +85,10 @@ class window.BaseCollections
           clean_params[key+ "_id"] = val.id
         else
           clean_params[key] = val
-    jprms =  JSON.stringify(clean_params)    
+    jprms =  JSON.stringify(clean_params)
     for col in @collections
       if jprms == col.jparams
-        return col    
+        return col
 
   delete: (col) ->
     @collections = _.without(@collections, col)

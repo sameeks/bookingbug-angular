@@ -23,7 +23,7 @@
 * @property {package} package The currectly selected package
 * @property {hash} filters A hash of filters
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -34,9 +34,9 @@
 *     </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
-* 
+*
 ####
 
 angular.module('BB.Directives').directive 'bbPackageItems', () ->
@@ -46,7 +46,8 @@ angular.module('BB.Directives').directive 'bbPackageItems', () ->
   controller : 'PackageItem'
 
 
-angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, PackageItemService) ->
+angular.module('BB.Controllers').controller 'PackageItem',
+($scope, $rootScope, BBModel) ->
 
   $scope.controller = "public.controllers.PackageItem"
 
@@ -56,7 +57,7 @@ angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, 
 
   $scope.init = (company) ->
     $scope.booking_item ||= $scope.bb.current_item
-    PackageItemService.query(company).then (package_items) ->
+    BBModel.PackageItem.$query(company).then (package_items) ->
       $scope.packages = package_items
 
 
@@ -106,7 +107,7 @@ angular.module('BB.Controllers').controller 'PackageItem', ($scope, $rootScope, 
   $scope.getPackageServices = (item) ->
     if item && !item.service_list
       item.service_list = []
-      promise = PackageItemService.getPackageServices(item)
+      promise = BBModel.PackageItem.$getPackageServices(item)
       promise.then (services) ->
         item.service_list = services
       return true

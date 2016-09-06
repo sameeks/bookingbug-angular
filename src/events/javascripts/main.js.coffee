@@ -12,3 +12,4 @@ angular.module('BBAdminEvents').config ($logProvider) ->
   $logProvider.debugEnabled(true)
 
 angular.module('BBAdminEventsMockE2E', ['BBAdminEvents', 'BBAdminMockE2E'])
+

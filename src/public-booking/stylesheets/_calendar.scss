@@ -1,4 +1,4 @@
-.bb-calendar, [bb-time-ranges],  {
+.bb-calendar, [bb-time-ranges], .bb-time-ranges {
   padding-bottom: 30px;
 
   .week {
@@ -69,18 +69,21 @@
     }
   }
 
-  // panel styling
+  // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+  // Panel overrides
+  // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   .panel-group {
+
     .panel {
       border-radius: 0;
       margin: 0;
       border: none;
-      border-bottom: 1px rgb(221, 221, 221) solid;
+      border-bottom: 1px $bb-border solid;
       box-shadow: none;
     }
 
     .accordion-group:first-child .panel {
-      border-top: 1px rgb(221, 221, 221) solid;
+      border-top: 1px $bb-border solid;
     }
   }
 
@@ -96,20 +99,24 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    cursor: position;
+    cursor: inherit;
   }
 
   .panel-default > .panel-heading + .panel-collapse .panel-body {
     border: none;
   }
 
-   .panel-body {
+  .panel-body {
     padding: 0;
   }
 
   .panel-title {
     font-size: inherit;
     padding-bottom: 0;
+  }
+
+  .panel-group .panel-heading+.panel-collapse>.panel-body {
+    border-top: none;
   }
 
   .period-label {
@@ -132,7 +139,7 @@
     cursor: pointer;
     text-align: center;
     &:hover, &.selected {
-      background-color: #333;
+      background-color: $gray-darker;
       color: #FFF;
     }
   }
@@ -145,11 +152,11 @@
 
   // expanded or selected panel
   .panel-group .panel.expanded {
-    background-color: #EEE;
+    background-color: $gray-lighter;
   }
 
   .panel-group .panel.selected {
-    background-color: #777;
+    background-color: $gray-light;
     color: #FFF;
   }
 
@@ -169,11 +176,13 @@
       display: none;
     }
     .panel-title {
-      color: #CCC;
+      color: $bb-gray;
     }
   }
 
-// calendar hidden column functionality
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// Calendar hidden column functionality
+// \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 @media (max-width: $screen-md-max) {
   .cal-col-6, .cal-col-7{
     display: none;
@@ -256,13 +265,13 @@
     button{
       background: transparent;
       border-radius: 0px;
-      border: solid 1px #ddd;
-      color: #777;
+      border: solid 1px $bb-border;
+      color: $gray-light;
       &:disabled{
         opacity: .5;
       }
       span{
-        color: #777;
+        color: $gray-light;
       }
     }
 

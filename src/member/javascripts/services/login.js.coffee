@@ -1,6 +1,6 @@
-angular.module('BBMember.Services').factory "MemberLoginService", ($q, halClient,
-    $rootScope, BBModel, $sessionStorage) ->
- 
+angular.module('BBMember.Services').factory "MemberLoginService", ($q,
+  $rootScope, $sessionStorage, halClient,  BBModel) ->
+
   login: (form, options) ->
     defer = $q.defer()
     url = "#{$rootScope.bb.api_url}/api/v1/login"
@@ -9,7 +9,7 @@ angular.module('BBMember.Services').factory "MemberLoginService", ($q, halClient
       if login.$has('member')
         login.$get('member').then (member) ->
           member = new BBModel.Member.Member(member)
-          auth_token = member.getOption('auth_token')
+          auth_token = member._data.getOption('auth_token')
           $sessionStorage.setItem("login", member.$toStore())
           $sessionStorage.setItem("auth_token", auth_token)
           defer.resolve(member)
@@ -27,4 +27,3 @@ angular.module('BBMember.Services').factory "MemberLoginService", ($q, halClient
       else
         defer.reject(err)
     defer.promise
-

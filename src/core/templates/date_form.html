@@ -2,9 +2,14 @@
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
 
   <p class="input-group" ng-init="datepicker = {isOpen: true}">
-    <input datepicker-popup="dd-MMMM-yyyy" ng-model="$$value$$"
-    class="form-control" is-open="datepicker.isOpen"
-    ng-disabled="form.readonly"></input>
+    <input
+      uib-datepicker-popup="dd-MMMM-yyyy"
+      ng-model="$$value$$"
+      class="form-control"
+      is-open="datepicker.isOpen"
+      ng-disabled="form.readonly"
+      ng-focus="datepicker.isOpen = true"
+    ></input>
     <span class="input-group-btn">
       <button type="button" class="btn btn-default" bb-debounce
         ng-click="$event.preventDefault(); $event.stopPropagation();

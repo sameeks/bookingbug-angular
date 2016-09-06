@@ -1,5 +1,4 @@
-'use strict';
-
+'use strict'
 
 ###**
 * @ngdoc directive
@@ -19,7 +18,7 @@
 * @property {string} name The category name
 * @property {integer} id The category id
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -30,9 +29,9 @@
 *     </div>
 *     </div>
 *     </div>
-*   </file> 
+*   </file>
 *  </example>
-*  
+*
 ####
 
 
@@ -43,34 +42,35 @@ angular.module('BB.Directives').directive 'bbCategories', () ->
   controller : 'CategoryList'
 
 
-angular.module('BB.Controllers').controller 'CategoryList',
-($scope,  $rootScope, CategoryService, $q, PageControllerService) ->
-  $scope.controller = "public.controllers.CategoryList"
-  $scope.notLoaded $scope
+angular.module('BB.Controllers').controller 'CategoryList', (
+  $scope, $rootScope, $q, PageControllerService, LoadingService, BBModel, ValidatorService) ->
 
-  angular.extend(this, new PageControllerService($scope, $q))
+  $scope.controller = "public.controllers.CategoryList"
+  loader = LoadingService.$loader($scope).notLoaded()
+
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $rootScope.connection_started.then =>
     if $scope.bb.company
       $scope.init($scope.bb.company)
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
-    CategoryService.query(comp).then (items) =>
+    BBModel.Category.$query(comp).then (items) =>
       $scope.items = items
       if (items.length == 1)
         $scope.skipThisStep()
         $rootScope.categories = items
         $scope.selectItem(items[0], $scope.nextRoute )
-      $scope.setLoaded $scope
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoaded()
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
   * @name selectItem
   * @methodOf BB.Directives:bbCategories
   * @description
-  * Select an item 
+  * Select an item
   *
   * @param {object} item The Service or BookableItem to select
   * @param {string=} route A specific route to load

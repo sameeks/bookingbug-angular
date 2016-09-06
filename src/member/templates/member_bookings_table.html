@@ -2,25 +2,25 @@
 <table tr-ng-grid="" items="bookings" enable-filtering="false"
   ng-hide="loading" fields="fields" order-by="orderBy">
   <thead>
-    <tr>
+    <tr role="row">
       <th field-name="date_order" display-name="Date/Time"></th>
       <th field-name="details" display-name="Description"></th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td field-name="date_order"><span>{{gridItem.datetime.format('ddd DD MMM YY h.mma')}}</span></td>
+    <tr role="row">
+      <td field-name="date_order"><span>{{gridItem.datetime | datetime: 'ddd DD MMM YY h.mma'}}</span></td>
       <td field-name="details"><span>{{gridItem.details}}</span></td>
       <td>
         <button class="btn btn-default btn-sm"
-          ng-hide="gridItem.date < now"
+          ng-hide="gridItem.datetime.format('X') < now.format('X')"
           ng-click="cancel(gridItem.id)"
           translate="PROGRESS_CANCEL">
         </button>
         <button class="btn btn-default btn-sm"
-          ng-hide="gridItem.date < now"
-          ng-click="edit(gridItem.id)"
-          translate="DETAILS_WORD">
+          ng-hide="gridItem.datetime.format('X') < now.format('X')"
+          ng-click="edit(gridItem.id)">
+          translate="DETAILS_WORD"
         </button>
       </td>
     </tr>

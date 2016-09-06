@@ -1,4 +1,9 @@
-angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel, ScheduleRules, BBAssets) ->
+'use strict'
+
+angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
+  BBModel, ScheduleRules, BBAssets) ->
+
+  schedule_cache = {}
 
   query: (params) ->
     company = params.company
@@ -32,37 +37,90 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q, BBModel
     , (err) =>
       deferred.reject(err)
 
-  # DEPRICATED use getAssetsScheduleEvents
-  getPeopleScheduleEvents: (company, start, end) ->
-     @getAssetsScheduleEvents(company, start, end)   
-  # DEPRICATED use mapAssetsToScheduleEvents
-  mapPeopleToScheduleEvents : (start, end, assets) ->
-    @mapAssetsToScheduleEvents(start, end, assets)  
+
+  cacheDates = (asset, dates) ->
+    schedule_cache[asset.self] ||= {}
+    for k,v of dates
+      schedule_cache[asset.self][k] = v
+
+  getCacheDates = (asset, start, end) ->
+
+    return false if !schedule_cache[asset.self]
+    st = moment(start)
+    en = moment(end)
+    curr = moment(start)
+    dates = []
+
+    asset_cache = schedule_cache[asset.self]
+    while (curr.unix() < end.unix())
+      test = curr.format('YYYY-MM-DD')
+      return false if !asset_cache[test]
+      dates[test] = asset_cache[test]
+      curr = curr.add(1, 'day')
+
+    return dates
+
+  # return a promise to resovle any existing schedule cahcing stuff
+  loadScheduleCaches = (assets) ->
+    proms = []
+    for asset in assets
+      if asset.$has('immediate_schedule')
+        do (asset) =>
+          prom = asset.$get('immediate_schedule')
+          proms.push(prom)
+          prom.then (schedules) ->
+            cacheDates(asset, schedules.dates)
+
+    fin = $q.defer()
+    if proms.length > 0
+      $q.all(proms).then () ->
+        fin.resolve()
+    else
+      fin.resolve()
+    fin.promise
+
 
   mapAssetsToScheduleEvents: (start, end, assets) ->
     assets_with_schedule = _.filter assets, (asset)->
       asset.$has('schedule')
 
     _.map assets_with_schedule, (asset) ->
-      params =
-        start_date: start.format('YYYY-MM-DD')
-        end_date: end.format('YYYY-MM-DD')
-         
-      asset.$get('schedule', params).then (schedules) ->
-        rules = new ScheduleRules(schedules.dates)
+
+      found = getCacheDates(asset, start, end)
+      if found
+        rules = new ScheduleRules(found)
         events = rules.toEvents()
         _.each events, (e) ->
           e.resourceId = asset.id
           e.title = asset.name
           e.rendering = "background"
-        events
+        prom = $q.defer()
+        prom.resolve(events)
+        prom.promise
+      else
+        params =
+          start_date: start.format('YYYY-MM-DD')
+          end_date: end.format('YYYY-MM-DD')
+
+        asset.$get('schedule', params).then (schedules) ->
+         # cacheDates(asset, schedules.dates)
+          rules = new ScheduleRules(schedules.dates)
+          events = rules.toEvents()
+          _.each events, (e) ->
+            e.resourceId = asset.id
+            e.title = asset.name
+            e.rendering = "background"
+          events
 
   getAssetsScheduleEvents: (company, start, end, filtered = false, requested = []) ->
     if filtered
-      $q.all(@mapAssetsToScheduleEvents(start, end, requested)).then (schedules) ->
-        _.flatten(schedules)
-    else 
+      loadScheduleCaches(requested).then () ->
+        $q.all(@mapAssetsToScheduleEvents(start, end, requested)).then (schedules) ->
+          _.flatten(schedules)
+    else
       localMethod = @mapAssetsToScheduleEvents
       BBAssets(company).then (assets)->
-        $q.all(localMethod(start, end, assets)).then (schedules) ->
-          _.flatten(schedules)
+        loadScheduleCaches(assets).then () ->
+          $q.all(localMethod(start, end, assets)).then (schedules) ->
+            _.flatten(schedules)
+

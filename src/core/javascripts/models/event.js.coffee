@@ -1,3 +1,5 @@
+'use strict'
+
 ###**
 * @ngdoc service
 * @name BB.Models:Event
@@ -14,7 +16,7 @@
 ####
 
 
-angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUlititiesService, $translate) ->
+angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUtilitiesService, EventService, $translate) ->
 
 
   class Event extends BaseModel
@@ -60,7 +62,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     *
     * @returns {promise} A promise for the chains event
     ###
-    getChain: () ->
+    getChain: (params) ->
       defer = $q.defer()
       if @chain
         defer.resolve(@chain)
@@ -68,7 +70,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
         if @$has('event_chains') or @$has('event_chain')
           event_chain = 'event_chain'
           event_chain = 'event_chains' if @$has('event_chains')
-          @$get(event_chain).then (chain) =>
+          @$get(event_chain, params).then (chain) =>
             @chain = new BBModel.EventChain(chain)
             defer.resolve(@chain)
         else
@@ -93,6 +95,73 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           @duration = chain.duration
           defer.resolve(@duration)
       defer.promise
+
+
+    ###**
+    * @ngdoc method
+    * @name getDescription
+    * @methodOf BB.Models:Event
+    * @description
+    * Get duration of the event
+    *
+    * @returns {object} The returned description
+    ###
+    getDescription: () ->
+      @getChain().description
+
+    ###**
+    * @ngdoc method
+    * @name getColour
+    * @methodOf BB.Models:Event
+    * @description
+    * Get the colour
+    *
+    * @returns {string} The returned colour
+    ###
+    getColour: () ->
+      if @getGroup()
+        return @getGroup().colour
+      else
+        return "#FFFFFF"
+
+
+    ###**
+    * @ngdoc method
+    * @name getPounds
+    * @methodOf BB.Models:Event
+    * @description
+    * Get pounts
+    *
+    * @returns {integer} The returned pounts
+    ###
+    getPounds: () ->
+      if @chain
+        Math.floor(@getPrice()).toFixed(0)
+
+    ###**
+    * @ngdoc method
+    * @name getPrice
+    * @methodOf BB.Models:Event
+    * @description
+    * Get price
+    *
+    * @returns {integer} The returned price
+    ###
+    getPrice: () ->
+      0
+
+    ###**
+    * @ngdoc method
+    * @name getPence
+    * @methodOf BB.Models:Event
+    * @description
+    * Get price
+    *
+    * @returns {integer} The returned pence
+    ###
+    getPence: () ->
+      if @chain
+        (@getPrice() % 1).toFixed(2)[-2..-1]
 
     ###**
     * @ngdoc method
@@ -119,8 +188,29 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
       if pool && @ticket_spaces && @ticket_spaces[pool]
         return @ticket_spaces[pool].left
       else
-        return @num_spaces - @getNumBooked()
-        
+        x =  @num_spaces - @getNumBooked()
+        return 0 if x < 0
+        return x
+
+
+    ###**
+    * @ngdoc method
+    * @name getWaitSpacesLeft
+    * @methodOf BB.Models:Event
+    * @description
+    * Get the number of waitlist spaces left (possibly limited by a specific ticket pool)
+    *
+    * @returns {object} The returned spaces left
+    ###
+    getWaitSpacesLeft: () ->
+      wait = @chain.waitlength
+      wait ||= 0
+      wait = wait - @spaces_wait
+      return 0 if wait <= 0
+
+      return wait
+
+
     ###**
     * @ngdoc method
     * @name hasSpace
@@ -132,6 +222,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     ###
     hasSpace: () ->
       (@getSpacesLeft() > 0)
+
 
     ###**
     * @ngdoc method
@@ -196,13 +287,13 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     *
     * @returns {promise} A promise for the event
     ###
-    prepEvent: () ->
+    prepEvent: (params) ->
       # build out some useful event stuff
       def = $q.defer()
-      @getChain().then () =>
+      @getChain(params).then () =>
 
         if @chain.$has('address')
-          @chain.getAddressPromise().then (address) =>
+          @chain.$getAddress().then (address) =>
             @chain.address = address
 
         @chain.getTickets().then (tickets) =>
@@ -238,3 +329,25 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
           ticket.price = 0
         else
           ticket.price = ticket.old_price
+
+    @$query: (company, params) ->
+      EventService.query(company, params)
+
+    @$summary: (company, params) ->
+      EventService.summary(company, params)
+
+    ###**
+    * @ngdoc method
+    * @name numTicketsSelected
+    * @methodOf BB.Models:Event
+    * @description
+    *
+    *
+    * @returns {object} get number of tickets selected
+    ###
+    numTicketsSelected: () ->
+      num = 0
+      for ticket in @tickets
+        num += ticket.qty
+      num
+

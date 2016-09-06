@@ -1,3 +1,5 @@
+'use strict'
+
 # Filters
 app = angular.module 'BB.Filters'
 app.requires.push 'pascalprecht.translate'
@@ -115,9 +117,9 @@ app.filter 'distance', ($translate) ->
 do ->
   currency_codes = {USD: "$", GBP: "£", AUD: "$", EUR: "€", CAD: "$", MIXED: "~"}
 
-  currency = ($translate, $window, $rootScope) ->
+angular.module('BB.Filters').filter 'icurrency', ($window, $rootScope, SettingsService) ->
     (cents, currency_code, prettyPrice=false) ->
-      currency_code ||= $rootScope.bb_currency
+    currencyCode ||= SettingsService.getCurrency()
 
       format = $translate.instant(['THOUSANDS_SEPARATOR', 'DECIMAL_SEPARATOR', 'CURRENCY_FORMAT'])
       hideCents = prettyPrice and (cents % 100 is 0)
@@ -146,6 +148,7 @@ app.filter 'time_period', ($translate) ->
     hours = Math.floor(minutes / 60)
     minutes %= 60
 
+      
     if hours > 0
         time_period += moment.duration(hours, 'hours').humanize()
         if minutes > 0
@@ -192,7 +195,6 @@ angular.module('BB.Filters').filter 'exclude_days', ->
 # format number as local number
 angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, ValidatorService) ->
   (phone_number) ->
-    console.log phone_number
 
     return if !phone_number
 
@@ -204,29 +206,33 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
       else
         return phone_number
 
-app.filter "uk_local_number", ->
-  (tel) ->
-    return ""  unless tel
-    return tel.replace(/\+44 \(0\)/, '0')
+# Checks if a format (option) is set if not checks the country and provides a default.
+# Additionally you can pass in date, time or datetime
+angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
 
-# format datetime, expects moment object but will attempt to convert to
-# moment object
-# TODO get timezone from company
-app.filter "datetime", ->
-  (datetime, format, show_timezone = true) ->
-    return if !datetime
+  hardcoded_formats =
+    datetime:
+      us: 'MM/DD/YYYY, h:mm a'
+      uk: 'DD/MM/YYYY, HH:mm'
+    date:
+      us: 'MM/DD/YYYY'
+      uk: 'DD/MM/YYYY'
+    time:
+      us: 'h:mm a'
+      uk: 'HH:mm'
 
-    datetime = moment(datetime)
-    return if !datetime.isValid()
+  (date, format="LLL", show_time_zone=false) ->
+    if hardcoded_formats[format]
+      cc = if SettingsService.getCountryCode() is 'us' then 'us' else 'uk'
+      format = hardcoded_formats[format][cc]
 
-    result = datetime.format(format)
+    if date and moment.isMoment(date)
+      new_date = date.clone()
+      new_date.tz(SettingsService.getDisplayTimeZone())
+      format += ' zz' if show_time_zone
+      return new_date.format(format)
 
-    # if the dates time zone is different to the users, show the timezone too
-    if datetime.utcOffset() != new Date().getTimezoneOffset() && show_timezone
-      if datetime._z
-        result += datetime.format(" z")
 
-    result
 
 angular.module('BB.Filters').filter 'range', ->
   (input, min, max) ->
@@ -278,8 +284,18 @@ angular.module('BB.Filters').filter 'nl2br', ->
       # replace new lines with <br/> tags for multiline display in HTML
       return str.replace(/\n/g, '<br/>')
 
+
 app.filter 'clearTimezone', ->
   (val, offset) ->
     if val != null and val.length > 19
       return val.substring(0, 19)
     val
+
+app.filter "format_answer", ->
+  (answer) ->
+    if typeof answer == "boolean"
+      answer = if answer is true then "Yes" else "No"
+    else if moment(answer, 'YYYY-MM-DD', true).isValid()
+      answer = moment(answer).format "D MMMM YYYY"
+    return answer
+

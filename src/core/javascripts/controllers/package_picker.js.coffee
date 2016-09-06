@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -25,8 +25,6 @@
 ####
 
 
-
-
 angular.module('BB.Directives').directive 'bbPackagePicker', () ->
   restrict: 'AE'
   replace: true
@@ -34,17 +32,19 @@ angular.module('BB.Directives').directive 'bbPackagePicker', () ->
   controller : 'PackagePicker'
 
 
-angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScope, $q, TimeService, BBModel) ->
+angular.module('BB.Controllers').controller 'PackagePicker',
+($scope,  $rootScope, $q, TimeService, LoadingService, BBModel) ->
+
   $scope.controller = "public.controllers.PackagePicker"
 
   $scope.sel_date = moment().add(1, 'days')
   $scope.selected_date = $scope.sel_date.toDate()
   $scope.picked_time = false
+  loader = LoadingService.$loader($scope)
 
   $scope.$watch 'selected_date', (newv, oldv) =>
     $scope.sel_date = moment(newv)
     $scope.loadDay()
-#    $scope.$broadcast('dateChanged', moment(newv));
 
   ###**
   * @ngdoc method
@@ -55,14 +55,14 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
   ###
   $scope.loadDay = () =>
     $scope.timeSlots = []
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     pslots = []
     for item in $scope.stackedItems
       pslots.push(TimeService.query({company: $scope.bb.company, cItem: item, date: $scope.sel_date, client: $scope.client }))
 
     $q.all(pslots).then (res) =>
-      $scope.setLoaded $scope
+      loader.setLoaded()
       $scope.data_valid = true
       $scope.timeSlots = []
       for item, _i in $scope.stackedItems
@@ -95,7 +95,7 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
             else
               next_latest = slot.time - item.service.duration
           latest = next_latest
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ###**
   * @ngdoc method
@@ -105,7 +105,7 @@ angular.module('BB.Controllers').controller 'PackagePicker', ($scope,  $rootScop
   * Select slot in according of sel_item and slot parameters
   *
   * @param {array} sel_item The sel item
-  * @param {object} slot The slot 
+  * @param {object} slot The slot
   ###
   $scope.selectSlot = (sel_item, slot) =>
 

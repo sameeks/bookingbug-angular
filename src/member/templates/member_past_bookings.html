@@ -1,25 +1,23 @@
-<div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
-<div ng-hide="loading" class="bb-past clearfix">
-  <div>
+<div>
 
-    <div ng-show="past_bookings.length == 0">
+  <div ng-show="past_bookings.length == 0">
       <h3 translate="NO_PAST_BOOKINGS"></h3>
-    </div>
+  </div>
 
-    <div ng-repeat="booking in past_bookings | filter:{deleted: false} |
-      orderBy: 'datetime.unix()' | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
-      <div class="datetime col-sm-5">
-        <div>{{booking.datetime | datetime:'Do MMM YYYY HH:mm'}}</div>
-      </div>
-      <div class="describe col-sm-5">
-        <div class="detail">{{booking.full_describe}}</div>
-      </div>
-    </div>
+  <div class="bb-section">
 
-    <pagination total-items="pagination.num_items"
-      ng-model="pagination.current_page" items-per-page="pagination.page_size"
-      max-size="pagination.max_size" boundary-links="true" rotate="false"
-      num-pages="pagination.num_pages" ng-show="past_bookings && past_bookings.length > 10"></pagination>
+    <ul class="bb-list bb-list-bordered">
+
+      <li bb-member-booking="booking" ng-repeat="booking in past_bookings | filter:{deleted: false} | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size"></li>
+
+    </ul>
 
   </div>
+
+  <div uib-pagination total-items="pagination.num_items"
+    ng-model="pagination.current_page" items-per-page="pagination.page_size"
+    max-size="pagination.max_size" boundary-links="true" rotate="false"
+    num-pages="pagination.num_pages" ng-show="past_bookings && past_bookings.length > 10"></div>
+
 </div>
+

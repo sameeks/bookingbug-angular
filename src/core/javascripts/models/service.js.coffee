@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -19,7 +19,7 @@
 ###
 
 
-angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, ServiceService) ->
 
   class Service extends BaseModel
 
@@ -44,7 +44,7 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
     * @description
     * Get price by duration in function of duration
     *
-    * @returns {object} The returning price by duration 
+    * @returns {object} The returning price by duration
     ###
     getPriceByDuration: (dur) ->
       for d,i in @durations
@@ -53,14 +53,14 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
 
     ###**
     * @ngdoc method
-    * @name getCategoryPromise
+    * @name $getCategory
     * @methodOf BB.Models:Service
     * @description
     * Get category promise
     *
-    * @returns {object} The returning category promise 
+    * @returns {object} The returning category promise
     ###
-    getCategoryPromise: () =>
+    $getCategory: () =>
       return null if !@$has('category')
       prom = @$get('category')
       prom.then (cat) =>
@@ -74,7 +74,7 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
     * @description
     * Put days in array
     *
-    * @returns {array} The returning days array 
+    * @returns {array} The returning days array
     ###
     days_array: () =>
       arr = []
@@ -83,3 +83,17 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel) ->
         str += "s" if x > 1
         arr.push({name: str, val: x})
       arr
+
+
+    ###**
+    * @ngdoc method
+    * @name $query
+    * @methodOf BB.Models:Service
+    * @description
+    * Static function that loads an array of services from a company object
+    *
+    * @returns {promise} A returned promise
+    ###
+    @$query: (company) ->
+      ServiceService.query(company)
+

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -29,27 +29,28 @@ angular.module('BB.Directives').directive 'bbDurations', () ->
   controller : 'DurationList'
 
 
-angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $rootScope, PageControllerService, $q, AlertService, $filter, $translate) ->
-  $scope.controller = "public.controllers.DurationList"
-  $scope.notLoaded $scope
+angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $rootScope, $q, $filter, PageControllerService, AlertService, ValidatorService, LoadingService) ->
 
-  angular.extend(this, new PageControllerService($scope, $q))
+  $scope.controller = "public.controllers.DurationList"
+  loader = LoadingService.$loader($scope).notLoaded()
+
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   options = $scope.$eval($attrs.bbDurations) or {}
 
   $rootScope.connection_started.then ->
     $scope.loadData()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $scope.loadData = () =>
     id = $scope.bb.company_id
     service = $scope.bb.current_item.service
-    if service && !$scope.durations
+    if service
       $scope.durations =
         (for d in _.zip(service.durations, service.prices)
           {value: d[0], price: d[1]})
-      
+
       initial_duration = $scope.$eval($attrs.bbInitialDuration)
 
       for duration in $scope.durations
@@ -67,7 +68,7 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $ro
         $scope.skipThisStep()
         $scope.selectDuration($scope.durations[0], $scope.nextRoute)
 
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -119,3 +120,4 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $ro
   # when the current item is updated, reload the duration data
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadData()
+

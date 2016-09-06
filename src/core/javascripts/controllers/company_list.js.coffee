@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
+CompanyListBase = ($scope, $rootScope, $q, $attrs, LoadingService) ->
 
   $scope.controller = "public.controllers.CompanyList"
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   options = $scope.$eval $attrs.bbCompanies
 
@@ -16,10 +16,10 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
       return
     else
       $scope.init($scope.bb.company)
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (comp) =>
-    
+
     $scope.companies = $scope.bb.company.companies
     if !$scope.companies || $scope.companies.length == 0
       $scope.companies = [$scope.bb.company]
@@ -32,7 +32,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
         $scope.items = $scope.companies.filter (c) -> c.live
       else
         $scope.items = $scope.companies
-    $scope.setLoaded $scope
+    loader.setLoaded()
 
   $scope.selectItem = (item, route) =>
 
@@ -42,7 +42,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
     else
       company_id = item.id
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
     prms = {company_id: company_id}
     $scope.initWidget(prms)
 
@@ -78,7 +78,7 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
 * @example
-*  <example module="BB"> 
+*  <example module="BB">
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
@@ -93,8 +93,8 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs) ->
 *      </div>
 *     </div>
 *     </div>
-*   </file> 
-*  </example> 
+*   </file>
+*  </example>
 ####
 
 angular.module('BB.Directives').directive 'bbCompanies', () ->
@@ -112,12 +112,13 @@ angular.module('BB.Directives').directive 'bbPostcodeLookup', () ->
   controller : 'PostcodeLookup'
 
 
-angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootScope, $q, ValidatorService, AlertService, $attrs) ->
+angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootScope, $q, ValidatorService, AlertService, LoadingService, $attrs) ->
   $scope.controller = "PostcodeLookup"
   angular.extend(this, new CompanyListBase($scope, $rootScope, $q, $attrs))
 
 
   $scope.validator = ValidatorService
+  loader = LoadingService.$loader($scope)
 
   ###**
   * @ngdoc method
@@ -127,11 +128,11 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   * Search the postcode
   *
   * @param {object} form The form where postcode has been searched
-  * @param {object} prms The parameters of postcode searching 
+  * @param {object} prms The parameters of postcode searching
   ###
   $scope.searchPostcode = (form, prms) =>
 
-    $scope.notLoaded($scope)
+    loader.notLoaded()
 
     promise = ValidatorService.validatePostcode(form, prms)
     if promise
@@ -141,9 +142,9 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
         loc = ValidatorService.getGeocodeResult().geometry.location
         $scope.selectItem($scope.getNearestCompany({center: loc}))
       ,(err) ->
-        $scope.setLoaded($scope)
+        loader.setLoaded()
     else
-      $scope.setLoaded($scope)
+      loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -151,17 +152,17 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   * @methodOf BB.Directives:bbCompanies
   * @description
   * Get nearest company in according of center parameter
-  * 
+  *
   * @param {string} center Geolocation parameter
   ###
   $scope.getNearestCompany = ({center}) =>
 
-    pi = Math.PI;
+    pi = Math.PI
     R = 6371  #equatorial radius
     distances = []
 
-    lat1 = center.lat();
-    lon1 = center.lng();
+    lat1 = center.lat()
+    lon1 = center.lng()
 
     for company in $scope.items
       if company.address.lat && company.address.long && company.live
@@ -170,19 +171,19 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
         lat2 = latlong.lat()
         lon2 = latlong.lng()
 
-        chLat = lat2-lat1;
-        chLon = lon2-lon1;
+        chLat = lat2-lat1
+        chLon = lon2-lon1
 
-        dLat = chLat*(pi/180);
-        dLon = chLon*(pi/180);
+        dLat = chLat*(pi/180)
+        dLon = chLon*(pi/180)
 
-        rLat1 = lat1*(pi/180);
-        rLat2 = lat2*(pi/180);
+        rLat1 = lat1*(pi/180)
+        rLat2 = lat2*(pi/180)
 
         a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2);
-        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        d = R * c;
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2)
+        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+        d = R * c
 
         company.distance = d
         distances.push company

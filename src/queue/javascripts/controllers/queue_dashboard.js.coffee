@@ -1,5 +1,7 @@
-angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope, $log,
-    AdminServiceService, AdminQueuerService, ModalForm, BBModel, $interval, $sessionStorage) ->
+'use strict'
+
+angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope,
+  $log, $interval, $sessionStorage, ModalForm, BBModel) ->
 
   $scope.loading = true
   $scope.waiting_for_queuers = false
@@ -9,7 +11,7 @@ angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope, $log
   $scope.getSetup = () ->
     params =
       company: $scope.company
-    AdminServiceService.query(params).then (services) ->
+    BBModel.Admin.Service.$query(params).then (services) ->
       $scope.services = []
       for service in services
         $scope.services.push(service) if !service.queuing_disabled
@@ -17,15 +19,15 @@ angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope, $log
     , (err) ->
       $log.error err.data
       $scope.loading = false
-    $scope.pusherSubscribe();
-    $scope.getQueuers();
+    $scope.pusherSubscribe()
+    $scope.getQueuers()
 
   $scope.getQueuers = () ->
     return if $scope.waiting_for_queuers
     $scope.waiting_for_queuers = true
     params =
       company: $scope.company
-    AdminQueuerService.query(params).then (queuers) ->
+    BBModel.Admin.Queuer.$query(params).then (queuers) ->
       $scope.queuers = queuers
       $scope.waiting_queuers = []
       for queuer in queuers
@@ -39,15 +41,13 @@ angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope, $log
       $scope.loading = false
       $scope.waiting_for_queuers = false
 
-
   $scope.overTrash = (event, ui, set) ->
     $scope.$apply () ->
       $scope.trash_hover = set
 
    $scope.hoverOver = (event, ui, obj, set) ->
-    console.log event, ui, obj, set
     $scope.$apply () ->
-      obj.hover = set     
+      obj.hover = set
 
   $scope.dropQueuer = (event, ui, server, trash) ->
     if $scope.drag_queuer
@@ -58,21 +58,18 @@ angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope, $log
       if server
         $scope.drag_queuer.startServing(server).then () ->
 
-
-
   $scope.selectQueuer = (queuer) ->
     if $scope.selected_queuer && $scope.selected_queuer == queuer
       $scope.selected_queuer = null
     else
-      $scope.selected_queuer = queuer    
+      $scope.selected_queuer = queuer
 
   $scope.selectDragQueuer = (queuer) ->
-    $scope.drag_queuer = queuer 
+    $scope.drag_queuer = queuer
 
   $scope.addQueuer = (service) ->
     $scope.new_queuer.service_id = service.id
     service.$post('queuers', {}, $scope.new_queuer).then (queuer) ->
-
 
   $scope.pusherSubscribe = () =>
     if $scope.company? && Pusher?
@@ -85,22 +82,21 @@ angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope, $log
               'App-Id' : 'f6b16c23'
               'App-Key' : 'f0bc4f65f4fbfe7b4b3b7264b655f5eb'
               'Auth-Token' : $sessionStorage.getItem('auth_token')
-      
+
       channelName = "mobile-queue-#{$scope.company.id}"
-      
+
       if !$scope.pusher.channel(channelName)?
         $scope.pusher_channel = $scope.pusher.subscribe channelName
-      
+
         pusherEvent = (res) =>
           $scope.getQueuers()
 
         $scope.pusher_channel.bind 'notification', pusherEvent
 
-
-  
-    # this is used to retrigger a scope check that will update service time
+  # this is used to retrigger a scope check that will update service time
   $interval(->
     if $scope.queuers
       for queuer in $scope.queuers
         queuer.remaining()
   , 5000)
+

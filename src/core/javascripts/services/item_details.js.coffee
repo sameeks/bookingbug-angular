@@ -1,5 +1,7 @@
+'use strict'
 
 angular.module('BB.Services').factory "ItemDetailsService",  ($q, BBModel) ->
+
   query: (prms) ->
     deferred = $q.defer()
     if prms.cItem.service
@@ -26,3 +28,4 @@ angular.module('BB.Services').factory "ItemDetailsService",  ($q, BBModel) ->
     else
       deferred.resolve()
     deferred.promise
+

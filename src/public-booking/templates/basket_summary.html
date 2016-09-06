@@ -1,0 +1,76 @@
+<div bb-basket-summary>
+	<h2>Summary</h2>
+	<hr/>
+	<p>Please review the following information</p>
+
+	<div class="row">
+		<div class="col-md-12">
+
+
+
+			<uib-accordion close-others="oneAtATime">
+		    <div uib-accordion-group class="panel-default" ng-repeat="item in basket_items" is-open="$first">
+		    	<uib-accordion-heading>
+		    		{{item.getName()}} <small>({{item.startDatetime() | datetime: 'llll'}})</small>
+		    	</uib-accordion-heading>
+
+
+	      	<ul class="bb-list bb-list-bordered-in">
+	      		<li>
+	      			<div class="row">
+		      			<div class="col-sm-4"><b>Duration:</b></div>
+		      			<div class="col-sm-8">{{item.duration | time_period}}</div>
+		      		</div>
+      			</li>
+	      		<li>
+	      			<div class="row">
+		      			<div class="col-sm-4"><b>Fullname:</b></div>
+	      				<div class="col-sm-8">{{client.first_name + ' ' + client.last_name}}</div>
+	      			</div>
+      			</li>
+	      		<li>
+	      			<div class="row" ng-if="client.email">
+		      			<div class="col-sm-4"><b>Email:</b></div>
+	      				<div class="col-sm-8">{{client.email}}</div>
+	      			</div>
+      			</li>
+	      		<li ng-if="item.mobile">
+	      			<div class="row">
+		      			<div class="col-sm-4"><b>Mobile:</b> </div>
+	      				<div class="col-sm-8">{{item.mobile}}</div>
+	      			</div>
+      			</li>
+      			<li ng-if="bb.company_settings.ask_address && (client.address1 || client.address2 || client.address3 || client.address4 || client.postcode)">
+	      			<div class="row">
+		      			<div class="col-sm-4"><b>Address:</b> </div>
+	      				<div class="col-sm-8">{{client.address1}} {{client.address2}} {{client.address3}} {{client.address4}} {{client.postcode}}</div>
+	      			</div>
+      			</li>
+      			<li ng-repeat="question in item.item_details.questions" ng-if="item.has_questions && question.answer && !question.important">
+              <div class="row" ng-if="item.price">
+		      			<div class="col-sm-4"><b>{{question.name}}:</b> </div>
+	      				<div class="col-sm-8">{{question.answer | format_answer}}</div>
+	      			</div>
+            </li>
+            <li ng-if="item.price">
+	      			<div class="row">
+		      			<div class="col-sm-4"><b>Price:</b> </div>
+	      				<div class="col-sm-8">{{item.price | currency}}</div>
+	      			</div>
+      			</li>
+	      	</ul>
+		    </div>
+		  </uib-accordion>
+
+		</div>
+	</div>
+
+	<hr/>
+
+	<div class="row">
+		<div class="col-md-12">
+			<button class="btn btn-primary pull-right" ng-click="confirm()">Confirm</button>
+      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+    </div>
+	</div>
+</div>

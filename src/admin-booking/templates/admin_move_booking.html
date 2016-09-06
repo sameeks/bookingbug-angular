@@ -1,0 +1,87 @@
+
+<div bb-purchase="{move_route: 'calendar'}">
+
+  <div class="bb-checkout">
+
+    <div class="row">
+
+      <div class="col-xs-offset-1 col-xs-10">
+
+        <div ng-show="purchase && bookings.length == 0">
+          <div class="confirmation-header">
+            <h2 class="confirmation-heading">Your booking has been cancelled</h2>
+          </div>
+        </div>
+
+        <div ng-show="bookings">
+          <div ng-show="is_waitlist">
+            <div bb-include="book_waitlist"></div>
+          </div>
+          <div ng-hide="is_waitlist">
+            <div class="confirmation-header">
+              <h3 class="confirmation-heading">Your <span>{{purchase.bookings[0].service_name}}</span> booking</h3>
+
+              <div class="row hidden-print text-right" >
+              <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print"></span> Print</button>
+              <div bb-booking-export class="bb-booking-export"></div>
+              </div>
+            </div>
+
+
+            <div>
+              <ul class="confirmation-summary">
+                <li class="row confirmation-summary-item">
+                  <div class="bb-summary-label">Name: </div>
+                  <div class="bb-summary-value">{{purchase.client.name}}</div>
+                </li>
+                <li class="row confirmation-summary-item">
+                  <div class="bb-summary-label">Email: </div>
+                  <div class="bb-summary-value">{{purchase.client.email}}</div>
+                </li>
+                <li class="row confirmation-summary-item">
+                  <div class="bb-summary-label">Service: </div>
+                  <div class="bb-summary-value">{{purchase.bookings[0].service_name}}</div>
+                </li>
+                <li class="row confirmation-summary-item">
+                  <div class="bb-summary-label">When: </div>
+                  <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM":false}}</div>
+                </li>
+                <li class="row confirmation-summary-item" ng-show="purchase.total_price > 0">
+                  <div class="bb-summary-label">Price: </div>
+                  <div class="bb-summary-value">{{purchase.total_price | currency }}</div>
+                </li>
+              </ul>
+
+
+
+            </div>
+
+
+
+            <div class="hidden-print">
+              <div class="bb-step-navigation">
+                <div class='row'>
+                  <div class="col-sm-4">
+                    <button type="button" class="btn btn-danger btn-block" ng-click="delete(bookings[0])">Cancel Booking</button>
+                  </div>
+                  <div class="col-sm-4">
+                    <button type="button" class="btn btn-primary btn-block" ng-click="move(bookings[0], '', {use_resource: true})">Move Booking</button>
+                  </div>
+                </div>
+                <div ng-show="waitlist_bookings"class="col-sm-4">
+                  <button type="button" class="btn btn-primary btn-block" ng-click="is_waitlist = true">Book Waitlist Items</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+       </div>
+
+    </div>
+
+  </div>
+
+</div>

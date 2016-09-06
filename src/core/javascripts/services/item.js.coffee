@@ -1,3 +1,4 @@
+'use strict'
 
 angular.module('BB.Services').factory "ItemService", ($q, BBModel) ->
   query: (prms) ->

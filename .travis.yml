@@ -1,10 +1,35 @@
 language: node_js
+
 node_js:
-  - "0.10"
+  - '5.11'
+
+install: ./travis/install.sh
+
 before_script:
   - npm install -g gulp
-script: gulp test
+
+script: ./travis/script.sh
+
 cache:
   directories:
     - node_modules
     - bower_components
+    - test/unit/bower_components
+
+env:
+  global:
+    - secure: "EOLSkOnWNqKODETqXwoRK+KbxyR11YCTi8kRX0+q21KQKaTqqt39UzSOoD0qlfKXPU+D23kvWSYWcGbHQw6DiVHtenVbn9ktik3lJkscXpJmNJmaregclSYJpaK7GC5vJU0av4Q0lDASxrqBv9FftrAEoC7fTfdoZgJ8t29huoU="
+    - secure: "JjeAjs+rZnrsIfBYo1OSszSnzRQ6Zy/BBfAvb3mE9Qf0fjDjeMy6rVbbFh/CzgJz84EuQf2iCNjWgpvoPatZfYhosiILGxRN7V35HODlenTkxuU/TSkmkkTdjDt1ijjf5dM/Er1ygrgnQO6wxyyOi9hzL70pZ3RNX6MwBn87j6A="
+
+deploy:
+  - provider: script
+    script: ./travis/deploy.sh
+    on:
+      tags: true
+    skip_cleanup: true
+  - provider: script
+    script: ./travis/deploy.sh
+    on:
+      branch: master
+    skip_cleanup: true
+

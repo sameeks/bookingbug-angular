@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -23,6 +23,20 @@
 * @property {array} bookable_people The bookable people from the person list
 * @property {array} bookable_items The bookable items from the person list
 * @property {array} booking_item The BasketItem used by the person list. If bbItems provided, this will be the first item
+* @example
+*  <example module="BB">
+*    <file name="index.html">
+*   <div bb-api-url='https://dev01.bookingbug.com'>
+*   <div  bb-widget='{company_id:37167}'>
+*     <div bb-people>
+*        <ul>
+*          <li ng-repeat='person in all_people'> {{person.name}}</li>
+*        </ul>
+*     </div>
+*     </div>
+*     </div>
+*   </file>
+*  </example>
 ####
 
 
@@ -32,7 +46,6 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
   scope : true
   controller : 'PersonList'
   link : (scope, element, attrs) ->
-  
     if attrs.bbItems
       scope.booking_items = scope.$eval(attrs.bbItems) or []
       scope.booking_item  = scope.booking_items[0]
@@ -41,17 +54,18 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
       scope.booking_items = [scope.booking_item]
 
 
-angular.module('BB.Controllers').controller 'PersonList',
-($scope, $rootScope, PageControllerService, PersonService, ItemService, $q, BBModel, PersonModel, FormDataStoreService) ->
+angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
+  PageControllerService, $q, BBModel, PersonModel, FormDataStoreService,
+  ValidatorService, LoadingService) ->
 
   $scope.controller = "public.controllers.PersonList"
 
-  $scope.notLoaded $scope
-  angular.extend(this, new PageControllerService($scope, $q))
+  loader = LoadingService.$loader($scope).notLoaded()
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $rootScope.connection_started.then ->
     loadData()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   loadData = () ->
@@ -62,38 +76,38 @@ angular.module('BB.Controllers').controller 'PersonList',
     if !bi.service or bi.service is $scope.change_watch_item
       # if there's no service - we have to wait for one to be set - so we're kind of done loading for now!
       if !bi.service
-        $scope.setLoaded $scope
+        loader.setLoaded()
       return
 
     $scope.change_watch_item = bi.service
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
-    ppromise = PersonService.query($scope.bb.company)
+    ppromise = BBModel.Person.$query($scope.bb.company)
     ppromise.then (people) ->
       if bi.group # check they're part of any currently selected group
         people = people.filter (x) -> !x.group_id or x.group_id is bi.group
       $scope.all_people = people
 
-    ItemService.query(
+    BBModel.BookableItem.$query(
       company: $scope.bb.company
       cItem: bi
       wait: ppromise
       item: 'person'
     ).then (items) ->
-      
+
       if bi.group # check they're part of any currently selected group
         items = items.filter (x) -> !x.group_id or x.group_id is bi.group
 
       promises = []
       for i in items
         promises.push(i.promise)
-        
+
       $q.all(promises).then (res) =>
         people = []
         for i in items
           people.push(i.item)
           if bi and bi.person and bi.person.id is i.item.id
-            $scope.person = i.item
+            $scope.person = i.item if $scope.bb.current_item.settings.person isnt -1
             $scope.selected_bookable_items = [i]
 
         # if there's only 1 person and combine resources/staff has been turned on, auto select the person
@@ -109,9 +123,11 @@ angular.module('BB.Controllers').controller 'PersonList',
           $scope.bookable_items = items
           if !$scope.selected_bookable_items
             $scope.selected_bookable_items = items
-        $scope.setLoaded $scope
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoaded()
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
+      ppromise['finally'] ->
+        loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -120,7 +136,7 @@ angular.module('BB.Controllers').controller 'PersonList',
   * @description
   * Storing the person property in the form store
   *
-  * @param {array} people The people 
+  * @param {array} people The people
   ###
   # we're storing the person property in the form store but the angular select
   # menu has to have a reference to the same object memory address for it to

@@ -1,38 +1,44 @@
 <div class="bb-item-summary">
   <div class="bb-item-summary-header">
-    <div class="bb-item-summary-header-text">
-      {{bb.current_item.service.name}}
+    <div class="bb-item-summary-header-text hidden-xs">
+      <h3><span>{{bb.current_item.service.name}}</span></h3>
     </div>
   </div>
   <ul class="bb-item-summary-list">
+    <li class="visible-xs bb-confirmation-summary-item">
+        <div class="bb-summary-label">Service
+        </div>
+        <div class="bb-summary-value">{{bb.current_item.service.name}}
+        </div>
+    </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.duration">
-      <div class="bb-summary-label">{{"ITEM_DURATION"|translate}}:</div>
+      <div class="bb-summary-label">{{"ITEM_DURATION"|translate}}</div>
       <div class="bb-summary-value"><span>{{bb.current_item.duration | time_period}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.resource && bb.current_item.resource.name">
-      <div class="bb-summary-label">{{"ITEM_RESOURCE"|translate}}:</div>
+      <div class="bb-summary-label">{{"ITEM_RESOURCE"|translate}}</div>
       <div class="bb-summary-value"><span>{{bb.current_item.resource.name}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.person && bb.current_item.person.name">
-      <div class="bb-summary-label">{{"ITEM_PERSON"|translate}}:</div>
+      <div class="bb-summary-label">{{"ITEM_PERSON"|translate}}</div>
       <div class="bb-summary-value"><span>{{bb.current_item.person.name}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.price">
-      <div class="bb-summary-label">{{"ITEM_PRICE"|translate}}:</div>
+      <div class="bb-summary-label">{{"ITEM_PRICE"|translate}}</div>
       <div class="bb-summary-value"><span>{{bb.current_item.price | currency}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.date">
-      <div class="bb-summary-label">{{"ITEM_DATE"|translate}}:</div>
-      <div class="bb-summary-value"><span>{{bb.current_item.date.date | datetime: 'LL'}}</span>
+      <div class="bb-summary-label">{{"ITEM_DATE"|translate}}</div>
+      <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'dddd D MMMM'}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.time">
-      <div class="bb-summary-label">{{"ITEM_TIME"|translate}}:</div>
-      <div class="bb-summary-value"><span>{{bb.current_item.start_datetime() | datetime: 'LT'}}</span>
+      <div class="bb-summary-label">{{"ITEM_TIME"|translate}}</div>
+      <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'time'}}</span>
       </div>
     </li>
   </ul>

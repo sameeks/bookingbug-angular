@@ -1,6 +1,9 @@
-angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $rootScope, AdminLoginService, $templateCache, $q) ->
+'use strict'
 
-  loginAdminController = ($scope, $modalInstance, company_id) ->
+angular.module('BBAdmin.Directives').directive 'adminLogin', ($uibModal,
+  $log, $rootScope, $q, $document, BBModel) ->
+
+  loginAdminController = ($scope, $uibModalInstance, company_id) ->
     $scope.title = 'Login'
     $scope.schema =
       type: 'object'
@@ -22,18 +25,18 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
     $scope.submit = (form) ->
       options =
         company_id: company_id
-      AdminLoginService.login(form, options).then (admin) ->
+      BBModel.Admin.Login.$login(form, options).then (admin) ->
         admin.email = form.email
         admin.password = form.password
-        $modalInstance.close(admin)
+        $uibModalInstance.close(admin)
       , (err) ->
-        $modalInstance.dismiss(err)
+        $uibModalInstance.dismiss(err)
 
     $scope.cancel = () ->
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
 
-  pickCompanyController = ($scope, $modalInstance, companies) ->
+  pickCompanyController = ($scope, $uibModalInstance, companies) ->
     $scope.title = 'Pick Company'
     $scope.schema =
       type: 'object'
@@ -49,10 +52,10 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
     $scope.pick_company_form = {}
 
     $scope.submit = (form) ->
-      $modalInstance.close(form.company_id)
+      $uibModalInstance.close(form.company_id)
 
     $scope.cancel = () ->
-      $modalInstance.dismiss('cancel')
+      $uibModalInstance.dismiss('cancel')
 
 
   link = (scope, element, attrs) ->
@@ -61,7 +64,8 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
     $rootScope.bb.api_url ||= "http://www.bookingbug.com"
 
     loginModal = () ->
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'login_modal_form.html'
         controller: loginAdminController
         resolve:
@@ -80,7 +84,8 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
         loginModal()
 
     pickCompanyModal = (companies) ->
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'pick_company_modal_form.html'
         controller: pickCompanyController
         resolve:
@@ -97,7 +102,7 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($modal, $log, $roo
         password: scope.adminPassword
       options =
         company_id: scope.companyId
-      AdminLoginService.login(login_form, options).then (result) ->
+      BBModel.Admin.Login.$login(login_form, options).then (result) ->
         if result.$has('admins')
           result.$get('admins').then (admins) ->
             scope.admins = admins

@@ -8,7 +8,7 @@
 *
 * @description
 *
-* Loads a list of payments for the currently in scope company
+* Renders payment iframe (where integrated payment has been configured) and handles payment success/failure.
 *
 * <pre>
 * restrict: 'AE'
@@ -16,38 +16,41 @@
 * scope: true
 * </pre>
 *
-* @property {array} total The total of payment 
+* @property {array} total The total of payment
 ####
 
 
-angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce, SettingsService, AlertService) ->
+angular.module('BB.Directives').directive 'bbPayment', ($window, $location,
+  $sce, SettingsService, AlertService) ->
 
-  error = (scope, message) ->
-    scope.error(message)
+  restrict: 'AE'
+  replace: true
+  scope: true
+  controller: 'Payment'
+  link: (scope, element, attributes) ->
 
-  getHost = (url) ->
-    a = document.createElement('a')
-    a.href = url
-    a['protocol'] + '//' +a['host']
+    error = (scope, message) ->
+      scope.error(message)
 
-  sendLoadEvent = (element, origin, scope) ->
-    referrer = $location.protocol() + "://" + $location.host()
-    if $location.port()
-      referrer += ":" + $location.port()
-    custom_stylesheet = scope.payment_options.custom_stylesheet if scope.payment_options.custom_stylesheet
-    payload = JSON.stringify({
-      'type': 'load',
-      'message': referrer,
-      'custom_partial_url': scope.bb.custom_partial_url,
-      'custom_stylesheet' : custom_stylesheet,
-      'scroll_offset'     : SettingsService.getScrollOffset()
-    })
+    getHost = (url) ->
+      a = document.createElement('a')
+      a.href = url
+      a['protocol'] + '//' +a['host']
 
-    element.find('iframe')[0].contentWindow.postMessage(payload, origin)
+    sendLoadEvent = (element, origin, scope) ->
+      referrer = $location.protocol() + "://" + $location.host()
+      if $location.port()
+        referrer += ":" + $location.port()
+      custom_stylesheet = scope.payment_options.custom_stylesheet if scope.payment_options.custom_stylesheet
+      payload = JSON.stringify({
+        'type': 'load',
+        'message': referrer,
+        'custom_partial_url': scope.bb.custom_partial_url,
+        'custom_stylesheet' : custom_stylesheet,
+        'scroll_offset'     : SettingsService.getScrollOffset()
+      })
 
-
-
-  linker = (scope, element, attributes) ->
+      element.find('iframe')[0].contentWindow.postMessage(payload, origin)
 
     scope.payment_options = scope.$eval(attributes.bbPayment) or {}
     scope.route_to_next_page = if scope.payment_options.route_to_next_page? then scope.payment_options.route_to_next_page else true
@@ -81,57 +84,55 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location, $sce
 
     , false
 
-  return {
-    restrict: 'AE'
-    replace: true
-    scope: true
-    controller: 'Payment'
-    link: linker
-  }
 
-angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope, $q, $location, $window, $sce, $log, $timeout) ->
+angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope,
+  $q, $location, $window, $sce, $log, $timeout, LoadingService) ->
 
   $scope.controller = "public.controllers.Payment"
 
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.bb.total = $scope.purchase if $scope.purchase
 
-  $rootScope.connection_started.then =>
+  $rootScope.connection_started.then ->
     $scope.bb.total = $scope.total if $scope.total
-    $scope.url = $sce.trustAsResourceUrl($scope.bb.total.$href('new_payment')) if $scope.bb && $scope.bb.total && $scope.bb.total.$href('new_payment')
-  
+    $scope.url = $sce.trustAsResourceUrl($scope.bb.total.$href('new_payment')) if $scope.bb and $scope.bb.total and $scope.bb.total.$href('new_payment')
+
   ###**
   * @ngdoc method
   * @name callNotLoaded
   * @methodOf BB.Directives:bbPayment
   * @description
-  * Call not loaded
+  * Set not loaded state
   ###
   $scope.callNotLoaded = () =>
-    $scope.notLoaded $scope
+    loader.notLoaded()
+
 
   ###**
   * @ngdoc method
   * @name callSetLoaded
   * @methodOf BB.Directives:bbPayment
   * @description
-  * Call set loaded
+  * Set loaded state
   ###
   $scope.callSetLoaded = () =>
-    $scope.setLoaded $scope
+    loader.setLoaded()
+
 
   ###**
   * @ngdoc method
   * @name paymentDone
   * @methodOf BB.Directives:bbPayment
   * @description
-  * Payment done
+  * Handles payment success
   ###
   $scope.paymentDone = () ->
     $scope.bb.payment_status = "complete"
     $scope.$emit('payment:complete')
     $scope.decideNextPage() if $scope.route_to_next_page
 
+
   $scope.error = (message) ->
     $log.warn("Payment Failure: " + message)
+

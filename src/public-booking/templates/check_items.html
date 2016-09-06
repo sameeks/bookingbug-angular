@@ -18,45 +18,48 @@
             <div class="col-sm-offset-4 col-sm-5">
                <p class="form-control-static">*Required fields</p>
             </div>
-          </div>
+          </div> 
 
           <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && (client_form.first_name.$dirty || booking_form.submitted)}">
-            <label for="first_name" class="control-label col-sm-4"><span translate="DETAILS_FIRST_NAME"></span>*:</label>
+            <label for="first_name" class="control-label col-sm-4"><span translate="DETAILS_FIRST_NAME"></span>**:</label>
             <div class="col-sm-5">
-              <input type="text" name="first_name" id"first_name" required ng-model="client.first_name" class="form-control"/>
+              <input type="text" name="first_name" id"first_name" required ng-model="client.first_name" class="form-control" autocomplete="given-name"/>
             </div>
             <div class="col-sm-offset-4 messages">
-              <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted"><span translate="DETAILS_FIRST_NAME_VALIDATION_MSG"></span>
+              <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted">
+                <span translate="DETAILS_FIRST_NAME_VALIDATION_MSG"></span>
               </div>
-            </div> 
+            </div>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (client_form.last_name.$dirty|| booking_form.submitted)}">
             <label for="last_name" class="control-label col-sm-4"><span translate="DETAILS_LAST_NAME"></span>*:</label>
             <div class="col-sm-5">
-              <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
+              <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" autocomplete="family-name"/>
             </div>
             <div class="col-sm-offset-4 messages">
-              <div class="error-message" ng-show="client_form.last_name.$invalid && booking_form.submitted"><span translate="DETAILS_LAST_NAME_VALIDATION_MSG"></span>
-              </div>          
+              <div class="error-message" ng-show="client_form.last_name.$invalid && booking_form.submitted">
+                <span translate="DETAILS_LAST_NAME_VALIDATION_MSG"></span>
+              </div>
             </div>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && (client_form.email.$dirty|| booking_form.submitted)}">
             <label for="email" class="control-label col-sm-4"><span translate="DETAILS_EMAIL"></span>*:</label>
             <div class="col-sm-5">
-              <input type="email" name="email" id="email" required ng-model="client.email" class="form-control"/>
+              <input type="email" name="email" id="email" required ng-model="client.email" class="form-control" autocomplete="email"/>
             </div>
             <div class="col-sm-offset-4 messages">
-              <div class="error-message" ng-show="client_form.email.$invalid && booking_form.submitted"><span translate="DETAILS_EMAIL_VALIDATION_MSG"></span>
-              </div>          
+              <div class="error-message" ng-show="client_form.email.$invalid && booking_form.submitted">
+                <span translate="DETAILS_EMAIL_VALIDATION_MSG"></span>
+              </div>
             </div>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && ((client_form.mobile.$dirty && !client_form.mobile.$focused) || booking_form.submitted)}">
             <label for="mobile" class="control-label col-sm-4"><span translate="DETAILS_PHONE_MOBILE"></span>:</label>
             <div class="col-sm-5">
-              <input type="text" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern(true)" ng-model="client.mobile" class="form-control" bb-focus/>
+              <input type="text" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern(true)" ng-model="client.mobile" class="form-control" bb-focus autocomplete="tel"/>
             </div>
           </div>
 
@@ -69,10 +72,11 @@
                 <input bb-question="question"/>
               </div>
               <div class="col-sm-offset-4 messages">
-                <div class="error-message" ng-show="client_form['q' + question.id].$invalid && ( client_form['q' + question.id].$dirty || booking_form.submitted )"><span translate="DETAILS_VALIDATION_MSG"></span>
+                <div class="error-message" ng-show="client_form['q' + question.id].$invalid && ( client_form['q' + question.id].$dirty || booking_form.submitted )">
+                  <span translate="DETAILS_VALIDATION_MSG"></span>
                 </div>
-              </div> 
-            </div>   
+              </div>
+            </div>
 
           </div>
 
@@ -89,9 +93,10 @@
               <input bb-question="question"/><span ng-show="question.detail_type == 'check' && question.required">*</span>
             </div>
             <div class="col-sm-offset-4 messages">
-              <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )"><span translate="DETAILS_VALIDATION_MSG"></span>
+              <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )">
+                <span translate="DETAILS_VALIDATION_MSG"></span>
               </div>
-            </div> 
+            </div>
           </div>
 
         </div><!--booking_questions_form-->

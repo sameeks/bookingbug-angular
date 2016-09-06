@@ -1,20 +1,22 @@
 angular.module('BBMember.Services').factory "MemberBookingService", ($q,
-    SpaceCollections, $rootScope, MemberService, BBModel) ->
+  SpaceCollections, $rootScope, MemberService, BBModel) ->
 
   query: (member, params) ->
     deferred = $q.defer()
+    params ||= {}
+    params.no_cache = true
     if !member.$has('bookings')
       deferred.reject("member does not have bookings")
     else
       member.$get('bookings', params).then (bookings) =>
         if angular.isArray bookings
-          bookings = for booking in bookings
-            new BBModel.Member.Booking(booking)
+          # bookings embedded in member
+          bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
           deferred.resolve(bookings)
         else
+          params.no_cache = false
           bookings.$get('bookings', params).then (bookings) =>
-            bookings = for booking in bookings
-              new BBModel.Member.Booking(booking)
+            bookings = (new BBModel.Member.Booking(booking) for booking in bookings)
             deferred.resolve(bookings)
           , (err) ->
             deferred.reject(err)
@@ -27,7 +29,7 @@ angular.module('BBMember.Services').factory "MemberBookingService", ($q,
     booking.$del('self').then (b) =>
       booking.deleted = true
       b = new BBModel.Member.Booking(b)
-      MemberService.refresh(member).then (member) =>
+      BBModel.Member.Member.$refresh(member).then (member) =>
         member = member
       , (err) =>
       deferred.resolve(b)
@@ -37,7 +39,6 @@ angular.module('BBMember.Services').factory "MemberBookingService", ($q,
 
   update: (booking) ->
     deferred = $q.defer()
-    $rootScope.member.flushBookings()
     booking.$put('self', {}, booking).then (booking) =>
       book = new BBModel.Member.Booking(booking)
       SpaceCollections.checkItems(book)

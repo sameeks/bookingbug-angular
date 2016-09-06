@@ -1,4 +1,5 @@
 angular.module("BB.Directives").directive "bbWalletPurchaseBands", ($rootScope) ->
+
   scope: true
   restrict: "AE"
   templateUrl: "wallet_purchase_bands.html"
@@ -15,6 +16,6 @@ angular.module("BB.Directives").directive "bbWalletPurchaseBands", ($rootScope) 
           if scope.wallet
             scope.getWalletPurchaseBandsForWallet(scope.wallet)
             deregisterWatch()
-      else 
+      else
         scope.getWalletForMember(scope.member).then () ->
           scope.getWalletPurchaseBandsForWallet(scope.wallet)

@@ -1,3 +1,5 @@
+'use strict'
+
 angular.module('BB.Directives').directive 'bbPurchase', () ->
   restrict: 'AE'
   replace: true
@@ -7,11 +9,15 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
     scope.init(scope.$eval( attrs.bbPurchase ))
     return
 
-angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, CompanyService, PurchaseService, ClientService, $modal, $location, $timeout, BBWidget, BBModel, $q, QueryStringService, SSOService, AlertService, LoginService, $window, $upload, ServiceService, $sessionStorage, SettingsService, $translate) ->
+angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
+  PurchaseService, $uibModal, $location, $timeout, BBModel, $q, QueryStringService,
+  SSOService, AlertService, LoginService, $window, $sessionStorage, LoadingService,
+  SettingsService, $translate, ReasonService, $document) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
   $scope.make_payment = false
+  loader = LoadingService.$loader($scope)
 
   setPurchaseCompany = (company) ->
     $scope.bb.company_id = company.id
@@ -37,7 +43,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   $scope.init = (options) ->
     options = {} if !options
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
     $scope.move_route = options.move_route if options.move_route
     $scope.move_all = options.move_all if options.move_all
     $scope.fail_msg = options.fail_msg if options.fail_msg
@@ -49,79 +55,97 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
       $scope.purchase = $scope.bb.purchase
       $scope.bookings = $scope.bb.purchase.bookings
       $scope.messages = $scope.purchase.confirm_messages if $scope.purchase.confirm_messages
-      $scope.setLoaded $scope
+      $scope.cancel_reasons = $scope.bb.cancel_reasons unless $scope.cancel_reasons
+      $scope.move_reasons = $scope.bb.move_reasons unless $scope.move_reasons
+      loader.setLoaded()
     else
       if options.member_sso
         SSOService.memberLogin(options).then (login) ->
           $scope.load()
         , (err) ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
           failMsg()
       else
         $scope.load()
 
+  getPurchase = (params) ->
+    deferred = $q.defer()
+    PurchaseService.query(params).then (purchase) ->
+      deferred.resolve(purchase)
+      purchase.$get('company').then (company) =>
+        setPurchaseCompany(company)
+      $scope.purchase = purchase
+      $scope.bb.purchase = purchase
+      $scope.price = !($scope.purchase.price == 0)
+    , (err) -> #get purchase
+      loader.setLoaded()
+      if err && err.status == 401
+        if LoginService.isLoggedIn()
+          # TODO don't show fail message, display message that says you're logged in as someone else and offer switch user function (logout and show login)
+          failMsg()
+        else
+          loginRequired()
+      else
+        failMsg()
+    return deferred.promise
+
+  getBookings = (purchase) ->
+    $scope.purchase.$getBookings().then (bookings) ->
+      $scope.bookings = bookings
+
+      if bookings[0]
+        bookings[0].$getCompany().then (company) ->
+          $scope.purchase.bookings[0].company = company
+          if company.$has("reasons")
+            getReasons(company).then (reasons) ->
+              setCancelReasons()
+              setMoveReasons()
+              setMoveReasonsToBB()
+              setCancelReasonsToBB()
+          company.$getAddress().then (address) ->
+            $scope.purchase.bookings[0].company.address = address
+
+      loader.setLoaded()
+      checkIfMoveBooking(bookings)
+      checkIfWaitlistBookings(bookings)
+
+      for booking in $scope.bookings
+        booking.$getAnswers().then (answers) ->
+          booking.answers = answers
+    , (err) -> #get booking
+      loader.setLoaded()
+      failMsg()
+
+    if purchase.$has('client')
+      purchase.$get('client').then (client) =>
+        $scope.setClient(new BBModel.Client(client))
+    $scope.purchase.getConfirmMessages().then (messages) ->
+      $scope.purchase.confirm_messages = messages
+      $scope.messages = messages
 
   $scope.load = (id) ->
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
-    id = getPurchaseID()
+    id = getPurchaseID() if !id
 
     unless $scope.loaded || !id
       $rootScope.widget_started.then () =>
         $scope.waiting_for_conn_started.then () =>
           company_id = getCompanyID()
           if company_id
-            CompanyService.query(company_id, {}).then (company) ->
+            BBModel.Company.$query(company_id, {}).then (company) ->
               setPurchaseCompany(company)
           params = {purchase_id: id, url_root: $scope.bb.api_url}
           auth_token = $sessionStorage.getItem('auth_token')
           params.auth_token = auth_token if auth_token
-          PurchaseService.query(params).then (purchase) ->
-            unless $scope.bb.company?
-              purchase.$get('company').then (company) =>
-                setPurchaseCompany(company)
-            $scope.purchase = purchase
-            $scope.bb.purchase = purchase
-            $scope.price = !($scope.purchase.price == 0)
 
-            $scope.purchase.getBookingsPromise().then (bookings) ->
-              $scope.bookings = bookings
+          getPurchase(params).then (purchase) ->
+            getBookings(purchase)
 
-              if bookings[0]
-                bookings[0].getCompanyPromise().then (company) ->
-                  $scope.purchase.bookings[0].company = company
-                  company.getAddressPromise().then (address) ->
-                    $scope.purchase.bookings[0].company.address = address
-
-              $scope.setLoaded $scope
-              checkIfMoveBooking(bookings)
-              checkIfWaitlistBookings(bookings)
-
-              for booking in $scope.bookings
-                booking.getAnswersPromise().then (answers) ->
-                  booking.answers = answers
-            , (err) ->
-              $scope.setLoaded $scope
-              failMsg()
-
-            if purchase.$has('client')
-              purchase.$get('client').then (client) =>
-                $scope.setClient(new BBModel.Client(client))
-            $scope.purchase.getConfirmMessages().then (messages) ->
-              $scope.purchase.confirm_messages = messages
-              $scope.messages = messages
-          , (err) ->
-            $scope.setLoaded $scope
-            if err && err.status == 401
-              if LoginService.isLoggedIn()
-                # TODO don't show fail message, display message that says you're logged in as someone else and offer switch user function (logout and show login)
-                failMsg()
-              else
-                loginRequired()
-            else
-              failMsg()
-        , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+      , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+    else
+      loader.setLoaded()
 
     $scope.loaded = true
 
@@ -169,7 +193,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     if $scope.move_all
       return $scope.moveAll(route, options)
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
     $scope.initWidget({company_id: booking.company_id, no_route: true})
     $timeout () =>
       $rootScope.connection_started.then () =>
@@ -184,19 +208,19 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
         $scope.setBasketItem(new_item)
 
         $q.all(proms).then () ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
           $rootScope.$broadcast "booking:move"
           $scope.decideNextPage(route)
         , (err) ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
           failMsg()
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   # potentially move all of the items in booking - move the whole lot to a basket
   $scope.moveAll = (route, options = {}) ->
     route ||= $scope.move_route
-    $scope.notLoaded $scope
+    loader.notLoaded()
     $scope.initWidget({company_id: $scope.bookings[0].company_id, no_route: true})
     $timeout () =>
       $rootScope.connection_started.then () =>
@@ -222,57 +246,65 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
 
         $scope.setBasketItem($scope.bb.basket.items[0])
         $q.all(proms).then () ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
           $scope.decideNextPage(route)
         , (err) ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
           failMsg()
-      , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $scope.bookWaitlistItem = (booking) ->
-    $scope.notLoaded $scope
-    params = { purchase: $scope.purchase, booking: booking }
+    loader.notLoaded()
+
+    params =
+      purchase: $scope.purchase
+      booking: booking
     PurchaseService.bookWaitlistItem(params).then (purchase) ->
       $scope.purchase = purchase
       $scope.total = $scope.purchase
       $scope.bb.purchase = purchase
-      $scope.purchase.getBookingsPromise().then (bookings) ->
+      $scope.purchase.$getBookings().then (bookings) ->
         $scope.bookings = bookings
-        $scope.waitlist_bookings = (booking for booking in $scope.bookings when (booking.on_waitlist && booking.settings.sent_waitlist == 1))
-        if $scope.purchase.$has('new_payment') && $scope.purchase.due_now > 0
+        $scope.waitlist_bookings = (booking for booking in $scope.bookings when (booking.on_waitlist and booking.settings.sent_waitlist is 1))
+        if $scope.purchase.$has('new_payment') and $scope.purchase.due_now > 0
           $scope.make_payment = true
-        $scope.setLoaded $scope
+        loader.setLoaded()
       , (err) ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
         failMsg()
+
     , (err) =>
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   # delete a single booking
   $scope.delete = (booking) ->
-    modalInstance = $modal.open
+    modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDelete
       resolve:
-        booking: ->
-          booking    
-   
+        booking: -> booking
+        cancel_reasons: -> $scope.cancel_reasons
+
     modalInstance.result.then (booking) ->
-      booking.$del('self').then (service) =>
+      cancel_reason = null
+      cancel_reason = booking.cancel_reason if booking.cancel_reason
+      data = {cancel_reason: cancel_reason}
+      booking.$del('self', {}, data).then (service) =>
         $scope.bookings = _.without($scope.bookings, booking)
         $rootScope.$broadcast "booking:cancelled"
 
 
   # delete all bookings assoicated to the purchase
   $scope.deleteAll = () ->
-    modalInstance = $modal.open
+    modalInstance = $uibModal.open
+      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDeleteAll
       resolve:
-        purchase: ->
-          $scope.purchase
+        purchase: -> $scope.purchase
     modalInstance.result.then (purchase) ->
       PurchaseService.deleteAll(purchase).then (purchase) ->
         $scope.purchase = purchase
@@ -284,35 +316,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
     if booking.min_cancellation_time
       return moment().isBefore(booking.min_cancellation_time)
     booking.datetime.isAfter(moment())
-
-
-  $scope.onFileSelect = (booking, $file, existing) ->
-    $scope.upload_progress = 0
-    file = $file
-    att_id = null
-    att_id = existing.id if existing
-    method = "POST"
-    method = "PUT" if att_id
-    $scope.upload = $upload.upload({
-      url: booking.$href('attachments'),
-      method: method,
-      # headers: {'header-key': 'header-value'},
-      # withCredentials: true,
-      data: {att_id: att_id},
-      file: file, # or list of files: $files for html5 only
-      # set the file formData name ('Content-Desposition'). Default is 'file'
-      # fileFormDataName: myFile, //or a list of names for multiple files (html5).
-      # customize how data is added to formData. See #40#issuecomment-28612000 for sample code
-      # formDataAppender: function(formData, key, val){}
-    }).progress (evt) ->
-      if $scope.upload_progress < 100
-        $scope.upload_progress = parseInt(99.0 * evt.loaded / evt.total)
-    .success (data, status, headers, config) ->
-      # file is uploaded successfully
-      $scope.upload_progress = 100
-      if data && data.attachments && booking
-        booking.attachments = data.attachments
-
 
   $scope.createBasketItem = (booking) ->
     item = new BBModel.BasketItem(booking, $scope.bb)
@@ -327,29 +330,53 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope, Co
   $scope.changeAttendees = (route) ->
     $scope.moveAll(route)
 
+  getReasons = (company) ->
+    ReasonService.query(company).then (reasons) ->
+      $scope.company_reasons = reasons
+      $scope.company_reasons
+    , (err) ->
+      loader.setLoadedAndShowError(err, 'Sorry, something went wrong retrieving reasons')
+
+  setCancelReasons = () ->
+    $scope.cancel_reasons = _.filter($scope.company_reasons, (r) -> r.reason_type == 3)
+    $scope.cancel_reasons
+
+  setMoveReasons = () ->
+    $scope.move_reasons = _.filter($scope.company_reasons, (r) -> r.reason_type == 5)
+    $scope.move_reasons
+
+  setMoveReasonsToBB = () ->
+    $scope.bb.move_reasons = $scope.move_reasons if $scope.move_reasons
+
+  setCancelReasonsToBB = () ->
+    $scope.bb.cancel_reasons = $scope.cancel_reasons if $scope.cancel_reasons
+
+
+
 
 
 
 
 # Simple modal controller for handling the 'delete' modal
-ModalDelete = ($scope,  $rootScope, $modalInstance, booking, AlertService) ->
+ModalDelete = ($scope,  $rootScope, $uibModalInstance, booking, AlertService, cancel_reasons) ->
   $scope.controller = "ModalDelete"
   $scope.booking = booking
+  $scope.cancel_reasons = cancel_reasons
 
   $scope.confirmDelete = () ->
     AlertService.clear()
-    $modalInstance.close(booking)
+    $uibModalInstance.close(booking)
 
   $scope.cancel = ->
-    $modalInstance.dismiss "cancel"
+    $uibModalInstance.dismiss "cancel"
 
 # Simple modal controller for handling the 'delete all' modal
-ModalDeleteAll = ($scope,  $rootScope, $modalInstance, purchase) ->
+ModalDeleteAll = ($scope,  $rootScope, $uibModalInstance, purchase) ->
   $scope.controller = "ModalDeleteAll"
   $scope.purchase = purchase
 
   $scope.confirmDelete = () ->
-    $modalInstance.close(purchase)
+    $uibModalInstance.close(purchase)
 
   $scope.cancel = ->
-    $modalInstance.dismiss "cancel"
+    $uibModalInstance.dismiss "cancel"

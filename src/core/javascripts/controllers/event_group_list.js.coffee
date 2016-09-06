@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -37,30 +37,30 @@ angular.module('BB.Directives').directive 'bbEventGroups', () ->
     return
 
 
-angular.module('BB.Controllers').controller 'EventGroupList',
-($scope,  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
-  PageControllerService, halClient) ->
+angular.module('BB.Controllers').controller 'EventGroupList', ($scope,
+  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
+  PageControllerService, LoadingService, halClient) ->
 
   $scope.controller = "public.controllers.EventGroupList"
 
   FormDataStoreService.init 'EventGroupList', $scope, [
     'event_group'
   ]
+  loader = LoadingService.$loader($scope).notLoaded()
 
-  $scope.notLoaded $scope
-  angular.extend(this, new PageControllerService($scope, $q))
+  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.validator = ValidatorService
 
   $rootScope.connection_started.then =>
     if $scope.bb.company
       $scope.init($scope.bb.company)
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $scope.init = (comp) ->
     $scope.booking_item ||= $scope.bb.current_item
-    ppromise = comp.getEventGroupsPromise()
+    ppromise = comp.$getEventGroups()
 
     ppromise.then (items) ->
       # not all service lists need filtering. check for attribute first
@@ -98,12 +98,12 @@ angular.module('BB.Controllers').controller 'EventGroupList',
             item.selected = true
             $scope.booking_item.setEventGroup($scope.event_group)
 
-      $scope.setLoaded $scope
+      loader.setLoaded()
 
       if $scope.booking_item.event_group || (!$scope.booking_item.person && !$scope.booking_item.resource)
         # the "bookable services" are the event_group unless we've pre-selected something!
         $scope.bookable_services = $scope.items
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
 

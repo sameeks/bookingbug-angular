@@ -1,10 +1,12 @@
+'use strict'
+
 ###
 * @ngdoc service
 * @name BBAdminBooking.service:ProcessAssetsFilter
 * @description
 * Returns array of assets from a comma delimited string
 ###
-angular.module('BBAdminBooking').factory 'ProcessAssetsFilter', [() ->
+angular.module('BBAdminBooking').factory 'ProcessAssetsFilter', () ->
   return (string)->
     assets = []
 
@@ -13,7 +15,7 @@ angular.module('BBAdminBooking').factory 'ProcessAssetsFilter', [() ->
 
     angular.forEach(string.split(','), (value)->
         assets.push parseInt(decodeURIComponent(value))
-    )    
+    )
 
-  return assets 
-]
+  return assets
+

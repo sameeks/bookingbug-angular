@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 
 ###**
@@ -28,8 +28,9 @@ angular.module('BB.Directives').directive 'bbPurchaseTotal', () ->
   controller : 'PurchaseTotal'
 
 
-angular.module('BB.Controllers').controller 'PurchaseTotal',
-($scope, $rootScope, $window, PurchaseTotalService, $q) ->
+angular.module('BB.Controllers').controller 'PurchaseTotal', ($scope,
+  $rootScope, $window, BBModel, $q) ->
+
   $scope.controller = "public.controllers.PurchaseTotal"
 
   angular.extend(this, new $window.PageController($scope, $q))
@@ -45,7 +46,7 @@ angular.module('BB.Controllers').controller 'PurchaseTotal',
   ###
   $scope.load = (total_id) =>
     $rootScope.connection_started.then =>
-      $scope.loadingTotal = PurchaseTotalService.query({company: $scope.bb.company, total_id: total_id})
+      $scope.loadingTotal = BBModel.PurchaseTotal.$query({company: $scope.bb.company, total_id: total_id})
       $scope.loadingTotal.then (total) =>
         $scope.total = total
 

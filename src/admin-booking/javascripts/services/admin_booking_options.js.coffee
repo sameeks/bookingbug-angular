@@ -1,3 +1,5 @@
+'use strict'
+
 ###
 * @ngdoc service
 * @module BB.Services
@@ -22,11 +24,13 @@
   ]
   </example>
 ###
-angular.module('BB.Services').provider 'AdminBookingOptions', [ ->
+angular.module('BB.Services').provider 'AdminBookingOptions', ->
   # This list of default options is meant to grow
   options = {
     merge_resources: true
     merge_people: true
+    day_view: 'multi_day'
+    mobile_pattern: null
   }
 
   @setOption = (option, value) ->
@@ -38,4 +42,4 @@ angular.module('BB.Services').provider 'AdminBookingOptions', [ ->
     options
 
   return
-]
+

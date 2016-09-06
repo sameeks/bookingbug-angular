@@ -29,22 +29,23 @@ angular.module('BB.Directives').directive 'bbDeals', () ->
   scope : true
   controller : 'DealList'
 
-angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, DealService, $q, BBModel, AlertService, FormDataStoreService, ValidatorService, $modal, $translate) ->
+angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $uibModal, $document, AlertService, FormDataStoreService, ValidatorService, LoadingService, BBModel, $translate) ->
 
   $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then ->
     init()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   init = () ->
-    $scope.notLoaded $scope
+    loader.notLoaded()
     if !$scope.deals
-      deal_promise = DealService.query($scope.bb.company)
+      deal_promise = BBModel.Deal.$query($scope.bb.company)
       deal_promise.then (deals) ->
         $scope.deals = deals
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -60,7 +61,8 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
     iitem.setDefaults $scope.bb.item_defaults
     iitem.setDeal deal
     if !$scope.bb.company_settings.no_recipient
-      modalInstance = $modal.open
+      modalInstance = $uibModal.open
+        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: $scope.getPartial('_add_recipient')
         scope: $scope
         controller: ModalInstanceCtrl
@@ -69,21 +71,21 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
             iitem
 
       modalInstance.result.then (item) ->
-        $scope.notLoaded $scope
+        loader.notLoaded()
         $scope.setBasketItem item
         $scope.addItemToBasket().then ->
-          $scope.setLoaded $scope
+          loader.setLoaded()
         , (err) ->
-          $scope.setLoadedAndShowError $scope, err, 'Sorry, something went wrong'
+          loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     else
-      $scope.notLoaded $scope
+      loader.notLoaded()
       $scope.setBasketItem iitem
       $scope.addItemToBasket().then ->
-        $scope.setLoaded $scope
+        loader.setLoaded()
       , (err) ->
-        $scope.setLoadedAndShowError $scope, err, 'Sorry, something went wrong'
+        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
-  ModalInstanceCtrl = ($scope, $modalInstance, item, ValidatorService) ->
+  ModalInstanceCtrl = ($scope, $uibModalInstance, item, ValidatorService) ->
     $scope.controller = 'ModalInstanceCtrl'
     $scope.item = item
     $scope.recipient = false
@@ -100,10 +102,10 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
     $scope.addToBasket = (form) ->
       if !ValidatorService.validateForm(form)
         return
-      $modalInstance.close($scope.item)
+      $uibModalInstance.close($scope.item)
 
     $scope.cancel = ->
-      $modalInstance.dismiss 'cancel'
+      $uibModalInstance.dismiss 'cancel'
 
   ###**
   * @ngdoc method
@@ -130,3 +132,4 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, Dea
       true
     else
       AlertService.add('danger', msg: $translate.instant('SELECT_GIFT_CERTIFICATE'))
+

@@ -1,17 +1,22 @@
-'use strict';
+'use strict'
 
 angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   restrict: 'AE'
-  replace: true
+  replace: false
   scope : true
   controller : 'adminBookingClients'
+  templateUrl: 'admin_booking_clients.html'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, $timeout) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,
+  $rootScope, $q, AlertService, ValidatorService, ErrorService, $log, BBModel,
+  $timeout, LoadingService, AdminBookingOptions) ->
 
   $scope.validator  = ValidatorService
+  $scope.admin_options = AdminBookingOptions
   $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 10})
-  
+  loader = LoadingService.$loader($scope)
+
   $scope.sort_by_options = [
     {key: 'first_name', name: 'First Name'},
     {key: 'last_name', name: 'Last Name'},
@@ -24,7 +29,6 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
   $rootScope.connection_started.then () ->
     $scope.clearClient()
 
-
   $scope.selectClient = (client, route) =>
     $scope.setClient(client)
     $scope.client.setValid(true)
@@ -33,7 +37,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
 
   $scope.createClient = (route) =>
 
-    $scope.notLoaded $scope
+    loader.notLoaded()
 
     # we need to validate the client information has been correctly entered here
     if $scope.bb && $scope.bb.parent_client
@@ -41,19 +45,19 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
 
     $scope.client.setClientDetails($scope.client_details) if $scope.client_details
 
-    ClientService.create_or_update($scope.bb.company, $scope.client).then (client) =>
-      $scope.setLoaded $scope
+    BBModel.Client.$create_or_update($scope.bb.company, $scope.client).then (client) =>
+      loader.setLoaded()
       $scope.selectClient(client, route)
     , (err) ->
 
       if err.data and err.data.error is "Please Login"
-        $scope.setLoaded($scope)
+        loader.setLoaded()
         AlertService.raise('EMAIL_ALREADY_REGISTERED_ADMIN')
       else if err.data and err.data.error is "Sorry, it appears that this phone number already exists"
-        $scope.setLoaded($scope)
+        loader.setLoaded()
         AlertService.raise('PHONE_NUMBER_ALREADY_REGISTERED_ADMIN')
       else
-        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
   $scope.getClients = (params, options = {}) ->
@@ -77,7 +81,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
 
     $scope.notLoaded $scope
 
-    AdminClientService.query($scope.params).then (result) ->
+    BBModel.Admin.Client.$query($scope.params).then (result) ->
 
       $scope.search_complete = true
 
@@ -85,23 +89,18 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
         $scope.clients.add(params.page, result.items)
       else
         $scope.clients.initialise(result.items, result.total_entries)
-      
-      $scope.setLoaded $scope
+
+      loader.setLoaded()
 
 
   $scope.searchClients = (search_text) ->
-
     defer = $q.defer()
-
     params =
       filter_by: search_text
       company: $scope.bb.company
-
-    AdminClientService.query(params).then (clients) =>
-      defer.resolve(clients.items)
-      clients.items
-
-    return defer.promise
+    BBModel.Admin.Client.$query(params).then (clients) =>
+      defer.resolve(clients)
+    defer.promise
 
 
   $scope.typeHeadResults = ($item, $model, $label) ->
@@ -137,3 +136,4 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
     $scope.params.order_by = sort_by
     $scope.params.page = 1
     $scope.getClients($scope.params)
+

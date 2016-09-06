@@ -1,4 +1,4 @@
-
+'use strict'
 
 # build a dynamic injector for each of the models!
 # This creates a service that is capable of creating any given model
@@ -7,53 +7,31 @@
 
 angular.module('BB.Models').service "BBModel", ($q, $injector) ->
 
+
+angular.module('BB.Models').run ($q, $injector, BBModel) ->
+
   # the top level models
   models = ['Address', 'Answer', 'Affiliate', 'Basket', 'BasketItem',
     'BookableItem', 'Category', 'Client', 'ClientDetails', 'Company',
     'CompanySettings', 'Day', 'Event', 'EventChain', 'EventGroup',
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
-    'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
-    'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
-    'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection', 'ExternalPurchase', 'PackageItem', 'BulkPurchase', 'Pagination']
+    'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space',
+    'Clinic', 'SurveyQuestion','TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
+    'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection',
+    'ExternalPurchase', 'PackageItem', 'BulkPurchase', 'Pagination', 'Reason',
+    'Login']
 
-  funcs = {}
   for model in models
-    do (model) =>  
-      funcs[model] = (p1, p2) => 
-        new ($injector.get(model + "Model"))(p1, p2)
-
+    BBModel[model] = $injector.get(model + "Model")
 
   # purchase models
   purchase_models = ['Booking', 'Total', 'CourseBooking']
   pfuncs = {}
   for model in purchase_models
-    do (model) =>  
-      pfuncs[model] = (init) => 
-        new ($injector.get("Purchase." + model + "Model"))(init)
-  funcs['Purchase'] = pfuncs
-
-  # member models
-  member_models = ['Member', 'Booking', 'PrePaidBooking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand']
-  mfuncs = {}
-  for model in member_models
-    do (model) =>  
-      mfuncs[model] = (init) => 
-        new ($injector.get("Member." + model + "Model"))(init)
-  funcs['Member'] = mfuncs
-
-  # admin models
-  admin_models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
-    'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup', 'Event', 'Queuer', 'ClientQueue', 'Clinic']
-  afuncs = {}
-  for model in admin_models
-    do (model) =>  
-      afuncs[model] = (init) => 
-        new ($injector.get("Admin." + model + "Model"))(init)
-  funcs['Admin'] = afuncs
+    pfuncs[model] = $injector.get("Purchase." + model + "Model")
+  BBModel['Purchase'] = pfuncs
 
 
-
-  funcs
 
 
 
@@ -75,7 +53,8 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
         @_data = data
       if data
         for n,m of data
-          @[n] = m
+          if typeof(m) != 'function'
+            @[n] = m
       if @_data && @_data.$href
         @self = @_data.$href("self")
         # append get functions for all links...
@@ -90,8 +69,8 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
           do (link, obj, name) =>
             if !@[name]
               @[name] = () -> @$buildOject(link)
-            if !@[name + "Promise"]
-              @[name + "Promise"] = () -> @$buildOjectPromise(link)
+            if !@["$" + name]
+              @["$" + name] = () -> @$buildOjectPromise(link)
 
 
     _snakeToCamel: (s) ->
@@ -131,7 +110,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
       , (err) -> prom.reject(err)
 
       @__linkedPromises[link]
-    
+
 
     get: (ikey) ->
       return null if !@_data
@@ -139,7 +118,15 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
 
     set: (ikey, value) ->
       return null if !@_data
-      @_data[ikey] = value 
+      @_data[ikey] = value
+
+    getOption: (ikey) ->
+      return null if !@_data
+      return @_data.getOption(ikey)
+
+    setOption: (ikey, value) ->
+      return null if !@_data
+      return @_data.setOption(ikey, value)
 
 
     $href: (rel, params) ->
@@ -149,7 +136,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
       @_data.$has(rel) if @_data
 
     $flush: (rel, params) ->
-      @_data.$href(rel, params) if @_data
+      @_data.$flush(rel, params) if @_data
 
     $get: (rel, params) ->
       @_data.$get(rel, params) if @_data
@@ -163,11 +150,15 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
     $patch: (rel, params, dat) ->
       @_data.$patch(rel, params, dat) if @_data
 
-    $del: (rel, params) ->
-      @_data.$del(rel, params) if @_data
+    $del: (rel, params, dat) ->
+      @_data.$del(rel, params, dat) if @_data
 
     $links: () ->
       @_data.$links() if @_data
 
+    $link: (rel) ->
+      @_data.$link(rel) if @_data
+
     $toStore: () ->
       @_data.$toStore() if @_data
+

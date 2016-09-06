@@ -38,11 +38,11 @@ angular.module('BB.Directives').directive 'bbProductList', () ->
 
 angular.module('BB.Controllers').controller 'ProductList', ($scope,
     $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
-    PageControllerService, halClient) ->
+    PageControllerService, LoadingService, halClient) ->
 
   $scope.controller = "public.controllers.ProductList"
 
-  $scope.notLoaded $scope
+  loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.validator = ValidatorService
 
@@ -50,7 +50,7 @@ angular.module('BB.Controllers').controller 'ProductList', ($scope,
     if $scope.bb.company
       $scope.init($scope.bb.company)
   , (err) ->
-    $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   $scope.init = (company) ->
     $scope.booking_item ||= $scope.bb.current_item
@@ -58,7 +58,7 @@ angular.module('BB.Controllers').controller 'ProductList', ($scope,
     company.$get('products').then (products) ->
       products.$get('products').then (products) ->
         $scope.products = products
-        $scope.setLoaded $scope
+        loader.setLoaded()
 
   ###**
   * @ngdoc method

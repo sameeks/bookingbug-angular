@@ -1,6 +1,6 @@
 {
   "name": "bookingbug-angular-services",
-  "version": "0.0.0",
+  "version": "master",
   "homepage": "https://github.com/BookingBug/bookingbug-angular-services-bower",
   "authors": [
     "Glenn Shoosmith <glenn@bookingbug.com>",
@@ -9,7 +9,8 @@
   "main": [
     "bookingbug-angular-services.js",
     "bookingbug-angular-services-templates.js",
-    "bookingbug-angular-services.css"
+    "bookingbug-angular-services.css",
+    "src/stylesheets/*"
   ],
   "license": "MIT",
   "ignore": [
@@ -22,10 +23,6 @@
   "dependencies": {
     "bookingbug-angular-core": "master",
     "bookingbug-angular-admin": "master",
-    "angular-ui-calendar": "~1.0.0",
-    "fullcalendar": "2.3.1"
-  },
-  "resolutions": {
-    "fullcalendar": "2.3.1"
+    "angular-ui-calendar": "~1.0.0"
   }
 }
