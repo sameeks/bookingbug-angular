@@ -93,6 +93,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             resourceAreaWidth: '18%'
         resourceGroupField: 'group'
         resourceLabelText: ' '
+        eventResourceEditable: true
         selectable: true
         lazyFetching: false
         columnFormat: AdminCalendarOptions.column_format
