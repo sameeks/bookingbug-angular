@@ -29,7 +29,7 @@ angular.module('BB.Services').provider 'GeneralOptions', ->
   # This list of default options is meant to grow
   options = {
     twelve_hour_format : false,
-    calendar_minute_step: 10,
+    calendar_minute_step: 5,
     calendar_min_time: "09:00",
     calendar_max_time: "18:00",
     calendar_slot_duration: 5
