@@ -205,8 +205,10 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           $scope.calendarLoading = isLoading
 
     isTimeRangeAvailable = (start, end, resource) ->
+      st =  moment(start.toISOString()).unix()
+      en =  moment(end.toISOString()).unix()
       events = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', (event)->
-        event.rendering == 'background' && start >= event.start && end <= event.end && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
+        event.rendering == 'background' && st >= event.start.unix() && en <= event.end.unix() && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
       )
 
       events.length > 0
