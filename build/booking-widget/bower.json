@@ -26,11 +26,12 @@
     "angular-bootstrap": "~2.0.0",
     "angular-cookies": "~1.5.8",
     "fontawesome": "~4.6.3",
-    "fullcalendar": "~2.9.1",
     "angular-mocks": "~1.5.8",
     "angular-google-maps": "2.3.2",
     "angular-schema-form": "~0.8.13",
-    "trNgGrid": "~3.1.7"
+    "trNgGrid": "~3.1.7",
+    "jquery": "~1.11.3",
+    "fullcalendar": "~3.0.0"
   },
   "dependencies": {
     "bookingbug-angular-core": "../core",
