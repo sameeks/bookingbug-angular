@@ -29,7 +29,7 @@
     "bookingbug-angular-services": "master",
     "bookingbug-angular-events": "master",
     "AdminLTE-angular-sass": "~0.0.1",
-    "fullcalendar-scheduler": "~1.3.3",
+    "fullcalendar-scheduler": "~1.4.0",
     "jqueryui-touch-punch": "*",
     "pusher": "~2.2.4",
     "angular-ui-calendar": "~1.0.1",

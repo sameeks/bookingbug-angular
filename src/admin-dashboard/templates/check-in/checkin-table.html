@@ -31,45 +31,45 @@
           </td>
           <td>
             <span ng-if="bmap[gridItem].hasStatus('no_show')">
-              {{bmap[gridItem].statusTime("no_show").format("HH:mm")}}
+              <i class="fa fa-check-square"></i> {{bmap[gridItem].statusTime("no_show").format("HH:mm")}}
             </span>
             <span ng-if="!bmap[gridItem].hasStatus('no_show') && !bmap[gridItem].hasStatus('checked_in')">
               <button ng-click="setStatus(bmap[gridItem], 'no_show')" class="btn btn-default btn-xs btn-block">
-                <i class="fa fa-check-square-o"></i>
+                <i class="fa fa-square-o"></i>
                 <span translate>CHECK_IN_PAGE.NO_SHOW_BUTTON</span>
               </button>
             </span>
           </td>
           <td>
             <span ng-if="bmap[gridItem].hasStatus('checked_in')">
-              {{bmap[gridItem].statusTime("checked_in").format("HH:mm")}}
+              <i class="fa fa-check-square"></i> {{bmap[gridItem].statusTime("checked_in").format("HH:mm")}}
             </span>
             <span ng-if="!bmap[gridItem].hasStatus('checked_in')">
               <button ng-click="setStatus(bmap[gridItem], 'checked_in')" class="btn btn-default btn-xs btn-block">
-                <i class="fa fa-check-square-o"></i>
+                <i class="fa fa-square-o"></i>
                 <span translate>CHECK_IN_PAGE.CHECK_IN_BUTTON</span>
               </button>
             </span>
           </td>
           <td>
             <span ng-if="bmap[gridItem].hasStatus('being_seen')">
-              {{bmap[gridItem].statusTime("being_seen").format("HH:mm")}}
+              <i class="fa fa-check-square"></i> {{bmap[gridItem].statusTime("being_seen").format("HH:mm")}}
             </span>
             <span ng-if="!bmap[gridItem].hasStatus('being_seen') && !bmap[gridItem].hasStatus('checked_in') && bmap[gridItem].sinceStart() > 0" ng-class="bmap[gridItem].sinceStart() | gar:1000:10000">
                <span translate translate-values="{period: '{{ bmap[gridItem].sinceStart() | time_period }}'}">CHECK_IN_PAGE.WAS_DUE</span>
             </span>
             <span ng-if="!bmap[gridItem].hasStatus('being_seen') && bmap[gridItem].hasStatus('checked_in')">
               <button ng-click="setStatus(bmap[gridItem], 'being_seen')" class="btn btn-default btn-xs pull-right">
-                <i class="fa fa-check-square"></i>
+                <i class="fa fa-square"></i>
                 <span translate>CHECK_IN_PAGE.SERVE</span>
               </button>
-              <span ng-class="bmap[gridItem].sinceStart({later: 'checked_in'}) | gar:1000:10000" > <span translate translate-values="{period: '{{bmap[gridItem].sinceStart({later: 'checked_in'}) | time_period}}'}">CHECK_IN_PAGE.WAITING_FOR</span></span>
+              <span ng-class="bmap[gridItem].sinceStatus('checked_in') | gar:1000:10000" > <i class="fa fa-check-square"></i> <span translate translate-values="{period: '{{bmap[gridItem].sinceStatus('checked_in') | time_period}}'}">CHECK_IN_PAGE.WAITING_FOR</span></span>
             </span>
           </td>
 
           <td>
             <span ng-if="bmap[gridItem].hasStatus('completed')">
-              {{bmap[gridItem].statusTime("completed").format("HH:mm")}}
+              <i class="fa fa-check-square"></i> {{bmap[gridItem].statusTime("completed").format("HH:mm")}}
             </span>
             <span ng-if="!bmap[gridItem].hasStatus('completed') && bmap[gridItem].hasStatus('being_seen')">
               <span ng-class="bmap[gridItem].sinceStatus('being_seen') | gar:100:10" > <span translate translate-values="{period: '{{bmap[gridItem].sinceStatus('being_seen') | time_period}}'}">CHECK_IN_PAGE.BEING_SEEN_FOR</span> </span><br/>
