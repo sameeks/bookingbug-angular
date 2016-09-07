@@ -75,9 +75,11 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         header:
           left: 'today,prev,next'
           center: 'title'
-          right: 'timelineDay,timelineDayThirty,agendaWeek,month'
+          right: 'timelineDay,listDay,timelineDayThirty,agendaWeek,month'
         defaultView: 'timelineDay'
         views:
+          listDay:
+             buttonText: $translate.instant('CALENDAR_PAGE.AGENDA')
           agendaWeek:
             slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
             buttonText: $translate.instant('CALENDAR_PAGE.WEEK')
@@ -148,10 +150,18 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             $scope.editBooking(new BBModel.Admin.Booking(event))
         eventRender: (event, element) ->
           service = _.findWhere($scope.services, {id: event.service_id})
-          if service
+          if uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getView').type == "listDay"
+            link = $bbug(element.children()[2])
+            if link
+              a = link.children()[0]
+              if a
+                if event.person_name
+                  a.innerHTML = event.person_name + " - " + a.innerHTML
+          else if service
             element.css('background-color', service.color)
             element.css('color', service.textColor)
             element.css('border-color', service.textColor)
+          element
         eventAfterRender: (event, elements, view) ->
           if not event.rendering? or event.rendering != 'background'
             PrePostTime.apply(event, elements, view, $scope)

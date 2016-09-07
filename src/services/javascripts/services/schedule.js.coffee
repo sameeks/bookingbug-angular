@@ -118,7 +118,7 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
 
   getAssetsScheduleEvents: (company, start, end, filtered = false, requested = []) ->
     if filtered
-      loadScheduleCaches(requested).then () ->
+      loadScheduleCaches(requested).then () =>
         $q.all(@mapAssetsToScheduleEvents(start, end, requested)).then (schedules) ->
           _.flatten(schedules)
     else

@@ -25,6 +25,7 @@ angular.module('BBAdminDashboard.calendar.translations')
       'WEEK'                    : 'Week',
       'MONTH'                   : 'Month',
       'DAY'                     : 'Day ({{minutes}}m)',
+      'AGENDA'                  : 'Agenda',
       'STAFF'                   : 'Staff',
       'RESOURCES'               : 'Resources',
       'MOVE_MODAL_TITLE'        : 'Move',
