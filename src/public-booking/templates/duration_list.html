@@ -16,7 +16,8 @@
           <div class="col-sm-2 col-xs-6">
             <div class="bb-duration-price">
               <span ng-show="duration.price > 0">{{duration.price | currency}}</span>
-              <span ng-show="duration.price == 0"><span translate="ITEM_FREE"></span></span>
+              <span ng-show="duration.price == 0"><span translate="ITEM_FREE"></span>
+            </div>
           </div>
           <div class="col-sm-2 col-xs-12">
             <button type="button" ng-click="selectDuration(duration)" class="btn btn-primary btn-block"><span translate="PROGRESS_SELECT"></span></button>

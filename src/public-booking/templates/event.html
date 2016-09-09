@@ -205,7 +205,7 @@
               </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error': client_form.phone.$invalid && ((client_form.phone.$dirty && !client_form.phone.$focused) || booking_form.submitted)}">
+            <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && ((client_form.mobile.$dirty && !client_form.mobile.$focused) || booking_form.submitted)}">
               <label for="phone" class="control-label col-sm-4"><span translate="STORE_PHONE"></span>:</label>
               <div class="col-sm-5">
                 <input type="tel" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern()" ng-model="client.mobile" class="form-control" autocomplete="tel"/>
@@ -281,7 +281,7 @@
               <div ng-form name="client_ticket_form" class="form-horizontal" role="form" novalidate>
                 <div ticket-accordion uib-accordion-group is-open="is_open" ng-init="is_open = $first">
                   <div uib-accordion-heading>
-                    <h2>Ticket <span ng-if="bb.basket.timeItems().length != 1">{{$index + 1}}</span> details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i></h2>
+                    <h2>Ticket <span ng-if="current_ticket_items.length != 1">{{$index + 1}}</span> details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i></h2>
                   </div>
 
 
@@ -361,7 +361,7 @@
           <div class="col-sm-4 hidden-xs">&nbsp;</div>
           <div class="col-sm-5">
             <label>
-                <input type="checkbox" required ng-model="tandc" id="tandc" name="tandc" /><span translate="DETAILS_TERMS"></span>.
+              <input type="checkbox" required ng-model="tandc" id="tandc" name="tandc" /><span translate="DETAILS_TERMS"></span>.
             </label>
           </div>
           <div class="col-sm-3 messages">
@@ -384,7 +384,7 @@
                 <span class="glyphicon glyphicon-chevron-right"></span>
               </button>
 
-              <button type="submit" class="btn btn-primary btn-block" ng-click="validator.validateForm(booking_form) && checkReady() && routeReady()">Book Ticket<span ng-show="event.tickets[0].qty > 1">s</span></button>
+              <button type="button" class="btn btn-primary btn-block pull-right" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() <= 0 && bb.company.settings.has_waitlists">
                 Join Waitlist
               </button>
 
@@ -392,7 +392,7 @@
 
             <div ng-if="selected_tickets">
 
-              <button type="submit" class="btn btn-primary btn-block" ng-click="validator.validateForm(booking_form) && checkReady() && routeReady()">Confirm Details</button>
+              <button type="submit" class="btn btn-primary btn-block pull-right" ng-click="validator.validateForm(booking_form) && checkReady() && routeReady()">
                 Book Ticket
               </button>
 
@@ -404,7 +404,7 @@
 
             <button type="button" class="btn btn-default" bb-debounce ng-click="decideNextPage('event_list')">
               Back
-            &lt; Back</button>
+            </button>
 
           </div>
 
