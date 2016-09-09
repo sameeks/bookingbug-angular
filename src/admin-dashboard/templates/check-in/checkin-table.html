@@ -5,14 +5,14 @@
       <thead>
         <tr role="row">
           <th field-name="icon" display-name="-" enable-sorting="false" width="10"></th>
-          <th field-name="client_name" display-name="{{'CHECK_IN_PAGE.CUSTOMER' | translate}}" enable-sorting="true"></th>
-          <th field-name="person_name" display-name="{{'CHECK_IN_PAGE.STAFF_MEMBER' | translate}}" enable-sorting="true"></th>
-          <th field-name="datetime" display-name="{{'CHECK_IN_PAGE.DUE' | translate}}" enable-sorting="true"></th>
+          <th field-name="client_name" display-name="{{'ADMIN_DASHBOARD.CHECK_IN_PAGE.CUSTOMER' | translate}}" enable-sorting="true"></th>
+          <th field-name="person_name" display-name="{{'ADMIN_DASHBOARD.CHECK_IN_PAGE.STAFF_MEMBER' | translate}}" enable-sorting="true"></th>
+          <th field-name="datetime" display-name="{{'ADMIN_DASHBOARD.CHECK_IN_PAGE.DUE' | translate}}" enable-sorting="true"></th>
 
-          <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.NO_SHOW' | translate}}</div></th>
-          <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.ARRIVED' | translate}}</div></th>
-          <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.BEEING_SEEN' | translate}}</div></th>
-          <th><div class="tr-ng-title">{{'CHECK_IN_PAGE.COMPLETED' | translate}}</div></th>
+          <th><div class="tr-ng-title"><span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.NO_SHOW"></span></div></th>
+          <th><div class="tr-ng-title"><span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.ARRIVED"></span></div></th>
+          <th><div class="tr-ng-title"><span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.BEEING_SEEN"></span></div></th>
+          <th><div class="tr-ng-title"><span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.COMPLETED"></span></div></th>
         </tr>
       </thead>
       <tbody>
@@ -36,7 +36,7 @@
             <span ng-if="!bmap[gridItem].hasStatus('no_show') && !bmap[gridItem].hasStatus('checked_in')">
               <button ng-click="setStatus(bmap[gridItem], 'no_show')" class="btn btn-default btn-xs btn-block">
                 <i class="fa fa-square-o"></i>
-                <span translate>CHECK_IN_PAGE.NO_SHOW_BUTTON</span>
+                <span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.NO_SHOW_BUTTON"></span>
               </button>
             </span>
           </td>
@@ -47,7 +47,7 @@
             <span ng-if="!bmap[gridItem].hasStatus('checked_in')">
               <button ng-click="setStatus(bmap[gridItem], 'checked_in')" class="btn btn-default btn-xs btn-block">
                 <i class="fa fa-square-o"></i>
-                <span translate>CHECK_IN_PAGE.CHECK_IN_BUTTON</span>
+                <span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.CHECK_IN_BUTTON"></span>
               </button>
             </span>
           </td>
@@ -56,14 +56,14 @@
               <i class="fa fa-check-square"></i> {{bmap[gridItem].statusTime("being_seen").format("HH:mm")}}
             </span>
             <span ng-if="!bmap[gridItem].hasStatus('being_seen') && !bmap[gridItem].hasStatus('checked_in') && bmap[gridItem].sinceStart() > 0" ng-class="bmap[gridItem].sinceStart() | gar:1000:10000">
-               <span translate translate-values="{period: '{{ bmap[gridItem].sinceStart() | time_period }}'}">CHECK_IN_PAGE.WAS_DUE</span>
+               <span translate translate-values="{period: '{{ bmap[gridItem].sinceStart() | time_period }}'}">ADMIN_DASHBOARD.CHECK_IN_PAGE.WAS_DUE</span>
             </span>
             <span ng-if="!bmap[gridItem].hasStatus('being_seen') && bmap[gridItem].hasStatus('checked_in')">
               <button ng-click="setStatus(bmap[gridItem], 'being_seen')" class="btn btn-default btn-xs pull-right">
                 <i class="fa fa-square"></i>
-                <span translate>CHECK_IN_PAGE.SERVE</span>
+                <span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.SERVE"></span>
               </button>
-              <span ng-class="bmap[gridItem].sinceStatus('checked_in') | gar:1000:10000" > <i class="fa fa-check-square"></i> <span translate translate-values="{period: '{{bmap[gridItem].sinceStatus('checked_in') | time_period}}'}">CHECK_IN_PAGE.WAITING_FOR</span></span>
+              <span ng-class="bmap[gridItem].sinceStatus('checked_in') | gar:1000:10000" > <i class="fa fa-check-square"></i> <span translate translate-values="{period: '{{bmap[gridItem].sinceStatus('checked_in') | time_period}}'}">ADMIN_DASHBOARD.CHECK_IN_PAGE.WAITING_FOR</span></span>
             </span>
           </td>
 
@@ -72,8 +72,8 @@
               <i class="fa fa-check-square"></i> {{bmap[gridItem].statusTime("completed").format("HH:mm")}}
             </span>
             <span ng-if="!bmap[gridItem].hasStatus('completed') && bmap[gridItem].hasStatus('being_seen')">
-              <span ng-class="bmap[gridItem].sinceStatus('being_seen') | gar:100:10" > <span translate translate-values="{period: '{{bmap[gridItem].sinceStatus('being_seen') | time_period}}'}">CHECK_IN_PAGE.BEING_SEEN_FOR</span> </span><br/>
-              <button ng-click="setStatus(bmap[gridItem], 'completed')" class="btn btn-default"><span translate>CHECK_IN_PAGE.COMPLETED_BUTTON</span></button>
+              <span ng-class="bmap[gridItem].sinceStatus('being_seen') | gar:100:10" > <span translate translate-values="{period: '{{bmap[gridItem].sinceStatus('being_seen') | time_period}}'}">ADMIN_DASHBOARD.CHECK_IN_PAGE.BEING_SEEN_FOR</span> </span><br/>
+              <button ng-click="setStatus(bmap[gridItem], 'completed')" class="btn btn-default"><span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.COMPLETED_BUTTON"></span></button>
             </span>
           </td>
         </tr>

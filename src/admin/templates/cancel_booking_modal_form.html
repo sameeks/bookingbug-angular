@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h3 class="modal-title">Cancel Booking</h3>
+  <h3 class="modal-title"><span translate="ADMIN.MODAL.CANCEL_BOOKING.TITLE"></span></h3>
 </div>
 <form name="modal_form" ng-submit="$close(model)">
   <div ng-show="loading" class="loader"></div>
@@ -8,17 +8,17 @@
     <div class="checkbox">
       <label>
         <input type="checkbox" name="notify" ng-model="model.notify">
-        Send cancellation confirmation to {{booking.client_email}}?
+        <span translate="ADMIN.MODAL.CANCEL_BOOKING.SEND_EMAIL" translate-values="{email:'{{booking.client_email}}'}"></span>
       </label>
     </div>
     <div class="form-group">
-      <label for="reason" class="form-label">Cancel reason</label>
+      <label for="reason" class="form-label"><span translate="ADMIN.MODAL.CANCEL_BOOKING.REASON"></span></label>
       <input id="reason" name="reason" type="text" class="form-control"
-      ng-model="model.cancel_reason">
+             ng-model="model.cancel_reason">
     </div>
   </div>
   <div class="modal-footer">
-    <input type="submit" class="btn btn-primary" ng-disabled="loading" value="OK">
-    <button class="btn btn-default" ng-click="$dismiss()">Close</button>
+    <input type="submit" class="btn btn-primary" ng-disabled="loading" value="{{ 'COMMON.BTN.OK' | translate }}">
+    <button class="btn btn-default" ng-click="$dismiss()"><span translate="COMMON.BTN.CLOSE"></span></button>
   </div>
 </form>

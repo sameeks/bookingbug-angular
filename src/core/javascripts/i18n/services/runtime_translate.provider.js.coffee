@@ -22,11 +22,12 @@
   ]
   </pre>
 ###
-angular.module('BBAdminDashboard').provider 'RuntimeTranslate', ['$translateProvider', ($translateProvider)->
-  translateProvider  = $translateProvider
+angular.module('BB.i18n').provider 'RuntimeTranslate', ($translateProvider)->
+  'ngInject'
+
+  translateProvider = $translateProvider
   @setProvider = (provider)->
     translateProvider = provider
   @$get = ->
     translateProvider
   return
-]

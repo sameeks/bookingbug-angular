@@ -70,7 +70,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         maxTime: $scope.options.max_time
         height: 'auto'
         buttonText: {
-          today: $translate.instant('CALENDAR_PAGE.TODAY')
+          today: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
         }
         header:
           left: 'today,prev,next'
@@ -79,19 +79,19 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         defaultView: 'timelineDay'
         views:
           listDay:
-             buttonText: $translate.instant('CALENDAR_PAGE.AGENDA')
+             buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.AGENDA')
           agendaWeek:
             slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
-            buttonText: $translate.instant('CALENDAR_PAGE.WEEK')
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
             groupByDateAndResource: false
           month:
             eventLimit: 5
-            buttonText: $translate.instant('CALENDAR_PAGE.MONTH')
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
           timelineDay:
             slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
             eventOverlap: false
             slotWidth: 25
-            buttonText: $translate.instant('CALENDAR_PAGE.DAY', {minutes: $scope.options.cal_slot_duration})
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: $scope.options.cal_slot_duration})
             resourceAreaWidth: '18%'
         resourceGroupField: 'group'
         resourceLabelText: ' '
@@ -138,9 +138,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
 
             # if it's got a person and resource - then it
           Dialog.confirm
-            title: $translate.instant('CALENDAR_PAGE.MOVE_MODAL_TITLE')
+            title: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_TITLE')
             model: event
-            body: $translate.instant('CALENDAR_PAGE.MOVE_MODAL_BODY')
+            body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY')
             success: (model) =>
               $scope.updateBooking(event)
             fail: () ->
@@ -296,7 +296,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           BBAssets(company).then((assets)->
             for asset in assets
               asset.id = asset.identifier
-              asset.group = $translate.instant('CALENDAR_PAGE.' + asset.group.toUpperCase())
+              asset.group = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.' + asset.group.toUpperCase())
 
             $scope.loading = false
             callback(assets)

@@ -17,7 +17,6 @@ BBAdminDashboardDependencies = [
   'ui.calendar',
   'ui.bootstrap',
   'ui.router',
-  'ui.select',
   'ct.ui.router.extras',
   'trNgGrid',
   'toggle-switch',
@@ -91,29 +90,3 @@ adminBookingApp = angular.module('BBAdminDashboard', BBAdminDashboardDependencie
 .config ($logProvider, $httpProvider) ->
   $logProvider.debugEnabled(true)
   $httpProvider.defaults.withCredentials = true
-
-# Translatition Configuration
-.config ['$translateProvider', 'AdminCoreOptionsProvider', ($translateProvider, AdminCoreOptionsProvider) ->
-  # Sanitisation strategy
-  $translateProvider.useSanitizeValueStrategy('sanitize');
-  # Persist language selection in localStorage
-  $translateProvider.useLocalStorage()
-
-  $translateProvider
-    .fallbackLanguage(AdminCoreOptionsProvider.getOption('available_languages'))
-]
-.run ['$translate', 'AdminCoreOptions', 'RuntimeTranslate', ($translate, AdminCoreOptions, RuntimeTranslate) ->
-
-  # Register available languages and their associations
-  RuntimeTranslate.registerAvailableLanguageKeys(AdminCoreOptions.available_languages,AdminCoreOptions.available_language_associations)
-
-  # define fallback
-  $translate.preferredLanguage AdminCoreOptions.default_language
-
-  # Depending on configuration use the browser to decide prefered language
-  if AdminCoreOptions.use_browser_language
-    browserLocale = $translate.negotiateLocale($translate.resolveClientLocale())
-
-    if _.contains(AdminCoreOptions.available_languages, browserLocale)
-      $translate.preferredLanguage browserLocale
-]

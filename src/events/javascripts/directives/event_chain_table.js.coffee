@@ -57,6 +57,6 @@ angular.module('BBAdminEvents').directive 'eventChainTable', (BBModel, $log, Mod
   {
     controller: controller
     link: link
-    templateUrl: 'event_chain_table_main.html'
+    templateUrl: 'event-chain-table/event_chain_table_main.html'
   }
 
