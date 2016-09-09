@@ -1,6 +1,27 @@
 # Change Log
 All notable changes to this project will be documented in this file using [CHANGELOG](http://keepachangelog.com/en/0.3.0/) convention.
 
+
+## [Unreleased]
+### Changed
+- SDK build process does not flatten template files anymore in order to avoid naming conflicts.
+  Bespoke projects that refer|override any of the following templates should be updated so they have proper directory structure.  
+  ADMIN
+  templates/login/admin_login.html
+  templates/login/admin_pick_company.html  
+  EVENT
+  templates/event-chain-table/event_chain_table_main.html
+  templates/event-chain-table/event_group_table_main.html  
+  QUEUE
+  templates/public/queuer_position.html  
+  SETTINGS
+  templates/admin-table/admin_form.html
+  templates/admin-table/admin_table_main.html  
+  Before change $templateCache would register 'login/admin_login.html' template as 'admin_login.html'.
+  After change $templateCache registers 'login/admin_login.html' template as 'login/admin_login.html'.
+
+
+
 <a name="2.0.0-alpha"></a>
 # 2.0.0-alpha (2015-11-21)
 ### Changed

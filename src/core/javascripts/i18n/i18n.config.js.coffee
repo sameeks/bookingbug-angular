@@ -7,6 +7,8 @@ angular.module('BB.i18n').config ($translateProvider, TranslationOptionsProvider
 
   $translateProvider.useLocalStorage()
 
+  $translateProvider.addInterpolation('$translateMessageFormatInterpolation')
+
   $translateProvider.fallbackLanguage(TranslationOptionsProvider.getOption('available_languages'))
 
   return

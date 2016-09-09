@@ -8,7 +8,12 @@
           <span ng-show="has_availability && is_open" class="period-label-icon">-</span>
           {{heading}}
         </span>
-        <span class="period-detail" ng-hide="is_selected || (is_open && has_availability) || options.hide_availability_summary">{{accordion_slots.length}} available</span>
+        <span class="period-detail"
+              ng-hide="is_selected || (is_open && has_availability) || options.hide_availability_summary"
+              translate="PUBLIC_BOOKING.ACCORDION_RANGE_GROUP.AVAILABLE"
+              translate-values="{ SLOTS_NUMBER: accordion_slots.length || 0 }"
+              translate-interpolation="messageformat">
+        </span>
       </div>
       <span class="period-detail selected-time" ng-show="is_selected && !is_open">{{selected_slot.time_moment | datetime: 'time'}}</span>
     </div>

@@ -2,7 +2,7 @@
 
 ###*
 * @ngdoc service
-* @name BBAdminDashboard.RuntimeTranslate
+* @name BB.i18n.RuntimeTranslate
 *
 * @description
 * Returns an instance of $translateProvider that allows late language binding (on runtime)
@@ -10,7 +10,7 @@
 
 ###*
 * @ngdoc service
-* @name BBAdminDashboard.RuntimeTranslateProvider
+* @name BB.i18n.RuntimeTranslateProvider
 *
 * @description
 * Provider
