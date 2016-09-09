@@ -20,7 +20,6 @@ angular.module('BB.Directives')
     link: (scope, element, attr) ->
       $timeout () ->
         if attr.autofocus == '' || scope.$eval(attr.autofocus)
-          console.log 'do autofocus'
           element[0].focus()
   }
 
