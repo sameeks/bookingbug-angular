@@ -1,6 +1,6 @@
 <div ng-show="loading"><img src='/BB_wait.gif' class="loader"></div>
 <div ng-hide="loading" class="bb-upcoming clearfix">
-  <div id="bookings">
+  <div class="bookings">
     <div ng-if="pre_paid_bookings.length == 0">
       <h3 translate="NO_PREPAID_BOOKINGS"></h3>
     </div>
@@ -14,8 +14,8 @@
             |
             <span translate="PREPAID_BOOKING_DATES" translate-values="{booking: booking}"></span>
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
 
     <div uib-pagination total-items="pagination.num_items"
       ng-model="pagination.current_page" items-per-page="pagination.page_size"

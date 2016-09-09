@@ -8,8 +8,7 @@
           <span ng-show="has_availability && is_open" class="period-label-icon">-</span>
           <span ng-if="heading" translate="{{heading}}"></span>
         </span>
-        <span ng-hide="is_selected || (is_open && has_availability)" class="period-detail" translate="AVAILABLE"
-              translate-values="{ number: accordian_slots.length || 0 }" translate-interpolation="messageformat"></span>
+        <span ng-hide="is_selected || (is_open && has_availability)" class="period-detail" translate="AVAILABLE" translate-values="{ number: accordian_slots.length || 0 }" translate-interpolation="messageformat"></span>
       </div>
       <span class="period-detail selected-time" ng-show="is_selected && !is_open">{{selected_slot.datetime | datetime: 'LT'}}</span>
         

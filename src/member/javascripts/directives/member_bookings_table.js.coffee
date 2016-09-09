@@ -55,7 +55,6 @@ angular.module('BBMember').directive 'memberBookingsTable', ($uibModal, $log, Mo
       $scope.bookings = _.map $scope.booking_models, (booking) ->
         id: booking.id
         date: moment(booking.datetime).format('YYYY-MM-DD')
-        datetime: moment(booking.datetime).format('LLLL')
         date_order: moment(booking.datetime).format('x')
         datetime: moment(booking.datetime)
         details: booking.full_describe

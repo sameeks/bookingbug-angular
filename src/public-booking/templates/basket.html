@@ -121,23 +121,23 @@
 					<button type="button" class="btn btn-primary btn-xs" ng-click="applyCoupon(coupon_code)"><span translate="PROGRESS_APPLY"></span></button>
 				</div>
 
-          <div class="bb-coupon-box" ng-if="bb.company_settings.has_vouchers">
-            <form class="form-inline">
-              <div ng-show="!show_voucher_box">
-                <a ng-click="show_voucher_box = true"><span translate='BASKET_GIFT_CERTIFICATE_QUESTION'></span></a>
+        <div class="bb-coupon-box" ng-if="bb.company_settings.has_vouchers">
+          <form class="form-inline">
+            <div ng-show="!show_voucher_box">
+              <a ng-click="show_voucher_box = true"><span translate='BASKET_GIFT_CERTIFICATE_QUESTION'></span></a>
+            </div>
+            <div ng-show="show_voucher_box" class="form-group">
+              <label ng-if="!basket.hasDeal()" for="deal"><span translate='BASKET_GIFT_CERTIFICATE_APPLY'></span>:</label>
+              <label ng-if="basket.hasDeal()" for="deal"><span translate='BASKET_GIFT_CERTIFICATE_APPLY_ANOTHER'></span>:</label>
+              <div class=" input-group">
+                <input type="text" class="form-control input-sm" id="deal_code" name="deal_code" ng-model="deal_code" placeholder="Enter a voucher code">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary btn-sm" ng-click="applyDeal(deal_code)"><span translate='PROGRESS_APPLY'></span></button>
+                </span>
               </div>
-              <div ng-show="show_voucher_box" class="form-group">
-                <label ng-if="!basket.hasDeal()" for="deal"><span translate='BASKET_GIFT_CERTIFICATE_APPLY'></span>:</label>
-                <label ng-if="basket.hasDeal()" for="deal"><span translate='BASKET_GIFT_CERTIFICATE_APPLY_ANOTHER'></span>:</label>
-                <div class=" input-group">
-                  <input type="text" class="form-control input-sm" id="deal_code" name="deal_code" ng-model="deal_code" placeholder="Enter a voucher code">
-                  <span class="input-group-btn">
-                    <button type="button" class="btn btn-primary btn-sm" ng-click="applyDeal(deal_code)"><span translate='PROGRESS_APPLY'></span></button>
-                  </span>
-                </div>
-              </div>
-            </form>
-          </div>
+            </div>
+          </form>
+        </div>
 
 			</div>
 		</div>

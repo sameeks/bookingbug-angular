@@ -12,13 +12,12 @@
 
       <li bb-member-booking="booking" ng-repeat="booking in (waitlist_bookings = (upcoming_bookings | filter:{deleted: false, on_waitlist: true} | orderBy: 'datetime.unix()'))"></li>
 
-        <div>{{booking.datetime.format('Do MMM YYYY h.mma')}}</div>
     </ul>
 
   </div>
 
-        <button ng-click="cancel(booking)" class="btn btn-danger bb-push">Cancel</button>
-        <button ng-click="edit(booking)" class="btn bb-push">Details</button>
+  <div class="bb-section" ng-show="confirmed_bookings.length > 0" bb-scroll-to="page:changed">
+
     <h3>Confirmed</h3>
 
     <ul class="bb-list bb-list-bordered">

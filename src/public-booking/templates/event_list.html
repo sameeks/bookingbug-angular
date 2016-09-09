@@ -202,9 +202,9 @@
                   <div class="event-select col-xs-12"  ng-class="{'col-sm-4':!$root.tiles}">
                     <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" ng-disabled="spaces_left == 0 && !bb.company.settings.has_waitlists">
                       <span ng-show="spaces_left > 0">
-					  	<span translate="PROGRESS_BOOK"></span>
-						<span translate="EVENT_WORD">
-					  </span>
+                        <span translate="PROGRESS_BOOK"></span>
+                        <span translate="EVENT_WORD"></span>
+                      </span>
                       <div ng-show="spaces_left <= 0 && !bb.company.settings.has_waitlists">
                         <span class="status-sold-out"><span translate="EVENT_SOLD_OUT"></span></span>
                       </div>
