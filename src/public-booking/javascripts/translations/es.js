@@ -1,4 +1,4 @@
-;window.bookingbug.translations.es = {
+translations = {
   ADDRESS: 'Dirección'
   AFTERNOON: 'Tarde'
   APPOINTMENT_REFERENCE: 'Información de la cita'

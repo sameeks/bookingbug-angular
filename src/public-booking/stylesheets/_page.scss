@@ -144,15 +144,3 @@ p {
   height: 200px; 
 }
 
-div[bb-locale-switcher] {
-  float: right;
-  margin-bottom: 45px;
-  // Width sized to generally the longest language name size 'Luxermbourgish'
-  button {
-    width: 160px;
-  }
-  a {
-    text-decoration: none;
-    cursor: pointer;
-  }
-}

@@ -1,4 +1,4 @@
-;window.bookingbug.translations.en = {
+translations = {
   "ALERTS": {
     "ACCOUNT_DISABLED": "Your account appears to be disabled. Please contact the business you're booking with if the problem persists.",
     "ALREADY_REGISTERED": "You have already registered with this email address. Please login or reset your password.",

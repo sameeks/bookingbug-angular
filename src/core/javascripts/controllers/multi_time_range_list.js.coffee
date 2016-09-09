@@ -330,7 +330,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
 
           item.slots = {}
           for own day, times of slots
-            item.slots[day] = _.groupBy(times, 'time')
+            item.slots[day] = _.indexBy(times, 'time')
 
       if $scope.data_valid
         for k, v of res[0]

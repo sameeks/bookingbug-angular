@@ -396,7 +396,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       $scope.bb.template = prms.template
 
     if prms.i18n
-      $scope.i18n = true
+      SettingsService.enableInternationalizaton()
 
     if prms.login_required
       $scope.bb.login_required = true

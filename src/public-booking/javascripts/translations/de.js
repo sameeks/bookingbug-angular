@@ -1,4 +1,4 @@
-;window.bookingbug.translations.de = {
+translations = {
   "CHANGE_LANG":"Sprache ändern",
   "EN":"English",
   "DE":"Deutsch",

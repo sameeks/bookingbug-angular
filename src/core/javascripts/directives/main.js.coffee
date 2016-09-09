@@ -235,7 +235,7 @@ angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
             else
               $scope.questions[question.id] = {question: question, item: item}
 
-      $scope.has_questions = _.mapValues($scope.questions, 'question').length > 0
+      $scope.has_questions = _.pluck($scope.questions, 'question').length > 0
 
 
 

@@ -219,6 +219,33 @@ angular.module('BB.Filters').filter 'time_period', ($translate) ->
     return time_period
 
 
+###
+ * @ngdoc filter
+ * @name time_period_from_seconds
+ * @kind function
+ *
+ * @description
+ * Formats a number as a humanized duration, e.g. 1 hour, 2 minutes, 5 seconds
+ *
+ * @param {number} seconds Input to format
+ * @returns {string} Humanized duration.
+ *
+ *
+ * @example
+   <example module="timePeriodExample">
+     <file name="index.html">
+       <script>
+         angular.module('timePeriodExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.duration = 90;
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Duration: {{amount | time_period_from_seconds}}</span>
+       </div>
+     </file>
+   </example>
+###
 angular.module('BB.Filters').filter 'time_period_from_seconds', ($translate, $filter) ->
   (v) ->
 
@@ -235,6 +262,28 @@ angular.module('BB.Filters').filter 'time_period_from_seconds', ($translate, $fi
       time_period += moment.duration(seconds % 60, 'seconds').humanize()
 
     return time_period
+
+
+angular.module('BB.Filters').filter 'twelve_hour_time', ($window) ->
+  (time, options) ->
+
+    return if !angular.isNumber(time)
+
+    omit_mins_on_hour = options && options.omit_mins_on_hour or false
+    separator         = if options && options.separator then options.separator else ":"
+
+    t = time
+    h = Math.floor(t / 60)
+    m = t%60
+    suffix = 'am'
+    suffix = 'pm' if h >=12
+    h -=12 if (h > 12)
+    if m is 0 && omit_mins_on_hour
+      time = "#{h}"
+    else
+      time = "#{h}#{separator}" + $window.sprintf("%02d", m)
+    time += suffix
+    return time
 
 
 angular.module('BB.Filters').filter 'round_up', ->
