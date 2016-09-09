@@ -8,9 +8,8 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   templateUrl: 'admin_booking_clients.html'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,
-  $rootScope, $q, AlertService, ValidatorService, ErrorService, $log, BBModel,
-  $timeout, LoadingService, AdminBookingOptions) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AlertService,
+  ValidatorService, ErrorService, $log, BBModel,  $timeout, LoadingService, AdminBookingOptions, $translate) ->
 
   $scope.validator  = ValidatorService
   $scope.admin_options = AdminBookingOptions
@@ -18,9 +17,9 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,
   loader = LoadingService.$loader($scope)
 
   $scope.sort_by_options = [
-    {key: 'first_name', name: 'First Name'},
-    {key: 'last_name', name: 'Last Name'},
-    {key: 'email', name: 'Email'}
+    {key: 'first_name', name: $translate.instant('ADMIN_BOOKING.CUSTOMER.SORT_BY_FIRST_NAME')},
+    {key: 'last_name', name: $translate.instant('ADMIN_BOOKING.CUSTOMER.SORT_BY_LAST_NAME')},
+    {key: 'email', name: $translate.instant('ADMIN_BOOKING.CUSTOMER.SORT_BY_EMAIL')}
   ]
 
   $scope.sort_by = $scope.sort_by_options[0].key

@@ -12,10 +12,10 @@ angular.module('BB.i18n').controller 'languagePickerController', ($scope, $trans
   init = () ->
     vm.pickLanguage = pickLanguage
 
-    $scope.$on 'LanguagePicker:updateLanguage', setCurrentLanguage
-
     setCurrentLanguage();
     loadAvailableLanguages();
+
+    $scope.$on 'LanguagePicker:updateLanguage', setCurrentLanguage
 
     return
 
