@@ -152,7 +152,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       oldQuestions = $scope.item_details.questions
 
       _.each details.questions, (item) ->
-        search = _.find(oldQuestions, { name: item.name })
+        search = _.findWhere(oldQuestions, {name: item.name})
         if search
           item.answer = search.answer
     $scope.item_details = details

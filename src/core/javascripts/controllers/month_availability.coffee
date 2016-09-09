@@ -30,8 +30,7 @@ angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
   scope : true
   controller : 'MonthAvailability'
 
-angular.module('BB.Controllers').controller 'MonthAvailability', (
-  $scope, $rootScope, $q, AlertService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootScope, $q, AlertService, LoadingService, BBModel, $translate) ->
 
   $scope.controller = "public.controllers.MonthAvailability"
   

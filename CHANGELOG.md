@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file using [CHANGELOG](http://keepachangelog.com/en/0.3.0/) convention.
 
+# Unreleased
+### Added
+- i18n support to public-booking
+- 'endDateTime' helper method to the core TimeSlot model which returns the end time as a Moment object.
+### Removed
+ - `print_time`, `print_end_time`, `print_time12`, and `print_end_time12` methods and `time_12` and `time_24` properties have been removed from the TimeSlot model in favour or `datetime` and `endDateTime`.
+
+
 <a name="2.0.0-alpha"></a>
 # 2.0.0-alpha (2015-11-21)
 ### Changed

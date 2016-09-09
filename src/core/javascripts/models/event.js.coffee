@@ -309,7 +309,7 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
             @price_range.from  = @price
             @price_range.to = @price
 
-          @ticket_prices = _.groupBy(tickets, 'name')
+          @ticket_prices = _.indexBy(tickets, 'name')
 
           def.resolve(@)
       def.promise

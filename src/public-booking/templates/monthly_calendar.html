@@ -86,7 +86,7 @@
 
     <ul class="time-slots row">
       <li ng-repeat="slot in slots" class="col-sm-3">
-        <button type="button" class="btn btn-secondary btn-block" ng-click="selectSlot(slot)">{{slot.print_local_time()}}</button>
+        <button type="button" class="btn btn-secondary btn-block" ng-click="selectSlot(slot)">{{slot.datetime | datetime: 'LT'}}</button>
       </li>
     </ul>
   </div>

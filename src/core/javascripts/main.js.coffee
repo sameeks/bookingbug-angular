@@ -52,7 +52,7 @@ app.config (uiGmapGoogleMapApiProvider) ->
     v: '3.20',
     libraries: 'weather,geometry,visualization'
   })
-app.config ($locationProvider, $httpProvider, $translateProvider, $provide, ie8HttpBackendProvider) ->
+app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) ->
 
   $httpProvider.defaults.headers.common =
     'App-Id': 'f6b16c23',
@@ -67,11 +67,6 @@ app.config ($locationProvider, $httpProvider, $translateProvider, $provide, ie8H
   lowercase = (string) ->
     if angular.isString(string) then string.toLowerCase() else string
 
-  $translateProvider
-    .useLocalStorage()
-    .useLoader('I18nService')
-    .addInterpolation('$translateMessageFormatInterpolation')
-
   msie = int((/msie (\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
   if (isNaN(msie))
     msie = int((/trident\/.*; rv:(\d+)/.exec(lowercase(navigator.userAgent)) || [])[1])
@@ -82,9 +77,6 @@ app.config ($locationProvider, $httpProvider, $translateProvider, $provide, ie8H
 
   if (msie && msie <= 9) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
-
-
-  moment.fn.toISODate ||= -> this.locale('en').format('YYYY-MM-DD')
 
 
 app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig) ->
@@ -127,20 +119,5 @@ window.bookingbug =
     angular.injector(['BB.Services', 'BB.Models', 'ng'])
            .get('LoginService').logout(logout_opts)
     window.location.reload() if options.reload
-  translations: {}
 
-# String::includes polyfill
-if !String::includes
-
-  String::includes = (search, start) ->
-    if typeof start != 'number'
-      start = 0
-    if start + search.length > @length
-      false
-    else
-      @indexOf(search, start) != -1
-
-# Extend String with parameterise method
-String::parameterise = (seperator = '-') ->
-  @trim().replace(/\s/g,seperator).toLowerCase()
 

@@ -183,7 +183,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService,
   ErrorService, AppConfig, QueryStringService, QuestionService, LocaleService,
   PurchaseService, $sessionStorage, $bbug, SettingsService, UriTemplate, LoadingService,
-  $anchorScroll, $localStorage, $document, $translate, I18nService) ->
+  $anchorScroll, $localStorage, $document) ->
 
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
@@ -395,7 +395,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     if prms.template
       $scope.bb.template = prms.template
 
-    I18nService.init(prms.i18n, prms.supported_locales)
     if prms.i18n
       $scope.i18n = true
 

@@ -329,27 +329,3 @@
   "YES": "Yes",
   "YOUR_PURCHASES": "Your Purchases"
 };
-
-moment.locale('en', {
-  longDateFormat: {
-    LT : "h:mma",
-    LL: "Do MMMM YYYY",
-    LLL: "Do MMM YYYY h:mma",
-    LLLL : "dddd Do MMMM YYYY h:mma"
-  },
-  relativeTime: {
-    future: "in %s",
-    past:   "%s ago",
-    s:  "seconds",
-    m:  "one minute",
-    mm: "%d minutes",
-    h:  "one hour",
-    hh: "%d hours",
-    d:  "one day",
-    dd: "%d days",
-    M:  "one month",
-    MM: "%d months",
-    y:  "one year",
-    yy: "%d years"
-  }  
-);

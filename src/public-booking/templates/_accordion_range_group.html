@@ -11,14 +11,14 @@
         <span ng-hide="is_selected || (is_open && has_availability)" class="period-detail" translate="AVAILABLE"
               translate-values="{ number: accordian_slots.length || 0 }" translate-interpolation="messageformat"></span>
       </div>
-      <span class="period-detail selected-time" ng-show="is_selected && !is_open">{{selected_slot.print_local_time()}}</span>
+      <span class="period-detail selected-time" ng-show="is_selected && !is_open">{{selected_slot.datetime | datetime: 'LT'}}</span>
         
     </div>
   </div>
 
   <ul class="time-slots" ng-show="has_availability">
     <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="selectSlot(slot, day)" ng-repeat="slot in accordion_slots">
-      <span>{{slot.print_local_time()}}</span>
+      <span>{{slot.datetime | datetime: 'LT'}}</span>
     </li>
   </ul>
 

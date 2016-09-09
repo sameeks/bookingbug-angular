@@ -116,13 +116,13 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
         latlong = new google.maps.LatLng(comp.address.lat,comp.address.long)
         $scope.mapBounds.extend(latlong)
 
-    $scope.mapOptions =  {
-        center: $scope.mapBounds.getCenter(), 
-        zoom: $scope.default_zoom, 
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControl:true, 
-      mapTypeControlOptions: {
-          style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU 
+    $scope.mapOptions = {
+        center: $scope.mapBounds.getCenter(),
+        zoom: $scope.default_zoom,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl:true,
+        mapTypeControlOptions: {
+          style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU
       }
     }
 
@@ -299,7 +299,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
 
     req = {
       query : prms.address
-      #types: ['shopping_mall', 'store', 'embassy'] WTF? We're looking for cities/streets/areas
+      types: ['shopping_mall', 'store', 'embassy'] # narrow place types to improve results
     }
 
     req.bounds = prms.bounds if prms.bounds

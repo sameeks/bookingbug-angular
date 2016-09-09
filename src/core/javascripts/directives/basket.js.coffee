@@ -46,7 +46,7 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
 
     $scope.$watch ->
       $scope.basketItemCount = len = if $scope.bb.basket then $scope.bb.basket.length() else 0
-      $scope.baskenStatus = $translate.instant("BASKET_STATUS", {N: len}, "messageformat")
+      $scope.basketStatus = $translate.instant("BASKET_STATUS", {N: len}, "messageformat")
       return
     return
 

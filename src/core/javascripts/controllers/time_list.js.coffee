@@ -33,7 +33,7 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   scope : true
   controller : 'TimeList'
 
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService, ErrorService) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService, ErrorService, $translate) ->
 
   $scope.controller = "public.controllers.TimeList"
   loader = LoadingService.$loader($scope).notLoaded()
