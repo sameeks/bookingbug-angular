@@ -11,6 +11,8 @@ angular.module('BBAdminDashboard').config ($translateProvider) ->
   'ngInject'
 
   translations = {
+    SIDE_NAV_BOOKINGS: "BOOKINGS",
+    SIDE_NAV_CONFIG: "CONFIGURATION",
     ADMIN_DASHBOARD: {
       CORE: {
         GREETING         : 'Hi',
