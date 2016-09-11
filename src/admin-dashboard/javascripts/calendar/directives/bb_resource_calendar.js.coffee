@@ -46,6 +46,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.options = $scope.$eval $attrs.bbResourceCalendar
     $scope.options ||= {}
 
+
+
     # height = if $scope.options.header_height
     #   $bbug($window).height() - $scope.options.header_height
     # else
@@ -261,6 +263,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         for asset in assets
           asset.id = asset.identifier
         $scope.loading = false
+
+        if $scope.options.type
+          assets = _.filter assets, (a) -> a.type == $scope.options.type
         $scope.assets = assets
 
         # requestedAssets
@@ -294,6 +299,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       $scope.getCompanyPromise().then (company) ->
         if $scope.showAll
           BBAssets(company).then((assets)->
+            if $scope.options.type
+              assets = _.filter assets, (a) -> a.type == $scope.options.type
+
             for asset in assets
               asset.id = asset.identifier
               asset.group = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.' + asset.group.toUpperCase())

@@ -18,8 +18,16 @@ angular.module('BBAdminDashboard.calendar', [
     RuntimeStates
       .state 'calendar',
         parent: AdminCalendarOptions.parent_state
-        url: "calendar/:assets"
+        url: "calendar"
         templateUrl: "calendar/index.html"
+        controller: 'CalendarPageCtrl'
+      .state 'calendar.people',
+        url: "/people/:assets"
+        templateUrl: "calendar/people.html"
+        controller: 'CalendarPageCtrl'
+      .state 'calendar.resources',
+        url: "/resources/:assets"
+        templateUrl: "calendar/resources.html"
         controller: 'CalendarPageCtrl'
 
   if AdminCalendarOptions.show_in_navigation

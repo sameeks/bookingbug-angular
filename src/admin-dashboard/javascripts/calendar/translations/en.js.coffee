@@ -16,6 +16,8 @@ angular.module('BBAdminDashboard.calendar.translations')
       'SIDE_NAV': {
         'CALENDAR_PAGE': {
           'CALENDAR': 'Calendar'
+          'PEOPLE': 'Staff'
+          'RESOURCES': 'Resources'
         }
       },
 
