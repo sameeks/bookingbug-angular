@@ -221,7 +221,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       st =  moment(start.toISOString()).unix()
       en =  moment(end.toISOString()).unix()
       events = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', (event)->
-        event.rendering == 'background' && st >= event.start.unix() && en <= event.end.unix() && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
+        event.rendering == 'background' && st >= event.start.unix() && event.end && en <= event.end.unix() && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
       )
 
       events.length > 0
