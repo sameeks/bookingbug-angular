@@ -8,9 +8,9 @@
          filter-by="clientsOptions.search" items="clients" page-items="per_page" total-items="total_entries" on-data-required="getClients(currentPage, filterBy, filterByFields, orderBy, orderByReverse)" role="grid">
         <thead>
           <tr role="row">
-            <th field-name="name" display-name="{{'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME' | translate}}"></th>
-            <th field-name="email" display-name="{{'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL' | translate}}"></th>
-            <th field-name="mobile" display-name="{{'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE' | translate}}"></th>
+            <th field-name="name" enable-filtering display-name="{{'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME' | translate}}"></th>
+            <th field-name="email" enable-filtering display-name="{{'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL' | translate}}"></th>
+            <th field-name="mobile" enable-filtering display-name="{{'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE' | translate}}"></th>
             <th width="60" display-align="center"><div class="tr-ng-title"><span translate="ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS"></span></div></th>
           </tr>
         </thead>
