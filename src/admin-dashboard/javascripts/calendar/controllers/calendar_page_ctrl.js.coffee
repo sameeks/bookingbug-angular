@@ -8,15 +8,42 @@
 * Controller for the calendar page
 ###
 angular.module('BBAdminDashboard.calendar.controllers')
-.controller 'CalendarPageCtrl',['$scope', '$state', '$log', ($scope, $state, $log) ->
-  pusher_channel = $scope.company.getPusherChannel('bookings')
+.controller 'CalendarPageCtrl', ($log, $scope, $state) ->
+  'ngInject'
+
+  init = () ->
+
+    bindToPusherChannel()
+
+    if $state.current.name is 'calendar'
+      gotToProperState()
+
+    return
+
+  gotToProperState = () ->
+
+    if $scope.bb.company.$has('people')
+      $state.go("calendar.people")
+    else if $scope.bb.company.$has('resources')
+      $state.go("calendar.resources")
+
+    return
+
+  bindToPusherChannel = () ->
+    pusherChannel = $scope.company.getPusherChannel('bookings')
+
+    if pusherChannel
+      pusherChannel.bind 'create', refetch
+      pusherChannel.bind 'update', refetch
+      pusherChannel.bind 'destroy', refetch
+
+    return
+
   refetch = _.throttle (data) ->
-    $log.info '== booking push received in bookins == ', data
-    $scope.$broadcast 'refetchBookings' , data
+    $log.info '== booking push received in bookings == ', data
+    $scope.$broadcast 'refetchBookings', data
   , 1000, {leading: false}
 
-  if pusher_channel
-    pusher_channel.bind 'create', refetch
-    pusher_channel.bind 'update', refetch
-    pusher_channel.bind 'destroy', refetch
-]
+  init()
+
+  return

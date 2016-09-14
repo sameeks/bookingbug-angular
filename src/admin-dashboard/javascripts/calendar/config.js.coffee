@@ -24,11 +24,9 @@ angular.module('BBAdminDashboard.calendar', [
       .state 'calendar.people',
         url: "/people/:assets"
         templateUrl: "calendar/people.html"
-        controller: 'CalendarPageCtrl'
       .state 'calendar.resources',
         url: "/resources/:assets"
         templateUrl: "calendar/resources.html"
-        controller: 'CalendarPageCtrl'
 
   if AdminCalendarOptions.show_in_navigation
     SideNavigationPartials.addPartialTemplate('calendar', 'calendar/nav.html')
