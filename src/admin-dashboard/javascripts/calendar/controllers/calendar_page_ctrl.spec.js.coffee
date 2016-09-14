@@ -3,6 +3,7 @@
 describe 'BBAdminDashboard.calendar.controllers, CalendarPageCtrl', () ->
   $compile = null
   $controller = null
+  $httpBackend = null
   $rootScope = null
   $state = null
   $log = null
@@ -11,7 +12,7 @@ describe 'BBAdminDashboard.calendar.controllers, CalendarPageCtrl', () ->
   $scope = null
 
   pusherChannelMock = {
-    bind: (name, callback) ->
+    bind: () ->
   }
 
   companyMock = {
@@ -19,13 +20,34 @@ describe 'BBAdminDashboard.calendar.controllers, CalendarPageCtrl', () ->
       pusherChannelMock
   }
 
+  bbMockCompanyHasPeople = {
+    company: {
+      $has: (type) ->
+        if type is 'people'
+          return true;
+
+        return false;
+    }
+  }
+
+  bbMockCompanyHasResources = {
+    company: {
+      $has: (type) ->
+        if type is 'resources'
+          return true
+
+        return false
+    }
+  }
+
   setup = () ->
-    module('ui.router')
-    module('BBAdminDashboard.calendar.controllers')
+    module('BBAdminDashboard')
+    module('BB')
 
     inject ($injector) ->
       $compile = $injector.get '$compile'
       $controller = $injector.get '$controller'
+      $httpBackend = $injector.get '$httpBackend'
       $rootScope = $injector.get '$rootScope'
       $scope = $rootScope.$new()
       $state = $injector.get '$state'
@@ -35,16 +57,24 @@ describe 'BBAdminDashboard.calendar.controllers, CalendarPageCtrl', () ->
     $scope.company = companyMock;
 
     spyOn pusherChannelMock, 'bind'
+    spyOn $state, 'go'
+    .and.callThrough()
+
+    return
 
   beforeEach setup
 
-  it 'bind proper events on company\'s pusher_channel', () ->
-    controllerInstance = $controller(
+  getControllerInstance = () ->
+    return $controller(
       'CalendarPageCtrl'
+      '$log': $log
       '$scope': $scope
       '$state': $state
-      '$log': $log
     )
+    return
+
+  it 'bind proper events on company "bookings" pusher channel', () ->
+    controllerInstance = getControllerInstance()
 
     expect pusherChannelMock.bind.calls.argsFor(0)[0]
     .toEqual('create')
@@ -54,3 +84,35 @@ describe 'BBAdminDashboard.calendar.controllers, CalendarPageCtrl', () ->
 
     expect pusherChannelMock.bind.calls.argsFor(2)[0]
     .toEqual('destroy')
+
+    return
+
+  describe 'current state is different than calendar', () ->
+    beforeEach () ->
+      $state.current.name = 'calendar' # TODO find better way to set current state
+      return
+
+    afterEach () ->
+      expect pusherChannelMock.bind.calls.count()
+      .toEqual 3
+      return
+
+    it 'redirects to people', () ->
+      $scope.bb = bbMockCompanyHasPeople
+      controllerInstance = getControllerInstance()
+
+      expect $state.go
+      .toHaveBeenCalledWith('calendar.people')
+      return
+
+    it 'redirects to resources', () ->
+      $scope.bb = bbMockCompanyHasResources
+      controllerInstance = getControllerInstance()
+
+      expect $state.go
+      .toHaveBeenCalledWith('calendar.resources')
+      return
+
+    return
+
+  return
