@@ -21,7 +21,7 @@
 
   <ul class="time-slots" ng-show="has_availability">
     <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="selectSlot(slot, day)" ng-repeat="slot in accordion_slots">
-      <span>{{slot.time_moment | datetime: 'time'}}</span>
+      <span>{{slot.time_moment | datetime: 'LT'}}</span>
     </li>
   </ul>
 

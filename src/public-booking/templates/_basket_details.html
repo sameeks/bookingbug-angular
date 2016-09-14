@@ -21,7 +21,7 @@
             {{ item.service_name }}
           </td>
           <td>
-            {{ item.date.date | datetime: "ddd Do MMM"}} at {{ item.date.date | datetime: "h:mma"}} for {{ item.duration | time_period }}
+            {{ item.date.date | datetime: "ddd Do MMM"}} at {{ item.date.date | datetime: "LT"}} for {{ item.duration | time_period }}
           </td>
           <td class="text-center">
             <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></span>
