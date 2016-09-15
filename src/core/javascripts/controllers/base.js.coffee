@@ -184,10 +184,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $te
     scope.$watch () ->
       angular.element($window.document.body).hasClass('modal-open')
     , (modalOpen) ->
-      if modalOpen && notInModal(element.parent())
-        scope.coveredByModal = true
-      else
-        scope.coveredByModal = false
+      scope.coveredByModal = modalOpen && notInModal(element.parent())
 
 
 # a controller used for the main page contents - just in case we need one here
