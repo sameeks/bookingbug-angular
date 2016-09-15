@@ -28,7 +28,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope) ->
+angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, $window) ->
 
   ###**
   * @ngdoc method
@@ -167,6 +167,27 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $te
         else
           element.html(clone).show()
           element.append('<style widget_css scoped></style>') if prms.design_mode
+
+
+    notInModal = (p) ->
+      if p.length == 0 || p[0].attributes == undefined
+        true
+      else if p[0].attributes['uib-modal-window'] != undefined
+        false
+      else
+        if p.parent().length == 0
+          true
+        else
+          notInModal(p.parent())
+
+
+    scope.$watch () ->
+      angular.element($window.document.body).hasClass('modal-open')
+    , (modalOpen) ->
+      if modalOpen && notInModal(element.parent())
+        scope.coveredByModal = true
+      else
+        scope.coveredByModal = false
 
 
 # a controller used for the main page contents - just in case we need one here
