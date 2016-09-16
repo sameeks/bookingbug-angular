@@ -84,6 +84,10 @@ angular.module('BB.Services').config ($translateProvider) ->
         SERVICE_LIST_NO: "No services match your filter criteria.",
         PROGRESS_BACK: "Back"
       }
+      RESOURCE_LIST: {
+        PROGRESS_SELECT: "Select",
+        PROGRESS_BACK:  "Back"
+      }
     }
   }
 
