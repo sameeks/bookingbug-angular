@@ -9,21 +9,21 @@
 ###
 angular.module('BBAdminDashboard.settings-iframe.controllers')
 .controller 'SettingsIframeIntegrationsPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'SETTINGS_IFRAME_PAGE.INTEGRATIONS.TITLE'
+  $scope.pageHeader = 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.INTEGRATIONS.TITLE'
 
   $scope.tabs = [
     {
-      name: 'SETTINGS_IFRAME_PAGE.INTEGRATIONS.TAB_PAYMENT',
+      name: 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.INTEGRATIONS.TAB_PAYMENT',
       icon: 'fa fa-credit-card',
       path: 'settings.integrations.page({path: "conf/addons/payment"})'
     },
     {
-      name: 'SETTINGS_IFRAME_PAGE.INTEGRATIONS.TAB_ACCOUNTING',
+      name: 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.INTEGRATIONS.TAB_ACCOUNTING',
       icon: 'fa fa-pencil-square-o',
       path: 'settings.integrations.page({path: "conf/addons/accounting"})'
     },
     {
-      name: 'SETTINGS_IFRAME_PAGE.INTEGRATIONS.TAB_OTHER',
+      name: 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.INTEGRATIONS.TAB_OTHER',
       icon: 'fa fa-question',
       path: 'settings.integrations.page({path: "conf/addons/other"})'
     }

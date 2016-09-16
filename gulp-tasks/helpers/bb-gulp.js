@@ -27,6 +27,7 @@
 
             var files = [
                 srcpath + '/' + module + '/javascripts/main.js.coffee',
+                srcpath + '/' + module + '/javascripts/**/*.module.js.coffee',
                 srcpath + '/' + module + '/javascripts/**/*',
                 srcpath + '/' + module + '/i18n/en.js',
                 '!' + srcpath + '/' + module + '/javascripts/**/*~',
@@ -81,17 +82,15 @@
                 .pipe(flatten())
                 .pipe(gulp.dest(releasepath + '/' + module));
         },
-        templates: function (module, srcpath, releasepath, mod_name, keep_path_info) {
+        templates: function (module, srcpath, releasepath, mod_name) {
             srcpath || (srcpath = './src');
             releasepath || (releasepath = './build');
-            if (keep_path_info === undefined) {
-                keep_path_info = true;
-            }
+
             if (mod_name === undefined || mod_name == '' || !mod_name) {
                 mod_name = 'BB';
             }
+
             return gulp.src(srcpath + '/' + module + '/templates/**/*.html')
-                .pipe(gulpif(keep_path_info, flatten()))
                 .pipe(templateCache({module: mod_name}))
                 .pipe(concat('bookingbug-angular-' + module + '-templates.js'))
                 .pipe(gulp.dest(releasepath + '/' + module));

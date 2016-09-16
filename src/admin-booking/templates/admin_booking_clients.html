@@ -1,13 +1,26 @@
 <div>
 
   <div class="page-header">
-    <h1>Select a customer</h1>
+    <h1><span translate="ADMIN_BOOKING.CUSTOMER.SELECT_HEADLINE"></span></h1>
   </div>
 
   <div class="admin-typehead-wrapper" ng-form bb-form name="client_search_form">
     <div class="form-group" ng-class="{'has-error': client_search_form.result.$invalid && (client_search_form.result.$dirty || client_search_form.submitted)}">
       <div class="input-group" ng-class="{'animated shake': !typehead_result && search_triggered}">
-        <input class="input-lg form-control" name="result" ng-model="typehead_result" placeholder="Search by email or name" required uib-typeahead="item.name for item in searchClients($viewValue)" typeahead-template-url="_typehead.html" typeahead-loading="customer_typeahead_loading" typeahead-no-results="no_results" class="form-control" typeahead-on-select="typeHeadResults($item, $uibModal, $label)" typeahead-focus-first="false" typeahead-min-length="2">
+
+        <input class="input-lg form-control"
+               name="result"
+               ng-model="typehead_result"
+               placeholder="{{ 'ADMIN_BOOKING.CUSTOMER.SEARCH_BY' | translate }}"
+               required
+               typeahead-template-url="_typehead.html"
+               typeahead-loading="customer_typeahead_loading"
+               typeahead-no-results="no_results"
+               typeahead-on-select="typeHeadResults($item, $uibModal, $label)"
+               typeahead-focus-first="false"
+               typeahead-min-length="2"
+               uib-typeahead="item.name for item in searchClients($viewValue)">
+
         <span class="input-group-btn">
           <button type="button" class="btn btn-primary btn-lg" ng-click="submitForm(); getClients({filter_by: typehead_result})"><i class="fa fa-search"></i></button>
         </span>
@@ -22,9 +35,13 @@
       <div class="row">
 
         <div class="col-sm-6">
-          <div class="bb-search-summary">{{clients.num_items}} customer<span ng-show="clients.num_items > 1">s</span> found</div>
+          <div class="bb-search-summary">
+            <span translate="ADMIN_BOOKING.CUSTOMER.NUMBER"
+                  translate-values="{ CUSTOMERS_NUMBER: clients.num_items || 0 }"
+                  translate-interpolation="messageformat"></span>
+            </div>
 
-          <button class="btn btn-link" ng-click="clearSearch()">Clear</button>
+          <button class="btn btn-link" ng-click="clearSearch()"><span translate="ADMIN_BOOKING.CUSTOMER.CLEAR"></span></button>
 
         </div>
 
@@ -33,7 +50,7 @@
           <div class="form-inline bb-search-options">
 
             <div class="form-group">
-              <label class="bb-label" for="sort_by">Sort by: </label>
+              <label class="bb-label" for="sort_by"><span translate="ADMIN_BOOKING.CUSTOMER.SORT_BY"></span></label>
               <select ng-model="sort_by" id="sort_by" class="form-control" ng-options="option.key as option.name for option in sort_by_options" ng-change="sortChanged(sort_by)">
               </select>
             </div>
@@ -47,10 +64,12 @@
 
     <div class="bb-block text-center" ng-show="clients.num_items == 0">
       <p>
-        No customers matching <strong>{{typehead_result}}</strong> found
+        <span translate="ADMIN_BOOKING.CUSTOMER.NO_RESULTS_FOUND"></span>
       </p>
       <p>
-        <button class="btn btn-link" ng-click="clearSearch()">Create one instead?</button>
+        <button class="btn btn-link" ng-click="clearSearch()">
+          <span translate="ADMIN_BOOKING.CUSTOMER.CREATE_ONE_INSTEAD"></span>
+        </button>
       </p>
     </div>
 
@@ -90,7 +109,7 @@
 
             </div>
             <div class="col-sm-2">
-              <button class="btn btn-primary btn-block btn-select-client" ng-click="selectClient(client);">Select</button>
+              <button class="btn btn-primary btn-block btn-select-client" ng-click="selectClient(client);"><span translate="ADMIN_BOOKING.CUSTOMER.SELECT_BTN"></span></button>
             </div>
           </div>
 
@@ -112,28 +131,28 @@
     <hr />
 
     <div class="panel panel-default">
-      <div class="panel-heading"><strong>Create Customer</strong></div>
+      <div class="panel-heading"><strong><span translate="ADMIN_BOOKING.CUSTOMER.CREATE"></span></strong></div>
       <div class="panel-body">
 
         <div ng-form name="client_form" bb-form>
 
           <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
-            <label for="first_name" class="control-label">First Name:</label><br />
+            <label for="first_name" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.FIRST_NAME"></span></label><br />
             <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control"/>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
-            <label for="last_name" class="control-label">Last Name:</label><br />
+            <label for="last_name" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.LAST_NAME"></span></label><br />
             <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
-            <label for="email" class="control-label">E-mail:</label>
+            <label for="email" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.EMAIL"></span></label>
             <input type="email" name="email" id="email" ng-required="!client.mobile" ng-pattern="validator.getEmailPattern()" ng-model="client.email" class="form-control"/>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
-            <label for="mobile" class="control-label">Mobile:</label>
+            <label for="mobile" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.MOBILE"></span></label>
             <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email || bb.company.settings.ask_mobile_phone" ng-pattern="admin_options.mobile_pattern"/>
           </div>
 
@@ -184,7 +203,9 @@
 
           <div class="row">
             <div class="col-sm-3">
-              <button type="submit" class="btn btn-primary btn-block" ng-click="submitForm(client_form) && createClient()" bb-debounce>Create Customer</button>
+              <button type="submit" class="btn btn-primary btn-block" ng-click="submitForm(client_form) && createClient()" bb-debounce>
+                <span translate="ADMIN_BOOKING.CUSTOMER.CREATE_BTN"></span>
+              </button>
             </div>
           </div>
 
@@ -201,7 +222,9 @@
         <!-- <button type="submit" class="btn btn-primary" ng-click="confirm(booking_form) && validator.validateForm(booking_form) && checkReady() && routeReady()">Confirm</button> -->
       </div>
       <div class="col-sm-3 col-sm-pull-9">
-        <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+        <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">
+          <span translate="ADMIN_BOOKING.CUSTOMER.BACK_BTN"></span>
+        </button>
       </div>
     </div>
   </div>

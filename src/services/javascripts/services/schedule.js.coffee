@@ -91,8 +91,10 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
         rules = new ScheduleRules(found)
         events = rules.toEvents()
         _.each events, (e) ->
-          e.resourceId = asset.id
+          e.resourceId = asset.id + "_" + asset.type[0]
           e.title = asset.name
+          e.start = moment(e.start)
+          e.end = moment(e.end)
           e.rendering = "background"
         prom = $q.defer()
         prom.resolve(events)
@@ -107,14 +109,16 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
           rules = new ScheduleRules(schedules.dates)
           events = rules.toEvents()
           _.each events, (e) ->
-            e.resourceId = asset.id
+            e.resourceId = asset.id + "_" + asset.type[0]
             e.title = asset.name
+            e.start = moment(e.start)
+            e.end = moment(e.end)
             e.rendering = "background"
           events
 
   getAssetsScheduleEvents: (company, start, end, filtered = false, requested = []) ->
     if filtered
-      loadScheduleCaches(requested).then () ->
+      loadScheduleCaches(requested).then () =>
         $q.all(@mapAssetsToScheduleEvents(start, end, requested)).then (schedules) ->
           _.flatten(schedules)
     else

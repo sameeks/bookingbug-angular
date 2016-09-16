@@ -37,7 +37,7 @@
     "moment": "~2.14.0",
     "moment-timezone": "~0.5.4",
 
-    "fullcalendar": "~2.9.1",
+    "fullcalendar": "~3.0.0",
     "fontawesome": "~4.6.3",
     "angular-ui-router": "~0.2.18",
 
@@ -48,10 +48,11 @@
     "angular-ui-utils": "~0.1.1",
     "angular-i18n": "~1.3.4",
     "angular-recaptcha": "~2.2.3",
-    "angular-translate": "^2.11.0",
-    "angular-translate-storage-cookie": "^2.11.0",
-    "angular-translate-storage-local": "^2.11.0",
-    "angular-translate-loader-partial": "^2.11.0",
+    "angular-translate": "^2.12.0",
+    "angular-translate-storage-cookie": "^2.12.0",
+    "angular-translate-storage-local": "^2.12.0",
+    "angular-translate-loader-partial": "^2.12.0",
+    "angular-translate-interpolation-messageformat": "^2.12.0",
     "angular-schema-form": "~0.8.13",
     "angular-cache": "~3.2.5",
     "angular-spectrum-colorpicker": "~1.4.2",
@@ -71,12 +72,13 @@
     "airbrake-js-client": "^0.5.8",
     "pusher-angular": "~0.1.4",
     "pusher": "~2.2.4",
-    "ng-file-upload": "^12.0.4"
+    "ng-file-upload": "^12.0.4",
+    "ui-select": "angular-ui-select#^0.16.1"
   },
   "resolutions": {
     "jquery": "~1.11.3",
     "angular": "~1.5.8",
-    "fullcalendar": ">=2.9.1",
+    "fullcalendar": ">=3.0.0",
     "moment": "~2.14.0",
     "angular-ui-router": "^0.2.8"
   }

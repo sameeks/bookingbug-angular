@@ -1,10 +1,13 @@
+'use strict'
+
 ###*
 * @ngdoc filter
-* @name BBAdminDashboard.filter:propsFilter
+* @name BB.Filters.filter:props
 * @description
 * Does an OR operation
 ###
-angular.module('BBAdminDashboard').filter 'propsFilter', ['$translate', ($translate)->
+angular.module('BB.Filters').filter 'props', ($translate)->
+  'ngInject'
   (items, props) ->
     out = []
     if angular.isArray(items)
@@ -24,7 +27,8 @@ angular.module('BBAdminDashboard').filter 'propsFilter', ['$translate', ($transl
           out.push item
         return
     else
-      # Let the output be the input untouched
+# Let the output be the input untouched
       out = items
-    out
-]
+
+    return out
+

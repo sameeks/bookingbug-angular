@@ -45,6 +45,6 @@ angular.module('BBAdminEvents').directive 'eventGroupTable', (BBModel, $log, Mod
   {
     controller: controller
     link: link
-    templateUrl: 'event_group_table_main.html'
+    templateUrl: 'event-chain-table/event_group_table_main.html'
   }
 

@@ -74,7 +74,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
                       $scope.onSuccess($scope.login.selected_company)
             else
               $scope.template_vars.show_loading = false
-              $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_INCORRECT_CREDS"}
+              $scope.formErrors.push { message: "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_INCORRECT_CREDS"}
 
         # else if there is an associated company
         else if user.$has('company')
@@ -95,11 +95,11 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
                 $scope.onSuccess($scope.login.selected_company)
           , (err) ->
             $scope.template_vars.show_loading = false
-            $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
+            $scope.formErrors.push { message: "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
 
         else
           $scope.template_vars.show_loading = false
-          $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"}
+          $scope.formErrors.push { message: "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"}
 
       # If a User is available at this stages SSO login is implied
       if $scope.user
@@ -127,7 +127,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
 
           , (err) ->
             $scope.template_vars.show_loading = false
-            $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_INCORRECT_CREDS"}
+            $scope.formErrors.push { message: "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_INCORRECT_CREDS"}
 
       $scope.pickCompany = ()->
         $scope.template_vars.show_loading = true

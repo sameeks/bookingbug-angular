@@ -9,21 +9,21 @@
 ###
 angular.module('BBAdminDashboard.settings-iframe.controllers')
 .controller 'SettingsIframeSubscriptionPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TITLE'
+  $scope.pageHeader = 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TITLE'
 
   $scope.tabs = [
     {
-      name: 'SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TAB_STATUS',
+      name: 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TAB_STATUS',
       icon: null,
       path: 'settings.subscription.page({path: "subscription/show"})'
     },
     {
-      name: 'SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TAB_PAYMENT_HISTORY',
+      name: 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TAB_PAYMENT_HISTORY',
       icon: null,
       path: 'settings.subscription.page({path: "payment_event"})'
     },
     {
-      name: 'SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TAB_INVOICES',
+      name: 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TAB_INVOICES',
       icon: null,
       path: 'settings.subscription.page({path: "payment_invoice"})'
     }

@@ -23,7 +23,10 @@ app = angular.module('BB', [
   'ngCookies',
   'pascalprecht.translate',
   'vcRecaptcha',
-  'slickCarousel'
+  'slickCarousel',
+  'ui.select',
+
+  'BB.i18n'
 ])
 
 
@@ -98,8 +101,9 @@ app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $docu
 
 
 angular.module('BB.Services', [
-  'ngResource',
+  'ngResource'
   'ngSanitize'
+  'pascalprecht.translate'
 ])
 
 angular.module('BB.Controllers', [

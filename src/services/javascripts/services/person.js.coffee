@@ -8,7 +8,7 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
     company = params.company
     defer = $q.defer()
     if company.$has('people')
-      company.$get('people').then (collection) ->
+      company.$get('people', params).then (collection) ->
         collection.$get('people').then (people) ->
           models = (new BBModel.Admin.Person(p) for p in people)
           defer.resolve(models)

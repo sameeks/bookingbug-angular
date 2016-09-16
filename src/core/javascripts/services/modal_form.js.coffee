@@ -1,10 +1,8 @@
 'use strict'
 
-angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog, FormTransform) ->
-
+angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog, FormTransform, $translate) ->
   newForm = ($scope, $uibModalInstance, company, title, new_rel, post_rel,
-      success, fail) ->
-
+    success, fail) ->
     $scope.loading = true
     $scope.title = title
     $scope.company = company
@@ -36,18 +34,17 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
       $uibModalInstance.dismiss('cancel')
 
 
-
   # THIS IS CRUFTY AND SHOULD BE REMOVE WITH AN API UPDATE THAT TIDIES UP THE SCEMA RESPONE
   # fix the issues we have with the the sub client and question blocks being in doted notation, and not in child objects
   checkSchema = (schema) ->
     for k,v of schema.properties
       vals = k.split(".")
       if vals[0] == "questions" && vals.length > 1
-        schema.properties.questions ||= {type: "object", properties: {} }
-        schema.properties.questions.properties[vals[1]] ||= {type: "object", properties: {answer: v} }
+        schema.properties.questions ||= {type: "object", properties: {}}
+        schema.properties.questions.properties[vals[1]] ||= {type: "object", properties: {answer: v}}
       if vals[0] == "client" && vals.length > 2
-        schema.properties.client ||= {type: "object", properties: {q: {type: "object", properties: {}}} }
-        schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v} }
+        schema.properties.client ||= {type: "object", properties: {q: {type: "object", properties: {}}}}
+        schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v}}
     return schema
 
 
@@ -121,10 +118,16 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
           model.$post('cancel', params).then (booking) ->
             success(booking) if success
       else
+        question = null;
+        if type is 'appointment'
+          question = $translate.instant('MODAL.CANCEL_BOOKING.QUESTION', {type: type})
+        else
+          question = $translate.instant('MODAL.CANCEL_BOOKING.APPOINTMENT_QUESTION')
+
         Dialog.confirm
           model: model,
-          title: 'Cancel'
-          body: "Are you sure you want to cancel this #{type}?"
+          title: $translate.instant('MODAL.CANCEL_BOOKING.HEADER')
+          body: question
           success: (model) ->
             model.$del('self').then (response) ->
               success(response) if success

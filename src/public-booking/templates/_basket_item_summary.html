@@ -38,7 +38,7 @@
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.time">
       <div class="bb-summary-label">{{"ITEM_TIME"|translate}}</div>
-      <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'time'}}</span>
+      <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'LT'}}</span>
       </div>
     </li>
   </ul>

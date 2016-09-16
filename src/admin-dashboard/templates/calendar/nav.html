@@ -1,3 +1,18 @@
-<ul class="sidebar-menu">
-	<li ng-class="{active: isState('calendar')}"><a ui-sref="calendar"><i class="fa fa-calendar"></i> <span translate>SIDE_NAV.CALENDAR_PAGE.CALENDAR</span></a></li>
+<ul class="sidebar-menu"  ng-if="bb.company.$has('people') && !bb.company.$has('resources')">
+	<li ng-class="{active: isState('calendar')}"><a ui-sref="calendar.people"><i class="fa fa-calendar"></i> <span translate="ADMIN_DASHBOARD.SIDE_NAV.CALENDAR_PAGE.CALENDAR"></span></a></li>
+</ul>
+
+<ul class="sidebar-menu"  ng-if="!bb.company.$has('people') && bb.company.$has('resources')">
+  <li ng-class="{active: isState('calendar')}"><a ui-sref="calendar.resources"><i class="fa fa-calendar"></i> <span translate="ADMIN_DASHBOARD.SIDE_NAV.CALENDAR_PAGE.CALENDAR"></span></a></li>
+</ul>
+
+
+<ul class="sidebar-menu" ng-if="bb.company.$has('people') && bb.company.$has('resources')">
+  <li ng-class="{active: isState('calendar')}">
+    <a ui-sref="calendar"><i class="fa fa-calendar"></i> <span translate="ADMIN_DASHBOARD.SIDE_NAV.CALENDAR_PAGE.CALENDAR"></span></a>
+    <ul class="treeview-menu">
+      <li ui-sref-active="active"><a ui-sref="calendar.people"><i class="fa fa-users"></i> <span translate="ADMIN_DASHBOARD.SIDE_NAV.CALENDAR_PAGE.PEOPLE"></span></a></li>
+      <li ui-sref-active="active"><a ui-sref="calendar.resources"><i class="fa fa-home"></i> <span translate="ADMIN_DASHBOARD.SIDE_NAV.CALENDAR_PAGE.RESOURCES"></span></a></li>
+    </ul>
+  </li>
 </ul>
