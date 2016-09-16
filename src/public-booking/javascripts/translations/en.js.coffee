@@ -63,6 +63,12 @@ angular.module('BB.Services').config ($translateProvider) ->
         RECIPIENT_NOT_ME:"Someone else",
         WHO_TO:"Who should we send the gift voucher to?"
       }
+      TIME: {
+        AVAIL_DAY_PREVIOUS: "Previous Day",
+        AVAIL_DAY_NEXT: "Next Day",
+        AVAIL_NO: "No Service Available",
+        PROGRESS_BACK: "No Service Available",
+      }
     }
   }
 
