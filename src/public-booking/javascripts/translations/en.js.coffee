@@ -54,14 +54,28 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOVE_BOOKING_FAIL_MSG: "Failed to move booking. Please try again."
       }
       ADD_RECIPIENT: {
-        RECIPIENT:"Recipient",
-        RECIPIENT_ADD:"Add a Recipient",
-        EMAIL_VALIDATION_MSG:"Please enter a valid email address",
-        RECIPIENT_ME:"Me",
-        RECIPIENT_NAME:"Name",
-        RECIPIENT_NAME_VALIDATION_MSG:"Please enter the recipient's full name",
-        RECIPIENT_NOT_ME:"Someone else",
-        WHO_TO:"Who should we send the gift voucher to?"
+        MODAL_TITLE:"Recipient",
+        WHO_TO_QUESTION:"Who should we send the gift voucher to?"
+        WHO_TO_OPTION_ME:"Me",
+        WHO_TO_OPTION_NOT_ME:"Someone else"
+        NAME_LABEL:"Name",
+        NAME_VALIDATION_MSG:"Please enter the recipient's full name"
+        EMAIL_LABEL: "Email"
+        EMAIL_VALIDATION_MSG:"Please enter a valid email address"
+        ADD_LABEL: "Add Recipient"
+        CANCEL_LABEL: "Cancel"
+        
+      }
+      ERROR_MODAL: {
+        PROGRESS_OK:"OK"
+      }
+      MEMBER_FORM: {
+        FIRST_NAME_LABEL:"First Name",
+        LAST_NAME_LABEL:"Last Name",
+        EMAIL_LABEL:"Email",
+        PHONE_LABEL:"Phone",
+        MOBILE_LABEL:"Mobile",
+        SAVE_BUTTON:"Save"
       }
       TIME: {
         AVAIL_DAY_PREVIOUS: "Previous Day",
