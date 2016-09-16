@@ -17,7 +17,7 @@
       <div uib-accordion>
 
         <div uib-accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" class="store-body">
-          
+
           <div uib-accordion-heading class="filter-header">
             <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
             <span>Filter</span>
@@ -133,7 +133,7 @@
     <div class="bb-events-list row">
 
       <div ng-repeat="item in filtered_items | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" ng-init="spaces_left = item.getSpacesLeft()" ng-show="pagination.num_items > 0">
-      
+
         <div class="panel panel-default bb-event-card" ng-class="{'col-sm-6 col-md-4 col-lg-3':$root.tiles}">
           <div class="panel-body" style="padding: 20px;">
             <div class="row">
@@ -143,7 +143,7 @@
                     <em>{{item.date | datetime: 'dddd' : false}}</em>
                     <span class="date">{{item.date | datetime: 'DD'}}</span>
                     <strong class="date">{{item.date | datetime: 'MMMM'}}</strong>
-                    <span class="time">{{item.date | datetime: 'h[:]mm'}}</span>
+                    <span class="time">{{item.date | datetime: 'LT'}}</span>
                     <strong class="time">{{item.date | datetime: 'a'}}</strong>
                   </time>
                 </div>
@@ -165,9 +165,9 @@
                     </li>
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
                       <span class="fa fa-clock-o" aria-hidden="true"></span>
-                      <span ng-bind="item.date | datetime: 'h[:]mma'"></span>
+                      <span ng-bind="item.date | datetime: 'LT'"></span>
                       <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}">-</span>
-                      <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}" ng-bind="item.end_datetime | datetime: 'h[:]mma'"></span>
+                      <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}" ng-bind="item.end_datetime | datetime: 'LT'"></span>
                     </li>
                     <li class="hidden-xs truncate-xs" ng-class="{'col-sm-4':!$root.tiles, 'hidden-sm':$root.tiles, 'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">
                       <span class="fa fa-hourglass-half"></span>
