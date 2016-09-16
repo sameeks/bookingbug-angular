@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('BB.Services').factory 'SettingsService', ($uibModalStack) ->
-  i18n = false
+
   scroll_offset = 0
   country_code = null
   use_local_time_zone = false
@@ -10,12 +10,6 @@ angular.module('BB.Services').factory 'SettingsService', ($uibModalStack) ->
   display_time_zone = null
 
   update_document_title: false
-
-  enableInternationalizaton: () ->
-    i18n = true
-
-  isInternationalizatonEnabled: () ->
-    return i18n
 
   setScrollOffset: (value) ->
     scroll_offset = parseInt(value)

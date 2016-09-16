@@ -6,7 +6,7 @@
         <span class="period-label">
           <span ng-show="has_availability && !is_open" class="period-label-icon">+</span>
           <span ng-show="has_availability && is_open" class="period-label-icon">-</span>
-          <span ng-if="heading" translate="{{heading}}"></span>
+          <span>{{heading}}</span>
         </span>
         <span class="period-detail"
               ng-hide="is_selected || (is_open && has_availability) || options.hide_availability_summary"

@@ -262,8 +262,8 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
 
         , (err) ->
-           loader.setLoaded()
-           AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
+          loader.setLoaded()
+          AlertService.add("danger", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_MSG')})
       else
         if $scope.bb.current_item.move_reason
           $scope.item.move_reason = $scope.bb.current_item.move_reason
@@ -282,17 +282,13 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           $scope.showMoveMessage(b.datetime)
          , (err) =>
           loader.setLoaded()
-          AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
+          AlertService.add("danger", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_MSG')})
     else
       $scope.decideNextPage(route)
 
   $scope.showMoveMessage = (datetime) ->
-    # TODO remove whem translate enabled by default
-    if SettingsService.isInternationalizatonEnabled()
-      $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
-        AlertService.add("info", { msg: translated_text })
-    else
-      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
+
+    AlertService.add("info", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_MSG', {datetime: datetime})})
 
 
   ###**

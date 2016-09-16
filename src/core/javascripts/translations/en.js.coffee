@@ -5,6 +5,9 @@ angular.module('BB.Services').config ($translateProvider) ->
 
   translations = {
     CORE: {
+      ALERTS: {
+        ERROR_TITLE: 'Error'
+      }
       MODAL: {
         CANCEL_BOOKING: {
           HEADER: 'Cancel'
