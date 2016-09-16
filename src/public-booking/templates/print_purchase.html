@@ -18,29 +18,29 @@ end
         <div class="col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8">
 
           <div class="confirmation-header bb-confirmation-border-margin">
-            <h2><span translate="CONFIRMATION_BOOKING_TITLE"></span></h2>
-            <p class="bb-confirmation-p-alignment"><span translate="CONFIRMATION_BOOKING_SUBHEADER" translate-values="{member_name: total.client.first_name}"></span></p>
+            <h2><span translate="PUBLIC_BOOKING.PRINT_PURCHASE.CONFIRMATION_BOOKING_TITLE"></span></h2>
+            <p class="bb-confirmation-p-alignment"><span translate="PUBLIC_BOOKING.PRINT_PURCHASE.CONFIRMATION_BOOKING_SUBHEADER" translate-values="{member_name: total.client.first_name}"></span></p>
             <div class="pull-right hidden-print" >
-              <button type="button" class="btn btn-link" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> <span translate="PRINT"></span></button>
-              <button type="button" class="btn btn-link" onclick="" uib-popover-html="<a class='image img_outlook' title='Add this booking to an Outlook Calendar' href='http://blinkbrowbar.bookingbug.com/ical/total/UkICc5s-2yzH09PqNzE%3D'><img alt='' src='https://www.bookingbug.com/assets/outlook.png'></a> <a class='image img_ical' title='Add this booking to an iCal Calendar' href='http://blinkbrowbar.bookingbug.com/ical/total/UkICc5s-2yzH09PqNzE%3D'><img alt='' src='https://www.bookingbug.com/assets/ical.png'></a> <a class='image img_gcal' title='Add this booking to Google Calendar' href='http://www.google.com/calendar/event?dates=20150120T120000Z%2F20150120T123000Z&details=&location=Chair&sprop=www.bookingbug.com&text=Booking%3A+Ayurvedic+Eye+Soother+with+Romana+-+Chair+at+Bristol&trp=false&action=TEMPLATE' target='_blank'><img src='https://www.bookingbug.com/assets/gcal.png' border='0'></a>" popover-placement="bottom"><span class="glyphicon glyphicon-calendar"></span> <span translate="CALENDAR_EXPORT_TITLE"></span></button>
+              <button type="button" class="btn btn-link" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> <span translate="PUBLIC_BOOKING.PRINT_PURCHASE.PRINT"></span></button>
+              <button type="button" class="btn btn-link" onclick="" uib-popover-html="<a class='image img_outlook' title='Add this booking to an Outlook Calendar' href='http://blinkbrowbar.bookingbug.com/ical/total/UkICc5s-2yzH09PqNzE%3D'><img alt='' src='https://www.bookingbug.com/assets/outlook.png'></a> <a class='image img_ical' title='Add this booking to an iCal Calendar' href='http://blinkbrowbar.bookingbug.com/ical/total/UkICc5s-2yzH09PqNzE%3D'><img alt='' src='https://www.bookingbug.com/assets/ical.png'></a> <a class='image img_gcal' title='Add this booking to Google Calendar' href='http://www.google.com/calendar/event?dates=20150120T120000Z%2F20150120T123000Z&details=&location=Chair&sprop=www.bookingbug.com&text=Booking%3A+Ayurvedic+Eye+Soother+with+Romana+-+Chair+at+Bristol&trp=false&action=TEMPLATE' target='_blank'><img src='https://www.bookingbug.com/assets/gcal.png' border='0'></a>" popover-placement="bottom"><span class="glyphicon glyphicon-calendar"></span> <span translate="PUBLIC_BOOKING.PRINT_PURCHASE.CALENDAR_EXPORT_TITLE"></span></button>
             </div>
           </div>
 
           <ul class="confirmation-summary" ng-repeat="i in purchase.items">
             <li ng-if="i.full_describe" class="row confirmation-summary-item">
-              <div class="col-xs-12 col-sm-3"><span translate="ITEM"></span>:</div>
+              <div class="col-xs-12 col-sm-3"><span translate="PUBLIC_BOOKING.PRINT_PURCHASE.ITEM"></span>:</div>
               <div class="col-xs-12 col-sm-9">{{i.full_describe}}</div>
             </li>
             <li ng-if="i.full_describe" class="row confirmation-summary-item">
-              <div class="col-xs-12 col-sm-3"><span translate="ITEM_DATE"></span> <span translate="AND"></span> <span translate="ITEM_TIME"></span>:</div>
+              <div class="col-xs-12 col-sm-3"><span translate="PUBLIC_BOOKING.PRINT_PURCHASE.ITEM_DATE"></span> <span translate="PUBLIC_BOOKING.PRINT_PURCHASE.AND"></span> <span translate="PUBLIC_BOOKING.PRINT_PURCHASE.ITEM_TIME"></span>:</div>
               <div class="col-xs-12 col-sm-9">{{i.describe}}</div>
             </li>
             <li ng-if="i.full_describe" class="row confirmation-summary-item">
-              <div class="col-xs-12 col-sm-3"><span translate="ITEM_QUANTITY"></span>:</div>
+              <div class="col-xs-12 col-sm-3"><span translate="PUBLIC_BOOKING.PRINT_PURCHASE.ITEM_QUANTITY"></span>:</div>
               <div class="col-xs-12 col-sm-9">{{i.quantity}}</div>
             </li>
             <li ng-if="i.full_describe" class="row confirmation-summary-item">
-              <div class="col-xs-12 col-sm-3"><span translate="BOOKING_REFERENCE"></span>:</div>
+              <div class="col-xs-12 col-sm-3"><span translate="PUBLIC_BOOKING.PRINT_PURCHASE.BOOKING_REFERENCE"></span>:</div>
               <div class="col-xs-12 col-sm-9">{{i.id}}</div>
             </li>
           </ul>
@@ -59,7 +59,7 @@ end
 
 <footer>
   <div class="powered-by hidden-print">
-    <p><span translate="POWERED_BY"></span> <span style="color:#087f94">booking</span><span style="color:#88c66f">bug </span></p>
+    <p><span translate="PUBLIC_BOOKING.PRINT_PURCHASE.POWERED_BY"></span> <span style="color:#087f94">booking</span><span style="color:#88c66f">bug </span></p>
     <a href="http://www.bookingbug.com" style="text-decoration:none" target="_blank"></a>
   </div>
 </footer>
