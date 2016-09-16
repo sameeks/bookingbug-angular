@@ -136,6 +136,17 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_SELECT: "Select",
         PROGRESS_BACK: "Back"
       }
+      MONTHLY_CALENDAR: {
+        SELECT_DAY: "Select a day",
+        WEEK_BEGINNING: "Week beginning",
+        PICK_A_DATE: "Pick a date",
+        PREVIOUS_5_WEEKS: "Previous 5 Weeks",
+        NEXT_5_WEEKS: "Next 5 Weeks",
+        KEY: "Key",
+        AVAILABLE: "{number, plural, =0{No availability} other{# available}}",
+        UNAVAILABLE: "Unavailable",
+        PROGRESS_BACK: "Back"
+      }
     }
   }
 

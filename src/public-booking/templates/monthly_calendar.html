@@ -1,7 +1,7 @@
 <div bb-day-list>
 
   <div class="page-summary">
-    <h2 class="booking-form-header" translate="SELECT_DAY"></h2>
+    <h2 class="booking-form-header" translate="PUBLIC_BOOKING.MONTHLY_CALENDAR.SELECT_DAY"></h2>
   </div>
 
   <div class="row month-calendar">
@@ -12,11 +12,11 @@
 
           <form>
             <div class="form-group">
-              <label class="control-label" translate="WEEK_BEGINNING"></label>:
+              <label class="control-label" translate="PUBLIC_BOOKING.MONTHLY_CALENDAR.WEEK_BEGINNING"></label>:
 
               <div class="input-group date-picker">
                 <!-- date format: http://docs.angularjs.org/api/ng.filter:date -->
-                <input type="text" 
+                <input type="text"
                   ng-model="current_date_js"
                   class="form-control"
                   bb-datepicker-popup="DD/MM/YYYY"
@@ -30,22 +30,23 @@
                   show-button-bar="false"
                   ng-readonly="false"/>
                 <span class="input-group-btn" ng-click="$event.preventDefault();$event.stopPropagation();opened=true">
-                  <button class="btn btn-default" type="submit" title="{{'PICK_A_DATE'|translate}}"><span class="glyphicon glyphicon-calendar"></span></button>
+                  <button class="btn btn-default" type="submit"><span translate="PUBLIC_BOOKING.MONTHLY_CALENDAR.PICK_A_DATE"></span><span class="glyphicon glyphicon-calendar"></span></button>
                 </span>
               </div>
 
             </div>
           </form>
-          
+
         </div>
 
         <div class="col-xs-7">
           <div class="day-nav">
             <button type="button" class="btn btn-link" ng-click="subtract('weeks', 5)" ng-disabled="isPast()">
-              <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span> {{"PREVIOUS_5_WEEKS" | translate}}
+              <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span> <span
+              ="PUBLIC_BOOKING.MONTHLY_CALENDAR.PREVIOUS_5_WEEKS"></span>
               </button> |
             <button type="button" class="btn btn-link" ng-click="add('weeks', 5)">
-              {{"NEXT_5_WEEKS" | translate}} <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+              <span translate="PUBLIC_BOOKING.MONTHLY_CALENDAR.NEXT_5_WEEKS"></span> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
             </button>
           </div>
         </div>
@@ -64,13 +65,13 @@
       </table>
 
       <div class="legend">
-        <h4 translate="KEY"></h4>
+        <h4 translate="PUBLIC_BOOKING.MONTHLY_CALENDAR.KEY"></h4>
         <ul class="keys">
           <li class="key available">
-            <div class="square"></div> <span translate="AVAILABLE"></span>
+            <div class="square"></div> <span translate="PUBLIC_BOOKING.MONTHLY_CALENDAR.AVAILABLE"></span>
           </li>
           <li class="key unavailable">
-            <div class="square"></div> <span translate="UNAVAILABLE"></span>
+            <div class="square"></div> <span translate="PUBLIC_BOOKING.MONTHLY_CALENDAR.UNAVAILABLE"></span>
           </li>
         </ul>
       </div>
@@ -95,7 +96,7 @@
   <div class="bb-step-navigation">
     <div class="row">
       <div class="col-sm-2 back">
-        <button type="button" class="btn btn-secondary btn-block" bb-debounce ng-click="loadPreviousStep()" translate="PROGRESS_BACK">
+        <button type="button" class="btn btn-secondary btn-block" bb-debounce ng-click="loadPreviousStep()" translate="PUBLIC_BOOKING.MONTHLY_CALENDAR.PROGRESS_BACK">
         </button>
       </div>
     </div>
