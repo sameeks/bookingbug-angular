@@ -181,9 +181,206 @@ angular.module('BB.Services').config ($translateProvider) ->
         PRINT: "Print"
         PROGRESS_BACK: "Back"
       }
+      ERROR_MODAL: {
+        PROGRESS_OK: "OK"
+      }
+      MEMBER_FORM: {
+        FIRST_NAME_LABEL: "First Name"
+        LAST_NAME_LABEL: "Last Name"
+        EMAIL_LABEL: "Email"
+        PHONE_LABEL: "Phone"
+        MOBILE_LABEL: "Mobile"
+        SAVE_BUTTON: "Save"
+      }
+      BASKET_WALLET: {
+        BASKET_WALLET_MAKE_PAYMENT: "Make Payment"
+        BASKET_WALLET_TOP_UP: "Top Up"
+        BASKET_WALLET_AMOUNT: "Amount"
+        BASKET_WALLET: "Wallet"
+        BASKET_WALLET_AMOUNT_MINIMUM: "Minimum top up amount must be greater than"
+        PROGRESS_BACK: "Back"
+      }
+      DASH: {
+        DASHBOARD: "Dashboard"
+        DASHBOARD_TITLE: "Pick a Location/Service"
+      }
+      DAY: {
+        AVAIL_MONTH_PREVIOUS: "Previous Month"
+        AVAIL_MONTH_NEXT: "Next Month"
+        PROGRESS_BACK: "Back"
+      }
+      DEAL_LIST: {
+        BASKET_GIFT_CERTIFICATE: "Gift Certificates"
+        BASKET_GIFT_CERTIFICATE_BUY: "Buy Gift Certificates"
+        BASKET_GIFT_CERTIFICATE_SELECTED: "Selected Gift Certificates"
+        ITEM: "Item"
+        ITEM_PRICE: "Price"
+        RECIPIENT_ADD: "Add Recipient"
+        RECIPIENT_NAME: "Recipient Name"
+        DETAILS_EMAIL: "E-mail"
+        PROGRESS_ADD: "Add"
+        RECIPIENT_NAME_VALIDATION_MSG: "Please enter your name"
+        RECIPIENT_EMAIL_VALIDATION_MSG: "Please enter your email"
+        RECIPIENT: "Recipient"
+        RECIPIENT_NAME: "Name"
+        PROGRESS_BUY: "Buy"
+        PROGRESS_BACK: "Back"
+      }
+      DURATION_LIST: {
+        ITEM_FREE: "Free"
+        PROGRESS_SELECT: "Select"
+        PROGRESS_BACK: "Back"
+      }
+      EVENT: {
+        EVENT_DETAILS_TITLE: "Course details"
+        DETAILS_TITLE: "Your details"
+        DETAILS_FIRST_NAME: "First Name"
+        DETAILS_FIRST_NAME_VALIDATION_MSG: "Please enter your first name"
+        DETAILS_LAST_NAME: "Last Name"
+        DETAILS_LAST_NAME_VALIDATION_MSG: "Please enter your last name"
+        DETAILS_EMAIL: "Email"
+        DETAILS_EMAIL_VALIDATION_MSG: "Please enter a valid email address"
+        STORE_PHONE: "Phone"
+        DETAILS_PHONE_MOBILE_VALIDATION_MSG: "Please enter a valid mobile number"
+        DETAILS_ADDRESS: "Address"
+        DETAILS_ADDRESS_VALIDATION_MSG: "Please enter your address"
+        DETAILS_TOWN: "Town"
+        DETAILS_COUNTY: "County"
+        DETAILS_POSTCODE: "Postcode"
+        INVALID_POSTCODE: "Please enter a valid postcode"
+        DETAILS_VALIDATION_MSG: "This field is required"
+        ATTENDEE_IS_YOU_QUESTION: "Are you the attendee?"
+        ATTENDEE_USE_MY_DETAILS: "Yes, use my details"
+        DETAILS_TERMS: "I agree to the terms and conditions"
+        DETAILS_TERMS_VALIDATION_MSG: "Please accept the terms and conditions"
+      }
+      EVENT_GROUP_LIST: {
+        PROGRESS_SELECT: "Select"
+      }
+      EVENT_LIST: {
+        EVENT_LOCATION: "Event at"
+        FILTER: "Filter"
+        FILTER_CATEGORY: "Category"
+        FILTER_ANY: "Any"
+        ITEM_DATE: "Date"
+        ITEM_PRICE: "Price"
+        EVENT_SOLD_OUT_HIDE: "Hide Sold Out Events"
+        EVENT_SOLD_OUT_SHOW: "Show Sold Out Events"
+        FILTER_RESET: "Reset"
+        FILTER_NONE: "Showing all events"
+        FILTER_FILTERED: "Showing filtered events"
+        EVENT_WORD: "Events"
+        EVENT_NO: "No event found"
+        EVENT_SPACE_WORD: "space"
+        EVENT_LEFT_WORD: "left"
+        ITEM_FROM: "From"
+        PROGRESS_BOOK: "Book"
+        EVENT_SOLD_OUT: "Sold out"
+        EVENT_JOIN_WAITLIST: "Join Waitlist"
+      }
+      MAIN: {
+        POWERED_BY: "Bookings powered by"
+      }
+      MAIN_ACCOUNT: {
+        POWERED_BY: "Bookings powered by"
+      }
+      MAIN_CONFIRMATION: {
+        POWERED_BY: "Bookings powered by"
+      }
+      MAIN_EVENT: {
+        POWERED_BY: "Bookings powered by"
+      }
+      MAIN_GIFT_CERTIFICATE: {
+        POWERED_BY: "Bookings powered by"
+      }
+      MAIN_VIEW_BOOKING: {
+        POWERED_BY: "Bookings powered by"
+      }
+      MAP: {
+        PROGRESS_SEARCH: "Search"
+        STORE_RESULT_TITLE: "{results, plural, =0{No results} one{1 result} other{# results}} for stores near {address}"
+        HIDE_STORES: "Hide stores with no availability"
+        SERVICE_UNAVAILABLE: "Sorry, but {{name}} is not available at this location"
+        PROGRESS_SELECT: "Select"
+      }
+      MEMBERSHIP_LEVELS: {
+        MEMBERSHIP_TYPES: "Membership Types"
+        PROGRESS_SELECT: "Select"
+      }
+      TIME: {
+        AVAIL_DAY_PREVIOUS: "Previous Day",
+        AVAIL_DAY_NEXT: "Next Day",
+        AVAIL_NO: "No Service Available",
+        PROGRESS_BACK: "No Service Available"
+      }
+      SURVEY: {
+        SURVEY_THANK_YOU: "Thank you for filling out the survey!",
+        ITEM_SESSION: "ITEM_SESSION":"Session",
+        ITEM_DATE: "ITEM_DATE":"Date",
+        SURVEY_WORD: "SURVEY_WORD":"Survey",
+        DETAILS_QUESTIONS: "Questions",
+        SURVEY_SUBMIT: "Required",
+        SURVEY_NO: "No survey questions for this session."
+      }
+      SERVICE_LIST: {
+        ITEM_FREE: "Free",
+        PROGRESS_SELECT: "Select",
+        SERVICE_LIST_NO: "No services match your filter criteria.",
+        PROGRESS_BACK: "Back"
+      }
+      RESOURCE_LIST: {
+        PROGRESS_SELECT: "Select",
+        PROGRESS_BACK:  "Back"
+      }
+      RESCHEDULE_REASONS:{
+        MOVE_TITLE: "Move Appointment ",
+        MOVE_REASON: "Please select a reason for moving your appointment:"
+        MOVE_BUTTON: "Move Appointment"
+        }
+      PURCHASE: {
+        CANCEL_CONFIRMATION: "Your booking has been cancelled.",
+        CONFIRMATION_PURCHASE_TITLE: "Your {{ service_name }} booking",
+        RECIPIENT_NAME: "Name",
+        PRINT: " Print",
+        DETAILS_EMAIL: "E-mail",
+        ITEM_SERVICE: "Service",
+        ITEM_WHEN: "When",
+        ITEM_PRICE: "Price",
+        PROGRESS_CANCEL_BOOKING: "Cancel booking",
+        PROGRESS_MOVE_BOOKING: "Move booking",
+        PROGRESS_BOOK_WAITLIST_ITEMS: "Book Waitlist Items"
+      }
+      PRINT_PURCHASE: {
+        CONFIRMATION_BOOKING_TITLE: "Booking Confirmation",
+        CONFIRMATION_BOOKING_SUBHEADER: "Thanks {{ member_name }}. Your booking is now confirmed. We have emailed you the details below.",
+        CALENDAR_EXPORT_TITLE: "Export",
+        PRINT: " Print",
+        AND: "and",
+        ITEM: "Item",
+        ITEM_DATE: "Date",
+        ITEM_QUANTITY: "Quantity",
+        BOOKING_REFERENCE: "Booking Reference",
+        POWERED_BY: "Bookings powered by"
+      }
+      PERSON_LIST: {
+        PROGRESS_SELECT: "Select",
+        PROGRESS_BACK: "Back"
+      }
+      MONTHLY_CALENDAR: {
+        SELECT_DAY: "Select a day",
+        WEEK_BEGINNING: "Week beginning",
+        PICK_A_DATE: "Pick a date",
+        PREVIOUS_5_WEEKS: "Previous 5 Weeks",
+        NEXT_5_WEEKS: "Next 5 Weeks",
+        KEY: "Key",
+        AVAILABLE: "{number, plural, =0{No availability} other{# available}}",
+        UNAVAILABLE: "Unavailable",
+        PROGRESS_BACK: "Back"
+      }
     }
   }
 
   $translateProvider.translations('en', translations)
 
   return
+    
