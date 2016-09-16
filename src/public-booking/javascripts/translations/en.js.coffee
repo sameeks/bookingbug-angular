@@ -192,6 +192,76 @@ angular.module('BB.Services').config ($translateProvider) ->
         MEMBERSHIP_TYPES: "Membership Types"
         PROGRESS_SELECT: "Select"
       }
+      TIME: {
+        AVAIL_DAY_PREVIOUS: "Previous Day",
+        AVAIL_DAY_NEXT: "Next Day",
+        AVAIL_NO: "No Service Available",
+        PROGRESS_BACK: "No Service Available"
+      }
+      SURVEY: {
+        SURVEY_THANK_YOU: "Thank you for filling out the survey!",
+        ITEM_SESSION: "ITEM_SESSION":"Session",
+        ITEM_DATE: "ITEM_DATE":"Date",
+        SURVEY_WORD: "SURVEY_WORD":"Survey",
+        DETAILS_QUESTIONS: "Questions",
+        SURVEY_SUBMIT: "Required",
+        SURVEY_NO: "No survey questions for this session."
+      }
+      SERVICE_LIST: {
+        ITEM_FREE: "Free",
+        PROGRESS_SELECT: "Select",
+        SERVICE_LIST_NO: "No services match your filter criteria.",
+        PROGRESS_BACK: "Back"
+      }
+      RESOURCE_LIST: {
+        PROGRESS_SELECT: "Select",
+        PROGRESS_BACK:  "Back"
+      }
+      RESCHEDULE_REASONS:{
+        MOVE_TITLE: "Move Appointment ",
+        MOVE_REASON: "Please select a reason for moving your appointment:"
+        MOVE_BUTTON: "Move Appointment"
+        }
+      PURCHASE: {
+        CANCEL_CONFIRMATION: "Your booking has been cancelled.",
+        CONFIRMATION_PURCHASE_TITLE: "Your {{ service_name }} booking",
+        RECIPIENT_NAME: "Name",
+        PRINT: " Print",
+        DETAILS_EMAIL: "E-mail",
+        ITEM_SERVICE: "Service",
+        ITEM_WHEN: "When",
+        ITEM_PRICE: "Price",
+        PROGRESS_CANCEL_BOOKING: "Cancel booking",
+        PROGRESS_MOVE_BOOKING: "Move booking",
+        PROGRESS_BOOK_WAITLIST_ITEMS: "Book Waitlist Items"
+      }
+      PRINT_PURCHASE: {
+        CONFIRMATION_BOOKING_TITLE: "Booking Confirmation",
+        CONFIRMATION_BOOKING_SUBHEADER: "Thanks {{ member_name }}. Your booking is now confirmed. We have emailed you the details below.",
+        CALENDAR_EXPORT_TITLE: "Export",
+        PRINT: " Print",
+        AND: "and",
+        ITEM: "Item",
+        ITEM_DATE: "Date",
+        ITEM_QUANTITY: "Quantity",
+        BOOKING_REFERENCE: "Booking Reference",
+        POWERED_BY: "Bookings powered by"
+      }
+      PERSON_LIST: {
+        PROGRESS_SELECT: "Select",
+        PROGRESS_BACK: "Back"
+      }
+      MONTHLY_CALENDAR: {
+        SELECT_DAY: "Select a day",
+        WEEK_BEGINNING: "Week beginning",
+        PICK_A_DATE: "Pick a date",
+        PREVIOUS_5_WEEKS: "Previous 5 Weeks",
+        NEXT_5_WEEKS: "Next 5 Weeks",
+        KEY: "Key",
+        AVAILABLE: "{number, plural, =0{No availability} other{# available}}",
+        UNAVAILABLE: "Unavailable",
+        PROGRESS_BACK: "Back"
+      }
     }
   }
 
