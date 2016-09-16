@@ -106,6 +106,18 @@ angular.module('BB.Services').config ($translateProvider) ->
           PROGRESS_MOVE_BOOKING: "Move booking",
           PROGRESS_BOOK_WAITLIST_ITEMS: "Book Waitlist Items"
         }
+      PRINT_PURCHASE: {
+        CONFIRMATION_BOOKING_TITLE: "Booking Confirmation",
+        CONFIRMATION_BOOKING_SUBHEADER: "Thanks {{ member_name }}. Your booking is now confirmed. We have emailed you the details below.",
+        CALENDAR_EXPORT_TITLE: "Export",
+        PRINT: " Print",
+        AND: "and",
+        ITEM: "Item",
+        ITEM_DATE: "Date",
+        ITEM_QUANTITY: "Quantity",
+        BOOKING_REFERENCE: "Booking Reference",
+        POWERED_BY: "Bookings powered by"
+      }
     }
   }
 
