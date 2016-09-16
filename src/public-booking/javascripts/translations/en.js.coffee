@@ -93,6 +93,19 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOVE_REASON: "Please select a reason for moving your appointment:"
         MOVE_BUTTON: "Move Appointment"
         }
+        PURCHASE: {
+          CANCEL_CONFIRMATION: "Your booking has been cancelled.",
+          CONFIRMATION_PURCHASE_TITLE: "Your {{ service_name }} booking",
+          RECIPIENT_NAME: "Name",
+          PRINT: " Print",
+          DETAILS_EMAIL: "E-mail",
+          ITEM_SERVICE: "Service",
+          ITEM_WHEN: "When",
+          ITEM_PRICE: "Price",
+          PROGRESS_CANCEL_BOOKING: "Cancel booking",
+          PROGRESS_MOVE_BOOKING: "Move booking",
+          PROGRESS_BOOK_WAITLIST_ITEMS: "Book Waitlist Items"
+        }
     }
   }
 
