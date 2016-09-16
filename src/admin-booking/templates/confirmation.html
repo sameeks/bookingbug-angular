@@ -6,11 +6,11 @@
         <div class="confirmation-header bb-confirmation-border-margin">
           <div ng-if="!total.containsWaitlistItems()">
             <h2>Booking Confirmation</h2>
-            <p class="bb-confirmation-p-alignment">Booking is now confirmed. An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</p>
+            <p class="bb-confirmation-p-alignment">Booking is now confirmed. <span ng-if="total.client.email">An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</span></p>
           </div>
            <div ng-if="total.containsWaitlistItems()">
             <h2>Confirmation</h2>
-            <p class="bb-confirmation-p-alignment">You have successfully made the following bookings. An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</p>
+            <p class="bb-confirmation-p-alignment">You have successfully made the following bookings. <span ng-if="total.client.email">An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</span></p>
           </div>
         </div>
 

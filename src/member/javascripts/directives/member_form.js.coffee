@@ -36,21 +36,41 @@ angular.module('BBMember').directive 'memberForm', ($rootScope, AlertService, Pa
       if attrs.bbCustomMemberForm?
         scope.custom_member_form = true
 
-    controller: ($scope) ->
+    controller: ($scope, FormTransform) ->
 
       $scope.loading = true
+
+      # THIS IS CRUFTY AND SHOULD BE REMOVE WITH AN API UPDATE THAT TIDIES UP THE SCEMA RESPONE
+      # fix the issues we have with the the sub client and question blocks being in doted notation, and not in child objects
+      checkSchema = (schema) ->
+        for k,v of schema.properties
+          vals = k.split(".")
+          if vals[0] == "questions" && vals.length > 1
+            schema.properties.questions ||= {type: "object", properties: {}}
+            schema.properties.questions.properties[vals[1]] ||= {type: "object", properties: {answer: v}}
+          if vals[0] == "client" && vals.length > 2
+            schema.properties.client ||= {type: "object", properties: {q: {type: "object", properties: {}}}}
+            schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v}}
+        return schema
+
 
       $scope.$watch 'member', (member) ->
         if member?
           if member.$has('edit_member')
             member.$get('edit_member').then (member_schema) ->
               $scope.form = member_schema.form
-              $scope.schema = member_schema.schema
+              model_type = member.constructor.name
+              if FormTransform['edit'][model_type]
+                $scope.form = FormTransform['edit'][model_type]($scope.form)
+              $scope.schema = checkSchema(member_schema.schema)
               $scope.loading = false
           else if member.$has('edit')
             member.$get('edit').then (member_schema) ->
               $scope.form = member_schema.form
-              $scope.schema = member_schema.schema
+              model_type = member.constructor.name
+              if FormTransform['edit'][model_type]
+                $scope.form = FormTransform['edit'][model_type]($scope.form)
+              $scope.schema = checkSchema(member_schema.schema)
               $scope.loading = false
 
       $scope.submit = (form, data) ->
