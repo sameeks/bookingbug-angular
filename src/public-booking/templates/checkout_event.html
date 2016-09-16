@@ -11,8 +11,8 @@
         </li>
         <li class="col-xs-6 col-sm-3 time truncate-xs">
           <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-          <span class="event-time" ng-bind="bb.event_details.datetime | datetime: 'h[:]mma'"></span>
-          &ndash;<span ng-bind="bb.event_details.end_datetime | datetime: 'h[:]mma'"></span>
+          <span class="event-time" ng-bind="bb.event_details.datetime | datetime: 'LT'"></span>
+          &ndash;<span ng-bind="bb.event_details.end_datetime | datetime: 'LT'"></span>
         </li>
         <li class="hidden-xs col-sm-3 duration truncate-xs">
           <span class="glyphicon glyphicon-hourglass"></span>
@@ -75,10 +75,10 @@
         <div class="button-group">
           <div class="row">
             <div class="col-sm-offset-9 col-sm-3">
-               <div ng-if="total.$has('new_payment')" class="bb-checkout-pay-button">
-                <div bb-payment-button 
-                  class="btn btn-primary btn-block" 
-                  total="total" 
+               <div ng-if="total.$has('new_payment')" class="bb-checkout-pay-button-div">
+                <div bb-payment-button
+                  class="btn btn-primary btn-block"
+                  total="total"
                   bb="bb"
                   decide-next-page="decideNextPage"
                   value="Pay with WorldPay">
@@ -86,7 +86,7 @@
               </div>
             </div>
           </div>
-        </div> 
+        </div>
 
       </div>
     </div>

@@ -14,7 +14,7 @@
         <span ng-show="person_name" translate="ADMIN_BOOKING.AVAILABILITY.CONFLICT_EXISTS_WITH_PERSON" translate-values="{person_name: '{{ person_name }}'}"></span>
 
         <span ng-show="resource_name" translate="ADMIN_BOOKING.AVAILABILITY.CONFLICT_EXISTS_IN_RESOURCE" translate-values="{resource_name: '{{ resource_name }}'}"></span>.
-        <!--at {{bb.current_item.defaults.datetime | datetime: 'LD'}} -->
+        <!--at {{bb.current_item.defaults.datetime | datetime: 'LT'}} -->
         <span translate="ADMIN_BOOKING.AVAILABILITY.CONFLICT_RESULT_OF"></span>
         <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
       </p>
