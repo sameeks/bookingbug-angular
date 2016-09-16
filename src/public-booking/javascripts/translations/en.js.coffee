@@ -78,6 +78,12 @@ angular.module('BB.Services').config ($translateProvider) ->
         SURVEY_SUBMIT: "Required",
         SURVEY_NO: "No survey questions for this session."
       }
+      SERVICE_LIST: {
+        ITEM_FREE: "Free",
+        PROGRESS_SELECT: "Select",
+        SERVICE_LIST_NO: "No services match your filter criteria.",
+        PROGRESS_BACK: "Back"
+      }
     }
   }
 
