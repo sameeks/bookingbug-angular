@@ -64,7 +64,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EMAIL_VALIDATION_MSG:"Please enter a valid email address"
         ADD_LABEL: "Add Recipient"
         CANCEL_LABEL: "Cancel"
-        
+
       }
       ERROR_MODAL: {
         PROGRESS_OK:"OK"
@@ -107,19 +107,19 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOVE_REASON: "Please select a reason for moving your appointment:"
         MOVE_BUTTON: "Move Appointment"
         }
-        PURCHASE: {
-          CANCEL_CONFIRMATION: "Your booking has been cancelled.",
-          CONFIRMATION_PURCHASE_TITLE: "Your {{ service_name }} booking",
-          RECIPIENT_NAME: "Name",
-          PRINT: " Print",
-          DETAILS_EMAIL: "E-mail",
-          ITEM_SERVICE: "Service",
-          ITEM_WHEN: "When",
-          ITEM_PRICE: "Price",
-          PROGRESS_CANCEL_BOOKING: "Cancel booking",
-          PROGRESS_MOVE_BOOKING: "Move booking",
-          PROGRESS_BOOK_WAITLIST_ITEMS: "Book Waitlist Items"
-        }
+      PURCHASE: {
+        CANCEL_CONFIRMATION: "Your booking has been cancelled.",
+        CONFIRMATION_PURCHASE_TITLE: "Your {{ service_name }} booking",
+        RECIPIENT_NAME: "Name",
+        PRINT: " Print",
+        DETAILS_EMAIL: "E-mail",
+        ITEM_SERVICE: "Service",
+        ITEM_WHEN: "When",
+        ITEM_PRICE: "Price",
+        PROGRESS_CANCEL_BOOKING: "Cancel booking",
+        PROGRESS_MOVE_BOOKING: "Move booking",
+        PROGRESS_BOOK_WAITLIST_ITEMS: "Book Waitlist Items"
+      }
       PRINT_PURCHASE: {
         CONFIRMATION_BOOKING_TITLE: "Booking Confirmation",
         CONFIRMATION_BOOKING_SUBHEADER: "Thanks {{ member_name }}. Your booking is now confirmed. We have emailed you the details below.",
@@ -131,6 +131,10 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_QUANTITY: "Quantity",
         BOOKING_REFERENCE: "Booking Reference",
         POWERED_BY: "Bookings powered by"
+      }
+      PERSON_LIST: {
+        PROGRESS_SELECT: "Select",
+        PROGRESS_BACK: "Back",
       }
     }
   }
