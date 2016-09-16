@@ -134,7 +134,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       PERSON_LIST: {
         PROGRESS_SELECT: "Select",
-        PROGRESS_BACK: "Back",
+        PROGRESS_BACK: "Back"
       }
     }
   }
