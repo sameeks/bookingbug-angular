@@ -88,6 +88,11 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_SELECT: "Select",
         PROGRESS_BACK:  "Back"
       }
+      RESCHEDULE_REASONS:{
+        MOVE_TITLE: "Move Appointment ",
+        MOVE_REASON: "Please select a reason for moving your appointment:"
+        MOVE_BUTTON: "Move Appointment"
+        }
     }
   }
 

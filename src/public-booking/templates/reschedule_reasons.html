@@ -1,12 +1,12 @@
 <div bb-page>
 <!--   <div bb-people></div> -->
   <div class="page-subheader-var">
-    <h1>Move Appointment </h1>
+    <h1><span translate="PUBLIC_BOOKING.RESCHEDULE_REASONS.MOVE_TITLE"></span></h1>
   </div>
   <div bb-include="_basket_item_summary_var"></div>
   <div>
     <p ng-show="bb.move_reasons.length > 0">
-      <span class="bb-summary-label3">Please select a reason for moving your appointment:</span>
+      <span class="bb-summary-label3"><span translate="PUBLIC_BOOKING.RESCHEDULE_REASONS.MOVE_REASON"></span></span>
       <select ng-model="bb.current_item.move_reason" id="cancel_reason" class="form-control" ng-options="option.id as option.text for option in bb.move_reasons">
       </select>
     </p>
@@ -15,7 +15,7 @@
     <div class="row">
       <div class="col-sm-offset-8 col-sm-3 col-sm-push-1 text-right">
         <button type="button" aria-label="continue button" class="btn btn-primary btn-block" ng-click="checkReady() && routeReady()" bb-debounce>
-          <span>Move Appointment</span>
+          <span translate="PUBLIC_BOOKING.RESCHEDULE_REASONS.MOVE_REASON"></span>
         </button>
       </div>
     </div>
