@@ -17,8 +17,7 @@ angular.module('BBMember').directive 'bbMemberPastBookings', ($rootScope, Pagina
 
 
     scope.$watch 'member', () ->
-      getBookings() if !scope.past_bookings
+      getBookings() if scope.member && !scope.past_bookings
 
 
-    $rootScope.connection_started.then () ->
-      getBookings()
+    getBookings() if scope.member
