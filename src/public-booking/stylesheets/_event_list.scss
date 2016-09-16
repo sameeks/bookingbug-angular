@@ -217,6 +217,11 @@
       @media(max-width:$screen-xs-max) {
         margin-bottom: 20px;
       }
+      p.event-group-description{
+        border: solid 0 #ccc;
+        border-top-width: 2px;
+        padding-top: 5px;
+      }
     }
 
     .fa{

@@ -213,8 +213,24 @@
                         <span>Join Waitlist</span>
                       </div>
                     </button>
+                    <button type="button" class="btn btn-default btn-block" ng-show="item.group.description" ng-click="isCollapsed = !isCollapsed">
+                      <span ng-show='!isCollapsed'>More Info</span>
+                      <span ng-show='isCollapsed'>Less Info</span>
+                    </button>
                   </div>
                 </div>
+                 <div class="row" ng-show="item.group.description">
+                   <div class="col-sm-10 col-xs-12 event-details">
+                     <ul class="event-summary-list" collapse="!isCollapsed">
+                       <li>
+                         <p class='event-group-description'>
+                           <span class="fa fa-info-circle"></span>
+                           <span>{{item.group.description}}</span>
+                         </p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
               </div>
             </div>
           </div>
