@@ -66,6 +66,17 @@ angular.module('BB.Services').config ($translateProvider) ->
         CANCEL_LABEL: "Cancel"
         
       }
+      ERROR_MODAL: {
+        PROGRESS_OK:"OK"
+      }
+      MEMBER_FORM: {
+        FIRST_NAME_LABEL:"First Name",
+        LAST_NAME_LABEL:"Last Name",
+        EMAIL_LABEL:"Email",
+        PHONE_LABEL:"Phone",
+        MOBILE_LABEL:"Mobile",
+        SAVE_BUTTON:"Save"
+      }
     }
   }
 
