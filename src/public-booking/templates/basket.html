@@ -105,14 +105,41 @@
 						</tr>
 					</tbody>
 				</table>
+
 				<div ng-if="show_wallet">
-					<h4><span translate="BASKET_WALLET"></span></h4>
+
+					<h4>
+						<span translate="BASKET_WALLET"></span>
+					</h4>
+
 					<div ng-show="client.has_active_wallet">
-						<p><span translate="BASKET_WALLET_BALANCE"></span>: {{client.wallet_amount | icurrency}} </p> <small style="color:#ff1919;" ng-if="client.wallet_amount < basket.total_due_price"> (-{{basket.total_due_price - client.wallet_amount | icurrency }})</small>
-						<small ng-if="client.wallet_amount < basket.total_due_price"><i><span translate="BASKET_WALLET_BALANCE_INSUFFICIENT"></span></i></small>
-						<small ng-if="client.wallet_amount >= basket.total_due_price"><i><span translate="BASKET_WALLET_REMAINDER_PART_ONE"></span> {{(client.wallet_amount - basket.total_price) | icurrency }} <span translate="BASKET_WALLET_REMAINDER_PART_TWO"></span>. </i></small>
-					  <button ng-if="client.wallet_amount < basket.total_due_price" type="button" class="btn btn-primary btn-xs" ng-click="topUpWallet()"><span translate="BASKET_WALLET_TOP_UP"></span></button>
+
+						<p>
+							<span translate="BASKET_WALLET_BALANCE"></span>: {{client.wallet_amount | icurrency}} 
+						</p> 
+
+						<small style="color:#ff1919;" ng-if="client.wallet_amount < basket.total_due_price"> (-{{basket.total_due_price - client.wallet_amount | icurrency }})</small>
+
+						<small ng-if="client.wallet_amount < basket.total_due_price">
+							<i>
+								<span translate="BASKET_WALLET_BALANCE_INSUFFICIENT"></span>
+							</i>
+						</small>
+
+						<small ng-if="client.wallet_amount >= basket.total_due_price">
+							<i>
+								<span translate="BASKET_WALLET_REMAINDER_PART_ONE"></span>
+								{{(client.wallet_amount - basket.total_price) | icurrency }}
+								<span translate="BASKET_WALLET_REMAINDER_PART_TWO"></span>. 
+							</i>
+						</small>
+
+					  <button ng-if="client.wallet_amount < basket.total_due_price" type="button" class="btn btn-primary btn-xs" ng-click="topUpWallet()">
+					  	<span translate="BASKET_WALLET_TOP_UP"></span>
+				  	</button>
+				  	
 					</div>
+
       	</div>
 
 				<div ng-if="bb.company_settings.has_coupons" class="bb-coupon-box">

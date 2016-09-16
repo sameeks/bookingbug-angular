@@ -54,17 +54,132 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOVE_BOOKING_FAIL_MSG: "Failed to move booking. Please try again."
       }
       ADD_RECIPIENT: {
-        MODAL_TITLE:"Recipient",
-        WHO_TO_QUESTION:"Who should we send the gift voucher to?"
-        WHO_TO_OPTION_ME:"Me",
-        WHO_TO_OPTION_NOT_ME:"Someone else"
-        NAME_LABEL:"Name",
-        NAME_VALIDATION_MSG:"Please enter the recipient's full name"
+        MODAL_TITLE: "Recipient",
+        WHO_TO_QUESTION: "Who should we send the gift voucher to?"
+        WHO_TO_OPTION_ME: "Me",
+        WHO_TO_OPTION_NOT_ME: "Someone else"
+        NAME_LABEL: "Name",
+        NAME_VALIDATION_MSG: "Please enter the recipient's full name"
         EMAIL_LABEL: "Email"
-        EMAIL_VALIDATION_MSG:"Please enter a valid email address"
+        EMAIL_VALIDATION_MSG: "Please enter a valid email address"
         ADD_LABEL: "Add Recipient"
         CANCEL_LABEL: "Cancel"
-        
+      }
+      BASKET_DETAILS: {
+        BASKET_DETAILS_TITLE: "Basket Details"
+        BASKET_DETAILS_NO: "No items added to basket yet."
+        ITEM: "Item"
+        BASKET_ITEM_APPOINTMENT: "Appointment"
+        TIME_AND_DURATION: "{{time | datetime: 'LLLL':false}} for {{duration | time_period }}"
+        PROGRESS_CANCEL: "Cancel"
+        BASKET_CHECKOUT: "Checkout"
+      }
+      BASKET_ITEM_SUMMARY: {
+        ITEM_DURATION: "Duration"
+        ITEM_RESOURCE: "Resource"
+        ITEM_PERSON: "Person"
+        ITEM_PRICE: "Price"
+        ITEM_DATE: "Date"
+        ITEM_TIME: "Time"
+      }
+      CANCEL_MODAL: {
+        CANCEL_QUESTION: "Are you sure you want to cancel this booking?"
+        ITEM_SERVICE: "Service"
+        ITEM_WHEN: "When"
+        PROGRESS_CANCEL_BOOKING: "Cancel booking"
+        PROGRESS_CANCEL_CANCEL: "Do not cancel"
+      }
+      MEMBER_LOGIN_FORM: {
+        EMAIL_LABEL: "Email"
+        EMAIL_VALIDATION_REQUIRED_MESSAGE: "Please enter your email"
+        EMAIL_VALIDATION_PATTERN_MESSAGE: "Please enter a valid email address"
+        PASSWORD_LABEL: "Password"
+        PLEASE_ENTER_PASSWORD: "Please enter your password"
+        REMEMBER_ME: "Remember me"
+        LOGIN: "Login"
+      }
+      MONTH_PICKER: {
+        PROGRESS_PREVIOUS: "Previous"
+        PROGRESS_NEXT: "Next"
+      }
+      POPOUT_EXPORT_BOOKING: {
+        LONG_EXPORT_LABEL: "Export to calendar"
+        SHORT_EXPORT_LABEL: "Export"
+      }
+      PRICE_FILTER: {
+        ITEM_PRICE: "Price"
+      }
+      SERVICE_LIST_FILTER: {
+        FILTER: "Filter"
+        FILTER_CATEGORY: "Category"
+        FILTER_ANY: "Any"
+        ITEM_SERVICE: "Service"
+        FILTER_RESET: "Reset"
+      }
+      WEEK_CALENDAR: {
+        ALL_TIMES_IN: "All times are shown in {{time_zone_name}}."
+        NO_AVAILABILITY: "{time_range_length, plural, It looks like there's no availability for the next {time_range_length} one{day} other{days}}"
+        NEXT_AVAIL: "Jump to Next Available Day"
+        ANY_DATE: "\- Any Date \-"
+      }
+      BASKET: {
+        BASKET_TITLE: "Your basket"
+        BASKET_ITEM_NO: "There are no items in the basket"
+        BASKET_ITEM_ADD_INSTRUCT: "Please press the add another item button if you wish to add a product or service"
+        ITEM: "Item"
+        ITEM_PRICE: "Price"
+        BASKET_RECIPIENT: "Recipient"
+        BASKET_CERTIFICATE_PAID: "Certificate Paid"
+        BASKET_GIFT_CERTIFICATES: "Gift Certificates"
+        BASKET_PRICE_ORIGINAL: "Original Price"
+        BASKET_BOOKING_FEE: "Booking Fee"
+        BASKET_GIFT_CERTIFICATES_TOTAL: "Gift Certificates"
+        BASKET_GIFT_CERTIFICATE_BALANCE: "Remaining Value on Gift Certificate"
+        BASKET_COUPON_DISCOUNT: "Coupon Discount"
+        BASKET_TOTAL: "Total"
+        BASKET_TOTAL_DUE_NOW: "Total Due Now"
+        BASKET_WALLET: "Wallet"
+        BASKET_WALLET_BALANCE: "Current Wallet Balance"
+        BASKET_WALLET_BALANCE_INSUFFICIENT: "You do not currently have enough money in your wallet account. You can either pay the full amount, or top up to add more money to your wallet."
+        BASKET_WALLET_REMAINDER_PART_ONE: "You will have"
+        BASKET_WALLET_REMAINDER_PART_TWO: "left in your wallet after this purchase"
+        BASKET_WALLET_TOP_UP: "Top Up"
+        BASKET_COUPON_APPLY: "Apply a coupon"
+        PROGRESS_APPLY: "Apply"
+        BASKET_GIFT_CERTIFICATE_QUESTION: "Have a gift certificate?"
+        BASKET_GIFT_CERTIFICATE_APPLY: "Apply a Gift Certificate"
+        BASKET_GIFT_CERTIFICATE_APPLY_ANOTHER: "Apply another Gift Certificate"
+        PROGRESS_APPLY: "Apply"
+        BASKET_ITEM_ADD: "Add another item"
+        BASKET_CHECKOUT: "Checkout"
+        PROGRESS_BACK: "Back"
+      }
+      BASKET_ITEM_SUMMARY: {
+        STEP_TITLE: "Summary"
+        STEP_DESCRIPTION: "Please review the following information"
+        DURATION_LABEL: "Duration"
+        FULL_NAME_LABEL: "Full name"
+        EMAIL_LABEL: "Email"
+        MOBILE_LABEL: "Mobile"
+        ADDRESS_LABEL: "Address"
+        PRICE_LABEL: "Price"
+        CONFIRM_BUTTON: "Confirm"
+        BACK_BUTTON: "Back"
+      }
+      BASKET_WAITLIST: {
+        WAITLIST_BOOKING_TITLE: "Your Waitlist booking"
+        BOOKING_REFERENCE: "Booking Referenc"
+        ITEM_SERVICE: "Service"
+        ITEM_DATE_AND_OR_TIME: "Date/Time"
+        ITEM_PRICE: "Price"
+        PROGRESS_BOOK: "Book"
+        BASKET_TOTAL: "Total"
+        BASKET_TOTAL_DUE_NOW: "Total Due Now"
+        CONFIRMATION_WAITLIST_SUBHEADER: "Thanks {{member_name}}. You have successully booked onto {{purchase_item}}."
+        BASKET_TOTAL: "Total"
+        BASKET_TOTAL_DUE_NOW: "Total Due Now"
+        PRINT: "Print"
+        PROGRESS_BACK: "Back"
       }
     }
   }

@@ -12,32 +12,32 @@
         </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.duration">
-      <div class="bb-summary-label">{{"ITEM_DURATION"|translate}}</div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_DURATION"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.duration | time_period}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.resource && bb.current_item.resource.name">
-      <div class="bb-summary-label">{{"ITEM_RESOURCE"|translate}}</div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_RESOURCE"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.resource.name}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.person && bb.current_item.person.name">
-      <div class="bb-summary-label">{{"ITEM_PERSON"|translate}}</div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_PERSON"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.person.name}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.price">
-      <div class="bb-summary-label">{{"ITEM_PRICE"|translate}}</div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_PRICE"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.price | currency}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.date">
-      <div class="bb-summary-label">{{"ITEM_DATE"|translate}}</div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_DATE"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'dddd D MMMM'}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.time">
-      <div class="bb-summary-label">{{"ITEM_TIME"|translate}}</div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_TIME"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'LT'}}</span>
       </div>
     </li>
