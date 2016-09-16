@@ -67,7 +67,16 @@ angular.module('BB.Services').config ($translateProvider) ->
         AVAIL_DAY_PREVIOUS: "Previous Day",
         AVAIL_DAY_NEXT: "Next Day",
         AVAIL_NO: "No Service Available",
-        PROGRESS_BACK: "No Service Available",
+        PROGRESS_BACK: "No Service Available"
+      }
+      SURVEY: {
+        SURVEY_THANK_YOU: "Thank you for filling out the survey!",
+        ITEM_SESSION: "ITEM_SESSION":"Session",
+        ITEM_DATE: "ITEM_DATE":"Date",
+        SURVEY_WORD: "SURVEY_WORD":"Survey",
+        DETAILS_QUESTIONS: "Questions",
+        SURVEY_SUBMIT: "Required",
+        SURVEY_NO: "No survey questions for this session."
       }
     }
   }

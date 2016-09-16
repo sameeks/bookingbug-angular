@@ -14,7 +14,7 @@
   </div>
 
   <div class="bb-survey-thankyou" ng-if="completed">
-    <h2><span translate="SURVEY_THANK_YOU"></span></h2>
+    <h2><span translate="PUBLIC_BOOKING.SURVEY.SURVEY_THANK_YOU"></span></h2>
   </div>
 
   <div ng-if="purchase" ng-show="bookings[0].survey_questions">
@@ -31,12 +31,12 @@
 
         <ul class="summary-list">
           <li class="row">
-            <div class="col-xs-3 col-sm-2 summary-label"><span translate="ITEM_SESSION"></span>:</div>
+            <div class="col-xs-3 col-sm-2 summary-label"><span translate="PUBLIC_BOOKING.SURVEY.ITEM_SESSION"></span>:</div>
             <div class="col-xs-9 col-sm-10 summary-value"><span class="bold-small">{{bookings[0].service_name}}</span>
             </div>
           </li>
           <li class="row">
-            <div class="col-xs-3 col-sm-2 summary-label"><span translate="ITEM_DATE"></span>:</div>
+            <div class="col-xs-3 col-sm-2 summary-label"><span translate="PUBLIC_BOOKING.SURVEY.ITEM_DATE"></span>:</div>
             <div class="col-xs-9 col-sm-10 summary-value">
               <span class="bold-small">{{bookings[0].pretty_date}}</span>
             </div>
@@ -44,7 +44,7 @@
         </ul>
 
         <div ng-show="bookings[0].survey_questions && bookings[0].survey_questions.length > 0">
-          <h2 class="booking-form-header"><span translate="SURVEY_WORD"></span> <span translate="DETAILS_QUESTIONS"></span></h2>
+          <h2 class="booking-form-header"><span translate="PUBLIC_BOOKING.SURVEY.SURVEY_WORD"></span> <span translate="PUBLIC_BOOKING.SURVEY.DETAILS_QUESTIONS"></span></h2>
 
           <div class="form-group" ng-repeat="question in bookings[0].survey_questions" bb-question-line ng-class="{'check': question.detail_type == 'check', 'has-error': survey_form['q' + question.id].$invalid && (survey_form['q' + question.id].$dirty || survey_form.submitted)}">
             <label ng-if="question.detail_type != 'check'" for="{{question.id}}" class="control-label col-sm-4">{{question.name}}<span ng-if="question.required" class="text-warning">*</span>:</label>
@@ -58,13 +58,13 @@
 
         <div class="row step-navigation">
           <div class="col-sm-3 col-sm-offset-9">
-            <button type="submit" class="btn btn-primary" ng-click="submitSurvey(survey_form)" bb-debounce><span translate="SURVEY_SUBMIT"></span></button>
+            <button type="submit" class="btn btn-primary" ng-click="submitSurvey(survey_form)" bb-debounce><span translate="PUBLIC_BOOKING.SURVEY.SURVEY_SUBMIT"></span></button>
           </div>
         </div>
 
       </form>
     </div>
-    <h2 ng-if="bookings[0].survey_questions.length < 1"><span translate="SURVEY_NO"></span></h2>
+    <h2 ng-if="bookings[0].survey_questions.length < 1"><span translate="PUBLIC_BOOKING.SURVEY.SURVEY_NO"></span></h2>
 
   </div>
   <div bb-loading class="bb-loader">
