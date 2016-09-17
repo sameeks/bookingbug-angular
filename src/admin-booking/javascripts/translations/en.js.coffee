@@ -11,7 +11,7 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
         BACK                              : 'Back'
         BOOK                              : 'Book'
         CALENDAR                          : 'Calendar'
-        CONFLICT                          : 'Availability Conflict'
+        NOT_AVAILABLE                     : 'Time not available'
         CONFLICT_EXISTS                   : 'There\'s an availability conflict'
         CONFLICT_EXISTS_WITH_PERSON       : 'with {{ person_name }}'
         CONFLICT_EXISTS_IN_RESOURCE       : 'in {{ resource_name }}'
