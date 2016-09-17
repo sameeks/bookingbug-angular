@@ -118,7 +118,7 @@
     margin-bottom: 10px;
     font-size: $font-size-small;
     // font-size: 0.9rem;
-  }
+  } 
 
   .selected-time {
     display: block;
@@ -152,7 +152,12 @@
     background-color: $gray-light;
     color: #FFF;
   }
-
+  .panel-group .selected  .panel{
+    background-color: $gray-light;
+    color: #FFF;
+  }
+ 
+ 
   .panel-default.expanded > .panel-heading {
     padding-bottom: 5px;
   }
