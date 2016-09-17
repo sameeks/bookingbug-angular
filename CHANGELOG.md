@@ -1,7 +1,6 @@
 # Change Log
 All notable changes to this project will be documented in this file using [CHANGELOG](http://keepachangelog.com/en/0.3.0/) convention.
 
-
 ## [Unreleased]
 ### Changed
 - SDK build process does not flatten template files anymore in order to avoid naming conflicts.
@@ -19,8 +18,7 @@ All notable changes to this project will be documented in this file using [CHANG
   templates/admin-table/admin_table_main.html  
   Before change $templateCache would register 'login/admin_login.html' template as 'admin_login.html'.
   After change $templateCache registers 'login/admin_login.html' template as 'login/admin_login.html'.
-
-
+- Month picker now works with angular carousel (removed angular slick from month picker)
 
 <a name="2.0.0-alpha"></a>
 # 2.0.0-alpha (2015-11-21)

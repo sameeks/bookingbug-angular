@@ -12,14 +12,25 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
     scope.picker_settings = scope.$eval(attrs.bbMonthPicker) or {}
     scope.picker_settings.months_to_show = scope.picker_settings.months_to_show or 3
 
-    stopWatch = scope.$watch attrs.dayData, (dates) ->
-      if dates
-        scope.processDates(dates)
-        stopWatch()
+    $(window).resize () ->
+      $timeout ->
+        width = el.width()
+        scope.rebuildSlideToWidth width
+      , 500
+
+    scope.$watch attrs.dayData, (dayData) ->
+      if dayData
+        scope.months = null if !dayData.length
+        scope.processDates(dayData) if dayData.length
+        width = el.width()
+        scope.rebuildSlideToWidth width
 
   controller : ($scope) ->
 
     $scope.processDates = (dates) ->
+
+      dates = null if !dates.length
+
       datehash = {}
       for date in dates
         datehash[date.date.format("DDMMYY")] = date
@@ -27,71 +38,18 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
 
       # start at current month or the first month that has availability
       if $scope.picker_settings.start_at_first_available_day
-        cur_month = $scope.first_available_day.clone().startOf('month')
+        first_carousel_month = $scope.first_available_day.clone().startOf('month')
       else
-        cur_month = moment().startOf('month')
+        first_carousel_month = moment().startOf('month')
      
       last_date = _.last dates
-      diff = last_date.date.diff(cur_month, 'months')
+      diff = last_date.date.diff(first_carousel_month, 'months')
       diff = if diff > 0 then diff + 1 else 1
       
       # use picker settings or diff between first and last date to determine number of months to display
       $scope.num_months = if $scope.picker_settings and $scope.picker_settings.months then $scope.picker_settings.months else diff
 
-      months = []
-      for m in [1..$scope.num_months]
-        date = cur_month.clone().startOf('week')
-        month = {weeks: []}
-        month.index = m - 1
-        for w in [1..6]
-          week = {days: []}
-          for d in [1..7]
-
-            month.start_date = date.clone() if date.isSame(date.clone().startOf('month'),'day') and !month.start_date
-            day_data = datehash[date.format("DDMMYY")]
-
-            day = {
-              date      : date.clone(), 
-              data      : day_data,
-              available : day_data and day_data.spaces and day_data.spaces > 0,
-              today     : moment().isSame(date, 'day'),
-              past      : date.isBefore(moment(), 'day'),
-              disabled  : !month.start_date or !date.isSame(month.start_date, 'month')
-            }
-
-            week.days.push(day)
-
-            if $scope.selected_date and day.date.isSame($scope.selected_date, 'day')
-              day.selected = true
-              $scope.selected_day = day
-
-            date.add(1, 'day')
-            
-          month.weeks.push(week)
-
-        months.push(month)
-        cur_month.add(1, 'month')
-
-      $scope.months = months
-
-      $scope.slick_config =
-        nextArrow: ".month-next",
-        prevArrow: ".month-prev",
-        slidesToShow: if $scope.months.length >= $scope.picker_settings.months_to_show then $scope.picker_settings.months_to_show else $scope.months.length,
-        infinite: false,
-        responsive: [
-          {breakpoint: 1200, settings: {slidesToShow: if $scope.months.length >= 2 then 2 else $scope.months.length}},
-          {breakpoint: 992, settings: {slidesToShow: 1}}
-        ],
-        method: {},
-        event:
-          init: (event, slick) ->
-            $timeout ->
-              # scroll to the selected month
-              if $scope.selected_day?
-                for m in $scope.months
-                  slick.slickGoTo(m.index) if m.start_date.month() is $scope.selected_day.date.month()
-
+      $scope.months = $scope.getMonths($scope.num_months, first_carousel_month, datehash)
       
     # listen to date changes from the date filter and clear the selected day
     $scope.$on 'event_list_filter_date:changed', (event, date) ->
@@ -136,6 +94,101 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
 
       # TODO refactor to call showDay via controller
       $scope.showDay(day.date)
+
+    $scope.rebuildSlide = (n) ->
+
+      last_carousel_month = moment().startOf('month')
+      num_empty_months_to_add = 0
+
+      if $scope.months and $scope.months.length
+        # remove filler months before rebuilding
+        months = []
+        for month in $scope.months
+          if month and !month.filler
+            months.push month
+
+
+        $scope.months = months if months.length
+        # set required vars
+        last_carousel_month = angular.copy($scope.months[$scope.months.length - 1].start_date)
+        last_carousel_month.add(1, 'month')
+
+        num_empty_months_to_add = n - ($scope.months.length % n)
+        num_empty_months_to_add = 0 if num_empty_months_to_add is n
+      else 
+        # set required vars
+        num_empty_months_to_add = n
+        last_carousel_month = moment().startOf('month')
+
+      monthCollection = []
+      slide = []
+      
+      $scope.months = [] if !$scope.months
+
+      fillerMonths = $scope.getMonths(num_empty_months_to_add, last_carousel_month)
+      $scope.months = $scope.months.concat fillerMonths
+
+      # displays months in sets per slide
+      for value in $scope.months
+          if slide.length is n
+              monthCollection.push slide
+              slide = []
+          slide.push value
+      monthCollection.push slide
+      $scope.monthCollection = monthCollection
+
+    $scope.getMonths = (months_to_display, start_month, datehash) ->
+      months = []
+      # generates dates for carousel
+      for m in [0...months_to_display]
+        date = start_month.clone().startOf('week')
+        month = {weeks: []}
+        month.index = m - 1
+        for w in [1..6]
+          week = {days: []}
+          for d in [1..7]
+
+            month.start_date = date.clone() if date.isSame(date.clone().startOf('month'),'day') and !month.start_date
+            day_data = datehash[date.format("DDMMYY")] if datehash
+
+            day = {
+              date      : date.clone(), 
+              data      : if datehash then day_data else null,
+              available : if datehash then day_data and day_data.spaces and day_data.spaces > 0 else false,
+              today     : moment().isSame(date, 'day'),
+              past      : date.isBefore(moment(), 'day'),
+              disabled  : !month.start_date or !date.isSame(month.start_date, 'month')
+            }
+            week.days.push(day)
+
+            if $scope.selected_date and day.date.isSame($scope.selected_date, 'day')
+              day.selected = true
+              $scope.selected_day = day
+
+            date.add(1, 'day')
+
+          month.filler = true if !datehash
+          month.weeks.push(week)
+          
+        months.push month
+        start_month.add(1, 'month')
+
+      return months
+
+    $scope.rebuildSlideToWidth = (width) ->
+      # TODO - add code for 4 and 5?
+      if width > 750
+        # desktop
+        num_slides_to_display = 3
+        $scope.rebuildSlide num_slides_to_display
+      else if width > 550
+        # tablet
+        num_slides_to_display = 2
+        $scope.rebuildSlide num_slides_to_display
+      else
+        # phone
+        num_slides_to_display = 1
+        $scope.rebuildSlide num_slides_to_display
 
 
     $scope.getDay = (date) ->
