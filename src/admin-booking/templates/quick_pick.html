@@ -37,7 +37,9 @@
           <select id="resource" ng-model="picked_resource" ng-change="changeResource()" ng-options="item.identifier as item.name group by item.group for item in resources" class="form-control">
             <option value="" translate="ADMIN_BOOKING.QUICK_PICK.SELECT"></option>
           </select>
-          <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError">Please select a resource or member of staff</p>
+          <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError">
+            <span translate="ADMIN_BOOKING.QUICK_PICK.RESOURCE_PERSON_VALIDATION_MSG"></span>
+          </p>
         </div>
         <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
           <label><span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_WHOLE_DAY"></span> &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" translate-attr-on-label="ADMIN_BOOKING.QUICK_PICK.YES" translate-attr-off-label="ADMIN_BOOKING.QUICK_PICK.NO"></toggle-switch></label>
@@ -68,7 +70,7 @@
             </div>
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )">
-                This field is required
+                <span translate="ADMIN_BOOKING.QUICK_PICKFIELD_VALIDATION_MSG"></span>
               </div>
             </div>
           </div>

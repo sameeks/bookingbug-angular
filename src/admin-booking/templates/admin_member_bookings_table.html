@@ -14,13 +14,11 @@
       <td>
         <button class="btn btn-default btn-sm"
           ng-hide="gridItem.datetime.format('X') < now.format('X')"
-          ng-click="cancel(gridItem.id)">
-            Cancel
+          ng-click="cancel(gridItem.id)" translate="ADMIN_BOOKING.BOOKINGS_TABLE.CANCEL_BTN">
         </button>
         <button class="btn btn-default btn-sm"
           ng-hide="gridItem.datetime.format('X') < now.format('X')"
-          ng-click="edit(gridItem.id)">
-            Details
+          ng-click="edit(gridItem.id)" translate="ADMIN_BOOKING.BOOKINGS_TABLE.DETAILS_BTN">
         </button>
       </td>
     </tr>

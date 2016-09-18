@@ -1,4 +1,4 @@
-<div bb-total ng-init="checkStepTitle('Confirmed')" class="bb-checkout">
+<div bb-total class="bb-checkout">
   <div class="row">
     <div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
 
@@ -18,25 +18,27 @@
           <ul class="confirmation-summary">
             <li class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Reference:</div>
-              <div class="col-sm-9 bb-summary-value">   {{ total.id }}</div>
+              <div class="col-sm-9 bb-summary-value">{{total.id}}</div>
             </li>
             <li class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Customer:</div>
-              <div class="col-sm-9 bb-summary-value">   {{ total.client.first_name  }}  {{ total.client.last_name }}</div>
+              <div class="col-sm-9 bb-summary-value">
+                {{total.client.first_name}} {{total.client.last_name}}
+              </div>
             </li>
           </ul>
           <ul class="confirmation-summary" ng-repeat="i in total.items">
             <li ng-if="i.full_describe" class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Service:</div>
-              <div class="col-sm-9 bb-summary-value">   {{ i.full_describe }}</div>
+              <div class="col-sm-9 bb-summary-value">{{i.full_describe}}</div>
             </li>
             <li ng-if="i.describe" class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Date/Time:</div>
-              <div class="col-sm-9 bb-summary-value">   {{ i.describe }}</div>
+              <div class="col-sm-9 bb-summary-value">{{i.describe}}</div>
             </li>
             <li ng-if="i.price" class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Price:</div>
-              <div class="col-sm-9 bb-summary-value">   {{ i.price | currency }}</div>
+              <div class="col-sm-9 bb-summary-value">{{i.price | currency}}</div>
             </li>
           </ul>
 
@@ -53,8 +55,3 @@
 </div>
 
 <!-- <div class="bb-step-navigation"></div> -->
-
-<div ng-show="isLoaded" class="powered-by visible-print">
-  <p>Bookings powered by <span style="color:#087f94">booking</span><span style="color:#88c66f">bug</p>
-  <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"></a>
-</div>

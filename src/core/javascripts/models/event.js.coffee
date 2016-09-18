@@ -248,9 +248,9 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     getRemainingDescription: () ->
       left = @getSpacesLeft()
       if left > 0 && left < 3
-        return $translate.instant("SPACES_LEFT", {N: left}, 'messageformat')
+        return $translate.instant("PUBLIC_BOOKING.EVENT.SPACES_LEFT", {N: left}, 'messageformat')
       if @hasWaitlistSpace()
-        return $translate.instant("JOIN_WAITLIST")
+        return $translate.instant("PUBLIC_BOOKING.EVENT.JOIN_WAITLIST")
       return ""
 
     ###**

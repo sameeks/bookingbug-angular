@@ -113,7 +113,7 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $ro
       return true
     else
       AlertService.clear()
-      AlertService.add("danger", { msg: $translate.instant('SELECT_DURATION') })
+      AlertService.add("danger", { msg: $translate.instant('PUBLIC_BOOKING.DURATION)LIST.DURATON_NOT_SELECTED_ALERT')})
       return false
 
 

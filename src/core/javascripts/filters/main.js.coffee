@@ -105,7 +105,7 @@ angular.module('BB.Filters').filter 'map_lat_long', ->
 angular.module('BB.Filters').filter 'distance', ($translate) ->
   (distance) ->
     return '' unless distance
-    local_unit = $translate.instant('DISTANCE_UNIT')
+    local_unit = $translate.instant('FILTERS.DISTANCE.UNIT')
     distance *= 1.60934 if local_unit is 'km'
     pretty_distance = distance.toFixed(1).replace(/\.0+$/,'')
     pretty_distance + local_unit
@@ -146,7 +146,7 @@ angular.module('BB.Filters').filter 'currency', ($window, $rootScope, SettingsSe
 
     currency_code ||= SettingsService.getCurrency()
 
-    format = $translate.instant(['THOUSANDS_SEPARATOR', 'DECIMAL_SEPARATOR', 'CURRENCY_FORMAT'])
+    format = $translate.instant(['FILTERS.CURRENCY.THOUSANDS_SEPARATOR', 'FILTERS.CURRENCY.DECIMAL_SEPARATOR', 'FILTERS.CURRENCY.CURRENCY_FORMAT'])
     
     hide_decimal = pretty_price and (amount % 100 is 0)
 
@@ -163,7 +163,7 @@ angular.module('BB.Filters').filter 'raw_currency', -> (number) -> number / 100.
 
 angular.module('BB.Filters').filter 'pretty_price', ($translate, $filter) ->
   (price, currency_code) ->
-    if parseFloat(price) == 0 then $translate.instant('ITEM_FREE')
+    if parseFloat(price) == 0 then $translate.instant('FILTERS.PRETTY_PRICE.FREE')
     else $filter('currency')(price, currency_code, true)
 
 
@@ -212,7 +212,7 @@ angular.module('BB.Filters').filter 'time_period', ($translate) ->
     if hours > 0
       time_period += moment.duration(hours, 'hours').humanize()
       if minutes > 0
-        time_period += $translate.instant('TIME_SEPARATOR')
+        time_period += $translate.instant('FILTERS.TIME_PERIOD.TIME_SEPARATOR')
     if minutes > 0 or hours == 0
       time_period += moment.duration(minutes, 'minutes').humanize()
 
@@ -257,7 +257,7 @@ angular.module('BB.Filters').filter 'time_period_from_seconds', ($translate, $fi
     if seconds >= 60
       time_period += $filter('time_period')(seconds / 60)
       if (seconds % 60) > 0
-        time_period += $translate.instant('TIME_SEPARATOR')
+        time_period += $translate.instant('FILTERS.TIME_PERIOD.TIME_SEPARATOR')
     if (seconds % 60) > 0
       time_period += moment.duration(seconds % 60, 'seconds').humanize()
 

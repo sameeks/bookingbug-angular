@@ -7,8 +7,8 @@
     sf-model="form_model" sf-options="{formDefaults: {feedback: false}}"
     ng-hide="loading">
   </div>
-  <div class="modal-footer">
-    <input type="submit" class="btn btn-primary" ng-disabled="loading" value="OK">
-    <button class="btn btn-default" ng-click="cancel($event)" translate="PROGRESS_CANCEL"></button>
+  <div class="modal-footer"></div>
+    <button type="submit" class="btn btn-primary" ng-disabled="loading" translate="CORE.SCHEMA_FORM.OK_BTN"></button>
+    <button class="btn btn-default" ng-click="cancel($event)" translate="CORE.SCHEMA_FORM.CANCEL_BTN"></button>
   </div>
 </form>

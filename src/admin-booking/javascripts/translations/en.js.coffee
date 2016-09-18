@@ -58,22 +58,42 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
         SORT_BY_EMAIL     : 'Email'
         SORT_BY_FIRST_NAME: 'First Name'
         SORT_BY_LAST_NAME : 'Last Name'
+        ADDRESS1_LABEL    : 'Address'
+        ADDRESS1_VALIDATION_MSG : 'Please enter your address'
+        ADDRESS3_LABEL   : 'Town'
+        ADDRESS4_LABEL   : 'County'
+        POSTCODE_LABEL   : 'Postcode'
 
       }
       QUICK_PICK  : {
-        BLOCK_WHOLE_DAY : 'Block whole day'
-        BLOCK_TIME      : 'Block time'
-        BOOK            : 'Book'
-        FOR             : 'For'
-        FROM            : 'From'
-        MAKE_BOOKING    : 'Make booking'
-        NO              : 'No'
-        SELECT          : '-- select --'
-        SELECT_A_SERVICE: '-- select a service --'
-        SERVICE         : 'Service'
-        TO              : 'To'
-        YES             : 'Yes'
+        BLOCK_WHOLE_DAY      : 'Block whole day'
+        BLOCK_TIME           : 'Block time'
+        BOOK                 : 'Book'
+        FOR                  : 'For'
+        FROM                 : 'From'
+        MAKE_BOOKING         : 'Make booking'
+        NO                   : 'No'
+        SELECT               : '-- select --'
+        SELECT_A_SERVICE     : '-- select a service --'
+        SERVICE              : 'Service'
+        TO                   : 'To'
+        YES                  : 'Yes'
+        FIELD_VALIDATION_MSG : 'This field is required'
+        RESOURCE_PERSON_VALIDATION_MSG : 'Please select a resource or member of staff'
       }
+      BOOKINGS_TABLE : {
+        CANCEL_BTN  : 'Cancel'
+        DETAILS_BTN : 'Details'
+      }
+      CHECK_ITEMS : {
+        BOOKINGS_QUESTIONS_TITLE : 'Questions'
+        FIELD_VALIDATION_MSG     : 'This field is required'
+        BOOKING_NOTES_TITLE      : 'Booking Notes'
+        BOOK_BTN                 : 'Book'
+        BACK_BTN                 : ''
+
+      }
+
     }
   }
 

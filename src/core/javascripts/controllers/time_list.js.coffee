@@ -257,10 +257,10 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
       , (err) ->
         if err.status == 404  && err.data && err.data.error && err.data.error == "No bookable events found"
           if $scope.data_source && $scope.data_source.person
-            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'))
+            AlertService.warning(ErrorService.getError('PUBLIC_BOOKING.ALERTS.NOT_BOOKABLE_PERSON'))
             $scope.setLoaded $scope
           else if  $scope.data_source && $scope.data_source.resource
-            AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'))
+            AlertService.warning(ErrorService.getError('PUBLIC_BOOKING.ALERTS.NOT_BOOKABLE_RESOURCE'))
             $scope.setLoaded $scope
           else
             $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -309,7 +309,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scop
   $scope.setReady = () ->
     if !$scope.data_source.time
       AlertService.clear()
-      AlertService.add("danger", { msg: $translate.instant('SELECT_TIME_SLOT') })
+      AlertService.add("danger", { msg: $translate.instant('PUBLIC_BOOKING.TIME.TIME_NOT_SELECTED_ALERT') })
       return false
     else
       if $scope.data_source.reserve_ready

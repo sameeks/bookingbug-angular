@@ -2,17 +2,17 @@
 <div ng-hide="loading" class="bb-upcoming clearfix">
   <div class="bookings">
     <div ng-if="pre_paid_bookings.length == 0">
-      <h3 translate="NO_PREPAID_BOOKINGS"></h3>
+      <h3 translate="MEMBER.PREPAID_BOOKINGS.NO_PREPAID_BOOKINGS"></h3>
     </div>
     <ul class="bb-list bb-banded-list">
       <li ng-repeat="booking in pre_paid_bookings | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" class="bb-list-item">
         <div class="row">
           <div class="col-xs-4">{{booking.service_name}}</div>
           <div class="col-xs-8">
-            <span translate="REMAINING_BOOKINGS" translate-interpolation="messageformat"
+            <span translate="MEMBER.PREPAID_BOOKINGS.REMAINING_BOOKINGS" translate-interpolation="messageformat"
                   translate-values="{remaining: booking.remaining, total: booking.num_bookings}"></span>
             |
-            <span translate="PREPAID_BOOKING_DATES" translate-values="{booking: booking}"></span>
+            <span translate="MEMBER.PREPAID_BOOKINGS.PREPAID_BOOKING_DATES" translate-values="{booking: booking}"></span>
         </div>
       </li>
     </ul>

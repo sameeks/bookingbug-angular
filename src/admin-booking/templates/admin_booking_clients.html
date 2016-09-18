@@ -159,13 +159,15 @@
           <div ng-show="bb.company_settings.ask_address">
 
             <div class="form-group" ng-class="{'has-error': client_form.address1.$invalid && ((client_form.address1.$dirty && !client_form.address1.$focused) || booking_form.submitted)}">
-              <label for="address1" class="control-label">Address:</label>
+              <label for="address1" class="control-label">
+                <span translate="ADMIN_BOOKING.CUSTOMER.ADDRESS1_LABEL"></span>:
+              </label>
               <div>
                 <input type="text" name="address1" id="address1" ng-model="client.address1" class="form-control"/>
               </div>
               <div class="col-sm-3 messages">
                 <div class="error-message" ng-show="client_form.address1.$invalid && booking_form.submitted">
-                  Please enter your address
+                  <span translate="ADMIN_BOOKING.CUSTOMER.ADDRESS1_VALIDATION_MSG"></span>
                 </div>
               </div>
             </div>
@@ -178,21 +180,27 @@
             </div>
 
             <div class="form-group" ng-class="{'has-error': client_form.address3.$invalid && ((client_form.address3.$dirty && !client_form.address3.$focused) || booking_form.submitted)}">
-              <label for="address3" class="control-label">Town:</label>
+              <label for="address3" class="control-label">
+                <span translate="ADMIN_BOOKING.CUSTOMER.ADDRESS3_LABEL"></span>:
+              </label>
               <div>
                 <input type="text" name="address3" id="address3" ng-model="client.address3" class="form-control"/>
               </div>
             </div>
 
             <div class="form-group" ng-class="{'has-error': client_form.address4.$invalid && booking_form.submitted}">
-              <label for="address4" class="control-label">County:</label>
+              <label for="address4" class="control-label">
+                <span translate="ADMIN_BOOKING.CUSTOMER.ADDRESS4_LABEL"></span>:
+              </label>
               <div>
                 <input type="text" name="address4" id="address4" ng-model="client.address4" class="form-control"/>
               </div>
             </div>
 
             <div class="form-group" ng-class="{'has-error': client_form.postcode.$invalid && ((client_form.postcode.$dirty && !client_form.postcode.$focused) || booking_form.submitted)}">
-              <label for="postcode" class="control-label">Postcode:</label>
+              <label for="postcode" class="control-label">
+                <span translate="ADMIN_BOOKING.CUSTOMER.POSTCODE_LABEL"></span>:
+              </label>
               <div>
                 <input type="text" name="postcode" id="postcode" ng-model="client.postcode" class="form-control"/>
               </div>

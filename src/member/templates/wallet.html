@@ -2,28 +2,28 @@
 
   <div class="wallet-balance">
     <div ng-show="wallet.amount == 0">
-      <span>{{'BALANCE' | translate}}: </span>
-      <span translate="WALLET_NO_CREDIT"></span>
+      <span>{{'MEMBER.WALLET.BALANCE' | translate}}: </span>
+      <span translate="MEMBER.WALLET.WALLET_NO_CREDIT"></span>
     </div>
     <div ng-show="wallet.amount > 0">
-      <span>{{'BALANCE' | translate}}: </span>
+      <span>{{'MEMBER.WALLET.BALANCE' | translate}}: </span>
       <span id="balance">{{wallet.amount | currency}}</span>
     </div>
   </div>
 
   <div class="wallet-status">
     <div ng-hide="wallet.active">
-      <span>{{'STATUS'|translate}}: </span><span><b translate="WALLET_NOT_ACTIVE"></b></span>
-      <span><button ng-click="activateWallet(member)" translate="ACTIVATE"></button></span>
+      <span>{{'MEMBER.WALLET.STATUS'|translate}}: </span><span><b translate="MEMBER.WALLET.WALLET_NOT_ACTIVE"></b></span>
+      <span><button ng-click="activateWallet(member)" translate="MEMBER.WALLET.ACTIVATE"></button></span>
     </div>
     <div ng-show="wallet.active">
-      <span>{{'STATUS'|translate}}: </span><span id="status"><b translate="ACTIVE"></b></span>
+      <span>{{'MEMBER.WALLET.STATUS'|translate}}: </span><span id="status"><b translate="MEMBER.WALLET.ACTIVE"></b></span>
     </div>
   </div>
 
 
   <div>
-    <button type="button" class="btn btn-primary" ng-click="(show_topup_box = true);(show_wallet_logs = false);" translate="TOP_UP"></button>
+    <button type="button" class="btn btn-primary" ng-click="(show_topup_box = true);(show_wallet_logs = false);" translate="MEMBER.WALLET.TOP_UP"></button>
   </div>
 
   <br>
@@ -40,15 +40,15 @@
 
       <div ng-form class="form-inline">
         <div class="form-group">
-          <label for="amount">{{'AMOUNT' | translate}}:</label>
+          <label for="amount">{{'MEMBER.WALLET.AMOUNT' | translate}}:</label>
           <div class="input-group">
             <input type="number" class="form-control input-sm" id="amount" name="amount" ng-model="amount" placeholder="Enter Top Up Amount" bb-currency-field>
             <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!amount || (amount < wallet.min_amount)" ng-click="updateWallet(member, amount)" translate="TOP_UP"></button>
+              <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!amount || (amount < wallet.min_amount)" ng-click="updateWallet(member, amount)" translate="MEMBER.WALLET.TOP_UP"></button>
             </span>
           </div>
           <br>
-          <small translate="MIN_TOP_UP" translate-values="{amount: wallet.min_amount}"></small>
+          <small translate="MEMBER.WALLET.MIN_TOP_UP" translate-values="{amount: wallet.min_amount}"></small>
         </div>
       </div>
 
@@ -56,8 +56,8 @@
 
       <div ng-show="show_payment_iframe" class="bb-payment">
         <div class="bb-head">
-          <h3 translate="MAKE_PAYMENT"></h3>
-          <p translate="TOP_UP_WALLET"></p>
+          <h3 translate="MEMBER.WALLET.MAKE_PAYMENT"></h3>
+          <p translate="MEMBER.WALLET.TOP_UP_WALLET"></p>
         </div>
 
         <iframe id="bb-payment" ng-src="{{wallet_payment_url}}" width="100%" scrolling="no" frameborder="0"></iframe>

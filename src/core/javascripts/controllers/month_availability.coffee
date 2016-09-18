@@ -288,6 +288,6 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
       return true
     else
       AlertService.clear()
-      AlertService.add("danger", { msg: $translate.instant("SELECT_DATE") })
+      AlertService.add("danger", {msg: $translate.instant("PUBLIC_BOOKING.DAY.DATE_NOT_SELECTED")})
       return false
 

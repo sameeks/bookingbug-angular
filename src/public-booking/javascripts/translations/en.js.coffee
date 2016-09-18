@@ -48,6 +48,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BOOKING_CANCELLED: "Your booking has been cancelled."
         NOT_BOOKABLE_PERSON: "Sorry, this person does not offer this service, please select another"
         NOT_BOOKABLE_RESOURCE: "Sorry, resource does not offer this service, pelase select another"
+        SPEND_AT_LEAST: "You need to spend at least {{min_spend | pretty_price}} to make a booking.",
       }
       ITEM_DETAILS: {
         MOVE_BOOKING_SUCCESS_MSG: "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
@@ -73,6 +74,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         TIME_AND_DURATION: "{{time | datetime: 'LLLL':false}} for {{duration | time_period }}"
         PROGRESS_CANCEL: "Cancel"
         BASKET_CHECKOUT: "Checkout"
+        BASKET_STATUS: "{N, plural, =0 {empty}, one {One item in your basket}, others {#items in your basket}}"
       }
       BASKET_ITEM_SUMMARY: {
         ITEM_DURATION: "Duration"
@@ -208,6 +210,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         AVAIL_MONTH_PREVIOUS: "Previous Month"
         AVAIL_MONTH_NEXT: "Next Month"
         PROGRESS_BACK: "Back"
+        DATE_NOT_SELECTED: "You need to select a date"
       }
       DEAL_LIST: {
         BASKET_GIFT_CERTIFICATE: "Gift Certificates"
@@ -225,11 +228,13 @@ angular.module('BB.Services').config ($translateProvider) ->
         RECIPIENT_NAME: "Name"
         PROGRESS_BUY: "Buy"
         PROGRESS_BACK: "Back"
+        CERTIFICATE_NOT_SELECTED_ALERT: 'You need to select at least one Gift Certificate to continue'
       }
       DURATION_LIST: {
         ITEM_FREE: "Free"
         PROGRESS_SELECT: "Select"
         PROGRESS_BACK: "Back"
+        DURATON_NOT_SELECTED_ALERT: "You need to select a duration"
       }
       EVENT: {
         EVENT_DETAILS_TITLE: "Course details"
@@ -312,12 +317,14 @@ angular.module('BB.Services').config ($translateProvider) ->
         AVAIL_DAY_NEXT: "Next Day",
         AVAIL_NO: "No Service Available",
         PROGRESS_BACK: "No Service Available"
+        TIME_NOT_SELECTED_ALERT: "Please select a time slot"
+
       }
       SURVEY: {
         SURVEY_THANK_YOU: "Thank you for filling out the survey!",
-        ITEM_SESSION: "ITEM_SESSION":"Session",
-        ITEM_DATE: "ITEM_DATE":"Date",
-        SURVEY_WORD: "SURVEY_WORD":"Survey",
+        ITEM_SESSION: "Session",
+        ITEM_DATE: "Date",
+        SURVEY_WORD: "Survey",
         DETAILS_QUESTIONS: "Questions",
         SURVEY_SUBMIT: "Required",
         SURVEY_NO: "No survey questions for this session."

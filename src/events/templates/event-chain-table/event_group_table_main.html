@@ -1,11 +1,11 @@
-<button class="btn btn-default" ng-click="newEventGroup()">New Event Group</button>
+<button class="btn btn-default" ng-click="newEventGroup()" translate="EVENTS.EVENT_GROUP_TABLE.NEW_EVENT_CHAIN_BTN"></button>
 <table tr-ng-grid="" items="event_groups">
    <tbody>
     <tr>
       <td>
-        <button class="btn btn-default btn-sm" ng-click="delete(gridDisplayItem.id)" translate="DELETE">
+        <button class="btn btn-default btn-sm" ng-click="delete(gridDisplayItem.id)" translate="EVENTS.EVENT_GROUP_TABLE.NEW_EVENT_CHAIN_BTN">
         </button>
-        <button class="btn btn-default btn-sm" translate="EDIT" ng-click="edit(gridDisplayItem.id)">
+        <button class="btn btn-default btn-sm" translate="EVENTS.EVENT_GROUP_TABLE.NEW_EVENT_CHAIN_BTN" ng-click="edit(gridDisplayItem.id)">
         </button>
       </td>
     </tr>

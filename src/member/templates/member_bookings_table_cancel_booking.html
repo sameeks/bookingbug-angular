@@ -1,17 +1,17 @@
 <div class="modal-header">
-  <h3 class="modal-title" translate="PROGRESS_CANCEL_BOOKING"></h3>
+  <h3 class="modal-title" translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.TITLE"></h3>
 </div>
 <form ng-submit="ok()">
   <div class="modal-body" style="min-height: 200px">
     <div class="checkbox">
       <label>
         <input type="checkbox" ng-model="booking.notify">
-        {{'EMAIL_CUSTOMER_QUESTION' | translate}}
+        <span translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.EMAIL_CUSTOMER_LABEL"></span>
       </label>
     </div>
   </div>
   <div class="modal-footer">
-    <input type="submit" class="btn btn-primary" value="{{'PROGRESS_CANCEL_BOOKING' | translate}}">
-    <button class="btn btn-default" ng-click="close($event)" translate="PROGRESS_CLOSE"></button>
+    <button type="submit" class="btn btn-primary" translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.CANCEL_BOOKING_BTN"></button>
+    <button class="btn btn-default" ng-click="close($event)" translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.CANCEL_BTN"></button>
   </div>
 </form>
