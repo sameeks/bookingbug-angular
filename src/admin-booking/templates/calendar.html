@@ -16,7 +16,17 @@
 
 
           <div ng-if="!checking_conflicts">
-            <div ng-if="nearby_bookings">
+
+            <div ng-if="overlapping_bookings">
+              <p>The following bookings look like they are clashing with this requested time</p>      
+              <div class="container">    
+                <div class="row" ng-repeat="booking in overlapping_bookings">
+                  <div class="col-sm-12"><i class="fa fa-clock-o" aria-hidden="true"></i><strong> {{booking.full_describe}}</strong> </div>
+                </div>
+              </div>
+            </div>
+
+            <div ng-if="nearby_bookings && !overlapping_bookings">
               <p>The following nearby bookings might be clashing with this requested time</p>      
               <div class="container">    
                 <div class="row" ng-repeat="booking in nearby_bookings">
@@ -25,10 +35,20 @@
               </div>
             </div>
 
+            <div ng-if="external_bookings">
+              <p>The following external calendar bookings look like they are clashing with this requested time</p>      
+              <div class="container">    
+                <div class="row" ng-repeat="booking in external_bookings">
+                  <div class="col-sm-12"><i class="fa fa-clock-o" aria-hidden="true"></i><strong> {{booking.title}} from {{booking.start_time.format('lll')}}  to {{booking.end_time.format('lll')}} </strong> </div>
+                </div>
+              </div>
+            </div>
+
 
             <div ng-if="best_earlier || best_later">
               <div ng-if="step_mismatch">
-                <p>It looks like the booking step that service was configured for don't allow that time. You can select an alternative time, or you can try and booking the requested time anyway</p>
+                <p ng-if="allow_overbook">It looks like the booking step that service was configured for don't allow that time. You can select an alternative time, or you can try and booking the requested time anyway</p>
+                <p ng-if="!allow_overbook">It looks like the booking step that service was configured for don't allow that time. You can select an alternative time, or you can try and booking the requested time anyway, however making double bookings is not allowed by your business configuration settings</p>
                 <div class="row container">
                   <div class="col-sm-3"><button class="btn btn-primary" ng-click="pickTime(best_earlier)"><i class="fa fa-calendar-check-o"></i> <span>Closest Earlier</span>: {{best_earlier.datetime.format("LT")}}</button></div>
                   <div class="col-sm-3"><button class="btn btn-warning" ng-click="overBook()" ><i class="fa fa-calendar-times-o"></i> <span>Requested Time</span>: {{bb.current_item.defaults.datetime.format("LT")}}</button></div>
@@ -37,7 +57,8 @@
                 </div>
               </div>
               <div ng-if="!step_mismatch">
-                <p>Looks like that time wasn't available. This was the closest time I found. You can select an alternative time, or you can try and booking the requested time anyway</p>
+                <p ng-if="allow_overbook">Looks like that time wasn't available. This was the closest time I found. You can select an alternative time, or you can try and booking the requested time anyway</p>
+                <p ng-if="!allow_overbook">Looks like that time wasn't available. This was the closest time I found. You can select an alternative time, or you can try and booking the requested time anyway, however double bookings aren't allowed by your company configuration settings</p>
                 <div class="row">
                   <div class="col-sm-3" ng-if="best_earlier"><button  class="btn btn-primary" ng-click="pickTime(best_earlier)"><i class="fa fa-calendar-check-o"></i> <span>Closest Earlier</span>: {{best_earlier.datetime.format("LT")}}</button></div>
                   <div class="col-sm-3"><button  class="btn btn-warning" ng-click="overBook()"><i class="fa fa-calendar-times-o"></i> <span>Requested Time</span>: {{bb.current_item.defaults.datetime.format("LT")}}</button></div>

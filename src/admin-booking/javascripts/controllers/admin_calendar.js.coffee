@@ -99,12 +99,22 @@ angular.module('BB.Directives').directive 'bbAdminCalendarConflict', () ->
     time = $scope.bb.current_item.defaults.time
     duration = $scope.bb.current_item.duration
     end_time = time + $scope.bb.current_item.duration
-    st = time - 30
-    en = duration + 60
 
+
+    start_datetime = $scope.bb.current_item.defaults.datetime
+
+    # caclulate the max and min time we need to book around based on the service pre and post time
+    service = $scope.bb.current_item.service
+    min_time = start_datetime.clone().add(-(service.pre_time  || 0), 'minutes')
+    max_time = start_datetime.clone().add(duration + (service.post_time  || 0), 'minutes')
+
+    st = time - 30
+    en = time + duration + 30
 
     ibest_earlier = 0
     ibest_later = 0
+
+    $scope.allow_overbook = $scope.bb.company.settings.has_overbook
 
     if $scope.slots
       for slot in $scope.slots
@@ -115,6 +125,7 @@ angular.module('BB.Directives').directive 'bbAdminCalendarConflict', () ->
           ibest_later = slot.time
           $scope.best_later = slot
 
+    # I actaully think this time is available - just it's not on a schedule step that matches
     if ibest_earlier > 0 && ibest_later > 0 && ibest_earlier > time - duration && ibest_later < time + duration
       $scope.step_mismatch = true
 
@@ -130,6 +141,28 @@ angular.module('BB.Directives').directive 'bbAdminCalendarConflict', () ->
       if bookings.items.length > 0
         $scope.nearby_bookings = _.filter bookings.items, (x) -> 
           (($scope.bb.current_item.defaults.person && x.person_id == $scope.bb.current_item.defaults.person.id) || ($scope.bb.current_item.defaults.resources && x.resources_id == $scope.bb.current_item.defaults.resources.id))
+        $scope.overlapping_bookings = _.filter $scope.nearby_bookings, (x) ->
+          b_st = x.datetime.clone().subtract(-(x.pre_time || 0), "minutes")
+          b_en = x.end_datetime.clone().subtract((x.post_time || 0), "minutes")
+          (b_st.isBefore(max_time)) && (b_en.isAfter(min_time))        
+        $scope.nearby_bookings = false if $scope.nearby_bookings.length == 0
+        $scope.overlapping_bookings = false if $scope.overlapping_bookings.length == 0
+
+      if !$scope.overlapping_bookings && $scope.bb.company.$has('external_bookings') # no overlappying bookings - try external bookings
+        params =
+          start    : $scope.bb.current_item.defaults.datetime.format('YYYY-MM-DD')
+          end      : $scope.bb.current_item.defaults.datetime.clone().add(1, 'day').format('YYYY-MM-DD')
+          person_id : $scope.bb.current_item.defaults.person.id if $scope.bb.current_item.defaults.person
+          resource_id : $scope.bb.current_item.defaults.resource_id if $scope.bb.current_item.defaults.resource
+        $scope.bb.company.$get('external_bookings', params).then (collection) ->
+          bookings = collection.external_bookings
+          if bookings && bookings.length > 0
+            $scope.external_bookings = _.filter bookings, (x) -> 
+              x.start_time = moment(x.start)
+              x.end_time = moment(x.end)
+              x.title ||= "Blocked"
+              (x.start_time.isBefore(max_time)) && (x.end_time.isAfter(min_time))        
+
       $scope.checking_conflicts = false
     , (err) ->
       $scope.checking_conflicts = false
