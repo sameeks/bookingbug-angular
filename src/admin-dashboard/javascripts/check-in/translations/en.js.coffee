@@ -31,7 +31,6 @@ angular.module('BBAdminDashboard.check-in.translations')
         'COMPLETED'       : 'Completed',
         'NO_SHOW_BUTTON'  : 'Mark No Show',
         'CHECK_IN_BUTTON' : 'Check in',
-        'WAS_DUE'         : 'Was due at',
         'SERVE'           : 'Serve',
         'WAITING_FOR'     : 'Waiting for {{period}}',
         'BEING_SEEN_FOR'  : 'Being seen for {{period}}',

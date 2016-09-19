@@ -61,6 +61,9 @@
     }
 
     .bb-months {
+      padding: 0px !important;
+      width: 100% !important;
+
       @include make-xs-column(12);
       @include make-sm-column(8);
       @include make-md-column(10);
@@ -72,15 +75,6 @@
         margin: 0 auto;
       }
     }
-
-    .slick-disabled {
-      cursor: default;
-      opacity: 0.2;
-      cursor: false;
-      pointer-events: none;
-      filter: alpha(opacity=20);
-    }
-
 
     td {
 
@@ -137,6 +131,51 @@
         font-weight: normal;
       }
     }
+
+    #rnCarousel {
+      height: 300px;
+      margin-left: 30px;
+      margin-right: 30px;
+
+      li {
+        padding-left: 0px;
+      }
+
+      .carousel-table {
+        display: inline-block;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+    }
+
+    .rn-carousel-control.rn-carousel-control-prev:before {
+      content:"\e079";
+      font-family:"Glyphicons Halflings";
+      line-height:1;
+      display:inline-block;
+    }
+
+    .rn-carousel-control.rn-carousel-control-next:before {
+      content:"\e080";
+      font-family:"Glyphicons Halflings";
+      line-height:1;
+      display:inline-block;
+    }
+
+    .rn-carousel-control-next {
+      @media (max-width: $screen-xs-max) {
+        display: absolute;
+        right: 0;
+      }
+    }
+
+    .rn-carousel-control-prev {
+      @media (max-width: $screen-xs-max) {
+        display: absolute;
+        left: 0;
+      }
+    }
+
   }
 
   .bb-events-list {
@@ -428,3 +467,9 @@
   // }
 
 }
+
+
+
+
+
+

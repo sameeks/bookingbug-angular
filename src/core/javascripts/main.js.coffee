@@ -23,7 +23,6 @@ app = angular.module('BB', [
   'ngCookies',
   'pascalprecht.translate',
   'vcRecaptcha',
-  'slickCarousel',
   'ui.select',
 
   'BB.i18n'

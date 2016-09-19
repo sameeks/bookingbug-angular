@@ -58,9 +58,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
                 password: $scope.login.password
 
               $scope.login.selected_admin = _.first(administrators)
-
               $scope.login.selected_admin.$post('login', {}, params).then (login) ->
-                $scope.login.selected_admin.getCompanyPromise().then (company) ->
+                $scope.login.selected_admin.$getCompany().then (company) ->
                   $scope.template_vars.show_loading = false
                   # if there are departments show department selector
                   if company.companies && company.companies.length > 0
@@ -136,8 +135,9 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         params =
           email: $scope.login.email
           password: $scope.login.password
+
         $scope.login.selected_admin.$post('login', {}, params).then (login) ->
-          $scope.login.selected_admin.getCompanyPromise().then (company) ->
+          $scope.login.selected_admin.$getCompany().then (company) ->
             $scope.template_vars.show_loading = false
 
             if company.companies && company.companies.length > 0

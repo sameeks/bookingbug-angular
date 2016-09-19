@@ -115,6 +115,7 @@ angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSourc
               if booking.resource_id?
                 booking.resourceIds.push booking.resource_id  + '_r'
 
+              booking.title ||= "Blocked"
               if options.externalLabelAssembler?
                 booking.title = TitleAssembler.getTitle(booking, options.externalLabelAssembler)
 

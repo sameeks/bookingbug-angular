@@ -22,5 +22,4 @@ angular.module('BBMember').directive 'bbMemberPrePaidBookings', ($rootScope, Pag
         PaginationService.update(scope.pagination, pre_paid_bookings.length)
 
 
-    $rootScope.connection_started.then () ->
-      getBookings()
+    getBookings() if scope.member
