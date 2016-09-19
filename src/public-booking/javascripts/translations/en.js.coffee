@@ -71,7 +71,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_DETAILS_NO: "No items added to basket yet."
         ITEM: "Item"
         BASKET_ITEM_APPOINTMENT: "Appointment"
-        TIME_AND_DURATION: "{{time | datetime: 'LLLL':false}} for {{duration | time_period }}"
+        TIME_AND_DURATION: "{{time | datetime: 'LLLL'}} for {{duration | time_period}}"
         PROGRESS_CANCEL: "Cancel"
         BASKET_CHECKOUT: "Checkout"
         BASKET_STATUS: "{N, plural, =0 {empty}, one {One item in your basket}, others {#items in your basket}}"
@@ -122,7 +122,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         ALL_TIMES_IN: "All times are shown in {{time_zone_name}}."
         NO_AVAILABILITY: "{time_range_length, plural, It looks like there's no availability for the next {time_range_length} one{day} other{days}}"
         NEXT_AVAIL: "Jump to Next Available Day"
-        ANY_DATE: "\- Any Date \-"
+        ANY_DATE: "- Any Date -"
       }
       BASKET: {
         BASKET_TITLE: "Your basket"
