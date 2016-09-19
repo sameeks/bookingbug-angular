@@ -48,12 +48,13 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     return schema
 
 
-  editForm = ($scope, $uibModalInstance, model, title, success, fail) ->
+  editForm = ($scope, $uibModalInstance, model, title, success, fail, params) ->
     $scope.loading = true
     $scope.title = title
     $scope.model = model
+    params ||= {}
     if $scope.model.$has('edit')
-      $scope.model.$get('edit').then (schema) =>
+      $scope.model.$get('edit', params).then (schema) =>
         $scope.form = _.reject schema.form, (x) -> x.type == 'submit'
         model_type = model.constructor.name
         if FormTransform['edit'][model_type]
@@ -197,6 +198,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
         title: () -> config.title
         success: () -> config.success
         fail: () -> config.fail
+        params: () -> config.params || {}
 
   book: (config) ->
     templateUrl = config.templateUrl if config.templateUrl

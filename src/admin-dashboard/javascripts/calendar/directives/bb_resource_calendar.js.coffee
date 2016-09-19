@@ -369,6 +369,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         templateUrl: templateUrl
         model: booking
         title: title
+        params:
+          locale: $translate.use()
         success: (response) =>
           if typeof response == 'string'
             if response == "move"
