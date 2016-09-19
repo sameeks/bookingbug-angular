@@ -28,7 +28,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, $window) ->
+angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, SettingsService) ->
 
   ###**
   * @ngdoc method
@@ -182,7 +182,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $te
 
 
     scope.$watch () ->
-      angular.element($window.document.body).hasClass('modal-open')
+      SettingsService.isModalOpen()
     , (modalOpen) ->
       scope.coveredByModal = modalOpen && notInModal(element.parent())
 
