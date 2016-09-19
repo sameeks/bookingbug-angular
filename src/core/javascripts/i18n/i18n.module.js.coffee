@@ -1,3 +1,3 @@
 'use strict'
 
-angular.module('BB.i18n', [])
+angular.module('BB.i18n', ['tmh.dynamicLocale'])

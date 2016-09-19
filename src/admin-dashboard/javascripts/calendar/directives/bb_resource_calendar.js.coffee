@@ -65,6 +65,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
     $scope.uiCalOptions =
       calendar:
+        locale: $translate.use()
         schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: false
         eventDurationEditable: false
@@ -441,11 +442,11 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.$on 'newCheckout', () ->
       uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
 
-    $rootScope.$on 'LanguagePicker:changeLanguage', () ->
+    $rootScope.$on 'BBLanguagePicker:languageChanged', () ->
       # Horrible hack refresh page because FUllcalendar doesnt have a rerender method
       #  we have to refresh the state to load new translation
       $state.go($state.current, {}, {reload: true})
-
+      return
 
   link = (scope, element, attrs) ->
 
