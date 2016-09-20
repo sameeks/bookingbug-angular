@@ -11,11 +11,17 @@
 			<uib-accordion close-others="oneAtATime">
 		    <div uib-accordion-group class="panel-default" ng-repeat="item in basket_items" is-open="$first">
 		    	<uib-accordion-heading>
-		    		{{item.getName()}} <small>({{item.startDatetime() | datetime: 'llll'}})</small>
+		    		{{item.getName()}}
 		    	</uib-accordion-heading>
 
 
 	      	<ul class="bb-list bb-list-bordered-in">
+	      		<li>
+	      			<div class="row">
+		      			<div class="col-sm-4"><b>Date/Time:</b></div>
+		      			<div class="col-sm-8">{{item.startDatetime() | datetime: 'llll'}}</div>
+		      		</div>
+      			</li>
 	      		<li>
 	      			<div class="row">
 		      			<div class="col-sm-4"><b>Duration:</b></div>
