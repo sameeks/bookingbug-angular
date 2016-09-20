@@ -143,7 +143,7 @@ angular.module('BB.Directives').directive 'bbAdminCalendarConflict', () ->
           (($scope.bb.current_item.defaults.person && x.person_id == $scope.bb.current_item.defaults.person.id) || ($scope.bb.current_item.defaults.resources && x.resources_id == $scope.bb.current_item.defaults.resources.id))
         $scope.overlapping_bookings = _.filter $scope.nearby_bookings, (x) ->
           b_st = x.datetime.clone().subtract(-(x.pre_time || 0), "minutes")
-          b_en = x.end_datetime.clone().subtract((x.post_time || 0), "minutes")
+          b_en = moment(x.end_datetime).clone().subtract((x.post_time || 0), "minutes")
           (b_st.isBefore(max_time)) && (b_en.isAfter(min_time))        
         $scope.nearby_bookings = false if $scope.nearby_bookings.length == 0
         $scope.overlapping_bookings = false if $scope.overlapping_bookings.length == 0
