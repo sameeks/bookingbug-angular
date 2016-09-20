@@ -15,8 +15,8 @@ angular.module('BB.Services').config ($translateProvider) ->
           APPOINTMENT_QUESTION: 'Are you sure you want to cancel this appointment?'
         }
         SCHEMA_FORM: {
-          OK_BTN: 'Ok'
-          CANCEL_BTN: 'Cancel'
+          OK_BTN: '@:CORE.COMMON.BTN.OK'
+          CANCEL_BTN: '@:CORE.COMMON.BTN.CANCEL'
         }
       }
       FILTERS: {
@@ -29,7 +29,7 @@ angular.module('BB.Services').config ($translateProvider) ->
           CURRENCY_FORMAT: '%s%v'
         }
         PRETTY_PRICE: {
-          FREE: 'Free'
+          FREE: '@:CORE.COMMON.PRICE_FREE'
         }
         TIME_PERIOD: {
           TIME_SEPARATOR: " and "
@@ -41,12 +41,70 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
     }
     COMMON: {
+      TERMINOLOGY: {
+        CATEGORY: 'Category'
+        DURATION: 'Duration'
+        RESOURCE: 'Resource'
+        PERSON: 'Person'
+        SERVICE: 'Service'
+        WALLET: 'Wallet'
+        SESSION: 'Session'
+        EVENT: 'Event'
+        COURSE: 'Course'
+        DATE: 'Date'
+        TIME: 'Time'
+        WHEN: 'When'
+        DURATION: 'Duration'
+        GIFT_CERTIFICATE: 'Gift Certificate'
+        ITEM: 'Item'
+        FILTER: 'Filter'
+        ANY: 'Any'
+        RESET: 'Reset'
+        TOTAL: 'Total'
+        TOTAL_DUE_NOW: 'Total Due Now'
+        PRICE: 'Price'
+        PRICE_FREE: 'Free'
+        PRINT: 'Print'
+        AND: 'and'
+      }
+      FORM: {
+        FIRST_NAME: 'First Name'
+        FIRST_NAME_REQUIRED: 'Please enter your first name'
+        LAST_NAME: 'Last Name'
+        LAST_NAME_REQUIRED: 'Please enter your last name'
+        FULL_NAME: 'Full Name'
+        ADDRESS1: 'Address'
+        ADDRESS_REQUIRED: ''
+        ADDRESS3: 'Town'
+        ADDRESS4: 'County'
+        POSTCODE: 'Postcode'
+        PHONE: 'Phone'
+        MOBILE: 'Mobile'
+        MOBILE_REQUIRED: 'Please enter a valid mobile number'
+        EMAIL: 'Email'
+        EMAIL_REQURIED: 'Please enter your email'
+        EMAIL_PATTERN: 'Please enter a valid email address'
+        FIELD_REQUIRED: ''
+        PASSWORD: 'Password'
+        PASSWORD_REQUIRED: 'Please enter your password'        
+      }
       BTN: {
         CANCEL: 'Cancel'
         CLOSE: 'Close'
         NO: 'No'
         OK: 'OK'
         YES: 'Yes'
+        BACK: 'Back'
+        NEXT: 'Continue'
+        LOGIN: 'Login'
+        CONFIRM: 'Confirm'
+        SAVE: 'Save'
+        SELECT: 'Select'
+        BOOK: 'Book'
+        CANCEL_BOOKING: 'Cancel Booking'
+        DO_NOT_CANCEL_BOOKING: 'Do not cancel'
+        APPLY: 'Apply'
+
       }
       LANGUAGE: {
         EN: 'English'
