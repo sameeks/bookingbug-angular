@@ -5,36 +5,37 @@
       <div class="bb-subcontent">
         <div class="confirmation-header bb-confirmation-border-margin">
           <div ng-if="!total.containsWaitlistItems()">
-            <h2>Booking Confirmation</h2>
-            <p class="bb-confirmation-p-alignment">Booking is now confirmed. <span ng-if="total.client.email">An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</span></p>
+            <h2 id="bb-confirmation-summary-title"> Booking Confirmation</h2>
+            <p  id="bb-confirmation-summary-subtitle" class="bb-confirmation-p-alignment">Booking is now confirmed. <span ng-if="total.client.email">An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</span></p>
           </div>
            <div ng-if="total.containsWaitlistItems()">
-            <h2>Confirmation</h2>
-            <p class="bb-confirmation-p-alignment">You have successfully made the following bookings. <span ng-if="total.client.email">An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</span></p>
+            <h2 id="bb-confirmation-summary-title">Confirmation</h2>
+            <p id="bb-confirmation-summary-title" class="bb-confirmation-p-alignment">You have successfully made the following bookings. <span ng-if="total.client.email">An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.</span></p>
+
           </div>
         </div>
 
         <div>
           <ul class="confirmation-summary">
-            <li class="row confirmation-summary-item">
+            <li id="bb-confirmation-summary-reference" class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Reference:</div>
               <div class="col-sm-9 bb-summary-value">   {{ total.id }}</div>
             </li>
-            <li class="row confirmation-summary-item">
+            <li id="bb-confirmation-summary-customer" class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Customer:</div>
               <div class="col-sm-9 bb-summary-value">   {{ total.client.first_name  }}  {{ total.client.last_name }}</div>
             </li>
           </ul>
           <ul class="confirmation-summary" ng-repeat="i in total.items">
-            <li ng-if="i.full_describe" class="row confirmation-summary-item">
+            <li id="bb-confirmation-summary-service" ng-if="i.full_describe" class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Service:</div>
               <div class="col-sm-9 bb-summary-value">   {{ i.full_describe }}</div>
             </li>
-            <li ng-if="i.describe" class="row confirmation-summary-item">
+            <li id="bb-confirmation-summary-datetime" ng-if="i.describe" class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Date/Time:</div>
               <div class="col-sm-9 bb-summary-value">   {{ i.describe }}</div>
             </li>
-            <li ng-if="i.price" class="row confirmation-summary-item">
+            <li id="bb-confirmation-summary-price" ng-if="i.price" class="row confirmation-summary-item">
               <div class="col-sm-3 bb-summary-label">Price:</div>
               <div class="col-sm-9 bb-summary-value">   {{ i.price | currency }}</div>
             </li>
