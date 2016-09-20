@@ -1,0 +1,393 @@
+'use strict';
+
+angular.module('BB.Services').config ($translateProvider) ->
+  'ngInject'
+
+  translations = {
+    PUBLIC_BOOKING: {
+      ACCORDION_RANGE_GROUP: {
+        AVAILABLE: '{number, plural, =0{Aucun disponible} one{1 disponible} other{# disponibles}}'
+      }
+      ALERTS: {
+        ACCOUNT_DISABLED: "Votre compte semble desactivé. Merci de contacter le commerce si le problème persiste"
+        ALREADY_REGISTERED: "Il y a déjà un compte pour cette addresse email. Veuillez vous connecter ou changer votre mot de passe."
+        APPT_AT_SAME_TIME: "Votre rendez-vous est déja réservé à la même heure"
+        ATTENDEES_CHANGED: "Votre réservation a été mise à jour"
+        EMAIL_ALREADY_REGISTERED_ADMIN: "Il y a déjà un compte associé à cette addresse mail. Utilisez le champ de research."
+        EMPTY_BASKET_FOR_CHECKOUT:"Il n'y a aucun élément dans le panier."
+        FB_LOGIN_NOT_A_MEMBER: "Aucun compte associé à ce compte Facebook. Veuillez vous enregistrer avec Facebook d'abord"
+        FORM_INVALID: "Saisissez tous les champs obligatoires"
+        GENERIC:"Désolé, il semble qu'une erreur s'est produite. Essayez de nouveau et contactez le service client si le problème persiste."
+        GEOLOCATION_ERROR: "Sorry, we could not determine your location. Please try searching instead."
+        GIFT_CERTIFICATE_REQUIRED: "Cette réservaction nécessited une carte cadeau"
+        INVALID_POSTCODE: "Saisissez un code postal valide"
+        ITEM_NO_LONGER_AVAILABLE: "Désolé. L'article que vous souhaitez réserver n'est plus disponible."
+        NO_WAITLIST_SPACES_LEFT: "Sorry, the space has now been taken, you are still in the waitlist and we will notify you if more spaces become available"
+        LOCATION_NOT_FOUND: "SDésolé, nous ne reconnaissons pas cet adresse"
+        LOGIN_FAILED: "Désolé, votre email ou mot de passe n'a pas été reconnu. Merci de réessayer ou de changer votre mot de passe"
+        SSO_LOGIN_FAILED: "Something went wrong when trying to log you in. Please try again."
+        MAXIMUM_TICKETS: "Désolé, le nombre maximum de billets par personne a été dépassé.",
+        MISSING_LOCATION: "Saisissez votre adresse"
+        MISSING_POSTCODE: "Saisissez votre code postal"
+        PASSWORD_INVALID: "Désolé, votre mot de passe n'est pas valide"
+        PASSWORD_MISMATCH: "Vos mots de passe sont différents"
+        PASSWORD_RESET_FAILED: "Désolé, nous n'avons pas pu mettre votre mot de passe à jour. Merci de réessayer"
+        PASSWORD_RESET_REQ_FAILED: "Désolé, nous n'avons pas trouvé de compte pour cet email."
+        PASSWORD_RESET_REQ_SUCCESS: "Nous avons envoyé un email avec un lien pour changer votre mot de passe."
+        PASSWORD_RESET_SUCESS: "Votre mot de passe a été mis à jour."
+        PAYMENT_FAILED: "Le paiement a échoué. Veuillez contacter votre banque ou essayer une autre carte"
+        PHONE_NUMBER_ALREADY_REGISTERED_ADMIN: "Il y a déjà un compte associé à ce numéro de téléphone. Utilisez le champ de research."
+        REQ_TIME_NOT_AVAIL: "Ce créneau est pris, merci d'en choisir un autre."
+        TIME_SLOT_NOT_SELECTED: "Veuillez choisir un créneau"
+        STORE_NOT_SELECTED: "You need to select a store"
+        TOPUP_FAILED: "Désolé, votre porte-feuille n'a pas pu être rechargé, veuillez réessayer."
+        TOPUP_SUCCESS: "Votre portefeuille a été rechargé"
+        UPDATE_FAILED: "Mise à jour ratée. Merci de réessayer"
+        UPDATE_SUCCESS: "Mis à jour"
+        WAITLIST_ACCEPTED: "Your booking is now confirmed!"
+        BOOKING_CANCELLED: "Your booking has been cancelled."
+        NOT_BOOKABLE_PERSON: "Sorry, this person does not offer this service, please select another"
+        NOT_BOOKABLE_RESOURCE: "Sorry, resource does not offer this service, pelase select another"
+        SPEND_AT_LEAST: "Le montant minimal pour une réservation est de {{min_spend | pretty_price}}.",
+      }
+      ITEM_DETAILS: {
+        MOVE_BOOKING_SUCCESS_MSG: "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
+        MOVE_BOOKING_FAIL_MSG: "Failed to move booking. Please try again."
+      }
+      ADD_RECIPIENT: {
+        MODAL_TITLE: "Recipient",
+        WHO_TO_QUESTION: "Who should we send the gift voucher to?"
+        WHO_TO_OPTION_ME: "Moi",
+        WHO_TO_OPTION_NOT_ME: "quelqu'un d'autre"
+        NAME_LABEL: "Nom",
+        NAME_VALIDATION_MSG: "Ecrivez le nom complet du destinataire"
+        EMAIL_LABEL: "Email"
+        EMAIL_VALIDATION_MSG: "Saisissez une adresse email valide"
+        ADD_LABEL: "Ajouter un destinataire"
+        CANCEL_LABEL: "Cancel"
+      }
+      BASKET_DETAILS: {
+        BASKET_DETAILS_TITLE: "Panier Détails"
+        BASKET_DETAILS_NO: "Aucun élément dans votre panier."
+        ITEM: "Article"
+        BASKET_ITEM_APPOINTMENT: "Rendez-vous"
+        TIME_AND_DURATION: "{{ time | datetime: 'LLLL':false}} pour {{ duration | time_period }}"
+        PROGRESS_CANCEL: "Annuler"
+        BASKET_CHECKOUT: "Caisse"
+        BASKET_STATUS: "{N, plural, =0 {vide}, one {Un article dans votre panier}, others {# articles dans votre panier}}"
+      }
+      BASKET_ITEM_SUMMARY: {
+        ITEM_DURATION: "Durée"
+        ITEM_RESOURCE: "Ressource"
+        ITEM_PERSON: "Personne"
+        ITEM_PRICE: "Prix"
+        ITEM_DATE: "Date"
+        ITEM_TIME: "Heure"
+      }
+      CANCEL_MODAL: {
+        CANCEL_QUESTION: "Êtes-vous sûr que vous voulez annuler cette réservation?"
+        ITEM_SERVICE: "Service"
+        ITEM_WHEN: "Quand"
+        PROGRESS_CANCEL_BOOKING: "Annuler Réservation"
+        PROGRESS_CANCEL_CANCEL: "Ne pas annuler"
+      }
+      MEMBER_LOGIN_FORM: {
+        EMAIL_LABEL: "Email"
+        EMAIL_VALIDATION_REQUIRED_MESSAGE: "Please enter your email"
+        EMAIL_VALIDATION_PATTERN_MESSAGE: "Please enter a valid email address"
+        PASSWORD_LABEL: "Password"
+        PLEASE_ENTER_PASSWORD: "Veuillez entrer le mot de passe"
+        REMEMBER_ME: "Rester connecter"
+        LOGIN: "Connexion"
+      }
+      MONTH_PICKER: {
+        PROGRESS_PREVIOUS: "Précédent"
+        PROGRESS_NEXT: "Suivant"
+      }
+      POPOUT_EXPORT_BOOKING: {
+        LONG_EXPORT_LABEL: "Export to calendar"
+        SHORT_EXPORT_LABEL: "Exporter"
+      }
+      PRICE_FILTER: {
+        ITEM_PRICE: "Prix"
+      }
+      SERVICE_LIST_FILTER: {
+        FILTER: "Filtre"
+        FILTER_CATEGORY: "Catégorie"
+        FILTER_ANY: "Tout"
+        ITEM_SERVICE: "Service"
+        FILTER_RESET: "Remettre"
+      }
+      WEEK_CALENDAR: {
+        ALL_TIMES_IN: "All times are shown in {{time_zone_name}}."
+        NO_AVAILABILITY: "{time_range_length, plural, It looks like there's no availability for the next {time_range_length} one{day} other{days}}"
+        NEXT_AVAIL: "Jump to Next Available Day"
+        ANY_DATE: "- Date -"
+      }
+      BASKET: {
+        BASKET_TITLE: "Votre Panier"
+        BASKET_ITEM_NO: "Aucun élément dans votre panier."
+        BASKET_ITEM_ADD_INSTRUCT: "Cliquez sur le bouton 'Ajouter un autre article' si vous souhaitez ajouter un autre produit ou service."
+        ITEM: "Article"
+        ITEM_PRICE: "Prix"
+        BASKET_RECIPIENT: "Recipient"
+        BASKET_CERTIFICATE_PAID: "Chèques-cadeaux payé"
+        BASKET_GIFT_CERTIFICATES: "Chèques-cadeaux"
+        BASKET_PRICE_ORIGINAL: "Prix d'origine"
+        BASKET_BOOKING_FEE: "Frais de réservation"
+        BASKET_GIFT_CERTIFICATES_TOTAL: "Total des chèque-cadeau"
+        BASKET_GIFT_CERTIFICATE_BALANCE: "La valeur restante de vos chèques-cadeaux"
+        BASKET_COUPON_DISCOUNT: "Coupon"
+        BASKET_TOTAL: "Total"
+        BASKET_TOTAL_DUE_NOW: "Total à payer"
+        BASKET_WALLET: "portefeuille"
+        BASKET_WALLET_BALANCE: "Current Wallet Balance"
+        BASKET_WALLET_BALANCE_INSUFFICIENT: "Oh non! Vous n'avez pas assez d'argent dans votre portefeuille. Vous pouvez soit payer le montant intégral, soit recharger votre portefeuille."
+        BASKET_WALLET_REMAINDER_PART_ONE: "Vous aurez"
+        BASKET_WALLET_REMAINDER_PART_TWO: "restant dans votre portefeuille après cet achat"
+        BASKET_WALLET_TOP_UP: "Top Up"
+        BASKET_COUPON_APPLY: "Appliquer un coupon"
+        PROGRESS_APPLY: "Appliquer"
+        BASKET_GIFT_CERTIFICATE_QUESTION: "Avez-vous un chèque-cadeau?"
+        BASKET_GIFT_CERTIFICATE_APPLY: "Utiliser un chèque-cadeau"
+        BASKET_GIFT_CERTIFICATE_APPLY_ANOTHER: "Utiliser une autre chèque-cadeau"
+        PROGRESS_APPLY: "Appliquer"
+        BASKET_ITEM_ADD: "Ajouter un autre élément"
+        BASKET_CHECKOUT: "Caisse"
+        PROGRESS_BACK: "Retour"
+      }
+      BASKET_ITEM_SUMMARY: {
+        STEP_TITLE: "Summary"
+        STEP_DESCRIPTION: "Please review the following information"
+        DURATION_LABEL: "Durée"
+        FULL_NAME_LABEL: "Full name"
+        EMAIL_LABEL: "Mail"
+        MOBILE_LABEL: "Mobile"
+        ADDRESS_LABEL: "Adresse"
+        PRICE_LABEL: "Prix"
+        CONFIRM_BUTTON: "Confirmer"
+        BACK_BUTTON: "Retour"
+      }
+      BASKET_WAITLIST: {
+        WAITLIST_BOOKING_TITLE: "Votre réservation est sur liste d'attente"
+        BOOKING_REFERENCE: "Référence de votre réservation"
+        ITEM_SERVICE: "Service"
+        ITEM_DATE_AND_OR_TIME: "Date/Heure"
+        ITEM_PRICE: "Prix"
+        PROGRESS_BOOK: "Réserver"
+        BASKET_TOTAL: "Total"
+        BASKET_TOTAL_DUE_NOW: "Total à payer"
+        CONFIRMATION_WAITLIST_SUBHEADER: "Merci {{ member_name }}. Vous avez réservé avec succès {{ purchase_item }}."
+        BASKET_TOTAL: "Total"
+        BASKET_TOTAL_DUE_NOW: "Total à payer"
+        PRINT: "Print"
+        PROGRESS_BACK: "Retour"
+      }
+      ERROR_MODAL: {
+        PROGRESS_OK: "OK"
+      }
+      MEMBER_FORM: {
+        FIRST_NAME_LABEL: "Prénom"
+        LAST_NAME_LABEL: "Nom"
+        EMAIL_LABEL: "Mail"
+        PHONE_LABEL: "Téléphone"
+        MOBILE_LABEL: "Mobile"
+        SAVE_BUTTON: "Save"
+      }
+      BASKET_WALLET: {
+        BASKET_WALLET_MAKE_PAYMENT: "effectuer le paiement"
+        BASKET_WALLET_TOP_UP: "Top Up"
+        BASKET_WALLET_AMOUNT: "Montant"
+        BASKET_WALLET: "portefeuille"
+        BASKET_WALLET_AMOUNT_MINIMUM: "Le montant de recharge minimum doit être supérieur"
+        PROGRESS_BACK: "Retour"
+      }
+      DASH: {
+        DASHBOARD: "Tableau de bord"
+        DASHBOARD_TITLE: "Choisissez un emplacement / service"
+      }
+      DAY: {
+        AVAIL_MONTH_PREVIOUS: "Mois Précédent"
+        AVAIL_MONTH_NEXT: "Mois suivant"
+        PROGRESS_BACK: "Retour"
+        DATE_NOT_SELECTED: "You need to select a date"
+      }
+      DEAL_LIST: {
+        BASKET_GIFT_CERTIFICATE: "Chèques-cadeaux"
+        BASKET_GIFT_CERTIFICATE_BUY: "Acheter un chèque-cadeau"
+        BASKET_GIFT_CERTIFICATE_SELECTED: "Chèques-cadeaux sélectionnés"
+        ITEM: "Article"
+        ITEM_PRICE: "Prix"
+        RECIPIENT_ADD: "Ajouter un destinataire"
+        RECIPIENT_NAME: "Nom"
+        DETAILS_EMAIL: "Mail"
+        PROGRESS_ADD: "Ajouter"
+        RECIPIENT_NAME_VALIDATION_MSG: "Ecrivez le nom complet du destinataire"
+        RECIPIENT_EMAIL_VALIDATION_MSG: "Saisissez une adresse email valide"
+        RECIPIENT: "Destinataire"
+        RECIPIENT_NAME: "Nom"
+        PROGRESS_BUY: "Acheter"
+        PROGRESS_BACK: "Retour"
+        CERTIFICATE_NOT_SELECTED_ALERT: 'You need to select at least one Gift Certificate to continue'
+      }
+      DURATION_LIST: {
+        ITEM_FREE: "Gratuit"
+        PROGRESS_SELECT: "Choisir"
+        PROGRESS_BACK: "Retour"
+        DURATON_NOT_SELECTED_ALERT: "You need to select a duration"
+      }
+      EVENT: {
+        EVENT_DETAILS_TITLE: "Détails de l'événement"
+        DETAILS_TITLE: "Vos coordonnées"
+        DETAILS_FIRST_NAME: "Prénom"
+        DETAILS_FIRST_NAME_VALIDATION_MSG: "Saisissez votre prénom"
+        DETAILS_LAST_NAME: "Nom"
+        DETAILS_LAST_NAME_VALIDATION_MSG: "Saisissez votre nom"
+        DETAILS_EMAIL: "Mail"
+        DETAILS_EMAIL_VALIDATION_MSG: "Saisissez une adresse email valide"
+        STORE_PHONE: "Téléphone"
+        DETAILS_PHONE_MOBILE_VALIDATION_MSG: "Saisissez un numéro de téléphone valide"
+        DETAILS_ADDRESS: "Adresse"
+        DETAILS_ADDRESS_VALIDATION_MSG: "Merci d'entrer votre adresse"
+        DETAILS_TOWN: "Ville"
+        DETAILS_COUNTY: "Comté"
+        DETAILS_POSTCODE: "Code Postal"
+        INVALID_POSTCODE: "Saisissez un code postal valide"
+        DETAILS_VALIDATION_MSG: "Ce champ est obligatoire"
+        ATTENDEE_IS_YOU_QUESTION: "Êtes-vous le participant?"
+        ATTENDEE_USE_MY_DETAILS: " Utiliser mes coordonnées"
+        DETAILS_TERMS: " J'accepte les conditions générales de vente."
+        DETAILS_TERMS_VALIDATION_MSG: "Vous devez accepter les conditions générales de vente"
+      }
+      EVENT_GROUP_LIST: {
+        PROGRESS_SELECT: "Choisir"
+      }
+      EVENT_LIST: {
+        EVENT_LOCATION: "Evénements à"
+        FILTER: "Filtre"
+        FILTER_CATEGORY: "Catégorie"
+        FILTER_ANY: "Tout"
+        ITEM_DATE: "Date"
+        ITEM_PRICE: "Prix"
+        EVENT_SOLD_OUT_HIDE: "Cacher les événements indisponibles"
+        EVENT_SOLD_OUT_SHOW: "Afficher les événements indisponibles"
+        FILTER_RESET: "Remettre"
+        FILTER_NONE: "Tous les événements"
+        FILTER_FILTERED: "Afficher les événements filtrés"
+        EVENT_WORD: "Événements"
+        EVENT_NO: "Aucun événement trouvé"
+        EVENT_SPACE_WORD: "espace"
+        EVENT_LEFT_WORD: "restant"
+        ITEM_FROM: "À partir de"
+        PROGRESS_BOOK: "Réserver"
+        EVENT_SOLD_OUT: "Épuisé"
+        EVENT_JOIN_WAITLIST: "S'inscrire sur la liste d'attente"
+      }
+      MAIN: {
+        POWERED_BY: "Réservations par"
+      }
+      MAIN_ACCOUNT: {
+        POWERED_BY: "Réservations par"
+      }
+      MAIN_CONFIRMATION: {
+        POWERED_BY: "Réservations par"
+      }
+      MAIN_EVENT: {
+        POWERED_BY: "Réservations par"
+      }
+      MAIN_GIFT_CERTIFICATE: {
+        POWERED_BY: "Réservations par"
+      }
+      MAIN_VIEW_BOOKING: {
+        POWERED_BY: "Réservations par"
+      }
+      MAP: {
+        PROGRESS_SEARCH: "Rechercher"
+        STORE_RESULT_TITLE: "{results, plural, =0{Aucun réultat trouvé} one{1 résultat trouvé} other{# résultats trouvés}} pour les magasins à proximité de {address}"
+        HIDE_STORES: "Masquer les magasins sans disponibilité"
+        SERVICE_UNAVAILABLE: "Désolé mais {{name}} n'est pas disponible dans ce magasin"
+        PROGRESS_SELECT: "Choisir"
+      }
+      MEMBERSHIP_LEVELS: {
+        MEMBERSHIP_TYPES: "Types d'adhésion"
+        PROGRESS_SELECT: "Choisir"
+      }
+      TIME: {
+        AVAIL_DAY_PREVIOUS: "Jour Précédent",
+        AVAIL_DAY_NEXT: "Jour suivant",
+        AVAIL_NO: "Aucun service disponible",
+        PROGRESS_BACK: "Retour"
+        TIME_NOT_SELECTED_ALERT: "Please select a time slot"
+
+      }
+      SURVEY: {
+        SURVEY_THANK_YOU: "Merci de remplir le questionnaire!",
+        ITEM_SESSION: "Session",
+        ITEM_DATE: "Date",
+        SURVEY_WORD: "Enquête",
+        DETAILS_QUESTIONS: "Questions",
+        SURVEY_SUBMIT: "Soumettre les réponses",
+        SURVEY_NO: "Pas de questions de l'enquête pour cette session."
+      }
+      SERVICE_LIST: {
+        ITEM_FREE: "Gratuit",
+        PROGRESS_SELECT: "Choisir",
+        SERVICE_LIST_NO: "Aucun service répondant à vos critères de filtrage.",
+        PROGRESS_BACK: "Retour"
+      }
+      RESOURCE_LIST: {
+        PROGRESS_SELECT: "Choisir",
+        PROGRESS_BACK:  "Retour"
+      }
+      RESCHEDULE_REASONS:{
+        MOVE_TITLE: "Move Appointment ",
+        MOVE_REASON: "Please select a reason for moving your appointment:"
+        MOVE_BUTTON: "Move Appointment"
+        }
+      PURCHASE: {
+        CANCEL_CONFIRMATION: "Votre réservation a été annulée.",
+        CONFIRMATION_PURCHASE_TITLE: "Votre {{ service_name }} réservation",
+        RECIPIENT_NAME: "Nom",
+        PRINT: " Imprimer",
+        DETAILS_EMAIL: "Mail",
+        ITEM_SERVICE: "Service",
+        ITEM_WHEN: "Quand",
+        ITEM_PRICE: "Prix",
+        PROGRESS_CANCEL_BOOKING: "Annuler Réservation",
+        PROGRESS_MOVE_BOOKING: "Modifier la réservation",
+        PROGRESS_BOOK_WAITLIST_ITEMS: "Réserver des articles en liste d'attente"
+      }
+      PRINT_PURCHASE: {
+        CONFIRMATION_BOOKING_TITLE: "Confirmation de réservation",
+        CONFIRMATION_BOOKING_SUBHEADER: "Merci {{member_name}}. Votre réservation est à présent confirmée. Nous vous avons envoyé par email les informations ci-dessous.",
+        CALENDAR_EXPORT_TITLE: "Exporter",
+        PRINT: " Imprimer",
+        AND: "et",
+        ITEM: "Article",
+        ITEM_DATE: "Date",
+        ITEM_QUANTITY: "Quantité",
+        BOOKING_REFERENCE: "Référence de votre réservation",
+        POWERED_BY: "Réservations par"
+      }
+      PERSON_LIST: {
+        PROGRESS_SELECT: "Choisir",
+        PROGRESS_BACK: "Retour"
+      }
+      MONTHLY_CALENDAR: {
+        SELECT_DAY: "Choisir jour",
+        WEEK_BEGINNING: "La semaine commençant le",
+        PICK_A_DATE: "Choisir une date",
+        PREVIOUS_5_WEEKS: "5 semaines précédentes",
+        NEXT_5_WEEKS: "5 semaines suivantes",
+        KEY: "Clé",
+        AVAILABLE: "{number, plural, =0{Aucun disponible} one{1 disponible} other{# disponibles}}",
+        UNAVAILABLE: "Non disponible",
+        PROGRESS_BACK: "Retour"
+      }
+    }
+  }
+
+  $translateProvider.translations('fr', translations)
+
+  return
+
