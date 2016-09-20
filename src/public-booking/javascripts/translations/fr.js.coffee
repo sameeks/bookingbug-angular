@@ -18,14 +18,14 @@ angular.module('BB.Services').config ($translateProvider) ->
         FB_LOGIN_NOT_A_MEMBER: "Aucun compte associé à ce compte Facebook. Veuillez vous enregistrer avec Facebook d'abord"
         FORM_INVALID: "Saisissez tous les champs obligatoires"
         GENERIC:"Désolé, il semble qu'une erreur s'est produite. Essayez de nouveau et contactez le service client si le problème persiste."
-        GEOLOCATION_ERROR: "Sorry, we could not determine your location. Please try searching instead."
+        GEOLOCATION_ERROR: "Désolé, nous n'avons pas pu déterminer votre location. Veuillez entrer une location."
         GIFT_CERTIFICATE_REQUIRED: "Cette réservaction nécessited une carte cadeau"
         INVALID_POSTCODE: "Saisissez un code postal valide"
         ITEM_NO_LONGER_AVAILABLE: "Désolé. L'article que vous souhaitez réserver n'est plus disponible."
-        NO_WAITLIST_SPACES_LEFT: "Sorry, the space has now been taken, you are still in the waitlist and we will notify you if more spaces become available"
-        LOCATION_NOT_FOUND: "SDésolé, nous ne reconnaissons pas cet adresse"
+        NO_WAITLIST_SPACES_LEFT: "Désolé, la place a été prise, vous êtes sur liste d'attente et nous vous écririons quand plus de places seront disponibles"
+        LOCATION_NOT_FOUND: "Désolé, nous ne reconnaissons pas cet adresse"
         LOGIN_FAILED: "Désolé, votre email ou mot de passe n'a pas été reconnu. Merci de réessayer ou de changer votre mot de passe"
-        SSO_LOGIN_FAILED: "Something went wrong when trying to log you in. Please try again."
+        SSO_LOGIN_FAILED: "Il y a eu une erreur de connection. Veuillez réessayer."
         MAXIMUM_TICKETS: "Désolé, le nombre maximum de billets par personne a été dépassé.",
         MISSING_LOCATION: "Saisissez votre adresse"
         MISSING_POSTCODE: "Saisissez votre code postal"
@@ -39,35 +39,35 @@ angular.module('BB.Services').config ($translateProvider) ->
         PHONE_NUMBER_ALREADY_REGISTERED_ADMIN: "Il y a déjà un compte associé à ce numéro de téléphone. Utilisez le champ de research."
         REQ_TIME_NOT_AVAIL: "Ce créneau est pris, merci d'en choisir un autre."
         TIME_SLOT_NOT_SELECTED: "Veuillez choisir un créneau"
-        STORE_NOT_SELECTED: "You need to select a store"
+        STORE_NOT_SELECTED: "Veuillz choisir un magasin."
         TOPUP_FAILED: "Désolé, votre porte-feuille n'a pas pu être rechargé, veuillez réessayer."
         TOPUP_SUCCESS: "Votre portefeuille a été rechargé"
         UPDATE_FAILED: "Mise à jour ratée. Merci de réessayer"
         UPDATE_SUCCESS: "Mis à jour"
-        WAITLIST_ACCEPTED: "Your booking is now confirmed!"
-        BOOKING_CANCELLED: "Your booking has been cancelled."
-        NOT_BOOKABLE_PERSON: "Sorry, this person does not offer this service, please select another"
-        NOT_BOOKABLE_RESOURCE: "Sorry, resource does not offer this service, pelase select another"
+        WAITLIST_ACCEPTED: "Votre réservation est confirmée !"
+        BOOKING_CANCELLED: "Votre réservation a été annulée."
+        NOT_BOOKABLE_PERSON: "Désolé, cette personne n'offre pas ce service, veuillez choisir quelqu'un d'autre"
+        NOT_BOOKABLE_RESOURCE: "Désolé, cette resource n'offre pas ce service, veuillez en choisir une autre"
         SPEND_AT_LEAST: "Le montant minimal pour une réservation est de {{min_spend | pretty_price}}.",
       }
       ITEM_DETAILS: {
-        MOVE_BOOKING_SUCCESS_MSG: "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
-        MOVE_BOOKING_FAIL_MSG: "Failed to move booking. Please try again."
+        MOVE_BOOKING_SUCCESS_MSG: "Votre réservation a été déplacée au {{datetime | datetime: 'LLLL'}}"
+        MOVE_BOOKING_FAIL_MSG: "La réservation n'a pas pu être déplacée. Merci de réessayer"
       }
       ADD_RECIPIENT: {
-        MODAL_TITLE: "Recipient",
-        WHO_TO_QUESTION: "Who should we send the gift voucher to?"
+        MODAL_TITLE: "Destinataire",
+        WHO_TO_QUESTION: "Pour qui est le cadeau ?"
         WHO_TO_OPTION_ME: "Moi",
-        WHO_TO_OPTION_NOT_ME: "quelqu'un d'autre"
+        WHO_TO_OPTION_NOT_ME: "Quelqu'un d'autre"
         NAME_LABEL: "Nom",
-        NAME_VALIDATION_MSG: "Ecrivez le nom complet du destinataire"
+        NAME_VALIDATION_MSG: "Veuillez entrer le nom complet du destinataire"
         EMAIL_LABEL: "Email"
-        EMAIL_VALIDATION_MSG: "Saisissez une adresse email valide"
+        EMAIL_VALIDATION_MSG: "Veuillez entrer une addresse email valid"
         ADD_LABEL: "Ajouter un destinataire"
-        CANCEL_LABEL: "Cancel"
+        CANCEL_LABEL: "Annuler"
       }
       BASKET_DETAILS: {
-        BASKET_DETAILS_TITLE: "Panier Détails"
+        BASKET_DETAILS_TITLE: "Détails du panier"
         BASKET_DETAILS_NO: "Aucun élément dans votre panier."
         ITEM: "Article"
         BASKET_ITEM_APPOINTMENT: "Rendez-vous"
@@ -93,8 +93,8 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       MEMBER_LOGIN_FORM: {
         EMAIL_LABEL: "Email"
-        EMAIL_VALIDATION_REQUIRED_MESSAGE: "Please enter your email"
-        EMAIL_VALIDATION_PATTERN_MESSAGE: "Please enter a valid email address"
+        EMAIL_VALIDATION_REQUIRED_MESSAGE: "Veuillez entrer votre addresse email"
+        EMAIL_VALIDATION_PATTERN_MESSAGE: "Veuillez entrer une addresse email valid"
         PASSWORD_LABEL: "Password"
         PLEASE_ENTER_PASSWORD: "Veuillez entrer le mot de passe"
         REMEMBER_ME: "Rester connecter"
@@ -105,7 +105,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_NEXT: "Suivant"
       }
       POPOUT_EXPORT_BOOKING: {
-        LONG_EXPORT_LABEL: "Export to calendar"
+        LONG_EXPORT_LABEL: "Exporter vers un calendrier"
         SHORT_EXPORT_LABEL: "Exporter"
       }
       PRICE_FILTER: {
@@ -119,9 +119,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         FILTER_RESET: "Remettre"
       }
       WEEK_CALENDAR: {
-        ALL_TIMES_IN: "All times are shown in {{time_zone_name}}."
-        NO_AVAILABILITY: "{time_range_length, plural, It looks like there's no availability for the next {time_range_length} one{day} other{days}}"
-        NEXT_AVAIL: "Jump to Next Available Day"
+        ALL_TIMES_IN: "Le fuseau horaire est {{time_zone_name}}."
+        NO_AVAILABILITY: "{time_range_length, plural, Aucune disponibilité pour one{le prochain jour} other{les prochains {time_range_length} jours}}"
+        NEXT_AVAIL: "Aller au prochain jour réservable"
         ANY_DATE: "- Date -"
       }
       BASKET: {
@@ -130,8 +130,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_ITEM_ADD_INSTRUCT: "Cliquez sur le bouton 'Ajouter un autre article' si vous souhaitez ajouter un autre produit ou service."
         ITEM: "Article"
         ITEM_PRICE: "Prix"
-        BASKET_RECIPIENT: "Recipient"
-        BASKET_CERTIFICATE_PAID: "Chèques-cadeaux payé"
+        BASKET_RECIPIENT: "Destinataire"
+        BASKET_CERTIFICATE_PAID: "Chèques-cadeaux payés"
         BASKET_GIFT_CERTIFICATES: "Chèques-cadeaux"
         BASKET_PRICE_ORIGINAL: "Prix d'origine"
         BASKET_BOOKING_FEE: "Frais de réservation"
@@ -140,12 +140,12 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_COUPON_DISCOUNT: "Coupon"
         BASKET_TOTAL: "Total"
         BASKET_TOTAL_DUE_NOW: "Total à payer"
-        BASKET_WALLET: "portefeuille"
-        BASKET_WALLET_BALANCE: "Current Wallet Balance"
-        BASKET_WALLET_BALANCE_INSUFFICIENT: "Oh non! Vous n'avez pas assez d'argent dans votre portefeuille. Vous pouvez soit payer le montant intégral, soit recharger votre portefeuille."
-        BASKET_WALLET_REMAINDER_PART_ONE: "Vous aurez"
-        BASKET_WALLET_REMAINDER_PART_TWO: "restant dans votre portefeuille après cet achat"
-        BASKET_WALLET_TOP_UP: "Top Up"
+        BASKET_WALLET: "Portefeuille"
+        BASKET_WALLET_BALANCE: "Balance du Portefeuille"
+        BASKET_WALLET_BALANCE_INSUFFICIENT: "Oh non! Vous n'avez pas assez d'argent dans votre Portefeuille. Vous pouvez soit payer le montant intégral, soit recharger votre Portefeuille."
+        BASKET_WALLET_REMAINDER_PART_ONE: "Vous aurez encore "
+        BASKET_WALLET_REMAINDER_PART_TWO: " dans votre Portefeuille après cet achat"
+        BASKET_WALLET_TOP_UP: "Recharger"
         BASKET_COUPON_APPLY: "Appliquer un coupon"
         PROGRESS_APPLY: "Appliquer"
         BASKET_GIFT_CERTIFICATE_QUESTION: "Avez-vous un chèque-cadeau?"
@@ -157,8 +157,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_BACK: "Retour"
       }
       BASKET_ITEM_SUMMARY: {
-        STEP_TITLE: "Summary"
-        STEP_DESCRIPTION: "Please review the following information"
+        STEP_TITLE: "Résumé"
+        STEP_DESCRIPTION: "Merci de vérifier ces détails"
         DURATION_LABEL: "Durée"
         FULL_NAME_LABEL: "Full name"
         EMAIL_LABEL: "Mail"
@@ -177,10 +177,10 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_BOOK: "Réserver"
         BASKET_TOTAL: "Total"
         BASKET_TOTAL_DUE_NOW: "Total à payer"
-        CONFIRMATION_WAITLIST_SUBHEADER: "Merci {{ member_name }}. Vous avez réservé avec succès {{ purchase_item }}."
+        CONFIRMATION_WAITLIST_SUBHEADER: "Merci d'avoir réservé {{ purchase_item }}, {{ member_name }}."
         BASKET_TOTAL: "Total"
         BASKET_TOTAL_DUE_NOW: "Total à payer"
-        PRINT: "Print"
+        PRINT: "Imprimer"
         PROGRESS_BACK: "Retour"
       }
       ERROR_MODAL: {
@@ -189,16 +189,16 @@ angular.module('BB.Services').config ($translateProvider) ->
       MEMBER_FORM: {
         FIRST_NAME_LABEL: "Prénom"
         LAST_NAME_LABEL: "Nom"
-        EMAIL_LABEL: "Mail"
+        EMAIL_LABEL: "Email"
         PHONE_LABEL: "Téléphone"
         MOBILE_LABEL: "Mobile"
-        SAVE_BUTTON: "Save"
+        SAVE_BUTTON: "Enregistrer"
       }
       BASKET_WALLET: {
         BASKET_WALLET_MAKE_PAYMENT: "effectuer le paiement"
-        BASKET_WALLET_TOP_UP: "Top Up"
+        BASKET_WALLET_TOP_UP: "Recharger"
         BASKET_WALLET_AMOUNT: "Montant"
-        BASKET_WALLET: "portefeuille"
+        BASKET_WALLET: "Portefeuille"
         BASKET_WALLET_AMOUNT_MINIMUM: "Le montant de recharge minimum doit être supérieur"
         PROGRESS_BACK: "Retour"
       }
@@ -210,7 +210,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         AVAIL_MONTH_PREVIOUS: "Mois Précédent"
         AVAIL_MONTH_NEXT: "Mois suivant"
         PROGRESS_BACK: "Retour"
-        DATE_NOT_SELECTED: "You need to select a date"
+        DATE_NOT_SELECTED: "Veuillez choisir une date"
       }
       DEAL_LIST: {
         BASKET_GIFT_CERTIFICATE: "Chèques-cadeaux"
@@ -228,13 +228,13 @@ angular.module('BB.Services').config ($translateProvider) ->
         RECIPIENT_NAME: "Nom"
         PROGRESS_BUY: "Acheter"
         PROGRESS_BACK: "Retour"
-        CERTIFICATE_NOT_SELECTED_ALERT: 'You need to select at least one Gift Certificate to continue'
+        CERTIFICATE_NOT_SELECTED_ALERT: 'Il vous faut au moins un chèque-cadeau pour continuer'
       }
       DURATION_LIST: {
         ITEM_FREE: "Gratuit"
         PROGRESS_SELECT: "Choisir"
         PROGRESS_BACK: "Retour"
-        DURATON_NOT_SELECTED_ALERT: "You need to select a duration"
+        DURATON_NOT_SELECTED_ALERT: "Merci de choisir une durée"
       }
       EVENT: {
         EVENT_DETAILS_TITLE: "Détails de l'événement"
@@ -276,7 +276,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         FILTER_FILTERED: "Afficher les événements filtrés"
         EVENT_WORD: "Événements"
         EVENT_NO: "Aucun événement trouvé"
-        EVENT_SPACE_WORD: "espace"
+        EVENT_SPACE_WORD: "place"
         EVENT_LEFT_WORD: "restant"
         ITEM_FROM: "À partir de"
         PROGRESS_BOOK: "Réserver"
@@ -317,22 +317,22 @@ angular.module('BB.Services').config ($translateProvider) ->
         AVAIL_DAY_NEXT: "Jour suivant",
         AVAIL_NO: "Aucun service disponible",
         PROGRESS_BACK: "Retour"
-        TIME_NOT_SELECTED_ALERT: "Please select a time slot"
+        TIME_NOT_SELECTED_ALERT: "Veuillez choisir un créneau"
 
       }
       SURVEY: {
-        SURVEY_THANK_YOU: "Merci de remplir le questionnaire!",
+        SURVEY_THANK_YOU: "Merci d'avoir rempli le questionnaire !",
         ITEM_SESSION: "Session",
         ITEM_DATE: "Date",
         SURVEY_WORD: "Enquête",
         DETAILS_QUESTIONS: "Questions",
         SURVEY_SUBMIT: "Soumettre les réponses",
-        SURVEY_NO: "Pas de questions de l'enquête pour cette session."
+        SURVEY_NO: "Aucune question de l'enquête pour cette session."
       }
       SERVICE_LIST: {
         ITEM_FREE: "Gratuit",
         PROGRESS_SELECT: "Choisir",
-        SERVICE_LIST_NO: "Aucun service répondant à vos critères de filtrage.",
+        SERVICE_LIST_NO: "Aucun service ne répond à vos critères de filtrage.",
         PROGRESS_BACK: "Retour"
       }
       RESOURCE_LIST: {
@@ -340,9 +340,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_BACK:  "Retour"
       }
       RESCHEDULE_REASONS:{
-        MOVE_TITLE: "Move Appointment ",
-        MOVE_REASON: "Please select a reason for moving your appointment:"
-        MOVE_BUTTON: "Move Appointment"
+        MOVE_TITLE: "Déplacer le rendez-vous ",
+        MOVE_REASON: "Veuillez choisir une raison :"
+        MOVE_BUTTON: "Déplacer"
         }
       PURCHASE: {
         CANCEL_CONFIRMATION: "Votre réservation a été annulée.",
