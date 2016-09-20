@@ -75,6 +75,7 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
         SERVICE         : 'Service'
         TO              : 'To'
         YES             : 'Yes'
+        STEP_SUMMARY    : 'Select a service'
       }
     }
   }

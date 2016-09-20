@@ -1,4 +1,4 @@
-<div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store bb-page>
+<div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store>
   <uib-tabset>
     <uib-tab>
       <uib-tab-heading>
@@ -8,18 +8,11 @@
 
       <!-- Make booking tab START -->
       <div ng-form name="appointment-booking-form">
-        <div bb-services>
-          <div class="form-group">
-            <label><span translate="ADMIN_BOOKING.QUICK_PICK.SERVICE"></span></label>
 
-            <!-- TODO use display_name -->
-            <select id="service" ng-model="service" ng-options="s.name for s in bookable_services | orderBy: 'order'" class="form-control">
-              <option value="" translate="ADMIN_BOOKING.QUICK_PICK.SELECT_A_SERVICE"></option>
-            </select>
-          </div>
-        </div>
+        <p translate="ADMIN_BOOKING.QUICK_PICK.STEP_SUMMARY"></p>
 
-        <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady('calendar')" bb-debounce ng-disabled="!bb.current_item.service"><span translate="ADMIN_BOOKING.QUICK_PICK.NEXT"></span></button>
+        <div bb-services></div>
+
       </div>
       <!-- Make booking tab END -->
 

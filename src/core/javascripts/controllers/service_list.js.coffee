@@ -45,17 +45,30 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbServices', () ->
+angular.module('BB.Directives').directive 'bbServices', ($q, $compile, $templateCache) ->
   restrict: 'AE'
   replace: true
   scope : true
+  transclude: true
   controller : 'ServiceList'
-  link : (scope, element, attrs) ->
+  link : (scope, element, attrs, ctrls, transclude) ->
+
     scope.directives = "public.ServiceList"
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q,
-  $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,
-  PageControllerService, ErrorService, $filter, LoadingService) ->
+    transclude scope, (clone) =>
+
+      # if there's content compile that or grab the _services template
+      has_content = clone.length > 1 || (clone.length == 1 and (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+
+      if has_content
+        element.html(clone).show()
+      else
+        $q.when($templateCache.get('_services.html')).then (template) ->
+          element.html(template).show()
+          $compile(element.contents())(scope)
+
+
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
 
   $scope.controller = "public.controllers.ServiceList"
 
@@ -221,6 +234,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route, options={}) =>
+    
     if $scope.routed
       return true
 
