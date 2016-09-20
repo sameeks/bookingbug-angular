@@ -119,6 +119,13 @@
     font-weight: bold;
   }
 
+  &.bb-list-md {
+    > li {
+      padding-bottom: 10px;
+      padding-top: 10px;
+    }
+  }
+
   &.bb-list-sm {
     > li {
       padding-bottom: 5px;
