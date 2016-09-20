@@ -98,7 +98,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       filter_by: search_text
       company: $scope.bb.company
     BBModel.Admin.Client.$query(params).then (clients) =>
-      defer.resolve(clients)
+      defer.resolve(clients.items)
     defer.promise
 
 
