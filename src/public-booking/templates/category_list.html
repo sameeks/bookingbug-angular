@@ -1,7 +1,7 @@
 <div bb-categories ng-init="checkStepTitle('Select a category')" class="bb_wrap">
 
   <div class="page-summary">
-    <p translate="APPOINTMENT_TYPE"></p>
+    <p translate="PUBLIC_BOOKING.CATEGORY.APPOINTMENT_TYPE"></p>
   </div>
 
   <div class="panel panel-default" ng-repeat="item in items">
@@ -12,7 +12,7 @@
           <p class="bb-service-description">{{item.description}}</p>
         </div>
         <div class="col-md-4">
-          <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" translate="PROGRESS_BOOK"></button>
+          <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" translate="PUBLIC_BOOKING.CATEGORY.PROGRESS_BOOK"></button>
         </div>
       </div>
     </div>
@@ -21,6 +21,6 @@
 
 <div class="row bb-step-navigation">
   <div class="col-sm-2 back">
-    <button type="button" class="btn btn-secondary" bb-debounce ng-click="loadPreviousStep()" translate="PROGRESS_BACK"></button>
+    <button type="button" class="btn btn-secondary" bb-debounce ng-click="loadPreviousStep()" translate="PUBLIC_BOOKING.CATEGORY.PROGRESS_BACK"></button>
   </div>
 </div>

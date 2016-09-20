@@ -84,6 +84,16 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_DATE: "@:CORE.COMMON.TERMINOLOGY.DATE"
         ITEM_TIME: "@:CORE.COMMON.TERMINOLOGY.TIME"
       }
+      CALENDAR: {
+        PROGRESS_NEXT: '@:CORE.BTN.NEXT'
+        PROGRESS_MOVE_BOOKING: '@:CORE.BTN.BOOK'
+        PROGRESS_BACK: '@:CORE.BTN.BACK'
+      }
+      CATEGORY : {
+        APPOINTMENT_TYPE: 'Select appointment type'
+        PROGRESS_BOOK: '@:CORE.COMMON.BTN.BOOK'
+        PROGRESS_BACK: '@:CORE.COMMON.BTN.BACK'
+      }
       CANCEL_MODAL: {
         CANCEL_QUESTION: "Are you sure you want to cancel this booking?"
         ITEM_SERVICE: "@:CORE.COMMON.TERMINOLOGY.SERVICE"
@@ -168,7 +178,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         CONFIRM_BUTTON: "Confirm"
         BACK_BUTTON: "@:CORE.COMMON.BTN.BACK"
       }
-      BASKET_WAITLIST: {
+      BOOK_WAITLIST: {
         WAITLIST_BOOKING_TITLE: "Your Waitlist booking"
         BOOKING_REFERENCE: "Booking Reference"
         ITEM_SERVICE: "@:CORE.COMMON.TERMINOLOGY.SERVICE"

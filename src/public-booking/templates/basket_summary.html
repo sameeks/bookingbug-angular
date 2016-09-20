@@ -1,7 +1,7 @@
 <div bb-basket-summary>
-	<h2 translate="STEP_TITLE"></h2>
+	<h2 translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.STEP_TITLE"></h2>
 	<hr/>
-	<p translate="STEP_DESCRIPTION"></p>
+	<p translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.STEP_DESCRIPTION"></p>
 
 	<div class="row">
 		<div class="col-md-12">
@@ -18,31 +18,31 @@
 	      	<ul class="bb-list bb-list-bordered-in">
 	      		<li>
 	      			<div class="row">
-		      			<div class="col-sm-4"><b translate="DURATION_LABEL">:</b></div>
+		      			<div class="col-sm-4"><b translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.DURATION_LABEL">:</b></div>
 		      			<div class="col-sm-8">{{item.duration | time_period}}</div>
 		      		</div>
       			</li>
 	      		<li>
 	      			<div class="row">
-		      			<div class="col-sm-4"><b translate="FULL_NAME_LABEL">:</b></div>
+		      			<div class="col-sm-4"><b translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.FULL_NAME_LABEL">:</b></div>
 	      				<div class="col-sm-8">{{client.first_name + ' ' + client.last_name}}</div>
 	      			</div>
       			</li>
 	      		<li>
 	      			<div class="row" ng-if="client.email">
-		      			<div class="col-sm-4"><b translate="EMAIL_LABEL">:</b></div>
+		      			<div class="col-sm-4"><b translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.EMAIL_LABEL">:</b></div>
 	      				<div class="col-sm-8">{{client.email}}</div>
 	      			</div>
       			</li>
 	      		<li ng-if="item.mobile">
 	      			<div class="row">
-		      			<div class="col-sm-4"><b translate="MOBILE_LABEL">:</b> </div>
+		      			<div class="col-sm-4"><b translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.MOBILE_LABEL">:</b> </div>
 	      				<div class="col-sm-8">{{item.mobile}}</div>
 	      			</div>
       			</li>
       			<li ng-if="bb.company_settings.ask_address && (client.address1 || client.address2 || client.address3 || client.address4 || client.postcode)">
 	      			<div class="row">
-		      			<div class="col-sm-4"><b translate="ADDRESS_LABEL">:</b> </div>
+		      			<div class="col-sm-4"><b translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ADDRESS_LABEL">:</b> </div>
 	      				<div class="col-sm-8">{{client.address1}} {{client.address2}} {{client.address3}} {{client.address4}} {{client.postcode}}</div>
 	      			</div>
       			</li>
@@ -54,7 +54,7 @@
             </li>
             <li ng-if="item.price">
 	      			<div class="row">
-		      			<div class="col-sm-4"><b translate="PRICE_LABEL">:</b> </div>
+		      			<div class="col-sm-4"><b translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.PRICE_LABEL">:</b> </div>
 	      				<div class="col-sm-8">{{item.price | currency}}</div>
 	      			</div>
       			</li>
@@ -69,8 +69,8 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<button class="btn btn-primary pull-right" ng-click="confirm()" translate="CONFIRM_BUTTON"></button>
-      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1" translate="BACK_BUTTON"></button>
+			<button class="btn btn-primary pull-right" ng-click="confirm()" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.CONFIRM_BUTTON"></button>
+      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.BACK_BUTTON"></button>
     </div>
 	</div>
 </div>
