@@ -43,17 +43,17 @@ angular.module('BB.Services').config ($translateProvider) ->
     COMMON: {
       TERMINOLOGY: {
         CATEGORY: 'Category'
-        DURATION: 'Duration'
+        DURATION: 'Duración'
         RESOURCE: 'Resource'
         PERSON: 'Person'
-        SERVICE: 'Service'
+        SERVICE: 'Servicio'
         WALLET: 'Wallet'
         SESSION: 'Session'
         EVENT: 'Event'
         COURSE: 'Course'
-        DATE: 'Date'
-        TIME: 'Time'
-        WHEN: 'When'
+        DATE: 'Fecha'
+        TIME: 'Horario'
+        WHEN: 'Cuándo '
         GIFT_CERTIFICATE: 'Gift Certificate'
         ITEM: 'Item'
         FILTER: 'Filter'
@@ -61,26 +61,26 @@ angular.module('BB.Services').config ($translateProvider) ->
         RESET: 'Reset'
         TOTAL: 'Total'
         TOTAL_DUE_NOW: 'Total Due Now'
-        PRICE: 'Price'
+        PRICE: 'Precio'
         PRICE_FREE: 'Free'
-        PRINT: 'Print'
+        PRINT: ' Imprimir'
         AND: 'and'
       }
       FORM: {
-        FIRST_NAME: 'First Name'
-        FIRST_NAME_REQUIRED: 'Please enter your first name'
-        LAST_NAME: 'Last Name'
-        LAST_NAME_REQUIRED: 'Please enter your last name'
+        FIRST_NAME: 'Nombre'
+        FIRST_NAME_REQUIRED: 'Por favor ingresa tu nombre'
+        LAST_NAME: 'Apellido'
+        LAST_NAME_REQUIRED: 'Por favor ingresa tu apellido'
         FULL_NAME: 'Full Name'
         ADDRESS1: 'Address'
         ADDRESS_REQUIRED: ''
         ADDRESS3: 'Town'
         ADDRESS4: 'County'
         POSTCODE: 'Postcode'
-        PHONE: 'Phone'
+        PHONE: 'Teléfono'
         MOBILE: 'Mobile'
         MOBILE_REQUIRED: 'Please enter a valid mobile number'
-        EMAIL: 'Email'
+        EMAIL: 'Correo electrónico'
         EMAIL_REQURIED: 'Please enter your email'
         EMAIL_PATTERN: 'Please enter a valid email address'
         FIELD_REQUIRED: ''
@@ -93,15 +93,15 @@ angular.module('BB.Services').config ($translateProvider) ->
         NO: 'No'
         OK: 'OK'
         YES: 'Yes'
-        BACK: 'Back'
-        NEXT: 'Continue'
+        BACK: 'Regresar'
+        NEXT: 'Siguiente'
         LOGIN: 'Login'
-        CONFIRM: 'Confirm'
+        CONFIRM: 'Confirmar'
         SAVE: 'Save'
-        SELECT: 'Select'
-        BOOK: 'Book'
-        CANCEL_BOOKING: 'Cancel Booking'
-        DO_NOT_CANCEL_BOOKING: 'Do not cancel'
+        SELECT: 'Seleccionar'
+        BOOK: 'Cita'
+        CANCEL_BOOKING: 'Cancelar cita'
+        DO_NOT_CANCEL_BOOKING: 'No cancelar'
         APPLY: 'Apply'
 
       }
@@ -113,6 +113,6 @@ angular.module('BB.Services').config ($translateProvider) ->
     }
   }
 
-  $translateProvider.translations('en', translations)
+  $translateProvider.translations('es', translations)
 
   return

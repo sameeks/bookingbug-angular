@@ -37,34 +37,34 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       EVENT: {
         SPACES_LEFT: 'Only {N, plural, one{one space}, others{# spaces}} left'
-        JOIN_WAITLIST: 'Join waitlist'
+        JOIN_WAITLIST: 'Beitreten Warteliste'
       }
     }
     COMMON: {
       TERMINOLOGY: {
-        CATEGORY: 'Category'
+        CATEGORY: 'Kategorie'
         DURATION: 'Duration'
-        RESOURCE: 'Resource'
+        RESOURCE: 'Ressource'
         PERSON: 'Person'
         SERVICE: 'Service'
-        WALLET: 'Wallet'
+        WALLET: 'Brieftasche'
         SESSION: 'Session'
         EVENT: 'Event'
         COURSE: 'Course'
-        DATE: 'Date'
-        TIME: 'Time'
-        WHEN: 'When'
+        DATE: 'Datum'
+        TIME: 'Zeit'
+        WHEN: 'Wann'
         GIFT_CERTIFICATE: 'Gift Certificate'
-        ITEM: 'Item'
+        ITEM: 'Artikel'
         FILTER: 'Filter'
-        ANY: 'Any'
-        RESET: 'Reset'
-        TOTAL: 'Total'
-        TOTAL_DUE_NOW: 'Total Due Now'
-        PRICE: 'Price'
-        PRICE_FREE: 'Free'
-        PRINT: 'Print'
-        AND: 'and'
+        ANY: 'Jeder'
+        RESET: 'Rücksetzen'
+        TOTAL: 'Gesamt'
+        TOTAL_DUE_NOW: 'Insgesamt Aufgrund Now'
+        PRICE: 'Preis'
+        PRICE_FREE: 'Kostenlos'
+        PRINT: ' Drucken'
+        AND: 'und'
       }
       FORM: {
         FIRST_NAME: 'First Name'
@@ -93,16 +93,16 @@ angular.module('BB.Services').config ($translateProvider) ->
         NO: 'No'
         OK: 'OK'
         YES: 'Yes'
-        BACK: 'Back'
-        NEXT: 'Continue'
+        BACK: 'Zurück'
+        NEXT: 'Nächster'
         LOGIN: 'Login'
         CONFIRM: 'Confirm'
         SAVE: 'Save'
-        SELECT: 'Select'
-        BOOK: 'Book'
-        CANCEL_BOOKING: 'Cancel Booking'
+        SELECT: 'Wählen'
+        BOOK: 'Buchen'
+        CANCEL_BOOKING: 'Reservierung stornieren'
         DO_NOT_CANCEL_BOOKING: 'Do not cancel'
-        APPLY: 'Apply'
+        APPLY: 'Anwenden'
 
       }
       LANGUAGE: {
@@ -113,6 +113,6 @@ angular.module('BB.Services').config ($translateProvider) ->
     }
   }
 
-  $translateProvider.translations('en', translations)
+  $translateProvider.translations('de', translations)
 
   return

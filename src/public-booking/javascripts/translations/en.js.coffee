@@ -26,7 +26,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         LOCATION_NOT_FOUND: "Sorry, we don't recognise that location"
         LOGIN_FAILED: "Sorry, your email or password was not recognised. Please try again or reset your password."
         SSO_LOGIN_FAILED: "Something went wrong when trying to log you in. Please try again."
-        MAXIMUM_TICKETS: "Sorry, the maximum number of tickets per person has been reached.",
+        MAXIMUM_TICKETS: "Sorry, the maximum number of tickets per person has been reached."
         MISSING_LOCATION: "Please enter your location"
         MISSING_POSTCODE: "Please enter a postcode"
         PASSWORD_INVALID: "Sorry, your password is invalid"
@@ -48,18 +48,18 @@ angular.module('BB.Services').config ($translateProvider) ->
         BOOKING_CANCELLED: "Your booking has been cancelled."
         NOT_BOOKABLE_PERSON: "Sorry, this person does not offer this service, please select another"
         NOT_BOOKABLE_RESOURCE: "Sorry, resource does not offer this service, pelase select another"
-        SPEND_AT_LEAST: "You need to spend at least {{min_spend | pretty_price}} to make a booking.",
+        SPEND_AT_LEAST: "You need to spend at least {{min_spend | pretty_price}} to make a booking."
       }
       ITEM_DETAILS: {
         MOVE_BOOKING_SUCCESS_MSG: "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
         MOVE_BOOKING_FAIL_MSG: "Failed to move booking. Please try again."
       }
       ADD_RECIPIENT: {
-        MODAL_TITLE: "Recipient",
+        MODAL_TITLE: "Recipient"
         WHO_TO_QUESTION: "Who should we send the gift voucher to?"
-        WHO_TO_OPTION_ME: "Me",
+        WHO_TO_OPTION_ME: "Me"
         WHO_TO_OPTION_NOT_ME: "Someone else"
-        NAME_LABEL: "Name",
+        NAME_LABEL: "Name"
         NAME_VALIDATION_MSG: "Please enter the recipient's full name"
         EMAIL_LABEL: "Email"
         EMAIL_VALIDATION_MSG: "Please enter a valid email address"
@@ -157,11 +157,11 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_WALLET_REMAINDER_PART_TWO: "left in your wallet after this purchase"
         BASKET_WALLET_TOP_UP: "Top Up"
         BASKET_COUPON_APPLY: "Apply a coupon"
-        PROGRESS_CANCEL: "@:CORE.COMMON.BTN.APPLY"
+        PROGRESS_APPLY: "@:CORE.COMMON.BTN.APPLY"
         BASKET_GIFT_CERTIFICATE_QUESTION: "Have a gift certificate?"
         BASKET_GIFT_CERTIFICATE_APPLY: "Apply a Gift Certificate"
         BASKET_GIFT_CERTIFICATE_APPLY_ANOTHER: "Apply another Gift Certificate"
-        PROGRESS_CANCEL: "@:CORE.COMMON.BTN.APPLY"
+        PROGRESS_CANCEL: "@:CORE.COMMON.BTN.CANCEL"
         BASKET_ITEM_ADD: "Add another item"
         BASKET_CHECKOUT: "Checkout"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
@@ -188,8 +188,6 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_TOTAL: "@:CORE.COMMON.TERMINOLOGY.TOTAL"
         BASKET_TOTAL_DUE_NOW: "@:CORE.COMMON.TERMINOLOGY.TOTAL_DUE_NOW"
         CONFIRMATION_WAITLIST_SUBHEADER: "Thanks {{member_name}}. You have successully booked onto {{purchase_item}}."
-        BASKET_TOTAL: "@:CORE.COMMON.TERMINOLOGY.TOTAL"
-        BASKET_TOTAL_DUE_NOW: "@:CORE.COMMON.TERMINOLOGY.TOTAL_DUE_NOW"
         PRINT: "@:CORE.COMMON.TERMINOLOGY.PRINT"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
       }
@@ -308,15 +306,14 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT"
       }
       TIME: {
-        AVAIL_DAY_PREVIOUS: "Previous Day",
-        AVAIL_DAY_NEXT: "Next Day",
-        AVAIL_NO: "No Service Available",
+        AVAIL_DAY_PREVIOUS: "Previous Day"
+        AVAIL_DAY_NEXT: "Next Day"
+        AVAIL_NO: "No Service Available"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
         TIME_NOT_SELECTED_ALERT: "Please select a time slot"
         AVAIL_MORNING: "Morning"
         AVAIL_AFTERNOON: "Afternoon"
         AVAIL_EVENING: "Evening"
-
       }
       SURVEY: {
         SURVEY_THANK_YOU: "Thank you for filling out the survey!"
@@ -328,8 +325,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         SURVEY_NO: "No survey questions for this session."
       }
       SERVICE_LIST: {
-        ITEM_FREE: "@:CORE.COMMON.TERMINOLOGY.PRICE_FREE",
-        PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT",
+        ITEM_FREE: "@:CORE.COMMON.TERMINOLOGY.PRICE_FREE"
+        PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT"
         SERVICE_LIST_NO: "No services match your filter criteria."
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
       }
@@ -388,4 +385,3 @@ angular.module('BB.Services').config ($translateProvider) ->
   $translateProvider.translations('en', translations)
 
   return
-    
