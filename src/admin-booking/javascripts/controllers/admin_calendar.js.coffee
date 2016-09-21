@@ -139,12 +139,12 @@ angular.module('BB.Directives').directive 'bbAdminCalendarConflict', () ->
       end_time   : sprintf("%02d:%02d",en/60, en%60)
     BBModel.Admin.Booking.$query(params).then (bookings) ->
       if bookings.items.length > 0
-        $scope.nearby_bookings = _.filter bookings.items, (x) -> 
+        $scope.nearby_bookings = _.filter bookings.items, (x) ->
           (($scope.bb.current_item.defaults.person && x.person_id == $scope.bb.current_item.defaults.person.id) || ($scope.bb.current_item.defaults.resources && x.resources_id == $scope.bb.current_item.defaults.resources.id))
         $scope.overlapping_bookings = _.filter $scope.nearby_bookings, (x) ->
-          b_st = x.datetime.clone().subtract(-(x.pre_time || 0), "minutes")
-          b_en = x.end_datetime.clone().subtract((x.post_time || 0), "minutes")
-          (b_st.isBefore(max_time)) && (b_en.isAfter(min_time))        
+          b_st = moment(x.datetime).subtract(-(x.pre_time || 0), "minutes")
+          b_en = moment(x.end_datetime).subtract((x.post_time || 0), "minutes")
+          (b_st.isBefore(max_time)) && (b_en.isAfter(min_time))
         $scope.nearby_bookings = false if $scope.nearby_bookings.length == 0
         $scope.overlapping_bookings = false if $scope.overlapping_bookings.length == 0
 
@@ -157,11 +157,11 @@ angular.module('BB.Directives').directive 'bbAdminCalendarConflict', () ->
         $scope.bb.company.$get('external_bookings', params).then (collection) ->
           bookings = collection.external_bookings
           if bookings && bookings.length > 0
-            $scope.external_bookings = _.filter bookings, (x) -> 
+            $scope.external_bookings = _.filter bookings, (x) ->
               x.start_time = moment(x.start)
               x.end_time = moment(x.end)
               x.title ||= "Blocked"
-              (x.start_time.isBefore(max_time)) && (x.end_time.isAfter(min_time))        
+              (x.start_time.isBefore(max_time)) && (x.end_time.isAfter(min_time))
 
       $scope.checking_conflicts = false
     , (err) ->

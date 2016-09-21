@@ -9,11 +9,15 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
     defer = $q.defer()
     if company.$has('people')
       company.$get('people', params).then (collection) ->
-        collection.$get('people').then (people) ->
-          models = (new BBModel.Admin.Person(p) for p in people)
-          defer.resolve(models)
-        , (err) ->
-          defer.reject(err)
+        if collection.$has('people')
+          collection.$get('people').then (people) ->
+            models = (new BBModel.Admin.Person(p) for p in people)
+            defer.resolve(models)
+          , (err) ->
+            defer.reject(err)
+        else
+          obj = new BBModel.Admin.Person(collection)
+          defer.resolve(obj)
       , (err) ->
         defer.reject(err)
     else

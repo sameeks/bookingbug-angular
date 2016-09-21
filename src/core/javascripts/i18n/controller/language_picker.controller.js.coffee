@@ -1,6 +1,7 @@
 'use strict'
 
-angular.module('BB.i18n').controller 'languagePickerController', ($scope, $translate, TranslationOptions, $rootScope) ->
+angular.module('BB.i18n').controller 'languagePickerController', ($locale, $rootScope, tmhDynamicLocale, $translate,
+  TranslationOptions, $scope) ->
   'ngInject'
 
   ###jshint validthis: true ###
@@ -10,13 +11,16 @@ angular.module('BB.i18n').controller 'languagePickerController', ($scope, $trans
   vm.availableLanguages = []
 
   init = () ->
-    vm.pickLanguage = pickLanguage
-
+    seAvailableLanguages();
     setCurrentLanguage();
-    loadAvailableLanguages();
+    $scope.$on 'BBLanguagePicker:refresh', setCurrentLanguage
 
-    $scope.$on 'LanguagePicker:updateLanguage', setCurrentLanguage
+    vm.pickLanguage = pickLanguage
+    return
 
+  seAvailableLanguages = () ->
+    angular.forEach TranslationOptions.available_languages, (languageKey) ->
+      vm.availableLanguages.push(createLanguage(languageKey))
     return
 
   setCurrentLanguage = () ->
@@ -24,25 +28,31 @@ angular.module('BB.i18n').controller 'languagePickerController', ($scope, $trans
     if languageKey is 'undefined'
       languageKey = $translate.preferredLanguage()
 
-    vm.language = {
-      selected: {
-        identifier: languageKey
-        label     : 'COMMON.LANGUAGE.' + languageKey.toUpperCase()
-      }
+    vm.language =
+      selected: createLanguage(languageKey)
+
+    if languageKey isnt $locale.id
+      pickLanguage(languageKey)
+
+    return
+
+  ###
+  # @param {String]
+  ###
+  createLanguage = (languageKey) ->
+    return {
+      identifier: languageKey
+      label: 'COMMON.LANGUAGE.' + languageKey.toUpperCase()
     }
-    return
 
-  loadAvailableLanguages = () ->
-    angular.forEach TranslationOptions.available_languages, (languageKey, index) ->
-      vm.availableLanguages.push {
-        identifier: languageKey
-        label     : 'COMMON.LANGUAGE.' + languageKey.toUpperCase()
-      }
-    return
-
-  pickLanguage = (language) ->
-    $translate.use language
-    $rootScope.$broadcast 'LanguagePicker:changeLanguage'
+  ###
+  # @param {String]
+  ###
+  pickLanguage = (languageKey) ->
+    tmhDynamicLocale.set(languageKey).then () ->
+      $translate.use languageKey
+      $rootScope.$broadcast 'BBLanguagePicker:languageChanged'
+      return
     return
 
   init();

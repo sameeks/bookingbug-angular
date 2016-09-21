@@ -1,4 +1,4 @@
-<div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store bb-page>
+<div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store>
   <uib-tabset>
     <uib-tab>
       <uib-tab-heading>
@@ -8,18 +8,32 @@
 
       <!-- Make booking tab START -->
       <div ng-form name="appointment-booking-form">
-        <div bb-services>
-          <div class="form-group">
-            <label><span translate="ADMIN_BOOKING.QUICK_PICK.SERVICE"></span></label>
 
-            <!-- TODO use display_name -->
-            <select id="service" ng-model="service" ng-options="s.name for s in bookable_services | orderBy: 'order'" class="form-control">
-              <option value="" translate="ADMIN_BOOKING.QUICK_PICK.SELECT_A_SERVICE"></option>
-            </select>
-          </div>
+        <p translate="ADMIN_BOOKING.QUICK_PICK.STEP_SUMMARY"></p>
+
+        <div bb-services>
+          
+          <ul class="bb-list bb-list-bordered bb-list-md">
+  
+            <li ng-repeat="item in filtered_items | orderBy: 'order'">
+
+               <div class="row">
+
+                <div class="col-sm-10 col-xs-6">
+
+                  <h2 class="bb-service-name bb-service-name-small">{{item.name}}</h2>
+
+                </div>
+
+                <div class="col-sm-2 col-xs-12">
+                  <button type="button" ng-click="selectItem(item, 'calendar')" class="btn btn-primary btn-block" translate="ADMIN_BOOKING.QUICK_PICK.SELECT_BTN"></button>
+                </div>
+              </div>
+            </li>
+          </ul>
+
         </div>
 
-        <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady('calendar')" bb-debounce ng-disabled="!bb.current_item.service"><span translate="ADMIN_BOOKING.QUICK_PICK.BOOK"></span></button>
       </div>
       <!-- Make booking tab END -->
 

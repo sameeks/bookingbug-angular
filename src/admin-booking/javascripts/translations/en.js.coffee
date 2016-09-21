@@ -10,6 +10,7 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
         ANY_RESOURCE                      : 'Any resource'
         BACK                              : 'Back'
         BOOK                              : 'Book'
+        SELECT                            : 'Select'
         CALENDAR                          : 'Calendar'
         NOT_AVAILABLE                     : 'Time not available'
         CONFLICT_EXISTS                   : 'There\'s an availability conflict'
@@ -69,6 +70,7 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
         BLOCK_WHOLE_DAY      : 'Block whole day'
         BLOCK_TIME           : 'Block time'
         BOOK                 : 'Book'
+        NEXT                 : 'Next'
         FOR                  : 'For'
         FROM                 : 'From'
         MAKE_BOOKING         : 'Make booking'
@@ -80,6 +82,8 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
         YES                  : 'Yes'
         FIELD_VALIDATION_MSG : 'This field is required'
         RESOURCE_PERSON_VALIDATION_MSG : 'Please select a resource or member of staff'
+	STEP_SUMMARY         : 'Select a service'
+        SELECT_BTN           : 'Select'
       }
       BOOKINGS_TABLE : {
         CANCEL_BTN  : 'Cancel'

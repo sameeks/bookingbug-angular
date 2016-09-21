@@ -1,37 +1,28 @@
-<div bb-include="_basket_item_summary">
-</div>
+<div bb-include="_basket_item_summary"></div>
 
-  <div class="bb-subcontent">
+<p>Select a resource to continue making a booking.</p>
 
-    <div bb-resources ng-init="checkStepTitle('Select a resource')">
-      <div class="panel panel-default" ng-repeat="item in all_resources">
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-sm-10">
-              <h2 class="panel-title">{{ item.name }}</h2>
-              <div class="row">
-                <div class="col-sm-2">
-                  <img ng-src="" class="img-responsive" />
-                </div>
-                <div class="col-sm-10">
-                  <!-- Description? -->
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block"><span translate="PUBLIC_BOOKING.RESOURCE_LIST.PROGRESS_SELECT"></span></button>
-            </div>
-          </div>
+<div bb-resources>
+  <ul class="bb-list bb-list-bordered bb-list-md">
+    <li ng-repeat="item in all_resources">
+
+      <div class="row">
+        <div class="col-sm-10">
+          <h2 class="panel-title">{{item.name}}</h2>
+        </div>
+        <div class="col-sm-2">
+          <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" translate="PUBLIC_BOOKING.RESOURCE_LIST.PROGRESS_SELECT"></button>
         </div>
       </div>
-    </div>
 
-  </div>
+    </li>
+  </ul>
+</div>
 
 <div class="bb-step-navigation">
   <div class="row">
     <div class="col-sm-3">
-      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PUBLIC_BOOKING.RESOURCE_LIST.PROGRESS_BACK"></span></button>
+      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1" translate="PUBLIC_BOOKING.RESOURCE_LIST.PROGRESS_BACK"></button>
     </div>
   </div>
 </div>
