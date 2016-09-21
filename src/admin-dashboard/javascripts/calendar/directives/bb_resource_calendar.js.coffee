@@ -38,6 +38,10 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             selectedResources      : $scope.selectedResources.selected
             calendarView           : uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getView').type
 
+          if $scope.model
+            options.showAll = false
+            options.selectedResources = [$scope.model]
+
           CalendarEventSources.getAllCalendarEntries(company, start, end, options).then (results)->
             $scope.loading  = false
             return callback(results)
@@ -46,7 +50,17 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.options = $scope.$eval $attrs.bbResourceCalendar
     $scope.options ||= {}
 
+    if !$scope.options.defaultView
+      if $scope.model
+        $scope.options.defaultView = 'agendaWeek'
+      else
+        $scope.options.defaultView = 'timelineDay'
 
+    if !$scope.options.views
+      if $scope.model
+        $scope.options.views = 'listDay,timelineDayThirty,agendaWeek,month'
+      else
+        $scope.options.views = 'timelineDay,listDay,timelineDayThirty,agendaWeek,month'
 
     # height = if $scope.options.header_height
     #   $bbug($window).height() - $scope.options.header_height
@@ -78,8 +92,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         header:
           left: 'today,prev,next'
           center: 'title'
-          right: 'timelineDay,listDay,timelineDayThirty,agendaWeek,month'
-        defaultView: 'timelineDay'
+          right: $scope.options.views
+        defaultView: $scope.options.defaultView
         views:
           listDay:
              buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.AGENDA')
@@ -295,6 +309,11 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         $state.go($state.current.name, params, { notify:false, reload:false})
 
     getCalendarAssets = (callback) ->
+
+      if $scope.model
+        callback([$scope.model])
+        return
+
       $scope.loading = true
 
       $scope.getCompanyPromise().then (company) ->
@@ -476,5 +495,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       labelAssembler : '@'
       blockLabelAssembler: '@'
       externalLabelAssembler: '@'
+      model: '='
   }
 
