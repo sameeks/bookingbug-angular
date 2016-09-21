@@ -41,7 +41,7 @@
                 </li>
                 <li class="row confirmation-summary-item">
                   <div class="bb-summary-label"><span translate="PUBLIC_BOOKING.PURCHASE.ITEM_WHEN">: </div>
-                  <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "LLLL":false}}</div>
+                  <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "LLLL"}}</div>
                 </li>
                 <li class="row confirmation-summary-item" ng-show="purchase.total_price > 0">
                   <div class="bb-summary-label"><span translate="PUBLIC_BOOKING.PURCHASE.ITEM_PRICE"></span>: </div>
@@ -50,7 +50,7 @@
               </ul>
 
               <div bb-address-map="purchase.bookings[0].company.address" class="view-booking-map">
-                <ui-gmap-google-map ng-if='map.center' center='map.center' zoom='map.zoom' options="options">
+                <ui-gmap-google-map ng-if="map.center" center="map.center" zoom="map.zoom" options="options">
                   <ui-gmap-marker coords="marker.coords" idkey="marker.id">
                   </ui-gmap-marker>
                 </ui-gmap-google-map>
@@ -72,7 +72,7 @@
 
             <div class="hidden-print">
               <div class="bb-step-navigation">
-                <div class='row'>
+                <div class="row">
                   <div class="col-sm-4">
                     <button type="button" class="btn btn-secondary btn-block" ng-click="delete(bookings[0])" translate="PUBLIC_BOOKING.PURCHASE.PROGRESS_CANCEL_BOOKING"></button>
                   </div>

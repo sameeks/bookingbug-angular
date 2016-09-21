@@ -1,15 +1,15 @@
 <div bb-checkout>
   <div ng-if="total.$has('new_payment')">
-    <h1 translate="PAYMENT_WORD"></h1>
+    <h1 translate="PUBLIC_BOOKING.CHECKOUT.PAYMENT_WORD"></h1>
     <div bb-include="_basket_item_summary"></div>
-    <h2 class="booking-form-header" translate="PAYMENT_DETAILS_TITLE"></h2>
+    <h2 class="booking-form-header" translate="PUBLIC_BOOKING.CHECKOUT.PAYMENT_DETAILS_TITLE"></h2>
     <div class="bb-checkout-pay-button">
       <div bb-payment-button
         class="btn btn-primary"
         total="total"
         bb="bb"
         decide-next-page="decideNextPage"
-        value="Pay">
+        value="PUBLIC_BOOKING.CHECKOUT.PAY_BTN">
       </div>
     </div>
   </div>

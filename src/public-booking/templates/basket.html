@@ -28,7 +28,7 @@
 									<br/>
 									<small>{{item.resource.getAddress() | address_single_line }}</small>
 									<br/>
-									<small ng-if="item.recipient"><span translate='BASKET_RECIPIENT'></span>: {{ item.recipient }} </small>
+									<small ng-if="item.recipient"><span translate="BASKET_RECIPIENT"></span>: {{ item.recipient }} </small>
 								</p>
 							</td>
 							<td class="text-right">
@@ -55,7 +55,7 @@
 								<p></p>
 							</td>
 							<td class="text-right">
-								{{ deal_code.value | currency }}
+								{{deal_code.value | currency}}
 							</td>
 							<td class="text-center">
 								<span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeDeal(deal_code)"></span>
@@ -83,7 +83,7 @@
 
 						<tr data-ng-if="basket.hasDeal()">
 							<th class="text-right"><span translate="PUBLIC_BOOKING.BASKET.BASKET_GIFT_CERTIFICATE_BALANCE"></span></th>
-							<th class="text-right">{{ basket.totalCertificatePaid() | currency }}</th>
+							<th class="text-right">{{basket.totalCertificatePaid() | currency}}</th>
 							<th>&nbsp;</th>
 						</tr>
 
@@ -143,7 +143,7 @@
       	</div>
 
 				<div ng-if="bb.company_settings.has_coupons" class="bb-coupon-box">
-					<span translate='BASKET_COUPON_APPLY'></span>
+					<span translate="BASKET_COUPON_APPLY"></span>
 					<input ng-model="coupon_code"/>
 					<button type="button" class="btn btn-primary btn-xs" ng-click="applyCoupon(coupon_code)"><span translate="PUBLIC_BOOKING.BASKET.PROGRESS_APPLY"></span></button>
 				</div>
@@ -151,15 +151,15 @@
         <div class="bb-coupon-box" ng-if="bb.company_settings.has_vouchers">
           <form class="form-inline">
             <div ng-show="!show_voucher_box">
-              <a ng-click="show_voucher_box = true"><span translate='BASKET_GIFT_CERTIFICATE_QUESTION'></span></a>
+              <a ng-click="show_voucher_box = true"><span translate="BASKET_GIFT_CERTIFICATE_QUESTION"></span></a>
             </div>
             <div ng-show="show_voucher_box" class="form-group">
-              <label ng-if="!basket.hasDeal()" for="deal"><span translate='BASKET_GIFT_CERTIFICATE_APPLY'></span>:</label>
-              <label ng-if="basket.hasDeal()" for="deal"><span translate='BASKET_GIFT_CERTIFICATE_APPLY_ANOTHER'></span>:</label>
+              <label ng-if="!basket.hasDeal()" for="deal"><span translate="BASKET_GIFT_CERTIFICATE_APPLY"></span>:</label>
+              <label ng-if="basket.hasDeal()" for="deal"><span translate="BASKET_GIFT_CERTIFICATE_APPLY_ANOTHER"></span>:</label>
               <div class=" input-group">
                 <input type="text" class="form-control input-sm" id="deal_code" name="deal_code" ng-model="deal_code" placeholder="Enter a voucher code">
                 <span class="input-group-btn">
-                  <button type="button" class="btn btn-primary btn-sm" ng-click="applyDeal(deal_code)"><span translate='PROGRESS_APPLY'></span></button>
+                  <button type="button" class="btn btn-primary btn-sm" ng-click="applyDeal(deal_code)"><span translate="PROGRESS_APPLY"></span></button>
                 </span>
               </div>
             </div>

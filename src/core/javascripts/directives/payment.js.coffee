@@ -1,7 +1,6 @@
 'use strict'
 
-angular.module('BB.Directives').directive 'bbPaymentButton', (
-  $compile, $sce, $http, $templateCache, $q, $log, TemplateSvc) ->
+angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $http, $templateCache, $q, $log, TemplateSvc, $translate) ->
 
   restrict: 'EA'
   replace: true
@@ -33,7 +32,7 @@ angular.module('BB.Directives').directive 'bbPaymentButton', (
         when 'button_form'
           inputs = element.find("input")
           main_tag = (i for i in inputs when $(i).attr('type') == 'submit')[0]
-          $(main_tag).attr('value', attributes.value) if attributes.value
+          $(main_tag).attr('value', $translate.instant(attributes.value)) if attributes.value
         when 'page', 'location'
           main_tag = element.find("a")[0]
       if attributes.class
@@ -60,8 +59,7 @@ angular.module('BB.Directives').directive 'bbPaymentButton', (
 
 
 
-angular.module('BB.Directives').directive 'bbPaypalExpressButton', ($compile,
-  $sce, $http, $templateCache, $q, $log, $window, UriTemplate) ->
+angular.module('BB.Directives').directive 'bbPaypalExpressButton', ($compile, $sce, $http, $templateCache, $q, $log, $window, UriTemplate) ->
 
   restrict: 'EA'
   replace: true

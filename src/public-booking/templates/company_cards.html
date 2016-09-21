@@ -1,4 +1,4 @@
-<div bb-companies ng-init="checkStepTitle('Select a Company')">
+<div bb-companies>
   <div class="row">
     <div ng-repeat="item in companies | orderBy: name">
       <div class="col-sm-6 col-md-4">
@@ -17,7 +17,7 @@
               <span ng-show="item.getAddress().address5">{{item.getAddress().address5}}<br /></span>
               <span ng-show="item.getAddress().country">{{item.getAddress().country}}</span>
               <span ng-show="item.description">{{item.description}}</span>
-              <a ng-click="selectItem(item)" class="btn btn-primary">Select</a>
+              <button type="button" ng-click="selectItem(item)" class="btn btn-primary" translate="PUBLIC_BOOKING.COMPANY_CARDS.SELECT_BTN"></button>
               <div class="clearfix">
               </div>
             </div>
@@ -32,7 +32,7 @@
 <div class="bb-step-navigation" ng-show="bb.current_step > 1">
   <div class="row">
     <div class="col-sm-2">
-      <button type="button" class="btn btn-default pull-left" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+      <button type="button" class="btn btn-default pull-left" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1" translate="PUBLIC_BOOKING.COMPANY_CARDS.BACK_BTN"></button>
     </div>
   </div>
 </div>

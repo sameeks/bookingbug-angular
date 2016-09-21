@@ -1,7 +1,7 @@
 <div bb-page>
   <div bb-item-details>
 
-    <h1><span translate="REVIEW"></span></h1>
+    <h1><span translate="PUBLIC_BOOKING.CHECK_ITEMS.REVIEW"></span></h1>
 
     <div bb-include="_basket_item_summary">
     </div>
@@ -12,7 +12,7 @@
 
 <!--         <div ng-form name="client_form" class="bb-form" role="form" novalidate>
 
-          <h2 class="booking-form-header"><span translate="DETAILS_TITLE"></span></h2>
+          <h2 class="booking-form-header"><span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_TITLE"></span></h2>
 
           <div class="form-group">
             <div class="col-sm-offset-4 col-sm-5">
@@ -21,43 +21,43 @@
           </div> 
 
           <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && (client_form.first_name.$dirty || booking_form.submitted)}">
-            <label for="first_name" class="control-label col-sm-4"><span translate="DETAILS_FIRST_NAME"></span>**:</label>
+            <label for="first_name" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_FIRST_NAME"></span>**:</label>
             <div class="col-sm-5">
               <input type="text" name="first_name" id"first_name" required ng-model="client.first_name" class="form-control" autocomplete="given-name"/>
             </div>
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted">
-                <span translate="DETAILS_FIRST_NAME_VALIDATION_MSG"></span>
+                <span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_FIRST_NAME_VALIDATION_MSG"></span>
               </div>
             </div>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && (client_form.last_name.$dirty|| booking_form.submitted)}">
-            <label for="last_name" class="control-label col-sm-4"><span translate="DETAILS_LAST_NAME"></span>*:</label>
+            <label for="last_name" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_LAST_NAME"></span>*:</label>
             <div class="col-sm-5">
               <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control" autocomplete="family-name"/>
             </div>
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="client_form.last_name.$invalid && booking_form.submitted">
-                <span translate="DETAILS_LAST_NAME_VALIDATION_MSG"></span>
+                <span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_LAST_NAME_VALIDATION_MSG"></span>
               </div>
             </div>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && (client_form.email.$dirty|| booking_form.submitted)}">
-            <label for="email" class="control-label col-sm-4"><span translate="DETAILS_EMAIL"></span>*:</label>
+            <label for="email" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_EMAIL"></span>*:</label>
             <div class="col-sm-5">
               <input type="email" name="email" id="email" required ng-model="client.email" class="form-control" autocomplete="email"/>
             </div>
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="client_form.email.$invalid && booking_form.submitted">
-                <span translate="DETAILS_EMAIL_VALIDATION_MSG"></span>
+                <span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_EMAIL_VALIDATION_MSG"></span>
               </div>
             </div>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && ((client_form.mobile.$dirty && !client_form.mobile.$focused) || booking_form.submitted)}">
-            <label for="mobile" class="control-label col-sm-4"><span translate="DETAILS_PHONE_MOBILE"></span>:</label>
+            <label for="mobile" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_PHONE_MOBILE"></span>:</label>
             <div class="col-sm-5">
               <input type="text" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern(true)" ng-model="client.mobile" class="form-control" bb-focus autocomplete="tel"/>
             </div>
@@ -73,7 +73,7 @@
               </div>
               <div class="col-sm-offset-4 messages">
                 <div class="error-message" ng-show="client_form['q' + question.id].$invalid && ( client_form['q' + question.id].$dirty || booking_form.submitted )">
-                  <span translate="DETAILS_VALIDATION_MSG"></span>
+                  <span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_VALIDATION_MSG"></span>
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@
 
         <div ng-show="item_details.hasQuestions" ng-form name="booking_questions_form" class="bb-form" role="form" novalidate>
 
-          <h2 class="booking-form-header" translate="DETAILS_OTHER_INFO"></h2>
+          <h2 class="booking-form-header" translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_OTHER_INFO"></h2>
 
           <div class="form-group">    
             <div class="col-sm-offset-4 col-sm-5">    
@@ -100,7 +100,7 @@
             </div>
             <div class="col-sm-offset-4 messages">
               <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )">
-                <span translate="DETAILS_VALIDATION_MSG"></span>
+                <span translate="PUBLIC_BOOKING.CHECK_ITEMS.DETAILS_VALIDATION_MSG"></span>
               </div>
             </div>
           </div>
@@ -111,10 +111,10 @@
         <div class="bb-step-navigation">
           <div class="row">
             <div class="col-sm-9 col-sm-push-3 text-right">
-              <button type="submit" class="btn btn-primary" ng-click="confirm(booking_form) && validator.validateForm(booking_form) && checkReady() && routeReady()" translate="PROGRESS_CONFIRM"></button>
+              <button type="submit" class="btn btn-primary" ng-click="confirm(booking_form) && validator.validateForm(booking_form) && checkReady() && routeReady()" translate="PUBLIC_BOOKING.CHECK_ITEMS.PROGRESS_CONFIRM"></button>
             </div>
             <div class="col-sm-3 col-sm-pull-9">
-              <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PROGRESS_BACK"></span></button>
+              <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PUBLIC_BOOKING.CHECK_ITEMS.PROGRESS_BACK"></span></button>
             </div>
           </div>
         </div>

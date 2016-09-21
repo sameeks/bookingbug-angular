@@ -103,7 +103,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         CANCEL_BOOKING: 'Cancel Booking'
         DO_NOT_CANCEL_BOOKING: 'Do not cancel'
         APPLY: 'Apply'
-
+        CLEAR: 'Clear'
       }
       LANGUAGE: {
         EN: 'English'

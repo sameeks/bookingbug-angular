@@ -28,20 +28,20 @@
 
   <div class="panel panel-default event-description">
     <div class="panel-body">
-      <p><span translate="EVENT_PAYMENT"></span>.</p>
+      <p><span translate="PUBLIC_BOOKING.CHECKOUT_EVENT.EVENT_PAYMENT"></span>.</p>
     </div>
   </div>
 
   <div class="panel panel-default event-tickets">
     <div class="panel-body">
-      <h2 class="heading"><span translate="EVENT_TICKETS"></span></h2>
+      <h2 class="heading"><span translate="PUBLIC_BOOKING.CHECKOUT_EVENT.EVENT_TICKETS"></span></h2>
       <div>
         <ul class="ticket-list">
           <li class="header">
             <div class="row">
-              <div class="col-sm-6 col-xs-6"><span translate="ITEM_TYPE"></span></div>
-              <div class="col-sm-3 col-xs-4"><span translate="ITEM_PRICE"></span></div>
-              <div class="col-sm-3 col-xs-2"><span translate="ITEM_QTY"></span></div>
+              <div class="col-sm-6 col-xs-6"><span translate="PUBLIC_BOOKING.CHECKOUT_EVENT.ITEM_TYPE"></span></div>
+              <div class="col-sm-3 col-xs-4"><span translate="PUBLIC_BOOKING.CHECKOUT_EVENT.ITEM_PRICE"></span></div>
+              <div class="col-sm-3 col-xs-2"><span translate="PUBLIC_BOOKING.CHECKOUT_EVENT.ITEM_QTY"></span></div>
             </div>
           </li>
           <li ng-repeat="ticket in bb.event_details.tickets">
@@ -50,8 +50,13 @@
                 <span>{{ticket.fullName()}}</span>
               </div>
               <div class="col-sm-3 col-xs-4">
-                <span ng-if="ticket.price > 0">{{ticket.price | currency}}</span><span ng-if="ticket.price == 0">Free</span>
-                <small ng-if="ticket.counts_as"><i>(for {{ticket.counts_as}})</i></small>
+                <span ng-if="ticket.price > 0">
+                  {{ticket.price | currency}}
+                </span>
+                <span ng-if="ticket.price == 0">Free</span>
+                <small ng-if="ticket.counts_as">
+                  <i>(<span translate="PUBLIC_BOOKING.CHECKOUT_EVENT.COUNT_AS" translate-values="{count_as: ticket.counts_as}"></span>)</i>
+                </small>
               </div>
               <div class="col-sm-3 col-xs-2">
                 <span>{{ticket.qty}}</span>
@@ -66,7 +71,7 @@
           </li> -->
           <li>
             <div class="row">
-              <div class="col-sm-6 col-xs-6 total-label"><span translate="BASKET_TOTAL"></span></div>
+              <div class="col-sm-6 col-xs-6 total-label"><span translate="PUBLIC_BOOKING.CHECKOUT_EVENT.BASKET_TOTAL"></span></div>
               <div class="col-sm-3 col-xs-6"><strong ng-show="total.due_now">{{total.due_now | currency}}</strong></div>
             </div>
           </li>
@@ -81,7 +86,7 @@
                   total="total"
                   bb="bb"
                   decide-next-page="decideNextPage"
-                  value="Pay with WorldPay">
+                  value="PUBLIC_BOOKING.CHECKOUT_EVENT.PAY_BTN">
                 </div>
               </div>
             </div>
