@@ -42,18 +42,18 @@ angular.module('BB.Services').config ($translateProvider) ->
     }
     COMMON: {
       TERMINOLOGY: {
-        CATEGORY: 'Category'
-        DURATION: 'Duration'
-        RESOURCE: 'Resource'
-        PERSON: 'Person'
-        SERVICE: 'Service'
-        WALLET: 'Wallet'
-        SESSION: 'Session'
-        EVENT: 'Event'
-        COURSE: 'Course'
-        DATE: 'Date'
-        TIME: 'Time'
-        WHEN: 'When'
+        CATEGORY:         'Category'
+        DURATION:         'Duration'
+        RESOURCE:         'Resource'
+        PERSON:           'Person'
+        SERVICE:          'Service'
+        WALLET:           'Wallet'
+        SESSION:          'Session'
+        EVENT:            'Event'
+        COURSE:           'Course'
+        DATE:             'Date'
+        TIME:             'Time'
+        WHEN:             'When'
         GIFT_CERTIFICATE: 'Gift Certificate'
         ITEM: 'Item'
         FILTER: 'Filter'
@@ -65,6 +65,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         PRICE_FREE: 'Free'
         PRINT: 'Print'
         AND: 'and'
+        APPOINTMENT: 'Appointment'
+        TICKETS: 'Tickets'
       }
       FORM: {
         FIRST_NAME: 'First Name'
@@ -83,9 +85,10 @@ angular.module('BB.Services').config ($translateProvider) ->
         EMAIL: 'Email'
         EMAIL_REQURIED: 'Please enter your email'
         EMAIL_PATTERN: 'Please enter a valid email address'
-        FIELD_REQUIRED: ''
+        FIELD_REQUIRED: 'This field is required'
         PASSWORD: 'Password'
         PASSWORD_REQUIRED: 'Please enter your password'
+        REQUIRED_LABEL: '*Required'
       }
       BTN: {
         CANCEL: 'Cancel'
@@ -104,6 +107,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         DO_NOT_CANCEL_BOOKING: 'Do not cancel'
         APPLY: 'Apply'
         CLEAR: 'Clear'
+        PAY: 'Pay'
       }
       LANGUAGE: {
         EN: 'English'

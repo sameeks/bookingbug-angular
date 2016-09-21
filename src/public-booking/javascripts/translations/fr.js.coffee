@@ -337,7 +337,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       RESCHEDULE_REASONS:{
         MOVE_TITLE: "Déplacer le rendez-vous "
         MOVE_REASON: "Veuillez choisir une raison :"
-        MOVE_BUTTON: "Déplacer"
+        MOVE_BTN: "Déplacer"
         }
       PURCHASE: {
         CANCEL_CONFIRMATION: "Votre réservation a été annulée."

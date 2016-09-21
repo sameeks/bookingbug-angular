@@ -6,7 +6,7 @@ angular.module('BB.Services').config ($translateProvider) ->
   translations = {
     PUBLIC_BOOKING: {
       ACCORDION_RANGE_GROUP: {
-        AVAILABLE: '{SLOTS_NUMBER, plural, =0{no time} =1{1 time} other{{SLOTS_NUMBER} times}} available'
+        AVAILABLE: "{SLOTS_NUMBER, plural, =0{no time} =1{1 time} other{{SLOTS_NUMBER} times}} available"
       }
       ALERTS: {
         ACCOUNT_DISABLED: "Your account appears to be disabled. Please contact the business you're booking with if the problem persists."
@@ -70,7 +70,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_DETAILS_TITLE: "Basket Details"
         BASKET_DETAILS_NO: "No items added to basket yet."
         ITEM: "@:CORE.COMMON.TERMINOLOGY.ITEM"
-        BASKET_ITEM_APPOINTMENT: "Appointment"
+        BASKET_ITEM_APPOINTMENT: "@:CORE.COMMON.TERMINOLOGY.APPOINTMENT"
         TIME_AND_DURATION: "{{time | datetime: 'LLLL'}} for {{duration | time_period}}"
         PROGRESS_CANCEL: "@:CORE.COMMON.BTN.CANCEL"
         BASKET_CHECKOUT: "Checkout"
@@ -85,9 +85,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_TIME: "@:CORE.COMMON.TERMINOLOGY.TIME"
       }
       CALENDAR: {
-        PROGRESS_NEXT: '@:CORE.BTN.NEXT'
-        PROGRESS_MOVE_BOOKING: '@:CORE.BTN.BOOK'
-        PROGRESS_BACK: '@:CORE.BTN.BACK'
+        PROGRESS_NEXT: "@:CORE.BTN.NEXT"
+        PROGRESS_MOVE_BOOKING: "@:CORE.BTN.BOOK"
+        PROGRESS_BACK: "@:CORE.BTN.BACK"
       }
       CATEGORY : {
         APPOINTMENT_TYPE: "Select appointment type"
@@ -99,52 +99,52 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_SERVICE: "@:CORE.COMMON.TERMINOLOGY.SERVICE"
         ITEM_WHEN: "@:CORE.COMMON.TERMINOLOGY.WHEN"
         PROGRESS_CANCEL_BOOKING: "@:CORE.COMMON.BTN.CANCEL_BOOKING"
-        PROGRESS_CANCEL_CANCEL: "Do not cancel"
+        PROGRESS_CANCEL_CANCEL: "@:CORE.COMMON.BTN.DO_NOT_CANCEL_BOOKING"
       }
       CHECK_ITEMS : {
         REVIEW: "Review"
-        DETAILS_TITLE: "Your detail"
-        DETAILS_FIRST_NAME: "Please enter the client's first name"
-        DETAILS_FIRST_NAME_VALIDATION_MSG: "Please enter your first name"
-        DETAILS_LAST_NAME: "Last Name"
-        DETAILS_LAST_NAME_VALIDATION_MSG: "Please enter your last name"
-        DETAILS_EMAIL: "Email"
-        DETAILS_EMAIL_VALIDATION_MSG: "Please enter a valid email address"
-        DETAILS_PHONE_MOBILE: "Mobile"
-        DETAILS_VALIDATION_MSG: "This field is required"
+        DETAILS_TITLE: "Your details"
+        DETAILS_FIRST_NAME: "@:CORE.COMMON.FORM.FIRST_NAME"
+        DETAILS_FIRST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIRST_NAME_REQUIRED"
+        DETAILS_LAST_NAME: "@:CORE.COMMON.FORM.LAST_NAME"
+        DETAILS_LAST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.LAST_NAME_REQUIRED"
+        DETAILS_EMAIL: "@:CORE.COMMON.FORM.EMAIL"
+        DETAILS_EMAIL_VALIDATION_MSG: "@:CORE.COMMON.FORM.EMAIL_REQURIED"
+        DETAILS_PHONE_MOBILE: "@:CORE.COMMON.FORM.MOBILE"
+        DETAILS_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIELD_REQUIRED"
         DETAILS_OTHER_INFO: "Other information"
-        DETAILS_VALIDATION_MSG: "This field is required"
+        DETAILS_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIELD_REQUIRED"
         PROGRESS_CONFIRM: "@:CORE.COMMON.BTN.CONFIRM"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
       }
       CHECKOUT: {
         PAYMENT_WORD: "Payment"
         PAYMENT_DETAILS_TITLE: "Payment Details"
-        PAY_BTN: "Pay"
+        PAY_BTN: "@:CORE.COMMON.BTN.PAY"
       }
       CHECKOUT_EVENT: {
         EVENT_PAYMENT: "Please complete payment to confirm your booking"
-        EVENT_TICKETS: "Tickets"
+        EVENT_TICKETS: "@:CORE.COMMON.TERMINOLOGY.TICKETS"
         ITEM_TYPE: "Type"
-        ITEM_PRICE: "Price"
+        ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
         ITEM_QTY: "Qty"
-        BASKET_TOTAL: "Total"
+        BASKET_TOTAL: "@:CORE.COMMON.TERMINOLOGY.TOTAL"
         COUNT_AS: "for {{count_as}}"
-        PAY_BTN: "Pay"
+        PAY_BTN: "@:CORE.COMMON.BTN.PAY"
       }
       CLIENT: {
         DETAILS_TITLE: "Your details"
         CLIENT_DETAILS_TITLE: "Client details"
-        REQUIRED_FIELDS: "*Required fields"
-        DETAILS_FIRST_NAME: "First Name"
-        DETAILS_FIRST_NAME_VALIDATION_MSG: "Please enter your first name"
-        DETAILS_LAST_NAME: "Last Name"
-        DETAILS_LAST_NAME_VALIDATION_MSG: "Please enter your last name"
-        DETAILS_EMAIL: "Email"
-        DETAILS_EMAIL_VALIDATION_MSG: "Please enter a valid email address"
-        DETAILS_PHONE_MOBILE: "Mobile"
+        REQUIRED_FIELDS: "@:CORE.COMMON.FORM.FIELD_REQUIRED"
+        DETAILS_FIRST_NAME: "@:CORE.COMMON.FORM.FIRST_NAME"
+        DETAILS_FIRST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIRST_NAME_REQUIRED"
+        DETAILS_LAST_NAME: "@:CORE.COMMON.FORM.LAST_NAME"
+        DETAILS_LAST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.LAST_NAME_REQUIRED"
+        DETAILS_EMAIL: "@:CORE.COMMON.FORM.EMAIL"
+        DETAILS_EMAIL_VALIDATION_MSG: "@:CORE.COMMON.FORM.EMAIL_PATTERN"
+        DETAILS_PHONE_MOBILE: "@:CORE.COMMON.FORM.MOBILE"
         DETAILS_OTHER_INFO: "Other information"
-        DETAILS_VALIDATION_MSG: "This field is required"
+        DETAILS_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIELD_REQUIRED"
         PROGRESS_CONTINUE: "@:CORE.COMMON.BTN.NEXT"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
         PROGRESS_CLEAR: "@:CORE.COMMON.BTN.NEXT"
@@ -161,13 +161,13 @@ angular.module('BB.Services').config ($translateProvider) ->
         CONFIRMATION_BOOKING_TITLE: "Booking Confirmation"
         CONFIRMATION_BOOKING_SUBHEADER: "CONFIRMATION_BOOKING_SUBHEADER"
         ITEM_CONFIRMATION: "Confirmation"
-        CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST: "Thanks {{ member_name }}. Your have successfully made the following bookings. We have you emailed you the details below."
-        PRINT: "Print"
+        CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST: "Thanks {{member_name}}. Your have successfully made the following bookings. We have you emailed you the details below."
+        PRINT: "@:CORE.COMMON.TERMINOLOGY.PRINT"
         BOOKING_REFERENCE: "Booking Reference"
         ITEM_SERVICE: "Service"
         ITEM_DATE: "Date"
         ITEM_TIME: "Time"
-        ITEM_PRICE: "Price"
+        ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
       }
       MEMBER_LOGIN_FORM: {
         EMAIL_LABEL: "Email"
@@ -304,7 +304,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         RECIPIENT_NAME: "Name"
         PROGRESS_BUY: "Buy"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
-        CERTIFICATE_NOT_SELECTED_ALERT: 'You need to select at least one Gift Certificate to continue'
+        CERTIFICATE_NOT_SELECTED_ALERT: "You need to select at least one Gift Certificate to continue"
       }
       DURATION_LIST: {
         ITEM_FREE: "@:CORE.COMMON.TERMINOLOGY.PRICE_FREE"
@@ -405,7 +405,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       RESCHEDULE_REASONS:{
         MOVE_TITLE: "Move Appointment "
         MOVE_REASON: "Please select a reason for moving your appointment:"
-        MOVE_BUTTON: "Move Appointment"
+        MOVE_BTN: "Move Appointment"
         }
       PURCHASE: {
         CANCEL_CONFIRMATION: "Your booking has been cancelled."
