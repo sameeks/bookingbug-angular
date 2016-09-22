@@ -65,6 +65,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         PRICE_FREE: 'Kostenlos'
         PRINT: ' Drucken'
         AND: 'und'
+        APPOINTMENT: 'Ernennung'
+        TICKETS: 'Tickets'
       }
       FORM: {
         FIRST_NAME: 'First Name'
@@ -83,9 +85,10 @@ angular.module('BB.Services').config ($translateProvider) ->
         EMAIL: 'Email'
         EMAIL_REQURIED: 'Please enter your email'
         EMAIL_PATTERN: 'Please enter a valid email address'
-        FIELD_REQUIRED: ''
+        FIELD_REQUIRED: 'This field is required'
         PASSWORD: 'Password'
         PASSWORD_REQUIRED: 'Please enter your password'
+        REQUIRED_LABEL: '*Erforderlich'
       }
       BTN: {
         CANCEL: 'Cancel'
@@ -101,9 +104,10 @@ angular.module('BB.Services').config ($translateProvider) ->
         SELECT: 'Wählen'
         BOOK: 'Buchen'
         CANCEL_BOOKING: 'Reservierung stornieren'
-        DO_NOT_CANCEL_BOOKING: 'Do not cancel'
+        DO_NOT_CANCEL_BOOKING: 'Stornieren Sie nicht'
         APPLY: 'Anwenden'
-
+        CLEAR: 'Klar'
+        PAY: 'Pay'
       }
       LANGUAGE: {
         EN: 'English'

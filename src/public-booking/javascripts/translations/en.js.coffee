@@ -159,7 +159,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       CONFIRMATION: {
         CONFIRMATION_BOOKING_TITLE: "Booking Confirmation"
-        CONFIRMATION_BOOKING_SUBHEADER: "CONFIRMATION_BOOKING_SUBHEADER"
+        CONFIRMATION_BOOKING_SUBHEADER: "Thanks {{ member_name }}. Your booking is now confirmed. We have emailed you the details below."
         ITEM_CONFIRMATION: "Confirmation"
         CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST: "Thanks {{member_name}}. Your have successfully made the following bookings. We have you emailed you the details below."
         PRINT: "@:CORE.COMMON.TERMINOLOGY.PRINT"
@@ -356,6 +356,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EVENT_LEFT_WORD: "left"
         ITEM_FROM: "From"
         PROGRESS_BOOK: "@:CORE.COMMON.BTN.BOOK"
+        PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
         EVENT_SOLD_OUT: "Sold out"
         EVENT_JOIN_WAITLIST: "Join Waitlist"
       }
@@ -364,10 +365,17 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       MAP: {
         PROGRESS_SEARCH: "Search"
+        SEARCH_BTN_TITLE: "Search"
+        INPUT_PLACEHOLDER: "Enter a town, city, postcode or store"
+        GEOLOCATE_TITLE: "Use current location"
         STORE_RESULT_TITLE: "{results, plural, =0{No results} one{1 result} other{# results}} for stores near {address}"
         HIDE_STORES: "Hide stores with no availability"
         SERVICE_UNAVAILABLE: "Sorry, but {{name}} is not available at this location"
         PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT"
+        UIB_ACCORDIAN: {
+          PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT"
+          SERVICE_UNAVAILABLE: "Sorry, but {{name}} is not available at this location"
+        }
       }
       MEMBERSHIP_LEVELS: {
         MEMBERSHIP_TYPES: "Membership Types"
@@ -428,6 +436,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         AND: "@:CORE.COMMON.TERMINOLOGY.AND"
         ITEM: "@:CORE.COMMON.TERMINOLOGY.ITEM"
         ITEM_DATE: "@:CORE.COMMON.TERMINOLOGY.DATE"
+        ITEM_TIME: "@:CORE.COMMON.TERMINOLOGY.TIME"
         ITEM_QUANTITY: "Quantity"
         BOOKING_REFERENCE: "Booking Reference"
         POWERED_BY: "Bookings powered by"

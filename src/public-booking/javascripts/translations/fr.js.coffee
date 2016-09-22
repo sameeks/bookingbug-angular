@@ -6,7 +6,7 @@ angular.module('BB.Services').config ($translateProvider) ->
   translations = {
     PUBLIC_BOOKING: {
       ACCORDION_RANGE_GROUP: {
-        AVAILABLE: '{number, plural, =0{Aucun disponible} one{1 disponible} other{# disponibles}}'
+        AVAILABLE: "{number, plural, =0{Aucun disponible} one{1 disponible} other{# disponibles}}"
       }
       ALERTS: {
         ACCOUNT_DISABLED: "Votre compte semble desactivé. Merci de contacter le commerce si le problème persiste"
@@ -70,7 +70,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_DETAILS_TITLE: "Détails du panier"
         BASKET_DETAILS_NO: "Aucun élément dans votre panier."
         ITEM: "@:CORE.COMMON.TERMINOLOGY.ITEM"
-        BASKET_ITEM_APPOINTMENT: "Rendez-vous"
+        BASKET_ITEM_APPOINTMENT: "@:CORE.COMMON.TERMINOLOGY.APPOINTMENT"
         TIME_AND_DURATION: "{{ time | datetime: 'LLLL':false}} pour {{ duration | time_period }}"
         PROGRESS_CANCEL: "@:CORE.COMMON.BTN.CANCEL"
         BASKET_CHECKOUT: "Caisse"
@@ -85,21 +85,89 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_TIME: "@:CORE.COMMON.TERMINOLOGY.TIME"
       }
       CALENDAR: {
-        PROGRESS_NEXT: '@:CORE.BTN.NEXT'
-        PROGRESS_MOVE_BOOKING: '@:CORE.BTN.BOOK'
-        PROGRESS_BACK: '@:CORE.BTN.BACK'
+        PROGRESS_NEXT: "@:CORE.BTN.NEXT"
+        PROGRESS_MOVE_BOOKING: "@:CORE.BTN.BOOK"
+        PROGRESS_BACK: "@:CORE.BTN.BACK"
       }
       CATEGORY : {
-        APPOINTMENT_TYPE: 'Type de rdv'
-        PROGRESS_BOOK: '@:CORE.COMMON.BTN.BOOK'
-        PROGRESS_BACK: '@:CORE.COMMON.BTN.BACK'
+        APPOINTMENT_TYPE: "Type de rdv"
+        PROGRESS_BOOK: "@:CORE.COMMON.BTN.BOOK"
+        PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
       }
       CANCEL_MODAL: {
         CANCEL_QUESTION: "Êtes-vous sûr que vous voulez annuler cette réservation?"
         ITEM_SERVICE: "@:CORE.COMMON.TERMINOLOGY.SERVICE"
         ITEM_WHEN: "@:CORE.COMMON.TERMINOLOGY.WHEN"
         PROGRESS_CANCEL_BOOKING: "@:CORE.COMMON.BTN.CANCEL_BOOKING"
-        PROGRESS_CANCEL_CANCEL: "Ne pas annuler"
+        PROGRESS_CANCEL_CANCEL: "@:CORE.COMMON.BTN.DO_NOT_CANCEL_BOOKING"
+      }
+      CHECK_ITEMS : {
+        REVIEW: "Examen"
+        DETAILS_TITLE: "Détail de votre rendez-vous"
+        DETAILS_FIRST_NAME: "@:CORE.COMMON.FORM.FIRST_NAME"
+        DETAILS_FIRST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIRST_NAME_REQUIRED"
+        DETAILS_LAST_NAME: "@:CORE.COMMON.FORM.LAST_NAME"
+        DETAILS_LAST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.LAST_NAME_REQUIRED"
+        DETAILS_EMAIL: "@:CORE.COMMON.FORM.EMAIL"
+        DETAILS_EMAIL_VALIDATION_MSG: "@:CORE.COMMON.FORM.EMAIL_REQURIED"
+        DETAILS_PHONE_MOBILE: "@:CORE.COMMON.FORM.MOBILE"
+        DETAILS_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIELD_REQUIRED"
+        DETAILS_OTHER_INFO: "Autre Information"
+        DETAILS_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIELD_REQUIRED"
+        PROGRESS_CONFIRM: "@:CORE.COMMON.BTN.CONFIRM"
+        PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
+      }
+      CHECKOUT: {
+        PAYMENT_WORD: "Paiement"
+        PAYMENT_DETAILS_TITLE: "Détails de paiement"
+        PAY_BTN: "@:CORE.COMMON.BTN.PAY"
+      }
+      CHECKOUT_EVENT: {
+        EVENT_PAYMENT: "Merci de finir le paiement pour confirmer votre réservation"
+        EVENT_TICKETS: "@:CORE.COMMON.TERMINOLOGY.TICKETS"
+        ITEM_TYPE: "Type"
+        ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
+        ITEM_QTY: "Quantité"
+        BASKET_TOTAL: "@:CORE.COMMON.TERMINOLOGY.TOTAL"
+        COUNT_AS: "for {{count_as}}"
+        PAY_BTN: "@:CORE.COMMON.BTN.PAY"
+      }
+      CLIENT: {
+        DETAILS_TITLE: "Vos coordonnées"
+        CLIENT_DETAILS_TITLE: "Détails du client"
+        REQUIRED_FIELDS: "@:CORE.COMMON.FORM.FIELD_REQUIRED"
+        DETAILS_FIRST_NAME: "@:CORE.COMMON.FORM.FIRST_NAME"
+        DETAILS_FIRST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIRST_NAME_REQUIRED"
+        DETAILS_LAST_NAME: "@:CORE.COMMON.FORM.LAST_NAME"
+        DETAILS_LAST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.LAST_NAME_REQUIRED"
+        DETAILS_EMAIL: "@:CORE.COMMON.FORM.EMAIL"
+        DETAILS_EMAIL_VALIDATION_MSG: "@:CORE.COMMON.FORM.EMAIL_PATTERN"
+        DETAILS_PHONE_MOBILE: "@:CORE.COMMON.FORM.MOBILE"
+        DETAILS_OTHER_INFO: "Autre Information"
+        DETAILS_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIELD_REQUIRED"
+        PROGRESS_CONTINUE: "@:CORE.COMMON.BTN.NEXT"
+        PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
+        PROGRESS_CLEAR: "@:CORE.COMMON.BTN.NEXT"
+      }
+      COMPANY_CARDS: {
+        SELECT_BTN: "@:CORE.COMMON.BTN.SELECT"
+        BACK_BTN: "@:CORE.COMMON.BTN.BACK"
+      }
+      COMPANY_LIST: {
+        PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT"
+        PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
+      }
+      CONFIRMATION: {
+        CONFIRMATION_BOOKING_TITLE: "Confirmation de réservation"
+        CONFIRMATION_BOOKING_SUBHEADER: "Merci {{member_name}}. Votre réservation est à présent confirmée. Nous vous avons envoyé par email les informations ci-dessous."
+        ITEM_CONFIRMATION: "Confirmation"
+        CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST: "Merci {{ member_name }}. Votre réservation a été effectuée avec succès. Nous vous avons envoyé par email les informations ci-dessous."
+        PRINT: "@:CORE.COMMON.TERMINOLOGY.PRINT"
+        BOOKING_REFERENCE: "Référence de votre réservation"
+        ITEM_SERVICE: "Service"
+        ITEM_DATE: "Date"
+        ITEM_TIME: "Heure"
+        ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
       }
       MEMBER_LOGIN_FORM: {
         EMAIL_LABEL: "Email"
@@ -236,7 +304,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         RECIPIENT_NAME: "@:CORE.COMMON.FORM.LAST_NAME"
         PROGRESS_BUY: "Acheter"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
-        CERTIFICATE_NOT_SELECTED_ALERT: 'Il vous faut au moins un chèque-cadeau pour continuer'
+        CERTIFICATE_NOT_SELECTED_ALERT: "Il vous faut au moins un chèque-cadeau pour continuer"
       }
       DURATION_LIST: {
         ITEM_FREE: "@:CORE.COMMON.TERMINOLOGY.PRICE_FREE"
@@ -288,6 +356,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EVENT_LEFT_WORD: "restant"
         ITEM_FROM: "À partir de"
         PROGRESS_BOOK: "@:CORE.COMMON.BTN.BOOK"
+        PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
         EVENT_SOLD_OUT: "Épuisé"
         EVENT_JOIN_WAITLIST: "S'inscrire sur la liste d'attente"
       }
@@ -296,10 +365,17 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       MAP: {
         PROGRESS_SEARCH: "Rechercher"
+        SEARCH_BTN_TITLE: "Rechercher"
+        INPUT_PLACEHOLDER: "Saisissez une ville, un code postal ou un magasin"
+        GEOLOCATE_TITLE: "Utilisez votre emplacement actuel"
         STORE_RESULT_TITLE: "{results, plural, =0{Aucun réultat trouvé} one{1 résultat trouvé} other{# résultats trouvés}} pour les magasins à proximité de {address}"
         HIDE_STORES: "Masquer les magasins sans disponibilité"
         SERVICE_UNAVAILABLE: "Désolé mais {{name}} n'est pas disponible dans ce magasin"
         PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT"
+        UIB_ACCORDIAN: {
+          PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT"
+          SERVICE_UNAVAILABLE: "Désolé mais {{name}} n'est pas disponible dans ce magasin"
+        }
       }
       MEMBERSHIP_LEVELS: {
         MEMBERSHIP_TYPES: "Types d'adhésion"
@@ -360,6 +436,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         AND: "@:CORE.COMMON.TERMINOLOGY.AND"
         ITEM: "@:CORE.COMMON.TERMINOLOGY.ITEM"
         ITEM_DATE: "@:CORE.COMMON.TERMINOLOGY.DATE"
+        ITEM_TIME: "@:CORE.COMMON.TERMINOLOGY.TIME"
         ITEM_QUANTITY: "Quantité"
         BOOKING_REFERENCE: "Référence de votre réservation"
         POWERED_BY: "Réservations par"

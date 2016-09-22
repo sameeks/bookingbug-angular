@@ -1,5 +1,5 @@
 <form name="memberForm" ng-submit="submit(memberForm, member)" ng-hide="loading">
- 
+
 	<div class="form-group" ng-class="{'has-error': memberForm.first_name.$invalid && !memberForm.first_name.$pristine, 'has-success': memberForm.first_name.$valid}">
 		<label class="control-label" for="first_name" translate="PUBLIC_BOOKING.MEMBER_FORM.FIRST_NAME_LABEL"></label>
 		<input type="text" class="form-control" name="first_name" id="first_name" ng-model="member.first_name" required autocomplete="given-name"/>
@@ -21,13 +21,13 @@
 	</div>
 
 	<div class="form-group" ng-class="{'has-error': memberForm.mobile.$invalid && !memberForm.mobile.$pristine, 'has-success': memberForm.mobile.$valid && !memberForm.mobile.$pristine}">
-		<label class="control-label" for="mobile" translate="PUBLIC_BOOKING.MEMBER_FORM.MOBILE_LABEL">Mobile</label>
+		<label class="control-label" for="mobile" translate="PUBLIC_BOOKING.MEMBER_FORM.MOBILE_LABEL"></label>
 		<input type="text" class="form-control" name="mobile" id="mobile" ng-model="member.mobile" autocomplete="tel"/>
 	</div>
 
 	<div ng-repeat="question in member.questions" class="form-group" ng-class="{'has-error': memberForm['q' + question.id].$invalid && !memberForm['q' + question.id].$pristine, 'has-success': memberForm['q' + question.id].$valid}">
 		<label class="control-label" for="{{question.id}}">{{question.name}}</label>
-		<input class="form-control" bb-question="question" />
+		<input class="form-control" bb-question="question"/>
 	</div>
 
 	<div class="form-group">
