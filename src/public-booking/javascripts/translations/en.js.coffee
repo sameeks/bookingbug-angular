@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('BB.@:CORE.COMMON.TERMINOLOGY.SERVICEs').config ($translateProvider) ->
+angular.module('BB.Services').config ($translateProvider) ->
   'ngInject'
 
   translations = {

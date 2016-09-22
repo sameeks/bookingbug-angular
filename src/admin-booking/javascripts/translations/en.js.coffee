@@ -82,7 +82,7 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
         YES                  : 'Yes'
         FIELD_VALIDATION_MSG : 'This field is required'
         RESOURCE_PERSON_VALIDATION_MSG : 'Please select a resource or member of staff'
-	STEP_SUMMARY         : 'Select a service'
+	   STEP_SUMMARY         : 'Select a service'
         SELECT_BTN           : 'Select'
       }
       BOOKINGS_TABLE : {
