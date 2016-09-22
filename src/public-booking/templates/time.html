@@ -29,11 +29,11 @@
       <div ng-if="slots">
 
         <div uib-accordion close-others="false">
-          <div bb-accordion-range-group="{heading: 'AVAIL_MORNING', range: [0, 720], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
+          <div bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.AVAIL_MORNING', range: [0, 720], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
 
-          <div bb-accordion-range-group="{heading: 'AVAIL_AFTERNOON',range: [720, 1020], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
+          <div bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.AVAIL_AFTERNOON',range: [720, 1020], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
 
-          <div bb-accordion-range-group="{heading: 'AVAIL_EVENING', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
+          <div bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.AVAIL_EVENING', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
         </div>
       </div>
     </div>
