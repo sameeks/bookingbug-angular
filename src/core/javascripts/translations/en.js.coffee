@@ -77,6 +77,11 @@ angular.module('BB.Services').config ($translateProvider) ->
         MORNING:           "Morning"
         AFTERNOON:         "Afternoon"
         EVENING:           "Evening"
+        AVAILABLE:         "Available"
+        UNAVAILABLE:       "Unavailable"
+        CALENDAR:          "Calendar"
+        QUESTIONS:         "Questions"
+        BOOKING:           "Booking"
       }
       FORM: {
         FIRST_NAME:                    "First Name"
@@ -107,7 +112,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         CANCEL:                "Cancel"
         CLOSE:                 "Close"
         NO:                    "No"
-        OK:                    "OK"
+        OK:                    "Ok"
         YES:                   "Yes"
         BACK:                  "Back"
         NEXT:                  "Continue"
@@ -125,6 +130,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         TOP_UP:                "Top Up"
         ADD:                   "Add"
         SUBMIT:                "Submit"
+        DETAILS:               "Details"
+        MORE:                  "More"
+        LESS:                  "Less"
       }
       LANGUAGE: {
         EN: "English"

@@ -7,13 +7,13 @@ angular.module('BBAdminEvents').config ($translateProvider) ->
     EVENTS: {
       EVENT_CHAIN_TABLE: {
         NEW_EVENT_CHAIN_BTN: 'New Event Chain'
-        DELETE_BTN: 'Delete'
-        EDIT_BTN: 'Edit'
+        DELETE_BTN: '@:CORE.COMMON.BTN.DELETE'
+        EDIT_BTN: '@:CORE.COMMON.BTN.EDIT'
       }
       EVENT_GROUP_TABLE: {
         NEW_EVENT_GROUP: 'New Event Group'
-        DELETE_BTN: 'Delete'
-        EDIT_BTN: 'Edit'
+        DELETE_BTN: '@:CORE.COMMON.BTN.DELETE'
+        EDIT_BTN: '@:CORE.COMMON.BTN.EDIT'
       }
     }
   }

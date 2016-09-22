@@ -50,7 +50,9 @@
           <div class="form-inline bb-search-options">
 
             <div class="form-group">
-              <label class="bb-label" for="sort_by"><span translate="ADMIN_BOOKING.CUSTOMER.SORT_BY"></span></label>
+              <label class="bb-label" for="sort_by">
+                <span translate="ADMIN_BOOKING.CUSTOMER.SORT_BY"></span>:
+              </label>
               <select ng-model="sort_by" id="sort_by" class="form-control" ng-options="option.key as option.name for option in sort_by_options" ng-change="sortChanged(sort_by)">
               </select>
             </div>
@@ -137,22 +139,30 @@
         <div ng-form name="client_form" bb-form>
 
           <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
-            <label for="first_name" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.FIRST_NAME"></span></label><br />
+            <label for="first_name" class="control-label">
+              <span translate="ADMIN_BOOKING.CUSTOMER.FIRST_NAME"></span>:
+            </label><br />
             <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control"/>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
-            <label for="last_name" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.LAST_NAME"></span></label><br />
+            <label for="last_name" class="control-label">
+              <span translate="ADMIN_BOOKING.CUSTOMER.LAST_NAME"></span>:
+            </label><br />
             <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
-            <label for="email" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.EMAIL"></span></label>
+            <label for="email" class="control-label">
+              <span translate="ADMIN_BOOKING.CUSTOMER.EMAIL"></span>:
+            </label>
             <input type="email" name="email" id="email" ng-required="!client.mobile" ng-pattern="validator.getEmailPattern()" ng-model="client.email" class="form-control"/>
           </div>
 
           <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
-            <label for="mobile" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.MOBILE"></span></label>
+            <label for="mobile" class="control-label">
+              <span translate="ADMIN_BOOKING.CUSTOMER.MOBILE"></span>:
+            </label>
             <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email || bb.company.settings.ask_mobile_phone" ng-pattern="admin_options.mobile_pattern"/>
           </div>
 

@@ -7,36 +7,36 @@ angular.module('BBMember').config ($translateProvider) ->
     MEMBER: {
       MODAL: {
         EDIT_BOOKING: {
-          CANCEL_BTN: 'Cancel'
+          CANCEL_BTN: '@:CORE.COMMON.BTN.CANCEL'
         }
         LOGIN: {
-          OK_BUTTON: 'Ok'
-          CANCEL_BTN: 'Cancel'
+          OK_BUTTON: '@:CORE.COMMON.BTN.OK'
+          CANCEL_BTN: '@:CORE.COMMON.BTN.CANCEL'
         }
         DELETE_BOOKING: {
-          TITLE: 'Cancel booking'
-          DESCRIPTION: 'Booking'
+          TITLE: '@:CORE.COMMON.BTN.CANCEL_BOOKING'
+          DESCRIPTION: '@:CORE.COMMON.TERMINOLOGY.BOOKING'
           WHEN: 'When'
-          CANCEL_BOOKING_BTN: 'Cancel booking'
-          CANCEL_BTN: 'Do not cancel'
+          CANCEL_BOOKING_BTN: '@:CORE.COMMON.BTN.CANCEL_BOOKING'
+          CANCEL_BTN: '@:CORE.COMMON.BTN.DO_NOT_CANCEL_BOOKING'
         }
         BOOKINGS_TABLE_CANCEL_BOOKING: {
-          TITLE: 'Cancel booking'
+          TITLE:                '@:CORE.COMMON.BTN.CANCEL_BOOKING'
           EMAIL_CUSTOMER_LABEL: 'Email customer?'
-          CANCEL_BOOKING_BTN: 'Cancel booking'
-          CANCEL_BTN: 'Do not cancel'
+          CANCEL_BOOKING_BTN:   '@:CORE.COMMON.BTN.CANCEL_BOOKING'
+          CANCEL_BTN:           '@:CORE.COMMON.BTN.DO_NOT_CANCEL_BOOKING'
         }
         PICK_COMPANY: {
-          OK_BTN: 'Ok'
-          CANCEL_BTN: 'Cancel'
+          OK_BTN: '@:CORE.COMMON.BTN.OK'
+          CANCEL_BTN: '@:CORE.COMMON.BTN.CANCEL'
         }
       }
       LOGIN: {
-        EMAIL_LABEL: 'Email'
-        EMAIL_PLACEHOLDER: 'Email'
-        PASSWORD_LABEL: 'Password'
-        PASSWORD_PLACEHOLDER: 'Password'
-        LOGIN_BTN: 'Login'
+        EMAIL_LABEL:          '@:CORE.COMMON.FORM.EMAIL'
+        EMAIL_PLACEHOLDER:    '@:CORE.COMMON.FORM.EMAIL'
+        PASSWORD_LABEL:       '@:CORE.COMMON.FORM.PASSWORD'
+        PASSWORD_PLACEHOLDER: '@:CORE.COMMON.FORM.PASSWORD'
+        LOGIN_BTN:            '@:CORE.COMMON.BTN.LOGIN'
       }
       BOOKING_TABS: {
         UPCOMING_BOOKINGS: 'Upcoming bookings'
@@ -68,7 +68,7 @@ angular.module('BBMember').config ($translateProvider) ->
         WALLET_NOT_ACTIVE: 'Your wallet is not active.'
         ACTIVATE: 'Activate'
         ACTIVE: 'Active'
-        TOP_UP: 'Top Up'
+        TOP_UP: '@:CORE.COMMON.BTN.TOP_UP'
         AMOUNT: 'Amount'
         MAKE_PAYMENT: 'Make Payment'
         TOP_UP_WALLET: 'Top up wallet by {{amount | currency}}'

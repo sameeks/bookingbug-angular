@@ -396,7 +396,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_SESSION: "@:CORE.COMMON.TERMINOLOGY.SESSION"
         ITEM_DATE: "@:CORE.COMMON.TERMINOLOGY.DATE"
         SURVEY_WORD: "Survey"
-        DETAILS_QUESTIONS: "Questions"
+        DETAILS_QUESTIONS: "@:CORE.COMMON.TERMINOLOGY.QUESTIONS"
         SURVEY_SUBMIT: "@:CORE.COMMON.BTN.SUBMIT"
         SURVEY_NO: "No survey questions for this session."
       }
@@ -453,7 +453,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         NEXT_5_WEEKS:     "Next 5 Weeks"
         KEY:              "Key"
         AVAILABLE:        "{number, plural, =0{No availability} other{# available}}"
-        UNAVAILABLE:      "Unavailable"
+        UNAVAILABLE:      "@:CORE.COMMON.TERMINOLOGY.UNAVAILABLE"
         PROGRESS_BACK:    "@:CORE.COMMON.BTN.BACK"
       }
     }
