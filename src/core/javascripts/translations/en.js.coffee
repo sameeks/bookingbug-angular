@@ -133,6 +133,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         DETAILS:               "Details"
         MORE:                  "More"
         LESS:                  "Less"
+        DELETE:                "Delete"
       }
       LANGUAGE: {
         EN: "English"
