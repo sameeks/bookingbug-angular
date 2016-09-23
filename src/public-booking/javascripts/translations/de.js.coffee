@@ -20,7 +20,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         GENERIC:"Leider scheint es, dass etwas schief gelaufen ist. Bitte versuchen Sie es erneut oder rufen Sie das Unternehmen sind Sie bei der Buchung mit, wenn das Problem weiterhin besteht."
         GEOLOCATION_ERROR: "Leider konnten wir Dein Ort wurde nicht festzustellen. Bitte versuchen Sie statt."
         GIFT_CERTIFICATE_REQUIRED: "A valid Gift Certificate is required to proceed with this booking"
-        INVALID_POSTCODE: "Bitte GEBEN Sie eine Gültige Postleitzahl ein"
+        INVALID_POSTCODE: "@:CORE.COMMON.FORM.POSTCODE_PATTERN"
         ITEM_NO_LONGER_AVAILABLE: "Entschuldigung. Das Element, das Sie versuchten, zu buchen ist nicht mehr verfügbar. Bitte versuchen Sie es erneut."
         NO_WAITLIST_SPACES_LEFT: "Sorry, the space has now been taken, you are still in the waitlist and we will notify you if more spaces become available"
         LOCATION_NOT_FOUND: "Sorry, we don't recognise that location"
@@ -55,16 +55,16 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOVE_BOOKING_FAIL_MSG: "Failed to move booking. Please try again."
       }
       ADD_RECIPIENT: {
-        MODAL_TITLE: "Recipient"
+        MODAL_TITLE: "@:CORE.COMMON.TERMINOLOGY.RECIPIENT"
         WHO_TO_QUESTION: "Who should we send the gift voucher to?"
         WHO_TO_OPTION_ME: "Me"
         WHO_TO_OPTION_NOT_ME: "Someone else"
         NAME_LABEL: "Name"
         NAME_VALIDATION_MSG: "Bitte geben Sie den vollständigen Namen des Empfängers ein"
-        EMAIL_LABEL: "Email"
-        EMAIL_VALIDATION_MSG: "Bitte geben Sie eine gültige E-Mail-Adresse"
+        EMAIL_LABEL: "@:CORE.COMMON.FORM.EMAIL"
+        EMAIL_VALIDATION_MSG: "@:CORE.COMMON.FORM.EMAIL_PATTERN"
         ADD_LABEL: "Add Recipient"
-        CANCEL_LABEL: "Cancel"
+        CANCEL_LABEL: "@:CORE.COMMON.BTN.CANCEL"
       }
       BASKET_DETAILS: {
         BASKET_DETAILS_TITLE: "Warenkorb Details"
@@ -73,7 +73,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_ITEM_APPOINTMENT: "@:CORE.COMMON.TERMINOLOGY.APPOINTMENT"
         TIME_AND_DURATION: "{{ time | datetime: 'LLLL':false}} für {{ duration | time_period }}"
         PROGRESS_CANCEL: "@:CORE.COMMON.BTN.CANCEL"
-        BASKET_CHECKOUT: "Kasse"
+        BASKET_CHECKOUT: "@:CORE.COMMON.BTN.CHECKOUT"
         BASKET_STATUS: "{N, plural, =0 {empty}, one {One item in your basket}, others {#items in your basket}}"
       }
       BASKET_ITEM_SUMMARY: {
@@ -163,20 +163,20 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_CONFIRMATION: "Bestätigung"
         CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST: "Thanks {{member_name}}. Your have successfully made the following bookings. We have you emailed you the details below."
         PRINT: "@:CORE.COMMON.TERMINOLOGY.PRINT"
-        BOOKING_REFERENCE: "Buchungsnummer"
-        ITEM_SERVICE: "Service"
-        ITEM_DATE: "Datum"
-        ITEM_TIME: "Zeit"
+        BOOKING_REFERENCE: "@:CORE.COMMON.TERMINOLOGY.BOOKING_REF"
+        ITEM_SERVICE: "@:CORE.COMMON.TERMINOLOGY.SERVICE"
+        ITEM_DATE: "@:CORE.COMMON.TERMINOLOGY.DATE"
+        ITEM_TIME: "@:CORE.COMMON.TERMINOLOGY.TIME"
         ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
       }
       MEMBER_LOGIN_FORM: {
-        EMAIL_LABEL: "Email"
-        EMAIL_VALIDATION_REQUIRED_MESSAGE: "Please enter your email"
-        EMAIL_VALIDATION_PATTERN_MESSAGE: "Please enter a valid email address"
-        PASSWORD_LABEL: "Password"
+        EMAIL_LABEL: "@:CORE.COMMON.FORM.EMAIL"
+        EMAIL_VALIDATION_REQUIRED_MESSAGE: "@:CORE.COMMON.FORM.EMAIL_REQUIRED"
+        EMAIL_VALIDATION_PATTERN_MESSAGE: "@:CORE.COMMON.FORM.EMAIL_PATTERN"
+        PASSWORD_LABEL: "@:CORE.COMMON.FORM.PASSWORD"
         PLEASE_ENTER_PASSWORD: "Please enter your password"
         REMEMBER_ME: "Remember me"
-        LOGIN: "Login"
+        LOGIN: "@:CORE.COMMON.FORM.LOGIN"
       }
       MONTH_PICKER: {
         PROGRESS_PREVIOUS: "@:CORE.COMMON.BTN.CANCEL"
@@ -184,7 +184,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       POPOUT_EXPORT_BOOKING: {
         LONG_EXPORT_LABEL: "Export to calendar"
-        SHORT_EXPORT_LABEL: "Export"
+        SHORT_EXPORT_LABEL: "@:CORE.COMMON.TERMINOLOGY.EXPORT"
       }
       PRICE_FILTER: {
         ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
@@ -208,12 +208,12 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_ITEM_ADD_INSTRUCT: "Please press the add another item button if you wish to add a product or service"
         ITEM: "@:CORE.COMMON.TERMINOLOGY.ITEM"
         ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
-        BASKET_RECIPIENT: "Recipient"
+        BASKET_RECIPIENT: "@:CORE.COMMON.TERMINOLOGY.RECIPIENT"
         BASKET_CERTIFICATE_PAID: "Certicicate Bezahlt"
-        BASKET_GIFT_CERTIFICATES: "Geschenkgutscheine"
+        BASKET_GIFT_CERTIFICATES: "@:CORE.COMMON.TERMINOLOGY.GIFT_CERTIFICATES"
         BASKET_PRICE_ORIGINAL: "Neupreis"
-        BASKET_BOOKING_FEE: "Buchungsgebühr"
-        BASKET_GIFT_CERTIFICATES_TOTAL: "Insgesamt Geschenkgutscheine"
+        BASKET_BOOKING_FEE: "@:CORE.COMMON.TERMINOLOGY.BOOKING_FEE"
+        BASKET_GIFT_CERTIFICATES_TOTAL: "@:CORE.COMMON.TERMINOLOGY.GIFT_CERTIFICATES"
         BASKET_GIFT_CERTIFICATE_BALANCE: "Restwert auf Geschenkgutscheine"
         BASKET_COUPON_DISCOUNT: "Coupon Rabatt"
         BASKET_TOTAL: "@:CORE.COMMON.TERMINOLOGY.TOTAL"
@@ -223,7 +223,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_WALLET_BALANCE_INSUFFICIENT: "Ach nein! Sie haben derzeit nicht genügend Geld in der Brieftasche Konto. Sie können entweder den vollen Betrag, oder nach oben, um mehr Geld, um Ihre Brieftasche hinzufügen."
         BASKET_WALLET_REMAINDER_PART_ONE: "Du wirst haben"
         BASKET_WALLET_REMAINDER_PART_TWO: "in Ihrer Brieftasche nach diesem Kauf links"
-        BASKET_WALLET_TOP_UP: "Nachfüllen"
+        BASKET_WALLET_TOP_UP: "@:CORE.COMMON.BTN.TOP_UP"
         BASKET_COUPON_APPLY: "Anwendung der Rabatt"
         PROGRESS_APPLY: "@:CORE.COMMON.BTN.APPLY"
         BASKET_GIFT_CERTIFICATE_QUESTION: "Haben Sie einen Gutschein?"
@@ -231,24 +231,24 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_GIFT_CERTIFICATE_APPLY_ANOTHER: "Gelten Andere Geschenkgutschein"
         PROGRESS_CANCEL: "@:CORE.COMMON.BTN.CANCEL"
         BASKET_ITEM_ADD: "Fügen Sie ein anderes Element"
-        BASKET_CHECKOUT: "Kasse"
+        BASKET_CHECKOUT: "@:CORE.COMMON.BTN.CHECKOUT"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
       }
       BASKET_ITEM_SUMMARY: {
         STEP_TITLE: "Summary"
         STEP_DESCRIPTION: "Please review the following information"
         DURATION_LABEL: "@:CORE.COMMON.TERMINOLOGY.DURATION"
-        FULL_NAME_LABEL: "Full name"
-        EMAIL_LABEL: "Email"
-        MOBILE_LABEL: "Mobile"
-        ADDRESS_LABEL: "Address"
+        FULL_NAME_LABEL: "@:CORE.COMMON.FORM.FULL_NAME"
+        EMAIL_LABEL: "@:CORE.COMMON.FORM.EMAIL"
+        MOBILE_LABEL: "@:CORE.COMMON.FORM.MOBILE"
+        ADDRESS_LABEL: "@:CORE.COMMON.FORM.ADDRESS"
         PRICE_LABEL: "@:CORE.COMMON.TERMINOLOGY.PRICE"
-        CONFIRM_BUTTON: "Confirm"
+        CONFIRM_BUTTON: "@:CORE.COMMON.BTN.CONFIRM"
         BACK_BUTTON: "@:CORE.COMMON.BTN.BACK"
       }
       BASKET_WAITLIST: {
         WAITLIST_BOOKING_TITLE: "Ihre Warteliste Buchung"
-        BOOKING_REFERENCE: "Buchungsnummer"
+        BOOKING_REFERENCE: "@:CORE.COMMON.TERMINOLOGY.BOOKING_REF"
         ITEM_SERVICE: "@:CORE.COMMON.TERMINOLOGY.SERVICE"
         ITEM_DATE_AND_OR_TIME: "@:CORE.COMMON.TERMINOLOGY.DATE/Time"
         ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
@@ -260,19 +260,19 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
       }
       ERROR_MODAL: {
-        PROGRESS_OK: "Ok"
+        PROGRESS_OK: "@:CORE.COMMON.BTN.OK"
       }
       MEMBER_FORM: {
         FIRST_NAME_LABEL: "@:CORE.COMMON.FORM.FIRST_NAME"
         LAST_NAME_LABEL: "@:CORE.COMMON.FORM.LAST_NAME"
-        EMAIL_LABEL: "Email"
-        PHONE_LABEL: "Phone"
-        MOBILE_LABEL: "Mobile"
+        EMAIL_LABEL: "@:CORE.COMMON.FORM.EMAIL"
+        PHONE_LABEL: "@:CORE.COMMON.FORM.PHONE"
+        MOBILE_LABEL: "@:CORE.COMMON.FORM.MOBILE"
         SAVE_BUTTON: "@:CORE.COMMON.BTN.SAVE"
       }
       BASKET_WALLET: {
         BASKET_WALLET_MAKE_PAYMENT: "Zahlung"
-        BASKET_WALLET_TOP_UP: "Nachfüllen"
+        BASKET_WALLET_TOP_UP: "@:CORE.COMMON.BTN.TOP_UP"
         BASKET_WALLET_AMOUNT: "Menge"
         BASKET_WALLET: "@:CORE.COMMON.TERMINOLOGY.WALLET"
         BASKET_WALLET_AMOUNT_MINIMUM: "Mindest nachfüllen Betrag muss größer sein als"
@@ -280,7 +280,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       DASH: {
         DASHBOARD: "Armaturenbrett"
-        DASHBOARD_TITLE: "Wählen Sie einen Ort / Dienst"
+        DASHBOARD_TITLE: "Wählen Sie einen Ort / @:CORE.COMMON.TERMINOLOGY.SERVICE"
       }
       DAY: {
         AVAIL_MONTH_PREVIOUS: "Vorheriger Monat"
@@ -289,18 +289,18 @@ angular.module('BB.Services').config ($translateProvider) ->
         DATE_NOT_SELECTED: "You need to select a date"
       }
       DEAL_LIST: {
-        BASKET_GIFT_CERTIFICATE: "Geschenkgutscheine"
+        BASKET_GIFT_CERTIFICATE: "@:CORE.COMMON.TERMINOLOGY.GIFT_CERTIFICATES"
         BASKET_GIFT_CERTIFICATE_BUY: "Kaufen Geschenkgutscheine"
         BASKET_GIFT_CERTIFICATE_SELECTED: "Ausgewählte Geschenkgutscheine"
         ITEM: "@:CORE.COMMON.TERMINOLOGY.ITEM"
         ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
         RECIPIENT_ADD: "Fügen Sie einen Empfänger"
         RECIPIENT_NAME: "Name"
-        DETAILS_EMAIL: "E-Mail"
+        DETAILS_EMAIL: "@:CORE.COMMON.FORM.EMAIL"
         PROGRESS_ADD: "Hinzufügen"
         RECIPIENT_NAME_VALIDATION_MSG: "Bitte geben Sie den vollständigen Namen des Empfängers ein"
-        RECIPIENT_EMAIL_VALIDATION_MSG: "Bitte geben Sie eine gültige E-Mail-Adresse"
-        RECIPIENT: "Empfänger"
+        RECIPIENT_EMAIL_VALIDATION_MSG: "@:CORE.COMMON.FORM.EMAIL_REQUIRED"
+        RECIPIENT: "@:CORE.COMMON.TERMINOLOGY.RECIPIENT"
         RECIPIENT_NAME: "Name"
         PROGRESS_BUY: "Kaufen"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
@@ -316,24 +316,24 @@ angular.module('BB.Services').config ($translateProvider) ->
         EVENT_DETAILS_TITLE: "Event-Details"
         DETAILS_TITLE: "Angaben zu Ihrer Person"
         DETAILS_FIRST_NAME: "@:CORE.COMMON.FORM.FIRST_NAME"
-        DETAILS_FIRST_NAME_VALIDATION_MSG: "Bitte geben Sie Ihre Vorname"
+        DETAILS_FIRST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIRST_NAME_REQUIRED"
         DETAILS_LAST_NAME: "@:CORE.COMMON.FORM.LAST_NAME"
-        DETAILS_LAST_NAME_VALIDATION_MSG: "Bitte geben Sie Ihre Nachname"
-        DETAILS_EMAIL: "E-Mail"
-        DETAILS_EMAIL_VALIDATION_MSG: "Bitte geben Sie eine gültige E-Mail-Adresse"
-        STORE_PHONE: "Telefon"
-        DETAILS_PHONE_MOBILE_VALIDATION_MSG: "Please enter a valid mobile number"
-        DETAILS_ADDRESS: "Adresse"
-        DETAILS_ADDRESS_VALIDATION_MSG: "Bitte geben Sie Ihre Anschrift"
-        DETAILS_TOWN: "Stadt"
-        DETAILS_COUNTY: "County"
-        DETAILS_POSTCODE: "PLZ"
-        INVALID_POSTCODE: "Bitte GEBEN Sie eine Gültige Postleitzahl ein"
-        DETAILS_VALIDATION_MSG: "Dieses Feld ist erforderlich"
+        DETAILS_LAST_NAME_VALIDATION_MSG: "@:CORE.COMMON.FORM.LAST_NAME_REQUIRED"
+        DETAILS_EMAIL: "@:CORE.COMMON.FORM.EMAIL"
+        DETAILS_EMAIL_VALIDATION_MSG: "@:CORE.COMMON.FORM.EMAIL_PATTERN"
+        STORE_PHONE: "@:CORE.COMMON.FORM.PHONE"
+        DETAILS_PHONE_MOBILE_VALIDATION_MSG: "@:CORE.COMMON.FORM.MOBILE_REQUIRED"
+        DETAILS_ADDRESS: "@:CORE.COMMON.FORM.ADDRESS"
+        DETAILS_ADDRESS_VALIDATION_MSG: "@:CORE.COMMON.FORM.MOBILE_REQUIRED"
+        DETAILS_TOWN: "@:CORE.COMMON.FORM.ADDRESS3"
+        DETAILS_COUNTY: "@:CORE.COMMON.FORM.ADDRESS4"
+        DETAILS_POSTCODE: "@:CORE.COMMON.FORM.POSTCODE"
+        INVALID_POSTCODE: "@:CORE.COMMON.FORM.POSTCODE_PATTERN"
+        DETAILS_VALIDATION_MSG: "@:CORE.COMMON.FORM.FIELD_REQUIRED"
         ATTENDEE_IS_YOU_QUESTION: "Sind Sie der Teilnehmer?"
         ATTENDEE_USE_MY_DETAILS: " Ja, verwenden Sie meine Daten"
-        DETAILS_TERMS: " Ich akzeptiere die Geschäftsbedingungen."
-        DETAILS_TERMS_VALIDATION_MSG: "Bitte stimmen Sie den Geschäftsbedingungen"
+        DETAILS_TERMS: "@:CORE.COMMON.FORM.TERMS_AND_CONDITIONS"
+        DETAILS_TERMS_VALIDATION_MSG: "@:CORE.COMMON.FORM.TERMS_AND_CONDITIONS_REQUIRED"
       }
       EVENT_GROUP_LIST: {
         PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT"
@@ -350,7 +350,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         FILTER_RESET: "@:CORE.COMMON.TERMINOLOGY.RESET"
         FILTER_NONE: "Zeige alle Veranstaltungen"
         FILTER_FILTERED: "Zeige gefilterte Ereignisse"
-        EVENT_WORD: "Events"
+        EVENT_WORD: "@:CORE.COMMON.TERMINOLOGY.EVENTS"
         EVENT_NO: "Keine Termine gefunden"
         EVENT_SPACE_WORD: "raum"
         EVENT_LEFT_WORD: "übrig"
@@ -384,7 +384,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       TIME: {
         AVAIL_DAY_PREVIOUS: "Vorheriger Tag"
         AVAIL_DAY_NEXT: "Nächster Tag"
-        AVAIL_NO: "Kein Dienst vorhanden"
+        AVAIL_NO: "Kein @:CORE.COMMON.TERMINOLOGY.SERVICE vorhanden"
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
         TIME_NOT_SELECTED_ALERT: "Please select a time slot"
         AVAIL_MORNING: "Morgens"
@@ -396,8 +396,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_SESSION: "@:CORE.COMMON.TERMINOLOGY.SESSION"
         ITEM_DATE: "@:CORE.COMMON.TERMINOLOGY.DATE"
         SURVEY_WORD: "Umfrage"
-        DETAILS_QUESTIONS: "Fragen"
-        SURVEY_SUBMIT: "Antworten abschicken"
+        DETAILS_QUESTIONS: "@:CORE.COMMON.TERMINOLOGY.QUESTIONS"
+        SURVEY_SUBMIT: "@:CORE.COMMON.BTN.SUBMIT"
         SURVEY_NO: "Keine Umfrage Fragen für diese Sitzung."
       }
       SERVICE_LIST: {
@@ -411,7 +411,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
       }
       RESCHEDULE_REASONS:{
-        MOVE_TITLE: "Move Appointment "
+        MOVE_TITLE: "Move Appointment"
         MOVE_REASON: "Please select a reason for moving your appointment:"
         MOVE_BTN: "Move Appointment"
         }
@@ -420,7 +420,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         CONFIRMATION_PURCHASE_TITLE: "Ihre {{ service_name }} reservierung"
         RECIPIENT_NAME: "Name"
         PRINT: "@:CORE.COMMON.TERMINOLOGY.PRINT"
-        DETAILS_EMAIL: "E-Mail"
+        DETAILS_EMAIL: "@:CORE.COMMON.FORM.EMAIL"
         ITEM_SERVICE: "@:CORE.COMMON.TERMINOLOGY.SERVICE"
         ITEM_WHEN: "@:CORE.COMMON.TERMINOLOGY.WHEN"
         ITEM_PRICE: "@:CORE.COMMON.TERMINOLOGY.PRICE"
@@ -431,30 +431,30 @@ angular.module('BB.Services').config ($translateProvider) ->
       PRINT_PURCHASE: {
         CONFIRMATION_BOOKING_TITLE: "Buchungsbestätigung"
         CONFIRMATION_BOOKING_SUBHEADER: "Danke {{member_name}}. Ihre Buchung ist jetzt bestätigt. Wir haben Ihnen die Angaben per E-Mail geschickt."
-        CALENDAR_EXPORT_TITLE: " In den Kalender exportieren"
+        CALENDAR_EXPORT_TITLE: "@:CORE.COMMON.TERMINOLOGY.EXPORT"
         PRINT: "@:CORE.COMMON.TERMINOLOGY.PRINT"
         AND: "@:CORE.COMMON.TERMINOLOGY.AND"
         ITEM: "@:CORE.COMMON.TERMINOLOGY.ITEM"
         ITEM_DATE: "@:CORE.COMMON.TERMINOLOGY.DATE"
         ITEM_TIME: "@:CORE.COMMON.TERMINOLOGY.TIME"
         ITEM_QUANTITY: "Menge"
-        BOOKING_REFERENCE: "Buchungsnummer"
+        BOOKING_REFERENCE: "@:CORE.COMMON.TERMINOLOGY.BOOKING_REF"
         POWERED_BY: "Buchungen bereitgestellt von"
       }
       PERSON_LIST: {
         PROGRESS_SELECT: "@:CORE.COMMON.BTN.SELECT"
-        PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
+        PROGRESS_BACK:   "@:CORE.COMMON.BTN.BACK"
       }
       MONTHLY_CALENDAR: {
-        SELECT_DAY: "Select a day"
-        WEEK_BEGINNING: "Week beginning"
-        PICK_A_DATE: "Wählen Sie ein Datum"
+        SELECT_DAY:       "Select a day"
+        WEEK_BEGINNING:   "Week beginning"
+        PICK_A_DATE:      "Wählen Sie ein Datum"
         PREVIOUS_5_WEEKS: "Previous 5 Weeks"
-        NEXT_5_WEEKS: "Next 5 Weeks"
-        KEY: "Key"
-        AVAILABLE: "{number, plural, =0{Keine verfügbar} one{1 verfügbar} other{# verfügbare}}"
-        UNAVAILABLE: "Unavailable"
-        PROGRESS_BACK: "@:CORE.COMMON.BTN.BACK"
+        NEXT_5_WEEKS:     "Next 5 Weeks"
+        KEY:              "Key"
+        AVAILABLE:        "{number, plural, =0{Keine verfügbar} one{1 verfügbar} other{# verfügbare}}"
+        UNAVAILABLE:      "@:CORE.COMMON.TERMINOLOGY.UNAVAILABLE"
+        PROGRESS_BACK:    "@:CORE.COMMON.BTN.BACK"
       }
     }
   }
