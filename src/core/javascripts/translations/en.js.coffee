@@ -82,6 +82,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         CALENDAR:          "Calendar"
         QUESTIONS:         "Questions"
         BOOKING:           "Booking"
+        ADMITTANCE:        "Admittance"
       }
       FORM: {
         FIRST_NAME:                    "First Name"
