@@ -317,35 +317,45 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
       else
         return phone_number
 
-# Checks if a format (option) is set if not checks the country and provides a default.
-# Additionally you can pass in date, time or datetime
-angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
 
-  hardcoded_formats =
-    datetime:
-      us: 'MM/DD/YYYY, h:mm a'
-      uk: 'DD/MM/YYYY, HH:mm'
-    date:
-      us: 'MM/DD/YYYY'
-      uk: 'DD/MM/YYYY'
-    time:
-      us: 'h:mm a'
-      uk: 'HH:mm'
-
+###
+ * @ngdoc filter
+ * @name datetime
+ * @kind function
+ *
+ * @description
+ * Format given moment object or datelike string using provided format.
+ *
+ * @param {moment|string} date The date to format
+ * @param {string} format The format to apply. Defaults to LLL
+ * @returns {boolean} show_time_zone Show timezone identifer. Defaults to false
+ *
+ *
+ * @example
+   <example module="dateTimeExample">
+     <file name="index.html">
+       <script>
+         angular.module('dateTimeExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.date = moment();
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Date: {{date | datetime}}</span>
+       </div>
+     </file>
+   </example>
+###
+angular.module('BB.Filters').filter 'datetime', () ->
   (date, format="LLL", show_time_zone=false) ->
 
-    if hardcoded_formats[format]
+    return if !date or (date and !moment(date.isValid()))
+   
+    new_date = moment(date) 
+    new_date.tz(SettingsService.getDisplayTimeZone())
+    format += ' zz' if show_time_zone
 
-      cc = if SettingsService.getCountryCode() is 'us' then 'us' else 'uk'
-      format = hardcoded_formats[format][cc]
-
-    if date and moment.isMoment(date)
-
-      new_date = date.clone()
-      new_date.tz(SettingsService.getDisplayTimeZone())
-      format += ' zz' if show_time_zone
-      
-      return new_date.format(format)
+    return new_date.format(format)
 
 
 
