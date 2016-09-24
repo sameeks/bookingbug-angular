@@ -87,7 +87,6 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibMo
 
       BBModel.Admin.Booking.$query(params).then (bookings) ->
         now = moment.unix()
-        console.log "got bookings", $scope.period, now
         if $scope.period && $scope.period == "past"
           $scope.booking_models = _.filter bookings.items, (x) ->
             x.datetime.unix() < now 
