@@ -12,7 +12,7 @@
 
     <div class="breadcrumbs">
       <span ng-repeat="step in steps">
-        <a ng-if="!$last" href="" ng-click="loadStep(step.number)" class="btn default med flat">  {{step.number}}.
+        <a ng-if="!$last" href="" ng-click="loadStep(step.number)" class="btn default med flat"> {{step.number}}.
         </a>
         <div ng-if="$last" class="step">{{step.number}}. {{step.title}}</div>
       <span>

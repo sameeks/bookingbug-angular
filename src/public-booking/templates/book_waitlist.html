@@ -29,13 +29,13 @@
   <ul class="confirmation-summary">
     <li class="row confirmation-summary-item">
       <div class="row">
-        <div class="col-sm-6 col-xs-6 total-label"><strong><span translate="PUBLIC_BOOKING.BOOK_WAITLIST.BASKET_TOTAL"></span></strong></div>
+        <div class="col-sm-6 col-xs-6 total-label"><strong><span translate="PUBLIC_BOOKING.BOOK_WAITLIST.CONFIRMATION_SUMMARY.BASKET_TOTAL"></span></strong></div>
         <div class="col-sm-3 col-xs-6"><strong>{{purchase.total_price | icurrency }}</strong></div>
       </div>
     </li>
     <li class="row confirmation-summary-item">
       <div class="row">
-        <div class="col-sm-6 col-xs-6 total-label"><strong><span translate="PUBLIC_BOOKING.BOOK_WAITLIST.BASKET_TOTAL_DUE_NOW"></span></strong></div>
+        <div class="col-sm-6 col-xs-6 total-label"><strong><span translate="PUBLIC_BOOKING.BOOK_WAITLIST.CONFIRMATION_SUMMARY.BASKET_TOTAL_DUE_NOW"></span></strong></div>
         <div class="col-sm-3 col-xs-6"><strong>{{purchase.due_now | currency }}</strong></div>
       </div>
     </li>
@@ -65,10 +65,10 @@
 <div class="hidden-print">
   <div class="bb-step-navigation">
     <div ng-if="make_payment" class="col-sm-12 bb-checkout-pay-button-div">
-      <div payment-button 
-        value="Pay" 
-        class="btn btn-primary" 
-        total="total" 
+      <div payment-button
+        value="Pay"
+        class="btn btn-primary"
+        total="total"
         bb="bb"
         decide-next-page="decideNextPage">
       </div>

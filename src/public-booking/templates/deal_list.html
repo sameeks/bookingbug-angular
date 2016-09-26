@@ -19,26 +19,26 @@
           <td>
             <p>
               {{item.deal.name}}
-              <br/> 
+              <br/>
               <form ng-if="!bb.company_settings.no_recipient" name="recipient_form" class="form-horizontal" role="form" bb-form-resettable bb-form novalidate>
                 <div ng-hide="recipient_form.submitted && item.recipient">
-                  <small><span translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_ADD"></span><small>
+                  <small><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.RECIPIENT_ADD"></span><small>
                     <br/>
                     <p>
-                      <label bb-question-label="question" for="recipient_name" class="control-label col-sm-4"> <small><span translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_NAME"></span>:</small> </label> <input type="text" name="recipient_name" id="recipient_name" ng-model="recipient.name" ng-pattern="validator.alpha"/>
+                      <label bb-question-label="question" for="recipient_name" class="control-label col-sm-4"> <small><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.RECIPIENT_NAME"></span>:</small> </label> <input type="text" name="recipient_name" id="recipient_name" ng-model="recipient.name" ng-pattern="validator.alpha"/>
                       <br/>
                     </p>
                     <p>
-                      <label bb-question-label="question" for="recipient_mail" class="control-label col-sm-4"><small><span translate="PUBLIC_BOOKING.DEAL_LIST.DETAILS_EMAIL"></span>:</small> </label> <input type="email" name="recipient_mail" id="recipient_mail" ng-model="recipient.mail"/>
+                      <label bb-question-label="question" for="recipient_mail" class="control-label col-sm-4"><small><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.DETAILS_EMAIL"></span>:</small> </label> <input type="email" name="recipient_mail" id="recipient_mail" ng-model="recipient.mail"/>
                       <br/>
-                    </p> 
+                    </p>
                     <p>
-                      <button ng-click="validator.validateForm(recipient_form) && addRecipient(item, recipient)"><span translate="PUBLIC_BOOKING.DEAL_LIST.PROGRESS_ADD"></span></button>
+                      <button ng-click="validator.validateForm(recipient_form) && addRecipient(item, recipient)"><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.PROGRESS_ADD"></span></button>
                       <br/>
                     </p>
                     <br/>
-                    <p ng-show="recipient_form.recipient_name.$invalid && recipient_form.submitted" class="error-message"><span translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_NAME_VALIDATION_MSG"></span></p>
-                    <p ng-show="recipient_form.recipient_mail.$invalid && recipient_form.submitted" class="error-message"><span translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_EMAIL_VALIDATION_MSG"></span></p>
+                    <p ng-show="recipient_form.recipient_name.$invalid && recipient_form.submitted" class="error-message"><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.RECIPIENT_NAME_VALIDATION_MSG"></span></p>
+                    <p ng-show="recipient_form.recipient_mail.$invalid && recipient_form.submitted" class="error-message"><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.RECIPIENT_EMAIL_VALIDATION_MSG"></span></p>
                   </div>
                 </form>
                 <div ng-if="item.recipient">

@@ -28,7 +28,7 @@
             <div class="form-group">
               <label class="sr-only" for="event_group"><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_CATEGORY"></span></label>
               <select class="form-control" name="event_group" id="event_group" ng-model="filters.event_group" ng-options="event_group.name for (id, event_group) in event_groups" ng-change="filterChanged()">
-                <option value=""><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_ANY"></span> <span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_CATEGORY"></span></option>
+                <option value=""><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_ANY_CATEGORY"></span></option>
               </select>
             </div>
 
@@ -73,7 +73,7 @@
             <div class="form-group">
               <label class="sr-only" for="price"><span translate="PUBLIC_BOOKING.EVENT_LIST.ITEM_PRICE"></span></label>
               <select class="form-control" name="price" id="price" ng-model="filters.price" ng-options="price as (price | currency) for price in price_options" ng-change="filterChanged()">
-                <option value=""><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_ANY"></span> <span translate="PUBLIC_BOOKING.EVENT_LIST.ITEM_PRICE"></span></option>
+                <option value=""><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_ANY_PRICE"></span></option>
               </select>
             </div>
 
@@ -202,8 +202,7 @@
                   <div class="event-select col-xs-12"  ng-class="{'col-sm-4':!$root.tiles}">
                     <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" ng-disabled="spaces_left == 0 && !bb.company.settings.has_waitlists">
                       <span ng-show="spaces_left > 0">
-                        <span translate="PUBLIC_BOOKING.EVENT_LIST.PROGRESS_BOOK"></span>
-                        <span translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_WORD"></span>
+                        <span translate="PUBLIC_BOOKING.EVENT_LIST.PROGRESS_BOOK_EVENT"></span>
                       </span>
                       <div ng-show="spaces_left <= 0 && !bb.company.settings.has_waitlists">
                         <span class="status-sold-out"><span translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_SOLD_OUT"></span></span>
