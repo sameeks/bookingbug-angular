@@ -15,8 +15,8 @@ angular.module('BB.Services').config ($translateProvider) ->
           APPOINTMENT_QUESTION: "Êtes-vous sûr de vouloir annuler ce rendez-vous ?"
         }
         SCHEMA_FORM: {
-          OK_BTN:     "@:CORE.COMMON.BTN.OK"
-          CANCEL_BTN: "@:CORE.COMMON.BTN.CANCEL"
+          OK_BTN:     "@:COMMON.BTN.OK"
+          CANCEL_BTN: "@:COMMON.BTN.CANCEL"
         }
       }
       FILTERS: {
@@ -29,7 +29,7 @@ angular.module('BB.Services').config ($translateProvider) ->
           CURRENCY_FORMAT:     "%v%s"
         }
         PRETTY_PRICE: {
-          FREE: "@:CORE.COMMON.TERMINOLOGY.PRICE_FREE"
+          FREE: "@:COMMON.TERMINOLOGY.PRICE_FREE"
         }
         TIME_PERIOD: {
           TIME_SEPARATOR: " et "
@@ -82,6 +82,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         CALENDAR:          "Calendar"
         QUESTIONS:         "Questions"
         BOOKING:           "Réservation"
+        ADMITTANCE:        "Admittance"
       }
       FORM: {
         FIRST_NAME:                    "Prénom"
@@ -137,6 +138,8 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       LANGUAGE: {
         EN: "English"
+        DE: "Deutsch"
+        ES: "Español"
         FR: "Français"
       }
 

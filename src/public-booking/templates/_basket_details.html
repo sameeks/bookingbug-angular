@@ -2,16 +2,16 @@
 
   <div class="modal-header">
     <button type="button" class="close" ng-click="cancel()">&times;</button>
-    <h5 class="modal-title"><span translate="BASKET_DETAILS_TITLE"></span></h5>
+    <h5 class="modal-title"><span translate="PUBLIC_BOOKING.BASKET_DETAILS.BASKET_DETAILS_TITLE"></span></h5>
   </div>
 
   <div class="modal-body">
-    <p ng-hide="bb.basket.items"><span translate="BASKET_DETAILS_NO"></span></p>
+    <p ng-hide="bb.basket.items"><span translate="PUBLIC_BOOKING.BASKET_DETAILS.BASKET_DETAILS_NO"></span></p>
     <table class="table table-bordered" ng-show="bb.basket.items">
       <thead>
         <tr>
-          <th><span translate="ITEM"></span></th>
-          <th><span translate="BASKET_ITEM_APPOINTMENT"></span></th>
+          <th><span translate="PUBLIC_BOOKING.BASKET_DETAILS.ITEM"></span></th>
+          <th><span translate="PUBLIC_BOOKING.BASKET_DETAILS.BASKET_ITEM_APPOINTMENT"></span></th>
           <th>&nbsp;</th>
         </tr>
       </thead>
@@ -20,7 +20,7 @@
           <td >
             {{ item.service_name }}
           </td>
-          <td translate="TIME_AND_DURATION" translate-values="{time: item.date.date, duration: item.duration}">
+          <td translate="PUBLIC_BOOKING.BASKET_DETAILS.TIME_AND_DURATION" translate-values="{time: item.date.date, duration: item.duration}">
           <td class="text-center">
             <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></span>
           </td>
@@ -30,8 +30,8 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="cancel()"><span translate="PROGRESS_CANCEL"></span></button>
-    <button ng-show="bb.basket.items" class="btn btn-primary" ng-click="checkout('basket') && cancel()"><span translate="BASKET_CHECKOUT"></span></button>
+    <button class="btn btn-default" ng-click="cancel()"><span translate="PUBLIC_BOOKING.BASKET_DETAILS.PROGRESS_CANCEL"></span></button>
+    <button ng-show="bb.basket.items" class="btn btn-primary" ng-click="checkout('basket') && cancel()"><span translate="PUBLIC_BOOKING.BASKET_DETAILS.BASKET_CHECKOUT"></span></button>
   </div>
 
 </div>

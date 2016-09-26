@@ -6,8 +6,8 @@
   <form name="client_form" ng-submit="validator.validateForm(client_form)" class="form-horizontal" role="form" bb-form-resettable bb-form novalidate>
 
     <div>
-      <h2 ng-if="!isAdmin()" class="booking-form-header"><span ng-if="!isAdmin()"><span translate="PUBLIC_BOOKING.CLIENT.DETAILS_TITLE"></span></span></h2>
-      <h2 ng-if="isAdmin()" class="booking-form-header"><span ng-if="isAdmin()"><span translate="PUBLIC_BOOKING.CLIENT.CLIENT_DETAILS_TITLE"></span></h2>
+      <h2 ng-if="!isAdmin()" class="booking-form-header"><span translate="PUBLIC_BOOKING.CLIENT.DETAILS_TITLE"></span></h2>
+      <h2 ng-if="isAdmin()" class="booking-form-header"><span translate="PUBLIC_BOOKING.CLIENT.CLIENT_DETAILS_TITLE"></span></h2>
     </div>
 
     <div class="form-group">
@@ -44,7 +44,7 @@
         <input type="email" name="email" id="email" required ng-model="client.email" class="form-control" bb-resettable  ng-pattern="validator.getEmailPattern()" autocomplete="email"/>
       </div>
       <div class="col-sm-offset-4 messages">
-        <div class="error-message" ng-show="client_form.email.$invalid && client_form.submitted"><span translate="PUBLIC_BOOKING.CLIENT.DETAILS_EMAIL_VALIDATION_MSG"></span>
+        <div class="error-message" ng-show="client_form.email.$invalid && client_form.submitted">
           <span translate="PUBLIC_BOOKING.CLIENT.DETAILS_EMAIL_VALIDATION_MSG"></span>
         </div>
       </div>

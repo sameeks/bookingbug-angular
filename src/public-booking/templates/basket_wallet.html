@@ -11,7 +11,7 @@
 
       <div ng-form class="form-inline">
         <div ng-show="!showTopUpBox()">
-          <button type="button" class="bb-bookings-action" ng-click="(show_topup_box = true);(error_message = false)"><span translate="PUBLIC_BOOKING.BASKET_WALLET.BASKET_WALLET_TOP_UP"></span></button>
+          <button type="button" class="bb-bookings-action" ng-click="(show_topup_box = true);(error_message = false)"><span translate="PUBLIC_BOOKING.BASKET_WALLET.BASKET_WALLET_SHOW_TOP_UP_BOX"></span></button>
         </div>
         <div ng-show="showTopUpBox()" class="form-group">
           <label for="amount"><span translate="PUBLIC_BOOKING.BASKET_WALLET.BASKET_WALLET_AMOUNT"></span>:</label>
@@ -33,7 +33,7 @@
         </div>
         <script type="text/javascript">
           iFrameResize([{log:true, checkOrigin:false}],['#bb-widget']);
-       </script> 
+       </script>
       </div>
 
     </div>
@@ -43,7 +43,7 @@
           <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()"><span translate="PUBLIC_BOOKING.BASKET_WALLET.PROGRESS_BACK"></span></button>
         </div>
       </div>
-    </div> 
+    </div>
 
   </div>
 </div>
