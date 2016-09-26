@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.calendar', [
     RuntimeStates
       .state 'calendar',
         parent: AdminCalendarOptions.parent_state
-        url: "calendar/:assets"
+        url: "calendar"
         templateUrl: 'calendar/index.html'
         controller: 'CalendarPageCtrl'
         resolve: {
@@ -30,6 +30,12 @@ angular.module('BBAdminDashboard.calendar', [
             $ocLazyLoad.load(script);
           ]
         }
+      .state 'calendar.people',
+        url: "/people/:assets"
+        templateUrl: "calendar/people.html"
+      .state 'calendar.resources',
+        url: "/resources/:assets"
+        templateUrl: "calendar/resources.html"
 
   if AdminCalendarOptions.show_in_navigation
     SideNavigationPartials.addPartialTemplate('calendar', 'core/nav/calendar.html')

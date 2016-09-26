@@ -28,23 +28,19 @@
 </pre>
 ###
 
-provider = () ->
+angular.module('BBAdminDashboard').provider 'AdminCoreOptions', () ->
+  'ngInject'
+
   options = {
-    default_state: 'calendar'
-    default_language: 'en',
-    use_browser_language: true,
-    available_languages: ['en'],
-    deactivate_sidenav: false,
+    default_state          : 'calendar'
+    deactivate_sidenav     : false,
     deactivate_boxed_layout: false,
-    sidenav_start_open: true,
-    boxed_layout_start: false,
-    available_language_associations: {
-      'en_*': 'en'
-    },
-    side_navigation: [
+    sidenav_start_open     : true,
+    boxed_layout_start     : false,
+    side_navigation        : [
       {
         group_name: 'SIDE_NAV_BOOKINGS'
-        items: [
+        items     : [
           'calendar',
           'clients',
           'check-in',
@@ -54,7 +50,7 @@ provider = () ->
       },
       {
         group_name: 'SIDE_NAV_CONFIG'
-        items: [
+        items     : [
           'config-iframe',
           'publish-iframe',
           'settings-iframe'
@@ -78,4 +74,4 @@ provider = () ->
 
   return
 
-angular.module('BBAdminDashboard').provider 'AdminCoreOptions', provider
+

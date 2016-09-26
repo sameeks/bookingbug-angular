@@ -4,7 +4,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
   $document, $log, $q, ModalForm, $rootScope, AlertService, PurchaseService,
   LoadingService) ->
 
-  loader = LoadingService.$loader($scope).notLoaded()
+  loader = LoadingService.$loader($scope)
 
   $scope.getUpcomingBookings = () ->
     defer = $q.defer()

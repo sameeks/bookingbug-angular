@@ -1,0 +1,7 @@
+<ui-select ng-model="vm.language.selected" theme="bootstrap"
+           ng-change="vm.pickLanguage(vm.language.selected.identifier)" enable-search="false">
+  <ui-select-match placeholder="Select..."><span translate="{{$select.selected.label}}"></span></ui-select-match>
+  <ui-select-choices repeat="lang in vm.availableLanguages | props: { label: $select.search}">
+    <div ng-bind-html="lang.label | translate | highlight: $select.search"></div>
+  </ui-select-choices>
+</ui-select>

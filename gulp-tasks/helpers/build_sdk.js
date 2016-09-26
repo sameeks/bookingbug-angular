@@ -38,10 +38,10 @@
             .pipe(gulp.dest(path.join(releasePath, moduleDirName)));
     }
 
-    function fonts(moduleDirName, srcpath, releasepath) {
-        srcpath || (srcpath = './src');
+    function fonts(moduleDirName, srcPath, releasepath) {
+        srcPath || (srcPath = './src');
         releasepath || (releasepath = './build');
-        return gulp.src(srcpath + '/' + moduleDirName + '/fonts/*')
+        return gulp.src(srcPath + '/' + moduleDirName + '/fonts/*')
             .pipe(gulpFlatten())
             .pipe(gulp.dest(releasepath + '/' + moduleDirName));
     }
@@ -62,6 +62,8 @@
 
         var files = [
             srcPath + '/' + moduleDirName + '/javascripts/main.js.coffee',
+            srcPath + '/' + moduleDirName + '/javascripts/**/*.module.js.coffee',
+            srcPath + '/' + moduleDirName + '/javascripts/**/*',
             srcPath + '/' + moduleDirName + '/javascripts/**/*',
             srcPath + '/' + moduleDirName + '/i18n/en.js',
             '!' + srcPath + '/' + moduleDirName + '/javascripts/**/*~',
@@ -199,18 +201,14 @@
             .pipe(gulp.dest(releasePath + '/' + moduleDirName + '/src/stylesheets'))
     }
 
-    function templates(moduleDirName, srcPath, releasePath, moduleName, keepPathInfo) {
+    function templates(moduleDirName, srcPath, releasePath, moduleName) {
         srcPath || (srcPath = './src');
         releasePath || (releasePath = './build');
 
-        if (keepPathInfo === undefined) {
-            keepPathInfo = true;
-        }
         if (moduleName === undefined || moduleName == '' || !moduleName) {
             moduleName = 'BB';
         }
         return gulp.src(srcPath + '/' + moduleDirName + '/templates/**/*.html')
-            .pipe(gulpIf(keepPathInfo, gulpFlatten()))
             .pipe(gulpAngularTemplateCache({module: moduleName, root: 'default'}))
             .pipe(gulpConcat('bookingbug-angular-' + moduleDirName + '-templates.js'))
             .pipe(gulp.dest(releasePath + '/' + moduleDirName));

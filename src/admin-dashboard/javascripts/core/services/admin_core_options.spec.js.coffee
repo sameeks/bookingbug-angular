@@ -24,12 +24,6 @@ describe 'BBAdminDashboard, AdminCoreOptions provider', () ->
 
     expect options.default_state
     .toBeDefined()
-    expect options.default_language
-    .toBeDefined()
-    expect options.use_browser_language
-    .toBeDefined()
-    expect options.available_languages
-    .toBeDefined()
     expect options.deactivate_sidenav
     .toBeDefined()
     expect options.deactivate_boxed_layout
@@ -37,8 +31,6 @@ describe 'BBAdminDashboard, AdminCoreOptions provider', () ->
     expect options.sidenav_start_open
     .toBeDefined()
     expect options.boxed_layout_start
-    .toBeDefined()
-    expect options.available_language_associations
     .toBeDefined()
     expect options.side_navigation
     .toBeDefined()

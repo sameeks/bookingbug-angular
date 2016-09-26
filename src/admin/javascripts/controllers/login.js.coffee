@@ -23,7 +23,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
     password: null
     selected_admin: null
 
-  $scope.login_template = 'admin_login.html'
+  $scope.login_template = 'login/admin_login.html'
 
   $scope.login = () ->
     $scope.alert = ""
@@ -42,7 +42,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
       $scope.alert = "Sorry, either your email or password was incorrect"
 
   $scope.pickCompany = () ->
-    $scope.login_template = 'admin_pick_company.html'
+    $scope.login_template = 'login/admin_pick_company.html'
 
   $scope.selectedCompany = () ->
     $scope.alert = ""

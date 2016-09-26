@@ -1,58 +1,72 @@
-<div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store bb-page>
+<div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store>
   <uib-tabset>
     <uib-tab>
       <uib-tab-heading>
-        <i class="fa fa-calendar-plus-o"></i> Make booking
+        <i class="fa fa-calendar-plus-o"></i> <span translate="ADMIN_BOOKING.QUICK_PICK.MAKE_BOOKING"></span>
       </uib-tab-heading>
       <br/>
 
       <!-- Make booking tab START -->
       <div ng-form name="appointment-booking-form">
-        <div bb-services>
-          <div class="form-group">
-            <label>Service</label>
 
-            <!-- TODO use display_name -->
-            <select id="service" ng-model="service" ng-options="s.name for s in bookable_services | orderBy: 'order'" class="form-control">
-              <option value="">-- select a service --</option>
-            </select>
-          </div>
+        <p translate="ADMIN_BOOKING.QUICK_PICK.STEP_SUMMARY"></p>
+
+        <div bb-services>
+          
+          <ul class="bb-list bb-list-bordered bb-list-md">
+  
+            <li ng-repeat="item in filtered_items | orderBy: 'order'">
+
+               <div class="row">
+
+                <div class="col-sm-10 col-xs-6">
+
+                  <h2 class="bb-service-name bb-service-name-small">{{item.name}}</h2>
+
+                </div>
+
+                <div class="col-sm-2 col-xs-12">
+                  <button type="button" ng-click="selectItem(item, 'calendar')" class="btn btn-primary btn-block" translate="ADMIN_BOOKING.QUICK_PICK.SELECT_BTN"></button>
+                </div>
+              </div>
+            </li>
+          </ul>
+
         </div>
 
-        <button type="button" class="btn btn-primary" ng-click="checkReady() && routeReady('calendar')" bb-debounce ng-disabled="!bb.current_item.service">Book</button>
       </div>
       <!-- Make booking tab END -->
 
     </uib-tab>
     <uib-tab ng-show="!bb.hide_block">
       <uib-tab-heading>
-        <i class="fa fa-calendar-minus-o"></i> Block time
+        <i class="fa fa-calendar-minus-o"></i> <span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME"></span>
       </uib-tab-heading>
       <br/>
       <!-- Block time tab START -->
       <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
 
         <div class="form-group" ng-class="{'has-error': resourceError}">
-          <label>For</label>
+          <label><span translate="ADMIN_BOOKING.QUICK_PICK.FOR"></span></label>
           <select id="resource" ng-model="picked_resource" ng-change="changeResource()" ng-options="item.identifier as item.name group by item.group for item in resources" class="form-control">
-            <option value="">-- select --</option>
+            <option value="" translate="ADMIN_BOOKING.QUICK_PICK.SELECT"></option>
           </select>
           <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError">Please select a resource or member of staff</p>
         </div>
         <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
-          <label>Block whole day &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" on-label="Yes" off-label="No"></toggle-switch></label>
+          <label><span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_WHOLE_DAY"></span> &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" translate-attr-on-label="ADMIN_BOOKING.QUICK_PICK.YES" translate-attr-off-label="ADMIN_BOOKING.QUICK_PICK.NO"></toggle-switch></label>
         </div>
         <div class="row" ng-hide="blockWholeDay">
           <div class="col-md-6">
             <div class="form-group">
-              <label>From</label>
-              <div bb-date-time-picker date="config.from_datetime" max-date="config.to_datetime" min-date="config.min_date"></div>
+              <label><span translate="ADMIN_BOOKING.QUICK_PICK.FROM"></span></label>
+              <div bb-date-time-picker date="bb.from_datetime" max-date="bb.to_datetime" min-date="bb.min_date"></div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label>To</label>
-              <div bb-date-time-picker date="config.to_datetime" min-date="config.from_datetime" max-date="config.max_date"></div>
+              <label><span translate="ADMIN_BOOKING.QUICK_PICK.TO"></span></label>
+              <div bb-date-time-picker date="bb.to_datetime" min-date="bb.from_datetime" max-date="bb.max_date"></div>
             </div>
           </div>
         </div>
@@ -75,7 +89,7 @@
 
         </div><!--booking_questions_form-->
 
-        <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false">Block Time</button>
+        <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false"><span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME"></span></button>
 
       </div>
       <!-- Block time tab END -->

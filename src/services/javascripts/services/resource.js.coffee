@@ -6,7 +6,7 @@ angular.module('BBAdmin.Services').factory 'AdminResourceService', ($q,
   query: (params) ->
     company = params.company
     defer = $q.defer()
-    company.$get('resources').then (collection) ->
+    company.$get('resources', params).then (collection) ->
       collection.$get('resources').then (resources) ->
         models = (new BBModel.Admin.Resource(r) for r in resources)
         defer.resolve(models)

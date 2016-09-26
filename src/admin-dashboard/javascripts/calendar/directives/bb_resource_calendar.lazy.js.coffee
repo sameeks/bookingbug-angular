@@ -46,6 +46,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.options = $scope.$eval $attrs.bbResourceCalendar
     $scope.options ||= {}
 
+
+
     # height = if $scope.options.header_height
     #   $bbug($window).height() - $scope.options.header_height
     # else
@@ -63,6 +65,7 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
     $scope.uiCalOptions =
       calendar:
+        locale: $translate.use()
         schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: false
         eventDurationEditable: false
@@ -70,29 +73,32 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         maxTime: $scope.options.max_time
         height: 'auto'
         buttonText: {
-          today: $translate.instant('CALENDAR_PAGE.TODAY')
+          today: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
         }
         header:
           left: 'today,prev,next'
           center: 'title'
-          right: 'timelineDay,timelineDayThirty,agendaWeek,month'
+          right: 'timelineDay,listDay,timelineDayThirty,agendaWeek,month'
         defaultView: 'timelineDay'
         views:
+          listDay:
+             buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.AGENDA')
           agendaWeek:
             slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
-            buttonText: $translate.instant('CALENDAR_PAGE.WEEK')
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
             groupByDateAndResource: false
           month:
             eventLimit: 5
-            buttonText: $translate.instant('CALENDAR_PAGE.MONTH')
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
           timelineDay:
             slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
             eventOverlap: false
             slotWidth: 25
-            buttonText: $translate.instant('CALENDAR_PAGE.DAY', {minutes: $scope.options.cal_slot_duration})
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: $scope.options.cal_slot_duration})
             resourceAreaWidth: '18%'
         resourceGroupField: 'group'
         resourceLabelText: ' '
+        eventResourceEditable: true
         selectable: true
         lazyFetching: false
         columnFormat: AdminCalendarOptions.column_format
@@ -135,9 +141,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
 
             # if it's got a person and resource - then it
           Dialog.confirm
-            title: $translate.instant('CALENDAR_PAGE.MOVE_MODAL_TITLE')
+            title: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_TITLE')
             model: event
-            body: $translate.instant('CALENDAR_PAGE.MOVE_MODAL_BODY')
+            body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY')
             success: (model) =>
               $scope.updateBooking(event)
             fail: () ->
@@ -147,10 +153,18 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
             $scope.editBooking(new BBModel.Admin.Booking(event))
         eventRender: (event, element) ->
           service = _.findWhere($scope.services, {id: event.service_id})
-          if service
+          if uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getView').type == "listDay"
+            link = $bbug(element.children()[2])
+            if link
+              a = link.children()[0]
+              if a
+                if event.person_name
+                  a.innerHTML = event.person_name + " - " + a.innerHTML
+          else if service
             element.css('background-color', service.color)
             element.css('color', service.textColor)
             element.css('border-color', service.textColor)
+          element
         eventAfterRender: (event, elements, view) ->
           if not event.rendering? or event.rendering != 'background'
             PrePostTime.apply(event, elements, view, $scope)
@@ -205,8 +219,10 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
           $scope.calendarLoading = isLoading
 
     isTimeRangeAvailable = (start, end, resource) ->
+      st =  moment(start.toISOString()).unix()
+      en =  moment(end.toISOString()).unix()
       events = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', (event)->
-        event.rendering == 'background' && start >= event.start && end <= event.end && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
+        event.rendering == 'background' && st >= event.start.unix() && event.end && en <= event.end.unix() && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
       )
 
       events.length > 0
@@ -248,6 +264,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         for asset in assets
           asset.id = asset.identifier
         $scope.loading = false
+
+        if $scope.options.type
+          assets = _.filter assets, (a) -> a.type == $scope.options.type
         $scope.assets = assets
 
         # requestedAssets
@@ -281,9 +300,12 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       $scope.getCompanyPromise().then (company) ->
         if $scope.showAll
           BBAssets(company).then((assets)->
+            if $scope.options.type
+              assets = _.filter assets, (a) -> a.type == $scope.options.type
+
             for asset in assets
               asset.id = asset.identifier
-              asset.group = $translate.instant('CALENDAR_PAGE.' + asset.group.toUpperCase())
+              asset.group = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.' + asset.group.toUpperCase())
 
             $scope.loading = false
             callback(assets)
@@ -348,6 +370,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
         templateUrl: templateUrl
         model: booking
         title: title
+        params:
+          locale: $translate.use()
         success: (response) =>
           if typeof response == 'string'
             if response == "move"
@@ -418,11 +442,11 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     $scope.$on 'newCheckout', () ->
       uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
 
-    $rootScope.$on 'LanguagePicker:changeLanguage', () ->
+    $rootScope.$on 'BBLanguagePicker:languageChanged', () ->
       # Horrible hack refresh page because FUllcalendar doesnt have a rerender method
       #  we have to refresh the state to load new translation
       $state.go($state.current, {}, {reload: true})
-
+      return
 
   link = (scope, element, attrs) ->
 

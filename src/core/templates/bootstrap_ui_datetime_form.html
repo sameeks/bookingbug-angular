@@ -1,7 +1,6 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': !hasError()}">
 	<label class="control-label">{{form.title}}</label>
-  <input ng-if="form.readonly" ng-show="form.key" type="text" placeholder="" class="form-control" id="datetime" ng-model="model.datetime" ng-disabled="form.readonly" name="datetime" disabled="disabled"/>
-
+  <input ng-if="form.readonly" ng-show="form.key" type="text" placeholder="" class="form-control" id="datetime" value="{{model.datetime  | datetime: 'llll'}}" ng-disabled="form.readonly" name="datetime" disabled="disabled"/>
   <div class="input-group" ng-if="!form.readonly">
    	<div bb-date-time-picker  date="$$value$$"  bb-disabled="form.readonly" ></div>
 	</div>

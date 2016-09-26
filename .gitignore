@@ -6,6 +6,7 @@ docs/*
 /.idea/
 **/*.js.js
 **/*.js.map
+.DS_Store
 
 .awspublish-angular.bookingbug.com
 

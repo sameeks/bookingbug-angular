@@ -1,8 +1,12 @@
 .bb-service-list, div[bb-services] {
 
   .bb-service-name {
-    font-size: $font-size-h3;
-    font-weight: 200;
+    font-size: $font-size-large;
+    font-weight: 400;
+  }
+
+  .bb-service-name-small {
+    margin-top: 10px;
   }
 
   .bb-service-image {
@@ -21,7 +25,7 @@
   }
 
   .bb-service-price {
-    font-size: $font-size-h3;
+    font-size: $font-size-large;
     text-align: right;
   }
 

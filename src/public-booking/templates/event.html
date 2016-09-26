@@ -12,7 +12,7 @@
           </li>
           <li class="col-xs-6 col-sm-4 time truncate-xs">
             <span class="fa fa-clock-o" aria-hidden="true"></span>
-            <span class="event-time" ng-bind="event.date.format('h[:]mma')"></span>&ndash;<span ng-bind="event.end_datetime.format('h[:]mma')"></span>
+            <span class="event-time" ng-bind="event.date.format('LT')"></span>&ndash;<span ng-bind="event.end_datetime.format('LT')"></span>
           </li>
           <li class="hidden-xs col-sm-4 duration truncate-xs">
             <span class="fa fa-hourglass-half"></span>
@@ -57,7 +57,7 @@
                 <div class="col-sm-6 col-xs-6">Type</div>
                 <div class="col-sm-3 col-xs-4">Price</div>
                 <div class="col-sm-3 col-xs-2">Qty</div>
-              </div> 
+              </div>
             </li>
             <li ng-repeat="ticket in event.tickets">
               <div class="row">
@@ -176,7 +176,7 @@
               <label for="first_name" class="control-label col-sm-4">First Name:</label>
               <div class="col-sm-5">
                 <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control" autocomplete="given-name"/>
-              </div> 
+              </div>
               <div class="col-sm-3 messages">
                 <div class="error-message" ng-show="client_form.first_name.$invalid && booking_form.submitted">
                   Please enter your first name

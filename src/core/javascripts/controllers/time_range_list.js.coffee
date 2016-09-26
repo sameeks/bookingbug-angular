@@ -36,7 +36,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
   controller : 'TimeRangeList'
   link: (scope, element, attrs, controller, transclude) ->
 
-# date helpers
+    # date helpers
     scope.today = moment().toDate()
     scope.tomorrow = moment().add(1, 'days').toDate()
 
@@ -44,7 +44,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
     transclude scope, (clone) =>
 
-# if there's content compile that or grab the week_calendar template
+      # if there's content compile that or grab the week_calendar template
       has_content = clone.length > 1 || (clone.length == 1 and (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
 
       if has_content

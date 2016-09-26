@@ -98,6 +98,7 @@ angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
       return null
 
     $update: (data) ->
+      defer = $q.defer()
       if data
         data.datetime = moment(data.datetime)
         data.datetime.tz()
@@ -108,14 +109,23 @@ angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
         if @using_full_time
           @useFullTime()
         BookingCollections.checkItems(@)
+        defer.resolve(@)
+      , (err) ->
+        defer.reject(err)
+      defer.promise
 
     $refetch: () ->
+      defer = $q.defer()
       @$flush('self')
       @$get('self').then (res) =>
         @constructor(res)
         if @using_full_time
           @useFullTime()
         BookingCollections.checkItems(@)
+        defer.resolve(@)
+      , (err) ->
+        defer.reject(err)
+      defer.promise
 
     @$query: (params) ->
       if params.slot

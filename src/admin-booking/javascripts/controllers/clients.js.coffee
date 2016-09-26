@@ -8,18 +8,18 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   templateUrl: 'admin_booking_clients.html'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,
-  $rootScope, $q, AlertService, ValidatorService, ErrorService, $log, BBModel,
-  $timeout, LoadingService) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AlertService,
+  ValidatorService, ErrorService, $log, BBModel,  $timeout, LoadingService, AdminBookingOptions, $translate) ->
 
   $scope.validator  = ValidatorService
+  $scope.admin_options = AdminBookingOptions
   $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 10})
   loader = LoadingService.$loader($scope)
 
   $scope.sort_by_options = [
-    {key: 'first_name', name: 'First Name'},
-    {key: 'last_name', name: 'Last Name'},
-    {key: 'email', name: 'Email'}
+    {key: 'first_name', name: $translate.instant('ADMIN_BOOKING.CUSTOMER.SORT_BY_FIRST_NAME')},
+    {key: 'last_name', name: $translate.instant('ADMIN_BOOKING.CUSTOMER.SORT_BY_LAST_NAME')},
+    {key: 'email', name: $translate.instant('ADMIN_BOOKING.CUSTOMER.SORT_BY_EMAIL')}
   ]
 
   $scope.sort_by = $scope.sort_by_options[0].key
@@ -98,7 +98,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,
       filter_by: search_text
       company: $scope.bb.company
     BBModel.Admin.Client.$query(params).then (clients) =>
-      defer.resolve(clients)
+      defer.resolve(clients.items)
     defer.promise
 
 

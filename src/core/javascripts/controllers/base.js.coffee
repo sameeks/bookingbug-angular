@@ -28,7 +28,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope) ->
+angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, SettingsService) ->
 
   ###**
   * @ngdoc method
@@ -167,6 +167,24 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $te
         else
           element.html(clone).show()
           element.append('<style widget_css scoped></style>') if prms.design_mode
+
+
+    notInModal = (p) ->
+      if p.length == 0 || p[0].attributes == undefined
+        true
+      else if p[0].attributes['uib-modal-window'] != undefined
+        false
+      else
+        if p.parent().length == 0
+          true
+        else
+          notInModal(p.parent())
+
+
+    scope.$watch () ->
+      SettingsService.isModalOpen()
+    , (modalOpen) ->
+      scope.coveredByModal = modalOpen && notInModal(element.parent())
 
 
 # a controller used for the main page contents - just in case we need one here
@@ -545,8 +563,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
           $scope.bb.admin = admin
         setup_promises.push sso_admin_login
 
-      if $scope.bb.item_defaults and $scope.bb.item_defaults.long_id
-        total_id = $scope.bb.item_defaults.long_id
+      if $scope.bb.item_defaults and $scope.bb.item_defaults.purchase_total_long_id
+        total_id = $scope.bb.item_defaults.purchase_total_long_id
       else total_id = QueryStringService('total_id')
 
       if total_id

@@ -39,6 +39,6 @@ angular.module('BBAdminSettings').directive 'adminTable', ($log,
   {
     controller: controller
     link: link
-    templateUrl: 'admin_table_main.html'
+    templateUrl: 'admin-table/admin_table_main.html'
   }
 

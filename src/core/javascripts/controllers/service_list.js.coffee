@@ -45,17 +45,30 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbServices', () ->
+angular.module('BB.Directives').directive 'bbServices', ($q, $compile, $templateCache) ->
   restrict: 'AE'
   replace: true
   scope : true
+  transclude: true
   controller : 'ServiceList'
-  link : (scope, element, attrs) ->
+  link : (scope, element, attrs, ctrls, transclude) ->
+
     scope.directives = "public.ServiceList"
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q,
-  $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,
-  PageControllerService, ErrorService, $filter, LoadingService) ->
+    transclude scope, (clone) =>
+
+      # if there's content compile that or grab the _services template
+      has_content = clone.length > 1 || (clone.length == 1 and (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+
+      if has_content
+        element.html(clone).show()
+      else
+        $q.when($templateCache.get('_services.html')).then (template) ->
+          element.html(template).show()
+          $compile(element.contents())(scope)
+
+
+angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
 
   $scope.controller = "public.controllers.ServiceList"
 
@@ -146,8 +159,6 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
             item.selected = true
             $scope.booking_item.setService($scope.service)
 
-      loader.setLoaded()
-
       if $scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))
         # the "bookable services" are the service unless we've pre-selected something!
         items = setServicesDisplayName(items)
@@ -184,12 +195,11 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
           # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages.
           setServiceItem services
 
-        loader.setLoaded()
       , (err) ->
         loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
     $q.all(all_loaded).then () ->
-      $scope.setLoaded($scope)
+      loader.setLoaded()
 
 
   setServicesDisplayName = (items)->
@@ -224,6 +234,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route, options={}) =>
+    
     if $scope.routed
       return true
 
