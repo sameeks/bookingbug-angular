@@ -8,7 +8,7 @@ angular.module('BB.i18n').service 'bbLocale', (bbi18nOptions, $log, $translate, 
 
   determineLocale = () ->
 
-    if $translate.use() isnt 'undefined' && angular.isDefined($translate.use())
+    if $translate.use() isnt 'undefined' && angular.isDefined($translate.use()) && isAvailable($translate.use())
       setLocale($translate.use(), '$translate.use()')
     else
       browserLocale = $translate.negotiateLocale($translate.resolveClientLocale()) #browserLocale = $window.navigator.language;
