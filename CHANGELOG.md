@@ -2,12 +2,19 @@
 All notable changes to this project will be documented in this file using [CHANGELOG](http://keepachangelog.com/en/0.3.0/) convention.
 
 ## [Unreleased]
+
 ### Added
 - i18n support to public-booking
 - `endDateTime` helper method to the core TimeSlot model which returns the end time as a Moment object.
 
 ### Removed
  - `print_time`, `print_end_time`, `print_time12`, and `print_end_time12` methods and `time_12` and `time_24` properties have been removed from the TimeSlot model in favour or `datetime` and `endDateTime`.
+ 
+## [2.0.26] - 2016-09-26
+
+### Changed
+
+- SDK has been refactored so bbLocale is the only one place to change moment.locale across whole codebase
 
 ### Changed
 - SDK build process does not flatten template files anymore in order to avoid naming conflicts.
