@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file using [CHANGELOG](http://keepachangelog.com/en/0.3.0/) convention.
 
 ## [Unreleased]
+
+
+## [2.0.26] - 2016-09-26
 ### Changed
+- SDK has been refactored so bbLocale is the only one place to change moment.locale across whole codebase
 - SDK build process does not flatten template files anymore in order to avoid naming conflicts.
   Bespoke projects that refer|override any of the following templates should be updated so they have proper directory structure.  
   ADMIN
