@@ -117,7 +117,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.has_company_questions = false
 
     # event group promise
-    if !$scope.current_item.event_group and $scope.bb.company.$has('event_groups')
+    if $scope.bb.item_defaults and $scope.bb.item_defaults.event_group
+      $scope.bb.current_item.setEventGroup($scope.bb.item_defaults.event_group)
+    else if !$scope.current_item.event_group and $scope.bb.company.$has('event_groups')
       promises.push($scope.bb.company.getEventGroupsPromise())
     else
       promises.push($q.when([]))
@@ -466,10 +468,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * @param {array} item The Event or BookableItem to select
   ###
   $scope.filterEvents = (item) ->
-    result = (moment($scope.filters.date).isSame(item.date, 'day') or !$scope.filters.date?) and
+    result = item.bookable and
+      (moment($scope.filters.date).isSame(item.date, 'day') or !$scope.filters.date?) and
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
-      (($scope.filters.hide_sold_out_events and item.bookable) or !$scope.filters.hide_sold_out_events) and
+      (($scope.filters.hide_sold_out_events and item.getSpacesLeft() > 0) or !$scope.filters.hide_sold_out_events) and
       $scope.filterEventsWithDynamicFilters(item)
     return result
 

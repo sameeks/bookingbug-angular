@@ -11,7 +11,7 @@
 
       <p>
         There's an availability conflict <span ng-show="person_name">with {{person_name}}</span><span ng-show="resource_name">in {{resource_name}}</span>.
-           <!--at {{bb.current_item.defaults.datetime | datetime: 'time'}} -->  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
+           <!--at {{bb.current_item.defaults.datetime | datetime: 'LT'}} -->  This can be the result of: <!-- either the person or resouce requried already be booked/unavailable or that there's not enough to complete the service. You can r -->
       </p>
 
       <div class="row">
@@ -106,7 +106,7 @@
                   <ul class="time-slots" ng-if="slots.length > 0">
 
                     <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(slot, selected_day)" ng-repeat="slot in slots | in_the_future | limitTo: 10">
-                      <span>{{slot.time_moment | datetime: 'time'}} (in {{slot.time | tod_from_now }})</span>
+                      <span>{{slot.time_moment | datetime: 'LT'}} (in {{slot.time | tod_from_now }})</span>
                     </li>
 
                   </ul>
@@ -188,11 +188,11 @@
         <ul class="bb-list bb-list-horizontal bb-bordered bb-block bb-block-sm">
           <li>
             <i class="fa fa-calendar" aria-hidden="true"></i>
-            {{bb.current_item.defaults.datetime | datetime: 'date'}}
+            {{bb.current_item.defaults.datetime | datetime: 'L'}} 
           </li>
           <li>
             <i class="fa fa-clock-o" aria-hidden="true"></i>
-            {{bb.current_item.defaults.datetime | datetime: 'time'}}
+            {{bb.current_item.defaults.datetime | datetime: 'LT'}}
           </li>
           <li ng-show="bb.current_item.defaults.person">
             <i class="fa fa-user" aria-hidden="true"></i>

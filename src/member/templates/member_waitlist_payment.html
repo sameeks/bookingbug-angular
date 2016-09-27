@@ -10,11 +10,11 @@
   <ul class="bb-list bb-list-horizontal bb-block bb-block-sm">
     <li>
       <i class="fa fa-calendar" aria-hidden="true"></i>
-      {{booking.datetime | datetime: 'date'}}
+      {{booking.datetime | datetime: 'L'}}
     </li>
     <li>
       <i class="fa fa-clock-o" aria-hidden="true"></i>
-      {{booking.datetime | datetime: 'time'}} - {{booking.end_datetime | datetime: 'time'}}
+      {{booking.datetime | datetime: 'LT'}} - {{booking.end_datetime | datetime: 'LT'}}
     </li>
     <!-- <li>
       <span class="bb-btn bb-btn-link">
