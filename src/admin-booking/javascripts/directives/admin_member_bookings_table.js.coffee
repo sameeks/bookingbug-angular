@@ -85,8 +85,6 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibMo
         url        : $rootScope.bb.api_url
         client_id  : member.id
 
-
-      console.log params
       AdminBookingService.query(params).then (bookings) ->
         $scope.booking_models = bookings.items
         $scope.setRows()

@@ -58,6 +58,7 @@ angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
       data.post_time = @post_time
       data.person_id = @person_id
       data.resource_id = @resource_id
+      data.child_client_ids = @child_client_ids
       if @questions
         data.questions = (q.getPostData() for q in @questions)
       data
@@ -151,14 +152,19 @@ angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
           BookingCollections.delete(existing) if existing
           src.$flush('bookings', params)
 
-        src.$get('bookings', params).then (collection) ->
-          collection.$get('bookings').then (bookings) ->
-            models = (new BBModel.Admin.Booking(b) for b in bookings)
-            spaces = new $window.Collection.Booking(collection, models, params)
-            BookingCollections.add(spaces)
-            defer.resolve(spaces)
-          , (err) ->
-            defer.reject(err)
+        src.$get('bookings', params).then (resource) ->
+          if resource.$has('bookings')
+            resource.$get('bookings').then (bookings) ->
+              models = (new BBModel.Admin.Booking(b) for b in bookings)
+              spaces = new $window.Collection.Booking(resource, models, params)
+              BookingCollections.add(spaces)
+              defer.resolve(spaces)
+            , (err) ->
+              defer.reject(err)
+          else
+            booking = new BBModel.Admin.Booking(resource)
+            defer.resolve(booking)
+
         , (err) ->
           defer.reject(err)
       defer.promise
