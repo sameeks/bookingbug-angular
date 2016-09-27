@@ -14,7 +14,6 @@ angular.module('BB.i18n').controller 'bbLanguagePickerController', (bbLocale, $l
     seAvailableLanguages();
     setCurrentLanguage();
     $scope.$on 'BBLanguagePicker:refresh', setCurrentLanguage
-
     vm.pickLanguage = pickLanguage
     return
 
@@ -24,8 +23,10 @@ angular.module('BB.i18n').controller 'bbLanguagePickerController', (bbLocale, $l
     return
 
   setCurrentLanguage = () ->
-    vm.language =
-      selected: createLanguage(bbLocale.getLocale())
+    tmhDynamicLocale.set(bbLocale.getLocale()).then () ->
+      vm.language =
+        selected: createLanguage(bbLocale.getLocale())
+      return
 
     return
 
@@ -43,10 +44,8 @@ angular.module('BB.i18n').controller 'bbLanguagePickerController', (bbLocale, $l
   ###
   pickLanguage = (languageKey) ->
     tmhDynamicLocale.set(languageKey).then () ->
-      $translate.use languageKey
-      $rootScope.$broadcast 'BBLanguagePicker:languageChanged'
       bbLocale.setLocale(languageKey, 'bbLanguagePicker.pickLanguage')
-
+      $rootScope.$broadcast 'BBLanguagePicker:languageChanged'
       return
     return
 
