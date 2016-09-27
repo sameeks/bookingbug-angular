@@ -27,7 +27,6 @@
 
 
 angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, ClientService) ->
-  ClientService, LocaleService) ->
 
   class Client extends BaseModel
 
