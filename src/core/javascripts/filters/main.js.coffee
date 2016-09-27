@@ -346,7 +346,7 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
      </file>
    </example>
 ###
-angular.module('BB.Filters').filter 'datetime', () ->
+angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
   (date, format="LLL", show_time_zone=false) ->
 
     return if !date or (date and !moment(date.isValid()))
