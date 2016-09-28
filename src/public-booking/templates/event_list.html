@@ -170,15 +170,17 @@
                       <span class="fa fa-hourglass-half"></span>
                       <span ng-bind="item.duration | time_period"></span>
                     </li>
+
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
-                      <span ng-if="spaces_left > 0" class="fa fa-users" aria-hidden="true"></span>
-                      <span ng-if="spaces_left < 1" class="fa fa-ban" aria-hidden="true"></span>
-                      <span>
-                        <span ng-if="spaces_left > 0" ng-bind="spaces_left"></span>
-                        <span ng-if="spaces_left < 1" ng-bind="'No'"></span> <span translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_SPACE_WORD"></span><span ng-if="spaces_left > 1 || spaces_left < 1" ng-bind="'s'"></span>
-                        <span ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}"><span translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_LEFT_WORD"></span></span>
+
+                      <span ng-show="item.spaces_left > 0" class="fa fa-users" aria-hidden="true"></span>
+                      <span ng-show="item.spaces_left < 1" class="fa fa-ban" aria-hidden="true"></span>
+
+                      <span translate="PUBLIC_BOOKING.EVENT_LIST.SPACES_LEFT" translate-values="{spaces_left: item.spaces_left}" translate-interpolation="messageformat"> 
                       </span>
+
                     </li>
+
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
                       <span class="fa fa-ticket" aria-hidden="true"></span>
                       <span>

@@ -410,6 +410,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EVENT_WORD: "@:COMMON.TERMINOLOGY.EVENTS"
         EVENT_NO: "No event found"
         EVENT_SPACE_WORD: "space"
+        SPACES_LEFT: "{spaces_left, plural, =0{No spaces} one{# space} other{# spaces}} left"
         EVENT_LEFT_WORD: "left"
         ITEM_FROM: "From"
         BOOK_EVENT_BTN: "@:COMMON.BTN.BOOK @:COMMON.TERMINOLOGY.EVENT"
