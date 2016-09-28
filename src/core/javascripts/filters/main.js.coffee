@@ -142,6 +142,8 @@ angular.module('BB.Filters').filter 'distance', ($translate) ->
 angular.module('BB.Filters').filter 'currency', ($window, $rootScope, SettingsService, $translate) ->
   (amount, currency_code, pretty_price=false) ->
 
+    return unless angular.isNumber(amount)
+
     currency_codes = {USD: "$", GBP: "£", AUD: "$", EUR: "€", CAD: "$", MIXED: "~", RUB: "₽"}
 
     currency_code ||= SettingsService.getCurrency()
@@ -149,8 +151,9 @@ angular.module('BB.Filters').filter 'currency', ($window, $rootScope, SettingsSe
     format = $translate.instant(['CORE.FILTERS.CURRENCY.THOUSANDS_SEPARATOR', 'CORE.FILTERS.CURRENCY.DECIMAL_SEPARATOR', 'CORE.FILTERS.CURRENCY.CURRENCY_FORMAT'])
     
     hide_decimal = pretty_price and (amount % 100 is 0)
+    decimal_places = if hide_decimal then 0 else 2
 
-    $window.accounting.formatMoney(amount / 100.0, currency_codes[currency_code], hide_decimal ? 0 : 2, format.THOUSANDS_SEPARATOR, format.DECIMAL_SEPARATORS, format.CURRENCY_FORMAT)
+    return $window.accounting.formatMoney(amount / 100, currency_codes[currency_code], decimal_places, format.THOUSANDS_SEPARATOR, format.DECIMAL_SEPARATORS, format.CURRENCY_FORMAT)
 
 
 angular.module('BB.Filters').filter 'icurrency', ($filter) ->
