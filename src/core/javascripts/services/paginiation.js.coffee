@@ -20,7 +20,6 @@ angular.module('BB.Services').factory "PaginationService", ($translate) ->
     end   = paginator.current_page * paginator.page_size
     total = if end < paginator.page_size then end else length
     end = if end > total then total else end
-    total = if total >= 100 then "100+" else total
     paginator.summary = $translate.instant('CORE.PAGINATION.SUMMARY', {start: start, end: end, total: total})
 
   checkItems: (paginator, items_loaded) ->
