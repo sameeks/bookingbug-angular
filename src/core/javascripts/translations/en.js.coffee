@@ -8,6 +8,9 @@ angular.module('BB.Services').config ($translateProvider) ->
       ALERTS: {
         ERROR_TITLE: "Error"
       }
+      PAGINATION: {
+        SUMMARY: "{{start}} - {{end}} of {{total}}"
+      }
       MODAL: {
         CANCEL_BOOKING: {
           HEADER:               "Cancel"

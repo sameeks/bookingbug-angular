@@ -142,7 +142,7 @@ angular.module('BB.Filters').filter 'distance', ($translate) ->
 angular.module('BB.Filters').filter 'currency', ($window, $rootScope, SettingsService, $translate) ->
   (amount, currency_code, pretty_price=false) ->
 
-    currency_codes = {USD: "$", GBP: "£", AUD: "$", EUR: "€", CAD: "$", MIXED: "~", RUS: "&#8381"}
+    currency_codes = {USD: "$", GBP: "£", AUD: "$", EUR: "€", CAD: "$", MIXED: "~", RUB: "₽"}
 
     currency_code ||= SettingsService.getCurrency()
 

@@ -446,7 +446,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
         
         # if you can only book one ticket - just use that
         @tickets =
-          name: $translate.instant('CORE.COMMON.TERMINOLOGY.ADMITTANCE')
+          name: $translate.instant('COMMON.TERMINOLOGY.ADMITTANCE')
           max: 1,
           type: "normal",
           price: @base_price
