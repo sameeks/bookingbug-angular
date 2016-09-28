@@ -8,7 +8,7 @@
 * This services exposes methods to get all event-type information to be shown in the calendar
 ###
 angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSources', (
-  $exceptionHandler, $q, TitleAssembler, AdminScheduleService, BBModel) ->
+  $exceptionHandler, $q, TitleAssembler, AdminScheduleService, BBModel, $translate) ->
 
     bookingBelongsToSelectedResources = (resources, booking)->
       belongs = false
@@ -53,6 +53,9 @@ angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSourc
         filteredBookings = []
 
         for booking in bookings.items
+
+          booking.service_name = $translate.instant(booking.service_name)
+
           booking.resourceIds = []
           if booking.person_id?
             booking.resourceIds.push booking.person_id + '_p'
