@@ -139,7 +139,7 @@
                   <div class=" input-group">
                     <input type="text" class="form-control input-sm" id="deal_code" name="deal_code" ng-model="deal_code" placeholder="{{'PUBLIC_BOOKING.EVENT.GIFT_CERTIFICATE_CODE_PLACEHOLDER' | translate}}">
                     <span class="input-group-btn">
-                    <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!deal_code" ng-click="applyDeal(deal_code)"><span translate="PUBLIC_BOOKING.EVENT.PROGRESS_APPLY"></span></button>
+                    <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!deal_code" ng-click="applyDeal(deal_code)"><span translate="PUBLIC_BOOKING.EVENT.APPLY_BTN"></span></button>
                   </span>
                   </div>
                 </div>
@@ -206,7 +206,7 @@
             </div>
 
             <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && ((client_form.mobile.$dirty && !client_form.mobile.$focused) || booking_form.submitted)}">
-              <label for="phone" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.EVENT.STORE_PHONE"></span>:</label>
+              <label for="mobile" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.EVENT.STORE_PHONE"></span>:</label>
               <div class="col-sm-5">
                 <input type="tel" name="mobile" id="mobile" ng-pattern="validator.getUKMobilePattern()" ng-model="client.mobile" class="form-control" autocomplete="tel"/>
               </div>
@@ -380,7 +380,7 @@
             <div ng-if="!selected_tickets">
 
               <button type="button" class="btn btn-primary btn-block pull-right" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() > 0">
-                <span translate="PUBLIC_BOOKING.EVENT.RESERVE_TICKET"></span><span ng-show="event.numTicketsSelected() > 1"><span translate="PUBLIC_BOOKING.EVENT.LETTER_S"></span></span>
+                <span translate="PUBLIC_BOOKING.EVENT.RESERVE_TICKET" translate-interpolation="messageformat" translate-values="{num_tickets: event.numTicketsSelected()}"></span>
                 <span class="glyphicon glyphicon-chevron-right"></span>
               </button>
 
@@ -393,7 +393,7 @@
             <div ng-if="selected_tickets">
 
               <button type="submit" class="btn btn-primary btn-block pull-right" ng-click="validator.validateForm(booking_form) && checkReady() && routeReady()">
-                <span translate="PUBLIC_BOOKING.EVENT.BOOK_TICKET"></span>
+                <span translate="PUBLIC_BOOKING.EVENT.BOOK_TICKET" translate-interpolation="messageformat" translate-values="{num_tickets: event.numTicketsSelected()}"></span>
               </button>
 
             </div>

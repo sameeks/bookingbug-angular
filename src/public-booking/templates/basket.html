@@ -115,10 +115,10 @@
 					<div ng-show="client.has_active_wallet">
 
 						<p>
-							<span translate="PUBLIC_BOOKING.BASKET.BASKET_WALLET_BALANCE"></span>: {{client.wallet_amount | icurrency}}
+							<span translate="PUBLIC_BOOKING.BASKET.BASKET_WALLET_BALANCE"></span>: {{client.wallet_amount | currency}}
 						</p>
 
-						<small style="color:#ff1919;" ng-if="client.wallet_amount < basket.total_due_price"> (-{{basket.total_due_price - client.wallet_amount | icurrency }})</small>
+						<small style="color:#ff1919;" ng-if="client.wallet_amount < basket.total_due_price"> (-{{basket.total_due_price - client.wallet_amount | currency }})</small>
 
 						<small ng-if="client.wallet_amount < basket.total_due_price">
 							<i>
@@ -129,7 +129,7 @@
 						<small ng-if="client.wallet_amount >= basket.total_due_price">
 							<i>
 								<span translate="PUBLIC_BOOKING.BASKET.BASKET_WALLET_REMAINDER_PART_ONE"></span>
-								{{(client.wallet_amount - basket.total_price) | icurrency }}
+								{{(client.wallet_amount - basket.total_price) | currency }}
 								<span translate="PUBLIC_BOOKING.BASKET.BASKET_WALLET_REMAINDER_PART_TWO"></span>.
 							</i>
 						</small>
@@ -145,7 +145,7 @@
 				<div ng-if="bb.company_settings.has_coupons" class="bb-coupon-box">
 					<span translate="PUBLIC_BOOKING.BASKET.BASKET_COUPON_APPLY"></span>
 					<input ng-model="coupon_code"/>
-					<button type="button" class="btn btn-primary btn-xs" ng-click="applyCoupon(coupon_code)"><span translate="PUBLIC_BOOKING.BASKET.PROGRESS_APPLY"></span></button>
+					<button type="button" class="btn btn-primary btn-xs" ng-click="applyCoupon(coupon_code)"><span translate="PUBLIC_BOOKING.BASKET.APPLY_BTN"></span></button>
 				</div>
 
         <div class="bb-coupon-box" ng-if="bb.company_settings.has_vouchers">
@@ -159,7 +159,7 @@
               <div class=" input-group">
                 <input type="text" class="form-control input-sm" id="deal_code" name="deal_code" ng-model="deal_code" placeholder="{{'PUBLIC_BOOKING.BASKET.VOUCHER_BOX.VOUCHER_CODE_PLACEHOLDER' | translate}}">
                 <span class="input-group-btn">
-                  <button type="button" class="btn btn-primary btn-sm" ng-click="applyDeal(deal_code)"><span translate="PUBLIC_BOOKING.BASKET.VOUCHER_BOX.PROGRESS_APPLY"></span></button>
+                  <button type="button" class="btn btn-primary btn-sm" ng-click="applyDeal(deal_code)"><span translate="PUBLIC_BOOKING.BASKET.VOUCHER_BOX.APPLY_BTN"></span></button>
                 </span>
               </div>
             </div>
