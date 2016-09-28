@@ -318,7 +318,7 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Clie
     fullMobile: ->
       return if !@mobile
       return @mobile if !@mobile_prefix
-      return "+" + @mobile_prefix + @mobile
+      return "+" + @mobile_prefix + if @mobile.substr(0,1) is '0' then @mobile.substr(1) else @mobile
 
     ###**
     * @ngdoc method
