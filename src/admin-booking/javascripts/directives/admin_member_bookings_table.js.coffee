@@ -1,4 +1,4 @@
-angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibModal, $log, $rootScope, AdminBookingService, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup) ->
+angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup) ->
 
   controller = ($scope, $uibModal) ->
 
@@ -85,8 +85,16 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibMo
         url        : $rootScope.bb.api_url
         client_id  : member.id
 
-      AdminBookingService.query(params).then (bookings) ->
-        $scope.booking_models = bookings.items
+      BBModel.Admin.Booking.$query(params).then (bookings) ->
+        now = moment.unix()
+        if $scope.period && $scope.period == "past"
+          $scope.booking_models = _.filter bookings.items, (x) ->
+            x.datetime.unix() < now
+        if $scope.period && $scope.period == "future"
+          $scope.booking_models = _.filter bookings.items, (x) ->
+            x.datetime.unix() > now
+        else
+          $scope.booking_models = bookings.items
         $scope.setRows()
         $scope.loading = false
       , (err) ->
@@ -115,4 +123,5 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibMo
       endDate:      '=?'
       endTime:      '=?'
       defaultOrder: '=?'
+      period:       '@'
   }

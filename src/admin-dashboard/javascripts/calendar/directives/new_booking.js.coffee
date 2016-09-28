@@ -10,7 +10,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbNewBooking',
           day_view: AdminBookingOptions.day_view
           merge_people: true
           merge_resources: true
-          date: moment($scope.$parent.currentDate).format('YYYY-MM-DD') or moment().format('YYYY-MM-DD')
+          date: if moment($scope.$parent.currentDate).isValid() then moment($scope.$parent.currentDate).format('YYYY-MM-DD') else moment().format('YYYY-MM-DD')
         company_id: $rootScope.bb.company.id
         template: 'main'
-
