@@ -1121,7 +1121,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
 
   $scope.setCompany = (company, keep_basket) ->
+
     defer = $q.defer()
+
     $scope.bb.company_id = company.id
     $scope.bb.company = company
     # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over

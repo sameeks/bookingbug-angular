@@ -24,8 +24,7 @@
 
 
 # helpful functions about a company
-angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel,
-  halClient, AppConfig, $sessionStorage, CompanyService) ->
+angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, halClient, AppConfig, $sessionStorage, CompanyService) ->
 
   class Company extends BaseModel
 
