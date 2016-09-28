@@ -81,15 +81,13 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
 
-app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig, LocaleService) ->
+app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig) ->
   # add methods to the rootscope if they are applicable to whole app
   $rootScope.$log = $log
   $rootScope.$setIfUndefined = FormDataStoreService.setIfUndefined
 
   $rootScope.bb ||= {}
   $rootScope.bb.api_url = $sessionStorage.getItem("host")
-
-  moment.locale([LocaleService, "en"])
 
   # add bits of IE8 support
   if ($bbug.support.opacity == false)

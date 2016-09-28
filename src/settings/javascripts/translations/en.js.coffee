@@ -7,10 +7,10 @@ angular.module('BBAdminSettings').config ($translateProvider) ->
     SETTINGS: {
       ADMIN_TABLE: {
         NEW_ADMINISTRATOR: 'New Administrator'
-        EDIT: '@:CORE.COMMON.BTN.EDIT'
+        EDIT: '@:COMMON.BTN.EDIT'
       }
       ADMIN_FORM: {
-        PROGRESS_CANCEL: '@:CORE.COMMON.BTN.CANCEL'
+        PROGRESS_CANCEL: '@:COMMON.BTN.CANCEL'
       }
     }
   }
