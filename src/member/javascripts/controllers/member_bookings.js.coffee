@@ -64,8 +64,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
   $scope.cancelBooking = (booking) ->
     index = _.indexOf($scope.upcoming_bookings, booking)
-    return false if index is -1
-    $scope.upcoming_bookings.splice(index, 1)
+    _.without($scope.upcoming_bookings, booking)
     AlertService.raise('BOOKING_CANCELLED')
     booking.$del('self').then () ->
       $rootScope.$broadcast("booking:cancelled")

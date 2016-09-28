@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="cancel()">&times;</button>
+  <h1 class="modal-title">{{booking.full_describe}}</h1>
+</div>
+
+<div class="modal-body">
+
+  <p translate="PUBLIC_BOOKING.BOOKING_PAYMENT_MODAL.INSTRUCTION_TEXT">Pay for your booking to confirm your place.</p>
+
+  <ul class="bb-list bb-list-horizontal bb-block bb-block-sm bb-bordered">
+    <li>
+      <i class="fa fa-calendar" aria-hidden="true"></i>
+      {{booking.datetime | datetime: 'L'}}
+    </li>
+    <li>
+      <i class="fa fa-clock-o" aria-hidden="true"></i>
+      {{booking.datetime | datetime: 'time'}} - {{booking.end_datetime | datetime: 'LT'}}
+    </li>
+    <li>
+      {{booking.price | pretty_price}}
+    </li> 
+    <!-- <li>
+      <span class="bb-btn bb-btn-link">
+        More
+        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+      </span>
+      <span class="bb-btn bb-btn-link">
+        Less
+        <i class="fa fa-chevron-up" aria-hidden="true"></i>
+      </span>
+    </li> -->
+
+  </ul>
+
+    <div bb-payment-button
+      class="btn btn-primary"
+      total="total"
+      bb="bb"
+      decide-next-page="decideNextPage"
+      value="{{ 'PUBLIC_BOOKING.BOOKING_PAYMENT_MODAL.PROCESS_PAYMENT_BUTTON' | translate }}">
+    </div>
+  
+</div>
+<div class="modal-footer">
+<!--   <button class="btn btn-primary" ng-click="confirm_delete()"><span>Cancel Booking</span></button>
+  <button class="btn btn-link" ng-click="cancel()">Do not cancel</button> -->
+</div>

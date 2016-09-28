@@ -3,13 +3,12 @@
 angular.module('BB.i18n').service 'bbLocale', (bbi18nOptions, $log, $translate, $window) ->
   'ngInject'
 
-  _locale = null
   _localeCompanyUsed = false
 
   determineLocale = () ->
 
     if $translate.use() isnt 'undefined' && angular.isDefined($translate.use()) && isAvailable($translate.use())
-      setLocale($translate.use(), '$translate.use()')
+      setLocale($translate.use(), '$translate.use() locale')
     else
       browserLocale = $translate.negotiateLocale($translate.resolveClientLocale()) #browserLocale = $window.navigator.language;
       defaultLocale = bbi18nOptions.default_language
@@ -34,10 +33,13 @@ angular.module('BB.i18n').service 'bbLocale', (bbi18nOptions, $log, $translate, 
     if !isAvailable(locale)
       return
 
-    _locale = locale
-    moment.locale _locale # TODO we need angular wrapper for moment
-    $translate.use(_locale)
-    console.info('bbLocale.locale = ', _locale, ', set with: ', setWith)
+    moment.locale(locale) # TODO we need angular wrapper for moment
+    $translate.use(locale)
+
+    console.info('bbLocale.locale = ', locale, ', set with: ', setWith)
+
+    if locale isnt moment.locale() || locale isnt $translate.use()
+      console.error('could not set locale properly, preferredLocale = ' + locale + ', moment.locale() = ', moment.locale(), '$translate.use() = ', $translate.use())
 
     return
 
@@ -51,7 +53,7 @@ angular.module('BB.i18n').service 'bbLocale', (bbi18nOptions, $log, $translate, 
   # @returns {String}
   ###
   getLocale = () ->
-    return _locale
+    return $translate.use()
 
   ###
     # It's a hacky way to map country code to specific locale. Reason is moment default is set to en_US
@@ -64,7 +66,7 @@ angular.module('BB.i18n').service 'bbLocale', (bbi18nOptions, $log, $translate, 
 
     if countryCode and countryCode.match /^(gb|au)$/
       locale = 'en-' + countryCode
-      setLocale locale, 'countryCode'
+      setLocale(locale, 'countryCode')
     return
 
   return {

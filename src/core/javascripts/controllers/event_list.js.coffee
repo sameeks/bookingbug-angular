@@ -100,7 +100,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     # has the event group been manually set (i.e. in the step before)
     if !$scope.event_group_manually_set and !$scope.current_item.event_group?
-      $scope.event_group_manually_set = if !$scope.event_group_manually_set? and $scope.current_item.event_group? then true else false
+      $scope.event_group_manually_set = !$scope.event_group_manually_set? and $scope.current_item.event_group?
 
     # clear current item
     if $scope.bb.current_item.event
