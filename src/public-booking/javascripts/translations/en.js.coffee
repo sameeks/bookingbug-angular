@@ -88,12 +88,12 @@ angular.module('BB.Services').config ($translateProvider) ->
       CALENDAR: {
         PROGRESS_NEXT: "@:CORE.BTN.NEXT"
         PROGRESS_MOVE_BOOKING: "@:CORE.BTN.BOOK"
-        PROGRESS_BACK: "@:CORE.BTN.BACK"
+        BACK_BTN: "@:CORE.BTN.BACK"
       }
       CATEGORY : {
         APPOINTMENT_TYPE: "Select appointment type"
         PROGRESS_BOOK: "@:COMMON.BTN.BOOK"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CANCEL_MODAL: {
         CANCEL_QUESTION: "Are you sure you want to cancel this booking?"
@@ -119,7 +119,7 @@ angular.module('BB.Services').config ($translateProvider) ->
           REQUIRED_FIELDS: "@:COMMON.FORM.REQUIRED_LABEL fields"
         }
         PROGRESS_CONFIRM: "@:COMMON.BTN.CONFIRM"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CHECKOUT: {
         PAYMENT_WORD: "Payment"
@@ -150,7 +150,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         DETAILS_OTHER_INFO: "Other information"
         DETAILS_VALIDATION_MSG: "@:COMMON.FORM.FIELD_REQUIRED"
         PROGRESS_CONTINUE: "@:COMMON.BTN.NEXT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         PROGRESS_CLEAR: "@:COMMON.BTN.CLEAR"
       }
       COMPANY_CARDS: {
@@ -159,7 +159,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       COMPANY_LIST: {
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CONFIRMATION: {
         CONFIRMATION_BOOKING_TITLE: "Booking Confirmation"
@@ -207,6 +207,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         NEXT_AVAIL: "Jump to Next Available Day"
         DATE_LABEL: "@:COMMON.TERMINOLOGY.DATE"
         ANY_DATE: "- Any Date -"
+        MORNING_HEADER: "@:COMMON.TERMINOLOGY.MORNING"
+        AFTERNOON_HEADER: "@:COMMON.TERMINOLOGY.AFTERNOON"
+        EVENING_HEADER: "@:COMMON.TERMINOLOGY.EVENING"
       }
       BASKET: {
         BASKET_TITLE: "Your basket"
@@ -242,7 +245,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_CANCEL: "@:COMMON.BTN.CANCEL"
         BASKET_ITEM_ADD: "Add another item"
         BASKET_CHECKOUT: "@:COMMON.BTN.CHECKOUT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       BASKET_SUMMARY: {
         STEP_TITLE: "Summary"
@@ -272,7 +275,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_TOTAL_DUE_NOW: "@:COMMON.TERMINOLOGY.TOTAL_DUE_NOW"
         CONFIRMATION_WAITLIST_SUBHEADER: "Thanks {{member_name}}. You have successully booked onto {{purchase_item}}."
         PRINT: "@:COMMON.TERMINOLOGY.PRINT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       ERROR_MODAL: {
         PROGRESS_OK: "@:COMMON.BTN.OK"
@@ -292,7 +295,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_WALLET_AMOUNT: "Amount"
         BASKET_WALLET: "@:COMMON.TERMINOLOGY.WALLET"
         BASKET_WALLET_AMOUNT_MINIMUM: "Minimum top up amount must be greater than"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       DASH: {
         DASHBOARD: "Dashboard"
@@ -301,7 +304,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       DAY: {
         AVAIL_MONTH_PREVIOUS: "Previous Month"
         AVAIL_MONTH_NEXT: "Next Month"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         DATE_NOT_SELECTED: "You need to select a date"
       }
       DEAL_LIST: {
@@ -322,13 +325,13 @@ angular.module('BB.Services').config ($translateProvider) ->
         RECIPIENT_NAME: "Name"
         DETAILS_EMAIL: "@:COMMON.FORM.EMAIL"
         PROGRESS_BUY: "Buy"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         CERTIFICATE_NOT_SELECTED_ALERT: "You need to select at least one Gift Certificate to continue"
       }
       DURATION_LIST: {
         ITEM_FREE: "@:COMMON.TERMINOLOGY.PRICE_FREE"
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         DURATON_NOT_SELECTED_ALERT: "You need to select a duration"
       }
       EVENT: {
@@ -386,7 +389,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         LETTER_S: "s"
         EVENT_JOIN_WAITLIST: "Join Waitlist"
         BOOK_TICKET: "@:COMMON.BTN.BOOK Ticket"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       EVENT_GROUP_LIST: {
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
@@ -411,7 +414,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EVENT_LEFT_WORD: "left"
         ITEM_FROM: "From"
         PROGRESS_BOOK_EVENT: "@:COMMON.BTN.BOOK @:COMMON.TERMINOLOGY.EVENT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         EVENT_SOLD_OUT: "Sold out"
         EVENT_JOIN_WAITLIST: "Join Waitlist"
       }
@@ -440,11 +443,11 @@ angular.module('BB.Services').config ($translateProvider) ->
         AVAIL_DAY_PREVIOUS: "Previous Day"
         AVAIL_DAY_NEXT: "Next Day"
         AVAIL_NO: "No @:COMMON.TERMINOLOGY.SERVICE Available"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         TIME_NOT_SELECTED_ALERT: "Please select a time slot"
-        AVAIL_MORNING: "Morning"
-        AVAIL_AFTERNOON: "Afternoon"
-        AVAIL_EVENING: "Evening"
+        MORNING_HEADER: "@:COMMON.TERMINOLOGY.MORNING"
+        AFTERNOON_HEADER: "@:COMMON.TERMINOLOGY.AFTERNOON"
+        EVENING_HEADER: "@:COMMON.TERMINOLOGY.EVENING"
       }
       SURVEY: {
         SURVEY_THANK_YOU: "Thank you for filling out the survey!"
@@ -459,11 +462,11 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_FREE: "@:COMMON.TERMINOLOGY.PRICE_FREE"
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
         SERVICE_LIST_NO: "No services match your filter criteria."
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       RESOURCE_LIST: {
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       RESCHEDULE_REASONS:{
         MOVE_TITLE: "Move Appointment"
@@ -498,7 +501,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       PERSON_LIST: {
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
-        PROGRESS_BACK:   "@:COMMON.BTN.BACK"
+        BACK_BTN:   "@:COMMON.BTN.BACK"
       }
       MONTHLY_CALENDAR: {
         SELECT_DAY:       "Select a day"
@@ -509,7 +512,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         KEY:              "Key"
         AVAILABLE:        "{number, plural, =0{No availability} other{# available}}"
         UNAVAILABLE:      "@:COMMON.TERMINOLOGY.UNAVAILABLE"
-        PROGRESS_BACK:    "@:COMMON.BTN.BACK"
+        BACK_BTN:    "@:COMMON.BTN.BACK"
       }
     }
   }

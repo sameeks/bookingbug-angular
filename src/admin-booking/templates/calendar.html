@@ -200,16 +200,31 @@
 
               <div uib-accordion close-others="false">
 
-                <div bb-accordion-range-group="{heading: '{{'ADMIN_BOOKING.CALENDAR.MORNING'|translate}}', range: [0, 720], collaspe_when_time_selected: true}"
-                     day="selected_day" slots="slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
+                <div
+                  bb-accordion-range-group="{heading: ADMIN_BOOKING.CALENDAR.MORNING_HEADER', range: [0, 720], collaspe_when_time_selected: true}"
+                  day="selected_day"
+                  slots="slots"
+                  select-slot="highlightSlot"
+                  ng-init="setFormDataStoreId($index)"
+                  class="accordion-group">
                 </div>
 
-                <div bb-accordion-range-group="{heading: '{{'ADMIN_BOOKING.CALENDAR.AFTERNOON'|translate}}', range: [720, 1020], collaspe_when_time_selected: true}"
-                     day="selected_day" slots="slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
+                <div
+                  bb-accordion-range-group="{heading: 'ADMIN_BOOKING.CALENDAR.AFTERNOON_HEADER', range: [720, 1020], collaspe_when_time_selected: true}"
+                  day="selected_day"
+                  slots="slots"
+                  select-slot="highlightSlot"
+                  ng-init="setFormDataStoreId($index)"
+                  class="accordion-group">
                 </div>
 
-                <div bb-accordion-range-group="{heading: '{{'ADMIN_BOOKING.CALENDAR.EVENING'|translate}}', range: [1020, 1440], collaspe_when_time_selected: true}"
-                     day="selected_day" slots="slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
+                <div 
+                  bb-accordion-range-group="{heading: 'ADMIN_BOOKING.CALENDAR.EVENING_HEADER', range: [1020, 1440], collaspe_when_time_selected: true}"
+                  day="selected_day"
+                  slots="slots"
+                  select-slot="highlightSlot"
+                  ng-init="setFormDataStoreId($index)"
+                  class="accordion-group">
                 </div>
 
               </div>

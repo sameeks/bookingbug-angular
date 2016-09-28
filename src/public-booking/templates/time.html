@@ -29,11 +29,31 @@
       <div ng-if="slots">
 
         <div uib-accordion close-others="false">
-          <div bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.AVAIL_MORNING', range: [0, 720], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
 
-          <div bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.AVAIL_AFTERNOON',range: [720, 1020], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
+          <div
+            bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.MORNING_HEADER', range: [0, 720], slots: slots, collaspe_when_time_selected: true}"
+            day="day"
+            slots="day.slots"
+            select-slot="highlightSlot"
+            ng-init="setFormDataStoreId($index)"
+            class="accordion-group"></div>
 
-          <div bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.AVAIL_EVENING', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true}" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group"></div>
+          <div
+            bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.AFTERNOON_HEADER',range: [720, 1020], slots: slots, collaspe_when_time_selected: true}"
+            day="day"
+            slots="day.slots"
+            select-slot="highlightSlot"
+            ng-init="setFormDataStoreId($index)"
+            class="accordion-group"></div>
+
+          <div
+            bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.EVENING_HEADER', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true}"
+            day="day"
+            slots="day.slots"
+            select-slot="highlightSlot"
+            ng-init="setFormDataStoreId($index)"
+            class="accordion-group"></div>
+
         </div>
       </div>
     </div>
@@ -46,7 +66,7 @@
 <div class="bb-step-navigation">
   <div class="row">
     <div class="col-sm-3">
-      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PUBLIC_BOOKING.TIME.PROGRESS_BACK"></span></button>
+      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PUBLIC_BOOKING.TIME.BACK_BTN"></span></button>
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 <div ng-show="loading"><img src="/BB_wait.gif" class="loader"></div>
 <div ng-hide="loading" class="bb-upcoming clearfix">
   <div class="bookings">
-    <div ng-if="pre_paid_bookings.length == 0">
+    <div ng-show="pre_paid_bookings.length == 0">
       <h3 translate="MEMBER.PREPAID_BOOKINGS.NO_PREPAID_BOOKINGS"></h3>
     </div>
     <ul class="bb-list bb-banded-list">

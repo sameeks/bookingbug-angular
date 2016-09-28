@@ -2,22 +2,30 @@
 
   <div class="wallet-balance">
     <div ng-show="wallet.amount == 0">
-      <span>{{'MEMBER.WALLET.BALANCE' | translate}}: </span>
+      <span translate="MEMBER.WALLET.BALANCE"></span>:
       <span translate="MEMBER.WALLET.WALLET_NO_CREDIT"></span>
     </div>
     <div ng-show="wallet.amount > 0">
-      <span>{{'MEMBER.WALLET.BALANCE' | translate}}: </span>
+      <span translate="MEMBER.WALLET.BALANCE"></span>:
       <span id="balance">{{wallet.amount | currency}}</span>
     </div>
   </div>
 
   <div class="wallet-status">
     <div ng-hide="wallet.active">
-      <span>{{'MEMBER.WALLET.STATUS'|translate}}: </span><span><b translate="MEMBER.WALLET.WALLET_NOT_ACTIVE"></b></span>
-      <span><button ng-click="activateWallet(member)" translate="MEMBER.WALLET.ACTIVATE"></button></span>
+      <span translate="MEMBER.WALLET.STATUS"></span>:
+      <span>
+        <b translate="MEMBER.WALLET.WALLET_NOT_ACTIVE"></b>
+      </span>
+      <span>
+        <button ng-click="activateWallet(member)" translate="MEMBER.WALLET.ACTIVATE"></button>
+      </span>
     </div>
     <div ng-show="wallet.active">
-      <span>{{'MEMBER.WALLET.STATUS'|translate}}: </span><span id="status"><b translate="MEMBER.WALLET.ACTIVE"></b></span>
+      <span translate="MEMBER.WALLET.STATUS"></span>:
+      <span id="status">
+        <b translate="MEMBER.WALLET.ACTIVE"></b>
+      </span>
     </div>
   </div>
 
@@ -40,7 +48,9 @@
 
       <div ng-form class="form-inline">
         <div class="form-group">
-          <label for="amount">{{'MEMBER.WALLET.AMOUNT' | translate}}:</label>
+          <label for="amount">
+            <span translate="MEMBER.WALLET.AMOUNT"></span>:
+          </label>
           <div class="input-group">
             <input type="number" class="form-control input-sm" id="amount" name="amount" ng-model="amount" placeholder="Enter Top Up Amount" bb-currency-field>
             <span class="input-group-btn">

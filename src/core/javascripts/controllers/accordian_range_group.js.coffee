@@ -46,9 +46,7 @@ angular.module('BB.Directives').directive 'bbAccordionRangeGroup', (PathSvc) ->
   templateUrl : (element, attrs) ->
     PathSvc.directivePartial "_accordion_range_group"
 
-angular.module('BB.Controllers').controller 'AccordionRangeGroup', (
-  $scope, $attrs, $rootScope, $q, FormDataStoreService, SettingsService,
-  DateTimeUtilitiesService) ->
+angular.module('BB.Controllers').controller 'AccordionRangeGroup', ($scope, $attrs, $rootScope, $q, FormDataStoreService, SettingsService, DateTimeUtilitiesService, $translate) ->
 
   $scope.controller = "public.controllers.AccordionRangeGroup"
 
@@ -91,7 +89,8 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', (
 
     $scope.options.collaspe_when_time_selected = if _.isBoolean($scope.options.collaspe_when_time_selected) then $scope.options.collaspe_when_time_selected else true
     $scope.options.hide_availability_summary = if _.isBoolean($scope.options.hide_availability_summary) then $scope.options.hide_availability_summary else false
-    $scope.heading = $scope.options.heading
+    
+    $scope.heading = $translate.instant($scope.options.heading)
 
     setData()
 

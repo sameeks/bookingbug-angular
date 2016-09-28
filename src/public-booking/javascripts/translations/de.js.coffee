@@ -88,12 +88,12 @@ angular.module('BB.Services').config ($translateProvider) ->
       CALENDAR: {
         PROGRESS_NEXT: "@:CORE.BTN.NEXT"
         PROGRESS_MOVE_BOOKING: "@:CORE.BTN.BOOK"
-        PROGRESS_BACK: "@:CORE.BTN.BACK"
+        BACK_BTN: "@:CORE.BTN.BACK"
       }
       CATEGORY : {
         APPOINTMENT_TYPE: "Select appointment type"
         PROGRESS_BOOK: "@:COMMON.BTN.BOOK"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CANCEL_MODAL: {
         CANCEL_QUESTION: "Sind Sie sicher, Sie wollen diesen Buchung stornieren?"
@@ -119,7 +119,7 @@ angular.module('BB.Services').config ($translateProvider) ->
           REQUIRED_FIELDS: "@:COMMON.FORM.REQUIRED_LABEL fields"
         }
         PROGRESS_CONFIRM: "@:COMMON.BTN.CONFIRM"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CHECKOUT: {
         PAYMENT_WORD: "Zahlung"
@@ -150,7 +150,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         DETAILS_OTHER_INFO: "Sonstige Angaben"
         DETAILS_VALIDATION_MSG: "@:COMMON.FORM.FIELD_REQUIRED"
         PROGRESS_CONTINUE: "@:COMMON.BTN.NEXT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         PROGRESS_CLEAR: "@:COMMON.BTN.CLEAR"
       }
       COMPANY_CARDS: {
@@ -159,7 +159,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       COMPANY_LIST: {
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CONFIRMATION: {
         CONFIRMATION_BOOKING_TITLE: "Buchungsbestätigung"
@@ -242,7 +242,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         PROGRESS_CANCEL: "@:COMMON.BTN.CANCEL"
         BASKET_ITEM_ADD: "Fügen Sie ein anderes Element"
         BASKET_CHECKOUT: "@:COMMON.BTN.CHECKOUT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       BASKET_SUMMARY: {
         STEP_TITLE: "Summary"
@@ -272,7 +272,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_TOTAL_DUE_NOW: "@:COMMON.TERMINOLOGY.TOTAL_DUE_NOW"
         CONFIRMATION_WAITLIST_SUBHEADER: "Danke {{ member_name }}. Sie haben successully auf gebucht {{ purchase_item }}."
         PRINT: "@:COMMON.TERMINOLOGY.PRINT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       ERROR_MODAL: {
         PROGRESS_OK: "@:COMMON.BTN.OK"
@@ -292,7 +292,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_WALLET_AMOUNT: "Menge"
         BASKET_WALLET: "@:COMMON.TERMINOLOGY.WALLET"
         BASKET_WALLET_AMOUNT_MINIMUM: "Mindest nachfüllen Betrag muss größer sein als"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       DASH: {
         DASHBOARD: "Armaturenbrett"
@@ -301,7 +301,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       DAY: {
         AVAIL_MONTH_PREVIOUS: "Vorheriger Monat"
         AVAIL_MONTH_NEXT: "Nächster Monat"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         DATE_NOT_SELECTED: "You need to select a date"
       }
       DEAL_LIST: {
@@ -322,13 +322,13 @@ angular.module('BB.Services').config ($translateProvider) ->
         RECIPIENT_NAME: "Name"
         DETAILS_EMAIL: "@:COMMON.FORM.EMAIL"
         PROGRESS_BUY: "Kaufen"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         CERTIFICATE_NOT_SELECTED_ALERT: "You need to select at least one Gift Certificate to continue"
       }
       DURATION_LIST: {
         ITEM_FREE: "@:COMMON.TERMINOLOGY.PRICE_FREE"
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         DURATON_NOT_SELECTED_ALERT: "You need to select a duration"
       }
       EVENT: {
@@ -386,7 +386,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         LETTER_S: "s"
         EVENT_JOIN_WAITLIST: "Join Waitlist"
         BOOK_TICKET: "@:COMMON.BTN.BOOK Ticket"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       EVENT_GROUP_LIST: {
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
@@ -411,7 +411,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EVENT_LEFT_WORD: "übrig"
         ITEM_FROM: "Von"
         PROGRESS_BOOK_EVENT: "@:COMMON.BTN.BOOK @:COMMON.TERMINOLOGY.EVENT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         EVENT_SOLD_OUT: "Ausverkauft"
         EVENT_JOIN_WAITLIST: "Beitreten Warteliste"
       }
@@ -440,7 +440,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         AVAIL_DAY_PREVIOUS: "Vorheriger Tag"
         AVAIL_DAY_NEXT: "Nächster Tag"
         AVAIL_NO: "Kein @:COMMON.TERMINOLOGY.SERVICE vorhanden"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
         TIME_NOT_SELECTED_ALERT: "Please select a time slot"
         AVAIL_MORNING: "Morgens"
         AVAIL_AFTERNOON: "Nachmittags"
@@ -459,11 +459,11 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_FREE: "@:COMMON.TERMINOLOGY.PRICE_FREE"
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
         SERVICE_LIST_NO: "Keine Dienste Ihren Filterkriterien."
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       RESOURCE_LIST: {
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
-        PROGRESS_BACK: "@:COMMON.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       RESCHEDULE_REASONS:{
         MOVE_TITLE: "Move Appointment"
@@ -498,7 +498,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       PERSON_LIST: {
         PROGRESS_SELECT: "@:COMMON.BTN.SELECT"
-        PROGRESS_BACK:   "@:COMMON.BTN.BACK"
+        BACK_BTN:   "@:COMMON.BTN.BACK"
       }
       MONTHLY_CALENDAR: {
         SELECT_DAY:       "Select a day"
@@ -509,7 +509,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         KEY:              "Key"
         AVAILABLE:        "{number, plural, =0{Keine verfügbar} one{1 verfügbar} other{# verfügbare}}"
         UNAVAILABLE:      "@:COMMON.TERMINOLOGY.UNAVAILABLE"
-        PROGRESS_BACK:    "@:COMMON.BTN.BACK"
+        BACK_BTN:    "@:COMMON.BTN.BACK"
       }
     }
   }
