@@ -349,7 +349,7 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
 angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
   (date, format="LLL", show_time_zone=false) ->
 
-    return if !date or (date and !moment(date.isValid()))
+    return if !date or (date and !moment(date).isValid())
    
     new_date = moment(date) 
     new_date.tz(SettingsService.getDisplayTimeZone())
