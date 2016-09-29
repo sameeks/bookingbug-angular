@@ -21,7 +21,7 @@
 * @property {string} setLoaded  Set the day list loaded
 * @property {object} setLoadedAndShowError Set loaded and show error
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-####
+###
 
 
 angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
