@@ -833,6 +833,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
       data.id = @id
       data.duration = @duration
       data.settings = @settings
+      data.child_client_ids = @child_client_ids
       data.settings ||= {}
       data.settings.earliest_time = @earliest_time if @earliest_time
       data.questions = @item_details.getPostData() if @item_details && @asked_questions
