@@ -29,12 +29,12 @@ angular.module('BB.Directives').directive 'bbEvent', () ->
   controller : 'Event'
 
 
-angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
-  $rootScope, EventService, $q, PageControllerService, BBModel,
-  ValidatorService, FormDataStoreService, LoadingService) ->
+angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService, FormDataStoreService, LoadingService) ->
 
   $scope.controller = "public.controllers.Event"
+
   loader = LoadingService.$loader($scope).notLoaded()
+
   angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.validator = ValidatorService
@@ -48,7 +48,9 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs,
   ]
 
   $rootScope.connection_started.then ->
+
     init($scope.bb.company) if $scope.bb.company
+
   , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
