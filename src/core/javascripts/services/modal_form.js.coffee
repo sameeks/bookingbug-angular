@@ -68,7 +68,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
 
     functionName = (func) ->
       result = /^function\s+([\w\$]+)\s*\(/.exec( func.toString() )
-      if result 
+      if result
          result[ 1 ]
       else
          ''
@@ -127,11 +127,8 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
           model.$post('cancel', params).then (booking) ->
             success(booking) if success
       else
-        question = null;
-        if type is 'appointment'
-          question = $translate.instant('CORE.MODAL.CANCEL_BOOKING.QUESTION', {type: type})
-        else
-          question = $translate.instant('CORE.MODAL.CANCEL_BOOKING.APPOINTMENT_QUESTION')
+        question = null
+        question = $translate.instant('CORE.MODAL.CANCEL_BOOKING.QUESTION', {type: type})
 
         Dialog.confirm
           model: model,
