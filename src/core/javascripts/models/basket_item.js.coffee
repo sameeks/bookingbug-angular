@@ -27,7 +27,9 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
   class BasketItem extends BaseModel
 
     constructor: (data, bb) ->
+
       super(data)
+
       @ready = false
       @days_link =  null
       @book_link =  null
@@ -942,6 +944,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
       temp.days_link = @days_link
       temp.book_link = @book_link
       temp.ready = @ready
+      temp.num_book = @num_book
       return temp
 
     ###**
@@ -969,6 +972,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
       @days_link = step.days_link
       @book_link = step.book_link
       @ready = step.ready
+      @num_book = step.num_book
 
     ###**
     * @ngdoc method
@@ -979,7 +983,6 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
     *
     * @returns {object} The returned title
     ###
-    # functions for pretty printing some information about of the basket item
     describe: ->
       title = "-"
       title = @service.name if @service

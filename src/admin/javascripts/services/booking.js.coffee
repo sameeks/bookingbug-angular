@@ -4,6 +4,7 @@ angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
     halClient, BookingCollections, BBModel, UriTemplate) ->
 
   query: (prms) ->
+
     if prms.slot
       prms.slot_id = prms.slot.id
     if prms.date

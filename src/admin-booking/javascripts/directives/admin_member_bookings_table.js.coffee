@@ -75,7 +75,7 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibMo
         datetime: moment(booking.datetime)
         details: booking.full_describe
 
-    getBookings = ($scope, member) -> 
+    getBookings = ($scope, member) ->
       params =
         start_date : $scope.startDate.format('YYYY-MM-DD')
         start_time : $scope.startTime.format('HH:mm') if $scope.startTime
@@ -86,13 +86,13 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibMo
         client_id  : member.id
 
       BBModel.Admin.Booking.$query(params).then (bookings) ->
-        now = moment.unix()
+        now = moment().unix()
         if $scope.period && $scope.period == "past"
           $scope.booking_models = _.filter bookings.items, (x) ->
-            x.datetime.unix() < now 
+            x.datetime.unix() < now
         if $scope.period && $scope.period == "future"
           $scope.booking_models = _.filter bookings.items, (x) ->
-            x.datetime.unix() > now 
+            x.datetime.unix() > now
         else
           $scope.booking_models = bookings.items
         $scope.setRows()

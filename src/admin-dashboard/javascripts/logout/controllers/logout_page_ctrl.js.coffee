@@ -8,8 +8,11 @@
 * Controller for the logout page
 ###
 angular.module('BBAdminDashboard.logout.controllers')
-.controller 'LogoutPageCtrl',['$scope', '$state', 'BBModel', ($scope, $state, BBModel) ->
+.controller 'LogoutPageCtrl', (BBModel, $scope, $state, $sessionStorage) ->
   BBModel.Admin.Login.$logout().then ()->
-  	$state.go 'login', {}, {reload: true}
+    $sessionStorage.removeItem("user")
+    $sessionStorage.removeItem("auth_token")
+    $state.go 'login', {}, {reload: true}
+    return
 
-]
+  return
