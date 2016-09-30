@@ -935,6 +935,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
       temp.book_link = @book_link
       temp.ready = @ready
       temp.num_book = @num_book
+      temp.tickets = @tickets
       return temp
 
     ###**
@@ -963,6 +964,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
       @book_link = step.book_link
       @ready = step.ready
       @num_book = step.num_book
+      @tickets = step.tickets
 
     ###**
     * @ngdoc method
