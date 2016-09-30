@@ -11,10 +11,10 @@
 
         <p translate="ADMIN_BOOKING.QUICK_PICK.STEP_SUMMARY"></p>
 
-        <div bb-services>
-          
+        <div bb-services="{allowSinglePick: true}">
+
           <ul class="bb-list bb-list-bordered bb-list-md">
-  
+
             <li ng-repeat="item in filtered_items | orderBy: 'order'">
 
                <div class="row">
