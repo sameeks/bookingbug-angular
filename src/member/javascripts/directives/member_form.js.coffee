@@ -50,7 +50,8 @@ angular.module('BBMember').directive 'memberForm', ($rootScope, AlertService, Pa
             schema.properties.questions.properties[vals[1]] ||= {type: "object", properties: {answer: v}}
           if vals[0] == "client" && vals.length > 2
             schema.properties.client ||= {type: "object", properties: {q: {type: "object", properties: {}}}}
-            schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v}}
+            if schema.properties.client.properties
+              schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v}}
         return schema
 
 
