@@ -34,7 +34,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
           noCache: true
           showAll: $scope.showAll
           selectedResources: $scope.selectedResources.selected
-          calendarView: uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getView').type
+          calendarView: uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getView').type
 
         if $scope.model
           options.showAll = false
@@ -64,6 +64,11 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   #   $bbug($window).height() - $scope.options.header_height
   # else
   #   800
+
+  if $scope.options.name
+    $scope.calendar_name = $scope.options.name
+  else
+    $scope.calendar_name = "resourceCalendar"
 
   if not $scope.options.min_time?
     $scope.options.min_time = GeneralOptions.calendar_min_time
@@ -165,7 +170,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
           $scope.editBooking(new BBModel.Admin.Booking(event))
       eventRender: (event, element) ->
         service = _.findWhere($scope.services, {id: event.service_id})
-        if uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getView').type == "listDay"
+        if uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getView').type == "listDay"
           link = $bbug(element.children()[2])
           if link
             a = link.children()[0]
@@ -188,8 +193,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
         view.calendar.unselect()
 
-        if isTimeRangeAvailable(start, end, resource) || (Math.abs(start.diff(end, 'days')) == 1 && dayHasAvailability(start))
-
+        if !$scope.options.enforce_schedules || (isTimeRangeAvailable(start, end, resource) || (Math.abs(start.diff(end, 'days')) == 1 && dayHasAvailability(start)))
           if Math.abs(start.diff(end, 'days')) > 0
             end.subtract(1, 'days')
             end = setTimeToMoment(end, $scope.options.max_time)
@@ -213,7 +217,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
               first_page: "quick_pick"
               company_id: company.id
       viewRender: (view, element) ->
-        date = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('getDate')
+        date = uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getDate')
         newDate = moment().tz(moment.tz.guess())
         newDate.set({
           'year': parseInt(date.get('year'))
@@ -233,14 +237,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   isTimeRangeAvailable = (start, end, resource) ->
     st = moment(start.toISOString()).unix()
     en = moment(end.toISOString()).unix()
-    events = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', (event)->
+    events = uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('clientEvents', (event)->
       event.rendering == 'background' && st >= event.start.unix() && event.end && en <= event.end.unix() && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
     )
-
     events.length > 0
 
   dayHasAvailability = (start)->
-    events = uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', (event)->
+    events = uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('clientEvents', (event)->
       event.rendering == 'background' && event.start.year() == start.year() && event.start.month() == start.month() && event.start.date() == start.date()
     )
 
@@ -266,8 +269,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     if $scope.showAll
       $scope.selectedResources.selected = []
 
-    uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchResources')
-    uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+    uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchResources')
+    uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchEvents')
 
   $scope.getCompanyPromise().then (company) ->
     $scope.loading = true
@@ -352,7 +355,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
       booking.title = getBookingTitle(booking)
 
-      uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+      uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('updateEvent', booking)
 
 
   $scope.updateBooking = (booking) ->
@@ -372,7 +375,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
       booking.title = getBookingTitle(booking)
 
-      uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+      uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('updateEvent', booking)
 
   $scope.editBooking = (booking) ->
     if booking.status == 3
@@ -401,20 +404,20 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
                 fail: () ->
                   $scope.refreshBooking(booking)
         if response.is_cancelled
-          uiCalendarConfig.calendars.resourceCalendar.fullCalendar('removeEvents', [response.id])
+          uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('removeEvents', [response.id])
         else
           booking.title = getBookingTitle(booking)
-          uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+          uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('updateEvent', booking)
 
   pusherBooking = (res) ->
     if res.id?
-      booking = _.first(uiCalendarConfig.calendars.resourceCalendar.fullCalendar('clientEvents', res.id))
+      booking = _.first(uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('clientEvents', res.id))
       if booking && booking.$refetch
         booking.$refetch().then () ->
           booking.title = getBookingTitle(booking)
-          uiCalendarConfig.calendars.resourceCalendar.fullCalendar('updateEvent', booking)
+          uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('updateEvent', booking)
       else
-        uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+        uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchEvents')
 
   $scope.pusherSubscribe = () =>
     if $scope.company
@@ -430,7 +433,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     $scope.datePickerOpened = true
 
   $scope.updateDate = (date) ->
-    if uiCalendarConfig.calendars.resourceCalendar
+    if uiCalendarConfig.calendars[$scope.calendar_name]
       assembledDate = moment.utc()
       assembledDate.set({
         'year': parseInt(date.getFullYear())
@@ -441,7 +444,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         'second': 0,
       })
 
-      uiCalendarConfig.calendars.resourceCalendar.fullCalendar('gotoDate', assembledDate)
+      uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('gotoDate', assembledDate)
 
   $scope.lazyUpdateDate = _.debounce($scope.updateDate, 400)
 
@@ -452,10 +455,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       $scope.lazyUpdateDate(newDate)
 
   $scope.$on 'refetchBookings', () ->
-    uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+    uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchEvents')
 
   $scope.$on 'newCheckout', () ->
-    uiCalendarConfig.calendars.resourceCalendar.fullCalendar('refetchEvents')
+    uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchEvents')
 
   $rootScope.$on 'BBLanguagePicker:languageChanged', () ->
 # Horrible hack refresh page because FUllcalendar doesnt have a rerender method
