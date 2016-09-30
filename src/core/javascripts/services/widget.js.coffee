@@ -20,7 +20,7 @@
 
 # This class contrains handy functions and variables used in building and displaying a booking widget
 
-angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope, PathHelper, SettingsService ) ->
+angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope, PathHelper, SettingsService) ->
 
 
   class Widget
@@ -425,10 +425,11 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @returns {array} The returned stacked items
     ###
     pushStackToBasket: () ->
-      @basket ||= new new BBModel.Basket(null, @)
+      @basket ||= new BBModel.Basket(null, @)
       for i in @stacked_items
         @basket.addItem(i)
       @emptyStackedItems()
+
 
     ###**
     * @ngdoc method
