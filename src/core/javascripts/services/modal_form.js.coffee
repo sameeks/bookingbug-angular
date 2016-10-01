@@ -59,7 +59,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
         $scope.form = _.reject schema.form, (x) -> x.type == 'submit'
         model_type = functionName(model.constructor)
         if FormTransform['edit'][model_type]
-          $scope.form = FormTransform['edit'][model_type]($scope.form)
+          $scope.form = FormTransform['edit'][model_type]($scope.form, schema.schema, $scope.model)
         $scope.schema = checkSchema(schema.schema)
         $scope.form_model = $scope.model
         $scope.loading = false
