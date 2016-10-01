@@ -520,6 +520,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         child = null
         if comp.companies && $scope.bb.item_defaults.company
           child = comp.findChildCompany($scope.bb.item_defaults.company)
+        
         if child
           parent_company = comp
           halClient.$get($scope.bb.api_url + '/api/v1/company/' + child.id).then (company) ->
@@ -1070,6 +1071,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
 
   restoreBasket = () ->
+
     restore_basket_defer = $q.defer()
     $scope.quickEmptybasket().then () ->
       auth_token = $localStorage.getItem('auth_token') or $sessionStorage.getItem('auth_token')
@@ -1097,6 +1099,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         else
           if res.$has('baskets')
             res.$get('baskets').then (baskets) =>
+
               basket = _.find(baskets, (b) ->
                 parseInt(b.company_id) == $scope.bb.company_id)
               if basket
@@ -1126,8 +1129,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
     $scope.bb.company_id = company.id
     $scope.bb.company = company
-    # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over
-    $scope.company = company
 
     $scope.bb.item_defaults.company = $scope.bb.company
 
@@ -1139,6 +1140,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       company.getSettings().then (settings) =>
         # setup some useful info
         $scope.bb.company_settings = settings
+        SettingsService.company_settings = settings
         $scope.bb.item_defaults.merge_resources = true if $scope.bb.company_settings.merge_resources
         $scope.bb.item_defaults.merge_people = true if $scope.bb.company_settings.merge_people
         $rootScope.bb_currency = $scope.bb.company_settings.currency
@@ -1195,8 +1197,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
   # reload a step
   $scope.loadStep = (step) ->
+
     return if step == $scope.bb.current_step
+
     $scope.bb.calculatePercentageComplete(step)
+    
     # so actually use the data from the "next" page if there is one - but show the correct page
     # this means we load the completed data from that page
     # if there isn't a next page - then try the select one
