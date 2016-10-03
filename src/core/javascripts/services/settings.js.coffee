@@ -8,6 +8,7 @@ angular.module('BB.Services').factory 'SettingsService', ($uibModalStack, bbLoca
   currency            = null
   company_time_zone   = null
   display_time_zone   = null
+  i18n                = false
 
   update_document_title: false
   company_settings     : {}

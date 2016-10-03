@@ -14,7 +14,7 @@
       </span>
     </div>
   </div>
-  <div class="col-sm-5" ng-if="!dateOnly">
+  <div class="col-sm-5" ng-show="!dateOnly">
     <div uib-timepicker ng-model="datetimeWithNoTz" show-meridian="showMeridian"
       minute-step="minuteStep" max="maxDateClean" min="minDateClean" readonly-input="bbDisabled"></div>
   </div>

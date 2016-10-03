@@ -54,8 +54,11 @@ angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
     name ||= "allDone"
     scope[name] = false
     prom = scope.$eval(attrs.bbWaitFor)
-    prom.then () ->
+    if !prom
       scope[name] = true
+    else
+      prom.then () ->
+        scope[name] = true
     return
 
 

@@ -55,7 +55,11 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
 
 
   $scope.pickTime = (slot) ->
+    $scope.bb.current_item.setDate({date: slot.datetime})
     $scope.bb.current_item.setTime(slot)
+
+    $scope.setLastSelectedDate(slot.datetime)
+
     if $scope.bb.current_item.reserve_ready
       $scope.addItemToBasket().then () =>
         $scope.decideNextPage()

@@ -16,5 +16,6 @@ angular.module('BBAdminDashboard.check-in.directives').directive 'bbAddWalkin', 
           merge_people: true
           merge_resources: true
           date: moment().format('YYYY-MM-DD')
+        on_conflict: "cancel()"
         company_id: $scope.bb.company.id
 

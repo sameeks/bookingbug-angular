@@ -33,6 +33,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
           externalLabelAssembler: if $scope.externalLabelAssembler then $scope.externalLabelAssembler else AdminCalendarOptions.external_label_assembler
           noCache: true
           showAll: $scope.showAll
+          type: $scope.options.type
           selectedResources: $scope.selectedResources.selected
           calendarView: uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getView').type
 
@@ -154,6 +155,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
                 $scope.refreshBooking(event)
               fail: () ->
                 $scope.refreshBooking(event)
+                revertFunc()
           return
 
         # if it's got a person and resource - then it
@@ -169,15 +171,28 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         if event.$has('edit')
           $scope.editBooking(new BBModel.Admin.Booking(event))
       eventRender: (event, element) ->
+        type = uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getView').type
         service = _.findWhere($scope.services, {id: event.service_id})
-        if uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getView').type == "listDay"
-          link = $bbug(element.children()[2])
-          if link
-            a = link.children()[0]
-            if a
-              if event.person_name
-                a.innerHTML = event.person_name + " - " + a.innerHTML
-        else if service
+        if !$scope.model  # if not a single item view
+          if type == "listDay"
+            link = $bbug(element.children()[2])
+            if link
+              a = link.children()[0]
+              if a
+                if event.person_name && (!$scope.options.type || $scope.options.type == "person")
+                  a.innerHTML = event.person_name + " - " + a.innerHTML
+                else if event.resource_name && $scope.options.type == "resource"
+                  a.innerHTML = event.resource_name + " - " + a.innerHTML
+          else if type == "agendaWeek" || type == "month"
+            link = $bbug(element.children()[0])
+            if link
+              a = link.children()[1]
+              if a
+                if event.person_name && (!$scope.options.type || $scope.options.type == "person")
+                  a.innerHTML = event.person_name + "<br/>" + a.innerHTML
+                else if event.resource_name && $scope.options.type == "resource"
+                  a.innerHTML = event.resource_name + "<br/>" + a.innerHTML
+        if service && type != "listDay"
           element.css('background-color', service.color)
           element.css('color', service.textColor)
           element.css('border-color', service.textColor)
@@ -215,6 +230,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
               to_datetime: moment(end.toISOString())
               item_defaults: item_defaults
               first_page: "quick_pick"
+              on_conflict: "cancel()"
               company_id: company.id
       viewRender: (view, element) ->
         date = uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getDate')

@@ -1,4 +1,4 @@
-<div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store>
+<div class="bb-quick-pick" bb-wait-for="emptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store>
   <uib-tabset>
     <uib-tab>
       <uib-tab-heading>
@@ -11,7 +11,7 @@
 
         <p translate="ADMIN_BOOKING.QUICK_PICK.STEP_SUMMARY"></p>
 
-        <div bb-services="{allowSinglePick: true}">
+        <div bb-services="{allow_single_pick: true}">
 
           <ul class="bb-list bb-list-bordered bb-list-md">
 

@@ -74,7 +74,9 @@ angular.module('BBAdminDashboard.calendar.services').factory 'CalendarEventSourc
             else if booking.status == 3 && options.blockLabelAssembler?
               booking.title = TitleAssembler.getTitle(booking, options.blockLabelAssembler)
 
-            filteredBookings.push booking
+            ## if we're limiting to peopel or resoures - check this is correct
+            if !options.type || (options.type == "resource" && booking.resource_id ) || (options.type == "person" && booking.person_id )
+              filteredBookings.push booking
 
         deferred.resolve filteredBookings
 
