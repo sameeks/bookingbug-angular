@@ -72,7 +72,10 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
         event =  @current_item.event.id if @current_item.event
         date = @current_item.date.date.toISODate() if @current_item.date
         time = @current_item.time.time if @current_item.time
-        company = @convertToDashSnakeCase(@current_item.company.name) if @current_item.company
+        if @current_item.company.name
+          company = @convertToDashSnakeCase(@current_item.company.name)
+        else
+          console.log('%c bb_warning: Make sure you are using a valid company_id', 'background: #c0392b; color: #fff')
       prms = angular.copy(@route_values) if @route_values
       prms ||= {}
       angular.extend(prms,{page: page, company: company, service: service_name, event_group: event_group, date: date, time: time, event: event})
