@@ -241,6 +241,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     Slot: 12
     Event: 13
     Login: 14
+    Confirmation: 14
   $scope.Route = $rootScope.Route
 
 
@@ -779,7 +780,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
         return
       else
         if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          $scope.showPage('confirmation')
+          return if $scope.setPageRoute($rootScope.Route.Confirmation)
+          return $scope.showPage('confirmation')
         else
           return $scope.showPage(route)
 
@@ -795,6 +797,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')
     else if $scope.bb.total && $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
@@ -848,6 +851,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
     #   return $scope.showPage('payment')
     else if $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
 
