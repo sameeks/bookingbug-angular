@@ -241,7 +241,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     Slot: 12
     Event: 13
     Login: 14
-    Confirmation: 14
+    Confirmation: 15
   $scope.Route = $rootScope.Route
 
 
