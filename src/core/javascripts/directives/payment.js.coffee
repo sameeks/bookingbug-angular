@@ -61,7 +61,6 @@ angular.module('BB.Directives').directive 'bbPaypalExpressButton', ($compile, $s
   linker = (scope, element, attributes) ->
     total = scope.total
     paypalOptions = scope.paypalOptions
-    console.log paypalOptions
     scope.href = new UriTemplate(total.$link('paypal_express').href).fillFromObject(paypalOptions)
 
     scope.showLoader = () ->
