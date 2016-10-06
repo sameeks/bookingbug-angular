@@ -66,15 +66,15 @@
 <div class="hidden-print">
   <div class="bb-step-navigation">
     <div ng-if="make_payment" class="col-sm-12 bb-checkout-pay-button-div">
-      <div payment-button 
-        value="Pay" 
-        class="btn btn-primary" 
-        total="total" 
+      <div payment-button
+        value="Pay"
+        class="btn btn-primary"
+        total="total"
         bb="bb"
         decide-next-page="decideNextPage">
       </div>
     </div>
-    <button type="button" class="btn btn-link" onclick="window.print()"><span class="glyphicon glyphicon-print"></span> Print</button>
+    <button type="button" class="btn btn-link" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
     <div bb-booking-export class="bb-booking-export"></div>
     <div class="col-sm-12 pull-left">
       <button type="button" class="btn btn-default" ng-click="$parent.is_waitlist = false"> Back </button>

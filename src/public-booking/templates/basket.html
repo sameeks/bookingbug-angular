@@ -38,7 +38,7 @@
 								</div>
 							</td>
 							<td class="text-center">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></span>
+								<i class="fa fa-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></i>
 							</td>
 						</tr>
 						<tr ng-if="basket.hasDeal()">
@@ -58,7 +58,7 @@
 								{{ deal_code.value | currency }}
 							</td>
 							<td class="text-center">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeDeal(deal_code)"></span>
+								<i class="fa fa-trash" aria-hidden="true" ng-click="removeDeal(deal_code)"></i>
 							</td>
 						</tr>
 

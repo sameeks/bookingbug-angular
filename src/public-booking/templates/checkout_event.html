@@ -10,12 +10,12 @@
           <span>{{bb.event_details.datetime | datetime: 'Do MMMM YYYY'}}</span>
         </li>
         <li class="col-xs-6 col-sm-3 time truncate-xs">
-          <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+          <i class="fa fa-clock-o" aria-hidden="true"></i>
           <span class="event-time" ng-bind="bb.event_details.datetime | datetime: 'LT'"></span>
           &ndash;<span ng-bind="bb.event_details.end_datetime | datetime: 'LT'"></span>
         </li>
         <li class="hidden-xs col-sm-3 duration truncate-xs">
-          <span class="glyphicon glyphicon-hourglass"></span>
+          <i class="fa fa-hourglass-o" aria-hidden="true"></i>
           <span ng-bind="bb.event_details.duration | time_period"></span>
         </li>
         <li class="hidden-xs col-sm-12 location" ng-show="bb.event_details.address">

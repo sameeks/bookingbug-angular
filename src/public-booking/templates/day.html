@@ -6,16 +6,14 @@
   <div bb-month-availability ng-init="checkStepTitle('Select a date')" class="bb-day">
     <div class="bb-calendar-navigation">
       <button type="button" class="btn btn-link pull-left" ng-click="subtract('months',1)" ng-disabled="isPast()">
-        <span class="glyphicon glyphicon-chevron-left pull-left" aria-hidden="true">
-        </span>
+        <i class="fa fa-chevron-left pull-left" aria-hidden="true"></i>
         <span class="hidden-xs">Previous Month
         </span>
       </button>
       <button type="button" class="btn btn-link pull-right" ng-click="add('months',1)">
         <span class="hidden-xs">Next Month
         </span>
-        <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
-        </span>
+        <i class="fa fa-chevron-right pull-right" aria-hidden="true"></i>
       </button>
     </div>
     <div>

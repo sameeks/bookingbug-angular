@@ -150,7 +150,7 @@
                 <ul class="deals-applied">
                   <li ng-repeat="deal in bb.basket.getDealCodes()">
                     {{deal.description}} ({{deal.deal_code}})
-                    <button  type="button" class="btn btn-link btn-red" ng-click="removeDeal(deal)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</button>
+                    <button  type="button" class="btn btn-link btn-red" ng-click="removeDeal(deal)"><i class="fa fa-times" aria-hidden="true"></i> Remove</button>
                   </li>
                 </ul>
                 <p>Remaining Gift Certificate balance: {{bb.basket.remainingDealBalance() | currency}}</p>
@@ -288,7 +288,7 @@
               <div ng-form name="client_ticket_form" class="form-horizontal" role="form" novalidate>
                 <div ticket-accordion uib-accordion-group is-open="is_open" ng-init="is_open = $first">
                   <div uib-accordion-heading>
-                    <h2>Ticket <span ng-show="current_ticket_items.length != 1">{{$index + 1}}</span> details <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i></h2>
+                    <h2>Ticket <span ng-show="current_ticket_items.length != 1">{{$index + 1}}</span> details <i class="pull-right fa" ng-class="{'fa-chevron-down': is_open, 'fa-chevron-right': !is_open}" aria-hidden="true"></i></h2>
                   </div>
 
 
@@ -391,7 +391,7 @@
 
               <button type="button" class="btn btn-primary btn-block pull-right" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() > 0">
                 Reserve Ticket<span ng-show="event.numTicketsSelected() > 1">s</span>
-                <span class="glyphicon glyphicon-chevron-right"></span>
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
               </button>
 
               <button type="button" class="btn btn-primary btn-block pull-right" ng-disabled="event.numTicketsSelected() == 0" ng-click="selectTickets()" ng-show="event.getSpacesLeft() <= 0 && bb.company.settings.has_waitlists">
