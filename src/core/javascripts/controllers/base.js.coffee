@@ -257,6 +257,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     Event: 13
     Login: 14
     Questions: 15
+    Confirmation: 16
   $scope.Route = $rootScope.Route
 
 
@@ -807,7 +808,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         return
       else
         if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          $scope.showPage('confirmation')
+          return if $scope.setPageRoute($rootScope.Route.Confirmation)
+          return $scope.showPage('confirmation')
         else
           return $scope.showPage(route)
 
@@ -823,6 +825,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')
     else if $scope.bb.total && $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
@@ -879,6 +882,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
     #   return $scope.showPage('payment')
     else if $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
 
@@ -1424,4 +1428,3 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
   $scope.redirectTo = (url) ->
     $window.location.href = url
-
