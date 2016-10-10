@@ -19,14 +19,18 @@
         </div>
 
         <div>
-          <ul class="confirmation-summary">
+          <ul ng-if="total.items.length > 1" class="confirmation-summary">
             <li class="row confirmation-summary-item">
-              <div class="bb-summary-label">Reference: </div>
+              <div class="bb-summary-label">Purchase Reference: </div>
               <div class="bb-summary-value">{{total.id}}</div>
             </li>
           </ul>
 
           <ul class="confirmation-summary" ng-repeat="booking in total.bookings">
+            <li class="row confirmation-summary-item">
+              <div class="bb-summary-label">Booking Reference: </div>
+              <div class="bb-summary-value">{{booking.id}}</div>
+            </li>
             <li ng-show="booking.full_describe" class="row confirmation-summary-item">
               <div class="bb-summary-label">Service: </div>
               <div class="bb-summary-value">{{booking.full_describe}}</div>
