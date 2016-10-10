@@ -116,6 +116,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
       $uibModalInstance.close()
       if type == 'booking'
         modal_instance = $uibModal.open
+          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: 'cancel_booking_modal_form.html'
           controller: ($scope, booking) ->
             $scope.booking = booking
