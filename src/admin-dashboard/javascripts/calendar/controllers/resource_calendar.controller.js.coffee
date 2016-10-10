@@ -1,9 +1,56 @@
 'use strict';
 
-angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCalendarController', ($scope, $rootScope, $attrs,
-  BBAssets, ProcessAssetsFilter, $state, GeneralOptions, AdminCalendarOptions, CalendarEventSources, TitleAssembler, $translate,
-  uiCalendarConfig, AdminCompanyService, $q, ModalForm, AdminBookingPopup, AdminMoveBookingPopup, $window, $bbug, Dialog, $filter,
-  PrePostTime, BBModel) ->
+angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCalendarController', (AdminBookingPopup,
+  AdminCalendarOptions, AdminCompanyService, AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources,
+  ColorPalette, Dialog, $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope,
+  $state, TitleAssembler, $translate, $window, uiCalendarConfig) ->
+  'ngInject'
+
+  ###jshint validthis: true ###
+  vm = @
+
+  filters = null
+
+  company = null
+  companyServices = []
+
+  calOptions = []
+
+  vm.assets = [] # All options sets (resources, people) go to the same select
+
+  vm.selectedResources = {
+    selected: []
+  }
+
+  init = () ->
+    applyFilters()
+
+    prepareCalOptions()
+    prepareEventSources()
+    prepareUiCalOptions()
+
+    $scope.$watch 'selectedResources.selected', selectedResourcesListener
+    $scope.$watch 'currentDate', currentDateListener
+
+    $scope.$on 'refetchBookings', refetchBookingsHandler
+    $scope.$on 'newCheckout', newCheckoutHandler
+    $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
+
+    getCompanyPromise().then(companyListener)
+
+    vm.changeSelectedResources = changeSelectedResources
+    return
+
+  applyFilters = () ->
+    filters = {
+      requestedAssets: ProcessAssetsFilter($state.params.assets)
+    }
+
+    vm.showAll = true
+    if filters.requestedAssets.length > 0
+      vm.showAll = false
+
+    return
 
   setTimeToMoment = (date, time)->
     newDate = moment(time, 'HH:mm')
@@ -13,308 +60,282 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       'date': parseInt(date.get('date'))
       'second': 0
     })
-    newDate
+    return newDate
 
-  filters = {
-    requestedAssets: ProcessAssetsFilter($state.params.assets)
-  }
+  prepareEventSources = () ->
+    vm.eventSources = [
+      events: getEvents
+    ]
+    return
 
-  $scope.showAll = true
-  if filters.requestedAssets.length > 0
-    $scope.showAll = false
+  getEvents = (start, end, timezone, callback) ->
+    vm.loading = true
+    getCompanyPromise().then (company) ->
+      options =
+        labelAssembler: if $scope.labelAssembler then $scope.labelAssembler else AdminCalendarOptions.bookings_label_assembler
+        blockLabelAssembler: if $scope.blockLabelAssembler then $scope.blockLabelAssembler else AdminCalendarOptions.block_label_assembler
+        externalLabelAssembler: if $scope.externalLabelAssembler then $scope.externalLabelAssembler else AdminCalendarOptions.external_label_assembler
+        noCache: true
+        showAll: vm.showAll
+        type: calOptions.type
+        selectedResources: vm.selectedResources.selected
+        calendarView: uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getView').type
 
-  $scope.eventSources = [
-    events: (start, end, timezone, callback) ->
-      $scope.loading = true
-      $scope.getCompanyPromise().then (company) ->
-        options =
-          labelAssembler: if $scope.labelAssembler then $scope.labelAssembler else AdminCalendarOptions.bookings_label_assembler
-          blockLabelAssembler: if $scope.blockLabelAssembler then $scope.blockLabelAssembler else AdminCalendarOptions.block_label_assembler
-          externalLabelAssembler: if $scope.externalLabelAssembler then $scope.externalLabelAssembler else AdminCalendarOptions.external_label_assembler
-          noCache: true
-          showAll: $scope.showAll
-          type: $scope.options.type
-          selectedResources: $scope.selectedResources.selected
-          calendarView: uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getView').type
+      if $scope.model
+        options.showAll = false
+        options.selectedResources = [$scope.model]
 
-        if $scope.model
-          options.showAll = false
-          options.selectedResources = [$scope.model]
+      CalendarEventSources.getAllCalendarEntries(company, start, end, options).then (results)->
+        vm.loading = false
+        return callback(results)
+    return
 
-        CalendarEventSources.getAllCalendarEntries(company, start, end, options).then (results)->
-          $scope.loading = false
-          return callback(results)
-  ]
+  prepareCalOptions = () ->
+    calOptions = $scope.$eval $attrs.bbResourceCalendar
+    calOptions ||= {}
 
-  $scope.options = $scope.$eval $attrs.bbResourceCalendar
-  $scope.options ||= {}
+    if !calOptions.defaultView
+      if $scope.model
+        calOptions.defaultView = 'agendaWeek'
+      else
+        calOptions.defaultView = 'timelineDay'
 
-  if !$scope.options.defaultView
-    if $scope.model
-      $scope.options.defaultView = 'agendaWeek'
+    if !calOptions.views
+      if $scope.model
+        calOptions.views = 'listDay,timelineDayThirty,agendaWeek,month'
+      else
+        calOptions.views = 'timelineDay,listDay,timelineDayThirty,agendaWeek,month'
+
+    # height = if calOptions.header_height
+    #   $bbug($window).height() - calOptions.header_height
+    # else
+    #   800
+
+    if calOptions.name
+      vm.calendar_name = calOptions.name
     else
-      $scope.options.defaultView = 'timelineDay'
+      vm.calendar_name = "resourceCalendar"
 
-  if !$scope.options.views
-    if $scope.model
-      $scope.options.views = 'listDay,timelineDayThirty,agendaWeek,month'
-    else
-      $scope.options.views = 'timelineDay,listDay,timelineDayThirty,agendaWeek,month'
+    if not calOptions.min_time?
+      calOptions.min_time = GeneralOptions.calendar_min_time
 
-  # height = if $scope.options.header_height
-  #   $bbug($window).height() - $scope.options.header_height
-  # else
-  #   800
+    if not calOptions.max_time?
+      calOptions.max_time = GeneralOptions.calendar_max_time
 
-  if $scope.options.name
-    $scope.calendar_name = $scope.options.name
-  else
-    $scope.calendar_name = "resourceCalendar"
+    if not calOptions.cal_slot_duration?
+      calOptions.cal_slot_duration = GeneralOptions.calendar_slot_duration
 
-  if not $scope.options.min_time?
-    $scope.options.min_time = GeneralOptions.calendar_min_time
+    return
 
-  if not $scope.options.max_time?
-    $scope.options.max_time = GeneralOptions.calendar_max_time
+  prepareUiCalOptions = () ->
+    vm.uiCalOptions = # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
+      calendar:
+        locale: $translate.use()
+        schedulerLicenseKey: '0598149132-fcs-1443104297'
+        eventStartEditable: false
+        eventDurationEditable: false
+        minTime: calOptions.min_time
+        maxTime: calOptions.max_time
+        height: 'auto'
+        buttonText: {
+          today: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
+        }
+        header:
+          left: 'today,prev,next'
+          center: 'title'
+          right: calOptions.views
+        defaultView: calOptions.defaultView
+        views:
+          listDay:
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.AGENDA')
+          agendaWeek:
+            slotDuration: $filter('minutesToString')(calOptions.cal_slot_duration)
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
+            groupByDateAndResource: false
+          month:
+            eventLimit: 5
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
+          timelineDay:
+            slotDuration: $filter('minutesToString')(calOptions.cal_slot_duration)
+            eventOverlap: false
+            slotWidth: 25
+            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration})
+            resourceAreaWidth: '18%'
+        resourceGroupField: 'group'
+        resourceLabelText: ' '
+        eventResourceEditable: true
+        selectable: true
+        lazyFetching: false
+        columnFormat: AdminCalendarOptions.column_format
+        resources: fcResources
+        eventDragStop: fcEventDragStop
+        eventDrop: fcEventDrop
+        eventClick: fcEventClick
+        eventRender: fcEventRender
+        eventAfterRender: fcEventAfterRender
+        select: fcSelect
+        viewRender: fcViewRender
+        eventResize: fcEventResize
+        loading: fcLoading
+    return
 
-  if not $scope.options.cal_slot_duration?
-    $scope.options.cal_slot_duration = GeneralOptions.calendar_slot_duration
+  fcResources = (callback) ->
+    getCalendarAssets(callback)
 
-  # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
-  $scope.uiCalOptions =
-    calendar:
-      locale: $translate.use()
-      schedulerLicenseKey: '0598149132-fcs-1443104297'
-      eventStartEditable: false
-      eventDurationEditable: false
-      minTime: $scope.options.min_time
-      maxTime: $scope.options.max_time
-      height: 'auto'
-      buttonText: {
-        today: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
-      }
-      header:
-        left: 'today,prev,next'
-        center: 'title'
-        right: $scope.options.views
-      defaultView: $scope.options.defaultView
-      views:
-        listDay:
-          buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.AGENDA')
-        agendaWeek:
-          slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
-          buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
-          groupByDateAndResource: false
-        month:
-          eventLimit: 5
-          buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
-        timelineDay:
-          slotDuration: $filter('minutesToString')($scope.options.cal_slot_duration)
-          eventOverlap: false
-          slotWidth: 25
-          buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: $scope.options.cal_slot_duration})
-          resourceAreaWidth: '18%'
-      resourceGroupField: 'group'
-      resourceLabelText: ' '
-      eventResourceEditable: true
-      selectable: true
-      lazyFetching: false
-      columnFormat: AdminCalendarOptions.column_format
-      resources: (callback) ->
-        getCalendarAssets(callback)
-      eventDragStop: (event, jsEvent, ui, view) ->
-        event.oldResourceIds = event.resourceIds
-      eventDrop: (event, delta, revertFunc) ->
-# we need a full move cal if either it has a person and resource, or they've dragged over multiple days
-        if  event.person_id && event.resource_id || delta.days() > 0
-          start = event.start
-          end = event.end
-          item_defaults =
-            date: start.format('YYYY-MM-DD')
-            time: (start.hour() * 60 + start.minute())
+  fcEventDragStop = (event, jsEvent, ui, view) ->
+    event.oldResourceIds = event.resourceIds
 
-          if event.resourceId
-            newAssetId = event.resourceId.substring(0, event.resourceId.indexOf('_'))
-            if event.resourceId.indexOf('_p') > -1
-              item_defaults.person = newAssetId
-              orginal_resource = "" + event.person_id + "_p"
-            else if event.resourceId.indexOf('_r') > -1
-              item_defaults.resource = newAssetId
-              orginal_resource = "" + event.resource_id + "_r"
+  fcEventDrop = (event, delta, revertFunc) -> # we need a full move cal if either it has a person and resource, or they've dragged over multiple days
+    if  event.person_id && event.resource_id || delta.days() > 0
+      start = event.start
+      end = event.end
+      item_defaults =
+        date: start.format('YYYY-MM-DD')
+        time: (start.hour() * 60 + start.minute())
 
-          $scope.getCompanyPromise().then (company) ->
-            AdminMoveBookingPopup.open
-              min_date: setTimeToMoment(start, $scope.options.min_time)
-              max_date: setTimeToMoment(end, $scope.options.max_time)
-              from_datetime: moment(start.toISOString())
-              to_datetime: moment(end.toISOString())
-              item_defaults: item_defaults
-              company_id: company.id
-              booking_id: event.id
-              success: (model) =>
-                $scope.refreshBooking(event)
-              fail: () ->
-                $scope.refreshBooking(event)
-                revertFunc()
-          return
+      if event.resourceId
+        newAssetId = event.resourceId.substring(0, event.resourceId.indexOf('_'))
+        if event.resourceId.indexOf('_p') > -1
+          item_defaults.person = newAssetId
+          orginal_resource = "" + event.person_id + "_p"
+        else if event.resourceId.indexOf('_r') > -1
+          item_defaults.resource = newAssetId
+          orginal_resource = "" + event.resource_id + "_r"
 
-        # if it's got a person and resource - then it
-        Dialog.confirm
-          title: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_TITLE')
-          model: event
-          body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY')
+      getCompanyPromise().then (company) ->
+        AdminMoveBookingPopup.open
+          min_date: setTimeToMoment(start, calOptions.min_time)
+          max_date: setTimeToMoment(end, calOptions.max_time)
+          from_datetime: moment(start.toISOString())
+          to_datetime: moment(end.toISOString())
+          item_defaults: item_defaults
+          company_id: company.id
+          booking_id: event.id
           success: (model) =>
-            $scope.updateBooking(event)
+            refreshBooking(event)
           fail: () ->
+            refreshBooking(event)
             revertFunc()
-      eventClick: (event, jsEvent, view) ->
-        if event.$has('edit')
-          $scope.editBooking(new BBModel.Admin.Booking(event))
-      eventRender: (event, element) ->
-        type = uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getView').type
-        service = _.findWhere($scope.services, {id: event.service_id})
-        if !$scope.model  # if not a single item view
-          if type == "listDay"
-            link = $bbug(element.children()[2])
-            if link
-              a = link.children()[0]
-              if a
-                if event.person_name && (!$scope.options.type || $scope.options.type == "person")
-                  a.innerHTML = event.person_name + " - " + a.innerHTML
-                else if event.resource_name && $scope.options.type == "resource"
-                  a.innerHTML = event.resource_name + " - " + a.innerHTML
-          else if type == "agendaWeek" || type == "month"
-            link = $bbug(element.children()[0])
-            if link
-              a = link.children()[1]
-              if a
-                if event.person_name && (!$scope.options.type || $scope.options.type == "person")
-                  a.innerHTML = event.person_name + "<br/>" + a.innerHTML
-                else if event.resource_name && $scope.options.type == "resource"
-                  a.innerHTML = event.resource_name + "<br/>" + a.innerHTML
-        if service && type != "listDay"
-          element.css('background-color', service.color)
-          element.css('color', service.textColor)
-          element.css('border-color', service.textColor)
-        element
-      eventAfterRender: (event, elements, view) ->
-        if not event.rendering? or event.rendering != 'background'
-          PrePostTime.apply(event, elements, view, $scope)
-      select: (start, end, jsEvent, view, resource) ->
-# For some reason clicking on the scrollbars triggers this event
-#  therefore we filter based on the jsEvent target
-        if jsEvent.target.className == 'fc-scroller'
-          return
+      return
 
-        view.calendar.unselect()
+    # if it's got a person and resource - then it
+    Dialog.confirm
+      title: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_TITLE')
+      model: event
+      body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY')
+      success: (model) =>
+        updateBooking(event)
+      fail: () ->
+        revertFunc()
 
-        if !$scope.options.enforce_schedules || (isTimeRangeAvailable(start, end, resource) || (Math.abs(start.diff(end, 'days')) == 1 && dayHasAvailability(start)))
-          if Math.abs(start.diff(end, 'days')) > 0
-            end.subtract(1, 'days')
-            end = setTimeToMoment(end, $scope.options.max_time)
+  fcEventClick = (event, jsEvent, view) ->
+    if event.$has('edit')
+      editBooking(new BBModel.Admin.Booking(event))
 
-          item_defaults =
-            date: start.format('YYYY-MM-DD')
-            time: (start.hour() * 60 + start.minute())
+  fcEventRender = (event, element) ->
+    type = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getView').type
+    service = _.findWhere(companyServices, {id: event.service_id})
+    if !$scope.model  # if not a single item view
+      if type == "listDay"
+        link = $bbug(element.children()[2])
+        if link
+          a = link.children()[0]
+          if a
+            if event.person_name && (!calOptions.type || calOptions.type == "person")
+              a.innerHTML = event.person_name + " - " + a.innerHTML
+            else if event.resource_name && calOptions.type == "resource"
+              a.innerHTML = event.resource_name + " - " + a.innerHTML
+      else if type == "agendaWeek" || type == "month"
+        link = $bbug(element.children()[0])
+        if link
+          a = link.children()[1]
+          if a
+            if event.person_name && (!calOptions.type || calOptions.type == "person")
+              a.innerHTML = event.person_name + "<br/>" + a.innerHTML
+            else if event.resource_name && calOptions.type == "resource"
+              a.innerHTML = event.resource_name + "<br/>" + a.innerHTML
+    if service && type != "listDay"
+      element.css('background-color', service.color)
+      element.css('color', service.textColor)
+      element.css('border-color', service.textColor)
+    element
 
-          if resource && resource.type == 'person'
-            item_defaults.person = resource.id.substring(0, resource.id.indexOf('_'))
-          else if resource && resource.type == 'resource'
-            item_defaults.resource = resource.id.substring(0, resource.id.indexOf('_'))
+  fcEventAfterRender = (event, elements, view) ->
+    if not event.rendering? or event.rendering != 'background'
+      PrePostTime.apply(event, elements, view, $scope)
 
-          $scope.getCompanyPromise().then (company) ->
-            AdminBookingPopup.open
-              min_date: setTimeToMoment(start, $scope.options.min_time)
-              max_date: setTimeToMoment(end, $scope.options.max_time)
-              from_datetime: moment(start.toISOString())
-              to_datetime: moment(end.toISOString())
-              item_defaults: item_defaults
-              first_page: "quick_pick"
-              on_conflict: "cancel()"
-              company_id: company.id
-      viewRender: (view, element) ->
-        date = uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('getDate')
-        newDate = moment().tz(moment.tz.guess())
-        newDate.set({
-          'year': parseInt(date.get('year'))
-          'month': parseInt(date.get('month'))
-          'date': parseInt(date.get('date'))
-          'hour': 0
-          'minute': 0
-          'second': 0
-        })
-        $scope.currentDate = newDate.toDate()
-      eventResize: (event, delta, revertFunc, jsEvent, ui, view) ->
-        event.duration = event.end.diff(event.start, 'minutes')
-        $scope.updateBooking(event)
-      loading: (isLoading, view) ->
-        $scope.calendarLoading = isLoading
+  fcSelect = (start, end, jsEvent, view, resource) -> # For some reason clicking on the scrollbars triggers this event therefore we filter based on the jsEvent target
+    if jsEvent.target.className == 'fc-scroller'
+      return
+
+    view.calendar.unselect()
+
+    if !calOptions.enforce_schedules || (isTimeRangeAvailable(start, end, resource) || (Math.abs(start.diff(end, 'days')) == 1 && dayHasAvailability(start)))
+      if Math.abs(start.diff(end, 'days')) > 0
+        end.subtract(1, 'days')
+        end = setTimeToMoment(end, calOptions.max_time)
+
+      item_defaults =
+        date: start.format('YYYY-MM-DD')
+        time: (start.hour() * 60 + start.minute())
+
+      if resource && resource.type == 'person'
+        item_defaults.person = resource.id.substring(0, resource.id.indexOf('_'))
+      else if resource && resource.type == 'resource'
+        item_defaults.resource = resource.id.substring(0, resource.id.indexOf('_'))
+
+      getCompanyPromise().then (company) ->
+        AdminBookingPopup.open
+          min_date: setTimeToMoment(start, calOptions.min_time)
+          max_date: setTimeToMoment(end, calOptions.max_time)
+          from_datetime: moment(start.toISOString())
+          to_datetime: moment(end.toISOString())
+          item_defaults: item_defaults
+          first_page: "quick_pick"
+          on_conflict: "cancel()"
+          company_id: company.id
+
+  fcViewRender = (view, element) ->
+    date = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getDate')
+    newDate = moment().tz(moment.tz.guess())
+    newDate.set({
+      'year': parseInt(date.get('year'))
+      'month': parseInt(date.get('month'))
+      'date': parseInt(date.get('date'))
+      'hour': 0
+      'minute': 0
+      'second': 0
+    })
+    $scope.currentDate = newDate.toDate() #TODO other directive expect this variable on scope
+
+  fcEventResize = (event, delta, revertFunc, jsEvent, ui, view) ->
+    event.duration = event.end.diff(event.start, 'minutes')
+    updateBooking(event)
+
+  fcLoading = (isLoading, view) ->
+    vm.calendarLoading = isLoading
+
+  $scope.openDatePicker = ($event) -> #TODO other directive expect this method on scope
+    $event.preventDefault()
+    $event.stopPropagation()
+    $scope.datePickerOpened = true
 
   isTimeRangeAvailable = (start, end, resource) ->
     st = moment(start.toISOString()).unix()
     en = moment(end.toISOString()).unix()
-    events = uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('clientEvents', (event)->
+    events = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', (event)->
       event.rendering == 'background' && st >= event.start.unix() && event.end && en <= event.end.unix() && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
     )
-    events.length > 0
+    return events.length > 0
 
   dayHasAvailability = (start)->
-    events = uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('clientEvents', (event)->
+    events = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', (event)->
       event.rendering == 'background' && event.start.year() == start.year() && event.start.month() == start.month() && event.start.date() == start.date()
     )
 
-    events.length > 0
+    return events.length > 0
 
-  $scope.getCompanyPromise = () ->
-    defer = $q.defer()
-    if $scope.company
-      defer.resolve($scope.company)
-    else
-      AdminCompanyService.query($attrs).then (company) ->
-        $scope.company = company
-        defer.resolve($scope.company)
-    defer.promise
-
-  # All optionassetss (resources, people) go to the same select
-  $scope.assets = []
-  $scope.selectedResources = {
-    selected: []
-  }
-
-  $scope.changeSelectedResources = ()->
-    if $scope.showAll
-      $scope.selectedResources.selected = []
-
-    uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchResources')
-    uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchEvents')
-
-  $scope.getCompanyPromise().then (company) ->
-    $scope.loading = true
-
-    BBAssets(company).then((assets)->
-      for asset in assets
-        asset.id = asset.identifier
-      $scope.loading = false
-
-      if $scope.options.type
-        assets = _.filter assets, (a) -> a.type == $scope.options.type
-      $scope.assets = assets
-
-      # requestedAssets
-      if filters.requestedAssets.length > 0
-        angular.forEach($scope.assets, (asset)->
-          isInArray = _.find(filters.requestedAssets, (id)->
-            return id == asset.id
-          )
-
-          if typeof isInArray != 'undefined'
-            $scope.selectedResources.selected.push asset
-        )
-
-        $scope.changeSelectedResources()
-    )
-
-  $scope.$watch 'selectedResources.selected', (newValue, oldValue) ->
+  selectedResourcesListener = (newValue, oldValue) ->
     if newValue != oldValue
       assets = []
       angular.forEach(newValue, (asset)->
@@ -324,30 +345,35 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       params = $state.params
       params.assets = assets.join()
       $state.go($state.current.name, params, {notify: false, reload: false})
+    return
 
   getCalendarAssets = (callback) ->
     if $scope.model
       callback([$scope.model])
       return
 
-    $scope.loading = true
+    vm.loading = true
 
-    $scope.getCompanyPromise().then (company) ->
-      if $scope.showAll
+    getCompanyPromise().then (company) ->
+      if vm.showAll
         BBAssets(company).then((assets)->
-          if $scope.options.type
-            assets = _.filter assets, (a) -> a.type == $scope.options.type
+          if calOptions.type
+            assets = _.filter assets, (a) -> a.type == calOptions.type
 
           for asset in assets
             asset.id = asset.identifier
             asset.group = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.' + asset.group.toUpperCase())
 
-          $scope.loading = false
+          vm.loading = false
           callback(assets)
         )
       else
-        $scope.loading = false
-        callback($scope.selectedResources.selected)
+        vm.loading = false
+        callback(vm.selectedResources.selected)
+      return
+
+    return
+
 
   getBookingTitle = (booking)->
     labelAssembler = if $scope.labelAssembler then $scope.labelAssembler else AdminCalendarOptions.bookings_label_assembler
@@ -358,9 +384,9 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     else if booking.status == 3 && blockLabelAssembler
       return TitleAssembler.getTitle(booking, blockLabelAssembler)
 
-    booking.title
+    return booking.title
 
-  $scope.refreshBooking = (booking) ->
+  refreshBooking = (booking) ->
     booking.$refetch().then (response) ->
       booking.resourceIds = []
       booking.resourceId = null
@@ -371,10 +397,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
       booking.title = getBookingTitle(booking)
 
-      uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('updateEvent', booking)
+      uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
+    return
 
-
-  $scope.updateBooking = (booking) ->
+  updateBooking = (booking) ->
     newAssetId = booking.resourceId.substring(0, booking.resourceId.indexOf('_'))
     if booking.resourceId.indexOf('_p') > -1
       booking.person_id = newAssetId
@@ -391,9 +417,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
       booking.title = getBookingTitle(booking)
 
-      uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('updateEvent', booking)
+      uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
+    return
 
-  $scope.editBooking = (booking) ->
+  editBooking = (booking) ->
     if booking.status == 3
       templateUrl = 'edit_block_modal_form.html'
       title = 'Edit Block'
@@ -410,46 +437,44 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         if typeof response == 'string'
           if response == "move"
             item_defaults = {person: booking.person_id, resource: booking.resource_id}
-            $scope.getCompanyPromise().then (company) ->
+            getCompanyPromise().then (company) ->
               AdminMoveBookingPopup.open
                 item_defaults: item_defaults
                 company_id: company.id
                 booking_id: booking.id
                 success: (model) =>
-                  $scope.refreshBooking(booking)
+                  refreshBooking(booking)
                 fail: () ->
-                  $scope.refreshBooking(booking)
+                  refreshBooking(booking)
         if response.is_cancelled
-          uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('removeEvents', [response.id])
+          uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('removeEvents', [response.id])
         else
           booking.title = getBookingTitle(booking)
-          uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('updateEvent', booking)
+          uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
+    return
 
   pusherBooking = (res) ->
     if res.id?
-      booking = _.first(uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('clientEvents', res.id))
+      booking = _.first(uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', res.id))
       if booking && booking.$refetch
         booking.$refetch().then () ->
           booking.title = getBookingTitle(booking)
-          uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('updateEvent', booking)
+          uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
       else
-        uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchEvents')
+        uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
+    return
 
-  $scope.pusherSubscribe = () =>
-    if $scope.company
-      pusher_channel = $scope.company.getPusherChannel('bookings')
+  pusherSubscribe = () =>
+    if company
+      pusher_channel = company.getPusherChannel('bookings')
       if pusher_channel
         pusher_channel.bind 'create', pusherBooking
         pusher_channel.bind 'update', pusherBooking
         pusher_channel.bind 'destroy', pusherBooking
+    return
 
-  $scope.openDatePicker = ($event) ->
-    $event.preventDefault()
-    $event.stopPropagation()
-    $scope.datePickerOpened = true
-
-  $scope.updateDate = (date) ->
-    if uiCalendarConfig.calendars[$scope.calendar_name]
+  updateDate = (date) ->
+    if uiCalendarConfig.calendars[vm.calendar_name]
       assembledDate = moment.utc()
       assembledDate.set({
         'year': parseInt(date.getFullYear())
@@ -460,24 +485,96 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         'second': 0,
       })
 
-      uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('gotoDate', assembledDate)
-
-  $scope.lazyUpdateDate = _.debounce($scope.updateDate, 400)
-
-  $scope.datePickerOptions = {showButtonBar: false}
-
-  $scope.$watch 'currentDate', (newDate, oldDate) ->
-    if newDate != oldDate && oldDate?
-      $scope.lazyUpdateDate(newDate)
-
-  $scope.$on 'refetchBookings', () ->
-    uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchEvents')
-
-  $scope.$on 'newCheckout', () ->
-    uiCalendarConfig.calendars[$scope.calendar_name].fullCalendar('refetchEvents')
-
-  $rootScope.$on 'BBLanguagePicker:languageChanged', () ->
-# Horrible hack refresh page because FUllcalendar doesnt have a rerender method
-#  we have to refresh the state to load new translation
-    $state.go($state.current, {}, {reload: true})
+      uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('gotoDate', assembledDate)
     return
+
+  lazyUpdateDate = _.debounce(updateDate, 400)
+
+  currentDateListener = (newDate, oldDate) ->
+    if newDate != oldDate && oldDate?
+      lazyUpdateDate(newDate)
+    return
+
+  refetchBookingsHandler = () ->
+    uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
+    return
+
+  newCheckoutHandler = () ->
+    uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
+    return
+
+  languageChangedHandler = () ->
+    $state.go($state.current, {}, {reload: true}) # Horrible hack refresh page because FUllcalendar doesnt have a rerender method  we have to refresh the state to load new translation
+    return
+
+  getCompanyPromise = () ->
+    defer = $q.defer()
+    if company
+      defer.resolve(company)
+    else
+      AdminCompanyService.query($attrs).then (_company) ->
+        company = _company
+        defer.resolve(company)
+    return defer.promise
+
+  changeSelectedResources = ()->
+    if vm.showAll
+      vm.selectedResources.selected = []
+
+    uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchResources')
+    uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
+    return
+
+  assetsListener = (assets)->
+    for asset in assets
+      asset.id = asset.identifier
+    vm.loading = false
+
+    if calOptions.type
+      assets = _.filter assets, (a) -> a.type == calOptions.type
+    vm.assets = assets
+
+    # requestedAssets
+    if filters.requestedAssets.length > 0
+      angular.forEach(vm.assets, (asset)->
+        isInArray = _.find(filters.requestedAssets, (id)->
+          return id == asset.id
+        )
+
+        if typeof isInArray != 'undefined'
+          vm.selectedResources.selected.push asset
+      )
+
+      changeSelectedResources()
+    return
+
+  ###*
+  # {Object} company
+  ###
+  companyListener = (company) ->
+    vm.loading = true
+
+    BBAssets(company).then(assetsListener)
+
+    company.$get('services').then(collectionListener)
+
+    pusherSubscribe()
+    return
+
+  ###*
+  # {Object} baseResourceCollection
+  ###
+  collectionListener = (collection) ->
+    collection.$get('services').then servicesListener
+    return
+
+  ###*
+  # {Array.<Object>} services
+  ###
+  servicesListener = (services) ->
+    companyServices = (new BBModel.Admin.Service(service) for service in services)
+    ColorPalette.setColors(companyServices)
+    return
+
+  init()
+  return
