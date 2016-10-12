@@ -116,7 +116,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
       $uibModalInstance.close()
       if type == 'booking'
         modal_instance = $uibModal.open
-          appendTo: angular.element($document[0].getElementById('bb'))
+
           templateUrl: 'cancel_booking_modal_form.html'
           controller: ($scope, booking) ->
             $scope.booking = booking
@@ -180,7 +180,6 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: newForm
       size: config.size
@@ -196,7 +195,6 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: editForm
       size: config.size
@@ -211,7 +209,6 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: bookForm
       size: config.size

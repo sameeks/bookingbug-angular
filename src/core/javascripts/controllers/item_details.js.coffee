@@ -304,7 +304,6 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   ###
   $scope.openTermsAndConditions = () ->
     modalInstance = $uibModal.open(
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "terms_and_conditions"
       scope: $scope
     )

@@ -958,7 +958,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
         error_modal = $uibModal.open
-          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: $scope.getPartial('_error_modal')
           controller: ($scope, $uibModalInstance) ->
             $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg

@@ -45,7 +45,6 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibMo
       booking = _.find $scope.booking_models, (b) -> b.id == id
 
       modalInstance = $uibModal.open
-        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'member_bookings_table_cancel_booking.html'
         controller: ($scope, $uibModalInstance, booking) ->
           $scope.booking = booking
