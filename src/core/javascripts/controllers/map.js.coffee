@@ -83,14 +83,16 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   webshim.polyfill("geolocation")
 
   $rootScope.connection_started.then ->
+    
     loader.setLoaded() if !$scope.selectedStore
+
     if $scope.bb.company.companies
       $rootScope.parent_id = $scope.bb.company.id
     else if $rootScope.parent_id
       $scope.initWidget(
-        company_id:$rootScope.parent_id
+        company_id: $rootScope.parent_id
         first_page: $scope.bb.current_page
-        keep_basket:true
+        keep_basket: true
         item_defaults: if $scope.bb.item_defaults then $scope.bb.item_defaults else {}
       )
       return
@@ -205,6 +207,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
         loader.setLoaded()
     checkDataStore()
 
+
   ###**
   * @ngdoc method
   * @name checkDataStore
@@ -225,6 +228,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
             google.maps.event.trigger(marker, 'click')
       )
 
+
   ###**
   * @ngdoc method
   * @name title
@@ -241,6 +245,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
       p1 = $scope.bb.company.extra.department
 
     return p1 + ' - ' + $scope.$eval('getCurrentStepTitle()')
+
 
   ###**
   * @ngdoc method
@@ -289,6 +294,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
 
     loader.setLoaded()
 
+
   ###**
   * @ngdoc method
   * @name searchPlaces
@@ -316,6 +322,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
       else
         searchFailed()
 
+
   ###**
   * @ngdoc method
   * @name searchSuccess
@@ -334,6 +341,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     $scope.showClosestMarkers $scope.loc
     $rootScope.$broadcast "map:search_success"
 
+
   ###**
   * @ngdoc method
   * @name searchFailed
@@ -346,6 +354,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     AlertService.raise('LOCATION_NOT_FOUND')
     # need to call apply to update bindings as geocode callback is outside angular library
     $rootScope.$apply()
+
 
   ###**
   * @ngdoc method
@@ -364,6 +373,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
       return false
     else
       return true
+
 
   haversine = (latlong, marker) ->
 
@@ -389,6 +399,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
             Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2)
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
     d = R * c
+
 
   ###**
   * @ngdoc method
@@ -434,6 +445,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     $timeout ->
       setMarkers()
 
+
   setMarkers = () ->
 
     latlong = $scope.loc
@@ -468,6 +480,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     $scope.shownMarkers[open_marker_index].is_open = true
     $scope.openMarkerInfo $scope.shownMarkers[open_marker_index]
 
+
   ###**
   * @ngdoc method
   * @name openMarkerInfo
@@ -482,6 +495,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
       $scope.currentMarker = marker
       $scope.myInfoWindow.open($scope.myMap, marker)
     , 250
+
 
   ###**
   * @ngdoc method
@@ -523,11 +537,13 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
 
     $scope.initWidget init_obj
 
+
   setAnswers = ->
     answers = {}
     for q in $scope.bb.current_item.item_details.questions
       answers["q_" + q.name] = q.answer
     $scope.bb.item_defaults.answers = answers if !_.isEmpty answers
+
 
   ###**
   * @ngdoc method
@@ -559,6 +575,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
       options = {timeout: 5000, maximumAge: 3600000}
       navigator.geolocation.getCurrentPosition(reverseGeocode, geolocateFail, options)
 
+
   ###**
   * @ngdoc method
   * @name geolocateFail
@@ -577,6 +594,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
       else
         loader.setLoaded()
     $scope.$apply()
+
 
   ###**
   * @ngdoc method
@@ -614,6 +632,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   $scope.increaseRange = () ->
     $scope.range_limit = Infinity
     $scope.searchAddress($scope.search_prms)
+
 
   # look for change in display size to determine if the map needs to be refreshed
   $scope.$watch 'display.xs', (new_value, old_value) =>

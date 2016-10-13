@@ -46,7 +46,7 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
 
     $scope.login.role = 'member'
 
-    $scope.company.$post('login', {}, $scope.login).then (login) ->
+    $scope.bb.company.$post('login', {}, $scope.login).then (login) ->
       if login.$has('members')
         login.$get('members').then (members) ->
           $scope.handleLogin(members[0])

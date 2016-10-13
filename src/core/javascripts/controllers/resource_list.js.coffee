@@ -116,7 +116,10 @@ angular.module('BB.Controllers').controller 'ResourceList', ($scope,
           if !$scope.selectItem(items[0].item, $scope.nextRoute, {skip_step: true})
             $scope.bookable_resources = resources
             $scope.bookable_items = items
-          loader.setLoaded()
+        else
+          $scope.bookable_resources = resources
+          $scope.bookable_items = items
+        loader.setLoaded()
       , (err) ->
         loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
     , (err) ->

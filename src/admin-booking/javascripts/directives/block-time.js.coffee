@@ -62,6 +62,7 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
       if !isValid()
         return false
 
+      $scope.loading = true 
 
       params =
         start_time: $scope.bb.from_datetime
@@ -93,6 +94,7 @@ angular.module('BBAdminBooking').directive 'bbBlockTime', () ->
 
     blockSuccess = (response)->
       $rootScope.$broadcast('refetchBookings')
+      $scope.loading = false
       # Close modal window
       $scope.cancel()
 

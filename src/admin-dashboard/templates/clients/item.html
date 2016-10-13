@@ -1,7 +1,7 @@
 <section class="content-header">
-  <h1>
-      <span translate>CLIENTS_PAGE.CLIENT</span>: {{client.name}}
-  </h1>
+  <h3>
+      <a ui-sref="clients.all" translate="ADMIN_DASHBOARD.CLIENTS_PAGE.CLIENTS"></a> <i class="fa fa-chevron-right"></i> {{client.name}}
+  </h3>
 </section>
 <section class="content">
   <div class="row">
@@ -10,7 +10,7 @@
       <div class="box box-primary">
         <div class="box-body box-profile">
 
-          <h3 class="profile-username text-center">{{client.first_name}}</h3>
+          <h4 class="profile-username text-center">{{client.first_name}}</h4>
 
           <p class="text-muted text-center">
             <span ng-bind-html="(client.email || 'empty') | linky"></span>
@@ -18,17 +18,17 @@
 
           <table class="table table-striped">
             <tr ng-if="client.mobile">
-              <td><b translate>CLIENTS_PAGE.MOBILE</b></td>
+              <td><b translate="ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE"></b></td>
               <td><a class="pull-right" ng-href="tel:{{client.mobile}}" target=_blank>{{client.fullMobile()}}</a></td>
             </tr>
             <tr ng-if="client.phone">
-              <td><b translate>CLIENTS_PAGE.PHONE</b></td>
+              <td><b translate="ADMIN_DASHBOARD.CLIENTS_PAGE.PHONE"></b></td>
               <td><a class="pull-right"  ng-href="tel:{{client.phone}}" target=_blank>{{client.phone}}</a></td>
             </tr>
           </table>
 
           <div ng-if="client.addressMultiLine()">
-            <strong><i class="fa fa-map-marker margin-r-5"></i> <b translate>CLIENTS_PAGE.ADDRESS</b></strong>
+            <strong><i class="fa fa-map-marker margin-r-5"></i> <b translate="ADMIN_DASHBOARD.CLIENTS_PAGE.ADDRESS"></b></strong>
             <p class="text-muted">
               <span ng-bind-html="client.addressMultiLine()">
               <br clear='all'/>
@@ -46,28 +46,28 @@
       <uib-tabset class="bb-tabs nav-tabs-custom">
 
         <uib-tab id="client-upcoming-booking-tab">
-          <uib-tab-heading translate>
-            CLIENTS_PAGE.UPCOMING_BOOKINGS
+          <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.UPCOMING_BOOKINGS">
+
           </uib-tab-heading>
 
-          <div member-bookings-table member="client"></div>
+          <div bb-admin-member-bookings-table period="future" member="client"></div>
 
         </uib-tab>
 
         <uib-tab  id="client-past-booking-tab">
-          <uib-tab-heading translate>
-            CLIENTS_PAGE.PAST_BOOKINGS
+          <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.PAST_BOOKINGS">
+
           </uib-tab-heading>
 
-          <div member-bookings-table member="client"
+          <div bb-admin-member-bookings-table member="client" period="past"
             start-date="historicalStartDate"
             end-date="historicalEndDate"></div>
 
         </uib-tab>
 
         <uib-tab id="client-details-tab" >
-          <uib-tab-heading translate>
-            CLIENTS_PAGE.CUSTOMER_DETAILS
+          <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.CUSTOMER_DETAILS">
+
           </uib-tab-heading>
 
           <div member-form member="client" on-success-save="memberSaveCallback"></div>

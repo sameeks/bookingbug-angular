@@ -28,7 +28,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope) ->
+angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, SettingsService) ->
 
   ###**
   * @ngdoc method
@@ -169,6 +169,24 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $te
           element.append('<style widget_css scoped></style>') if prms.design_mode
 
 
+    notInModal = (p) ->
+      if p.length == 0 || p[0].attributes == undefined
+        true
+      else if p[0].attributes['uib-modal-window'] != undefined
+        false
+      else
+        if p.parent().length == 0
+          true
+        else
+          notInModal(p.parent())
+
+
+    scope.$watch () ->
+      SettingsService.isModalOpen()
+    , (modalOpen) ->
+      scope.coveredByModal = modalOpen && notInModal(element.parent())
+
+
 # a controller used for the main page contents - just in case we need one here
 angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
   $scope.controller = "public.controllers.bbContentController"
@@ -181,7 +199,7 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
 angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,
   halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService,
   $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService,
-  ErrorService, AppConfig, QueryStringService, QuestionService, LocaleService,
+  ErrorService, AppConfig, QueryStringService, QuestionService,
   PurchaseService, $sessionStorage, $bbug, SettingsService, UriTemplate, LoadingService,
   $anchorScroll, $localStorage, $document) ->
 
@@ -221,7 +239,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   $rootScope.connection_started = con_started.promise
   widget_started = $q.defer()
   $rootScope.widget_started = widget_started.promise
-  moment.locale([LocaleService, "en"])
 
   $rootScope.Route =
     Company: 0
@@ -240,6 +257,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     Event: 13
     Login: 14
     Questions: 15
+    Confirmation: 16
   $scope.Route = $rootScope.Route
 
 
@@ -347,6 +365,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     if prms.app_key
       $scope.bb.app_key = prms.app_key
 
+    if prms.on_conflict
+      $scope.bb.on_conflict = prms.on_conflict
+
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
       $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
@@ -362,9 +383,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       # do we need to call anything else before continuing...
       if $scope.bb_route_init
         $scope.bb_route_init()
-
-    if prms.locale
-      moment.locale(prms.locale)
 
     if prms.use_local_time_zone
       SettingsService.setUseLocalTimeZone(prms.use_local_time_zone)
@@ -506,6 +524,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         child = null
         if comp.companies && $scope.bb.item_defaults.company
           child = comp.findChildCompany($scope.bb.item_defaults.company)
+
         if child
           parent_company = comp
           halClient.$get($scope.bb.api_url + '/api/v1/company/' + child.id).then (company) ->
@@ -545,8 +564,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
           $scope.bb.admin = admin
         setup_promises.push sso_admin_login
 
-      if $scope.bb.item_defaults and $scope.bb.item_defaults.long_id
-        total_id = $scope.bb.item_defaults.long_id
+      if $scope.bb.item_defaults and $scope.bb.item_defaults.purchase_total_long_id
+        total_id = $scope.bb.item_defaults.purchase_total_long_id
       else total_id = QueryStringService('total_id')
 
       if total_id
@@ -789,7 +808,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         return
       else
         if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          $scope.showPage('confirmation')
+          return if $scope.setPageRoute($rootScope.Route.Confirmation)
+          return $scope.showPage('confirmation')
         else
           return $scope.showPage(route)
 
@@ -805,6 +825,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')
     else if $scope.bb.total && $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
@@ -861,6 +882,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
     #   return $scope.showPage('payment')
     else if $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
 
@@ -936,38 +958,42 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
         error_modal = $uibModal.open
-          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: $scope.getPartial('_error_modal')
           controller: ($scope, $uibModalInstance) ->
             $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg
             $scope.ok = () ->
               $uibModalInstance.close()
         error_modal.result.finally () ->
-          if $scope.bb.nextSteps
-            # either go back to the Date/Event routes or load the previous step
-            if $scope.setPageRoute($rootScope.Route.Date)
-              # already routed
-            else if $scope.setPageRoute($rootScope.Route.Event)
-              # already routed
-            else
-              $scope.loadPreviousStep()
+          if $scope.bb.on_conflict
+            $scope.$eval($scope.bb.on_conflict)
           else
-            $scope.decideNextPage()
+            if $scope.bb.nextSteps
+              # either go back to the Date/Event routes or load the previous step
+              if $scope.setPageRoute($rootScope.Route.Date)
+                # already routed
+              else if $scope.setPageRoute($rootScope.Route.Event)
+                # already routed
+              else
+                $scope.loadPreviousStep()
+            else
+              $scope.decideNextPage()
     add_defer.promise
 
 
   $scope.emptyBasket = ->
-    return if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
 
     defer = $q.defer()
 
-    BBModel.Basket.$empty($scope.bb).then (basket) ->
-      if $scope.bb.current_item.id
-        delete $scope.bb.current_item.id
-      $scope.setBasket(basket)
+    if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
       defer.resolve()
-    , (err) ->
-      defer.reject()
+    else
+      BBModel.Basket.$empty($scope.bb).then (basket) ->
+        if $scope.bb.current_item.id
+          delete $scope.bb.current_item.id
+        $scope.setBasket(basket)
+        defer.resolve()
+      , (err) ->
+        defer.reject()
 
     return defer.promise
 
@@ -1056,6 +1082,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
 
   restoreBasket = () ->
+
     restore_basket_defer = $q.defer()
     $scope.quickEmptybasket().then () ->
       auth_token = $localStorage.getItem('auth_token') or $sessionStorage.getItem('auth_token')
@@ -1083,6 +1110,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         else
           if res.$has('baskets')
             res.$get('baskets').then (baskets) =>
+
               basket = _.find(baskets, (b) ->
                 parseInt(b.company_id) == $scope.bb.company_id)
               if basket
@@ -1107,11 +1135,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
 
   $scope.setCompany = (company, keep_basket) ->
+
     defer = $q.defer()
+
     $scope.bb.company_id = company.id
     $scope.bb.company = company
-    # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over
-    $scope.company = company
 
     $scope.bb.item_defaults.company = $scope.bb.company
 
@@ -1123,6 +1151,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       company.getSettings().then (settings) =>
         # setup some useful info
         $scope.bb.company_settings = settings
+        SettingsService.company_settings = settings
         $scope.bb.item_defaults.merge_resources = true if $scope.bb.company_settings.merge_resources
         $scope.bb.item_defaults.merge_people = true if $scope.bb.company_settings.merge_people
         $rootScope.bb_currency = $scope.bb.company_settings.currency
@@ -1179,8 +1208,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
   # reload a step
   $scope.loadStep = (step) ->
+
     return if step == $scope.bb.current_step
+
     $scope.bb.calculatePercentageComplete(step)
+
     # so actually use the data from the "next" page if there is one - but show the correct page
     # this means we load the completed data from that page
     # if there isn't a next page - then try the select one
@@ -1395,4 +1427,3 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
   $scope.redirectTo = (url) ->
     $window.location.href = url
-

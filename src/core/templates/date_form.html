@@ -1,22 +1,10 @@
 <div class="form-group" ng-class="{'has-error': hasError()}">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
 
-  <p class="input-group" ng-init="datepicker = {isOpen: true}">
-    <input
-      uib-datepicker-popup="dd-MMMM-yyyy"
-      ng-model="$$value$$"
-      class="form-control"
-      is-open="datepicker.isOpen"
-      ng-disabled="form.readonly"
-      ng-focus="datepicker.isOpen = true"
-    ></input>
-    <span class="input-group-btn">
-      <button type="button" class="btn btn-default" bb-debounce
-        ng-click="$event.preventDefault(); $event.stopPropagation();
-        datepicker.isOpen = !datepicker.isOpen" ng-disabled="form.readonly">
-        <i class="glyphicon glyphicon-calendar"></i>
-      </button>
-    </span>
+  <input ng-if="form.readonly" ng-show="form.key" type="text" placeholder="" class="form-control" id="datetime" value="{{model.datetime  | datetime: 'LL'}}" ng-disabled="form.readonly" name="datetime" disabled="disabled"/>
+
+  <p class="input-group" ng-if="!form.readonly">
+    <div bb-date-time-picker date-only="true" date="$$value$$" ></div>
   </p>
 
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>

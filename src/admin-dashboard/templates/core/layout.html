@@ -1,7 +1,7 @@
 <!-- Site wrapper -->
 <div class="wrapper">
     <header class="main-header">
-        <a ui-sref="admin.dashboard" class="logo"></a>
+        <a ui-sref="calendar" ui-sref-opts="{reload: true}" class="logo"></a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
             <!-- Sidebar toggle button-->
@@ -14,18 +14,26 @@
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    <li class="dropdown" uib-dropdown ng-show="bb.company">
+                        <a href class="dropdown-toggle" uib-dropdown-toggle>
+                            <span class="hidden-xs"><i class="fa fa-building-o fa-fw" aria-hidden="true"></i> {{bb.company.name}}</span>
+                        </a>
+                        <ul class="dropdown-menu user-dropdown" uib-dropdown-menu role="menu">
+                            <li><a bb-child-company-switch ng-click="logoutChildCompany()" class="btn btn-default btn-sm btn-block"><i class="fa fa-exchange"></i> <span>Switch Department</span></a></li>
+                        </ul>
+                    </li>
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown" uib-dropdown is-open="isopen">
                         <a href class="dropdown-toggle" uib-dropdown-toggle>
-                            <span class="hidden-xs">&nbsp;<span translate>GREETING</span>, {{user.name}} <span class="caret"></span></span>
+                            <span class="hidden-xs">&nbsp;<span translate="ADMIN_DASHBOARD.CORE.GREETING"></span>, {{user.name}} <span class="caret"></span></span>
                         </a>
                         <ul class="dropdown-menu user-dropdown" uib-dropdown-menu role="menu">
-                            <li><a ui-sref="logout" class="btn btn-default btn-sm btn-block"><i class="fa fa-lock"></i> <span translate>LOGOUT</span></a></li>
-                            <li><a bb-classic-switch href="https://dev01.bookingbug.com?dashboard_redirect=true" class="btn btn-default btn-sm btn-block"><i class="fa fa-home"></i> <span translate>SWITCH_TO_CLASSIC</span></a></li>
+                            <li><a ui-sref="logout" class="btn btn-default btn-sm btn-block"><i class="fa fa-lock"></i> <span translate="ADMIN_DASHBOARD.CORE.LOGOUT"></span></a></li>
+                            <li><a bb-classic-switch class="btn btn-default btn-sm btn-block"><i class="fa fa-home"></i> <span translate="ADMIN_DASHBOARD.CORE.SWITCH_TO_CLASSIC"></span></a></li>
                         </ul>
                     </li>
                     <li>
-                        <span class="language-picker" admin-language-picker></span>
+                        <span class="language-picker" bb-language-picker></span>
                     </li>
                     <li ng-if="!page.hideBoxedLayoutControl">
                         <a href ng-click="page.boxed = !page.boxed" class="visible-lg-inline-block">
@@ -56,8 +64,8 @@
 
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            <b translate>VERSION</b> 2.0
+            <b translate="ADMIN_DASHBOARD.CORE.VERSION"></b> 2.0
         </div>
-        <strong><span translate>COPYRIGHT</span> &copy; 2016 <a href="http://bookingbug.com" target="_blank">BookingBug</a>.</strong>
+        <strong><span translate="ADMIN_DASHBOARD.CORE.COPYRIGHT"></span> &copy; 2016 <a href="http://bookingbug.com" target="_blank">BookingBug</a>.</strong>
     </footer>
 </div><!-- ./wrapper -->

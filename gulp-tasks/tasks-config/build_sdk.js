@@ -68,7 +68,7 @@
         });
 
         gulp.task('build-sdk:admin-dashboard:templates', function () {
-            return bbGulp.templates('admin-dashboard', srcPath, destPath, false, false);
+            return bbGulp.templates('admin-dashboard', srcPath, destPath, false);
         });
 
         gulp.task('build-sdk:admin-dashboard:bower', function () {

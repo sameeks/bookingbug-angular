@@ -36,7 +36,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
   controller : 'TimeRangeList'
   link: (scope, element, attrs, controller, transclude) ->
 
-# date helpers
+    # date helpers
     scope.today = moment().toDate()
     scope.tomorrow = moment().add(1, 'days').toDate()
 
@@ -44,7 +44,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
     transclude scope, (clone) =>
 
-# if there's content compile that or grab the week_calendar template
+      # if there's content compile that or grab the week_calendar template
       has_content = clone.length > 1 || (clone.length == 1 and (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
 
       if has_content
@@ -57,7 +57,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
 angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
-  FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize) ->
+  FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize, SettingsService, ErrorService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
 
@@ -469,11 +469,17 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
         else
           $scope.no_slots_in_week = false
 
-        # sort time slots to be in chronological order
+        utc = moment().utc()
+        utcHours = utc.format('H')
+        utcMinutes = utc.format('m')
+        utcSeconds = utc.format('s')
+
+    # sort time slots to be in chronological order
         for pair in _.sortBy(_.pairs(datetime_arr), (pair) -> pair[0])
           d = pair[0]
           time_slots = pair[1]
-          day = {date: moment(d), slots: time_slots}
+          #day = {date: moment(d), slots: time_slots}
+          day = {date: moment(d).add(utcHours, 'hours').add(utcMinutes, 'minutes').add(utcSeconds, 'seconds'), slots: time_slots}
           $scope.days.push(day)
 
           if time_slots.length > 0
@@ -605,4 +611,3 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
     if day and slot
       $scope.bb.current_item.earliest_time_slot.selected = true
       $scope.highlightSlot(day, slot)
-

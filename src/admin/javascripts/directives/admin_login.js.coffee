@@ -65,7 +65,6 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($uibModal,
 
     loginModal = () ->
       modalInstance = $uibModal.open
-        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'login_modal_form.html'
         controller: loginAdminController
         resolve:
@@ -85,7 +84,6 @@ angular.module('BBAdmin.Directives').directive 'adminLogin', ($uibModal,
 
     pickCompanyModal = (companies) ->
       modalInstance = $uibModal.open
-        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'pick_company_modal_form.html'
         controller: pickCompanyController
         resolve:

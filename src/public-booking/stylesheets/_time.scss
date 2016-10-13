@@ -61,7 +61,7 @@
   }
 
   // disabled panel
-  .panel-default[disabled], .panel[disabled].expanded {
+  .panel-default[disabled], .panel[disabled], .panel[disabled].expanded {
     background: none;
 
     .panel-heading {

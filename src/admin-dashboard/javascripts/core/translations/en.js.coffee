@@ -7,23 +7,24 @@
 * Translations for the admin core module
 ###
 
-config = ($translateProvider) ->
+angular.module('BBAdminDashboard').config ($translateProvider) ->
   'ngInject'
 
-  enTranslations = {
-    'SIDE_NAV_BOOKINGS': 'BOOKINGS',
-    'SIDE_NAV_CONFIG': 'CONFIGURATION',
-    'LANGUAGE_EN': 'English',
-    'GREETING': 'Hi',
-    'LOGOUT': 'Logout'
-    'VERSION': 'Version',
-    'COPYRIGHT': 'Copyright',
-    'SWITCH_TO_CLASSIC' : 'Switch to Classic'
+  translations = {
+    SIDE_NAV_BOOKINGS: "BOOKINGS",
+    SIDE_NAV_CONFIG: "CONFIGURATION",
+    ADMIN_DASHBOARD: {
+      CORE: {
+        GREETING         : 'Hi',
+        LOGOUT           : 'Logout'
+        VERSION          : 'Version',
+        COPYRIGHT        : 'Copyright',
+        SWITCH_TO_CLASSIC: 'Switch to Classic'
+      }
+    }
   }
 
-  $translateProvider.translations('en', enTranslations)
+  $translateProvider.translations('en', translations)
 
   return
 
-
-angular.module('BBAdminDashboard').config config

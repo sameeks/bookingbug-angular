@@ -23,7 +23,10 @@ app = angular.module('BB', [
   'ngCookies',
   'pascalprecht.translate',
   'vcRecaptcha',
-  'slickCarousel'
+  'ui.select',
+  'BB.i18n',
+  'BB.uib',
+  'angular-carousel'
 ])
 
 
@@ -99,8 +102,9 @@ app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $docu
 
 
 angular.module('BB.Services', [
-  'ngResource',
+  'ngResource'
   'ngSanitize'
+  'pascalprecht.translate'
 ])
 
 angular.module('BB.Controllers', [
@@ -136,5 +140,5 @@ if !String::includes
 
 # Extend String with parameterise method
 String::parameterise = (seperator = '-') ->
-  @trim().replace(/\s/g,seperator).toLowerCase()
+  @trim().replace(/\s/g, seperator).toLowerCase()
 

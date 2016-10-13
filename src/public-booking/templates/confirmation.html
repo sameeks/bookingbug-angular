@@ -12,21 +12,25 @@
             <h2>Confirmation</h2>
             <p class="bb-confirmation-p-alignment">Thanks {{ total.client.first_name }}. You have successfully made the following bookings. We have you emailed you the details below.</p>
           </div>
-          <div class="row hidden-print text-right print-row">">
+          <div class="row hidden-print text-right print-row">
             <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print"></span> Print</button>
             <div bb-booking-export class="bb-booking-export"></div>
           </div>
         </div>
 
         <div>
-          <ul class="confirmation-summary">
+          <ul ng-if="total.items.length > 1" class="confirmation-summary">
             <li class="row confirmation-summary-item">
-              <div class="bb-summary-label">Reference: </div>
+              <div class="bb-summary-label">Purchase Reference: </div>
               <div class="bb-summary-value">{{total.id}}</div>
             </li>
           </ul>
 
           <ul class="confirmation-summary" ng-repeat="booking in total.bookings">
+            <li class="row confirmation-summary-item">
+              <div class="bb-summary-label">Booking Reference: </div>
+              <div class="bb-summary-value">{{booking.id}}</div>
+            </li>
             <li ng-show="booking.full_describe" class="row confirmation-summary-item">
               <div class="bb-summary-label">Service: </div>
               <div class="bb-summary-value">{{booking.full_describe}}</div>

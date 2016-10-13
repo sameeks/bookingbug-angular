@@ -40,10 +40,18 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
 
       $scope.formErrors = []
 
-      companySelection = (user)->
+      formErrorExists = (message) ->
+        # iterate through the formErrors array
+        for obj in $scope.formErrors
+          # check if the message passed in matches any pre-existing ones.
+          if obj.message.match message
+            return true
+        return false
+
+      companySelection = (user) ->
         # if user is admin
         if user.$has('administrators')
-          user.getAdministratorsPromise().then (administrators) ->
+          user.$getAdministrators().then (administrators) ->
             $scope.administrators = administrators
 
             # if user is admin in more than one company show select company
@@ -51,16 +59,15 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
               $scope.template_vars.show_loading = false
               $scope.template_vars.show_login = false
               $scope.template_vars.show_pick_company = true
-            else
+            else if administrators.length == 1
             # else automatically select the first admin
               params =
                 email: $scope.login.email
                 password: $scope.login.password
 
               $scope.login.selected_admin = _.first(administrators)
-
               $scope.login.selected_admin.$post('login', {}, params).then (login) ->
-                $scope.login.selected_admin.getCompanyPromise().then (company) ->
+                $scope.login.selected_admin.$getCompany().then (company) ->
                   $scope.template_vars.show_loading = false
                   # if there are departments show department selector
                   if company.companies && company.companies.length > 0
@@ -72,6 +79,10 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
                     BBModel.Admin.Login.$setLogin($scope.login.selected_admin)
                     BBModel.Admin.Login.$setCompany($scope.login.selected_company.id).then (user) ->
                       $scope.onSuccess($scope.login.selected_company)
+            else
+              $scope.template_vars.show_loading = false
+              message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_INCORRECT_CREDS"
+              $scope.formErrors.push { message: message } if !formErrorExists message
 
         # else if there is an associated company
         else if user.$has('company')
@@ -92,11 +103,13 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
                 $scope.onSuccess($scope.login.selected_company)
           , (err) ->
             $scope.template_vars.show_loading = false
-            $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
+            message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"
+            $scope.formErrors.push { message: message } if !formErrorExists message
 
         else
           $scope.template_vars.show_loading = false
-          $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"}
+          message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_ACCOUNT_ISSUES"
+          $scope.formErrors.push { message: message } if !formErrorExists message
 
       # If a User is available at this stages SSO login is implied
       if $scope.user
@@ -112,7 +125,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
           if AdminLoginOptions.show_api_field
             if $scope.login.site.indexOf("http") == -1
               $scope.login.site = "https://" + $scope.login.site
-            $scope.bb.api_url =  $scope.login.site
+            $scope.bb.api_url = $scope.login.site
             $rootScope.bb.api_url = $scope.login.site
             $localStorage.setItem("api_url", $scope.login.site)
 
@@ -124,7 +137,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
 
           , (err) ->
             $scope.template_vars.show_loading = false
-            $scope.formErrors.push { message: "LOGIN_PAGE.ERROR_INCORRECT_CREDS"}
+            message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_INCORRECT_CREDS"
+            $scope.formErrors.push { message: message } if !formErrorExists message
 
       $scope.pickCompany = ()->
         $scope.template_vars.show_loading = true
@@ -133,8 +147,9 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         params =
           email: $scope.login.email
           password: $scope.login.password
+
         $scope.login.selected_admin.$post('login', {}, params).then (login) ->
-          $scope.login.selected_admin.getCompanyPromise().then (company) ->
+          $scope.login.selected_admin.$getCompany().then (company) ->
             $scope.template_vars.show_loading = false
 
             if company.companies && company.companies.length > 0
@@ -142,7 +157,6 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
               $scope.departments = company.companies
             else
               $scope.login.selected_company = company
-
 
       $scope.selectCompanyDepartment = (isValid) ->
         $scope.template_vars.show_loading = true

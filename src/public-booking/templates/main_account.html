@@ -1,4 +1,4 @@
-<div class="header">
+<div class="header" aria-hidden="{{!isLoaded || coveredByModal}}">
 
   <div bb-form-data-store></div>
 
@@ -10,18 +10,18 @@
 
 </div>
 
-<div class="content">
+<div class="content" aria-hidden="{{!isLoaded || coveredByModal}}">
 
   <div class="row" ng-if="isMemberLoggedIn()">
 
     <div class="col-sm-3">
 
-      <div tabset vertical="true" type="pills">
-        <div tab heading="Account" ng-click="showPage('account')"></div>
-        <div tab heading="Upcoming Bookings" ng-click="showPage('upcoming-bookings')"></div>
-        <div tab heading="Past Bookings" ng-click="showPage('past-bookings')"></div>
-        <div tab heading="Purchase History" ng-click="showPage('purchase-history')"></div>
-        <div tab heading="Wallet" ng-click="showPage('wallet')"></div>
+      <div uib-tabset vertical="true" type="pills">
+        <div uib-tab heading="Account" ng-click="showPage('account')"></div>
+        <div uib-tab heading="Upcoming Bookings" ng-click="showPage('upcoming-bookings')"></div>
+        <div uib-tab heading="Past Bookings" ng-click="showPage('past-bookings')"></div>
+        <div uib-tab heading="Purchase History" ng-click="showPage('purchase-history')"></div>
+        <div uib-tab heading="Wallet" ng-click="showPage('wallet')"></div>
       </div>
 
     </div>
@@ -65,7 +65,7 @@
 
 </div>
 
-<div bb-dynamic-footer class="footer">
+<div bb-dynamic-footer class="footer" aria-hidden="{{!isLoaded || coveredByModal}}">
   <div ng-show="isLoaded" class="powered-by">
     <span>Bookings powered by <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"><span style="color:#087f94">booking</span><span style="color:#88c66f">bug</span></a></span>
   </div>

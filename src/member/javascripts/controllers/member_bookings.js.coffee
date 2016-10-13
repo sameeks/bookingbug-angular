@@ -4,7 +4,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
   $document, $log, $q, ModalForm, $rootScope, AlertService, PurchaseService,
   LoadingService) ->
 
-  loader = LoadingService.$loader($scope).notLoaded()
+  loader = LoadingService.$loader($scope)
 
   $scope.getUpcomingBookings = () ->
     defer = $q.defer()
@@ -64,10 +64,9 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
   $scope.cancelBooking = (booking) ->
     index = _.indexOf($scope.upcoming_bookings, booking)
-    return false if index is -1
-    $scope.upcoming_bookings.splice(index, 1)
+    _.without($scope.upcoming_bookings, booking)
     AlertService.raise('BOOKING_CANCELLED')
-    $scope.booking.$del('self').then () ->
+    booking.$del('self').then () ->
       $rootScope.$broadcast("booking:cancelled")
       # does a removeBooking method exist in the scope chain?
       $scope.removeBooking(booking) if $scope.removeBooking
@@ -94,7 +93,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
   openPaymentModal = (booking, total) ->
     modalInstance = $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: "booking_payment_modal.html"
       windowClass: "bbug"
       size: "lg"
@@ -131,7 +129,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
   cancel: (booking) ->
     modalInstance = $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: "member_booking_delete_modal.html"
       windowClass: "bbug"
       controller: ($scope, $rootScope, $uibModalInstance, booking) ->

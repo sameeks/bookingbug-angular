@@ -48,12 +48,15 @@ angular.module('BBAdmin.Services').factory "AdminLoginService", ($q, halClient,
 
 
   isLoggedIn: ->
+    deferred = $q.defer()
     @checkLogin().then () ->
       if $rootScope.user
-        true
+         deferred.resolve(true)
       else
-        false
-
+         deferred.reject(false)
+    , (err) ->
+       deferred.reject(false)
+    deferred.promise
 
   setLogin: (user) ->
     user = new BBModel.Admin.User(user)

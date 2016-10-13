@@ -8,10 +8,11 @@ app.directive 'bbDisplayMode', ($compile, $window, $bbug, ViewportSize) ->
     restrict: 'A',
     template: '<span class="visible-xs">&nbsp;</span><span class="visible-sm">&nbsp;</span><span class="visible-md">&nbsp;</span><span class="visible-lg">&nbsp;</span>',
     link: (scope, elem, attrs) ->
+
       markers = elem.find('span')
       $bbug(elem).addClass("bb-display-mode")
       scope.display = {}
-      currentSize = null
+      previous_size = null
 
       isVisible = (element) ->
         return element && element.style.display != 'none' && element.offsetWidth && element.offsetHeight
@@ -27,9 +28,10 @@ app.directive 'bbDisplayMode', ($compile, $window, $bbug, ViewportSize) ->
         return currentSize
 
       update = () =>
+
         nsize = getCurrentSize()
-        if nsize != currentSize
-          currentSize = nsize
+        if nsize != previous_size
+          previous_size = nsize
           scope.display.xs = false
           scope.display.sm = false
           scope.display.md = false

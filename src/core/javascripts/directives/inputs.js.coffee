@@ -76,7 +76,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
             else if question.detail_type is "radio"
               html = '<div class="radio-group">'
               for itemx in question.options
-                html += "<div class='radio'><label class='radio-label'><input ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='radio' value=\"#{itemx.name}\"/>#{itemx.name}</label></div>"
+                html += "<div class='radio'><label class='radio-label'><input ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='radio' value=\"#{itemx.name}\"/>#{itemx.name}<span class='input-icon'></span></label></div>"
               html += "</div>"
 
             else if question.detail_type is "check"
@@ -94,7 +94,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
             else if question.detail_type is "radio-price"
               html = '<div class="radio-group">'
               for itemx in question.options
-                html += "<div class='radio'><label class='radio-label'><input ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='radio' value=\"#{itemx.name}\"/>#{itemx.display_name}</label></div>"
+                html += "<div class='radio'><label class='radio-label'><input ng-model='question.answer' name='q#{question.id}' id='#{question.id}' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='radio' value=\"#{itemx.name}\"/>#{itemx.display_name}<span class='input-icon'></span></label></div>"
               html += "</div>"
             else if question.detail_type is "date"
               html = "

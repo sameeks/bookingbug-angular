@@ -66,8 +66,8 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
 
   geocode_result = null
 
-  # letters and spaces
-  alpha: /^[a-zA-Z\s]*$/
+  # letters, hyphens and spaces
+  alpha: /^[a-zA-Z\s-]*$/
 
   # https://www.safaribooksonline.com/library/view/regular-expressions-cookbook/9781449327453/ch04s02.html
   us_phone_number: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/

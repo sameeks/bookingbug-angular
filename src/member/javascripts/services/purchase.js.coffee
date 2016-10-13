@@ -14,7 +14,13 @@ angular.module('BBMember.Services').factory "MemberPurchaseService", ($q, $rootS
             new BBModel.PurchaseTotal(purchase)
           deferred.resolve(purchases)
         , (err) ->
-          deferred.reject(err)
+          if err.status == 404
+            deferred.resolve([])
+          else
+            deferred.reject(err)
       , (err) ->
-        deferred.reject(err)
+        if err.status == 404
+          deferred.resolve([])
+        else
+          deferred.reject(err)
     deferred.promise

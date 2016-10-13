@@ -1,10 +1,8 @@
 'use strict'
 
-angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog, FormTransform) ->
-
+angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, Dialog, FormTransform, $translate) ->
   newForm = ($scope, $uibModalInstance, company, title, new_rel, post_rel,
-      success, fail) ->
-
+    success, fail) ->
     $scope.loading = true
     $scope.title = title
     $scope.company = company
@@ -36,36 +34,45 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
       $uibModalInstance.dismiss('cancel')
 
 
-
   # THIS IS CRUFTY AND SHOULD BE REMOVE WITH AN API UPDATE THAT TIDIES UP THE SCEMA RESPONE
   # fix the issues we have with the the sub client and question blocks being in doted notation, and not in child objects
   checkSchema = (schema) ->
     for k,v of schema.properties
       vals = k.split(".")
       if vals[0] == "questions" && vals.length > 1
-        schema.properties.questions ||= {type: "object", properties: {} }
-        schema.properties.questions.properties[vals[1]] ||= {type: "object", properties: {answer: v} }
+        schema.properties.questions ||= {type: "object", properties: {}}
+        schema.properties.questions.properties[vals[1]] ||= {type: "object", properties: {answer: v}}
       if vals[0] == "client" && vals.length > 2
-        schema.properties.client ||= {type: "object", properties: {q: {type: "object", properties: {}}} }
-        schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v} }
+        schema.properties.client ||= {type: "object", properties: {q: {type: "object", properties: {}}}}
+        if schema.properties.client.properties
+          schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v}}
     return schema
 
 
-  editForm = ($scope, $uibModalInstance, model, title, success, fail) ->
+  editForm = ($scope, $uibModalInstance, model, title, success, fail, params) ->
     $scope.loading = true
     $scope.title = title
     $scope.model = model
+    params ||= {}
     if $scope.model.$has('edit')
-      $scope.model.$get('edit').then (schema) =>
+      $scope.model.$get('edit', params).then (schema) =>
         $scope.form = _.reject schema.form, (x) -> x.type == 'submit'
-        model_type = model.constructor.name
+        model_type = functionName(model.constructor)
         if FormTransform['edit'][model_type]
-          $scope.form = FormTransform['edit'][model_type]($scope.form)
+          $scope.form = FormTransform['edit'][model_type]($scope.form, schema.schema, $scope.model)
         $scope.schema = checkSchema(schema.schema)
         $scope.form_model = $scope.model
         $scope.loading = false
     else
       $log.warn("model does not have 'edit' rel")
+
+
+    functionName = (func) ->
+      result = /^function\s+([\w\$]+)\s*\(/.exec( func.toString() )
+      if result
+         result[ 1 ]
+      else
+         ''
 
     $scope.submit = (form) ->
       $scope.$broadcast('schemaFormValidate')
@@ -107,13 +114,31 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
       event.preventDefault()
       event.stopPropagation()
       $uibModalInstance.close()
-      Dialog.confirm
-        model: model,
-        title: 'Cancel'
-        body: "Are you sure you want to cancel this #{type}?"
-        success: (model) ->
-          model.$del('self').then (response) ->
-            success(response) if success
+      if type == 'booking'
+        modal_instance = $uibModal.open
+
+          templateUrl: 'cancel_booking_modal_form.html'
+          controller: ($scope, booking) ->
+            $scope.booking = booking
+            $scope.model =
+              notify: false
+              cancel_reason: null
+          resolve:
+            booking: () -> model
+        modal_instance.result.then (params) ->
+          model.$post('cancel', params).then (booking) ->
+            success(booking) if success
+      else
+        question = null
+        question = $translate.instant('CORE.MODAL.CANCEL_BOOKING.QUESTION', {type: type})
+
+        Dialog.confirm
+          model: model,
+          title: $translate.instant('CORE.MODAL.CANCEL_BOOKING.HEADER')
+          body: question
+          success: (model) ->
+            model.$del('self').then (response) ->
+              success(response) if success
 
   bookForm = ($scope, $uibModalInstance, model, company, title, success, fail) ->
     $scope.loading = true
@@ -155,7 +180,6 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: newForm
       size: config.size
@@ -171,7 +195,6 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: editForm
       size: config.size
@@ -180,12 +203,12 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
         title: () -> config.title
         success: () -> config.success
         fail: () -> config.fail
+        params: () -> config.params || {}
 
   book: (config) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: bookForm
       size: config.size
