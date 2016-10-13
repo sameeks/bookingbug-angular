@@ -64,7 +64,6 @@ angular.module('BBMember').directive 'loginMember', ($uibModal, $document, $log,
 
     loginModal = () ->
       modalInstance = $uibModal.open
-        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'login_modal_form.html'
         controller: loginMemberController
         resolve:
@@ -84,7 +83,6 @@ angular.module('BBMember').directive 'loginMember', ($uibModal, $document, $log,
 
     pickCompanyModal = (companies) ->
       modalInstance = $uibModal.open
-        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: 'pick_company_modal_form.html'
         controller: pickCompanyController
         resolve:

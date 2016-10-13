@@ -57,7 +57,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
 angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
-  FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize, SettingsService) ->
+  FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize, SettingsService, ErrorService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
 
@@ -611,4 +611,3 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
     if day and slot
       $scope.bb.current_item.earliest_time_slot.selected = true
       $scope.highlightSlot(day, slot)
-

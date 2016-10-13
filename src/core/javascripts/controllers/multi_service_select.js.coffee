@@ -350,7 +350,6 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     else
 
       modalInstance = $uibModal.open
-        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: $scope.getPartial('_select_duration_modal')
         scope: $scope
         controller: ($scope, $uibModalInstance, service) ->

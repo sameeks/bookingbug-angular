@@ -291,7 +291,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   $scope.delete = (booking) ->
 
     modalInstance = $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDelete
       resolve:
@@ -311,7 +310,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   $scope.deleteAll = () ->
 
     modalInstance = $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.getPartial "_cancel_modal"
       controller: ModalDeleteAll
       resolve:

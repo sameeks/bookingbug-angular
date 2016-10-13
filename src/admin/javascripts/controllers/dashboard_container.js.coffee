@@ -12,7 +12,6 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
     $scope.poppedBooking = booking
 
     modalInstance = $uibModal.open {
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: 'full_booking_details',
       controller: ModalInstanceCtrl,
       scope: $scope,
@@ -40,7 +39,6 @@ angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, 
   $scope.popupTimeAction = (prms) ->
 
     modalInstance = $uibModal.open {
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: $scope.partial_url + 'time_popup',
       controller: ModalInstanceCtrl,
       scope: $scope,

@@ -9,10 +9,10 @@
 angular.module('BBAdminDashboard').factory 'AdminSsoLogin', [
   'halClient', '$q'
   (halClient, $q) ->
-    ssoToken  : null
-    companyId : null
-    apiUrl    : null
-    ssoLoginPromise : (ssoToken = @ssoToken, companyId = @companyId, apiUrl = @apiUrl) ->
+    ssoToken: null
+    companyId: null
+    apiUrl: null
+    ssoLoginPromise: (ssoToken = @ssoToken, companyId = @companyId, apiUrl = @apiUrl) ->
       defer = $q.defer()
 
       # if something is missing reject the promise

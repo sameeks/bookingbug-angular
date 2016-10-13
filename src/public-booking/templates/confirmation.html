@@ -13,21 +13,25 @@
             <h2 translate="PUBLIC_BOOKING.CONFIRMATION.ITEM_CONFIRMATION"></h2>
             <p class="bb-confirmation-p-alignment" translate="PUBLIC_BOOKING.CONFIRMATION.CONFIRMATION_BOOKING_SUBHEADER_WITH_WAITLIST" translate-values="{member_name: total.client.first_name}"></p>
           </div>
-          <div class="row hidden-print text-right print-row">">
+          <div class="row hidden-print text-right print-row">
             <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print"></span><span translate="PUBLIC_BOOKING.CONFIRMATION.PRINT"></span></button>
             <div bb-booking-export class="bb-booking-export"></div>
           </div>
         </div>
 
         <div>
-          <ul class="confirmation-summary">
+          <ul ng-show="total.items.length > 1" class="confirmation-summary">
             <li class="row confirmation-summary-item">
-              <div class="bb-summary-label"><span translate="PUBLIC_BOOKING.CONFIRMATION.BOOKING_REFERENCE">: </div>
+              <div class="bb-summary-label">Purchase Reference: </div>
               <div class="bb-summary-value">{{total.id}}</div>
             </li>
           </ul>
 
           <ul class="confirmation-summary" ng-repeat="booking in total.bookings">
+            <li class="row confirmation-summary-item">
+              <div class="bb-summary-label">Booking Reference: </div>
+              <div class="bb-summary-value">{{booking.id}}</div>
+            </li>
             <li ng-show="booking.full_describe" class="row confirmation-summary-item">
               <div class="bb-summary-label"><span translate="PUBLIC_BOOKING.CONFIRMATION.ITEM_SERVICE"></span>:</div>
               <div class="bb-summary-value">{{ booking.full_describe }}</div>

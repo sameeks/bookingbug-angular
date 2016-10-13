@@ -54,5 +54,5 @@ angular.module('BB.Models').factory "AdminResourceModel", ($q, AdminResourceServ
       AdminResourceService.query(params)
 
     @$block: (company, resource, data) ->
-      block(company, resource, data)
+      AdminResourceService.block(company, resource, data)
 

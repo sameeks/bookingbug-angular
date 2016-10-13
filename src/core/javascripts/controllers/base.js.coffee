@@ -257,6 +257,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     Event: 13
     Login: 14
     Questions: 15
+    Confirmation: 16
   $scope.Route = $rootScope.Route
 
 
@@ -363,6 +364,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       $scope.bb.app_id = prms.app_id
     if prms.app_key
       $scope.bb.app_key = prms.app_key
+
+    if prms.on_conflict
+      $scope.bb.on_conflict = prms.on_conflict
 
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
@@ -517,7 +521,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         child = null
         if comp.companies && $scope.bb.item_defaults.company
           child = comp.findChildCompany($scope.bb.item_defaults.company)
-        
+
         if child
           parent_company = comp
           halClient.$get($scope.bb.api_url + '/api/v1/company/' + child.id).then (company) ->
@@ -801,7 +805,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         return
       else
         if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          $scope.showPage('confirmation')
+          return if $scope.setPageRoute($rootScope.Route.Confirmation)
+          return $scope.showPage('confirmation')
         else
           return $scope.showPage(route)
 
@@ -817,6 +822,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')
     else if $scope.bb.total && $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
@@ -873,6 +879,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
     #   return $scope.showPage('payment')
     else if $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
 
@@ -948,38 +955,42 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
         error_modal = $uibModal.open
-          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: $scope.getPartial('_error_modal')
           controller: ($scope, $uibModalInstance) ->
             $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg
             $scope.ok = () ->
               $uibModalInstance.close()
         error_modal.result.finally () ->
-          if $scope.bb.nextSteps
-            # either go back to the Date/Event routes or load the previous step
-            if $scope.setPageRoute($rootScope.Route.Date)
-              # already routed
-            else if $scope.setPageRoute($rootScope.Route.Event)
-              # already routed
-            else
-              $scope.loadPreviousStep()
+          if $scope.bb.on_conflict
+            $scope.$eval($scope.bb.on_conflict)
           else
-            $scope.decideNextPage()
+            if $scope.bb.nextSteps
+              # either go back to the Date/Event routes or load the previous step
+              if $scope.setPageRoute($rootScope.Route.Date)
+                # already routed
+              else if $scope.setPageRoute($rootScope.Route.Event)
+                # already routed
+              else
+                $scope.loadPreviousStep()
+            else
+              $scope.decideNextPage()
     add_defer.promise
 
 
   $scope.emptyBasket = ->
-    return if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
 
     defer = $q.defer()
 
-    BBModel.Basket.$empty($scope.bb).then (basket) ->
-      if $scope.bb.current_item.id
-        delete $scope.bb.current_item.id
-      $scope.setBasket(basket)
+    if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
       defer.resolve()
-    , (err) ->
-      defer.reject()
+    else
+      BBModel.Basket.$empty($scope.bb).then (basket) ->
+        if $scope.bb.current_item.id
+          delete $scope.bb.current_item.id
+        $scope.setBasket(basket)
+        defer.resolve()
+      , (err) ->
+        defer.reject()
 
     return defer.promise
 
@@ -1198,7 +1209,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     return if step == $scope.bb.current_step
 
     $scope.bb.calculatePercentageComplete(step)
-    
+
     # so actually use the data from the "next" page if there is one - but show the correct page
     # this means we load the completed data from that page
     # if there isn't a next page - then try the select one
@@ -1413,4 +1424,3 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
   $scope.redirectTo = (url) ->
     $window.location.href = url
-

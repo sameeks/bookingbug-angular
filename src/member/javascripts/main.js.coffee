@@ -34,7 +34,7 @@ angular.module('BBMember.Controllers', [
 
 
 angular.module('BBMember').run ($q, $injector, BBModel) ->
-  models = ['Member', 'Booking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand']
+  models = ['Member', 'Booking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand', 'PaymentItem']
   mfuncs = {}
   for model in models
     mfuncs[model] = $injector.get("Member." + model + "Model")

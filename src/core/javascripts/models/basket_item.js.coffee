@@ -133,6 +133,9 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
         if data.attachment_id
           @attachment_id = data.attachment_id
 
+        if data.person_group_id
+          @setPersonGroupId(data.person_group_id)
+
         if data.$has('product')
           data.$get('product').then (product) =>
             @setProduct(new BBModel.Product(product))
@@ -567,6 +570,16 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
 
     ###**
     * @ngdoc method
+    * @name setStaffGroup
+    * @methodOf BB.Models:BasketItem
+    * @description Set the current staff group id
+    ###
+    setPersonGroupId: (id) ->
+      @person_group_id = id
+
+
+    ###**
+    * @ngdoc method
     * @name setResource
     * @methodOf BB.Models:BasketItem
     * @description
@@ -845,6 +858,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
       data.id = @id
       data.duration = @duration
       data.settings = @settings
+      data.child_client_ids = @child_client_ids
       data.settings ||= {}
       data.settings.earliest_time = @earliest_time if @earliest_time
       data.questions = @item_details.getPostData() if @item_details && @asked_questions
@@ -853,6 +867,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
       data.service_id = @service.id if @service
       data.resource_id = @resource.id if @resource
       data.person_id = @person.id if @person
+      data.person_group_id = @person_group_id if @person_group_id
       data.length = @length
       if @event
         data.event_id = @event.id
@@ -1440,4 +1455,3 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
     ###
     isTimeItem: () ->
       return @service or @event
-

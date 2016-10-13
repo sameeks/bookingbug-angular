@@ -56,6 +56,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
       extra.end_date = end_date.toISODate() if end_date
       extra.duration = prms.duration
       extra.resource_ids = prms.resource_ids
+      extra.person_group_id = prms.cItem.person_group_id
       extra.num_resources = prms.num_resources
       extra.time_zone = prms.time_zone if prms.time_zone
       extra.ignore_booking = prms.cItem.id if prms.cItem.id
@@ -203,4 +204,3 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, Se
       halClient.clearCache(ev.$href("self"))
     else if item && item.id && item.event_id == ev.event_id && item.time && sorted_times[item.time.time] && item.date && item.date.date.toISODate() == ev.date
       sorted_times[item.time.time].avail = 1
-
