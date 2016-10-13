@@ -18,6 +18,7 @@ angular.module('BBAdminDashboard.dashboard-iframe.controllers')
         AdminBookingPopup.open
           size: 'lg'
           company_id: $scope.bb.company.id
+          on_conflict: "cancel()"
           item_defaults:
             date: event.data.date
             time: event.data.iarray * 5

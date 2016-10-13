@@ -63,7 +63,6 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $ui
     iitem.setDeal deal
     if !$scope.bb.company_settings.no_recipient
       modalInstance = $uibModal.open
-        appendTo: angular.element($document[0].getElementById('bb'))
         templateUrl: $scope.getPartial('_add_recipient')
         scope: $scope
         controller: ModalInstanceCtrl

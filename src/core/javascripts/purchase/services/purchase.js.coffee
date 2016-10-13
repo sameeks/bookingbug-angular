@@ -1,7 +1,6 @@
 'use strict'
 
-angular.module('BB.Services').factory "PurchaseService", ($q, halClient,
-  BBModel, $window, UriTemplate) ->
+angular.module('BB.Services').factory "PurchaseService", ($q, halClient, BBModel, $window, UriTemplate) ->
 
   query: (params) ->
     defer = $q.defer()

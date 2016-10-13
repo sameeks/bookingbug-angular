@@ -1,4 +1,4 @@
-<div class="bb-quick-pick" bb-wait-for="quickEmptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store>
+<div class="bb-quick-pick" bb-wait-for="emptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store>
   <uib-tabset>
     <uib-tab>
       <uib-tab-heading>
@@ -11,10 +11,10 @@
 
         <p translate="ADMIN_BOOKING.QUICK_PICK.STEP_SUMMARY"></p>
 
-        <div bb-services>
-          
+        <div bb-services="{allow_single_pick: true}">
+
           <ul class="bb-list bb-list-bordered bb-list-md">
-  
+
             <li ng-repeat="item in filtered_items | orderBy: 'order'">
 
                <div class="row">
@@ -89,7 +89,7 @@
 
         </div><!--booking_questions_form-->
 
-        <button type="button" class="btn btn-primary" ng-click="blockTime()" bb-debounce ng-disabled="false"><span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME"></span></button>
+        <button type="button" class="btn btn-primary" ng-click="blockTime()" ng-disabled="loading"><span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME"></span></button>
 
       </div>
       <!-- Block time tab END -->

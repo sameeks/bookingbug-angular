@@ -47,7 +47,7 @@ angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache
   link: (scope, element, attrs, controller, transclude) ->
 
     transclude scope, (clone) =>
-      # if there's content compile that or grab the week_calendar template
+      # if there's content compile that or grab the client_form template
       has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
       if has_content
         element.html(clone).show()
@@ -57,9 +57,7 @@ angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache
           $compile(element.contents())(scope)
 
 
-angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
-  $rootScope, LoginService, ValidatorService, AlertService, LoadingService,
-  BBModel) ->
+angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.ClientDetails"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -72,6 +70,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
   $scope.suppress_client_create = $attrs.bbSuppressCreate? or options.suppress_client_create
 
   $rootScope.connection_started.then =>
+
     $scope.initClientDetails()
 
   , (err) ->  loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -80,6 +79,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
   $rootScope.$watch 'member', (oldmem, newmem) =>
     if !$scope.client.valid() && LoginService.isLoggedIn()
       $scope.setClient(new BBModel.Client(LoginService.member()._data))
+
 
   ###**
   * @ngdoc method
@@ -112,6 +112,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
         loader.setLoaded()
       , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
+
   ###**
   * @ngdoc method
   * @name validateClient
@@ -119,10 +120,9 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
   * @description
   * Validate the client
   *
-  * @param {object} client_form The client form
   * @param {string=} route A specific route to load
   ###
-  $scope.validateClient = (client_form, route) =>
+  $scope.validateClient = (route) =>
     loader.notLoaded()
     $scope.existing_member = false
 
@@ -138,6 +138,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
       $scope.existing_member = false
       $scope.decideNextPage(route)
     , (err) -> handleError(err)
+
 
   ###**
   * @ngdoc method
@@ -157,6 +158,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
         $scope.login_error = true
         loader.setLoaded()
         AlertService.raise('LOGIN_FAILED')
+
 
   ###**
   * @ngdoc method
@@ -184,6 +186,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
 
       return true
 
+
   ###**
   * @ngdoc method
   * @name clientSearch
@@ -205,6 +208,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
       $scope.setClient({})
       $scope.client = {}
 
+
   ###**
   * @ngdoc method
   * @name switchNumber
@@ -223,6 +227,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
       $scope.bb.basket.setSettings({send_sms_reminder: false})
       $scope.client.mobile = null
 
+
   ###**
   * @ngdoc method
   * @name getQuestion
@@ -238,6 +243,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
 
     return null
 
+
   ###**
   * @ngdoc method
   * @name useClient
@@ -250,6 +256,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
   $scope.useClient = (client) ->
     $scope.setClient(client)
 
+
   ###**
   * @ngdoc method
   * @name recalc_question
@@ -259,6 +266,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
   ###
   $scope.recalc_question = () ->
     BBModel.Question.$checkConditionalQuestions($scope.client_details.questions) if $scope.client_details.questions
+
 
   handleError = (error) ->
     if error.data.error == "Please Login"

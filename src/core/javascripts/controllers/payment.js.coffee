@@ -43,7 +43,7 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location,
         referrer += ":" + $location.port()
 
       if scope.payment_options.custom_stylesheet
-        if custom_stylesheet.match(/http/)
+        if scope.payment_options.custom_stylesheet.match(/http/)
           # custom stylesheet as an absolute url, for ex. "http://bespoke.bookingbug.com/staging/custom-booking-widget.css"
           custom_stylesheet = scope.payment_options.custom_stylesheet
         else
@@ -143,4 +143,3 @@ angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope,
 
   $scope.error = (message) ->
     $log.warn("Payment Failure: " + message)
-

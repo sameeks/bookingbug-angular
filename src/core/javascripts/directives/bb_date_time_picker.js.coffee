@@ -24,6 +24,7 @@ angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
     minDate: '=?'
     maxDate: '=?'
     format: '=?'
+    dateOnly: '=?'
     bbDisabled: '=?'
   restrict: 'A'
   templateUrl : 'bb_date_time_picker.html'
@@ -59,6 +60,7 @@ angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
 
     clearTimezone = (date)->
       if date? and moment(date).isValid()
+        date = moment(date)
         newDate = new Date();
         newDate.setFullYear(date.year())
         newDate.setMonth(date.month())

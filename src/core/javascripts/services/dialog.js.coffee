@@ -24,7 +24,6 @@ angular.module('BB.Services').factory 'Dialog', ($uibModal, $log, $document) ->
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'dialog.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: controller
       size: config.size || 'sm'

@@ -9,7 +9,6 @@ angular.module('BB.Services').config ($translateProvider) ->
         CANCEL_BOOKING: {
           HEADER: 'Cancel'
           QUESTION: 'Are you sure you want to cancel this {{type}}?'
-          APPOINTMENT_QUESTION: 'Are you sure you want to cancel this appointment?'
         }
       }
     }

@@ -1,6 +1,6 @@
 angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup) ->
 
-  controller = ($scope, $uibModal) ->
+  controller = ($document, $scope, $uibModal) ->
 
     $scope.loading = true
 
@@ -90,7 +90,7 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibMo
         if $scope.period && $scope.period == "past"
           $scope.booking_models = _.filter bookings.items, (x) ->
             x.datetime.unix() < now
-        if $scope.period && $scope.period == "future"
+        else if $scope.period && $scope.period == "future"
           $scope.booking_models = _.filter bookings.items, (x) ->
             x.datetime.unix() > now
         else

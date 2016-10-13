@@ -1,200 +1,9 @@
-'use strict'
-
-###**
-* @ngdoc directive
-* @name BB.Directives:bbWidget
-* @restrict A
-* @scope
-*   client: '=?'
-*   apiUrl: '@?'
-*   useParent:'='
-* @description
-*
-* Loads a list of widgets for the currently in scope company
-*
-* <pre>
-* restrict: 'A'
-* scope:
-*   client: '=?'
-*   apiUrl: '@?'
-*   useParent:'='
-* transclude: true
-* </pre>
-*
-* @param {hash} bbWidget A hash of options
-* @property {string} pusher The pusher
-* @property {string} pusher_channel The pusher channel
-* @property {string} init_params Initialization of basic parameters
-####
-
-
-angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, SettingsService) ->
-
-  ###**
-  * @ngdoc method
-  * @name getTemplate
-  * @methodOf BB.Directives:bbWidget
-  * @description
-  * Get template
-  *
-  * @param {object} template The template
-  ###
-  getTemplate = (template) ->
-    partial = if template then template else 'main'
-    fromTemplateCache = $templateCache.get(partial)
-    if fromTemplateCache
-      fromTemplateCache
-    else
-      src = PathSvc.directivePartial(partial).$$unwrapTrustedValue()
-      $http.get(src, {cache: $templateCache}).then (response) ->
-        response.data
-
-  ###**
-  * @ngdoc method
-  * @name updatePartials
-  * @methodOf BB.Directives:bbWidget
-  * @description
-  * Update partials
-  *
-  * @param {object} prms The parameter
-  ###
-  updatePartials = (scope, element, prms) ->
-    $bbug(i).remove() for i in element.children() when $bbug(i).hasClass('custom_partial')
-    appendCustomPartials(scope, element, prms).then () ->
-      scope.$broadcast('refreshPage')
-
-  ###**
-  * @ngdoc method
-  * @name setupPusher
-  * @methodOf BB.Directives:bbWidget
-  * @description
-  * Push setup
-  *
-  * @param {object} prms The parameter
-  ###
-  setupPusher = (scope, element, prms) ->
-    $timeout () ->
-      scope.pusher = new Pusher('c8d8cea659cc46060608')
-      scope.pusher_channel = scope.pusher.subscribe("widget_#{prms.design_id}")
-      scope.pusher_channel.bind 'update', (data) ->
-        updatePartials(scope, element, prms)
-
-  ###**
-  * @ngdoc method
-  * @name appendCustomPartials
-  * @methodOf BB.Directives:bbWidget
-  * @description
-  * Appent custom partials
-  *
-  * @param {object} prms The parameter
-  ###
-  appendCustomPartials = (scope, element, prms) ->
-    defer = $q.defer()
-    $http.get(prms.custom_partial_url).then (custom_templates) ->
-      $compile(custom_templates.data) scope, (custom, scope) ->
-        custom.addClass('custom_partial')
-        style = (tag for tag in custom when tag.tagName == "STYLE")
-        non_style = (tag for tag in custom when tag.tagName != "STYLE")
-        $bbug("#widget_#{prms.design_id}").html(non_style)
-        element.append(style)
-        scope.bb.path_setup = true
-        defer.resolve(style)
-    defer.promise
-
-  ###**
-  * @ngdoc method
-  * @name renderTemplate
-  * @methodOf BB.Directives:bbWidget
-  * @description
-  * Render template
-  *
-  * @param {object} design_mode The design mode
-  * @param {object} template The template
-  ###
-  renderTemplate = (scope, element, design_mode, template) ->
-    $q.when(getTemplate(template)).then (template) ->
-      element.html(template).show()
-      element.append('<style widget_css scoped></style>') if design_mode
-      $compile(element.contents())(scope)
-
-  restrict: 'A'
-  scope:
-    client: '=?'
-    apiUrl: '@?'
-    useParent:'='
-  transclude: true
-  controller: 'BBCtrl'
-  link: (scope, element, attrs, controller, transclude) ->
-    scope.client = attrs.member if attrs.member?
-    evaluator = scope
-    if scope.useParent && scope.$parent?
-      evaluator = scope.$parent
-    init_params = evaluator.$eval(attrs.bbWidget)
-    scope.initWidget(init_params)
-    $rootScope.widget_started.then () =>
-      prms = scope.bb
-      if prms.custom_partial_url
-        prms.design_id = prms.custom_partial_url.match(/^.*\/(.*?)$/)[1]
-        $bbug("[ng-app='BB']").append("<div id='widget_#{prms.design_id}'></div>")
-      if scope.bb.partial_url
-        if init_params.partial_url
-          AppConfig['partial_url'] = init_params.partial_url
-        else
-          AppConfig['partial_url'] = scope.bb.partial_url
-
-      transclude scope, (clone) =>
-        # if there's content or not whitespace
-        scope.has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
-        if !scope.has_content
-          if prms.custom_partial_url
-            appendCustomPartials(scope, element, prms).then (style) ->
-              $q.when(getTemplate()).then (template) ->
-                element.html(template).show()
-                $compile(element.contents())(scope)
-                element.append(style)
-                setupPusher(scope, element, prms) if prms.update_design
-          else if prms.template
-            renderTemplate(scope, element, prms.design_mode, prms.template)
-          else
-            renderTemplate(scope, element, prms.design_mode)
-          scope.$on 'refreshPage', () ->
-            renderTemplate(scope, element, prms.design_mode)
-        else if prms.custom_partial_url
-          appendCustomPartials(scope, element, prms)
-          setupPusher(scope, element, prms) if prms.update_design
-          scope.$on 'refreshPage', () ->
-            scope.showPage scope.bb.current_page
-        else
-          element.html(clone).show()
-          element.append('<style widget_css scoped></style>') if prms.design_mode
-
-
-    notInModal = (p) ->
-      if p.length == 0 || p[0].attributes == undefined
-        true
-      else if p[0].attributes['uib-modal-window'] != undefined
-        false
-      else
-        if p.parent().length == 0
-          true
-        else
-          notInModal(p.parent())
-
-
-    scope.$watch () ->
-      SettingsService.isModalOpen()
-    , (modalOpen) ->
-      scope.coveredByModal = modalOpen && notInModal(element.parent())
-
-
 # a controller used for the main page contents - just in case we need one here
 angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
   $scope.controller = "public.controllers.bbContentController"
   $scope.initPage = () =>
     $scope.setPageLoaded()
     $scope.setLoadingPage(false)
-
-
 
 angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,
   halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService,
@@ -257,6 +66,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     Event: 13
     Login: 14
     Questions: 15
+    Confirmation: 16
   $scope.Route = $rootScope.Route
 
 
@@ -363,6 +173,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       $scope.bb.app_id = prms.app_id
     if prms.app_key
       $scope.bb.app_key = prms.app_key
+
+    if prms.on_conflict
+      $scope.bb.on_conflict = prms.on_conflict
 
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
@@ -520,6 +333,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         child = null
         if comp.companies && $scope.bb.item_defaults.company
           child = comp.findChildCompany($scope.bb.item_defaults.company)
+
         if child
           parent_company = comp
           halClient.$get($scope.bb.api_url + '/api/v1/company/' + child.id).then (company) ->
@@ -803,7 +617,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         return
       else
         if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          $scope.showPage('confirmation')
+          return if $scope.setPageRoute($rootScope.Route.Confirmation)
+          return $scope.showPage('confirmation')
         else
           return $scope.showPage(route)
 
@@ -819,6 +634,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       return if $scope.setPageRoute($rootScope.Route.Company)
       return $scope.showPage('company_list')
     else if $scope.bb.total && $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
@@ -875,6 +691,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
     #   return $scope.showPage('payment')
     else if $scope.bb.payment_status == "complete"
+      return if $scope.setPageRoute($rootScope.Route.Confirmation)
       return $scope.showPage('confirmation')
 
 
@@ -950,38 +767,42 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
         error_modal = $uibModal.open
-          appendTo: angular.element($document[0].getElementById('bb'))
           templateUrl: $scope.getPartial('_error_modal')
           controller: ($scope, $uibModalInstance) ->
             $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg
             $scope.ok = () ->
               $uibModalInstance.close()
         error_modal.result.finally () ->
-          if $scope.bb.nextSteps
-            # either go back to the Date/Event routes or load the previous step
-            if $scope.setPageRoute($rootScope.Route.Date)
-              # already routed
-            else if $scope.setPageRoute($rootScope.Route.Event)
-              # already routed
-            else
-              $scope.loadPreviousStep()
+          if $scope.bb.on_conflict
+            $scope.$eval($scope.bb.on_conflict)
           else
-            $scope.decideNextPage()
+            if $scope.bb.nextSteps
+              # either go back to the Date/Event routes or load the previous step
+              if $scope.setPageRoute($rootScope.Route.Date)
+                # already routed
+              else if $scope.setPageRoute($rootScope.Route.Event)
+                # already routed
+              else
+                $scope.loadPreviousStep()
+            else
+              $scope.decideNextPage()
     add_defer.promise
 
 
   $scope.emptyBasket = ->
-    return if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
 
     defer = $q.defer()
 
-    BBModel.Basket.$empty($scope.bb).then (basket) ->
-      if $scope.bb.current_item.id
-        delete $scope.bb.current_item.id
-      $scope.setBasket(basket)
+    if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
       defer.resolve()
-    , (err) ->
-      defer.reject()
+    else
+      BBModel.Basket.$empty($scope.bb).then (basket) ->
+        if $scope.bb.current_item.id
+          delete $scope.bb.current_item.id
+        $scope.setBasket(basket)
+        defer.resolve()
+      , (err) ->
+        defer.reject()
 
     return defer.promise
 
@@ -1070,6 +891,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
 
   restoreBasket = () ->
+
     restore_basket_defer = $q.defer()
     $scope.quickEmptybasket().then () ->
       auth_token = $localStorage.getItem('auth_token') or $sessionStorage.getItem('auth_token')
@@ -1097,6 +919,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         else
           if res.$has('baskets')
             res.$get('baskets').then (baskets) =>
+
               basket = _.find(baskets, (b) ->
                 parseInt(b.company_id) == $scope.bb.company_id)
               if basket
@@ -1126,8 +949,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
     $scope.bb.company_id = company.id
     $scope.bb.company = company
-    # for now also set a scope vbaraible for company - we should remove this as soon as all partials are moved over
-    $scope.company = company
 
     $scope.bb.item_defaults.company = $scope.bb.company
 
@@ -1139,6 +960,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       company.getSettings().then (settings) =>
         # setup some useful info
         $scope.bb.company_settings = settings
+        SettingsService.company_settings = settings
         $scope.bb.item_defaults.merge_resources = true if $scope.bb.company_settings.merge_resources
         $scope.bb.item_defaults.merge_people = true if $scope.bb.company_settings.merge_people
         $rootScope.bb_currency = $scope.bb.company_settings.currency
@@ -1195,8 +1017,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
   # reload a step
   $scope.loadStep = (step) ->
+
     return if step == $scope.bb.current_step
+
     $scope.bb.calculatePercentageComplete(step)
+
     # so actually use the data from the "next" page if there is one - but show the correct page
     # this means we load the completed data from that page
     # if there isn't a next page - then try the select one
@@ -1411,4 +1236,3 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
   $scope.redirectTo = (url) ->
     $window.location.href = url
-

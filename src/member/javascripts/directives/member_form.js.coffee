@@ -50,7 +50,8 @@ angular.module('BBMember').directive 'memberForm', ($rootScope, AlertService, Pa
             schema.properties.questions.properties[vals[1]] ||= {type: "object", properties: {answer: v}}
           if vals[0] == "client" && vals.length > 2
             schema.properties.client ||= {type: "object", properties: {q: {type: "object", properties: {}}}}
-            schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v}}
+            if schema.properties.client.properties
+              schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v}}
         return schema
 
 
@@ -59,19 +60,30 @@ angular.module('BBMember').directive 'memberForm', ($rootScope, AlertService, Pa
           if member.$has('edit_member')
             member.$get('edit_member').then (member_schema) ->
               $scope.form = member_schema.form
-              model_type = member.constructor.name
+              model_type = functionName(member.constructor)
               if FormTransform['edit'][model_type]
-                $scope.form = FormTransform['edit'][model_type]($scope.form)
+                $scope.form = FormTransform['edit'][model_type]($scope.form, member_schema.schema, member)
               $scope.schema = checkSchema(member_schema.schema)
               $scope.loading = false
           else if member.$has('edit')
             member.$get('edit').then (member_schema) ->
               $scope.form = member_schema.form
-              model_type = member.constructor.name
+              model_type = functionName(member.constructor)
               if FormTransform['edit'][model_type]
-                $scope.form = FormTransform['edit'][model_type]($scope.form)
+                $scope.form = FormTransform['edit'][model_type]($scope.form, member_schema.schema, member)
               $scope.schema = checkSchema(member_schema.schema)
               $scope.loading = false
+
+
+
+
+      functionName = (func) ->
+        result = /^function\s+([\w\$]+)\s*\(/.exec( func.toString() )
+        if result
+           result[ 1 ]
+        else
+           ''
+
 
       $scope.submit = (form, data) ->
         # Required for the fields to validate themselves

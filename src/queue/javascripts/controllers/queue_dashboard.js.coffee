@@ -45,7 +45,7 @@ angular.module('BBQueue').controller 'bbQueueDashboardController', ($scope,
     $scope.$apply () ->
       $scope.trash_hover = set
 
-   $scope.hoverOver = (event, ui, obj, set) ->
+  $scope.hoverOver = (event, ui, obj, set) ->
     $scope.$apply () ->
       obj.hover = set
 

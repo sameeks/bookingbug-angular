@@ -57,7 +57,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
 angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
-  FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize, SettingsService) ->
+  FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize, SettingsService, ErrorService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
 
@@ -100,7 +100,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   ###
   $scope.initialise = () ->
 
-# read initialisation attributes
+    # read initialisation attributes
     if $attrs.bbTimeRangeLength?
       $scope.time_range_length = $scope.$eval($attrs.bbTimeRangeLength)
     else if $scope.options and $scope.options.time_range_length
@@ -135,8 +135,8 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
     # initialise the time range
     # last selected day is set (i.e, a user has already selected a date)
     if !$scope.start_date and $scope.last_selected_date
-# if the time range list was initialised with a selected_day, restore the view so that
-# selected day remains relative to where the first day that was originally shown
+      # if the time range list was initialised with a selected_day, restore the view so that
+      # selected day remains relative to where the first day that was originally shown
       if $scope.original_start_date
         diff = $scope.last_selected_date.diff($scope.original_start_date, 'days')
         diff = diff % $scope.time_range_length
@@ -145,15 +145,15 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
         setTimeRange($scope.last_selected_date, start_date)
       else
         setTimeRange($scope.last_selected_date)
-# the current item already has a date
+    # the current item already has a date
     else if $scope.bb.current_item.date or $scope.bb.current_item.defaults.date
       date = if $scope.bb.current_item.date then $scope.bb.current_item.date.date else $scope.bb.current_item.defaults.date
       setTimeRange(date)
-# selected day has been provided, use this to set the time
+    # selected day has been provided, use this to set the time
     else if $scope.selected_day
       $scope.original_start_date = $scope.original_start_date or moment($scope.selected_day)
       setTimeRange($scope.selected_day)
-# set the time range to show the current week
+    # set the time range to show the current week
     else
       $scope.start_at_week_start = true
       setTimeRange(moment())
@@ -474,7 +474,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
         utcMinutes = utc.format('m')
         utcSeconds = utc.format('s')
 
-    # sort time slots to be in chronological order
+        # sort time slots to be in chronological order
         for pair in _.sortBy(_.pairs(datetime_arr), (pair) -> pair[0])
           d = pair[0]
           time_slots = pair[1]
@@ -611,4 +611,3 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
     if day and slot
       $scope.bb.current_item.earliest_time_slot.selected = true
       $scope.highlightSlot(day, slot)
-

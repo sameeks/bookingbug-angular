@@ -91,7 +91,7 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
         rules = new ScheduleRules(found)
         events = rules.toEvents()
         _.each events, (e) ->
-          e.resourceId = asset.id + "_" + asset.type[0]
+          e.resourceId = parseInt(asset.id) + "_" + asset.type[0]
           e.title = asset.name
           e.start = moment(e.start)
           e.end = moment(e.end)
@@ -109,7 +109,7 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
           rules = new ScheduleRules(schedules.dates)
           events = rules.toEvents()
           _.each events, (e) ->
-            e.resourceId = asset.id + "_" + asset.type[0]
+            e.resourceId = parseInt(asset.id) + "_" + asset.type[0]
             e.title = asset.name
             e.start = moment(e.start)
             e.end = moment(e.end)

@@ -521,25 +521,25 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
         @take_from_wallet = false
         return false
 
-    $applyCoupon: (company, params) ->
+    @$applyCoupon: (company, params) ->
         BasketService.applyCoupon(company, params)
 
     @$updateBasket: (company, params) ->
       BasketService.updateBasket(company, params)
 
-    $deleteItem: (item, company, params) ->
+    @$deleteItem: (item, company, params) ->
         BasketService.deleteItem(item, company, params)
 
     @$checkout: (company, basket, params) ->
         BasketService.checkout(company, basket, params)
 
-    $empty: (bb) ->
+    @$empty: (bb) ->
         BasketService.empty (bb)
 
-    $applyDeal: (company, params) ->
+    @$applyDeal: (company, params) ->
         BasketService.applyDeal(company, params)
 
-    $removeDeal: (company, params) ->
+    @$removeDeal: (company, params) ->
         BasketService.removeDeal(company, params)
 
     ###**

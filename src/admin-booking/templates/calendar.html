@@ -49,30 +49,30 @@
               <div ng-if="step_mismatch">
                 <p ng-if="allow_overbook" translate="ADMIN_BOOKING.AVAILABILITY.ALTERNATIVE_TIME_ALLOW_OVERBOOKING"></p>
                 <p ng-if="!allow_overbook" translate="ADMIN_BOOKING.AVAILABILITY.ALTERNATIVE_TIME_NO_OVERBOOKING"></p>
-                <div class="btn-group btn-group-justified "  role="group">
-                  <div class="btn-group" role="group"><button class="btn btn-primary" ng-click="pickTime(best_earlier)"><i class="fa fa-calendar-check-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_EARLIER_TIME_BTN"></span>: {{best_earlier.datetime.format("LT")}}</button></div>
-                  <div class="btn-group" role="group"><button class="btn btn-warning" ng-click="overBook()" ><i class="fa fa-calendar-times-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.REQUESTED_TIME_BTN"></span>: {{bb.current_item.defaults.datetime.format("LT")}}</button></div>
-                  <div class="btn-group" role="group"><button class="btn btn-primary"  ng-click="pickTime(best_later)" ><i class="fa fa-calendar-check-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_LATER_TIME_BTN"></span>: {{best_later.datetime.format("LT")}}</button></div>
-                  <div class="btn-group" role="group"><button class="btn btn-primary" ng-click="pickOtherTime()"><i class="fa fa-calendar-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.FIND_ANOTHER_TIME_BTN"></span></button></div>
+                <div class="text-center">
+                  <button class="btn btn-primary" ng-click="pickTime(best_earlier)"><i class="fa fa-calendar-check-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_EARLIER_TIME_BTN"></span>: {{best_earlier.datetime.format("LT")}}</button>
+                  <button class="btn btn-warning" ng-click="overBook()" ><i class="fa fa-calendar-times-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.REQUESTED_TIME_BTN"></span>: {{bb.current_item.defaults.datetime.format("LT")}}</button>
+                  <button class="btn btn-primary"  ng-click="pickTime(best_later)" ><i class="fa fa-calendar-check-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_LATER_TIME_BTN"></span>: {{best_later.datetime.format("LT")}}</button>
+                  <button class="btn btn-primary" ng-click="pickOtherTime()"><i class="fa fa-calendar-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.FIND_ANOTHER_TIME_BTN"></span></button>
                 </div>
               </div>
               <div ng-if="!step_mismatch">
                 <p ng-if="allow_overbook" translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_TIME_ALLOW_OVERBOOKING"></p>
                 <p ng-if="!allow_overbook" translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_TIME_NO_OVERBOOKING"></p>
-                <div class="btn-group btn-group-justified"  role="group">
-                  <div class="btn-group" role="group" ng-if="best_earlier"><button  class="btn btn-primary" ng-click="pickTime(best_earlier)"><i class="fa fa-calendar-check-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_EARLIER_TIME_BTN"></span>: {{best_earlier.datetime.format("LT")}}</button></div>
-                  <div class="btn-group" role="group"><button  class="btn btn-warning" ng-click="overBook()"><i class="fa fa-calendar-times-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.REQUESTED_TIME_BTN"></span>: {{bb.current_item.defaults.datetime.format("LT")}}</button></div>
-                  <div class="btn-group" role="group" ng-if="best_later"><button  class="btn btn-primary" ng-click="pickTime(best_later)"><i class="fa fa-calendar-check-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_LATER_TIME_BTN"></span>: {{best_later.datetime.format("LT")}}</button></div>
-                  <div class="btn-group" role="group"><button class="btn btn-primary" ng-click="pickOtherTime()"><i class="fa fa-calendar-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.FIND_ANOTHER_TIME_BTN"></span></button></div>
+                <div class="text-center">
+                  <button ng-if="best_earlier" class="btn btn-primary" ng-click="pickTime(best_earlier)"><i class="fa fa-calendar-check-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_EARLIER_TIME_BTN"></span>: {{best_earlier.datetime.format("LT")}}</button>
+                  <button  class="btn btn-warning" ng-click="overBook()"><i class="fa fa-calendar-times-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.REQUESTED_TIME_BTN"></span>: {{bb.current_item.defaults.datetime.format("LT")}}</button>
+                  <button ng-if="best_later" class="btn btn-primary" ng-click="pickTime(best_later)"><i class="fa fa-calendar-check-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.CLOSEST_LATER_TIME_BTN"></span>: {{best_later.datetime.format("LT")}}</button>
+                  <button class="btn btn-primary" ng-click="pickOtherTime()"><i class="fa fa-calendar-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.FIND_ANOTHER_TIME_BTN"></span></button>
                 </div>
               </div>
             </div>
             <div ng-if="!best_earlier && !best_later">
               <p ng-if="allow_overbook" translate="ADMIN_BOOKING.AVAILABILITY.ALTERNATIVE_TIME_ALLOW_OVERBOOKING"></p>
               <p ng-if="!allow_overbook" translate="ADMIN_BOOKING.AVAILABILITY.ALTERNATIVE_TIME_NO_OVERBOOKING"></p>
-              <div class="btn-group btn-group-justified "  role="group">
-                <div class="btn-group" role="group"><button class="btn btn-warning" ng-click="overBook()" ><i class="fa fa-calendar-times-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.REQUESTED_TIME_BTN"></span>: {{bb.current_item.defaults.datetime.format("LT")}}</button></div>
-                <div class="btn-group" role="group"><button class="btn btn-primary" ng-click="pickOtherTime()"><i class="fa fa-calendar-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.FIND_ANOTHER_TIME_BTN"></span></button></div>
+              <div class="text-center">
+                <button class="btn btn-warning" ng-click="overBook()" ><i class="fa fa-calendar-times-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.REQUESTED_TIME_BTN"></span>: {{bb.current_item.defaults.datetime.format("LT")}}</button>
+                <button class="btn btn-primary" ng-click="pickOtherTime()"><i class="fa fa-calendar-o"></i> <span translate="ADMIN_BOOKING.AVAILABILITY.FIND_ANOTHER_TIME_BTN"></span></button>
               </div>
             </div>
           </div>
@@ -137,7 +137,7 @@
 
         </div>
 
-        <div ng-if="calendar_view.next_available">
+        <div ng-if="calendar_view.next_available" select-first-slot>
 
           <div class="bb-day-nav">
 
@@ -154,7 +154,7 @@
 
                   <ul class="time-slots" ng-if="slots.length > 0">
 
-                    <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled}" ng-disabled="slot.disabled" ng-click="highlightSlot(slot, selected_day)" ng-repeat="slot in slots | in_the_future | limitTo: 10">
+                    <li class="time-slot" ng-class="{'selected': slot.selected, 'disabled': slot.disabled, 'hide-later': slot.hidden}" ng-disabled="slot.disabled" ng-click="highlightSlot(slot, selected_day)" ng-repeat="slot in slots | in_the_future | limitTo: 10">
                       <span>{{slot.time_moment | datetime: 'LT'}} (in {{slot.time | tod_from_now }})</span>
                     </li>
 

@@ -44,7 +44,8 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
         schema.properties.questions.properties[vals[1]] ||= {type: "object", properties: {answer: v}}
       if vals[0] == "client" && vals.length > 2
         schema.properties.client ||= {type: "object", properties: {q: {type: "object", properties: {}}}}
-        schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v}}
+        if schema.properties.client.properties
+          schema.properties.client.properties.q.properties[vals[2]] ||= {type: "object", properties: {answer: v}}
     return schema
 
 
@@ -58,7 +59,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
         $scope.form = _.reject schema.form, (x) -> x.type == 'submit'
         model_type = functionName(model.constructor)
         if FormTransform['edit'][model_type]
-          $scope.form = FormTransform['edit'][model_type]($scope.form)
+          $scope.form = FormTransform['edit'][model_type]($scope.form, schema.schema, $scope.model)
         $scope.schema = checkSchema(schema.schema)
         $scope.form_model = $scope.model
         $scope.loading = false
@@ -68,7 +69,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
 
     functionName = (func) ->
       result = /^function\s+([\w\$]+)\s*\(/.exec( func.toString() )
-      if result 
+      if result
          result[ 1 ]
       else
          ''
@@ -115,6 +116,7 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
       $uibModalInstance.close()
       if type == 'booking'
         modal_instance = $uibModal.open
+
           templateUrl: 'cancel_booking_modal_form.html'
           controller: ($scope, booking) ->
             $scope.booking = booking
@@ -127,11 +129,8 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
           model.$post('cancel', params).then (booking) ->
             success(booking) if success
       else
-        question = null;
-        if type is 'appointment'
-          question = $translate.instant('CORE.MODAL.CANCEL_BOOKING.QUESTION', {type: type})
-        else
-          question = $translate.instant('CORE.MODAL.CANCEL_BOOKING.APPOINTMENT_QUESTION')
+        question = null
+        question = $translate.instant('CORE.MODAL.CANCEL_BOOKING.QUESTION', {type: type})
 
         Dialog.confirm
           model: model,
@@ -181,7 +180,6 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: newForm
       size: config.size
@@ -197,7 +195,6 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: editForm
       size: config.size
@@ -212,7 +209,6 @@ angular.module('BB.Services').factory 'ModalForm', ($uibModal, $document, $log, 
     templateUrl = config.templateUrl if config.templateUrl
     templateUrl ||= 'modal_form.html'
     $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: templateUrl
       controller: bookForm
       size: config.size
