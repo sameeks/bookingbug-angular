@@ -5,8 +5,8 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
   replace: true
   scope: true
   require: ['^?bbEvents', '^?bbMultiCompanyEvents']
-  templateUrl: (element, attrs) ->
-    PathSvc.directivePartial "_month_picker"
+  # templateUrl: (element, attrs) ->
+  #   PathSvc.directivePartial "_month_picker"
   link: (scope, el, attrs) ->
 
     scope.picker_settings = scope.$eval(attrs.bbMonthPicker) or {}
@@ -15,7 +15,7 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
     $(window).resize () ->
       $timeout ->
         width = el.width()
-        scope.rebuildSlideToWidth width
+        # scope.rebuildSlideToWidth width
       , 500
 
     scope.$watch attrs.dayData, (dayData) ->
