@@ -108,13 +108,13 @@
 
       <li class="day navigation hidden-xs">
         <button type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 3)" ng-disabled="!is_subtract_valid || !isLoaded">
-          <span class="glyphicon glyphicon-chevron-left"></span>
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
         </button>
         <button type="button" class="btn btn-icon visible-md" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
-          <span class="glyphicon glyphicon-chevron-left"></span>
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
         </button>
         <button type="button" class="btn btn-icon visible-lg" ng-click="subtract('days', 7)" ng-disabled="!is_subtract_valid || !isLoaded">
-          <span class="glyphicon glyphicon-chevron-left"></span>
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
         </button>
         <span ng-show="!is_subtract_valid || !isLoaded">&nbsp;</span>
       </li>
@@ -123,7 +123,7 @@
         <div class="day-header row">
           <span class="col-xs-2 previous visible-xs">
             <button type="button" class="btn btn-icon" ng-click="subtract('days', 1)" ng-disabled="day.date.isSame(moment(),'day') || !isLoaded">
-              <span class="glyphicon glyphicon-chevron-left"></span>
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
             </button>
           </span>
           <h3 class="day-heading col-xs-8 col-sm-12">
@@ -132,7 +132,7 @@
           </h3>
           <span class="col-xs-2 next visible-xs">
             <button type="button" class="btn btn-icon visible-xs pull-right" ng-click="add('days', 1)" ng-disabled="!isLoaded">
-              <span class="glyphicon glyphicon-chevron-right"></span>
+              <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </button>
           </span>
         </div>
@@ -159,13 +159,13 @@
 
       <li class="day navigation hidden-xs">
         <button type="button" class="btn btn-icon visible-sm" ng-click="add('days', 3)" ng-disabled="!isLoaded">
-          <span class="glyphicon glyphicon-chevron-right"></span>
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
         </button>
         <button type="button" class="btn btn-icon visible-md" ng-click="add('days', 5)" ng-disabled="!isLoaded">
-          <span class="glyphicon glyphicon-chevron-right"></span>
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
         </button>
         <button type="button" class="btn btn-icon visible-lg" ng-click="add('days', 7)" ng-disabled="!isLoaded">
-          <span class="glyphicon glyphicon-chevron-right"></span>
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
         </button>
       </li>
     </ul>
