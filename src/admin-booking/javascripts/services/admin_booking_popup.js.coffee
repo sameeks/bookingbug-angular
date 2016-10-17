@@ -5,7 +5,6 @@ angular.module('BBAdminBooking').factory 'AdminBookingPopup', ($uibModal, $timeo
   open: (config) ->
     $uibModal.open
       size: 'lg'
-      appendTo: angular.element($document[0].getElementById('bb'))
       controller: ($scope, $uibModalInstance, config, $window, AdminBookingOptions) ->
         $scope.Math = $window.Math
         if $scope.bb && $scope.bb.current_item

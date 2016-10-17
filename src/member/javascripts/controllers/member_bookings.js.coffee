@@ -93,7 +93,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
   openPaymentModal = (booking, total) ->
     modalInstance = $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: "booking_payment_modal.html"
       windowClass: "bbug"
       size: "lg"
@@ -130,7 +129,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
   cancel: (booking) ->
     modalInstance = $uibModal.open
-      appendTo: angular.element($document[0].getElementById('bb'))
       templateUrl: "member_booking_delete_modal.html"
       windowClass: "bbug"
       controller: ($scope, $rootScope, $uibModalInstance, booking) ->

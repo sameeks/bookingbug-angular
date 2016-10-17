@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.i18n').run (bbi18nOptions, bbLocale, RuntimeTranslate, $translate) ->
+angular.module('BB.i18n').run (bbi18nOptions, bbLocale, RuntimeTranslate) ->
   'ngInject'
 
   RuntimeTranslate.registerAvailableLanguageKeys(
@@ -9,5 +9,4 @@ angular.module('BB.i18n').run (bbi18nOptions, bbLocale, RuntimeTranslate, $trans
   )
 
   bbLocale.determineLocale()
-
   return

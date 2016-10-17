@@ -1,6 +1,6 @@
 #### BookingBug AngularJS SDK
 
-[![Build Status](https://travis-ci.com/BookingBug/bookingbug-angular.svg?branch=master)](https://travis-ci.com/BookingBug/bookingbug-angular)
+[![Build Status](https://travis-ci.org/BookingBug/bookingbug-angular.svg?branch=master)](https://travis-ci.org/BookingBug/bookingbug-angular)
 
 This SDK enables you to build rich web apps that utilise the BookingBug
 API. Use the [Yeoman Generator](https://www.npmjs.com/package/generator-bookingbug)

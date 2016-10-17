@@ -25,6 +25,7 @@ app = angular.module('BB', [
   'vcRecaptcha',
   'ui.select',
   'BB.i18n',
+  'BB.uib',
   'angular-carousel'
 ])
 
