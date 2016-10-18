@@ -174,13 +174,18 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
               return true
             return false
 
+          extended = false
           if dayAvailability.length > 0
-            if moment(availability.start).unix() < moment(dayAvailability[0].start).unix()
-              dayAvailability[0].start = availability.start
+            for day in dayAvailability
+              if moment(availability.start).unix() < moment(day.start).unix() && moment(availability.end).unix() > moment(day.start).unix()
+                day.start = availability.start
+                extended = true
 
-            if moment(availability.end).unix() > moment(dayAvailability[0].end).unix()
-              dayAvailability[0].end = availability.end
-          else
+              if moment(availability.end).unix() > moment(day.end).unix()  && moment(availability.start).unix() < moment(day.end).unix()
+                day.end = availability.end
+                extended = true
+
+          if !extended
             overAllAvailabilities.push {
               start: availability.start
               end: availability.end
