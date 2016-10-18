@@ -114,7 +114,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
                     is-open='opened'
                     ng-focus='opened=true' />
                   <span class='input-group-btn' ng-click='$event.preventDefault();$event.stopPropagation();opened=true'>
-                    <button class='btn btn-default' type='submit'><span class='glyphicon glyphicon-calendar'></span></button>
+                    <button class='btn btn-default' type='submit'><i class='fa fa-calendar-o' aria-hidden='true'></i></button>
                   </span>
                 </div>"
 

@@ -29,8 +29,8 @@
                     </li>
                     <li ng-if="!page.hideBoxedLayoutControl">
                         <a href ng-click="page.boxed = !page.boxed" class="visible-lg-inline-block">
-                            <span ng-show="!page.boxed" class="glyphicon glyphicon-resize-small"></span>
-                            <span ng-show="page.boxed" class="glyphicon glyphicon-resize-full"></span>
+                            <i ng-show="!page.boxed" class="fa fa-compress" aria-hidden="true"></i>
+                            <i ng-show="page.boxed" class="fa fa-expand" aria-hidden="true"></i>
                         </a>
                     </li>
                 </ul>

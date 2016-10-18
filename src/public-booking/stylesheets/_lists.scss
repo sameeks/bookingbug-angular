@@ -48,7 +48,7 @@
     padding-right: 15px;
   }
 
-  > li span.glyphicon {
+  > li i.fa {
     padding-right: 5px;
   }
 
@@ -157,7 +157,7 @@
   margin-bottom: 5px;
   li {
     padding-bottom: 5px;
-    .bb-icon, .glyphicon {
+    .bb-icon, .fa {
       color: $gray;
     }
     &:last-child {
