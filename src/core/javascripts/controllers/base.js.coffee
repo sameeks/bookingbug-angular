@@ -5,12 +5,7 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
     $scope.setPageLoaded()
     $scope.setLoadingPage(false)
 
-angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,
-  halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService,
-  $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService,
-  ErrorService, AppConfig, QueryStringService, QuestionService,
-  PurchaseService, $sessionStorage, $bbug, SettingsService, UriTemplate, LoadingService,
-  $anchorScroll, $localStorage, $document) ->
+angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService,ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, SettingsService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document) ->
 
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
