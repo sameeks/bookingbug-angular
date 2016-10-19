@@ -550,9 +550,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       # Get the step number to load
       step_number = $scope.bb.matchURLToStep()
       # Load next page
-      if step_number? and step_number > $scope.bb.current_step
+      if step_number > $scope.bb.current_step
         $scope.loadStep(step_number)
-      else
+      else if step_number < $scope.bb.current_step
         $scope.loadPreviousStep('locationChangeStart')
 
     $scope.bb.routing = false
