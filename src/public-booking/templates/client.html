@@ -3,7 +3,7 @@
   <div bb-include="_basket_item_summary" ng-if="bb.current_item.service">
   </div>
 
-  <form name="client_form" ng-submit="validator.validateForm(client_form)" class="form-horizontal" role="form" bb-form-resettable bb-form novalidate>
+  <form name="client_form" ng-submit="validator.validateForm(client_form) && validateClient()" class="form-horizontal" role="form" bb-form-resettable bb-form novalidate>
 
     <div>
       <h2 ng-if="!isAdmin()" class="booking-form-header"><span translate="PUBLIC_BOOKING.CLIENT.DETAILS_TITLE"></span></h2>
@@ -76,11 +76,11 @@
     <div class="bb-step-navigation">
       <div class="row">
         <div class="col-sm-9 col-sm-push-3 text-right">
-          <button type="submit" class="btn btn-primary" ng-click="validator.validateForm(client_form) && validateClient(client_form)"><span translate="PUBLIC_BOOKING.CLIENT.PROGRESS_CONTINUE"></span></button>
+          <button type="submit" class="btn btn-primary" translate="PUBLIC_BOOKING.CLIENT.PROGRESS_CONTINUE">Continue</button>
         </div>
         <div class="col-sm-3 col-sm-pull-9 text-left">
-          <button type="button" class="btn btn-default" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PUBLIC_BOOKING.CLIENT.BACK_BTN"></span></button>
-          <button type="button" class="btn btn-default" ng-click="resetForm()"><span translate="PUBLIC_BOOKING.CLIENT.PROGRESS_CLEAR"></span></button>
+          <button type="button" class="btn btn-default" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1" translate="PUBLIC_BOOKING.CLIENT.BACK_BTN"></button>
+          <button type="button" class="btn btn-default" ng-click="resetForm()" translate="PUBLIC_BOOKING.CLIENT.PROGRESS_CLEAR"></button>
         </div>
       </div>
     </div>
