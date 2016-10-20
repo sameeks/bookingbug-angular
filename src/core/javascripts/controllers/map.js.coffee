@@ -73,7 +73,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
   $scope.numberedPin          ||= null
   $scope.defaultPin           ||= null
   $scope.address              = $scope.$eval $attrs.bbAddress if !$scope.address and $attrs.bbAddress
-  
+
   loader = LoadingService.$loader($scope).notLoaded()
 
   # setup geolocation shim
@@ -81,7 +81,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
   webshim.polyfill("geolocation")
 
   $rootScope.connection_started.then ->
-    
+
     loader.setLoaded() if !$scope.selectedStore
 
     if $scope.bb.company.companies
@@ -465,6 +465,10 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
 
     google.maps.event.trigger($scope.myMap, 'resize')
     $scope.myMap.fitBounds(localBounds)
+    openDefaultMarker()
+
+  openDefaultMarker = () ->
+    return if $scope.options and $scope.options.no_default_location_details
 
     open_marker_index = 0
     open_marker = _.find $scope.shownMarkers, (obj) ->
@@ -491,6 +495,10 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
     $timeout ->
       $scope.currentMarker = marker
       $scope.myInfoWindow.open($scope.myMap, marker)
+      for shown_marker in $scope.shownMarkers
+        if shown_marker.company.id is marker.company.id
+          shown_marker.is_open = true
+      return $scope.shownMarkers
     , 250
 
 

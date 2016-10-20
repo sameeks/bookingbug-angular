@@ -57,9 +57,7 @@ angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache
           $compile(element.contents())(scope)
 
 
-angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs,
-  $rootScope, LoginService, ValidatorService, AlertService, LoadingService,
-  BBModel) ->
+angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.ClientDetails"
   loader = LoadingService.$loader($scope).notLoaded()
