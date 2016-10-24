@@ -82,7 +82,7 @@ app.config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider) 
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
 
-  moment.fn.toISODate ||= -> this.locale('en').format('YYYY-MM-DD')
+  moment.fn.toISODate ||= -> this.clone().locale('en').format('YYYY-MM-DD')
 
 
 app.run ($rootScope, $log, DebugUtilsService, FormDataStoreService, $bbug, $document, $sessionStorage, AppConfig) ->
