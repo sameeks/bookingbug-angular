@@ -88,6 +88,8 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   $rootScope.connection_started.then ->
     $scope.initialise()
 
+  $scope.highlighted_slot = null
+
 
 
   ###**
@@ -233,10 +235,12 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   * @param {object} amount The amount of the days
   ###
   $scope.add = (type, amount) ->
+    
     if amount > 0
       $element.removeClass('subtract')
       $element.addClass('add')
     $scope.selected_day = moment($scope.selected_date)
+
     switch type
       when 'days'
         setTimeRange($scope.selected_day.add(amount, 'days'))
@@ -247,6 +251,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
 # TODO make this advance to the next month
         $scope.start_date.add(amount, type).startOf('month')
         setTimeRange($scope.start_date)
+    
     $scope.loadData()
 
   ###**
@@ -383,6 +388,10 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   * @param {array} slot The slot
   ###
   $scope.highlightSlot = (slot, day) ->
+    
+    $scope.highlighted_slot = 
+      slot: slot
+      day: day  
 
     current_item = $scope.bb.current_item
 
@@ -406,6 +415,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
       $rootScope.$broadcast "time:selected"
 
       # broadcast message to the accordion range groups
+      
       $scope.$broadcast 'slotChanged', day, slot
 
   ###**
@@ -417,7 +427,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   *
   ###
   $scope.loadData = ->
-
     current_item = $scope.bb.current_item
 
     # has a service been selected?

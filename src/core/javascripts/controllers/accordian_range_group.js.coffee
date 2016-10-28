@@ -38,7 +38,8 @@ angular.module('BB.Directives').directive 'bbAccordionRangeGroup', (PathSvc) ->
     day: '=',
     slots: '=',
     selectSlot: '=',
-    disabled_slot: "=disabledSlot"
+    disabled_slot: "=disabledSlot",
+    highlightedSlot: '='
   }
   controller: 'AccordionRangeGroup'
   link: (scope, element, attrs) ->
@@ -110,6 +111,9 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', (
     $scope.has_availability = $scope.has_availability or false
     $scope.is_selected = $scope.is_selected or false
 
+    # console.log 'setData highlightedSlot = ', $scope.highlightedSlot
+
+    hasSlotToHiglight = false
 
     if $scope.slots
 
@@ -123,9 +127,26 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', (
           slot_time = slot.time
 
         $scope.accordion_slots.push(slot) if slot_time >= $scope.start_time and slot_time < $scope.end_time and slot.avail is 1
+        # if $scope.highlightedSlot isnt null && $scope.highlightedSlot.slot.time is slot.time
+        #   console.log $scope.highlightedSlot.slot.time is slot.time, $scope.highlightedSlot.slot.time, slot.time
+        if $scope.highlightedSlot isnt null and $scope.highlightedSlot.slot.time is slot.time and $scope.day.date.date() is $scope.highlightedSlot.day.date.date()
+          # console.log 'YEQAHH !!', $scope.day.date.date() is $scope.highlightedSlot.day.date.date(), $scope.day.date.date(), $scope.highlightedSlot.day.date.date()         
+          hasSlotToHiglight = true
 
-      updateAvailability()
+    updateAvailability()      
 
+    if hasSlotToHiglight
+      console.log('just beforeeee', $scope.day)
+      # $scope.day = $scope.highlightedSlot.day
+      $scope.selectSlot($scope.highlightedSlot.slot, $scope.highlightedSlot.day)
+      # updateAvailability($scope.highlightedSlot.slot, $scope.highlightedSlot.day)
+      $scope.hideHeading = true
+      $scope.is_selected = true
+      $scope.is_open = false if $scope.options.collaspe_when_time_selected
+      
+    
+
+    return  
 
   ###**
   * @ngdoc method
