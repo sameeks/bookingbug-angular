@@ -143,6 +143,12 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $rootScope,
     $scope.multi_basket_grouping = _.values($scope.multi_basket_grouping)
     loader.setLoaded()
 
+  updateLocalBasket = (basket) ->
+    for item in basket.items
+      item.storeDefaults($scope.bb.item_defaults)
+    basket.setSettings($scope.bb.basket.settings)
+    $scope.setBasket(basket)
+
   ###**
   * @ngdoc method
   * @name addAnother
@@ -210,17 +216,17 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $rootScope,
     AlertService.clear()
     loader.notLoaded()
     params = {bb: $scope.bb, coupon: coupon }
-    BBModel.Basket.$applyCoupon($scope.bb.company, params).then (basket) ->
-      for item in basket.items
-        item.storeDefaults($scope.bb.item_defaults)
-      basket.setSettings($scope.bb.basket.settings)
-      $scope.setBasket(basket)
-      loader.setLoaded()
-    , (err) ->
-      if err and err.data and err.data.error
-        AlertService.clear()
-        AlertService.add("danger", { msg: err.data.error })
-      loader.setLoaded()
+
+    # first update the basket item on the server
+    BBModel.Basket.$updateBasket($scope.bb.company, params.bb.basket).then () ->
+      BBModel.Basket.$applyCoupon($scope.bb.company, params).then (basket) ->
+        updateLocalBasket(basket)
+        loader.setLoaded()
+      , (err) ->
+        if err and err.data and err.data.error
+          AlertService.clear()
+          AlertService.raise('COUPON_APPLY_FAILED')
+        loader.setLoaded()
 
   ###**
   * @ngdoc method
@@ -237,18 +243,17 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $rootScope,
       params = {bb: $scope.bb, deal_code: deal_code, member_id: $scope.client.id}
     else
       params = {bb: $scope.bb, deal_code: deal_code, member_id: null}
-    BBModel.Basket.$applyDeal($scope.bb.company, params).then (basket) ->
 
-      for item in basket.items
-        item.storeDefaults($scope.bb.item_defaults)
-      basket.setSettings($scope.bb.basket.settings)
-      $scope.setBasket(basket)
-      $scope.items = $scope.bb.basket.items
-      $scope.deal_code = null
-    , (err) ->
-      if err and err.data and err.data.error
-        AlertService.clear()
-        AlertService.add("danger", { msg: err.data.error })
+    # first update the basket item on the server
+    BBModel.Basket.$updateBasket($scope.bb.company, params.bb.basket).then () ->
+      BBModel.Basket.$applyDeal($scope.bb.company, params).then (basket) ->
+        updateLocalBasket(basket)
+        $scope.items = $scope.bb.basket.items
+        $scope.deal_code = null
+      , (err) ->
+        if err and err.data and err.data.error
+          AlertService.clear()
+          AlertService.raise('DEAL_APPLY_FAILED')
 
   ###**
   * @ngdoc method
@@ -261,17 +266,16 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $rootScope,
   ###
   $scope.removeDeal = (deal_code) =>
     params = {bb: $scope.bb, deal_code_id: deal_code.id }
-    BBModel.Basket.$removeDeal($scope.bb.company, params).then (basket) ->
 
-      for item in basket.items
-        item.storeDefaults($scope.bb.item_defaults)
-      basket.setSettings($scope.bb.basket.settings)
-      $scope.setBasket(basket)
-      $scope.items = $scope.bb.basket.items
-    , (err) ->
-      if err and err.data and err.data.error
-        AlertService.clear()
-        AlertService.add("danger", { msg: err.data.error })
+    # first update the basket item on the server
+    BBModel.Basket.$updateBasket($scope.bb.company, params.bb.basket).then () ->
+      BBModel.Basket.$removeDeal($scope.bb.company, params).then (basket) ->
+        updateLocalBasket(basket)
+        $scope.items = $scope.bb.basket.items
+      , (err) ->
+        if err and err.data and err.data.error
+          AlertService.clear()
+          AlertService.raise('DEAL_REMOVE_FAILED')
 
 
   $scope.topUpWallet = () ->
