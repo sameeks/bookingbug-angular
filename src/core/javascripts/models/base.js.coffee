@@ -68,9 +68,9 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
           name = @_snakeToCamel("get_" + link)
           do (link, obj, name) =>
             if !@[name]
-              @[name] = () -> @$buildOject(link)
+              @[name] = (options) -> @$buildOject(link, options, obj)
             if !@["$" + name]
-              @["$" + name] = () -> @$buildOjectPromise(link)
+              @["$" + name] = (options) -> @$buildOjectPromise(link, options, obj)
 
 
     _snakeToCamel: (s) ->
@@ -78,22 +78,26 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
 
 
     # build out a linked object
-    $buildOject: (link) ->
-      return @__linkedData[link] if @__linkedData[link]
-      @$buildOjectPromise(link).then (ans) =>
-        @__linkedData[link] = ans
+    $buildOject: (link, options, obj) ->
+      url = if obj.templated then new UriTemplate(obj.href).fillFromObject(options || {}) else obj.href
+
+      return @__linkedData[url] if @__linkedData[url]
+      @$buildOjectPromise(link, options, obj).then (ans) =>
+        @__linkedData[url] = ans
         # re-set it again with a digest loop - jsut to be sure!
         $timeout () =>
-          @__linkedData[link] = ans
+          @__linkedData[url] = ans
       return null
 
     # build a promise for a linked object
-    $buildOjectPromise: (link) ->
-      return @__linkedPromises[link] if @__linkedPromises[link]
-      prom = $q.defer()
-      @__linkedPromises[link] = prom.promise
+    $buildOjectPromise: (link, options, obj) ->
+      url = if obj.templated then new UriTemplate(obj.href).fillFromObject(options || {}) else obj.href
 
-      @$get(link).then (res) =>
+      return @__linkedPromises[url] if @__linkedPromises[url]
+      prom = $q.defer()
+      @__linkedPromises[url] = prom.promise
+
+      @$get(link, options).then (res) =>
         inj = $injector.get('BB.Service.' + link)
         if inj
           if inj.promise
@@ -109,7 +113,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
           prom.resolve(res)
       , (err) -> prom.reject(err)
 
-      @__linkedPromises[link]
+      @__linkedPromises[url]
 
 
     get: (ikey) ->
