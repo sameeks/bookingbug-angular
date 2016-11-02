@@ -199,12 +199,30 @@ angular.module('BB.Services').factory 'ErrorService', ($translate) ->
     {
       key: 'NOT_BOOKABLE_PERSON'
       type: 'warning'
-      persist: false,
+      persist: false
     },
     {
       key: 'NOT_BOOKABLE_RESOURCE'
       type: 'warning'
       persist: false
+    },
+    {
+      key: 'COUPON_APPLY_FAILED'
+      type: 'warning'
+      title: ''
+      persist: true
+    },
+    {
+      key: 'DEAL_APPLY_FAILED'
+      type: 'warning'
+      title: ''
+      persist: true
+    },
+    {
+      key: 'DEAL_REMOVE_FAILED'
+      type: 'warning'
+      title: ''
+      persist: true
     }
   ]
 

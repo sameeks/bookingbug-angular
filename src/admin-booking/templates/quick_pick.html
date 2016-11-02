@@ -56,7 +56,7 @@
           </p>
         </div>
         <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
-          <label><span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_WHOLE_DAY"></span> &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" translate-attr-on-label="ADMIN_BOOKING.QUICK_PICK.YES" translate-attr-off-label="ADMIN_BOOKING.QUICK_PICK.NO"></toggle-switch></label>
+          <label><span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_WHOLE_DAY"></span> &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" on-label="{{ 'ADMIN_BOOKING.QUICK_PICK.YES' | translate }}"  off-label="{{ 'ADMIN_BOOKING.QUICK_PICK.NO' | translate }}"></toggle-switch></label>
         </div>
         <div class="row" ng-hide="blockWholeDay">
           <div class="col-md-6">

@@ -9,8 +9,5 @@ angular.module('BBAdminServices', [
   'ui.calendar',
 ])
 
-angular.module('BBAdminServices').config ($logProvider) ->
-  $logProvider.debugEnabled(true)
-
 angular.module('BBAdminServicesMockE2E', ['BBAdminServices', 'BBAdminMockE2E'])
 

@@ -1,24 +1,15 @@
 'use strict'
 
-angular.module('BBAdminDashboard.login.controllers', [])
-angular.module('BBAdminDashboard.login.services', [])
-angular.module('BBAdminDashboard.login.directives', [])
-angular.module('BBAdminDashboard.login.translations', [])
+angular.module('BBAdminDashboard.login').run (RuntimeStates, AdminLoginOptions) ->
+  'ngInject'
 
-angular.module('BBAdminDashboard.login', [
-  'BBAdminDashboard.login.controllers',
-  'BBAdminDashboard.login.services',
-  'BBAdminDashboard.login.directives',
-  'BBAdminDashboard.login.translations'
-])
-.run ['RuntimeStates', 'AdminLoginOptions', (RuntimeStates, AdminLoginOptions) ->
   # Choose to opt out of the default routing
   if AdminLoginOptions.use_default_states
     RuntimeStates
-      .state 'login',
-        url: "/login"
-        resolve:
-         user: ($q, BBModel, AdminSsoLogin) ->
+    .state 'login',
+      url: "/login"
+      resolve:
+        user: ($q, BBModel, AdminSsoLogin) ->
           defer = $q.defer()
           BBModel.Admin.Login.$user().then (user) ->
             if user
@@ -35,6 +26,7 @@ angular.module('BBAdminDashboard.login', [
           , (err) ->
             defer.reject({reason: 'LOGIN_SERVICE_ERROR', error: err})
           defer.promise
-        controller: "LoginPageCtrl"
-        templateUrl: "login/index.html"
-]
+      controller: "LoginPageCtrl"
+      templateUrl: "login/index.html"
+
+  return
