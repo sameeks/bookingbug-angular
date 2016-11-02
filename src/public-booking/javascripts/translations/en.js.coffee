@@ -49,6 +49,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         NOT_BOOKABLE_PERSON: "Sorry, this person does not offer this service, please select another"
         NOT_BOOKABLE_RESOURCE: "Sorry, resource does not offer this service, pelase select another"
         SPEND_AT_LEAST: "You need to spend at least {{min_spend | pretty_price}} to make a booking."
+        COUPON_APPLY_FAILED: "Sorry, your coupon could not be applied. Please try again."
+        DEAL_APPLY_FAILED: "Sorry, your deal code could not be applied. Please try again."
+        DEAL_REMOVE_FAILED: "Sorry, we were unable to remove that deal. Please try again."
       }
       ITEM_DETAILS: {
         MOVE_BOOKING_SUCCESS_MSG: "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
