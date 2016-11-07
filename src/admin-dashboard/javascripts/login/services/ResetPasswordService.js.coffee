@@ -10,9 +10,10 @@
 ###
 angular.module('BBAdminDashboard.login.services').factory 'ResetPasswordService', ($q, $rootScope, $http) ->
 
-  query: (body) ->
+  query: (email) ->
     deferred = $q.defer()
-    body = {"email": "admin2@bookingbug.com", "path": "path/to/reset/password/page"}
+    # body = {"email": "admin2@bookingbug.com", "path": "path/to/reset/password/page"}
+    body = {"email": email, "path": "path/to/reset/password/page"}
     # Development Test url
     url = "http://7fb3e640.ngrok.io/api/v1/login/admin/reset_password_email"
     # Production url

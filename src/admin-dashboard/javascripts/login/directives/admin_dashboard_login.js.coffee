@@ -155,7 +155,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
       $scope.sendPasswordReset = (email) ->
         $scope.template_vars.show_loading = true
         console.log email
-        ResetPasswordService.query().then (response) ->
+        ResetPasswordService.query(email).then (response) ->
           console.log "response: ", response
           $scope.template_vars.show_reset_password = false
           $scope.template_vars.show_loading = false
