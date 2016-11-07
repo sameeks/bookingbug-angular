@@ -16,6 +16,15 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, $bbug,
       @min_cancellation_time = moment(@min_cancellation_time)
       @min_cancellation_hours = @datetime.diff(@min_cancellation_time, 'hours')
 
+    icalLink: ->
+      @_data.$href('ical')
+
+    webcalLink: ->
+      @_data.$href('ical')
+
+    gcalLink: ->
+      @_data.$href('gcal')
+
     getGroup: () ->
       return @group if @group
       if @_data.$has('event_groups')

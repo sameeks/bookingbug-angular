@@ -1,6 +1,6 @@
 'use strict'
 
-queueapp = angular.module('BBQueue', [
+angular.module('BBQueue', [
   'BB',
   'BBAdmin.Services',
   'BBAdmin.Directives',
@@ -25,9 +25,5 @@ angular.module('BBQueue.Services', [
 
 angular.module('BBQueueMockE2E', ['BBQueue', 'BBAdminMockE2E'])
 
-angular.module('BBQueue.Services').run () ->
-  models = ['Queuer', 'ClientQueue']
-  for model in models
-    BBModel['Admin'][model] = $injector.get("Admin#{model}Model")
-  BBModel['Admin']['Person'] = $injector.get("AdminQueuerPersonModel")
+
 

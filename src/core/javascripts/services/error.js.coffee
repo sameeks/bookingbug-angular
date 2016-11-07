@@ -275,6 +275,27 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
       title: '',
       persist: false,
       msg: "Sorry, resource does not offer this service, pelase select another"
+    },
+    {
+      key: 'COUPON_APPLY_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, your coupon could not be applied. Please try again.'
+    },
+    {
+      key: 'DEAL_APPLY_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, your deal code could not be applied. Please try again.'
+    },
+    {
+      key: 'DEAL_REMOVE_FAILED',
+      type: 'warning',
+      title: '',
+      persist: true,
+      msg: 'Sorry, we were unable to remove that deal. Please try again.'
     }
   ]
 

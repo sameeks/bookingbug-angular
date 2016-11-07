@@ -236,10 +236,9 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
     if amount > 0
       $element.removeClass('subtract')
       $element.addClass('add')
-    $scope.selected_day = moment($scope.selected_date)
     switch type
       when 'days'
-        setTimeRange($scope.selected_day.add(amount, 'days'))
+        setTimeRange($scope.start_date.add(amount, 'days'))
       when 'weeks'
         $scope.start_date.add(amount, type)
         setTimeRange($scope.start_date)
