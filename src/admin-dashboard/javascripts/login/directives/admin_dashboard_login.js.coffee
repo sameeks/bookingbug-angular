@@ -148,6 +148,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
 
       $scope.goBackToLogin = () ->
         $scope.template_vars.show_reset_password = false
+        $scope.template_vars.show_reset_password_success = false
+        $scope.template_vars.show_reset_password_fail = false
         $scope.login_template = 'login/admin-dashboard-login.html'
 
       $scope.sendPasswordReset = (email) ->
@@ -155,14 +157,14 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         console.log email
         ResetPasswordService.query().then (response) ->
           console.log "response: ", response
+          $scope.template_vars.show_reset_password = false
           $scope.template_vars.show_loading = false
-          success = {message: "Thanks for resetting your password. You will receive an email shortly with instructions to complete this process."}
-          $scope.formErrors.push(success)
+          $scope.template_vars.show_reset_password_success = true
         , (err) ->
           console.log "Error: ", err
+          $scope.template_vars.show_reset_password = false
           $scope.template_vars.show_loading = false
-          error = {message: "Sorry we couldn't update your password successfully. Please try again or contact our support team."}
-          $scope.formErrors.push(error)
+          $scope.template_vars.show_reset_password_fail = true
 
       $scope.pickCompany = ()->
         $scope.template_vars.show_loading = true
