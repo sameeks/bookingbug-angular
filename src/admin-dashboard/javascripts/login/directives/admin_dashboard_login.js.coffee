@@ -22,8 +22,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
       bb: '='
       user: '=?'
     }
-    templateUrl: 'login/admin-dashboard-login.html'
-    controller: ['$scope', '$rootScope', 'BBModel', '$q', '$localStorage', 'AdminLoginOptions', ($scope, $rootScope, BBModel, $q, $localStorage, AdminLoginOptions)->
+    template: '<div ng-include="login_template"></div>'
+    controller: ['$scope', '$rootScope', 'BBModel', '$q', '$localStorage', 'AdminLoginOptions', 'ResetPasswordService', ($scope, $rootScope, BBModel, $q, $localStorage, AdminLoginOptions, ResetPasswordService)->
       $scope.template_vars =
         show_api_field: AdminLoginOptions.show_api_field
         show_login: true
@@ -37,6 +37,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         selected_admin: null
         selected_company: null
         site: $localStorage.getItem("api_url")
+
+      $scope.login_template = 'login/admin-dashboard-login.html'
 
       $scope.formErrors = []
 
@@ -139,6 +141,28 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             $scope.template_vars.show_loading = false
             message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_INCORRECT_CREDS"
             $scope.formErrors.push { message: message } if !formErrorExists message
+
+      $scope.resetPassword = () ->
+        $scope.template_vars.show_reset_password = true
+        $scope.login_template = 'login/reset-password.html'
+
+      $scope.goBackToLogin = () ->
+        $scope.template_vars.show_reset_password = false
+        $scope.login_template = 'login/admin-dashboard-login.html'
+
+      $scope.sendPasswordReset = (email) ->
+        $scope.template_vars.show_loading = true
+        console.log email
+        ResetPasswordService.query().then (response) ->
+          console.log "response: ", response
+          $scope.template_vars.show_loading = false
+          success = {message: "Thanks for resetting your password. You will receive an email shortly with instructions to complete this process."}
+          $scope.formErrors.push(success)
+        , (err) ->
+          console.log "Error: ", err
+          $scope.template_vars.show_loading = false
+          error = {message: "Sorry we couldn't update your password successfully. Please try again or contact our support team."}
+          $scope.formErrors.push(error)
 
       $scope.pickCompany = ()->
         $scope.template_vars.show_loading = true
