@@ -109,9 +109,9 @@ angular.module('BB.Filters').filter 'currency', ($filter) ->
   (number, currencyCode) =>
     return $filter('icurrency')(number, currencyCode)
 
-angular.module('BB.Filters').filter 'icurrency', ($window, SettingsService) ->
+angular.module('BB.Filters').filter 'icurrency', ($window, CompanyStoreService) ->
   (number, currencyCode) =>
-    currencyCode ||= SettingsService.getCurrency()
+    currencyCode ||= CompanyStoreService.currency_code
     currency = {
       USD: "$",
       GBP: "£",
@@ -145,7 +145,7 @@ angular.module('BB.Filters').filter 'pretty_price', ($filter) ->
     return $filter('ipretty_price')(price, symbol)
 
 
-angular.module('BB.Filters').filter 'ipretty_price', ($window, SettingsService) ->
+angular.module('BB.Filters').filter 'ipretty_price', ($window, CompanyStoreService) ->
   (price, symbol) ->
     if !symbol
       currency = {
@@ -156,7 +156,7 @@ angular.module('BB.Filters').filter 'ipretty_price', ($window, SettingsService) 
         CAD: "$",
         MIXED: "~"
       }
-      symbol = currency[SettingsService.getCurrency()]
+      symbol = currency[CompanyStoreService.currency_code]
 
     price /= 100.0
 
@@ -268,12 +268,12 @@ angular.module('BB.Filters').filter 'exclude_days', ->
       excluded.indexOf(day.date.format('dddd')) == -1
 
 # format number as local number
-angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, ValidatorService) ->
+angular.module('BB.Filters').filter 'local_phone_number', (CompanyStoreService, ValidatorService) ->
   (phone_number) ->
 
     return if !phone_number
 
-    cc = SettingsService.getCountryCode()
+    cc = CompanyStoreService.country_code
 
     switch cc
       when "gb" then return phone_number.replace(/^(\+44 \(0\)|\S{0})/, '0')
@@ -283,7 +283,7 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
 
 # Checks if a format (option) is set if not checks the country and provides a default.
 # Additionally you can pass in date, time or datetime
-angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
+angular.module('BB.Filters').filter 'datetime', (GeneralOptions, CompanyStoreService) ->
 
   hardcoded_formats =
     datetime:
@@ -298,12 +298,12 @@ angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
 
   (date, format="LLL", show_time_zone=false) ->
     if hardcoded_formats[format]
-      cc = if SettingsService.getCountryCode() is 'us' then 'us' else 'uk'
+      cc = if CompanyStoreService.country_code is 'us' then 'us' else 'uk'
       format = hardcoded_formats[format][cc]
 
     if date and moment.isMoment(date)
       new_date = date.clone()
-      new_date.tz(SettingsService.getDisplayTimeZone())
+      new_date.tz(GeneralOptions.display_time_zone)
       format += ' zz' if show_time_zone
       return new_date.format(format)
 

@@ -22,7 +22,7 @@
 
 
 angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
-  AlertService, SettingsService, BBModel, $q, $bbug) ->
+  AlertService, CompanyStoreService, BBModel, $q, $bbug) ->
 
   # Use http://regex101.com/ to test patterns
 
@@ -120,7 +120,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
 
 
   getMailingPattern: () ->
-    cc = SettingsService.getCountryCode()
+    cc = CompanyStoreService.country_code
     if cc = "us"
       return us_postcode_regex
     else

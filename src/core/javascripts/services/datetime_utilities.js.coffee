@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsService) ->
+angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOptions, CompanyStoreService) ->
 
   checkPerson = (basket_item, item_defaults) ->
     return (basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person) or item_defaults.merge_people
@@ -13,8 +13,9 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (SettingsServi
   convertTimeSlotToMoment: (date, time_slot) ->
     return unless date and moment.isMoment(date) and time_slot
     datetime = moment()
-    if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()
-      datetime = datetime.tz(SettingsService.getTimeZone())
+    # if user timezone different than company timezone
+    if GeneralOptions.display_time_zone != CompanyStoreService.time_zone
+      datetime = datetime.tz(CompanyStoreService.time_zone)
     val = parseInt(time_slot.time)
     hours = parseInt(val / 60)
     mins = val % 60

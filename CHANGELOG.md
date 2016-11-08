@@ -3,6 +3,22 @@ All notable changes to this project will be documented in this file using [CHANG
 
 ## [Unreleased]
 
+## [2.1.0] - 2016-11-08
+###Added
+- New CompanyStoreService has been created to share company data around, e.g country_code and currency_code
+### Changed
+- BREAKING: Replaced SettingsService with (new) CompanyStoreService and (the existing) GeneralOptions provider. 
+  The following initilisation options from bbWiget have been moved to be configurable options in GeneralOptions:
+    - scroll_offset
+    - update_document_title
+    - use_local_time_zone - if set to true display_time_zone will be set using moment.guess() 
+    - use_i18n
+  Use your projects config block to set them:
+
+```
+    angular.module('demo').config (GeneralOptionsProvider) ->
+      GeneralOptionsProvider.setOption('use_local_time_zone', true)
+```
 
 ## [2.0.26] - 2016-09-26
 ### Changed

@@ -52,7 +52,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, 
 
 angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope,
   PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService,
-  $uibModal, $document, $translate, SettingsService, PurchaseService, LoadingService) ->
+  $uibModal, $document, $translate, GeneralOptions, PurchaseService, LoadingService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
   loader = LoadingService.$loader($scope)
@@ -289,7 +289,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
   $scope.showMoveMessage = (datetime) ->
     # TODO remove whem translate enabled by default
-    if SettingsService.isInternationalizatonEnabled()
+    if GeneralOptions.use_i18n 
       $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
         AlertService.add("info", { msg: translated_text })
     else

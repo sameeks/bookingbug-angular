@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB').run ($bbug, DebugUtilsService, FormDataStoreService, $log, $rootScope, $sessionStorage) ->
+angular.module('BB').run ($bbug, DebugUtilsService, FormDataStoreService, $log, $rootScope, $sessionStorage, GeneralOptions) ->
   'ngInject'
 
   $rootScope.$log = $log
@@ -14,5 +14,8 @@ angular.module('BB').run ($bbug, DebugUtilsService, FormDataStoreService, $log, 
     document.createElement('nav')
     document.createElement('section')
     document.createElement('footer')
+
+  if GeneralOptions.use_local_time_zone
+    GeneralOptions.display_time_zone = moment.tz.guess()
 
   return

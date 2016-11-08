@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
-  SettingsService, DateTimeUtilitiesService) ->
+  GeneralOptions, CompanyStoreService, DateTimeUtilitiesService) ->
 
   query: (prms) ->
 
@@ -23,18 +23,22 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
     start_date = prms.start_date
     end_date   = prms.end_date if prms.end_date
 
-    # Adjust time range based on UTC offset between company time zone and display time zone
-    if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()
+    display_time_zone = GeneralOptions.display_time_zone
+    company_time_zone = CompanyStoreService.time_zone
 
-      display_utc_offset = moment().tz(SettingsService.getDisplayTimeZone()).utcOffset()
-      company_utc_offset = moment().tz(SettingsService.getTimeZone()).utcOffset()
+
+    # Adjust time range based on UTC offset between company time zone and display time zone
+    if display_time_zone? and display_time_zone != company_time_zone 
+
+      display_utc_offset = moment().tz(display_time_zone).utcOffset()
+      company_utc_offset = moment().tz(company_time_zone).utcOffset()
 
       if company_utc_offset < display_utc_offset
         start_date = prms.start_date.clone().subtract(1, 'day')
       else if company_utc_offset > display_utc_offset and prms.end_date
         end_date = prms.end_date.clone().add(1, 'day')
 
-      prms.time_zone = SettingsService.getDisplayTimeZone()
+      prms.time_zone = display_time_zone
 
     # If there was no duration passed in get the default duration off the
     # current item

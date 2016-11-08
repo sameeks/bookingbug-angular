@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
+angular.module('BB.Services').factory 'ErrorService', (GeneralOptions) ->
 
   alerts = [
     {
@@ -302,7 +302,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
   getError: (key) ->
     error = _.findWhere(alerts, {key: key})
     error.persist = true
-    translate = SettingsService.isInternationalizatonEnabled()
+    translate = GeneralOptions.use_i18n
     # if i18n enabled, return the translation key
     if error and translate
       return {msg: "ERROR.#{key}"}
@@ -318,7 +318,7 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
 
   getAlert: (key) ->
     alert = _.findWhere(alerts, {key: key})
-    translate = SettingsService.isInternationalizatonEnabled()
+    translate = GeneralOptions.use_i18n
     # if i18n enabled, return the translation key
     if alert and translate
       return {msg: "ALERT.#{key}"}
