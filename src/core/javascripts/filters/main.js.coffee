@@ -306,15 +306,42 @@ angular.module('BB.Filters').filter 'exclude_days', ->
     _.filter days, (day) ->
       excluded.indexOf(day.date.format('dddd')) == -1
 
-# format number as local number
+###
+ * @ngdoc filter
+ * @name local_phone_number
+ * @kind function
+ *
+ * @description
+ * Formats a phone number using provided country code. If no country code is passed in, the country of the current company is used.
+ *
+ * @param {string} phone_number The phone number to format
+ * @param {string} country_code (Optional) The country code in Alpha-2 ISO-3166 format
+ * @returns {string} Formatted phone number
+ *
+ *
+ * @example
+   <example module="localPhoneNumberExample">
+     <file name="index.html">
+       <script>
+         angular.module('localPhoneNumberExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.number = "+44 7877 123456";
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Phone Number: {{number | local_phone_number}}</span>
+       </div>
+     </file>
+   </example>
+###
 angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, ValidatorService) ->
-  (phone_number) ->
+  (phone_number, country_code) ->
 
     return if !phone_number
 
-    cc = SettingsService.getCountryCode()
+    country_code ||= SettingsService.getCountryCode()
 
-    switch cc
+    switch country_code
       when "gb" then return phone_number.replace(/^(\+44 \(0\)|\S{0})/, '0')
       when "us" then return phone_number.replace(ValidatorService.us_phone_number, "($1) $2 $3")
       else
