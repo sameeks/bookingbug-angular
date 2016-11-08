@@ -40,7 +40,7 @@ angular.module('BB.Directives').directive 'bbMap', () ->
   scope : true
   controller : 'MapCtrl'
 
-angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, SettingsService) ->
+angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, bbLocale) ->
 
   $scope.controller = "public.controllers.MapCtrl"
 
@@ -60,8 +60,8 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
   $scope.filter_by_service = $scope.options.filter_by_service or false # The aforementioned checkbox is bound to this value which can be true or false depending on checked state, hence why we cannot use filter_by_service to show/hide the checkbox
   $scope.default_zoom = $scope.options.default_zoom or 6
 
-  cc = SettingsService.getCountryCode()
-  $scope.distance_unit = if _.contains(["gb", "us", "jp"], cc) then "miles" else "km"
+  locale = bbLocale.getLocale()
+  if locale.match(/^(en|en-gb|en-us)$/gi) then "miles" else "km"
 
   map_ready_def               = $q.defer()
   $scope.mapLoaded            = $q.defer()
