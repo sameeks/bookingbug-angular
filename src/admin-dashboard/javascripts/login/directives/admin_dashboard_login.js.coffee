@@ -142,7 +142,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_INCORRECT_CREDS"
             $scope.formErrors.push { message: message } if !formErrorExists message
 
-      $scope.resetPassword = () ->
+      $scope.goToResetPassword = () ->
         $scope.template_vars.show_reset_password = true
         $scope.login_template = 'login/reset-password.html'
 
@@ -152,10 +152,10 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         $scope.template_vars.show_reset_password_fail = false
         $scope.login_template = 'login/admin-dashboard-login.html'
 
-      $scope.sendPasswordReset = (email) ->
+      $scope.sendResetPassword = (email) ->
         $scope.template_vars.show_loading = true
         console.log email
-        ResetPasswordService.query(email).then (response) ->
+        ResetPasswordService.postRequest(email).then (response) ->
           console.log "response: ", response
           $scope.template_vars.show_reset_password = false
           $scope.template_vars.show_loading = false

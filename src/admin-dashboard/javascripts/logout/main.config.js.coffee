@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BBAdminDashboard.logout').config ($stateProvider, $urlRouterProvider) ->
+angular.module('BBAdminDashboard.logout').config ($stateProvider) ->
   'ngInject'
 
   $stateProvider

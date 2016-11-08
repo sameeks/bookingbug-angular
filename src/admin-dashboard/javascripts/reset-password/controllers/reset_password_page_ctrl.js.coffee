@@ -16,10 +16,10 @@ angular.module('BBAdminDashboard.reset-password.controllers')
   #   AdminSsoLogin.ssoToken = null
   #   AdminSsoLogin.companyId = null
 
-  #   $state.go 'reset-password', {}, {reload: true}
+  #   $state.go 'login', {}, {reload: true}
 
   #   return
-  console.log "I am the controller"
+
   ResetPasswordSchemaFormService.getSchemaForm().then (response) ->
     console.log "response.data.schema :", response.data.schema
     console.log "response.data.form :", response.data.form
@@ -31,5 +31,11 @@ angular.module('BBAdminDashboard.reset-password.controllers')
     $scope.model = {}
   , (err) ->
     console.log "Error: ", err
+
+  $scope.submitSchemaForm = (model) ->
+    ResetPasswordSchemaFormService.postSchemaForm(model.password).then (response) ->
+      console.log "response from POST :", response
+    , (err) ->
+      console.log "Error: ", err
 
   return

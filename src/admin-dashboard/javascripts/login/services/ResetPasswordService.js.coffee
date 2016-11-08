@@ -8,16 +8,19 @@
 * This service enables the user to send a request to reset he's password
 *
 ###
-angular.module('BBAdminDashboard.login.services').factory 'ResetPasswordService', ($q, $rootScope, $http) ->
+angular.module('BBAdminDashboard.login.services').factory 'ResetPasswordService', ($q, ResetPasswordApiURL, $window, $http) ->
 
-  query: (email) ->
+  postRequest: (email) ->
     deferred = $q.defer()
-    # body = {"email": "admin2@bookingbug.com", "path": "path/to/reset/password/page"}
-    body = {"email": email, "path": "path/to/reset/password/page"}
+
     # Development Test url
-    url = "http://7fb3e640.ngrok.io/api/v1/login/admin/reset_password_email"
+    url = ResetPasswordApiURL + "api/v1/login/admin/reset_password_email"
     # Production url
     # url = ""
+
+    path = $window.location.pathname + '#/reset-password'
+
+    body = {"email": email, "path": path}
 
     $http.post(url, body).then (response) =>
       deferred.resolve(response)
