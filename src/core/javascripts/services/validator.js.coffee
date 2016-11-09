@@ -12,7 +12,8 @@
 *
 ###
 
-angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, SettingsService, BBModel, $q, $bbug) ->
+
+angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, CompanyStoreService, BBModel, $q, $bbug) ->
 
   # Use http://regex101.com/ to test patterns
 
@@ -113,7 +114,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   ###
   # We use the country code in favour of the locale given that it's more likley that a user will reside in the same place as the business
   getMailingPattern: () ->
-    cc = SettingsService.getCountryCode()
+    cc = CompanyStoreService.country_code
     switch cc
       when "us" then return us_postcode_regex
       when "gb" then return uk_postcode_regex_lenient

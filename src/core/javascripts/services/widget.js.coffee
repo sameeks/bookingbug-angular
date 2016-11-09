@@ -20,7 +20,7 @@
 
 # This class contrains handy functions and variables used in building and displaying a booking widget
 
-angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope, PathHelper, SettingsService) ->
+angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $urlMatcherFactory, $location, BreadcrumbService, $window, $rootScope, PathHelper, GeneralOptions) ->
 
 
   class Widget
@@ -185,7 +185,7 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     recordCurrentPage: () =>
 
       setDocumentTitle = (title) ->
-        document.title = title if SettingsService.update_document_title and title
+        document.title = title if GeneralOptions.update_document_title and title
 
       if !@current_step
         @current_step = 0

@@ -120,8 +120,8 @@ angular.module('BB.Filters').filter 'distance', ($translate) ->
  *
  * @param {integer} amount Input amount to format
  * @param {string} currency_code Optional currency symbol
- * @param {boolean} pretty_price Set to true to omit decimal places when price is whole. Default is false
- * @returns {string} Humanized duration.
+ * @param {boolean} pretty_price Use to omit decimal places when price is whole. Default is false
+ * @returns {string} Formatted currency.
  *
  *
  * @example
@@ -139,14 +139,14 @@ angular.module('BB.Filters').filter 'distance', ($translate) ->
      </file>
    </example>
 ###
-angular.module('BB.Filters').filter 'currency', ($window, $rootScope, SettingsService, $translate) ->
+angular.module('BB.Filters').filter 'currency', ($window, $rootScope, CompanyStoreService, $translate) ->
   (amount, currency_code, pretty_price=false) ->
 
     return unless angular.isNumber(amount)
 
     currency_codes = {USD: "$", GBP: "£", AUD: "$", EUR: "€", CAD: "$", MIXED: "~", RUB: "₽"}
 
-    currency_code ||= SettingsService.getCurrency()
+    currency_code ||= CompanyStoreService.currency_code
 
     format = $translate.instant(['CORE.FILTERS.CURRENCY.THOUSANDS_SEPARATOR', 'CORE.FILTERS.CURRENCY.DECIMAL_SEPARATOR', 'CORE.FILTERS.CURRENCY.CURRENCY_FORMAT'])
     
@@ -334,12 +334,12 @@ angular.module('BB.Filters').filter 'exclude_days', ->
      </file>
    </example>
 ###
-angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, ValidatorService) ->
+angular.module('BB.Filters').filter 'local_phone_number', (CompanyStoreService, ValidatorService) ->
   (phone_number, country_code) ->
 
     return if !phone_number
 
-    country_code ||= SettingsService.getCountryCode()
+    country_code ||= CompanyStoreService.country_code
 
     switch country_code
       when "gb" then return phone_number.replace(/^(\+44 \(0\)|\S{0})/, '0')
@@ -376,13 +376,13 @@ angular.module('BB.Filters').filter 'local_phone_number', (SettingsService, Vali
      </file>
    </example>
 ###
-angular.module('BB.Filters').filter 'datetime', (SettingsService) ->
+angular.module('BB.Filters').filter 'datetime', (GeneralOptions) ->
   (date, format="LLL", show_time_zone=false) ->
 
     return if !date or (date and !moment(date).isValid())
    
     new_date = moment(date) 
-    new_date.tz(SettingsService.getDisplayTimeZone())
+    new_date.tz(GeneralOptions.display_time_zone)
     format += ' zz' if show_time_zone
 
     return new_date.format(format)

@@ -23,7 +23,7 @@
 
 
 angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout,
-  $sce, $http, $compile, $document, $location, SettingsService) ->
+  $sce, $http, $compile, $document, $location, GeneralOptions) ->
 
 
   ###**
@@ -91,7 +91,7 @@ angular.module('BB.Directives').directive 'bbPayForm', ($window, $timeout,
               scope.referrer = data.message
               applyCustomPartials(event.data.custom_partial_url, scope, element) if data.custom_partial_url
               applyCustomStylesheet(data.custom_stylesheet) if data.custom_stylesheet
-              SettingsService.setScrollOffset(data.scroll_offset) if data.scroll_offset
+              GeneralOptions.scroll_offset = data.scroll_offset if data.scroll_offset
     , false
 
   return {

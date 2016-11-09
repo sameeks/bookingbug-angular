@@ -65,7 +65,7 @@ angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
 
 # bbScrollTo
 # Allows you to scroll to a specific element
-angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, SettingsService) ->
+angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, GeneralOptions) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
@@ -95,10 +95,10 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
         if (evnt == "page:loaded" and current_step > 1) or always_scroll or (evnt == "widget:restart") or
           (not scroll_to_element.is(':visible') and scroll_to_element.offset().top != 0)
             if 'parentIFrame' of $window
-              parentIFrame.scrollToOffset(0, scroll_to_element.offset().top - SettingsService.getScrollOffset())
+              parentIFrame.scrollToOffset(0, scroll_to_element.offset().top - GeneralOptions.scroll_offset)
             else
               $bbug("html, body").animate
-                scrollTop: scroll_to_element.offset().top - SettingsService.getScrollOffset()
+                scrollTop: scroll_to_element.offset().top - GeneralOptions.scroll_offset
                 , bb_transition_time
 
 
@@ -134,7 +134,7 @@ angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
 * <form name="example_form" bb-form></form>
 *
 ####
-angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsService, ValidatorService, $timeout) ->
+angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, ValidatorService, $timeout, GeneralOptions) ->
   restrict: 'A'
   require: '^form'
   scope: true
@@ -163,10 +163,10 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, SettingsSer
         if invalid_form_group and invalid_form_group.length > 0 and !scope.form.raise_alerts
 
           if 'parentIFrame' of $window
-            parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - SettingsService.getScrollOffset())
+            parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - GeneralOptions.scroll_offset)
           else
             $bbug("html, body").animate
-              scrollTop: invalid_form_group.offset().top - SettingsService.getScrollOffset()
+              scrollTop: invalid_form_group.offset().top - GeneralOptions.scroll_offset
               , 1000
 
           invalid_input = invalid_form_group.find('.ng-invalid')
@@ -314,11 +314,12 @@ angular.module('BB.Directives').directive 'bbCapacityView', () ->
 * @example_result
 * <span bb-time-zone ng-show="is_time_zone_diff">All times are shown in British Summer Time.</span>
 ####
-angular.module('BB.Directives').directive 'bbTimeZone', (SettingsService) ->
+angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions, CompanyStoreService) ->
   restrict: 'A'
   link: (scope, el, attrs) ->
-    company_time_zone = SettingsService.getTimeZone()
+    company_time_zone = CompanyStoreService.time_zone
     scope.time_zone_name = moment().tz(company_time_zone).format('zz')
-    if !SettingsService.getUseLocalTimeZone() and moment.tz.guess() != company_time_zone
-      scope.is_time_zone_diff = true
+    #  if not using local time zone and user time zone is not same as companies
+    if !GeneralOptions.use_local_time_zone and GeneralOptions.display_time_zone != company_time_zone
+      scope.is_time_zone_diff = true 
 

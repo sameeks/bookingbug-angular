@@ -52,7 +52,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, 
 
 angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope,
   PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService,
-  $uibModal, $document, $translate, SettingsService, PurchaseService, LoadingService) ->
+  $uibModal, $document, $translate, GeneralOptions, PurchaseService, LoadingService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
   loader = LoadingService.$loader($scope)

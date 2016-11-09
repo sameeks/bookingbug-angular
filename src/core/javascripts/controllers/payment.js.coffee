@@ -21,7 +21,7 @@
 
 
 angular.module('BB.Directives').directive 'bbPayment', ($window, $location,
-  $sce, SettingsService, AlertService) ->
+  $sce, GeneralOptions, AlertService) ->
 
   restrict: 'AE'
   replace: true
@@ -55,7 +55,7 @@ angular.module('BB.Directives').directive 'bbPayment', ($window, $location,
         'message': referrer,
         'custom_partial_url': scope.bb.custom_partial_url,
         'custom_stylesheet' : custom_stylesheet,
-        'scroll_offset'     : SettingsService.getScrollOffset()
+        'scroll_offset'     : GeneralOptions.scroll_offset
       })
 
       element.find('iframe')[0].contentWindow.postMessage(payload, origin)
