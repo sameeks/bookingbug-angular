@@ -66,7 +66,11 @@ angular.module('BBAdminDashboard.reset-password.controllers')
 # ---------------------------------------
 
 
-  ResetPasswordSchemaFormService.getSchemaForm().then (response) ->
+  # temporary local test url
+  BaseURL = "http://7fb3e640.ngrok.io/"
+  # BaseURL = "#{$scope.bb.api_url}"
+
+  ResetPasswordSchemaFormService.getSchemaForm(BaseURL).then (response) ->
     console.log "response.data.schema :", response.data.schema
     console.log "response.data.form :", response.data.form
 
@@ -81,7 +85,7 @@ angular.module('BBAdminDashboard.reset-password.controllers')
   , (err) ->
     console.log "Error: ", err
 
-  $scope.submitSchemaForm = (form) ->
+  $scope.submitSchemaForm = (form, BaseURL) ->
     console.log form
     # First we broadcast an event so all fields validate themselves
     $scope.$broadcast('schemaFormValidate')

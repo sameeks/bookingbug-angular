@@ -8,13 +8,13 @@
 * This service enables the user to send a request to reset he's password
 *
 ###
-angular.module('BBAdminDashboard.login.services').factory 'ResetPasswordService', ($q, ResetPasswordApiURL, $window, $http) ->
+angular.module('BBAdminDashboard.login.services').factory 'ResetPasswordService', ($q, $window, $http) ->
 
-  postRequest: (email) ->
+  postRequest: (email, BaseURL) ->
     deferred = $q.defer()
 
     # Development Test url
-    url = ResetPasswordApiURL + "api/v1/login/admin/reset_password_email"
+    url = BaseURL + "api/v1/login/admin/reset_password_email"
     # Production url
     # url = ""
 

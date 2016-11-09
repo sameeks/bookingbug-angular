@@ -8,11 +8,11 @@
 * This service enables the user to fetch/submit a schema form from/to the server.
 *
 ###
-angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswordSchemaFormService', ($q, ResetPasswordApiURL, QueryStringService, $http) ->
+angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswordSchemaFormService', ($q, QueryStringService, $http) ->
 
-  getSchemaForm: () ->
+  getSchemaForm: (BaseURL) ->
     deferred = $q.defer()
-    src = ResetPasswordApiURL + "api/v1/login/admin/reset_password_schema"
+    src = BaseURL + "api/v1/login/admin/reset_password_schema"
 
     $http.get(src, {}).then (response) ->
       deferred.resolve(response)
@@ -20,9 +20,9 @@ angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswor
       deferred.reject(err)
     deferred.promise
 
-  postSchemaForm: (password) ->
+  postSchemaForm: (password, BaseURL) ->
     deferred = $q.defer()
-    src = ResetPasswordApiURL + "api/v1/login/admin/reset_password"
+    src = BaseURL + "api/v1/login/admin/reset_password"
 
     reset_password_token = QueryStringService('reset_password_token')
 

@@ -157,7 +157,10 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
       $scope.sendResetPassword = (email) ->
         $scope.template_vars.show_loading = true
         console.log email
-        ResetPasswordService.postRequest(email).then (response) ->
+        # temporary local test url
+        BaseURL = "http://7fb3e640.ngrok.io/"
+        # BaseURL = "#{$scope.bb.api_url}"
+        ResetPasswordService.postRequest(email, BaseURL).then (response) ->
           console.log "response: ", response
           $scope.template_vars.show_reset_password = false
           $scope.template_vars.show_loading = false
