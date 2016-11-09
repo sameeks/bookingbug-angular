@@ -27,7 +27,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $compile) ->
+angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $compile, $timeout) ->
   restrict: 'AE'
   replace: true
   scope : true
@@ -35,6 +35,12 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
   transclude: true
   controller : 'TimeRangeList'
   link: (scope, element, attrs, controller, transclude) ->
+    scope.$watch 'selected_slot', ->
+      if scope.bb.current_item.time
+        btn = element[0].parentNode.getElementsByClassName('btn-primary')
+        $timeout () ->
+          btn[0].focus()
+        , 200
 
     # date helpers
     scope.today = moment().toDate()
