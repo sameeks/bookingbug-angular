@@ -143,10 +143,12 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             $scope.formErrors.push { message: message } if !formErrorExists message
 
       $scope.goToResetPassword = () ->
+        $scope.formErrors = []
         $scope.template_vars.show_reset_password = true
         $scope.login_template = 'login/reset-password.html'
 
       $scope.goBackToLogin = () ->
+        $scope.formErrors = []
         $scope.template_vars.show_reset_password = false
         $scope.template_vars.show_reset_password_success = false
         $scope.template_vars.show_reset_password_fail = false
@@ -165,6 +167,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
           $scope.template_vars.show_reset_password = false
           $scope.template_vars.show_loading = false
           $scope.template_vars.show_reset_password_fail = true
+          message = "ADMIN_DASHBOARD.LOGIN_PAGE.FORM_SUBMIT_FAIL_MSG"
+          $scope.formErrors.push { message: message } if !formErrorExists message
 
       $scope.pickCompany = ()->
         $scope.template_vars.show_loading = true
