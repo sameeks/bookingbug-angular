@@ -106,13 +106,13 @@ angular.module('BBAdminDashboard.reset-password.controllers')
     $scope.$broadcast('schemaFormValidate')
 
     # Then we check if the form is valid
-    if form.$valid
-      console.log "form is valid"
+    # if form.$valid
+    #   console.log "form is valid"
 
-    ResetPasswordSchemaFormService.postSchemaForm(model.password).then (response) ->
-      console.log "response from POST :", response
-    , (err) ->
-      console.log "Error: ", err
+    # ResetPasswordSchemaFormService.postSchemaForm(model.password).then (response) ->
+    #   console.log "response from POST :", response
+    # , (err) ->
+    #   console.log "Error: ", err
 
     return
 
