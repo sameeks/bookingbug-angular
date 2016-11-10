@@ -7,6 +7,6 @@ angular.module('BBAdminDashboard.reset-password').config ($stateProvider, $urlRo
   .state 'reset-password',
     url: '/reset-password'
     controller: 'resetPasswordPageCtrl'
-    templateUrl: "reset-password/reset-password-by-token.html"
+    templateUrl: "reset-password/index.html"
 
   return

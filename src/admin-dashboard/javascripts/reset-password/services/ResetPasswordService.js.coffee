@@ -2,13 +2,13 @@
 
 ###
 * @ngdoc service
-* @name BBAdminDashboard.login.services.service:ResetPasswordService
+* @name BBAdminDashboard.reset-password.services.service:ResetPasswordService
 *
 * @description
 * This service enables the user to send a request to reset he's password
 *
 ###
-angular.module('BBAdminDashboard.login.services').factory 'ResetPasswordService', ($q, $window, $http) ->
+angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswordService', ($q, $window, $http) ->
 
   postRequest: (email, BaseURL) ->
     deferred = $q.defer()

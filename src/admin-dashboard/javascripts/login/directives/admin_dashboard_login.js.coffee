@@ -23,7 +23,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
       user: '=?'
     }
     template: '<div ng-include="login_template"></div>'
-    controller: ['$scope', '$rootScope', 'BBModel', '$q', '$localStorage', 'AdminLoginOptions', 'ResetPasswordService', ($scope, $rootScope, BBModel, $q, $localStorage, AdminLoginOptions, ResetPasswordService)->
+    controller: ['$scope', '$rootScope', 'BBModel', '$q', '$localStorage', '$state', 'AdminLoginOptions', ($scope, $rootScope, BBModel, $q, $localStorage, $state, AdminLoginOptions)->
       $scope.template_vars =
         show_api_field: AdminLoginOptions.show_api_field
         show_login: true
@@ -143,35 +143,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             $scope.formErrors.push { message: message } if !formErrorExists message
 
       $scope.goToResetPassword = () ->
-        $scope.formErrors = []
-        $scope.template_vars.show_reset_password = true
-        $scope.login_template = 'login/reset-password.html'
-
-      $scope.goBackToLogin = () ->
-        $scope.formErrors = []
-        $scope.template_vars.show_reset_password = false
-        $scope.template_vars.show_reset_password_success = false
-        $scope.template_vars.show_reset_password_fail = false
-        $scope.login_template = 'login/admin-dashboard-login.html'
-
-      $scope.sendResetPassword = (email) ->
-        $scope.template_vars.show_loading = true
-        console.log email
-        # temporary local test url
-        BaseURL = "http://7fb3e640.ngrok.io/"
-        # BaseURL = "#{$scope.bb.api_url}"
-        ResetPasswordService.postRequest(email, BaseURL).then (response) ->
-          console.log "response: ", response
-          $scope.template_vars.show_reset_password = false
-          $scope.template_vars.show_loading = false
-          $scope.template_vars.show_reset_password_success = true
-        , (err) ->
-          console.log "Error: ", err
-          $scope.template_vars.show_reset_password = false
-          $scope.template_vars.show_loading = false
-          $scope.template_vars.show_reset_password_fail = true
-          message = "ADMIN_DASHBOARD.LOGIN_PAGE.FORM_SUBMIT_FAIL_MSG"
-          $scope.formErrors.push { message: message } if !formErrorExists message
+        $state.go 'reset-password'
 
       $scope.pickCompany = ()->
         $scope.template_vars.show_loading = true
