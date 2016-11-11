@@ -27,6 +27,11 @@ angular.module('BBAdminDashboard.reset-password.controllers')
 
   init = () ->
 
+    if !$scope.BaseURL?
+      $scope.BaseURL = $scope.reset_password_site
+
+    $scope.reset_password_site = angular.copy($scope.bb.api_url)
+
     $scope.template_vars =
       show_api_field: AdminLoginOptions.show_api_field
       show_reset_password: true
@@ -37,19 +42,6 @@ angular.module('BBAdminDashboard.reset-password.controllers')
     $scope.validator = ValidatorService
 
     $scope.formErrors = []
-
-    $scope.reset_password_site = angular.copy($scope.bb.api_url)
-
-    if $scope.bb.api_url? and $scope.bb.api_url != ''
-      $scope.BaseURL = angular.copy($scope.bb.api_url)
-    else if $scope.reset_password_site? and $scope.reset_password_site != ''
-      $scope.BaseURL = angular.copy($scope.reset_password_site)
-    else
-      message = "ADMIN_DASHBOARD.RESET_PASSWORD_PAGE.ERROR_API_MISSING"
-      $scope.formErrors.push { message: message } if !formErrorExists message
-      # temporary local test url
-      $scope.BaseURL = "http://526e0d94.ngrok.io"
-      $scope.reset_password_site = angular.copy($scope.BaseURL)
 
     # decide which template to show
     if QueryStringService('reset_password_token')? and QueryStringService('reset_password_token') != 'undefined' and QueryStringService('reset_password_token') != ''

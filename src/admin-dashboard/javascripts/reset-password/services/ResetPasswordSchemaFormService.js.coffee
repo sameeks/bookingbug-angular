@@ -5,7 +5,7 @@
 * @name BBAdminDashboard.reset-password.services.service:ResetPasswordSchemaFormService
 *
 * @description
-* This service enables the user to fetch/submit a schema form from/to the server.
+* This service enables the user to fetch/submit a schema form from/to the server and also post the new password.
 *
 ###
 angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswordSchemaFormService', ($q, QueryStringService, $http) ->
