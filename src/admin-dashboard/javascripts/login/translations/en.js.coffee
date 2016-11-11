@@ -26,7 +26,8 @@ angular.module('BBAdminDashboard.login.translations')
         'USERNAME'                     : 'Username'
         'ERROR_ISSUE_WITH_COMPANY'     : 'Sorry, there seems to be a problem with the company associated with this account',
         'ERROR_INCORRECT_CREDS'        : 'Sorry, either your email or password was incorrect',
-        'ERROR_ACCOUNT_ISSUES'         : 'Sorry, there seems to be a problem with this account'
+        'ERROR_ACCOUNT_ISSUES'         : 'Sorry, there seems to be a problem with this account',
+        'ERROR_REQUIRED'               : 'This field is required.'
       }
     }
   })

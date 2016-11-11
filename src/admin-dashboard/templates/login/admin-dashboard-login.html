@@ -11,17 +11,32 @@
                     </div>
                     <div class="panel-body">
                         <div uib-alert ng-repeat="alert in formErrors" class="alert-danger" close="formErrors.splice($index, 1)"><span translate="{{alert.message}}"></span></div>
-                        <div class="form-group" ng-show="template_vars.show_api_field" ng-class="{'has-error': loginForm.login.site.$invalid && (!loginForm.login.site.$pristine || loginForm.submitted)}">
+                        <div class="form-group" ng-show="template_vars.show_api_field" ng-class="{'has-error': loginForm.site.$invalid && (!loginForm.site.$pristine || loginForm.submitted)}">
                             <label for="site"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.SITE"></span></label>
                             <input type="text" name="site" ng-model="login.site" ng-required="template_vars.show_api_field" class="form-control" id="site" placeholder="www.bookingbug.com">
+                            <div ng-messages="loginForm.site.$error" ng-show="loginForm.submitted" role="alert">
+                              <div class="error-message" ng-message="required">
+                                <span translate="ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_REQUIRED"></span>
+                              </div>
+                            </div>
                         </div>
-                        <div class="form-group" ng-class="{'has-error': loginForm.login.email.$invalid && (!loginForm.login.email.$pristine || loginForm.submitted)}">
+                        <div class="form-group" ng-class="{'has-error': loginForm.username.$invalid && (!loginForm.username.$pristine || loginForm.submitted)}">
                             <label for="username"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.USERNAME"></span></label>
                             <input type="text" name="username" ng-model="login.email" required="required" class="form-control" id="username">
+                            <div ng-messages="loginForm.username.$error" ng-show="loginForm.submitted" role="alert">
+                              <div class="error-message" ng-message="required">
+                                <span translate="ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_REQUIRED"></span>
+                              </div>
+                            </div>
                         </div>
-                        <div class="form-group" ng-class="{'has-error': loginForm.login.password.$invalid && (!loginForm.login.password.$pristine || loginForm.submitted)}">
+                        <div class="form-group" ng-class="{'has-error': loginForm.password.$invalid && (!loginForm.password.$pristine || loginForm.submitted)}">
                             <label for="password"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.PASSWORD"></span></label>
                             <input type="password" name="password" ng-model="login.password" required="required" class="form-control" id="password">
+                            <div ng-messages="loginForm.password.$error" ng-show="loginForm.submitted" role="alert">
+                              <div class="error-message" ng-message="required">
+                                <span translate="ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_REQUIRED"></span>
+                              </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <a ng-click="goToResetPassword()" ng-disabled="template_vars.show_loading" class="btn btn-link"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.FORGOT_PASSWORD"></span></a>
