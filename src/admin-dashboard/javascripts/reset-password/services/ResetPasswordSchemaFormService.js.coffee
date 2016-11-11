@@ -20,7 +20,7 @@ angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswor
 
   getSchemaForm: (BaseURL) ->
     deferred = $q.defer()
-    src = BaseURL + "api/v1/login/admin/reset_password_schema"
+    src = BaseURL + "/api/v1/login/admin/reset_password_schema"
 
     $http.get(src, {}).then (response) ->
       deferred.resolve(response)
@@ -30,13 +30,13 @@ angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswor
 
   postSchemaForm: (password, BaseURL) ->
     deferred = $q.defer()
-    src = BaseURL + "api/v1/login/admin/reset_password"
+    src = BaseURL + "/api/v1/login/admin/reset_password"
 
     reset_password_token = QueryStringService('reset_password_token')
 
     body = {"password": password, "reset_password_token": reset_password_token}
 
-    $http.post(src, body).then (response) ->
+    $http.put(src, body).then (response) ->
       deferred.resolve(response)
     , (err) =>
       deferred.reject(err)

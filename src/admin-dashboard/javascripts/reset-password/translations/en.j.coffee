@@ -29,6 +29,8 @@ angular.module('BBAdminDashboard.reset-password.translations')
         'FORM_SUBMIT_SUCCESS_MSG'    : 'Thank you for resetting your password. You will receive an email shortly with instructions to complete this process.',
         'NEW_PASSWORD_LABEL'         : 'New Password',
         'PASSWORD'                   : 'Password',
+        'PASSWORD_RESET_SUCCESS'     : 'Password Reset complete',
+        'PASSWORD_RESET_SUCCESS_MSG' : 'Your password has now been successfully updated.',
         'RESET_PASSWORD_BTN'         : 'Reset Password',
         'SITE_LABEL': 'Site'
       }

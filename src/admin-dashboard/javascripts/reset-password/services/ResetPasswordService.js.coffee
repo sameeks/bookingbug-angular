@@ -14,7 +14,7 @@ angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswor
     deferred = $q.defer()
 
     # Development Test url
-    url = BaseURL + "api/v1/login/admin/reset_password_email"
+    url = BaseURL + "/api/v1/login/admin/reset_password_email"
     # Production url
     # url = ""
 
