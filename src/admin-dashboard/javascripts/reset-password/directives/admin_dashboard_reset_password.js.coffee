@@ -22,22 +22,34 @@ angular.module('BBAdminDashboard.reset-password.directives').directive 'adminDas
     return
 
 angular.module('BBAdminDashboard.reset-password.controllers')
-.controller 'ResetPassword', ($scope, $state, QueryStringService, schemaForm, ResetPasswordService, ResetPasswordSchemaFormService) ->
+.controller 'ResetPassword', ($scope, $state, AdminLoginOptions, QueryStringService, ValidatorService, schemaForm, ResetPasswordService, ResetPasswordSchemaFormService) ->
   'ngInject'
 
   init = () ->
 
-    # temporary local test url
-    $scope.BaseURL = "http://f72ff8d5.ngrok.io/"
-    # BaseURL = "#{$scope.bb.api_url}"
-
     $scope.template_vars =
+      show_api_field: AdminLoginOptions.show_api_field
       show_reset_password: true
       show_reset_password_success: false
       show_reset_password_fail: false
       show_loading: false
 
+    $scope.validator = ValidatorService
+
     $scope.formErrors = []
+
+    $scope.reset_password_site = angular.copy($scope.bb.api_url)
+
+    if $scope.bb.api_url? and $scope.bb.api_url != ''
+      $scope.BaseURL = angular.copy($scope.bb.api_url)
+    else if $scope.reset_password_site? and $scope.reset_password_site != ''
+      $scope.BaseURL = angular.copy($scope.reset_password_site)
+    else
+      message = "ADMIN_DASHBOARD.RESET_PASSWORD_PAGE.ERROR_API_MISSING"
+      $scope.formErrors.push { message: message } if !formErrorExists message
+      # temporary local test url
+      $scope.BaseURL = "http://526e0d94.ngrok.io/"
+      $scope.reset_password_site = angular.copy($scope.BaseURL)
 
     # decide which template to show
     if QueryStringService('reset_password_token')? and QueryStringService('reset_password_token') != 'undefined' and QueryStringService('reset_password_token') != ''
@@ -71,8 +83,13 @@ angular.module('BBAdminDashboard.reset-password.controllers')
       console.log "scope schema: ", $scope.resetPasswordSchema
 
       $scope.resetPasswordModel = {}
+      console.log "pattern from back-end: ", $scope.resetPasswordSchema.properties.password.pattern
+      ResetPasswordSchemaFormService.setPasswordPattern($scope.resetPasswordSchema.properties.password.pattern)
+      $scope.reset_password_pattern = ResetPasswordSchemaFormService.getPasswordPattern()
     , (err) ->
       console.log "Error: ", err
+      ResetPasswordSchemaFormService.setPasswordPattern('^(?=[^\s]*[^a-zA-Z])(?=[^\s]*[a-zA-Z])[^\s]{7,25}$')
+      $scope.reset_password_pattern = ResetPasswordSchemaFormService.getPasswordPattern()
 
     return
 
@@ -95,19 +112,14 @@ angular.module('BBAdminDashboard.reset-password.controllers')
       $scope.template_vars.show_reset_password = true
       $scope.template_vars.show_reset_password_fail = true
       $scope.template_vars.show_loading = false
-      message = "ADMIN_DASHBOARD.LOGIN_PAGE.FORM_SUBMIT_FAIL_MSG"
+      message = "ADMIN_DASHBOARD.RESET_PASSWORD_PAGE.FORM_SUBMIT_FAIL_MSG"
       $scope.formErrors.push { message: message } if !formErrorExists message
 
     return
 
   $scope.submitSchemaForm = (form) ->
     console.log form
-    # First we broadcast an event so all fields validate themselves
-    $scope.$broadcast('schemaFormValidate')
 
-    # Then we check if the form is valid
-    # if form.$valid
-    #   console.log "form is valid"
 
     # ResetPasswordSchemaFormService.postSchemaForm(model.password).then (response) ->
     #   console.log "response from POST :", response

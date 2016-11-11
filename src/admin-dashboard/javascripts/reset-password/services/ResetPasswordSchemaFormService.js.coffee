@@ -10,6 +10,14 @@
 ###
 angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswordSchemaFormService', ($q, QueryStringService, $http) ->
 
+  password_pattern = ''
+
+  setPasswordPattern: (pattern) ->
+    password_pattern = pattern
+
+  getPasswordPattern: () ->
+    return password_pattern
+
   getSchemaForm: (BaseURL) ->
     deferred = $q.defer()
     src = BaseURL + "api/v1/login/admin/reset_password_schema"

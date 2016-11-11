@@ -7,6 +7,7 @@ angular.module('BBAdminDashboard', [
   'ngSanitize',
   'ngLocalData',
   'ngCookies',
+  'ngMessages'
 
   'BBAdmin',
   'BBAdminServices',

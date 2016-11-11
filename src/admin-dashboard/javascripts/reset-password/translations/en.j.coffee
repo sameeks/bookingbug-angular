@@ -12,16 +12,25 @@ angular.module('BBAdminDashboard.reset-password.translations')
   $translateProvider.translations('en', {
     'ADMIN_DASHBOARD': {
       'RESET_PASSWORD_PAGE': {
-        'BACK_BTN'                : 'Back',
-        'EMAIL_LABEL'             : 'Email',
-        'ENTER_EMAIL'             : 'Enter your email address',
-        'FORGOT_PASSWORD'         : 'Forgot your password?',
-        'FORM_SUBMIT_FAIL'        : 'Password Reset request failed',
-        'FORM_SUBMIT_SUCCESS'     : 'Password Reset request submitted',
-        'FORM_SUBMIT_FAIL_MSG'    : "Sorry we couldn't update your password successfully. Please try again or contact our support team.",
-        'FORM_SUBMIT_SUCCESS_MSG' : 'Thank you for resetting your password. You will receive an email shortly with instructions to complete this process.',
-        'PASSWORD'                : 'Password',
-        'RESET_PASSWORD_BTN'      : 'Reset Password'
+        'BACK_BTN'                   : 'Back',
+        'CONFIRM_NEW_PASSWORD_LABEL' : 'Confirm New Password',
+        'EMAIL_LABEL'                : 'Email',
+        'ENTER_NEW_PASSWORD'         : 'Enter your new password',
+        'ENTER_EMAIL'                : 'Enter your email address',
+        'ERROR_API_MISSING'          : 'API url has not been set correctly.',
+        'ERROR_EMAIL_PATTERN'        : 'Please enter a valid email.',
+        'ERROR_PASSWORD_MATCH'       : 'This needs to be the same as the new password.',
+        'ERROR_PASSWORD_PATTERN'     : 'Password must be between 7 and 25 characters and contain at least one letter and one number.',
+        'ERROR_REQUIRED'             : 'This field is required.',
+        'FORGOT_PASSWORD'            : 'Forgot your password?',
+        'FORM_SUBMIT_FAIL'           : 'Password Reset request failed',
+        'FORM_SUBMIT_SUCCESS'        : 'Password Reset request submitted',
+        'FORM_SUBMIT_FAIL_MSG'       : "Sorry we couldn't update your password successfully. Please try again or contact our support team.",
+        'FORM_SUBMIT_SUCCESS_MSG'    : 'Thank you for resetting your password. You will receive an email shortly with instructions to complete this process.',
+        'NEW_PASSWORD_LABEL'         : 'New Password',
+        'PASSWORD'                   : 'Password',
+        'RESET_PASSWORD_BTN'         : 'Reset Password',
+        'SITE_LABEL': 'Site'
       }
     }
   })
