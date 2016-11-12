@@ -22,7 +22,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
       bb: '='
       user: '=?'
     }
-    template: '<div ng-include="login_template"></div>'
+    templateUrl: 'login/admin-dashboard-login.html'
     controller: ['$scope', '$rootScope', 'BBModel', '$q', '$localStorage', '$state', 'AdminLoginOptions', ($scope, $rootScope, BBModel, $q, $localStorage, $state, AdminLoginOptions)->
       $scope.template_vars =
         show_api_field: AdminLoginOptions.show_api_field
@@ -37,8 +37,6 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         selected_admin: null
         selected_company: null
         site: $localStorage.getItem("api_url")
-
-      $scope.login_template = 'login/admin-dashboard-login.html'
 
       $scope.formErrors = []
 

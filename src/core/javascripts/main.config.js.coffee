@@ -19,8 +19,6 @@ else
 
 angular.module('BB').constant('UriTemplate', window.UriTemplate)
 
-angular.module('BB').constant('ResetPasswordApiURL', 'http://7fb3e640.ngrok.io/')
-
 angular.module('BB').config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider, uiGmapGoogleMapApiProvider) ->
   'ngInject'
 
