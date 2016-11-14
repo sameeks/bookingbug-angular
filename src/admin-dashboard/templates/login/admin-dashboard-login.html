@@ -13,15 +13,15 @@
                         <div uib-alert ng-repeat="alert in formErrors" class="alert-danger" close="formErrors.splice($index, 1)"><span translate="{{alert.message}}"></span></div>
                         <div class="form-group" ng-show="template_vars.show_api_field">
                             <label for="site"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.SITE"></span></label>
-                            <input type="text" name="site" ng-model="login.site" ng-required="template_vars.show_api_field" class="form-control" id="site" placeholder="www.bookingbug.com">
+                            <input type="text" name="site" ng-model="login_form.site" ng-required="template_vars.show_api_field" class="form-control" id="site" placeholder="www.bookingbug.com">
                         </div>
                         <div class="form-group">
                             <label for="username"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.USERNAME"></span></label>
-                            <input type="text" name="username" ng-model="login.email" required="required" class="form-control" id="username">
+                            <input type="text" name="username" ng-model="login_form.email" required="required" class="form-control" id="username">
                         </div>
                         <div class="form-group">
                             <label for="password"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.PASSWORD"></span></label>
-                            <input type="password" name="password" ng-model="login.password" required="required" class="form-control" id="password">
+                            <input type="password" name="password" ng-model="login_form.password" required="required" class="form-control" id="password">
                         </div>
                         <!-- <div class="form-group">
                             <a class=""><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.FORGOT_PASSWORD"></span></a>
@@ -47,7 +47,7 @@
                     <div class="panel-body">
                         <div class="form-group" ng-show="template_vars.show_pick_company">
                             <label for="company"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.COMPANIES"></span></label>
-                            <ui-select ng-model="login.selected_admin" theme="bootstrap" ng-change="pickCompany()">
+                            <ui-select ng-model="login_form.selected_admin" theme="bootstrap" ng-change="pickCompany()">
                                 <ui-select-match placeholder="{{'ADMIN_DASHBOARD.LOGIN_PAGE.SEARCH_COMPANY_PLACEHOLDER' | translate}}">{{$select.selected.company_name}}</ui-select-match>
                                 <ui-select-choices repeat="admin in administrators | filter: $select.search">
                                   <div ng-bind-html="admin.company_name | highlight: $select.search"></div>
@@ -58,7 +58,7 @@
 
                         <div class="form-group" ng-show="template_vars.show_pick_department">
                             <label for="company"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.DEPARTMENTS"></span></label>
-                            <ui-select ng-model="login.selected_company" theme="bootstrap">
+                            <ui-select ng-model="login_form.selected_company" theme="bootstrap">
                                 <ui-select-match placeholder="{{'ADMIN_DASHBOARD.LOGIN_PAGE.SEARCH_DEPARTMENT_PLACEHOLDER' | translate}}">{{$select.selected.name}}</ui-select-match>
                                 <ui-select-choices repeat="department in departments | filter: $select.search">
                                   <div ng-bind-html="department.name | highlight: $select.search"></div>
@@ -69,7 +69,7 @@
 
                     </div>
                     <div class="panel-footer">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="!login.selected_company"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.SELECT"></span></button>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="!login_form.selected_company"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.SELECT"></span></button>
                     </div>
                 </div>
             </form>
