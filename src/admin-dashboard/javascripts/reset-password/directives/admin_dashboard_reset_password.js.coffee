@@ -30,14 +30,13 @@ angular.module('BBAdminDashboard.reset-password.controllers')
     if !$scope.BaseURL?
       $scope.BaseURL = $scope.reset_password_site
 
-    $scope.reset_password_site = angular.copy($scope.bb.api_url)
-
     $scope.template_vars =
       show_api_field: AdminLoginOptions.show_api_field
-      show_reset_password: true
-      show_reset_password_success: false
-      show_reset_password_fail: false
+      reset_password_success: false
       show_loading: false
+
+    if $scope.template_vars.show_api_field
+      $scope.reset_password_site = angular.copy($scope.bb.api_url)
 
     $scope.validator = ValidatorService
 
@@ -76,7 +75,7 @@ angular.module('BBAdminDashboard.reset-password.controllers')
       $scope.reset_password_pattern = ResetPasswordSchemaFormService.getPasswordPattern()
     , (err) ->
       console.log "Error: ", err
-      ResetPasswordSchemaFormService.setPasswordPattern('^(?=[^\s]*[^a-zA-Z])(?=[^\s]*[a-zA-Z])[^\s]{7,25}$')
+      ResetPasswordSchemaFormService.setPasswordPattern('^(?=[^\\s]*[^a-zA-Z])(?=[^\\s]*[a-zA-Z])[^\\s]{7,25}$')
       $scope.reset_password_pattern = ResetPasswordSchemaFormService.getPasswordPattern()
 
     return
@@ -89,12 +88,11 @@ angular.module('BBAdminDashboard.reset-password.controllers')
     $scope.template_vars.show_loading = true
 
     ResetPasswordService.postRequest(email, $scope.BaseURL).then (response) ->
-      $scope.template_vars.show_reset_password = false
-      $scope.template_vars.show_reset_password_success = true
+      $scope.template_vars.reset_password_success = true
       $scope.template_vars.show_loading = false
     , (err) ->
       console.log "Error: ", err
-      $scope.template_vars.show_reset_password_fail = true
+      $scope.template_vars.reset_password_success = false
       $scope.template_vars.show_loading = false
       message = "ADMIN_DASHBOARD.RESET_PASSWORD_PAGE.FORM_SUBMIT_FAIL_MSG"
       $scope.formErrors.push { message: message } if !formErrorExists message
@@ -105,21 +103,20 @@ angular.module('BBAdminDashboard.reset-password.controllers')
     $scope.template_vars.show_loading = true
 
     ResetPasswordSchemaFormService.postSchemaForm(password, $scope.BaseURL).then (response) ->
-      $scope.template_vars.show_reset_password = false
-      $scope.template_vars.show_reset_password_success = true
-      $scope.template_vars.show_loading = false
+      $scope.template_vars.reset_password_success = true
 
-      # password reset successful, so auto-login next
+      # password reset successful, so auto-login
       login_form = {"email": response.data.email, "password": password}
 
       AdminLoginService.login(login_form).then (response) ->
         $state.go 'login'
       , (err)->
         $scope.formErrors.push { message: "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
+        $scope.template_vars.show_loading = false
 
     , (err) ->
       console.log "Error: ", err
-      $scope.template_vars.show_reset_password_fail = true
+      $scope.template_vars.reset_password_success = false
       $scope.template_vars.show_loading = false
       message = "ADMIN_DASHBOARD.RESET_PASSWORD_PAGE.FORM_SUBMIT_FAIL_MSG"
       $scope.formErrors.push { message: message } if !formErrorExists message
