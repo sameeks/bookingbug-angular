@@ -86,8 +86,13 @@ angular.module('BBAdminDashboard.reset-password.controllers')
 
   $scope.sendResetPassword = (email, reset_password_site) ->
     $scope.template_vars.show_loading = true
+
+    #if the site field is used, set the api url to the submmited url
     if $scope.template_vars.show_api_field and reset_password_site != ''
-      $scope.BaseURL = reset_password_site
+      $scope.reset_password_site = reset_password_site.replace(/\/+$/, '')
+      if $scope.reset_password_site.indexOf("http") == -1
+        $scope.reset_password_site = "https://" + $scope.reset_password_site
+      $scope.BaseURL = $scope.reset_password_site
 
     ResetPasswordService.postRequest(email, $scope.BaseURL).then (response) ->
       $scope.template_vars.reset_password_success = true

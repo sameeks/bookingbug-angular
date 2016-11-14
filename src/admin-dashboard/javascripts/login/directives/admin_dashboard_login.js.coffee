@@ -123,6 +123,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
 
           #if the site field is used set the api url to the submmited url
           if AdminLoginOptions.show_api_field
+            $scope.login.site = $scope.login.site.replace(/\/+$/, '')
             if $scope.login.site.indexOf("http") == -1
               $scope.login.site = "https://" + $scope.login.site
             $scope.bb.api_url = $scope.login.site
