@@ -374,3 +374,6 @@ app.filter "format_answer", ->
       answer = moment(answer).format "D MMMM YYYY"
     return answer
 
+angular.module('BB.Filters').filter 'snakeCase', ->
+  (string) ->
+    return string.trim().replace(/\s/g, '_').toLowerCase()

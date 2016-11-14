@@ -33,16 +33,16 @@
             </div>
 
             <div class="form-group" ng-repeat="check_filter in dynamic_filters.check">
-              <label class="sr-only" for="event_group">{{select_filter.name}}</label>
+              <label class="sr-only" for="event_group">{{select_filter.display_name}}</label>
               <select class="form-control" name="check_filter" id="check_filter" ng-model="dynamic_filters.values[check_filter.name]" ng-options="answer.name for answer in check_filter.question_items | orderBy: 'name'" ng-change="filterChanged()">
-                <option value="">&mdash; Any {{check_filter.name}} &mdash;</option>
+                <option value="">&mdash; Any {{check_filter.display_name}} &mdash;</option>
               </select>
             </div>
 
             <div class="form-group" ng-repeat="select_filter in dynamic_filters.select" ng-show="has_company_questions">
-              <label class="sr-only" for="event_group">{{select_filter.name}}</label>
+              <label class="sr-only" for="event_group">{{select_filter.display_name}}</label>
               <select class="form-control" name="select_filter" id="select_filter" ng-model="dynamic_filters.values[select_filter.name]" ng-options="answer.name for answer in select_filter.question_items" ng-change="filterChanged()">
-                <option value="">&mdash; Any {{select_filter.name}} &mdash;</option>
+                <option value="">&mdash; Any {{select_filter.display_name}} &mdash;</option>
               </select>
             </div>
 
