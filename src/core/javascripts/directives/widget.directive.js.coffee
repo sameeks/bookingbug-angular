@@ -25,8 +25,8 @@
 * @property {string} pusher The pusher
 * @property {string} pusher_channel The pusher channel
 * @property {string} init_params Initialization of basic parameters
-### #
-angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, SettingsService) ->
+### 
+angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, AppService) ->
 
   ###**
   * @ngdoc method
@@ -170,7 +170,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $te
           notInModal(p.parent())
 
     scope.$watch () ->
-      SettingsService.isModalOpen()
+      AppService.isModalOpen()
     , (modalOpen) ->
       scope.coveredByModal = modalOpen && notInModal(element.parent())
     return

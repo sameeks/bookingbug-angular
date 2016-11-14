@@ -47,8 +47,8 @@ angular.module('BB.Directives').directive 'bbAccordionRangeGroup', (PathSvc) ->
     PathSvc.directivePartial "_accordion_range_group"
 
 angular.module('BB.Controllers').controller 'AccordionRangeGroup', (
-  $scope, $attrs, $rootScope, $q, FormDataStoreService, SettingsService,
-  DateTimeUtilitiesService) ->
+  $scope, $attrs, $rootScope, $q, FormDataStoreService,
+  DateTimeUtilitiesService, GeneralOptions, CompanyStoreService) ->
 
   $scope.controller = "public.controllers.AccordionRangeGroup"
 
@@ -115,9 +115,10 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', (
 
       angular.forEach $scope.slots, (slot) ->
 
+
         # use display time zone to ensure slots get added to the right range group
-        if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()
-          datetime = moment(slot.datetime).tz(SettingsService.getDisplayTimeZone())
+        if GeneralOptions.display_time_zone? and GeneralOptions.display_time_zone != CompanyStoreService.time_zone
+          datetime = moment(slot.datetime).tz(GeneralOptions.display_time_zone)
           slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime)
         else
           slot_time = slot.time
@@ -159,8 +160,8 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', (
     if day and slot
 
       # use display time zone to ensure slots get added to the right range group
-      if SettingsService.getDisplayTimeZone() != SettingsService.getTimeZone()
-        datetime = moment(slot.datetime).tz(SettingsService.getDisplayTimeZone())
+      if GeneralOptions.display_time_zone? and GeneralOptions.display_time_zone != CompanyStoreService.time_zone
+        datetime = moment(slot.datetime).tz(GeneralOptions.display_time_zone)
         slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime)
       else
         slot_time = slot.time

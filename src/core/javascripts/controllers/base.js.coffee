@@ -5,7 +5,7 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
     $scope.setPageLoaded()
     $scope.setLoadingPage(false)
 
-angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService,ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, SettingsService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document) ->
+angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService) ->
 
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
@@ -185,8 +185,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       if $scope.bb_route_init
         $scope.bb_route_init()
 
-    if prms.use_local_time_zone
-      SettingsService.setUseLocalTimeZone(prms.use_local_time_zone)
 
     if prms.hide == true
       $scope.hide_page = true
@@ -215,9 +213,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     if prms.template
       $scope.bb.template = prms.template
 
-    if prms.i18n
-      SettingsService.enableInternationalizaton()
-
     if prms.login_required
       $scope.bb.login_required = true
 
@@ -227,12 +222,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     if prms.qudini_booking_id
       $scope.bb.qudini_booking_id = prms.qudini_booking_id
 
-    # this is used by the bbScrollTo directive so that we can account of
-    # floating headers that might reside on sites where the widget is embedded
-    if prms.scroll_offset
-      SettingsService.setScrollOffset(prms.scroll_offset)
-
-    SettingsService.update_document_title = SettingsService.update_document_title or prms.update_document_title or false
 
     @waiting_for_conn_started_def = $q.defer()
     $scope.waiting_for_conn_started = @waiting_for_conn_started_def.promise
@@ -243,6 +232,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       @waiting_for_conn_started_def.resolve()
 
     widget_started.resolve()
+
 
 
     #########################################################
@@ -543,7 +533,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     return if !$scope.bb.routeFormat
 
     # don't load any steps if route is being updated or a modal is open
-    if !$scope.bb.routing or SettingsService.isModalOpen()
+    if !$scope.bb.routing or AppService.isModalOpen()
       # Get the step number to load
       step_number = $scope.bb.matchURLToStep()
       # Load next page
@@ -944,15 +934,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
     $scope.bb.item_defaults.company = $scope.bb.company
 
-    SettingsService.setCountryCode(company.country_code)
-    SettingsService.setCurrency(company.currency_code)
-    SettingsService.setTimeZone(company.timezone)
 
     if company.$has('settings')
       company.getSettings().then (settings) =>
         # setup some useful info
         $scope.bb.company_settings = settings
-        SettingsService.company_settings = settings
+        setActiveCompany(company, settings)
         $scope.bb.item_defaults.merge_resources = true if $scope.bb.company_settings.merge_resources
         $scope.bb.item_defaults.merge_people = true if $scope.bb.company_settings.merge_people
         $rootScope.bb_currency = $scope.bb.company_settings.currency
@@ -974,7 +961,17 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       else
         defer.resolve()
         $scope.$emit 'company:setup'
-    defer.promise
+      setActiveCompany(company)
+    defer.promise 
+
+  setActiveCompany = (company, settings) ->
+
+    # currency code exists in both company and company_settings
+    # get from company if not defined in settings 
+    CompanyStoreService.currency_code = if !settings then company.currency_code else settings.currency
+    CompanyStoreService.time_zone     = company.timezone
+    CompanyStoreService.country_code  = company.country_code
+    CompanyStoreService.settings      = settings
 
 
   ############################################################################################

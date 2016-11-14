@@ -12,7 +12,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
 angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   PurchaseService, $uibModal, $location, $timeout, BBModel, $q, QueryStringService,
   SSOService, AlertService, LoginService, $window, $sessionStorage, LoadingService,
-  SettingsService, $translate, ReasonService, $document) ->
+  GeneralOptions, $translate, ReasonService, $document) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
@@ -33,7 +33,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
     if $scope.fail_msg
       AlertService.danger({msg:$scope.fail_msg})
     else
-      if SettingsService.isInternationalizatonEnabled()
+      if GeneralOptions.use_i18n
         $translate('ERROR.GENERIC', {}).then (translated_text) ->
           AlertService.add("danger", { msg: translated_text })
       else

@@ -26,21 +26,27 @@
 ###
 angular.module('BB.Services').provider 'GeneralOptions', ->
 
-  # This list of default options is meant to grow
   options = {
-    twelve_hour_format     : false
-    calendar_minute_step   : 5
-    calendar_min_time      : "09:00"
-    calendar_max_time      : "18:00"
-    calendar_slot_duration : 5
+    twelve_hour_format: false
+    calendar_minute_step: 5
+    calendar_min_time: "09:00"
+    calendar_max_time: "18:00"
+    calendar_slot_duration: 5
+    use_local_time_zone: false 
+    display_time_zone: null
+    use_i18n: false 
+    update_document_title: false 
+    scroll_offset: 0
   }
+
+
 
   @setOption = (option, value) ->
     if options.hasOwnProperty(option)
       options[option] = value
     return
 
-  @$get =  ->
+  @$get = ->
     options
 
   return

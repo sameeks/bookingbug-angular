@@ -1,5 +1,5 @@
 angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope,
-  $window, $location, SettingsService, AlertService) ->
+  $window, $location, GeneralOptions, AlertService) ->
 
   restrict: 'A'
   controller: 'Wallet'
@@ -34,7 +34,7 @@ angular.module("BB.Directives").directive "bbWalletPayment", ($sce, $rootScope,
         'message': referrer,
         'custom_partial_url': custom_partial_url,
         'custom_stylesheet' : custom_stylesheet,
-        'scroll_offset'     : SettingsService.getScrollOffset()
+        'scroll_offset'     : GeneralOptions.scroll_offset
       })
       element.find('iframe')[0].contentWindow.postMessage(payload, origin)
 
