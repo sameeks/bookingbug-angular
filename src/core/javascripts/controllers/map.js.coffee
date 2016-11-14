@@ -42,7 +42,7 @@ angular.module('BB.Directives').directive 'bbMap', () ->
 
 angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q,
-  $window, $timeout, CompanyStoreService) ->
+  $window, $timeout, CompanyStoreService, ErrorService, $log) ->
 
   $scope.controller = "public.controllers.MapCtrl"
 
@@ -521,6 +521,11 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     if !company
       AlertService.warning(ErrorService.getError('STORE_NOT_SELECTED'))
       return
+    else if !company.id
+      AlertService.warning(ErrorService.getError('STORE_NOT_SELECTED'))
+      $log.warn('valid company object not found')
+      return
+
 
     loader.notLoaded()
 
