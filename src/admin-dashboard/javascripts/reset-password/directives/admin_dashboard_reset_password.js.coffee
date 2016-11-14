@@ -84,8 +84,10 @@ angular.module('BBAdminDashboard.reset-password.controllers')
     $state.go 'login'
     return
 
-  $scope.sendResetPassword = (email) ->
+  $scope.sendResetPassword = (email, reset_password_site) ->
     $scope.template_vars.show_loading = true
+    if $scope.template_vars.show_api_field and reset_password_site != ''
+      $scope.BaseURL = reset_password_site
 
     ResetPasswordService.postRequest(email, $scope.BaseURL).then (response) ->
       $scope.template_vars.reset_password_success = true
