@@ -8,10 +8,10 @@
 * Controller for the logout page
 ###
 angular.module('BBAdminDashboard.reset-password.controllers')
-.controller 'resetPasswordPageCtrl', ($scope, $state) ->
+.controller 'ResetPasswordPageCtrl', ($scope, $state) ->
   'ngInject'
 
   if $scope.bb.api_url? and $scope.bb.api_url != ''
-    $scope.BaseURL = angular.copy($scope.bb.api_url)
+    $scope.base_url = angular.copy($scope.bb.api_url)
 
   return

@@ -18,9 +18,9 @@ angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswor
   getPasswordPattern: () ->
     return password_pattern
 
-  getSchemaForm: (BaseURL) ->
+  getSchemaForm: (base_url) ->
     deferred = $q.defer()
-    src = BaseURL + "/api/v1/login/admin/reset_password_schema"
+    src = base_url + "/api/v1/login/admin/reset_password_schema"
 
     $http.get(src, {}).then (response) ->
       deferred.resolve(response)
@@ -28,9 +28,9 @@ angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswor
       deferred.reject(err)
     deferred.promise
 
-  postSchemaForm: (password, BaseURL) ->
+  postSchemaForm: (password, base_url) ->
     deferred = $q.defer()
-    src = BaseURL + "/api/v1/login/admin/reset_password"
+    src = base_url + "/api/v1/login/admin/reset_password"
 
     reset_password_token = QueryStringService('reset_password_token')
 

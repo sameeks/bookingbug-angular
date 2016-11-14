@@ -27,8 +27,8 @@ angular.module('BBAdminDashboard.reset-password.controllers')
 
   init = () ->
 
-    if !$scope.BaseURL?
-      $scope.BaseURL = $scope.reset_password_site
+    if !$scope.base_url?
+      $scope.base_url = $scope.reset_password_site
 
     $scope.template_vars =
       show_api_field: AdminLoginOptions.show_api_field
@@ -62,7 +62,7 @@ angular.module('BBAdminDashboard.reset-password.controllers')
 
   # fetch Schema Form helper method
   fetchSchemaForm = () ->
-    ResetPasswordSchemaFormService.getSchemaForm($scope.BaseURL).then (response) ->
+    ResetPasswordSchemaFormService.getSchemaForm($scope.base_url).then (response) ->
 
       $scope.resetPasswordSchema = angular.copy(response.data.schema)
 
@@ -86,9 +86,9 @@ angular.module('BBAdminDashboard.reset-password.controllers')
       $scope.reset_password_site = reset_password_site.replace(/\/+$/, '')
       if $scope.reset_password_site.indexOf("http") == -1
         $scope.reset_password_site = "https://" + $scope.reset_password_site
-      $scope.BaseURL = $scope.reset_password_site
+      $scope.base_url = $scope.reset_password_site
 
-    ResetPasswordService.postRequest(email, $scope.BaseURL).then (response) ->
+    ResetPasswordService.postRequest(email, $scope.base_url).then (response) ->
       $scope.template_vars.reset_password_success = true
       $scope.template_vars.show_loading = false
     , (err) ->
@@ -102,7 +102,7 @@ angular.module('BBAdminDashboard.reset-password.controllers')
   $scope.submitSchemaForm = (password) ->
     $scope.template_vars.show_loading = true
 
-    ResetPasswordSchemaFormService.postSchemaForm(password, $scope.BaseURL).then (response) ->
+    ResetPasswordSchemaFormService.postSchemaForm(password, $scope.base_url).then (response) ->
       $scope.template_vars.reset_password_success = true
 
       # password reset successful, so auto-login

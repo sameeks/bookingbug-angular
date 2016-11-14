@@ -10,10 +10,10 @@
 ###
 angular.module('BBAdminDashboard.reset-password.services').factory 'ResetPasswordService', ($q, $window, $http) ->
 
-  postRequest: (email, BaseURL) ->
+  postRequest: (email, base_url) ->
     deferred = $q.defer()
 
-    url = BaseURL + "/api/v1/login/admin/reset_password_email"
+    url = base_url + "/api/v1/login/admin/reset_password_email"
 
     path = $window.location.pathname + '#/reset-password'
 
