@@ -1,12 +1,12 @@
 <div>
-  <form name="login_form" ng-submit="login_function()" class="form-horizontal"
+  <form name="login_form" ng-submit="login()" class="form-horizontal"
   role="form">
     <div class="alert alert-danger" role="alert" ng-if="alert && alert.length > 0">{{alert}}</div>
 
     <div ng-class="{'form-group': true, 'has-error': emailIsInvalid()}">
       <label for="email" class="col-sm-2 control-label">Email</label>
       <div class="col-sm-10">
-        <input type="email" ng-model="login.email" name="email" class="form-control"
+        <input type="email" ng-model="login_form.email" name="email" class="form-control"
           id="email" placeholder="Email" required autofocus autocomplete="email">
       </div>
     </div>
@@ -14,7 +14,7 @@
     <div ng-class="{'form-group': true, 'has-error': passwordIsInvalid()}">
       <label for="password" class="col-sm-2 control-label">Password</label>
       <div class="col-sm-10">
-        <input type="password" ng-model="login.password" name="password"
+        <input type="password" ng-model="login_form.password" name="password"
           class="form-control" id="password" placeholder="Password" required>
       </div>
     </div>
