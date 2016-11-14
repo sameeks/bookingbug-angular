@@ -63,14 +63,14 @@
   padding-left: 15px;
   &:before {
     position: relative;
-    top: 0px;
+    top: 1px;
     display: inline-block;
-    font-family: 'FontAwesome';
+    font-family: 'Glyphicons Halflings';
     font-style: normal;
     font-weight: normal;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-    content:"\f071";
+    content:"\e107";
   }
 }
 

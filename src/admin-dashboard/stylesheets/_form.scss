@@ -1,0 +1,18 @@
+.error-message {
+  color: $state-danger-text;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 7px;
+  padding-left: 15px;
+  &:before {
+    position: relative;
+    top: 0px;
+    display: inline-block;
+    font-family: 'FontAwesome';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content:"\f071";
+  }
+}
