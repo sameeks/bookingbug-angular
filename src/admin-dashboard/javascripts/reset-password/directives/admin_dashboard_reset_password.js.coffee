@@ -64,11 +64,6 @@ angular.module('BBAdminDashboard.reset-password.controllers')
   fetchSchemaForm = () ->
     ResetPasswordSchemaFormService.getSchemaForm($scope.BaseURL).then (response) ->
 
-      # angular schema Form
-      # $scope.resetPasswordSchema = angular.copy(response.data.schema)
-      # $scope.resetPasswordForm = angular.copy(response.data.form)
-      # $scope.resetPasswordModel = {}
-
       $scope.resetPasswordSchema = angular.copy(response.data.schema)
 
       ResetPasswordSchemaFormService.setPasswordPattern($scope.resetPasswordSchema.properties.password.pattern)
