@@ -117,7 +117,7 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
         $scope.template_vars.show_login = false
         companySelection($scope.user)
 
-      $scope.login = (isValid) ->
+      $scope.login_function = (isValid) ->
         if isValid
           $scope.template_vars.show_loading = true
 

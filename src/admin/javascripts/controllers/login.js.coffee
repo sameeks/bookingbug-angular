@@ -25,7 +25,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
 
   $scope.login_template = 'login/admin_login.html'
 
-  $scope.login = () ->
+  $scope.login_function = () ->
     $scope.alert = ""
     params =
       email: $scope.login.email
