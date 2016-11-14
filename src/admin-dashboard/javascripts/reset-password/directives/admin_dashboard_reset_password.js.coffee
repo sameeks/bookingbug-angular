@@ -74,7 +74,6 @@ angular.module('BBAdminDashboard.reset-password.controllers')
       ResetPasswordSchemaFormService.setPasswordPattern($scope.resetPasswordSchema.properties.password.pattern)
       $scope.reset_password_pattern = ResetPasswordSchemaFormService.getPasswordPattern()
     , (err) ->
-      console.log "Error: ", err
       ResetPasswordSchemaFormService.setPasswordPattern('^(?=[^\\s]*[^a-zA-Z])(?=[^\\s]*[a-zA-Z])[^\\s]{7,25}$')
       $scope.reset_password_pattern = ResetPasswordSchemaFormService.getPasswordPattern()
 
@@ -98,7 +97,6 @@ angular.module('BBAdminDashboard.reset-password.controllers')
       $scope.template_vars.reset_password_success = true
       $scope.template_vars.show_loading = false
     , (err) ->
-      console.log "Error: ", err
       $scope.template_vars.reset_password_success = false
       $scope.template_vars.show_loading = false
       message = "ADMIN_DASHBOARD.RESET_PASSWORD_PAGE.FORM_SUBMIT_FAIL_MSG"
@@ -122,7 +120,6 @@ angular.module('BBAdminDashboard.reset-password.controllers')
         $scope.template_vars.show_loading = false
 
     , (err) ->
-      console.log "Error: ", err
       $scope.template_vars.reset_password_success = false
       $scope.template_vars.show_loading = false
       message = "ADMIN_DASHBOARD.RESET_PASSWORD_PAGE.FORM_SUBMIT_FAIL_MSG"
