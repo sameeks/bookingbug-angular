@@ -2,10 +2,10 @@
 
 ###
 * @ngdoc controller
-* @name BBAdminDashboard.reset-password.controllers.controller:resetPasswordPageCtrl
+* @name BBAdminDashboard.reset-password.controllers.controller:ResetPasswordPageCtrl
 #
 * @description
-* Controller for the logout page
+* Controller for the reset password page
 ###
 angular.module('BBAdminDashboard.reset-password.controllers')
 .controller 'ResetPasswordPageCtrl', ($scope, $state) ->
