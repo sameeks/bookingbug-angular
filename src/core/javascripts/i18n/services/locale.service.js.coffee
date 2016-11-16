@@ -57,7 +57,7 @@ angular.module('BB.i18n').service 'bbLocale', (bbi18nOptions, $log, $translate, 
 
   ###
     # It's a hacky way to map country code to specific locale. Reason is moment default is set to en_US
-    # @param {String} countryCode
+    # @param {string} countryCode
     ###
   setLocaleUsingCountryCode = (countryCode) ->
     if _localeCompanyUsed
