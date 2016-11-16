@@ -8,7 +8,7 @@
 * Controller for the reset password page
 ###
 
-ResetPasswordPageCtrl = ($scope, $state) ->
+ResetPasswordPageCtrl = ($scope) ->
   'ngInject'
 
   init = () ->
