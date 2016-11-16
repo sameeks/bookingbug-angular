@@ -20,9 +20,9 @@ ResetPasswordService = ($q, $window, $http) ->
 
     body = {"email": email, "path": path}
 
-    $http.post(url, body).then (response) =>
+    $http.post(url, body).then (response) ->
       deferred.resolve(response)
-    , (err) =>
+    , (err) ->
       deferred.reject(err)
     deferred.promise
 
