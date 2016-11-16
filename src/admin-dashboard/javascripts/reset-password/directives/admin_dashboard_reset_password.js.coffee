@@ -16,8 +16,9 @@ adminDashboardResetPassword = () ->
     restrict: 'AE'
     replace: true
     scope : true
-    template: '<div ng-include="reset_password_template"></div>'
-    controller : 'ResetPasswordCtrl'
+    template: '<div ng-include="$resetPasswordCtrl.reset_password_template"></div>'
+    controller: 'ResetPasswordCtrl'
+    controllerAs: '$resetPasswordCtrl'
 
   return directive
 
