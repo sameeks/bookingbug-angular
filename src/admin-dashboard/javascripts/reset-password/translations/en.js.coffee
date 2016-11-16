@@ -7,7 +7,7 @@
 * @description
 * Translations for the admin reset-password module
 ###
-angular.module('BBAdminDashboard.reset-password.translations')
+angular.module('BBAdminDashboard.reset-password')
 .config ['$translateProvider', ($translateProvider)->
   $translateProvider.translations('en', {
     'ADMIN_DASHBOARD': {
