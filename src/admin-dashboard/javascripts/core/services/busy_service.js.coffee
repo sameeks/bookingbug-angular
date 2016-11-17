@@ -50,7 +50,10 @@ angular.module('BBAdminDashboard').factory "BusyService", [
       $log.warn(err, error_string)
       @setLoaded(scope)
       if err.status is 409
-        AlertService.danger(ErrorService.getError('ITEM_NO_LONGER_AVAILABLE'))
+        if err.data.error is 'Rule checking failed'
+          AlertService.danger(ErrorService.createCustomError(err.data.message))
+        else
+          AlertService.danger(ErrorService.getError('ITEM_NO_LONGER_AVAILABLE'))
       else if err.data and err.data.error is "Number of Bookings exceeds the maximum"
         AlertService.danger(ErrorService.getError('MAXIMUM_TICKETS'))
       else

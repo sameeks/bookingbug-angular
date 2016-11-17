@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Services').factory 'ErrorService', (GeneralOptions) ->
+angular.module('BB.Services').factory 'ErrorService', (GeneralOptions, $translate) ->
 
   alerts = [
     {
@@ -299,13 +299,20 @@ angular.module('BB.Services').factory 'ErrorService', (GeneralOptions) ->
     }
   ]
 
-  getError: (key) ->
+  ###*
+  # @param {String} msg
+  # @returns {{msg: String}}
+  ###
+  createCustomError = (msg) ->
+    return {msg: msg}
+
+  getError = (key) ->
     error = _.findWhere(alerts, {key: key})
     error.persist = true
     translate = GeneralOptions.use_i18n
     # if i18n enabled, return the translation key
     if error and translate
-      return {msg: "ERROR.#{key}"}
+      return {msg: $translate.instant('ERROR.' + key)}
     # else return the error object
     else if error and !translate
       return error
@@ -316,14 +323,20 @@ angular.module('BB.Services').factory 'ErrorService', (GeneralOptions) ->
       return alerts[0]
 
 
-  getAlert: (key) ->
+  getAlert = (key) ->
     alert = _.findWhere(alerts, {key: key})
     translate = GeneralOptions.use_i18n
     # if i18n enabled, return the translation key
     if alert and translate
-      return {msg: "ALERT.#{key}"}
+      return {msg: $translate.instant('ALERT.' + key)}
     else if alert and !translate
       return alert
     else
       return null
+
+  return {
+    createCustomError: createCustomError
+    getAlert: getAlert
+    getError: getError
+  }
 
