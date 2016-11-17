@@ -23,7 +23,9 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
       user: '=?'
     }
     templateUrl: 'login/admin-dashboard-login.html'
-    controller: ['$scope', '$rootScope', 'BBModel', '$q', '$localStorage', '$state', 'AdminLoginOptions', ($scope, $rootScope, BBModel, $q, $localStorage, $state, AdminLoginOptions)->
+    controller: ($scope, $rootScope, BBModel, $q, $localStorage, $state, AdminLoginOptions) ->
+      'ngInject'
+
       $scope.template_vars =
         show_api_field: AdminLoginOptions.show_api_field
         show_login: true
@@ -169,6 +171,5 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
           BBModel.Admin.Login.$setLogin($scope.login_form.selected_admin)
           BBModel.Admin.Login.$setCompany($scope.login_form.selected_company.id).then (user) ->
             $scope.onSuccess($scope.login_form.selected_company)
-    ]
   }
 ]
