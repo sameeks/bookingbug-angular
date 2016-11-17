@@ -20,7 +20,7 @@
 * @param {hash}  bbEvents A hash of options
 * @property {integer} total_entries The event total entries
 * @property {array} events The events array
-* @property {boolean} hide_fully_booked_events - Events that are fully booked but have a waitlist will be hidden. Events that are fully booked and DO NOT have a waitlist are ALWAYS hidden.
+* @property {boolean} hide_fully_booked_events Hide fully booked events (i.e. events with only waitlist spaces left). Default is false.
 
 ####
 
