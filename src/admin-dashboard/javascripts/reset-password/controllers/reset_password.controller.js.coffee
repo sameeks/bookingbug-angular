@@ -18,7 +18,7 @@ ResetPasswordCtrl = ($scope, $state, AdminLoginOptions, AdminLoginService, Query
     if !$scope.baseUrl?
       $scope.baseUrl = $resetPasswordCtrl.resetPasswordSite
 
-    $resetPasswordCtrl.showApiField = AdminLoginOptions.showApiField
+    $resetPasswordCtrl.showApiField = AdminLoginOptions.show_api_field
     $resetPasswordCtrl.resetPasswordSuccess = false
     $resetPasswordCtrl.showLoading = false
 
