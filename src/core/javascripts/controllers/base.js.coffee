@@ -1230,7 +1230,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     if $scope.bb.routeFormat
 
       pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
-      
+
       # -------------------------------------------------------------------------
       # Reduce number of pages to remove from browser history by one if this
       # method was triggered by Angular's $locationChangeStart broadcast
@@ -1345,7 +1345,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location,
     $log.warn(err, error_string)
     scope.setLoaded(scope)
     if err and err.status is 409
-      AlertService.danger(ErrorService.getError('ITEM_NO_LONGER_AVAILABLE'))
+      if err.data.error is 'Rule checking failed'
+        AlertService.danger(ErrorService.createCustomError(err.data.message))
+      else
+        AlertService.danger(ErrorService.getError('ITEM_NO_LONGER_AVAILABLE'))
     else if err and err.data and err.data.error is "Number of Bookings exceeds the maximum"
       AlertService.danger(ErrorService.getError('MAXIMUM_TICKETS'))
     else
