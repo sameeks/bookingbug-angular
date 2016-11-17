@@ -19,6 +19,7 @@
 * @param {hash}  bbEvents A hash of options
 * @property {integer} total_entries The event total entries
 * @property {array} events The events array
+* @property {boolean} hide_fully_booked_events Hide fully booked events (i.e. events with only waitlist spaces left). Default is false.
 
 ####
 angular.module('BB.Directives').directive 'bbEvents', () ->
@@ -54,7 +55,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.pick = {}
   $scope.start_date = moment()
   $scope.end_date = moment().add(1, 'year')
-  $scope.filters = {hide_sold_out_events: true}
+  $scope.filters = {hide_fully_booked_events: false}
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   $scope.events = {}
   $scope.fully_booked = false
@@ -83,7 +84,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
           $scope.company_parent = parent
           $scope.initialise()
         , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-      
+
       else
 
         $scope.initialise()
@@ -312,7 +313,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     params.per_page = $scope.per_page if $scope.per_page
 
     chains = $scope.loadEventChainData(comp)
-    
+
     $scope.events = {}
 
     BBModel.Event.$query(comp, params).then (events) ->
@@ -341,10 +342,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
           params = if $scope.events_options.embed then {embed: $scope.events_options.embed} else {}
           item.prepEvent(params)
-          
+
           # check if the current item already has the same event selected
           if $scope.mode is 0 and current_event and current_event.self == item.self
-            
+
             item.select()
             $scope.event = item
 
@@ -360,21 +361,21 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
               item.getDuration()
               idate = parseInt(item.date.format("YYYYDDDD"))
               item.idate = idate
-              
+
               if !item_dates[idate]
                 item_dates[idate] = {date:item.date, idate: idate, count:0, spaces:0}
-              
+
               item_dates[idate].count  += 1
               item_dates[idate].spaces += item.num_spaces
 
             $scope.item_dates = []
-            
+
             for x,y of item_dates
 
               $scope.item_dates.push(y)
-              
+
             $scope.item_dates = $scope.item_dates.sort (a,b) -> (a.idate - b.idate)
-          
+
           else
 
             idate = parseInt($scope.start_date.format("YYYYDDDD"))
@@ -418,7 +419,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     for item in $scope.items
 
       full_events.push(item) if item.num_spaces == item.spaces_booked
-    
+
     return $scope.fully_booked = true if full_events.length == $scope.items.length
 
 
@@ -444,7 +445,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       $scope.start_date = moment(date)
       $scope.end_date = moment(date)
       $scope.loadEventData()
-    
+
     else
 
       new_date = date if !$scope.selected_date or !date.isSame($scope.selected_date, 'day')
@@ -485,7 +486,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.selectItem = (item, route) =>
 
     return false unless (item.getSpacesLeft() <= 0 && $scope.bb.company.settings.has_waitlists) || item.hasSpace()
-    
+
     loader.notLoaded()
 
     if $scope.$parent.$has_page_control
@@ -496,7 +497,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       loader.setLoaded()
 
       return false
-    
+
     else
 
       if $scope.bb.moving_purchase
@@ -511,7 +512,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         $scope.decideNextPage(route)
 
       , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-      
+
       return true
 
 
@@ -547,9 +548,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       (moment($scope.filters.date).isSame(item.date, 'day') or !$scope.filters.date?) and
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
-      (($scope.filters.hide_sold_out_events and item.getSpacesLeft() > 0) or !$scope.filters.hide_sold_out_events) and
+      (($scope.filters.hide_fully_booked_events and item.getSpacesLeft() > 0) or !$scope.filters.hide_fully_booked_events) and
       $scope.filterEventsWithDynamicFilters(item)
-    
+
     return result
 
 
@@ -568,20 +569,20 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
           name = dynamic_filter.name.parameterise('_')
           filter = false
-          
+
           if item.chain and item.chain.extra[name]
 
             for i in item.chain.extra[name]
               filter = ($scope.dynamic_filters.values[dynamic_filter.name] and i is $scope.dynamic_filters.values[dynamic_filter.name].name) or !$scope.dynamic_filters.values[dynamic_filter.name]?
 
               break if filter
-          
+
           else if (item.chain.extra[name] is undefined && (_.isEmpty($scope.dynamic_filters.values) || !$scope.dynamic_filters.values[dynamic_filter.name]?))
 
             filter = true
 
           result = result and filter
-      
+
       else
 
         for dynamic_filter in $scope.dynamic_filters[type]
@@ -607,7 +608,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       date = moment($scope.filters.date)
       $scope.$broadcast "event_list_filter_date:changed", date
       $scope.showDay(date)
-      
+
       if options.reset == true || !$scope.selected_date?
 
         $timeout () ->
