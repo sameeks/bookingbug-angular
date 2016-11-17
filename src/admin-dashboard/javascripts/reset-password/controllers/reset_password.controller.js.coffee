@@ -15,15 +15,15 @@ ResetPasswordCtrl = ($scope, $state, AdminLoginOptions, AdminLoginService, Query
 
   init = () ->
 
-    if !$scope.base_url?
-      $scope.base_url = $resetPasswordCtrl.reset_password_site
+    if !$scope.baseUrl?
+      $scope.baseUrl = $resetPasswordCtrl.resetPasswordSite
 
-    $resetPasswordCtrl.show_api_field = AdminLoginOptions.show_api_field
-    $resetPasswordCtrl.reset_password_success = false
-    $resetPasswordCtrl.show_loading = false
+    $resetPasswordCtrl.showApiField = AdminLoginOptions.showApiField
+    $resetPasswordCtrl.resetPasswordSuccess = false
+    $resetPasswordCtrl.showLoading = false
 
-    if $resetPasswordCtrl.show_api_field
-      $resetPasswordCtrl.reset_password_site = angular.copy($scope.bb.api_url)
+    if $resetPasswordCtrl.showApiField
+      $resetPasswordCtrl.resetPasswordSite = angular.copy($scope.bb.api_url)
 
     $resetPasswordCtrl.validator = ValidatorService
 
@@ -31,10 +31,10 @@ ResetPasswordCtrl = ($scope, $state, AdminLoginOptions, AdminLoginService, Query
 
     # decide which template to show
     if QueryStringService('reset_password_token')? and QueryStringService('reset_password_token') != 'undefined' and QueryStringService('reset_password_token') != ''
-      $resetPasswordCtrl.reset_password_template = 'reset-password/reset-password-by-token.html'
+      $resetPasswordCtrl.resetPasswordTemplate = 'reset-password/reset-password-by-token.html'
       fetchSchemaForm()
     else
-      $resetPasswordCtrl.reset_password_template = 'reset-password/reset-password.html'
+      $resetPasswordCtrl.resetPasswordTemplate = 'reset-password/reset-password.html'
 
     return
 
@@ -49,7 +49,7 @@ ResetPasswordCtrl = ($scope, $state, AdminLoginOptions, AdminLoginService, Query
 
   # fetch Schema Form helper method
   fetchSchemaForm = () ->
-    ResetPasswordSchemaFormService.getSchemaForm($scope.base_url).then (response) ->
+    ResetPasswordSchemaFormService.getSchemaForm($scope.baseUrl).then (response) ->
 
       $resetPasswordCtrl.resetPasswordSchema = angular.copy(response.data.schema)
 
@@ -65,45 +65,47 @@ ResetPasswordCtrl = ($scope, $state, AdminLoginOptions, AdminLoginService, Query
     $state.go 'login'
     return
 
-  $resetPasswordCtrl.sendResetPassword = (email, reset_password_site) ->
-    $resetPasswordCtrl.show_loading = true
+  $resetPasswordCtrl.sendResetPassword = (email, resetPasswordSite) ->
+    $resetPasswordCtrl.showLoading = true
 
     #if the site field is used, set the api url to the submmited url
-    if $resetPasswordCtrl.show_api_field and reset_password_site != ''
-      $resetPasswordCtrl.reset_password_site = reset_password_site.replace(/\/+$/, '')
-      if $resetPasswordCtrl.reset_password_site.indexOf("http") == -1
-        $resetPasswordCtrl.reset_password_site = "https://" + $resetPasswordCtrl.reset_password_site
-      $scope.base_url = $resetPasswordCtrl.reset_password_site
+    if $resetPasswordCtrl.showApiField and resetPasswordSite != ''
+      # strip trailing spaces from the url to avoid calling an invalid endpoint
+      # since all service calls to api end-points begin with '/', e.g '/api/v1/...'
+      $resetPasswordCtrl.resetPasswordSite = resetPasswordSite.replace(/\/+$/, '')
+      if $resetPasswordCtrl.resetPasswordSite.indexOf("http") == -1
+        $resetPasswordCtrl.resetPasswordSite = "https://" + $resetPasswordCtrl.resetPasswordSite
+      $scope.baseUrl = $resetPasswordCtrl.resetPasswordSite
 
-    ResetPasswordService.postRequest(email, $scope.base_url).then (response) ->
-      $resetPasswordCtrl.reset_password_success = true
-      $resetPasswordCtrl.show_loading = false
+    ResetPasswordService.postRequest(email, $scope.baseUrl).then (response) ->
+      $resetPasswordCtrl.resetPasswordSuccess = true
+      $resetPasswordCtrl.showLoading = false
     , (err) ->
-      $resetPasswordCtrl.reset_password_success = false
-      $resetPasswordCtrl.show_loading = false
+      $resetPasswordCtrl.resetPasswordSuccess = false
+      $resetPasswordCtrl.showLoading = false
       message = "ADMIN_DASHBOARD.RESET_PASSWORD_PAGE.FORM_SUBMIT_FAIL_MSG"
       $resetPasswordCtrl.formErrors.push { message: message } if !formErrorExists message
 
     return
 
   $resetPasswordCtrl.submitSchemaForm = (password) ->
-    $resetPasswordCtrl.show_loading = true
+    $resetPasswordCtrl.showLoading = true
 
-    ResetPasswordSchemaFormService.postSchemaForm(password, $scope.base_url).then (response) ->
-      $resetPasswordCtrl.reset_password_success = true
+    ResetPasswordSchemaFormService.postSchemaForm(password, $scope.baseUrl).then (response) ->
+      $resetPasswordCtrl.resetPasswordSuccess = true
 
       # password reset successful, so auto-login
-      login_form = {"email": response.data.email, "password": password}
+      loginForm = {"email": response.data.email, "password": password}
 
-      AdminLoginService.login(login_form).then (response) ->
+      AdminLoginService.login(loginForm).then (response) ->
         $state.go 'login'
       , (err)->
-        $resetPasswordCtrl.show_loading = false
+        $resetPasswordCtrl.showLoading = false
         $resetPasswordCtrl.formErrors.push { message: "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY"}
 
     , (err) ->
-      $resetPasswordCtrl.reset_password_success = false
-      $resetPasswordCtrl.show_loading = false
+      $resetPasswordCtrl.resetPasswordSuccess = false
+      $resetPasswordCtrl.showLoading = false
       message = "ADMIN_DASHBOARD.RESET_PASSWORD_PAGE.FORM_SUBMIT_FAIL_MSG"
       $resetPasswordCtrl.formErrors.push { message: message } if !formErrorExists message
 

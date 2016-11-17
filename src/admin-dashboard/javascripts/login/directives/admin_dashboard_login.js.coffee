@@ -125,6 +125,8 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
 
           #if the site field is used set the api url to the submmited url
           if AdminLoginOptions.show_api_field
+            # strip trailing spaces from the url to avoid calling an invalid endpoint
+            # since all service calls to api end-points begin with '/', e.g '/api/v1/...'
             $scope.login_form.site = $scope.login_form.site.replace(/\/+$/, '')
             if $scope.login_form.site.indexOf("http") == -1
               $scope.login_form.site = "https://" + $scope.login_form.site

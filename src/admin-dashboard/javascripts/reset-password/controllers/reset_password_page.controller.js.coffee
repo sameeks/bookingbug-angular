@@ -14,7 +14,7 @@ ResetPasswordPageCtrl = ($scope) ->
   init = () ->
 
     if $scope.bb.api_url? and $scope.bb.api_url != ''
-      $scope.base_url = angular.copy($scope.bb.api_url)
+      $scope.baseUrl = angular.copy($scope.bb.api_url)
 
     return
 

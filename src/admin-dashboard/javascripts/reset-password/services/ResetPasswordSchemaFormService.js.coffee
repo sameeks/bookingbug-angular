@@ -11,17 +11,17 @@
 ResetPasswordSchemaFormService = ($q, $http, QueryStringService) ->
   'ngInject'
 
-  password_pattern = ''
+  passwordPattern = ''
 
   setPasswordPattern = (pattern) ->
     password_pattern = pattern
 
   getPasswordPattern = () ->
-    return password_pattern
+    return passwordPattern
 
-  getSchemaForm = (base_url) ->
+  getSchemaForm = (baseUrl) ->
     deferred = $q.defer()
-    src = base_url + "/api/v1/login/admin/reset_password_schema"
+    src = baseUrl + "/api/v1/login/admin/reset_password_schema"
 
     $http.get(src, {}).then (response) ->
       deferred.resolve(response)
@@ -29,13 +29,13 @@ ResetPasswordSchemaFormService = ($q, $http, QueryStringService) ->
       deferred.reject(err)
     deferred.promise
 
-  postSchemaForm = (password, base_url) ->
+  postSchemaForm = (password, baseUrl) ->
     deferred = $q.defer()
-    src = base_url + "/api/v1/login/admin/reset_password"
+    src = baseUrl + "/api/v1/login/admin/reset_password"
 
-    reset_password_token = QueryStringService('reset_password_token')
+    resetPasswordToken = QueryStringService('reset_password_token')
 
-    body = {"password": password, "reset_password_token": reset_password_token}
+    body = {"password": password, "reset_password_token": resetPasswordToken}
 
     $http.put(src, body).then (response) ->
       deferred.resolve(response)

@@ -11,10 +11,10 @@
 ResetPasswordService = ($q, $window, $http) ->
   'ngInject'
 
-  postRequest = (email, base_url) ->
+  postRequest = (email, baseUrl) ->
     deferred = $q.defer()
 
-    url = base_url + "/api/v1/login/admin/reset_password_email"
+    url = baseUrl + "/api/v1/login/admin/reset_password_email"
 
     path = $window.location.pathname + '#/reset-password'
 
