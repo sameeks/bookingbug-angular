@@ -56,7 +56,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.pick = {}
   $scope.start_date = moment()
   $scope.end_date = moment().add(1, 'year')
-  $scope.filters = {hide_sold_out_events: true}
+  $scope.filters = {hide_fully_booked_events: false}
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   $scope.events = {}
   $scope.fully_booked = false
@@ -167,7 +167,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Load event summary
   ###
   $scope.loadEventSummary = () ->
-    
+
     deferred = $q.defer()
     current_event = $scope.current_item.event
 
@@ -178,11 +178,11 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     comp = $scope.bb.company
 
-    params = 
+    params =
       item       : $scope.bb.current_item
       start_date : $scope.start_date.toISODate()
       end_date   : $scope.end_date.toISODate()
-    
+
     params.event_chain_id = $scope.bb.item_defaults.event_chain.id if $scope.bb.item_defaults.event_chain
 
     EventService.summary(comp, params).then (items) ->
@@ -243,7 +243,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         item       : $scope.bb.current_item
         start_date : $scope.start_date.toISODate()
         end_date   : $scope.end_date.toISODate()
-        
+
       params.embed = $scope.events_options.embed if $scope.events_options.embed
 
       EventChainService.query(comp, params).then (event_chains) ->
@@ -472,7 +472,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       (moment($scope.filters.date).isSame(item.date, 'day') or !$scope.filters.date?) and
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
-      (($scope.filters.hide_sold_out_events and item.getSpacesLeft() > 0) or !$scope.filters.hide_sold_out_events) and
+      (($scope.filters.hide_fully_booked_events and item.getSpacesLeft() > 0) or !$scope.filters.hide_fully_booked_events) and
       $scope.filterEventsWithDynamicFilters(item)
     return result
 
