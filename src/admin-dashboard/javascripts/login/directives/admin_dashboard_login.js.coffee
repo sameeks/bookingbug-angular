@@ -23,7 +23,9 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
       user: '=?'
     }
     templateUrl: 'login/admin-dashboard-login.html'
-    controller: ['$scope', '$rootScope', 'BBModel', '$q', '$localStorage', 'AdminLoginOptions', ($scope, $rootScope, BBModel, $q, $localStorage, AdminLoginOptions)->
+    controller: ($scope, $rootScope, BBModel, $q, $localStorage, $state, AdminLoginOptions) ->
+      'ngInject'
+
       $scope.template_vars =
         show_api_field: AdminLoginOptions.show_api_field
         show_login: true
@@ -123,6 +125,9 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
 
           #if the site field is used set the api url to the submmited url
           if AdminLoginOptions.show_api_field
+            # strip trailing spaces from the url to avoid calling an invalid endpoint
+            # since all service calls to api end-points begin with '/', e.g '/api/v1/...'
+            $scope.login_form.site = $scope.login_form.site.replace(/\/+$/, '')
             if $scope.login_form.site.indexOf("http") == -1
               $scope.login_form.site = "https://" + $scope.login_form.site
             $scope.bb.api_url = $scope.login_form.site
@@ -139,6 +144,9 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
             $scope.template_vars.show_loading = false
             message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_INCORRECT_CREDS"
             $scope.formErrors.push { message: message } if !formErrorExists message
+
+      $scope.goToResetPassword = () ->
+        $state.go 'reset-password'
 
       $scope.pickCompany = ()->
         $scope.template_vars.show_loading = true
@@ -165,6 +173,5 @@ angular.module('BBAdminDashboard.login.directives').directive 'adminDashboardLog
           BBModel.Admin.Login.$setLogin($scope.login_form.selected_admin)
           BBModel.Admin.Login.$setCompany($scope.login_form.selected_company.id).then (user) ->
             $scope.onSuccess($scope.login_form.selected_company)
-    ]
   }
 ]
