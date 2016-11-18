@@ -86,9 +86,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_TIME: "@:COMMON.TERMINOLOGY.TIME"
       }
       CALENDAR: {
-        PROGRESS_NEXT: "@:CORE.BTN.NEXT"
+        PROGRESS_NEXT: "@:COMMON.BTN.NEXT"
         PROGRESS_MOVE_BOOKING: "@:CORE.BTN.BOOK"
-        BACK_BTN: "@:CORE.BTN.BACK"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CATEGORY : {
         APPOINTMENT_TYPE: "Select appointment type"
@@ -110,15 +110,15 @@ angular.module('BB.Services').config ($translateProvider) ->
         DETAILS_LAST_NAME: "@:COMMON.FORM.LAST_NAME"
         DETAILS_LAST_NAME_VALIDATION_MSG: "@:COMMON.FORM.LAST_NAME_REQUIRED"
         DETAILS_EMAIL: "@:COMMON.FORM.EMAIL"
-        DETAILS_EMAIL_VALIDATION_MSG: "@:COMMON.FORM.EMAIL_REQURIED"
+        DETAILS_EMAIL_VALIDATION_MSG: "@:COMMON.FORM.EMAIL_REQUIRED"
         DETAILS_PHONE_MOBILE: "@:COMMON.FORM.MOBILE"
         DETAILS_VALIDATION_MSG: "@:COMMON.FORM.FIELD_REQUIRED"
         ITEM_DETAILS: {
           DETAILS_OTHER_INFO: "Other information"
           DETAILS_VALIDATION_MSG: "@:COMMON.FORM.FIELD_REQUIRED"
-          REQUIRED_FIELDS: "@:COMMON.FORM.REQUIRED_LABEL fields"
+          REQUIRED_FIELDS: "@:COMMON.FORM.REQUIRED"
         }
-        PROGRESS_CONFIRM: "@:COMMON.BTN.CONFIRM"
+        NEXT_BTN: "@:COMMON.BTN.CONFIRM"
         BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CHECKOUT: {
@@ -139,7 +139,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       CLIENT: {
         DETAILS_TITLE: "Tus detalles"
         CLIENT_DETAILS_TITLE: "Client details"
-        REQUIRED_FIELDS: "@:COMMON.FORM.FIELD_REQUIRED"
+        REQUIRED_FIELDS: "@:COMMON.FORM.REQUIRED"
         DETAILS_FIRST_NAME: "@:COMMON.FORM.FIRST_NAME"
         DETAILS_FIRST_NAME_VALIDATION_MSG: "@:COMMON.FORM.FIRST_NAME_REQUIRED"
         DETAILS_LAST_NAME: "@:COMMON.FORM.LAST_NAME"
@@ -203,10 +203,13 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       WEEK_CALENDAR: {
         ALL_TIMES_IN: "All times are shown in {{time_zone_name}}."
-        NO_AVAILABILITY: "{time_range_length, plural, It looks like there's no availability for the next {time_range_length} one{day} other{days}}"
+        NO_AVAILABILITY: "It looks like there's no availability for the next {time_range_length, plural, one{day} other{# days}}"
         NEXT_AVAIL: "Jump to Next Available Day"
         DATE_LABEL: "@:COMMON.TERMINOLOGY.DATE"
         ANY_DATE: "- Any Date -"
+        MORNING_HEADER: "@:COMMON.TERMINOLOGY.MORNING"
+        AFTERNOON_HEADER: "@:COMMON.TERMINOLOGY.AFTERNOON"
+        EVENING_HEADER: "@:COMMON.TERMINOLOGY.EVENING"
       }
       BASKET: {
         BASKET_TITLE: "Your basket"

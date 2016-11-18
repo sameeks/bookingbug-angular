@@ -58,55 +58,55 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOVE_BOOKING_FAIL_MSG: "Failed to move booking. Please try again."
       }
       ADD_RECIPIENT: {
-        MODAL_TITLE: "@:COMMON.TERMINOLOGY.RECIPIENT"
-        WHO_TO_QUESTION: "Who should we send the gift voucher to?"
-        WHO_TO_OPTION_ME: "Me"
+        MODAL_TITLE:          "@:COMMON.TERMINOLOGY.RECIPIENT"
+        WHO_TO_QUESTION:      "Who should we send the gift voucher to?"
+        WHO_TO_OPTION_ME:     "Me"
         WHO_TO_OPTION_NOT_ME: "Someone else"
-        NAME_LABEL: "Name"
-        NAME_VALIDATION_MSG: "Please enter the recipient's full name"
-        EMAIL_LABEL: "@:COMMON.FORM.EMAIL"
+        NAME_LABEL:           "Name"
+        NAME_VALIDATION_MSG:  "Please enter the recipient's full name"
+        EMAIL_LABEL:          "@:COMMON.FORM.EMAIL"
         EMAIL_VALIDATION_MSG: "@:COMMON.FORM.EMAIL_PATTERN"
-        ADD_LABEL: "Add Recipient"
-        CANCEL_LABEL: "@:COMMON.BTN.CANCEL"
+        ADD_LABEL:            "Add Recipient"
+        CANCEL_LABEL:         "@:COMMON.BTN.CANCEL"
       }
       BASKET_DETAILS: {
-        BASKET_DETAILS_TITLE: "Basket Details"
-        BASKET_DETAILS_NO: "No items added to basket yet."
-        ITEM: "@:COMMON.TERMINOLOGY.ITEM"
+        BASKET_DETAILS_TITLE:    "Basket Details"
+        BASKET_DETAILS_NO:       "No items added to basket yet."
+        ITEM:                    "@:COMMON.TERMINOLOGY.ITEM"
         BASKET_ITEM_APPOINTMENT: "@:COMMON.TERMINOLOGY.APPOINTMENT"
-        TIME_AND_DURATION: "{{time | datetime: 'LLLL'}} for {{duration | time_period}}"
-        PROGRESS_CANCEL: "@:COMMON.BTN.CANCEL"
-        BASKET_CHECKOUT: "@:COMMON.BTN.CHECKOUT"
-        BASKET_STATUS: "{N, plural, =0 {empty}, one {One item in your basket}, others {#items in your basket}}"
+        TIME_AND_DURATION:       "{{time | datetime: 'LLLL'}} for {{duration | time_period}}"
+        PROGRESS_CANCEL:         "@:COMMON.BTN.CANCEL"
+        BASKET_CHECKOUT:         "@:COMMON.BTN.CHECKOUT"
+        BASKET_STATUS:           "{N, plural, =0 {empty}, one {One item in your basket}, others {#items in your basket}}"
       }
       BASKET_ITEM_SUMMARY: {
-        ITEM_SERVICE: "@:COMMON.TERMINOLOGY.SERVICE"
+        ITEM_SERVICE:  "@:COMMON.TERMINOLOGY.SERVICE"
         ITEM_DURATION: "@:COMMON.TERMINOLOGY.DURATION"
         ITEM_RESOURCE: "@:COMMON.TERMINOLOGY.RESOURCE"
-        ITEM_PERSON: "@:COMMON.TERMINOLOGY.PERSON"
-        ITEM_PRICE: "@:COMMON.TERMINOLOGY.PRICE"
-        ITEM_DATE: "@:COMMON.TERMINOLOGY.DATE"
-        ITEM_TIME: "@:COMMON.TERMINOLOGY.TIME"
+        ITEM_PERSON:   "@:COMMON.TERMINOLOGY.PERSON"
+        ITEM_PRICE:    "@:COMMON.TERMINOLOGY.PRICE"
+        ITEM_DATE:     "@:COMMON.TERMINOLOGY.DATE"
+        ITEM_TIME:     "@:COMMON.TERMINOLOGY.TIME"
       }
       CALENDAR: {
-        PROGRESS_NEXT: "@:CORE.BTN.NEXT"
+        PROGRESS_NEXT:         "@:COMMON.BTN.NEXT"
         PROGRESS_MOVE_BOOKING: "@:CORE.BTN.BOOK"
-        BACK_BTN: "@:CORE.BTN.BACK"
+        BACK_BTN:              "@:COMMON.BTN.BACK"
       }
       CATEGORY : {
         APPOINTMENT_TYPE: "Select appointment type"
-        PROGRESS_BOOK: "@:COMMON.BTN.BOOK"
-        BACK_BTN: "@:COMMON.BTN.BACK"
+        PROGRESS_BOOK:    "@:COMMON.BTN.BOOK"
+        BACK_BTN:         "@:COMMON.BTN.BACK"
       }
       CANCEL_MODAL: {
-        CANCEL_QUESTION: "Are you sure you want to cancel this booking?"
-        ITEM_SERVICE: "@:COMMON.TERMINOLOGY.SERVICE"
-        ITEM_WHEN: "@:COMMON.TERMINOLOGY.WHEN"
+        CANCEL_QUESTION:         "Are you sure you want to cancel this booking?"
+        ITEM_SERVICE:            "@:COMMON.TERMINOLOGY.SERVICE"
+        ITEM_WHEN:               "@:COMMON.TERMINOLOGY.WHEN"
         PROGRESS_CANCEL_BOOKING: "@:COMMON.BTN.CANCEL_BOOKING"
-        PROGRESS_CANCEL_CANCEL: "@:COMMON.BTN.DO_NOT_CANCEL_BOOKING"
+        PROGRESS_CANCEL_CANCEL:  "@:COMMON.BTN.DO_NOT_CANCEL_BOOKING"
       }
       CHECK_ITEMS : {
-        REVIEW: "Review"
+        REVIEW:           "Review"
         DETAILS_TITLE: "Your details"
         DETAILS_FIRST_NAME: "@:COMMON.FORM.FIRST_NAME"
         DETAILS_FIRST_NAME_VALIDATION_MSG: "@:COMMON.FORM.FIRST_NAME_REQUIRED"
@@ -119,10 +119,10 @@ angular.module('BB.Services').config ($translateProvider) ->
         ITEM_DETAILS: {
           DETAILS_OTHER_INFO: "Other information"
           DETAILS_VALIDATION_MSG: "@:COMMON.FORM.FIELD_REQUIRED"
-          REQUIRED_FIELDS: "@:COMMON.FORM.REQUIRED_LABEL fields"
+          REQUIRED_FIELDS: "@:COMMON.FORM.REQUIRED"
         }
-        PROGRESS_CONFIRM: "@:COMMON.BTN.CONFIRM"
-        BACK_BTN: "@:COMMON.BTN.BACK"
+        NEXT_BTN: "@:COMMON.BTN.CONFIRM"
+        BACK_BTN:         "@:COMMON.BTN.BACK"
       }
       CHECKOUT: {
         PAYMENT_WORD: "Payment"
@@ -142,7 +142,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       CLIENT: {
         DETAILS_TITLE: "Your details"
         CLIENT_DETAILS_TITLE: "Client details"
-        REQUIRED_FIELDS: "@:COMMON.FORM.FIELD_REQUIRED"
+        REQUIRED_FIELDS: "@:COMMON.FORM.REQUIRED"
         DETAILS_FIRST_NAME: "@:COMMON.FORM.FIRST_NAME"
         DETAILS_FIRST_NAME_VALIDATION_MSG: "@:COMMON.FORM.FIRST_NAME_REQUIRED"
         DETAILS_LAST_NAME: "@:COMMON.FORM.LAST_NAME"
@@ -206,7 +206,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       WEEK_CALENDAR: {
         ALL_TIMES_IN: "All times are shown in {{time_zone_name}}."
-        NO_AVAILABILITY: "{time_range_length, plural, It looks like there's no availability for the next {time_range_length} one{day} other{days}}"
+        NO_AVAILABILITY: "It looks like there's no availability for the next {time_range_length, plural, one{day} other{# days}}"
         NEXT_AVAIL: "Jump to Next Available Day"
         DATE_LABEL: "@:COMMON.TERMINOLOGY.DATE"
         ANY_DATE: "- Any Date -"

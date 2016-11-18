@@ -34,7 +34,7 @@ angular.module('BB.Services').config ($translateProvider) ->
           FREE: "@:COMMON.TERMINOLOGY.PRICE_FREE"
         }
         TIME_PERIOD: {
-          TIME_SEPARATOR: " and "
+          TIME_PERIOD: "{hours, plural, =0{} one{1 hour} other{# hours}}{show_seperator, plural, =0{} =1{, } other{}}{minutes, plural, =0{} one{1 minute} other{# minutes}}"
         }
       }
       EVENT: {
@@ -107,7 +107,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         FIELD_REQUIRED:                "This field is required"
         PASSWORD:                      "Password"
         PASSWORD_REQUIRED:             "Please enter your password"
-        REQUIRED_LABEL:                "*Required"
+        REQUIRED:                      "*Required"
         TERMS_AND_CONDITIONS:          "I agree to the terms and conditions"
         TERMS_AND_CONDITIONS_REQUIRED: "Please accept the terms and conditions"
       }
@@ -144,7 +144,6 @@ angular.module('BB.Services').config ($translateProvider) ->
         ES: "Español"
         FR: "Français"
       }
-
     }
   }
 

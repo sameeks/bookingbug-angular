@@ -91,7 +91,7 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
             SERVICE                        : '@:COMMON.TERMINOLOGY.SERVICE'
             TO                             : 'To'
             YES                            : '@:COMMON.BTN.YES'
-            FIELD_VALIDATION_MSG           : '@:COMMON.FORM.FIELD_REQUIRED'
+            FIELD_VALIDATION_MSG           : '@:COMMON.FORM.REQUIRED'
             RESOURCE_PERSON_VALIDATION_MSG : 'Please select a resource or member of staff'
             STEP_SUMMARY                   : 'Select a service'
             SELECT_BTN                     : '@:COMMON.BTN.SELECT'

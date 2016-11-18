@@ -1,11 +1,9 @@
 'use strict'
 
-app = angular.module 'BB.Directives'
-
 # International Telephone Input directive
 # http://www.tooorangey.co.uk/posts/that-international-telephone-input-umbraco-7-property-editor/
 # https://github.com/Bluefieldscom/intl-tel-input
-app.directive "bbIntTelNumber", ($parse) ->
+angular.module('BB.Directives').directive "bbIntTelNumber", ($parse) ->
   restrict: "A"
   require: "ngModel"
 

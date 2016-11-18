@@ -8,11 +8,13 @@ angular.module('BB.Services').config ($translateProvider) ->
       ALERTS: {
         ERROR_TITLE: "Error"
       }
+      PAGINATION: {
+        SUMMARY: "{{start}} - {{end}} of {{total}}"
+      }
       MODAL: {
         CANCEL_BOOKING: {
           HEADER:               "Cancel"
           QUESTION:             "Are you sure you want to cancel this {{type}}?"
-          APPOINTMENT_QUESTION: "Are you sure you want to cancel this appointment?"
         }
         SCHEMA_FORM: {
           OK_BTN:     "@:COMMON.BTN.OK"
@@ -32,7 +34,7 @@ angular.module('BB.Services').config ($translateProvider) ->
           FREE: "@:COMMON.TERMINOLOGY.PRICE_FREE"
         }
         TIME_PERIOD: {
-          TIME_SEPARATOR: " and "
+          TIME_PERIOD: "{hours, plural, =0{} one{1 hour} other{# hours}}{show_seperator, plural, =0{} =1{, } other{}}{minutes, plural, =0{} one{1 minute} other{# minutes}}"
         }
       }
       EVENT: {

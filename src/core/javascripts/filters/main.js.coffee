@@ -207,17 +207,16 @@ angular.module('BB.Filters').filter 'time_period', ($translate) ->
     return unless angular.isNumber(v)
 
     minutes = parseInt(v)
-    time_period = ''
 
-    hours = Math.floor(minutes / 60)
-    minutes %= 60
+    hours          = Math.floor(minutes / 60)
+    minutes        %= 60
+    show_seperator = hours > 0 and minutes > 0
 
-    if hours > 0
-      time_period += moment.duration(hours, 'hours').humanize()
-      if minutes > 0
-        time_period += $translate.instant('CORE.FILTERS.TIME_PERIOD.TIME_SEPARATOR')
-    if minutes > 0 or hours == 0
-      time_period += moment.duration(minutes, 'minutes').humanize()
+    time_period = $translate.instant('CORE.FILTERS.TIME_PERIOD.TIME_PERIOD', {
+      hours          : hours,
+      minutes        : minutes, 
+      show_seperator : +show_seperator
+    }, 'messageformat')
 
     return time_period
 
