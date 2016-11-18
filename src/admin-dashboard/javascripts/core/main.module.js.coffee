@@ -7,6 +7,7 @@ angular.module('BBAdminDashboard', [
   'ngSanitize',
   'ngLocalData',
   'ngCookies',
+  'ngMessages'
 
   'BBAdmin',
   'BBAdminServices',
@@ -29,6 +30,7 @@ angular.module('BBAdminDashboard', [
   'BBAdminDashboard.clients',
   'BBAdminDashboard.login',
   'BBAdminDashboard.logout',
+  'BBAdminDashboard.reset-password',
   'BBAdminDashboard.calendar',
   'BBAdminDashboard.dashboard-iframe',
   'BBAdminDashboard.members-iframe',

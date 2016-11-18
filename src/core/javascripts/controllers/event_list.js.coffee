@@ -19,6 +19,7 @@
 * @param {hash}  bbEvents A hash of options
 * @property {integer} total_entries The event total entries
 * @property {array} events The events array
+* @property {boolean} hide_fully_booked_events Hide fully booked events (i.e. events with only waitlist spaces left). Default is false.
 
 ####
 angular.module('BB.Directives').directive 'bbEvents', () ->
@@ -54,7 +55,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.pick = {}
   $scope.start_date = moment()
   $scope.end_date = moment().add(1, 'year')
-  $scope.filters = {hide_sold_out_events: true}
+  $scope.filters = {hide_fully_booked_events: false}
   $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
   $scope.events = {}
   $scope.fully_booked = false
@@ -547,7 +548,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
       (moment($scope.filters.date).isSame(item.date, 'day') or !$scope.filters.date?) and
       (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and
       (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
-      (($scope.filters.hide_sold_out_events and item.getSpacesLeft() > 0) or !$scope.filters.hide_sold_out_events) and
+      (($scope.filters.hide_fully_booked_events and item.getSpacesLeft() > 0) or !$scope.filters.hide_fully_booked_events) and
       $scope.filterEventsWithDynamicFilters(item)
 
     return result
