@@ -636,7 +636,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   # build dynamic filters using company questions
   buildDynamicFilters = (questions) ->
 
-    questions = _.forEach questions (question) -> question.name = $filter('wordCharactersAndSpaces')(question.name)
+    questions = _.each questions, (question) -> question.name = $filter('wordCharactersAndSpaces')(question.name)
 
     $scope.dynamic_filters                = _.groupBy(questions, 'question_type')
     $scope.dynamic_filters.question_types = _.uniq(_.pluck(questions, 'question_type'))
