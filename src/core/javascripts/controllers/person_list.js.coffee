@@ -96,15 +96,13 @@ angular.module('BB.Controllers').controller 'PersonList',
             $scope.person = i.item if $scope.bb.current_item.settings.person isnt -1
             $scope.selected_bookable_items = [i]
 
-        # if the person has been passed in via query string, and not navigating from previous step, skip to next step
+        # if the person has been passed in via query string, skip to next step
         # OR if there's only 1 person and combine resources/staff has been turned on, auto select the person
-        if ($scope.bb.item_defaults.person and $scope.bb.steps[$scope.bb.steps.length - 1].active) or (items.length is 1 and $scope.bb.company.settings and $scope.bb.company.settings.merge_people)
-          if !$scope.selectItem(items[0], $scope.nextRoute )
+        if ($scope.bb.item_defaults.person) or (items.length is 1 and $scope.bb.company.settings and $scope.bb.company.settings.merge_people)
+          if !$scope.selectItem(items[0], $scope.nextRoute, {skip_step: true})
             setPerson people
             $scope.bookable_items = items
             $scope.selected_bookable_items = items
-          else
-            $scope.skipThisStep()
         else
           setPerson people
           $scope.bookable_items = items
@@ -162,13 +160,15 @@ angular.module('BB.Controllers').controller 'PersonList',
   * @param {array} item Selected item from the list of current people
   * @param {string=} route A specific route to load
   ###
-  $scope.selectItem = (item, route) =>
+  $scope.selectItem = (item, route, options = {}) =>
     if $scope.$parent.$has_page_control
       $scope.person = item
       return false
     else
       new_person = getItemFromPerson(item)
       _.each $scope.booking_items, (bi) -> bi.setPerson(new_person)
+      if options.skip_step
+        $scope.skipThisStep()
       $scope.decideNextPage(route)
       return true
 
