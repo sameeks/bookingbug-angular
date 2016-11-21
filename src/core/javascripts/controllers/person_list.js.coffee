@@ -99,7 +99,10 @@ angular.module('BB.Controllers').controller 'PersonList',
         # if the person has been passed into item_defaults, skip to next step
         # OR if there's only 1 person and combine resources/staff has been turned on, auto select the person
         if ($scope.bb.item_defaults.person) or (items.length is 1 and $scope.bb.company.settings and $scope.bb.company.settings.merge_people)
-          if !$scope.selectItem(items[0], $scope.nextRoute, {skip_step: true})
+          selected_item = items[0]
+          if items.length isnt 1
+            selected_item = getItemFromPerson($scope.bb.item_defaults.person)
+          if !$scope.selectItem(selected_item, $scope.nextRoute, {skip_step: true})
             setPerson people
             $scope.bookable_items = items
             $scope.selected_bookable_items = items

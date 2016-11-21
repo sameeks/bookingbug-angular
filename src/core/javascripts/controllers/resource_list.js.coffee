@@ -98,7 +98,10 @@ angular.module('BB.Controllers').controller 'ResourceList',
         # OR if there's only one resource and single pick hasn't been enabled,
         # automatically select the resource.
         if ($scope.bb.item_defaults.resource or resources.length is 1) and !$scope.options.allow_single_pick
-          if !$scope.selectItem(items[0].item, $scope.nextRoute, {skip_step: true})
+          selected_item = items[0]
+          if resources.length isnt 1
+            selected_item = getItemFromResource($scope.bb.item_defaults.resource)
+          if !$scope.selectItem(selected_item.item, $scope.nextRoute, {skip_step: true})
             $scope.bookable_resources = resources
             $scope.bookable_items = items
         else
