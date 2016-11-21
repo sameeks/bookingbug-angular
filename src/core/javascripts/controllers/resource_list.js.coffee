@@ -94,7 +94,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
           if $scope.booking_item and $scope.booking_item.resource and $scope.booking_item.resource.id is i.item.id
             # set the resource unless the resource was automatically set
             $scope.resource = i.item if $scope.bb.current_item.settings.resource isnt -1
-        # if the resource has been passed into item_defaults via query string, skip to next step
+        # if the resource has been passed into item_defaults, skip to next step
         # OR if there's only one resource and single pick hasn't been enabled,
         # automatically select the resource.
         if ($scope.bb.item_defaults.resource or resources.length is 1) and !$scope.options.allow_single_pick
