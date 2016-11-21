@@ -138,6 +138,9 @@
     padding: 15px 25px;
     cursor: pointer;
     text-align: center;
+    &:hover {
+      cursor: initial;
+    }
     &:hover, &.selected {
       background-color: $gray-darker;
       color: #FFF;
@@ -163,6 +166,21 @@
   .panel-default.expanded > .panel-heading {
     padding-bottom: 5px;
   }
+  
+  .unavailable-slot {
+    &:hover {
+      cursor: default;
+    }
+  }
+
+  .panel-heading .available-slot {
+    &:hover {
+      cursor: pointer;
+    }
+    &:focus {
+      outline: -webkit-focus-ring-color auto 5px;
+    }
+  }
 
   // disabled panel
   .panel-default[disabled], .panel[disabled], .panel[disabled].expanded {
@@ -176,6 +194,12 @@
     }
     .panel-title {
       color: $bb-gray;
+    }
+  }
+
+  .accordion-toggle {
+    &:focus {
+      outline: -webkit-focus-ring-color auto 5px;
     }
   }
 

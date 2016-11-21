@@ -42,7 +42,7 @@ angular.module('BB.Directives').directive 'bbMap', () ->
 
 angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q,
-  $window, $timeout, CompanyStoreService) ->
+  $window, $timeout, CompanyStoreService, ErrorService, $log) ->
 
   $scope.controller = "public.controllers.MapCtrl"
 
@@ -336,6 +336,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     AlertService.clear()
     $scope.search_failed = false
     $scope.loc           = result.geometry.location
+    $scope.formatted_address = result.formatted_address
     $scope.myMap.setCenter $scope.loc
     $scope.myMap.setZoom 15
     $scope.showClosestMarkers $scope.loc
@@ -521,6 +522,11 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     if !company
       AlertService.warning(ErrorService.getError('STORE_NOT_SELECTED'))
       return
+    else if !company.id
+      AlertService.warning(ErrorService.getError('STORE_NOT_SELECTED'))
+      $log.warn('valid company object not found')
+      return
+
 
     loader.notLoaded()
 
@@ -655,4 +661,3 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     $scope.loc = null
     $scope.reverse_geocode_address = null
     $scope.address = null
-

@@ -374,3 +374,13 @@ app.filter "format_answer", ->
       answer = moment(answer).format "D MMMM YYYY"
     return answer
 
+angular.module('BB.Filters').filter 'snakeCase', ->
+  (string) ->
+    return string.trim().replace(/\s/g, '_').toLowerCase()
+
+# -------------------------------------------------------------------------------------------
+# filters out all non alpha-numeric characters with the exception of space and underscore
+# -------------------------------------------------------------------------------------------
+angular.module('BB.Filters').filter 'wordCharactersAndSpaces', ->
+  (string) ->
+    return string.replace(/[^a-zA-Z0-9\_\s]+/, '')
