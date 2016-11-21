@@ -103,9 +103,9 @@ angular.module('BB.Controllers').controller 'PersonList',
         if $scope.bb.item_defaults.person
           person = $scope.bb.item_defaults.person
         if person and !$scope.selectItem(person, $scope.nextRoute, {skip_step: true})
-            setPerson people
-            $scope.bookable_items = items
-            $scope.selected_bookable_items = items
+          setPerson people
+          $scope.bookable_items = items
+          $scope.selected_bookable_items = items
         else
           setPerson people
           $scope.bookable_items = items

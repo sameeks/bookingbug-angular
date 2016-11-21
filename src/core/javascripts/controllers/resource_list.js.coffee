@@ -102,8 +102,8 @@ angular.module('BB.Controllers').controller 'ResourceList',
         if $scope.bb.item_defaults.resource
           resource = $scope.bb.item_defaults.resource
         if resource and !$scope.selectItem(resource.item, $scope.nextRoute, {skip_step: true})
-            $scope.bookable_resources = resources
-            $scope.bookable_items = items
+          $scope.bookable_resources = resources
+          $scope.bookable_items = items
         else
           $scope.bookable_resources = resources
           $scope.bookable_items = items
