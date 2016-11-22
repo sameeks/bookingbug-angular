@@ -10,20 +10,20 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
 
   # converts date and time belonging to BBModel.Day and BBModel.TimeSlot into
   # a valid moment object
-  convertTimeSlotToMoment: (date, time_slot) ->
-    return unless date and moment.isMoment(date) and time_slot
+  convertTimeToMoment: (date, time_slot) ->
+    return unless date and moment.isMoment(date) and angular.isNumber(time_slot)
     datetime = moment()
     # if user timezone different than company timezone
     if GeneralOptions.display_time_zone != CompanyStoreService.time_zone
       datetime = datetime.tz(CompanyStoreService.time_zone)
-    val = parseInt(time_slot.time)
+    val = parseInt(time_slot)
     hours = parseInt(val / 60)
     mins = val % 60
     datetime.hour(hours)
     datetime.minutes(mins)
     datetime.seconds(0)
     datetime.date(date.date())
-    datetime.month(date.month())
+    datetime.month(date.month()) 
     datetime.year(date.year())
 
     return datetime
