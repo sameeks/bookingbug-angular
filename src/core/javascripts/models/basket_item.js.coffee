@@ -193,7 +193,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
         # NOTE: time is not set as it might not be available
         date = if defaults.date then defaults.date else moment()
         time = if defaults.time then parseInt(defaults.time) else 0
-        defaults.datetime = DateTimeUtilitiesService.convertTimeToMoment(defaults.date, time.time)
+        defaults.datetime = DateTimeUtilitiesService.convertTimeToMoment(defaults.date, time)
       if defaults.service_ref
         @service_ref = defaults.service_ref
       if defaults.group
