@@ -18,8 +18,8 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @methodOf BB.Services:DateTimeUtilities
   * @description
   * Checks if basket_item has default person 
-  * @param {Object} Object containing basket_item
-  * @param {Object} Object containing item_defaults
+  * @param {Object} basket_item The basket item object
+  * @param {Object} item_defaults The item defaults object
   *
   * @returns {boolean} 
   ###
@@ -32,8 +32,8 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @methodOf BB.Services:DateTimeUtilities
   * @description
   * Checks if basket_item has default resource
-  * @param {Object} Object containing basket_item
-  * @param {Object} Object containing item_defaults
+  * @param {Object} basket_item The basket item object
+  * @param {Object} item_defaults The item defaults object
   *
   * @returns {boolean} 
   ###
@@ -47,8 +47,8 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @methodOf BB.Services:DateTimeUtilities
   * @description
   * Converts date and time to valid moment object
-  * @param {Moment} Object containing moment to convert
-  * @param {integer} Time integer to convert
+  * @param {Moment} date The date object to convert
+  * @param {integer} time The time integer to convert
   *
   * @returns {object} Moment object converted from date/time 
   ###
@@ -77,7 +77,7 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @methodOf BB.Services:DateTimeUtilities
   * @description
   * Converts moment object to time 
-  * @param {Moment} Moment object containing datetime to convert
+  * @param {Moment} datetime the datetime object to convert
   *
   * @returns {integer} Datetime integer converted from moment object 
   ###
@@ -91,10 +91,10 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @methodOf BB.Services:DateTimeUtilities
   * @description
   *  Checks if basket_item default time exists 
-  * @param {Moment} Moment object containing date to check
-  * @param {Array} Array of timeslots 
-  * @param {Object} Object containing basket_item 
-  * @param {Object} Object containing item_defaults
+  * @param {Moment} date The date object
+  * @param {Array} time_slots An array of time slots 
+  * @param {Object} basket_item The basket item object
+  * @param {Object} item_defaults The item defaults object
   * @returns {Object} object describing matching slot
   ###
   checkDefaultTime: (date, time_slots, basket_item, item_defaults) ->
