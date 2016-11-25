@@ -51,8 +51,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         SPEND_AT_LEAST: "You need to spend at least {{min_spend | pretty_price}} to make a booking."
       }
       ITEM_DETAILS: {
-        MOVE_BOOKING_SUCCESS_MSG: "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
-        MOVE_BOOKING_FAIL_MSG: "Failed to move booking. Please try again."
+        MOVE_BOOKING_SUCCESS_ALERT: "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
+        MOVE_BOOKING_FAIL_ALERT: "Failed to move booking. Please try again."
       }
       ADD_RECIPIENT: {
         MODAL_TITLE: "@:COMMON.TERMINOLOGY.RECIPIENT"

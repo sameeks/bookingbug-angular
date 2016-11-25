@@ -51,8 +51,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         SPEND_AT_LEAST: "Le montant minimal pour une réservation est de {{min_spend | pretty_price}}."
       }
       ITEM_DETAILS: {
-        MOVE_BOOKING_SUCCESS_MSG: "Votre réservation a été déplacée au {{datetime | datetime: 'LLLL'}}"
-        MOVE_BOOKING_FAIL_MSG: "La réservation n'a pas pu être déplacée. Merci de réessayer"
+        MOVE_BOOKING_SUCCESS_ALERT: "Votre réservation a été déplacée au {{datetime | datetime: 'LLLL'}}"
+        MOVE_BOOKING_FAIL_ALERT: "La réservation n'a pas pu être déplacée. Merci de réessayer"
       }
       ADD_RECIPIENT: {
         MODAL_TITLE: "@:COMMON.TERMINOLOGY.RECIPIENT"

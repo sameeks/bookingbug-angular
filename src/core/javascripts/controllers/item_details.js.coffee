@@ -264,7 +264,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
 
         , (err) ->
           loader.setLoaded()
-          AlertService.add("danger", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_MSG')})
+          AlertService.add("danger", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')})
       else
         if $scope.bb.current_item.move_reason
           $scope.item.move_reason = $scope.bb.current_item.move_reason
@@ -283,13 +283,13 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
           $scope.showMoveMessage(b.datetime)
          , (err) =>
           loader.setLoaded()
-          AlertService.add("danger", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_MSG')})
+          AlertService.add("danger", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')})
     else
       $scope.decideNextPage(route)
 
   $scope.showMoveMessage = (datetime) ->
 
-    AlertService.add("info", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_MSG', {datetime: datetime})})
+    AlertService.add("info", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', {datetime: datetime})})
 
 
   ###**

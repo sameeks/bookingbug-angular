@@ -4,22 +4,31 @@ All notable changes to this project will be documented in this file using [CHANG
 ## [Unreleased]
 
 ### Added
-- i18n support
-- `endDateTime` helper method to the core TimeSlot model which returns the end time as a Moment object.
+* [i18n](https://github.com/BookingBug/bookingbug-angular/wiki/1.1-i18n) support: 
+  * All templates have beenn updated to use translation keys
+* `endDateTime` helper method to the core TimeSlot model which returns the end time as a Moment object.
+* Added `bbMonthAvailability` component 
+
+### Changed
+* bbDaylist has been enhanced so that it supports localisation.  The directive shows the next 5 weeks of availability rather than a traditional month view so that past days aren't displayed
+* 
+
 
 ### Removed
- - `print_time`, `print_end_time`, `print_time12`, and `print_end_time12` methods and `time_12` and `time_24` properties have been removed from the TimeSlot model in favour of `datetime` and `endDateTime`.
+* use_i18n from GeneralOptionsProvider - i18n is now enabled by default
+* `print_time`, `print_end_time`, `print_time12`, and `print_end_time12` methods and `time_12` and `time_24` properties have been removed from the TimeSlot model in favour of `datetime` and `endDateTime()`.
 
 
 ## [2.1.0] - 2016-11-08
 ### Added
-- New CompanyStoreService has been created to share company data around, e.g country_code and currency_code
+- New CompanyStoreService has been created to share company data, e.g country_code and currency_code
+
 ### Changed
 - BREAKING: Replaced SettingsService with (new) CompanyStoreService and (the existing) GeneralOptions provider. 
   The following initilisation options from bbWiget have been moved to be configurable options in GeneralOptions:
     - scroll_offset
     - update_document_title
-    - use_local_time_zone - if set to true display_time_zone will be set using moment.guess() 
+    - use_local_time_zone
     - use_i18n
   Use your projects config block to set them:
 
