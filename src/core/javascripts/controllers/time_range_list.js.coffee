@@ -508,6 +508,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
           requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item, $scope.bb.item_defaults)
 
           if requested_slot.slot and requested_slot.match == "full"
+            $scope.skipThisStep()
             $scope.selectSlot requested_slot.slot, day
           else if requested_slot.slot
             $scope.highlightSlot requested_slot.slot, day
