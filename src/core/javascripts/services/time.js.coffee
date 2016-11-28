@@ -18,8 +18,6 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
       deferred.reject("No date set")
       return deferred.promise
 
-
-
     start_date = prms.start_date
     end_date   = prms.end_date if prms.end_date
 
@@ -43,30 +41,31 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
     # If there was no duration passed in get the default duration off the
     # current item
     if !prms.duration?
-      prms.duration = prms.cItem.duration if prms.cItem && prms.cItem.duration
+      prms.duration = prms.cItem.duration if prms.cItem and prms.cItem.duration
 
     item_link = prms.item_link
 
-    if prms.cItem && prms.cItem.days_link && !item_link
+    if prms.cItem and prms.cItem.days_link and !item_link
       item_link = prms.cItem.days_link
 
     if item_link
 
-      extra = {date: start_date.toISODate()}
-      # extra.location = prms.client.addressCsvLine() if prms.client && prms.client.hasAddress()
-      extra.location = prms.location if prms.location
-      extra.event_id = prms.cItem.event_id if prms.cItem.event_id
-      extra.person_id = prms.cItem.person.id if prms.cItem.person && !prms.cItem.anyPerson() && !item_link.event_id && !extra.event_id
-      extra.resource_id = prms.cItem.resource.id if prms.cItem.resource && !prms.cItem.anyResource() && !item_link.event_id  && !extra.event_id
-      extra.end_date = end_date.toISODate() if end_date
-      extra.duration = prms.duration
-      extra.resource_ids = prms.resource_ids
+      extra                 = {}
+      extra.date            = start_date.toISODate()
+      extra.location        = prms.location if prms.location
+      extra.event_id        = prms.cItem.event_id if prms.cItem.event_id
+      extra.person_id       = prms.cItem.person.id if prms.cItem.person and !prms.cItem.anyPerson() and !item_link.event_id and !extra.event_id
+      extra.resource_id     = prms.cItem.resource.id if prms.cItem.resource and !prms.cItem.anyResource() and !item_link.event_id  and !extra.event_id
+      extra.end_date        = end_date.toISODate() if end_date
+      extra.duration        = prms.duration
       extra.person_group_id = prms.cItem.person_group_id
-      extra.num_resources = prms.num_resources
-      extra.time_zone = prms.time_zone if prms.time_zone
-      extra.ignore_booking = prms.cItem.id if prms.cItem.id
-      # if we have an event - the the company link - so we don't add in extra params
-      item_link = prms.company if extra.event_id
+      extra.num_resources   = prms.num_resources
+      extra.time_zone       = prms.time_zone if prms.time_zone
+      extra.ignore_booking  = prms.cItem.id if prms.cItem.id
+      extra.people_ids      = prms.people_ids if prms.people_ids
+      extra.resource_ids    = prms.resource_ids if prms.resource_ids
+
+      item_link             = prms.company if extra.event_id # if we have an event - the the company link - so we don't add in extra params
 
       item_link.$get('times', extra).then (results) =>
 
@@ -170,7 +169,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
 
   merge_times: (all_events, service, item, date) ->
 
-    return [] if !all_events || all_events.length == 0
+    return [] if !all_events or all_events.length == 0
 
     all_events = _.shuffle(all_events)
     sorted_times = []
@@ -178,7 +177,7 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
       if ev.times
         for i in ev.times
           # set it not set, currently unavailable, or randomly based on the number of events
-          if !sorted_times[i.time] || sorted_times[i.time].avail == 0 || (Math.floor(Math.random()*all_events.length) == 0 && i.avail > 0)
+          if !sorted_times[i.time] or sorted_times[i.time].avail == 0 or (Math.floor(Math.random()*all_events.length) == 0 and i.avail > 0)
             i.event_id = ev.event_id
             sorted_times[i.time] = i
         # if we have an item - which an already booked item - make sure that it's the list of time slots we can select - i.e. that we can select the current slot
@@ -201,11 +200,11 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
 
 
   checkCurrentItem: (item, sorted_times, ev) ->
-    if item && item.id && item.event_id == ev.event_id && item.time && !sorted_times[item.time.time] && item.date && item.date.date.toISODate() == ev.date
+    if item and item.id and item.event_id == ev.event_id and item.time and !sorted_times[item.time.time] and item.date and item.date.date.toISODate() == ev.date
       # calculate the correct datetime for time slot
       item.time.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(item.date.date, item.time)
       sorted_times[item.time.time] = item.time
       # remote this entry from the cache - just in case - we know it has a held item in it so lets just not keep it in case that goes later!
       halClient.clearCache(ev.$href("self"))
-    else if item && item.id && item.event_id == ev.event_id && item.time && sorted_times[item.time.time] && item.date && item.date.date.toISODate() == ev.date
+    else if item and item.id and item.event_id == ev.event_id and item.time and sorted_times[item.time.time] and item.date and item.date.date.toISODate() == ev.date
       sorted_times[item.time.time].avail = 1
