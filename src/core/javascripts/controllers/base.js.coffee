@@ -65,9 +65,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   $scope.Route = $rootScope.Route
 
 
-  $compile("<span bb-display-mode></span>") $scope, (cloned, scope) =>
-    $bbug($element).append(cloned)
-
 
   $scope.initWidget = (prms = {}) =>
 
