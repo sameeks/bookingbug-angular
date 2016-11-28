@@ -12,6 +12,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   $scope.cid                    = "BBCtrl"
   $scope.controller             = "public.controllers.BBCtrl"
   $scope.bb                     = new BBWidget()
+
+  @bb = $scope.bb
+
   AppConfig.uid                 = $scope.bb.uid
   $scope.qs                     = QueryStringService
   $scope.company_api_path       = '/api/v1/company/{company_id}{?embed,category_id}'
@@ -1225,3 +1228,5 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
   $scope.redirectTo = (url) ->
     $window.location.href = url
+
+  return

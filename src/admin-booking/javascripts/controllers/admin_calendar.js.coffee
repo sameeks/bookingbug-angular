@@ -62,6 +62,7 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
 
     if $scope.bb.current_item.reserve_ready
       $scope.addItemToBasket().then () =>
+        debugger
         $scope.decideNextPage()
     else
       $scope.decideNextPage()
@@ -88,6 +89,7 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
 
     if $scope.bb.current_item.reserve_ready
       $scope.addItemToBasket().then () =>
+        debugger
         $scope.decideNextPage()
     else
       $scope.decideNextPage()
