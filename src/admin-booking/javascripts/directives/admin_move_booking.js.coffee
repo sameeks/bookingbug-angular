@@ -68,5 +68,6 @@ angular.module('BBAdminBooking').directive 'bbAdminMoveBooking', ($log,
   {
     link: link
     controller: 'BBCtrl'
+    controllerAs: '$bbCtrl'
   }
 
