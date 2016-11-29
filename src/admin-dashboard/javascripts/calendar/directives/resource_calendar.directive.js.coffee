@@ -30,9 +30,9 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
     templateUrl: 'calendar/resource-calendar.html'
     replace: true
     scope:
-      labelAssembler: '@?'
-      blockLabelAssembler: '@?'
-      externalLabelAssembler: '@?'
+      labelAssembler: '@'
+      blockLabelAssembler: '@'
+      externalLabelAssembler: '@'
       model: '=?'
   }
 
