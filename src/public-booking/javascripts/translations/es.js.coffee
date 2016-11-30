@@ -51,7 +51,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         SPEND_AT_LEAST: "You need to spend at least {{min_spend | pretty_price}} to make a booking."
       }
       ITEM_DETAILS: {
-        MOVE_BOOKING_SUCCESS_ALERT: "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
+        MOVE_BOOKING_SUCCESS_ALERT: "Your booking has been moved to {{datetime}}"
         MOVE_BOOKING_FAIL_ALERT: "Failed to move booking. Please try again."
       }
       ADD_RECIPIENT: {
@@ -87,7 +87,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       CALENDAR: {
         PROGRESS_NEXT: "@:COMMON.BTN.NEXT"
-        PROGRESS_MOVE_BOOKING: "@:CORE.BTN.BOOK"
+        PROGRESS_MOVE_BOOKING: "@:COMMON.BTN.BOOK"
         BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CATEGORY : {

@@ -51,7 +51,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         SPEND_AT_LEAST: "Le montant minimal pour une réservation est de {{min_spend | pretty_price}}."
       }
       ITEM_DETAILS: {
-        MOVE_BOOKING_SUCCESS_ALERT: "Votre réservation a été déplacée au {{datetime | datetime: 'LLLL'}}"
+        MOVE_BOOKING_SUCCESS_ALERT: "Votre réservation a été déplacée au {{datetime}}"
         MOVE_BOOKING_FAIL_ALERT: "La réservation n'a pas pu être déplacée. Merci de réessayer"
       }
       ADD_RECIPIENT: {
@@ -87,7 +87,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       CALENDAR: {
         PROGRESS_NEXT: "@:COMMON.BTN.NEXT"
-        PROGRESS_MOVE_BOOKING: "@:CORE.BTN.BOOK"
+        PROGRESS_MOVE_BOOKING: "@:COMMON.BTN.BOOK"
         BACK_BTN: "@:COMMON.BTN.BACK"
       }
       CATEGORY : {

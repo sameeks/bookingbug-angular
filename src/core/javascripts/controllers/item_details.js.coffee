@@ -52,7 +52,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, 
 
 angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope,
   PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService,
-  $uibModal, $document, $translate, GeneralOptions, PurchaseService, LoadingService) ->
+  $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
   loader = LoadingService.$loader($scope)
@@ -288,8 +288,9 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       $scope.decideNextPage(route)
 
   $scope.showMoveMessage = (datetime) ->
+    datetime = $filter('datetime')(datetime, 'LLLL')
 
-    AlertService.add("info", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', {datetime: datetime})})
+    AlertService.add("info", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', datetime: datetime)})
 
 
   ###**
