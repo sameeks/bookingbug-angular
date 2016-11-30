@@ -38,14 +38,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     Confirmation: 16
 
   init = () ->
-    compileDisplayMode()
-    initializeBBWidget()
-
-    $rootScope.$on 'show:loader', showLoaderHandler
-    $rootScope.$on 'hide:loader', hideLoaderHandler
-    $scope.$on '$locationChangeStart', locationChangeStartHandler
-
-    vm.bb = $scope.bb
 
     $scope.addItemToBasket = addItemToBasket
     $scope.areScopesLoaded = LoadingService.areScopesLoaded
@@ -106,6 +98,21 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     $scope.supportsTouch = supportsTouch
     $scope.showPage = showPage
     $scope.updateBasket = updateBasket
+
+    vm.$onInit = $onInit
+
+    return
+
+  $onInit = () ->
+
+    compileDisplayMode()
+    initializeBBWidget()
+
+    $rootScope.$on 'show:loader', showLoaderHandler
+    $rootScope.$on 'hide:loader', hideLoaderHandler
+    $scope.$on '$locationChangeStart', locationChangeStartHandler
+
+    vm.bb = $scope.bb
 
     return
 
