@@ -221,7 +221,7 @@
               <div class="col-sm-5">
                 <input type="text" name="address1" id="address1" ng-model="client.address1" class="form-control" autocomplete="address-line1"/>
               </div>
-              <div class="col-sm-3 messages">
+              <div class="col-sm-3 messages"> 
                 <div class="error-message" ng-show="client_form.address1.$invalid && booking_form.submitted" translate="PUBLIC_BOOKING.EVENT.DETAILS_ADDRESS_VALIDATION_MSG">
                 </div>
               </div>
@@ -313,7 +313,7 @@
                   </div>
 
                   <div class="form-group" ng-class="{'has-error': (!$first || !use_my_details) && client_ticket_form.attendee_email.$dirty && client_ticket_form.attendee_email.$invalid}">
-                    <label for="attendee_email" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.UIB_ACCORDION.EVENT.DETAILS_EMAIL"></span>:</label>
+                    <label for="attendee_email" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.EVENT.UIB_ACCORDION.DETAILS_EMAIL"></span>:</label>
                     <div ng-if="use_my_details && $first" class="col-sm-5">
                       <input disabled type="email" ng-model="client.email" name="attendee_email" required class="form-control" />
                     </div>
