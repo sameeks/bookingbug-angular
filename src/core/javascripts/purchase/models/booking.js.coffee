@@ -100,7 +100,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
       else if @event
         data.event_id = @event.id
       else
-        data.event_id = @slot_id
+        data.event_id = @event_id
 
       data.full_describe = @full_describe
       data.id = @id
