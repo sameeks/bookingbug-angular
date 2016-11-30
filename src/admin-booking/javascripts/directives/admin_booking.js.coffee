@@ -34,4 +34,5 @@ angular.module('BBAdminBooking').directive 'bbAdminBooking', (AdminCompanyServic
   {
     link: link
     controller: 'BBCtrl'
+    scope: true
   }
