@@ -12,12 +12,11 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
   $scope.company_api_path = '/api/v1/company/{company_id}{?embed,category_id}'
   $scope.company_admin_api_path = '/api/v1/admin/{company_id}/company{?embed,category_id}'
 
-  first_call = true
-  con_started = $q.defer()
-  $rootScope.connection_started = con_started.promise
-
-  widget_started = $q.defer()
-  $rootScope.widget_started = widget_started.promise
+  isFirstCall = true
+  connectionStarted = $q.defer()
+  $rootScope.connection_started = connectionStarted.promise
+  widgetStarted = $q.defer()
+  $rootScope.widget_started = widgetStarted.promise
 
   $rootScope.Route = $scope.Route =
     Company: 0
@@ -39,23 +38,84 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     Confirmation: 16
 
   init = () ->
-    initializeBBWidget()
     compileDisplayMode()
+    initializeBBWidget()
 
     $rootScope.$on 'show:loader', showLoaderHandler
     $rootScope.$on 'hide:loader', hideLoaderHandler
     $scope.$on '$locationChangeStart', locationChangeStartHandler
 
-    exposeMethodsToScope()
-
     vm.bb = $scope.bb
+
+    $scope.addItemToBasket = addItemToBasket
+    $scope.areScopesLoaded = LoadingService.areScopesLoaded
+    $scope.base64encode = base64encode
+    $scope.broadcastItemUpdate = broadcastItemUpdate
+    $scope.clearPage = clearPage
+    $scope.clearBasketItem = clearBasketItem
+    $scope.clearClient = clearClient
+    $scope.checkStepTitle = checkStepTitle
+    $scope.$debounce = $debounce
+    $scope.decideNextPage = decideNextPage
+    $scope.deleteBasketItem = deleteBasketItem
+    $scope.deleteBasketItems = deleteBasketItems
+    $scope.emptyBasket = emptyBasket
+    $scope.getCurrentStepTitle = getCurrentStepTitle
+    $scope.getPartial = getPartial
+    $scope.getUrlParam = getUrlParam
+    $scope.hidePage = hidePage
+    $scope.isAdmin = isAdmin
+    $scope.isAdminIFrame = isAdminIFrame
+    $scope.initWidget = initWidget
+    $scope.initWidget2 = initWidget2
+    $scope.isLoadingPage = isLoadingPage
+    $scope.isMemberLoggedIn = isMemberLoggedIn
+    $scope.jumpToPage = jumpToPage
+    $scope.loadPreviousStep = loadPreviousStep
+    $scope.loadStep = loadStep
+    $scope.loadStepByPageName = loadStepByPageName
+    $scope.logout = logout
+    $scope.moveToBasket = moveToBasket
+    $scope.notLoaded = LoadingService.notLoaded
+    $scope.parseDate = moment
+    $scope.quickEmptybasket = quickEmptybasket
+    $scope.recordStep = $scope.bb.recordStep
+    $scope.redirectTo = redirectTo
+    $scope.reloadDashboard = reloadDashboard
+    $scope.reset = reset
+    $scope.restart = restart
+    $scope.scrollTo = scrollTo
+    $scope.setAffiliate = setAffiliate
+    $scope.setBasicRoute = setBasicRoute
+    $scope.setBasket = setBasket
+    $scope.setBasketItem = setBasketItem
+    $scope.setClient = setClient
+    $scope.setCompany = setCompany
+    $scope.setLastSelectedDate = setLastSelectedDate
+    $scope.setLoaded = LoadingService.setLoaded
+    $scope.setLoadedAndShowError = LoadingService.setLoadedAndShowError
+    $scope.setLoadingPage = setLoadingPage
+    $scope.setPageLoaded = setPageLoaded
+    $scope.setPageRoute = setPageRoute
+    $scope.setReadyToCheckout = setReadyToCheckout
+    $scope.setRoute = setRoute
+    $scope.setStepTitle = setStepTitle
+    $scope.setUsingBasket = setUsingBasket
+    $scope.skipThisStep = skipThisStep
+    $scope.showCheckout = showCheckout
+    $scope.supportsTouch = supportsTouch
+    $scope.showPage = showPage
+    $scope.updateBasket = updateBasket
 
     return
 
   initializeBBWidget = () ->
     $scope.bb = new BBWidget()
     AppConfig.uid = $scope.bb.uid
+
     $scope.bb.stacked_items = []
+    $scope.bb.company_set = companySet
+
     determineBBApiUrl()
     return
 
@@ -108,10 +168,10 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
   initWidget = (prms = {}) =>
     @$init_prms = prms
     # remark the connection as starting again
-    con_started = $q.defer()
-    $rootScope.connection_started = con_started.promise
+    connectionStarted = $q.defer()
+    $rootScope.connection_started = connectionStarted.promise
 
-    if (($sniffer.webkit and $sniffer.webkit < 537) || ($sniffer.msie and $sniffer.msie <= 9)) && first_call # ie 8 hacks
+    if (($sniffer.webkit and $sniffer.webkit < 537) || ($sniffer.msie and $sniffer.msie <= 9)) && isFirstCall # ie 8 hacks
 
       if $scope.bb.api_url
         url = document.createElement('a')
@@ -263,7 +323,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     else
       @waiting_for_conn_started_def.resolve()
 
-    widget_started.resolve()
+    widgetStarted.resolve()
 
 
     #########################################################
@@ -434,28 +494,28 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
             $scope.bb.stacked_items = []
           if $scope.bb.company || $scope.bb.affiliate
 # onyl start if the company is valid
-            con_started.resolve()
+            connectionStarted.resolve()
             $scope.done_starting = true
             if !prms.no_route
               page = null
               # does the routing have a first step ? use this as long as we've not set explicit 'when' routes
-              page = $scope.bb.firstStep if first_call && $bbug.isEmptyObject($scope.bb.routeSteps)
+              page = $scope.bb.firstStep if isFirstCall && $bbug.isEmptyObject($scope.bb.routeSteps)
               page = prms.first_page if prms.first_page
 
-              first_call = false
+              isFirstCall = false
               decideNextPage(page)
       , (err) ->
-        con_started.reject("Failed to start widget")
+        connectionStarted.reject("Failed to start widget")
         LoadingService.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     , (err) ->
-      con_started.reject("Failed to start widget")
+      connectionStarted.reject("Failed to start widget")
       LoadingService.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
   setupDefaults = (company_id) =>
     def = $q.defer()
 
-    if first_call || ($scope.bb.orginal_company_id && $scope.bb.orginal_company_id != company_id) # if this is the first call - or we've switch companies
+    if isFirstCall || ($scope.bb.orginal_company_id && $scope.bb.orginal_company_id != company_id) # if this is the first call - or we've switch companies
 
       $scope.bb.orginal_company_id = company_id
       $scope.bb.default_setup_promises = []
@@ -1162,76 +1222,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
 
   redirectTo = (url) ->
     $window.location.href = url
-
-  ###*
-  * TODO We need to avoid putting any new public functions|properties on $scope. Instead:
-  *       - assign them on controller's context object
-  *       - dependent directive link function can access other directive controllers by using 'require' property on its definition object and 4
-  *       - prefer creating components over directives, we should transform existing directives to components
-  *       -
-  ###
-  exposeMethodsToScope = () ->
-    $scope.addItemToBasket = addItemToBasket
-    $scope.areScopesLoaded = LoadingService.areScopesLoaded
-    $scope.base64encode = base64encode
-    $scope.bb.company_set = companySet
-    $scope.broadcastItemUpdate = broadcastItemUpdate
-    $scope.clearPage = clearPage
-    $scope.clearBasketItem = clearBasketItem
-    $scope.clearClient = clearClient
-    $scope.checkStepTitle = checkStepTitle
-    $scope.$debounce = $debounce
-    $scope.decideNextPage = decideNextPage
-    $scope.deleteBasketItem = deleteBasketItem
-    $scope.deleteBasketItems = deleteBasketItems
-    $scope.emptyBasket = emptyBasket
-    $scope.getCurrentStepTitle = getCurrentStepTitle
-    $scope.getPartial = getPartial
-    $scope.getUrlParam = getUrlParam
-    $scope.hidePage = hidePage
-    $scope.isAdmin = isAdmin
-    $scope.isAdminIFrame = isAdminIFrame
-    $scope.initWidget = initWidget
-    $scope.initWidget2 = initWidget2
-    $scope.isLoadingPage = isLoadingPage
-    $scope.isMemberLoggedIn = isMemberLoggedIn
-    $scope.jumpToPage = jumpToPage
-    $scope.loadPreviousStep = loadPreviousStep
-    $scope.loadStep = loadStep
-    $scope.loadStepByPageName = loadStepByPageName
-    $scope.logout = logout
-    $scope.moveToBasket = moveToBasket
-    $scope.notLoaded = LoadingService.notLoaded
-    $scope.parseDate = moment # literally reference to moment constructing function
-    $scope.quickEmptybasket = quickEmptybasket
-    $scope.recordStep = $scope.bb.recordStep
-    $scope.redirectTo = redirectTo
-    $scope.reloadDashboard = reloadDashboard
-    $scope.reset = reset
-    $scope.restart = restart
-    $scope.scrollTo = scrollTo
-    $scope.setAffiliate = setAffiliate
-    $scope.setBasicRoute = setBasicRoute
-    $scope.setBasket = setBasket
-    $scope.setBasketItem = setBasketItem
-    $scope.setClient = setClient
-    $scope.setCompany = setCompany
-    $scope.setLastSelectedDate = setLastSelectedDate
-    $scope.setLoaded = LoadingService.setLoaded
-    $scope.setLoadedAndShowError = LoadingService.setLoadedAndShowError
-    $scope.setLoadingPage = setLoadingPage
-    $scope.setPageLoaded = setPageLoaded
-    $scope.setPageRoute = setPageRoute
-    $scope.setReadyToCheckout = setReadyToCheckout
-    $scope.setRoute = setRoute
-    $scope.setStepTitle = setStepTitle
-    $scope.setUsingBasket = setUsingBasket
-    $scope.skipThisStep = skipThisStep
-    $scope.showCheckout = showCheckout
-    $scope.supportsTouch = supportsTouch
-    $scope.showPage = showPage
-    $scope.updateBasket = updateBasket
-    return
 
   init()
 

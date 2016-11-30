@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
+BBContentController = ($scope) ->
   'ngInject'
 
   $scope.controller = "public.controllers.bbContentController"
@@ -9,3 +9,5 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
     $scope.setLoadingPage(false)
 
   return
+
+angular.module('BB.Controllers').controller 'bbContentController', BBContentController
