@@ -8,11 +8,11 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   templateUrl: 'admin_booking_clients.html'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, $timeout) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AdminClientService, AdminBookingOptions, AlertService, ClientService, ValidatorService, ErrorService, $log, BBModel, $timeout) ->
 
   $scope.validator  = ValidatorService
   $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 10})
-  
+
   $scope.sort_by_options = [
     {key: 'first_name', name: 'First Name'},
     {key: 'last_name', name: 'Last Name'},
@@ -75,6 +75,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
       order_by: params.order_by or $scope.sort_by
       order_by_reverse: params.order_by_reverse
       page: params.page or 1
+      
     $scope.params.default_company_id = $scope.bb.company.id if AdminBookingOptions.use_default_company_id
 
     $scope.notLoaded $scope
@@ -87,7 +88,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
         $scope.clients.add(params.page, result.items)
       else
         $scope.clients.initialise(result.items, result.total_entries)
-      
+
       $scope.setLoaded $scope
 
 
@@ -98,6 +99,8 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
     params =
       filter_by: search_text
       company: $scope.bb.company
+
+    params.default_company_id = $scope.bb.company.id if AdminBookingOptions.use_default_company_id
 
     AdminClientService.query(params).then (clients) =>
       defer.resolve(clients.items)
