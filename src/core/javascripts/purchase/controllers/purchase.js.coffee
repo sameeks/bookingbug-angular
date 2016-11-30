@@ -12,7 +12,7 @@ angular.module('BB.Directives').directive 'bbPurchase', () ->
 angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   PurchaseService, $uibModal, $location, $timeout, BBModel, $q, QueryStringService,
   SSOService, AlertService, LoginService, $window, $sessionStorage, LoadingService,
-  SettingsService, $translate, ReasonService, $document) ->
+  $translate, ReasonService, $document) ->
 
   $scope.controller = "Purchase"
   $scope.is_waitlist = false
