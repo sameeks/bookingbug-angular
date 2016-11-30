@@ -75,6 +75,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
       order_by: params.order_by or $scope.sort_by
       order_by_reverse: params.order_by_reverse
       page: params.page or 1
+    $scope.params.default_company_id = $scope.bb.company.id if AdminBookingOptions.use_default_company_id
 
     $scope.notLoaded $scope
 
