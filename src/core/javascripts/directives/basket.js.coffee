@@ -79,6 +79,6 @@ angular.module('BB.Directives').directive 'bbMinSpend', () ->
         return true
       else
         AlertService.clear()
-        AlertService.add("warning", { msg: $translate.instant('PUBLIC_BOOKING.ALERTS.SPEND_AT_LEAST', min_spend: $scope.min_spend)})
+        AlertService.add("warning", { msg: $translate.instant('ALERTS.SPEND_AT_LEAST', min_spend: $scope.min_spend)})
         return false
 
