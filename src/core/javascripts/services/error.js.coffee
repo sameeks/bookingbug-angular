@@ -1,4 +1,4 @@
-angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
+angular.module('BB.Services').factory 'ErrorService', (SettingsService, $translate) ->
 
   alerts = [
     {
@@ -276,13 +276,20 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
     }
   ]
 
-  getError: (key) ->
+  ###*
+  # @param {String} msg
+  # @returns {{msg: String}}
+  ###
+  createCustomError = (msg) ->
+    return {msg: msg}
+
+  getError = (key) ->
     error = _.findWhere(alerts, {key: key})
     error.persist = true
     translate = SettingsService.isInternationalizatonEnabled()
     # if i18n enabled, return the translation key
     if error and translate
-      return {msg: "ERROR.#{key}"}
+      return {msg: $translate.instant('ERROR.' + key)}
     # else return the error object
     else if error and !translate
       return error
@@ -292,14 +299,21 @@ angular.module('BB.Services').factory 'ErrorService', (SettingsService) ->
     else
       return alerts[0]
 
-
-  getAlert: (key) ->
+  getAlert = (key) ->
     alert = _.findWhere(alerts, {key: key})
     translate = SettingsService.isInternationalizatonEnabled()
     # if i18n enabled, return the translation key
     if alert and translate
-      return {msg: "ALERT.#{key}"}
+      return {msg: $translate.instant('ALERT.' + key)}
     else if alert and !translate
       return alert
     else
       return null
+
+  return {
+    createCustomError: createCustomError
+    getAlert: getAlert
+    getError: getError
+  }
+
+

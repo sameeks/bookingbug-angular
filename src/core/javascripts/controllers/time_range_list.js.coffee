@@ -235,10 +235,9 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
     if amount > 0
       $element.removeClass('subtract')
       $element.addClass('add')
-    $scope.selected_day = moment($scope.selected_date)
     switch type
       when 'days'
-        setTimeRange($scope.selected_day.add(amount, 'days'))
+        setTimeRange($scope.start_date.add(amount, 'days'))
       when 'weeks'
         $scope.start_date.add(amount, type)
         setTimeRange($scope.start_date)
@@ -498,6 +497,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
           requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item, $scope.bb.item_defaults)
 
           if requested_slot.slot and requested_slot.match == "full"
+            $scope.skipThisStep()
             $scope.selectSlot requested_slot.slot, day
           else if requested_slot.slot
             $scope.highlightSlot requested_slot.slot, day
@@ -506,14 +506,14 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
          $scope.$broadcast "time_slots:loaded", time_slots
 
-      , (err) -> 
+      , (err) ->
         if err.status == 404  && err.data && err.data.error && err.data.error == "No bookable events found"
           if $scope.data_source && $scope.data_source.person
             AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'))
-            $scope.setLoaded $scope        
+            $scope.setLoaded $scope
           else if  $scope.data_source && $scope.data_source.resource
             AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'))
-            $scope.setLoaded $scope        
+            $scope.setLoaded $scope
           else
           $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
         else
