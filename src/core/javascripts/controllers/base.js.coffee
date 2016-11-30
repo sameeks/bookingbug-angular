@@ -1164,8 +1164,11 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     $window.location.href = url
 
   ###*
-  * TODO We need to avoid putting any new public methods|properties on $scope - instead expose them through controller instance (vm.methodName = methodName).
-  *      Dependent directives|components can access controller instance properties by using 'require' property on its definition object (bbWidget, bbAdminBooking, bbAdminMoveBooking are using BBCtrl).
+  * TODO We need to avoid putting any new public functions|properties on $scope. Instead:
+  *       - assign them on controller's context object
+  *       - dependent directive link function can access other directive controllers by using 'require' property on its definition object and 4
+  *       - prefer creating components over directives, we should transform existing directives to components
+  *       -
   ###
   exposeMethodsToScope = () ->
     $scope.addItemToBasket = addItemToBasket
