@@ -371,7 +371,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EVENT_SPACE_WORD: "place"
         EVENT_LEFT_WORD: "restant"
         ITEM_FROM: "À partir de"
-        BOOK_EVENT_BTN: "@:COMMON.BTN.BOOK @:COMMON.TERMINOLOGY.EVENT"
+        BOOK_EVENT_BTN: "@:COMMON.BTN.BOOK_EVENT" 
         BACK_BTN: "@:COMMON.BTN.BACK"
         EVENT_SOLD_OUT: "Épuisé"
         EVENT_JOIN_WAITLIST: "S'inscrire sur la liste d'attente"

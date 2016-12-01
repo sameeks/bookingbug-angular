@@ -167,6 +167,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         SAVE:                  "Save"
         SELECT:                "Select"
         BOOK:                  "Book"
+        BOOK_EVENT:            "Book Event"
         CANCEL_BOOKING:        "Cancel Booking"
         DO_NOT_CANCEL_BOOKING: "Do not cancel"
         APPLY:                 "Apply"
