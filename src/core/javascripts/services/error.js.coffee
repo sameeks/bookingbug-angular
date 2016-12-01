@@ -255,7 +255,7 @@ angular.module('BB.Services').factory 'ErrorService', ($translate) ->
 
     if alert
 
-      alert.msg = $translate.instant("ALERTS.#{key}")
+      alert.msg = $translate.instant("CORE.ALERTS.#{key}")
 
       return alert
 
