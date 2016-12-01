@@ -35,6 +35,7 @@ angular.module('BBAdminBooking').directive 'bbAdminBooking', (BBModel, $log, $co
   {
     link: link
     controller: 'BBCtrl'
+    controllerAs: '$bbCtrl'
     scope: true
   }
 
