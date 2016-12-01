@@ -5,7 +5,7 @@ angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
     $scope.setPageLoaded()
     $scope.setLoadingPage(false)
 
-angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService) ->
+angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, ViewportSize) ->
 
   # dont change the cid as we use it in the app to identify this as the widget
   # root scope
@@ -100,6 +100,9 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
     # Initialize the scope from params
     prms = @$init_prms
+
+    # Initialise viewport size tracking
+    ViewportSize.init()
 
     # if we've been asked to load any values from the url - do so!
     if prms.query
