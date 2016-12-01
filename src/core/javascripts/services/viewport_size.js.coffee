@@ -21,6 +21,11 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
   ###
   viewport_element_id_prefix = 'viewport_size_'
 
+  ###
+  # @description used to prevent multiple viewport elements being appended to dom
+  ###
+  is_initialised = false
+
 
   ###
   # @description supported bootstrap screen sizes
@@ -87,7 +92,7 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
   # @returns {boolean}
   ###
   isElementVisible = (element) ->
-    return element and element.style.display is not 'none' and element.offsetWidth and element.offsetHeight
+    return element and element.style.display != 'none' and element.offsetWidth and element.offsetHeight
 
   
   ###
@@ -104,7 +109,7 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
   ###
   # @description determins the current size of the screen and generates dynamic functions
   ###
-  calculateCurrentSize = ->
+  findVisibleElement = ->
     viewport_elements = getViewportElementsFromDocumentBody()
     for viewport_element in viewport_elements
       element_size = getSizeFromElement(viewport_element)
@@ -119,11 +124,11 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
 
 
   ###
-  # @description re-calculate screen size when window resize function has been called
+  # @description get screen size when window resize function has been called
   ###
   listenForResize = ->
     angular.element($window).resize ->
-      calculateCurrentSize()
+      findVisibleElement()
       return
     return
 
@@ -132,7 +137,7 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
   # PUBLIC METHODS #
   ##################
 
-  # Dynamically generated methods (see calculateCurrentSize)
+  # Dynamically generated methods (see findVisibleElement)
   # service.isXS
   # service.isSM
   # service.isMD
@@ -142,9 +147,11 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
   # @description initialise before utilising viewport service
   ###
   service.init = ->
-    appendViewportElementsToDocumentBody()
-    calculateCurrentSize()
-    listenForResize()
+    if !is_initialised
+      appendViewportElementsToDocumentBody()
+      findVisibleElement()
+      listenForResize()
+      is_initialised = true
     return
 
   ###
