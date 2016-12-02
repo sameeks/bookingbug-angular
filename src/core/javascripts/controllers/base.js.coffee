@@ -71,7 +71,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     $scope.notLoaded = LoadingService.notLoaded
     $scope.parseDate = moment
     $scope.quickEmptybasket = quickEmptybasket
-    $scope.recordStep = $scope.bb.recordStep
     $scope.redirectTo = redirectTo
     $scope.reloadDashboard = reloadDashboard
     $scope.reset = reset
@@ -122,6 +121,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
 
     $scope.bb.stacked_items = []
     $scope.bb.company_set = companySet
+    $scope.recordStep = $scope.bb.recordStep
 
     determineBBApiUrl()
     return
