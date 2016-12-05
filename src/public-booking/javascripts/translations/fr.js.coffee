@@ -361,8 +361,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         FILTER_ANY_PRICE: '@:COMMON.TERMINOLOGY.ANY @:COMMON.TERMINOLOGY.PRICE'
         ITEM_DATE: "@:COMMON.TERMINOLOGY.DATE"
         ITEM_PRICE: "@:COMMON.TERMINOLOGY.PRICE"
-        EVENT_SOLD_OUT_HIDE: "Cacher les événements indisponibles"
-        EVENT_SOLD_OUT_SHOW: "Afficher les événements indisponibles"
+        HIDE_FULLY_BOOKED_EVENTS: "Cacher les événements indisponibles"
+        SHOW_FULLED_BOOKED_EVENTS: "Afficher les événements indisponibles"
         FILTER_RESET: "@:COMMON.TERMINOLOGY.RESET"
         FILTER_NONE: "Tous les événements"
         FILTER_FILTERED: "Afficher les événements filtrés"
