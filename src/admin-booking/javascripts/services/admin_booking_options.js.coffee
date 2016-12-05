@@ -31,6 +31,7 @@ angular.module('BB.Services').provider 'AdminBookingOptions', ->
     merge_people: true
     day_view: 'multi_day'
     mobile_pattern: null
+    use_default_company_id: false
   }
 
   @setOption = (option, value) ->
