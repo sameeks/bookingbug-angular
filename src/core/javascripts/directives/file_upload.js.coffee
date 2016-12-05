@@ -15,8 +15,8 @@
       bb-file-upload
       item="item"
       max-size="100KB"
-      pertty-accept="images, .pdf, .doc/docx"
-      accept="application/pdf,application/msword,image/*">
+      pretty-accept="images, .pdf, .doc/docx"
+      accept="'application/pdf,application/msword,image/*'">
     </div>
   </example>
 ###

@@ -8,7 +8,7 @@
 * Defines different alerts and errors that are raised by the SDK.
 *
 ####
-angular.module('BB.Services').factory 'ErrorService', ($translate) ->
+angular.module('BB.Services').factory 'ErrorService', (GeneralOptions) ->
 
   alerts = [
     {
@@ -226,6 +226,13 @@ angular.module('BB.Services').factory 'ErrorService', ($translate) ->
     }
   ]
 
+  ###*
+  # @param {String} msg
+  # @returns {{msg: String}}
+  ###
+  createCustomError = (msg) ->
+    return {msg: msg}
+
   ###**
   * @ngdoc method
   * @name getError
@@ -233,11 +240,11 @@ angular.module('BB.Services').factory 'ErrorService', ($translate) ->
   * @description
   * Returns error, always setting persist to true. Returns generic error if error with given key is not found.
   ###
-  getError: (key) ->
+  getError =  (key) ->
 
-    error = @getAlert(key)
+    error = getAlert(key)
     # return generic error if we can't find the key
-    error = @getAlert('GENERIC') if !error
+    error = getAlert('GENERIC') if !error
     error.persist = true
 
     return error
@@ -249,7 +256,7 @@ angular.module('BB.Services').factory 'ErrorService', ($translate) ->
   * @description
   * Returns alert by given key
   ###
-  getAlert: (key) ->
+  getAlert = (key) ->
 
     alert = _.findWhere(alerts, {key: key})
 
@@ -263,4 +270,9 @@ angular.module('BB.Services').factory 'ErrorService', ($translate) ->
 
       return null
 
+  return {
+    createCustomError: createCustomError
+    getAlert: getAlert
+    getError: getError
+  }
 

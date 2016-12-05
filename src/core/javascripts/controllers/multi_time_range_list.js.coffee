@@ -358,7 +358,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
   spliceExistingDateTimes = (stacked_item, slots) ->
 
     return if !stacked_item.datetime and !stacked_item.date 
-    datetime = stacked_item.datetime or DateTimeUtilitiesService.convertTimeSlotToMoment(stacked_item.date.date, stacked_item.time)
+    datetime = stacked_item.datetime or DateTimeUtilitiesService.convertTimeToMoment(stacked_item.date.date, stacked_item.time.time)
     if $scope.start_date <= datetime && $scope.end_date >= datetime
       time = DateTimeUtilitiesService.convertMomentToTime(datetime)
       time_slot = _.findWhere(slots[datetime.toISODate()], {time: time})

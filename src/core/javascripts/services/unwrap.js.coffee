@@ -30,6 +30,12 @@ angular.module('BB.Services').factory "BB.Service.address", ($q, BBModel, Unwrap
     UnwrapService.unwrapResource(BBModel.Address, resource)
 
 
+angular.module('BB.Services').factory "BB.Service.addresses", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.Address, 'addresses', resource)
+
+
 angular.module('BB.Services').factory "BB.Service.person", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
     UnwrapService.unwrapResource(BBModel.Person, resource)

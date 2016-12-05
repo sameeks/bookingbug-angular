@@ -10,7 +10,7 @@
   <div class="bb-step-navigation">
     <div class="row">
       <div class="col-sm-offset-7 col-sm-3 col-sm-push-2 text-right">       
-        <button type="button" class="btn btn-primary btn-block" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time">
+        <button id="btn-continue" type="button" class="btn btn-primary btn-block" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time">
           <span ng-show="!bb.moving_booking" translate="PUBLIC_BOOKING.CALENDAR.PROGRESS_NEXT"></span>
           <span ng-show="bb.moving_booking" translate="PUBLIC_BOOKING.CALENDAR.PROGRESS_MOVE_BOOKING"></span>
         </button>
