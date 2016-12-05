@@ -1,50 +1,24 @@
-# a controller used for the main page contents - just in case we need one here
-angular.module('BB.Controllers').controller 'bbContentController', ($scope) ->
-  $scope.controller = "public.controllers.bbContentController"
-  $scope.initPage = () =>
-    $scope.setPageLoaded()
-    $scope.setLoadingPage(false)
+'use strict'
 
-angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootScope,halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService) ->
+BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService) ->
+  'ngInject'
 
-  # dont change the cid as we use it in the app to identify this as the widget
-  # root scope
-  $scope.cid                    = "BBCtrl"
-  $scope.controller             = "public.controllers.BBCtrl"
-  $scope.bb                     = new BBWidget()
-  AppConfig.uid                 = $scope.bb.uid
-  $scope.qs                     = QueryStringService
-  $scope.company_api_path       = '/api/v1/company/{company_id}{?embed,category_id}'
+  vm = @
+
+  $scope.cid = "BBCtrl" # dont change the cid as we use it in the app to identify this as the widget root scope
+  $scope.controller = "public.controllers.BBCtrl"
+
+  $scope.qs = QueryStringService
+  $scope.company_api_path = '/api/v1/company/{company_id}{?embed,category_id}'
   $scope.company_admin_api_path = '/api/v1/admin/{company_id}/company{?embed,category_id}'
 
-  if $scope.apiUrl
-    $scope.bb ||= {}
-    $scope.bb.api_url = $scope.apiUrl
-  
-  if $rootScope.bb && $rootScope.bb.api_url
-    $scope.bb.api_url = $rootScope.bb.api_url
-    unless $rootScope.bb.partial_url
-#      $scope.bb.partial_url = "#{$scope.bb.api_url}/angular/"
-      $scope.bb.partial_url = ""
-    else
-      $scope.bb.partial_url = $rootScope.bb.partial_url
-  # if a custom port was used add that to the url
-  if $location.port() isnt 80 and $location.port() isnt 443
-    $scope.bb.api_url ||= $location.protocol() + "://" + $location.host() + ":" + $location.port()
-    #$scope.bb.partial_url ||= $location.protocol() + "://" + $location.host() + ":" + $location.port() + '/angular/'
-  else
-    $scope.bb.api_url ||= $location.protocol() + "://" + $location.host()
-    #$scope.bb.partial_url ||= $location.protocol() + "://" + $location.host() + '/angular/'
+  isFirstCall = true
+  connectionStarted = $q.defer()
+  $rootScope.connection_started = connectionStarted.promise
+  widgetStarted = $q.defer()
+  $rootScope.widget_started = widgetStarted.promise
 
-
-  $scope.bb.stacked_items       = []
-  first_call                    = true
-  con_started                   = $q.defer()
-  $rootScope.connection_started = con_started.promise
-  widget_started                = $q.defer()
-  $rootScope.widget_started     = widget_started.promise
-
-  $rootScope.Route =
+  $rootScope.Route = $scope.Route =
     Company: 0
     Category: 1
     Service: 2
@@ -62,56 +36,181 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     Login: 14
     Questions: 15
     Confirmation: 16
-  $scope.Route = $rootScope.Route
 
+  init = () ->
 
-  $compile("<span bb-display-mode></span>") $scope, (cloned, scope) =>
-    $bbug($element).append(cloned)
+    $scope.addItemToBasket = addItemToBasket
+    $scope.areScopesLoaded = LoadingService.areScopesLoaded
+    $scope.base64encode = base64encode
+    $scope.broadcastItemUpdate = broadcastItemUpdate
+    $scope.clearPage = clearPage
+    $scope.clearBasketItem = clearBasketItem
+    $scope.clearClient = clearClient
+    $scope.checkStepTitle = checkStepTitle
+    $scope.$debounce = $debounce
+    $scope.decideNextPage = decideNextPage
+    $scope.deleteBasketItem = deleteBasketItem
+    $scope.deleteBasketItems = deleteBasketItems
+    $scope.emptyBasket = emptyBasket
+    $scope.getCurrentStepTitle = getCurrentStepTitle
+    $scope.getPartial = getPartial
+    $scope.getUrlParam = getUrlParam
+    $scope.hidePage = hidePage
+    $scope.isAdmin = isAdmin
+    $scope.isAdminIFrame = isAdminIFrame
+    $scope.initWidget = initWidget
+    $scope.initWidget2 = initWidget2
+    $scope.isLoadingPage = isLoadingPage
+    $scope.isMemberLoggedIn = isMemberLoggedIn
+    $scope.jumpToPage = jumpToPage
+    $scope.loadPreviousStep = loadPreviousStep
+    $scope.loadStep = loadStep
+    $scope.loadStepByPageName = loadStepByPageName
+    $scope.logout = logout
+    $scope.moveToBasket = moveToBasket
+    $scope.notLoaded = LoadingService.notLoaded
+    $scope.parseDate = moment
+    $scope.quickEmptybasket = quickEmptybasket
+    $scope.redirectTo = redirectTo
+    $scope.reloadDashboard = reloadDashboard
+    $scope.reset = reset
+    $scope.restart = restart
+    $scope.scrollTo = scrollTo
+    $scope.setAffiliate = setAffiliate
+    $scope.setBasicRoute = setBasicRoute
+    $scope.setBasket = setBasket
+    $scope.setBasketItem = setBasketItem
+    $scope.setClient = setClient
+    $scope.setCompany = setCompany
+    $scope.setLastSelectedDate = setLastSelectedDate
+    $scope.setLoaded = LoadingService.setLoaded
+    $scope.setLoadedAndShowError = LoadingService.setLoadedAndShowError
+    $scope.setLoadingPage = setLoadingPage
+    $scope.setPageLoaded = setPageLoaded
+    $scope.setPageRoute = setPageRoute
+    $scope.setReadyToCheckout = setReadyToCheckout
+    $scope.setRoute = setRoute
+    $scope.setStepTitle = setStepTitle
+    $scope.setUsingBasket = setUsingBasket
+    $scope.skipThisStep = skipThisStep
+    $scope.showCheckout = showCheckout
+    $scope.supportsTouch = supportsTouch
+    $scope.showPage = showPage
+    $scope.updateBasket = updateBasket
 
+    vm.$onInit = $onInit
 
-  $scope.initWidget = (prms = {}) =>
+    return
 
+  $onInit = () ->
+
+    compileDisplayMode()
+    initializeBBWidget()
+
+    $rootScope.$on 'show:loader', showLoaderHandler
+    $rootScope.$on 'hide:loader', hideLoaderHandler
+    $scope.$on '$locationChangeStart', locationChangeStartHandler
+
+    vm.bb = $scope.bb
+
+    return
+
+  initializeBBWidget = () ->
+    $scope.bb = new BBWidget()
+    AppConfig.uid = $scope.bb.uid
+
+    $scope.bb.stacked_items = []
+    $scope.bb.company_set = companySet
+    $scope.recordStep = $scope.bb.recordStep
+
+    determineBBApiUrl()
+    return
+
+  determineBBApiUrl = () ->
+    if $scope.apiUrl
+      $scope.bb ||= {}
+      $scope.bb.api_url = $scope.apiUrl
+
+    if $rootScope.bb && $rootScope.bb.api_url
+      $scope.bb.api_url = $rootScope.bb.api_url
+      unless $rootScope.bb.partial_url
+        $scope.bb.partial_url = ""
+      else
+        $scope.bb.partial_url = $rootScope.bb.partial_url
+    if $location.port() isnt 80 and $location.port() isnt 443
+      $scope.bb.api_url ||= $location.protocol() + "://" + $location.host() + ":" + $location.port()
+    else
+      $scope.bb.api_url ||= $location.protocol() + "://" + $location.host()
+    return
+
+  compileDisplayMode = () ->
+    $compile("<span bb-display-mode></span>") $scope, (cloned, scope) =>
+      $bbug($element).append(cloned)
+    return
+
+  showLoaderHandler = () ->
+    $scope.loading = true
+    return
+
+  hideLoaderHandler = () ->
+    $scope.loading = false
+    return
+
+  locationChangeStartHandler = (angular_event, new_url, old_url) ->
+    return if !$scope.bb.routeFormat # don't react to URL changes if we're not in control of the URL
+
+    # don't load any steps if route is being updated or a modal is open
+    if !$scope.bb.routing or AppService.isModalOpen()
+
+      step_number = $scope.bb.matchURLToStep() # Get the step number to load
+
+      if step_number > $scope.bb.current_step
+        loadStep(step_number)
+      else if step_number < $scope.bb.current_step
+        loadPreviousStep('locationChangeStart')
+
+    $scope.bb.routing = false
+    return
+
+  initWidget = (prms = {}) =>
     @$init_prms = prms
     # remark the connection as starting again
-    con_started = $q.defer()
-    $rootScope.connection_started = con_started.promise
+    connectionStarted = $q.defer()
+    $rootScope.connection_started = connectionStarted.promise
 
-    if (($sniffer.webkit and $sniffer.webkit < 537) || ($sniffer.msie and $sniffer.msie <= 9)) && first_call
+    if (($sniffer.webkit and $sniffer.webkit < 537) || ($sniffer.msie and $sniffer.msie <= 9)) && isFirstCall # ie 8 hacks
 
-      # ie 8 hacks
       if $scope.bb.api_url
         url = document.createElement('a')
         url.href = $scope.bb.api_url
         if url.host == '' || url.host == $location.host() || url.host == "#{$location.host()}:#{$location.port()}"
-          $scope.initWidget2()
+          initWidget2()
           return
       if $rootScope.iframe_proxy_ready
-        $scope.initWidget2()
+        initWidget2()
         return
       else
         $scope.$on 'iframe_proxy_ready', (event, args) ->
           if args.iframe_proxy_ready
-            $scope.initWidget2()
+            initWidget2()
         return
 
     else
-      $scope.initWidget2()
+      initWidget2()
       return
 
-  $scope.initWidget2 = () =>
+  initWidget2 = () =>
     $scope.init_widget_started = true
 
-    # Initialize the scope from params
-    prms = @$init_prms
+    prms = @$init_prms # Initialize the scope from params
 
-    # if we've been asked to load any values from the url - do so!
-    if prms.query
+    if prms.query # if we've been asked to load any values from the url - do so!
       for k,v of prms.query
         prms[k] = QueryStringService(v)
 
     if prms.custom_partial_url
       $scope.bb.custom_partial_url = prms.custom_partial_url
-      $scope.bb.partial_id = prms.custom_partial_url.substring(prms.custom_partial_url.lastIndexOf("/")+1)
+      $scope.bb.partial_id = prms.custom_partial_url.substring(prms.custom_partial_url.lastIndexOf("/") + 1)
       $scope.bb.update_design = prms.update_design if prms.update_design
     else if prms.design_mode
       $scope.bb.design_mode = prms.design_mode
@@ -122,7 +221,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
     if prms.affiliate_id
       $scope.bb.affiliate_id = prms.affiliate_id
-      $rootScope.affiliate_id =  prms.affiliate_id
+      $rootScope.affiliate_id = prms.affiliate_id
 
     if (prms.api_url)
       $scope.bb.api_url = prms.api_url
@@ -142,8 +241,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       $scope.bb.clear_basket = false
     if prms.clear_basket == false
       $scope.bb.clear_basket = false
-    if $window.bb_setup || prms.client
-      # if setup is defined - blank the member -a s we're probably setting it - unless specifically defined as false
+    if $window.bb_setup || prms.client # if setup is defined - blank the member -a s we're probably setting it - unless specifically defined as false
+
       prms.clear_member ||= true
     $scope.bb.client_defaults = prms.client or {}
 
@@ -154,7 +253,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     if $scope.bb.client_defaults && $scope.bb.client_defaults.name
       match = $scope.bb.client_defaults.name.match(/^(\S+)(?:\s(\S+))?/)
       if match
-        $scope.bb.client_defaults.first_name =  match[1]
+        $scope.bb.client_defaults.first_name = match[1]
         $scope.bb.client_defaults.last_name = match[2] if match[2]?
 
     if prms.clear_member
@@ -171,10 +270,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
     if prms.item_defaults
       $scope.bb.original_item_defaults = prms.item_defaults
-      $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
-    else if $scope.bb.original_item_defaults
-      # possibly reset the defails (yes, the defails!)
-      $scope.bb.item_defaults =  angular.copy($scope.bb.original_item_defaults)
+      $scope.bb.item_defaults = angular.copy($scope.bb.original_item_defaults)
+    else if $scope.bb.original_item_defaults # possibly reset the defails (yes, the defails!)
+
+      $scope.bb.item_defaults = angular.copy($scope.bb.original_item_defaults)
 
     if $scope.bb.selected_service and $scope.bb.selected_service.company_id == company_id
       $scope.bb.item_defaults.service = $scope.bb.selected_service.id
@@ -191,21 +290,21 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     else
       $scope.hide_page = false
 
-    $scope.bb.from_datetime =  prms.from_datetime if prms.from_datetime
-    $scope.bb.to_datetime =  prms.to_datetime if prms.to_datetime
-    $scope.bb.min_date =  prms.min_date if prms.min_date
-    $scope.bb.max_date =  prms.max_date if prms.max_date
-    $scope.bb.hide_block =  prms.hide_block if prms.hide_block
+    $scope.bb.from_datetime = prms.from_datetime if prms.from_datetime
+    $scope.bb.to_datetime = prms.to_datetime if prms.to_datetime
+    $scope.bb.min_date = prms.min_date if prms.min_date
+    $scope.bb.max_date = prms.max_date if prms.max_date
+    $scope.bb.hide_block = prms.hide_block if prms.hide_block
 
     # say we've setup the path - so other partials that are relying on it at can trigger
     if !prms.custom_partial_url
       $scope.bb.path_setup = true
 
     if prms.extra_setup
-      $scope.bb.extra_setup          = prms.extra_setup
+      $scope.bb.extra_setup = prms.extra_setup
       $scope.bb.starting_step_number = parseInt(prms.extra_setup.step) if prms.extra_setup.step
-      $scope.bb.return_url           = prms.extra_setup.return_url if prms.extra_setup.return_url
-      $scope.bb.destination          = prms.extra_setup.destination if prms.extra_setup.destination
+      $scope.bb.return_url = prms.extra_setup.return_url if prms.extra_setup.return_url
+      $scope.bb.destination = prms.extra_setup.destination if prms.extra_setup.destination
 
     if prms.booking_settings
       $scope.bb.booking_settings = prms.booking_settings
@@ -231,8 +330,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     else
       @waiting_for_conn_started_def.resolve()
 
-    widget_started.resolve()
-
+    widgetStarted.resolve()
 
 
     #########################################################
@@ -241,7 +339,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     # i.e. the active of reolving one promise, may need a second to be reoslved before the widget is created
 
     setup_promises2 = []
-    setup_promises= []
+    setup_promises = []
 
     if $scope.bb.affiliate_id
       aff_promise = halClient.$get($scope.bb.api_url + '/api/v1/affiliates/' + $scope.bb.affiliate_id)
@@ -249,14 +347,14 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       aff_promise.then (affiliate) =>
         if $scope.bb.$wait_for_routing
           setup_promises2.push($scope.bb.$wait_for_routing.promise)
-        $scope.setAffiliate(new BBModel.Affiliate(affiliate))
+        setAffiliate(new BBModel.Affiliate(affiliate))
         $scope.bb.item_defaults.affiliate = $scope.affiliate
         if prms.company_ref
           comp_p = $q.defer()
           comp_promise = $scope.affiliate.getCompanyByRef(prms.company_ref)
           setup_promises2.push(comp_p.promise)
           comp_promise.then (company) ->
-            $scope.setCompany(company, prms.keep_basket).then (val) ->
+            setCompany(company, prms.keep_basket).then (val) ->
               comp_p.resolve(val)
             , (err) ->
               comp_p.reject(err)
@@ -282,19 +380,31 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       options = {}
       options.auth_token = $sessionStorage.getItem('auth_token') if $sessionStorage.getItem('auth_token')
       if $scope.bb.isAdmin
-        comp_url = new UriTemplate($scope.bb.api_url + $scope.company_admin_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
+        comp_url = new UriTemplate($scope.bb.api_url + $scope.company_admin_api_path).fillFromObject({
+          company_id: company_id,
+          category_id: comp_category_id,
+          embed: embed_params
+        })
         halClient.$get(comp_url, options).then (company) ->
           comp_def.resolve(company)
         , (err) ->
-          # try non admin if admin failed
-          comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
+# try non admin if admin failed
+          comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({
+            company_id: company_id,
+            category_id: comp_category_id,
+            embed: embed_params
+          })
           halClient.$get(comp_url, options).then (company) ->
             comp_def.resolve(company)
           , (err) ->
             comp_def.reject(err)
 
       else
-        comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({company_id: company_id, category_id: comp_category_id, embed: embed_params})
+        comp_url = new UriTemplate($scope.bb.api_url + $scope.company_api_path).fillFromObject({
+          company_id: company_id,
+          category_id: comp_category_id,
+          embed: embed_params
+        })
         halClient.$get(comp_url, options).then (company) ->
           if company
             comp_def.resolve(company)
@@ -305,7 +415,6 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
       setup_promises.push(comp_promise)
       comp_promise.then (company) =>
-
         if $scope.bb.$wait_for_routing
           setup_promises2.push($scope.bb.$wait_for_routing.promise)
         comp = new BBModel.Company(company)
@@ -322,7 +431,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
             comp = new BBModel.Company(company)
             setupDefaults(comp.id)
             $scope.bb.parent_company = parent_company
-            $scope.setCompany(comp, prms.keep_basket).then () ->
+            setCompany(comp, prms.keep_basket).then () ->
               cprom.resolve()
             , (err) ->
               cprom.reject()
@@ -330,13 +439,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
             cprom.reject()
         else
           setupDefaults(comp.id)
-          $scope.setCompany(comp, prms.keep_basket).then () ->
+          setCompany(comp, prms.keep_basket).then () ->
             cprom.resolve()
           , (err) ->
             cprom.reject()
 
-    # an array of promises we want resolves before we'll show a widget - there could be a number of set up calls
-    # setup_promises = [comp_promise]
+      # an array of promises we want resolves before we'll show a widget - there could be a number of set up calls
+      # setup_promises = [comp_promise]
 
       if prms.member_sso
         params =
@@ -344,7 +453,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
           root: $scope.bb.api_url
           member_sso: prms.member_sso
         sso_member_login = SSOService.memberLogin(params).then (client) ->
-            $scope.setClient(client)
+          setClient(client)
         setup_promises.push sso_member_login
       if prms.admin_sso
         params =
@@ -376,13 +485,13 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         if !$scope.bb.basket
           $scope.bb.basket ||= new BBModel.Basket(null, $scope.bb)
         if !$scope.client
-          $scope.clearClient()
+          clearClient()
 
         # set up other stuff!
         def_clear = $q.defer()
         clear_prom = def_clear.promise
         if !$scope.bb.current_item
-          clear_prom = $scope.clearBasketItem()
+          clear_prom = clearBasketItem()
         else
           def_clear.resolve()
         clear_prom.then () ->
@@ -391,30 +500,30 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
           if !$scope.bb.stacked_items
             $scope.bb.stacked_items = []
           if $scope.bb.company || $scope.bb.affiliate
-            # onyl start if the company is valid
-            con_started.resolve()
+# onyl start if the company is valid
+            connectionStarted.resolve()
             $scope.done_starting = true
             if !prms.no_route
               page = null
               # does the routing have a first step ? use this as long as we've not set explicit 'when' routes
-              page = $scope.bb.firstStep if first_call && $bbug.isEmptyObject($scope.bb.routeSteps)
+              page = $scope.bb.firstStep if isFirstCall && $bbug.isEmptyObject($scope.bb.routeSteps)
               page = prms.first_page if prms.first_page
 
-              first_call = false
-              $scope.decideNextPage(page)
+              isFirstCall = false
+              decideNextPage(page)
       , (err) ->
-        con_started.reject("Failed to start widget")
-        $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+        connectionStarted.reject("Failed to start widget")
+        LoadingService.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
     , (err) ->
-      con_started.reject("Failed to start widget")
-      $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      connectionStarted.reject("Failed to start widget")
+      LoadingService.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
   setupDefaults = (company_id) =>
     def = $q.defer()
 
-    if first_call || ($scope.bb.orginal_company_id && $scope.bb.orginal_company_id != company_id)
-      # if this is the first call - or we've switch companies
+    if isFirstCall || ($scope.bb.orginal_company_id && $scope.bb.orginal_company_id != company_id) # if this is the first call - or we've switch companies
+
       $scope.bb.orginal_company_id = company_id
       $scope.bb.default_setup_promises = []
       # deal with query versions - load any query vals frm the url
@@ -424,25 +533,25 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
       if $scope.bb.item_defaults.resource
         if $scope.bb.isAdmin
-          resource = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/resources/' + $scope.bb.item_defaults.resource )
+          resource = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/resources/' + $scope.bb.item_defaults.resource)
         else
-          resource = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/resources/' + $scope.bb.item_defaults.resource )
+          resource = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/resources/' + $scope.bb.item_defaults.resource)
         $scope.bb.default_setup_promises.push(resource)
         resource.then (res) =>
           $scope.bb.item_defaults.resource = new BBModel.Resource(res)
 
       if $scope.bb.item_defaults.person
         if $scope.bb.isAdmin
-          person = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/people/' + $scope.bb.item_defaults.person )
+          person = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/people/' + $scope.bb.item_defaults.person)
         else
-          person = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/people/' + $scope.bb.item_defaults.person )
+          person = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/people/' + $scope.bb.item_defaults.person)
         $scope.bb.default_setup_promises.push(person)
         person.then (res) =>
           $scope.bb.item_defaults.person = new BBModel.Person(res)
 
       if $scope.bb.item_defaults.person_ref
         if $scope.bb.isAdmin
-          person = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/people/find_by_ref/' + $scope.bb.item_defaults.person_ref )
+          person = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/people/find_by_ref/' + $scope.bb.item_defaults.person_ref)
         else
           person = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/people/find_by_ref/' + $scope.bb.item_defaults.person_ref)
 
@@ -452,57 +561,57 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
       if $scope.bb.item_defaults.service
         if $scope.bb.isAdmin
-          service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services/' + $scope.bb.item_defaults.service )
+          service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services/' + $scope.bb.item_defaults.service)
         else
-          service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/services/' + $scope.bb.item_defaults.service )
+          service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/services/' + $scope.bb.item_defaults.service)
         $scope.bb.default_setup_promises.push(service)
         service.then (res) =>
           $scope.bb.item_defaults.service = new BBModel.Service(res)
 
       if $scope.bb.item_defaults.service_ref
         if $scope.bb.isAdmin
-          service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services?api_ref=' + $scope.bb.item_defaults.service_ref )
+          service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services?api_ref=' + $scope.bb.item_defaults.service_ref)
         else
-          service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/services?api_ref=' + $scope.bb.item_defaults.service_ref )
+          service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/services?api_ref=' + $scope.bb.item_defaults.service_ref)
         $scope.bb.default_setup_promises.push(service)
         service.then (res) =>
           $scope.bb.item_defaults.service = new BBModel.Service(res)
 
       if $scope.bb.item_defaults.event_group
         if $scope.bb.isAdmin
-          event_group = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/event_groups/' + $scope.bb.item_defaults.event_group )
+          event_group = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/event_groups/' + $scope.bb.item_defaults.event_group)
         else
-          event_group = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/event_groups/' + $scope.bb.item_defaults.event_group )
+          event_group = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/event_groups/' + $scope.bb.item_defaults.event_group)
         $scope.bb.default_setup_promises.push(event_group)
         event_group.then (res) =>
           $scope.bb.item_defaults.event_group = new BBModel.EventGroup(res)
 
       if $scope.bb.item_defaults.event
         if $scope.bb.isAdmin
-          event = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/event_chains/' + $scope.bb.item_defaults.event_chain + '/events/' + $scope.bb.item_defaults.event )
+          event = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/event_chains/' + $scope.bb.item_defaults.event_chain + '/events/' + $scope.bb.item_defaults.event)
         else
-          event = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/events/' + $scope.bb.item_defaults.event )
+          event = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/events/' + $scope.bb.item_defaults.event)
         $scope.bb.default_setup_promises.push(event)
         event.then (res) =>
           $scope.bb.item_defaults.event = new BBModel.Event(res)
 
       if $scope.bb.item_defaults.event_chain
         if $scope.bb.isAdmin
-          event_chain = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/event_chains/' + $scope.bb.item_defaults.event_chain )
+          event_chain = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/event_chains/' + $scope.bb.item_defaults.event_chain)
         else
-          event_chain = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/event_chains/' + $scope.bb.item_defaults.event_chain )
+          event_chain = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/event_chains/' + $scope.bb.item_defaults.event_chain)
         $scope.bb.default_setup_promises.push(event_chain)
         event_chain.then (res) =>
           $scope.bb.item_defaults.event_chain = new BBModel.EventChain(res)
 
       if $scope.bb.item_defaults.category
-        category = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/categories/' + $scope.bb.item_defaults.category )
+        category = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/categories/' + $scope.bb.item_defaults.category)
         $scope.bb.default_setup_promises.push(category)
         category.then (res) =>
           $scope.bb.item_defaults.category = new BBModel.Category(res)
 
       if $scope.bb.item_defaults.clinic
-        clinic = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/clinics/' + $scope.bb.item_defaults.clinic )
+        clinic = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/clinics/' + $scope.bb.item_defaults.clinic)
         $scope.bb.default_setup_promises.push(clinic)
         clinic.then (res) =>
           $scope.bb.item_defaults.clinic = new BBModel.Clinic(res)
@@ -516,44 +625,20 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       def.resolve()
     def.promise
 
-
-  ######################
-  # set if a page is loaded yet or now helps prevent double loading
-  $scope.setLoadingPage = (val) =>
+  setLoadingPage = (val) =>
     $scope.loading_page = val
 
-  $scope.isLoadingPage = () =>
+  isLoadingPage = () =>
     $scope.loading_page
 
-
-  # $locationChangeStart is broadcast before a URL will change
-  $scope.$on '$locationChangeStart', (angular_event, new_url, old_url) ->
-
-    # don't react to URL changes if we're not in control of the URL
-    return if !$scope.bb.routeFormat
-
-    # don't load any steps if route is being updated or a modal is open
-    if !$scope.bb.routing or AppService.isModalOpen()
-      # Get the step number to load
-      step_number = $scope.bb.matchURLToStep()
-      # Load next page
-      if step_number > $scope.bb.current_step
-        $scope.loadStep(step_number)
-      else if step_number < $scope.bb.current_step
-        $scope.loadPreviousStep('locationChangeStart')
-
-    $scope.bb.routing = false
-
-  $scope.showPage = (route, dont_record_page) =>
-
+  showPage = (route, dont_record_page) =>
     $scope.bb.updateRoute(route)
     $scope.jumped = false
 
-
     # don't load a new page if we are still loading an old one - helps prevent double clicks
-    return if $scope.isLoadingPage()
+    return if isLoadingPage()
 
-    $scope.setLoadingPage(true)
+    setLoadingPage(true)
     if $scope.bb.current_page == route
       $scope.bb_main = ""
       setTimeout () ->
@@ -564,135 +649,126 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       AlertService.clear() # clear any alerts as part of loading a new page
       $scope.bb.current_page = route
       $scope.bb.recordCurrentPage() if !dont_record_page
-      $scope.notLoaded $scope
+      LoadingService.notLoaded($scope)
       $scope.bb_main = $sce.trustAsResourceUrl($scope.bb.pageURL(route))
 
     $rootScope.$broadcast "page:loaded"
 
-  $scope.jumpToPage = (route) =>
+  jumpToPage = (route) =>
     $scope.current_page = route
     $scope.jumped = true
-    $scope.bb_main = $sce.trustAsResourceUrl($scope.partial_url  + route + $scope.page_suffix)
+    $scope.bb_main = $sce.trustAsResourceUrl($scope.partial_url + route + $scope.page_suffix)
 
-
-  $scope.clearPage = () ->
+  clearPage = () ->
     $scope.bb_main = ""
 
-  $scope.getPartial = (file) ->
+  getPartial = (file) ->
     $scope.bb.pageURL(file)
 
-  $scope.setPageLoaded = () ->
-    $scope.setLoaded $scope
+  setPageLoaded = () ->
+    LoadingService.setLoaded($scope)
 
-
-  $scope.setPageRoute = (route) =>
+  setPageRoute = (route) =>
     $scope.bb.current_page_route = route
     if $scope.bb.routeSteps && $scope.bb.routeSteps[route]
-      $scope.showPage($scope.bb.routeSteps[route])
+      showPage($scope.bb.routeSteps[route])
       return true
     return false
 
-
-  $scope.decideNextPage = (route) ->
+  decideNextPage = (route) ->
     if route
       if route == 'none'
         return
       else
         if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          return if $scope.setPageRoute($rootScope.Route.Confirmation)
-          return $scope.showPage('confirmation')
+          return if setPageRoute($rootScope.Route.Confirmation)
+          return showPage('confirmation')
         else
-          return $scope.showPage(route)
+          return showPage(route)
 
     # do we have a pre-set route...
     if $scope.bb.nextSteps && $scope.bb.current_page && $scope.bb.nextSteps[$scope.bb.current_page] && !$scope.bb.routeSteps
-      return $scope.showPage($scope.bb.nextSteps[$scope.bb.current_page])
+      return showPage($scope.bb.nextSteps[$scope.bb.current_page])
     if !$scope.client.valid() && LoginService.isLoggedIn()
-      # make sure we set the client to the currently logged in member
-      # we should also just check the logged in member is  a member of the company they are currently booking with
+# make sure we set the client to the currently logged in member
+# we should also just check the logged in member is  a member of the company they are currently booking with
       $scope.client = new BBModel.Client(LoginService.member()._data)
 
     if ($scope.bb.company && $scope.bb.company.companies) || (!$scope.bb.company && $scope.affiliate)
-      return if $scope.setPageRoute($rootScope.Route.Company)
-      return $scope.showPage('company_list')
+      return if setPageRoute($rootScope.Route.Company)
+      return showPage('company_list')
     else if $scope.bb.total && $scope.bb.payment_status == "complete"
-      return if $scope.setPageRoute($rootScope.Route.Confirmation)
-      return $scope.showPage('confirmation')
+      return if setPageRoute($rootScope.Route.Confirmation)
+      return showPage('confirmation')
 
     else if ($scope.bb.total && $scope.bb.payment_status == "pending")
-      return $scope.showPage('payment')
-
-    else if ($scope.bb.company.$has('event_groups') && !$scope.bb.current_item.event_group && !$scope.bb.current_item.service && !$scope.bb.current_item.product && !$scope.bb.current_item.deal) or
-            ($scope.bb.company.$has('events') && $scope.bb.current_item.event_group && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if $scope.setPageRoute($rootScope.Route.Event)
-      return $scope.showPage('event_list')
+      return showPage('payment')
+    else if ($scope.bb.company.$has('event_groups') && !$scope.bb.current_item.event_group && !$scope.bb.current_item.service && !$scope.bb.current_item.product && !$scope.bb.current_item.deal) or ($scope.bb.company.$has('events') && $scope.bb.current_item.event_group && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
+      return if setPageRoute($rootScope.Route.Event)
+      return showPage('event_list')
     else if ($scope.bb.company.$has('events') && $scope.bb.current_item.event && !$scope.bb.current_item.num_book && (!$scope.bb.current_item.tickets || !$scope.bb.current_item.tickets.qty) && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return $scope.showPage('event')
+      return showPage('event')
     else if ($scope.bb.company.$has('services') && !$scope.bb.current_item.service && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if $scope.setPageRoute($rootScope.Route.Service)
-      return $scope.showPage('service_list')
+      return if setPageRoute($rootScope.Route.Service)
+      return showPage('service_list')
     else if ($scope.bb.company.$has('resources') && !$scope.bb.current_item.resource && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if $scope.setPageRoute($rootScope.Route.Resource)
-      return $scope.showPage('resource_list')
+      return if setPageRoute($rootScope.Route.Resource)
+      return showPage('resource_list')
     else if ($scope.bb.company.$has('people') && !$scope.bb.current_item.person && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if $scope.setPageRoute($rootScope.Route.Person)
-      return $scope.showPage('person_list')
+      return if setPageRoute($rootScope.Route.Person)
+      return showPage('person_list')
     else if (!$scope.bb.current_item.duration && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if $scope.setPageRoute($rootScope.Route.Duration)
-      return $scope.showPage('duration_list')
+      return if setPageRoute($rootScope.Route.Duration)
+      return showPage('duration_list')
     else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.date && !$scope.bb.current_item.event? && !$scope.bb.current_item.deal)
       if $scope.bb.company.$has('availability_slots')
-        return if $scope.setPageRoute($rootScope.Route.Slot)
-        return $scope.showPage('slot_list')
+        return if setPageRoute($rootScope.Route.Slot)
+        return showPage('slot_list')
       else
-        return if $scope.setPageRoute($rootScope.Route.Date)
+        return if setPageRoute($rootScope.Route.Date)
         # if we're an admin and we've pre-selected a time - route to that instead
-        return $scope.showPage('calendar')
+        return showPage('calendar')
     else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.time && !$scope.bb.current_item.event? && (!$scope.bb.current_item.service || $scope.bb.current_item.service.duration_unit != 'day') && !$scope.bb.current_item.deal)
-      return if $scope.setPageRoute($rootScope.Route.Time)
-      return $scope.showPage('time')
+      return if setPageRoute($rootScope.Route.Time)
+      return showPage('time')
     else if ($scope.bb.moving_booking && (!$scope.bb.current_item.ready || !$scope.bb.current_item.move_done))
-      return $scope.showPage('check_move')
+      return showPage('check_move')
     else if (!$scope.client.valid())
-      return if $scope.setPageRoute($rootScope.Route.Client)
-      return $scope.showPage('client')
+      return if setPageRoute($rootScope.Route.Client)
+      return showPage('client')
     else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions && !$scope.bb.current_item.asked_questions)
-      return if $scope.setPageRoute($rootScope.Route.Questions)
-      return $scope.showPage('check_items')
+      return if setPageRoute($rootScope.Route.Questions)
+      return showPage('check_items')
     else if $scope.bb.moving_booking && $scope.bb.basket.itemsReady()
-      return $scope.showPage('purchase')
+      return showPage('purchase')
     else if !$scope.bb.basket.readyToCheckout()
-      return if $scope.setPageRoute($rootScope.Route.Summary)
-      return $scope.showPage('basket_summary')
+      return if setPageRoute($rootScope.Route.Summary)
+      return showPage('basket_summary')
     else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
-      return if $scope.setPageRoute($rootScope.Route.Basket)
-      return $scope.showPage('basket')
+      return if setPageRoute($rootScope.Route.Basket)
+      return showPage('basket')
     else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null && !$scope.bb.basket.waiting_for_checkout)
-      return if $scope.setPageRoute($rootScope.Route.Checkout)
-      return $scope.showPage('checkout')
-    # else if ($scope.bb.total && $scope.bb.payment_status == "pending")
-    #   return $scope.showPage('payment')
+      return if setPageRoute($rootScope.Route.Checkout)
+      return showPage('checkout')
+# else if ($scope.bb.total && $scope.bb.payment_status == "pending")
+#   return showPage('payment')
     else if $scope.bb.payment_status == "complete"
-      return if $scope.setPageRoute($rootScope.Route.Confirmation)
-      return $scope.showPage('confirmation')
+      return if setPageRoute($rootScope.Route.Confirmation)
+      return showPage('confirmation')
 
-
-  $scope.showCheckout = ->
+  showCheckout = ->
     $scope.bb.current_item.ready
 
-
-  # add the current item to the basket service
-  $scope.addItemToBasket = ->
+  addItemToBasket = ->
     add_defer = $q.defer()
 
     if !$scope.bb.current_item.submitted && !$scope.bb.moving_booking
-      $scope.moveToBasket()
-      $scope.bb.current_item.submitted = $scope.updateBasket()
+      moveToBasket()
+      $scope.bb.current_item.submitted = updateBasket()
       $scope.bb.current_item.submitted.then (basket) ->
         add_defer.resolve(basket)
       , (err) ->
-        if err.status == 409
-          # unavailable item - remove the time, person and resource and resete teh service
+        if err.status == 409 # unavailable item - remove the time, person and resource and resete teh service
           $scope.bb.current_item.person = null
           $scope.bb.current_item.resource = null
           $scope.bb.current_item.setTime(null)
@@ -708,14 +784,11 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     add_defer.promise
 
 
-  # add several items at once
-  $scope.updateBasket = () ->
-
-    # save the current item ref so that we can restore the current item after the basket has been updated
-    current_item_ref = $scope.bb.current_item.ref
+  updateBasket = () ->  # add several items at once
+    current_item_ref = $scope.bb.current_item.ref # save the current item ref so that we can restore the current item after the basket has been updated
 
     add_defer = $q.defer()
-    params = {member_id: $scope.client.id, member: $scope.client, items: $scope.bb.basket.items, bb: $scope.bb }
+    params = {member_id: $scope.client.id, member: $scope.client, items: $scope.bb.basket.items, bb: $scope.bb}
     BBModel.Basket.$updateBasket($scope.bb.company, params).then (basket) ->
       for item in basket.items
         item.storeDefaults($scope.bb.item_defaults)
@@ -724,19 +797,19 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       halClient.clearCache("events")
       basket.setSettings($scope.bb.basket.settings)
 
-      $scope.setBasket(basket)
+      setBasket(basket)
 
       # restore the current item using the ref
       current_item = _.find basket.items, (item) -> item.ref is current_item_ref
       # use last item if there is no ref
       current_item = _.last basket.items if !current_item
 
-      $scope.setBasketItem(current_item)
+      setBasketItem(current_item)
 
       # check if item has been added to the basket
       if !$scope.bb.current_item
-        # not added to basket, clear the item
-        $scope.clearBasketItem().then () ->
+# not added to basket, clear the item
+        clearBasketItem().then () ->
           add_defer.resolve(basket)
       else
         add_defer.resolve(basket)
@@ -744,12 +817,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       add_defer.reject(err)
       # handle item conflict
       if err.status == 409
-        # clear the currently cached time date
+# clear the currently cached time date
         halClient.clearCache("time_data")
         halClient.clearCache("events")
         $scope.bb.current_item.person = null
         error_modal = $uibModal.open
-          templateUrl: $scope.getPartial('_error_modal')
+          templateUrl: getPartial('_error_modal')
           controller: ($scope, $uibModalInstance) ->
             $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg
             $scope.ok = () ->
@@ -759,20 +832,19 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
             $scope.$eval($scope.bb.on_conflict)
           else
             if $scope.bb.nextSteps
-              # either go back to the Date/Event routes or load the previous step
-              if $scope.setPageRoute($rootScope.Route.Date)
-                # already routed
-              else if $scope.setPageRoute($rootScope.Route.Event)
-                # already routed
+# either go back to the Date/Event routes or load the previous step
+              if setPageRoute($rootScope.Route.Date)
+# already routed
+              else if setPageRoute($rootScope.Route.Event)
+# already routed
               else
-                $scope.loadPreviousStep()
+                loadPreviousStep()
             else
-              $scope.decideNextPage()
+              decideNextPage()
     add_defer.promise
 
 
-  $scope.emptyBasket = ->
-
+  emptyBasket = ->
     defer = $q.defer()
 
     if !$scope.bb.basket.items or ($scope.bb.basket.items and $scope.bb.basket.items.length is 0)
@@ -781,7 +853,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       BBModel.Basket.$empty($scope.bb).then (basket) ->
         if $scope.bb.current_item.id
           delete $scope.bb.current_item.id
-        $scope.setBasket(basket)
+        setBasket(basket)
         defer.resolve()
       , (err) ->
         defer.reject()
@@ -789,20 +861,20 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     return defer.promise
 
 
-  $scope.deleteBasketItem = (item) ->
+  deleteBasketItem = (item) ->
     BBModel.Basket.$deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
-      $scope.setBasket(basket)
+      setBasket(basket)
 
 
-  $scope.deleteBasketItems = (items) ->
+  deleteBasketItems = (items) ->
     for item in items
       BBModel.Basket.$deleteItem(item, $scope.bb.company, {bb: $scope.bb}).then (basket) ->
-        $scope.setBasket(basket)
+        setBasket(basket)
 
 
-  $scope.clearBasketItem = ->
+  clearBasketItem = ->
     def = $q.defer()
-    $scope.setBasketItem(new BBModel.BasketItem(null, $scope.bb))
+    setBasketItem(new BBModel.BasketItem(null, $scope.bb))
     if $scope.bb.default_setup_promises
       $q.all($scope.bb.default_setup_promises).finally () ->
         $scope.bb.current_item.setDefaults($scope.bb.item_defaults)
@@ -814,36 +886,33 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     return def.promise
 
 
-  $scope.setBasketItem = (item) ->
+  setBasketItem = (item) ->
     $scope.bb.current_item = item
     # for now also set a variable in the scope - for old views that we've not tidied up yet
     $scope.current_item = $scope.bb.current_item
 
-
-  # say that the basket is ready to checkout
-  $scope.setReadyToCheckout = (ready) ->
+  setReadyToCheckout = (ready) ->
     $scope.bb.confirmCheckout = ready
 
-
-  $scope.moveToBasket = ->
+  moveToBasket = ->
     $scope.bb.basket.addItem($scope.bb.current_item)
 
 
-  $scope.quickEmptybasket = (options) ->
+  quickEmptybasket = (options) ->
     preserve_stacked_items = if options && options.preserve_stacked_items then true else false
     if !preserve_stacked_items
       $scope.bb.stacked_items = []
-      $scope.setBasket(new BBModel.Basket(null, $scope.bb))
-      $scope.clearBasketItem()
+      setBasket(new BBModel.Basket(null, $scope.bb))
+      clearBasketItem()
     else
       $scope.bb.basket = new BBModel.Basket(null, $scope.bb)
-      $scope.basket    = $scope.bb.basket
+      $scope.basket = $scope.bb.basket
       $scope.bb.basket.company_id = $scope.bb.company_id
       def = $q.defer()
       def.resolve()
       def.promise
 
-  $scope.setBasket = (basket) ->
+  setBasket = (basket) ->
     $scope.bb.basket = basket
     $scope.basket = basket
     $scope.bb.basket.company_id = $scope.bb.company_id
@@ -851,20 +920,18 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     if $scope.bb.stacked_items
       $scope.bb.setStackedItems(basket.timeItems())
 
-
-  # clear the user and logout
-  $scope.logout = (route) ->
+  logout = (route) ->
     if $scope.client && $scope.client.valid()
       LoginService.logout({root: $scope.bb.api_url}).then ->
-        $scope.client =  new BBModel.Client()
-        $scope.decideNextPage(route)
+        $scope.client = new BBModel.Client()
+        decideNextPage(route)
     else if $scope.member
       LoginService.logout({root: $scope.bb.api_url}).then ->
-        $scope.member =  new BBModel.Member.Member()
-        $scope.decideNextPage(route)
+        $scope.member = new BBModel.Member.Member()
+        decideNextPage(route)
 
 
-  $scope.setAffiliate = (affiliate) ->
+  setAffiliate = (affiliate) ->
     $scope.bb.affiliate_id = affiliate.id
     $scope.bb.affiliate = affiliate
     # for now also set a scope varaible for company - we should remove this as soon as all partials are moved over
@@ -873,9 +940,8 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
 
   restoreBasket = () ->
-
     restore_basket_defer = $q.defer()
-    $scope.quickEmptybasket().then () ->
+    quickEmptybasket().then () ->
       auth_token = $localStorage.getItem('auth_token') or $sessionStorage.getItem('auth_token')
       href = $scope.bb.api_url +
         '/api/v1/status{?company_id,affiliate_id,clear_baskets,clear_member}'
@@ -892,16 +958,15 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
             $scope.client = new BBModel.Client(client) if !$scope.client or ($scope.client and !$scope.client.valid())
         if res.$has('member')
           res.$get('member').then (member) =>
-            # HACK check if client_type is not contact
+# HACK check if client_type is not contact
             if member.client_type != 'Contact'
               member = LoginService.setLogin(member)
-              $scope.setClient(member)
+              setClient(member)
         if $scope.bb.clear_basket
           restore_basket_defer.resolve()
         else
           if res.$has('baskets')
             res.$get('baskets').then (baskets) =>
-
               basket = _.find(baskets, (b) ->
                 parseInt(b.company_id) == $scope.bb.company_id)
               if basket
@@ -909,12 +974,12 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
                 basket.$get('items').then (items) ->
                   items = (new BBModel.BasketItem(i) for i in items)
                   basket.addItem(i) for i in items
-                  $scope.setBasket(basket)
+                  setBasket(basket)
 
                   promises = [].concat.apply([], (i.promises for i in items))
                   $q.all(promises).then () ->
                     if basket.items.length > 0
-                      $scope.setBasketItem(basket.items[0])
+                      setBasketItem(basket.items[0])
                     restore_basket_defer.resolve()
               else
                 restore_basket_defer.resolve()
@@ -925,8 +990,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     restore_basket_defer.promise
 
 
-  $scope.setCompany = (company, keep_basket) ->
-
+  setCompany = (company, keep_basket) ->
     defer = $q.defer()
 
     $scope.bb.company_id = company.id
@@ -937,7 +1001,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
 
     if company.$has('settings')
       company.getSettings().then (settings) =>
-        # setup some useful info
+# setup some useful info
         $scope.bb.company_settings = settings
         setActiveCompany(company, settings)
         $scope.bb.item_defaults.merge_resources = true if $scope.bb.company_settings.merge_resources
@@ -962,51 +1026,36 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
         defer.resolve()
         $scope.$emit 'company:setup'
       setActiveCompany(company)
-    defer.promise 
+    defer.promise
 
   setActiveCompany = (company, settings) ->
-
-    # currency code exists in both company and company_settings
-    # get from company if not defined in settings 
+# currency code exists in both company and company_settings
+# get from company if not defined in settings
     CompanyStoreService.currency_code = if !settings then company.currency_code else settings.currency
-    CompanyStoreService.time_zone     = company.timezone
-    CompanyStoreService.country_code  = company.country_code
-    CompanyStoreService.settings      = settings
-
-
-  ############################################################################################
-  # Breadcrumbs
-  ############################################################################################
-
-  # record a step in the checkout process
-  $scope.recordStep = (step, title) ->
-    $scope.bb.recordStep(step, title)
-
+    CompanyStoreService.time_zone = company.timezone
+    CompanyStoreService.country_code = company.country_code
+    CompanyStoreService.settings = settings
 
   # set the title fo the current step
-  $scope.setStepTitle = (title) ->
-    $scope.bb.steps[$scope.bb.current_step-1].title = title
+  setStepTitle = (title) ->
+    $scope.bb.steps[$scope.bb.current_step - 1].title = title
 
 
-  $scope.getCurrentStepTitle = ->
+  getCurrentStepTitle = ->
     steps = $scope.bb.steps
 
     if !_.compact(steps).length or steps.length == 1 and steps[0].number != $scope.bb.current_step
       steps = $scope.bb.allSteps
 
     if $scope.bb.current_step
-        return steps[$scope.bb.current_step-1].title
-
+      return steps[$scope.bb.current_step - 1].title
 
   # conditionally set the title of the current step - if it doesn't have one
-  $scope.checkStepTitle = (title) ->
-    if $scope.bb.steps[$scope.bb.current_step-1] and !$scope.bb.steps[$scope.bb.current_step-1].title
-      $scope.setStepTitle(title)
+  checkStepTitle = (title) ->
+    if $scope.bb.steps[$scope.bb.current_step - 1] and !$scope.bb.steps[$scope.bb.current_step - 1].title
+      setStepTitle(title)
 
-
-  # reload a step
-  $scope.loadStep = (step) ->
-
+  loadStep = (step) ->
     return if step == $scope.bb.current_step
 
     $scope.bb.calculatePercentageComplete(step)
@@ -1015,22 +1064,22 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     # this means we load the completed data from that page
     # if there isn't a next page - then try the select one
     st = $scope.bb.steps[step]
-    prev_step =  $scope.bb.steps[step-1]
+    prev_step = $scope.bb.steps[step - 1]
     prev_step = st if st && !prev_step
     st = prev_step if !st
     if st && !$scope.bb.last_step_reached
-      $scope.bb.stacked_items = [] if !st.stacked_length ||  st.stacked_length == 0
+      $scope.bb.stacked_items = [] if !st.stacked_length || st.stacked_length == 0
       $scope.bb.current_item.loadStep(st.current_item)
       if $scope.bb.steps.length > 1
-        $scope.bb.steps.splice(step, $scope.bb.steps.length-step)
+        $scope.bb.steps.splice(step, $scope.bb.steps.length - step)
       $scope.bb.current_step = step
-      $scope.showPage(prev_step.page, true)
+      showPage(prev_step.page, true)
     if $scope.bb.allSteps
       for step in $scope.bb.allSteps
         step.active = false
         step.passed = step.number < $scope.bb.current_step
-      if $scope.bb.allSteps[$scope.bb.current_step-1]
-        $scope.bb.allSteps[$scope.bb.current_step-1].active = true
+      if $scope.bb.allSteps[$scope.bb.current_step - 1]
+        $scope.bb.allSteps[$scope.bb.current_step - 1].active = true
 
   ###**
   * @ngdoc method
@@ -1042,8 +1091,7 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   * @param {integer} steps_to_go_back: The number of steps to go back
   * @param {string} caller: The method that called this function
   ###
-  $scope.loadPreviousStep = (caller) ->
-
+  loadPreviousStep = (caller) ->
     past_steps = _.reject($scope.bb.steps, (s) -> s.number >= $scope.bb.current_step)
 
     # Find the last unskipped step
@@ -1070,43 +1118,36 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       # -------------------------------------------------------------------------
       pages_to_remove_from_history-- if caller is "locationChangeStart"
 
-      window.history.go(pages_to_remove_from_history*-1) if pages_to_remove_from_history > 0
+      window.history.go(pages_to_remove_from_history * -1) if pages_to_remove_from_history > 0
 
-    $scope.loadStep(step_to_load) if step_to_load > 0
+    loadStep(step_to_load) if step_to_load > 0
 
 
-  $scope.loadStepByPageName = (page_name) ->
+  loadStepByPageName = (page_name) ->
     for step in $scope.bb.allSteps
       if step.page == page_name
-        return $scope.loadStep(step.number)
-    return $scope.loadStep(1)
+        return loadStep(step.number)
+    return loadStep(1)
 
-
-  $scope.reset = () ->
+  reset = () ->
     $rootScope.$broadcast 'clear:formData'
     $rootScope.$broadcast 'widget:restart'
-    $scope.setLastSelectedDate(null)
-    $scope.client =  new BBModel.Client() if !LoginService.isLoggedIn()
+    setLastSelectedDate(null)
+    $scope.client = new BBModel.Client() if !LoginService.isLoggedIn()
     $scope.bb.last_step_reached = false
     # This is to remove the current step you are on.
     $scope.bb.steps.splice(1)
 
+  restart = () ->
+    reset()
+    loadStep(1)
+  # TODO clear current item?
 
-  $scope.restart = () ->
-    $scope.reset()
-    $scope.loadStep(1)
-    # TODO clear current item?
-
-
-  # setup full route data
-  $scope.setRoute = (rdata) ->
+  setRoute = (rdata) ->
     $scope.bb.setRoute(rdata)
 
-
-  # set basic step path only
-  $scope.setBasicRoute = (routes) ->
+  setBasicRoute = (routes) ->
     $scope.bb.setBasicRoute(routes)
-
 
   ###**
   * @ngdoc method
@@ -1115,76 +1156,47 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
   * @description
   * Marks the current step as skipped
   ###
-  $scope.skipThisStep = () ->
+  skipThisStep = () ->
     $scope.bb.steps[$scope.bb.steps.length - 1].skipped = true if $scope.bb.steps[$scope.bb.steps.length - 1]
 
-
-  #############################################################
-
-  $scope.setUsingBasket = (usingBasket) =>
+  setUsingBasket = (usingBasket) =>
     $scope.bb.usingBasket = usingBasket
 
-  $scope.setClient = (client) =>
+  setClient = (client) =>
     $scope.client = client
     $scope.bb.postcode = client.postcode if client.postcode && !$scope.bb.postcode
 
-  $scope.clearClient = () =>
+  clearClient = () =>
     $scope.client = new BBModel.Client()
     if $window.bb_setup
       $scope.client.setDefaults($window.bb_setup)
     if $scope.bb.client_defaults
       $scope.client.setDefaults($scope.bb.client_defaults)
 
-  $scope.parseDate = (d) =>
-    moment(d)
-
-  $scope.getUrlParam = (param) =>
+  getUrlParam = (param) =>
     $window.getURIparam param
 
-  $scope.base64encode = (param) =>
+  base64encode = (param) =>
     $window.btoa(param)
 
-  $scope.setLastSelectedDate = (date) =>
+  setLastSelectedDate = (date) =>
     $scope.last_selected_date = date
 
-
-  # TODO: Get rid of these 'scope loading' methods when they are no longer
-  # called from the scopes
-  $scope.setLoaded = (cscope) ->
-    LoadingService.setLoaded(cscope)
-
-
-  $scope.setLoadedAndShowError = (scope, err, error_string) ->
-    LoadingService.setLoadedAndShowError(scope, err, error_string)
-
-
-  # go around schild scopes - return false if *any* child scope is marked as
-  # isLoaded = false
-  $scope.areScopesLoaded = (cscope) ->
-    LoadingService.areScopesLoaded(cscope)
-
-  #set scope not loaded...
-  $scope.notLoaded = (cscope) ->
-    LoadingService.notLoaded(cscope)
-
-
-  $scope.broadcastItemUpdate = () =>
+  broadcastItemUpdate = () =>
     $scope.$broadcast("currentItemUpdate", $scope.bb.current_item)
 
-  # do you show the page.
-  $scope.hidePage = () ->
+  hidePage = () ->
     $scope.hide_page = true
 
-  $scope.bb.company_set =() ->
+  companySet = () ->
     $scope.bb.company_id?
 
-  $scope.isAdmin = () ->
+  isAdmin = () ->
     $scope.bb.isAdmin
 
-  $scope.isAdminIFrame = () ->
+  isAdminIFrame = () ->
     if !$scope.bb.isAdmin
       return false
-
     try
       location = $window.parent.location.href
       if location && $window.parent.reload_dashboard
@@ -1194,10 +1206,10 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
     catch err
       return false
 
-  $scope.reloadDashboard = ->
+  reloadDashboard = ->
     $window.parent.reload_dashboard()
 
-  $scope.$debounce = (tim) ->
+  $debounce = (tim) ->
     return false if $scope._debouncing
     tim ||= 100
     $scope._debouncing = true
@@ -1205,23 +1217,21 @@ angular.module('BB.Controllers').controller 'BBCtrl', ($scope, $location, $rootS
       $scope._debouncing = false
     , tim
 
-  $scope.supportsTouch = () ->
+  supportsTouch = () ->
     Modernizr.touch
 
-
-  $rootScope.$on 'show:loader', () ->
-    $scope.loading = true
-  $rootScope.$on 'hide:loader', () ->
-    $scope.loading = false
-
-  $scope.isMemberLoggedIn = () ->
+  isMemberLoggedIn = () ->
     return LoginService.isLoggedIn()
 
-
-  $scope.scrollTo = (id) ->
+  scrollTo = (id) ->
     $location.hash(id)
     $anchorScroll()
 
-
-  $scope.redirectTo = (url) ->
+  redirectTo = (url) ->
     $window.location.href = url
+
+  init()
+
+  return
+
+angular.module('BB.Controllers').controller 'BBCtrl', BBCtrl
