@@ -196,7 +196,22 @@
         }
       }
     }
+
+    &.expanded {
+      > .panel {
+        background: #eee;
+      }
+    }
+
+    &.selected {
+      > .panel {
+        background: #777;
+        color: #fff;
+      }
+    }
+
   }
+
 
 // calendar hidden column functionality
 @media (max-width: $screen-md-max) {
