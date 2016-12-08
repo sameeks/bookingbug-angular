@@ -2,36 +2,46 @@ angular.module('BB.Directives').directive 'bbMoveBooking', () ->
 	restrict: 'AE'
 	controller: 'MoveBooking'
 
-angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, BBModel, LoadingService, PurchaseService, PurchaseBookingService, AlertService, GeneralOptions, $translate, MemberBookingService) ->
+angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, BBModel, LoadingService, PurchaseService, PurchaseBookingService, AlertService, GeneralOptions, $translate, MemberBookingService, WidgetModalService, QueryStringService) ->
 
 	vm = @
 
 	loader = LoadingService.$loader($scope)
 
 	
-	$scope.moveBooking = (booking, route) ->
-		confirmMove(booking, route)
+	$scope.initMove = (booking, route) ->
+    # open modal if moving public booking from purchase template
+    if route = 'modal' and !WidgetModalService.is_open
+      total_id = QueryStringService('id')
+      openCalendarModal(booking, total_id)
 
-	confirmMove = (booking, route) ->
-	  confirming = true
-	  booking.moved_booking = false
-	  # we need to validate the question information has been correctly entered here
-	  booking.setAskedQuestions()
+    # else just move the booking
+    else readyBooking(booking, route)
 
-	  if booking.ready
-	    loader.notLoaded()
-	    if $scope.bb.moving_purchase
-	    	updatePurchase(booking, route)
-	    else
-	    	updatePurchaseBooking(booking, route)
-	  else
-	    $scope.decideNextPage(route)
+
+  readyBooking = (booking, route) ->
+    confirming = true
+    booking.moved_booking = false
+    booking.setAskedQuestions()
+
+    if booking.move_reason
+      booking.move_reason = $scope.bb.current_item.move_reason
+
+    if booking.ready
+      moveBooking(booking, route)
+    else 
+      $scope.decideNextPage(route)
+
+
+  moveBooking = (booking, route) ->
+    if $scope.bb.moving_purchase
+      updatePurchase(booking, route)
+    else
+      updatePurchaseBooking(booking, route)
 
 
 
 	updatePurchaseBooking = (purchase, route) ->
-    if purchase.move_reason
-      purchase.move_reason = $scope.bb.current_item.move_reason
     PurchaseBookingService.update(purchase).then (booking) ->
       b = new BBModel.Purchase.Booking(booking)
 
@@ -42,9 +52,7 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       loader.setLoaded()
       $scope.bb.moved_booking = booking
       purchase.move_done = true
-      $rootScope.$broadcast "booking:moved"
-      $scope.decideNextPage(route)
-      showMoveMessage(b.datetime)
+      resolveCalendarModal(b)
      , (err) =>
       loader.setLoaded()
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
@@ -62,9 +70,7 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
         loader.setLoaded()
         booking.move_done = true
         booking.moved_booking = true
-        $rootScope.$broadcast "booking:moved"
-        $scope.decideNextPage(route)
-        showMoveMessage(bookings[0].datetime)
+        resolveCalendarModal(bookings[0])
 
     , (err) ->
        loader.setLoaded()
@@ -77,3 +83,20 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 	      AlertService.add("info", { msg: translated_text })
 	  else
 	    AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
+
+
+  openCalendarModal = (booking, total_id) ->
+    WidgetModalService.open
+      company_id: booking.company.id
+      template: 'main_view_booking'
+      total_id: total_id
+      first_page: 'calendar'
+
+  resolveCalendarModal = (booking) ->
+      $rootScope.$broadcast "booking:moved"
+      # dont close modal and render purchase template if moving member booking
+      if WidgetModalService.config.member
+        $scope.decideNextPage('confirmation')
+      else 
+        WidgetModalService.close() 
+      showMoveMessage(booking.datetime)

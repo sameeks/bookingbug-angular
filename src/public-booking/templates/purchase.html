@@ -80,10 +80,20 @@
                     <button type="button" class="btn btn-danger btn-block" ng-click="delete(bookings[0])">Cancel Booking</button>
                   </div>
                   <div class="col-sm-4">
-                    <button type="button" class="btn btn-primary btn-block" ng-click="move(bookings[0], '', {use_resource: true})">Move Booking</button>
+                    <div bb-move-booking>
+                      <button 
+                        type="button" 
+                        id="btn-continue" 
+                        class="btn btn-primary btn-block" 
+                        ng-click="initMove(bb.current_item, 'modal')" 
+                        bb-debounce>
+                        <span>Reschedule</span>
+                      </button>
+                    </div>
+
                   </div>
                 </div>
-                <div ng-show="waitlist_bookings"class="col-sm-4">
+                <div ng-show="waitlist_bookings" class="col-sm-4">
                   <button type="button" class="btn btn-primary btn-block" ng-click="is_waitlist = true">Book Waitlist Items</button>
                 </div>
               </div>

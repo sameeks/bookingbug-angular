@@ -29,7 +29,11 @@ angular.module('BB.Directives').directive 'bbModalWidget', (BBModel, $log, $comp
         scope.initWidget(config)
         renderTemplate(scope, element, config.design_mode, config.template)
 
-    if attrs.companyId and config.member
+    else if attrs.companyId and config.member
+      scope.initWidget(config)
+      renderTemplate(scope, element, config.design_mode, config.template)
+
+    else 
       scope.initWidget(config)
       renderTemplate(scope, element, config.design_mode, config.template)
 
