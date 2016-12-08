@@ -474,6 +474,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
           url_root: $scope.bb.api_url
           purchase_id: prms.total_id
         PurchaseService.query(params).then (total) -> 
+          $scope.bb.purchase = total
           total.$getBookings().then (bookings) ->
             createBasketFromBookings(bookings)
 

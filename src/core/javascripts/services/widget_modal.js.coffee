@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Services').factory 'WidgetModalService', ($uibModal, $timeout, $document, $uibModalStack) ->
+angular.module('BB.Services').factory 'WidgetModalService', ($uibModal, $timeout, $document, $uibModalStack, AlertService) ->
   # you can store data in WidgetModalService config block 
   # to then be used as prms in base controller initWidget2()
   config = 
@@ -14,7 +14,7 @@ angular.module('BB.Services').factory 'WidgetModalService', ($uibModal, $timeout
     @is_open = true
     $uibModal.open
       size: 'lg'
-      controller: ($scope, WidgetModalService, $uibModalInstance, config, $window) ->
+      controller: ($scope, WidgetModalService, $uibModalInstance, config, $window, AlertService) ->
         if $scope.bb && $scope.bb.current_item 
           delete $scope.bb.current_item
         WidgetModalService.config = config
@@ -22,6 +22,7 @@ angular.module('BB.Services').factory 'WidgetModalService', ($uibModal, $timeout
         $scope.config.company_id ||= $scope.company.id if $scope.company
         $scope.cancel = () ->
           WidgetModalService.is_open = false
+          AlertService.clear()
           $uibModalInstance.dismiss('cancel')
       templateUrl: 'widget_modal.html'
       resolve:
@@ -29,6 +30,7 @@ angular.module('BB.Services').factory 'WidgetModalService', ($uibModal, $timeout
 
   close: () ->
     @is_open = false
+    AlertService.clear()
     open_modal = $uibModalStack.getTop()
 
     $uibModalStack.close(open_modal.key)

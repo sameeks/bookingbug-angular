@@ -39,6 +39,10 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
       else
         AlertService.raise('GENERIC')
 
+  $scope.$on "booking:moved", () ->
+    console.log 'moved'
+    $scope.init()
+
 
   $scope.init = (options) ->
     options = {} if !options
@@ -47,6 +51,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
     $scope.move_route = options.move_route if options.move_route
     $scope.move_all = options.move_all if options.move_all
     $scope.fail_msg = options.fail_msg if options.fail_msg
+
+    if PurchaseService.purchase
+      $scope.bb.purchase = PurchaseService.purchase
 
     # is there a purchase total already in scope?
     if $scope.bb.total

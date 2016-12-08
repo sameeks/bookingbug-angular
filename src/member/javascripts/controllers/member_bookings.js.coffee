@@ -10,6 +10,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
   $scope.$on 'booking:moved', () ->
     updateBookings()
 
+
   $scope.getUpcomingBookings = () ->
     defer = $q.defer()
     now = moment()

@@ -20,6 +20,7 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 
 
   readyBooking = (booking, route) ->
+    loader.notLoaded()
     confirming = true
     booking.moved_booking = false
     booking.setAskedQuestions()
@@ -45,12 +46,15 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
     PurchaseBookingService.update(purchase).then (booking) ->
       b = new BBModel.Purchase.Booking(booking)
 
+
       if $scope.bb.purchase
         for oldb, _i in $scope.bb.purchase.bookings
           $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
 
+
       loader.setLoaded()
       $scope.bb.moved_booking = booking
+      PurchaseService.purchase = $scope.bb.purchase
       purchase.move_done = true
       resolveCalendarModal(b)
      , (err) =>
@@ -93,7 +97,7 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       first_page: 'calendar'
 
   resolveCalendarModal = (booking) ->
-      $rootScope.$broadcast "booking:moved"
+      $rootScope.$broadcast("booking:moved", booking)
       # dont close modal and render purchase template if moving member booking
       if WidgetModalService.config.member
         $scope.decideNextPage('confirmation')
