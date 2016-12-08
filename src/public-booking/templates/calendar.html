@@ -1,5 +1,4 @@
 <div bb-page>
-
   <div class="page-summary">
     <div bb-include="_basket_item_summary">
     </div>
@@ -9,12 +8,32 @@
 
   <div class="bb-step-navigation">
     <div class="row">
-      <div class="col-sm-offset-7 col-sm-3 col-sm-push-2 text-right">       
-        <button type="button" id="btn-continue" class="btn btn-primary btn-block" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time">
-          <span ng-show="!bb.moving_booking">Continue</span>
-          <span ng-show="bb.moving_booking">Move booking</span>
+
+      <div class="col-sm-offset-7 col-sm-3 col-sm-push-2 text-right">  
+        <button 
+          ng-show="!bb.moving_booking" 
+          type="button" 
+          id="btn-continue" 
+          class="btn btn-primary btn-block" 
+          ng-click="checkReady() && routeReady()" 
+          bb-debounce 
+          ng-disabled="!bb.current_item.time">
+          <span>Continue</span>
         </button>
       </div>
+
+      <div ng-if="bb.moving_booking" bb-move-booking>
+        <button 
+          ng-show="bb.moving_booking" 
+          type="button" 
+          id="btn-continue" 
+          class="btn btn-primary btn-block" 
+          ng-click="moveBooking(bb.current_item, 'purchase')" 
+          bb-debounce>
+          <span>Reschedule</span>
+        </button>
+      </div>
+
       <div class="col-sm-2 col-sm-pull-10 text-left">    
         <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="loadPreviousStep()" ng-show="!bb.moving_booking">Back</button>
       </div>
