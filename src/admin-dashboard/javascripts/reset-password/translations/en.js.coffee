@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.reset-password')
         'ENTER_NEW_PASSWORD'         : 'Enter your new password',
         'ENTER_EMAIL'                : 'Enter your email address',
         'ERROR_API_MISSING'          : 'API url has not been set correctly.',
-        'ERROR_EMAIL_PATTERN'        : 'Please enter a valid email.',
+        'ERROR_EMAIL_INVALID'        : 'Please enter a valid email.',
         'ERROR_PASSWORD_MATCH'       : 'This needs to be the same as the new password.',
         'ERROR_PASSWORD_PATTERN'     : 'Password must be between 7 and 25 characters and contain at least one letter and one number.',
         'ERROR_REQUIRED'             : 'This field is required.',

@@ -20,7 +20,7 @@ angular.module('BBAdminServices').config ($translateProvider) ->
       SERVICE_TABLE: {
         NEW_SERVICE: 'New Service'
         EDIT: '@:COMMON.BTN.EDIT'
-        PROGRESS_BOOK: '@:COMMON.BTN.BOOK'
+        BOOK_BTN: '@:COMMON.BTN.BOOK'
       }
     }
   }

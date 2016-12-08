@@ -4,22 +4,22 @@
     <div uib-accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" class="store-body">
 
       <div uib-accordion-heading class="filter-header">
-        <span translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.FILTER"></span>
+        <span translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.FILTER_HEADING"></span>
         <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
       </div>
 
       <form class="form-inline">
 
         <div ng-if="all_categories" class="form-group">
-          <label class="sr-only"><span translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.FILTER_CATEGORY"></span></label>
+          <label class="sr-only" translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.CATEGORY_LABEL"></label>
           <select class="form-control" type="text" name="category" id="category" ng-model="filters.category_name" ng-options="item.name for item in all_categories" ng-change="filterChanged()">
-            <option  value=""><span translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.FILTER_ANY"></span><span translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.FILTER_CATEGORY"></span></option>
+            <option value="" translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.ANY_CATEGORY"></option>
           </select>
         </div>
 
         <div class="form-group">
-          <label class="sr-only"><span translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.ITEM_SERVICE"></span></label>
-          <input class="form-control" type="text" ng-model="filters.service_name" ng-change="filterChanged()" placeholder="{{ 'PUBLIC_BOOKING.SERVICE_LIST_FILTER.ITEM_SERVICE_PLACEHOLDER' | translate }}"/>
+          <label class="sr-only" translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.SERVICE_LABEL"></label>
+          <input class="form-control" type="text" ng-model="filters.service_name" ng-change="filterChanged()" placeholder="{{ 'PUBLIC_BOOKING.SERVICE_LIST_FILTER.ITEM_SERVICE_PLACEHOLDER' | translate}}"/>
         </div>
 
         <div class="form-group">
@@ -28,7 +28,8 @@
 
         <div class="form-group">
           <button type="button" class="btn btn-link" ng-click="resetFilters()">
-            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span><span translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.FILTER_RESET"></span>
+            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+            <span translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.RESET_BTN"></span>
           </button>
         </div>
 

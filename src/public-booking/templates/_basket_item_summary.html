@@ -1,42 +1,44 @@
 <div class="bb-item-summary">
   <div class="bb-item-summary-header">
     <div class="bb-item-summary-header-text hidden-xs">
-      <h3><span>{{bb.current_item.service.name}}</span></h3>
+      <h3>
+        <span>{{bb.current_item.service.name}}</span>
+      </h3>
     </div>
   </div>
   <ul class="bb-item-summary-list">
     <li class="visible-xs bb-confirmation-summary-item">
-        <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_SERVICE"></div>
+        <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.SERVICE_LABEL"></div>
         <div class="bb-summary-value">{{bb.current_item.service.name}}
         </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.duration">
-      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_DURATION"></div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.DURATION_LABEL"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.duration | time_period}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.resource && bb.current_item.resource.name">
-      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_RESOURCE"></div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.RESOURCE_LABEL"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.resource.name}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.person && bb.current_item.person.name">
-      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_PERSON"></div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.PERSON_LABEL"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.person.name}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.price">
-      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_PRICE"></div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.PRICE_LABEL"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.price | currency}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.date">
-      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_DATE"></div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.DATE_LABEL"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'dddd D MMMM'}}</span>
       </div>
     </li>
     <li class="bb-confirmation-summary-item" ng-show="bb.current_item.time">
-      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.ITEM_TIME"></div>
+      <div class="bb-summary-label" translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.TIME_LABEL"></div>
       <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'LT'}}</span>
       </div>
     </li>

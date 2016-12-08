@@ -220,7 +220,9 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
   ###
   $scope.setReady = () =>
+
     $scope.item.setAskedQuestions()
+    
     if $scope.item.ready and !$scope.suppress_basket_update
       return $scope.addItemToBasket()
     else

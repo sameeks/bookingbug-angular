@@ -428,7 +428,7 @@ app.directive "bbMatchInput", ->
       compare(ctrl.$viewValue)
 
     compare = (value) ->
-      ctrl.$setValidity 'match', scope.val_1 == value
+      ctrl.$setValidity 'match', scope.val_1 is value
       value
 
     ctrl.$parsers.push compare

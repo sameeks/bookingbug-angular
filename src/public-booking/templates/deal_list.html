@@ -1,96 +1,206 @@
 <div bb-deals>
 
-  <h2 class="deal-list-heading">
-    <span translate="PUBLIC_BOOKING.DEAL_LIST.BASKET_GIFT_CERTIFICATE"></span>
+  <h2
+    class="deal-list-heading"
+    translate="PUBLIC_BOOKING.DEAL_LIST.TITLE">
   </h2>
 
   <div ng-if="bb.stacked_items && bb.stacked_items[0].deal">
-    <h4><span translate="PUBLIC_BOOKING.DEAL_LIST.BASKET_GIFT_CERTIFICATE_SELECTED"></span></h4>
+
+    <h4 translate="PUBLIC_BOOKING.DEAL_LIST.SELECTED_CERTIFICATES"></h4>
+
     <table class="table table-bordered">
+
       <thead>
         <tr>
-          <th><span translate="PUBLIC_BOOKING.DEAL_LIST.ITEM"></span></th>
-          <th><span translate="PUBLIC_BOOKING.DEAL_LIST.ITEM_PRICE"></span></th>
+          <th translate="PUBLIC_BOOKING.DEAL_LIST.CERTIFICATE_COL_HEADING"></th>
+          <th translate="PUBLIC_BOOKING.DEAL_LIST.PRICE_COL_HEADING"></th>
           <th>&nbsp;</th>
         </tr>
       </thead>
+
       <tbody>
-        <tr ng-repeat="item in bb.stacked_items" ng-class="{'last-item': $last}">
+        <tr
+          ng-repeat="item in bb.stacked_items"
+          ng-class="{'last-item': $last}">
           <td>
             <p>
               {{item.deal.name}}
               <br/>
-              <form ng-if="!bb.company_settings.no_recipient" name="recipient_form" class="form-horizontal" role="form" bb-form-resettable bb-form novalidate>
+
+              <form
+                ng-if="!bb.company_settings.no_recipient"
+                name="recipient_form"
+                class="form-horizontal"
+                role="form"
+                bb-form-resettable
+                bb-form
+                novalidate>
+
                 <div ng-hide="recipient_form.submitted && item.recipient">
-                  <small><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.RECIPIENT_ADD"></span><small>
+
+                  <small translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_FORM.TITLE"><small>
+                  
+                  <br/>
+
+                  <p>
+                    <label
+                      bb-question-label="question"
+                      for="recipient_name"
+                      class="control-label col-sm-4">
+                        <small>
+                          <span translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_FORM.RECIPIENT_NAME_LABEL"></span>:
+                        </small>
+                      </label>
+                      <input
+                        type="text"
+                        name="recipient_name"
+                        id="recipient_name"
+                        ng-model="recipient.name"
+                        ng-pattern="validator.alpha"
+                      />
                     <br/>
+
+                  </p>
+
                     <p>
-                      <label bb-question-label="question" for="recipient_name" class="control-label col-sm-4"> <small><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.RECIPIENT_NAME"></span>:</small> </label> <input type="text" name="recipient_name" id="recipient_name" ng-model="recipient.name" ng-pattern="validator.alpha"/>
+                      <label
+                        bb-question-label="question"
+                        for="recipient_mail"
+                        class="control-label col-sm-4">
+                        <small>
+                          <span translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_FORM.EMAIL_LABEL"></span>:
+                        </small>
+                      </label>
+                      <input
+                        type="email"
+                        name="recipient_mail"
+                        id="recipient_mail"
+                        ng-model="recipient.mail"
+                      />
                       <br/>
                     </p>
+
                     <p>
-                      <label bb-question-label="question" for="recipient_mail" class="control-label col-sm-4"><small><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.DETAILS_EMAIL"></span>:</small> </label> <input type="email" name="recipient_mail" id="recipient_mail" ng-model="recipient.mail"/>
+                      <button
+                        ng-click="validator.validateForm(recipient_form) && addRecipient(item, recipient)"
+                        translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_FORM.ADD_RECIPIENT_BTN">
+                      </button>
                       <br/>
                     </p>
-                    <p>
-                      <button ng-click="validator.validateForm(recipient_form) && addRecipient(item, recipient)"><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.PROGRESS_ADD"></span></button>
-                      <br/>
-                    </p>
+
                     <br/>
-                    <p ng-show="recipient_form.recipient_name.$invalid && recipient_form.submitted" class="error-message"><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.RECIPIENT_NAME_VALIDATION_MSG"></span></p>
-                    <p ng-show="recipient_form.recipient_mail.$invalid && recipient_form.submitted" class="error-message"><span translate="PUBLIC_BOOKING.DEAL_LIST.FORM.RECIPIENT_EMAIL_VALIDATION_MSG"></span></p>
+
+                    <p
+                      ng-show="recipient_form.recipient_name.$invalid && recipient_form.submitted"
+                      class="error-message"
+                      translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_FORM.RECIPIENT_NAME_REQUIRED">
+                    </p>
+
+                    <p
+                      ng-show="recipient_form.recipient_mail.$invalid && recipient_form.submitted"
+                      class="error-message"
+                      translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_FORM.RECIPIENT_EMAIL_REQUIRED">
+                    </p>
+
                   </div>
+
                 </form>
+
                 <div ng-if="item.recipient">
-                 <h5><span translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT"></span></h5>
-                 <p ng-if="item.recipient"><span translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_NAME"></span>:<small> {{ item.recipient }} </small> </p>
-                 <p ng-if="item.recipient_mail"><span translate="PUBLIC_BOOKING.DEAL_LIST.DETAILS_EMAIL"></span>:<small> {{ item.recipient_mail }} </small> </p>
-               </div>
-             </p>
-           </td>
+
+                 <h5 translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_HEADING"></h5>
+
+                 <p ng-if="item.recipient">
+                  <span translate="PUBLIC_BOOKING.DEAL_LIST.RECIPIENT_NAME_LABEL"></span>:
+                  <small>{{item.recipient}}</small>
+                </p>
+
+                <p ng-if="item.recipient_mail">
+                  <span translate="PUBLIC_BOOKING.DEAL_LIST.EMAIL_LABEL"></span>:
+                  <small>{{item.recipient_mail}}</small>
+                </p>
+
+              </div>
+
+            </p>
+
+          </td>
+
           <td class="text-right">
-            {{ item.deal.price | currency }}
+            {{item.deal.price | currency }}
           </td>
+
           <td class="text-center">
-            <span class="glyphicon glyphicon-trash" aria-hidden="true"  ng-click="removeDeal(item)"></span>
+            <span
+              class="glyphicon glyphicon-trash"
+              aria-hidden="true"
+              ng-click="removeDeal(item)">
+            </span>
           </td>
+
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="panel panel-default bb-event-card" ng-repeat="deal in deals">
+  <div
+    class="panel panel-default bb-event-card"
+    ng-repeat="deal in deals">
+
     <div class="panel-body">
       <div class="row vertical-row-align">
 
         <div class="col-sm-9 col-xs-12 deal-details">
-          <h3 >{{deal.name}}</h3>
+
+          <h3>{{deal.name}}</h3>
+
           <ul class="deal-summary-list">
             <li class="deal-description">
-              <span>{{ deal.description }}</span>
+              <span>{{deal.description}}</span>
             </li>
             <li class="price">
               <span class="bb-icon icon-price"></span>
               <span>{{deal.price | currency}}</span>
             </li>
           </ul>
+
         </div>
 
-          <div class="col-sm-3 deal-select">
-            <button type="button" ng-click="selectDeal(deal)" class="btn btn-primary btn-block">
-              <span><span translate="PUBLIC_BOOKING.DEAL_LIST.PROGRESS_BUY"></span></span>
-            </button>
-          </div>
+        <div class="col-sm-3 deal-select">
+          <button
+            type="button"
+            ng-click="selectDeal(deal)"
+            class="btn btn-primary btn-block"
+            translate="PUBLIC_BOOKING.DEAL_LIST.BUY_BTN">
+          </button>
+        </div>
 
       </div>
     </div>
   </div>
 
   <div ng-if="bb.stacked_items && bb.stacked_items[0].deal">
-    <button type="button" class="btn btn-primary btn-block" ng-click="purchaseDeals()"><span translate="PUBLIC_BOOKING.DEAL_LIST.BASKET_GIFT_CERTIFICATE_BUY"></span></button>
+
+    <button
+      type="button"
+      class="btn btn-primary btn-block"
+      ng-click="purchaseDeals()"
+      translate="PUBLIC_BOOKING.DEAL_LIST.BUY_GIFT_CERT_BTN">  
+    </button>
+
   </div>
+
   <div class="bb-step-navigation">
-    <button type="button" class="btn btn-default" ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PUBLIC_BOOKING.DEAL_LIST.BACK_BTN"></span></button>
+
+    <button
+      type="button"
+      class="btn btn-default"
+      ng-click="loadPreviousStep()"
+      ng-show="bb.current_step > 1"
+      translate="PUBLIC_BOOKING.DEAL_LIST.BACK_BTN">
+    </button>
+
   </div>
 
 </div>

@@ -1,28 +1,49 @@
 <div class="bb-month-picker">
   <div class="bb-months">
-    <ul id="rnCarousel" rn-carousel rn-carousel-controls rn-carousel-index="carouselIndex" rn-carousel-buffered bb-month-picker-listener class="md-col-4" ng-if="monthCollection">
+    <ul
+      id="rnCarousel"
+      rn-carousel
+      rn-carousel-controls
+      rn-carousel-index="carouselIndex"
+      rn-carousel-buffered
+      bb-month-picker-listener
+      class="md-col-4"
+      ng-if="monthCollection">
 
-      <li ng-repeat="months in monthCollection" class="text-center">
-        <div class="bb-month carousel-table" ng-repeat="month in months" ng-if="months" ng-class="{'hidden-xs': month.selected}">
+      <li
+        ng-repeat="months in monthCollection"
+        class="text-center">
+        <div
+          class="bb-month carousel-table"
+          ng-repeat="month in months"
+          ng-if="months"
+          ng-class="{'hidden-xs': month.selected}">
           <table>
             <thead>
               <tr>
                 <div class="row">
-                  <div class="months text-center col-xs-12 col-sm-4 visible-xs"><b>
+                  <div class="months text-center col-xs-12 col-sm-4 visible-xs">
+                    <b>
                     {{month.start_date | datetime: "MMMM"}} {{month.start_date | datetime: "YYYY"}}</b>
                   </div>
-                  <div class="months text-center hidden-xs"><b>
+                  <div class="months text-center hidden-xs">
+                    <b>
                     {{month.start_date | datetime: "MMMM"}} {{month.start_date | datetime: "YYYY"}}</b>
                   </div>
                 </div>
               </tr>
               <tr>
-                <th ng-repeat="day in month.weeks[0].days" class="days">{{day.date | datetime: "ddd"}}</th>
+                <th
+                  ng-repeat="day in month.weeks[0].days"
+                  class="days">
+                  {{day.date | datetime: "ddd"}}
+                </th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="week in month.weeks">
-                <td ng-repeat="day in week.days" 
+                <td
+                  ng-repeat="day in week.days" 
                   ng-class="{'available': day.available, 
                              'selected': day.selected,
                              'today': day.today,

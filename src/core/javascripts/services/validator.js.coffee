@@ -237,7 +237,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
 
     else if form.$error.pattern
 
-      AlertService.raise('INVALID_POSTCODE')
+      AlertService.raise('POSTCODE_INVALID')
       return false
 
     else
@@ -265,7 +265,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
 
         else
 
-          AlertService.raise('INVALID_POSTCODE')
+          AlertService.raise('POSTCODE_INVALID')
           $rootScope.$apply()
           deferred.reject(false)
 

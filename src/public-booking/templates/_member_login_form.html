@@ -1,24 +1,67 @@
-<form name="login_form" ng-submit="validator.validateForm(login_form) && submit()" class="form-horizontal" role="form" bb-form novalidate>
+<form
+  name="login_form"
+  ng-submit="validator.validateForm(login_form) && submit()"
+  class="form-horizontal"
+  role="form"
+  bb-form 
+  novalidate>
 
-    <div class="form-group" ng-class="{'has-error': login_form.email.$invalid && (!login_form.email.$pristine || login_form.submitted)}">
-      <label for="email" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.EMAIL_LABEL"></span>:</label>
+    <div
+      class="form-group"
+      ng-class="{'has-error': login_form.email.$invalid && (!login_form.email.$pristine || login_form.submitted)}">
+      <label
+        for="email"
+        class="control-label col-sm-4"
+        translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.EMAIL_LABEL">
+      </label>
       <div class="col-sm-5">
-        <input type="text" name="email" id="email" required ng-model="login.email" class="form-control" ng-pattern="validator.getEmailPattern()" autocomplete="email"/>
+        <input
+          type="text"
+          name="email"
+          id="email"
+          required
+          ng-model="login.email"
+          class="form-control"
+          ng-pattern="validator.getEmailPattern()" 
+          autocomplete="email"
+        />
       </div>
-      <div class="col-sm-offset-4 messages">
-        <div class="error-message" ng-show="login_form.email.$error.required && login_form.submitted" translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.EMAIL_VALIDATION_REQUIRED_MESSAGE">
+      <divclass="col-sm-offset-4 messages">
+        <div
+          class="error-message"
+          ng-show="login_form.email.$error.required && login_form.submitted"
+          translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.EMAIL_REQUIRED">
         </div>
-        <div class="error-message" ng-show="login_form.email.$error.pattern && login_form.submitted" translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.EMAIL_VALIDATION_PATTERN_MESSAGE"></div>
+        <div
+          class="error-message"
+          ng-show="login_form.email.$error.pattern && login_form.submitted"
+          translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.EMAIL_INVALID">
+        </div>
       </div> 
     </div>
   
-    <div class="form-group" ng-class="{'has-error': login_form.password.$invalid && (!login_form.password.$pristine || login_form.submitted)}">
-      <label for="password" class="control-label col-sm-4"><span translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.PASSWORD_LABEL"></span>:</label>
+    <div
+      class="form-group"
+      ng-class="{'has-error': login_form.password.$invalid && (!login_form.password.$pristine || login_form.submitted)}">
+      <label
+        for="password"
+        class="control-label col-sm-4"
+        translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.PASSWORD_LABEL"></label>
       <div class="col-sm-5">
-        <input type="password" name="password" id="password" required ng-model="login.password" class="form-control"  />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          required
+          ng-model="login.password"
+          class="form-control"
+        />
       </div>
       <div class="col-sm-offset-4 messages">
-        <div class="error-message" ng-show="login_form.password.$invalid && login_form.submitted" translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.PLEASE_ENTER_PASSWORD">
+        <div
+          class="error-message"
+          ng-show="login_form.password.$invalid && login_form.submitted"
+          translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.PASSWORD_REQURIED">
         </div>
       </div> 
     </div>
@@ -27,7 +70,10 @@
       <div class="col-sm-offset-4 col-sm-5">
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="login.persist_login" translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.REMEMBER_ME">
+            <input
+              type="checkbox"
+              ng-model="login.persist_login">
+              <span translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.REMEMBER_ME"></span>
           </label>
         </div>
       </div> 
@@ -35,7 +81,11 @@
 
     <div class="form-group">
       <div class="col-sm-offset-4 col-sm-5">
-        <button type="submit" class="btn btn-primary btn-block" translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.LOGIN"></button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.LOGIN_BTN">
+        </button>
       </div>
     </div>
 

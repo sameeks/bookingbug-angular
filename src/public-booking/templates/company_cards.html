@@ -4,8 +4,14 @@
       <div class="col-sm-6 col-md-4">
         <div class="card">
           <div bb-address-map="item.address">
-            <ui-gmap-google-map ng-if='map.center' center='map.center' zoom='map.zoom' options="options">
-              <ui-gmap-marker coords="marker.coords" idkey="marker.id">
+            <ui-gmap-google-map
+              ng-if="map.center"
+              center="map.center"
+              zoom="map.zoom"
+              options="options">
+              <ui-gmap-marker
+                coords="marker.coords"
+                idkey="marker.id">
               </ui-gmap-marker>
             </ui-gmap-google-map>
             <div class="card-block">
@@ -17,9 +23,13 @@
               <span ng-show="item.getAddress().address5">{{item.getAddress().address5}}<br /></span>
               <span ng-show="item.getAddress().country">{{item.getAddress().country}}</span>
               <span ng-show="item.description">{{item.description}}</span>
-              <button type="button" ng-click="selectItem(item)" class="btn btn-primary" translate="PUBLIC_BOOKING.COMPANY_CARDS.SELECT_BTN"></button>
-              <div class="clearfix">
-              </div>
+              <button
+                type="button"
+                ng-click="selectItem(item)"
+                class="btn btn-primary"
+                translate="PUBLIC_BOOKING.COMPANY_CARDS.SELECT_BTN">
+              </button>
+              <div class="clearfix"></div>
             </div>
           </div>
         </div>
@@ -29,10 +39,20 @@
 </div>
 
 
-<div class="bb-step-navigation" ng-show="bb.current_step > 1">
+<div
+  class="bb-step-navigation" 
+  ng-show="bb.current_step > 1">
+
   <div class="row">
     <div class="col-sm-2">
-      <button type="button" class="btn btn-default pull-left" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1" translate="PUBLIC_BOOKING.COMPANY_CARDS.BACK_BTN"></button>
+      <button
+        type="button"
+        class="btn btn-default pull-left"
+        bb-debounce ng-click="loadPreviousStep()"
+        ng-show="bb.current_step > 1"
+        translate="PUBLIC_BOOKING.COMPANY_CARDS.BACK_BTN">
+      </button>
     </div>
   </div>
+
 </div>

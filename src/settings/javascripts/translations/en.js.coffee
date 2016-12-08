@@ -10,7 +10,7 @@ angular.module('BBAdminSettings').config ($translateProvider) ->
         EDIT: '@:COMMON.BTN.EDIT'
       }
       ADMIN_FORM: {
-        PROGRESS_CANCEL: '@:COMMON.BTN.CANCEL'
+        CANCEL_BTN: '@:COMMON.BTN.CANCEL'
       }
     }
   }

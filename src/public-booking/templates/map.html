@@ -14,7 +14,7 @@
               <div class="input-group">
                 <input type="text" ng-model="address" class="form-control input-lg" id="search-stores" placeholder="{{'PUBLIC_BOOKING.MAP.INPUT_PLACEHOLDER' | translate}}">
                 <span class="input-group-btn">
-                  <button class="btn btn-primary btn-lg" type="submit" title="{{'PUBLIC_BOOKING.MAP.SEARCH_BTN_TITLE' | translate}}"><span class="glyphicon glyphicon-search"></span></button>
+                  <button class="btn btn-primary btn-lg" type="submit" title="{{'PUBLIC_BOOKING.MAP.SEARCH_BTN' | translate}}"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
               </div>
             </div>
@@ -67,7 +67,7 @@
           <div ng-show="!currentMarker.company.has_service && can_filter_by_service" translate="PUBLIC_BOOKING.MAP.SERVICE_UNAVAILABLE" translate-values="{name: marker.company.service.name}"></div>
 
           <br />
-          <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.has_service || !can_filter_by_service" translate="PUBLIC_BOOKING.MAP.PROGRESS_SELECT"></button>
+          <button type="button" ng-click="selectItem(currentMarker.company)" class="btn btn-primary" ng-show="currentMarker.company.has_service || !can_filter_by_service" translate="PUBLIC_BOOKING.MAP.SELECT_BTN"></button>
 
         </div>
       </div>
@@ -97,7 +97,7 @@
 
             <div ng-show="!marker.company.has_service && can_filter_by_service" translate="PUBLIC_BOOKING.MAP.UIB_ACCORDION.SERVICE_UNAVAILABLE" translate-values="{name: marker.company.service.name}"></div>
 
-            <button type="button" ng-show="marker.company.has_service || !can_filter_by_service" ng-click="selectItem(marker.company)" ng-show="currentMarker.company.has_service" class="btn btn-primary pull-right"><span translate="PUBLIC_BOOKING.MAP.UIB_ACCORDION.PROGRESS_SELECT"></span></button>
+            <button type="button" ng-show="marker.company.has_service || !can_filter_by_service" ng-click="selectItem(marker.company)" ng-show="currentMarker.company.has_service" class="btn btn-primary pull-right"><span translate="PUBLIC_BOOKING.MAP.UIB_ACCORDION.SELECT_BTN"></span></button>
 
           </div>
         </div>

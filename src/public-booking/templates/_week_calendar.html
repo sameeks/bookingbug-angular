@@ -1,13 +1,29 @@
 <div>
 
-  <div class="alert alert-info" bb-time-zone ng-show="is_time_zone_diff">
-    <span translate="PUBLIC_BOOKING.WEEK_CALENDAR.ALL_TIMES_IN" translate-values="{time_zone_name: time_zone_name}"></span>
+  <div
+    bb-time-zone
+    class="alert alert-info"
+    ng-show="is_time_zone_diff" translate="PUBLIC_BOOKING.WEEK_CALENDAR.TIMEZONE_INFO" translate-values="{time_zone_name: time_zone_name}">
   </div>
 
-  <div class="alert alert-info" ng-show="no_slots_in_week">
-    <i class="fa fa-info-circle" aria-hidden="true"></i>
-    <span translate="PUBLIC_BOOKING.WEEK_CALENDAR.NO_AVAILABILITY" translate-values="{time_range_length: time_range_length}" translate-interpolation="messageformat"></span>
-    <button type="button" class="btn btn-default" ng-click="showFirstAvailableDay()" translate="PUBLIC_BOOKING.WEEK_CALENDAR.NEXT_AVAIL"></button>
+  <div
+    class="alert alert-info"
+    ng-show="no_slots_in_week">
+    <i
+      class="fa fa-info-circle"
+      aria-hidden="true">
+    </i>
+    <span
+      translate="PUBLIC_BOOKING.WEEK_CALENDAR.NO_AVAILABILITY"
+      translate-values="{time_range_length: time_range_length}"
+      translate-interpolation="messageformat">
+    </span>
+    <button
+      type="button"
+      class="btn btn-default"
+      ng-click="showFirstAvailableDay()"
+      translate="PUBLIC_BOOKING.WEEK_CALENDAR.NEXT_AVAIL_BTN">
+    </button>
   </div>
 
   <div class="month-header hidden-xs">
@@ -47,11 +63,20 @@
    <!-- function: selectedDateChanged() -->
    <!-- accepts user input?: NO         -->
    <!-- =============================== -->
-   <div class="visible-xs" class="form-group">
-      <label class="sr-only" for="date" translate="PUBLIC_BOOKING.WEEK_CALENDAR.DATE_LABEL"></label>
+   <div
+    class="visible-xs"
+    class="form-group">
+      <label
+        class="sr-only"
+        for="date"
+        translate="PUBLIC_BOOKING.WEEK_CALENDAR.DATE_LABEL">
+      </label>
       <div class="input-group date-picker">
         <!-- date format: http://docs.angularjs.org/api/ng.filter:date" -->
-        <input type="text" ng-model="selected_date" class="form-control"
+        <input
+          type="text"
+          ng-model="selected_date"
+          class="form-control"
           bb-datepicker-popup="DD/MM/YYYY"
           uib-datepicker-popup="dd/MM/yyyy"
           is-open="opened"
@@ -63,9 +88,15 @@
           ng-readonly="true"
           name="date"
           id="date"
-          translate-attr="{placeholder: 'PUBLIC_BOOKING.WEEK_CALENDAR.ANY_DATE'}"/>
-        <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
-          <button class="btn btn-default" type="submit" title="Pick date">
+          translate-attr="{placeholder: 'PUBLIC_BOOKING.WEEK_CALENDAR.ANY_DATE'}"
+        />
+        <span
+          class="input-group-btn"
+          ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
+          <button
+            class="btn btn-default"
+            type="submit"
+            title="Pick date">
             <span class="fa fa-calendar-o"></span>
           </button>
         </span>
@@ -106,34 +137,66 @@
   <!-- /\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
 
   <div class="cal-custom">
-    <ul class="week row" ng-show="days">
+    <ul
+      class="week row"
+      ng-show="days">
 
       <li class="day navigation hidden-xs">
-        <button type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 3)" ng-disabled="!is_subtract_valid || !isLoaded">
+        <button
+          type="button"
+          class="btn btn-icon visible-sm"
+          ng-click="subtract('days', 3)"
+          ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
-        <button type="button" class="btn btn-icon visible-md" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
+        <button
+          type="button"
+          class="btn btn-icon visible-md"
+          ng-click="subtract('days', 5)"
+          ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
-        <button type="button" class="btn btn-icon visible-lg" ng-click="subtract('days', 7)" ng-disabled="!is_subtract_valid || !isLoaded">
+        <button
+          type="button"
+          class="btn btn-icon visible-lg"
+          ng-click="subtract('days', 7)"
+          ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </button>
         <span ng-show="!is_subtract_valid || !isLoaded">&nbsp;</span>
       </li>
 
-      <li class="day cal-col-{{$index + 1}}" ng-repeat="day in days" ng-class="{'past': day.date.isBefore(moment(),'day')}">
+      <li
+        class="day cal-col-{{$index + 1}}"
+        ng-repeat="day in days"
+        ng-class="{'past': day.date.isBefore(moment(),'day')}">
         <div class="day-header row">
           <span class="col-xs-2 previous visible-xs">
-            <button type="button" class="btn btn-icon" ng-click="subtract('days', 1)" ng-disabled="day.date.isSame(moment(),'day') || !isLoaded">
+            <button
+              type="button"
+              class="btn btn-icon"
+              ng-click="subtract('days', 1)"
+              ng-disabled="day.date.isSame(moment(),'day') || !isLoaded">
               <span class="glyphicon glyphicon-chevron-left"></span>
             </button>
           </span>
           <h3 class="day-heading col-xs-8 col-sm-12">
-            <span class="visible-xs">{{day.date | datetime: "ddd"}} <strong>{{day.date | datetime: "D"}} </strong>{{day.date | datetime: "MMM"}}</span>
-            <span class="hidden-xs">{{day.date | datetime: "ddd"}} <strong>{{day.date | datetime: "D"}} </strong></span>
+            <span class="visible-xs">
+              {{day.date | datetime: "ddd"}}
+              <strong>{{day.date | datetime: "D"}} </strong>
+              {{day.date | datetime: "MMM"}}
+            </span>
+            <span class="hidden-xs">
+              {{day.date | datetime: "ddd"}} 
+              <strong>{{day.date | datetime: "D"}}</strong>
+            </span>
           </h3>
           <span class="col-xs-2 next visible-xs">
-            <button type="button" class="btn btn-icon visible-xs pull-right" ng-click="add('days', 1)" ng-disabled="!isLoaded">
+            <button
+              type="button"
+              class="btn btn-icon visible-xs pull-right"
+              ng-click="add('days', 1)"
+              ng-disabled="!isLoaded">
               <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
           </span>
@@ -177,16 +240,29 @@
       </li>
 
       <li class="day navigation hidden-xs">
-        <button type="button" class="btn btn-icon visible-sm" ng-click="add('days', 3)" ng-disabled="!isLoaded">
+        <button
+          type="button"
+          class="btn btn-icon visible-sm"
+          ng-click="add('days', 3)"
+          ng-disabled="!isLoaded">
           <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
-        <button type="button" class="btn btn-icon visible-md" ng-click="add('days', 5)" ng-disabled="!isLoaded">
+        <button
+          type="button"
+          class="btn btn-icon visible-md"
+          ng-click="add('days', 5)"
+          ng-disabled="!isLoaded">
           <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
-        <button type="button" class="btn btn-icon visible-lg" ng-click="add('days', 7)" ng-disabled="!isLoaded">
+        <button
+          type="button"
+          class="btn btn-icon visible-lg"
+          ng-click="add('days', 7)"
+          ng-disabled="!isLoaded">
           <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
       </li>
+      
     </ul>
   </div>
 </div>

@@ -47,7 +47,7 @@
             </div>
 
             <div class="form-group calendar">
-              <label class="sr-only" for="date" translate="PUBLIC_BOOKING.EVENT_LIST.ITEM_DATE"></label>
+              <label class="sr-only" for="date" translate="PUBLIC_BOOKING.EVENT_LIST.DATE_LABEL"></label>
               <div class="input-group date-picker">
                 <!-- date format: http://docfiddich.angularjs.org/api/ng.filter:date" -->
                 <input type="text" ng-model="selected_date" class="form-control"
@@ -71,7 +71,7 @@
             </div>
 
             <div class="form-group">
-              <label class="sr-only" for="price"><span translate="PUBLIC_BOOKING.EVENT_LIST.ITEM_PRICE"></span></label>
+              <label class="sr-only" for="price"><span translate="PUBLIC_BOOKING.EVENT_LIST.PRICE_LABEL"></span></label>
               <select class="form-control" name="price" id="price" ng-model="filters.price" ng-options="price as (price | currency) for price in price_options" ng-change="filterChanged()">
                 <option value=""><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_ANY_PRICE"></span></option>
               </select>

@@ -2,19 +2,31 @@
   
   <li ng-repeat="item in filtered_items | orderBy: 'order'">
 
-    <div class="row" ng-class="{'bb-vertical-align-center': item.extra.image_url || item.description}">
+    <div
+      class="row"
+      ng-class="{'bb-vertical-align-center': item.extra.image_url || item.description}">
 
       <div class="col-sm-8 col-xs-6">
 
-        <h2 class="bb-service-name" ng-class="{'bb-service-name-small': !item.description}">{{item.name}}</h2>
+        <h2
+          class="bb-service-name"
+          ng-class="{'bb-service-name-small': !item.description}">
+          {{item.name}}
+        </h2>
 
         <div class="row">
 
-          <div class="hidden-xs col-sm-2 bb-service-image" ng-if="item.extra.image_url">
-            <img ng-src="{{item.extra.image_url}}" class="img-responsive"/>
+          <div
+            class="hidden-xs col-sm-2 bb-service-image"
+            ng-if="item.extra.image_url">
+            <img
+              ng-src="{{item.extra.image_url}}"
+              class="img-responsive"/>
           </div>
 
-          <div class="hidden-xs col-sm-10 bb-service-description" ng-if="item.description">
+          <div
+            class="hidden-xs col-sm-10 bb-service-description"
+            ng-if="item.description">
             {{item.description}}
           </div>
 
@@ -30,18 +42,28 @@
 
         </div>
 
-        <div class="col-xs-12 hidden-sm hidden-md hidden-lg bbb-service-image" ng-if="item.extra.image_url">
-          <img ng-src="{{item.extra.image_url}}" class="img-responsive"/>
+        <div
+          class="col-xs-12 hidden-sm hidden-md hidden-lg bb-service-image"
+          ng-if="item.extra.image_url">
+          <img
+            ng-src="{{item.extra.image_url}}"
+            class="img-responsive"/>
         </div>
-        <div class="col-xs-12 hidden-sm hidden-md hidden-lg bb-service-description" ng-if="item.description">
+        <div
+          class="col-xs-12 hidden-sm hidden-md hidden-lg bb-service-description"
+          ng-if="item.description">
           {{item.description}}
         </div>
         <div class="col-sm-2 col-xs-12">
-          <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" translate="PUBLIC_BOOKING.SERVICE_LIST.PROGRESS_SELECT"></button>
+          <button
+            type="button"
+            ng-click="selectItem(item)"
+            class="btn btn-primary btn-block"
+            translate="PUBLIC_BOOKING.SERVICE_LIST.SELECT_BTN">
+          </button>
         </div>
 
     </div>
-
 
   </li>
 

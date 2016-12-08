@@ -1,17 +1,27 @@
 <div class="modal-header">
-  <button type="button" class="close" ng-click="cancel()">&times;</button>
-  <h1 class="modal-title"><span translate="PUBLIC_BOOKING.CANCEL_MODAL.CANCEL_QUESTION"></span></h1>
+  <button
+    type="button"
+    class="close"
+    ng-click="cancel()">
+    &times;
+  </button>
+  <h1
+    class="modal-title"
+    translate="PUBLIC_BOOKING.CANCEL_MODAL.MODAL_TITLE">
+  </h1>
 </div>
 
 <div class="modal-body">
 
   <ul class="confirmation-summary">
     <li class="row confirmation-summary-item">
-      <div class="col-xs-3"><span translate="PUBLIC_BOOKING.CANCEL_MODAL.ITEM_SERVICE"><span>:</div>
+      <div class="col-xs-3">
+        <span translate="PUBLIC_BOOKING.CANCEL_MODAL.SERVICE_LABEL"><span>:</div>
       <div class="col-xs-9">{{booking.service_name}}</div>
     </li>
     <li class="row confirmation-summary-item">
-      <div class="col-xs-3"><span translate="PUBLIC_BOOKING.CANCEL_MODAL.ITEM_WHEN"></span>:</div>
+      <div class="col-xs-3">
+        <span translate="PUBLIC_BOOKING.CANCEL_MODAL.WHEN_LABEL"></span>:</div>
       <div class="col-xs-9">{{booking.datetime | datetime: "LLLL"}}</div>
     </li>
   </ul>
@@ -19,6 +29,14 @@
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-primary" ng-click="confirmDelete()"><span translate="PUBLIC_BOOKING.CANCEL_MODAL.PROGRESS_CANCEL_BOOKING"></button>
-  <button class="btn btn-link" ng-click="cancel()"><span translate="PUBLIC_BOOKING.CANCEL_MODAL.PROGRESS_CANCEL_CANCEL"></span></button>
+  <button
+    class="btn btn-primary"
+    ng-click="confirmDelete()"
+    translate="PUBLIC_BOOKING.CANCEL_MODAL.CANCEL_BOOKING_BTN">
+  </button>
+  <button
+    class="btn btn-link"
+    ng-click="cancel()"
+    translate="PUBLIC_BOOKING.CANCEL_MODAL.DONT_CANCEL_BOOKING_BTN">
+  </button>
 </div>

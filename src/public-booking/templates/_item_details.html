@@ -1,0 +1,42 @@
+<div
+  ng-show="item_details.hasQuestions"
+  ng-form 
+  name="booking_questions_form"
+  class="bb-form"
+  role="form"
+  novalidate>
+
+  <h2
+    class="booking-form-header"
+    translate="PUBLIC_BOOKING.ITEM_DETAILS.SECTION_TITLE">
+  </h2>
+
+  <div
+    class="form-group"
+    ng-repeat="question in item_details.questions"
+    ng-if="question.currentlyShown"
+    bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
+    <label
+      for="{{question.id}}"
+      class="control-label col-sm-4"
+      ng-hide="question.detail_type == 'check'">
+      {{question.name}}
+    </label>
+    <div
+      ng-show="question.detail_type == 'check'"
+      class="col-sm-4 hidden-xs">
+      &nbsp;
+    </div>
+    <div class="col-sm-5">
+      <input bb-question="question"/>
+    </div>
+    <div class="col-sm-offset-4 messages">
+      <div
+        class="error-message"
+        ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )"
+        translate="PUBLIC_BOOKING.ITEM_DETAILS.FIELD_REQUIRED">
+      </div>
+    </div>
+  </div>
+
+</div>

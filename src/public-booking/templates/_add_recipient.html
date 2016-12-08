@@ -1,8 +1,20 @@
-<form name="recipient_form" role="form" bb-form novalidate>
+<form
+  name="recipient_form"
+  role="form"
+  bb-form
+  novalidate>
 
   <div class="modal-header">
-    <button type="button" class="close" ng-click="cancel()">&times;</button>
-    <h1 class="modal-title"><span translate="PUBLIC_BOOKING.ADD_RECIPIENT.MODAL_TITLE"></span></h1>
+    <button
+      type="button"
+      class="close"
+      ng-click="cancel()">
+      &times;
+    </button>
+    <h1
+      class="modal-title"
+      translate="PUBLIC_BOOKING.ADD_RECIPIENT.MODAL_TITLE">
+    </h1>
     <span translate="PUBLIC_BOOKING.ADD_RECIPIENT.WHO_TO_QUESTION"></span>
   </div>
 
@@ -10,34 +22,72 @@
 
       <div class="radio">
         <label>
-          <input type="radio" ng-model="recipient" ng-value="false" checked>
-          <span translate="PUBLIC_BOOKING.ADD_RECIPIENT.WHO_TO_OPTION_ME"></span>
+          <input
+            type="radio"
+            ng-model="recipient"
+            ng-value="false"
+            checked
+            translate="PUBLIC_BOOKING.ADD_RECIPIENT.WHO_TO_OPTION_ME"
+          />
         </label>
       </div>
       <div class="radio">
         <label>
-          <input type="radio" ng-model="recipient" ng-value="true">
-          <span translate="PUBLIC_BOOKING.ADD_RECIPIENT.WHO_TO_OPTION_NOT_ME"></span>
+          <input
+            type="radio"
+            ng-model="recipient"
+            ng-value="true"
+            translate="PUBLIC_BOOKING.ADD_RECIPIENT.WHO_TO_OPTION_NOT_ME"
+          />
         </label>
       </div> 
 
       <div ng-if="recipient">
-        <div class="form-group" ng-class="{'has-error': recipient_form.name.$invalid && (!recipient_form.name.$pristine || recipient_form.submitted)}">
-          <label for="name"><span translate="PUBLIC_BOOKING.ADD_RECIPIENT.NAME_LABEL"></span>:</label>
-          <input type="text" name="name" id="name" required ng-model="item.recipient" class="form-control" autofocus />
+        <div
+          class="form-group"
+          ng-class="{'has-error': recipient_form.name.$invalid && (!recipient_form.name.$pristine || recipient_form.submitted)}">
+          <label
+            for="name"
+            translate="PUBLIC_BOOKING.ADD_RECIPIENT.NAME_LABEL">
+          </label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            required
+            ng-model="item.recipient"
+            class="form-control"
+            autofocus
+          />
           <div class="messages">
-            <div class="error-message" ng-show="recipient_form.name.$invalid && recipient_form.submitted">
-              <span translate="PUBLIC_BOOKING.ADD_RECIPIENT.NAME_VALIDATION_MSG"></span>
+            <div
+              class="error-message"
+              ng-show="recipient_form.name.$invalid && recipient_form.submitted"
+              translate="PUBLIC_BOOKING.ADD_RECIPIENT.RECIPIENT_NAME_REQUIRED">
             </div>
           </div> 
         </div>
 
-        <div class="form-group" ng-class="{'has-error': recipient_form.email.$invalid && (!recipient_form.email.$pristine || recipient_form.submitted)}">
-          <label for="email"><span translate="PUBLIC_BOOKING.ADD_RECIPIENT.EMAIL_LABEL"></span>:</label>
-          <input type="email" name="email" id="email" required ng-model="item.recipient_mail" class="form-control" />
+        <div
+          class="form-group"
+          ng-class="{'has-error': recipient_form.email.$invalid && (!recipient_form.email.$pristine || recipient_form.submitted)}">
+          <label
+            for="email"
+            translate="PUBLIC_BOOKING.ADD_RECIPIENT.EMAIL_LABEL">
+          </label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            required
+            ng-model="item.recipient_mail"
+            class="form-control"
+          />
           <div class="messages">
-            <div class="error-message" ng-show="recipient_form.email.$invalid && recipient_form.submitted">
-              <span translate="PUBLIC_BOOKING.ADD_RECIPIENT.EMAIL_VALIDATION_MSG"></span>
+            <div
+              class="error-message"
+              ng-show="recipient_form.email.$invalid && recipient_form.submitted"
+              translate="PUBLIC_BOOKING.ADD_RECIPIENT.RECIPIENT_EMAIL_REQUIRED">
             </div>
           </div> 
         </div>
@@ -45,7 +95,15 @@
 
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="addToBasket(recipient_form)"><span translate="PUBLIC_BOOKING.ADD_RECIPIENT.ADD_LABEL"></span></button>
-    <button class="btn btn-secondary" ng-click="cancel()"><span translate="PUBLIC_BOOKING.ADD_RECIPIENT.CANCEL_LABEL"></span></button>
+    <button
+      class="btn btn-primary"
+      ng-click="addToBasket(recipient_form)"
+      translate="PUBLIC_BOOKING.ADD_RECIPIENT.ADD_LABEL">
+    </button>
+    <button
+      class="btn btn-secondary"
+      ng-click="cancel()"
+      translate="PUBLIC_BOOKING.ADD_RECIPIENT.CANCEL_LABEL">
+    </button>
   </div>
 </form>

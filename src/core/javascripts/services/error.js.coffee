@@ -32,7 +32,7 @@ angular.module('BB.Services').factory 'ErrorService', (GeneralOptions) ->
       persist: true,
     },
     {
-      key: 'INVALID_POSTCODE'
+      key: 'POSTCODE_INVALID'
       type: 'warning'
       persist: true
       },
