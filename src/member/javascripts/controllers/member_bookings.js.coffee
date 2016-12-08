@@ -2,7 +2,7 @@
 
 angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
   $document, $log, $q, ModalForm, $rootScope, AlertService, PurchaseService,
-  LoadingService, BBModel) ->
+  LoadingService, BBModel, WidgetModalService) ->
 
   loader = LoadingService.$loader($scope)
 
@@ -114,6 +114,14 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
     modalInstance.result.then (booking) ->
       bookWaitlistSucces()
 
+  openCalendarModal = (booking, total) ->
+    WidgetModalService.open
+      company_id: booking.company_id
+      template: 'main_view_booking'
+      total_id: total.long_id
+      first_page: 'calendar'
+      member: true
+
 
   edit: (booking) ->
     booking.$getAnswers().then (answers) ->
@@ -173,3 +181,12 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
       purchase_id: booking.purchase_ref
     PurchaseService.query(params).then (total) ->
       openPaymentModal(booking, total)
+
+
+  move: (booking) ->
+    params =
+      url_root: $scope.$root.bb.api_url
+      purchase_id: booking.purchase_ref
+    PurchaseService.query(params).then (total) -> 
+      openCalendarModal(booking, total)
+

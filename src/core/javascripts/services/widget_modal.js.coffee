@@ -20,6 +20,6 @@ angular.module('BB.Services').factory 'WidgetModalService', ($uibModal, $timeout
         $scope.config.company_id ||= $scope.company.id if $scope.company
         $scope.cancel = () ->
           $uibModalInstance.dismiss('cancel')
-      templateUrl: 'widget_popup.html'
+      templateUrl: 'widget_modal.html'
       resolve:
         config: () -> config 

@@ -51,6 +51,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     $scope.decideNextPage = decideNextPage
     $scope.deleteBasketItem = deleteBasketItem
     $scope.deleteBasketItems = deleteBasketItems
+    $scope.createBasketFromBookings = createBasketFromBookings
     $scope.emptyBasket = emptyBasket
     $scope.getCurrentStepTitle = getCurrentStepTitle
     $scope.getPartial = getPartial
@@ -468,6 +469,15 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
         total_id = $scope.bb.item_defaults.purchase_total_long_id
       else total_id = QueryStringService('total_id')
 
+      if prms.total_id and prms.member 
+        params =
+          url_root: $scope.bb.api_url
+          purchase_id: prms.total_id
+        PurchaseService.query(params).then (total) -> 
+          total.$getBookings().then (bookings) ->
+            createBasketFromBookings(bookings)
+
+
       if total_id
         params =
           purchase_id: total_id
@@ -517,6 +527,21 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     , (err) ->
       connectionStarted.reject("Failed to start widget")
       LoadingService.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+  createBasketFromBookings = (bookings) ->
+    proms = []
+    if bookings.length is 1 
+      $scope.bb.current_item = bookings[0]
+      $scope.bb.moving_booking = bookings[0]
+
+    for booking in bookings  
+      $scope.quickEmptybasket()
+      new_item = new BBModel.BasketItem(booking, $scope.bb)
+      new_item.setSrcBooking(booking, $scope.bb)
+      new_item.ready = false
+      Array::push.apply proms, new_item.promises
+      $scope.bb.basket.addItem(new_item)
+      $scope.setBasketItem(new_item)
 
 
   setupDefaults = (company_id) =>
