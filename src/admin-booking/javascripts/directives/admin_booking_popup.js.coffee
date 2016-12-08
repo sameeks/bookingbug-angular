@@ -1,5 +1,5 @@
 
-angular.module('BBAdminBooking').directive 'bbAdminBookingPopup', (AdminBookingPopup) ->
+angular.module('BBAdminBooking').directive 'bbAdminBookingPopup', (WidgetModalService) ->
   restrict: 'A'
   link: (scope, element, attrs) ->
 
@@ -9,5 +9,5 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingPopup', (AdminBookingP
   controller: ($scope) ->
 
     $scope.open = () ->
-      AdminBookingPopup.open()
+      WidgetModalService.open()
 

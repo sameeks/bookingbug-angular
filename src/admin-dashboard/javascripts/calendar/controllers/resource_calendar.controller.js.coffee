@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCalendarController', (AdminBookingPopup,
+angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCalendarController', (WidgetModalService,
   AdminCalendarOptions, AdminCompanyService, AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources,
   ColorPalette, Dialog, $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope,
   $state, TitleAssembler, $translate, $window, uiCalendarConfig) ->
@@ -287,7 +287,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         item_defaults.resource = resource.id.substring(0, resource.id.indexOf('_'))
 
       getCompanyPromise().then (company) ->
-        AdminBookingPopup.open
+        WidgetModalService.open
           min_date: setTimeToMoment(start, calOptions.min_time)
           max_date: setTimeToMoment(end, calOptions.max_time)
           from_datetime: moment(start.toISOString())
