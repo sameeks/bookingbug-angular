@@ -6,6 +6,10 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
   loader = LoadingService.$loader($scope)
 
+
+  $scope.$on 'booking:moved', () ->
+    updateBookings()
+
   $scope.getUpcomingBookings = () ->
     defer = $q.defer()
     now = moment()
