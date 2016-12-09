@@ -436,7 +436,10 @@ angular.module('BB.Services').config ($translateProvider) ->
         
       }
       MAIN_ACCOUNT: {
-        
+        ACCOUNT_TAB_HEADING: "Account"
+        UPCOMING_BOOKINGS_TAB_HEADING: "Upcoming Bookings"
+        PAST_BOOKINGS_TAB_HEADING: "Past Bookings"
+        WALLET_TAB_HEADING: "Wallet"
       }
       ACCOUNT: {
         HEADING: 'My Details'
@@ -450,6 +453,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EMAIL_LABEL: "@:COMMON.FORM.EMAIL"
         EMAIL_INVALID: "@:COMMON.FORM.EMAIL_REQUIRED"
         PASSWORD_LABEL: "@:COMMON.FORM.PASSWORD"
+        PASSWORD_REQUIRED: "@:COMMON.FORM.PASSWORD_REQUIRED"
         PASSWORD_REQUIRED: "@:COMMON.FORM.PASSWORD_REQUIRED"
         CONFIRM_PASSWORD_LABEL: "@:COMMON.FORM.CONFIRM_PASSWORD"
         PASSWORD_MISMATCH: "@:COMMON.FORM.PASSWORD_MISMATCH"

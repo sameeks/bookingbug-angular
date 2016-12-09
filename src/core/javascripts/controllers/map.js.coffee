@@ -40,7 +40,7 @@ angular.module('BB.Directives').directive 'bbMap', () ->
   scope : true
   controller : 'MapCtrl'
 
-angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, bbLocale) ->
+angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, bbLocale, $translate) ->
 
   $scope.controller = "public.controllers.MapCtrl"
 
@@ -59,9 +59,6 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
   $scope.can_filter_by_service = $scope.options.filter_by_service or false # If set to true then the checkbox toggle for showing stores with/without the selected service will be shown in the template
   $scope.filter_by_service = $scope.options.filter_by_service or false # The aforementioned checkbox is bound to this value which can be true or false depending on checked state, hence why we cannot use filter_by_service to show/hide the checkbox
   $scope.default_zoom = $scope.options.default_zoom or 6
-
-  locale = bbLocale.getLocale()
-  if locale.match(/^(en|en-gb|en-us)$/gi) then "miles" else "km"
 
   map_ready_def               = $q.defer()
   $scope.mapLoaded            = $q.defer()
@@ -413,16 +410,12 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
     distances = []
     distances_with_services = []
 
-    for marker in $scope.mapMarkers
+    updateMarkerDistances(latlong)
 
-      km = haversine(latlong, marker)
+    for marker in $scope.mapMarkers
 
       if !$scope.showAllMarkers
         marker.setVisible false
-
-      # set distance to kilometres or convert to miles
-      marker.distance = km
-      marker.distance *= 0.621371192 if $scope.distance_unit == "miles"
 
       if marker.distance < $scope.range_limit
         distances.push marker
@@ -468,7 +461,19 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
     $scope.myMap.fitBounds(localBounds)
     openDefaultMarker()
 
+
+  updateMarkerDistances = (latlong) ->
+
+    use_miles = bbLocale.getLocale().match(/^(en|en-gb|en-us)$/gi)
+
+    for marker in $scope.mapMarkers
+      km = haversine(latlong, marker)
+      marker.distance = km
+      marker.distance *= 0.621371192 if use_miles
+
+
   openDefaultMarker = () ->
+
     return if $scope.options and $scope.options.no_default_location_details
 
     open_marker_index = 0
@@ -493,7 +498,9 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
   * @param {object} marker The marker
   ###
   $scope.openMarkerInfo = (marker) ->
+
     $timeout ->
+
       $scope.currentMarker = marker
       $scope.myInfoWindow.open($scope.myMap, marker)
       for shown_marker in $scope.shownMarkers
@@ -658,3 +665,8 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
     $scope.loc = null
     $scope.reverse_geocode_address = null
     $scope.address = null
+
+
+  $scope.$on "BBLanguagePicker:languageChanged", () ->
+    updateMarkerDistances($scope.loc)
+
