@@ -153,7 +153,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       SERVICE_LIST_FILTER: {
         FILTER: "@:COMMON.TERMINOLOGY.FILTER"
-        FILTER_CATEGORY: "@:COMMON.TERMINOLOGY.CATEGORY"
+        CATEGORY_FILTER_LABEL: "@:COMMON.TERMINOLOGY.CATEGORY"
         FILTER_ANY: "@:COMMON.TERMINOLOGY.ANY"
         SERVICE_LABEL: "@:COMMON.TERMINOLOGY.SERVICE"
         ITEM_SERVICE_PLACEHOLDER: "@:COMMON.TERMINOLOGY.SERVICE"
@@ -353,9 +353,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         SELECT_BTN: "@:COMMON.BTN.SELECT"
       }
       EVENT_LIST: {
-        EVENT_LOCATION: "Event at"
+        TITLE: "Event at"
         FILTER: "@:COMMON.TERMINOLOGY.FILTER"
-        FILTER_CATEGORY: "@:COMMON.TERMINOLOGY.CATEGORY"
+        CATEGORY_FILTER_LABEL: "@:COMMON.TERMINOLOGY.CATEGORY"
         FILTER_ANY_CATEGORY: "@:COMMON.TERMINOLOGY.ANY @:COMMON.TERMINOLOGY.CATEGORY"
         FILTER_ANY: "@:COMMON.TERMINOLOGY.ANY"
         FILTER_ANY_PRICE: '@:COMMON.TERMINOLOGY.ANY @:COMMON.TERMINOLOGY.PRICE'
@@ -370,7 +370,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EVENT_NO: "No event found"
         EVENT_SPACE_WORD: "space"
         EVENT_LEFT_WORD: "left"
-        ITEM_FROM: "From"
+        PRICE_FROM: "From"
         BOOK_EVENT_BTN: "@:COMMON.BTN.BOOK_EVENT" 
         BACK_BTN: "@:COMMON.BTN.BACK"
         EVENT_SOLD_OUT: "Sold out"

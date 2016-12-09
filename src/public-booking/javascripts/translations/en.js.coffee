@@ -304,29 +304,33 @@ angular.module('BB.Services').config ($translateProvider) ->
         SELECT_BTN: "@:COMMON.BTN.SELECT"
       }
       EVENT_LIST: {
-        EVENT_LOCATION: "Event at"
-        FILTER: "@:COMMON.TERMINOLOGY.FILTER"
-        FILTER_CATEGORY: "@:COMMON.TERMINOLOGY.CATEGORY"
-        FILTER_ANY_CATEGORY: "@:COMMON.TERMINOLOGY.ANY @:COMMON.TERMINOLOGY.CATEGORY"
-        FILTER_ANY: "@:COMMON.TERMINOLOGY.ANY"
-        FILTER_ANY_PRICE: '@:COMMON.TERMINOLOGY.ANY @:COMMON.TERMINOLOGY.PRICE'
-        DATE_LABEL: "@:COMMON.TERMINOLOGY.DATE"
-        PRICE_LABEL: "@:COMMON.TERMINOLOGY.PRICE"
-        HIDE_FULLY_BOOKED_EVENTS: "Hide Fully Booked Events"
-        SHOW_FULLY_BOOKED_EVENTS: "Show Fully Booked Events"
-        FILTER_RESET: "@:COMMON.TERMINOLOGY.RESET" 
-        FILTER_NONE: "Showing all events"
-        FILTER_FILTERED: "Showing filtered events"
-        EVENT_WORD: "@:COMMON.TERMINOLOGY.EVENTS"
-        EVENT_NO: "No event found"
-        EVENT_SPACE_WORD: "space"
+        TITLE: "Events at {{company_name}}"
+        TIMEZONE_INFO: "All times are shown in {{time_zone_name}}"
+        FILTER: {
+          HEADING: "@:COMMON.TERMINOLOGY.FILTER"
+          CATEGORY_LABEL: "@:COMMON.TERMINOLOGY.CATEGORY"
+          ANY_CATEGORY_OPTION: "- Any Category -"
+          ANY_OPTION: "- Any {{filter_name}} -"
+          PRICE_LABEL: "@:COMMON.TERMINOLOGY.PRICE"
+          ANY_PRICE_OPTION: "- Any Price -"
+          DATE_LABEL: "@:COMMON.TERMINOLOGY.DATE"
+          DATE_PICKER_TITLE: "Pick date"
+          DATE_PICKER_PLACEHOLDER: "- Any Date -"
+          HIDE_FULLY_BOOKED_EVENTS: "Hide Fully Booked Events"
+          SHOW_FULLY_BOOKED_EVENTS: "Show Fully Booked Events"
+          RESET_FILTER_BTN: "@:COMMON.TERMINOLOGY.RESET" 
+          NO_FILTER_APPLIED: "Showing all events"
+          FILTER_APPLIED: "Showing filtered events"
+        }
+        NO_EVENTS: "No events found"
         SPACES_LEFT: "{spaces_left, plural, =0{No spaces} one{# space} other{# spaces}} left"
-        EVENT_LEFT_WORD: "left"
-        ITEM_FROM: "From" 
+        PRICE_FROM: "From {{min_ticket_price | ipretty_price}}" 
         BOOK_EVENT_BTN: "@:COMMON.BTN.BOOK_EVENT" 
-        BACK_BTN: "@:COMMON.BTN.BACK"
         EVENT_SOLD_OUT: "Sold out"
-        EVENT_JOIN_WAITLIST: "Join Waitlist"
+        JOIN_WAITLIST_BTN: "Join Waitlist"
+        MORE_INFO: "More Info"
+        LESS_INFO: "Less Info"
+        BACK_BTN: "@:COMMON.BTN.BACK"
       }
       MAIN: {
         POWERED_BY: "Bookings powered by"
@@ -348,6 +352,10 @@ angular.module('BB.Services').config ($translateProvider) ->
       MEMBERSHIP_LEVELS: {
         MEMBERSHIP_TYPES: "Membership Types"
         SELECT_BTN: "@:COMMON.BTN.SELECT"
+      }
+      LOGIN: {
+        NO_ACCOUNT: "Don't have an account?"
+        SIGN_UP_BTN: "Sign U"
       }
       TIME: {
         AVAIL_DAY_PREVIOUS: "Previous Day"
@@ -425,6 +433,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         BACK_BTN:    "@:COMMON.BTN.BACK"
       }
       REGISTER: {
+        
+      }
+      MAIN_ACCOUNT: {
         
       }
       ACCOUNT: {

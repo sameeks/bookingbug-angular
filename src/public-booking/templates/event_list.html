@@ -1,56 +1,132 @@
-<div bb-events="{mode: 2}" ng-init="bb.basket.clear()">
+<div
+  bb-events="{mode: 2}"
+  ng-init="bb.basket.clear()">
 
   <div class="page-header">
-    <h1><span translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_LOCATION"></span> {{company.name}}</h1>
+    <h1
+      translate="PUBLIC_BOOKING.EVENT_LIST.TITLE"
+      translate-values="{company_name: company.name}"
+      >
+      </h1>
   </div>
 
-  <div class="alert alert-info" bb-time-zone ng-show="is_time_zone_diff">
-    All times are shown in {{time_zone_name}}.
+  <div
+    class="alert alert-info"
+    bb-time-zone
+    ng-show="is_time_zone_diff"
+    translate="PUBLIC_BOOKING.EVENT_LIST.TIMEZONE_INFO"
+    translate-values="{time_zone: time_zone_name}">
   </div>
 
-  <!-- <div bb-month-picker day-data="item_dates"></div> -->
+  <div bb-month-picker day-data="item_dates"></div>
 
-  <div class="events" bb-scroll-to="page:changed" bb-always-scroll>
+  <div
+    class="events"
+    bb-scroll-to="page:changed"
+    bb-always-scroll>
 
-    <div class="bb-filters" ng-show="items">
+    <div
+      class="bb-filters"
+      ng-show="items">
 
       <div uib-accordion>
 
-        <div uib-accordion-group is-open="is_open" ng-class="{'expanded': is_open, 'selected': is_selected}" class="store-body">
+        <div
+          uib-accordion-group
+          is-open="is_open"
+          ng-class="{'expanded': is_open, 'selected': is_selected}"
+          class="store-body">
 
-          <div uib-accordion-heading class="filter-header">
-            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
-            <span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER"></span>
+          <div
+            uib-accordion-heading
+            class="filter-header">
+            <span
+              class="glyphicon glyphicon-filter"
+              aria-hidden="true">    
+            </span>
+            <span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.HEADING"></span>
           </div>
 
           <form class="form-inline">
 
             <div class="form-group">
-              <label class="sr-only" for="event_group"><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_CATEGORY"></span></label>
-              <select class="form-control" name="event_group" id="event_group" ng-model="filters.event_group" ng-options="event_group.name for (id, event_group) in event_groups" ng-change="filterChanged()">
-                <option value=""><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_ANY_CATEGORY"></span></option>
+              <label
+                class="sr-only"
+                for="event_group"
+                translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.CATEGORY_LABEL">
+              </label>
+              <select
+                class="form-control"
+                name="event_group"
+                id="event_group"
+                ng-model="filters.event_group"
+                ng-options="event_group.name for (id, event_group) in event_groups"
+                ng-change="filterChanged()">
+                <option
+                  value=""
+                  translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.ANY_CATEGORY_OPTION">
+                </option>
               </select>
             </div>
 
-            <div class="form-group" ng-repeat="check_filter in dynamic_filters.check">
-              <label class="sr-only" for="event_group">{{select_filter.name}}</label>
-              <select class="form-control" name="check_filter" id="check_filter" ng-model="dynamic_filters.values[check_filter.name]" ng-options="answer.name for answer in check_filter.question_items | orderBy: 'name'" ng-change="filterChanged()">
-                <option value="">&mdash; <span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_ANY"></span> {{check_filter.name}} &mdash;</option>
+            <div
+              class="form-group"
+              ng-repeat="check_filter in dynamic_filters.check">
+              <label
+                class="sr-only"
+                for="event_group">
+                {select_filter.name}}
+              </label>
+              <select
+                class="form-control"
+                name="check_filter"
+                id="check_filter"
+                ng-model="dynamic_filters.values[check_filter.name]"
+                ng-options="answer.name for answer in check_filter.question_items | orderBy: 'name'"
+                ng-change="filterChanged()">
+                <option
+                  value=""
+                  translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.ANY_OPTION"
+                  translate-values="{filter_name: check_filter.name}">
+                </option>
               </select>
             </div>
 
-            <div class="form-group" ng-repeat="select_filter in dynamic_filters.select" ng-show="has_company_questions">
-              <label class="sr-only" for="event_group">{{select_filter.name}}</label>
-              <select class="form-control" name="select_filter" id="select_filter" ng-model="dynamic_filters.values[select_filter.name]" ng-options="answer.name for answer in select_filter.question_items" ng-change="filterChanged()">
-                <option value="">&mdash; <span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_ANY"></span> {{select_filter.name}} &mdash;</option>
+            <div
+              class="form-group"
+              ng-repeat="select_filter in dynamic_filters.select"
+              ng-show="has_company_questions">
+              <label
+                class="sr-only"
+                for="event_group">
+                {{select_filter.name}}
+              </label>
+              <select
+                class="form-control"
+                name="select_filter"
+                id="select_filter"
+                ng-model="dynamic_filters.values[select_filter.name]"
+                ng-options="answer.name for answer in select_filter.question_items" ng-change="filterChanged()">
+                <option
+                  value=""
+                  translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.ANY_OPTION"
+                  translate-values="{filter_name: select_filter.name}">
+                </option>
               </select>
             </div>
 
             <div class="form-group calendar">
-              <label class="sr-only" for="date" translate="PUBLIC_BOOKING.EVENT_LIST.DATE_LABEL"></label>
+              <label
+                class="sr-only"
+                for="date"
+                translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.DATE_LABEL">
+              </label>
               <div class="input-group date-picker">
                 <!-- date format: http://docfiddich.angularjs.org/api/ng.filter:date" -->
-                <input type="text" ng-model="selected_date" class="form-control"
+                <input
+                  type="text"
+                  ng-model="selected_date"
+                  class="form-control"
                   bb-datepicker-popup="DD/MM/YYYY"
                   uib-datepicker-popup="dd/MM/yyyy"
                   is-open="opened"
@@ -61,9 +137,15 @@
                   ng-readonly="true"
                   name="date"
                   id="date"
-                  placeholder="&mdash; Any Date &mdash;"/>
-                <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
-                  <button class="btn btn-default" type="submit" title="Pick date">
+                  translate-attr="{placeholder: 'PUBLIC_BOOKING.EVENT_LIST.FILTER.DATE_PICKER_PLACEHOLDER'}"
+                />
+                <span
+                  class="input-group-btn"
+                  ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
+                  <button
+                    class="btn btn-default"
+                    type="submit"
+                    translate-attr="{title: 'PUBLIC_BOOKING.EVENT_LIST.FILTER.DATE_PICKER_TITLE'}">
                     <span class="fa fa-calendar-o"></span>
                   </button>
                 </span>
@@ -71,28 +153,57 @@
             </div>
 
             <div class="form-group">
-              <label class="sr-only" for="price"><span translate="PUBLIC_BOOKING.EVENT_LIST.PRICE_LABEL"></span></label>
-              <select class="form-control" name="price" id="price" ng-model="filters.price" ng-options="price as (price | currency) for price in price_options" ng-change="filterChanged()">
-                <option value=""><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_ANY_PRICE"></span></option>
+              <label
+                class="sr-only"
+                for="price"
+                translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.PRICE_LABEL">
+              </label>
+              <select
+                class="form-control"
+                name="price"
+                id="price"
+                ng-model="filters.price"
+                ng-options="price as (price | currency) for price in price_options"
+                ng-change="filterChanged()">
+                <option
+                  value=""
+                  translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.ANY_PRICE_OPTION">
+                </option>
               </select>
             </div>
 
             <div class="form-group">
-              <button type="button" class="btn btn-link" ng-click="filters.hide_fully_booked_events =! filters.hide_fully_booked_events; filterChanged()">
-                <span ng-hide="filters.hide_fully_booked_events" class="">
-                  <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                  <span translate="PUBLIC_BOOKING.EVENT_LIST.HIDE_FULLY_BOOKED_EVENTS"></span>
+              <button
+                type="button"
+                class="btn btn-link"
+                ng-click="filters.hide_fully_booked_events =! filters.hide_fully_booked_events; filterChanged()">
+                <span ng-hide="filters.hide_fully_booked_events">
+                  <span
+                    class="glyphicon glyphicon-eye-close"
+                    aria-hidden="true">
+                  </span>
+                  <span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.HIDE_FULLY_BOOKED_EVENTS"></span>
                 </span>
                 <span ng-show="filters.hide_fully_booked_events">
-                  <span class="glyphicon glyphicon-eye-open " aria-hidden="true"></span>
-                  <span translate="PUBLIC_BOOKING.EVENT_LIST.SHOW_FULLED_BOOKED_EVENTS"></span>
+                  <span
+                    class="glyphicon glyphicon-eye-open"
+                    aria-hidden="true">
+                  </span>
+                  <span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.FILTER.SHOW_FULLED_BOOKED_EVENTS"></span>
                 </span>
               </button>
             </div>
 
             <div class="form-group">
-              <button type="button" class="btn btn-link" ng-click="resetFilters()">
-                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span><span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_RESET"></span>
+              <button
+                type="button"
+                class="btn btn-link"
+                ng-click="resetFilters()">
+                <span
+                  class="glyphicon glyphicon-repeat"
+                  aria-hidden="true">
+                </span>
+                <span translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.RESET_FILTER_BTN"></span>
               </button>
             </div>
 
@@ -105,23 +216,50 @@
 
     <div class="panel panel-default bb-filter-summary">
       <div class="panel-body">
-        <div class="row" ng-if="filtered_items.length > 0">
+        <div
+          class="row"
+          ng-if="filtered_items.length > 0">
           <div class="col-xs-8">
-            <span ng-show="!filter_active" translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_NONE"></span> 
-            <span ng-show="filter_active" translate="PUBLIC_BOOKING.EVENT_LIST.FILTER_FILTERED"></span> 
+            <span
+              ng-show="!filter_active"
+              translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.NO_FILTER_APPLIED">
+            </span> 
+            <span
+              ng-show="filter_active"
+              translate="PUBLIC_BOOKING.EVENT_LIST.FILTER.FILTER_APPLIED">
+            </span> 
           </div>
           <div class="col-xs-4 text-right">
-            {{pagination.summary}}<span class="hidden-xs" ><span class="text-capitalize" translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_WORD"></span></span>
+            {{pagination.summary}}
             <span class="hidden-xs">
-              <button type="button" class="btn btn-icon" ng-disabled="!$root.tiles" ng-click="$root.tiles = !$root.tiles"><span class="glyphicon glyphicon-th-list" aria-hidden="true" ></span></button>
-              <button type="button" class="btn btn-icon" ng-disabled="$root.tiles"  ng-click="$root.tiles = !$root.tiles"><span class="glyphicon glyphicon-th-large" aria-hidden="true" ></span></button>
+              <button
+                type="button"
+                class="btn btn-icon"
+                ng-disabled="!$root.tiles"
+                ng-click="$root.tiles = !$root.tiles">
+                <span
+                  class="glyphicon glyphicon-th-list"
+                  aria-hidden="true">
+                </span>
+              </button>
+              <button
+                type="button"
+                class="btn btn-icon"
+                ng-disabled="$root.tiles"
+                ng-click="$root.tiles = !$root.tiles">
+                <span
+                  class="glyphicon glyphicon-th-large"
+                  aria-hidden="true">
+                </span>
+              </button>
             </span>
-            </div>
           </div>
         </div>
-        <div class="row" ng-show="filtered_items.length == 0">
+        <div
+          class="row"
+          ng-show="filtered_items.length == 0">
           <div class="col-xs-12">
-            <span translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_NO"></span>
+            <span translate="PUBLIC_BOOKING.EVENT_LIST.NO_EVENTS"></span>
           </div>
         </div>
       </div>
@@ -129,20 +267,34 @@
 
     <div class="bb-events-list row">
 
-      <div ng-repeat="item in filtered_items | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" ng-init="spaces_left = item.getSpacesLeft()" ng-show="pagination.num_items > 0">
+      <div
+        ng-repeat="item in filtered_items | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size"
+        ng-init="spaces_left = item.getSpacesLeft()"
+        ng-show="pagination.num_items > 0">
 
-        <div class="panel panel-default bb-event-card" ng-class="{'col-sm-6 col-md-4 col-lg-3':$root.tiles}">
-          <div class="panel-body" style="padding: 20px;">
+        <div
+          class="panel panel-default bb-event-card"
+          ng-class="{'col-sm-6 col-md-4 col-lg-3':$root.tiles}">
+          <div
+            class="panel-body"
+            style="padding: 20px;">
             <div class="row">
               <div ng-class="{'col-sm-3':!$root.tiles}">
-                 <div class="event-img" bb-background-image="item.group.getImages()[0].url">
-                  <time datetime="{{item.date | datetime: 'YY[-]MM[-]DD'}}" class="icon" ng-click="selectItem(item)">
+                 <div
+                  class="event-img"
+                  bb-background-image="item.group.getImages()[0].url">
+
+                  <time
+                    datetime="{{item.date | datetime: 'YY[-]MM[-]DD'}}"
+                    class="icon"
+                    ng-click="selectItem(item)">
                     <em>{{item.date | datetime: 'dddd'}}</em>
                     <span class="date">{{item.date | datetime: 'DD'}}</span>
                     <strong class="date">{{item.date | datetime: 'MMMM'}}</strong>
                     <span class="time">{{item.date | datetime: 'LT'}}</span>
                     <strong class="time">{{item.date | datetime: 'a'}}</strong>
                   </time>
+
                 </div>
               </div>
               <div ng-class="{'col-sm-9':!$root.tiles}">
@@ -152,44 +304,100 @@
                   </div>
                 </div>
                 <div class="row event-details">
+
                   <ul>
+
                     <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
                       <span class="fa fa-calendar-o"></span>
-                      <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date | datetime: 'dddd '}}</span>
-                      <span class="truncate-xs hidden-md hidden-lg">{{item.date | datetime: 'Do MMMM '}}</span>
-                      <span class="truncate-xs hidden-xs hidden-sm">{{item.date | datetime: 'Do MMM '}}</span>
-                      <span class="hidden-xs hidden-sm" ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date | datetime: 'YYYY'}}</span>
+                      <span
+                        class="hidden-xs hidden-sm"
+                        ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date | datetime: 'dddd '}}
+                      </span>
+                      <span class="truncate-xs hidden-md hidden-lg">
+                        {{item.date | datetime: 'Do MMMM '}}</span>
+                      <span class="truncate-xs hidden-xs hidden-sm">
+                        {{item.date | datetime: 'Do MMM '}}</span>
+                      <span
+                        class="hidden-xs hidden-sm"
+                        ng-class="{'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">{{item.date | datetime: 'YYYY'}}
+                      </span>
                     </li>
-                    <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
-                      <span class="fa fa-clock-o" aria-hidden="true"></span>
+
+                    <li
+                      class="col-xs-6 truncate-xs"
+                      ng-class="{'col-sm-4':!$root.tiles}">
+                      <span
+                        class="fa fa-clock-o"
+                        aria-hidden="true">
+                      </span>
                       <span ng-bind="item.date | datetime: 'LT'"></span>
-                      <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}">-</span>
-                      <span class="hidden-sm" ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}" ng-bind="item.end_datetime | datetime: 'LT'"></span>
+                      <span
+                        class="hidden-sm"
+                        ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}">-</span>
+                      <span
+                        class="hidden-sm"
+                        ng-class="{'hidden-lg':$root.tiles, 'hidden-md':$root.tiles}"
+                        ng-bind="item.end_datetime | datetime: 'LT'">
+                      </span>
                     </li>
-                    <li class="hidden-xs truncate-xs" ng-class="{'col-sm-4':!$root.tiles, 'hidden-sm':$root.tiles, 'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">
+
+                    <li
+                      class="hidden-xs truncate-xs"
+                      ng-class="{'col-sm-4':!$root.tiles, 'hidden-sm':$root.tiles, 'hidden-md':$root.tiles, 'hidden-lg':$root.tiles}">
                       <span class="fa fa-hourglass-half"></span>
                       <span ng-bind="item.duration | time_period"></span>
                     </li>
 
-                    <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
+                    <li
+                      class="col-xs-6 truncate-xs"
+                      ng-class="{'col-sm-4':!$root.tiles}">
 
-                      <span ng-show="item.spaces_left > 0" class="fa fa-users" aria-hidden="true"></span>
-                      <span ng-show="item.spaces_left < 1" class="fa fa-ban" aria-hidden="true"></span>
+                      <span
+                        ng-show="item.spaces_left > 0"
+                        class="fa fa-users"
+                        aria-hidden="true">
+                      </span>
+                      <span
+                        ng-show="item.spaces_left < 1"
+                        class="fa fa-ban"
+                        aria-hidden="true">
+                      </span>
 
-                      <span translate="PUBLIC_BOOKING.EVENT_LIST.SPACES_LEFT" translate-values="{spaces_left: item.spaces_left}" translate-interpolation="messageformat"> 
+                      <span
+                        translate="PUBLIC_BOOKING.EVENT_LIST.SPACES_LEFT"
+                        translate-values="{spaces_left: item.spaces_left}"
+                        translate-interpolation="messageformat"> 
                       </span>
 
                     </li>
 
-                    <li class="col-xs-6 truncate-xs" ng-class="{'col-sm-4':!$root.tiles}">
-                      <span class="fa fa-ticket" aria-hidden="true"></span>
+                    <li
+                      class="col-xs-6 truncate-xs"
+                      ng-class="{'col-sm-4':!$root.tiles}">
+                      <span
+                        class="fa fa-ticket"
+                        aria-hidden="true">
+                      </span>
                       <span>
-                        <span ng-show="item.price_range && (item.price_range.from != item.price_range.to) && item.price_range.from && !item.price"><span translate="PUBLIC_BOOKING.EVENT_LIST.ITEM_FROM"></span> {{item.price_range.from | ipretty_price}}</span>
-                        <span ng-show="item.price_range && (item.price_range.from == item.price_range.to) || !item.price && !item.price_range.from">{{item.price_range.from | ipretty_price}}</span>
+                        <span
+                          ng-show="item.price_range && (item.price_range.from != item.price_range.to) && item.price_range.from && !item.price"
+                          translate="PUBLIC_BOOKING.EVENT_LIST.PRICE_FROM"
+                          translate-values="{min_ticket_price: item.price_range.from}">
+                        </span>
+                        <span
+                          ng-show="item.price_range && (item.price_range.from == item.price_range.to) || !item.price && !item.price_range.from">
+                          {{item.price_range.from | ipretty_price}}
+                        </span>
                       </span>
                     </li>
-                    <li class="hidden-xs truncate-xs " ng-class="{'col-sm-4':!$root.tiles, 'col-sm-12':$root.tiles}">
-                      <span class="fa fa-map-marker" aria-hidden="true"></span>
+
+                    <li
+                      class="hidden-xs truncate-xs"
+                      ng-class="{'col-sm-4':!$root.tiles, 'col-sm-12':$root.tiles}">
+                      <span
+                        class="fa fa-map-marker"
+                        aria-hidden="true">
+                      </span>
                       <span>
                         {{bb.current_item.company.name}}
                       </span>
@@ -200,37 +408,77 @@
                   </ul>
                 </div>
                 <div class="row">
-                  <div class="event-description col-xs-12" ng-bind="item.chain.description" style="max-height: none; line-height: 1em; height:3em; margin-bottom: 20px; overflow:hidden"  ng-class="{'col-sm-8':!$root.tiles}"></div>
-                  <div class="event-select col-xs-12"  ng-class="{'col-sm-4':!$root.tiles}">
-                    <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" ng-disabled="spaces_left == 0 && !bb.company.settings.has_waitlists">
-                      <span ng-show="spaces_left > 0">
-                        <span translate="PUBLIC_BOOKING.EVENT_LIST.BOOK_EVENT_BTN"></span>
+
+                  <div
+                    class="event-description col-xs-12"
+                    ng-bind="item.chain.description"
+                    style="max-height: none; line-height: 1em; height:3em; margin-bottom: 20px; overflow:hidden"
+                    ng-class="{'col-sm-8':!$root.tiles}">
+                  </div>
+
+                  <div
+                    class="event-select col-xs-12"
+                    ng-class="{'col-sm-4':!$root.tiles}">
+
+                    <button
+                      type="button"
+                      ng-click="selectItem(item)"
+                      class="btn btn-primary btn-block"
+                      ng-disabled="spaces_left == 0 && !bb.company.settings.has_waitlists">
+                      <span
+                        ng-show="spaces_left > 0"
+                        translate="PUBLIC_BOOKING.EVENT_LIST.BOOK_EVENT_BTN">
                       </span>
                       <div ng-show="spaces_left <= 0 && !bb.company.settings.has_waitlists">
-                        <span class="status-sold-out"><span translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_SOLD_OUT"></span></span>
+                        <span
+                          class="status-sold-out"
+                          translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_SOLD_OUT">
+                        </span>
                       </div>
-                      <div ng-show="spaces_left <= 0 && bb.company.settings.has_waitlists">
-                        <span translate="PUBLIC_BOOKING.EVENT_LIST.EVENT_JOIN_WAITLIST"></span>
+                      <div
+                        ng-show="spaces_left <= 0 && bb.company.settings.has_waitlists"
+                        translate="PUBLIC_BOOKING.EVENT_LIST.JOIN_WAITLIST_BTN">
                       </div>
                     </button>
-                    <button type="button" class="btn btn-default btn-block" ng-show="item.group.description" ng-click="isCollapsed = !isCollapsed">
-                      <span ng-show="!isCollapsed">More Info</span>
-                      <span ng-show="isCollapsed">Less Info</span>
+
+                    <button
+                      type="button"
+                      class="btn btn-default btn-block"
+                      ng-show="item.group.description"
+                      ng-click="isCollapsed = !isCollapsed">
+                      <span
+                        ng-show="!isCollapsed"
+                        translate="PUBLIC_BOOKING.EVENT_LIST.MORE_INFO">
+                      </span>
+                      <span
+                        ng-show="isCollapsed"
+                        translate="PUBLIC_BOOKING.EVENT_LIST.LESS_INFO">
+                      </span>
                     </button>
+
+                  </div>
+
+                </div>
+
+                <div
+                  class="row"
+                  ng-show="item.group.description">
+                  <div class="col-sm-10 col-xs-12 event-details">
+
+                    <ul
+                      class="event-summary-list"
+                      collapse="!isCollapsed">
+
+                      <li>
+                        <p class="event-group-description">
+                          <span class="fa fa-info-circle"></span>
+                          <span>{{item.group.description}}</span>
+                        </p>
+                      </li>
+                    </ul>
                   </div>
                 </div>
-                 <div class="row" ng-show="item.group.description">
-                   <div class="col-sm-10 col-xs-12 event-details">
-                     <ul class="event-summary-list" collapse="!isCollapsed">
-                       <li>
-                         <p class="event-group-description">
-                           <span class="fa fa-info-circle"></span>
-                           <span>{{item.group.description}}</span>
-                         </p>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+
               </div>
             </div>
           </div>
@@ -240,15 +488,34 @@
         <!-- CLEARFIX! -->
         <!-- /\/\/\/\/ -->
 
-        <div ng-if="(($index + 1) % 2) == 0" class="clearfix visible-sm"></div>
-        <div ng-if="(($index + 1) % 3) == 0" class="clearfix visible-md"></div>
-        <div ng-if="(($index + 1) % 4) == 0" class="clearfix visible-lg"></div>
-
+        <div
+          ng-if="(($index + 1) % 2) == 0"
+          class="clearfix visible-sm">
+        </div>
+        <div
+          ng-if="(($index + 1) % 3) == 0"
+          class="clearfix visible-md">
+        </div>
+        <div
+          ng-if="(($index + 1) % 4) == 0"
+          class="clearfix visible-lg">
+        </div>
 
       </div>
     </div>
 
-    <div uib-pagination total-items="pagination.num_items" ng-model="pagination.current_page" items-per-page="pagination.page_size" max-size="pagination.max_size" boundary-links="true" rotate="false" num-pages="pagination.num_pages" ng-show="filtered_items" ng-change="pageChanged()"></div>
+    <div
+      uib-pagination
+      total-items="pagination.num_items"
+      ng-model="pagination.current_page"
+      items-per-page="pagination.page_size"
+      max-size="pagination.max_size"
+      boundary-links="true"
+      rotate="false"
+      num-pages="pagination.num_pages"
+      ng-show="filtered_items"
+      ng-change="pageChanged()">
+    </div>
 
   </div>
 
@@ -257,7 +524,14 @@
 <div class="bb-step-navigation">
   <div class="row">
     <div class="col-sm-3">
-      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+      <button
+        type="button"
+        class="btn btn-default"
+        bb-debounce
+        ng-click="loadPreviousStep()"
+        ng-show="bb.current_step > 1"
+        translate="PUBLIC_BOOKING.EVENT_LIST.BACK_BTN">
+      </button>
     </div>
   </div>
 </div>

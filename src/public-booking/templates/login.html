@@ -1,12 +1,18 @@
 <div class="sign-in-container">
 
-  <div bb-member-login bb-custom-login-form></div>
+  <div
+    bb-member-login
+    bb-custom-login-form>
+  </div>
+  
   <div bb-login></div>
 
   <div class="col-sm-offset-4 col-sm-5">
     <div class="form-group">
-      Don't have an account?
-      <a ng-click="decideNextPage('register')">Sign Up</a>
+      <span translate="PUBLIC_BOOKING.LOGIN.NO_ACCOUNT"></span>
+      <a
+        ng-click="decideNextPage('register')"
+        translate="PUBLIC_BOOKING.LOGIN.SIGN_UP_BTN"></a>
     </div>
   </div>
 
