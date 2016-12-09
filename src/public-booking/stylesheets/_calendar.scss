@@ -199,13 +199,13 @@
 
     &.expanded {
       > .panel {
-        background: #eee;
+        background-color: $gray-lighter;
       }
     }
 
     &.selected {
       > .panel {
-        background: #777;
+        background-color: $gray-light;
         color: #fff;
       }
     }
