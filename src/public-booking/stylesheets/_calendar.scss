@@ -198,15 +198,22 @@
     }
 
     &.expanded {
-      > .panel {
+      .panel {
         background-color: $gray-lighter;
+      }
+      .panel-collapse {
+         background-color: $gray-lighter;
       }
     }
 
     &.selected {
-      > .panel {
+      .panel {
         background-color: $gray-light;
-        color: #fff;
+        color: #FFF;
+      }
+      .panel-collapse {
+         background-color: $gray-light;
+         color: #FFF;
       }
     }
 
