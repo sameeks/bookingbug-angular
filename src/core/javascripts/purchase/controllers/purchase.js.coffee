@@ -19,6 +19,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   $scope.make_payment = false
   loader = LoadingService.$loader($scope)
 
+
   setPurchaseCompany = (company) ->
     $scope.bb.company_id = company.id
     $scope.bb.company = new BBModel.Company(company)
@@ -51,8 +52,8 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
     $scope.move_all = options.move_all if options.move_all
     $scope.fail_msg = options.fail_msg if options.fail_msg
 
-    if PurchaseService.purchase
-      $scope.bb.purchase = PurchaseService.purchase
+    if $scope.purchase
+      $scope.bb.purchase = $scope.purchase
 
     # is there a purchase total already in scope?
     if $scope.bb.total

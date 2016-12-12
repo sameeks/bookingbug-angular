@@ -11,7 +11,7 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 	
 	$scope.initMove = (basketItem, route) ->
     # open modal if moving public basketItem from purchase template
-    if route = 'modal' and !WidgetModalService.is_open
+    if route is 'modal' 
       total_id = QueryStringService('id')
       openCalendarModal(basketItem, total_id)
 
@@ -99,10 +99,14 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       first_page: 'calendar'
 
   resolveCalendarModal = (booking) ->
-      $rootScope.$broadcast("booking:moved", booking)
-      # dont close modal and render purchase template if moving member booking
-      if WidgetModalService.config.member
-        $scope.decideNextPage('confirmation')
-      else 
-        WidgetModalService.close() 
-      showMoveMessage(booking.datetime)
+    $rootScope.$broadcast("booking:moved", booking)
+
+    # if modal is already open just load confirmation template
+    if WidgetModalService.is_open and WidgetModalService.config.member
+      $scope.decideNextPage('confirmation')
+    # if using studio interface load purchase 
+    else if $rootScope.user
+      $scope.decideNextPage('purchase')
+    else 
+      WidgetModalService.close() 
+    showMoveMessage(booking.datetime)
