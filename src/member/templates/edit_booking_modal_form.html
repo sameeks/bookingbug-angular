@@ -9,8 +9,10 @@
     <div sf-schema="schema" sf-form="form" sf-model="form_model" sf-options="{formDefaults: {feedback: false}}">
     </div>
   </div>
+
   <div class="modal-footer">
-    <input type="submit" class="btn btn-primary" value="Save">
-    <button class="btn btn-default" ng-click="cancel($event)">Cancel</button>
+    <input ng-show="form.length" ng-disabled="booking_form.$invalid || booking_form.$pristine" type="submit" class="btn btn-primary" value="Save">
+    <button class="btn btn-default" ng-click="cancel($event)">Close</button>
   </div>
 </form>
+   

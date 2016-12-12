@@ -63,14 +63,17 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
 
   $scope.cancelBooking = (booking) ->
+    loader.notLoaded()
     index = _.indexOf($scope.upcoming_bookings, booking)
     _.without($scope.upcoming_bookings, booking)
     BBModel.Member.Booking.$cancel($scope.member, booking).then () ->
+      loader.setLoaded()
       AlertService.raise('BOOKING_CANCELLED')
       $rootScope.$broadcast("booking:cancelled")
       # does a removeBooking method exist in the scope chain?
       $scope.removeBooking(booking) if $scope.removeBooking
     , (err) ->
+      loader.setLoaded()
       AlertService.raise('GENERIC')
       $scope.upcoming_bookings.splice(index, 0, booking)
 
