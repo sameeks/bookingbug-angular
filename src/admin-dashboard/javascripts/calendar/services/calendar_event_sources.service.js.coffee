@@ -183,7 +183,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
         while test_id < (sorted.length)
           src = sorted[id]
           test = sorted[test_id]
-          console.log(id, test_id, src)
+          #console.log(id, test_id, src)
           if !src.delete_me
             if test.unix_end > src.unix_end && test.unix_start < src.unix_end
               src.end = test.end
@@ -213,7 +213,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
             }
 
 
-        console.log overAllAvailabilities
+        #console.log overAllAvailabilities
 
 
         deferred.resolve overAllAvailabilities

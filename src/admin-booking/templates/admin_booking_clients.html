@@ -19,6 +19,7 @@
                typeahead-on-select="typeHeadResults($item, $uibModal, $label)"
                typeahead-focus-first="false"
                typeahead-min-length="2"
+               typeahead-wait-ms="250"
                uib-typeahead="item.name for item in searchClients($viewValue)">
 
         <span class="input-group-btn">

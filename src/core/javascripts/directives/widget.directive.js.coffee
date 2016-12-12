@@ -183,5 +183,6 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $te
       useParent: '='
     transclude: true
     controller: 'BBCtrl'
+    controllerAs: '$bbCtrl'
     link: link
   }

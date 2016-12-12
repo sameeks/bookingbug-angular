@@ -20,7 +20,7 @@ angular.module('BB.Models').factory "AdminClientModel", (ClientModel, $q, BBMode
 
         url = ""
         url = $rootScope.bb.api_url if $rootScope.bb.api_url
-        href = url + "/api/v1/admin/{company_id}/client{/id}{?page,per_page,filter_by,filter_by_fields,order_by,order_by_reverse,search_by_fields}"
+        href = url + "/api/v1/admin/{company_id}/client{/id}{?page,per_page,filter_by,filter_by_fields,order_by,order_by_reverse,search_by_fields,default_company_id}"
         params.company_id = company.id
         uri = new UriTemplate(href).fillFromObject(params || {})
 

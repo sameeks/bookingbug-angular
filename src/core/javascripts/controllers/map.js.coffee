@@ -336,6 +336,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     AlertService.clear()
     $scope.search_failed = false
     $scope.loc           = result.geometry.location
+    $scope.formatted_address = result.formatted_address
     $scope.myMap.setCenter $scope.loc
     $scope.myMap.setZoom 15
     $scope.showClosestMarkers $scope.loc
@@ -660,4 +661,3 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     $scope.loc = null
     $scope.reverse_geocode_address = null
     $scope.address = null
-
