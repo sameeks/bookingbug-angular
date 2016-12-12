@@ -67,7 +67,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       FILTERS: {
         DISTANCE: {
           MILES: "miles"
-          KM: "km"
+          KILOMETRES: "km"
         }
         CURRENCY: {
           THOUSANDS_SEPARATOR: ","
