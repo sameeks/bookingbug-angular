@@ -101,14 +101,50 @@ angular.module('BB.Filters').filter 'map_lat_long', ->
     cord = /([-+]*\d{1,3}[\.]\d*)[, ]([-+]*\d{1,3}[\.]\d*)/.exec(address.map_url)
     return cord[0]
 
-#only works with miles input for now
-angular.module('BB.Filters').filter 'distance', ($translate) ->
-  (distance) ->
-    return '' unless distance
-    local_unit = $translate.instant('CORE.FILTERS.DISTANCE.UNIT')
-    distance *= 1.60934 if local_unit is 'km'
-    pretty_distance = distance.toFixed(1).replace(/\.0+$/,'')
-    pretty_distance + local_unit
+
+###
+ * @ngdoc filter
+ * @name distance
+ * @kind function
+ *
+ * @description
+ * Formats distance using current locale.
+ *
+ * @param {number} distance_in_km Distance in kilometres
+ * @param {integer} round_by The number of decimal places to round by
+
+ * @returns {string} Formatted distance
+ *
+ *
+ * @example
+   <example module="distanceExample">
+     <file name="index.html">
+       <script>
+         angular.module('distanceExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.distance = 10;
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Price: {{distance | distance:1}}</span><br/>
+       </div>
+     </file>
+   </example>
+###
+angular.module('BB.Filters').filter 'distance', ($translate, bbLocale) ->
+  (distance_in_km, round_by) ->
+
+    return '' unless distance_in_km
+
+    distance  = distance_in_km
+    use_miles = bbLocale.getLocale().match(/^(en|en-gb|en-us)$/gi)
+    distance  *= 0.621371192 if use_miles
+    distance  = Math.round(distance * Math.pow(10, round_by)) / Math.pow(10, round_by) if round_by 
+    unit      = if use_miles then $translate.instant('CORE.FILTERS.DISTANCE.MILES') else $translate.instant('CORE.FILTERS.DISTANCE.KILOMETRES')
+    distance  = "#{distance} #{unit}"
+
+    return distance 
+
      
 ###
  * @ngdoc filter
@@ -150,7 +186,7 @@ angular.module('BB.Filters').filter 'currency', ($window, $rootScope, CompanySto
 
     format = $translate.instant(['CORE.FILTERS.CURRENCY.THOUSANDS_SEPARATOR', 'CORE.FILTERS.CURRENCY.DECIMAL_SEPARATOR', 'CORE.FILTERS.CURRENCY.CURRENCY_FORMAT'])
     
-    hide_decimal = pretty_price and (amount % 100 is 0)
+    hide_decimal   = pretty_price and (amount % 100 is 0)
     decimal_places = if hide_decimal then 0 else 2
 
     return $window.accounting.formatMoney(amount / 100, currency_codes[currency_code], decimal_places, format.THOUSANDS_SEPARATOR, format.DECIMAL_SEPARATORS, format.CURRENCY_FORMAT)
@@ -298,12 +334,25 @@ angular.module('BB.Filters').filter 'round_up', ->
     return result
 
 
-# Usage:
-# day in days | exclude_days : ['Saturday','Sunday']
+###
+ * @ngdoc filter
+ * @name exclude_days
+ * @kind function
+ *
+ * @description
+ * Formats a phone number using provided country code. If no country code is passed in, the country of the current company is used.
+ *
+ * @param {array} days Array of BBModel.Day objects
+ * @param {array} excluded String array of days to exclude, e.g. ['Saturday','Sunday']
+ * @returns {array} Filtered array excluding specificed days
+ *
+###
 angular.module('BB.Filters').filter 'exclude_days', ->
   (days, excluded) ->
     _.filter days, (day) ->
       excluded.indexOf(day.date.format('dddd')) == -1
+
+
 
 ###
  * @ngdoc filter

@@ -40,7 +40,7 @@ angular.module('BB.Directives').directive 'bbMap', () ->
   scope : true
   controller : 'MapCtrl'
 
-angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, bbLocale, $translate) ->
+angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, GeolocationService) ->
 
   $scope.controller = "public.controllers.MapCtrl"
 
@@ -161,6 +161,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
       deferred.resolve()
     return deferred.promise
 
+
   ###**
   * @ngdoc method
   * @name $scope.filterByService
@@ -181,6 +182,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
 
     $timeout ->
       setMarkers()
+
 
   mapInit = () ->
     for comp in $scope.companies
@@ -231,7 +233,6 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
   * @description
   * Create title for the map selection step
   ###
-  # create title for the map selection step
   $scope.title = ->
     ci = $scope.bb.current_item
     if ci.category and ci.category.description
@@ -371,32 +372,6 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
       return true
 
 
-  haversine = (latlong, marker) ->
-
-    pi = Math.PI
-    R = 6371  #equatorial radius
-
-    lat1 = latlong.lat()
-    lon1 = latlong.lng()
-
-    lat2 = marker.position.lat()
-    lon2 = marker.position.lng()
-
-    chLat = lat2-lat1
-    chLon = lon2-lon1
-
-    dLat = chLat*(pi/180)
-    dLon = chLon*(pi/180)
-
-    rLat1 = lat1*(pi/180)
-    rLat2 = lat2*(pi/180)
-
-    a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2)
-    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
-    d = R * c
-
-
   ###**
   * @ngdoc method
   * @name showClosestMarkers
@@ -404,15 +379,26 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
   * @description
   * Display the closest markers
   *
-  * @param {array} latlong Using for determinate the closest markers
+  * @param {Object} centre The map centre
   ###
-  $scope.showClosestMarkers = (latlong) ->
+  $scope.showClosestMarkers = (centre) ->
+
     distances = []
     distances_with_services = []
 
-    updateMarkerDistances(latlong)
-
     for marker in $scope.mapMarkers
+
+      map_centre = {
+        lat:  centre.lat()
+        long: centre.lng()
+      }
+
+      marker_position = {
+        lat:  marker.position.lat()
+        long: marker.position.lng()
+      }
+
+      marker.distance = GeolocationService.haversine(map_centre, marker_position)
 
       if !$scope.showAllMarkers
         marker.setVisible false
@@ -420,8 +406,10 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
       if marker.distance < $scope.range_limit
         distances.push marker
         distances_with_services.push marker if marker.company.has_service
+    
     distances.sort (a, b) ->
       a.distance - b.distance
+    
     distances_with_services.sort (a, b) ->
       a.distance - b.distance
 
@@ -460,16 +448,6 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
     google.maps.event.trigger($scope.myMap, 'resize')
     $scope.myMap.fitBounds(localBounds)
     openDefaultMarker()
-
-
-  updateMarkerDistances = (latlong) ->
-
-    use_miles = bbLocale.getLocale().match(/^(en|en-gb|en-us)$/gi)
-
-    for marker in $scope.mapMarkers
-      km = haversine(latlong, marker)
-      marker.distance = km
-      marker.distance *= 0.621371192 if use_miles
 
 
   openDefaultMarker = () ->
@@ -665,8 +643,4 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
     $scope.loc = null
     $scope.reverse_geocode_address = null
     $scope.address = null
-
-
-  $scope.$on "BBLanguagePicker:languageChanged", () ->
-    updateMarkerDistances($scope.loc)
 

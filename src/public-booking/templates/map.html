@@ -133,7 +133,7 @@
                   class="fa fa-location-arrow"
                   aria-hidden="true"></i>
                   <span class="distance">
-                    {{roundNumberUp(currentMarker.distance,1)}} {{distance_unit}}
+                    {{currentMarker.distance | distance:1}}
                   </span>
               </li>
             </ul>
@@ -205,7 +205,7 @@
                   aria-hidden="true">    
                 </i>
                 <span class="distance">
-                  {{roundNumberUp(marker.distance,1)}} {{distance_unit}}
+                  {{marker.distance | distance:1}}
                 </span>
               </li>
             </ul>
