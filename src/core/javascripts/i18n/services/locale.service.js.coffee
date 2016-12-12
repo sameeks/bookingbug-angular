@@ -7,8 +7,6 @@ angular.module('BB.i18n').service 'bbLocale', (bbi18nOptions, $log, $translate, 
 
   determineLocale = () ->
 
-    debugger
-
     if $translate.use() isnt 'undefined' && angular.isDefined($translate.use()) && isAvailable($translate.use())
       setLocale($translate.use(), '$translate.use() locale')
     else

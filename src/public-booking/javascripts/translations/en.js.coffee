@@ -336,7 +336,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         POWERED_BY: "Bookings powered by"
       }
       MAP: {
-        PROGRESS_SEARCH: "Search"
+        SEARCH_BTN: "Search"
         SEARCH_BTN: "Search"
         INPUT_PLACEHOLDER: "Enter a town, city, postcode or store"
         GEOLOCATE_TITLE: "Use current location"

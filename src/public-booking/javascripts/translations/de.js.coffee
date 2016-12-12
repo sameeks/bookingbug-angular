@@ -380,7 +380,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         POWERED_BY: "Buchungen bereitgestellt von"
       }
       MAP: {
-        PROGRESS_SEARCH: "Suche"
+        SEARCH_BTN: "Suche"
         SEARCH_BTN: "Suche"
         INPUT_PLACEHOLDER: "Ort, Postleitzahl oder ladens eingeben"
         GEOLOCATE_TITLE: "Aktuellen Standort benutzen"

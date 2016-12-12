@@ -168,12 +168,9 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
           long: centre.lng()
         }
 
-        debugger
-
-        company_position = new google.maps.LatLng(company.address.lat, company.address.long)
         company_position = {
-          lat:  company_position.lat()
-          long: company_position.lng()
+          lat:  company.address.lat
+          long: company.address.long
         }
 
         company.distance = GeolocationService.haversine(map_centre, company_position)
