@@ -469,14 +469,22 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
         total_id = $scope.bb.item_defaults.purchase_total_long_id
       else total_id = QueryStringService('total_id')
 
+      # if total_id passed through as prms when ititialising widget in a modal
       if prms.total_id 
         params =
           url_root: $scope.bb.api_url
           purchase_id: prms.total_id
-        PurchaseService.query(params).then (total) -> 
+        totalDefer = $q.defer()
+        getPurchaseTotal = PurchaseService.query(params).then (total) -> 
           $scope.bb.purchase = total
           total.$getBookings().then (bookings) ->
-            createBasketFromBookings(bookings)
+            createBasketFromBookings(bookings, totalDefer)
+          , (err) ->
+            totalDefer.reject(err)
+        , (err) ->
+          totalDefer.reject(err)
+        totalDefer.promise
+        setup_promises.push getPurchaseTotal
 
 
       if total_id
@@ -896,7 +904,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
       def.resolve()
     return def.promise
 
-  createBasketFromBookings = (bookings) ->
+  createBasketFromBookings = (bookings, totalDefer) ->
     proms = []
     if bookings.length is 1 
       $scope.bb.current_item = bookings[0]
@@ -910,6 +918,11 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
       Array::push.apply proms, new_item.promises
       $scope.bb.basket.addItem(new_item)
       $scope.setBasketItem(new_item)
+
+    $q.all(proms).then () ->
+      totalDefer.resolve()
+    , (err) ->
+      totalDefer.reject(err)
 
 
   setBasketItem = (item) ->

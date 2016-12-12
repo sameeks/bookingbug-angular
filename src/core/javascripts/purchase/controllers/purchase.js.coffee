@@ -40,7 +40,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
         AlertService.raise('GENERIC')
 
   $scope.$on "booking:moved", () ->
-    console.log 'moved'
     $scope.init()
 
 
