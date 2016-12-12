@@ -9,42 +9,42 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 	loader = LoadingService.$loader($scope)
 
 	
-	$scope.initMove = (booking, route) ->
-    # open modal if moving public booking from purchase template
+	$scope.initMove = (basketItem, route) ->
+    # open modal if moving public basketItem from purchase template
     if route = 'modal' and !WidgetModalService.is_open
       total_id = QueryStringService('id')
-      openCalendarModal(booking, total_id)
+      openCalendarModal(basketItem, total_id)
 
-    # else just move the booking
-    else readyBooking(booking, route)
+    # else just move the basketItem
+    else readyBasketItem(basketItem, route)
 
 
-  readyBooking = (booking, route) ->
+  readyBasketItem = (basketItem, route) ->
     loader.notLoaded()
     confirming = true
-    booking.moved_booking = false
-    booking.setAskedQuestions()
+    basketItem.moved_booking = false
+    basketItem.setAskedQuestions()
 
-    if booking.move_reason
-      booking.move_reason = $scope.bb.current_item.move_reason
+    if basketItem.move_reason
+      basketItem.move_reason = $scope.bb.current_item.move_reason
 
-    if booking.ready
-      moveBooking(booking, route)
+    if basketItem.ready
+      moveBooking(basketItem, route)
     else 
       $scope.decideNextPage(route)
 
 
-  moveBooking = (booking, route) ->
+  moveBooking = (basketItem, route) ->
     if $scope.bb.moving_purchase
-      updatePurchase(booking, route)
+      updatePurchase(basketItem, route)
     else
-      updatePurchaseBooking(booking, route)
+      updatePurchaseBooking(basketItem, route)
 
 
-
-	updatePurchaseBooking = (purchase, route) ->
-    PurchaseBookingService.update(purchase).then (booking) ->
-      b = new BBModel.Purchase.Booking(booking)
+  # updates single srcBooking of purchase
+	updatePurchaseBooking = (basketItem, route) ->
+    PurchaseBookingService.update(basketItem).then (purchaseBooking) ->
+      b = new BBModel.Purchase.Booking(purchaseBooking)
 
 
       if $scope.bb.purchase
@@ -53,14 +53,16 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 
 
       loader.setLoaded()
-      $scope.bb.moved_booking = booking
+      $scope.bb.moved_booking = purchaseBooking
       PurchaseService.purchase = $scope.bb.purchase
-      purchase.move_done = true
+      purchaseBooking.move_done = true
       resolveCalendarModal(b)
      , (err) =>
       loader.setLoaded()
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
+
+  # updates all bookings found in purchase
 	updatePurchase = (booking, route) ->
     params =
       purchase: $scope.bb.moving_purchase
