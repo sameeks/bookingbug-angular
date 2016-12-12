@@ -336,15 +336,15 @@ angular.module('BB.Services').config ($translateProvider) ->
         POWERED_BY: "Bookings powered by"
       }
       MAP: {
+        SEARCH_LABEL: "Search"
         SEARCH_BTN: "Search"
-        SEARCH_BTN: "Search"
-        INPUT_PLACEHOLDER: "Enter a town, city, postcode or store"
-        GEOLOCATE_TITLE: "Use current location"
-        STORE_RESULT_TITLE: "{results, plural, =0{No results} one{1 result} other{# results}} for stores near {address}"
-        HIDE_STORES: "Hide stores with no availability"
+        SEARCH_PLACEHOLDER: "Enter a town, city, postcode or store"
+        GEOLOCATE_BTN_TITLE: "Use current location"
+        SEARCH_RESULT_SUMMARY: "{results, plural, =0{No results} one{1 result} other{# results}} for stores near {address}"
+        HIDE_STORES_LABEL: "Hide stores with no availability"
         SERVICE_UNAVAILABLE: "Sorry, but {{name}} is not available at this location"
         SELECT_BTN: "@:COMMON.BTN.SELECT"
-        UIB_ACCORDION: {
+        STORE_ACCORDION: {
           SELECT_BTN: "@:COMMON.BTN.SELECT"
           SERVICE_UNAVAILABLE: "Sorry, but {{name}} is not available at this location"
         }

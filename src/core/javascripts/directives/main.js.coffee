@@ -316,10 +316,16 @@ angular.module('BB.Directives').directive 'bbCapacityView', () ->
 ####
 angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions, CompanyStoreService) ->
   restrict: 'A'
-  link: (scope, el, attrs) ->
+  controllerAs: '$tzCtrl'
+  controller: ($scope, $element, $attrs) ->
+
+    vm = @
+
     company_time_zone = CompanyStoreService.time_zone
-    scope.time_zone_name = moment().tz(company_time_zone).format('zz')
+    vm.time_zone_name = moment().tz(company_time_zone).format('zz')
+
     #  if not using local time zone and user time zone is not same as companies
     if !GeneralOptions.use_local_time_zone and GeneralOptions.display_time_zone != company_time_zone
-      scope.is_time_zone_diff = true 
+      vm.is_time_zone_diff = true 
+
 
