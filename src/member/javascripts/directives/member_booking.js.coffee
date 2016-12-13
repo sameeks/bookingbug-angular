@@ -31,7 +31,7 @@ angular.module('BBMember').directive 'bbMemberBooking', () ->
         label: 'Details', 
         translation_key: 'MEMBER_BOOKING_EDIT'
 
-      if booking.datetime.isAfter(timeNow)
+      if booking.datetime.isAfter(booking.min_cancellation_time)
         scope.actions.push
           action: memberBookingController.cancel, 
           label: 'Cancel', 
