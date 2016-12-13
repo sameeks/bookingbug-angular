@@ -95,7 +95,7 @@ angular.module('BB.Controllers').controller 'PersonList',
           if bi and bi.person and bi.person.id is i.item.id
             $scope.person = i.item if $scope.bb.current_item.settings.person isnt -1
             $scope.selected_bookable_items = [i]
-        debugger
+
         # if there's only 1 person and combine resources/staff has been turned on, auto select the person
         # OR if the person has been passed into item_defaults, skip to next step
         if (items.length is 1 and $scope.bb.company.settings and $scope.bb.company.settings.merge_people)
