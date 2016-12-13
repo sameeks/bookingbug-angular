@@ -231,7 +231,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         TITLE: "Dashboard"
         DESCRIPTION: "Pick a Location/Person"
       }
-      DAY: {
+      MONTH_CALENDAR: {
         PREV_MONTH_BTN: "Previous Month"
         NEXT_MONTH_BTN: "Next Month"
         BACK_BTN: "@:COMMON.BTN.BACK"
@@ -350,7 +350,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         }
       }
       MEMBERSHIP_LEVELS: {
-        MEMBERSHIP_TYPES: "Membership Types"
+        STEP_HEADING: "Membership Types"
         SELECT_BTN: "@:COMMON.BTN.SELECT"
       }
       LOGIN: {
@@ -377,12 +377,13 @@ angular.module('BB.Services').config ($translateProvider) ->
         SURVEY_NO: "No survey questions for this session."
       }
       SERVICE_LIST: {
-        PRICE_FREE: "@:COMMON.TERMINOLOGY.PRICE_FREE"
-        SELECT_BTN: "@:COMMON.BTN.SELECT"
-        SERVICE_LIST_NO: "No services match your filter criteria."
         BACK_BTN: "@:COMMON.BTN.BACK"
       }
+      SERVICES: {
+        SELECT_BTN: "@:COMMON.BTN.SELECT"
+      }
       RESOURCE_LIST: {
+        STEP_DESCRIPTION: "Select a resource to continue making a booking."
         SELECT_BTN: "@:COMMON.BTN.SELECT"
         BACK_BTN: "@:COMMON.BTN.BACK"
       }
@@ -392,9 +393,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOVE_BTN: "Move Appointment"
         }
       PURCHASE: {
-        CANCEL_CONFIRMATION: "Your booking has been cancelled."
-        CONFIRMATION_PURCHASE_TITLE: "Your {{ service_name }} booking"
-        RECIPIENT_NAME: "Name"
+        CANCEL_CONFIRMATION_HEADING: "Your booking has been cancelled."
+        HEADING: "Your {{service_name}} booking"
+        CUSTOMER_NAME_LABEL: "Name"
         PRINT_BTN: "@:COMMON.TERMINOLOGY.PRINT"
         EMAIL_LABEL: "@:COMMON.FORM.EMAIL"
         SERVICE_LABEL: "@:COMMON.TERMINOLOGY.SERVICE"
@@ -406,30 +407,32 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       PRINT_PURCHASE: {
         TITLE: "Booking Confirmation"
-        BOOKING_CONFIRMATION: "Thanks {{ member_name }}. Your booking is now confirmed. We have emailed you the details below."
-        CALENDAR_EXPORT_TITLE: "@:COMMON.TERMINOLOGY.EXPORT"
+        BOOKING_CONFIRMATION: "Thanks {{member_name}}. Your booking is now confirmed. We have emailed you the details below."
+        EXPORT_BOOKING_BTN: "@:COMMON.TERMINOLOGY.EXPORT"
         PRINT_BTN: "@:COMMON.TERMINOLOGY.PRINT"
         AND: "@:COMMON.TERMINOLOGY.AND"
         ITEM_LABEL: "@:COMMON.TERMINOLOGY.ITEM"
-        DATE_LABEL: "@:COMMON.TERMINOLOGY.DATE"
-        TIME_LABEL: "@:COMMON.TERMINOLOGY.TIME"
+        DATE_TIME_LABEL: "Date/Time"
         QTY_LABEL: "Quantity"
-        BOOKING_REFERENCE: "@:COMMON.TERMINOLOGY.BOOKING_REF"
+        BOOKING_REFERENCE_LABEL: "@:COMMON.TERMINOLOGY.BOOKING_REF"
         POWERED_BY: "Bookings powered by"
       }
       PERSON_LIST: {
+        STEP_DESCRIPTION: "Select a person to continue making a booking."
         SELECT_BTN: "@:COMMON.BTN.SELECT"
         BACK_BTN:   "@:COMMON.BTN.BACK"
       }
-      MONTHLY_CALENDAR: {
-        SELECT_DAY:       "Select a day"
-        WEEK_BEGINNING:   "Week beginning"
-        PICK_A_DATE:      "Pick a date"
-        PREVIOUS_5_WEEKS: "Previous 5 Weeks"
-        NEXT_5_WEEKS:     "Next 5 Weeks"
-        KEY:              "Key"
-        AVAILABLE:        "{number, plural, =0{No availability} other{# available}}"
-        UNAVAILABLE:      "@:COMMON.TERMINOLOGY.UNAVAILABLE"
+      DAY: {
+        STEP_HEADING:     "Select a day"
+        WEEK_BEGINNING_LABEL:   "Week beginning:"
+        SELECT_DATE_BTN_TITLE:      "Pick a date"
+        PREVIOUS_5_WEEKS_BTN: "Previous 5 Weeks"
+        NEXT_5_WEEKS_BTN:     "Next 5 Weeks"
+        LEGEND : {
+          HEADING:              "Key"
+          AVAILABLE_KEY:        "{number, plural, =0{No availability} other{# available}}"
+          UNAVAILABLE_KEY:      "@:COMMON.TERMINOLOGY.UNAVAILABLE"
+        }
         BACK_BTN:    "@:COMMON.BTN.BACK"
       }
       REGISTER: {

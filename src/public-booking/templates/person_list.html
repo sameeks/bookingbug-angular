@@ -1,6 +1,6 @@
 <div bb-include="_basket_item_summary"></div>
 
-<p>Select a person to continue making a booking.</p>
+<p translate="PUBLIC_BOOKING.PERSON_LIST.STEP_DESCRIPTION"></p>
 
 <div bb-people>
   <ul class="bb-list bb-list-bordered bb-list-md">
@@ -11,7 +11,12 @@
           <h2 class="panel-title">{{item.name}}</h2>
         </div>
         <div class="col-sm-2">
-          <button type="button" ng-click="selectItem(item)" class="btn btn-primary btn-block" translate="PUBLIC_BOOKING.PERSON_LIST.SELECT_BTN"></button>
+          <button
+            type="button"
+            ng-click="selectItem(item)"
+            class="btn btn-primary btn-block"
+            translate="PUBLIC_BOOKING.PERSON_LIST.SELECT_BTN">
+          </button>
         </div>
       </div>
 
@@ -22,7 +27,15 @@
 <div class="bb-step-navigation">
   <div class="row">
     <div class="col-sm-3">
-      <button type="button" class="btn btn-default" ng-show="bb.current_step > 1" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1" translate="PUBLIC_BOOKING.PERSON_LIST.BACK_BTN"></button>
+      <button
+        type="button"
+        class="btn btn-default"
+        ng-show="bb.current_step > 1"
+        bb-debounce
+        ng-click="loadPreviousStep()"
+        ng-show="bb.current_step > 1"
+        translate="PUBLIC_BOOKING.PERSON_LIST.BACK_BTN">
+      </button>
     </div>
   </div>
 </div>

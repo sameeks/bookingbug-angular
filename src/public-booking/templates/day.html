@@ -1,86 +1,174 @@
-<div bb-include="_basket_item_summary"></div>
+<div bb-day-list>
 
-<div class="bb-subcontent">
+  <div class="page-summary">
+    <h2
+      class="booking-form-header"
+      translate="PUBLIC_BOOKING.DAY.STEP_HEADING">
+    </h2>
+  </div>
 
-  <div
-    bb-month-availability
-    class="bb-day">
+  <div class="row month-calendar">
+    <div class="col-md-12 day-list">
 
-    <div class="bb-calendar-navigation">
+      <div class="row day-list-header">
+        <div class="col-xs-5">
 
-      <button
-        type="button"
-        class="btn btn-link pull-left"
-        ng-click="subtract('months',1)"
-        ng-disabled="isPast()">
-        <span
-          class="glyphicon glyphicon-chevron-left pull-left"
-          aria-hidden="true">
-        </span>
-        <span
-          class="hidden-xs"
-          translate="PUBLIC_BOOKING.DAY.PREV_MONTH_BTN">
-        </span>
-      </button>
+          <form>
 
-      <button
-        type="button"
-        class="btn btn-link pull-right"
-        ng-click="add('months',1)">
-        <span
-          class="hidden-xs"
-          translate="PUBLIC_BOOKING.DAY.NEXT_MONTH_BTN">
-        </span>
-        <span
-          class="glyphicon glyphicon-chevron-right pull-right"
-          aria-hidden="true">
-        </span>
-      </button>
+            <div class="form-group">
 
-    </div>
+              <label
+                class="control-label"
+                translate="PUBLIC_BOOKING.DAY.WEEK_BEGINNING_LABEL_LABEL">
+              </label>
 
-    <div>
+              <div class="input-group date-picker">
+                <!-- date format: http://docs.angularjs.org/api/ng.filter:date -->
+                <input
+                  type="text"
+                  ng-model="current_date_js"
+                  class="form-control"
+                  bb-datepicker-popup="DD/MM/YYYY"
+                  on-date-change="currentDateChanged()"
+                  datepicker-popup="dd/MM/yyyy"
+                  is-open="opened"
+                  min-date="today"
+                  datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
+                  show-weeks="false"
+                  date-disabled="isDateDisabled(date, mode)"
+                  show-button-bar="false"
+                  ng-readonly="false"/>
+                <span
+                  class="input-group-btn"
+                  ng-click="$event.preventDefault();$event.stopPropagation();opened=true">
+                  <button
+                    class="btn btn-default"
+                    type="submit"
+                    translate-attr="{title: 'PUBLIC_BOOKING.DAY.SELECT_DATE_BTN_TITLE'}"
+                    >
+                    <span class="fa fa-calendar" aria-hidden="true"></span>
+                  </button>
+                </span>
+              </div>
 
-      <h2 class="bb-section-title text-center hidden-xs">
-        {{format_date('MMMM YYYY')}}
-      </h2>
+            </div>
+          </form>
 
-      <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">
-        {{format_date('MMM YY')}}
-      </h2>
+        </div>
 
-      <table class="table table-bordered">
+        <div class="col-xs-7">
+
+          <div class="day-nav">
+
+            <span>
+
+              <button
+                type="button"
+                class="btn btn-link"
+                ng-click="subtract('weeks', 5)"
+                ng-disabled="isPast()">
+                <span class="fa fa-chevron-left" aria-hidden="true"></span>
+                <span translate="PUBLIC_BOOKING.DAY.PREVIOUS_5_WEEKS_BTN"></span>
+              </button>
+
+              <span>|</span>
+
+              <button
+                type="button"
+                class="btn btn-link"
+                ng-click="add('weeks', 5)">
+                <span translate="PUBLIC_BOOKING.DAY.NEXT_5_WEEKS_BTN"></span>
+                <span class="fa fa-chevron-right" aria-hidden="true"></span>
+              </button>
+
+            </span>
+
+          </div>
+
+        </div>
+      </div>
+
+      <table class="table table-bordered calendar">
+
+        <tr>
+          <th
+            class="day-header"
+            ng-repeat="day in weeks[0]">
+            {{day.date | datetime: 'ddd': false}}
+          </th>
+        </tr>
+
         <tr ng-repeat="week in weeks">
           <td
             ng-repeat="day in week"
-            ng-class="{'bb-today': day.date.isSame(moment(),'day'), 'bb-go-ok': day.spaces > 0, 'bb-no-go': day.date.isBefore(moment(),'day') || day.spaces == 0, 'bb-month-highlight': current_date.isSame(day.date,'month') }"
-            ng-click="selectDay(day)">
-            <p
-              class="pull-right"
-              class="time-slot {{day.class(month)}}"
-              ng-class="{'bb-past': day.date.isBefore(moment(),'day') || day.spaces == 0}">
-              {{day.day()}}
-            </p>
+            ng-class="{'bb-today': day.date.isSame(moment(),'day'), 'bb-available': day.spaces > 0, 'bb-past': day.date.isBefore(moment(), 'day'), 'bb-selected': day.date.isSame(selected_date, 'day') && selected_date, 'bb-unavailable': day.spaces == 0 || !day.spaces}"
+            ng-click="selectDay(day)"
+            ng-disabled="!day.spaces || day.spaces == 0 || day.date.isBefore(moment(), 'day')">
+            <span
+              class="month-title pull-left"
+              ng-show="day.date.date() == 1 || day == weeks[0][0]">
+              {{day.date | datetime: 'MMMM': false}}
+            </span>
+            <span class="pull-right day-number">{{day.date.date()}}</span>
           </td>
         </tr>
+
       </table>
 
+      <div class="legend">
+        <h4 translate="PUBLIC_BOOKING.DAY.LEGEND.HEADING"></h4>
+        <ul class="keys">
+          <li class="key available">
+            <div class="square"></div>
+            <span translate="PUBLIC_BOOKING.DAY.AVAILABLE_KEY"></span>
+          </li>
+          <li class="key unavailable">
+            <div class="square"></div>
+            <span translate="PUBLIC_BOOKING.DAY.UNAVAILABLE_KEY"></span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div
+    bb-times
+    bb-scroll-to="dateChanged"
+    bb-always-scroll>
+
+    <h3
+      class="booking-form-header"
+      ng-show="slots">
+      {{selected_date | datetime: 'LL':false}}
+    </h3>
+
+    <ul class="time-slots row">
+      <li
+        ng-repeat="slot in slots"
+        class="col-sm-3">
+        <button
+          type="button"
+          class="btn btn-secondary btn-block"
+          ng-click="selectSlot(slot)">{{slot.datetime | datetime: 'LT'}}
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="bb-step-navigation">
+    <div class="row">
+      <div class="col-sm-2 back">
+        <button
+          type="button"
+          class="btn btn-secondary btn-block"
+          bb-debounce
+          ng-click="loadPreviousStep()"
+          translate="PUBLIC_BOOKING.DAY.BACK_BTN">
+        </button>
+      </div>
     </div>
   </div>
 
-</div>
-
-<div class="bb-step-navigation">
-  <div class="row">
-    <div class="col-sm-3">
-      <button
-        type="button"
-        class="btn btn-default"
-        bb-debounce
-        ng-click="loadPreviousStep()"
-        ng-show="bb.current_step > 1"
-        translate="PUBLIC_BOOKING.DAY.BACK_BTN">
-      </button>
-    </div>
-  </div>
 </div>

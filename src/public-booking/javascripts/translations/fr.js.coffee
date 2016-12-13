@@ -394,7 +394,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         }
       }
       MEMBERSHIP_LEVELS: {
-        MEMBERSHIP_TYPES: "Types d'adhésion"
+        STEP_HEADING: "Types d'adhésion"
         SELECT_BTN: "@:COMMON.BTN.SELECT"
       }
       TIME: {
@@ -461,12 +461,12 @@ angular.module('BB.Services').config ($translateProvider) ->
         SELECT_BTN: "@:COMMON.BTN.SELECT"
         BACK_BTN:   "@:COMMON.BTN.BACK"
       }
-      MONTHLY_CALENDAR: {
-        SELECT_DAY:       "Choisir jour"
-        WEEK_BEGINNING:   "La semaine commençant le"
-        PICK_A_DATE:      "Choisir une date"
-        PREVIOUS_5_WEEKS: "5 semaines précédentes"
-        NEXT_5_WEEKS:     "5 semaines suivantes"
+      DAY: {
+        STEP_HEADING:       "Choisir jour"
+        WEEK_BEGINNING_LABEL:   "La semaine commençant le"
+        SELECT_DATE_BTN_TITLE:      "Choisir une date"
+        PREVIOUS_5_WEEKS_BTN: "5 semaines précédentes"
+        NEXT_5_WEEKS_BTN:     "5 semaines suivantes"
         KEY:              "Clé"
         AVAILABLE:        "{number, plural, =0{Aucun disponible} one{1 disponible} other{# disponibles}}"
         UNAVAILABLE:      "@:COMMON.TERMINOLOGY.UNAVAILABLE"

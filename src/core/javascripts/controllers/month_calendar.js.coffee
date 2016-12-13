@@ -3,7 +3,7 @@
 
 ###**
 * @ngdoc directive
-* @name BB.Directives:bbMonthAvailability
+* @name BB.Directives:bbMonthCalendar
 * @restrict AE
 * @scope true
 *
@@ -24,15 +24,15 @@
 ###
 
 
-angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
+angular.module('BB.Directives').directive 'bbMonthCalendar', () ->
   restrict: 'A'
   replace: true
   scope : true
-  controller : 'MonthAvailability'
+  controller : 'MonthCalendar'
 
-angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootScope, $q, AlertService, LoadingService, BBModel, $translate) ->
+angular.module('BB.Controllers').controller 'MonthCalendar', ($scope, $rootScope, $q, AlertService, LoadingService, BBModel, $translate) ->
 
-  $scope.controller = "public.controllers.MonthAvailability"
+  $scope.controller = "public.controllers.MonthCalendar"
   
   loader = LoadingService.$loader($scope).notLoaded()
 
@@ -59,7 +59,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name setCalType
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Set cal type in acording of type
   *
@@ -71,7 +71,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name setDataSource
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Set data source in according of source
   *
@@ -83,7 +83,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name format_date
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Format date and get current date
   *
@@ -96,7 +96,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name format_start_date
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Format start date in according of fmt parameter
   *
@@ -108,7 +108,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name format_end_date
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Format end date in according of fmt parameter
   *
@@ -121,7 +121,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name selectDay
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Select day
   *
@@ -142,7 +142,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name setMonth
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Set month
   *
@@ -157,7 +157,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name setWeek
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Set month
   *
@@ -172,7 +172,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name add
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Add the current date in according of type and amount parameters
   *
@@ -186,7 +186,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name subtract
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Substract the current date in according of type and amount
   *
@@ -199,7 +199,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name isPast
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Calculate if the current earlist date is in the past - in which case we might want to disable going backwards
   ###
@@ -211,7 +211,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name loadData
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Load week if type is equals with week else load month
   ###
@@ -224,7 +224,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name loadMonth
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Load month
   ###
@@ -256,7 +256,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name loadWeek
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Load week
   ###
@@ -279,7 +279,7 @@ angular.module('BB.Controllers').controller 'MonthAvailability', ($scope, $rootS
   ###**
   * @ngdoc method
   * @name setReady
-  * @methodOf BB.Directives:bbMonthAvailability
+  * @methodOf BB.Directives:bbMonthCalendar
   * @description
   * Set this page section as ready
   ###

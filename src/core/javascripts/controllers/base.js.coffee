@@ -1029,8 +1029,8 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     defer.promise
 
   setActiveCompany = (company, settings) ->
-# currency code exists in both company and company_settings
-# get from company if not defined in settings
+    # currency code exists in both company and company_settings
+    # get from company if not defined in settings
     CompanyStoreService.currency_code = if !settings then company.currency_code else settings.currency
     CompanyStoreService.time_zone = company.timezone
     CompanyStoreService.country_code = company.country_code
