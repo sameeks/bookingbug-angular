@@ -55,7 +55,7 @@
 
           <li class="row">
             <div class="col-xs-3 col-sm-2 summary-label">
-              <span translate="PUBLIC_BOOKING.SURVEY.ITEM_SESSION"></span>:</div>
+              <span translate="PUBLIC_BOOKING.SURVEY.SESSION_LABEL"></span>:</div>
             <div class="col-xs-9 col-sm-10 summary-value">
               <span class="bold-small">{{bookings[0].service_name}}</span>
             </div>
@@ -74,9 +74,9 @@
 
         <div ng-show="bookings[0].survey_questions && bookings[0].survey_questions.length > 0">
 
-          <h2 class="booking-form-header">
-            <span translate="PUBLIC_BOOKING.SURVEY.SURVEY_WORD"></span>
-            <span translate="PUBLIC_BOOKING.SURVEY.DETAILS_QUESTIONS"></span>
+          <h2
+            class="booking-form-header"
+            translate="PUBLIC_BOOKING.SURVEY.SURVEY_QUESTIONS_HEADING">
           </h2>
 
           <div
@@ -85,14 +85,11 @@
             bb-question-line
             ng-class="{'check': question.detail_type == 'check', 'has-error': survey_form['q' + question.id].$invalid && (survey_form['q' + question.id].$dirty || survey_form.submitted)}">
             <label
-              ng-if="question.detail_type != 'check'"
+              bb-question-label="question" 
               for="{{question.id}}"
               class="control-label col-sm-4">
               {{question.name}}:
             </label>
-            <div
-              ng-if="question.detail_type == 'check'"
-              class="col-sm-4 hidden-xs">&nbsp;</div>
             <div class="col-sm-8">
               <input bb-question="question" />
             </div>
@@ -107,7 +104,7 @@
               class="btn btn-primary"
               ng-click="submitSurvey(survey_form)"
               bb-debounce
-              translate="PUBLIC_BOOKING.SURVEY.SURVEY_SUBMIT">
+              translate="PUBLIC_BOOKING.SURVEY.SUBMIT_SURVEY_BTN">
             </button>
           </div>
         </div>
@@ -116,7 +113,7 @@
     </div>
     <h2
       ng-if="bookings[0].survey_questions.length < 1"
-      translate="PUBLIC_BOOKING.SURVEY.SURVEY_NO">
+      translate="PUBLIC_BOOKING.SURVEY.NO_QUESTIONS">
     </h2>
 
   </div>

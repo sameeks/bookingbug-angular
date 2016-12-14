@@ -409,9 +409,9 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       SURVEY: {
         SURVEY_THANK_YOU: "Thank you for filling out the survey!"
-        ITEM_SESSION: "@:COMMON.TERMINOLOGY.SESSION"
+        SERVICE_LABEL: "@:COMMON.TERMINOLOGY.SESSION"
         DATE_LABEL: "@:COMMON.TERMINOLOGY.DATE"
-        SURVEY_WORD: "Survey"
+        SURVEY_QUESTIONS_HEADING: "Survey"
         DETAILS_QUESTIONS: "@:COMMON.TERMINOLOGY.QUESTIONS"
         SURVEY_SUBMIT: "@:COMMON.BTN.SUBMIT"
         SURVEY_NO: "No survey questions for this session."
@@ -432,8 +432,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOVE_BTN: "Move Appointment"
         }
       PURCHASE: {
-        CANCEL_CONFIRMATION: "Tu cita ha sido cancelada."
-        CONFIRMATION_PURCHASE_TITLE: "Your {{ service_name }} booking"
+        CANCEL_CONFIRMATION_HEADING: "Tu cita ha sido cancelada."
+        HEADING: "Your {{ service_name }} booking"
         RECIPIENT_NAME: "@:COMMON.FORM.FIRST_NAME"
         PRINT: " @:COMMON.TERMINOLOGY.PRINT"
         EMAIL_LABEL: "@:COMMON.FORM.EMAIL"
@@ -447,7 +447,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       PRINT_PURCHASE: {
         TITLE: "Booking Confirmation"
         BOOKING_CONFIRMATION: "Thanks {{ member_name }}. Your booking is now confirmed. We have emailed you the details below."
-        CALENDAR_EXPORT_TITLE: "@:COMMON.TERMINOLOGY.EXPORT"
+        EXPORT_BOOKING_BTN: "@:COMMON.TERMINOLOGY.EXPORT"
         PRINT_BTN: "@:COMMON.TERMINOLOGY.PRINT"
         AND: "@:COMMON.TERMINOLOGY.AND"
         ITEM_LABEL: "@:COMMON.TERMINOLOGY.ITEM"

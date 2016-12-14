@@ -17,16 +17,11 @@
     ng-if="question.currentlyShown"
     bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
     <label
+      bb-question-label="question" 
       for="{{question.id}}"
-      class="control-label col-sm-4"
-      ng-hide="question.detail_type == 'check'">
+      class="control-label col-sm-4">
       {{question.name}}
     </label>
-    <div
-      ng-show="question.detail_type == 'check'"
-      class="col-sm-4 hidden-xs">
-      &nbsp;
-    </div>
     <div class="col-sm-5">
       <input bb-question="question"/>
     </div>

@@ -369,10 +369,9 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       SURVEY: {
         SURVEY_THANK_YOU: "Thank you for filling out the survey!"
-        ITEM_SESSION: "@:COMMON.TERMINOLOGY.SESSION"
+        SERVICE_LABEL: "@:COMMON.TERMINOLOGY.SERVICE"
         DATE_LABEL: "@:COMMON.TERMINOLOGY.DATE"
-        SURVEY_WORD: "Survey"
-        DETAILS_QUESTIONS: "@:COMMON.TERMINOLOGY.QUESTIONS"
+        SURVEY_QUESTIONS_HEADING: "Survey Questions"
         SURVEY_SUBMIT: "@:COMMON.BTN.SUBMIT"
         SURVEY_NO: "No survey questions for this session."
       }

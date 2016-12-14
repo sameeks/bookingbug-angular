@@ -15,7 +15,6 @@
     class="form-group"
     ng-class="{'has-error': client_details_form.first_name.$invalid && (!client_details_form.first_name.$pristine || client_details_form.submitted)}">
     <label
-      bb-question-label="question"
       for="first_name" 
       class="control-label col-sm-4"
       translate="PUBLIC_BOOKING.CLIENT_FORM.FIRST_NAME_LABEL">
@@ -46,7 +45,6 @@
     class="form-group"
     ng-class="{'has-error': client_details_form.last_name.$invalid && (!client_details_form.last_name.$pristine || client_details_form.submitted)}">
     <label
-      bb-question-label="question" 
       class="control-label col-sm-4"
       for="last_name"
       translate="PUBLIC_BOOKING.CLIENT_FORM.LAST_NAME_LABEL">
@@ -76,7 +74,6 @@
     class="form-group"
     ng-class="{'has-error': client_details_form.email.$invalid && (!client_details_form.email.$pristine || client_details_form.submitted)}">
     <label
-      bb-question-label="question"
       class="control-label col-sm-4"
       for="email"
       translate="PUBLIC_BOOKING.CLIENT_FORM.EMAIL_LABEL">
@@ -106,7 +103,6 @@
     class="form-group"
     ng-class="{'has-error': (client_details_form.mobile.$invalid && (!client_details_form.mobile.$pristine || client_details_form.submitted)) && (!client_details_form.mobile.$focused || client_details_form.mobile.$error.required)}">
     <label
-      bb-question-label="question"
       class="control-label col-sm-4"
       for="mobile"
       translate="PUBLIC_BOOKING.CLIENT_FORM.MOBILE_LABEL">
