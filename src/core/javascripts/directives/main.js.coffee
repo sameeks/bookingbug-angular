@@ -140,7 +140,7 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, ValidatorSe
   scope: true
   link: (scope, elem, attrs, ctrls) ->
 
-    scope.form = ctrls
+    formCtrl = ctrls
 
     # set up event handler on the form element
     elem.on "submit", ->
@@ -150,17 +150,17 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, ValidatorSe
 
     scope.submitForm = () ->
 
-      scope.form.submitted = true
+      formCtrl.submitted = true
 
       # mark nested forms as submitted too
-      for property of scope.form
-        if angular.isObject(scope.form[property]) and scope.form[property].hasOwnProperty('$valid')
-          scope.form[property].submitted = true
+      for property of formCtrl
+        if angular.isObject(formCtrl[property]) and formCtrl[property].hasOwnProperty('$valid')
+          formCtrl[property].submitted = true
 
       $timeout ->
         invalid_form_group = elem.find('.has-error:first')
 
-        if invalid_form_group and invalid_form_group.length > 0 and !scope.form.raise_alerts
+        if invalid_form_group and invalid_form_group.length > 0 and !formCtrl.raise_alerts
 
           if 'parentIFrame' of $window
             parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - GeneralOptions.scroll_offset)
@@ -173,7 +173,7 @@ angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, ValidatorSe
           invalid_input.focus()
       , 100
 
-      return ValidatorService.validateForm(scope.form)
+      return ValidatorService.validateForm(formCtrl)
 
 
 
