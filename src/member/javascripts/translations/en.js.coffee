@@ -7,10 +7,11 @@ angular.module('BBMember').config ($translateProvider) ->
     MEMBER: {
       MODAL: {
         EDIT_BOOKING: {
-          CANCEL_BTN: '@:COMMON.BTN.CANCEL'
+          CANCEL_BTN : '@:COMMON.BTN.CANCEL'
+          SAVE_BTN   : '@:COMMON.BTN.CANCEL'
         }
         LOGIN: {
-          OK_BUTTON: '@:COMMON.BTN.OK'
+          OK_BTN: '@:COMMON.BTN.OK'
           CANCEL_BTN: '@:COMMON.BTN.CANCEL'
         }
         DELETE_BOOKING: {
@@ -30,6 +31,11 @@ angular.module('BBMember').config ($translateProvider) ->
           OK_BTN: '@:COMMON.BTN.OK'
           CANCEL_BTN: '@:COMMON.BTN.CANCEL'
         }
+        BOOKING_PAYMENT: {
+          DESCRIPTION : 'Pay for your booking to confirm your place.'
+          TIME_RANGE  : '{{start | datetime: "LT"}} - {{end | datetime: "LT}}'
+          PAY_BTN     : '@:COMMON.BTN.PAY'
+        }
       }
       LOGIN: {
         EMAIL_LABEL:          '@:COMMON.FORM.EMAIL'
@@ -37,6 +43,9 @@ angular.module('BBMember').config ($translateProvider) ->
         PASSWORD_LABEL:       '@:COMMON.FORM.PASSWORD'
         PASSWORD_PLACEHOLDER: '@:COMMON.FORM.PASSWORD'
         LOGIN_BTN:            '@:COMMON.BTN.LOGIN'
+      }
+      BOOKING: {
+        TOGGLE_DROPDOWN_BTN : 'Toggle Dropdown'
       }
       BOOKING_TABS: {
         UPCOMING_BOOKINGS: 'Upcoming bookings'

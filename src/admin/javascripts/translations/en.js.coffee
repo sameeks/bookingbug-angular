@@ -5,26 +5,26 @@ angular.module('BBAdmin').config ($translateProvider) ->
 
   translations = {
     ADMIN: {
-      MODAL: {
-        CANCEL_BOOKING: {
-          REASON: 'Cancel reason'
-          SEND_EMAIL: 'Send cancellation confirmation to {{email}}?'
-          TITLE: 'Cancel Booking'
-        }
+      CANCEL_BOOKING_MODAL: {
+        TITLE            : 'Cancel Booking'
+        REASON_LABEL     : 'Cancel reason'
+        SEND_EMAIL_LABEL : 'Send cancellation confirmation to {{email}}?'
+        OK_BTN           : 'COMMON.BTN.OK'
+        CLOSE_BTN        : 'COMMON.BTN.CLOSE'
       }
       LOGIN: {
-        EMAIL_LABEL          : 'Email'
-        EMAIL_PLACEHOLDER    : 'Email'
-        PASSWORD_LABEL       : 'Password'
-        PASSWORD_PLACEHOLDER : 'Password'
-        LOGIN_BTN            : 'Login'
+        EMAIL_LABEL          : '@:COMMON.FORM.EMAIL'
+        EMAIL_PLACEHOLDER    : '@:COMMON.FORM.EMAIL'
+        PASSWORD_LABEL       : '@:COMMON.FORM.PASSWORD'
+        PASSWORD_PLACEHOLDER : '@:COMMON.FORM.PASSWORD'
+        LOGIN_BTN            : '@:COMMON.BTN.LOGIN'
       }
       PICK_COMPANY : {
         STEP_SUMMARY : 'Pick Company'
       }
       BOOKNG_TABLE : {
         NEW_BOOKING_BTN : 'New booking'
-        EDIT_BTN        : 'Edit'
+        EDIT_BTN        : '@:COMMON.BTN.EDIT'
       }
     }
   }

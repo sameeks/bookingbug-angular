@@ -447,7 +447,6 @@ angular.module('BB.Services').config ($translateProvider) ->
         HEADING: 'My Details'
       }
       CLIENT_FORM: {
-        CLIENT_DETAILS_HEADING: "Contact Information"
         FIRST_NAME_LABEL: "@:COMMON.FORM.FIRST_NAME"
         FIRST_NAME_REQUIRED: "@:COMMON.FORM.FIRST_NAME_REQUIRED"
         LAST_NAME_LABEL: "@:COMMON.FORM.LAST_NAME"
