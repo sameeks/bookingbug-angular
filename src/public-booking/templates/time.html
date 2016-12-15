@@ -1,34 +1,60 @@
-<div bb-include="_basket_item_summary">
-</div>
+<div bb-include="_basket_item_summary"></div>
 
 <div class="bb-subcontent">
 
-  <div bb-times class="bb-time">
+  <div
+    bb-times
+    class="bb-time">
 
     <div class="bb-calendar-navigation">
-      <button type="button" class="btn btn-link pull-left" ng-click="subtract('days',1)">
-        <span class="glyphicon glyphicon-chevron-left pull-left" aria-hidden="true"></span>
-        <span class="hidden-xs"><span translate="PUBLIC_BOOKING.TIME.AVAIL_DAY_PREVIOUS"></span></span>
+
+      <button
+        type="button"
+        class="btn btn-link pull-left"
+        ng-click="subtract('days',1)">
+        <span
+          class="fa fa-chevron-left pull-left"
+          aria-hidden="true">
+        </span>
+        <span class="hidden-xs">
+          <span translate="PUBLIC_BOOKING.TIME.PREV_DAY_BTN"></span>
+        </span>
       </button>
-      <button type="button" class="btn btn-link pull-right" ng-click="add('days',1)">
-        <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true" ></span>
-        <span class="hidden-xs"><span translate="PUBLIC_BOOKING.TIME.AVAIL_DAY_NEXT"></span></span>
+
+      <button
+        type="button"
+        class="btn btn-link pull-right"
+        ng-click="add('days',1)">
+        <span
+          class="fa fa-chevron-right pull-right"
+          aria-hidden="true" >
+        </span>
+        <span class="hidden-xs">
+          <span translate="PUBLIC_BOOKING.TIME.NEXT_DAY_BTN"></span>
+        </span>
       </button>
     </div>
 
     <div>
 
       <h2 class="bb-section-title text-center hidden-xs">{{selected_date | datetime: 'LL'}}</h2>
+
       <h2 class="bb-section-title text-center hidden-sm hidden-md hidden-lg">{{selected_date | datetime: 'Do MMM'}}</h2>
 
-      <div ng-show="!slots || (slots && slots.length == 0)" class="bb-service-unavailable">
-        <p class="text-center" translate="PUBLIC_BOOKING.TIME.AVAIL_NO">
+      <div
+        ng-show="!slots || (slots && slots.length == 0)"
+        class="bb-service-unavailable">
+        <p
+          class="text-center"
+          translate="PUBLIC_BOOKING.TIME.NO_AVAILABILITY">
         </p>
       </div>
 
       <div ng-if="slots">
 
-        <div uib-accordion close-others="false">
+        <div
+          uib-accordion
+          close-others="false">
 
           <div
             bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.MORNING_HEADER', range: [0, 720], slots: slots, collaspe_when_time_selected: true}"
@@ -36,7 +62,8 @@
             slots="day.slots"
             select-slot="highlightSlot"
             ng-init="setFormDataStoreId($index)"
-            class="accordion-group"></div>
+            class="accordion-group">
+          </div>
 
           <div
             bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.AFTERNOON_HEADER',range: [720, 1020], slots: slots, collaspe_when_time_selected: true}"
@@ -44,7 +71,8 @@
             slots="day.slots"
             select-slot="highlightSlot"
             ng-init="setFormDataStoreId($index)"
-            class="accordion-group"></div>
+            class="accordion-group">
+          </div>
 
           <div
             bb-accordion-range-group="{heading: 'PUBLIC_BOOKING.TIME.EVENING_HEADER', range: [1020, 1440], slots: slots, collaspe_when_time_selected: true}"
@@ -52,7 +80,8 @@
             slots="day.slots"
             select-slot="highlightSlot"
             ng-init="setFormDataStoreId($index)"
-            class="accordion-group"></div>
+            class="accordion-group">
+          </div>
 
         </div>
       </div>
@@ -60,13 +89,19 @@
   </div>
 </div>
 
+<div class="clearfix hidden-xs"></div>
 
-<div class="clearfix hidden-xs">
-</div>
 <div class="bb-step-navigation">
   <div class="row">
     <div class="col-sm-3">
-      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1"><span translate="PUBLIC_BOOKING.TIME.BACK_BTN"></span></button>
+      <button
+        type="button"
+        class="btn btn-default"
+        bb-debounce
+        ng-click="loadPreviousStep()"
+        ng-show="bb.current_step > 1"
+        translate="PUBLIC_BOOKING.TIME.BACK_BTN">
+       </button>
     </div>
   </div>
 </div>

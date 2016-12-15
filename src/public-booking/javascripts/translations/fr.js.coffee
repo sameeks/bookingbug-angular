@@ -13,7 +13,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOVE_BOOKING_FAIL_ALERT: "La réservation n'a pas pu être déplacée. Merci de réessayer"
       }
       ADD_RECIPIENT: {
-        MODAL_TITLE: "@:COMMON.TERMINOLOGY.RECIPIENT"
+        MODAL_HEADING: "@:COMMON.TERMINOLOGY.RECIPIENT"
         WHO_TO_QUESTION: "Pour qui est le cadeau ?"
         WHO_TO_OPTION_ME: "Moi"
         WHO_TO_OPTION_NOT_ME: "Quelqu'un d'autre"
@@ -25,7 +25,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         CANCEL_LABEL: "@:COMMON.BTN.CANCEL"
       }
       BASKET_DETAILS: {
-        STEP_TITLE: "Détails du panier"
+        STEP_HEADING: "Détails du panier"
         BASKET_DETAILS_NO: "Aucun élément dans votre panier."
         ITEM_LABEL: "@:COMMON.TERMINOLOGY.ITEM"
         BASKET_ITEM_APPOINTMENT: "@:COMMON.TERMINOLOGY.APPOINTMENT"
@@ -62,7 +62,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       CHECK_ITEMS : {
         REVIEW: "Examen"
-        DETAILS_TITLE: "Détail de votre rendez-vous"
+        DETAILS_HEADING: "Détail de votre rendez-vous"
         FIRST_NAME_LABEL: "@:COMMON.FORM.FIRST_NAME"
         FIRST_NAME_VALIDATION_MSG: "@:COMMON.FORM.FIRST_NAME_REQUIRED"
         LAST_NAME_LABEL: "@:COMMON.FORM.LAST_NAME"
@@ -81,7 +81,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       CHECKOUT: {
         PAYMENT_WORD: "Paiement"
-        PAYMENT_DETAILS_TITLE: "Détails de paiement"
+        PAYMENT_DETAILS_HEADING: "Détails de paiement"
         PAY_BTN: "@:COMMON.BTN.PAY"
       }
       CHECKOUT_EVENT: {
@@ -95,8 +95,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         PAY_BTN: "@:COMMON.BTN.PAY"
       }
       CLIENT: {
-        DETAILS_TITLE: "Vos coordonnées"
-        CLIENT_DETAILS_TITLE: "Détails du client"
+        DETAILS_HEADING: "Vos coordonnées"
+        CLIENT_DETAILS_HEADING: "Détails du client"
         REQUIRED_FIELDS: "@:COMMON.FORM.REQUIRED"
         FIRST_NAME_LABEL: "@:COMMON.FORM.FIRST_NAME"
         FIRST_NAME_VALIDATION_MSG: "@:COMMON.FORM.FIRST_NAME_REQUIRED"
@@ -170,7 +170,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         EVENING_HEADER: "@:COMMON.TERMINOLOGY.EVENING"
       }
       BASKET: {
-        BASKET_TITLE: "Votre Panier"
+        BASKET_HEADING: "Votre Panier"
         BASKET_ITEM_NO: "Aucun élément dans votre panier."
         BASKET_ITEM_ADD_INSTRUCT: "Cliquez sur le bouton 'Ajouter un autre article' si vous souhaitez ajouter un autre produit ou service."
         ITEM_LABEL: "@:COMMON.TERMINOLOGY.ITEM"
@@ -206,7 +206,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BACK_BTN: "@:COMMON.BTN.BACK"
       }
       BASKET_SUMMARY: {
-        STEP_TITLE: "Résumé"
+        STEP_HEADING: "Résumé"
         STEP_DESCRIPTION: "Merci de vérifier ces détails"
         ITEM_DATE_AND_OR_TIME: "@:COMMON.TERMINOLOGY.DATE/Time"
         DURATION_LABEL: "@:COMMON.TERMINOLOGY.DURATION"
@@ -219,7 +219,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BACK_BTN: "@:COMMON.BTN.BACK"
       }
       BASKET_WAITLIST: {
-        WAITLIST_BOOKING_TITLE: "Votre réservation est sur liste d'attente"
+        WAITLIST_BOOKING_HEADING: "Votre réservation est sur liste d'attente"
         BOOKING_REFERENCE: "@:COMMON.TERMINOLOGY.BOOKING_REF"
         SERVICE_LABEL: "@:COMMON.TERMINOLOGY.SERVICE"
         ITEM_DATE_AND_OR_TIME: "@:COMMON.TERMINOLOGY.DATE/Time"
@@ -257,7 +257,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       }
       DASH: {
         DASHBOARD: "Tableau de bord"
-        DASHBOARD_TITLE: "Choisissez un emplacement / @:COMMON.TERMINOLOGY.SERVICE"
+        DASHBOARD_HEADING: "Choisissez un emplacement / @:COMMON.TERMINOLOGY.SERVICE"
       }
       DAY: {
         PREV_MONTH_BTN: "Mois Précédent"
@@ -293,7 +293,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         DURATON_NOT_SELECTED_ALERT: "Merci de choisir une durée"
       }
       EVENT: {
-        EVENT_DETAILS_TITLE: "Détails de l'événement"
+        EVENT_DETAILS_HEADING: "Détails de l'événement"
         ITEM_TYPE: "Type"
         PRICE_LABEL: "@:COMMON.TERMINOLOGY.PRICE"
         ITEM_QTY: "Qty"
@@ -312,7 +312,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BASKET_GIFT_CERTIFICATES_APPLIED: "Gift Certificates applied"
         BASKET_REMOVE_DEAL: "Remove"
         BASKET_GIFT_CERTIFICATE_BALANCE: "Remaining Gift Certificate balance"
-        DETAILS_TITLE: "Vos coordonnées"
+        DETAILS_HEADING: "Vos coordonnées"
         FIRST_NAME_LABEL: "@:COMMON.FORM.FIRST_NAME"
         FIRST_NAME_VALIDATION_MSG: "@:COMMON.FORM.FIRST_NAME_REQUIRED"
         LAST_NAME_LABEL: "@:COMMON.FORM.LAST_NAME"
@@ -383,8 +383,8 @@ angular.module('BB.Services').config ($translateProvider) ->
         SEARCH_BTN: "Rechercher"
         SEARCH_BTN: "Rechercher"
         INPUT_PLACEHOLDER: "Saisissez une ville, un code postal ou un magasin"
-        GEOLOCATE_TITLE: "Utilisez votre emplacement actuel"
-        STORE_RESULT_TITLE: "{results, plural, =0{Aucun réultat trouvé} one{1 résultat trouvé} other{# résultats trouvés}} pour les magasins à proximité de {address}"
+        GEOLOCATE_HEADING: "Utilisez votre emplacement actuel"
+        STORE_RESULT_HEADING: "{results, plural, =0{Aucun réultat trouvé} one{1 résultat trouvé} other{# résultats trouvés}} pour les magasins à proximité de {address}"
         HIDE_STORES: "Masquer les magasins sans disponibilité"
         SERVICE_UNAVAILABLE: "Désolé mais {{name}} n'est pas disponible dans ce magasin"
         SELECT_BTN: "@:COMMON.BTN.SELECT"
@@ -398,9 +398,9 @@ angular.module('BB.Services').config ($translateProvider) ->
         SELECT_BTN: "@:COMMON.BTN.SELECT"
       }
       TIME: {
-        AVAIL_DAY_PREVIOUS: "Jour Précédent"
-        AVAIL_DAY_NEXT: "Jour suivant"
-        AVAIL_NO: "Aucun @:COMMON.TERMINOLOGY.SERVICE disponible"
+        PREV_DAY_BTN: "Jour Précédent"
+        NEXT_DAY_BTN: "Jour suivant"
+        NO_AVAILABILITY: "Aucun @:COMMON.TERMINOLOGY.SERVICE disponible"
         BACK_BTN: "@:COMMON.BTN.BACK"
         TIME_NOT_SELECTED_ALERT: "Veuillez choisir un créneau"
         AVAIL_MORNING: "Matin"
@@ -427,7 +427,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         BACK_BTN: "@:COMMON.BTN.BACK"
       }
       RESCHEDULE_REASONS:{
-        MOVE_TITLE: "Déplacer le rendez-vous"
+        MOVE_HEADING: "Déplacer le rendez-vous"
         MOVE_REASON: "Veuillez choisir une raison :"
         MOVE_BTN: "Déplacer"
         }
@@ -464,7 +464,7 @@ angular.module('BB.Services').config ($translateProvider) ->
       DAY: {
         STEP_HEADING:       "Choisir jour"
         WEEK_BEGINNING_LABEL:   "La semaine commençant le"
-        SELECT_DATE_BTN_TITLE:      "Choisir une date"
+        SELECT_DATE_BTN_HEADING:      "Choisir une date"
         PREVIOUS_5_WEEKS_BTN: "5 semaines précédentes"
         NEXT_5_WEEKS_BTN:     "5 semaines suivantes"
         KEY:              "Clé"

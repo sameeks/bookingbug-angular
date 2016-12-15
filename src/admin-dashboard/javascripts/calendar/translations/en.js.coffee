@@ -34,7 +34,7 @@ angular.module('BBAdminDashboard.calendar.translations')
         'AGENDA'                : 'Agenda',
         'STAFF'                 : 'Staff',
         'RESOURCES'             : 'Resources',
-        'MOVE_MODAL_TITLE'      : 'Move',
+        'MOVE_MODAL_HEADING'      : 'Move',
         'MOVE_MODAL_BODY'       : 'Are you sure you want to move?',
         'ADD_BOOKING'           : 'Add Booking',
       }

@@ -6,7 +6,7 @@ angular.module('BB.Services').config ($translateProvider) ->
   translations = {
     CORE: {
       ALERTS: {
-        ERROR_TITLE: "Error"
+        ERROR_HEADING: "Error"
         ACCOUNT_DISABLED: "Your account appears to be disabled. Please contact the business you're booking with if the problem persists."
         ALREADY_REGISTERED: "You have already registered with this email address. Please login or reset your password."
         APPT_AT_SAME_TIME: "Your appointment is already booked for this time"

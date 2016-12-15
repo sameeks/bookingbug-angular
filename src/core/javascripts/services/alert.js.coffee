@@ -28,7 +28,7 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     return title if title
     switch type
       when "error", "danger"
-        title = $translate.instant('CORE.ERROR_TITLE')
+        title = $translate.instant('CORE.ERROR_HEADING')
       else
         title = null
     title

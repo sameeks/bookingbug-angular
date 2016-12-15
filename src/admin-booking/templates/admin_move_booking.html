@@ -1,4 +1,3 @@
-
 <div bb-purchase="{move_route: 'calendar'}">
 
   <div class="bb-checkout">
@@ -9,76 +8,130 @@
 
         <div ng-show="purchase && bookings.length == 0">
           <div class="confirmation-header">
-            <h2 class="confirmation-heading">Your booking has been cancelled</h2>
+            <h2
+              class="confirmation-heading"
+              translate="PUBLIC_BOOKING.PURCHASE.CANCEL_CONFIRMATION_HEADING">
+            </h2>
           </div>
         </div>
 
         <div ng-show="bookings">
+
           <div ng-show="is_waitlist">
             <div bb-include="book_waitlist"></div>
           </div>
-          <div ng-hide="is_waitlist">
-            <div class="confirmation-header">
-              <h3 class="confirmation-heading">Your <span>{{purchase.bookings[0].service_name}}</span> booking</h3>
 
+          <div ng-hide="is_waitlist">
+
+            <div class="confirmation-header">
+              <h3
+                class="confirmation-heading"
+                translate="PUBLIC_BOOKING.PURCHASE.HEADING"
+                translate-values="{service_name: purchase.bookings[0].service_name}">
+              </h3>
               <div class="row hidden-print text-right" >
-              <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print"></span> Print</button>
-              <div bb-booking-export="purchase" class="bb-booking-export"></div>
+                <button
+                  type="button"
+                  class="btn btn-link"
+                  onclick="window.print()">
+                  <span class="fa fa-print"></span>
+                  <span translate="PUBLIC_BOOKING.PURCHASE.PRINT_BTN"></span>
+                </button>
+                <div
+                  bb-booking-export="purchase"
+                  class="bb-booking-export">
+                </div>
               </div>
             </div>
-
 
             <div>
+
               <ul class="confirmation-summary">
+
                 <li class="row confirmation-summary-item">
-                  <div class="bb-summary-label">Name: </div>
+                  <div class="bb-summary-label">
+                    <span translate="PUBLIC_BOOKING.PURCHASE.CUSTOMER_NAME_LABEL"></span>
+                  </div>
                   <div class="bb-summary-value">{{purchase.client.name}}</div>
                 </li>
+
                 <li class="row confirmation-summary-item">
-                  <div class="bb-summary-label">Email: </div>
+                  <div class="bb-summary-label">
+                    <span translate="PUBLIC_BOOKING.PURCHASE.EMAIL_LABEL"></span>
+                  </div>
                   <div class="bb-summary-value">{{purchase.client.email}}</div>
                 </li>
+
                 <li class="row confirmation-summary-item">
-                  <div class="bb-summary-label">Service: </div>
+                  <div class="bb-summary-label">
+                    <span translate="PUBLIC_BOOKING.PURCHASE.SERVICE_LABEL"></span>
+                  </div>
                   <div class="bb-summary-value">{{purchase.bookings[0].service_name}}</div>
                 </li>
+
                 <li class="row confirmation-summary-item">
-                  <div class="bb-summary-label">When: </div>
-                  <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM":false}}</div>
+                  <div class="bb-summary-label">
+                    <span translate="PUBLIC_BOOKING.PURCHASE.WHEN_LABEL">
+                  </div>
+                  <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "LLLL"}}</div>
                 </li>
+
                 <li class="row confirmation-summary-item" ng-show="purchase.total_price > 0">
-                  <div class="bb-summary-label">Price: </div>
+                  <div class="bb-summary-label">
+                    <span translate="PUBLIC_BOOKING.PURCHASE.PRICE_LABEL"></span>
+                  </div>
                   <div class="bb-summary-value">{{purchase.total_price | currency }}</div>
                 </li>
+
               </ul>
-
-
 
             </div>
 
-
-
             <div class="hidden-print">
+
               <div class="bb-step-navigation">
+
                 <div class="row">
+
                   <div class="col-sm-4">
-                    <button type="button" class="btn btn-danger btn-block" ng-click="delete(bookings[0])">Cancel Booking</button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary btn-block"
+                      ng-click="delete(bookings[0])"
+                      translate="PUBLIC_BOOKING.PURCHASE.CANCEL_BOOKING_BTN">
+                    </button>
                   </div>
+
                   <div class="col-sm-4">
-                    <button type="button" class="btn btn-primary btn-block" ng-click="move(bookings[0], '', {use_resource: true})">Move Booking</button>
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-block"
+                      ng-click="move(bookings[0], '', {use_resource: true})"
+                      translate="PUBLIC_BOOKING.PURCHASE.MOVE_BOOKING_BTN">
+                    </button>
+                  </div>
+
+                  <div
+                    ng-show="waitlist_bookings"
+                    class="col-sm-4">
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-block"
+                      ng-click="is_waitlist = true"
+                      translate="PUBLIC_BOOKING.PURCHASE.BOOK_WAITLIST_ITEMS_BTN">
+                    </button>
                   </div>
                 </div>
-                <div ng-show="waitlist_bookings" class="col-sm-4">
-                  <button type="button" class="btn btn-primary btn-block" ng-click="is_waitlist = true">Book Waitlist Items</button>
-                </div>
+
               </div>
+
             </div>
 
           </div>
 
-        </div>
-
        </div>
+
+      </div>
 
     </div>
 

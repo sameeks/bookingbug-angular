@@ -6,16 +6,12 @@
   role="form"
   novalidate>
 
-  <h2
-    class="booking-form-header"
-    translate="PUBLIC_BOOKING.ITEM_DETAILS.SECTION_TITLE">
-  </h2>
-
   <div
     class="form-group"
     ng-repeat="question in item_details.questions"
     ng-if="question.currentlyShown"
-    bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
+    bb-question-line
+    ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
     <label
       bb-question-label="question" 
       for="{{question.id}}"

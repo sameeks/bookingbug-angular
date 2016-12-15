@@ -1,13 +1,24 @@
-<div class="bb-quick-pick" bb-wait-for="emptybasket()" bb-wait-var="all_done" ng-if="all_done" bb-form-data-store>
+<div
+  class="bb-quick-pick"
+  bb-wait-for="emptybasket()"
+  bb-wait-var="all_done"
+  ng-if="all_done"
+  bb-form-data-store>
+
   <uib-tabset>
+
     <uib-tab>
       <uib-tab-heading>
-        <i class="fa fa-calendar-plus-o"></i> <span translate="ADMIN_BOOKING.QUICK_PICK.MAKE_BOOKING"></span>
+        <i class="fa fa-calendar-plus-o"></i>
+        <span translate="ADMIN_BOOKING.QUICK_PICK.MAKE_BOOKING_TAB_HEADING"></span>
       </uib-tab-heading>
+
       <br/>
 
       <!-- Make booking tab START -->
-      <div ng-form name="appointment-booking-form">
+      <div
+        ng-form
+        name="appointment-booking-form">
 
         <p translate="ADMIN_BOOKING.QUICK_PICK.STEP_SUMMARY"></p>
 
@@ -26,7 +37,14 @@
                 </div>
 
                 <div class="col-sm-2 col-xs-12">
-                  <button type="button" ng-click="selectItem(item, 'calendar')" class="btn btn-primary btn-block" translate="ADMIN_BOOKING.QUICK_PICK.SELECT_BTN"></button>
+
+                  <button
+                    type="button"
+                    ng-click="selectItem(item, 'calendar')"
+                    class="btn btn-primary btn-block"
+                    translate="ADMIN_BOOKING.QUICK_PICK.SELECT_BTN">
+                  </button>
+
                 </div>
               </div>
             </li>
@@ -38,64 +56,136 @@
       <!-- Make booking tab END -->
 
     </uib-tab>
+
     <uib-tab ng-show="!bb.hide_block">
+
       <uib-tab-heading>
-        <i class="fa fa-calendar-minus-o"></i> <span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME"></span>
+        <i class="fa fa-calendar-minus-o"></i>
+        <span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME_TAB_HEADING"></span>
       </uib-tab-heading>
+
       <br/>
       <!-- Block time tab START -->
-      <div ng-form name="block_time_form" class="bb-block-time" bb-block-time>
+      <div
+        ng-form
+        name="block_time_form"
+        class="bb-block-time"
+        bb-block-time>
 
-        <div class="form-group" ng-class="{'has-error': resourceError}">
-          <label><span translate="ADMIN_BOOKING.QUICK_PICK.FOR"></span></label>
-          <select id="resource" ng-model="picked_resource" ng-change="changeResource()" ng-options="item.identifier as item.name group by item.group for item in resources" class="form-control">
-            <option value="" translate="ADMIN_BOOKING.QUICK_PICK.SELECT"></option>
+        <div
+          class="form-group"
+          ng-class="{'has-error': resourceError}">
+          <label translate="ADMIN_BOOKING.QUICK_PICK.FOR_LABEL"></label>
+          <select
+            id="resource"
+            ng-model="picked_resource"
+            ng-change="changeResource()"
+            ng-options="item.identifier as item.name group by item.group for item in resources"
+            class="form-control">
+            <option
+              value=""
+              translate="ADMIN_BOOKING.QUICK_PICK.RESOURCE_DEFAULT_OPTION">
+            </option>
           </select>
-          <p class="text-danger" ng-init="resourceError=false" ng-show="resourceError">
-            <span translate="ADMIN_BOOKING.QUICK_PICK.RESOURCE_PERSON_VALIDATION_MSG"></span>
+          <p
+            class="text-danger"
+            ng-init="resourceError=false"
+            ng-show="resourceError"
+            translate="ADMIN_BOOKING.QUICK_PICK.RESOURCE_PERSON_VALIDATION_MSG">
           </p>
         </div>
-        <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
-          <label><span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_WHOLE_DAY"></span> &nbsp;&nbsp;<toggle-switch ng-model="blockWholeDay" ng-change="changeBlockDay(blockWholeDay)" class="switch-primary switch-small" on-label="{{ 'ADMIN_BOOKING.QUICK_PICK.YES' | translate }}"  off-label="{{ 'ADMIN_BOOKING.QUICK_PICK.NO' | translate }}"></toggle-switch></label>
+
+        <div
+          class="form-group"
+          ng-init="blockWholeDay = false"
+          ng-hide="hideBlockAllDay">
+          <label>
+            <span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_WHOLE_DAY"></span>
+            &nbsp;&nbsp;
+            <toggle-switch
+              ng-model="blockWholeDay"
+              ng-change="changeBlockDay(blockWholeDay)"
+              class="switch-primary switch-small"
+              on-label="{{ 'ADMIN_BOOKING.QUICK_PICK.YES_OPTION' | translate }}"
+              off-label="{{ 'ADMIN_BOOKING.QUICK_PICK.NO_OPTION' | translate }}">
+            </toggle-switch>
+          </label>
         </div>
-        <div class="row" ng-hide="blockWholeDay">
+
+        <div
+          class="row"
+          ng-hide="blockWholeDay">
           <div class="col-md-6">
             <div class="form-group">
-              <label><span translate="ADMIN_BOOKING.QUICK_PICK.FROM"></span></label>
-              <div bb-date-time-picker date="bb.from_datetime" max-date="bb.to_datetime" min-date="bb.min_date"></div>
+              <label translate="ADMIN_BOOKING.QUICK_PICK.FROM_LABEL"></label>
+              <div
+                bb-date-time-picker
+                date="bb.from_datetime"
+                max-date="bb.to_datetime"
+                min-date="bb.min_date">
+              </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label><span translate="ADMIN_BOOKING.QUICK_PICK.TO"></span></label>
-              <div bb-date-time-picker date="bb.to_datetime" min-date="bb.from_datetime" max-date="bb.max_date"></div>
+              <label translate="ADMIN_BOOKING.QUICK_PICK.TO_LABEL"></label>
+              <div
+                bb-date-time-picker
+                date="bb.to_datetime"
+                min-date="bb.from_datetime"
+                max-date="bb.max_date">
+              </div>
             </div>
           </div>
         </div>
 
 
-        <div ng-show="block_questions && block_questions.hasQuestions" ng-form name="booking_questions_form" class="bb-form" role="form" novalidate>
+        <div
+          ng-show="block_questions && block_questions.hasQuestions"
+          ng-form
+          name="booking_questions_form"
+          class="bb-form"
+          role="form"
+          novalidate>
 
-          <div class="form-group row" ng-repeat="question in block_questions.questions" ng-if="question.currentlyShown" bb-question-line ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
-            <label for="{{question.id}}" class="control-label col-sm-4" ng-hide="question.detail_type == 'check'">{{question.name}}<span ng-show="question.required">*</span></label>
-            <div ng-show="question.detail_type == 'check'" class="col-sm-4 hidden-xs">&nbsp;</div>
+          <div
+            class="form-group row"
+            ng-repeat="question in block_questions.questions"
+            ng-if="question.currentlyShown"
+            bb-question-line
+            ng-class="{'has-error': booking_questions_form['q' + question.id].$invalid && (booking_questions_form['q' + question.id].$dirty || booking_form.submitted)}">
+            <label
+              for="{{question.id}}"
+              class="control-label col-sm-4"
+              bb-question-label="question">
+              {{question.name}}
+            </label>
             <div class="col-sm-5">
-              <input bb-question="question"/><span ng-show="question.detail_type == 'check' && question.required">*</span>
+              <input bb-question="question"/>
             </div>
             <div class="col-sm-offset-4 messages">
-              <div class="error-message" ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )">
-                <span translate="ADMIN_BOOKING.QUICK_PICKFIELD_VALIDATION_MSG"></span>
+              <div
+                class="error-message"
+                ng-show="booking_questions_form['q' + question.id].$invalid && ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted)"
+                translate="ADMIN_BOOKING.QUICK_PICK.FIELD_REQUIRED">
               </div>
             </div>
           </div>
 
         </div><!--booking_questions_form-->
 
-        <button type="button" class="btn btn-primary" ng-click="blockTime()" ng-disabled="loading"><span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME"></span></button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          ng-click="blockTime()"
+          ng-disabled="loading"
+          translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME_BTN">
+        </button>
 
       </div>
       <!-- Block time tab END -->
 
     </uib-tab>
   </uib-tabset>
+
 </div>

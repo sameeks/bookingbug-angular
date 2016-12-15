@@ -222,7 +222,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
     # if it's got a person and resource - then it
     Dialog.confirm
-      title: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_TITLE')
+      title: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_HEADING')
       model: event
       body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY')
       success: (model) =>

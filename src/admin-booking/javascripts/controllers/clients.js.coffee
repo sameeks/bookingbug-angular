@@ -116,7 +116,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
 
   $scope.clearSearch = () ->
     $scope.clients.initialise()
-    $scope.typehead_result = null
+    $scope.typeahead_result = null
     $scope.search_complete = false
 
 
