@@ -1,6 +1,6 @@
 'use strict'
 
-###
+###*
 * @ngdoc service
 * @name BB.Services.service:ViewportSize
 *
@@ -11,82 +11,88 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
 
   service = @
 
-  ###
+  ###*
   # @description variable used to store current screen size
   ###
-  viewport_size = null
+  viewportSize = null
 
-  ###
+  ###*
   # @description id prefix for span html elements used to determin screen size via bootstrap classes
   ###
-  viewport_element_id_prefix = 'viewport_size_'
+  viewportElementIdPrefix = 'viewport_size_'
 
-  ###
+  ###*
   # @description used to prevent multiple viewport elements being appended to dom
   ###
-  is_initialised = false
+  isInitialised = false
 
-
+  ###*
+  # @description boolean check for screen sizes
   ###
-  # @description supported bootstrap screen sizes
-  # also used to created dynamic methods in the format
-  # service.isXS() / service.isSM() / etc.
-  # @param {String} size
+  state = 
+    isXS: false
+    isSM: false
+    isMD: false
+    isLG: false
+
+
+  ###*
+  # @description returns supported bootstrap screen sizes
   # @returns {String}
   ###
   getSupportedSizes = ->
     return ['xs', 'sm', 'md', 'lg']
 
 
-  ###
+  ###*
   # @description logic for getting element ids
   # @param {String} size
   # @returns {String}
   ###
   getElementId = (size) ->
-    return viewport_element_id_prefix + size
+    return viewportElementIdPrefix + size
 
 
-  ###
+  ###*
   # @description constructs and returns the elements used to determine screen size
   # @returns {String}
   ###
   getViewportElementsToAppend = ->
     # opening parent tag
-    viewport_element_strings = '<div id="viewport_size">'
+    viewportElementStrings = '<div id="viewport_size">'
     for size in getSupportedSizes()
-      element_id = getElementId(size)
-      viewport_element_strings += ' <span id="' + element_id + '"  class="visible-' + size + '">&nbsp;</span>'
+      elementId = getElementId(size)
+      viewportElementStrings += ' <span id="' + elementId + '"  class="visible-' + size + '">&nbsp;</span>'
 
     # closing parent tag
-    viewport_element_strings += '</div>'
-    return viewport_element_strings
+    viewportElementStrings += '</div>'
+    return viewportElementStrings
 
 
-  ###
+  ###*
   # @description appends elements to document body for bootstrap to show or hide
   ###
   appendViewportElementsToDocumentBody = ->
-    viewport_elements = getViewportElementsToAppend()
+    viewportElements = getViewportElementsToAppend()
     body = $document.find('body')
-    body.append(viewport_elements)
+    body.append(viewportElements)
     return
 
 
-  ###
+  ###*
   # @description grabs elements from document after being appended to determin which ones are visible
   # @returns {Array}
   ###
   getViewportElementsFromDocumentBody = ->
-    viewport_elements = []
+    viewportElements = []
     for size in getSupportedSizes()
-      viewport_element_id = getElementId(size)
-      viewport_element = document.querySelector('#' + viewport_element_id)
-      viewport_elements.push(viewport_element)
-    return viewport_elements
+      viewportElementId = getElementId(size)
+      viewportElement = document.querySelector('#' + viewportElementId)
+      viewportElements.push(viewportElement)
+    return viewportElements
 
 
-  ###
+  ###*
   # @description check if element is visible based on styling
   # @param {String} element
   # @returns {boolean}
@@ -95,35 +101,33 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
     return element and element.style.display != 'none' and element.offsetWidth and element.offsetHeight
 
   
-  ###
+  ###*
   # @description Gets the bootstrap size from the class name 
   # @param {String} element
   # @returns {String}
   ###
   getSizeFromElement = (element) ->
-    class_name = element.className.match('(visible-[a-zA-Z]*)\\b')[0]
-    size = class_name.replace('visible-', '').trim()
+    className = element.className.match('(visible-[a-zA-Z]*)\\b')[0]
+    size = className.replace('visible-', '').trim()
     return size
 
 
-  ###
-  # @description determins the current size of the screen and generates dynamic functions
+  ###*
+  # @description determins the current size of the screen
   ###
   findVisibleElement = ->
-    viewport_elements = getViewportElementsFromDocumentBody()
-    for viewport_element in viewport_elements
-      element_size = getSizeFromElement(viewport_element)
-      if isElementVisible(viewport_element)
-        viewport_size = element_size
-        # dynamically created function to return true for current screensize 
-        service['is' + element_size.toUpperCase()] = -> return true
+    viewportElements = getViewportElementsFromDocumentBody()
+    for viewportElement in viewportElements
+      elementSize = getSizeFromElement(viewportElement)
+      if isElementVisible(viewportElement)
+        viewportSize = elementSize
+        state['is' + elementSize.toUpperCase()] = true
       else
-        # dynamically created function to return false for screensize 
-        service['is' + element_size.toUpperCase()] = -> return false
+        state['is' + elementSize.toUpperCase()] =  false
     return
 
 
-  ###
+  ###*
   # @description get screen size when window resize function has been called
   ###
   listenForResize = ->
@@ -132,34 +136,57 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
       return
     return
 
-
   ################## 
   # PUBLIC METHODS #
   ##################
 
-  # Dynamically generated methods (see findVisibleElement)
-  # service.isXS
-  # service.isSM
-  # service.isMD
-  # service.isLG
-
-  ###
+  ###*
   # @description initialise before utilising viewport service
   ###
-  service.init = ->
-    if !is_initialised
+  init = ->
+    if !isInitialised
       appendViewportElementsToDocumentBody()
       findVisibleElement()
       listenForResize()
-      is_initialised = true
+      isInitialised = true
     return
 
-  ###
+  ###*
   # @description using function to grab screensize so it cannot be altered outside service
   # @returns {String}
   ###
-  service.getViewportSize = ->
-    return viewport_size
+  getViewportSize = ->
+    return viewportSize
 
+  ###*
+  # @description boolean check for XS screen size
+  ###
+  isXS = ->
+    return state.isXS
 
-  return
+  ###*
+  # @description boolean check for SM screen size
+  ###
+  isSM = ->
+    return state.isSM
+
+  ###*
+  # @description boolean check for MD screen size
+  ###
+  isMD = ->
+    return state.isMD
+
+  ###*
+  # @description boolean check for LG screen size
+  ###
+  isLG = ->
+    return state.isLG
+
+  return {
+    init: init
+    getViewportSize: getViewportSize
+    isXS: isXS
+    isSM: isSM
+    isMD: isMD
+    isLG: isLG
+  }

@@ -99,12 +99,12 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     $scope.updateBasket = updateBasket
 
     vm.$onInit = $onInit
+    vm.$postLink = $postLink
 
     return
 
   $onInit = () ->
 
-    ViewportSize.init() # Initialise viewport size tracking
     initializeBBWidget()
 
     $rootScope.$on 'show:loader', showLoaderHandler
@@ -113,6 +113,10 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
 
     vm.bb = $scope.bb
 
+    return
+
+  $postLink = ->
+    ViewportSize.init() # Initialise viewport size tracking
     return
 
   initializeBBWidget = () ->
