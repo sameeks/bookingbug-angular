@@ -2,10 +2,12 @@
 
   <div bb-form-data-store></div>
 
-<!--   <div bb-breadcrumbs class="breadcrumbs_holder" ng-init="setRoute([
+  <div ng-init="setRoute([
       {page:'purchase', title: 'Your booking'}
       ])">
-  </div> -->
+  </div>
+
+  <div bb-breadcrumb></div>
 
   <div class="alerts" bb-scroll-to="alert:raised">
     <div uib-alert ng-repeat="alert in $root.alerts" ng-class="'alert-' + alert.type">

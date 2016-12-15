@@ -2,8 +2,7 @@
 
   <div bb-form-data-store></div>
 
-  <!-- BREADCRUMB ROUTE
-  <div bb-breadcrumbs class="breadcrumbs_holder" ng-init="setRoute([
+  <div ng-init="setRoute([
     {page:'map', title: 'Select a store'},
     {page:'service_list', title: 'Select a service'},
     {page:'person_list', title: 'Select a person'},
@@ -11,6 +10,9 @@
     {page:'checkout', title: 'Checkout'},
     {page:'confirmation', title: 'Confirmation'},
     ])">
+  </div>
+
+  <div bb-breadcrumb></div>
 
     <ol class="breadcrumb">
       <li ng-repeat="step in bb.allSteps" ng-class="{'active': step.active, 'passed': step.passed, 'disabled': isDisabledStep(step)}">
@@ -21,7 +23,7 @@
       </li>
     </ol>
   </div>
-  -->
+ 
 
   <!-- PROGRESSBAR
   <div uib-progressbar value="bb.percentage_complete" type="primary"></div>
