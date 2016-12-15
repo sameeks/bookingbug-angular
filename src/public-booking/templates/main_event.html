@@ -2,7 +2,7 @@
 
   <div bb-form-data-store></div>
 
-  <div bb-breadcrumbs ng-init="setRoute([
+  <div ng-init="setRoute([
     {page:'map', title: 'Select a store'},
     {page:'event_list', title: 'Select a date'},
     {page:'event', title: 'Select tickets'},
@@ -10,6 +10,8 @@
     {page:'confirmation', title: 'Finish'}
     ])">
   </div>
+
+  <div bb-breadcrumb></div>
 
   <div class="alerts" bb-scroll-to="alert:raised" bb-always-scroll>
     <div uib-alert ng-repeat="alert in $root.alerts" ng-class="'alert-' + alert.type">
