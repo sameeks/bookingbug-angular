@@ -3,8 +3,8 @@
 
     <h1>Additional Information</h1>
 
-    <div bb-include="_basket_item_summary">
-    </div>
+    <div ng-show="bb.stacked_items.length == 1" bb-include="_basket_item_summary"></div>
+    <div ng-show="bb.stacked_items.length > 1" bb-include="_multi_service_summary"></div>
 
     <div class="bb-subcontent">
 

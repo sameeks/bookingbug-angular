@@ -1,0 +1,54 @@
+<div ng-repeat="item in bb.stacked_items">
+  <div class="bb-item-summary">
+    <div class="bb-item-summary-header">
+      <div class="bb-item-summary-header-text hidden-xs">
+        <h3><span>{{item.service.name}}</span></h3>
+      </div>
+    </div>
+    <ul class="bb-item-summary-list">
+      <li class="visible-xs bb-confirmation-summary-item">
+          <div class="bb-summary-label">Service
+          </div>
+          <div class="bb-summary-value">{{item.service.name}}
+          </div>
+      </li>
+      <li class="bb-confirmation-summary-item" ng-show="item.duration">
+        <div class="bb-summary-label">Duration
+        </div>
+        <div class="bb-summary-value"><span>{{item.duration | time_period}}</span>
+        </div>
+      </li>
+      <li class="bb-confirmation-summary-item" ng-show="item.resource && item.resource.name">
+        <div class="bb-summary-label">Resource
+        </div>
+        <div class="bb-summary-value"><span>{{item.resource.name}}</span>
+        </div>
+      </li>
+      <li class="bb-confirmation-summary-item" ng-show="item.person && item.person.name">
+        <div class="bb-summary-label">Person
+        </div>
+        <div class="bb-summary-value"><span>{{item.person.name}}</span>
+        </div>
+      </li>
+      <li class="bb-confirmation-summary-item" ng-show="item.price">
+        <div class="bb-summary-label">Price
+        </div>
+        <div class="bb-summary-value"><span>{{item.price | currency}}</span>
+        </div>
+      </li>
+      <li class="bb-confirmation-summary-item" ng-show="item.date">
+        <div class="bb-summary-label">Date
+        </div>
+        <div class="bb-summary-value"><span>{{item.startDatetime() | datetime: 'dddd D MMMM'}}</span>
+        </div>
+      </li>
+      <li class="bb-confirmation-summary-item" ng-show="item.time">
+        <div class="bb-summary-label">Time
+        </div>
+        <div class="bb-summary-value"><span>{{item.startDatetime() | datetime: 'LT'}}</span>
+        </div>
+      </li>
+    </ul>
+    <div class="clearfix"></div>
+  </div>
+</div>
