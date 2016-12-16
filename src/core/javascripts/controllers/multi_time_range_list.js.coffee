@@ -31,11 +31,36 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
+angular.module('BB.Directives').directive 'bbTimeRangeStacked', ($q, $templateCache, $compile) ->
   restrict: 'AE'
   replace: true
   scope : true
+  transclude: true
   controller : 'TimeRangeListStackedController',
+  link: (scope, element, attrs, controller, transclude) ->
+    # focus on continue button after slot selected - for screen readers 
+    scope.$on 'time:selected', ->
+      btn = angular.element('#btn-continue')
+      btn[0].disabled = false
+      btn[0].focus()
+
+    # date helpers
+    scope.today = moment().toDate()
+    scope.tomorrow = moment().add(1, 'days').toDate()
+
+    scope.options = scope.$eval(attrs.bbTimeRangeRangeStacked) or {}
+
+    transclude scope, (clone) =>
+
+      # if there's content compile that or grab the week_calendar template
+      has_content = clone.length > 1 || (clone.length is 1 and (!clone[0].wholeText or /\S/.test(clone[0].wholeText)))
+
+      if has_content
+        element.html(clone).show()
+      else
+        $q.when($templateCache.get('_week_calendar.html')).then (template) ->
+          element.html(template).show()
+          $compile(element.contents())(scope)
 
 
 angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
@@ -123,7 +148,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
 
     $scope.selected_day = selected_date
     # convert selected day to JS date object for date picker, it needs
-    # to be saved as a variable as functions cannot be passed into the
+    # to be saved as a variable as functions cannot be passed into the 
     # AngluarUI date picker
     $scope.selected_date = $scope.selected_day.toDate()
 
@@ -304,6 +329,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
     grouped_items = _.groupBy $scope.bb.stacked_items, (item) -> item.service.id
     grouped_items = _.toArray grouped_items
 
+
     for items in grouped_items
       pslots.push(TimeService.query({
         company: $scope.bb.company
@@ -340,7 +366,6 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
         $rootScope.$broadcast "TimeRangeListStacked:loadFinished"
       else
         # raise error
-
       loader.setLoaded()
 
     , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')

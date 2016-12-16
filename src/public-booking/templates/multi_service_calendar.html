@@ -1,0 +1,25 @@
+<div bb-page>
+
+  <div class="page-summary">
+    <div bb-include="_basket_item_summary">
+    </div>
+  </div>
+
+  <div bb-time-range-stacked="{selected_day: today}" class="bb-calendar" ng-show="days"></div>
+
+  <div class="row step-navigation">
+    <div class="col-sm-offset-8 col-sm-2 col-sm-push-2 forward">
+      <div>
+        <!-- <button type="button" class="btn btn-default" ng-click="checkReady() && routeReady()" bb-debounce>  -->
+        <button type="button" class="btn btn-default" ng-click="checkReady() && routeReady()" bb-debounce>
+          <span ng-if="!bb.moving_booking">Continue</span>
+          <span ng-if="bb.moving_booking">Move booking</span>
+        </button>
+      </div>
+    </div>
+    <div class="col-sm-2 col-sm-pull-10 back">
+      <button type="button" class="btn btn-link" bb-debounce ng-click="loadPreviousStep()" ng-if="!bb.moving_booking"><span>Back</span></button>
+    </div>
+  </div> 
+
+</div>
