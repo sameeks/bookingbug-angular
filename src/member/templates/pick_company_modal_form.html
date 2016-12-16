@@ -1,12 +1,26 @@
 <div class="modal-header">
   <h3 class="modal-title">{{title}}</h3>
 </div>
-<form name="pick_company_form" ng-submit="submit(pick_company_form)">
-  <div class="modal-body" sf-schema="schema" sf-form="form"
+<form
+  name="pick_company_form"
+  ng-submit="submit(pick_company_form)">
+  <div
+    class="modal-body"
+    sf-schema="schema"
+    sf-form="form"
     sf-model="pick_company_form">
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary" translate="MEMBER.MODAL.PICK_COMPANY.OK_BTN"></button>
-    <button class="btn btn-default" ng-click="cancel($event)" translate="MEMBER.MODAL.PICK_COMPANY.CANCEL_BTN"></button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      translate="MEMBER.MODAL.PICK_COMPANY.OK_BTN">
+    </button>
+    <button
+      type="button"
+      class="btn btn-default"
+      ng-click="cancel($event)"
+      translate="MEMBER.MODAL.PICK_COMPANY.CANCEL_BTN">
+    </button>
   </div>
 </form>

@@ -1,14 +1,21 @@
 <div>
-  <h4 translate="MEMBER.WALLET_PURCHASE_BANDS.WALLET_PURCHASE_BAND"></h4>
+  <h4 translate="MEMBER.WALLET_PURCHASE_BANDS.HEADING"></h4>
   <table class="table table-bordered">
     <thead>
     </thead>
     <tbody>
       <tr ng-repeat="band in bands">
-        <td class="text-left" translate="MEMBER.WALLET_PURCHASE_BANDS.$X_FOR_$Y" translate-values="{X: band.wallet_amount, Y: band.actual_amount}">
+        <td
+          class="text-left"
+          translate="MEMBER.WALLET_PURCHASE_BANDS.$X_FOR_$Y"
+          translate-values="{X: band.wallet_amount, Y: band.actual_amount}">
         </td>
         <td class="text-center">
-          <button ng-click="purchaseBand(band)" translate="MEMBER.WALLET_PURCHASE_BANDS.PROGRESS_BUY"></button>
+          <button
+            type="button"
+            ng-click="purchaseBand(band)"
+            translate="MEMBER.WALLET_PURCHASE_BANDS.BUY_BTN">
+          </button>
         </td>
       </tr>
     </tbody>

@@ -1,17 +1,33 @@
 <div class="modal-header">
-  <h3 class="modal-title" translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.TITLE"></h3>
+  <h3
+    class="modal-title"
+    translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.TITLE">
+  </h3>
 </div>
 <form ng-submit="ok()">
-  <div class="modal-body" style="min-height: 200px">
+  <div
+    class="modal-body"
+    style="min-height: 200px">
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="booking.notify">
-        <span translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.EMAIL_CUSTOMER_LABEL"></span>
+        <input
+          type="checkbox"
+          ng-model="booking.notify"
+        />
+        <span translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.EMAIL_CUSTOMER_CHECKBOX_LABEL"></span>
       </label>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary" translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.CANCEL_BOOKING_BTN"></button>
-    <button class="btn btn-default" ng-click="close($event)" translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.CANCEL_BTN"></button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.CANCEL_BOOKING_BTN">
+    </button>
+    <button
+      type="button"
+      class="btn btn-default"
+      ng-click="close($event)"
+      translate="MEMBER.MODAL.BOOKINGS_TABLE_CANCEL_BOOKING.CANCEL_BTN"></button>
   </div>
 </form>

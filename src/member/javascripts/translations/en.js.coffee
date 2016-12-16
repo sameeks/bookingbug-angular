@@ -11,25 +11,25 @@ angular.module('BBMember').config ($translateProvider) ->
           SAVE_BTN   : '@:COMMON.BTN.CANCEL'
         }
         LOGIN: {
-          OK_BTN: '@:COMMON.BTN.OK'
-          CANCEL_BTN: '@:COMMON.BTN.CANCEL'
+          OK_BTN     : '@:COMMON.BTN.OK'
+          CANCEL_BTN : '@:COMMON.BTN.CANCEL'
         }
         DELETE_BOOKING: {
-          TITLE: '@:COMMON.BTN.CANCEL_BOOKING'
-          DESCRIPTION: '@:COMMON.TERMINOLOGY.BOOKING'
-          WHEN: 'When'
-          CANCEL_BOOKING_BTN: '@:COMMON.BTN.CANCEL_BOOKING'
-          CANCEL_BTN: '@:COMMON.BTN.DO_NOT_CANCEL_BOOKING'
+          TITLE              : '@:COMMON.BTN.CANCEL_BOOKING'
+          DESCRIPTION_LABEL  : '@:COMMON.TERMINOLOGY.BOOKING'
+          WHEN_LABEL         : '@:COMMON.TERMINOLOGY.WHEN'
+          CANCEL_BOOKING_BTN : '@:COMMON.BTN.CANCEL_BOOKING'
+          CANCEL_BTN         : '@:COMMON.BTN.DO_NOT_CANCEL_BOOKING'
         }
         BOOKINGS_TABLE_CANCEL_BOOKING: {
-          TITLE:                '@:COMMON.BTN.CANCEL_BOOKING'
-          EMAIL_CUSTOMER_LABEL: 'Email customer?'
-          CANCEL_BOOKING_BTN:   '@:COMMON.BTN.CANCEL_BOOKING'
-          CANCEL_BTN:           '@:COMMON.BTN.DO_NOT_CANCEL_BOOKING'
+          TITLE                         : '@:COMMON.BTN.CANCEL_BOOKING'
+          EMAIL_CUSTOMER_CHECKBOX_LABEL : 'Email customer?'
+          CANCEL_BOOKING_BTN            : '@:COMMON.BTN.CANCEL_BOOKING'
+          CANCEL_BTN                    : '@:COMMON.BTN.DO_NOT_CANCEL_BOOKING'
         }
         PICK_COMPANY: {
-          OK_BTN: '@:COMMON.BTN.OK'
-          CANCEL_BTN: '@:COMMON.BTN.CANCEL'
+          OK_BTN     : '@:COMMON.BTN.OK'
+          CANCEL_BTN : '@:COMMON.BTN.CANCEL'
         }
         BOOKING_PAYMENT: {
           DESCRIPTION : 'Pay for your booking to confirm your place.'
@@ -38,62 +38,87 @@ angular.module('BBMember').config ($translateProvider) ->
         }
       }
       LOGIN: {
-        EMAIL_LABEL:          '@:COMMON.FORM.EMAIL'
-        EMAIL_PLACEHOLDER:    '@:COMMON.FORM.EMAIL'
-        PASSWORD_LABEL:       '@:COMMON.FORM.PASSWORD'
-        PASSWORD_PLACEHOLDER: '@:COMMON.FORM.PASSWORD'
-        LOGIN_BTN:            '@:COMMON.BTN.LOGIN'
+        EMAIL_LABEL          : '@:COMMON.FORM.EMAIL'
+        EMAIL_PLACEHOLDER    : '@:COMMON.FORM.EMAIL'
+        PASSWORD_LABEL       : '@:COMMON.FORM.PASSWORD'
+        PASSWORD_PLACEHOLDER : '@:COMMON.FORM.PASSWORD'
+        LOGIN_BTN            : '@:COMMON.BTN.LOGIN'
+      }
+      MEMBER_BOOKINGS_TABLE: {
+        DETAILS_BTN : '@:COMMON.BTN.DETAILS'
+        CANCEL_BTN  : '@:COMMON.BTN.CANCEL'
       }
       BOOKING: {
         TOGGLE_DROPDOWN_BTN : 'Toggle Dropdown'
       }
       BOOKING_TABS: {
-        UPCOMING_BOOKINGS: 'Upcoming bookings'
-        PAST_BOOKINGS: 'Past bookings'
-        PURCHASES: 'Purchases'
+        UPCOMING_BOOKINGS_TAB_HEADING : 'Upcoming bookings'
+        PAST_BOOKINGS_TAB_HEADING     : 'Past bookings'
+        PURCHASES_TAB_HEADING         : 'Purchases'
+      }
+      MEMBER_PAST_BOOKINGS: {
+        NO_PAST_BOOKINGS : 'You don\'t currently have any past bookings.'
       }
       PAST_BOOKINGS: {
-        NO_PAST_BOOKINGS: 'You don\'t currently have any past bookings.'
+        HEADING :'Past Bookings'
       }
       PREPAID_BOOKINGS: {
-        NO_PREPAID_BOOKINGS: 'You don\'t currently have any pre-paid bookings.'
-        REMAINING_BOOKINGS: '{remaining} of {total} remaining'
-        PREPAID_BOOKING_DATES: 'Book By {{booking.book_by | datetime}} | Use from {{booking.use_from | datetime}} | Use by {{booking.use_by | datetime}}'
+        NO_PREPAID_BOOKINGS   : 'You don\'t currently have any pre-paid bookings.'
+        REMAINING_BOOKINGS    : '{{remaining}} of {{total}} remaining'
+        PREPAID_BOOKING_DATES : 'Book By {{booking.book_by | datetime}} | Use from {{booking.use_from | datetime}} | Use by {{booking.use_by | datetime}}'
       }
       PURCHASES: {
-        YOUR_PURCHASES: 'Your Purchases'
-        NO_CURRENT_PURCHASES: 'You don\'t currently have any purchases'
+        YOUR_PURCHASES            : 'Your Purchases'
+        NO_CURRENT_PURCHASES      : 'You don\'t currently have any purchases'
+        PURCHASE_DATE_COL_HEADING : 'Purchase Date'
+        ITEMS_COL_HEADING         : 'Items'
+        TOTAL_PRICE_COL_HEADING   : 'Total Price'
+        LESS_DETAIL_BTN           : '@:COMMON.BTN.LESS'
+        MORE_DETAIL_BTN           : '@:COMMON.BTN.MORE'
+      }
+      MEMBER_UPCOMING_BOOKINGS: {
+        NO_UPCOMING_BOOKINGS : 'You don\'t currently have any upcoming bookings.'
+        ON_WAITLIST_HEADING  : 'On Waitlist'
+        CONFIRMED_HEADING    : 'Confirmed'
       }
       UPCOMING_BOOKINGS: {
-        NO_UPCOMING_BOOKINGS: 'You don\'t currently have any upcoming bookings.'
+        HEADING : 'Upcoming Bookings'
       }
       PICK_COMPANY: {
-        PICK_COMPANY: 'Pick Company'
+        DESCRIPTION: 'Pick Company'
+      }
+      WAITLIST_PAYMENT: {
+        DESCRIPTION : 'Pay for your booking to confirm your place.'
+        PAY_BTN     : '@:COMMON.BTN.PAY'
       }
       WALLET: {
-        BALANCE: 'Balance'
-        WALLET_NO_CREDIT: 'You dont have any credit in your wallet.'
-        STATUS: 'Status'
-        WALLET_NOT_ACTIVE: 'Your wallet is not active.'
-        ACTIVATE: 'Activate'
-        ACTIVE: 'Active'
-        TOP_UP: '@:COMMON.BTN.TOP_UP'
-        AMOUNT: 'Amount'
-        MAKE_PAYMENT: 'Make Payment'
-        TOP_UP_WALLET: 'Top up wallet by {{amount | currency}}'
+        BALANCE_LABEL          : 'Balance:'
+        WALLET_NO_CREDIT       : 'You don\'t have any credit in your wallet.'
+        STATUS_LABEL           : 'Status:'
+        WALLET_NOT_ACTIVE      : 'Your wallet is not active.'
+        ACTIVATE_BTN           : 'Activate'
+        ACTIVE                 : 'Active'
+        TOP_UP_BTN             : '@:COMMON.BTN.TOP_UP'
+        AMOUNT_LABEL           : 'Amount'
+        PAYMENT_IFRAME_HEADING : 'Make Payment'
+        TOP_UP_WALLET_BY       : 'Top up wallet by {{amount | currency}}'
+        MIN_TOP_UP             : 'Minimum top up amount must be greater than {{min_amount | currency}}'
       }
       WALLET_LOGS: {
-        WALLET_TRANSACTION_HISTORY: 'Wallet Transaction History'
-        ACTION: 'Action'
-        AMOUNT: 'Amount'
-        BALANCE: 'Balance'
-        CHANGED_BY: 'Changed By'
-        DATE_AND_TIME: 'Date and Time'
+        HEADING                : 'Wallet Transaction History'
+        ACTION_COL_HEADING     : 'Action'
+        AMOUNT_COL_HEADING     : 'Amount'
+        BALANCE_COL_HEADING    : 'Balance'
+        CHANGED_BY_COL_HEADING : 'Changed By'
+        DATE_TIME_COL_HEADING  : 'Date and Time'
       }
       WALLET_PURCHASE_BANDS: {
-        WALLET_PURCHASE_BAND: 'Wallet Purchase Bands'
-        $X_FOR_$Y: '{{x | currency}} for {{y | currency}}'
-        PROGRESS_BUY: 'Buy'
+        HEADING   : 'Wallet Purchase Bands'
+        $X_FOR_$Y : '{{x | currency}} for {{y | currency}}'
+        BUY_BTN   : 'Buy'
+      }
+      PURCHASE_HISTORY: {
+        HEADING : 'Purchase History'
       }
     }
   }

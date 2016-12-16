@@ -1,22 +1,41 @@
 <div class="modal-header">
-  <h1 class="modal-title" translate="MEMBER.MODAL.DELETE_BOOKING.TITLE"></h1>
+  <h1
+    class="modal-title"
+    translate="MEMBER.MODAL.DELETE_BOOKING.TITLE">
+  </h1>
 </div>
 
 <div class="modal-body">
 
   <ul class="confirmation-summary">
     <li class="row confirmation-summary-item">
-      <div class="col-xs-3" translate="MEMBER.MODAL.DELETE_BOOKING.DESCRIPTION"></div>
+      <div
+        class="col-xs-3"
+        translate="MEMBER.MODAL.DELETE_BOOKING.DESCRIPTION_LABEL">
+      </div>
       <div class="col-xs-9">{{booking.full_describe}}</div>
     </li>
     <li class="row confirmation-summary-item">
-      <div class="col-xs-3" translate="MEMBER.MODAL.DELETE_BOOKING.WHEN"></div>
+      <div
+        class="col-xs-3"
+        translate="MEMBER.MODAL.DELETE_BOOKING.WHEN_LABEL">
+      </div>
       <div class="col-xs-9">{{booking.datetime | datetime: "LLLL"}}</div>
     </li>
   </ul>
 
 </div>
 <div class="modal-footer">
-  <button class="btn btn-primary" ng-click="confirm_delete()" translate="MEMBER.MODAL.DELETE_BOOKING.CANCEL_BOOKING_BTN"></button>
-  <button class="btn btn-link" ng-click="cancel()" translate="MEMBER.MODAL.DELETE_BOOKING.CANCEL_BTN"></button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    ng-click="confirm_delete()"
+    translate="MEMBER.MODAL.DELETE_BOOKING.CANCEL_BOOKING_BTN">
+  </button>
+  <button
+    type="button"
+    class="btn btn-link"
+    ng-click="cancel()"
+    translate="MEMBER.MODAL.DELETE_BOOKING.CANCEL_BTN">
+  </button>
 </div>

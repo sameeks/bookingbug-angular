@@ -1,11 +1,16 @@
 <div class="modal-header">
-  <button type="button" class="close" ng-click="cancel()">&times;</button>
+  <button
+    type="button"
+    class="close"
+    ng-click="cancel()">
+    &times;
+  </button>
   <h1 class="modal-title">{{booking.full_describe}}</h1>
 </div>
 
 <div class="modal-body">
 
-  <p>Pay for your booking to confirm your place.</p>
+  <p translate="MEMBER.WAITLIST_PAYMENT.DESCRIPTION"></p>
 
   <ul class="bb-list bb-list-horizontal bb-block bb-block-sm">
     <li>
@@ -29,16 +34,16 @@
 
   </ul>
 
-  <div bb-payment-button
+  <div
+    bb-payment-button
     class="btn btn-primary"
     total="total"
     bb="bb"
     decide-next-page="handlePaymentSuccess"
-    value="Pay" ng-if="total.$has('new_payment')">
+    ng-if="total.$has('new_payment')"
+    translate-attr="{value: 'MEMBER.WAITLIST_PAYMENT.PAY_BTN'}">
   </div>
 
 </div>
 <div class="modal-footer">
-<!--   <button class="btn btn-primary" ng-click="confirm_delete()"><span>Cancel Booking</span></button>
-  <button class="btn btn-link" ng-click="cancel()">Do not cancel</button> -->
 </div>

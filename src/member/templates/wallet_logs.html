@@ -1,17 +1,19 @@
 <div>
-  <h4 translate="MEMBER.WALLET_LOGS.WALLET_TRANSACTION_HISTORY"></h4>
+  <h4 translate="MEMBER.WALLET_LOGS.HEADING"></h4>
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th translate="MEMBER.WALLET_LOGS.ACTION"></th>
-        <th translate="MEMBER.WALLET_LOGS.AMOUNT"></th>
-        <th translate="MEMBER.WALLET_LOGS.BALANCE"></th>
-        <th translate="MEMBER.WALLET_LOGS.CHANGED_BY"></th>
-        <th translate="MEMBER.WALLET_LOGS.DATE_AND_TIME"></th>
+        <th translate="MEMBER.WALLET_LOGS.ACTION_COL_HEADING"></th>
+        <th translate="MEMBER.WALLET_LOGS.AMOUNT_COL_HEADING"></th>
+        <th translate="MEMBER.WALLET_LOGS.BALANCE_COL_HEADING"></th>
+        <th translate="MEMBER.WALLET_LOGS.CHANGED_BY_COL_HEADING"></th>
+        <th translate="MEMBER.WALLET_LOGS.DATE_TIME_COL_HEADING"></th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="log in logs | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size" ng-class="{'last-item': $last}">
+      <tr
+        ng-repeat="log in logs | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size"
+        ng-class="{'last-item': $last}">
         <td>
           {{log.action}}
         </td>
@@ -31,9 +33,16 @@
     </tbody>
   </table>
 
-  <div uib-pagination total-items="pagination.num_items"
-    ng-model="pagination.current_page" items-per-page="pagination.page_size"
-    max-size="pagination.max_size" boundary-links="true" rotate="false"
-    num-pages="pagination.num_pages" ng-show="logs && logs.length > 10"></div>
+  <div
+    uib-pagination
+    total-items="pagination.num_items"
+    ng-model="pagination.current_page"
+    items-per-page="pagination.page_size"
+    max-size="pagination.max_size"
+    boundary-links="true"
+    rotate="false"
+    num-pages="pagination.num_pages"
+    ng-show="logs && logs.length > 10">
+  </div>
 
 </div>

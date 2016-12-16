@@ -1,37 +1,49 @@
 <div>
 
   <div class="wallet-balance">
-    <div ng-show="wallet.amount == 0">
-      <span translate="MEMBER.WALLET.BALANCE"></span>:
-      <span translate="MEMBER.WALLET.WALLET_NO_CREDIT"></span>
+
+    <div>
+      <span translate="MEMBER.WALLET.BALANCE_LABEL"></span>
+      <span
+        ng-show="wallet.amount == 0"
+        translate="MEMBER.WALLET.WALLET_NO_CREDIT">
+      </span>
+      <span ng-show="wallet.amount > 0">
+        {{wallet.amount | currency}}
+      </span>
     </div>
-    <div ng-show="wallet.amount > 0">
-      <span translate="MEMBER.WALLET.BALANCE"></span>:
-      <span id="balance">{{wallet.amount | currency}}</span>
-    </div>
+
   </div>
 
   <div class="wallet-status">
     <div ng-hide="wallet.active">
-      <span translate="MEMBER.WALLET.STATUS"></span>:
+      <span translate="MEMBER.WALLET.STATUS_LABEL"></span>
       <span>
         <b translate="MEMBER.WALLET.WALLET_NOT_ACTIVE"></b>
       </span>
       <span>
-        <button ng-click="activateWallet(member)" translate="MEMBER.WALLET.ACTIVATE"></button>
+        <button
+          type="button"
+          ng-click="activateWallet(member)"
+          translate="MEMBER.WALLET.ACTIVATE_BTN">
+        </button>
       </span>
     </div>
     <div ng-show="wallet.active">
-      <span translate="MEMBER.WALLET.STATUS"></span>:
+      <span translate="MEMBER.WALLET.STATUS_LABEL"></span>
       <span id="status">
         <b translate="MEMBER.WALLET.ACTIVE"></b>
       </span>
     </div>
   </div>
 
-
   <div>
-    <button type="button" class="btn btn-primary" ng-click="(show_topup_box = true);(show_wallet_logs = false);" translate="MEMBER.WALLET.TOP_UP"></button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      ng-click="(show_topup_box = true);(show_wallet_logs = false);"
+      translate="MEMBER.WALLET.TOP_UP_BTN">
+    </button>
   </div>
 
   <br>
@@ -42,35 +54,66 @@
     </div>
   </div>
 
-  <div ng-if="show_topup_box && !show_wallet_logs" bb-wallet-payment>
+  <div
+    ng-if="show_topup_box && !show_wallet_logs"
+    bb-wallet-payment>
 
     <div class="bb-content">
 
       <div ng-form class="form-inline">
         <div class="form-group">
           <label for="amount">
-            <span translate="MEMBER.WALLET.AMOUNT"></span>:
+            <span translate="MEMBER.WALLET.AMOUNT_LABEL"></span>:
           </label>
           <div class="input-group">
-            <input type="number" class="form-control input-sm" id="amount" name="amount" ng-model="amount" placeholder="Enter Top Up Amount" bb-currency-field>
+            <input
+              type="number"
+              class="form-control input-sm"
+              id="amount"
+              name="amount"
+              ng-model="amount"
+              placeholder="Enter Top Up Amount"
+              bb-currency-field
+            />
             <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary btn-sm" ng-disabled="!amount || (amount < wallet.min_amount)" ng-click="updateWallet(member, amount)" translate="MEMBER.WALLET.TOP_UP"></button>
+              <button
+                type="submit"
+                class="btn btn-primary btn-sm"
+                ng-disabled="!amount || (amount < wallet.min_amount)"
+                ng-click="updateWallet(member, amount)"
+                translate="MEMBER.WALLET.TOP_UP_BTN">
+              </button>
             </span>
           </div>
           <br>
-          <small translate="MEMBER.WALLET.MIN_TOP_UP" translate-values="{amount: wallet.min_amount}"></small>
+          <small
+            translate="MEMBER.WALLET.MIN_TOP_UP"
+            translate-values="{min_amount: wallet.min_amount}">
+          </small>
         </div>
       </div>
 
       <div bb-wallet-purchase-bands></div>
 
-      <div ng-show="show_payment_iframe" class="bb-payment">
+      <div
+        ng-show="show_payment_iframe"
+        class="bb-payment">
         <div class="bb-head">
-          <h3 translate="MEMBER.WALLET.MAKE_PAYMENT"></h3>
-          <p translate="MEMBER.WALLET.TOP_UP_WALLET"></p>
+          <h3 translate="MEMBER.WALLET.PAYMENT_IFRAME_HEADING"></h3>
+          <p
+            translate="MEMBER.WALLET.TOP_UP_WALLET_BY"
+            translate-values="{amount: amount}"
+            >
+          </p>
         </div>
 
-        <iframe id="bb-payment" ng-src="{{wallet_payment_url}}" width="100%" scrolling="no" frameborder="0"></iframe>
+        <iframe
+          id="bb-payment"
+          ng-src="{{wallet_payment_url}}"
+          width="100%"
+          scrolling="no"
+          frameborder="0"> 
+        </iframe>
         <script type="text/javascript">
           iFrameResize({log:false, checkOrigin:false, enablePublicMethods:true}, '#bb-payment');
         </script>
