@@ -1,0 +1,134 @@
+<div bb-page>
+<div bb-services="{show_all: true, allow_single_pick: true, hide_disabled: true}" class="bb-service-list">
+  <div bb-multi-service-select="{ordered_categories: true, max_services: 3}" class="section">
+
+    <div class="section">
+      <div ng-show="categories">
+
+        <ul class="filters hidden-xs">
+          <div class="row">
+            <li class="col-sm-4 col-md-3" ng-repeat="category in categories | orderBy: 'order'">
+              <div class="panel panel-service"  ng-click="changeCategory(category.name, category.sub_categories)" ng-class="{'selected': selected_category.name == category.name}">
+                <div class="panel-body" ng-style="{'background': 'url(//bespoke.bookingbug.com/blink/images/' + category.name.parameterise() + '.jpg) center center no-repeat'}">
+                </div>
+                <div class="panel-heading">
+                  <h3>{{category.name}}</h3>
+                </div>
+              </div> 
+            </li>
+          </div>
+        </ul>
+
+        <div class="filters-xs visible-xs">
+          <form class="form" role="form" novalidate>
+            <div class="form-group">
+              <label for="treatment_type">Treatments</label>
+              <select
+                class="form-control"
+                id="category"
+                ng-model="selected_category"
+                ng-options="category.name for category in categories">
+                <option value="">&nbsp;</option>
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div bb-scroll-to="multi_service_select:category_changed" bb-always-scroll>
+        <div ng-if="selected_category" ng-show="categories">
+          <div class="section-heading">
+            <h2 class="section-title">{{selected_category.name}}</h2>
+          </div>
+          <p>{{selected_category.description}}</p>
+
+            <div class="panel">
+              <div class="panel-body hidden-xs row">
+                <div class="col-sm-6">Service</div>
+                <div class="col-sm-1">Price</div>
+                <div class="col-sm-2">Duration</div>
+                <div class="col-sm-2"></div>
+              </div>
+            </div>
+
+            <div ng-repeat="sub_category_services in selected_category.sub_categories">
+
+
+              <div ng-repeat="item in sub_category_services.services">
+
+                <div class="bb-list-item row">
+                  <div class="col-sm-6">
+                    <h4>{{item.name}}</h4>
+                  </div>
+                  <div class="col-sm-1">
+                    <span class="visible-xs-inline">Price: </span>{{item.price | icurrency}}
+                  </div>
+                  <div class="col-sm-2">
+                    <span class="visible-xs-inline">Duration: </span>{{item.listed_duration | time_period}}
+                  </div>
+                  <div class="col-sm-2">
+                    <button type="button" class="btn btn-block btn-default" ng-if="!item.selected" ng-click="addItem(item)">Add</button>
+                    <button type="button" class="btn btn-block btn-default" ng-if="item.selected"  ng-click="removeItem(item)">Remove</button>
+                  </div>
+                  <div ng-show="item.description">
+                    <span class="bb-btn bb-btn-link" ng-hide="item.show_more" ng-click="item.show_more = true">
+                      More
+                      <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    </span>
+                    <span class="bb-btn bb-btn-link" ng-show="item.show_more" ng-click="item.show_more = false">
+                      Less
+                      <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <div class="item-description col-sm-12">
+                    <p ng-show="item.show_more">{{item.description}}</p>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <section ng-show="bb.stacked_items.length > 0" class="service-list-selected col-xs-10 col-xs-offset-1">
+      <div class="section-heading">
+        <h2 class="section-title">Your treatments</h2>
+      </div>
+
+      <div ng-show="bb.stacked_items.length > 0">
+        <div class="text-block text-center">
+          <p>Below is the sequence of treatments you have selected:</p>
+        </div>
+        <div class="row">
+          <div class="col-sm-offset-2 col-sm-8">
+            <ul>
+              <li ng-repeat="item in bb.stacked_items" class="row">
+                <div class="col-xs-5">{{item.service.name}}</div>
+                <div class="col-xs-3">{{item.service.listed_duration | time_period}}</div>
+                <div class="col-xs-2">{{item.service.price | icurrency }}</div>
+                <div class="col-xs-2">
+                  <button type="button" class="btn btn-link" ng-click="removeItem(item.service)"><span>Remove</span></button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bb-step-navigation">
+      <div class="row">
+        <div ng-show="bb.stacked_items.length > 0" class="col-sm-9 col-sm-push-3 text-right">
+          <button type="button" class="btn btn-primary" ng-click="nextStep()">Continue</button>
+        </div>
+        <div class="col-sm-3 col-sm-pull-9">
+          <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

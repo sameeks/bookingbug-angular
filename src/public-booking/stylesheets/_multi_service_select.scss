@@ -1,0 +1,33 @@
+div[bb-multi-service-select] {
+  .filters .panel-body {
+    max-height: 300px;
+    min-height: 100px;
+  }
+
+  .bb-list-item {
+    margin-bottom: 15px;
+    margin-top: 15px;
+
+    .item-description {
+      padding: 10px;
+    }
+  }
+
+  .btn {
+    margin-top: -5px;
+  }
+
+  .service-list-selected {
+    border: 1px solid silver;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    h2 {
+      text-align: center;
+    }
+    ul {
+      margin-top: 15px;
+    }
+  }
+}
+
