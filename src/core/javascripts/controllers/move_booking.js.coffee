@@ -22,16 +22,13 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
     if bookings.length > 1 
       moveMultipleBookings(bookings, route)
 
-    else if typeof bookings is 'array' and bookings.length is 1
-      moveSingleBooking(bookings[0])
-
     else moveSingleBooking(bookings)
 
 
   moveMultipleBookings = (bookings, route) ->
     $scope.bb.moving_purchase = $scope.bb.purchase
     updatePurchase(bookings, route)
-    
+
 
   moveSingleBooking = (basketItem, route) ->
     confirming = true
@@ -82,14 +79,6 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
        loader.setLoaded()
        AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
-	showMoveMessage = (datetime) ->
-	  # TODO remove whem translate enabled by default
-	  if GeneralOptions.use_i18n 
-	    $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
-	      AlertService.add("info", { msg: translated_text })
-	  else
-	    AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
-
 
   openCalendarModal = (booking, total_id) ->
     if booking.length > 0 
@@ -106,8 +95,9 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
         total_id: total_id
         first_page: 'calendar'
 
+
   resolveCalendarModal = (bookings) ->
-    $rootScope.$broadcast("booking:moved", bookings)
+    $rootScope.$broadcast("booking:moved", $scope.bb.purchase)
 
     # if modal is already open just load confirmation template
     if WidgetModalService.is_open and WidgetModalService.config.member
@@ -117,4 +107,22 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       $scope.decideNextPage('purchase')
     else 
       WidgetModalService.close() 
-    showMoveMessage(bookings.datetime) if typeof bookings is 'object'
+    decideMoveMessage(bookings) 
+
+
+  decideMoveMessage = (bookings) ->
+    return if !bookings?
+
+    if bookings.length > 1
+      datetime = bookings[0].datetime
+    else 
+      datetime = bookings.datetime
+    showMoveMessage(datetime)
+
+
+  showMoveMessage = (datetime) ->
+    if GeneralOptions.use_i18n 
+      $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
+        AlertService.add("info", { msg: translated_text })
+    else
+      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })

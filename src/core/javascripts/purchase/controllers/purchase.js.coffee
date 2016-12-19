@@ -19,6 +19,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   $scope.make_payment = false
   loader = LoadingService.$loader($scope)
 
+  $scope.$on "booking:moved", (event, bookings) ->
+    $scope.purchase = bookings
+
 
   setPurchaseCompany = (company) ->
     $scope.bb.company_id = company.id
@@ -39,9 +42,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
           AlertService.add("danger", { msg: translated_text })
       else
         AlertService.raise('GENERIC')
-
-  $scope.$on "booking:moved", () ->
-    $scope.init()
 
 
   $scope.init = (options) ->
