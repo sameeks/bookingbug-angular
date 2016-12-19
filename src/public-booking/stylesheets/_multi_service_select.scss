@@ -3,10 +3,14 @@ div[bb-multi-service-select] {
     max-height: 300px;
     min-height: 100px;
   }
+  .panel-body {
+    padding: 0;
+    font-weight: bold;
+  }
 
   .bb-list-item {
-    margin-bottom: 15px;
-    margin-top: 15px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 
     .item-description {
       padding: 10px;
@@ -18,10 +22,9 @@ div[bb-multi-service-select] {
   }
 
   .service-list-selected {
-    border: 1px solid silver;
     padding: 20px;
     margin-top: 20px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     h2 {
       text-align: center;
     }
@@ -30,4 +33,3 @@ div[bb-multi-service-select] {
     }
   }
 }
-

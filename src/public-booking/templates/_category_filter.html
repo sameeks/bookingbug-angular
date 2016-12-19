@@ -1,0 +1,82 @@
+<ul class="filters" class="hidden-xs">
+  <div class="row">
+    <li class="col-sm-4 col-md-3" ng-repeat="category in categories | orderBy: 'order'">
+      <div class="panel panel-service"  ng-click="changeCategory(category.name, category.subCategories)" ng-class="{'selected': selectedCategory.name == category.name}">
+        <div class="panel-heading">
+          <h3>{{category.name}}</h3>
+        </div>
+      </div> 
+    </li>
+  </div>
+</ul>
+
+<div bb-scroll-to="multi_service_select:categoryChanged" bb-always-scroll>
+  <div ng-if="selectedCategory" ng-show="categories">
+    <div class="section-heading">
+      <h2 class="section-title">{{selectedCategory.name}}</h2>
+    </div>
+    <p>{{selectedCategory.description}}</p>
+
+    <div class="panel">
+      <div class="panel-body hidden-xs row">
+        <div class="col-sm-6">Service</div>
+        <div class="col-sm-1">Price</div>
+        <div class="col-sm-2">Duration</div>
+        <div class="col-sm-2"></div>
+      </div>
+    </div>
+
+      <div ng-repeat="subCategoryServices in selectedCategory.subCategories">
+        <div ng-repeat="item in subCategoryServices.services">
+          <div class="bb-list-item row">
+            <div class="col-sm-6">
+              <h4>{{item.name}}</h4>
+            </div>
+
+            <div class="col-sm-1">
+              <span class="visible-xs-inline">Price: </span>{{item.price | icurrency}}
+            </div>
+
+            <div class="col-sm-2">
+              <span class="visible-xs-inline">Duration: </span>{{item.listed_duration | time_period}}
+            </div>
+
+            <div class="col-sm-2">
+              <button 
+                type="button" 
+                class="btn btn-block btn-default" 
+                ng-if="!item.selected" 
+                ng-click="addItem(item)">
+                Add
+              </button>
+
+              <button 
+                type="button" 
+                class="btn btn-block btn-default" 
+                ng-if="item.selected"  
+                ng-click="removeItem(item)">
+                Remove
+              </button>
+            </div>
+
+            <div ng-show="item.description">
+              <span class="bb-btn bb-btn-link" ng-hide="item.show_more" ng-click="item.show_more = true">
+                More
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+              </span>
+              <span class="bb-btn bb-btn-link" ng-show="item.show_more" ng-click="item.show_more = false">
+                Less
+                <i class="fa fa-chevron-up" aria-hidden="true"></i>
+              </span>
+            </div>
+
+            <div class="item-description col-sm-12">
+              <p ng-show="item.show_more">{{item.description}}</p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

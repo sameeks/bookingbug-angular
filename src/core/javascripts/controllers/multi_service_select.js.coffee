@@ -64,7 +64,11 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
 
 
   readyServices = () ->
-    $scope.services = $scope.items
+    services = $scope.items
+    # filter out services with no duration
+    $scope.services = _.filter(services, (service) ->
+      service.duration?
+    ) 
 
     if $scope.bb.stacked_items and $scope.bb.stacked_items.length > 0
       getStackedItems()

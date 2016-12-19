@@ -84,6 +84,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
 
     # read initialisation attributes
     $scope.options = $scope.$eval($attrs.bbTimeRangeStacked) or {}
+    console.log $scope.bb.stacked_items
 
 
     if !$scope.time_range_length
