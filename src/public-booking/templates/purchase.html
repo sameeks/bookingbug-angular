@@ -12,7 +12,7 @@
           </div>
         </div>
 
-        <div ng-show="bookings">
+        <div ng-show="bookings.length > 0">
           <div ng-show="is_waitlist">
             <div bb-include="book_waitlist"></div>
           </div>
@@ -83,9 +83,10 @@
               <div class="bb-step-navigation">
                 <div class='row'>
                   <div class="col-sm-4">
-                    <button type="button" class="btn btn-danger btn-block" ng-click="delete(bookings[0])">Cancel Booking</button>
+                    <button ng-show="bookings.length == 1" type="button" class="btn btn-danger btn-block" ng-click="delete(bookings[0])">Cancel Booking</button>
+                    <button ng-show="bookings.length > 1" type="button" class="btn btn-danger btn-block" ng-click="deleteAll()">Cancel Booking</button>
                   </div>
-                  
+
                   <div class="col-sm-4">
                     <div bb-move-booking>
                       <button 

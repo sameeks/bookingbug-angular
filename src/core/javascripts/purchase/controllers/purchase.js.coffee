@@ -227,10 +227,12 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
         cancel_reasons: -> $scope.cancel_reasons
 
     modalInstance.result.then (booking) ->
+      loader.notLoaded()
       cancel_reason = null
       cancel_reason = booking.cancel_reason if booking.cancel_reason
       data = {cancel_reason: cancel_reason}
       booking.$del('self', {}, data).then (service) =>
+        loader.setLoaded()
         $scope.bookings = _.without($scope.bookings, booking)
         $rootScope.$broadcast "booking:cancelled"
 
@@ -243,7 +245,9 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
       resolve:
         purchase: -> $scope.purchase
     modalInstance.result.then (purchase) ->
+      loader.notLoaded()
       PurchaseService.deleteAll(purchase).then (purchase) ->
+        loader.setLoaded()
         $scope.purchase = purchase
         $scope.bookings = []
         $rootScope.$broadcast "booking:cancelled"
