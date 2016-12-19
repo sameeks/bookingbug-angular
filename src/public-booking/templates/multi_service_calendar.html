@@ -11,10 +11,29 @@
     <div class="col-sm-offset-8 col-sm-2 col-sm-push-2 forward">
       <div>
         <!-- <button type="button" class="btn btn-default" ng-click="checkReady() && routeReady()" bb-debounce>  -->
-        <button type="button" class="btn btn-default" ng-click="checkReady() && routeReady()" bb-debounce>
-          <span ng-if="!bb.moving_booking">Continue</span>
-          <span ng-if="bb.moving_booking">Move booking</span>
+        <button ng-show="!bb.moving_booking" type="button" class="btn btn-default" ng-click="checkReady() && routeReady()" bb-debounce>
+          <span>Continue</span>
         </button>
+      <div ng-if="bb.moving_booking" bb-move-booking>
+        <button 
+          ng-show="bb.purchase.bookings.length == 0" 
+          type="button" 
+          id="btn-continue" 
+          class="btn btn-primary btn-block" 
+          ng-click="initMove(bb.current_item, 'purchase')" 
+          bb-debounce>
+          <span>Reschedule</span>
+        </button>
+        <button 
+          ng-show="bb.purchase.bookings.length > 0" 
+          type="button" 
+          id="btn-continue" 
+          class="btn btn-primary btn-block" 
+          ng-click="initMove(bb.stacked_items, 'purchase')" 
+          bb-debounce>
+          <span>Reschedule</span>
+        </button>
+      </div>
       </div>
     </div>
     <div class="col-sm-2 col-sm-pull-10 back">

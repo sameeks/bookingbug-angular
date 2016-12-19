@@ -4,41 +4,44 @@ angular.module('BB.Directives').directive 'bbMoveBooking', () ->
 
 angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, BBModel, LoadingService, PurchaseService, PurchaseBookingService, AlertService, GeneralOptions, $translate, MemberBookingService, WidgetModalService, QueryStringService) ->
 
-	vm = @
-
 	loader = LoadingService.$loader($scope)
 
 	
-	$scope.initMove = (basketItem, route) ->
-    # open modal if moving public basketItem from purchase template
+	$scope.initMove = (bookings, route) ->
+    # open modal if moving public bookings from purchase template
     if route is 'modal' 
       total_id = QueryStringService('id')
-      openCalendarModal(basketItem, total_id)
+      openCalendarModal(bookings, total_id)
 
-    # else just move the basketItem
-    else readyBasketItem(basketItem, route)
+    # else just start moving the bookings
+    else decideNumberOfBookings(bookings, route)
 
 
-  readyBasketItem = (basketItem, route) ->
+  decideNumberOfBookings = (bookings, route) ->
     loader.notLoaded()
+    if bookings.length > 1 
+      moveMultipleBookings(bookings, route)
+
+    else if typeof bookings is 'array' and bookings.length is 1
+      moveSingleBooking(bookings[0])
+
+    else moveSingleBooking(bookings)
+
+
+  moveMultipleBookings = (bookings, route) ->
+    $scope.bb.moving_purchase = $scope.bb.purchase
+    updatePurchase(bookings, route)
+    
+
+  moveSingleBooking = (basketItem, route) ->
     confirming = true
     basketItem.moved_booking = false
-    basketItem.setAskedQuestions()
-
+    if basketItem.setAskedQuestions()
+      basketItem.setAskedQuestions() 
     if basketItem.move_reason
       basketItem.move_reason = $scope.bb.current_item.move_reason
 
-    if basketItem.ready
-      moveBooking(basketItem, route)
-    else 
-      $scope.decideNextPage(route)
-
-
-  moveBooking = (basketItem, route) ->
-    if $scope.bb.moving_purchase
-      updatePurchase(basketItem, route)
-    else
-      updatePurchaseBooking(basketItem, route)
+    updatePurchaseBooking(basketItem, route)
 
 
   # updates single srcBooking of purchase
@@ -54,7 +57,6 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 
       loader.setLoaded()
       $scope.bb.moved_booking = purchaseBooking
-      PurchaseService.purchase = $scope.bb.purchase
       purchaseBooking.move_done = true
       resolveCalendarModal(b)
      , (err) =>
@@ -63,20 +65,18 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 
 
   # updates all bookings found in purchase
-	updatePurchase = (booking, route) ->
+	updatePurchase = (bookings, route) ->
     params =
       purchase: $scope.bb.moving_purchase
-      bookings: $scope.bb.basket.items
-    if booking.move_reason
-      params.move_reason = booking.move_reason 
+      bookings: bookings
+    if bookings[0].move_reason
+      params.move_reason = bookings[0].move_reason 
     PurchaseService.update(params).then (purchase) ->
       $scope.bb.purchase = purchase
       $scope.bb.purchase.$getBookings().then (bookings)->
-        $scope.purchase = purchase
+        $scope.purchase = purchase 
         loader.setLoaded()
-        booking.move_done = true
-        booking.moved_booking = true
-        resolveCalendarModal(bookings[0])
+        resolveCalendarModal(bookings)
 
     , (err) ->
        loader.setLoaded()
@@ -92,14 +92,22 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 
 
   openCalendarModal = (booking, total_id) ->
-    WidgetModalService.open
-      company_id: booking.company.id
-      template: 'main_view_booking'
-      total_id: total_id
-      first_page: 'calendar'
+    if booking.length > 0 
+      booking = booking[0]
+      WidgetModalService.open
+        company_id: booking.company.id
+        template: 'main_view_booking'
+        total_id: total_id
+        first_page: 'multi_service_calendar'
+    else 
+      WidgetModalService.open
+        company_id: booking.company.id
+        template: 'main_view_booking'
+        total_id: total_id
+        first_page: 'calendar'
 
-  resolveCalendarModal = (booking) ->
-    $rootScope.$broadcast("booking:moved", booking)
+  resolveCalendarModal = (bookings) ->
+    $rootScope.$broadcast("booking:moved", bookings)
 
     # if modal is already open just load confirmation template
     if WidgetModalService.is_open and WidgetModalService.config.member
@@ -109,4 +117,4 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       $scope.decideNextPage('purchase')
     else 
       WidgetModalService.close() 
-    showMoveMessage(booking.datetime)
+    showMoveMessage(bookings.datetime) if typeof bookings is 'object'

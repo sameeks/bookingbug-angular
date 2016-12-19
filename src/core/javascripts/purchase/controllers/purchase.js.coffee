@@ -51,7 +51,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
     $scope.move_route = options.move_route if options.move_route
     $scope.move_all = options.move_all if options.move_all
     $scope.fail_msg = options.fail_msg if options.fail_msg
-
     if $scope.purchase
       $scope.bb.purchase = $scope.purchase
 
@@ -65,15 +64,14 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
       $scope.cancel_reasons = $scope.bb.cancel_reasons unless $scope.cancel_reasons
       $scope.move_reasons = $scope.bb.move_reasons unless $scope.move_reasons
       loader.setLoaded()
-    else
-      if options.member_sso
-        SSOService.memberLogin(options).then (login) ->
-          $scope.load()
-        , (err) ->
-          loader.setLoaded()
-          failMsg()
-      else
+    else if options.member_sso
+      SSOService.memberLogin(options).then (login) ->
         $scope.load()
+      , (err) ->
+        loader.setLoaded()
+        failMsg()
+    else
+      $scope.load()
 
   getPurchase = (params) ->
     deferred = $q.defer()
@@ -147,6 +145,7 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
           params.auth_token = auth_token if auth_token
 
           getPurchase(params).then (purchase) ->
+            $scope.bb.purchase = purchase
             getBookings(purchase)
 
         , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
@@ -192,73 +191,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
       id = QueryStringService('ref') if QueryStringService('ref')
     id = QueryStringService('booking_id')  if QueryStringService('booking_id')
     id
-
-
-  $scope.move = (booking, route, options = {}) ->
-
-    route ||= $scope.move_route
-    if $scope.move_all
-      return $scope.moveAll(route, options)
-
-    loader.notLoaded()
-    $scope.initWidget({company_id: booking.company_id, no_route: true})
-    $timeout () =>
-      $rootScope.connection_started.then () =>
-        proms = []
-        $scope.bb.moving_booking = booking
-        $scope.quickEmptybasket()
-        new_item = new BBModel.BasketItem(booking, $scope.bb)
-        new_item.setSrcBooking(booking, $scope.bb)
-        new_item.ready = false
-        Array::push.apply proms, new_item.promises
-        $scope.bb.basket.addItem(new_item)
-        $scope.setBasketItem(new_item)
-
-        $q.all(proms).then () ->
-          loader.setLoaded()
-          $rootScope.$broadcast "booking:move"
-          $scope.decideNextPage(route)
-        , (err) ->
-          loader.setLoaded()
-          failMsg()
-      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-
-
-  # potentially move all of the items in booking - move the whole lot to a basket
-  $scope.moveAll = (route, options = {}) ->
-    route ||= $scope.move_route
-    loader.notLoaded()
-    $scope.initWidget({company_id: $scope.bookings[0].company_id, no_route: true})
-    $timeout () =>
-      $rootScope.connection_started.then () =>
-        proms = []
-        if $scope.bookings.length == 1
-          $scope.bb.moving_booking = $scope.bookings[0]
-        else
-          $scope.bb.moving_booking = $scope.purchase
-
-        if _.every(_.map($scope.bookings, (b) -> b.event_id),
-                   (event_id) -> event_id == $scope.bookings[0].event_id)
-          $scope.bb.moving_purchase = $scope.purchase
-
-        $scope.quickEmptybasket()
-        for booking in $scope.bookings
-          new_item = new BBModel.BasketItem(booking, $scope.bb)
-          new_item.setSrcBooking(booking)
-          new_item.ready = false
-          new_item.move_done = false
-          Array::push.apply proms, new_item.promises
-          $scope.bb.basket.addItem(new_item)
-        $scope.bb.sortStackedItems()
-
-        $scope.setBasketItem($scope.bb.basket.items[0])
-        $q.all(proms).then () ->
-          loader.setLoaded()
-          $scope.decideNextPage(route)
-        , (err) ->
-          loader.setLoaded()
-          failMsg()
-      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   $scope.bookWaitlistItem = (booking) ->

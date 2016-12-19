@@ -37,18 +37,24 @@
                   <div class="bb-summary-label">Email: </div>
                   <div class="bb-summary-value">{{purchase.client.email}}</div>
                 </li>
-                <li class="row confirmation-summary-item">
-                  <div class="bb-summary-label">Service: </div>
-                  <div class="bb-summary-value">{{purchase.bookings[0].service_name}}</div>
-                </li>
-                <li class="row confirmation-summary-item">
-                  <div class="bb-summary-label">When: </div>
-                  <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM":false}}</div>
-                </li>
-                <li class="row confirmation-summary-item" ng-show="purchase.total_price > 0">
-                  <div class="bb-summary-label">Price: </div>
-                  <div class="bb-summary-value">{{purchase.total_price | currency }}</div>
-                </li>
+                <div ng-repeat="booking in purchase.bookings">
+                  <li class="row confirmation-summary-item">
+                    <div class="bb-summary-label">Service: </div>
+                    <div class="bb-summary-value">{{booking.service_name}}</div>
+                  </li>
+                  <li class="row confirmation-summary-item">
+                    <div class="bb-summary-label">When: </div>
+                    <div class="bb-summary-value">{{booking.datetime | datetime: "h:mma dddd Do MMMM":false}}</div>
+                  </li>
+                  <li class="row confirmation-summary-item" ng-show="booking.price > 0">
+                    <div class="bb-summary-label">Price: </div>
+                    <div class="bb-summary-value">{{booking.price | currency }}</div>
+                  </li>
+                </div>
+                 <li class="row confirmation-summary-item" ng-show="purchase.total_price > 0">
+                    <div class="bb-summary-label">Price: </div>
+                    <div class="bb-summary-value">{{purchase.total_price | currency }}</div>
+                  </li>
               </ul>
 
 
@@ -79,13 +85,25 @@
                   <div class="col-sm-4">
                     <button type="button" class="btn btn-danger btn-block" ng-click="delete(bookings[0])">Cancel Booking</button>
                   </div>
+                  
                   <div class="col-sm-4">
                     <div bb-move-booking>
                       <button 
+                        ng-show="bookings.length == 1"
                         type="button" 
                         id="btn-continue" 
                         class="btn btn-primary btn-block" 
                         ng-click="initMove(bb.current_item, 'modal')" 
+                        bb-debounce>
+                        <span>Reschedule</span>
+                      </button>
+
+                      <button 
+                        ng-show="bookings.length > 1"
+                        type="button" 
+                        id="btn-continue" 
+                        class="btn btn-primary btn-block" 
+                        ng-click="initMove(bookings, 'modal')" 
                         bb-debounce>
                         <span>Reschedule</span>
                       </button>

@@ -17,18 +17,31 @@
           class="btn btn-primary btn-block" 
           ng-click="checkReady() && routeReady()" 
           bb-debounce 
-          ng-disabled="!bb.current_item.time">
+          ng-disabled="!bb.current_item.time"> 
           <span>Continue</span>
         </button>
       </div>
 
       <div ng-if="bb.moving_booking" bb-move-booking>
+      
+      <!-- moving single booking -->
         <button 
-          ng-show="bb.moving_booking" 
+          ng-show="bb.current_item" 
           type="button" 
           id="btn-continue" 
           class="btn btn-primary btn-block" 
           ng-click="initMove(bb.current_item, 'purchase')" 
+          bb-debounce>
+          <span>Reschedule</span>
+        </button>
+
+      <!-- moving multiple bookings -->
+        <button 
+          ng-show="bb.purchase.bookings.length > 1" 
+          type="button" 
+          id="btn-continue" 
+          class="btn btn-primary btn-block" 
+          ng-click="initMove(bb.purchase.bookings, 'purchase')" 
           bb-debounce>
           <span>Reschedule</span>
         </button>

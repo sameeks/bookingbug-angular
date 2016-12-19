@@ -900,18 +900,22 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
 
   createBasketFromBookings = (bookings, totalDefer) ->
     proms = []
-    if bookings.length is 1 
-      $scope.bb.current_item = bookings[0]
-      $scope.bb.moving_booking = bookings[0]
 
     for booking in bookings  
-      $scope.quickEmptybasket()
       new_item = new BBModel.BasketItem(booking, $scope.bb)
       new_item.setSrcBooking(booking, $scope.bb)
       new_item.ready = false
       Array::push.apply proms, new_item.promises
       $scope.bb.basket.addItem(new_item)
       $scope.setBasketItem(new_item)
+      $scope.bb.moving_booking = bookings 
+      
+    if bookings.length is 1 
+      $scope.bb.current_item = $scope.bb.basket.items[0]
+      $scope.bb.current_item.setDefaults({})
+      $scope.bb.moving_booking = bookings[0]
+
+    $scope.bb.setStackedItems($scope.bb.basket.items) if bookings.length > 1
 
     $q.all(proms).then () ->
       totalDefer.resolve()
