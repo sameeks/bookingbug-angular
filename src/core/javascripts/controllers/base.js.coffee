@@ -51,6 +51,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     $scope.decideNextPage = decideNextPage
     $scope.deleteBasketItem = deleteBasketItem
     $scope.deleteBasketItems = deleteBasketItems
+    $scope.createBasketFromBookings = createBasketFromBookings
     $scope.emptyBasket = emptyBasket
     $scope.getCurrentStepTitle = getCurrentStepTitle
     $scope.getPartial = getPartial
@@ -468,6 +469,24 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
         total_id = $scope.bb.item_defaults.purchase_total_long_id
       else total_id = QueryStringService('total_id')
 
+      # if total_id passed through as prms when ititialising widget in a modal
+      if prms.total_id 
+        params =
+          url_root: $scope.bb.api_url
+          purchase_id: prms.total_id
+        totalDefer = $q.defer()
+        getPurchaseTotal = PurchaseService.query(params).then (total) -> 
+          $scope.bb.purchase = total
+          total.$getBookings().then (bookings) ->
+            createBasketFromBookings(bookings, totalDefer)
+          , (err) ->
+            totalDefer.reject(err)
+        , (err) ->
+          totalDefer.reject(err)
+        totalDefer.promise
+        setup_promises.push getPurchaseTotal
+
+
       if total_id
         params =
           purchase_id: total_id
@@ -731,16 +750,12 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.time && !$scope.bb.current_item.event? && (!$scope.bb.current_item.service || $scope.bb.current_item.service.duration_unit != 'day') && !$scope.bb.current_item.deal)
       return if setPageRoute($rootScope.Route.Time)
       return showPage('time')
-    else if ($scope.bb.moving_booking && (!$scope.bb.current_item.ready || !$scope.bb.current_item.move_done))
-      return showPage('check_move')
     else if (!$scope.client.valid())
       return if setPageRoute($rootScope.Route.Client)
       return showPage('client')
     else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions && !$scope.bb.current_item.asked_questions)
       return if setPageRoute($rootScope.Route.Questions)
       return showPage('check_items')
-    else if $scope.bb.moving_booking && $scope.bb.basket.itemsReady()
-      return showPage('purchase')
     else if !$scope.bb.basket.readyToCheckout()
       return if setPageRoute($rootScope.Route.Summary)
       return showPage('basket_summary')
@@ -750,8 +765,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null && !$scope.bb.basket.waiting_for_checkout)
       return if setPageRoute($rootScope.Route.Checkout)
       return showPage('checkout')
-# else if ($scope.bb.total && $scope.bb.payment_status == "pending")
-#   return showPage('payment')
     else if $scope.bb.payment_status == "complete"
       return if setPageRoute($rootScope.Route.Confirmation)
       return showPage('confirmation')
@@ -884,6 +897,26 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
       $scope.bb.current_item.setDefaults({})
       def.resolve()
     return def.promise
+
+  createBasketFromBookings = (bookings, totalDefer) ->
+    proms = []
+    if bookings.length is 1 
+      $scope.bb.current_item = bookings[0]
+      $scope.bb.moving_booking = bookings[0]
+
+    for booking in bookings  
+      $scope.quickEmptybasket()
+      new_item = new BBModel.BasketItem(booking, $scope.bb)
+      new_item.setSrcBooking(booking, $scope.bb)
+      new_item.ready = false
+      Array::push.apply proms, new_item.promises
+      $scope.bb.basket.addItem(new_item)
+      $scope.setBasketItem(new_item)
+
+    $q.all(proms).then () ->
+      totalDefer.resolve()
+    , (err) ->
+      totalDefer.reject(err)
 
 
   setBasketItem = (item) ->
