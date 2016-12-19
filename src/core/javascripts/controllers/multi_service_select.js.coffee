@@ -36,13 +36,14 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   $q, $attrs, BBModel, $uibModal, $document, AlertService, FormDataStoreService, LoadingService) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
-    'selected_category_name'
+    'selectedCategoryName'
   ]
 
   $scope.options                    = $scope.$eval($attrs.bbMultiServiceSelect) or {}
-  $scope.options.useCategories      = $scope.options.useCategories or false 
-  $scope.options.orderedCategories = $scope.options.orderedCategories or false
-  $scope.options.maxServices       = $scope.options.maxServices   or Infinity
+  $scope.options.useCategories      = $scope.options.useCategories or false
+  $scope.options.useSubCategories   = $scope.options.useSubCategories or false  
+  $scope.options.orderedCategories  = $scope.options.orderedCategories or false
+  $scope.options.maxServices        = $scope.options.maxServices   or Infinity
   $scope.options.services           = $scope.options.services or 'items'
 
   loader = LoadingService.$loader($scope)
@@ -81,7 +82,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
 
     $q.all(promises).then (result) ->
 
-      $scope.company_questions = result[1]
+      $scope.companyQuestions = result[1]
 
       initialiseCategories(result[0]) 
 
@@ -135,67 +136,90 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   initialiseCategories = (categories) ->
 
     # extract order from category name if we're using ordered categories
-    if $scope.options.ordered_categories
+    if $scope.options.orderedCategories
       for category in categories
           category.order = parseInt(category.name.slice(0,2))
           category.name  = category.name.slice(3)
 
     # index categories by their id
-    $scope.all_categories = _.indexBy(categories, 'id')
+    $scope.allCategories = _.indexBy(categories, 'id')
 
     # group services by category id
-    all_categories = _.groupBy($scope.items, (item) -> item.category_id)
+    allCategories = _.groupBy($scope.items, (item) -> item.category_id)
 
     # find any sub categories
-    sub_categories = _.findWhere($scope.company_questions, {name: 'Extra Category'})
-    sub_categories = _.map(sub_categories.question_items, (sub_category) -> sub_category.name) if sub_categories
+    if $scope.options.useSubCategories
+      subCategories = findSubCategories()
 
-    # filter categories that have no services
-    categories = {}
-    for own key, value of all_categories
-      categories[key] = value if value.length > 0
+    categories = filterEmptyCategories(allCategories)
+
 
     # build the catagories array
     $scope.categories = []
 
     for category_id, services of categories
-
       category = {}
-
-      # group services by their subcategory
-      grouped_sub_categories = []
-      if sub_categories
-        for sub_category in sub_categories
-          grouped_sub_category = {
-            name: sub_category,
-            services: _.filter(services, (service) -> service.extra.extra_category is sub_category)
-          }
-
-          # only add the sub category if it has some services
-          grouped_sub_categories.push(grouped_sub_category) if grouped_sub_category.services.length > 0
-        category.sub_categories = grouped_sub_categories
+      
+      if subCategories
+        groupSubCategories(category, subCategories, services)
       else
         category.services = services
 
-      # get the name and description
-      category_details = {name: $scope.all_categories[category_id].name, description: $scope.all_categories[category_id].description} if $scope.all_categories[category_id]
+      setCategoryDetails(category, category_id)
 
-      # set the category
-      category.name = category_details.name
-      category.description = category_details.description
 
-      # get the order if instruccted
-      category.order = $scope.all_categories[category_id].order if $scope.options.ordered_categories && $scope.all_categories[category_id]
+  findSubCategories = () ->
+    subCategories = _.findWhere($scope.companyQuestions, {name: 'Extra Category'})
+    subCategories = _.map(subCategories.question_items, (subCategory) -> subCategory.name) if subCategories
 
-      $scope.categories.push(category)
+    return subCategories
 
-      # check it a category is already selected
-      if $scope.selected_category_name and $scope.selected_category_name is category_details.name
-        $scope.selected_category = $scope.categories[$scope.categories.length - 1]
-      # or if there's a default category
-      else if $scope.bb.item_defaults.category and $scope.bb.item_defaults.category.name is category_details.name and !$scope.selected_category
-        $scope.selected_category = $scope.categories[$scope.categories.length - 1]
-        $scope.selected_category_name = $scope.selected_category.name
+
+  filterEmptyCategories = (allCategories) ->
+    # filter categories that have no services
+    categories = {}
+    for own key, value of allCategories
+      categories[key] = value if value.length > 0
+    return categories
+
+
+  groupSubCategories = (category, subCategories, services) ->
+    groupedSubCategories = []
+    for subCategory in subCategories
+      groupedSubCategory = {
+        name: subCategory,
+        services: _.filter(services, (service) -> service.extra.extra_category is subCategory)
+      }
+
+      # only add the sub category if it has some services
+      groupedSubCategories.push(groupedSubCategory) if groupedSubCategory.services.length > 0
+    category.subCategories = groupedSubCategories
+
+
+  setCategoryDetails = (category, category_id) ->
+    # get the name and description
+    categoryDetails = {name: $scope.allCategories[category_id].name, description: $scope.allCategories[category_id].description} if $scope.allCategories[category_id]
+    # set the category
+    category.name = categoryDetails.name
+    category.description = categoryDetails.description
+
+    # get the order if instruccted
+    category.order = $scope.allCategories[category_id].order if $scope.options.orderedCategories && $scope.allCategories[category_id]
+
+    $scope.categories.push(category)
+
+    selectCategory(categoryDetails)
+
+
+  selectCategory = (categoryDetails) ->
+    # check it a category is already selected
+    if $scope.selectedCategoryName and $scope.selectedCategoryName is categoryDetails.name
+      $scope.selectedCategory = $scope.categories[$scope.categories.length - 1]
+    # or if there's a default category
+    else if $scope.bb.item_defaults.category and $scope.bb.item_defaults.category.name is categoryDetails.name and !$scope.selectedCategory
+      $scope.selectedCategory = $scope.categories[$scope.categories.length - 1]
+      $scope.selectedCategoryName = $scope.selectedCategory.name
+
 
   ###**
   * @ngdoc method
@@ -207,15 +231,15 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   * @param {string} category_name The category name
   * @param {array} services The services array
   ###
-  $scope.changeCategory = (category_name, services) ->
+  $scope.changeCategory = (categoryName, services) ->
 
-    if category_name and services
-      $scope.selected_category = {
-        name: category_name
-        sub_categories: services
+    if categoryName and services
+      $scope.selectedCategory = {
+        name: categoryName
+        subCategories: services
       }
-      $scope.selected_category_name = $scope.selected_category.name
-      $rootScope.$broadcast "multi_service_select:category_changed"
+      $scope.selectedCategoryName = $scope.selectedCategory.name
+      $rootScope.$broadcast "multi_service_select:categoryChanged"
 
   ###**
   * @ngdoc method
@@ -225,8 +249,8 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   * Change the category name
   ###
   $scope.changeCategoryName = () ->
-      $scope.selected_category_name = $scope.selected_category.name
-      $rootScope.$broadcast "multi_service_select:category_changed"
+      $scope.selectedCategoryName = $scope.selectedCategory.name
+      $rootScope.$broadcast "multi_service_select:categoryChanged"
 
   ###**
   * @ngdoc method
@@ -248,8 +272,8 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       iitem.setDuration(duration) if duration
       iitem.setGroup(item.group)
       $scope.bb.stackItem(iitem)
-      $rootScope.$broadcast "multi_service_select:item_added"
-      AlertService.info({msg: "#{item.name} added to your service selection", persist:false}) if $scope.options.raise_alerts
+      $rootScope.$broadcast "multi_service_select:itemAdded"
+      AlertService.info({msg: "#{item.name} added to your service selection", persist:false}) if $scope.options.raiseAlerts
     else
       AlertService.add("warning", { msg: "You have already selected the maximum number of services" })
       
@@ -273,7 +297,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       $scope.bb.deleteStackedItemByService(item)
 
     $scope.bb.clearStackedItemsDateTime() # clear any selected date/time as the selection has changed
-    $rootScope.$broadcast "multi_service_select:item_removed"
+    $rootScope.$broadcast "multi_service_select:itemRemoved"
     for i in $scope.items
       if i.self is item.self
         i.selected = false
@@ -318,7 +342,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   * Add service which add a new item
   ###
   $scope.addService = () ->
-    $rootScope.$broadcast "multi_service_select:add_item"
+    $rootScope.$broadcast "multi_service_select:addItem"
 
   ###**
   * @ngdoc method

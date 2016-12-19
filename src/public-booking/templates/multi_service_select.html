@@ -1,6 +1,6 @@
 <div bb-page>
 <div bb-services class="bb-service-list">
-  <div bb-multi-service-select="{maxServices: 2}" class="section">
+  <div bb-multi-service-select="{maxServices: 3}" class="section">
 
     <div class="section">
       <div ng-show="categories">
@@ -8,9 +8,7 @@
         <ul class="filters hidden-xs">
           <div class="row">
             <li class="col-sm-4 col-md-3" ng-repeat="category in categories | orderBy: 'order'">
-              <div class="panel panel-service"  ng-click="changeCategory(category.name, category.sub_categories)" ng-class="{'selected': selected_category.name == category.name}">
-                <div class="panel-body" ng-style="{'background': 'url(//bespoke.bookingbug.com/blink/images/' + category.name.parameterise() + '.jpg) center center no-repeat'}">
-                </div>
+              <div class="panel panel-service"  ng-click="changeCategory(category.name, category.subCategories)" ng-class="{'selected': selectedCategory.name == category.name}">
                 <div class="panel-heading">
                   <h3>{{category.name}}</h3>
                 </div>
@@ -18,29 +16,14 @@
             </li>
           </div>
         </ul>
-
-        <div class="filters-xs visible-xs">
-          <form class="form" role="form" novalidate>
-            <div class="form-group">
-              <label for="treatment_type">Treatments</label>
-              <select
-                class="form-control"
-                id="category"
-                ng-model="selected_category"
-                ng-options="category.name for category in categories">
-                <option value="">&nbsp;</option>
-              </select>
-            </div>
-          </form>
-        </div>
       </div>
 
-      <div bb-scroll-to="multi_service_select:category_changed" bb-always-scroll>
-        <div ng-if="selected_category" ng-show="categories">
+      <div bb-scroll-to="multi_service_select:categoryChanged" bb-always-scroll>
+        <div ng-if="selectedCategory" ng-show="categories">
           <div class="section-heading">
-            <h2 class="section-title">{{selected_category.name}}</h2>
+            <h2 class="section-title">{{selectedCategory.name}}</h2>
           </div>
-          <p>{{selected_category.description}}</p>
+          <p>{{selectedCategory.description}}</p>
 
             <div class="panel">
               <div class="panel-body hidden-xs row">
@@ -51,10 +34,10 @@
               </div>
             </div>
 
-            <div ng-repeat="sub_category_services in selected_category.sub_categories">
+            <div ng-repeat="subCategoryServices in selectedCategory.subCategories">
 
 
-              <div ng-repeat="item in sub_category_services.services">
+              <div ng-repeat="item in subCategoryServices.services">
 
                 <div class="bb-list-item row">
                   <div class="col-sm-6">
@@ -93,56 +76,55 @@
     </div>
 
 
- <div bb-scroll-to="multi_service_select:category_changed" bb-always-scroll>
-        <div ng-show="services">
-          <div class="section-heading">
-          </div>
-            <div class="panel">
-              <div class="panel-body hidden-xs row">
-                <div class="col-sm-6">Service</div>
-                <div class="col-sm-1">Price</div>
-                <div class="col-sm-2">Duration</div>
-                <div class="col-sm-2"></div>
-              </div>
+    <div bb-scroll-to="multi_service_select:categoryChanged" bb-always-scroll>
+      <div ng-show="services">
+        <div class="section-heading">
+        </div>
+          <div class="panel">
+            <div class="panel-body hidden-xs row">
+              <div class="col-sm-6">Service</div>
+              <div class="col-sm-1">Price</div>
+              <div class="col-sm-2">Duration</div>
+              <div class="col-sm-2"></div>
             </div>
+          </div>
 
-            <div ng-repeat="service in services">
+          <div ng-repeat="service in services">
 
 
-              <div>
+            <div>
 
-                <div class="bb-list-item row">
-                  <div class="col-sm-6">
-                    <h4>{{service.name}}</h4>
-                  </div>
-                  <div class="col-sm-1">
-                    <span class="visible-xs-inline">Price: </span>{{service.price | icurrency}}
-                  </div>
-                  <div class="col-sm-2">
-                    <span class="visible-xs-inline">Duration: </span>{{service.listed_duration | time_period}}
-                  </div>
-                  <div class="col-sm-2">
-                    <button type="button" class="btn btn-block btn-default" ng-if="!service.selected" ng-click="addItem(service)">Add</button>
-                    <button type="button" class="btn btn-block btn-default" ng-if="service.selected"  ng-click="removeItem(service)">Remove</button>
-                  </div>
-                  <div ng-show="item.description">
-                    <span class="bb-btn bb-btn-link" ng-hide="service.show_more" ng-click="service.show_more = true">
-                      More
-                      <i class="fa fa-chevron-down" aria-hidden="true"></i>
-                    </span>
-                    <span class="bb-btn bb-btn-link" ng-show="service.show_more" ng-click="service.show_more = false">
-                      Less
-                      <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    </span>
-                  </div>
-                  <div class="item-description col-sm-12">
-                    <p ng-show="item.show_more">{{service.description}}</p>
-                  </div>
+              <div class="bb-list-item row">
+                <div class="col-sm-6">
+                  <h4>{{service.name}}</h4>
+                </div>
+                <div class="col-sm-1">
+                  <span class="visible-xs-inline">Price: </span>{{service.price | icurrency}}
+                </div>
+                <div class="col-sm-2">
+                  <span class="visible-xs-inline">Duration: </span>{{service.listed_duration | time_period}}
+                </div>
+                <div class="col-sm-2">
+                  <button type="button" class="btn btn-block btn-default" ng-if="!service.selected" ng-click="addItem(service)">Add</button>
+                  <button type="button" class="btn btn-block btn-default" ng-if="service.selected"  ng-click="removeItem(service)">Remove</button>
+                </div>
+                <div ng-show="item.description">
+                  <span class="bb-btn bb-btn-link" ng-hide="service.show_more" ng-click="service.show_more = true">
+                    More
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                  </span>
+                  <span class="bb-btn bb-btn-link" ng-show="service.show_more" ng-click="service.show_more = false">
+                    Less
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                  </span>
+                </div>
+                <div class="item-description col-sm-12">
+                  <p ng-show="item.show_more">{{service.description}}</p>
                 </div>
               </div>
-
+            </div>
           </div>
-
+        </div>
 
     <section ng-show="bb.stacked_items.length > 0" class="service-list-selected col-xs-10 col-xs-offset-1">
       <div class="section-heading">
