@@ -5,7 +5,7 @@
 
 <div class="modal-body">
 
-  <ul class="confirmation-summary">
+  <ul ng-show="booking" class="confirmation-summary">
     <li class="row confirmation-summary-item">
       <div class="col-xs-3">Service</div>
       <div class="col-xs-9">{{booking.service_name}}</div>
@@ -13,6 +13,17 @@
     <li class="row confirmation-summary-item">
       <div class="col-xs-3">When</div>
       <div class="col-xs-9">{{booking.datetime | datetime: "h:mma dddd Do MMMM"}}</div>
+    </li>
+  </ul>
+
+  <ul ng-show="purchase.bookings" class="confirmation-summary">
+    <li class="row confirmation-summary-item">
+      <div class="col-xs-3">Service</div>
+      <div class="col-xs-9">{{purchase.bookings[0].service_name}}</div>
+    </li>
+    <li class="row confirmation-summary-item">
+      <div class="col-xs-3">When</div>
+      <div class="col-xs-9">{{purchase.bookings[0].datetime | datetime: "h:mma dddd Do MMMM"}}</div>
     </li>
   </ul>
 
