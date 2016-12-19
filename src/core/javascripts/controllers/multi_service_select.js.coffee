@@ -40,8 +40,9 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   ]
 
   $scope.options                    = $scope.$eval($attrs.bbMultiServiceSelect) or {}
-  $scope.options.max_services       = $scope.options.max_services or Infinity
-  $scope.options.ordered_categories = $scope.options.ordered_categories or false
+  $scope.options.useCategories      = $scope.options.useCategories or false 
+  $scope.options.orderedCategories = $scope.options.orderedCategories or false
+  $scope.options.maxServices       = $scope.options.maxServices   or Infinity
   $scope.options.services           = $scope.options.services or 'items'
 
   loader = LoadingService.$loader($scope)
@@ -58,14 +59,19 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     $scope.$watch $scope.options.services, (newval, oldval) ->
       if newval and angular.isArray(newval)
         $scope.items = newval
-        initialise()
+        if $scope.options.useCategories then readyCategories() else readyServices()
 
-  initialise = () ->
 
-    return if !$scope.items or !$scope.company
+  readyServices = () ->
+    $scope.services = $scope.items
 
-    $scope.initialised = true
+    if $scope.bb.stacked_items and $scope.bb.stacked_items.length > 0
+      getStackedItems()
+    else
+      checkItemDefaults()
 
+
+  readyCategories = () ->
     promises = []
 
     promises.push(BBModel.Category.$query($scope.bb.company))
@@ -77,22 +83,13 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
 
       $scope.company_questions = result[1]
 
-      initialiseCategories(result[0])
+      initialiseCategories(result[0]) 
 
-      # if there's already some stacked items (i.e. we've come back to this page,
-      # make sure they're selected)
       if $scope.bb.stacked_items and $scope.bb.stacked_items.length > 0
-        for stacked_item in $scope.bb.stacked_items
-          for item in $scope.items
-            if item.self is stacked_item.service.self
-              stacked_item.service = item
-              stacked_item.service.selected = true
-              break
+        getStackedItems()
       else
-        # check item defaults
         checkItemDefaults()
 
-      # if we're moving the booking, just move to the next step
       if $scope.bb.moving_booking
         $scope.nextStep()
 
@@ -102,6 +99,15 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       loader.setLoaded()
 
     , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+
+
+  getStackedItems = () ->
+    for stacked_item in $scope.bb.stacked_items
+      for item in $scope.items
+        if item.self is stacked_item.service.self
+          stacked_item.service = item
+          stacked_item.service.selected = true
+          break
 
   ###**
   * @ngdoc method
@@ -233,7 +239,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   * @param {date} duration The duration
   ###
   $scope.addItem = (item, duration) ->
-    if $scope.bb.stacked_items.length < $scope.options.max_services
+    if $scope.bb.stacked_items.length < $scope.options.maxServices
       $scope.bb.clearStackedItemsDateTime() # clear any selected date/time as the selection has changed
       item.selected = true
       iitem = new BBModel.BasketItem(null, $scope.bb)
@@ -245,9 +251,8 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       $rootScope.$broadcast "multi_service_select:item_added"
       AlertService.info({msg: "#{item.name} added to your treatment selection", persist:false}) if $scope.options.raise_alerts
     else
-      for i in $scope.items
-        i.popover = "Sorry, you can only book a maximum of #{$scope.options.max_services} treatments"
-        i.popoverText = i.popover
+      AlertService.add("warning", { msg: "You have already selected the maximum number of services" })
+      
 
   ###**
   * @ngdoc method
