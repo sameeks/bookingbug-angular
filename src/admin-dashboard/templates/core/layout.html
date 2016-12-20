@@ -41,7 +41,8 @@
           </li>
 
           <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown" uib-dropdown is-open="isopen">
+          <li class="dropdown" uib-dropdown is-open="userAccount.isopen">
+
             <a href class="dropdown-toggle" uib-dropdown-toggle>
               <span class="hidden-xs">
                 &nbsp;
@@ -50,6 +51,7 @@
                 <span class="caret"></span>
               </span>
             </a>
+
             <ul class="dropdown-menu user-dropdown" uib-dropdown-menu role="menu">
               <li>
                 <a ui-sref="logout" class="btn btn-default btn-sm btn-block">
@@ -62,6 +64,10 @@
                   <i class="fa fa-home"></i>
                   <span translate="ADMIN_DASHBOARD.CORE.SWITCH_TO_CLASSIC"></span>
                 </a>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <timezone-select></timezone-select>
               </li>
             </ul>
           </li>

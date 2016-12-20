@@ -28,7 +28,7 @@ angular.module('BB', [
 
   'BB.i18n'
   'BB.uib'
-
+  'BB.uiSelect'
 ])
 
 angular.module('BB.Services', [

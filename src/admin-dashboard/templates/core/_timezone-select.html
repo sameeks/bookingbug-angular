@@ -1,0 +1,52 @@
+<h4>Preferences</h4>
+
+Time zone
+
+<!-- <ui-select
+  style="width: 260px;"
+  ng-model="$ctrl.selectedTimeZone"
+  theme="bootstrap"
+  ng-click="$ctrl.preventClose($event);"
+  ng-change="updateTimeZone(); resetTimeSelection()">
+
+  <ui-select-match placeholder="Select timezone">
+   {{$select.selected.display}}
+  </ui-select-match>
+
+  <ui-select-choices
+    ui-select-choices-lazyload
+    all-choices="$ctrl.timezones"
+    refresh-delay="0"
+    repeat="
+      timezone.value as timezone in $select.pagingOptions.items |
+      props: { display: $select.search}
+      track by timezone.id
+    ">
+    <div ng-bind-html="timezone.display | highlight: $select.search"></div>
+  </ui-select-choices>
+
+</ui-select> -->
+
+<!-- <br><br> -->
+
+<ui-select
+  style="width: 260px;"
+  ng-model="$ctrl.selectedTimeZone"
+  theme="bootstrap"
+  ng-click="$ctrl.preventClose($event);"
+  ng-change="updateTimeZone(); resetTimeSelection()">
+
+  <ui-select-match placeholder="Select timezone">
+   {{$select.selected.display}}
+  </ui-select-match>
+
+  <ui-select-choices
+    refresh-delay="400"
+    repeat="
+      timezone.value as timezone in $ctrl.timezones |
+      props: { display: $select.search}
+      track by timezone.id">
+    <div ng-bind-html="timezone.display | highlight: $select.search"></div>
+  </ui-select-choices>
+
+</ui-select>
