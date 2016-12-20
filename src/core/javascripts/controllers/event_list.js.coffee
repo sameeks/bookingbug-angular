@@ -500,7 +500,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     else
 
-      if $scope.bb.moving_purchase
+      if $scope.bb.movingPurchase
 
         i.setEvent(item) for i in $scope.bb.basket.items
 

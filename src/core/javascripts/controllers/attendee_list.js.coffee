@@ -23,7 +23,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
       deferred = $q.defer()
 
       params =
-        purchase: $scope.bb.moving_purchase
+        purchase: $scope.bb.movingPurchase
         bookings: $scope.bb.basket.items
         notify: true
       PurchaseService.update(params).then (purchase) ->
@@ -58,7 +58,7 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
     ###
     $scope.changeAttendees = () ->
 
-      return false if !$scope.bb.current_item.ready or !$scope.bb.moving_purchase
+      return false if !$scope.bb.current_item.ready or !$scope.bb.movingPurchase
 
       deferred = $q.defer()
 

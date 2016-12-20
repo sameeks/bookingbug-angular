@@ -2,13 +2,14 @@ angular.module('BB.Directives').directive 'bbMoveBooking', () ->
 	restrict: 'AE'
 	controller: 'MoveBooking'
 
-angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, BBModel, LoadingService, PurchaseService, PurchaseBookingService, AlertService, GeneralOptions, $translate, MemberBookingService, WidgetModalService, QueryStringService) ->
+angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, $attrs, BBModel, LoadingService, PurchaseService, PurchaseBookingService, AlertService, GeneralOptions, $translate, MemberBookingService, WidgetModalService, QueryStringService) ->
 
-	loader = LoadingService.$loader($scope)
+  loader = LoadingService.$loader($scope)
+  $scope.options = $scope.$eval($attrs.bbMoveBooking) or {}
 
-	$scope.initMove = (bookings, route) ->
+  $scope.initMove = (bookings, route) ->
     # open modal if moving public bookings from purchase template
-    if route is 'modal' 
+    if $scope.options.openCalendarInModal 
       total_id = QueryStringService('id')
       openCalendarModal(bookings, total_id)
 
@@ -24,55 +25,58 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 
 
   moveMultipleBookings = (bookings, route) ->
-    $scope.bb.moving_purchase = $scope.bb.purchase
+    if !bookings[0].datetimeHasChanged() 
+      AlertService.add("warning", { msg: "Your booking is already scheduled for that time." })
+      return
+
+    $scope.bb.movingPurchase = $scope.bb.purchase
     updatePurchase(bookings, route)
 
 
   moveSingleBooking = (basketItem, route) ->
-    basketItem.movedBooking = false
-    if basketItem.setAskedQuestions()
-      basketItem.setAskedQuestions() 
-    if basketItem.move_reason
-      basketItem.move_reason = $scope.bb.current_item.move_reason
+    # set ready to false until we check setAskedQuestions
+    basketItem.ready = false
 
-    updatePurchaseBooking(basketItem, route)
+    if !basketItem.datetimeHasChanged() 
+      AlertService.add("warning", { msg: "Your booking is already scheduled for that time." })
+      return
+
+    basketItem.setAskedQuestions() 
+
+    updatePurchaseBooking(basketItem, route) if basketItem.ready
 
 
   # updates single srcBooking of purchase
-	updatePurchaseBooking = (basketItem, route) ->
+  updatePurchaseBooking = (basketItem, route) ->
     loader.notLoaded()
     PurchaseBookingService.update(basketItem).then (purchaseBooking) ->
-      b = new BBModel.Purchase.Booking(purchaseBooking)
-
-      if $scope.bb.purchase
-        for oldb, _i in $scope.bb.purchase.bookings
-          $scope.bb.purchase.bookings[_i] = b if oldb.id == b.id
+      booking = new BBModel.Purchase.Booking(purchaseBooking)
       loader.setLoaded()
       $scope.bb.moved_booking = purchaseBooking
-      resolveCalendarModal(b)
-     , (err) =>
+      resolveCalendarModal(booking)
+    , (err) =>
       loader.setLoaded()
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
 
-  # updates all bookings found in purchase
-	updatePurchase = (bookings, route) ->
-    loader.notLoaded()
-    params =
-      purchase: $scope.bb.moving_purchase
+    # updates all bookings found in purchase
+    updatePurchase = (bookings, route) ->
+      loader.notLoaded()
+      params =
+      purchase: $scope.bb.movingPurchase
       bookings: bookings
-    if bookings[0].move_reason
-      params.move_reason = bookings[0].move_reason 
-    PurchaseService.update(params).then (purchase) ->
-      $scope.bb.purchase = purchase
-      $scope.bb.purchase.$getBookings().then (bookings)->
-        $scope.purchase = purchase 
-        loader.setLoaded()
-        resolveCalendarModal(bookings)
+      if bookings[0].move_reason
+        params.move_reason = bookings[0].move_reason 
+      PurchaseService.update(params).then (purchase) ->
+        $scope.bb.purchase = purchase
+        $scope.bb.purchase.$getBookings().then (bookings)->
+          $scope.purchase = purchase 
+          loader.setLoaded()
+          resolveCalendarModal(bookings)
 
-    , (err) ->
-       loader.setLoaded()
-       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
+      , (err) ->
+      loader.setLoaded()
+      AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
 
   openCalendarModal = (bookings, total_id) ->
@@ -99,12 +103,12 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
     # if modal is already open just load confirmation template
     if WidgetModalService.isOpen and WidgetModalService.config.member
       $scope.decideNextPage('confirmation')
-    # if using studio interface load purchase 
+      # if using studio interface load purchase 
     else if $rootScope.user
       $scope.decideNextPage('purchase')
     else 
       WidgetModalService.close() 
-    decideMoveMessage(bookings) 
+      decideMoveMessage(bookings) 
 
 
   decideMoveMessage = (bookings) ->
@@ -114,12 +118,13 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       datetime = bookings[0].datetime
     else 
       datetime = bookings.datetime
-    showMoveMessage(datetime)
+      showMoveMessage(datetime)
 
 
   showMoveMessage = (datetime) ->
     if GeneralOptions.use_i18n 
       $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
-        AlertService.add("info", { msg: translated_text })
+      AlertService.add("info", { msg: translated_text })
     else
       AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
+

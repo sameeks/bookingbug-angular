@@ -194,8 +194,6 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   $scope.confirm = (form, route) ->
     return if !ValidatorService.validateForm(form)
     # we need to validate the question information has been correctly entered here
-    if $scope.bb.moving_booking
-      return $scope.confirm_move(form, route)
 
     $scope.item.setAskedQuestions()
 

@@ -1444,3 +1444,17 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     ###
     isTimeItem: () ->
       return @service or @event
+      
+
+    ###**
+    * @ngdoc method
+    * @name datetimeHasChanged
+    * @methodOf BB.Models:BasketItem
+    * @description
+    * Indicates if the BasketItem datetime and srcBooking datetime differ 
+    * 
+    *
+    * @returns {boolean}
+    ###
+    datetimeHasChanged: () ->
+      return @time.datetime._i isnt @srcBooking.datetime._i
