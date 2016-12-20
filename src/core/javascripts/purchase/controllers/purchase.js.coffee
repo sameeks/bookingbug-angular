@@ -293,11 +293,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
     $scope.bb.cancel_reasons = $scope.cancel_reasons if $scope.cancel_reasons
 
 
-
-
-
-
-
 # Simple modal controller for handling the 'delete' modal
 ModalDelete = ($scope,  $rootScope, $uibModalInstance, booking, AlertService, cancel_reasons) ->
   $scope.controller = "ModalDelete"

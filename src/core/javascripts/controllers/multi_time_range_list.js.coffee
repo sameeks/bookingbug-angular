@@ -84,7 +84,6 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
 
     # read initialisation attributes
     $scope.options = $scope.$eval($attrs.bbTimeRangeStacked) or {}
-    console.log $scope.bb.stacked_items
 
 
     if !$scope.time_range_length
@@ -480,49 +479,11 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
         AlertService.add("danger", { msg: "Select a time to continue your booking" })
         return false
 
-    if $scope.bb.moving_booking? && $scope.bb.moving_booking.bookings?
-      different = false
-      for booking in $scope.bb.moving_booking.bookings
-        found = false
-        for item in $scope.bb.stacked_items
-          if booking.getDateString() == item.date.string_date && booking.getTimeInMins() == item.time.time && booking.category_name == item.category_name
-            found = true
-        if !found
-          different = true
-          break
-      if !different
-        AlertService.add("danger", { msg: "Your treatments are already booked for this time." })
-        return false
-
     # empty the current basket quickly
     $scope.bb.basket.clear()
 
     # add all the stacked items
     $scope.bb.pushStackToBasket()
-
-    if $scope.bb.moving_booking
-      # if we're moving - confirm everything in the basket right now
-      loader.notLoaded()
-
-      prom = PurchaseService.update({purchase: $scope.bb.moving_booking, bookings: $scope.bb.basket.items})
-
-      prom.then  (purchase) ->
-        purchase.$getBookings().then (bookings) ->
-          for booking in bookings
-            # update bookings
-            if $scope.bookings
-              for oldb, _i in $scope.bookings
-                if oldb.id == booking.id
-                  $scope.bookings[_i] = booking
-        loader.setLoaded()
-        $scope.bb.current_item.move_done = true
-        $scope.decideNextPage()
-      , (err) ->
-        loader.setLoaded()
-        AlertService.add("danger", { msg: "Failed to move booking" })
-      return
-
-    loader.notLoaded()
 
     if options.do_not_route
       return $scope.updateBasket()

@@ -482,7 +482,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
           , (err) ->
             totalDefer.reject(err)
         , (err) ->
-          totalDefer.reject(err)
+          totalDefer.reject(err) 
         totalDefer.promise
         setup_promises.push getPurchaseTotal
 
@@ -901,20 +901,22 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
   createBasketFromBookings = (bookings, totalDefer) ->
     proms = []
 
+    # build array of promises to be resolved when all items are in the basket
+    # when resolved basket is ready to move onto next step of the journey
     for booking in bookings  
       new_item = new BBModel.BasketItem(booking, $scope.bb)
       new_item.setSrcBooking(booking, $scope.bb)
-      new_item.ready = false
       Array::push.apply proms, new_item.promises
       $scope.bb.basket.addItem(new_item)
-      $scope.setBasketItem(new_item)
       $scope.bb.moving_booking = bookings 
-      
+
+    # set current_item if we are only loading one booking in the basket
     if bookings.length is 1 
       $scope.bb.current_item = $scope.bb.basket.items[0]
       $scope.bb.current_item.setDefaults({})
       $scope.bb.moving_booking = bookings[0]
 
+    # set stacked items when multiple bookings being loaded in modal 
     $scope.bb.setStackedItems($scope.bb.basket.items) if bookings.length > 1
 
     $q.all(proms).then () ->

@@ -29,7 +29,6 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
       PurchaseService.update(params).then (purchase) ->
         $scope.bb.purchase = purchase
         loader.setLoaded()
-        $scope.bb.current_item.move_done = true
         $rootScope.$broadcast "booking:updated"
         deferred.resolve()
       , (err) ->
