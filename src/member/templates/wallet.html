@@ -3,7 +3,7 @@
   <div class="wallet-balance">
 
     <div>
-      <span translate="MEMBER.WALLET.BALANCE_LABEL"></span>
+      <span translate="MEMBER.WALLET.BALANCE_LBL"></span>
       <span
         ng-show="wallet.amount == 0"
         translate="MEMBER.WALLET.WALLET_NO_CREDIT">
@@ -17,9 +17,9 @@
 
   <div class="wallet-status">
     <div ng-hide="wallet.active">
-      <span translate="MEMBER.WALLET.STATUS_LABEL"></span>
+      <span translate="MEMBER.WALLET.STATUS_LBL"></span>
       <span>
-        <b translate="MEMBER.WALLET.WALLET_NOT_ACTIVE"></b>
+        <b translate="MEMBER.WALLET.STATUS_INACTIVE"></b>
       </span>
       <span>
         <button
@@ -30,9 +30,9 @@
       </span>
     </div>
     <div ng-show="wallet.active">
-      <span translate="MEMBER.WALLET.STATUS_LABEL"></span>
+      <span translate="MEMBER.WALLET.STATUS_LBL"></span>
       <span id="status">
-        <b translate="MEMBER.WALLET.ACTIVE"></b>
+        <b translate="MEMBER.WALLET.STATUS_ACTIVE"></b>
       </span>
     </div>
   </div>
@@ -63,7 +63,7 @@
       <div ng-form class="form-inline">
         <div class="form-group">
           <label for="amount">
-            <span translate="MEMBER.WALLET.AMOUNT_LABEL"></span>:
+            <span translate="MEMBER.WALLET.AMOUNT_LBL"></span>:
           </label>
           <div class="input-group">
             <input

@@ -11,14 +11,14 @@
       <form class="form-inline">
 
         <div ng-if="all_categories" class="form-group">
-          <label class="sr-only" translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.CATEGORY_LABEL"></label>
+          <label class="sr-only" translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.CATEGORY_LBL"></label>
           <select class="form-control" type="text" name="category" id="category" ng-model="filters.category_name" ng-options="item.name for item in all_categories" ng-change="filterChanged()">
             <option value="" translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.ANY_CATEGORY"></option>
           </select>
         </div>
 
         <div class="form-group">
-          <label class="sr-only" translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.SERVICE_LABEL"></label>
+          <label class="sr-only" translate="PUBLIC_BOOKING.SERVICE_LIST_FILTER.SERVICE_LBL"></label>
           <input class="form-control" type="text" ng-model="filters.service_name" ng-change="filterChanged()" placeholder="{{ 'PUBLIC_BOOKING.SERVICE_LIST_FILTER.ITEM_SERVICE_PLACEHOLDER' | translate}}"/>
         </div>
 

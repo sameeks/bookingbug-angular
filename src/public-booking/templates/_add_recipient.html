@@ -48,7 +48,7 @@
           ng-class="{'has-error': recipient_form.name.$invalid && (!recipient_form.name.$pristine || recipient_form.submitted)}">
           <label
             for="name"
-            translate="PUBLIC_BOOKING.ADD_RECIPIENT.NAME_LABEL">
+            translate="PUBLIC_BOOKING.ADD_RECIPIENT.NAME_LBL">
           </label>
           <input
             type="text"
@@ -73,7 +73,7 @@
           ng-class="{'has-error': recipient_form.email.$invalid && (!recipient_form.email.$pristine || recipient_form.submitted)}">
           <label
             for="email"
-            translate="PUBLIC_BOOKING.ADD_RECIPIENT.EMAIL_LABEL">
+            translate="PUBLIC_BOOKING.ADD_RECIPIENT.EMAIL_LBL">
           </label>
           <input
             type="email"
@@ -98,12 +98,12 @@
     <button
       class="btn btn-primary"
       ng-click="addToBasket(recipient_form)"
-      translate="PUBLIC_BOOKING.ADD_RECIPIENT.ADD_LABEL">
+      translate="PUBLIC_BOOKING.ADD_RECIPIENT.ADD_LBL">
     </button>
     <button
       class="btn btn-secondary"
       ng-click="cancel()"
-      translate="PUBLIC_BOOKING.ADD_RECIPIENT.CANCEL_LABEL">
+      translate="PUBLIC_BOOKING.ADD_RECIPIENT.CANCEL_LBL">
     </button>
   </div>
 </form>

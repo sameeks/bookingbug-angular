@@ -1,20 +1,20 @@
-'use strict';
+"use strict";
 
-angular.module('BBAdminSettings').config ($translateProvider) ->
-  'ngInject'
+angular.module("BBAdminSettings").config ($translateProvider) ->
+  "ngInject"
 
   translations = {
     SETTINGS: {
       ADMIN_TABLE: {
-        NEW_ADMINISTRATOR: 'New Administrator'
-        EDIT: '@:COMMON.BTN.EDIT'
+        NEW_ADMINISTRATOR : "New Administrator"
+        EDIT              : "@:COMMON.BTN.EDIT"
       }
       ADMIN_FORM: {
-        CANCEL_BTN: '@:COMMON.BTN.CANCEL'
+        CANCEL_BTN: "@:COMMON.BTN.CANCEL"
       }
     }
   }
 
-  $translateProvider.translations('en', translations)
+  $translateProvider.translations("en", translations)
 
   return

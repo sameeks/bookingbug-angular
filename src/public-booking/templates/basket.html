@@ -37,7 +37,7 @@
                   <small>{{item.resource.getAddress() | address_single_line }}</small>
                   <br/>
                   <small ng-show="item.recipient">
-                    <span translate="PUBLIC_BOOKING.BASKET.RECIPIENT_LABEL"></span>: {{item.recipient}}
+                    <span translate="PUBLIC_BOOKING.BASKET.RECIPIENT_LBL"></span>: {{item.recipient}}
                   </small>
                 </p>
               </td>
@@ -45,7 +45,7 @@
                 {{item.total_price | currency}}
                 <div ng-show="item.certificate_paid > 0">
                   <small>
-                    <span translate="PUBLIC_BOOKING.BASKET.CERTIFICATE_PAID_LABEL"></span>: {{item.certificate_paid | currency}}
+                    <span translate="PUBLIC_BOOKING.BASKET.CERTIFICATE_PAID_LBL"></span>: {{item.certificate_paid | currency}}
                   </small>
                 </div>
               </td>
@@ -91,7 +91,7 @@
             <tr ng-show="basket.hasDeal() || basket.hasCoupon()">
               <th
                 class="text-right"
-                translate="PUBLIC_BOOKING.BASKET.ORIGINAL_PRICE_LABEL"> 
+                translate="PUBLIC_BOOKING.BASKET.ORIGINAL_PRICE_LBL"> 
               </th>
               <th class="text-right">{{basket.fullPrice() | currency }}</th>
               <th>&nbsp;</th>
@@ -100,7 +100,7 @@
             <tr ng-show="basket.questionPrice()">
               <th
                 Class="text-right"
-                translate="PUBLIC_BOOKING.BASKET.BOOKING_FEE_LABEL">
+                translate="PUBLIC_BOOKING.BASKET.BOOKING_FEE_LBL">
               </th>
               <th class="text-right">{{basket.questionPrice() | currency}}</th>
               <th>&nbsp;</th>
@@ -110,7 +110,7 @@
             <tr ng-show="basket.hasDeal()">
               <th
                 class="text-right"
-                translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATES_TOTAL_LABEL">
+                translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATES_TOTAL_LBL">
               </th>
               <th class="text-right">{{basket.totalDeals() | currency }}</th>
               <th>&nbsp;</th>
@@ -119,7 +119,7 @@
             <tr ng-show="basket.hasDeal()">
               <th
                 class="text-right"
-                translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATE_BALANCE_LABEL">
+                translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATE_BALANCE_LBL">
               </th>
               <th class="text-right">{{basket.totalCertificatePaid() | currency}}</th>
               <th>&nbsp;</th>
@@ -128,7 +128,7 @@
             <tr ng-show="basket.hasCoupon()">
               <th
                 class="text-right"
-                translate="PUBLIC_BOOKING.BASKET.COUPON_DISCOUNT_LABEL">
+                translate="PUBLIC_BOOKING.BASKET.COUPON_DISCOUNT_LBL">
               </th>
               <th class="text-right">{{(bb.basket.fullPrice() - bb.basket.totalPrice()) | currency}}</th>
               <th>&nbsp;</th>
@@ -137,7 +137,7 @@
             <tr ng-show="basket.total_price > 0">
               <th
                 class="text-right"
-                translate="PUBLIC_BOOKING.BASKET.TOTAL_LABEL">
+                translate="PUBLIC_BOOKING.BASKET.TOTAL_LBL">
               </th>
               <th class="text-right">{{basket.total_price | currency }}</th>
               <th>&nbsp;</th>
@@ -145,7 +145,7 @@
             <tr ng-if="basket.total_due_price != basket.total_price">
               <th
                 class="text-right"
-                translate="PUBLIC_BOOKING.BASKET.TOTAL_DUE_NOW_LABEL">
+                translate="PUBLIC_BOOKING.BASKET.TOTAL_DUE_NOW_LBL">
               </th>
               <th class="text-right">{{basket.total_due_price | currency }}</th>
               <th>&nbsp;</th>
@@ -160,7 +160,7 @@
           <div ng-show="client.has_active_wallet">
 
             <p>
-              <span translate="PUBLIC_BOOKING.BASKET.WALLET_BALANCE_LABEL"></span>: {{client.wallet_amount | currency}}
+              <span translate="PUBLIC_BOOKING.BASKET.WALLET_BALANCE_LBL"></span>: {{client.wallet_amount | currency}}
             </p>
 
             <small
@@ -195,7 +195,7 @@
         <div
           ng-if="bb.company_settings.has_coupons"
           class="bb-coupon-box">
-          <span translate="PUBLIC_BOOKING.BASKET.APPLY_COUPON_LABEL"></span>
+          <span translate="PUBLIC_BOOKING.BASKET.APPLY_COUPON_LBL"></span>
           <input ng-model="coupon_code"/>
           <button
             type="button"
@@ -220,12 +220,12 @@
               <label
                 ng-if="!basket.hasDeal()"
                 for="deal">
-                  <span translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATE.APPLY_LABEL"></span>:
+                  <span translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATE.APPLY_LBL"></span>:
               </label>
               <label
                 ng-if="basket.hasDeal()"
                 for="deal">
-                <span translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATE.APPLY_ANOTHER_LABEL"></span>:
+                <span translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATE.APPLY_ANOTHER_LBL"></span>:
               </label>
               <div class="input-group">
                 <input

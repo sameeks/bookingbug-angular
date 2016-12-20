@@ -157,7 +157,7 @@
             <li ng-show="selected_tickets && bb.basket.questionPrice()">
               <div class="row">
                 <div class="col-sm-6 col-xs-6 text-right">
-                  <span translate="PUBLIC_BOOKING.EVENT.ADD_ONS_LABEL"></span>
+                  <span translate="PUBLIC_BOOKING.EVENT.ADD_ONS_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
                   {{bb.basket.questionPrice() | currency}}
@@ -168,7 +168,7 @@
             <li ng-show="selected_tickets && (bb.basket.hasCoupon() || bb.basket.hasDeal())">
               <div class="row">
                 <div class="col-sm-6 col-xs-6 total-label">
-                  <span translate="PUBLIC_BOOKING.EVENT.SUBTOTAL_LABEL"></span>
+                  <span translate="PUBLIC_BOOKING.EVENT.SUBTOTAL_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
                   {{bb.basket.fullPrice() | currency}}
@@ -179,7 +179,7 @@
             <li ng-show="selected_tickets && bb.basket.hasDeal()">
               <div class="row">
                 <div class="col-sm-6 col-xs-6 text-right">
-                  <span translate="PUBLIC_BOOKING.EVENT.GIFT_CERT_LABEL"></span>
+                  <span translate="PUBLIC_BOOKING.EVENT.GIFT_CERT_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
                   <div>{{bb.basket.totalDealPaid() | currency}}</div>
@@ -190,7 +190,7 @@
             <li ng-show="selected_tickets && bb.basket.hasCoupon()">
               <div class="row">
                 <div class="col-sm-6 col-xs-6 text-right">
-                  <span translate="PUBLIC_BOOKING.EVENT.DISCOUNT_LABEL"></span>
+                  <span translate="PUBLIC_BOOKING.EVENT.DISCOUNT_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">-{{bb.basket.totalCoupons() | currency}} <!-- <span>(10%)</span></div> -->
                 </div>
@@ -200,7 +200,7 @@
             <li ng-show="selected_tickets">
               <div class="row">
                 <div class="col-sm-6 col-xs-6 total-label">
-                  <span translate="PUBLIC_BOOKING.EVENT.BASKET_TOTAL_LABEL"></span>
+                  <span translate="PUBLIC_BOOKING.EVENT.BASKET_TOTAL_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
                   <strong>{{bb.basket.totalPrice() | currency}}</strong>
@@ -211,7 +211,7 @@
             <li ng-show="selected_tickets">
               <div class="row">
                 <div class="col-sm-6 col-xs-6 total-label">
-                  <span translate="PUBLIC_BOOKING.EVENT.BASKET_DUE_TOTAL_LABEL"></span>
+                  <span translate="PUBLIC_BOOKING.EVENT.BASKET_DUE_TOTAL_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
                   <strong>{{bb.basket.dueTotal() | currency}}</strong>
@@ -307,7 +307,7 @@
                     <label
                       for="attendee_first_name"
                       class="control-label col-sm-4">
-                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.FIRST_NAME_LABEL"></span>*:
+                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.FIRST_NAME_LBL"></span>*:
                     </label>
                     <div
                       ng-if="use_my_details && $first"
@@ -337,7 +337,7 @@
                     <label
                       for="attendee_last_name"
                       class="control-label col-sm-4">
-                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.LAST_NAME_LABEL"></span>*:
+                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.LAST_NAME_LBL"></span>*:
                     </label>
                     <div
                       ng-if="use_my_details && $first"
@@ -369,7 +369,7 @@
                     <label
                       for="attendee_email"
                       class="control-label col-sm-4">
-                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.EMAIL_LABEL"></span>:
+                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.EMAIL_LBL"></span>:
                     </label>
                     <div
                       ng-if="use_my_details && $first"
@@ -442,7 +442,7 @@
                 id="tandc"
                 name="tandc"
               />
-              <span translate="PUBLIC_BOOKING.EVENT.T_AND_C_LABEL"></span>.
+              <span translate="PUBLIC_BOOKING.EVENT.T_AND_C_LBL"></span>.
             </label>
           </div>
           <div class="col-sm-3 messages">
