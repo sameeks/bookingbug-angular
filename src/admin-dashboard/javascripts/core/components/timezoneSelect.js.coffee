@@ -13,7 +13,7 @@
 * </example>
 ###
 
-timezoneSelectController = ($translate, TimezoneList) ->
+timezoneSelectController = ($rootScope, $translate, TimezoneList, GeneralOptions, uiCalendarConfig) ->
 
   this.$onInit = () ->
     this.timezones = TimezoneList.generateTzList(this.restrictRegion)
@@ -21,6 +21,11 @@ timezoneSelectController = ($translate, TimezoneList) ->
 
   this.preventClose = (event) ->
     event.stopPropagation()
+
+  # this.updateTimeZone = (selectedTimezone) ->
+  #   GeneralOptions.display_time_zone = selectedTimezone
+  #   localStorage.selectedTimeZone = selectedTimezone
+  #   $rootScope.$broadcast('timezone_changed')
 
   return
 

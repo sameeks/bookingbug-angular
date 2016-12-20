@@ -31,10 +31,10 @@ Time zone
 
 <ui-select
   style="width: 260px;"
-  ng-model="$ctrl.selectedTimeZone"
+  ng-model="$ctrl.selectedTimezone"
   theme="bootstrap"
   ng-click="$ctrl.preventClose($event);"
-  ng-change="updateTimeZone(); resetTimeSelection()">
+  ng-change="$ctrl.updateTimeZone($ctrl.selectedTimezone); resetTimeSelection()">
 
   <ui-select-match placeholder="Select timezone">
    {{$select.selected.display}}
