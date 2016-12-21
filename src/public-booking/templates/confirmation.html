@@ -58,7 +58,7 @@
                 </div>
               </div>
             </li>
-
+ 
             <div class="confirmation-summary-address">
               <div ng-show="total.bookings[0].address"><span class='fa fa-map-marker'></span> {{total.bookings[0].address | address_single_line}}</div>
               <div ng-show="total.bookings[0].address.phone"> <span class='fa fa-phone'></span> {{total.bookings[0].address.phone | local_phone_number}}</div>
@@ -70,6 +70,20 @@
             <div ng-repeat="msg in messages" ng-bind-html="msg"></div>
           </div>
 
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <div bb-move-booking="{openCalendarInModal: true}">
+          <button 
+            type="button" 
+            id="btn-continue" 
+            class="btn btn-primary btn-block" 
+            ng-click="initMove(total.bookings)" 
+            bb-debounce>
+            <span>Reschedule</span>
+          </button>
         </div>
 
       </div>
