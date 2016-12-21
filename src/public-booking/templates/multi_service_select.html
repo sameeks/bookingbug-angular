@@ -1,6 +1,6 @@
 <div bb-page>
 <div bb-services class="bb-service-list">
-  <div bb-multi-service-select="{maxServices: 3}" class="section">
+  <div bb-multi-service-select class="section">
 
     <div class="section">
       <div ng-show="categories">
@@ -14,8 +14,8 @@
           <div class="panel">
             <div class="panel-body hidden-xs row">
               <div class="col-sm-6">Service</div>
-              <div class="col-sm-1">Price</div>
               <div class="col-sm-2">Duration</div>
+              <div class="col-sm-2">Price</div>
               <div class="col-sm-2"></div>
             </div>
           </div>
@@ -25,14 +25,23 @@
             <div class="col-sm-6">
               <h4>{{service.name}}</h4>
             </div>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
+              <span class="visible-xs-inline">Duration: </span>
+              <div ng-show="service.durations.length == 1">{{service.listed_duration | time_period}}</div>
+              <select 
+                class="form-control" 
+                ng-show="service.durations.length > 1" 
+                ng-model="service.duration" 
+                ng-options="duration for duration in service.durations"
+                ng-change="selectDuration(service, service.duration)">
+                <option value="">{{duration | time_period}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2">
               <span class="visible-xs-inline">Price: </span>{{service.price | icurrency}}
             </div>
             <div class="col-sm-2">
-              <span class="visible-xs-inline">Duration: </span>{{service.listed_duration | time_period}}
-            </div>
-            <div class="col-sm-2">
-              <button type="button" class="btn btn-block btn-default" ng-if="!service.selected" ng-click="addItem(service)">Add</button>
+              <button type="button" class="btn btn-block btn-default" ng-if="!service.selected" ng-click="addItem(service, duration)">Add</button>
               <button type="button" class="btn btn-block btn-default" ng-if="service.selected"  ng-click="removeItem(service)">Remove</button>
             </div>
             <div ng-show="item.description">

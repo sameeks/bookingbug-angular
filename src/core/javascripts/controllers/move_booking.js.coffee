@@ -2,7 +2,7 @@ angular.module('BB.Directives').directive 'bbMoveBooking', () ->
 	restrict: 'AE'
 	controller: 'MoveBooking'
 
-angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, $attrs, BBModel, LoadingService, PurchaseService, PurchaseBookingService, AlertService, GeneralOptions, $translate, MemberBookingService, WidgetModalService, QueryStringService) ->
+angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, $attrs, BBModel, LoadingService, PurchaseService, PurchaseBookingService, AlertService, GeneralOptions, $translate, MemberBookingService, WidgetModalService, QueryStringService, $window) ->
 
   loader = LoadingService.$loader($scope)
   $scope.options = $scope.$eval($attrs.bbMoveBooking) or {}
@@ -59,22 +59,22 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
 
-    # updates all bookings found in purchase
-    updatePurchase = (bookings, route) ->
-      loader.notLoaded()
-      params =
+  # updates all bookings found in purchase
+  updatePurchase = (bookings, route) ->
+    loader.notLoaded()
+    params =
       purchase: $scope.bb.movingPurchase
       bookings: bookings
-      if bookings[0].move_reason
-        params.move_reason = bookings[0].move_reason 
-      PurchaseService.update(params).then (purchase) ->
-        $scope.bb.purchase = purchase
-        $scope.bb.purchase.$getBookings().then (bookings)->
-          $scope.purchase = purchase 
-          loader.setLoaded()
-          resolveCalendarModal(bookings)
+    if bookings[0].move_reason
+      params.move_reason = bookings[0].move_reason 
+    PurchaseService.update(params).then (purchase) ->
+      $scope.bb.purchase = purchase
+      $scope.bb.purchase.$getBookings().then (bookings)->
+        $scope.purchase = purchase 
+        loader.setLoaded()
+        resolveCalendarModal(bookings)
 
-      , (err) ->
+    , (err) ->
       loader.setLoaded()
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
@@ -118,7 +118,7 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       datetime = bookings[0].datetime
     else 
       datetime = bookings.datetime
-      showMoveMessage(datetime)
+    showMoveMessage(datetime)
 
 
   showMoveMessage = (datetime) ->
@@ -126,5 +126,6 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
       AlertService.add("info", { msg: translated_text })
     else
-      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
+      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" }) 
 
+    $window.scroll(0, 0)

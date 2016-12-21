@@ -37,9 +37,12 @@ angular.module('BB.Services').provider 'GeneralOptions', ->
     use_i18n: false 
     update_document_title: false 
     scroll_offset: 0
+    useCategories: false 
+    useSubCategories: false
+    maxServices: Infinity 
+    orderedCategories: false 
+    raiseAlerts: false
   }
-
-
 
   @setOption = (option, value) ->
     if options.hasOwnProperty(option)

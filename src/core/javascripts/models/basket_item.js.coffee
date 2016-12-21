@@ -617,9 +617,10 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
       else if @time && @time.price
         @base_price = @time.price
       else if @price
-        @base_price = @price
+        @base_price = @price  
 
-      @setPrice(@base_price)
+      # dont set price if there is no base_price - this would ovverride the price specific to the duration when multiple services selected
+      @setPrice(@base_price) unless !@base_price
 
     ###**
     * @ngdoc method
@@ -1444,7 +1445,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     ###
     isTimeItem: () ->
       return @service or @event
-      
+
 
     ###**
     * @ngdoc method

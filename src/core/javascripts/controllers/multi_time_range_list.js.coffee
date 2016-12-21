@@ -330,6 +330,8 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
     grouped_items = _.groupBy $scope.bb.stacked_items, (item) -> item.service.id
     grouped_items = _.toArray grouped_items
 
+    duration = $scope.bb.stacked_items[0].service.duration 
+
 
     for items in grouped_items
       pslots.push(TimeService.query({
@@ -339,7 +341,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
         end_date: $scope.end_date
         client: $scope.client
         available: 1
-        #duration: duration
+        duration: duration
       }))
 
     $q.all(pslots).then (res) ->

@@ -33,18 +33,11 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   controller : 'MultiServiceSelect'
 
 angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $rootScope,
-  $q, $attrs, BBModel, $uibModal, $document, AlertService, FormDataStoreService, LoadingService) ->
+  $q, $attrs, BBModel, $uibModal, $document, AlertService, FormDataStoreService, LoadingService, GeneralOptions) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selectedCategoryName'
   ]
-
-  $scope.options                    = $scope.$eval($attrs.bbMultiServiceSelect) or {}
-  $scope.options.useCategories      = $scope.options.useCategories or false
-  $scope.options.useSubCategories   = $scope.options.useSubCategories or false  
-  $scope.options.orderedCategories  = $scope.options.orderedCategories or false
-  $scope.options.maxServices        = $scope.options.maxServices   or Infinity
-  $scope.options.services           = $scope.options.services or 'items'
 
   loader = LoadingService.$loader($scope)
 
@@ -57,18 +50,14 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       $scope.company = $scope.bb.company
 
     # wait for services before we begin initialisation
-    $scope.$watch $scope.options.services, (newval, oldval) ->
+    $scope.$watch 'items', (newval, oldval) ->
       if newval and angular.isArray(newval)
         $scope.items = newval
-        if $scope.options.useCategories then readyCategories() else readyServices()
+        if GeneralOptions.useCategories then readyCategories() else readyServices()
 
 
   readyServices = () ->
-    services = $scope.items
-    # filter out services with no duration
-    $scope.services = _.filter(services, (service) ->
-      service.duration?
-    ) 
+    $scope.services = $scope.items
 
     if $scope.bb.stacked_items and $scope.bb.stacked_items.length > 0
       getStackedItems()
@@ -140,7 +129,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   initialiseCategories = (categories) ->
 
     # extract order from category name if we're using ordered categories
-    if $scope.options.orderedCategories
+    if GeneralOptions.orderedCategories
       for category in categories
           category.order = parseInt(category.name.slice(0,2))
           category.name  = category.name.slice(3)
@@ -152,7 +141,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     allCategories = _.groupBy($scope.items, (item) -> item.category_id)
 
     # find any sub categories
-    if $scope.options.useSubCategories
+    if GeneralOptions.useSubCategories
       subCategories = findSubCategories()
 
     categories = filterEmptyCategories(allCategories)
@@ -208,7 +197,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     category.description = categoryDetails.description
 
     # get the order if instruccted
-    category.order = $scope.allCategories[category_id].order if $scope.options.orderedCategories && $scope.allCategories[category_id]
+    category.order = $scope.allCategories[category_id].order if GeneralOptions.orderedCategories && $scope.allCategories[category_id]
 
     $scope.categories.push(category)
 
@@ -265,19 +254,20 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   *
   * @param {array} item The item that been added
   * @param {date} duration The duration
-  ###
+  ### 
   $scope.addItem = (item, duration) ->
-    if $scope.bb.stacked_items.length < $scope.options.maxServices
+    if $scope.bb.stacked_items.length < GeneralOptions.maxServices
       $scope.bb.clearStackedItemsDateTime() # clear any selected date/time as the selection has changed
       item.selected = true
       iitem = new BBModel.BasketItem(null, $scope.bb)
       iitem.setDefaults($scope.bb.item_defaults)
       iitem.setService(item)
+      iitem.setPrice(item.price) if item.prices.length > 0
       iitem.setDuration(duration) if duration
       iitem.setGroup(item.group)
       $scope.bb.stackItem(iitem)
       $rootScope.$broadcast "multi_service_select:itemAdded"
-      AlertService.info({msg: "#{item.name} added to your service selection", persist:false}) if $scope.options.raiseAlerts
+      AlertService.info({msg: "#{item.name} added to your service selection", persist:false}) if GeneralOptions.raiseAlerts
     else
       AlertService.add("warning", { msg: "You have already selected the maximum number of services" })
       
@@ -377,28 +367,31 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   *
   * @params {object} service The service
   ###
-  $scope.selectDuration = (service) ->
+  $scope.selectDuration = (service, duration) ->
+    service.price = service.getPriceByDuration(duration)
+    service.duration = duration
+    service.listed_duration = duration
 
-    if service.durations.length is 1
-      $scope.addItem(service)
-    else
+    # if service.durations.length is 1
+    #   $scope.addItem(service)
+    # else
 
-      modalInstance = $uibModal.open
-        templateUrl: $scope.getPartial('_select_duration_modal')
-        scope: $scope
-        controller: ($scope, $uibModalInstance, service) ->
-          $scope.durations = service.durations
-          $scope.duration = $scope.durations[0]
-          $scope.service = service
+    #   modalInstance = $uibModal.open
+    #     templateUrl: $scope.getPartial('_select_duration_modal')
+    #     scope: $scope
+    #     controller: ($scope, $uibModalInstance, service) ->
+    #       $scope.durations = service.durations
+    #       $scope.duration = $scope.durations[0]
+    #       $scope.service = service
 
-          $scope.cancel = ->
-            $uibModalInstance.dismiss 'cancel'
-          $scope.setDuration = () ->
-            $uibModalInstance.close({service: $scope.service, duration: $scope.duration})
-        resolve:
-          service: ->
-            service
+    #       $scope.cancel = ->
+    #         $uibModalInstance.dismiss 'cancel'
+    #       $scope.setDuration = () ->
+    #         $uibModalInstance.close({service: $scope.service, duration: $scope.duration})
+    #     resolve:
+    #       service: ->
+    #         service
 
-      modalInstance.result.then (result) ->
-        $scope.addItem(result.service, result.duration)
+    #   modalInstance.result.then (result) ->
+    #     $scope.addItem(result.service, result.duration)
 
