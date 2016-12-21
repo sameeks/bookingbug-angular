@@ -11,13 +11,15 @@
 *
 * @example
   <example>
-    <div
-      bb-file-upload
-      item="item"
-      max-size="100KB"
-      pretty-accept="images, .pdf, .doc/docx"
-      accept="'application/pdf,application/msword,image/*'">
-    </div>
+    <file name="index.html">
+      <div
+        bb-file-upload
+        item="item"
+        max-size="100KB"
+        pretty-accept="images, .pdf, .doc/docx"
+        accept="'application/pdf,application/msword,image/*'">
+      </div>
+    </file>
   </example>
 ###
 

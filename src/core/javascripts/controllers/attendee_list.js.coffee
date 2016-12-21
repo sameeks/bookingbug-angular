@@ -1,5 +1,11 @@
 'use strict'
 
+###**
+* @ngdoc directive
+* @name BB.Directives:bbAttendees
+* @restrict: 'AE'
+* @scope : true
+###
 angular.module('BB.Directives').directive 'bbAttendees', () ->
   restrict: 'AE'
   replace: true

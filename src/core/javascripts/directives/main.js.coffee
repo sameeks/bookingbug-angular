@@ -291,7 +291,7 @@ angular.module('BB.Directives').directive 'bbModal', ($window, $bbug, $timeout) 
 * Adds a background-image to an element
 
 * @param
-* {string} url
+* {string} url The url of the background image.
 *
 * @example
 * <div bb-background-image='images/example.jpg'></div>
@@ -362,5 +362,5 @@ angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions, Company
     scope.time_zone_name = moment().tz(company_time_zone).format('zz')
     #  if not using local time zone and user time zone is not same as companies
     if !GeneralOptions.use_local_time_zone and GeneralOptions.display_time_zone != company_time_zone
-      scope.is_time_zone_diff = true 
+      scope.is_time_zone_diff = true
 

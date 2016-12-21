@@ -1306,7 +1306,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     * @description
     * Checks if the BasketItem has a price
     *
-    * @returns {boolean}
+    * @returns {boolean} Whether the BasketItem has a price.
     ###
     hasPrice: () ->
       return @price?
@@ -1394,7 +1394,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     * @description
     * Indicates if the BasketItem is an external purchase
     *
-    * @returns {boolean}
+    * @returns {boolean} Whether the BasketItem is an external purchase.
     ###
     isExternalPurchase: () ->
       return @external_purchase?
@@ -1407,7 +1407,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     * @description
     * Returns the basket item name
     *
-    * @returns {String}
+    * @returns {String} The BasketItem name.
     ###
     getName: () ->
       if @session_name
@@ -1423,7 +1423,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     * @description
     * Returns the attendee name
     *
-    * @returns {String}
+    * @returns {String} The attendee name.
     ###
     getAttendeeName: (client) ->
       if @first_name
@@ -1440,7 +1440,8 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     * Indicates if the BasketItem is a time item (i.e. either an event
     * or appointment booking)
     *
-    * @returns {boolean}
+    * @returns {boolean} Whether the BasketItem is a time item (i.e. either an event
+    * or appointment booking)
     ###
     isTimeItem: () ->
       return @service or @event

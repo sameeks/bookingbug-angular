@@ -116,7 +116,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Returns an array of time items (i.e. event and appointment bookings)
     *
-    * @returns {array}
+    * @returns {array} An array of time items (i.e. event and appointment bookings)
     ###
     timeItems: ->
       titems = []
@@ -131,7 +131,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
     * @description
     * Indicates if the basket contains time items (i.e. event and appointment bookings)
     *
-    * @returns {boolean}
+    * @returns {boolean} Whether the basket contains time items (i.e. event and appointment bookings)
     ###
     hasTimeItems: ->
       for i in @items
