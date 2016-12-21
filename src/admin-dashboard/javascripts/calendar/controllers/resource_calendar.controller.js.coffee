@@ -35,10 +35,12 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     $scope.$on 'refetchBookings', refetchBookingsHandler
     $scope.$on 'newCheckout', newCheckoutHandler
     $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
+    $rootScope.$on 'timezoneUpdated', newTzHandler
 
     getCompanyPromise().then(companyListener)
 
     vm.changeSelectedResources = changeSelectedResources
+    console.log(vm.uiCalOptions)
     return
 
   applyFilters = () ->
@@ -84,7 +86,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       if $scope.model
         options.showAll = false
         options.selectedResources = [$scope.model]
-
       CalendarEventSources.getAllCalendarEntries(company, start, end, options).then (results)->
         vm.loading = false
         return callback(results)
@@ -131,6 +132,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     vm.uiCalOptions = # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
       calendar:
         locale: $translate.use()
+        editable: true
         schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: false
         eventDurationEditable: false
@@ -177,6 +179,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         viewRender: fcViewRender
         eventResize: fcEventResize
         loading: fcLoading
+        ignoreTimezone: false
+        # timezone: 'Australia/Sydney'
     return
 
   fcResources = (callback) ->
@@ -504,6 +508,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
   newCheckoutHandler = () ->
     uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
+    return
+
+  newTzHandler = (event, tz) ->
+    # uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('removeEvents');
+    uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('option', 'timezone', tz)
+    # uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('addEventSource', vm.eventSources);
+    console.log(vm.uiCalOptions)
     return
 
   languageChangedHandler = () ->

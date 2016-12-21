@@ -28,7 +28,7 @@ timezoneListFactory = ($translate, orderByFilter) ->
   * @param {String} restrictRegion A string to restrict the timezones to a particular region
   * @returns {Array} A list of timezones
   ###
-  generateTzList: (restrictRegion) ->
+  generateTzList = (restrictRegion) ->
 
     locationNames = moment.tz.names()
     locationNames = locationNames.filter (tz) -> tz.indexOf('GMT') is -1
@@ -41,6 +41,10 @@ timezoneListFactory = ($translate, orderByFilter) ->
     timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false)
 
     return timezones
+
+  return {
+    generateTzList: generateTzList
+  }
 
 angular
   .module('BBAdminDashboard')

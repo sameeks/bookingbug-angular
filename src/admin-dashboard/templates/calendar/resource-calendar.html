@@ -39,4 +39,8 @@
   <div id="uicalendar" ui-calendar="vm.uiCalOptions.calendar" ng-model="vm.eventSources" ng-if="vm.eventSources"
        calendar="{{vm.calendar_name}}" class="resource-calendar">
   </div>
+
+  <pre>{{vm.uiCalOptions.calendar | json}}</pre>
+  <pre>{{vm.eventSources | json}}</pre>
+  
 </div>

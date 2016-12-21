@@ -13,7 +13,14 @@
 * </example>
 ###
 
-timezoneSelectController = ($rootScope, $translate, TimezoneList, GeneralOptions, uiCalendarConfig) ->
+timezoneSelectController = ($timeout, $rootScope, $translate, TimezoneList, GeneralOptions, uiCalendarConfig) ->
+
+  # angular.element('#uicalendar').fullCalendar('option', 'timezone', 'Australia/Sydney')
+  #
+  # $timeout(() ->
+  #   angular.element('#uicalendar').fullCalendar('option', 'timezone', 'Australia/Sydney')
+  #   console.log('done')
+  # , 10000)
 
   this.$onInit = () ->
     this.timezones = TimezoneList.generateTzList(this.restrictRegion)
@@ -22,10 +29,10 @@ timezoneSelectController = ($rootScope, $translate, TimezoneList, GeneralOptions
   this.preventClose = (event) ->
     event.stopPropagation()
 
-  # this.updateTimeZone = (selectedTimezone) ->
-  #   GeneralOptions.display_time_zone = selectedTimezone
-  #   localStorage.selectedTimeZone = selectedTimezone
-  #   $rootScope.$broadcast('timezone_changed')
+  this.updateTimeZone = (selectedTimezone) ->
+    GeneralOptions.display_time_zone = selectedTimezone
+    localStorage.selectedTimeZone = selectedTimezone
+    $rootScope.$emit('timezoneUpdated', selectedTimezone)
 
   return
 

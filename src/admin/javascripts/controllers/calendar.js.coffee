@@ -77,6 +77,7 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl', ($scope,
         center: 'title',
         right: 'today prev,next'
       },
+      ignoreTimezone: false,
       dayClick: $scope.dayClick,
       eventClick: $scope.eventClick,
       eventDrop: $scope.alertOnDrop,
@@ -89,4 +90,3 @@ angular.module('BBAdmin.Controllers').controller 'CalendarCtrl', ($scope,
   }
   # event sources array*
   $scope.eventSources = [$scope.eventsF]
-

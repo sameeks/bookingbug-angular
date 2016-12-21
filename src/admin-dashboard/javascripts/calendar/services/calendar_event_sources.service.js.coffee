@@ -168,7 +168,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
       else
         overAllAvailabilities = []
 
-     
+
         for avail in availabilities
           avail.unix_start = moment(avail.start).unix()
           avail.unix_end = moment(avail.end).unix()
@@ -190,7 +190,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
               src.unix_end = test.unix_end
               test.delete_me = true
               test_id += 1
-            else if test.unix_end <= src.unix_end 
+            else if test.unix_end <= src.unix_end
               # it's inside - just delete it
               test.delete_me = true
               test_id +=1
@@ -262,4 +262,3 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
     getAvailabilityBackground: getAvailabilityBackground
     getAllCalendarEntries: getAllCalendarEntries
   }
-
