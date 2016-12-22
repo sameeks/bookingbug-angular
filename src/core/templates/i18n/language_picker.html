@@ -1,10 +1,7 @@
-<div id="language-picker-container" class="container col-xs-12">
-  <ui-select id="language-picker" ng-model="vm.language.selected" theme="bootstrap"
-             ng-change="vm.pickLanguage(vm.language.selected.identifier)" enable-search="false"
-             class="pull-right col-xs-12 col-sm-3 col-md-2 col-lg-2">
-    <ui-select-match placeholder="Select..."><span translate="{{$select.selected.label}}"></span></ui-select-match>
-    <ui-select-choices repeat="lang in vm.availableLanguages | props: { label: $select.search}">
-      <div ng-bind-html="lang.label | translate | highlight: $select.search"></div>
-    </ui-select-choices>
-  </ui-select>
-</div>
+<ui-select id="language-picker" ng-model="vm.language.selected" theme="bootstrap"
+           ng-change="vm.pickLanguage(vm.language.selected.identifier)" search-enabled="vm.enableSerach">
+  <ui-select-match placeholder="{{ 'Select...' | translate }}"><span translate="{{$select.selected.label}}"></span></ui-select-match>
+  <ui-select-choices repeat="lang in vm.availableLanguages | props: { label: $select.search}">
+    <div ng-bind-html="lang.label | translate | highlight: $select.search"></div>
+  </ui-select-choices>
+</ui-select>
