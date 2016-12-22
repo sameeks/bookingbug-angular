@@ -1,35 +1,51 @@
-<h4>Preferences</h4>
+<h3>Preferences</h3>
 
-Time zone
+<div class="form-group">
+  <label>
+    <span translate="ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_LABEL"></span>
+  </label>
+  <toggle-switch
+    ng-click="$ctrl.preventClose($event);"
+    ng-change="$ctrl.resetTimezone()"
+    ng-model="$ctrl.automaticTimezone"
+    on-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_ON_LABEL' | translate}}"
+    off-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_OFF_LABEL' | translate}}"
+    class="switch-primary">
+  </toggle-switch>
+</div>
+
+<div class="form-group">
+  <label>
+    <span translate="ADMIN_DASHBOARD.CORE.PREFERENCES.TIMEZONE_LABEL"></span>
+  </label>
+  <ui-select
+    style="width: 260px;"
+    ng-model="$ctrl.selectedTimezone"
+    theme="bootstrap"
+    ng-click="$ctrl.preventClose($event);"
+    ng-disabled="$ctrl.automaticTimezone"
+    ng-change="$ctrl.updateTimeZone($ctrl.selectedTimezone); resetTimeSelection()">
+
+    <ui-select-match placeholder="Select timezone">
+     {{$select.selected.display}}
+    </ui-select-match>
+
+    <ui-select-choices
+      ui-select-choices-lazyload
+      all-choices="$ctrl.timezones"``
+      refresh-delay="0"
+      repeat="
+        timezone.value as timezone in $select.pagingOptions.items |
+        props: { display: $select.search}
+        track by timezone.id
+      ">
+      <div ng-bind-html="timezone.display | highlight: $select.search"></div>
+    </ui-select-choices>
+
+  </ui-select>
+</div>
 
 <!-- <ui-select
-  style="width: 260px;"
-  ng-model="$ctrl.selectedTimeZone"
-  theme="bootstrap"
-  ng-click="$ctrl.preventClose($event);"
-  ng-change="updateTimeZone(); resetTimeSelection()">
-
-  <ui-select-match placeholder="Select timezone">
-   {{$select.selected.display}}
-  </ui-select-match>
-
-  <ui-select-choices
-    ui-select-choices-lazyload
-    all-choices="$ctrl.timezones"
-    refresh-delay="0"
-    repeat="
-      timezone.value as timezone in $select.pagingOptions.items |
-      props: { display: $select.search}
-      track by timezone.id
-    ">
-    <div ng-bind-html="timezone.display | highlight: $select.search"></div>
-  </ui-select-choices>
-
-</ui-select> -->
-
-<!-- <br><br> -->
-
-<ui-select
   style="width: 260px;"
   ng-model="$ctrl.selectedTimezone"
   theme="bootstrap"
@@ -49,4 +65,4 @@ Time zone
     <div ng-bind-html="timezone.display | highlight: $select.search"></div>
   </ui-select-choices>
 
-</ui-select>
+</ui-select> -->

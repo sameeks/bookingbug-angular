@@ -40,7 +40,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     getCompanyPromise().then(companyListener)
 
     vm.changeSelectedResources = changeSelectedResources
-    console.log(vm.uiCalOptions)
     return
 
   applyFilters = () ->
@@ -86,7 +85,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       if $scope.model
         options.showAll = false
         options.selectedResources = [$scope.model]
-      CalendarEventSources.getAllCalendarEntries(company, start, end, options).then (results)->
+      CalendarEventSources.getAllCalendarEntries(company, start, end, timezone, options).then (results)->
         vm.loading = false
         return callback(results)
     return
@@ -180,7 +179,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         eventResize: fcEventResize
         loading: fcLoading
         ignoreTimezone: false
-        # timezone: 'Australia/Sydney'
+        timezone: moment.tz.guess()
     return
 
   fcResources = (callback) ->
@@ -511,10 +510,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     return
 
   newTzHandler = (event, tz) ->
-    # uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('removeEvents');
     uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('option', 'timezone', tz)
-    # uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('addEventSource', vm.eventSources);
-    console.log(vm.uiCalOptions)
     return
 
   languageChangedHandler = () ->

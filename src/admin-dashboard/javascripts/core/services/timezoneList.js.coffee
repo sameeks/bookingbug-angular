@@ -20,6 +20,15 @@ timezoneListFactory = ($translate, orderByFilter) ->
         value: location
     return timezones
 
+  getLocalTimezone = () ->
+    location = moment.tz.guess()
+    city = location.match(/[^/]*$/)[0].replace(/_/g, ' ')
+    tz = moment.tz(location)
+    localTimezone =
+      display: "(UTC #{tz.format('Z')}) #{$translate.instant(city)} (#{tz.format('zz')})"
+      value: location
+    return localTimezone
+
   ###*
   * @ngdoc function
   * @name generateTzList
@@ -43,6 +52,7 @@ timezoneListFactory = ($translate, orderByFilter) ->
     return timezones
 
   return {
+    getLocalTimezone: getLocalTimezone
     generateTzList: generateTzList
   }
 

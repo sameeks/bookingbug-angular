@@ -15,14 +15,9 @@
 
 timezoneSelectController = ($timeout, $rootScope, $translate, TimezoneList, GeneralOptions, uiCalendarConfig) ->
 
-  # angular.element('#uicalendar').fullCalendar('option', 'timezone', 'Australia/Sydney')
-  #
-  # $timeout(() ->
-  #   angular.element('#uicalendar').fullCalendar('option', 'timezone', 'Australia/Sydney')
-  #   console.log('done')
-  # , 10000)
-
   this.$onInit = () ->
+    this.selectedTimezone = TimezoneList.getLocalTimezone()
+    this.automaticTimezone = true
     this.timezones = TimezoneList.generateTzList(this.restrictRegion)
     return
 
@@ -33,6 +28,11 @@ timezoneSelectController = ($timeout, $rootScope, $translate, TimezoneList, Gene
     GeneralOptions.display_time_zone = selectedTimezone
     localStorage.selectedTimeZone = selectedTimezone
     $rootScope.$emit('timezoneUpdated', selectedTimezone)
+
+  this.resetTimezone = () ->
+    if (this.automaticTimezone)
+      this.selectedTimezone = TimezoneList.getLocalTimezone()
+    return
 
   return
 
