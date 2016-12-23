@@ -45,7 +45,7 @@
                 {{item.total_price | currency}}
                 <div ng-show="item.certificate_paid > 0">
                   <small>
-                    <span translate="PUBLIC_BOOKING.BASKET.CERTIFICATE_PAID_LBL"></span>: {{item.certificate_paid | currency}}
+                    <span translate="PUBLIC_BOOKING.BASKET.GIFT_CERT_PAID_LBL"></span>: {{item.certificate_paid | currency}}
                   </small>
                 </div>
               </td>
@@ -60,7 +60,7 @@
             <tr ng-show="basket.hasDeal()">
               <th
                 class="text-left"
-                translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATES_HEADING">
+                translate="PUBLIC_BOOKING.BASKET.GIFT_CERT_HEADING">
               </th>
               <th>&nbsp;</th>
               <th>&nbsp;</th>
@@ -110,7 +110,7 @@
             <tr ng-show="basket.hasDeal()">
               <th
                 class="text-right"
-                translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATES_TOTAL_LBL">
+                translate="PUBLIC_BOOKING.BASKET.GIFT_CERT_TOTAL_LBL">
               </th>
               <th class="text-right">{{basket.totalDeals() | currency }}</th>
               <th>&nbsp;</th>
@@ -119,7 +119,7 @@
             <tr ng-show="basket.hasDeal()">
               <th
                 class="text-right"
-                translate="PUBLIC_BOOKING.BASKET.GIFT_CERTIFICATE_BALANCE_LBL">
+                translate="PUBLIC_BOOKING.BASKET.GIFT_CERT_BALANCE_LBL">
               </th>
               <th class="text-right">{{basket.totalCertificatePaid() | currency}}</th>
               <th>&nbsp;</th>
@@ -155,28 +155,31 @@
 
         <div ng-if="show_wallet">
 
-          <h4 translate="PUBLIC_BOOKING.BASKET.WALLET_HEADING"></h4>
+          <h4 translate="PUBLIC_BOOKING.BASKET.WALLET.HEADING"></h4>
 
           <div ng-show="client.has_active_wallet">
 
             <p>
-              <span translate="PUBLIC_BOOKING.BASKET.WALLET_BALANCE_LBL"></span>: {{client.wallet_amount | currency}}
+              <span translate="PUBLIC_BOOKING.BASKET.WALLET.BALANCE_LBL"></span>: {{client.wallet_amount | currency}}
             </p>
 
             <small
               style="color:#ff1919;"
-              ng-show="client.wallet_amount < basket.total_due_price"> (-{{basket.total_due_price - client.wallet_amount | currency }})
+              ng-show="client.wallet_amount < basket.total_due_price"
+              trans> (-{{basket.total_due_price - client.wallet_amount | currency }})
             </small>
 
             <small ng-show="client.wallet_amount < basket.total_due_price">
-              <i translate="PUBLIC_BOOKING.BASKET.WALLET_BALANCE_INSUFFICIENT"></i>
+              <i translate="PUBLIC_BOOKING.BASKET.WALLET.BALANCE_INSUFFICIENT"></i>
             </small>
 
             <small ng-show="client.wallet_amount >= basket.total_due_price">
               <i>
-                <span translate="PUBLIC_BOOKING.BASKET.WALLET_REMAINDER_PART_ONE"></span>
-                {{(client.wallet_amount - basket.total_price) | currency }}
-                <span translate="PUBLIC_BOOKING.BASKET.WALLET_REMAINDER_PART_TWO"></span>.
+                <span
+                  bb-wallet-remainder
+                  total-price="basket.total_price"
+                  wallet-amount="client.wallet_amount">
+                </span>
               </i>
             </small>
 
@@ -185,7 +188,7 @@
               type="button"
               class="btn btn-primary btn-xs"
               ng-click="topUpWallet()"
-              translate="PUBLIC_BOOKING.BASKET.TOP_UP_WALLET_BTN">
+              translate="PUBLIC_BOOKING.BASKET.TOP_UP_BTN">
             </button>
 
           </div>

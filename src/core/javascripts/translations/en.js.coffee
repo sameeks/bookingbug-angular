@@ -18,7 +18,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         GENERIC :"Sorry, it appears that something went wrong. Please try again or call the business you're booking with if the problem persists."
         GEOLOCATION_ERROR : "Sorry, we could not determine your location. Please try searching instead."
         GIFT_CERTIFICATE_REQUIRED : "A valid Gift Certificate is required to proceed with this booking"
-        POSTCODE_INVALID : "@ :COMMON.TERMINOLOGY.POSTCODE_PATTERN"
+        POSTCODE_INVALID : "@ :COMMON.TERMINOLOGY.POSTCODE_INVALID"
         ITEM_NO_LONGER_AVAILABLE : "Sorry. The item you were trying to book is no longer available. Please try again."
         NO_WAITLIST_SPACES_LEFT : "Sorry, the space has now been taken, you are still in the waitlist and we will notify you if more spaces become available"
         LOCATION_NOT_FOUND : "Sorry, we don't recognise that location"
@@ -52,7 +52,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         DEAL_REMOVE_FAILED : "Sorry, we were unable to remove that deal. Please try again."
       }
       PAGINATION: {
-        SUMMARY: "{{start}} - {{end}} of {{total}}"
+        SUMMARY : "{{start}} - {{end}} of {{total}}"
       }
       MODAL: {
         CANCEL_BOOKING: {
@@ -64,6 +64,7 @@ angular.module('BB.Services').config ($translateProvider) ->
           CANCEL_BTN : "@:COMMON.BTN.CANCEL"
         }
       }
+      TIMEZONE_INFO : "All times are shown in {{time_zone_name}}."
       FILTERS: {
         DISTANCE: {
           MILES      : "miles"
@@ -144,14 +145,15 @@ angular.module('BB.Services').config ($translateProvider) ->
         MOBILE            : "Mobile"
         EMAIL             : "Email"
         SCHEDULE          : "Schedule"
+        SEARCH            : "Search"
       }
       FORM: {
         FIRST_NAME_REQUIRED           : "Please enter your first name"
         LAST_NAME_REQUIRED            : "Please enter your last name"
         ADDRESS_REQUIRED              : "Please enter your address"
-        POSTCODE_PATTERN              : "Please enter a valid postcode"
-        PHONE_PATTERN                 : "Please enter a valid phone number"
-        MOBILE_PATTERN                : "Please enter a valid mobile number"
+        POSTCODE_INVALID              : "Please enter a valid postcode"
+        PHONE_INVALID                 : "Please enter a valid phone number"
+        MOBILE_INVALID                : "Please enter a valid mobile number"
         EMAIL_REQUIRED                : "Please enter your email"
         EMAIL_INVALID                 : "Please enter a valid email address"
         FIELD_REQUIRED                : "This field is required"

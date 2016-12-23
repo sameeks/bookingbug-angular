@@ -4,19 +4,13 @@
 
   <div class="page-header">
     <h1
-      translate="PUBLIC_BOOKING.EVENT_LIST.TITLE"
+      translate="PUBLIC_BOOKING.EVENT_LIST.HEADING"
       translate-values="{company_name: company.name}"
       >
       </h1>
   </div>
 
-  <div
-    class="alert alert-info"
-    bb-time-zone
-    ng-show="is_time_zone_diff"
-    translate="PUBLIC_BOOKING.EVENT_LIST.TIMEZONE_INFO"
-    translate-values="{time_zone: time_zone_name}">
-  </div>
+  <div bb-time-zone></div>
 
   <div bb-month-picker day-data="item_dates"></div>
 

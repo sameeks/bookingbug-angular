@@ -9,7 +9,7 @@
 *
 * @description
 *
-* Loads a list of maps for the currently in scope company
+* Search and find child companies using address search or geolocation. 
 *
 * <pre>
 * restrict: 'AE'
