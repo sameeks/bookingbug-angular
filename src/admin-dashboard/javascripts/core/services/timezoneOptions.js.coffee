@@ -2,11 +2,21 @@
 
 ###*
 * @ngdoc service
-* @name BBAdminDashboard.TimezoneList
+* @name BBAdminDashboard.TimezoneOptions
 * @description
 * Factory for retrieving a list of timezones
 ###
-timezoneListFactory = ($translate, orderByFilter) ->
+timezoneOptionsFactory = ($translate, orderByFilter) ->
+
+  mapRestrictRegion = (locationNames, restrictRegion) ->
+    if angular.isString(restrictRegion)
+      locationNames = _.filter locationNames, (tz) -> tz.indexOf(restrictRegion) isnt -1
+    else if angular.isArray(restrictRegion)
+      locations = []
+      angular.forEach restrictRegion, (region) ->
+        locations.push(_.filter locationNames, (tz) -> tz.indexOf(region) isnt -1)
+      locationNames = _.flatten(locations)
+    return locationNames
 
   mapTimezones = (locationNames) ->
     timezones = []
@@ -27,29 +37,24 @@ timezoneListFactory = ($translate, orderByFilter) ->
     localTimezone =
       display: "(UTC #{tz.format('Z')}) #{$translate.instant(city)} (#{tz.format('zz')})"
       value: location
-    return localTimezone
 
   ###*
   * @ngdoc function
   * @name generateTzList
   * @methodOf BBAdminDashboard.Services:TimezoneList
   * @description Generates list of timezones for display on FE, removing duplicates and ordering by distance from UTC time
-  * @param {String} restrictRegion A string to restrict the timezones to a particular region
+  * @param {String, Array} Restrict the timezones to one region (String) or multiple regions (Array)
   * @returns {Array} A list of timezones
   ###
   generateTzList = (restrictRegion) ->
-
     locationNames = moment.tz.names()
-    locationNames = locationNames.filter (tz) -> tz.indexOf('GMT') is -1
-
-    if (restrictRegion)
-      locationNames = locationNames.filter (tz) -> tz.indexOf(restrictRegion) isnt -1
+    locationNames = _.filter locationNames, (tz) -> tz.indexOf('GMT') is -1
+    if restrictRegion
+      locationNames = mapRestrictRegion(locationNames, restrictRegion)
 
     timezones = mapTimezones(locationNames)
     timezones = _.uniq(timezones, (timezone) -> timezone.display)
     timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false)
-
-    return timezones
 
   return {
     getLocalTimezone: getLocalTimezone
@@ -58,4 +63,4 @@ timezoneListFactory = ($translate, orderByFilter) ->
 
 angular
   .module('BBAdminDashboard')
-  .factory 'TimezoneList', timezoneListFactory
+  .factory 'TimezoneOptions', timezoneOptionsFactory

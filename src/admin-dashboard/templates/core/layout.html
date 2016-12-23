@@ -41,7 +41,7 @@
           </li>
 
           <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown" uib-dropdown is-open="userAccount.isopen">
+          <li class="dropdown" uib-dropdown is-open="userAccount.isopen" auto-close="outsideClick">
 
             <a href class="dropdown-toggle" uib-dropdown-toggle>
               <span class="hidden-xs">
@@ -67,7 +67,7 @@
               </li>
               <li class="divider"></li>
               <li>
-                <timezone-select></timezone-select>
+                <user-preferences></user-preferences>
               </li>
             </ul>
           </li>

@@ -1,11 +1,8 @@
-<h3>Preferences</h3>
-
 <div class="form-group">
   <label>
     <span translate="ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_LABEL"></span>
   </label>
   <toggle-switch
-    ng-click="$ctrl.preventClose($event);"
     ng-change="$ctrl.resetTimezone()"
     ng-model="$ctrl.automaticTimezone"
     on-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_ON_LABEL' | translate}}"
@@ -22,9 +19,8 @@
     style="width: 260px;"
     ng-model="$ctrl.selectedTimezone"
     theme="bootstrap"
-    ng-click="$ctrl.preventClose($event);"
     ng-disabled="$ctrl.automaticTimezone"
-    ng-change="$ctrl.updateTimeZone($ctrl.selectedTimezone); resetTimeSelection()">
+    ng-change="$ctrl.updateTimeZone($ctrl.selectedTimezone);">
 
     <ui-select-match placeholder="Select timezone">
      {{$select.selected.display}}
@@ -32,7 +28,7 @@
 
     <ui-select-choices
       ui-select-choices-lazyload
-      all-choices="$ctrl.timezones"``
+      all-choices="$ctrl.timezones"
       refresh-delay="0"
       repeat="
         timezone.value as timezone in $select.pagingOptions.items |
@@ -49,7 +45,6 @@
   style="width: 260px;"
   ng-model="$ctrl.selectedTimezone"
   theme="bootstrap"
-  ng-click="$ctrl.preventClose($event);"
   ng-change="$ctrl.updateTimeZone($ctrl.selectedTimezone); resetTimeSelection()">
 
   <ui-select-match placeholder="Select timezone">
