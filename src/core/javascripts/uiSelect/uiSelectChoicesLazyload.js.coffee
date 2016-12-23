@@ -5,6 +5,9 @@ angular
   .directive 'uiSelectChoicesLazyload', ($timeout, $parse, $compile, $document, $filter) ->
     (scope, elm, attr) ->
 
+      scope.$on 'close-select', () ->
+        scope.$select.close()
+
       raw = elm[0]
       scrollCompleted = true
 

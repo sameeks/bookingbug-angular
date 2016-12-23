@@ -179,7 +179,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         eventResize: fcEventResize
         loading: fcLoading
         ignoreTimezone: false
-        timezone: moment.tz.guess()
+        timezone: GeneralOptions.display_time_zone
     return
 
   fcResources = (callback) ->
