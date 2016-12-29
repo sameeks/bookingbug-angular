@@ -1,15 +1,5 @@
 'use strict'
 
-angular.module('BB').directive 'bbMemberLogin', (PathSvc) ->
-  restrict: 'A'
-  controller: 'MemberLogin'
-  templateUrl : (elem, attrs) ->
-    if attrs.bbCustomLoginForm?
-      PathSvc.directivePartial "_member_login_form"
-    else
-      PathSvc.directivePartial "_member_login_schema_form"
-
-
 angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
   $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window,
   AlertService, ValidatorService, LoadingService) ->
@@ -68,4 +58,3 @@ angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
     else
       $scope.skipThisStep()
       $scope.decideNextPage()
-
