@@ -110,4 +110,3 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
     ###
     $scope.setReady = () ->
       return $scope.changeAttendees()
-
