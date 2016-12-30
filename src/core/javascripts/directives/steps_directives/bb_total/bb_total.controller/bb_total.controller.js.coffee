@@ -1,34 +1,5 @@
 'use strict'
 
-
-###**
-* @ngdoc directive
-* @name BB.Directives:bbTotal
-* @restrict AE
-* @scope true
-*
-* @description
-*
-* Loads a list of totals for the currently in scope company
-*
-* <pre>
-* restrict: 'AE'
-* replace: true
-* scope: true
-* </pre>
-*
-* @param {hash}  bbTotal A hash of options
-* @property {array} payment_status The payment status
-* @property {array} total The total
-####
-
-
-angular.module('BB.Directives').directive 'bbTotal', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'Total'
-
 angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
     $location, $window, QueryStringService, LoadingService) ->
 
@@ -71,4 +42,3 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
     $window.open($scope.bb.partial_url+'print_purchase.html?id='+$scope.total.long_id,'_blank',
                 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0')
     return true
-
