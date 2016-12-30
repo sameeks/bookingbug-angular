@@ -1,24 +1,5 @@
 'use strict'
 
-###**
-* @ngdoc directive
-* @name BB.Directives:bbSummary
-* @restrict AE
-* @scope true
-*
-* @description
-* Loads a summary of the booking
-*
-*
-####
-
-
-angular.module('BB.Directives').directive 'bbSummary', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'Summary'
-
 angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, LoadingService, BBModel, $q) ->
 
   $scope.controller = "public.controllers.Summary"
@@ -59,4 +40,3 @@ angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, Load
       $scope.decideNextPage()
 
     , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-
