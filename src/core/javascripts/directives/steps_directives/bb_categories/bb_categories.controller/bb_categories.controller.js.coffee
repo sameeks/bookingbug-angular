@@ -1,6 +1,5 @@
 'use strict'
 
-
 angular.module('BB.Controllers').controller 'CategoryList', (
   $scope, $rootScope, $q, PageControllerService, LoadingService, BBModel, ValidatorService) ->
 
