@@ -81,6 +81,8 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
     scrollToCallback = (evnt) ->
       if evnt == "page:loaded" && scope.display && scope.display.xs && $bbug('[data-scroll-id="'+AppConfig.uid+'"]').length
         scroll_to_element = $bbug('[data-scroll-id="'+AppConfig.uid+'"]')
+      else if evnt == "time:selected"
+        scroll_to_element = $bbug('[bb-time-ranges]')
       else
         scroll_to_element = $bbug(element)
 
