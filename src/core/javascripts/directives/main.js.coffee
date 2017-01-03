@@ -82,6 +82,9 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
       scope.$on evnts, (e) ->
         scrollToCallback(evnts)
 
+    isElementInView = (el) ->
+      return el.offset().top > $bbug('body').scrollTop() and el.offset().top < ($bbug('body').scrollTop() + $bbug(window).height())
+
     scrollToCallback = (evnt) ->
       if evnt == "page:loaded" && scope.display && scope.display.xs && $bbug('[data-scroll-id="'+AppConfig.uid+'"]').length
         scroll_to_element = $bbug('[data-scroll-id="'+AppConfig.uid+'"]')
@@ -93,7 +96,7 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
       # if the event is page:loaded or the element is not in view, scroll to it
       if (scroll_to_element)
         if (evnt == "page:loaded" and current_step > 1) or always_scroll or (evnt == "widget:restart") or
-          (not scroll_to_element.is(':visible') and scroll_to_element.offset().top != 0)
+          (not isElementInView(scroll_to_element) and scroll_to_element.offset().top != 0)
             if 'parentIFrame' of $window
               parentIFrame.scrollToOffset(0, scroll_to_element.offset().top - GeneralOptions.scroll_offset)
             else
@@ -362,5 +365,5 @@ angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions, Company
     scope.time_zone_name = moment().tz(company_time_zone).format('zz')
     #  if not using local time zone and user time zone is not same as companies
     if !GeneralOptions.use_local_time_zone and GeneralOptions.display_time_zone != company_time_zone
-      scope.is_time_zone_diff = true 
+      scope.is_time_zone_diff = true
 
