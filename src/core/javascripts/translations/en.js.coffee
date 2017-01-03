@@ -18,7 +18,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         GENERIC :"Sorry, it appears that something went wrong. Please try again or call the business you're booking with if the problem persists."
         GEOLOCATION_ERROR : "Sorry, we could not determine your location. Please try searching instead."
         GIFT_CERTIFICATE_REQUIRED : "A valid Gift Certificate is required to proceed with this booking"
-        POSTCODE_INVALID : "@ :COMMON.TERMINOLOGY.POSTCODE_INVALID"
+        POSTCODE_INVALID : "@:COMMON.TERMINOLOGY.POSTCODE_INVALID"
         ITEM_NO_LONGER_AVAILABLE : "Sorry. The item you were trying to book is no longer available. Please try again."
         NO_WAITLIST_SPACES_LEFT : "Sorry, the space has now been taken, you are still in the waitlist and we will notify you if more spaces become available"
         LOCATION_NOT_FOUND : "Sorry, we don't recognise that location"
@@ -83,7 +83,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         }
       }
       EVENT: {
-        SPACES_LEFT:   "Only {N, plural, one{one space}, others{# spaces}} left"
+        SPACES_LEFT:   "Only {N, plural, one{one space}, other{# spaces}} left"
         JOIN_WAITLIST: "Join waitlist"
       }
     }

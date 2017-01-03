@@ -32,7 +32,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         TIME_AND_DURATION: "{{ time | datetime: 'LLLL':false}} pour {{ duration | time_period }}"
         CANCEL_BTN: "@:COMMON.BTN.CANCEL"
         CHECKOUT_BTN: "@:COMMON.BTN.CHECKOUT"
-        BASKET_STATUS: "{N, plural, =0 {vide}, one {Un article dans votre panier}, others {# articles dans votre panier}}"
+        BASKET_STATUS: "{N, plural, =0 {vide}, one {Un article dans votre panier}, other {# articles dans votre panier}}"
       }
       BASKET_ITEM_SUMMARY: {
         SERVICE_LBL: "@:COMMON.TERMINOLOGY.SERVICE"

@@ -277,7 +277,7 @@ angular.module("BB.Services").config ($translateProvider) ->
         BASKET_TOTAL_DUE_LBL     : "Total Due"
         CUSTOMER_DETAILS_HEADING : "Your details"
         TICKET_ACCORDION: {
-          HEADING: "Ticket {num_tickets, plural, =0{details} others{{ticket_number} details}}"
+          HEADING: "Ticket {num_tickets, plural, =0{details} other{{ticket_number} details}}"
           ATTENDEE_IS_YOU_QUESTION : "Are you the attendee?"
           ATTENDEE_USE_MY_DETAILS  : "Yes, use my details"
           FIRST_NAME_LBL           : "@:COMMON.TERMINOLOGY.FIRST_NAME"

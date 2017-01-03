@@ -5,7 +5,7 @@
   <div class="page-header">
     <h1
       translate="PUBLIC_BOOKING.EVENT_LIST.HEADING"
-      translate-values="{company_name: company.name}"
+      translate-values="{company_name: bb.company.name}"
       >
       </h1>
   </div>
@@ -285,7 +285,7 @@
                     <em>{{item.date | datetime: 'dddd'}}</em>
                     <span class="date">{{item.date | datetime: 'DD'}}</span>
                     <strong class="date">{{item.date | datetime: 'MMMM'}}</strong>
-                    <span class="time">{{item.date | datetime: 'LT'}}</span>
+                    <span class="time">{{item.date | datetime: 'hh.mm'}}</span>
                     <strong class="time">{{item.date | datetime: 'a'}}</strong>
                   </time>
 

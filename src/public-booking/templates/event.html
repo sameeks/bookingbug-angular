@@ -86,12 +86,17 @@
           ng-show="bb.basket.hasWaitlistItem()"
           class="heading"
           ng-bind="!selected_tickets ? 'Waitlist' : 'Waitlist summary'">
+          <span translate="" ng-show="selected_tickets"></span>
+          <span translate="" ng-hide="selected_tickets"></span>
         </h2>
 
         <h2
           ng-show="!bb.basket.hasWaitlistItem()"
           class="heading"
-          ng-bind="!selected_tickets ? 'Tickets' : 'Ticket summary'"></h2>
+          ng-bind="!selected_tickets ? 'Tickets' : 'Ticket summary'">
+          <span translate=""></span>
+          <span translate=""></span>
+        </h2>
 
         <div
           ng-form
@@ -307,7 +312,7 @@
                     <label
                       for="attendee_first_name"
                       class="control-label col-sm-4">
-                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.FIRST_NAME_LBL"></span>*:
+                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.FIRST_NAME_LBL"></span>
                     </label>
                     <div
                       ng-if="use_my_details && $first"
@@ -337,7 +342,7 @@
                     <label
                       for="attendee_last_name"
                       class="control-label col-sm-4">
-                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.LAST_NAME_LBL"></span>*:
+                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.LAST_NAME_LBL"></span>
                     </label>
                     <div
                       ng-if="use_my_details && $first"
@@ -369,7 +374,7 @@
                     <label
                       for="attendee_email"
                       class="control-label col-sm-4">
-                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.EMAIL_LBL"></span>:
+                      <span translate="PUBLIC_BOOKING.EVENT.TICKET_ACCORDION.EMAIL_LBL"></span>
                     </label>
                     <div
                       ng-if="use_my_details && $first"
