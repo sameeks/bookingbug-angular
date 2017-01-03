@@ -4,7 +4,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
   'ngInject'
 
   vm = @
-  alert "This is our refactoring A_Z23457890HELLO"
+  alert "This is our refactoring NEW_TEST1 ABC"
   $scope.cid = "BBCtrl" # dont change the cid as we use it in the app to identify this as the widget root scope
   $scope.controller = "public.controllers.BBCtrl"
 
