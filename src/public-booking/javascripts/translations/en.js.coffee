@@ -345,7 +345,8 @@ angular.module("BB.Services").config ($translateProvider) ->
         SELECT_BTN   : "@:COMMON.BTN.SELECT"
       }
       LOGIN: {
-        NO_ACCOUNT  : "Don't have an account?"
+        HEADING      : "Login"
+        NO_ACCOUNT   : "Don't have an account?"
         REGISTER_BTN : "Register"
       }
       TIME: {
