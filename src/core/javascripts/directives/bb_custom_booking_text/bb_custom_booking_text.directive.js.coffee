@@ -87,4 +87,3 @@ angular.module('BB.Controllers').controller 'CustomConfirmationText', ($scope, $
 
     else
       loader.setLoaded()
-
