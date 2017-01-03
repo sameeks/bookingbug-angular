@@ -8,12 +8,13 @@
   <div
     bb-time-ranges="{selected_day: today}"
     class="bb-calendar"
-    ng-show="days">
+    ng-show="days"
+	bb-scroll-to="time:selected">
   </div>
 
   <div class="bb-step-navigation">
     <div class="row">
-      <div class="col-sm-offset-7 col-sm-3 col-sm-push-2 text-right">       
+      <div class="col-sm-offset-7 col-sm-3 col-sm-push-2 text-right">
         <button
           id="btn-continue"
           type="button"
@@ -31,7 +32,7 @@
           </span>
         </button>
       </div>
-      <div class="col-sm-2 col-sm-pull-10 text-left">    
+      <div class="col-sm-2 col-sm-pull-10 text-left">
         <button
           type="button"
           class="btn btn-default btn-block"
@@ -42,5 +43,5 @@
       </div>
     </div>
   </div>
-  
+
 </div>
