@@ -14,7 +14,7 @@
                         <div class="form-group" ng-show="template_vars.show_api_field" ng-class="{'has-error': loginForm.site.$invalid && (!loginForm.site.$pristine || loginForm.submitted)}">
                             <label for="site"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.SITE"></span></label>
 
-                            <input type="text" name="site" ng-model="login_form.site" ng-required="template_vars.show_api_field" class="form-control" id="site" placeholder="https://bookingbug.com">
+                            <input type="text" name="site" ng-model="login_data.site" ng-required="template_vars.show_api_field" class="form-control" id="site" placeholder="https://bookingbug.com">
                             <div ng-messages="loginForm.site.$error" ng-show="loginForm.submitted" role="alert">
                               <div class="error-message" ng-message="required">
                                 <span translate="ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_REQUIRED"></span>
@@ -23,7 +23,7 @@
                         </div>
                         <div class="form-group" ng-class="{'has-error': loginForm.username.$invalid && (!loginForm.username.$pristine || loginForm.submitted)}">
                             <label for="username"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.USERNAME"></span></label>
-                            <input type="text" name="username" ng-model="login_form.email" required="required" class="form-control" id="username">
+                            <input type="text" name="username" ng-model="login_data.email" required="required" class="form-control" id="username">
                             <div ng-messages="loginForm.username.$error" ng-show="loginForm.submitted" role="alert">
                               <div class="error-message" ng-message="required">
                                 <span translate="ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_REQUIRED"></span>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="form-group" ng-class="{'has-error': loginForm.password.$invalid && (!loginForm.password.$pristine || loginForm.submitted)}">
                             <label for="password"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.PASSWORD"></span></label>
-                            <input type="password" name="password" ng-model="login_form.password" required="required" class="form-control" id="password">
+                            <input type="password" name="password" ng-model="login_data.password" required="required" class="form-control" id="password">
                             <div ng-messages="loginForm.password.$error" ng-show="loginForm.submitted" role="alert">
                               <div class="error-message" ng-message="required">
                                 <span translate="ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_REQUIRED"></span>
@@ -63,7 +63,7 @@
                     <div class="panel-body">
                         <div class="form-group" ng-show="template_vars.show_pick_company">
                             <label for="company"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.COMPANIES"></span></label>
-                            <ui-select ng-model="login_form.selected_admin" theme="bootstrap" ng-change="pickCompany()">
+                            <ui-select ng-model="login_data.selected_admin" theme="bootstrap" ng-change="pickCompany()">
                                 <ui-select-match placeholder="{{'ADMIN_DASHBOARD.LOGIN_PAGE.SEARCH_COMPANY_PLACEHOLDER' | translate}}">{{$select.selected.company_name}}</ui-select-match>
                                 <ui-select-choices repeat="admin in administrators | filter: $select.search">
                                   <div ng-bind-html="admin.company_name | highlight: $select.search"></div>
@@ -74,7 +74,7 @@
 
                         <div class="form-group" ng-show="template_vars.show_pick_department">
                             <label for="company"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.DEPARTMENTS"></span></label>
-                            <ui-select ng-model="login_form.selected_company" theme="bootstrap">
+                            <ui-select ng-model="login_data.selected_company" theme="bootstrap">
                                 <ui-select-match placeholder="{{'ADMIN_DASHBOARD.LOGIN_PAGE.SEARCH_DEPARTMENT_PLACEHOLDER' | translate}}">{{$select.selected.name}}</ui-select-match>
                                 <ui-select-choices repeat="department in departments | filter: $select.search">
                                   <div ng-bind-html="department.name | highlight: $select.search"></div>
@@ -85,7 +85,7 @@
 
                     </div>
                     <div class="panel-footer">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="!login_form.selected_company"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.SELECT"></span></button>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="!login_data.selected_company"><span translate="ADMIN_DASHBOARD.LOGIN_PAGE.SELECT"></span></button>
                     </div>
                 </div>
             </form>

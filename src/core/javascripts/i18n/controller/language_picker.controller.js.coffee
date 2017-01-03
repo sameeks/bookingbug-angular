@@ -9,17 +9,19 @@ angular.module('BB.i18n').controller 'bbLanguagePickerController', (bbLocale, $l
 
   vm.language = null
   vm.availableLanguages = []
+  vm.enableSearch = false
 
   init = () ->
-    seAvailableLanguages();
+    setAvailableLanguages();
     setCurrentLanguage();
     $scope.$on 'BBLanguagePicker:refresh', setCurrentLanguage
     vm.pickLanguage = pickLanguage
     return
 
-  seAvailableLanguages = () ->
+  setAvailableLanguages = () ->
     angular.forEach bbi18nOptions.available_languages, (languageKey) ->
       vm.availableLanguages.push(createLanguage(languageKey))
+    vm.enableSearch = vm.availableLanguages.length >= 10
     return
 
   setCurrentLanguage = () ->
