@@ -346,7 +346,7 @@ angular.module("BB.Services").config ($translateProvider) ->
       }
       LOGIN: {
         NO_ACCOUNT  : "Don't have an account?"
-        SIGN_UP_BTN : "Sign Up"
+        REGISTER_BTN : "Register"
       }
       TIME: {
         PREV_DAY_BTN            : "Previous Day"
@@ -425,7 +425,8 @@ angular.module("BB.Services").config ($translateProvider) ->
         BACK_BTN : "@:COMMON.BTN.BACK"
       }
       REGISTER: {
-        
+        HEADING: "Register"
+        REGISTER_BTN: "Register"
       }
       MAIN_ACCOUNT: {
         ACCOUNT_TAB_HEADING           : "Account"

@@ -127,12 +127,8 @@
                 </div>
 
                 <div class="col-sm-3 col-xs-4">
-                  <span ng-show="ticket.price > 0">
-                    {{ticket.price | currency}}
-                  </span>
-                  <span
-                    ng-show="ticket.price == 0"
-                    translate="PUBLIC_BOOKING.EVENT.PRICE_FREE">
+                  <span>
+                    {{ticket.price | pretty_price}}
                   </span>
                   <small ng-show="ticket.counts_as">
                     <i>(for {{ticket.counts_as}})</i>
@@ -165,7 +161,7 @@
                   <span translate="PUBLIC_BOOKING.EVENT.ADD_ONS_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
-                  {{bb.basket.questionPrice() | currency}}
+                  {{bb.basket.questionPrice() | pretty_price}}
                 </div>
               </div>
             </li>
@@ -176,7 +172,7 @@
                   <span translate="PUBLIC_BOOKING.EVENT.SUBTOTAL_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
-                  {{bb.basket.fullPrice() | currency}}
+                  {{bb.basket.fullPrice() | pretty_price}}
                 </div>
               </div>
             </li>
@@ -187,7 +183,7 @@
                   <span translate="PUBLIC_BOOKING.EVENT.GIFT_CERT_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
-                  <div>{{bb.basket.totalDealPaid() | currency}}</div>
+                  <div>{{bb.basket.totalDealPaid() | pretty_price}}</div>
                 </div>
               </div>
             </li>
@@ -197,29 +193,29 @@
                 <div class="col-sm-6 col-xs-6 text-right">
                   <span translate="PUBLIC_BOOKING.EVENT.DISCOUNT_LBL"></span>
                 </div>
-                <div class="col-sm-3 col-xs-6">-{{bb.basket.totalCoupons() | currency}} <!-- <span>(10%)</span></div> -->
+                <div class="col-sm-3 col-xs-6">-{{bb.basket.totalCoupons() | pretty_price}} <!-- <span>(10%)</span></div> -->
                 </div>
               </div>
             </li>
 
-            <li ng-show="selected_tickets">
+            <li ng-show="selected_tickets && bb.basket.totalPrice() > 0">
               <div class="row">
                 <div class="col-sm-6 col-xs-6 total-label">
                   <span translate="PUBLIC_BOOKING.EVENT.BASKET_TOTAL_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
-                  <strong>{{bb.basket.totalPrice() | currency}}</strong>
+                  <strong>{{bb.basket.totalPrice() | pretty_price}}</strong>
                 </div>
               </div>
             </li>
 
-            <li ng-show="selected_tickets">
+            <li ng-show="selected_tickets && bb.basket.dueTotal() > 0">
               <div class="row">
                 <div class="col-sm-6 col-xs-6 total-label">
                   <span translate="PUBLIC_BOOKING.EVENT.BASKET_TOTAL_DUE_LBL"></span>
                 </div>
                 <div class="col-sm-3 col-xs-6">
-                  <strong>{{bb.basket.dueTotal() | currency}}</strong>
+                  <strong>{{bb.basket.dueTotal() | pretty_price}}</strong>
                 </div>
               </div>
             </li>

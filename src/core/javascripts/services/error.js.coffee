@@ -8,7 +8,7 @@
 * Defines different alerts and errors that are raised by the SDK.
 *
 ####
-angular.module('BB.Services').factory 'ErrorService', (GeneralOptions) ->
+angular.module('BB.Services').factory 'ErrorService', ($translate) ->
 
   alerts = [
     {

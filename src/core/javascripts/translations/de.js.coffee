@@ -78,7 +78,7 @@ angular.module('BB.Services').config ($translateProvider) ->
         }
       }
       EVENT: {
-        SPACES_LEFT:   "Only {N, plural, one{one space}, others{# spaces}} left"
+        SPACES_LEFT:   "Only {N, plural, one{one space}, other{# spaces}} left"
         JOIN_WAITLIST: "Beitreten Warteliste"
       }
     }
