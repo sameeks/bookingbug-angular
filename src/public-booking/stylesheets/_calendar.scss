@@ -196,7 +196,29 @@
         }
       }
     }
+
+    &.expanded {
+      .panel {
+        background-color: $gray-lighter;
+      }
+      .panel-collapse {
+         background-color: $gray-lighter;
+      }
+    }
+
+    &.selected {
+      .panel {
+        background-color: $gray-light;
+        color: #FFF;
+      }
+      .panel-collapse {
+         background-color: $gray-light;
+         color: #FFF;
+      }
+    }
+
   }
+
 
 // calendar hidden column functionality
 @media (max-width: $screen-md-max) {
