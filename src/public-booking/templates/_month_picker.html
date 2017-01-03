@@ -1,6 +1,6 @@
-<div class="bb-month-picker">
-  <div class="bb-months">
-    <ul id="rnCarousel" rn-carousel rn-carousel-controls rn-carousel-index="carouselIndex" rn-carousel-buffered bb-month-picker-listener class="md-col-4" ng-if="monthCollection">
+<div class="bb-month-picker" style="width:auto">
+  <div class="bb-months" style="display:inline-flex">
+    <!-- <ul id="rnCarousel" rn-carousel rn-carousel-controls rn-carousel-index="carouselIndex" rn-carousel-buffered bb-month-picker-listener class="md-col-4" ng-if="monthCollection"> -->
 
       <li ng-repeat="months in monthCollection" class="text-center">
         <div class="bb-month carousel-table" ng-repeat="month in months" ng-if="months" ng-class="{'hidden-xs': month.selected}">
@@ -38,6 +38,6 @@
           </table>
         </div>
       </li>
-    </ul>
+  <!--   </ul> -->
   </div>
 </div>
