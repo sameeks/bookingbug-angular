@@ -18,22 +18,23 @@ timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions) ->
   this.$onInit = () ->
     this.automaticTimezone = true
     this.timezones = TimezoneOptions.generateTzList(this.restrictRegion)
-    this.generalTimezone = GeneralOptions
     return
 
   this.updateTimeZone = (selectedTimezone) ->
     GeneralOptions.display_time_zone = selectedTimezone
-    console.log(GeneralOptions.display_time_zone)
     localStorage.selectedTimeZone = selectedTimezone
     $rootScope.$emit('timezoneUpdated', selectedTimezone)
 
-  this.resetTimezone = () ->
+  this.automaticTimezoneChanged = () ->
+    if (this.automaticTimezone)
+      this.selectedTimezone = null
+      $rootScope.$broadcast('close-select')
+
     if (!this.automaticTimezone)
       GeneralOptions.use_local_time_zone = true
       this.selectedTimezone = TimezoneOptions.getLocalTimezone()
-    if (this.automaticTimezone)
-      $rootScope.$broadcast('close-select')
-      this.selectedTimezone = TimezoneOptions.getLocalTimezone()
+      $rootScope.$emit('timezoneUpdated', this.selectedTimezone.value)
+
     return
 
   return

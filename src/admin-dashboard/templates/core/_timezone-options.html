@@ -3,7 +3,7 @@
     <span translate="ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_LABEL"></span>
   </label>
   <toggle-switch
-    ng-change="$ctrl.resetTimezone()"
+    ng-change="$ctrl.automaticTimezoneChanged()"
     ng-model="$ctrl.automaticTimezone"
     on-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_ON_LABEL' | translate}}"
     off-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_OFF_LABEL' | translate}}"

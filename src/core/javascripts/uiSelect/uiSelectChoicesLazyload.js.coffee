@@ -47,12 +47,7 @@ angular
         pagingOptions.page = 0
       )
 
-      selectOpened = scope.$on('uis:activate', () ->
-        console.warn('opened')
-      )
-
       scope.addMoreItems = (doneCalBack) ->
-        console.log(scope)
         console.log('new addMoreItems')
         $select = scope.$select
         allItems = scope.pagingOptions.allOptions
@@ -64,8 +59,6 @@ angular
           page: 0,
           pageSize: 20,
           items: $select.items
-
-        console.warn(pagingOptions)
 
         if pagingOptions.page == 0
           pagingOptions.items.length = 0

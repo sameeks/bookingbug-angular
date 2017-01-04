@@ -8,14 +8,16 @@
 ###
 timezoneOptionsFactory = ($translate, orderByFilter) ->
 
-  mapRestrictRegion = (locationNames, restrictRegion) ->
+  restrictToRegion = (locationNames, restrictRegion) ->
     if angular.isString(restrictRegion)
       locationNames = _.filter locationNames, (tz) -> tz.indexOf(restrictRegion) isnt -1
     else if angular.isArray(restrictRegion)
       locations = []
-      angular.forEach restrictRegion, (region) ->
+      _.map restrictRegion, (region) ->
         locations.push(_.filter locationNames, (tz) -> tz.indexOf(region) isnt -1)
       locationNames = _.flatten(locations)
+    else
+      throw new Error('restrictRegion must be Array or String')
     return locationNames
 
   mapTimezones = (locationNames) ->
@@ -50,11 +52,12 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
     locationNames = moment.tz.names()
     locationNames = _.filter locationNames, (tz) -> tz.indexOf('GMT') is -1
     if restrictRegion
-      locationNames = mapRestrictRegion(locationNames, restrictRegion)
+      locationNames = restrictToRegion(locationNames, restrictRegion)
 
     timezones = mapTimezones(locationNames)
     timezones = _.uniq(timezones, (timezone) -> timezone.display)
     timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false)
+    return timezones
 
   return {
     getLocalTimezone: getLocalTimezone

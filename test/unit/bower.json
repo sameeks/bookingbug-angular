@@ -67,6 +67,6 @@
     "jquery": "~1.11.3",
     "moment": "~2.14.0",
     "fullcalendar": ">=2.9.1",
-    "angular": "1.5.8"
+    "angular": "1.5.10"
   }
 }

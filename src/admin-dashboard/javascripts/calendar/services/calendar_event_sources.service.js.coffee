@@ -20,7 +20,8 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
 
   mapBookingsToTimezone = (bookings, timezone) ->
     bookings = bookings.map (booking) ->
-      booking.start = moment.tz(booking.start, timezone).format()
+      if booking.start
+        booking.start = moment.tz(booking.start, timezone).format()
       if booking.end
         booking.end = moment.tz(booking.end, timezone).format()
       return booking
