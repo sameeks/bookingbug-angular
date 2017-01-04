@@ -68,9 +68,9 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
           name = @_snakeToCamel("get_" + link)
           do (link, obj, name) =>
             if !@[name]
-              @[name] = (options) -> @$buildOject(link, options, obj)
+              @[name] = (options) -> @$buildOject(link, options)
             if !@["$" + name]
-              @["$" + name] = (options) -> @$buildOjectPromise(link, options, obj)
+              @["$" + name] = (options) -> @$buildOjectPromise(link, options)
 
 
     _snakeToCamel: (s) ->
@@ -78,24 +78,24 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
 
 
     # build out a linked object
-    $buildOject: (link, options, obj) ->
-      url = if obj.templated then new UriTemplate(obj.href).fillFromObject(options || {}) else obj.href
+    $buildOject: (link, options) ->
+      linkId = link + (JSON.stringify(options) || '')
 
-      return @__linkedData[url] if @__linkedData[url]
-      @$buildOjectPromise(link, options, obj).then (ans) =>
-        @__linkedData[url] = ans
+      return @__linkedData[linkId] if @__linkedData[linkId]
+      @$buildOjectPromise(link, options).then (ans) =>
+        @__linkedData[linkId] = ans
         # re-set it again with a digest loop - jsut to be sure!
         $timeout () =>
-          @__linkedData[url] = ans
+          @__linkedData[linkId] = ans
       return null
 
     # build a promise for a linked object
-    $buildOjectPromise: (link, options, obj) ->
-      url = if obj.templated then new UriTemplate(obj.href).fillFromObject(options || {}) else obj.href
+    $buildOjectPromise: (link, options) ->
+      linkId = link + (JSON.stringify(options) || '')
 
-      return @__linkedPromises[url] if @__linkedPromises[url]
+      return @__linkedPromises[linkId] if @__linkedPromises[linkId]
       prom = $q.defer()
-      @__linkedPromises[url] = prom.promise
+      @__linkedPromises[linkId] = prom.promise
 
       @$get(link, options).then (res) =>
         inj = $injector.get('BB.Service.' + link)
@@ -113,7 +113,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
           prom.resolve(res)
       , (err) -> prom.reject(err)
 
-      @__linkedPromises[url]
+      @__linkedPromises[linkId]
 
 
     get: (ikey) ->
