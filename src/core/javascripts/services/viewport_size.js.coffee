@@ -98,7 +98,7 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
   # @returns {boolean}
   ###
   isElementVisible = (element) ->
-    return element and element.style.display != 'none' and element.offsetWidth and element.offsetHeight
+    return angular.element(element).css('display') != 'none'
 
   
   ###*
