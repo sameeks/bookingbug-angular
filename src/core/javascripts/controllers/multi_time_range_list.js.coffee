@@ -165,13 +165,18 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
   * @param {object} amount The selected amount
   * @param {array} type The start type
   ###
-  $scope.add = (amount, type) ->
-    $scope.selected_day = moment($scope.selected_date)
+  $scope.add = (type, amount) ->
+    if amount > 0
+      $element.removeClass('subtract')
+      $element.addClass('add')
     switch type
       when 'days'
-        setTimeRange($scope.selected_day.add(amount, 'days'))
+        setTimeRange($scope.start_date.add(amount, 'days'))
       when 'weeks'
-        $scope.start_date.add(amount, 'weeks')
+        $scope.start_date.add(amount, type)
+        setTimeRange($scope.start_date)
+      when 'months'
+        $scope.start_date.add(amount, type).startOf('month')
         setTimeRange($scope.start_date)
     $scope.loadData()
 
@@ -185,8 +190,8 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
   * @param {object} amount The selected amount
   * @param {object} type The start type
   ###
-  $scope.subtract = (amount, type) ->
-    $scope.add(-amount, type)
+  $scope.subtract = (type, amount) ->
+    $scope.add(type, -amount)
 
   ###**
   * @ngdoc method
@@ -310,17 +315,19 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
   ###
   # load the time data
   $scope.loadData = ->
-
+    
     loader.notLoaded()
 
-    # if the selected date has already been loaded, there's no need to call the API
-    if $scope.request and $scope.request.start.twix($scope.request.end).contains($scope.selected_day)
-      updateHideStatus()
-      loader.setLoaded()
-      return
 
-    $scope.start_date = moment($scope.start_date)
-    edate = moment($scope.start_date).add($scope.time_range_length, 'days')
+    # i have updated this to no longer depend on twixjs - but am removing for now as it breaks calendar
+    # if $scope.request 
+    #   if moment($scope.selected_day).isBetween($scope.request.start, $scope.request.end)
+    #     updateHideStatus()
+    #     loader.setLoaded() 
+    #     return
+
+    date = $scope.start_date
+    edate = moment(date).add($scope.time_range_length, 'days')
     $scope.end_date = moment(edate).add(-1, 'days')
 
     $scope.request = {start: moment($scope.start_date), end: moment($scope.end_date)}
@@ -331,7 +338,6 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
     grouped_items = _.toArray grouped_items
 
     duration = $scope.bb.stacked_items[0].service.duration 
-
 
     for items in grouped_items
       pslots.push(TimeService.query({
@@ -365,7 +371,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
         for k, v of res[0]
           $scope.days[k] = ({date: moment(k)})
         setEnabledSlots()
-        updateHideStatus()
+        # updateHideStatus()
         $rootScope.$broadcast "TimeRangeListStacked:loadFinished"
       else
         # raise error

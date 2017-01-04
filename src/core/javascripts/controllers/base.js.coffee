@@ -468,7 +468,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
       if $scope.bb.item_defaults and $scope.bb.item_defaults.purchase_total_long_id
         total_id = $scope.bb.item_defaults.purchase_total_long_id
       else total_id = QueryStringService('total_id')
-
       # if total_id passed through as prms when ititialising widget in a modal
       if prms.total_id 
         params =

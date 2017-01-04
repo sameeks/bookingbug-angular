@@ -36,32 +36,31 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
   loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then =>
+    loadTotal()
+
+  , (err) ->
+    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+
+  loadTotal = () ->
     $scope.bb.payment_status = null
-
     id = QueryStringService('purchase_id')
-
     # if purchase has been moved in modal then use that
-    if $scope.bb.purchase and !id
+    if $scope.purchase and !id
       $scope.total = $scope.bb.purchase
       loader.setLoaded()
-      emitSuccess($scope.total)
 
     else if id and !$scope.bb.total
       BBModel.Purchase.Total.$query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
         $scope.total = total
         loader.setLoaded()
-        emitSuccess(total)
         
     else
       $scope.total = $scope.bb.total
       loader.setLoaded()
-      emitSuccess($scope.total)
 
+    emitSuccess($scope.total)
     # Reset ready for another booking
     $scope.reset()
-
-  , (err) ->
-    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
   # emit checkout:success event if the amount paid matches the total price
@@ -80,3 +79,6 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
                 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0')
     return true
 
+  $rootScope.$on "booking:moved", (event, total) ->
+    $scope.total = total
+    emitSuccess(total)

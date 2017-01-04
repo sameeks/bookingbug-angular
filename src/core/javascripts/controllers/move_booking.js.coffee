@@ -7,10 +7,11 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
   loader = LoadingService.$loader($scope)
   $scope.options = $scope.$eval($attrs.bbMoveBooking) or {}
 
-  $scope.initMove = (bookings) ->
+  $scope.initMove = (bookings, totalId) ->
     # open modal if moving public bookings from purchase template
+    # totalId is either passed in from the template or if on view_booking page take from the url
     if $scope.options.openCalendarInModal 
-      totalId = QueryStringService('id')
+      totalId = QueryStringService('id') if !totalId
       openCalendarModal(bookings, totalId)
 
     # else just start moving the bookings
@@ -80,7 +81,6 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 
 
   openCalendarModal = (bookings, totalId) ->
-    console.log bookings
     # open multi_service_calendar template when moving multiple bookings at once 
     WidgetModalService.open
       company_id: if bookings.length > 0 then bookings[0].company_id else bookings.company.id
