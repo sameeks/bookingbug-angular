@@ -1,10 +1,11 @@
 'use strict'
 
-BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService) ->
+BBCtrl = ( ROUTE_STATES, $scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService) ->
   'ngInject'
 
   vm = @
-  alert "This is our refactoring NEW_TEST1 UUU"
+  alert "refactoring in progress"
+
   $scope.cid = "BBCtrl" # dont change the cid as we use it in the app to identify this as the widget root scope
   $scope.controller = "public.controllers.BBCtrl"
 
@@ -18,24 +19,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
   widgetStarted = $q.defer()
   $rootScope.widget_started = widgetStarted.promise
 
-  $rootScope.Route = $scope.Route =
-    Company: 0
-    Category: 1
-    Service: 2
-    Person: 3
-    Resource: 4
-    Duration: 5
-    Date: 6
-    Time: 7
-    Client: 8
-    Summary: 9
-    Basket: 10
-    Checkout: 11
-    Slot: 12
-    Event: 13
-    Login: 14
-    Questions: 15
-    Confirmation: 16
+  $rootScope.Route = $scope.Route = ROUTE_STATES
 
   init = () ->
 
