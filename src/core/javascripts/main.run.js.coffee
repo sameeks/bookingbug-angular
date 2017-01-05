@@ -15,7 +15,10 @@ angular.module('BB').run ($bbug, DebugUtilsService, FormDataStoreService, $log, 
     document.createElement('section')
     document.createElement('footer')
 
-  if GeneralOptions.use_local_time_zone
+  if GeneralOptions.set_time_zone_automatically
     GeneralOptions.display_time_zone = moment.tz.guess()
+
+  if localStorage.selectedTimeZone
+    GeneralOptions.display_time_zone = localStorage.selectedTimeZone
 
   return

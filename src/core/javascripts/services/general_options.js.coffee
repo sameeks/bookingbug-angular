@@ -32,10 +32,10 @@ angular.module('BB.Services').provider 'GeneralOptions', ->
     calendar_min_time: "09:00"
     calendar_max_time: "18:00"
     calendar_slot_duration: 5
-    use_local_time_zone: false 
+    set_time_zone_automatically: false
     display_time_zone: null
-    use_i18n: false 
-    update_document_title: false 
+    use_i18n: false
+    update_document_title: false
     scroll_offset: 0
   }
 
@@ -50,4 +50,3 @@ angular.module('BB.Services').provider 'GeneralOptions', ->
     options
 
   return
-

@@ -32,8 +32,7 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
         value: location
     return timezones
 
-  getLocalTimezone = () ->
-    location = moment.tz.guess()
+  mapTzForDisplay = (location) ->
     city = location.match(/[^/]*$/)[0].replace(/_/g, ' ')
     tz = moment.tz(location)
     localTimezone =
@@ -60,7 +59,7 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
     return timezones
 
   return {
-    getLocalTimezone: getLocalTimezone
+    mapTzForDisplay: mapTzForDisplay
     generateTzList: generateTzList
   }
 

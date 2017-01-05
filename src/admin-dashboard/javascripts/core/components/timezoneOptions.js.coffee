@@ -13,27 +13,33 @@
 * </example>
 ###
 
-timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions) ->
+timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions, CompanyStoreService) ->
 
   this.$onInit = () ->
-    this.automaticTimezone = true
     this.timezones = TimezoneOptions.generateTzList(this.restrictRegion)
+    if localStorage.selectedTimeZone
+      this.selectedTimezone = TimezoneOptions.mapTzForDisplay(localStorage.selectedTimeZone)
+    else
+      this.selectedTimezone = TimezoneOptions.mapTzForDisplay(CompanyStoreService.time_zone)
     return
 
-  this.updateTimeZone = (selectedTimezone) ->
-    GeneralOptions.display_time_zone = selectedTimezone
+  this.setTimezone = (selectedTimezone, setTimezoneAutomatically) ->
     localStorage.selectedTimeZone = selectedTimezone
+    GeneralOptions.set_time_zone_automatically = setTimezoneAutomatically
+    GeneralOptions.display_time_zone = selectedTimezone
     $rootScope.$emit('timezoneUpdated', selectedTimezone)
 
-  this.automaticTimezoneChanged = () ->
+  this.setAutomaticTimezone = () ->
     if (this.automaticTimezone)
-      this.selectedTimezone = null
+      tz = moment.tz.guess()
+      this.selectedTimezone = TimezoneOptions.mapTzForDisplay(tz)
+      this.setTimezone(tz, true)
       $rootScope.$broadcast('close-select')
 
     if (!this.automaticTimezone)
-      GeneralOptions.use_local_time_zone = true
-      this.selectedTimezone = TimezoneOptions.getLocalTimezone()
-      $rootScope.$emit('timezoneUpdated', this.selectedTimezone.value)
+      this.selectedTimezone = TimezoneOptions.mapTzForDisplay(CompanyStoreService.time_zone)
+      this.setTimezone(null, false)
+      localStorage.removeItem('selectedTimeZone')
 
     return
 
