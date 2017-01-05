@@ -1,33 +1,5 @@
 'use strict'
 
-
-###**
-* @ngdoc directive
-* @name BB.Directives:bbPurchaseTotal
-* @restrict AE
-* @scope true
-*
-* @description
-*
-* Loads a list of purchase total for the currently in scope company
-*
-* <pre>
-* restrict: 'AE'
-* replace: true
-* scope: true
-* </pre>
-*
-* @property {array} total The total purchase
-####
-
-
-angular.module('BB.Directives').directive 'bbPurchaseTotal', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'PurchaseTotal'
-
-
 angular.module('BB.Controllers').controller 'PurchaseTotal', ($scope,
   $rootScope, $window, BBModel, $q) ->
 
@@ -49,4 +21,3 @@ angular.module('BB.Controllers').controller 'PurchaseTotal', ($scope,
       $scope.loadingTotal = BBModel.PurchaseTotal.$query({company: $scope.bb.company, total_id: total_id})
       $scope.loadingTotal.then (total) =>
         $scope.total = total
-
