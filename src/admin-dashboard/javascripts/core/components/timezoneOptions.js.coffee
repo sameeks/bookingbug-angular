@@ -24,12 +24,12 @@ timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions, Compan
     return
 
   this.setTimezone = (selectedTimezone, setTimezoneAutomatically) ->
-    localStorage.selectedTimeZone = selectedTimezone
+    localStorage.selectedTimeZone = GeneralOptions.display_time_zone = selectedTimezone
     GeneralOptions.set_time_zone_automatically = setTimezoneAutomatically
-    GeneralOptions.display_time_zone = selectedTimezone
     $rootScope.$emit('timezoneUpdated', selectedTimezone)
+    return
 
-  this.setAutomaticTimezone = () ->
+  this.automaticTimezoneToggle = () ->
     if (this.automaticTimezone)
       tz = moment.tz.guess()
       this.selectedTimezone = TimezoneOptions.mapTzForDisplay(tz)
@@ -40,7 +40,6 @@ timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions, Compan
       this.selectedTimezone = TimezoneOptions.mapTzForDisplay(CompanyStoreService.time_zone)
       this.setTimezone(null, false)
       localStorage.removeItem('selectedTimeZone')
-
     return
 
   return
