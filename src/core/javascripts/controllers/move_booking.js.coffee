@@ -53,7 +53,7 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
     PurchaseBookingService.update(basketItem).then (purchaseBooking) ->
       booking = new BBModel.Purchase.Booking(purchaseBooking)
       loader.setLoaded()
-      $scope.bb.moved_booking = purchaseBooking
+      $scope.bb.singlePurchaseBooking = purchaseBooking
       resolveCalendarModal(booking)
     , (err) =>
       loader.setLoaded()

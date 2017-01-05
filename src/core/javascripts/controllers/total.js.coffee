@@ -44,20 +44,28 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
   loadTotal = () ->
     $scope.bb.payment_status = null
     id = QueryStringService('purchase_id')
-    # if purchase has been moved in modal then use that
-    if $scope.purchase and !id
-      $scope.total = $scope.bb.purchase
-      loader.setLoaded()
 
+    # if purchase has been moved in modal then use that
+    if $scope.bb.purchase and !id
+      $scope.total = $scope.bb.purchase
+
+    else if $scope.bb.singlePurchaseBooking and !id 
+      $scope.total = $scope.bb.singlePurchaseBooking 
+
+    # else get from ID found from URL
     else if id and !$scope.bb.total
       BBModel.Purchase.Total.$query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
         $scope.total = total
-        loader.setLoaded()
         
-    else
-      $scope.total = $scope.bb.total
-      loader.setLoaded()
+    # not sure if this is needed
+    else if $scope.bb.total
+      $scope.total = $scope.bb.total 
 
+    else 
+      console.log 'no purchase total found'
+      return
+      
+    loader.setLoaded()
     emitSuccess($scope.total)
     # Reset ready for another booking
     $scope.reset()

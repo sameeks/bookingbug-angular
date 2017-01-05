@@ -35,11 +35,6 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
   transclude: true
   controller : 'TimeRangeList'
   link: (scope, element, attrs, controller, transclude) ->
-    # focus on continue button after slot selected - for screen readers 
-    scope.$on 'time:selected', ->
-      btn = angular.element('#btn-continue')
-      btn[0].disabled = false
-      btn[0].focus()
 
     # date helpers
     scope.today = moment().toDate()
