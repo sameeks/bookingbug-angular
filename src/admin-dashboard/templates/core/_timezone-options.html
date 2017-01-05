@@ -20,7 +20,7 @@
     ng-model="$ctrl.selectedTimezone"
     theme="bootstrap"
     ng-disabled="$ctrl.automaticTimezone"
-    ng-change="$ctrl.setTimezone($ctrl.selectedTimezone, $ctrl.automaticTimezone);">
+    ng-change="$ctrl.setTimezone($ctrl.selectedTimezone.value, $ctrl.automaticTimezone);">
 
     <ui-select-match placeholder="Select timezone">
      {{$select.selected.display}}
@@ -31,7 +31,7 @@
       all-choices="$ctrl.timezones"
       refresh-delay="0"
       repeat="
-        timezone.value as timezone in $select.pagingOptions.items |
+        timezone as timezone in $select.pagingOptions.items |
         props: { display: $select.search}
         track by timezone.id
       ">
@@ -45,7 +45,7 @@
   style="width: 260px;"
   ng-model="$ctrl.selectedTimezone"
   theme="bootstrap"
-  ng-change="$ctrl.setTimezone($ctrl.selectedTimezone, $ctrl.automaticTimezone); resetTimeSelection()">
+  ng-change="$ctrl.setTimezone($ctrl.selectedTimezone.value, $ctrl.automaticTimezone); resetTimeSelection()">
 
   <ui-select-match placeholder="Select timezone">
    {{$select.selected.display}}
@@ -54,7 +54,7 @@
   <ui-select-choices
     refresh-delay="400"
     repeat="
-      timezone.value as timezone in $ctrl.timezones |
+      timezone as timezone in $ctrl.timezones |
       props: { display: $select.search}
       track by timezone.id">
     <div ng-bind-html="timezone.display | highlight: $select.search"></div>

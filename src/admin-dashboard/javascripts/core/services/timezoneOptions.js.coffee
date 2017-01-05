@@ -13,7 +13,7 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
       locationNames = _.filter locationNames, (tz) -> tz.indexOf(restrictRegion) isnt -1
     else if angular.isArray(restrictRegion)
       locations = []
-      _.map restrictRegion, (region) ->
+      _.each restrictRegion, (region) ->
         locations.push(_.filter locationNames, (tz) -> tz.indexOf(region) isnt -1)
       locationNames = _.flatten(locations)
     else
@@ -32,6 +32,14 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
         value: location
     return timezones
 
+  ###*
+  * @ngdoc function
+  * @name mapTzForDisplay
+  * @methodOf BBAdminDashboard.Services:TimezoneOptions
+  * @description Prepares a timezone string for display on FE
+  * @param {String} Timezone
+  * @returns {Object} 
+  ###
   mapTzForDisplay = (location) ->
     city = location.match(/[^/]*$/)[0].replace(/_/g, ' ')
     tz = moment.tz(location)
@@ -42,19 +50,18 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
   ###*
   * @ngdoc function
   * @name generateTzList
-  * @methodOf BBAdminDashboard.Services:TimezoneList
+  * @methodOf BBAdminDashboard.Services:TimezoneOptions
   * @description Generates list of timezones for display on FE, removing duplicates and ordering by distance from UTC time
   * @param {String, Array} Restrict the timezones to one region (String) or multiple regions (Array)
   * @returns {Array} A list of timezones
   ###
   generateTzList = (restrictRegion) ->
-    locationNames = moment.tz.names()
-    locationNames = _.filter locationNames, (tz) -> tz.indexOf('GMT') is -1
+    locationNames = moment.tz.names().filter (tz) -> tz.indexOf('GMT') is -1
     if restrictRegion
       locationNames = restrictToRegion(locationNames, restrictRegion)
-
     timezones = mapTimezones(locationNames)
     timezones = _.uniq(timezones, (timezone) -> timezone.display)
+    # Order here whilst lazy-loading items onto ui-select
     timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false)
     return timezones
 
