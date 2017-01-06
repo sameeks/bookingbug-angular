@@ -11,8 +11,8 @@
 
       <div class="col-sm-offset-7 col-sm-3 col-sm-push-2 text-right">  
         <button 
-          ng-show="!bb.moving_booking" 
-          type="button" 
+          ng-show="!bb.movingBooking" 
+          type="button"  
           id="btn-continue" 
           class="btn btn-primary btn-block" 
           ng-click="checkReady() && routeReady()" 
@@ -22,7 +22,7 @@
         </button>
       </div>
 
-      <div ng-if="bb.moving_booking" bb-move-booking>
+      <div ng-if="bb.movingBooking" bb-move-booking>
       
       <!-- moving single booking -->
         <button 
@@ -48,7 +48,7 @@
       </div>
 
       <div class="col-sm-2 col-sm-pull-10 text-left">    
-        <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="loadPreviousStep()" ng-show="!bb.moving_booking">Back</button>
+        <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="loadPreviousStep()" ng-show="!bb.movingBooking">Back</button>
       </div>
     </div>
   </div>

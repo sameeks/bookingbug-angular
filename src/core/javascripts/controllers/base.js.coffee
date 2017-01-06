@@ -774,7 +774,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
   addItemToBasket = ->
     add_defer = $q.defer()
 
-    if !$scope.bb.current_item.submitted && !$scope.bb.moving_booking
+    if !$scope.bb.current_item.submitted && !$scope.bb.movingBooking
       moveToBasket()
       $scope.bb.current_item.submitted = updateBasket()
       $scope.bb.current_item.submitted.then (basket) ->
@@ -907,13 +907,13 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
       new_item.setSrcBooking(booking, $scope.bb)
       Array::push.apply proms, new_item.promises
       $scope.bb.basket.addItem(new_item)
-      $scope.bb.moving_booking = bookings 
+      $scope.bb.movingBooking = bookings 
 
     # set current_item if we are only loading one booking in the basket
     if bookings.length is 1 
       $scope.bb.current_item = $scope.bb.basket.items[0]
       $scope.bb.current_item.setDefaults({})
-      $scope.bb.moving_booking = bookings[0]
+      $scope.bb.movingBooking = bookings[0]
 
     # set stacked items when multiple bookings being loaded in modal 
     $scope.bb.setStackedItems($scope.bb.basket.items) if bookings.length > 1

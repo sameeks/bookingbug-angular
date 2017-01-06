@@ -38,7 +38,7 @@ angular.module('BBAdminBooking').directive 'bbAdminMoveBooking', ($log,
         scope.initWidget(config)
         company.getBooking(config.booking_id).then (booking) ->
           scope.company = company
-          scope.bb.moving_booking = booking
+          scope.bb.movingBooking = booking
           scope.quickEmptybasket()
           proms = []
           new_item = new BBModel.BasketItem(booking, scope.bb)

@@ -84,7 +84,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       else
         checkItemDefaults()
 
-      if $scope.bb.moving_booking
+      if $scope.bb.movingBooking
         $scope.nextStep()
 
 

@@ -30,8 +30,14 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       AlertService.add("warning", { msg: "Your booking is already scheduled for that time." })
       return
 
+    readyBookings = []
+
+    for booking in bookings 
+      if booking.setAskedQuestions() is true
+        readyBookings.push booking 
+
     $scope.bb.movingPurchase = $scope.bb.purchase
-    updatePurchase(bookings)
+    updatePurchase(bookings) if readyBookings.length is bookings.length
 
 
   moveSingleBooking = (basketItem) ->
