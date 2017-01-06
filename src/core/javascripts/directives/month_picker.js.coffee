@@ -12,11 +12,11 @@ angular.module('BB.Directives').directive 'bbMonthPicker', (PathSvc, $timeout) -
     scope.picker_settings = scope.$eval(attrs.bbMonthPicker) or {}
     scope.picker_settings.months_to_show = scope.picker_settings.months_to_show or 3
 
-    $(window).resize () ->
-      $timeout ->
-        width = el.width()
-        scope.rebuildSlideToWidth width
-      , 500
+    # $(window).resize () ->
+    #   $timeout ->
+    #     width = el.width()
+    #     scope.rebuildSlideToWidth width
+    #   , 500
 
     scope.$watch attrs.dayData, (dayData) ->
       if dayData
