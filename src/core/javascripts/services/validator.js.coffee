@@ -48,7 +48,10 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   mobile_regex_lenient = /^(0|\+)([\d \(\)]{9,19})$/
 
   # UK landline regex (strict)
-  uk_landline_regex_strict = /^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/
+  # ----------------------------------------------------------------------------------------------------------------
+  # Will accept numbers like: 0208 695 1232, +44(0)208 695 1232, +44 208 695 1232, 020 8695 1232, (0)208 695 1232
+  # ----------------------------------------------------------------------------------------------------------------
+  uk_landline_regex_strict = /^(\+44|0|\(0\))\s*(\(0\))*\s*[1-9]\s*\d{1,4}\s*\d{3,4}\s*\d{3,4}$/
 
   # UK landline regex (lenient)
   uk_landline_regex_lenient = /^(0|\+)([\d \(\)]{9,19})$/
