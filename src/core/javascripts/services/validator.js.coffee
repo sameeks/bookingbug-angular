@@ -45,7 +45,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
   # ----------------------------------------------------------------------------------------------------------------------------------------
   # +44 or 0 followed by 7 followed by [45789] followed by \d{2} or 624 followed by \d{6} and can contain any number of spaces in between
   # ----------------------------------------------------------------------------------------------------------------------------------------
-  uk_mobile_regex_strict = /^((\+44|0)\s*7\s*([45789]\s*\d\s*\d|6\s*2\s*4)\s*\d\s*\d\s*\d\s*\d\s*\d\s*\d)$/
+  uk_mobile_regex_strict = /^((\+44|0)\s*7\s*([45789](\s*\d){2}|6\s*2\s*4)(\s*\d){6})$/
 
   # mobile number regex (lenient)
   mobile_regex_lenient = /^(0|\+)([\d \(\)]{9,19})$/
