@@ -19,6 +19,7 @@ describe 'ValidatorService', ->
 
       it '"07874319541"', ->
         expect ukMobileRegex.test('07874319541')
+        .toBe(true)
 
       it '"+447874319541"', ->
         expect ukMobileRegex.test('+447874319541')
