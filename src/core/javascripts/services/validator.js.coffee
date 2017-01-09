@@ -39,13 +39,19 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
   number_only_regex = /^\d+$/
 
   # UK mobile number regex (strict)
-  uk_mobile_regex_strict = /^((\+44\s?|0)7([45789]\d{2}|624)\s?\d{3}\s?\d{3})$/
+  # ----------------------------------------------------------------------------------------------------------------------------------------
+  # +44 or 0 followed by 7 followed by [45789] followed by \d{2} or 624 followed by \d{6} and can contain any number of spaces in between
+  # ----------------------------------------------------------------------------------------------------------------------------------------
+  uk_mobile_regex_strict = /^((\+44|0)\s*7\s*([45789]\s*\d\s*\d|6\s*2\s*4)\s*\d\s*\d\s*\d\s*\d\s*\d\s*\d)$/
 
   # mobile number regex (lenient)
   mobile_regex_lenient = /^(0|\+)([\d \(\)]{9,19})$/
 
-  # UK landline regex (strict)
-  uk_landline_regex_strict = /^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/
+   # UK landline regex (strict)
+  # ----------------------------------------------------------------------------------------------------------------
+  # Will accept numbers like: 0208 695 1232, 020 8695 1232, +44 208 695 1232, +44 1623 431 091
+  # ----------------------------------------------------------------------------------------------------------------
+  uk_landline_regex_strict = /^(\+44|0)\s*[1-9]\s*\d{1,4}\s*\d{3,4}\s*\d{2,4}$/
 
   # UK landline regex (lenient)
   uk_landline_regex_lenient = /^(0|\+)([\d \(\)]{9,19})$/
