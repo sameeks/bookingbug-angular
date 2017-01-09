@@ -11,14 +11,14 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
   restrictToRegion = (locationNames, restrictRegion) ->
     if angular.isString(restrictRegion)
       locationNames = _.filter locationNames, (tz) -> tz.indexOf(restrictRegion) isnt -1
-    else if angular.isArray(restrictRegion)
+      return locationNames
+
+    if angular.isArray(restrictRegion)
       locations = []
       _.each restrictRegion, (region) ->
         locations.push(_.filter locationNames, (tz) -> tz.indexOf(region) isnt -1)
       locationNames = _.flatten(locations)
-    else
-      throw new Error('restrictRegion must be Array or String')
-    return locationNames
+      return locationNames
 
   mapTimezones = (locationNames) ->
     timezones = []
@@ -38,7 +38,7 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
   * @methodOf BBAdminDashboard.Services:TimezoneOptions
   * @description Prepares a timezone string for display on FE
   * @param {String} Timezone
-  * @returns {Object} 
+  * @returns {Object}
   ###
   mapTzForDisplay = (location) ->
     city = location.match(/[^/]*$/)[0].replace(/_/g, ' ')
@@ -61,7 +61,7 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
       locationNames = restrictToRegion(locationNames, restrictRegion)
     timezones = mapTimezones(locationNames)
     timezones = _.uniq(timezones, (timezone) -> timezone.display)
-    # Order here whilst lazy-loading items onto ui-select
+    # Order here whilst using ui-select-choices-lazyload in ui-select
     timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false)
     return timezones
 

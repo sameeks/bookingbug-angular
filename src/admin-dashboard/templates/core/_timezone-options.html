@@ -15,8 +15,8 @@
   <label>
     <span translate="ADMIN_DASHBOARD.CORE.PREFERENCES.TIMEZONE_LABEL"></span>
   </label>
+  <!-- Using ui-select-choices-lazyload due to perfomance issues -->
   <ui-select
-    style="width: 260px;"
     ng-model="$ctrl.selectedTimezone"
     theme="bootstrap"
     ng-disabled="$ctrl.automaticTimezone"
@@ -39,25 +39,27 @@
     </ui-select-choices>
 
   </ui-select>
+
+  <!-- Standard ui-select -->
+  <!-- <ui-select
+    style="width: 260px;"
+    ng-model="$ctrl.selectedTimezone"
+    theme="bootstrap"
+    ng-change="$ctrl.setTimezone($ctrl.selectedTimezone.value, $ctrl.automaticTimezone); resetTimeSelection()">
+
+    <ui-select-match placeholder="Select timezone">
+     {{$select.selected.display}}
+    </ui-select-match>
+
+    <ui-select-choices
+      refresh-delay="400"
+      repeat="
+        timezone as timezone in $ctrl.timezones |
+        props: { display: $select.search}
+        track by timezone.id">
+      <div ng-bind-html="timezone.display | highlight: $select.search"></div>
+    </ui-select-choices>
+
+  </ui-select> -->
+
 </div>
-
-<!-- <ui-select
-  style="width: 260px;"
-  ng-model="$ctrl.selectedTimezone"
-  theme="bootstrap"
-  ng-change="$ctrl.setTimezone($ctrl.selectedTimezone.value, $ctrl.automaticTimezone); resetTimeSelection()">
-
-  <ui-select-match placeholder="Select timezone">
-   {{$select.selected.display}}
-  </ui-select-match>
-
-  <ui-select-choices
-    refresh-delay="400"
-    repeat="
-      timezone as timezone in $ctrl.timezones |
-      props: { display: $select.search}
-      track by timezone.id">
-    <div ng-bind-html="timezone.display | highlight: $select.search"></div>
-  </ui-select-choices>
-
-</ui-select> -->

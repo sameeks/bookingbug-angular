@@ -22,7 +22,7 @@ describe 'BBAdminDashboard, timezoneOptionsFactory', () ->
 
     return
 
-  describe 'getLocalTimezone method', () ->
+  describe 'mapTzForDisplay method', () ->
 
     beforeEach2LvlFn = () ->
       moment = jasmine.createSpy()
@@ -31,12 +31,12 @@ describe 'BBAdminDashboard, timezoneOptionsFactory', () ->
 
     beforeEach beforeEach2LvlFn
 
-    it 'should return local timezone object', () ->
+    it 'should return timezone object with display and value properties', () ->
       timezone =
         display: '(UTC +00:00) London (GMT)'
         value: 'Europe/London'
 
-      expect timezoneOptionsFactory.getLocalTimezone()
+      expect timezoneOptionsFactory.mapTzForDisplay('Europe/London')
       .toEqual(timezone)
 
       return

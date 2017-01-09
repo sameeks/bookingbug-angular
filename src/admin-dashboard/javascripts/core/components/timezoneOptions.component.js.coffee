@@ -9,7 +9,8 @@
 *
 * @example
 * <example>
-*   <timezone-options restrict-region="Europe"></timezone-options>
+*   <timezone-options restrict-region="'Europe'"></timezone-options>
+*   <timezone-options restrict-region="['Asia', 'America']"></timezone-options>
 * </example>
 ###
 

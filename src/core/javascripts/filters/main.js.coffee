@@ -304,7 +304,7 @@ angular.module('BB.Filters').filter 'datetime', (GeneralOptions, CompanyStoreSer
     if date and moment.isMoment(date)
       new_date = date.clone()
       new_date.tz(GeneralOptions.display_time_zone)
-      format += ' zz' if show_time_zone
+      format += ' (zz)' if show_time_zone
       return new_date.format(format)
 
 
