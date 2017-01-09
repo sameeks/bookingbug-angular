@@ -49,9 +49,6 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
     if $scope.bb.purchase and !id
       $scope.total = $scope.bb.purchase
 
-    else if $scope.bb.singlePurchaseBooking and !id 
-      $scope.total = $scope.bb.singlePurchaseBooking 
-
     # else get from ID found from URL
     else if id and !$scope.bb.total
       BBModel.Purchase.Total.$query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->

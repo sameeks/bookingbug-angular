@@ -121,10 +121,11 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
 
   openCalendarModal = (booking, total) ->
     WidgetModalService.open
+      booking: booking 
       company_id: booking.company_id
       template: 'main_view_booking'
       total_id: total.long_id
-      first_page: 'calendar'
+      first_page: if total.bookings.length > 0 then 'multi_service_calendar' else 'calendar'
       member: true
 
 

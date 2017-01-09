@@ -204,7 +204,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     $scope.init_widget_started = true
 
     prms = @$init_prms # Initialize the scope from params
-
     if prms.query # if we've been asked to load any values from the url - do so!
       for k,v of prms.query
         prms[k] = QueryStringService(v)
@@ -468,6 +467,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
       if $scope.bb.item_defaults and $scope.bb.item_defaults.purchase_total_long_id
         total_id = $scope.bb.item_defaults.purchase_total_long_id
       else total_id = QueryStringService('total_id')
+
       # if total_id passed through as prms when ititialising widget in a modal
       if prms.total_id 
         params =
@@ -477,7 +477,13 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
         getPurchaseTotal = PurchaseService.query(params).then (total) -> 
           $scope.bb.purchase = total
           total.$getBookings().then (bookings) ->
+            # get relevant booking from total if moving single booking where total contains multiple bookings
+            # if prms.member
+            #   bookings = _.find bookings, (b) ->
+            #     b.id is prms.booking.id
+
             createBasketFromBookings(bookings, totalDefer)
+
           , (err) ->
             totalDefer.reject(err)
         , (err) ->
@@ -902,21 +908,22 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
 
     # build array of promises to be resolved when all items are in the basket
     # when resolved basket is ready to move onto next step of the journey
-    for booking in bookings  
+    for booking in bookings
       new_item = new BBModel.BasketItem(booking, $scope.bb)
       new_item.setSrcBooking(booking, $scope.bb)
       Array::push.apply proms, new_item.promises
       $scope.bb.basket.addItem(new_item)
-      $scope.bb.movingBooking = bookings 
 
-    # set current_item if we are only loading one booking in the basket
-    if bookings.length is 1 
+    if bookings.length is 1
+      # set current_item if we are only loading one booking in the basket
       $scope.bb.current_item = $scope.bb.basket.items[0]
       $scope.bb.current_item.setDefaults({})
-      $scope.bb.movingBooking = bookings[0]
+    else 
+      # set stacked items when multiple bookings
+      $scope.bb.setStackedItems($scope.bb.basket.items) if bookings.length > 1
 
-    # set stacked items when multiple bookings being loaded in modal 
-    $scope.bb.setStackedItems($scope.bb.basket.items) if bookings.length > 1
+    $scope.bb.movingBooking = bookings
+
 
     $q.all(proms).then () ->
       totalDefer.resolve()

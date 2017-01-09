@@ -41,9 +41,6 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
 
 
   moveSingleBooking = (basketItem) ->
-    # set ready to false until we check setAskedQuestions
-    basketItem.ready = false
-
     if !basketItem.datetimeHasChanged() 
       AlertService.add("warning", { msg: "Your booking is already scheduled for that time." })
       return
@@ -59,7 +56,11 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
     PurchaseBookingService.update(basketItem).then (purchaseBooking) ->
       booking = new BBModel.Purchase.Booking(purchaseBooking)
       loader.setLoaded()
-      $scope.bb.singlePurchaseBooking = purchaseBooking
+
+      if $scope.bb.purchase
+        for oldb, _i in $scope.bb.purchase.bookings
+          $scope.bb.purchase.bookings[_i] = booking if oldb.id is booking.id
+
       resolveCalendarModal(booking)
     , (err) =>
       loader.setLoaded()
