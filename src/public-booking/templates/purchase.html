@@ -12,7 +12,7 @@
           </div>
         </div>
 
-        <div ng-show="bookings">
+        <div ng-show="bookings && bookings.length != 0">
           <div ng-show="is_waitlist">
             <div bb-include="book_waitlist"></div>
           </div>
