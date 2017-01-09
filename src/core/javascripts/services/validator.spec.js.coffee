@@ -16,6 +16,14 @@ describe 'ValidatorService', ->
       ukMobileRegex = validatorService.getUKMobilePattern(true)
 
     describe 'validates', ->
+
+      it '"07874319541"', ->
+        expect ukMobileRegex.test('07874319541')
+
+      it '"+447874319541"', ->
+        expect ukMobileRegex.test('+447874319541')
+        .toBe(true)
+
       it '"+44 787 431 9541"', ->
         expect ukMobileRegex.test('+44 787 431 95 41')
         .toBe(true)
