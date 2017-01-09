@@ -182,7 +182,6 @@ angular.module('BB.Filters').filter 'time_period', ->
       str = "#{val} #{min_string}"
       str += "s" if val != 1
       return str
-
     hours = parseInt(val / 60)
     mins = val % 60
 
@@ -200,7 +199,6 @@ angular.module('BB.Filters').filter 'time_period', ->
       str += " #{separator}" if separator.length > 0
       str += " #{mins} #{min_string}"
       str += "s" if mins != 1
-
     return str
 
 
