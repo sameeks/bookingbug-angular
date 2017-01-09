@@ -45,6 +45,7 @@ angular.module('BBAdminDashboard').directive 'adminIframe', ['$window', '$timeou
       element.find('iframe')[0].onload = () ->
         scope.$emit 'iframeLoaded',{}
         if typeof scope.onLoad == 'function'
+          this.style.display = 'block';
           scope.onLoad()
 
 
