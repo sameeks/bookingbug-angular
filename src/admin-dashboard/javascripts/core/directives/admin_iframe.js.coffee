@@ -45,6 +45,7 @@ angular.module('BBAdminDashboard').directive 'adminIframe', ['$window', '$timeou
       element.find('iframe')[0].onload = () ->
         scope.$emit 'iframeLoaded',{}
         if typeof scope.onLoad == 'function'
+          # moved this line from template to directive to work with IE & Firefox since onload was called before the iframe was entirely loaded.
           this.style.display = 'block';
           scope.onLoad()
 
