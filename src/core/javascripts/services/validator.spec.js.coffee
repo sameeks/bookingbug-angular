@@ -52,6 +52,18 @@ describe 'ValidatorService', ->
         expect ukLandlineRegex.test('0 20 7946 0018')
         .toBe(true)
 
+       it '"01632 431091"', ->
+          expect ukLandlineRegex.test('01632 431091')
+          .toBe(true)
+
+       it '"+44 1632 431 091"', ->
+          expect ukLandlineRegex.test('+44 1632 431 091')
+          .toBe(true)
+
+       it '"0113 496 7133"', ->
+         expect ukLandlineRegex.test('0113 496 7133')
+         .toBe(true)
+
     describe 'invalidates', ->
       it '"+44 (0) 20 7946 0018"', ->
         expect ukLandlineRegex.test('+44 (0) 20 7946 0018')
@@ -64,4 +76,10 @@ describe 'ValidatorService', ->
       it '"0 20 7946 0018 "', ->
         expect ukLandlineRegex.test('0 20 7946 0018 ')
         .toBe(false)
+
+      it '"+44 01632 431 091"', ->
+        expect ukLandlineRegex.test('+44 01632 431 091')
+        .toBe(false)
+
+
 
