@@ -7,7 +7,7 @@
 * @description
 * Stores the current screen size breakpoint.
 ###
-angular.module('BB.Services').service 'ViewportSize', ($window, $document, $rootScope) ->
+angular.module('BB.Services').service 'ViewportSize', ($window, $document) ->
 
   service = @
 
@@ -58,13 +58,11 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
   # @returns {String}
   ###
   getViewportElementsToAppend = ->
-    # opening parent tag
     viewportElementStrings = '<div id="viewport_size">'
     for size in getSupportedSizes()
       elementId = getElementId(size)
       viewportElementStrings += ' <span id="' + elementId + '"  class="visible-' + size + '">&nbsp;</span>'
 
-    # closing parent tag
     viewportElementStrings += '</div>'
     return viewportElementStrings
 
@@ -87,7 +85,7 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
     viewportElements = []
     for size in getSupportedSizes()
       viewportElementId = getElementId(size)
-      viewportElement = document.querySelector('#' + viewportElementId)
+      viewportElement = $document[0].querySelector('#' + viewportElementId)
       viewportElements.push(viewportElement)
     return viewportElements
 
@@ -135,10 +133,6 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document, $root
       findVisibleElement()
       return
     return
-
-  ################## 
-  # PUBLIC METHODS #
-  ##################
 
   ###*
   # @description initialise before utilising viewport service
