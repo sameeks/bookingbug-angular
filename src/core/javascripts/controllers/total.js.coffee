@@ -41,6 +41,15 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
   , (err) ->
     loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
+
+  ###**
+  * @ngdoc method
+  * @name loadTotal
+  * @methodOf BB.Directives:bbTotal
+  * @description
+  * Load purchase from either url or total if it's already in scope
+  ###
+
   loadTotal = () ->
     $scope.bb.payment_status = null
     id = QueryStringService('purchase_id')
@@ -68,7 +77,15 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
     $scope.reset()
 
 
-  # emit checkout:success event if the amount paid matches the total price
+  ###**
+  * @ngdoc method
+  * @name emitSuccess
+  * @methodOf BB.Directives:bbTotal
+  * @description
+  * Emit checkout:success if total has been paid
+  * @param {object} total The purchase total 
+  ###
+
   emitSuccess = (total) ->
     $scope.$emit("checkout:success", total) if total.paid is total.total_price
 

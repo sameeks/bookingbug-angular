@@ -56,6 +56,14 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
         if GeneralOptions.useCategories then readyCategories() else readyServices()
 
 
+  ###**
+  * @ngdoc method
+  * @name readyServices
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Define scoped items from services 
+  ###
+
   readyServices = () ->
     $scope.services = $scope.items
 
@@ -64,6 +72,14 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     else
       checkItemDefaults()
 
+
+  ###**
+  * @ngdoc method
+  * @name readyCategories
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Get categories from company
+  ###
 
   readyCategories = () ->
     promises = []
@@ -95,6 +111,14 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
+  ###**
+  * @ngdoc method
+  * @name checkItemDefaults
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Get stacked items from $scope.bb.stacked_items
+  ###
+
   getStackedItems = () ->
     for stacked_item in $scope.bb.stacked_items
       for item in $scope.items
@@ -110,12 +134,14 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   * @description
   * Check item defaults
   ###
+
   checkItemDefaults = () ->
     return if !$scope.bb.item_defaults.service
     for service in $scope.items
       if service.self is $scope.bb.item_defaults.service.self
         $scope.addItem(service)
         return
+
 
   ###**
   * @ngdoc method
@@ -126,6 +152,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   *
   * @param {array} categories The categories of service
   ###
+
   initialiseCategories = (categories) ->
 
     # extract order from category name if we're using ordered categories
@@ -161,12 +188,31 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       setCategoryDetails(category, category_id)
 
 
+  ###**
+  * @ngdoc method
+  * @name findSubCategories
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Get sub categories from company questions 
+  * @returns {array} 
+  ###
+
   findSubCategories = () ->
     subCategories = _.findWhere($scope.companyQuestions, {name: 'Extra Category'})
     subCategories = _.map(subCategories.question_items, (subCategory) -> subCategory.name) if subCategories
 
     return subCategories
 
+
+  ###**
+  * @ngdoc method
+  * @name findSubCategories
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Get sub categories from company questions 
+  * @param {array} allCategories The array containing all categories
+  * @returns {array} 
+  ###
 
   filterEmptyCategories = (allCategories) ->
     # filter categories that have no services
@@ -175,6 +221,17 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       categories[key] = value if value.length > 0
     return categories
 
+
+  ###**
+  * @ngdoc method
+  * @name groupSubCategories 
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Group sub categories by service category
+  * @param {object} category The category 
+  * @param {array} subCategories The sub categories
+  * @param {array} services The services
+  ###
 
   groupSubCategories = (category, subCategories, services) ->
     groupedSubCategories = []
@@ -188,6 +245,16 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       groupedSubCategories.push(groupedSubCategory) if groupedSubCategory.services.length > 0
     category.subCategories = groupedSubCategories
 
+
+  ###**
+  * @ngdoc method
+  * @name setCategoryDetails
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Set category name and description
+  * @param {object} category The category 
+  * @param {integer} category_id The category id
+  ###
 
   setCategoryDetails = (category, category_id) ->
     # get the name and description
@@ -338,6 +405,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   $scope.addService = () ->
     $rootScope.$broadcast "multi_service_select:addItem"
 
+
   ###**
   * @ngdoc method
   * @name setReady
@@ -366,6 +434,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   * Select duration in according of service parameter and display the modal
   *
   * @params {object} service The service
+  * @params {integer} duration The chosen service duration 
   ###
   $scope.selectDuration = (service, duration) ->
     service.price = service.getPriceByDuration(duration)

@@ -1,5 +1,15 @@
 'use strict'
 
+###**
+* @ngdoc service
+* @name BB.Services:WidgetModalService
+*
+* @description
+* Service for opening widgets in modals
+*
+####
+
+
 angular.module('BB.Services').factory 'WidgetModalService', ($uibModal, $timeout, $document, $uibModalStack, AlertService) ->
   # you can store data in WidgetModalService config block 
   # to then be used as prms in base controller initWidget2()
