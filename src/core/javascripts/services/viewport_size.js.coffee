@@ -2,14 +2,12 @@
 
 ###*
 * @ngdoc service
-* @name BB.Services.service:ViewportSize
+* @name BB.Services.service:viewportSize
 *
 * @description
 * Stores the current screen size breakpoint.
 ###
-angular.module('BB.Services').service 'ViewportSize', ($window, $document) ->
-
-  service = @
+angular.module('BB.Services').service 'viewportSize', ($window, $document, $rootScope) ->
 
   ###*
   # @description variable used to store current screen size
@@ -130,7 +128,10 @@ angular.module('BB.Services').service 'ViewportSize', ($window, $document) ->
   ###
   listenForResize = ->
     angular.element($window).resize ->
+      viewportSizeOld = viewportSize
       findVisibleElement()
+      if viewportSizeOld isnt viewportSize
+        $rootScope.$broadcast 'viewportSize:changed'
       return
     return
 

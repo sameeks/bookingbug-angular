@@ -65,7 +65,7 @@ angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
 
 # bbScrollTo
 # Allows you to scroll to a specific element
-angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, GeneralOptions, ViewportSize) ->
+angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, GeneralOptions, viewportSize) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
@@ -83,7 +83,7 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
         scrollToCallback(evnts)
 
     scrollToCallback = (evnt) ->
-      if evnt == "page:loaded" && ViewportSize.isXS() && $bbug('[data-scroll-id="'+AppConfig.uid+'"]').length
+      if evnt == "page:loaded" && viewportSize.isXS() && $bbug('[data-scroll-id="'+AppConfig.uid+'"]').length
         scroll_to_element = $bbug('[data-scroll-id="'+AppConfig.uid+'"]')
       else
         scroll_to_element = $bbug(element)
