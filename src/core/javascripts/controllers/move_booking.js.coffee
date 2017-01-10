@@ -7,6 +7,17 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
   loader = LoadingService.$loader($scope)
   $scope.options = $scope.$eval($attrs.bbMoveBooking) or {}
 
+  ###**
+  * @ngdoc method
+  * @name initMove
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * Decide whether bookings should be moved in modal
+  *
+  * @param {array|object} bookings The booking or bookings to be moved
+  * @param {string} totalId The total id associated with the bookings being moved (optional)
+  ###
+
   $scope.initMove = (bookings, totalId) ->
     # open modal if moving public bookings from purchase template
     # totalId is either passed in from the template or if on view_booking page take from the url
@@ -18,45 +29,88 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
     else decideNumberOfBookings(bookings)
 
 
+  ###**
+  * @ngdoc method
+  * @name decideNumberOfBookings
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * Decide whether we are moving an array of bookings or a single booking
+  *
+  * @param {array|object} bookings The basket item or bookings to be moved
+  ###
+
   decideNumberOfBookings = (bookings) ->
     if bookings.length > 1 
-      moveMultipleBookings(bookings)
+      checkMultipleBookings(bookings)
 
-    else moveSingleBooking(bookings)
+    else checkSingleBooking(bookings)
 
 
-  moveMultipleBookings = (bookings) ->
+  ###**
+  * @ngdoc method
+  * @name checkMultipleBookings
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * Check if all bookings in bookings array are ready to be moved 
+  *
+  * @param {array} bookings The array of bookings to be moved
+  ###
+
+  checkMultipleBookings = (bookings) ->
     if !bookings[0].datetimeHasChanged() 
       AlertService.add("warning", { msg: "Your booking is already scheduled for that time." })
       return
 
     readyBookings = []
 
+    # check if each bookings questions have been answered
     for booking in bookings 
       if booking.setAskedQuestions() is true
         readyBookings.push booking 
 
     $scope.bb.movingPurchase = $scope.bb.purchase
+
+    # only update puchase if all booking questions are answered
     updatePurchase(bookings) if readyBookings.length is bookings.length
 
 
-  moveSingleBooking = (basketItem) ->
+  ###**
+  * @ngdoc method
+  * @name checkSingleBooking
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * Check if single booking is ready to be moved
+  *
+  * @param {object} basketItem The booking to be moved
+  ###
+
+  checkSingleBooking = (basketItem) ->
     if !basketItem.datetimeHasChanged() 
       AlertService.add("warning", { msg: "Your booking is already scheduled for that time." })
       return
 
+    # only move purchase once any questions have been answered
     basketItem.setAskedQuestions() 
-
     updatePurchaseBooking(basketItem) if basketItem.ready
 
 
-  # updates single srcBooking of purchase
+  ###**
+  * @ngdoc method
+  * @name updatePurchaseBooking
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * Move single booking in purchase 
+  *
+  * @param {object} basketItem The booking to be moved
+  ###
+
   updatePurchaseBooking = (basketItem) ->
     loader.notLoaded()
     PurchaseBookingService.update(basketItem).then (purchaseBooking) ->
       booking = new BBModel.Purchase.Booking(purchaseBooking)
       loader.setLoaded()
 
+      # update the total purchase with the new booking
       if $scope.bb.purchase
         for oldb, _i in $scope.bb.purchase.bookings
           $scope.bb.purchase.bookings[_i] = booking if oldb.id is booking.id
@@ -67,7 +121,16 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
 
-  # updates all bookings found in purchase
+  ###**
+  * @ngdoc method
+  * @name updatePurchase
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * Move all bookings in purchase
+  *
+  * @param {array} bookings The bookings to be moved
+  ###
+
   updatePurchase = (bookings) ->
     loader.notLoaded()
     params =
@@ -87,6 +150,17 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
 
+  ###**
+  * @ngdoc method
+  * @name openCalendarModal
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * initialise widget in modal and render calendar or multi_service_calendar template
+  *
+  * @param {array} bookings The bookings to be moved
+  * @param {string} totalId The total id associated with the bookings being moved (optional)
+  ###
+
   openCalendarModal = (bookings, totalId) ->
     # open multi_service_calendar template when moving multiple bookings at once 
     WidgetModalService.open
@@ -95,6 +169,16 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       total_id: totalId
       first_page: if bookings.length > 0 then 'multi_service_calendar' else 'calendar'
 
+
+  ###**
+  * @ngdoc method
+  * @name resolveCalendarModal
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * Decide what template to render after booking has been moved, close modal if needed
+  *
+  * @param {array} bookings The bookings to be moved
+  ###
 
   resolveCalendarModal = (bookings) ->
     $rootScope.$broadcast("booking:moved", $scope.bb.purchase)
@@ -110,15 +194,33 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       decideMoveMessage(bookings) 
 
 
-  decideMoveMessage = (bookings) ->
-    return if !bookings?
+  ###**
+  * @ngdoc method
+  * @name decideMoveMessage
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * Get relevent datetime from updated bookings
+  *
+  * @param {array|object} bookings The bookings being moved
+  ###
 
+  decideMoveMessage = (bookings) ->
     if bookings.length > 1
       datetime = bookings[0].datetime
     else 
       datetime = bookings.datetime
     showMoveMessage(datetime)
 
+
+  ###**
+  * @ngdoc method
+  * @name showMoveMessage
+  * @methodOf BB.Directives:bbMoveBooking
+  * @description
+  * show alert with updated booking time
+  *
+  * @param {object} datetime The new booking datetime
+  ###
 
   showMoveMessage = (datetime) ->
     if GeneralOptions.use_i18n 
