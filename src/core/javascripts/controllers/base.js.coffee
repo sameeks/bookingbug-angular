@@ -1,6 +1,6 @@
 'use strict'
 
-BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService) ->
+BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize) ->
   'ngInject'
 
   vm = @
@@ -99,12 +99,12 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     $scope.updateBasket = updateBasket
 
     vm.$onInit = $onInit
+    vm.$postLink = $postLink
 
     return
 
   $onInit = () ->
 
-    compileDisplayMode()
     initializeBBWidget()
 
     $rootScope.$on 'show:loader', showLoaderHandler
@@ -113,6 +113,10 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
 
     vm.bb = $scope.bb
 
+    return
+
+  $postLink = ->
+    viewportSize.init() # Initialise viewport size tracking
     return
 
   initializeBBWidget = () ->
@@ -141,11 +145,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
       $scope.bb.api_url ||= $location.protocol() + "://" + $location.host() + ":" + $location.port()
     else
       $scope.bb.api_url ||= $location.protocol() + "://" + $location.host()
-    return
-
-  compileDisplayMode = () ->
-    $compile("<span bb-display-mode></span>") $scope, (cloned, scope) =>
-      $bbug($element).append(cloned)
     return
 
   showLoaderHandler = () ->
