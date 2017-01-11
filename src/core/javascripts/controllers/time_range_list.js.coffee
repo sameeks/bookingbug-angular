@@ -69,7 +69,7 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
 
 angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
-  FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize, ErrorService) ->
+  FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
 
@@ -124,14 +124,14 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
         timeRange = 7
 
         for size,days of cal_days
-          if size == ViewportSize.getViewportSize()
+          if size == viewportSize.getViewportSize()
             timeRange = days
 
         return timeRange
 
       $scope.time_range_length = calculateDayNum()
 
-      $scope.$on 'ViewportSize:changed', ()->
+      $scope.$on 'viewportSize:changed', ()->
         $scope.time_range_length = null
         $scope.initialise()
 
