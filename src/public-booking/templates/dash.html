@@ -11,7 +11,7 @@
         <div class="" ng-repeat="comp in companies"  >
           <h3>{{comp.name}}</h3>
 
-          <div ng-controller="PersonList" ng-init="init(comp)">
+          <div ng-controller="BBPeopleCtrl" ng-init="init(comp)">
 
             <a class="" ng-repeat="person in all_people"  style="margin-left:20px;font-size:14px;display:block;cursor:pointer;">
               {{person.name}}

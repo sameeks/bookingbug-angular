@@ -3,7 +3,7 @@
 BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize) ->
   'ngInject'
 
-  vm = @
+  @$scope = $scope
 
   $scope.cid = "BBCtrl" # dont change the cid as we use it in the app to identify this as the widget root scope
   $scope.controller = "public.controllers.BBCtrl"
@@ -37,7 +37,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     Questions: 15
     Confirmation: 16
 
-  init = () ->
+  @$onInit = () ->
 
     $scope.addItemToBasket = addItemToBasket
     $scope.areScopesLoaded = LoadingService.areScopesLoaded
@@ -98,24 +98,15 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     $scope.showPage = showPage
     $scope.updateBasket = updateBasket
 
-    vm.$onInit = $onInit
-    vm.$postLink = $postLink
-
-    return
-
-  $onInit = () ->
-
     initializeBBWidget()
 
     $rootScope.$on 'show:loader', showLoaderHandler
     $rootScope.$on 'hide:loader', hideLoaderHandler
     $scope.$on '$locationChangeStart', locationChangeStartHandler
 
-    vm.bb = $scope.bb
-
     return
 
-  $postLink = ->
+  @$postLink = ->
     viewportSize.init() # Initialise viewport size tracking
     return
 
@@ -887,8 +878,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
 
   setBasketItem = (item) ->
     $scope.bb.current_item = item
-    # for now also set a variable in the scope - for old views that we've not tidied up yet
-    $scope.current_item = $scope.bb.current_item
 
   setReadyToCheckout = (ready) ->
     $scope.bb.confirmCheckout = ready
@@ -1228,8 +1217,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
 
   redirectTo = (url) ->
     $window.location.href = url
-
-  init()
 
   return
 

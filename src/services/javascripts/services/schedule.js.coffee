@@ -123,7 +123,7 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
           _.flatten(schedules)
     else
       localMethod = @mapAssetsToScheduleEvents
-      BBAssets(company).then (assets)->
+      BBAssets.getAssets(company).then (assets)->
         loadScheduleCaches(assets).then () ->
           $q.all(localMethod(start, end, assets)).then (schedules) ->
             _.flatten(schedules)

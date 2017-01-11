@@ -5,6 +5,10 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
 
   translations = {
     ADMIN_BOOKING: {
+      ASSETS: {
+        RESOURCES_GROUP_LABEL: 'Resources'
+        STAFF_GROUP_LABEL: 'Staff'
+      }
       AVAILABILITY: {
         ANY_PERSON: 'Any person'
         ANY_RESOURCE: 'Any resource'
@@ -77,6 +81,9 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
 
       }
       QUICK_PICK: {
+        ANY_PERSON: 'Any Person'
+        ANY_RESOURCE: 'Any Resource'
+        ASSET_REQUIRED_MSG: 'Please select a resource or member of staff'
         BLOCK_WHOLE_DAY: 'Block whole day'
         BLOCK_TIME: 'Block time'
         BOOK: 'Book'
@@ -85,13 +92,17 @@ angular.module('BBAdminBooking').config ($translateProvider) ->
         FROM: 'From'
         MAKE_BOOKING: 'Make booking'
         NO: 'No'
+        PERSON_LABEL: 'Person'
+        RESOURCE_LABEL: 'Resource'
         SELECT: '-- select --'
         SELECT_A_SERVICE: '-- select a service --'
+        SELECT_BTN: 'Select'
         SERVICE: 'Service'
+        SERVICE_LABEL: 'Select a service'
+        SERVICE_REQUIRED_MSG: 'Please select a service'
+        STEP_SUMMARY: 'Select a service'
         TO: 'To'
         YES: 'Yes'
-        STEP_SUMMARY: 'Select a service'
-        SELECT_BTN: 'Select'
       }
     }
   }

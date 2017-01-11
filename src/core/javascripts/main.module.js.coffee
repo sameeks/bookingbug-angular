@@ -28,7 +28,6 @@ angular.module('BB', [
 
   'BB.i18n'
   'BB.uib'
-
 ])
 
 angular.module('BB.Services', [

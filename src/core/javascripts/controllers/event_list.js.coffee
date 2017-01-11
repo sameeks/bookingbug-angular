@@ -100,16 +100,16 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     delete $scope.selected_date if $scope.mode != 0
 
     # has the event group been manually set (i.e. in the step before)
-    if !$scope.event_group_manually_set and !$scope.current_item.event_group?
-      $scope.event_group_manually_set = !$scope.event_group_manually_set? and $scope.current_item.event_group?
+    if !$scope.event_group_manually_set and !$scope.bb.current_item.event_group?
+      $scope.event_group_manually_set = !$scope.event_group_manually_set? and $scope.bb.current_item.event_group?
 
     # clear current item
     if $scope.bb.current_item.event
-      event_group = $scope.current_item.event_group
+      event_group = $scope.bb.current_item.event_group
       $scope.clearBasketItem()
       # TODO only remove the basket items added in this session
       $scope.emptyBasket()
-      $scope.current_item.setEventGroup(event_group) if $scope.event_group_manually_set
+      $scope.bb.current_item.setEventGroup(event_group) if $scope.event_group_manually_set
 
     promises = []
 
@@ -125,7 +125,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
     # event group promise
     if $scope.bb.item_defaults and $scope.bb.item_defaults.event_group
       $scope.bb.current_item.setEventGroup($scope.bb.item_defaults.event_group)
-    else if !$scope.current_item.event_group and $scope.bb.company.$has('event_groups')
+    else if !$scope.bb.current_item.event_group and $scope.bb.company.$has('event_groups')
       # --------------------------------------------------------------------------------
       # By default, the API returns the first 100 event_groups. We don't really want
       # to paginate event_groups (athough we DO want to paginate events)
@@ -183,7 +183,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   $scope.loadEventSummary = () ->
 
     deferred = $q.defer()
-    current_event = $scope.current_item.event
+    current_event = $scope.bb.current_item.event
 
     # de-select the event chain if there's one already picked - as it's hiding other events in the same group
     if $scope.bb.current_item && ($scope.bb.current_item.event_chain_id || $scope.bb.current_item.event_chain)
@@ -216,10 +216,10 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         $scope.item_dates = item_dates.sort (a,b) -> (a.idate - b.idate)
 
         # TODO clear the selected date if the event group has changed (but only when event group has been explicity set)
-        # if $scope.current_item? and $scope.current_item.event_group?
-        #   if $scope.current_item.event_group.id != $scope.event_group_id
+        # if $scope.bb.current_item? and $scope.bb.current_item.event_group?
+        #   if $scope.bb.current_item.event_group.id != $scope.event_group_id
         #     $scope.showDay($scope.item_dates[0].date)
-        #   $scope.event_group_id = $scope.current_item.event_group.id
+        #   $scope.event_group_id = $scope.bb.current_item.event_group.id
 
         # if the selected date is within range of the dates loaded, show it, else show the first day loaded
         if $scope.mode is 0
@@ -291,7 +291,7 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
 
     deferred = $q.defer()
 
-    current_event = $scope.current_item.event
+    current_event = $scope.bb.current_item.event
 
     comp ||= $scope.bb.company
 
