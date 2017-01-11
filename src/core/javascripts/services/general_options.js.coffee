@@ -42,6 +42,8 @@ angular.module('BB.Services').provider 'GeneralOptions', ->
     maxServices: Infinity 
     orderedCategories: false 
     raiseAlerts: false
+    merge_resources: true
+    merge_people: true
   }
 
   @setOption = (option, value) ->

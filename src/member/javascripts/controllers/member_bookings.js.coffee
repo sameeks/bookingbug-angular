@@ -125,7 +125,7 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
       company_id: booking.company_id
       template: 'main_view_booking'
       total_id: total.long_id
-      first_page: if total.bookings.length > 0 then 'multi_service_calendar' else 'calendar'
+      first_page: 'calendar'
       member: true
 
 
