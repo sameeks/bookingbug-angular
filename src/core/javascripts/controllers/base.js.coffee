@@ -207,7 +207,6 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     if prms.query # if we've been asked to load any values from the url - do so!
       for k,v of prms.query
         prms[k] = QueryStringService(v)
-
     if prms.custom_partial_url
       $scope.bb.custom_partial_url = prms.custom_partial_url
       $scope.bb.partial_id = prms.custom_partial_url.substring(prms.custom_partial_url.lastIndexOf("/") + 1)
@@ -477,20 +476,13 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
         getPurchaseTotal = PurchaseService.query(params).then (total) -> 
           $scope.bb.purchase = total
           total.$getBookings().then (bookings) ->
-            # get relevant booking from total if moving single booking where total contains multiple bookings
-            # if prms.member
-            #   bookings = _.find bookings, (b) ->
-            #     b.id is prms.booking.id
-
             createBasketFromBookings(bookings, totalDefer)
-
           , (err) ->
             totalDefer.reject(err)
         , (err) ->
           totalDefer.reject(err) 
         totalDefer.promise
         setup_promises.push getPurchaseTotal
-
 
       if total_id
         params =
@@ -761,6 +753,8 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
     else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions && !$scope.bb.current_item.asked_questions)
       return if setPageRoute($rootScope.Route.Questions)
       return showPage('check_items')
+    else if $scope.bb.movingBooking && $scope.bb.basket.itemsReady()    
+      return showPage('confirmation')
     else if !$scope.bb.basket.readyToCheckout()
       return if setPageRoute($rootScope.Route.Summary)
       return showPage('basket_summary')

@@ -224,7 +224,19 @@
           <div bb-time-ranges="{selected_day: today}"></div>
         </div>
 
-        <button type="button" class="btn btn-primary pull-right" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time"><span translate="ADMIN_BOOKING.AVAILABILITY.SELECT"></span></button>
+        <button ng-show="!bb.movingBooking" type="button" class="btn btn-primary pull-right" ng-click="checkReady() && routeReady()" bb-debounce ng-disabled="!bb.current_item.time"><span translate="ADMIN_BOOKING.AVAILABILITY.SELECT"></span></button>
+
+        <div ng-if="bb.movingBooking" bb-move-booking>
+          <button 
+            ng-show="bb.current_item" 
+            type="button" 
+            id="btn-continue" 
+            class="btn btn-primary btn-block" 
+            ng-click="initMove(bb.current_item)" 
+            bb-debounce>
+            <span>Reschedule</span>
+          </button>
+        </div>
 
       </div>
 

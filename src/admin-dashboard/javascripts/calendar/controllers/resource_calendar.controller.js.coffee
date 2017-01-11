@@ -445,6 +445,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
                 item_defaults: item_defaults
                 company_id: company.id
                 booking_id: booking.id
+                total_id: booking.purchase_ref
                 success: (model) =>
                   refreshBooking(booking)
                 fail: () ->
