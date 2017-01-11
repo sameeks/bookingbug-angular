@@ -4,8 +4,7 @@ BBCtrl = ( ROUTE_STATES, $scope, $location, $rootScope, halClient, $window, $htt
   'ngInject'
 
   vm = @
-  alert "alert in bb_widget.controller.js.coffee line 7"
-
+  
   $scope.cid = "BBCtrl" # dont change the cid as we use it in the app to identify this as the widget root scope
   $scope.controller = "public.controllers.BBCtrl"
 
