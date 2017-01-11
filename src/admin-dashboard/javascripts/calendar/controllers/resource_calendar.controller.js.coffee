@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCalendarController', (WidgetModalService,
-  AdminCalendarOptions, AdminCompanyService, AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources,
+  AdminCalendarOptions, AdminCompanyService, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources,
   ColorPalette, Dialog, $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope,
   $state, TitleAssembler, $translate, $window, uiCalendarConfig) ->
   'ngInject'
@@ -205,7 +205,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
           orginal_resource = "" + event.resource_id + "_r"
 
       getCompanyPromise().then (company) ->
-        AdminMoveBookingPopup.open
+        WidgetModalService.open
           min_date: setTimeToMoment(start, calOptions.min_time)
           max_date: setTimeToMoment(end, calOptions.max_time)
           from_datetime: moment(start.toISOString())
@@ -441,7 +441,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
           if response == "move"
             item_defaults = {person: booking.person_id, resource: booking.resource_id}
             getCompanyPromise().then (company) ->
-              AdminMoveBookingPopup.open
+              WidgetModalService.open
                 item_defaults: item_defaults
                 company_id: company.id
                 booking_id: booking.id

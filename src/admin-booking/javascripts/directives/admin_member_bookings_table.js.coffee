@@ -1,4 +1,4 @@
-angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup) ->
+angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, WidgetModalService) ->
 
   controller = ($document, $scope, $uibModal) ->
 
@@ -22,7 +22,7 @@ angular.module('BBAdminBooking').directive 'bbAdminMemberBookingsTable', ($uibMo
             if typeof response == 'string'
               if response == "move"
                 item_defaults = {person:booking.person_id, resource:booking.resource_id}
-                AdminMoveBookingPopup.open
+                WidgetModalService.open
                   item_defaults: item_defaults
                   company_id: booking.company_id
                   booking_id: booking.id
