@@ -64,6 +64,7 @@
     "angular-loading-bar": "^0.9.0"
   },
   "resolutions": {
+    "angular": "~1.5.10",
     "jquery": "~1.11.3",
     "moment": "~2.14.0",
     "fullcalendar": ">=2.9.1"
