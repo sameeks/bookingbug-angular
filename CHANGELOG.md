@@ -2,33 +2,24 @@
 All notable changes to this project will be documented in this file using [CHANGELOG](http://keepachangelog.com/en/0.3.0/) convention.
 
 ## [Unreleased]
+-
 
+## [2.1.0] - 2017-01-12
 ### Added
-* [i18n](https://github.com/BookingBug/bookingbug-angular/wiki/1.1-i18n) support using [angular-translate](https://angular-translate.github.io/): 
+* [i18n](https://github.com/BookingBug/bookingbug-angular/wiki/1.1-i18n) support using [angular-translate](https://angular-translate.github.io/)
 * `endDateTime` helper method to the core TimeSlot model which returns the end time as a Moment object
-* Added `bbMonthCalendar` directive for selecting date and time using a tranditional month view
-* Added bbWalletRemainder directive for calculating remainuing wallet balance after basket checkout
+* Added bbWalletRemainder directive for calculating remaining wallet balance after basket checkout
 * Added `distance` filter which uses locale to determine the measurement unit to use
-
+* New CompanyStoreService has been created to share company data, e.g country_code and currency_code
 
 ### Changed
 * All templates have been updated to use translation keys
 * All controllers/models have been updated use the $translate service
 * Localized moment format tokens are now used throughout the SDK to support i10n
 * bbDayList has been enhanced so that it supports localisation.  The directive shows the next 5 weeks of availability rather than a traditional month view so that past days aren't displayed
+* The original bbDayList component is now named `bbMonthCalendar`
 * haversine function has been moved from bbMap to the GeolocationService
-
-### Removed
-* use_i18n from GeneralOptionsProvider as i18n is now enabled by default
-* `print_time`, `print_end_time`, `print_time12`, and `print_end_time12` methods and `time_12` and `time_24` properties have been removed from the TimeSlot model in favour of `datetime` and `endDateTime()`.
-
-
-## [2.1.0] - 2016-11-08
-### Added
-- New CompanyStoreService has been created to share company data, e.g country_code and currency_code
-
-### Changed
-- BREAKING: Replaced SettingsService with (new) CompanyStoreService and (the existing) GeneralOptions provider. 
+* BREAKING: Replaced SettingsService with (new) CompanyStoreService and (the existing) GeneralOptions provider. 
   The following initilisation options from bbWiget have been moved to be configurable options in GeneralOptions:
     - scroll_offset
     - update_document_title
@@ -40,6 +31,10 @@ All notable changes to this project will be documented in this file using [CHANG
     angular.module('demo').config (GeneralOptionsProvider) ->
       GeneralOptionsProvider.setOption('use_local_time_zone', true)
 ```
+
+### Removed
+* use_i18n from GeneralOptionsProvider as i18n is now enabled by default
+* `print_time`, `print_end_time`, `print_time12`, and `print_end_time12` methods and `time_12` and `time_24` properties have been removed from the core TimeSlot model in favour of `datetime()` and `endDateTime()`.
 
 ## [2.0.26] - 2016-09-26
 ### Changed
