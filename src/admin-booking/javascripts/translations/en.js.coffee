@@ -56,6 +56,7 @@ angular.module("BBAdminBooking").config ($translateProvider) ->
         MORNING_HEADER                     : "@:COMMON.TERMINOLOGY.MORNING"
         AFTERNOON_HEADER                   : "@:COMMON.TERMINOLOGY.AFTERNOON"
         EVENING_HEADER                     : "@:COMMON.TERMINOLOGY.EVENING"
+        RESCHEDULE_BTN                     : "Reschedule"
       }
       CUSTOMER: {
         BACK_BTN                : "@:COMMON.BTN.BACK"
