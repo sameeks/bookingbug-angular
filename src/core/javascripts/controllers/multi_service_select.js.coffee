@@ -69,8 +69,10 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     promises = []
 
     BBModel.Category.$query($scope.bb.company).then (categories) ->
-
-      matchServicesToCategories(categories)
+      if !categories?
+        setServices()
+      else 
+        matchServicesToCategories(categories)
 
       if $scope.bb.stacked_items and $scope.bb.stacked_items.length > 0
         # moving back from calendar
@@ -85,6 +87,9 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
 
+
+  setServices = () ->
+    $scope.services = $scope.items
 
   ###**
   * @ngdoc method

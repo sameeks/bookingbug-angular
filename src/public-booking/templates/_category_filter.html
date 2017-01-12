@@ -43,6 +43,16 @@
 
             <div class="col-sm-2">
               <span class="visible-xs-inline">Duration: </span>{{item.listed_duration | time_period}}
+            <span class="visible-xs">Duration: </span>    
+               <div ng-show="service.durations.length == 1">{{service.listed_duration | time_period}}</div>    
+               <select     
+                  class="form-control"    
+                  ng-show="service.durations.length > 1"    
+                  ng-model="service.duration"     
+                  ng-options="duration as (duration | time_period) for duration in service.durations"   
+                  ng-change="selectDuration(service, service.duration)">    
+                <option value="">{{duration}}</option>    
+               </select>
             </div>
 
             <div class="col-sm-2">
