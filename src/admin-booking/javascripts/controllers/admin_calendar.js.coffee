@@ -4,10 +4,9 @@ angular.module('BB.Directives').directive 'bbAdminCalendar', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller : 'adminCalendarCtrl'
+  controller : 'BBAdminCalendarCtrl'
 
-angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $element,
-  $controller, $attrs, BBModel, $rootScope) ->
+BBAdminCalendarCtrl = ($scope, $element, $controller, $attrs, BBModel, $rootScope) ->
 
   angular.extend(this, $controller('TimeList', {
     $scope: $scope,
@@ -92,18 +91,20 @@ angular.module('BB.Controllers').controller 'adminCalendarCtrl', ($scope, $eleme
     else
       $scope.decideNextPage()
 
+angular.module('BB.Controllers').controller 'BBAdminCalendarCtrl', BBAdminCalendarCtrl
+
 angular.module('BB.Directives').directive 'bbAdminCalendarConflict', () ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller : ($scope, $element, $controller, $attrs, BBModel, $rootScope) ->
+  controller : BBAdminCalendarConflictCtrl
 
-
+BBAdminCalendarConflictCtrl = ($scope, $element, $controller, $attrs, BBModel) ->
+    'ngInject'
 
     time = $scope.bb.current_item.defaults.time
     duration = $scope.bb.current_item.duration
     end_time = time + $scope.bb.current_item.duration
-
 
     start_datetime = $scope.bb.current_item.defaults.datetime
 
@@ -134,13 +135,22 @@ angular.module('BB.Directives').directive 'bbAdminCalendarConflict', () ->
       $scope.step_mismatch = true
 
     $scope.checking_conflicts = true
+
+    ###*
+    # @returns {Number}
+    ###
+    getCurrentPersonId = ->
+      return $scope.bb.current_item.person.id if $scope.bb.current_item.person?
+      return $scope.bb.current_item.defaults.person.id if $scope.bb.current_item.defaults.person?
+
     params =
       src     : $scope.bb.company
-      person_id : $scope.bb.current_item.defaults.person.id if $scope.bb.current_item.defaults.person
+      person_id : getCurrentPersonId()
       resource_id : $scope.bb.current_item.defaults.resource_id if $scope.bb.current_item.defaults.resource
       start_date : $scope.bb.current_item.defaults.datetime.format('YYYY-MM-DD')
       start_time : sprintf("%02d:%02d",st/60, st%60)
       end_time   : sprintf("%02d:%02d",en/60, en%60)
+
     BBModel.Admin.Booking.$query(params).then (bookings) ->
       if bookings.items.length > 0
         $scope.nearby_bookings = _.filter bookings.items, (x) ->
@@ -171,3 +181,4 @@ angular.module('BB.Directives').directive 'bbAdminCalendarConflict', () ->
     , (err) ->
       $scope.checking_conflicts = false
 
+    return

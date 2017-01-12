@@ -1,45 +1,104 @@
-<form name="login_form" ng-submit="validator.validateForm(login_form) && submit()" class="form-horizontal" role="form" bb-form novalidate>
+<form
+  name="login_form"
+  ng-submit="validator.validateForm(login_form) && submit()"
+  class="form-horizontal"
+  role="form"
+  bb-form
+  novalidate>
+    <div
+      class="form-group"
+      ng-class="{'has-error': login_form.email.$invalid && (login_form.email.$dirty || login_form.submitted)}">
+      <label
+        for="email"
+        class="control-label col-sm-4"
+        translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.EMAIL_LBL">
+      </label>
+      <div class="col-sm-5">
+        <input
+          type="text"
+          name="email"
+          id="email"
+          required
+          ng-model="login.email"
+          class="form-control"
+          ng-pattern="validator.getEmailPattern()"
+          autocomplete="email"
+        />
+      </div>
 
-    <div class="form-group" ng-class="{'has-error': login_form.email.$invalid && (!login_form.email.$pristine || login_form.submitted)}">
-      <label for="email" class="control-label col-sm-4">Email:</label>
-      <div class="col-sm-5">
-        <input type="text" name="email" id="email" required ng-model="login.email" class="form-control" ng-pattern="validator.getEmailPattern()" autocomplete="email"/>
+      <div class="col-sm-3">
+        <div ng-messages="login_form.email.$error" role="alert">
+          <div ng-show="login_form.email.$dirty || login_form.submitted">
+            <div ng-message="required" class="error-message">
+              <span
+                class="error-message__item"
+                translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.EMAIL_REQUIRED">
+              </span>
+            </div>
+            <div ng-message="pattern" class="error-message">
+              <span
+                class="error-message__item"
+                translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.EMAIL_INVALID">
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-sm-offset-4 messages">
-        <div class="error-message" ng-show="login_form.email.$error.required && login_form.submitted">
-          Please enter your email
-        </div>
-        <div class="error-message" ng-show="login_form.email.$error.pattern && login_form.submitted">
-          Please enter a valid email
-        </div>
-      </div> 
+
     </div>
-  
-    <div class="form-group" ng-class="{'has-error': login_form.password.$invalid && (!login_form.password.$pristine || login_form.submitted)}">
-      <label for="password" class="control-label col-sm-4">Password:</label>
+
+    <div
+      class="form-group"
+      ng-class="{'has-error': login_form.password.$invalid && (!login_form.password.$pristine || login_form.submitted)}">
+      <label
+        for="password"
+        class="control-label col-sm-4"
+        translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.PASSWORD_LBL"></label>
       <div class="col-sm-5">
-        <input type="password" name="password" id="password" required ng-model="login.password" class="form-control"  />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          required
+          ng-model="login.password"
+          class="form-control"
+        />
       </div>
-      <div class="col-sm-offset-4 messages">
-        <div class="error-message" ng-show="login_form.password.$invalid && login_form.submitted">
-          Please enter your password
+
+      <div class="col-sm-3">
+        <div ng-messages="login_form.password.$error" role="alert">
+          <div ng-show="login_form.password.$dirty || login_form.submitted">
+            <div ng-message="required" class="error-message">
+              <span
+                class="error-message__item"
+                translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.PASSWORD_REQURIED">
+              </span>
+            </div>
+          </div>
         </div>
-      </div> 
+      </div>
     </div>
 
     <div class="form-group">
       <div class="col-sm-offset-4 col-sm-5">
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="login.persist_login"> Remember me
+            <input
+              type="checkbox"
+              ng-model="login.persist_login">
+              <span translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.REMEMBER_ME"></span>
           </label>
         </div>
-      </div> 
+      </div>
     </div>
 
     <div class="form-group">
       <div class="col-sm-offset-4 col-sm-5">
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          translate="PUBLIC_BOOKING.MEMBER_LOGIN_FORM.LOGIN_BTN">
+        </button>
       </div>
     </div>
 

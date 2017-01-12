@@ -50,7 +50,8 @@ angular.module('BB.Directives').directive 'bbServices', ($q, $compile, $template
   replace: true
   scope : true
   transclude: true
-  controller : 'ServiceList'
+  controller : 'BBServicesCtrl'
+  controllerAs: '$bbServicesCtrl'
   link : (scope, element, attrs, ctrls, transclude) ->
 
     scope.directives = "public.ServiceList"
@@ -68,7 +69,10 @@ angular.module('BB.Directives').directive 'bbServices', ($q, $compile, $template
           $compile(element.contents())(scope)
 
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
+BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
+  'ngInject'
+
+  @$scope = $scope
 
   $scope.controller = "public.controllers.ServiceList"
 
@@ -234,7 +238,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route, options={}) =>
-    
+
     if $scope.routed
       return true
 
@@ -359,3 +363,6 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   $scope.filterChanged = () ->
     $scope.filtered_items = $filter('filter')($scope.items, $scope.filterFunction)
 
+  return
+
+angular.module('BB.Controllers').controller 'BBServicesCtrl', BBServicesCtrl

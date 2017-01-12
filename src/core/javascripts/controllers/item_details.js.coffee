@@ -52,7 +52,7 @@ angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, 
 
 angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope,
   PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService,
-  $uibModal, $document, $translate, GeneralOptions, PurchaseService, LoadingService) ->
+  $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService) ->
 
   $scope.controller = "public.controllers.ItemDetails"
   loader = LoadingService.$loader($scope)
@@ -152,7 +152,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       oldQuestions = $scope.item_details.questions
 
       _.each details.questions, (item) ->
-        search = _.findWhere(oldQuestions, { name: item.name })
+        search = _.findWhere(oldQuestions, {name: item.name})
         if search
           item.answer = search.answer
     $scope.item_details = details

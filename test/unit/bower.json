@@ -3,16 +3,16 @@
   "dependencies": {
     "jquery": "~1.11.3",
     "jquery-ui": "~1.11.3",
-    "angular": "~1.5.8",
-    "angular-animate": "~1.5.8",
-    "angular-aria": "~1.5.8",
+    "angular": "~1.5.10",
+    "angular-animate": "~1.5.10",
+    "angular-aria": "~1.5.10",
     "angular-dynamic-locale": "~0.1.32",
-    "angular-loader": "~1.5.8",
-    "angular-messages": "~1.5.8",
-    "angular-cookies": "~1.5.8",
-    "angular-resource": "~1.5.8",
-    "angular-sanitize": "~1.5.8",
-    "angular-touch": "~1.5.8",
+    "angular-loader": "~1.5.10",
+    "angular-messages": "~1.5.10",
+    "angular-cookies": "~1.5.10",
+    "angular-resource": "~1.5.10",
+    "angular-sanitize": "~1.5.10",
+    "angular-touch": "~1.5.10",
     "angular-bootstrap": "~2.0.0",
     "angular-carousel": "~0.3.13",
     "moment": "~2.14.0",
@@ -21,7 +21,7 @@
     "fontawesome": "~4.6.3",
     "angular-ui-router": "~0.2.18",
     "accounting": "~0.3.2",
-    "angular-mocks": "~1.5.8",
+    "angular-mocks": "~1.5.10",
     "trNgGrid": "~3.1.7",
     "angular-ui-map": "~0.5.0",
     "angular-ui-utils": "~0.1.1",
@@ -64,9 +64,9 @@
     "angular-loading-bar": "^0.9.0"
   },
   "resolutions": {
+    "angular": "~1.5.10",
     "jquery": "~1.11.3",
     "moment": "~2.14.0",
-    "fullcalendar": ">=2.9.1",
-    "angular": "1.5.8"
+    "fullcalendar": ">=2.9.1"
   }
 }

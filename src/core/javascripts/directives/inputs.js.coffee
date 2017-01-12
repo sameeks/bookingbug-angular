@@ -86,10 +86,14 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
               if name is lastName
                 name = ""
               lastName = question.name
-              html = "<div class='checkbox' ng-class='{\"selected\": question.answer}'><label><input name='q#{question.id}' id='#{question.id}' ng-model='question.answer' ng-checked='question.answer == \"1\"' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='checkbox' value=1>#{name}</label></div>"
+              if question.answer is "1"
+                question.answer = true;
+              html = "<div class='checkbox' ng-class='{\"selected\": question.answer}'><label><input name='q#{question.id}' id='#{question.id}' ng-model='question.answer' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='checkbox' value=1>#{name}</label></div>"
 
             else if question.detail_type is "check-price"
-              html = "<div class='checkbox'><label><input name='q#{question.id}' id='#{question.id}' ng-model='question.answer' ng-checked='question.answer == \"1\"' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='checkbox' value=1> ({{question.price | currency:'GBP'}})</label></div>"
+              if question.answer is "1"
+                question.answer = true;
+              html = "<div class='checkbox'><label><input name='q#{question.id}' id='#{question.id}' ng-model='question.answer' ng-change='recalc()' ng-required='question.currentlyShown && ((#{adminRequired} && question.required) || (question.required && !bb.isAdmin))' type='checkbox' value=1> ({{question.price | currency:'GBP'}})</label></div>"
 
             else if question.detail_type is "radio-price"
               html = '<div class="radio-group">'
@@ -114,7 +118,7 @@ app.directive 'bbQuestion', ($compile, $timeout) ->
                     is-open='opened'
                     ng-focus='opened=true' />
                   <span class='input-group-btn' ng-click='$event.preventDefault();$event.stopPropagation();opened=true'>
-                    <button class='btn btn-default' type='submit'><span class='glyphicon glyphicon-calendar'></span></button>
+                    <button class='btn btn-default' type='submit'><span class='fa fa-calendar'></span></button>
                   </span>
                 </div>"
 
@@ -428,8 +432,7 @@ app.directive "bbMatchInput", ->
       compare(ctrl.$viewValue)
 
     compare = (value) ->
-      ctrl.$setValidity 'match', scope.val_1 == value
+      ctrl.$setValidity 'match', scope.val_1 is value
       value
 
     ctrl.$parsers.push compare
-

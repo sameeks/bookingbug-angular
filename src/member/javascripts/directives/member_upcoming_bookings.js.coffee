@@ -1,5 +1,4 @@
-angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope,
-  PaginationService, PurchaseService) ->
+angular.module('BBMember').directive 'bbMemberUpcomingBookings', ($rootScope, PaginationService, PurchaseService) ->
 
   templateUrl: 'member_upcoming_bookings.html'
   scope:

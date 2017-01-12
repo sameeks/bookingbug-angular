@@ -1,9 +1,9 @@
-h1, h2, h3, h4, h5, h6 {
-  padding: 0;
-  margin: 0;
-  margin-bottom: 15px;
-  font-weight: 300;
-}
+// h1, h2, h3, h4, h5, h6 {
+//   padding: 0;
+//   margin: 0;
+//   margin-bottom: 15px;
+//   font-weight: 300;
+// }
 
 //
 // Alerts
@@ -47,7 +47,7 @@ h1, h2, h3, h4, h5, h6 {
     content: none;
   }
 
-  .glyphicon-chevron-right {
+  .fa-chevron-right {
     padding-left: 24px;
   }
 }
@@ -113,10 +113,10 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
 }
 
-.glyphicon-trash:hover {
+.fa-trash-o:hover {
   cursor: pointer;
 }
 
-.glyphicon-shopping-cart:hover {
+.fa-shopping-cart:hover {
   cursor: pointer;
 }

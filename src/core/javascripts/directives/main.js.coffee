@@ -65,7 +65,7 @@ angular.module('BB.Directives').directive 'bbWaitFor', ($compile) ->
 
 # bbScrollTo
 # Allows you to scroll to a specific element
-angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, GeneralOptions) ->
+angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, GeneralOptions, viewportSize) ->
   transclude: false,
   restrict: 'A',
   link: (scope, element, attrs) ->
@@ -82,8 +82,11 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
       scope.$on evnts, (e) ->
         scrollToCallback(evnts)
 
+    isElementInView = (el) ->
+      return el.offset().top > $bbug('body').scrollTop() and el.offset().top < ($bbug('body').scrollTop() + $bbug(window).height())
+
     scrollToCallback = (evnt) ->
-      if evnt == "page:loaded" && scope.display && scope.display.xs && $bbug('[data-scroll-id="'+AppConfig.uid+'"]').length
+      if evnt == "page:loaded" && viewportSize.isXS() && $bbug('[data-scroll-id="'+AppConfig.uid+'"]').length
         scroll_to_element = $bbug('[data-scroll-id="'+AppConfig.uid+'"]')
       else
         scroll_to_element = $bbug(element)
@@ -93,7 +96,7 @@ angular.module('BB.Directives').directive 'bbScrollTo', ($rootScope, AppConfig, 
       # if the event is page:loaded or the element is not in view, scroll to it
       if (scroll_to_element)
         if (evnt == "page:loaded" and current_step > 1) or always_scroll or (evnt == "widget:restart") or
-          (not scroll_to_element.is(':visible') and scroll_to_element.offset().top != 0)
+          (not isElementInView(scroll_to_element) and scroll_to_element.offset().top != 0)
             if 'parentIFrame' of $window
               parentIFrame.scrollToOffset(0, scroll_to_element.offset().top - GeneralOptions.scroll_offset)
             else
@@ -115,106 +118,6 @@ angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
     for slot in slots
       scope.grouped_slots.push(slot) if slot.time >= scope.$eval(attrs.startTime) && slot.time < scope.$eval(attrs.endTime)
     scope.has_slots = scope.grouped_slots.length > 0
-
-
-
-###**
-* @ngdoc directive
-* @name BB.Directives:bbForm
-* @restrict A
-* @scope true
-*
-* @description
-* Use with forms to add enhanced validation. When using with ng-form, submitForm
-* needs to be called manually as submit event is not raised.
-
-*
-* @example
-* <div ng-form name="example_form" bb-form></div>
-* <form name="example_form" bb-form></form>
-*
-####
-angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, ValidatorService, $timeout, GeneralOptions) ->
-  restrict: 'A'
-  require: '^form'
-  scope: true
-  link: (scope, elem, attrs, ctrls) ->
-
-    scope.formCtrl = ctrls
-
-    # set up event handler on the form element
-    elem.on "submit", ->
-      scope.submitForm()
-      scope.$apply()
-
-
-    scope.submitForm = () ->
-
-      scope.formCtrl.submitted = true
-
-      # mark nested forms as submitted too
-      for property of scope.formCtrl
-        if angular.isObject(scope.formCtrl[property]) and scope.formCtrl[property].hasOwnProperty('$valid')
-          scope.formCtrl[property].submitted = true
-
-      $timeout ->
-        invalid_form_group = elem.find('.has-error:first')
-
-        if invalid_form_group and invalid_form_group.length > 0 and !scope.formCtrl.raise_alerts
-
-          if 'parentIFrame' of $window
-            parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - GeneralOptions.scroll_offset)
-          else
-            $bbug("html, body").animate
-              scrollTop: invalid_form_group.offset().top - GeneralOptions.scroll_offset
-              , 1000
-
-          invalid_input = invalid_form_group.find('.ng-invalid')
-          invalid_input.focus()
-      , 100
-
-      return ValidatorService.validateForm(scope.formCtrl)
-
-
-
-# bbAddressMap
-# Adds behaviour to select first invalid input
-angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
-  restrict: 'A'
-  scope: true
-  replace: true
-  controller: ($scope, $element, $attrs, uiGmapGoogleMapApi) ->
-
-    $scope.isDraggable = $document.width() > 480
-
-    uiGmapGoogleMapApi.then (maps)->
-      maps.visualRefresh = true
-      $scope.$watch $attrs.bbAddressMap, (new_val, old_val) ->
-
-        return if !new_val
-
-        map_item = new_val
-
-        $scope.map = {
-          center: {
-            latitude: map_item.lat,
-            longitude: map_item.long
-          },
-          zoom: 15
-        }
-
-        $scope.options = {
-          scrollwheel: false,
-          draggable: $scope.isDraggable
-        }
-
-        $scope.marker = {
-          id: 0,
-          coords: {
-            latitude: map_item.lat,
-            longitude: map_item.long
-          }
-        }
 
 
 
@@ -340,27 +243,4 @@ angular.module('BB.Directives').directive 'bbCapacityView', () ->
           when "NUM_SPACES_LEFT" then scope.capacity_view_description = scope.ticket_spaces = item.spaces_left + " " + ticket_type + spaces_left_plural + " available"
           when "NUM_SPACES_AND_SPACES_LEFT" then scope.capacity_view_description = scope.ticket_spaces = item.spaces_left + " of " + item.num_spaces + " " + ticket_type + num_spaces_plural + " available"
 
-
-
-###**
-* @ngdoc directive
-* @name BB.Directives:bbTimeZone
-* @restrict A
-* @description
-* Timezone name helper
-* @param {String} time_zone_name The name of the time zone
-* @param {Boolean} is_time_zone_diff Indicates if the users time zone is different to the company time zone
-* @example
-* <span bb-time-zone ng-show="is_time_zone_diff">All times are shown in {{time_zone_name}}.</span>
-* @example_result
-* <span bb-time-zone ng-show="is_time_zone_diff">All times are shown in British Summer Time.</span>
-####
-angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions, CompanyStoreService) ->
-  restrict: 'A'
-  link: (scope, el, attrs) ->
-    company_time_zone = CompanyStoreService.time_zone
-    scope.time_zone_name = moment().tz(company_time_zone).format('zz')
-    #  if not using local time zone and user time zone is not same as companies
-    if !GeneralOptions.use_local_time_zone and GeneralOptions.display_time_zone != company_time_zone
-      scope.is_time_zone_diff = true 
 

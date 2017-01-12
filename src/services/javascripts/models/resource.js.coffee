@@ -16,8 +16,7 @@
 * @property {boolean} disabled Verify if resources is disabled or not
 ####
 
-angular.module('BB.Models').factory "AdminResourceModel", ($q,
-  AdminResourceService, BBModel, BaseModel, ResourceModel) ->
+angular.module('BB.Models').factory "AdminResourceModel", ($q, AdminResourceService, BBModel, BaseModel, ResourceModel) ->
 
   class Admin_Resource extends ResourceModel
 

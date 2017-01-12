@@ -33,9 +33,7 @@ angular.module('BB.Directives').directive 'bbLogin', () ->
   controller : 'Login'
 
 
-angular.module('BB.Controllers').controller 'Login', ($scope, $rootScope, $q,
-  $location, LoginService, ValidatorService, AlertService, LoadingService,
-  BBModel) ->
+angular.module('BB.Controllers').controller 'Login', ($scope, $rootScope, $q, $location, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.Login"
   $scope.validator = ValidatorService

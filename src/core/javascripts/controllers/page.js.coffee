@@ -1,13 +1,22 @@
 'use strict'
 
-BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
+BBPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
+  'ngInject'
+
+  @$scope = $scope
+
   # dont' give this $scope a 'controller' property as it's used for controller
   # inheritance, so the $scope agument is not injected but passed in as an
   # argument, so it would overwrite the property set elsewhere
-  $scope.controllerClass = "public.controllers.PageController"
+  $scope.controllerClass = "public.controllers.BBPageCtrl"
   $scope.$has_page_control = true
 
   $scope.validator = ValidatorService
+
+  init = () ->
+    $scope.checkReady = checkReady
+    $scope.routeReady = routeReady
+    return
 
   # go around child scopes - return false if *any* child scope is marked as isLoaded = false
   isScopeReady = (cscope) =>
@@ -19,7 +28,7 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
       children.push(child)
       child = child.$$nextSibling
 
-    children.sort (a,b) ->
+    children.sort (a, b) ->
       return if (a.ready_order || 0) >= (b.ready_order || 0) then 1 else -1
 
     for child in children
@@ -41,7 +50,7 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
   * @description
   * Check the page ready
   ###
-  $scope.checkReady = () ->
+  checkReady = () ->
     ready_list = isScopeReady($scope)
     checkread = $q.defer()
     $scope.$checkingReady = checkread.promise
@@ -64,7 +73,7 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
     $q.all(ready_list).then () ->
       loader.setLoaded()
       checkread.resolve()
-    , (err) ->  loader.setLoaded()
+    , (err) -> loader.setLoaded()
     return true
 
   ###**
@@ -76,12 +85,16 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
   *
   * @param {string=} route A specific route to load
   ###
-  $scope.routeReady = (route) ->
+  routeReady = (route) ->
     if !$scope.$checkingReady
       $scope.decideNextPage(route)
     else
       $scope.$checkingReady.then () =>
         $scope.decideNextPage(route)
+
+  init()
+
+  return
 
 
 ###**
@@ -99,16 +112,15 @@ BBBasicPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
 * replace: true
 * scope: true
 * </pre>
-####
-
+###
 
 angular.module('BB.Directives').directive 'bbPage', () ->
   restrict: 'AE'
   replace: true
-  scope : true
-  controller : 'PageController'
+  scope: true
+  controller: 'BBPageCtrl'
 
 
-angular.module('BB.Controllers').controller 'PageController', BBBasicPageCtrl
-angular.module('BB.Services').value "PageControllerService", BBBasicPageCtrl
+angular.module('BB.Controllers').controller 'BBPageCtrl', BBPageCtrl
+angular.module('BB.Services').value "PageControllerService", BBPageCtrl
 

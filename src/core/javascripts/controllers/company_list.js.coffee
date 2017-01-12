@@ -151,45 +151,33 @@ angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootSco
   * @name getNearestCompany
   * @methodOf BB.Directives:bbCompanies
   * @description
-  * Get nearest company in according of center parameter
+  * Get nearest company in according of centre parameter
   *
-  * @param {string} center Geolocation parameter
+  * @param {string} centre Map centre
   ###
-  $scope.getNearestCompany = ({center}) =>
+  $scope.getNearestCompany = ({centre}) =>
 
-    pi = Math.PI
-    R = 6371  #equatorial radius
     distances = []
 
-    lat1 = center.lat()
-    lon1 = center.lng()
-
     for company in $scope.items
-      if company.address.lat && company.address.long && company.live
-        latlong = new google.maps.LatLng(company.address.lat,company.address.long)
 
-        lat2 = latlong.lat()
-        lon2 = latlong.lng()
+      if company.address.lat and company.address.long and company.live
 
-        chLat = lat2-lat1
-        chLon = lon2-lon1
+        map_centre = {
+          lat:  center.lat()
+          long: centre.lng()
+        }
 
-        dLat = chLat*(pi/180)
-        dLon = chLon*(pi/180)
+        company_position = {
+          lat:  company.address.lat
+          long: company.address.long
+        }
 
-        rLat1 = lat1*(pi/180)
-        rLat2 = lat2*(pi/180)
+        company.distance = GeolocationService.haversine(map_centre, company_position)
 
-        a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2)
-        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
-        d = R * c
-
-        company.distance = d
         distances.push company
 
-      distances.sort (a,b)=>
-        a.distance - b.distance
+    distances.sort (a,b) =>
+      a.distance - b.distance
 
     return distances[0]
-

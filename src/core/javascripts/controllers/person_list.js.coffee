@@ -1,7 +1,6 @@
 'use strict'
 
-
-###**
+###*
 * @ngdoc directive
 * @name BB.Directives:bbPeople
 * @restrict AE
@@ -37,50 +36,66 @@
 *     </div>
 *   </file>
 *  </example>
-####
-
-
+###
 angular.module('BB.Directives').directive 'bbPeople', () ->
   restrict: 'AE'
   replace: true
-  scope : true
-  controller : 'PersonList'
-  link : (scope, element, attrs) ->
+  scope: true
+  controller: 'BBPeopleCtrl'
+  controllerAs: '$bbPeopleCtrl'
+  link: (scope, element, attrs) ->
     if attrs.bbItems
       scope.booking_items = scope.$eval(attrs.bbItems) or []
-      scope.booking_item  = scope.booking_items[0]
+      scope.booking_item = scope.booking_items[0]
     else
       scope.booking_item = scope.$eval(attrs.bbItem) or scope.bb.current_item
       scope.booking_items = [scope.booking_item]
 
 
-angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
-  PageControllerService, $q, BBModel, PersonModel, FormDataStoreService,
-  ValidatorService, LoadingService) ->
+BBPeopleCtrl = ($scope, $rootScope, PageControllerService, $q, BBModel, PersonModel, FormDataStoreService, ValidatorService, LoadingService) ->
+  'ngInject'
 
-  $scope.controller = "public.controllers.PersonList"
+  @$scope = $scope
 
-  loader = LoadingService.$loader($scope).notLoaded()
+  $scope.controller = "public.controllers.BBPeopleCtrl"
   angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
-  $rootScope.connection_started.then ->
-    loadData()
-  , (err) ->  loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+  chosenService = null
+  loader = null
 
+  init = ->
+    $scope.selectItem = selectItem
+    $scope.selectAndRoute = selectAndRoute
+    $scope.setReady = setReady
+
+    loader = LoadingService.$loader($scope).notLoaded()
+
+    $rootScope.connection_started.then connectionStartedSuccess, connectionStartedFailure
+    $scope.$watch 'person', personListener
+    $scope.$on "currentItemUpdate", currentItemUpdateHandler
+
+    return
+
+  connectionStartedSuccess = () ->
+    loadData()
+
+  connectionStartedFailure = (err) ->
+    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+
+  currentItemUpdateHandler = (event) ->
+    loadData()
 
   loadData = () ->
-
     bi = $scope.booking_item
 
-    # do nothing if nothing has changed
-    if !bi.service or bi.service is $scope.change_watch_item
-      # if there's no service - we have to wait for one to be set - so we're kind of done loading for now!
-      if !bi.service
+    if not bi.service or bi.service is chosenService
+      if not bi.service
         loader.setLoaded()
       return
 
-    $scope.change_watch_item = bi.service
     loader.notLoaded()
+
+    chosenService = bi.service
 
     ppromise = BBModel.Person.$query($scope.bb.company)
     ppromise.then (people) ->
@@ -94,7 +109,6 @@ angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
       wait: ppromise
       item: 'person'
     ).then (items) ->
-
       if bi.group # check they're part of any currently selected group
         items = items.filter (x) -> !x.group_id or x.group_id is bi.group
 
@@ -114,8 +128,10 @@ angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
         # OR if the person has been passed into item_defaults, skip to next step
         if (items.length is 1 and $scope.bb.company.settings and $scope.bb.company.settings.merge_people)
           person = items[0]
-        if $scope.bb.item_defaults.person
-          person = $scope.bb.item_defaults.person
+
+        if $scope.bb.current_item.defaults.person
+          person = $scope.bb.current_item.defaults.person
+
         if person and !$scope.selectItem(person, $scope.nextRoute, {skip_step: true})
           setPerson people
           $scope.bookable_items = items
@@ -131,45 +147,25 @@ angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
       ppromise['finally'] ->
         loader.setLoaded()
 
-  ###**
-  * @ngdoc method
-  * @name setPerson
-  * @methodOf BB.Directives:bbPeople
-  * @description
-  * Storing the person property in the form store
-  *
-  * @param {array} people The people
-  ###
   # we're storing the person property in the form store but the angular select
   # menu has to have a reference to the same object memory address for it to
   # appear as selected as it's ng-model property is a Person object.
   setPerson = (people) ->
     $scope.bookable_people = people
     if $scope.person
-        _.each people, (person) ->
-          if person.id is $scope.person.id
-            $scope.person = person
+      _.each people, (person) ->
+        if person.id is $scope.person.id
+          $scope.person = person
 
-
-  ###**
-  * @ngdoc method
-  * @name getItemFromPerson
-  * @methodOf BB.Directives:bbPeople
-  * @description
-  * Get item from person
-  *
-  * @param {array} person The person
-  ###
   getItemFromPerson = (person) =>
-    if (person instanceof  PersonModel)
+    if (person instanceof PersonModel)
       if $scope.bookable_items
         for item in $scope.bookable_items
           if item.item.self is person.self
             return item
     return person
 
-
-  ###**
+  ###*
   * @ngdoc method
   * @name selectItem
   * @methodOf BB.Directives:bbPeople
@@ -179,7 +175,7 @@ angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
   * @param {array} item Selected item from the list of current people
   * @param {string=} route A specific route to load
   ###
-  $scope.selectItem = (item, route, options = {}) =>
+  selectItem = (item, route, options = {}) =>
     if $scope.$parent.$has_page_control
       $scope.person = item
       return false
@@ -191,8 +187,7 @@ angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
       $scope.decideNextPage(route)
       return true
 
-
-  ###**
+  ###*
   * @ngdoc method
   * @name selectAndRoute
   * @methodOf BB.Directives:bbPeople
@@ -202,17 +197,15 @@ angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
   * @param {array} item Selected item from the list of current people
   * @param {string} route A specific route to load
   ###
-  $scope.selectAndRoute = (item, route) =>
+  selectAndRoute = (item, route) =>
     new_person = getItemFromPerson(item)
     _.each $scope.booking_items, (bi) -> bi.setPerson(new_person)
     $scope.decideNextPage(route)
     return true
 
-
-  $scope.$watch 'person',(newval, oldval) =>
+  personListener = (newval, oldval) =>
     if $scope.person and $scope.booking_item
-      if !$scope.booking_item.person or $scope.booking_item.person.self != $scope.person.self
-        # only set and broadcast if it's changed
+      if !$scope.booking_item.person or $scope.booking_item.person.self != $scope.person.self # only set and broadcast if it's changed
         new_person = getItemFromPerson($scope.person)
         _.each $scope.booking_items, (item) -> item.setPerson(new_person)
         $scope.broadcastItemUpdate()
@@ -220,19 +213,17 @@ angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
       _.each $scope.booking_items, (item) -> item.setPerson(null)
       $scope.broadcastItemUpdate()
 
+    $scope.bb.current_item.defaults.person = $scope.person
+    return
 
-  $scope.$on "currentItemUpdate", (event) ->
-    loadData()
-
-
-  ###**
+  ###*
   * @ngdoc method
   * @name setReady
   * @methodOf BB.Directives:bbPeople
   * @description
   * Called by bbPage to ready directive for transition to the next step
   ###
-  $scope.setReady = () =>
+  setReady = () =>
     if $scope.person
       new_person = getItemFromPerson($scope.person)
       _.each $scope.booking_items, (item) -> item.setPerson(new_person)
@@ -241,3 +232,9 @@ angular.module('BB.Controllers').controller 'PersonList', ($scope, $rootScope,
       _.each $scope.booking_items, (item) -> item.setPerson(null)
       return true
 
+  init()
+
+  return
+
+
+angular.module('BB.Controllers').controller 'BBPeopleCtrl', BBPeopleCtrl

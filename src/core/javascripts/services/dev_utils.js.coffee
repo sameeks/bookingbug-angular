@@ -76,10 +76,8 @@ angular.module('BB.Services').factory "DebugUtilsService",
         $window.bbBBCtrlScope = ->
           scope
 
-        # displays the $scope.current_item object, which is stored on the BBCtrl
-        # scope
         $window.bbCurrentItem = ->
-          scope.current_item
+          scope.bb.current_item
 
         # displays the currentItem Object
         $window.bbShowScopeChain = showScopeChain

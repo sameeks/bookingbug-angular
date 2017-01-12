@@ -4,7 +4,12 @@
     </div>
   </div>
 
-  <div bb-time-ranges="{selected_day: today}" class="bb-calendar" ng-show="days"></div>
+  <div
+    bb-time-ranges="{selected_day: today}"
+    class="bb-calendar"
+    ng-show="days"
+	bb-scroll-to="time:selected">
+  </div>
 
   <div class="bb-step-navigation">
     <div class="row">
@@ -17,8 +22,8 @@
           class="btn btn-primary btn-block" 
           ng-click="checkReady() && routeReady()" 
           bb-debounce 
-          ng-disabled="!bb.current_item.time"> 
-          <span>Continue</span>
+          ng-disabled="!bb.current_item.time"
+          translate="PUBLIC_BOOKING.CALENDAR.NEXT_BTN"> 
         </button>
       </div>
 
@@ -31,8 +36,8 @@
           id="btn-continue" 
           class="btn btn-primary btn-block" 
           ng-click="initMove(bb.current_item)" 
-          bb-debounce>
-          <span>Reschedule</span>
+          bb-debounce
+          translate="PUBLIC_BOOKING.CALENDAR.MOVE_BOOKING_BTN">
         </button>
 
       <!-- moving multiple bookings -->
@@ -42,15 +47,22 @@
           id="btn-continue" 
           class="btn btn-primary btn-block" 
           ng-click="initMove(bb.purchase.bookings)" 
-          bb-debounce>
-          <span>Reschedule</span>
+          bb-debounce
+		  translate="PUBLIC_BOOKING.CALENDAR.MOVE_BOOKING_BTN">
         </button>
       </div>
 
-      <div class="col-sm-2 col-sm-pull-10 text-left">    
-        <button type="button" class="btn btn-default btn-block" bb-debounce ng-click="loadPreviousStep()" ng-show="!bb.movingBooking">Back</button>
+      <div class="col-sm-2 col-sm-pull-10 text-left">
+        <button
+          type="button"
+          class="btn btn-default btn-block"
+          bb-debounce
+          ng-click="loadPreviousStep()"
+          ng-show="!bb.movingBooking"
+          translate="PUBLIC_BOOKING.CALENDAR.BACK_BTN">
+        </button>
       </div>
     </div>
   </div>
-  
+
 </div>

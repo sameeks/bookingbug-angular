@@ -4,7 +4,7 @@
     text-decoration: none;
   }
 
-  .glyphicon {
+  .fa {
     font-size: $font-size-h2;
   }
 
@@ -19,12 +19,12 @@
   table {
     color: $gray-base;
     font-size: $font-size-base;
-    .glyphicon {
+    .fa {
       font-size: $font-size-base;
     }
   }
 
-  span.glyphicon-shopping-cart {
+  span.fa-shopping-cart {
     padding-left: 60px;
   }
 

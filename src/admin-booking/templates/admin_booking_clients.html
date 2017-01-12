@@ -1,48 +1,76 @@
 <div>
 
   <div class="page-header">
-    <h1><span translate="ADMIN_BOOKING.CUSTOMER.SELECT_HEADLINE"></span></h1>
+    <h1 translate="ADMIN_BOOKING.CUSTOMER.STEP_HEADING"></h1>
   </div>
 
-  <div class="admin-typehead-wrapper" ng-form bb-form name="client_search_form">
-    <div class="form-group" ng-class="{'has-error': client_search_form.result.$invalid && (client_search_form.result.$dirty || client_search_form.submitted)}">
-      <div class="input-group" ng-class="{'animated shake': !typehead_result && search_triggered}">
+  <div
+    class="admin-typeahead-wrapper"
+    ng-form
+    bb-form
+    name="client_search_form">
 
-        <input class="input-lg form-control"
-               name="result"
-               ng-model="typehead_result"
-               placeholder="{{ 'ADMIN_BOOKING.CUSTOMER.SEARCH_BY' | translate }}"
-               required
-               typeahead-template-url="_typehead.html"
-               typeahead-loading="customer_typeahead_loading"
-               typeahead-no-results="no_results"
-               typeahead-on-select="typeHeadResults($item, $uibModal, $label)"
-               typeahead-focus-first="false"
-               typeahead-min-length="2"
-               typeahead-wait-ms="250"
-               uib-typeahead="item.name for item in searchClients($viewValue)">
+    <div
+      class="form-group"
+      ng-class="{'has-error': client_search_form.result.$invalid && (client_search_form.result.$dirty || client_search_form.submitted)}">
+      <div
+        class="input-group"
+        ng-class="{'animated shake': !typeahead_result && search_triggered}">
+
+        <input
+          class="input-lg form-control"
+          name="result"
+          ng-model="typeahead_result"
+          placeholder="{{'ADMIN_BOOKING.CUSTOMER.SEARCH_BY_PLACEHOLDER' | translate}}"
+          required
+          typeahead-template-url="_typeahead.html"
+          typeahead-loading="customer_typeahead_loading"
+          typeahead-no-results="no_results"
+          typeahead-on-select="typeHeadResults($item, $uibModal, $label)"
+          typeahead-focus-first="false"
+          typeahead-min-length="2"
+          typeahead-wait-ms="250"
+          uib-typeahead="item.name for item in searchClients($viewValue)"
+        />
 
         <span class="input-group-btn">
-          <button type="button" class="btn btn-primary btn-lg" ng-click="submitForm(); getClients({filter_by: typehead_result})"><i class="fa fa-search"></i></button>
+          <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            ng-click="submitForm(); getClients({filter_by: typeahead_result})">
+            <i class="fa fa-search"></i>
+          </button>
         </span>
+
       </div>
     </div>
   </div>
 
-  <div ng-if="search_complete" class="search-results">
+  <div
+    ng-if="search_complete"
+    class="search-results">
 
-    <div class="bb-block" ng-show="clients.num_items > 0">
+    <div
+      class="bb-block"
+      ng-show="clients.num_items > 0">
 
       <div class="row">
 
         <div class="col-sm-6">
-          <div class="bb-search-summary">
-            <span translate="ADMIN_BOOKING.CUSTOMER.NUMBER"
-                  translate-values="{ CUSTOMERS_NUMBER: clients.num_items || 0 }"
-                  translate-interpolation="messageformat"></span>
-            </div>
 
-          <button class="btn btn-link" ng-click="clearSearch()"><span translate="ADMIN_BOOKING.CUSTOMER.CLEAR"></span></button>
+          <div class="bb-search-summary">
+            <span
+              translate="ADMIN_BOOKING.CUSTOMER.NUM_CUSTOMERS"
+              translate-values="{ CUSTOMERS_NUMBER: clients.num_items || 0 }"
+              translate-interpolation="messageformat">
+            </span>
+          </div>
+
+          <button
+            class="btn btn-link"
+            ng-click="clearSearch()"
+            translate="ADMIN_BOOKING.CUSTOMER.CLEAR_BTN">
+          </button>
 
         </div>
 
@@ -51,8 +79,16 @@
           <div class="form-inline bb-search-options">
 
             <div class="form-group">
-              <label class="bb-label" for="sort_by"><span translate="ADMIN_BOOKING.CUSTOMER.SORT_BY"></span></label>
-              <select ng-model="sort_by" id="sort_by" class="form-control" ng-options="option.key as option.name for option in sort_by_options" ng-change="sortChanged(sort_by)">
+              <label
+                class="bb-label
+                for="sort_by">
+                <span translate="ADMIN_BOOKING.CUSTOMER.SORT_BY_LBL"></span>:
+              </label>
+              <select
+                ng-model="sort_by"
+                id="sort_by"
+                class="form-control"
+                ng-options="option.key as option.name for option in sort_by_options" ng-change="sortChanged(sort_by)">
               </select>
             </div>
 
@@ -63,13 +99,19 @@
 
     </div>
 
-    <div class="bb-block text-center" ng-show="clients.num_items == 0">
+    <div
+      class="bb-block text-center"
+      ng-show="clients.num_items == 0">
       <p>
         <span translate="ADMIN_BOOKING.CUSTOMER.NO_RESULTS_FOUND"></span>
       </p>
       <p>
-        <button class="btn btn-link" ng-click="clearSearch()">
-          <span translate="ADMIN_BOOKING.CUSTOMER.CREATE_ONE_INSTEAD"></span>
+        <button
+          type="button"
+          class="btn btn-link"
+          ng-click="clearSearch()"
+          translate="ADMIN_BOOKING.CUSTOMER.CREATE_ONE_INSTEAD_BTN">
+
         </button>
       </p>
     </div>
@@ -110,7 +152,12 @@
 
             </div>
             <div class="col-sm-2">
-              <button class="btn btn-primary btn-block btn-select-client" ng-click="selectClient(client);"><span translate="ADMIN_BOOKING.CUSTOMER.SELECT_BTN"></span></button>
+              <button
+                type="button"
+                class="btn btn-primary btn-block btn-select-client"
+                ng-click="selectClient(client);"
+                translate="ADMIN_BOOKING.CUSTOMER.SELECT_BTN">    
+              </button>
             </div>
           </div>
 
@@ -120,82 +167,214 @@
 
     </ul>
 
-    <div uib-pagination total-items="clients.num_items"
-      ng-model="clients.current_page" items-per-page="clients.page_size"
-      max-size="clients.max_size" boundary-links="true" rotate="false"
-      num-pages="clients.num_pages" ng-show="clients.num_items > clients.page_size" ng-change="pageChanged()"></div>
+    <div
+      uib-pagination
+      total-items="clients.num_items"
+      ng-model="clients.current_page"
+      items-per-page="clients.page_size"
+      max-size="clients.max_size"
+      boundary-links="true"
+      rotate="false"
+      num-pages="clients.num_pages"
+      ng-show="clients.num_items > clients.page_size"
+      ng-change="pageChanged()">
+    </div>
 
   </div>
 
-  <div ng-hide="search_complete" class="admin-create-client">
+  <div
+    ng-hide="search_complete"
+    class="admin-create-client">
 
     <hr />
 
     <div class="panel panel-default">
-      <div class="panel-heading"><strong><span translate="ADMIN_BOOKING.CUSTOMER.CREATE"></span></strong></div>
+
+      <div class="panel-heading">
+        <strong translate="ADMIN_BOOKING.CUSTOMER.CREATE_HEADING"></strong>
+      </div>
+
       <div class="panel-body">
 
-        <div ng-form name="client_form" bb-form>
+        <div
+          ng-form
+          name="client_form"
+          bb-form>
 
-          <div class="form-group" ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
-            <label for="first_name" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.FIRST_NAME"></span></label><br />
-            <input type="text" name="first_name" id="first_name" required ng-model="client.first_name" class="form-control"/>
+          <div
+            class="form-group"
+            ng-class="{'has-error': client_form.first_name.$invalid && client_form.submitted}">
+            <label
+              for="first_name"
+              class="control-label">
+              <span translate="ADMIN_BOOKING.CUSTOMER.FIRST_NAME_LBL"></span>
+            </label><br />
+            <input
+              type="text"
+              name="first_name"
+              id="first_name"
+              required
+              ng-model="client.first_name"
+              class="form-control"
+            />
           </div>
 
-          <div class="form-group" ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
-            <label for="last_name" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.LAST_NAME"></span></label><br />
-            <input type="text" name="last_name" id="last_name" required ng-model="client.last_name" class="form-control"/>
+          <div
+            class="form-group"
+            ng-class="{'has-error': client_form.last_name.$invalid && client_form.submitted}">
+            <label
+              for="last_name"
+              class="control-label">
+              <span translate="ADMIN_BOOKING.CUSTOMER.LAST_NAME_LBL"></span>
+            </label><br />
+            <input
+              type="text"
+              name="last_name"
+              id="last_name"
+              required
+              ng-model="client.last_name"
+              class="form-controlbb"
+            />
           </div>
 
-          <div class="form-group" ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
-            <label for="email" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.EMAIL"></span></label>
-            <input type="email" name="email" id="email" ng-required="!client.mobile" ng-pattern="validator.getEmailPattern()" ng-model="client.email" class="form-control"/>
+          <div
+            class="form-group"
+            ng-class="{'has-error': client_form.email.$invalid && client_form.submitted}">
+            <label
+              for="email"
+              class="control-label">
+              <span translate="ADMIN_BOOKING.CUSTOMER.EMAIL_LBL"></span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              ng-required="!client.mobile"
+              ng-pattern="validator.getEmailPattern()"
+              ng-model="client.email"
+              class="form-control"
+            />
           </div>
 
-          <div class="form-group" ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
-            <label for="mobile" class="control-label"><span translate="ADMIN_BOOKING.CUSTOMER.MOBILE"></span></label>
-            <input type="text" name="mobile" id="mobile" ng-model="client.mobile" class="form-control" ng-required="!client.email || bb.company.settings.ask_mobile_phone" ng-pattern="admin_options.mobile_pattern"/>
+          <div
+            class="form-group"
+            ng-class="{'has-error': client_form.mobile.$invalid && client_form.submitted}">
+            <label
+              for="mobile"
+              class="control-label">
+              <span translate="ADMIN_BOOKING.CUSTOMER.MOBILE_LBL"></span>
+            </label>
+            <input
+              type="text"
+              name="mobile"
+              id="mobile"
+              ng-model="client.mobile"
+              class="form-control"
+              ng-required="!client.email || bb.company.settings.ask_mobile_phone"
+              ng-pattern="admin_options.MOBILE_INVALID"
+            />
           </div>
 
           <div ng-show="bb.company_settings.ask_address">
 
-            <div class="form-group" ng-class="{'has-error': client_form.address1.$invalid && ((client_form.address1.$dirty && !client_form.address1.$focused) || booking_form.submitted)}">
-              <label for="address1" class="control-label">Address:</label>
+            <div
+              class="form-group"
+              ng-class="{'has-error': client_form.address1.$invalid && ((client_form.address1.$dirty && !client_form.address1.$focused) || booking_form.submitted)}">
+              <label
+                for="address1"
+                class="control-label">
+                <span translate="ADMIN_BOOKING.CUSTOMER.ADDRESS1_LBL"></span>
+              </label>
               <div>
-                <input type="text" name="address1" id="address1" ng-model="client.address1" class="form-control"/>
+                <input
+                  type="text"
+                  name="address1"
+                  id="address1"
+                  ng-model="client.address1"
+                  class="form-control"
+                />
               </div>
               <div class="col-sm-3 messages">
-                <div class="error-message" ng-show="client_form.address1.$invalid && booking_form.submitted">
-                  Please enter your address
+                <div
+                  class="error-message"
+                  ng-show="client_form.address1.$invalid && booking_form.submitted">
+                  <span translate="ADMIN_BOOKING.CUSTOMER.ADDRESS1_VALIDATION_MSG"></span>
                 </div>
               </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error': client_form.address2.$invalid && ((client_form.address2.$dirty && !client_form.address2.$focused) || booking_form.submitted)}">
-              <label for="address2" class="control-label"></label>
+            <div
+              class="form-group"
+              ng-class="{'has-error': client_form.address2.$invalid && ((client_form.address2.$dirty && !client_form.address2.$focused) || booking_form.submitted)}">
+              <label
+                for="address2"
+                class="control-label">
+              </label>
               <div>
-                <input type="text" name="address2" id="address2" ng-model="client.address2" class="form-control"/>
+                <input
+                  type="text"
+                  name="address2"
+                  id="address2"
+                  ng-model="client.address2"
+                  class="form-control"
+                />
               </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error': client_form.address3.$invalid && ((client_form.address3.$dirty && !client_form.address3.$focused) || booking_form.submitted)}">
-              <label for="address3" class="control-label">Town:</label>
+            <div
+              class="form-group"
+              ng-class="{'has-error': client_form.address3.$invalid && ((client_form.address3.$dirty && !client_form.address3.$focused) || booking_form.submitted)}">
+              <label
+                for="address3"
+                class="control-label">
+                <span translate="ADMIN_BOOKING.CUSTOMER.ADDRESS3_LBL"></span>
+              </label>
               <div>
-                <input type="text" name="address3" id="address3" ng-model="client.address3" class="form-control"/>
+                <input
+                  type="text"
+                  name="address3"
+                  id="address3"
+                  ng-model="client.address3"
+                  class="form-control"
+                />
               </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error': client_form.address4.$invalid && booking_form.submitted}">
-              <label for="address4" class="control-label">County:</label>
+            <div
+              class="form-group"
+              ng-class="{'has-error': client_form.address4.$invalid && booking_form.submitted}">
+              <label
+                for="address4"
+                class="control-label">
+                <span translate="ADMIN_BOOKING.CUSTOMER.ADDRESS4_LBL"></span>
+              </label>
               <div>
-                <input type="text" name="address4" id="address4" ng-model="client.address4" class="form-control"/>
+                <input
+                  type="text"
+                  name="address4"
+                  id="address4"
+                  ng-model="client.address4"
+                  class="form-control"
+                />
               </div>
             </div>
 
-            <div class="form-group" ng-class="{'has-error': client_form.postcode.$invalid && ((client_form.postcode.$dirty && !client_form.postcode.$focused) || booking_form.submitted)}">
-              <label for="postcode" class="control-label">Postcode:</label>
+            <div
+              class="form-group"
+              ng-class="{'has-error': client_form.postcode.$invalid && ((client_form.postcode.$dirty && !client_form.postcode.$focused) || booking_form.submitted)}">
+              <label
+                for="postcode"
+                class="control-label">
+                <span translate="ADMIN_BOOKING.CUSTOMER.POSTCODE_LBL"></span>
+              </label>
               <div>
-                <input type="text" name="postcode" id="postcode" ng-model="client.postcode" class="form-control"/>
+                <input
+                  type="text"
+                  name="postcode"
+                  id="postcode"
+                  ng-model="client.postcode"
+                  class="form-control"
+                />
               </div>
             </div>
 
@@ -204,8 +383,12 @@
 
           <div class="row">
             <div class="col-sm-3">
-              <button type="submit" class="btn btn-primary btn-block" ng-click="submitForm(client_form) && createClient()" bb-debounce>
-                <span translate="ADMIN_BOOKING.CUSTOMER.CREATE_BTN"></span>
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
+                ng-click="submitForm(client_form) && createClient()"
+                bb-debounce
+                translate="ADMIN_BOOKING.CUSTOMER.CREATE_BTN">
               </button>
             </div>
           </div>
@@ -223,8 +406,13 @@
         <!-- <button type="submit" class="btn btn-primary" ng-click="confirm(booking_form) && validator.validateForm(booking_form) && checkReady() && routeReady()">Confirm</button> -->
       </div>
       <div class="col-sm-3 col-sm-pull-9">
-        <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">
-          <span translate="ADMIN_BOOKING.CUSTOMER.BACK_BTN"></span>
+        <button
+          type="button"
+          class="btn btn-default"
+          bb-debounce
+          ng-click="loadPreviousStep()"
+          ng-show="bb.current_step > 1"
+          translate="ADMIN_BOOKING.CUSTOMER.BACK_BTN">
         </button>
       </div>
     </div>

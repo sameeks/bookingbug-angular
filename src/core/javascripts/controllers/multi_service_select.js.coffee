@@ -32,8 +32,7 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   scope : true
   controller : 'MultiServiceSelect'
 
-angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $rootScope,
-  $q, $attrs, BBModel, $uibModal, $document, AlertService, FormDataStoreService, LoadingService, GeneralOptions) ->
+angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $rootScope, $q, $attrs, BBModel, $uibModal, $document, AlertService, FormDataStoreService, LoadingService, GeneralOptions) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selectedCategoryName'

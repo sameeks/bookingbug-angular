@@ -1,7 +1,6 @@
 'use strict'
 
-angular.module('BBAdmin.Controllers').controller 'DashTimeList', ($scope,
-  $rootScope, $location, $q, $element, AdminTimeService) ->
+angular.module('BBAdmin.Controllers').controller 'DashTimeList', ($scope, $rootScope, $location, $q, $element, AdminTimeService) ->
 
   $loaded = null # has somethign been loaded
 
