@@ -45,32 +45,16 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
       $scope.bb.company.$getParent().then (parent) ->
         $scope.company = parent
-        initialise()
     else
       $scope.company = $scope.bb.company
+
 
     # wait for services before we begin initialisation
     $scope.$watch 'items', (newval, oldval) ->
       if newval and angular.isArray(newval)
-        $scope.items = newval
-        if GeneralOptions.useCategories then readyCategories() else readyServices()
+        $scope.items = newval 
+        readyCategories()
 
-
-  ###**
-  * @ngdoc method
-  * @name readyServices
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Define scoped items from services 
-  ###
-
-  readyServices = () ->
-    $scope.services = $scope.items
-
-    if $scope.bb.stacked_items and $scope.bb.stacked_items.length > 0
-      getStackedItems()
-    else
-      checkItemDefaults()
 
 
   ###**
@@ -84,31 +68,49 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   readyCategories = () ->
     promises = []
 
-    promises.push(BBModel.Category.$query($scope.bb.company))
+    BBModel.Category.$query($scope.bb.company).then (categories) ->
 
-    # company question promise
-    promises.push($scope.company.$getCompanyQuestions()) if $scope.company.$has('company_questions')
-
-    $q.all(promises).then (result) ->
-
-      $scope.companyQuestions = result[1]
-
-      initialiseCategories(result[0]) 
+      matchServicesToCategories(categories)
 
       if $scope.bb.stacked_items and $scope.bb.stacked_items.length > 0
+        # moving back from calendar
         getStackedItems()
       else
         checkItemDefaults()
-
-      if $scope.bb.movingBooking
-        $scope.nextStep()
-
 
       $scope.$broadcast "multi_service_select:loaded"
 
       loader.setLoaded()
 
     , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+
+
+
+  ###**
+  * @ngdoc method
+  * @name matchServicesToCategories
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Match services to categories by id
+  *
+  * @param {array} categories The categories of service
+  ###
+
+  matchServicesToCategories = (categories) ->
+
+    # index categories by their id 
+    allCategories = _.indexBy(categories, 'id')
+
+    # group services by their category_id
+    allCategoryServices = _.groupBy $scope.items, (item) -> 
+      item.category_id if item.category_id?
+
+    # match category_index of the services to the category objects
+    for categoryIndex of allCategories 
+      if allCategoryServices[categoryIndex]
+        allCategories[categoryIndex].services = allCategoryServices[categoryIndex]
+
+    $scope.categories = _.values(allCategories)
 
 
   ###**
@@ -143,134 +145,6 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
         return
 
 
-  ###**
-  * @ngdoc method
-  * @name initialiseCategories
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Initialize the categories in according of categories parameter
-  *
-  * @param {array} categories The categories of service
-  ###
-
-  initialiseCategories = (categories) ->
-
-    # extract order from category name if we're using ordered categories
-    if GeneralOptions.orderedCategories
-      for category in categories
-          category.order = parseInt(category.name.slice(0,2))
-          category.name  = category.name.slice(3)
-
-    # index categories by their id
-    $scope.allCategories = _.indexBy(categories, 'id')
-
-    # group services by category id
-    allCategories = _.groupBy($scope.items, (item) -> item.category_id)
-
-    # find any sub categories
-    if GeneralOptions.useSubCategories
-      subCategories = findSubCategories()
-
-    categories = filterEmptyCategories(allCategories)
-
-
-    # build the catagories array
-    $scope.categories = []
-
-    for category_id, services of categories
-      category = {}
-      
-      if subCategories
-        groupSubCategories(category, subCategories, services)
-      else
-        category.services = services
-
-      setCategoryDetails(category, category_id)
-
-
-  ###**
-  * @ngdoc method
-  * @name findSubCategories
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Get sub categories from company questions 
-  * @returns {array} 
-  ###
-
-  findSubCategories = () ->
-    subCategories = _.findWhere($scope.companyQuestions, {name: 'Extra Category'})
-    subCategories = _.map(subCategories.question_items, (subCategory) -> subCategory.name) if subCategories
-
-    return subCategories
-
-
-  ###**
-  * @ngdoc method
-  * @name findSubCategories
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Get sub categories from company questions 
-  * @param {array} allCategories The array containing all categories
-  * @returns {array} 
-  ###
-
-  filterEmptyCategories = (allCategories) ->
-    # filter categories that have no services
-    categories = {}
-    for own key, value of allCategories
-      categories[key] = value if value.length > 0
-    return categories
-
-
-  ###**
-  * @ngdoc method
-  * @name groupSubCategories 
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Group sub categories by service category
-  * @param {object} category The category 
-  * @param {array} subCategories The sub categories
-  * @param {array} services The services
-  ###
-
-  groupSubCategories = (category, subCategories, services) ->
-    groupedSubCategories = []
-    for subCategory in subCategories
-      groupedSubCategory = {
-        name: subCategory,
-        services: _.filter(services, (service) -> service.extra.extra_category is subCategory)
-      }
-
-      # only add the sub category if it has some services
-      groupedSubCategories.push(groupedSubCategory) if groupedSubCategory.services.length > 0
-    category.subCategories = groupedSubCategories
-
-
-  ###**
-  * @ngdoc method
-  * @name setCategoryDetails
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Set category name and description
-  * @param {object} category The category 
-  * @param {integer} category_id The category id
-  ###
-
-  setCategoryDetails = (category, category_id) ->
-    # get the name and description
-    categoryDetails = {name: $scope.allCategories[category_id].name, description: $scope.allCategories[category_id].description} if $scope.allCategories[category_id]
-    # set the category
-    category.name = categoryDetails.name
-    category.description = categoryDetails.description
-
-    # get the order if instruccted
-    category.order = $scope.allCategories[category_id].order if GeneralOptions.orderedCategories && $scope.allCategories[category_id]
-
-    $scope.categories.push(category)
-
-    selectCategory(categoryDetails)
-
-
   selectCategory = (categoryDetails) ->
     # check it a category is already selected
     if $scope.selectedCategoryName and $scope.selectedCategoryName is categoryDetails.name
@@ -291,26 +165,19 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   * @param {string} category_name The category name
   * @param {array} services The services array
   ###
-  $scope.changeCategory = (categoryName, services) ->
+  $scope.changeCategory = (category) ->
+    categoryName = category.name if category.name?
+    services = category.services if category.services?
 
-    if categoryName and services
+    if categoryName and services 
       $scope.selectedCategory = {
         name: categoryName
-        subCategories: services
+        services: services 
       }
+
       $scope.selectedCategoryName = $scope.selectedCategory.name
       $rootScope.$broadcast "multi_service_select:categoryChanged"
 
-  ###**
-  * @ngdoc method
-  * @name changeCategoryName
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Change the category name
-  ###
-  $scope.changeCategoryName = () ->
-      $scope.selectedCategoryName = $scope.selectedCategory.name
-      $rootScope.$broadcast "multi_service_select:categoryChanged"
 
   ###**
   * @ngdoc method
@@ -352,10 +219,7 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   $scope.removeItem = (item, options) ->
     item.selected = false
 
-    if options and options.type is 'BasketItem'
-      $scope.bb.deleteStackedItem(item)
-    else
-      $scope.bb.deleteStackedItemByService(item)
+    $scope.bb.deleteStackedItemByService(item)
 
     $scope.bb.clearStackedItemsDateTime() # clear any selected date/time as the selection has changed
     $rootScope.$broadcast "multi_service_select:itemRemoved"
@@ -364,36 +228,6 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
         i.selected = false
         break
 
-  ###**
-  * @ngdoc method
-  * @name removeStackedItem
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Removed stacked item whose type is 'BasketItem'
-  *
-  * @params {array} item The item that been removed
-  ###
-  $scope.removeStackedItem = (item) ->
-    $scope.removeItem(item, {type: 'BasketItem'})
-
-  ###**
-  * @ngdoc method
-  * @name nextStep
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Next step to selected an basket item, if basket item is not selected she display an error message
-  ###
-  $scope.nextStep = () ->
-    if $scope.bb.stacked_items.length > 1
-      $scope.decideNextPage()
-    else if $scope.bb.stacked_items.length is 1
-      # first clear anything already in the basket and then set the basket item
-      $scope.quickEmptybasket({preserve_stacked_items: true}) if $scope.bb.basket && $scope.bb.basket.items.length > 0
-      $scope.setBasketItem($scope.bb.stacked_items[0])
-      $scope.decideNextPage()
-    else
-      AlertService.clear()
-      AlertService.add("danger", { msg: "You need to select at least one service to continue" })
 
   ###**
   * @ngdoc method
@@ -405,26 +239,6 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
   $scope.addService = () ->
     $rootScope.$broadcast "multi_service_select:addItem"
 
-
-  ###**
-  * @ngdoc method
-  * @name setReady
-  * @methodOf BB.Directives:bbMultiServiceSelect
-  * @description
-  * Set this page section as ready
-  ###
-  $scope.setReady = () ->
-    if $scope.bb.stacked_items.length > 1
-      return true
-    else if $scope.bb.stacked_items.length is 1
-      # first clear anything already in the basket and then set the basket item
-      $scope.quickEmptybasket({preserve_stacked_items: true}) if $scope.bb.basket && $scope.bb.basket.items.length > 0
-      $scope.setBasketItem($scope.bb.stacked_items[0])
-      return true
-    else
-      AlertService.clear()
-      AlertService.add("danger", { msg: "You need to select at least one service to continue" })
-      return false
 
   ###**
   * @ngdoc method
@@ -440,27 +254,3 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
     service.price = service.getPriceByDuration(duration)
     service.duration = duration
     service.listed_duration = duration
-
-    # if service.durations.length is 1
-    #   $scope.addItem(service)
-    # else
-
-    #   modalInstance = $uibModal.open
-    #     templateUrl: $scope.getPartial('_select_duration_modal')
-    #     scope: $scope
-    #     controller: ($scope, $uibModalInstance, service) ->
-    #       $scope.durations = service.durations
-    #       $scope.duration = $scope.durations[0]
-    #       $scope.service = service
-
-    #       $scope.cancel = ->
-    #         $uibModalInstance.dismiss 'cancel'
-    #       $scope.setDuration = () ->
-    #         $uibModalInstance.close({service: $scope.service, duration: $scope.duration})
-    #     resolve:
-    #       service: ->
-    #         service
-
-    #   modalInstance.result.then (result) ->
-    #     $scope.addItem(result.service, result.duration)
-
