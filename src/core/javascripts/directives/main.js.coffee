@@ -119,45 +119,6 @@ angular.module('BB.Directives').directive 'bbSlotGrouper', () ->
       scope.grouped_slots.push(slot) if slot.time >= scope.$eval(attrs.startTime) && slot.time < scope.$eval(attrs.endTime)
     scope.has_slots = scope.grouped_slots.length > 0
 
-# bbAddressMap
-# Adds behaviour to select first invalid input
-angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
-  restrict: 'A'
-  scope: true
-  replace: true
-  controller: ($scope, $element, $attrs, uiGmapGoogleMapApi) ->
-
-    $scope.isDraggable = $document.width() > 480
-
-    uiGmapGoogleMapApi.then (maps)->
-      maps.visualRefresh = true
-      $scope.$watch $attrs.bbAddressMap, (new_val, old_val) ->
-
-        return if !new_val
-
-        map_item = new_val
-
-        $scope.map = {
-          center: {
-            latitude: map_item.lat,
-            longitude: map_item.long
-          },
-          zoom: 15
-        }
-
-        $scope.options = {
-          scrollwheel: false,
-          draggable: $scope.isDraggable
-        }
-
-        $scope.marker = {
-          id: 0,
-          coords: {
-            latitude: map_item.lat,
-            longitude: map_item.long
-          }
-        }
-
 
 
 angular.module('BB.Directives').directive 'bbMergeDuplicateQuestions', () ->
@@ -282,27 +243,4 @@ angular.module('BB.Directives').directive 'bbCapacityView', () ->
           when "NUM_SPACES_LEFT" then scope.capacity_view_description = scope.ticket_spaces = item.spaces_left + " " + ticket_type + spaces_left_plural + " available"
           when "NUM_SPACES_AND_SPACES_LEFT" then scope.capacity_view_description = scope.ticket_spaces = item.spaces_left + " of " + item.num_spaces + " " + ticket_type + num_spaces_plural + " available"
 
-
-
-###**
-* @ngdoc directive
-* @name BB.Directives:bbTimeZone
-* @restrict A
-* @description
-* Timezone name helper
-* @param {String} time_zone_name The name of the time zone
-* @param {Boolean} is_time_zone_diff Indicates if the users time zone is different to the company time zone
-* @example
-* <span bb-time-zone ng-show="is_time_zone_diff">All times are shown in {{time_zone_name}}.</span>
-* @example_result
-* <span bb-time-zone ng-show="is_time_zone_diff">All times are shown in British Summer Time.</span>
-####
-angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions, CompanyStoreService) ->
-  restrict: 'A'
-  link: (scope, el, attrs) ->
-    company_time_zone = CompanyStoreService.time_zone
-    scope.time_zone_name = moment().tz(company_time_zone).format('zz')
-    #  if not using local time zone and user time zone is not same as companies
-    if !GeneralOptions.use_local_time_zone and GeneralOptions.display_time_zone != company_time_zone
-      scope.is_time_zone_diff = true
 

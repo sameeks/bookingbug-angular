@@ -1,29 +1,42 @@
-<h1>Dashboard</h1>
-  <div class="dashcontainer" ng-controller="DashboardContainer" style="">
+<h1 translate="PUBLIC_BOOKING.DASH.TITLE"></h1>
+
+  <div
+    class="dashcontainer"
+    ng-controller="DashboardContainer">
 
   <div class="row">
 
     <div class="col-md-4">
-      <h4>Pick a Location/Service</h4>
 
-      <div ng-controller="CompanyList" ng-init="init()">
+      <h4 translate="PUBLIC_BOOKING.DASH.DESCRIPTION"></h4>
 
-        <div class="" ng-repeat="comp in companies"  >
+      <div
+        ng-controller="CompanyList"
+        ng-init="init()">
+
+        <div ng-repeat="comp in companies">
+
           <h3>{{comp.name}}</h3>
 
-          <div ng-controller="BBPeopleCtrl" ng-init="init(comp)">
+          <div
+            ng-controller="BBPeopleCtrl"
+            ng-init="init(comp)">
 
-            <a class="" ng-repeat="person in all_people"  style="margin-left:20px;font-size:14px;display:block;cursor:pointer;">
+            <a
+              ng-repeat="person in all_people"
+              style="margin-left:20px;font-size:14px;display:block;cursor:pointer;">
               {{person.name}}
             </a>
           </div>
+
         </div>
       </div>
 
       <div ng-show="selectedSlot">
-        <div ng-controller="SelectedSlotDetails" class="side_details">
-          <div ng-include="showItemView">
-          </div>
+        <div
+          ng-controller="SelectedSlotDetails"
+          class="side_details">
+          <div ng-include="showItemView"></div>
         </div>
       </div>
 
@@ -31,17 +44,20 @@
 
     <div class="col-md-8">
 
-      <div ng-controller="CalendarCtrl" ng-init="init()">
+      <div
+        ng-controller="CalendarCtrl"
+        ng-init="init()">
 
-        <div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="myCalendar">
+        <div
+          ui-calendar="uiConfig.calendar"
+          ng-model="eventSources"
+          calendar="myCalendar">
+        </div>
+
       </div>
-
     </div>
-  </div>
 
-
-    <div id="dialog-modal" title="" display:none;>
-
-    </div>
+    <div id="dialog-modal"></div>
+    
   </div>
 </div>

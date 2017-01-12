@@ -1,50 +1,80 @@
 <div class="bb-item-summary">
   <div class="bb-item-summary-header">
     <div class="bb-item-summary-header-text hidden-xs">
-      <h3><span>{{bb.current_item.service.name}}</span></h3>
+      <h3>{{bb.current_item.service.name}}</h3>
     </div>
   </div>
   <ul class="bb-item-summary-list">
     <li class="visible-xs bb-confirmation-summary-item">
-        <div class="bb-summary-label">Service
+        <div
+          class="bb-summary-label"
+          translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.SERVICE_LBL">
         </div>
         <div class="bb-summary-value">{{bb.current_item.service.name}}
         </div>
     </li>
-    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.duration">
-      <div class="bb-summary-label">Duration
+    <li
+      class="bb-confirmation-summary-item"
+      ng-show="bb.current_item.duration">
+      <div
+        class="bb-summary-label"
+        translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.DURATION_LBL">
       </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.duration | time_period}}</span>
-      </div>
-    </li>
-    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.resource && bb.current_item.resource.name">
-      <div class="bb-summary-label">Resource
-      </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.resource.name}}</span>
-      </div>
-    </li>
-    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.person && bb.current_item.person.name">
-      <div class="bb-summary-label">Person
-      </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.person.name}}</span>
+      <div class="bb-summary-value">
+        <span>{{bb.current_item.duration | time_period}}</span>
       </div>
     </li>
-    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.price">
-      <div class="bb-summary-label">Price
+    <li
+      class="bb-confirmation-summary-item"
+      ng-show="bb.current_item.resource && bb.current_item.resource.name">
+      <div
+        class="bb-summary-label"
+        translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.RESOURCE_LBL">
       </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.price | currency}}</span>
+      <div class="bb-summary-value">
+        <span>{{bb.current_item.resource.name}}</span>
       </div>
     </li>
-    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.date">
-      <div class="bb-summary-label">Date
-      </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'dddd D MMMM'}}</span>
+    <li
+      class="bb-confirmation-summary-item"
+      ng-show="bb.current_item.person && bb.current_item.person.name">
+      <div
+        class="bb-summary-label"
+        translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.PERSON_LBL"></div>
+      <div class="bb-summary-value">
+        <span>{{bb.current_item.person.name}}</span>
       </div>
     </li>
-    <li class="bb-confirmation-summary-item" ng-show="bb.current_item.time">
-      <div class="bb-summary-label">Time
+    <li
+      class="bb-confirmation-summary-item"
+      ng-show="bb.current_item.price">
+      <div
+        class="bb-summary-label"
+        translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.PRICE_LBL"></div>
+      <div class="bb-summary-value">
+        <span>{{bb.current_item.price | currency}}</span>
       </div>
-      <div class="bb-summary-value"><span>{{bb.current_item.startDatetime() | datetime: 'LT'}}</span>
+    </li>
+    <li
+      class="bb-confirmation-summary-item"
+      ng-show="bb.current_item.date">
+      <div
+        class="bb-summary-label"
+        translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.DATE_LBL">
+      </div>
+      <div class="bb-summary-value">
+        <span>{{bb.current_item.startDatetime() | datetime: 'dddd D MMMM'}}</span>
+      </div>
+    </li>
+    <li
+      class="bb-confirmation-summary-item"
+      ng-show="bb.current_item.time">
+      <div
+        class="bb-summary-label"
+        translate="PUBLIC_BOOKING.BASKET_ITEM_SUMMARY.TIME_LBL">
+      </div>
+      <div class="bb-summary-value">
+        <span>{{bb.current_item.startDatetime() | datetime: 'LT'}}</span>
       </div>
     </li>
   </ul>

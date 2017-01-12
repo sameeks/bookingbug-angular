@@ -11,12 +11,16 @@
     <uib-tab>
 
       <uib-tab-heading>
-        <i class="fa fa-calendar-plus-o"></i> <span translate="ADMIN_BOOKING.QUICK_PICK.MAKE_BOOKING"></span>
+        <i class="fa fa-calendar-plus-o"></i>
+        <span translate="ADMIN_BOOKING.QUICK_PICK.MAKE_BOOKING_TAB_HEADING"></span>
       </uib-tab-heading>
       <br/>
 
       <!-- Make booking tab START -->
-      <ng-form bb-form bb-form-route="calendar" name="appointmentBookingForm">
+      <ng-form
+        bb-form
+        bb-form-route="calendar"
+        name="appointmentBookingForm">
 
         <div
           bb-services="{allow_single_pick: true}"
@@ -34,14 +38,19 @@
             ng-model="$bbServicesCtrl.$scope.service"
             ng-options="s.name for s in (filtered_items | orderBy:'name' ) track by s.id"
             required="true">
-            <option translate="ADMIN_BOOKING.QUICK_PICK.SELECT_A_SERVICE" value=""></option>
+            <option
+              translate="ADMIN_BOOKING.QUICK_PICK.SERVICE_DEFAULT_OPTION"
+              value="">
+            </option>
           </select>
 
           <div ng-messages="appointmentBookingForm.service.$error" role="alert">
 
             <div ng-if="appointmentBookingForm.service.$dirty || appointmentBookingForm.$submitted">
 
-              <div class="error-message" ng-message="required">
+              <div
+                class="error-message"
+                ng-message="required">
                 <span translate="ADMIN_BOOKING.QUICK_PICK.SERVICE_REQUIRED_MSG"></span>
               </div>
 
@@ -51,9 +60,10 @@
 
         </div>
 
-        <div bb-people
-             class="form-group"
-             ng-if="appointmentBookingForm.service.$modelValue && bb.company.$has('people')">
+        <div
+          bb-people
+          class="form-group"
+          ng-if="appointmentBookingForm.service.$modelValue && bb.company.$has('people')">
 
           <label translate="ADMIN_BOOKING.QUICK_PICK.PERSON_LABEL"></label>
 
@@ -61,7 +71,10 @@
                   name="person"
                   ng-model="$bbPeopleCtrl.$scope.person"
                   ng-options="p.name for p in (bookable_people | orderBy:'name') track by p.id">
-            <option translate="ADMIN_BOOKING.QUICK_PICK.ANY_PERSON" value=""></option>
+            <option
+              translate="ADMIN_BOOKING.QUICK_PICK.PERSON_DEFAULT_OPTION"
+              value="">
+            </option>
           </select>
 
         </div>
@@ -78,7 +91,10 @@
             name="person"
             ng-model="$bbResourcesCtrl.$scope.resource"
             ng-options="r.name for r in (bookable_resources | orderBy:'name') track by r.id">
-            <option translate="ADMIN_BOOKING.QUICK_PICK.ANY_RESOURCE" value=""></option>
+            <option
+              translate="ADMIN_BOOKING.QUICK_PICK.RESOURCE_DEFAULT_OPTION"
+              value="">
+            </option>
           </select>
 
         </div>
@@ -87,7 +103,7 @@
           class="btn btn-primary"
           ng-click="submitForm()"
           type="button"
-          translate="ADMIN_BOOKING.QUICK_PICK.BOOK">
+          translate="ADMIN_BOOKING.QUICK_PICK.NEXT_BTN">
         </button>
 
       </ng-form>
@@ -99,7 +115,8 @@
     <uib-tab ng-show="!bb.hide_block">
 
       <uib-tab-heading>
-        <i class="fa fa-calendar-minus-o"></i> <span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME"></span>
+        <i class="fa fa-calendar-minus-o"></i>
+        <span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME_TAB_HEADING"></span>
       </uib-tab-heading>
       <br/>
 
@@ -111,7 +128,10 @@
 
         <bb-admin-resources-dropdown form-ctrl="blockTimeForm"></bb-admin-resources-dropdown>
 
-        <div class="form-group" ng-init="blockWholeDay = false" ng-hide="hideBlockAllDay">
+        <div
+          class="form-group"
+          ng-init="blockWholeDay = false"
+          ng-hide="hideBlockAllDay">
 
           <label>
             <span translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_WHOLE_DAY"></span> &nbsp;&nbsp;
@@ -119,20 +139,27 @@
               class="switch-primary switch-small"
               ng-model="blockWholeDay"
               ng-change="changeBlockDay(blockWholeDay)"
-              on-label="{{ 'ADMIN_BOOKING.QUICK_PICK.YES' | translate }}"
-              off-label="{{ 'ADMIN_BOOKING.QUICK_PICK.NO' | translate }}">
+              on-label="{{ 'ADMIN_BOOKING.QUICK_PICK.YES_OPTION' | translate }}"
+              off-label="{{ 'ADMIN_BOOKING.QUICK_PICK.NO_OPTION' | translate }}">
             </toggle-switch>
           </label>
 
         </div>
 
-        <div class="row" ng-hide="blockWholeDay">
+        <div
+          class="row"
+          ng-hide="blockWholeDay">
 
           <div class="col-md-6">
 
             <div class="form-group">
-              <label translate="ADMIN_BOOKING.QUICK_PICK.FROM"></label>
-              <div bb-date-time-picker date="bb.from_datetime" max-date="bb.to_datetime" min-date="bb.min_date"></div>
+              <label translate="ADMIN_BOOKING.QUICK_PICK.FROM_LBL"></label>
+              <div
+                bb-date-time-picker
+                date="bb.from_datetime"
+                max-date="bb.to_datetime"
+                min-date="bb.min_date">
+              </div>
             </div>
 
           </div>
@@ -140,8 +167,13 @@
           <div class="col-md-6">
 
             <div class="form-group">
-              <label translate="ADMIN_BOOKING.QUICK_PICK.TO"></label>
-              <div bb-date-time-picker date="bb.to_datetime" min-date="bb.from_datetime" max-date="bb.max_date"></div>
+              <label translate="ADMIN_BOOKING.QUICK_PICK.TO_LBL"></label>
+              <div
+                bb-date-time-picker
+                date="bb.to_datetime"
+                min-date="bb.from_datetime"
+                max-date="bb.max_date">
+              </div>
             </div>
 
           </div>
@@ -151,7 +183,8 @@
         <div
           class="bb-form"
           ng-show="block_questions && block_questions.hasQuestions"
-          ng-form name="booking_questions_form"
+          ng-form
+          name="booking_questions_form"
           novalidate
           role="form">
 
@@ -165,15 +198,18 @@
             ng-if="question.currentlyShown"
             ng-repeat="question in block_questions.questions">
 
-            <label class="control-label col-sm-4" for="{{question.id}}" ng-hide="question.detail_type == 'check'">
-              {{question.name}} <span ng-show="question.required">*</span>
+            <label
+              class="control-label col-sm-4"
+              for="{{question.id}}"
+              bb-question-label="question">
+              {{question.name}}
             </label>
 
-            <div class="col-sm-4 hidden-xs" ng-show="question.detail_type == 'check'"> &nbsp;</div>
-
             <div class="col-sm-5">
-              <input bb-question="question"/>
-              <span ng-show="question.detail_type == 'check' && question.required">*</span>
+              <input
+                bb-question="question"
+                class="form-control"
+              />
             </div>
 
             <div class="col-sm-offset-4 messages">
@@ -181,8 +217,8 @@
               <div
                 class="error-message"
                 ng-show="booking_questions_form['q' + question.id].$invalid &&
-                         ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )">
-                This field is required
+                         ( booking_questions_form['q' + question.id].$dirty || booking_form.submitted )"
+                translate="ADMIN_BOOKING.QUICK_PICK.FIELD_REQUIRED">
               </div>
 
             </div>
@@ -195,7 +231,7 @@
           class="btn btn-primary"
           ng-click="blockTime(blockTimeForm)"
           ng-disabled="loading"
-          translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME"
+          translate="ADMIN_BOOKING.QUICK_PICK.BLOCK_TIME_BTN"
           type="button">
         </button>
 

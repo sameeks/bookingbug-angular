@@ -29,8 +29,7 @@ angular.module('BB.Directives').directive 'bbDurations', () ->
   controller : 'DurationList'
 
 
-angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs,
-  $rootScope, $q, $filter, PageControllerService, AlertService, ValidatorService, LoadingService) ->
+angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $rootScope, $q, $filter, PageControllerService, AlertService, ValidatorService, LoadingService, $translate) ->
 
   $scope.controller = "public.controllers.DurationList"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -114,11 +113,10 @@ angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs,
       return true
     else
       AlertService.clear()
-      AlertService.add("danger", { msg: "You need to select a duration" })
+      AlertService.add("danger", { msg: $translate.instant('PUBLIC_BOOKING.DURATION_LIST.DURATON_NOT_SELECTED_ALERT')})
       return false
 
 
   # when the current item is updated, reload the duration data
   $scope.$on "currentItemUpdate", (event) ->
     $scope.loadData()
-

@@ -7,7 +7,7 @@
   }
 
   .panel-default {
-    border-bottom: none;
+    // border-bottom: none;
     margin-bottom: 45px;
   }
 
@@ -24,6 +24,9 @@
       padding-bottom: 15px;
       padding-top: 15px;
       border-bottom: 1px solid $bb-border;
+      &:last-child {
+        border-bottom: none;
+      }
       &.header {
         padding-top: 00;
         font-weight: bold;
@@ -122,7 +125,7 @@
       @media (max-width: $screen-xs-max) {
         padding-top: 100%;
       }
-      .bb-icon, .glyphicon {
+      .bb-icon, .fa {
         color: #FFF;
       margin-right: 5px;
       }

@@ -24,12 +24,7 @@
 *    <file name="index.html">
 *   <div bb-api-url='https://uk.bookingbug.com'>
 *   <div  bb-widget='{company_id:21}'>
-*     <div bb-client-details>
-*        <p>company_id: {{client_details.company_id}}</p>
-*        <p>offer_login: {{client_details.offer_login}}</p>
-*        <p>ask_address: {{client_details.ask_address}}</p>
-*        <p>no_phone: {{client_details.no_phone}}</p>
-*      </div>
+*     <div bb-client-details></div>
 *     </div>
 *     </div>
 *   </file>
@@ -52,7 +47,7 @@ angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache
       if has_content
         element.html(clone).show()
       else
-        $q.when($templateCache.get('client_form.html')).then (template) ->
+        $q.when($templateCache.get('_client_details.html')).then (template) ->
           element.html(template).show()
           $compile(element.contents())(scope)
 
@@ -168,6 +163,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
   ###
   $scope.setReady = () =>
+
     $scope.client.setClientDetails($scope.client_details)
 
     if !$scope.suppress_client_create

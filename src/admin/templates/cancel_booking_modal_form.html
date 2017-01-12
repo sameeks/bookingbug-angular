@@ -1,24 +1,66 @@
 <div class="modal-header">
-  <h3 class="modal-title"><span translate="ADMIN.MODAL.CANCEL_BOOKING.TITLE"></span></h3>
+  <h3
+    class="modal-title"
+    translate="ADMIN.CANCEL_BOOKING_MODAL.TITLE">    
+  </h3>
 </div>
-<form name="modal_form" ng-submit="$close(model)">
-  <div ng-show="loading" class="loader"></div>
+<form
+  name="modal_form"
+  ng-submit="$close(model)">
+  <div
+    ng-show="loading"
+    class="loader">    
+  </div>
+
   <div class="modal-body">
     <h4>{{booking.full_describe}}</h4>
     <div class="checkbox">
       <label>
-        <input type="checkbox" name="notify" ng-model="model.notify">
-        <span translate="ADMIN.MODAL.CANCEL_BOOKING.SEND_EMAIL" translate-values="{email:'{{booking.client_email}}'}"></span>
+        <input
+          type="checkbox" 
+          name="notify"
+          ng-model="model.notify">
+        <span
+          translate="ADMIN.CANCEL_BOOKING_MODAL.SEND_EMAIL_LBL"
+          translate-values="{email: booking.client_email}">
+        </span>
       </label>
     </div>
-    <div class="form-group" id="bb-modal-cancel-reason">
-      <label for="reason" class="form-label"><span translate="ADMIN.MODAL.CANCEL_BOOKING.REASON"></span></label>
-      <input id="reason" name="reason" type="text" class="form-control"
-             ng-model="model.cancel_reason">
+    <div
+      class="form-group"
+      id="bb-modal-cancel-reason">
+      <label
+        for="reason"
+        class="form-label"
+        translate="ADMIN.CANCEL_BOOKING_MODAL.REASON">
+      </label>
+      <input
+        id="reason"
+        name="reason"
+        type="text"
+        class="form-control"
+        ng-model="model.cancel_reason"
+      />
     </div>
+
   </div>
+
   <div class="modal-footer">
-    <input type="submit" class="btn btn-primary" ng-disabled="loading" value="{{ 'COMMON.BTN.OK' | translate }}">
-    <button class="btn btn-default" ng-click="$dismiss()"><span translate="COMMON.BTN.CLOSE"></span></button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      ng-disabled="loading"
+      translate="PUBLIC_BOOKING.CANCEL_BOOKING_MODAL.OK_BTN">
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-default"
+      ng-click="$dismiss()"
+      translate="PUBLIC_BOOKING.CANCEL_BOOKING_MODAL.CLOSE_BTN">
+    </button>
+
   </div>
+
 </form>

@@ -19,19 +19,20 @@ bbFormDirective = ($bbug, $window, ValidatorService, $timeout, GeneralOptions) -
 
   link = (scope, elem, attrs, ctrls) ->
     $bbPageCtrl = null
+    $formCtrl = null
 
     init = ->
-      scope.form = ctrls[0]
+      $formCtrl = ctrls[0]
       $bbPageCtrl = ctrls[1]
       scope.submitForm = submitForm
-      elem.on "submit", submitForm #doesn't work with ng-form just regular form
+      elem.on "submit", submitForm # doesn't work with ng-form just regular form
       return
 
     submitForm = () ->
-      scope.form.$setSubmitted()
+      $formCtrl.$setSubmitted()
       $timeout(scrollAndFocusOnInvalid, 100)
 
-      isValid = ValidatorService.validateForm(scope.form)
+      isValid = ValidatorService.validateForm($formCtrl)
 
       if isValid
         serveBBPage()
@@ -51,7 +52,7 @@ bbFormDirective = ($bbug, $window, ValidatorService, $timeout, GeneralOptions) -
     scrollAndFocusOnInvalid = () ->
       invalidFormGroup = elem.find('.has-error:first')
 
-      if invalidFormGroup and invalidFormGroup.length > 0 and !scope.form.raise_alerts
+      if invalidFormGroup and invalidFormGroup.length > 0 and !$formCtrl.raise_alerts
 
         if 'parentIFrame' of $window
           parentIFrame.scrollToOffset(0, invalidFormGroup.offset().top - GeneralOptions.scroll_offset)

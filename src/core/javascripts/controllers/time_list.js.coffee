@@ -33,9 +33,7 @@ angular.module('BB.Directives').directive 'bbTimes', () ->
   scope : true
   controller : 'TimeList'
 
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
-  $scope,  $rootScope, $q, TimeService, AlertService, BBModel,
-  DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService, ErrorService) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService, ErrorService, $translate) ->
 
   $scope.controller = "public.controllers.TimeList"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -260,7 +258,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
         if err.status == 404  && err.data && err.data.error && err.data.error == "No bookable events found"
           if $scope.data_source && $scope.data_source.person
             AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'))
-            $scope.setLoaded $scope
+            $scope.setLoaded $scope 
           else if  $scope.data_source && $scope.data_source.resource
             AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'))
             $scope.setLoaded $scope
@@ -308,7 +306,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
   $scope.setReady = () ->
     if !$scope.data_source.time
       AlertService.clear()
-      AlertService.add("danger", { msg: "You need to select a time slot" })
+      AlertService.add("danger", { msg: $translate.instant('PUBLIC_BOOKING.TIME.TIME_NOT_SELECTED_ALERT') })
       return false
     else
       if $scope.data_source.reserve_ready

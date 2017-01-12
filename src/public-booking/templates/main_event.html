@@ -1,20 +1,30 @@
-<div class="header" aria-hidden="{{!isLoaded || coveredByModal}}">
+<div
+  class="header"
+  aria-hidden="{{!isLoaded || coveredByModal}}">
 
   <div bb-form-data-store></div>
 
   <div bb-language-picker></div>
-
-  <div bb-breadcrumbs ng-init="setRoute([
-    {page:'map', title: 'Select a store'},
-    {page:'event_list', title: 'Select a date'},
-    {page:'event', title: 'Select tickets'},
-    {page:'checkout_event', title: 'Checkout', disable_breadcrumbs: true},
-    {page:'confirmation', title: 'Finish'}
+  
+  <div
+    bb-breadcrumbs
+    ng-init="setRoute([
+      {page:'map', title: 'Select a store'},
+      {page:'event_list', title: 'Select a date'},
+      {page:'event', title: 'Select tickets'},
+      {page:'checkout_event', title: 'Checkout', disable_breadcrumbs: true},
+      {page:'confirmation', title: 'Finish'}
     ])">
   </div>
 
-  <div class="alerts" bb-scroll-to="alert:raised" bb-always-scroll>
-    <div uib-alert ng-repeat="alert in $root.alerts" ng-class="'alert-' + alert.type">
+  <div
+    class="alerts"
+    bb-scroll-to="alert:raised"
+    bb-always-scroll>
+    <div
+      uib-alert
+      ng-repeat="alert in $root.alerts"
+      ng-class="'alert-' + alert.type">
       <ul>
         <li ng-bind-html="alert.msg"></li>
       </ul>
@@ -23,11 +33,13 @@
 
 </div>
 
-<div class="content" aria-hidden="{{!isLoaded || coveredByModal}}">
+<div
+  class="content"
+  aria-hidden="{{!isLoaded || coveredByModal}}">
 
   <div bb-content class="ng-cloak"></div>
 
-  <div bb-loading class="bb-loader" >
+  <div bb-loading class="bb-loader">
     <div id="loading_icon">
       <div id="wait_graphic">&nbsp;</div>
     </div>
@@ -35,8 +47,20 @@
 
 </div>
 
-<div bb-dynamic-footer class="footer" aria-hidden="{{!isLoaded || coveredByModal}}">
+<div
+  bb-dynamic-footer
+  class="footer"
+  aria-hidden="{{!isLoaded || coveredByModal}}">
   <div ng-show="isLoaded" class="powered-by">
-    <span>Bookings powered by <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"><span style="color:#087f94">booking</span><span style="color:#88c66f">bug</span></a></span>
+    <span>
+      <span translate="PUBLIC_BOOKING.MAIN.POWERED_BY"></span>
+      <a
+        href="//www.bookingbug.com"
+        style="text-decoration:none"
+        target="_blank">
+        <span style="color:#087f94">booking</span>
+        <span style="color:#88c66f">bug</span>
+      </a>
+    </span>
   </div>
 </div>

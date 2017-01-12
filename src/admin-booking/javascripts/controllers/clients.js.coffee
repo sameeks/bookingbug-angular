@@ -51,10 +51,10 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
 
       if err.data and err.data.error is "Please Login"
         loader.setLoaded()
-        AlertService.raise('EMAIL_ALREADY_REGISTERED_ADMIN')
+        AlertService.raise('EMAIL_IN_USE')
       else if err.data and err.data.error is "Sorry, it appears that this phone number already exists"
         loader.setLoaded()
-        AlertService.raise('PHONE_NUMBER_ALREADY_REGISTERED_ADMIN')
+        AlertService.raise('PHONE_NUMBER_IN_USE')
       else
         loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -116,7 +116,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
 
   $scope.clearSearch = () ->
     $scope.clients.initialise()
-    $scope.typehead_result = null
+    $scope.typeahead_result = null
     $scope.search_complete = false
 
 

@@ -177,7 +177,6 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $rootScope,
   ###
   $scope.checkout = (route) =>
 
-
     if $scope.bb.basket.settings and $scope.bb.basket.settings.requires_deal && !$scope.bb.basket.hasDeal()
       AlertService.raise('GIFT_CERTIFICATE_REQUIRED')
       return false

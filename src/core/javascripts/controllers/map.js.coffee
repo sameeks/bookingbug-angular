@@ -9,7 +9,7 @@
 *
 * @description
 *
-* Loads a list of maps for the currently in scope company
+* Search and find child companies using address search or geolocation. 
 *
 * <pre>
 * restrict: 'AE'
@@ -40,9 +40,7 @@ angular.module('BB.Directives').directive 'bbMap', () ->
   scope : true
   controller : 'MapCtrl'
 
-angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
-  $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q,
-  $window, $timeout, CompanyStoreService, ErrorService, $log) ->
+angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, GeolocationService) ->
 
   $scope.controller = "public.controllers.MapCtrl"
 
@@ -61,9 +59,6 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   $scope.can_filter_by_service = $scope.options.filter_by_service or false # If set to true then the checkbox toggle for showing stores with/without the selected service will be shown in the template
   $scope.filter_by_service = $scope.options.filter_by_service or false # The aforementioned checkbox is bound to this value which can be true or false depending on checked state, hence why we cannot use filter_by_service to show/hide the checkbox
   $scope.default_zoom = $scope.options.default_zoom or 6
-
-  cc = CompanyStoreService.country_code
-  $scope.distance_unit = if _.contains(["gb", "us", "jp"], cc) then "miles" else "km"
 
   map_ready_def               = $q.defer()
   $scope.mapLoaded            = $q.defer()
@@ -120,12 +115,12 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
         latlong = new google.maps.LatLng(comp.address.lat,comp.address.long)
         $scope.mapBounds.extend(latlong)
 
-    $scope.mapOptions =  {
+    $scope.mapOptions = {
         center: $scope.mapBounds.getCenter(),
         zoom: $scope.default_zoom,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControl:true,
-      mapTypeControlOptions: {
+        mapTypeControl:true,
+        mapTypeControlOptions: {
           style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU
       }
     }
@@ -166,6 +161,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
       deferred.resolve()
     return deferred.promise
 
+
   ###**
   * @ngdoc method
   * @name $scope.filterByService
@@ -186,6 +182,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
 
     $timeout ->
       setMarkers()
+
 
   mapInit = () ->
     for comp in $scope.companies
@@ -236,7 +233,6 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   * @description
   * Create title for the map selection step
   ###
-  # create title for the map selection step
   $scope.title = ->
     ci = $scope.bb.current_item
     if ci.category and ci.category.description
@@ -308,7 +304,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
 
     req = {
       query : prms.address
-      types: ['shopping_mall', 'store', 'embassy']
+      types: ['shopping_mall', 'store', 'embassy'] # narrow place types to improve results
     }
 
     req.bounds = prms.bounds if prms.bounds
@@ -376,32 +372,6 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
       return true
 
 
-  haversine = (latlong, marker) ->
-
-    pi = Math.PI
-    R = 6371  #equatorial radius
-
-    lat1 = latlong.lat()
-    lon1 = latlong.lng()
-
-    lat2 = marker.position.lat()
-    lon2 = marker.position.lng()
-
-    chLat = lat2-lat1
-    chLon = lon2-lon1
-
-    dLat = chLat*(pi/180)
-    dLon = chLon*(pi/180)
-
-    rLat1 = lat1*(pi/180)
-    rLat2 = lat2*(pi/180)
-
-    a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2)
-    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
-    d = R * c
-
-
   ###**
   * @ngdoc method
   * @name showClosestMarkers
@@ -409,29 +379,37 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   * @description
   * Display the closest markers
   *
-  * @param {array} latlong Using for determinate the closest markers
+  * @param {Object} centre The map centre
   ###
-  $scope.showClosestMarkers = (latlong) ->
+  $scope.showClosestMarkers = (centre) ->
 
     distances = []
     distances_with_services = []
 
     for marker in $scope.mapMarkers
 
-      km = haversine(latlong, marker)
+      map_centre = {
+        lat:  centre.lat()
+        long: centre.lng()
+      }
+
+      marker_position = {
+        lat:  marker.position.lat()
+        long: marker.position.lng()
+      }
+
+      marker.distance = GeolocationService.haversine(map_centre, marker_position)
 
       if !$scope.showAllMarkers
         marker.setVisible false
 
-      # set distance to kilometres or convert to miles
-      marker.distance = km
-      marker.distance *= 0.621371192 if $scope.distance_unit == "miles"
-
       if marker.distance < $scope.range_limit
         distances.push marker
         distances_with_services.push marker if marker.company.has_service
+    
     distances.sort (a, b) ->
       a.distance - b.distance
+    
     distances_with_services.sort (a, b) ->
       a.distance - b.distance
 
@@ -471,7 +449,9 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     $scope.myMap.fitBounds(localBounds)
     openDefaultMarker()
 
+
   openDefaultMarker = () ->
+
     return if $scope.options and $scope.options.no_default_location_details
 
     open_marker_index = 0
@@ -496,7 +476,9 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
   * @param {object} marker The marker
   ###
   $scope.openMarkerInfo = (marker) ->
+
     $timeout ->
+
       $scope.currentMarker = marker
       $scope.myInfoWindow.open($scope.myMap, marker)
       for shown_marker in $scope.shownMarkers
@@ -661,3 +643,4 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element,
     $scope.loc = null
     $scope.reverse_geocode_address = null
     $scope.address = null
+

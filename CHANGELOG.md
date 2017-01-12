@@ -3,15 +3,36 @@ All notable changes to this project will be documented in this file using [CHANG
 
 ## [Unreleased]
 
+### Added
+* [i18n](https://github.com/BookingBug/bookingbug-angular/wiki/1.1-i18n) support using [angular-translate](https://angular-translate.github.io/): 
+* `endDateTime` helper method to the core TimeSlot model which returns the end time as a Moment object
+* Added `bbMonthCalendar` directive for selecting date and time using a tranditional month view
+* Added bbWalletRemainder directive for calculating remainuing wallet balance after basket checkout
+* Added `distance` filter which uses locale to determine the measurement unit to use
+
+
+### Changed
+* All templates have been updated to use translation keys
+* All controllers/models have been updated use the $translate service
+* Localized moment format tokens are now used throughout the SDK to support i10n
+* bbDayList has been enhanced so that it supports localisation.  The directive shows the next 5 weeks of availability rather than a traditional month view so that past days aren't displayed
+* haversine function has been moved from bbMap to the GeolocationService
+
+### Removed
+* use_i18n from GeneralOptionsProvider as i18n is now enabled by default
+* `print_time`, `print_end_time`, `print_time12`, and `print_end_time12` methods and `time_12` and `time_24` properties have been removed from the TimeSlot model in favour of `datetime` and `endDateTime()`.
+
+
 ## [2.1.0] - 2016-11-08
-###Added
-- New CompanyStoreService has been created to share company data around, e.g country_code and currency_code
+### Added
+- New CompanyStoreService has been created to share company data, e.g country_code and currency_code
+
 ### Changed
 - BREAKING: Replaced SettingsService with (new) CompanyStoreService and (the existing) GeneralOptions provider. 
   The following initilisation options from bbWiget have been moved to be configurable options in GeneralOptions:
     - scroll_offset
     - update_document_title
-    - use_local_time_zone - if set to true display_time_zone will be set using moment.guess() 
+    - use_local_time_zone
     - use_i18n
   Use your projects config block to set them:
 
@@ -35,7 +56,8 @@ All notable changes to this project will be documented in this file using [CHANG
   templates/public/queuer_position.html  
   SETTINGS
   templates/admin-table/admin_form.html
-  templates/admin-table/admin_table_main.html  
+  templates/admin-table/admin_table_main.html
+  
   Before change $templateCache would register 'login/admin_login.html' template as 'admin_login.html'.
   After change $templateCache registers 'login/admin_login.html' template as 'login/admin_login.html'.
 - Month picker now works with angular carousel (removed angular slick from month picker)

@@ -34,7 +34,6 @@ angular.module('BB.Services').provider 'GeneralOptions', ->
     calendar_slot_duration: 5
     use_local_time_zone: false 
     display_time_zone: null
-    use_i18n: false 
     update_document_title: false 
     scroll_offset: 0
   }
