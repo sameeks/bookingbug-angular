@@ -464,7 +464,7 @@ BBCtrl = ($scope, $location, $rootScope, halClient, $window, $http, $q, $timeout
           purchase_id: prms.total_id
         totalDefer = $q.defer()
         getPurchaseTotal = PurchaseService.query(params).then (total) -> 
-          $scope.bb.purchase = total
+          $scope.bb.purchase = total 
           total.$getBookings().then (bookings) ->
             createBasketFromBookings(bookings, totalDefer)
           , (err) ->

@@ -35,9 +35,6 @@ angular.module('BB.Services').factory 'WidgetModalService', ($uibModal, $timeout
         if usingStudioInterface?
           merge_resources: GeneralOptions.merge_resources
           merge_people: GeneralOptions.merge_people
-          if $scope.config.movingBooking then $scope.config.first_page = 'calendar' else 'quick_pick'
-        else 
-          $scope.config.first_page = 'calendar'
 
         $scope.cancel = () ->
           WidgetModalService.close()

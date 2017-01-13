@@ -190,7 +190,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   fcEventDrop = (event, delta, revertFunc) -> # we need a full move cal if either it has a person and resource, or they've dragged over multiple days
 
     # not blocked and is a change in person/resource, or over multiple days
-    if event.status !=3 && (event.person_id && event.resource_id || delta.days() > 0)
+    if event.status isnt 3 and (event.person_id and event.resource_id or delta.days() > 0)
       start = event.start
       end = event.end
       item_defaults =
@@ -240,41 +240,41 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     type = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getView').type
     service = _.findWhere(companyServices, {id: event.service_id})
     if !$scope.model  # if not a single item view
-      if type == "listDay"
+      if type is "listDay"
         link = $bbug(element.children()[2])
         if link
           a = link.children()[0]
           if a
-            if event.person_name && (!calOptions.type || calOptions.type == "person")
+            if event.person_name and (!calOptions.type or calOptions.type is "person")
               a.innerHTML = event.person_name + " - " + a.innerHTML
-            else if event.resource_name && calOptions.type == "resource"
+            else if event.resource_name and calOptions.type is "resource"
               a.innerHTML = event.resource_name + " - " + a.innerHTML
-      else if type == "agendaWeek" || type == "month"
+      else if type is "agendaWeek" or type is "month"
         link = $bbug(element.children()[0])
         if link
           a = link.children()[1]
           if a
-            if event.person_name && (!calOptions.type || calOptions.type == "person")
+            if event.person_name and (!calOptions.type or calOptions.type is "person")
               a.innerHTML = event.person_name + "<br/>" + a.innerHTML
-            else if event.resource_name && calOptions.type == "resource"
+            else if event.resource_name and calOptions.type is "resource"
               a.innerHTML = event.resource_name + "<br/>" + a.innerHTML
-    if service && type != "listDay"
+    if service and type isnt "listDay"
       element.css('background-color', service.color)
       element.css('color', service.textColor)
       element.css('border-color', service.textColor)
     element
 
   fcEventAfterRender = (event, elements, view) ->
-    if not event.rendering? or event.rendering != 'background'
+    if not event.rendering? or event.rendering isnt 'background'
       PrePostTime.apply(event, elements, view, $scope)
 
   fcSelect = (start, end, jsEvent, view, resource) -> # For some reason clicking on the scrollbars triggers this event therefore we filter based on the jsEvent target
-    if jsEvent.target.className == 'fc-scroller'
+    if jsEvent.target.className is 'fc-scroller'
       return
 
     view.calendar.unselect()
 
-    if !calOptions.enforce_schedules || (isTimeRangeAvailable(start, end, resource) || (Math.abs(start.diff(end, 'days')) == 1 && dayHasAvailability(start)))
+    if !calOptions.enforce_schedules or (isTimeRangeAvailable(start, end, resource) or (Math.abs(start.diff(end, 'days')) is 1 and dayHasAvailability(start)))
       if Math.abs(start.diff(end, 'days')) > 0
         end.subtract(1, 'days')
         end = setTimeToMoment(end, calOptions.max_time)
@@ -283,9 +283,9 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         date: start.format('YYYY-MM-DD')
         time: (start.hour() * 60 + start.minute())
 
-      if resource && resource.type == 'person'
+      if resource and resource.type is 'person'
         item_defaults.person = resource.id.substring(0, resource.id.indexOf('_'))
-      else if resource && resource.type == 'resource'
+      else if resource and resource.type is 'resource'
         item_defaults.resource = resource.id.substring(0, resource.id.indexOf('_'))
 
       getCompanyPromise().then (company) ->
@@ -328,19 +328,19 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     st = moment(start.toISOString()).unix()
     en = moment(end.toISOString()).unix()
     events = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', (event)->
-      event.rendering == 'background' && st >= event.start.unix() && event.end && en <= event.end.unix() && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
+      event.rendering is 'background' and st >= event.start.unix() and event.end and en <= event.end.unix() and ((resource and parseInt(event.resourceId) is parseInt(resource.id)) or !resource)
     )
     return events.length > 0
 
   dayHasAvailability = (start)->
     events = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', (event)->
-      event.rendering == 'background' && event.start.year() == start.year() && event.start.month() == start.month() && event.start.date() == start.date()
+      event.rendering is 'background' and event.start.year() is start.year() and event.start.month() is start.month() and event.start.date() is start.date()
     )
 
     return events.length > 0
 
   selectedResourcesListener = (newValue, oldValue) ->
-    if newValue != oldValue
+    if newValue isnt oldValue
       assets = []
       angular.forEach(newValue, (asset)->
         assets.push asset.id
@@ -362,7 +362,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       if vm.showAll
         BBAssets.getAssets(company).then((assets)->
           if calOptions.type
-            assets = _.filter assets, (a) -> a.type == calOptions.type
+            assets = _.filter assets, (a) -> a.type is calOptions.type
 
           for asset in assets
             asset.id = asset.identifier
@@ -382,9 +382,9 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     labelAssembler = if $scope.labelAssembler then $scope.labelAssembler else AdminCalendarOptions.bookings_label_assembler
     blockLabelAssembler = if $scope.blockLabelAssembler then $scope.blockLabelAssembler else AdminCalendarOptions.block_label_assembler
 
-    if booking.status != 3 && labelAssembler
+    if booking.status isnt 3 and labelAssembler
       return TitleAssembler.getTitle(booking, labelAssembler)
-    else if booking.status == 3 && blockLabelAssembler
+    else if booking.status is 3 and blockLabelAssembler
       return TitleAssembler.getTitle(booking, blockLabelAssembler)
 
     return booking.title
@@ -425,7 +425,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     return
 
   editBooking = (booking) ->
-    if booking.status == 3
+    if booking.status is 3
       templateUrl = 'edit_block_modal_form.html'
       title = 'Edit Block'
     else
@@ -438,31 +438,24 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       params:
         locale: $translate.use()
       success: (response) =>
-        if typeof response == 'string'
-          if response == "move"
-            item_defaults = {person: booking.person_id, resource: booking.resource_id}
-            getCompanyPromise().then (company) ->
-              WidgetModalService.open
-                item_defaults: item_defaults
-                company_id: company.id
-                booking_id: booking.id
-                total_id: booking.purchase_ref
-                movingBooking: true 
-                success: (model) =>
-                  refreshBooking(booking)
-                fail: () ->
-                  refreshBooking(booking)
-        if response.is_cancelled
-          uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('removeEvents', [response.id])
-        else
-          booking.title = getBookingTitle(booking)
+        if response is 'move'
+          item_defaults = {person: booking.person_id, resource: booking.resource_id}
+          getCompanyPromise().then (company) ->
+            WidgetModalService.open
+              item_defaults: item_defaults
+              company_id: company.id
+              booking_id: booking.id
+              total_id: booking.purchase_ref
+              first_page: 'calendar'
+              movingBooking: true 
+        else 
           uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
-    return
+          refetchBookingsHandler()
 
   pusherBooking = (res) ->
     if res.id?
       booking = _.first(uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', res.id))
-      if booking && booking.$refetch
+      if booking and booking.$refetch
         booking.$refetch().then () ->
           booking.title = getBookingTitle(booking)
           uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
@@ -497,7 +490,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   lazyUpdateDate = _.debounce(updateDate, 400)
 
   currentDateListener = (newDate, oldDate) ->
-    if newDate != oldDate && oldDate?
+    if newDate isnt oldDate and oldDate?
       lazyUpdateDate(newDate)
     return
 
@@ -537,17 +530,17 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     vm.loading = false
 
     if calOptions.type
-      assets = _.filter assets, (a) -> a.type == calOptions.type
+      assets = _.filter assets, (a) -> a.type is calOptions.type
     vm.assets = assets
 
     # requestedAssets
     if filters.requestedAssets.length > 0
       angular.forEach(vm.assets, (asset)->
         isInArray = _.find(filters.requestedAssets, (id)->
-          return id == asset.id
+          return id is asset.id
         )
 
-        if typeof isInArray != 'undefined'
+        if typeof isInArray isnt 'undefined'
           vm.selectedResources.selected.push asset
       )
 
