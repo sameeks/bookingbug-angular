@@ -34,7 +34,9 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
     $scope.$on 'refetchBookings', refetchBookingsHandler
     $scope.$on 'newCheckout', newCheckoutHandler
-    $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
+    $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler 
+    $rootScope.$on 'booking:moved', () ->
+      refetchBookingsHandler()
 
     getCompanyPromise().then(companyListener)
 
