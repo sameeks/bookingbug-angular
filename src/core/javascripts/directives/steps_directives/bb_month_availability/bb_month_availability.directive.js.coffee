@@ -28,4 +28,4 @@ angular.module('BB.Directives').directive 'bbMonthAvailability', () ->
   restrict: 'A'
   replace: true
   scope : true
-  controller : 'DayList'
+  controller : 'DayListMa'

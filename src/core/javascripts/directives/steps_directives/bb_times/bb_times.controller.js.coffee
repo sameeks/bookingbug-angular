@@ -1,9 +1,6 @@
 'use strict'
 
-
-angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
-  $scope,  $rootScope, $q, TimeService, AlertService, BBModel,
-  DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService, ErrorService) ->
+angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService, ErrorService, $translate) ->
 
   $scope.controller = "public.controllers.TimeList"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -276,7 +273,7 @@ angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element,
   $scope.setReady = () ->
     if !$scope.data_source.time
       AlertService.clear()
-      AlertService.add("danger", { msg: "You need to select a time slot" })
+      AlertService.add("danger", { msg: $translate.instant('PUBLIC_BOOKING.TIME.TIME_NOT_SELECTED_ALERT') })
       return false
     else
       if $scope.data_source.reserve_ready

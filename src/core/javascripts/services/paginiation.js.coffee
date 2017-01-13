@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Services').factory "PaginationService", () ->
+angular.module('BB.Services').factory "PaginationService", ($translate) ->
 
   initialise: (options) ->
     return if !options
@@ -20,9 +20,7 @@ angular.module('BB.Services').factory "PaginationService", () ->
     end   = paginator.current_page * paginator.page_size
     total = if end < paginator.page_size then end else length
     end = if end > total then total else end
-    total = if total >= 100 then "100+" else total
-    paginator.summary =  "#{start} - #{end} of #{total}"
-
+    paginator.summary = $translate.instant('CORE.PAGINATION.SUMMARY', {start: start, end: end, total: total})
 
   checkItems: (paginator, items_loaded) ->
 
@@ -32,4 +30,3 @@ angular.module('BB.Services').factory "PaginationService", () ->
     remaining_items = paginator.num_items - items_loaded
 
     return (items_loaded < (items_traversed + paginator.page_size)) and remaining_items > 0
-

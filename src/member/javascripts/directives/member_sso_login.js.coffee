@@ -1,6 +1,4 @@
-angular.module('BBMember').directive 'memberSsoLogin', ($rootScope,
-  LoginService, $sniffer, $timeout, QueryStringService) ->
-
+angular.module('BBMember').directive 'memberSsoLogin', ($rootScope, LoginService, $sniffer, $timeout, QueryStringService) ->
   scope:
     token: '@memberSsoLogin'
     company_id: '@companyId'

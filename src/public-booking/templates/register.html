@@ -1,0 +1,42 @@
+<div bb-page>
+
+  <div class="page-header">
+    <h1 translate="PUBLIC_BOOKING.REGISTER.HEADING"></h1>
+  </div>
+
+  <div
+    ng-form
+    name="register_form"
+    bb-form>
+
+    <div bb-client-details></div>
+
+    <div class="col-sm-offset-4 col-sm-5">
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        ng-click="submitForm() && checkReady() && routeReady()"
+        translate="PUBLIC_BOOKING.REGISTER.REGISTER_BTN">
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="bb-step-navigation">
+  <div class="row">
+    <div class="col-sm-9 col-sm-push-3 text-right">
+    </div>
+    <div class="col-sm-3 col-sm-pull-9">
+      <button 
+        type="button"
+        class="btn btn-default"
+        bb-debounce
+        ng-click="loadPreviousStep()"
+        ng-show="bb.current_step > 1"
+        translate="PUBLIC_BOOKING.CHECK_ITEMS.BACK_BTN">
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="form-group"
+     ng-class="{
+        'has-error': $bbAdminResourcesDropdownCtrl.formCtrl.resource.$invalid &&
+                     ($bbAdminResourcesDropdownCtrl.formCtrl.$submitted || $bbAdminResourcesDropdownCtrl.formCtrl.resource.$dirty)
+     }">
+
+  <label translate="ADMIN_BOOKING.QUICK_PICK.FOR"></label>
+
+  <select
+    class="form-control"
+    name="resource"
+    ng-model="$bbAdminResourcesDropdownCtrl.pickedResource"
+    ng-change="$bbAdminResourcesDropdownCtrl.changeResource()"
+    ng-options="resource.identifier as resource.name group by resource.group for resource in $bbAdminResourcesDropdownCtrl.resources track by resource.identifier"
+    required="true">
+    <option translate="ADMIN_BOOKING.QUICK_PICK.SELECT" value=""></option>
+  </select>
+
+  <div ng-messages="$bbAdminResourcesDropdownCtrl.formCtrl.resource.$error" role="alert">
+    <div
+      ng-if="$bbAdminResourcesDropdownCtrl.formCtrl.resource.$dirty || $bbAdminResourcesDropdownCtrl.formCtrl.$submitted">
+      <div class="error-message" ng-message="required">
+        <span translate="ADMIN_BOOKING.QUICK_PICK.ASSET_REQUIRED_MSG"></span>
+      </div>
+    </div>
+  </div>
+
+</div>

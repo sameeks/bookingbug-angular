@@ -1,8 +1,6 @@
-'use strict'
-
 angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
-  FormDataStoreService, DateTimeUtilitiesService, SlotDates, ViewportSize, ErrorService) ->
+  FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService) ->
 
   $scope.controller = "public.controllers.TimeRangeList"
 
@@ -57,14 +55,14 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
         timeRange = 7
 
         for size,days of cal_days
-          if size == ViewportSize.getViewportSize()
+          if size == viewportSize.getViewportSize()
             timeRange = days
 
         return timeRange
 
       $scope.time_range_length = calculateDayNum()
 
-      $scope.$on 'ViewportSize:changed', ()->
+      $scope.$on 'viewportSize:changed', ()->
         $scope.time_range_length = null
         $scope.initialise()
 
@@ -503,7 +501,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
     if !$scope.bb.current_item.time
       AlertService.raise('TIME_SLOT_NOT_SELECTED')
       return false
-    else if $scope.bb.moving_booking and $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime) and ($scope.current_item.person_name == $scope.current_item.person.name)
+    else if $scope.bb.moving_booking and $scope.bb.current_item.start_datetime().isSame($scope.bb.current_item.original_datetime) and ($scope.bb.current_item.person_name == $scope.bb.current_item.person.name)
       AlertService.raise('APPT_AT_SAME_TIME')
       return false
     else if $scope.bb.moving_booking

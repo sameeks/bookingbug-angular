@@ -1,10 +1,9 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $uibModal,
-  $document, AlertService, FormDataStoreService, ValidatorService, LoadingService, BBModel) ->
+angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $uibModal, $document, AlertService, FormDataStoreService, ValidatorService, LoadingService, BBModel, $translate) ->
 
   $scope.controller = "public.controllers.DealList"
-  FormDataStoreService.init 'TimeRangeList', $scope, [ 'deals' ]
+  FormDataStoreService.init 'DealList', $scope, [ 'deals' ]
   loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then ->
@@ -89,7 +88,7 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $ui
     if $scope.bb.basket.items and $scope.bb.basket.items.length > 0
       $scope.decideNextPage()
     else
-      AlertService.add('danger', msg: 'You need to select at least one Gift Certificate to continue')
+      AlertService.add('danger', msg: $translate.instant('PUBLIC_BOOKING.DEAL_LIST.CERT_NOT_SELECTED_ALERT'))
 
   ###**
   * @ngdoc method
@@ -102,4 +101,4 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $ui
     if $scope.bb.basket.items and $scope.bb.basket.items.length > 0
       true
     else
-      AlertService.add('danger', msg: 'You need to select at least one Gift Certificate to continue')
+      AlertService.add('danger', msg: $translate.instant('PUBLIC_BOOKING.DEAL_LIST.CERT_NOT_SELECTED_ALERT'))

@@ -1,6 +1,5 @@
 'use strict'
 
-
 # bbSlotGrouper
 # group time slots together based on a given start time and end time
 angular.module('BB.Directives').directive 'bbSlotGrouper', () ->

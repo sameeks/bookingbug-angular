@@ -25,7 +25,7 @@
 * @property {string} pusher The pusher
 * @property {string} pusher_channel The pusher channel
 * @property {string} init_params Initialization of basic parameters
-### 
+###
 angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, AppService) ->
 
   ###**

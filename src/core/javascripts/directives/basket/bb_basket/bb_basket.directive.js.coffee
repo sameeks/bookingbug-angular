@@ -16,7 +16,7 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
     else PathSvc.directivePartial "basket"
   controllerAs : 'BasketCtrl'
 
-  controller : ($scope, $uibModal, $document, BasketService) ->
+  controller : ($scope, $uibModal, $translate, $document, BasketService) ->
     $scope.setUsingBasket true
 
     this.empty = () ->
@@ -45,13 +45,7 @@ angular.module('BB.Directives').directive 'bbBasket', (PathSvc) ->
 
     $scope.$watch ->
       $scope.basketItemCount = len = if $scope.bb.basket then $scope.bb.basket.length() else 0
-      if not len
-        $scope.basketStatus = "empty"
-      else
-        if len is 1
-          $scope.basketStatus = "1 item in your basket"
-        else
-          $scope.basketStatus = len + " items in your basket"
+      $scope.basketStatus = $translate.instant("PUBLIC_BOOKING.BASKET_DETAILS.BASKET_STATUS", {N: len}, "messageformat")
       return
     return
 

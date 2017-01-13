@@ -1,5 +1,6 @@
 'use strict'
 
+
 ###**
 * @ngdoc directive
 * @name BB.Directives:bbDeals

@@ -1,8 +1,6 @@
 'use strict'
 
-angular.module('BB.Directives').directive 'bbPaymentButton', (
-  $compile, $sce, $http, $templateCache, $q, $log, TemplateSvc) ->
-
+angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $http, $templateCache, $q, $log, TemplateSvc, $translate) ->
   restrict: 'EA'
   replace: true
   scope:
@@ -33,7 +31,7 @@ angular.module('BB.Directives').directive 'bbPaymentButton', (
         when 'button_form'
           inputs = element.find("input")
           main_tag = (i for i in inputs when $(i).attr('type') == 'submit')[0]
-          $(main_tag).attr('value', attributes.value) if attributes.value
+          $(main_tag).attr('value', $translate.instant(attributes.value)) if attributes.value
         when 'page', 'location'
           main_tag = element.find("a")[0]
       if attributes.class
@@ -57,3 +55,41 @@ angular.module('BB.Directives').directive 'bbPaymentButton', (
         , (err) ->
           $log.warn err.data
           element.remove()
+      else
+        element.hide()
+        console.warn("new_payment link missing: payment configuration maybe incorrect")
+
+
+    init = () ->
+      loadTotal(scope.total) if scope.total
+
+
+    killWatch = scope.$watch 'total', (total) ->
+      loadTotal(total)
+
+    init()
+
+    return
+
+
+angular.module('BB.Directives').directive 'bbPaypalExpressButton', ($compile, $sce, $http, $templateCache, $q, $log, $window, UriTemplate) ->
+
+  restrict: 'EA'
+  replace: true
+  template: """
+    <a ng-href="{{href}}" ng-click="showLoader()">Pay</a>
+  """
+  scope:
+    total: '='
+    bb: '='
+    decideNextPage: '='
+    paypalOptions: '=bbPaypalExpressButton'
+    notLoaded: '='
+  link: (scope, element, attributes) ->
+
+    total = scope.total
+    paypalOptions = scope.paypalOptions
+    scope.href = new UriTemplate(total.$link('paypal_express').href).fillFromObject(paypalOptions)
+
+    scope.showLoader = () ->
+      scope.notLoaded scope if scope.notLoaded

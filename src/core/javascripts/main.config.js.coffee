@@ -51,9 +51,6 @@ angular.module('BB').config ($locationProvider, $httpProvider, $provide, ie8Http
   if (msie && msie <= 9) or (webkit and webkit < 537)
     $provide.provider({$httpBackend: ie8HttpBackendProvider})
 
-
-  moment.fn.toISODate ||= -> this.clone().locale('en').format('YYYY-MM-DD')
-
   return
 
 window.bookingbug =
@@ -68,17 +65,3 @@ window.bookingbug =
     .get('LoginService').logout(logout_opts)
     window.location.reload() if options.reload
 
-# String::includes polyfill
-if !String::includes
-
-  String::includes = (search, start) ->
-    if typeof start != 'number'
-      start = 0
-    if start + search.length > @length
-      false
-    else
-      @indexOf(search, start) != -1
-
-# Extend String with parameterise method
-String::parameterise = (seperator = '-') ->
-  @trim().replace(/\s/g, seperator).toLowerCase()

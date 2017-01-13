@@ -1,6 +1,7 @@
-'use strict'
+BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
+  'ngInject'
 
-angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
+  @$scope = $scope
 
   $scope.controller = "public.controllers.ServiceList"
 
@@ -290,3 +291,7 @@ angular.module('BB.Controllers').controller 'ServiceList',($scope, $rootScope, $
   ###
   $scope.filterChanged = () ->
     $scope.filtered_items = $filter('filter')($scope.items, $scope.filterFunction)
+
+  return
+
+angular.module('BB.Controllers').controller 'BBServicesCtrl', BBServicesCtrl

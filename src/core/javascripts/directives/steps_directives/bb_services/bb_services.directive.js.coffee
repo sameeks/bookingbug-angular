@@ -50,7 +50,8 @@ angular.module('BB.Directives').directive 'bbServices', ($q, $compile, $template
   replace: true
   scope : true
   transclude: true
-  controller : 'ServiceList'
+  controller : 'BBServicesCtrl'
+  controllerAs: '$bbServicesCtrl'
   link : (scope, element, attrs, ctrls, transclude) ->
 
     scope.directives = "public.ServiceList"

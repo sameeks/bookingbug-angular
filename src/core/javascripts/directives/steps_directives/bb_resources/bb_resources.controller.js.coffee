@@ -1,18 +1,32 @@
-'use strict'
+BBResourcesCtrl = ($scope, $rootScope, $attrs, PageControllerService, $q, BBModel, ResourceModel, ValidatorService, LoadingService) ->
+  'ngInject'
 
-
-angular.module('BB.Controllers').controller 'ResourceList', ($scope,
-  $rootScope, $attrs, PageControllerService, $q, BBModel, ResourceModel,
-  ValidatorService, LoadingService) ->
-
-  loader = LoadingService.$loader($scope).notLoaded()
+  @$scope = $scope
 
   angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
+  loader = null
 
-  $rootScope.connection_started.then () =>
+  init = () ->
+    $scope.setReady = setReady.bind(this)
+    $scope.selectItem = selectItem.bind(this)
+
+    loader = LoadingService.$loader($scope).notLoaded()
+
+    $rootScope.connection_started.then connectionStartedSuccess.bind(this), connectionStartedFailure.bind(this)
+    $scope.$watch 'resource', resourceListener.bind(this)
+    $scope.$on "currentItemUpdate", currentItemUpdateHandler.bind(this)
+
+    return
+
+  connectionStartedSuccess = () ->
     loadData()
 
+  connectionStartedFailure = (err) ->
+    loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+
+  currentItemUpdateHandler =  (event) ->
+    loadData()
 
   loadData = () =>
     $scope.booking_item ||= $scope.bb.current_item
@@ -75,9 +89,7 @@ angular.module('BB.Controllers').controller 'ResourceList', ($scope,
       else
         loader.setLoaded()
 
-
-
-  ###**
+  ###*
   * @ngdoc method
   * @name getItemFromResource
   * @methodOf BB.Directives:bbResources
@@ -87,15 +99,14 @@ angular.module('BB.Controllers').controller 'ResourceList', ($scope,
   * @param {object} resource The resource
   ###
   getItemFromResource = (resource) =>
-    if (resource instanceof  ResourceModel)
+    if (resource instanceof ResourceModel)
       if $scope.bookable_items
         for item in $scope.bookable_items
           if item.item.self == resource.self
             return item
     return resource
 
-
-  ###**
+  ###*
   * @ngdoc method
   * @name selectItem
   * @methodOf BB.Directives:bbResources
@@ -106,7 +117,7 @@ angular.module('BB.Controllers').controller 'ResourceList', ($scope,
   * @param {string=} route A specific route to load
   * @param {string=} skip_step The skip_step has been set to false
   ###
-  $scope.selectItem = (item, route, options={}) =>
+  selectItem = (item, route, options = {}) =>
     if $scope.$parent.$has_page_control
       $scope.resource = item
       return false
@@ -117,7 +128,7 @@ angular.module('BB.Controllers').controller 'ResourceList', ($scope,
       $scope.decideNextPage(route)
       return true
 
-  $scope.$watch 'resource',(newval, oldval) =>
+  resourceListener = (newval, oldval) =>
     if $scope.resource and $scope.booking_item
       if !$scope.booking_item.resource or $scope.booking_item.resource.self != $scope.resource.self
         # only set and broadcast if it's changed
@@ -128,20 +139,14 @@ angular.module('BB.Controllers').controller 'ResourceList', ($scope,
       _.each $scope.booking_items, (item) -> item.setResource(null)
       $scope.broadcastItemUpdate()
 
-
-
-  $scope.$on "currentItemUpdate", (event) ->
-    loadData()
-
-
-    ###**
-    * @ngdoc method
-    * @name setReady
-    * @methodOf BB.Directives:bbResources
-    * @description
-    * Set this page section as ready
-    ###
-   $scope.setReady = () =>
+  ###*
+  * @ngdoc method
+  * @name setReady
+  * @methodOf BB.Directives:bbResources
+  * @description
+  * Set this page section as ready
+  ###
+  setReady = () =>
     if $scope.resource
       new_resource = getItemFromResource($scope.resource)
       _.each $scope.booking_items, (item) -> item.setResource(new_resource)
@@ -149,3 +154,9 @@ angular.module('BB.Controllers').controller 'ResourceList', ($scope,
     else
       _.each $scope.booking_items, (item) -> item.setResource(null)
       return true
+
+  init()
+
+  return
+
+angular.module('BB.Controllers').controller 'BBResourcesCtrl', BBResourcesCtrl

@@ -1,0 +1,118 @@
+[bb-day-list] {
+
+  .calendar th, .calendar td {
+    width: 14.28%;
+  }
+
+  .calendar td {
+    height: 80px;
+    &.bb-past .day-number {
+      color: #CCC;
+    }
+    &.bb-unavailable {
+      background: url("images/unavailable_tile.png");
+    }
+    &.bb-available {
+      cursor: pointer;
+      &:hover {
+        background-color: #ce1126;
+        .day-number, .month-title {
+          color: #FFF;
+        }
+      }
+    }
+    &.bb-selected, &.bb-selected:hover {
+      background-color: #ce1126;
+      .day-number, .month-title {
+        color: #FFF;
+      }
+    }
+  }
+
+  .day-header {
+    text-align: center;
+  }
+
+  .month-title {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .day-nav {
+    text-align: right;
+    line-height: 36px;
+    padding-top: 18px;
+    .btn-link {
+      color: #000;
+    }
+  }
+
+  .day-list .table {
+    background-color: #FFF;
+  }
+
+  .bb-month-highlight {
+    background-color: #FFF;
+  }
+
+  .day-list .table > tbody > tr > th, .day-list .table > tbody > tr > td {
+    padding: 5px;
+    width: 14.28%;
+    border-color: #D3D3D3;
+  }
+
+  .day-list-header {
+    margin-bottom: 25px;
+  }
+
+  .filters h1 {
+    font-size: 18px;
+  }
+
+  .legend {
+    margin-bottom: 30px;
+  }
+
+  .keys {
+    .key {
+      display: inline-block;
+      line-height: 30px;
+      margin-right: 15px;
+    }
+    .square {
+      display: inline-block;
+      height: 30px;
+      width: 30px;
+      border: 1px solid #DDD;
+    }
+    .available .square {
+      background-color: #FFF;
+    }
+    .unavailable .square {
+      background: url("images/unavailable_tile.png");
+    }
+    span {
+      line-height: 30px;
+    }
+  }
+
+  .btn-group {
+      @media (max-width: $screen-xs-max) {
+        margin-top: 10px;
+        margin-bottom: 5px; 
+      }
+  }
+
+}
+
+[bb-times] {
+  .time-slots li {
+    margin-bottom: 15px;
+  }
+
+  .btn-secondary:hover {
+    background-color: #ce1126;
+    color: #FFF;
+  }
+
+}

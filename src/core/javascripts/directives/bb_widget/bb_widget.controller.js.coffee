@@ -1,10 +1,10 @@
 'use strict'
 
-BBCtrl = ( ROUTE_STATES, $scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService) ->
+BBCtrl = (ROUTE_STATES,$scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize) ->
   'ngInject'
 
-  vm = @
-  
+  @$scope = $scope
+
   $scope.cid = "BBCtrl" # dont change the cid as we use it in the app to identify this as the widget root scope
   $scope.controller = "public.controllers.BBCtrl"
 
@@ -20,7 +20,7 @@ BBCtrl = ( ROUTE_STATES, $scope, $location, $rootScope, halClient, $window, $htt
 
   $rootScope.Route = $scope.Route = ROUTE_STATES
 
-  init = () ->
+  @$onInit = () ->
 
     $scope.addItemToBasket = addItemToBasket
     $scope.areScopesLoaded = LoadingService.areScopesLoaded
@@ -81,21 +81,16 @@ BBCtrl = ( ROUTE_STATES, $scope, $location, $rootScope, halClient, $window, $htt
     $scope.showPage = showPage
     $scope.updateBasket = updateBasket
 
-    vm.$onInit = $onInit
-
-    return
-
-  $onInit = () ->
-
-    compileDisplayMode()
     initializeBBWidget()
 
     $rootScope.$on 'show:loader', showLoaderHandler
     $rootScope.$on 'hide:loader', hideLoaderHandler
     $scope.$on '$locationChangeStart', locationChangeStartHandler
 
-    vm.bb = $scope.bb
+    return
 
+  @$postLink = ->
+    viewportSize.init() # Initialise viewport size tracking
     return
 
   initializeBBWidget = () ->
@@ -124,11 +119,6 @@ BBCtrl = ( ROUTE_STATES, $scope, $location, $rootScope, halClient, $window, $htt
       $scope.bb.api_url ||= $location.protocol() + "://" + $location.host() + ":" + $location.port()
     else
       $scope.bb.api_url ||= $location.protocol() + "://" + $location.host()
-    return
-
-  compileDisplayMode = () ->
-    $compile("<span bb-display-mode></span>") $scope, (cloned, scope) =>
-      $bbug($element).append(cloned)
     return
 
   showLoaderHandler = () ->
@@ -871,8 +861,6 @@ BBCtrl = ( ROUTE_STATES, $scope, $location, $rootScope, halClient, $window, $htt
 
   setBasketItem = (item) ->
     $scope.bb.current_item = item
-    # for now also set a variable in the scope - for old views that we've not tidied up yet
-    $scope.current_item = $scope.bb.current_item
 
   setReadyToCheckout = (ready) ->
     $scope.bb.confirmCheckout = ready
@@ -1012,8 +1000,8 @@ BBCtrl = ( ROUTE_STATES, $scope, $location, $rootScope, halClient, $window, $htt
     defer.promise
 
   setActiveCompany = (company, settings) ->
-# currency code exists in both company and company_settings
-# get from company if not defined in settings
+    # currency code exists in both company and company_settings
+    # get from company if not defined in settings
     CompanyStoreService.currency_code = if !settings then company.currency_code else settings.currency
     CompanyStoreService.time_zone = company.timezone
     CompanyStoreService.country_code = company.country_code
@@ -1212,8 +1200,6 @@ BBCtrl = ( ROUTE_STATES, $scope, $location, $rootScope, halClient, $window, $htt
 
   redirectTo = (url) ->
     $window.location.href = url
-
-  init()
 
   return
 

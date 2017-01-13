@@ -1,7 +1,6 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $rootScope,
-  $q, $attrs, BBModel, $uibModal, $document, AlertService, FormDataStoreService, LoadingService) ->
+angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $rootScope, $q, $attrs, BBModel, $uibModal, $document, AlertService, FormDataStoreService, LoadingService) ->
 
   FormDataStoreService.init 'MultiServiceSelect', $scope, [
     'selected_category_name'

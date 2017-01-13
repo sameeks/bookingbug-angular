@@ -11,7 +11,7 @@
 * @property {string} add Add alert message
 ####
 
-angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService, $timeout) ->
+angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService, $timeout, $translate) ->
 
   $rootScope.alerts = []
 
@@ -28,7 +28,7 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     return title if title
     switch type
       when "error", "danger"
-        title = "Error"
+        title = $translate.instant('CORE.ERROR_HEADING')
       else
         title = null
     title

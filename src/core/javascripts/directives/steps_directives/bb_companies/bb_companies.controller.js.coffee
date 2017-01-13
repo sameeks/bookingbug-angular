@@ -51,4 +51,5 @@ CompanyListBase = ($scope, $rootScope, $q, $attrs, LoadingService) ->
     arr    = company.name.split(' ')
     result = if arr[2] then arr[2] else ""
 
+
 angular.module('BB.Controllers').controller 'CompanyList', CompanyListBase

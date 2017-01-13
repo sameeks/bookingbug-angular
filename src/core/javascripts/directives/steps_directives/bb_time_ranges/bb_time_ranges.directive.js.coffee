@@ -27,7 +27,7 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $compile) ->
+angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $compile, $timeout, $bbug) ->
   restrict: 'AE'
   replace: true
   scope : true
@@ -39,7 +39,14 @@ angular.module('BB.Directives').directive 'bbTimeRanges', ($q, $templateCache, $
     scope.$on 'time:selected', ->
       btn = angular.element('#btn-continue')
       btn[0].disabled = false
-      btn[0].focus()
+      $timeout ->
+        $bbug("html, body").animate
+          scrollTop: btn.offset().top
+          , 500
+      , 1000
+      $timeout ->
+        btn[0].focus()
+      , 1500
 
     # date helpers
     scope.today = moment().toDate()

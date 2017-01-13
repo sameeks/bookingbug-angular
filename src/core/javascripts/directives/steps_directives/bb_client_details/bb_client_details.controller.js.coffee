@@ -111,6 +111,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
   ###
   $scope.setReady = () =>
+
     $scope.client.setClientDetails($scope.client_details)
 
     if !$scope.suppress_client_create

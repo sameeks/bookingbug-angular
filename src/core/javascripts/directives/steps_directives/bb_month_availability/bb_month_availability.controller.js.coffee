@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'DayList', (
+angular.module('BB.Controllers').controller 'DayListMa', (
   $scope, $rootScope, $q, AlertService, LoadingService, BBModel) ->
 
   $scope.controller = "public.controllers.DayList"

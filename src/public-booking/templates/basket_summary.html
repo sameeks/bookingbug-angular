@@ -1,82 +1,125 @@
 <div bb-basket-summary>
-	<h2>Summary</h2>
-	<hr/>
-	<p>Please review the following information</p>
 
-	<div class="row">
-		<div class="col-md-12">
+  <h2 translate="PUBLIC_BOOKING.BASKET_SUMMARY.STEP_HEADING"></h2>
 
+  <hr/>
 
+  <p translate="PUBLIC_BOOKING.BASKET_SUMMARY.STEP_DESCRIPTION"></p>
 
-			<uib-accordion close-others="oneAtATime">
-		    <div uib-accordion-group class="panel-default" ng-repeat="item in basket_items" is-open="$first">
-		    	<uib-accordion-heading>
-		    		{{item.getName()}}
-		    	</uib-accordion-heading>
+  <div class="row">
+    <div class="col-md-12">
 
+      <uib-accordion close-others="oneAtATime">
+        <div
+          uib-accordion-group
+          class="panel-default"
+          ng-repeat="item in basket_items"
+          is-open="$first">
+          <uib-accordion-heading>
+            {{item.getName()}}
+          </uib-accordion-heading>
 
-	      	<ul class="bb-list bb-list-bordered-in">
-	      		<li id="bb-basket-summary-datetime">
-	      			<div class="row">
-		      			<div class="col-sm-4"><b>Date/Time:</b></div>
-		      			<div class="col-sm-8">{{item.startDatetime() | datetime: 'llll'}}</div>
-		      		</div>
-      			</li>
-	      		<li id="bb-basket-summary-duration">
-	      			<div class="row">
-		      			<div class="col-sm-4"><b>Duration:</b></div>
-		      			<div class="col-sm-8">{{item.duration | time_period}}</div>
-		      		</div>
-      			</li>
-	      		<li id="bb-basket-summary-fullname">
-	      			<div class="row">
-		      			<div class="col-sm-4"><b>Fullname:</b></div>
-	      				<div class="col-sm-8">{{client.first_name + ' ' + client.last_name}}</div>
-	      			</div>
-      			</li>
-	      		<li  id="bb-basket-summary-email">
-	      			<div class="row" ng-if="client.email">
-		      			<div class="col-sm-4"><b>Email:</b></div>
-	      				<div class="col-sm-8">{{client.email}}</div>
-	      			</div>
-      			</li>
-	      		<li  id="bb-basket-summary-mobile" ng-if="item.mobile">
-	      			<div class="row">
-		      			<div class="col-sm-4"><b>Mobile:</b> </div>
-	      				<div class="col-sm-8">{{item.mobile}}</div>
-	      			</div>
-      			</li>
-      			<li id="bb-basket-summary-address" ng-if="bb.company_settings.ask_address && (client.address1 || client.address2 || client.address3 || client.address4 || client.postcode)">
-	      			<div class="row">
-		      			<div class="col-sm-4"><b>Address:</b> </div>
-	      				<div class="col-sm-8">{{client.address1}} {{client.address2}} {{client.address3}} {{client.address4}} {{client.postcode}}</div>
-	      			</div>
-      			</li>
-      			<li id="bb-basket-summary-questions" ng-repeat="question in item.item_details.questions" ng-if="item.has_questions && question.answer && !question.important">
+          <ul class="bb-list bb-list-bordered-in">
+            <li id="bb-basket-summary-datetime">
               <div class="row">
-		      			<div class="col-sm-4"><b>{{question.name}}:</b> </div>
-	      				<div class="col-sm-8">{{question.answer | format_answer}}</div>
-	      			</div>
+                <div class="col-sm-4">
+                  <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.DATE_TIME_LBL">:</b></span>
+                </div>
+                <div class="col-sm-8">{{item.startDatetime() | datetime: 'llll'}}</div>
+              </div>
             </li>
-            <li id="bb-basket-summary-price" ng-if="item.price">
-	      			<div class="row">
-		      			<div class="col-sm-4"><b>Price:</b> </div>
-	      				<div class="col-sm-8">{{item.price | currency}}</div>
-	      			</div>
-      			</li>
-	      	</ul>
-		    </div>
-		  </uib-accordion>
+            <li id="bb-basket-summary-duration">
+              <div class="row">
+                <div class="col-sm-4">
+                  <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.DURATION_LBL">:</b></span>
+                </div>
+                <div class="col-sm-8">{{item.duration | time_period}}</div>
+              </div>
+            </li>
+            <li id="bb-basket-summary-fullname">
+              <div class="row">
+                <div class="col-sm-4">
+                  <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.NAME_LBL">:</b></span>
+                </div>
+                <div class="col-sm-8">{{client.first_name + ' ' + client.last_name}}</div>
+              </div>
+            </li>
+            <li id="bb-basket-summary-email">
+              <div
+                class="row"
+                ng-show="client.email">
+                <div class="col-sm-4">
+                  <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.EMAIL_LBL">:</b></span>
+                </div>
+                <div class="col-sm-8">{{client.email}}</div>
+              </div>
+            </li>
+            <li
+              id="bb-basket-summary-mobile"
+              ng-show="item.mobile">
+              <div class="row">
+                <div class="col-sm-4">
+                  <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.MOBILE_LBL">:</b></span>
+                </div>
+                <div class="col-sm-8">{{item.mobile}}</div>
+              </div>
+            </li>
+            <li
+              id="bb-basket-summary-address"
+              ng-show="bb.company_settings.ask_address && (client.address1 || client.address2 || client.address3 || client.address4 || client.postcode)">
+              <div class="row">
+                <div class="col-sm-4">
+                  <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.ADDRESS_LBL">:</b></span>
+                </div>
+                <div class="col-sm-8">{{client.addressSingleLine()}}</div>
+              </div>
+            </li>
+            <li
+              id="bb-basket-summary-questions"
+              ng-repeat="question in item.item_details.questions"
+              ng-show="item.has_questions && question.answer && !question.important">
+              <div class="row">
+                <div class="col-sm-4">
+                  <span><b>{{question.name}}:</b>
+                </div>
+                <div class="col-sm-8">{{question.answer | format_answer}}</div>
+              </div>
+            </li>
+            <li
+              id="bb-basket-summary-price"
+              ng-show="item.price">
+              <div class="row">
+                <div class="col-sm-4">
+                  <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.PRICE_LBL">:</b></span>
+                </div>
+                <div class="col-sm-8">{{item.price | currency}}</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </uib-accordion>
 
-		</div>
-	</div>
-
-	<hr/>
-
-	<div class="row">
-		<div class="col-md-12">
-			<button class="btn btn-primary pull-right" ng-click="confirm()">Confirm</button>
-      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
     </div>
-	</div>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <div class="col-md-12">
+      <button
+        type="button"
+        class="btn btn-primary pull-right"
+        ng-click="confirm()"
+        translate="PUBLIC_BOOKING.BASKET_SUMMARY.CONFIRM_BTN">
+      </button>
+      <button
+        type="button"
+        class="btn btn-default"
+        bb-debounce
+        ng-click="loadPreviousStep()"
+        ng-show="bb.current_step > 1"
+        translate="PUBLIC_BOOKING.BASKET_SUMMARY.BACK_BTN">
+      </button>
+    </div>
+  </div>
 </div>
