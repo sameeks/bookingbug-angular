@@ -24,16 +24,21 @@ angular.module('BB.Services').factory 'WidgetModalService', ($uibModal, $timeout
     @isOpen = true
     $uibModal.open
       size: 'lg'
-      controller: ($scope, WidgetModalService, $uibModalInstance, config, $window, AlertService, GeneralOptions) ->
-        if $scope.bb && $scope.bb.current_item and $scope.$root.user
+      controller: ($scope, $rootScope, WidgetModalService, $uibModalInstance, config, $window, AlertService, GeneralOptions) ->
+        usingStudioInterface = true if $rootScope.user
+        if $scope.bb && $scope.bb.current_item and onStudioInterface
           delete $scope.bb.current_item
         WidgetModalService.config = config
         $scope.config = angular.extend(WidgetModalService.config, config)
         $scope.config.company_id ||= $scope.company.id if $scope.company
-        $scope.config.first_page = 'calendar'
-        if $scope.$root.user 
+
+        if usingStudioInterface?
           merge_resources: GeneralOptions.merge_resources
           merge_people: GeneralOptions.merge_people
+          if $scope.config.movingBooking then $scope.config.first_page = 'calendar' else 'quick_pick'
+        else 
+          $scope.config.first_page = 'calendar'
+
         $scope.cancel = () ->
           WidgetModalService.close()
       templateUrl: 'widget_modal.html'

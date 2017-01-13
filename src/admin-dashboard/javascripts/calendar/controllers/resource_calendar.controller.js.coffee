@@ -296,7 +296,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
           first_page: "quick_pick"
           on_conflict: "cancel()"
           company_id: company.id
-
+ 
   fcViewRender = (view, element) ->
     date = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getDate')
     newDate = moment().tz(moment.tz.guess())
@@ -445,6 +445,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
                 company_id: company.id
                 booking_id: booking.id
                 total_id: booking.purchase_ref
+                movingBooking: true 
                 success: (model) =>
                   refreshBooking(booking)
                 fail: () ->
