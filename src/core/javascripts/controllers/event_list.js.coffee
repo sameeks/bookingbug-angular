@@ -258,8 +258,8 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         item       : $scope.bb.current_item
         start_date : $scope.start_date.toISODate()
         end_date   : $scope.end_date.toISODate()
-
       params.embed = $scope.events_options.embed if $scope.events_options.embed
+      params.member_level_id = $scope.client.member_level_id if $scope.client
 
       BBModel.EventChain.$query(comp, params).then (event_chains) ->
         loader.setLoaded()
@@ -339,7 +339,9 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
         # get more event details
         for item in $scope.items
 
-          params = if $scope.events_options.embed then {embed: $scope.events_options.embed} else {}
+          params =
+            embed: $scope.events_options.embed
+          params.member_level_id = $scope.client.member_level_id if $scope.client
           item.prepEvent(params)
 
           # check if the current item already has the same event selected
