@@ -3,7 +3,7 @@
 angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCalendarController', (AdminBookingPopup,
   AdminCalendarOptions, AdminCompanyService, AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources,
   ColorPalette, Dialog, $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope,
-  $state, TitleAssembler, $translate, $window, uiCalendarConfig) ->
+  $state, TitleAssembler, $translate, $window, uiCalendarConfig, CompanyStoreService) ->
   'ngInject'
 
   ###jshint validthis: true ###
@@ -85,7 +85,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       if $scope.model
         options.showAll = false
         options.selectedResources = [$scope.model]
-      CalendarEventSources.getAllCalendarEntries(company, start, end, timezone, options).then (results)->
+      CalendarEventSources.getAllCalendarEntries(company, start, end, options).then (results)->
         vm.loading = false
         return callback(results)
     return
@@ -190,6 +190,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
   fcEventDrop = (event, delta, revertFunc) -> # we need a full move cal if either it has a person and resource, or they've dragged over multiple days
 
+    if GeneralOptions.custom_time_zone
+
+      # Set current custom timezone to start/end moments
+      calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar')
+      event.start = calendar.moment(moment.tz(event.start.toISOString(), GeneralOptions.display_time_zone))
+      event.end = calendar.moment(moment.tz(event.end.toISOString(), GeneralOptions.display_time_zone))
+
     # not blocked and is a change in person/resource, or over multiple days
     if event.status !=3 && (event.person_id && event.resource_id || delta.days() > 0)
       start = event.start
@@ -229,6 +236,9 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       model: event
       body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY')
       success: (model) =>
+        if GeneralOptions.custom_time_zone
+          model.start = moment.tz(model.start, CompanyStoreService.time_zone)
+          model.end = moment.tz(event.end, CompanyStoreService.time_zone)
         updateBooking(event)
       fail: () ->
         revertFunc()
@@ -270,8 +280,14 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       PrePostTime.apply(event, elements, view, $scope)
 
   fcSelect = (start, end, jsEvent, view, resource) -> # For some reason clicking on the scrollbars triggers this event therefore we filter based on the jsEvent target
+
     if jsEvent.target.className == 'fc-scroller'
       return
+
+    if GeneralOptions.custom_time_zone
+      calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar')
+      start = calendar.moment(moment.tz(moment(start.toISOString()), CompanyStoreService.time_zone))
+      end = calendar.moment(moment.tz(moment(end.toISOString()), CompanyStoreService.time_zone))
 
     view.calendar.unselect()
 
@@ -452,7 +468,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
                   refreshBooking(booking)
                 fail: () ->
                   refreshBooking(booking)
-        if response.is_cancelled
+        else if response.is_cancelled
           uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('removeEvents', [response.id])
         else
           booking.title = getBookingTitle(booking)

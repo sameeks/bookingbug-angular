@@ -6,7 +6,7 @@
 * @description
 * Controller for the layout (root state)
 ###
-controller = ($scope, $state, company, $uibModalStack, $rootScope, GeneralOptions, CompanyStoreService) ->
+controller = ($scope, $state, company, $uibModalStack, $rootScope, CompanyStoreService) ->
   'ngInject'
 
   $scope.company = company
@@ -14,7 +14,12 @@ controller = ($scope, $state, company, $uibModalStack, $rootScope, GeneralOption
   $scope.user = $rootScope.user
 
   #Set timezone globally per company basis (company contains timezone info)
-  moment.tz.setDefault(company.timezone)
+  # moment.tz.setDefault(company.timezone)
+
+  if localStorage.selectedTimezone
+    moment.tz.setDefault(localStorage.selectedTimezone)
+  else
+    moment.tz.setDefault(company.timezone)
 
   CompanyStoreService.country_code = company.country_code
   CompanyStoreService.currency_code = company.currency_code

@@ -17,11 +17,11 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @name checkPerson
   * @methodOf BB.Services:DateTimeUtilities
   * @description
-  * Checks if basket_item has default person 
+  * Checks if basket_item has default person
   * @param {Object} basket_item The basket item object
   * @param {Object} item_defaults The item defaults object
   *
-  * @returns {boolean} 
+  * @returns {boolean}
   ###
   checkPerson = (basket_item, item_defaults) ->
     return (basket_item.defaults.person and basket_item.defaults.person.self is basket_item.person.self) or _.isBoolean(basket_item.person) or item_defaults.merge_people
@@ -35,7 +35,7 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @param {Object} basket_item The basket item object
   * @param {Object} item_defaults The item defaults object
   *
-  * @returns {boolean} 
+  * @returns {boolean}
   ###
   checkResource = (basket_item, item_defaults) ->
     return (basket_item.defaults.resource and basket_item.defaults.resource.self is basket_item.resource.self) or _.isBoolean(basket_item.resource) or item_defaults.merge_resources
@@ -50,14 +50,14 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @param {Moment} date The date object to convert
   * @param {integer} time The time integer to convert
   *
-  * @returns {object} Moment object converted from date/time 
+  * @returns {object} Moment object converted from date/time
   ###
   convertTimeToMoment: (date, time) ->
     return unless date and moment.isMoment(date) and angular.isNumber(time)
     datetime = moment()
     # if user timezone different than company timezone
-    if GeneralOptions.display_time_zone != CompanyStoreService.time_zone
-      datetime = datetime.tz(CompanyStoreService.time_zone)
+    if GeneralOptions.custom_time_zone
+      datetime = datetime.tz(CompanyStoreService.time_zone) 
     val = parseInt(time)
     hours = parseInt(val / 60)
     mins = val % 60
@@ -65,7 +65,7 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
     datetime.minutes(mins)
     datetime.seconds(0)
     datetime.date(date.date())
-    datetime.month(date.month()) 
+    datetime.month(date.month())
     datetime.year(date.year())
 
     return datetime
@@ -76,10 +76,10 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @name convertMomentToTime
   * @methodOf BB.Services:DateTimeUtilities
   * @description
-  * Converts moment object to time 
+  * Converts moment object to time
   * @param {Moment} datetime the datetime object to convert
   *
-  * @returns {integer} Datetime integer converted from moment object 
+  * @returns {integer} Datetime integer converted from moment object
   ###
   convertMomentToTime: (datetime) ->
     return datetime.minutes() + datetime.hours() * 60
@@ -90,9 +90,9 @@ angular.module('BB.Services').factory "DateTimeUtilitiesService", (GeneralOption
   * @name checkDefaultTime
   * @methodOf BB.Services:DateTimeUtilities
   * @description
-  *  Checks if basket_item default time exists 
+  *  Checks if basket_item default time exists
   * @param {Moment} date The date object
-  * @param {Array} time_slots An array of time slots 
+  * @param {Array} time_slots An array of time slots
   * @param {Object} basket_item The basket item object
   * @param {Object} item_defaults The item defaults object
   * @returns {Object} object describing matching slot

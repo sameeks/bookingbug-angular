@@ -33,6 +33,7 @@ angular.module('BB.Services').provider 'GeneralOptions', ->
     calendar_max_time: "18:00"
     calendar_slot_duration: 5
     set_time_zone_automatically: false
+    custom_time_zone: false
     display_time_zone: null
     use_i18n: false
     update_document_title: false

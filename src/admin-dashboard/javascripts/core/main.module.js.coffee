@@ -38,5 +38,3 @@ angular.module('BBAdminDashboard', [
   'BBAdminDashboard.config-iframe',
   'BBAdminDashboard.publish-iframe'
 ])
-
-

@@ -26,15 +26,15 @@ angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
 
 
     # Adjust time range based on UTC offset between company time zone and display time zone
-    if display_time_zone? and display_time_zone != company_time_zone 
+    if display_time_zone? and display_time_zone != company_time_zone
 
       display_utc_offset = moment().tz(display_time_zone).utcOffset()
       company_utc_offset = moment().tz(company_time_zone).utcOffset()
 
-      if company_utc_offset < display_utc_offset
-        start_date = prms.start_date.clone().subtract(1, 'day')
-      else if company_utc_offset > display_utc_offset and prms.end_date
-        end_date = prms.end_date.clone().add(1, 'day')
+      # if company_utc_offset < display_utc_offset
+      #   start_date = prms.start_date.clone().subtract(1, 'day')
+      # else if company_utc_offset > display_utc_offset and prms.end_date
+      #   end_date = prms.end_date.clone().add(1, 'day')
 
       prms.time_zone = display_time_zone
 

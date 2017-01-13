@@ -359,7 +359,6 @@ angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions, Company
   restrict: 'A'
   link: (scope, el, attrs) ->
     company_time_zone = CompanyStoreService.time_zone
-    scope.time_zone_name = moment().tz(company_time_zone).format('zz')
-    #  if not using local time zone and user time zone is not same as companies
-    if !GeneralOptions.set_time_zone_automatically and GeneralOptions.display_time_zone != company_time_zone
-      scope.is_time_zone_diff = true 
+    scope.time_zone_name = moment.tz(GeneralOptions.display_time_zone).format('z')
+    if GeneralOptions.display_time_zone and GeneralOptions.display_time_zone != company_time_zone
+      scope.is_time_zone_diff = true

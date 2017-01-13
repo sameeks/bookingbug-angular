@@ -1,7 +1,6 @@
 'use strict'
 
-angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
-  BaseModel, BookingCollections, $window) ->
+angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel, BaseModel, BookingCollections, $window, GeneralOptions, CompanyStoreService) ->
 
   class Admin_Booking extends BaseModel
 
@@ -13,8 +12,8 @@ angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
       @end ||= @datetime.clone().add(@duration, 'minutes')
       @title = @full_describe
       @time = @start.hour()* 60 + @start.minute()
-#      @startEditable  = false
-#      @durationEditable  = false
+      # @startEditable  = false
+      # @durationEditable  = false
       # set to all day if it's a 24 hours span
       @allDay = false
       @allDay = true if (@duration_span && @duration_span == 86400)
@@ -169,4 +168,3 @@ angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel,
         , (err) ->
           defer.reject(err)
       defer.promise
-

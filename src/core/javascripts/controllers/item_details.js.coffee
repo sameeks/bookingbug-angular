@@ -288,12 +288,15 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       $scope.decideNextPage(route)
 
   $scope.showMoveMessage = (datetime) ->
+    if GeneralOptions.custom_time_zone
+      datetime = moment.tz(datetime, GeneralOptions.display_time_zone)
+
     # TODO remove whem translate enabled by default
-    if GeneralOptions.use_i18n 
-      $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
+    if GeneralOptions.use_i18n
+      $translate('MOVE_BOOKINGS_MSG', { datetime: datetime.format('LLLL') }).then (translated_text) ->
         AlertService.add("info", { msg: translated_text })
     else
-      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" })
+      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')} (#{datetime.format('z')})" })
 
 
   ###**
@@ -360,4 +363,3 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   ###
   $scope.editItem = () ->
     $scope.item_details_updated = false
-

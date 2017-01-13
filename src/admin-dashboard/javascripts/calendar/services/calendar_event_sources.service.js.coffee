@@ -18,14 +18,6 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
         belongs = true
     return belongs
 
-  mapBookingsToTimezone = (bookings, timezone) ->
-    bookings = bookings.map (booking) ->
-      if booking.start
-        booking.start = moment.tz(booking.start, timezone).format()
-      if booking.end
-        booking.end = moment.tz(booking.end, timezone).format()
-      return booking
-
   ###
   * @ngdoc method
   * @name getBookingsAndBlocks
@@ -47,7 +39,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
 
   * @returns {Promise} Promise which once resolved returns an array of bookings and blocks
   ###
-  getBookingsAndBlocks = (company, start, end, timezone, options = {})->
+  getBookingsAndBlocks = (company, start, end, options = {})->
     deferred = $q.defer()
 
     params =
@@ -85,9 +77,6 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
           if !options.type || (options.type == "resource" && booking.resource_id ) || (options.type == "person" && booking.person_id )
             filteredBookings.push booking
 
-      if timezone
-        mapBookingsToTimezone(filteredBookings, timezone)
-
       deferred.resolve filteredBookings
 
     , (err)->
@@ -111,7 +100,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
 
   * @returns {Promise} Promise which once resolved returns an array of bookings
   ###
-  getExternalBookings = (company, start, end, timezone, options = {})->
+  getExternalBookings = (company, start, end, options = {})->
     deferred = $q.defer()
     if company.$has('external_bookings')
       params =
@@ -139,9 +128,6 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
             booking.startEditable = false
             booking.durationEditable = false
             booking.resourceEditable = false
-
-            if timezone
-              mapBookingsToTimezone(bookings, timezone)
 
           deferred.resolve bookings
         else
@@ -173,7 +159,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
 
   * @returns {Promise} Promise which once resolved returns an array of availability background events
   ###
-  getAvailabilityBackground = (company, start, end, timezone, options = {})->
+  getAvailabilityBackground = (company, start, end, options = {})->
     deferred = $q.defer()
 
     AdminScheduleService.getAssetsScheduleEvents(company, start, end, !options.showAll, options.selectedResources).then (availabilities) ->
@@ -226,11 +212,6 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
               allDay: if options.calendarView == 'month' then true else false
             }
 
-
-        #console.log overAllAvailabilities
-        if timezone
-          mapBookingsToTimezone(overAllAvailabilities, timezone)
-
         deferred.resolve overAllAvailabilities
     , (err)->
       deferred.reject err
@@ -251,13 +232,13 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
   *
   * @returns {Promise} Promise which once resolved returns an array of availability background events
   ###
-  getAllCalendarEntries = (company, start, end, timezone, options = {})->
+  getAllCalendarEntries = (company, start, end, options = {})->
     deferred = $q.defer()
 
     promises = [
-      getBookingsAndBlocks(company, start, end, timezone, options),
-      getExternalBookings(company, start, end, timezone, options),
-      getAvailabilityBackground(company, start, end, timezone, options),
+      getBookingsAndBlocks(company, start, end, options),
+      getExternalBookings(company, start, end, options),
+      getAvailabilityBackground(company, start, end, options),
     ]
 
     $q.all(promises).then (resolutions)->
