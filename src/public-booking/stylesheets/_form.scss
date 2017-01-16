@@ -57,20 +57,25 @@
 
 .error-message {
   color: $state-danger-text;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-top: 7px;
-  padding-left: 15px;
+  min-height: 30px;
+  padding-top: 4px;
+  display: table;
   &:before {
     position: relative;
     top: 1px;
-    display: inline-block;
-    font-family: 'Glyphicons Halflings';
+    vertical-align: middle;
+    font-family: 'FontAwesome';
     font-style: normal;
     font-weight: normal;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-    content:"\e107";
+    content:"\f071 ";
+  }
+  &__item {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 7px;
+    line-height: 1.3
   }
 }
 
@@ -88,13 +93,21 @@
 }
 
 .bb-help-text {
-  padding-top: 12px;
+  padding-top: 6px;
+  display: inline-block;
 }
 
 .bb-check-space {
   margin-bottom: 0px;
-  padding-top: 0px;
-  min-height: 0px;
+  min-height: 26px;
+  .bb-help-text {
+    padding-top: 3px;
+    padding-bottom: 6px;
+  }
+}
+
+.bb-not-check {
+  margin-top: 15px;
 }
 
 .form-horizontal {

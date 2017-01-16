@@ -1,7 +1,6 @@
 'use strict'
 
-angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient,
-  GeneralOptions, CompanyStoreService, DateTimeUtilitiesService) ->
+angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, GeneralOptions, CompanyStoreService, DateTimeUtilitiesService) ->
 
   query: (prms) ->
 

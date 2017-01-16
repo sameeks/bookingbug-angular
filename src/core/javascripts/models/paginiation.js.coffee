@@ -126,7 +126,7 @@ angular.module('BB.Models').factory "PaginationModel", () ->
       end   = @current_page * @page_size
       end = if @num_items < end then @num_items else end
       total = if end >= 100 then "100+" else end
-      @summary = "#{start} - #{end} of #{total}"
+      @summary = $translate.instant('CORE.PAGINATION.SUMMARY', {start: start, end: end, total: total})
 
       page_to_load = Math.ceil((@current_page * @page_size) / @request_page_size)
 

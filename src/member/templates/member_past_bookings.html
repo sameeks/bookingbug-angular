@@ -1,23 +1,32 @@
 <div>
 
   <div ng-show="past_bookings.length == 0">
-    <h3>You don't currently have any past bookings.</h3>
+    <h3 translate="MEMBER.MEMBER_PAST_BOOKINGS.NO_PAST_BOOKINGS"></h3>
   </div>
 
   <div class="bb-section">
 
     <ul class="bb-list bb-list-bordered">
 
-      <li bb-member-booking="booking" ng-repeat="booking in past_bookings | filter:{deleted: false} | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size"></li>
+      <li
+        bb-member-booking="booking"
+        ng-repeat="booking in past_bookings | filter:{deleted: false} | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
+      </li>
 
     </ul>
 
   </div>
 
-  <div uib-pagination total-items="pagination.num_items"
-    ng-model="pagination.current_page" items-per-page="pagination.page_size"
-    max-size="pagination.max_size" boundary-links="true" rotate="false"
-    num-pages="pagination.num_pages" ng-show="past_bookings && past_bookings.length > 10"></div>
+  <div
+    uib-pagination
+    total-items="pagination.num_items"
+    ng-model="pagination.current_page"
+    items-per-page="pagination.page_size"
+    max-size="pagination.max_size"
+    boundary-links="true"
+    rotate="false"
+    num-pages="pagination.num_pages"
+    ng-show="past_bookings && past_bookings.length > 10"> 
+  </div>
 
 </div>
-

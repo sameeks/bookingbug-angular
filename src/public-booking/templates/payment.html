@@ -1,6 +1,16 @@
-<div bb-payment class="bb-payment">
+<div
+  bb-payment
+  class="bb-payment">
 
-  <iframe id="bb-widget-payment" width="100% "scrolling="no" frameborder="0" ng-src="{{url}}" name="Payment Form"></iframe>
+  <iframe
+    id="bb-widget-payment"
+    width="100%"
+    scrolling="no"
+    frameborder="0"
+    ng-src="{{url}}"
+    name="payment_form">
+  </iframe>
+    
   <script type="text/javascript">
     $('#bb-widget-payment').iFrameResize({checkOrigin:false, log: false, enablePublicMethods: true});
   </script>

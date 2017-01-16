@@ -1,75 +1,169 @@
-<div bb-total ng-init="checkStepTitle('Confirmed')" class="bb-checkout">
+<div
+  bb-total
+  class="bb-checkout">
+
   <div class="row">
     <div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
 
       <div class="bb-subcontent">
         <div class="confirmation-header bb-confirmation-border-margin">
+
+          <h2
+            id="bb-confirmation-summary-title"
+            translate="ADMIN_BOOKING.CONFIRMATION.TITLE">
+          </h2>
+
           <div ng-if="!total.containsWaitlistItems()">
-            <h2 id="bb-confirmation-summary-title"> Booking Confirmation</h2>
-            <p  id="bb-confirmation-summary-subtitle" class="bb-confirmation-p-alignment">
-              Booking is now confirmed.
-              <span ng-if="total.client.email">
-                An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.
+
+            <p
+              id="bb-confirmation-summary-subtitle"
+              class="bb-confirmation-p-alignment">
+              <span translate="ADMIN_BOOKING.CONFIRMATION.BOOKING_CONFIRMATION"></span>
+              <span
+                translate="ADMIN_BOOKING.CONFIRMATION.EMAIL_CONFIRMATION"
+                translate-values="{customer_name: total.client.getName()}"
+                ng-show="total.client.email">
               </span>
             </p>
+
           </div>
-           <div ng-if="total.containsWaitlistItems()">
-            <h2 id="bb-confirmation-summary-title">Confirmation</h2>
-            <p id="bb-confirmation-summary-subtitle" class="bb-confirmation-p-alignment">
-              You have successfully made the following bookings.
-              <span ng-if="total.client.email">
-                An email has been sent to {{ total.client.first_name }} {{ total.client.last_name }} with the details below.
+
+          <div ng-if="total.containsWaitlistItems()">
+
+            <p
+              id="bb-confirmation-summary-title"
+              class="bb-confirmation-p-alignment">
+              <span translate="ADMIN_BOOKING.CONFIRMATION.WAITLIST_CONFIRMATION"></span>
+              <span
+                translate="ADMIN_BOOKING.CONFIRMATION.EMAIL_CONFIRMATION"
+                translate-values="{customer_name: total.client.getName()}"
+                ng-show="total.client.email">
               </span>
             </p>
+
           </div>
         </div>
 
         <div>
           <ul class="confirmation-summary">
-            <li id="bb-confirmation-summary-reference" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Reference:</div>
-              <div class="col-sm-9 bb-summary-value">{{ total.id }}</div>
+
+            <li
+              id="bb-confirmation-summary-reference"
+              class="row confirmation-summary-item">
+              <div
+                class="col-sm-3 bb-summary-label"
+                translate="ADMIN_BOOKING.CONFIRMATION.PURCHASE_REF_LBL">
+              </div>
+              <div class="col-sm-9 bb-summary-value">
+                {{total.id}}
+              </div>
             </li>
-            <li id="bb-confirmation-summary-customer" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Customer:</div>
-              <div class="col-sm-9 bb-summary-value">{{ total.client.first_name  }}  {{ total.client.last_name }}</div>
+
+            <li
+              id="bb-confirmation-summary-customer"
+              class="row confirmation-summary-item">
+              <div
+                class="col-sm-3 bb-summary-label"
+                translate="ADMIN_BOOKING.CONFIRMATION.CUSTOMER_LBL">
+              </div>
+              <div class="col-sm-9 bb-summary-value">
+                {{total.client.getName()}}
+              </div>
             </li>
-          </ul>
-          <ul class="confirmation-summary" ng-repeat="item in total.items">
-            <li id="bb-confirmation-summary-service" ng-if="item.full_describe" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Service:</div>
-              <div class="col-sm-9 bb-summary-value">{{ item.full_describe }}</div>
-            </li>
-            <li id="bb-confirmation-summary-datetime" ng-if="item.describe" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Date/Time:</div>
-              <div class="col-sm-9 bb-summary-value">{{ item.datetime | datetime: 'llll':true }}</div>
-            </li>
-            <li id="bb-confirmation-summary-price" ng-if="item.price" class="row confirmation-summary-item">
-              <div class="col-sm-3 bb-summary-label">Price:</div>
-              <div class="col-sm-9 bb-summary-value">{{ item.price | currency }}</div>
-            </li>
+
           </ul>
 
-          <ul ng-show="total.bookings[0].address.lat" class="confirmation-summary">
+          <ul
+            class="confirmation-summary"
+            ng-repeat="i in total.items">
+
+            <li
+              id="bb-confirmation-summary-service"
+              ng-if="i.full_describe"
+              class="row confirmation-summary-item">
+              <div
+                class="col-sm-3 bb-summary-label"
+                translate="ADMIN_BOOKING.CONFIRMATION.SERVICE_LBL">
+              </div>
+              <div class="col-sm-9 bb-summary-value">
+                {{i.full_describe}}
+              </div>
+            </li>
+
+            <li
+              id="bb-confirmation-summary-datetime"
+              ng-if="i.describe"
+              class="row confirmation-summary-item">
+              <div
+                class="col-sm-3 bb-summary-label"
+                translate="ADMIN_BOOKING.CONFIRMATION.DATE_TIME_LBL">
+              </div>
+              <div class="col-sm-9 bb-summary-value">
+                {{i.describe}}
+              </div>
+            </li>
+
+            <li
+              id="bb-confirmation-summary-price"
+              ng-if="i.price"
+              class="row confirmation-summary-item">
+              <div
+                class="col-sm-3 bb-summary-label"
+                translate="ADMIN_BOOKING.CONFIRMATION.PRICE_LBL">
+              </div>
+              <div class="col-sm-9 bb-summary-value">
+                {{i.price | currency}}
+              </div>
+            </li>
+
+          </ul>
+
+          <ul
+            ng-show="total.bookings[0].address.lat"
+            class="confirmation-summary">
 
             <div class="confirmation-summary-address">
-              <div><span class="fa fa-map-marker"></span> {{total.bookings[0].address | address_single_line}}</div>
-              <div><span class="fa fa-phone"></span> {{total.bookings[0].address.phone | local_phone_number}}</div>
+              <div>
+                <span class="fa fa-map-marker"></span>
+                {{total.bookings[0].address | address_single_line}}
+              </div>
+              <div>
+                <span class="fa fa-phone"></span>
+                {{total.bookings[0].address.phone | local_phone_number}}
+              </div>
             </div>
 
           </ul>
 
-          <div bb-custom-confirmation-text class="bb-message">
-            <div ng-repeat="msg in messages" ng-bind-html="msg"></div>
+          <div
+            bb-custom-confirmation-text
+            class="bb-message">
+            <div
+              ng-repeat="msg in messages"
+              ng-bind-html="msg">
+            </div>
           </div>
 
           <div class="row hidden-print pull-right print-row">
-            <button type="button" class="btn btn-link" onclick="window.print()"><span class="fa fa-print fa-2x"></span> Print</button>
+            <button
+              type="button"
+              class="btn btn-link"
+              onclick="window.print()">
+              <span class="fa fa-print fa-2x"></span>
+              <span translate="ADMIN_BOOKING.CONFIRMATION.PRINT_BTN"></span>
+            </button>
           </div>
 
-
-          <div class="row" style="margin-top: 10px" ng-click="cancel()" ng-if="cancel">
-            <button type="button" class="btn btn-primary pull-right">Close</button>
+          <div
+            class="row"
+            style="margin-top: 10px"
+            ng-click="cancel()"
+            ng-if="cancel">
+            <button
+              type="button"
+              class="btn btn-primary pull-right">
+              <span translate="ADMIN_BOOKING.CONFIRMATION.CLOSE_BTN"></span>
+            </button>
           </div>
 
         </div>
@@ -78,11 +172,5 @@
 
     </div>
   </div>
-</div>
 
-<!-- <div class="bb-step-navigation"></div> -->
-
-<div ng-show="isLoaded" class="powered-by visible-print">
-  <p>Bookings powered by <span style="color:#087f94">booking</span><span style="color:#88c66f">bug</span></p>
-  <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"></a>
 </div>

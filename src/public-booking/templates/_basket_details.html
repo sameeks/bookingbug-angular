@@ -1,39 +1,72 @@
-<div bb-basket-list class="modal-content bb-basket-mini">
+<div
+  bb-basket-list
+  class="modal-content bb-basket-mini">
 
   <div class="modal-header">
-    <button type="button" class="close" ng-click="cancel()">&times;</button>
-    <h5 class="modal-title">Basket Details</h5>
+    <button
+      type="button"
+      class="close"
+      ng-click="cancel()">
+      &times;
+    </button>
+    <h5
+      class="modal-title"
+      translate="PUBLIC_BOOKING.BASKET_DETAILS.MODAL_HEADING">
+    </h5>
   </div>
 
   <div class="modal-body">
-    <p ng-hide="bb.basket.items">No items added to basket yet.</p>
-    <table class="table table-bordered" ng-show="bb.basket.items">
+
+    <p ng-hide="bb.basket.items">
+      <span translate="PUBLIC_BOOKING.BASKET_DETAILS.NO_ITEMS_IN_BASKET"></span>
+    </p>
+
+    <table
+      class="table table-bordered"
+      ng-show="bb.basket.items">
       <thead>
         <tr>
-          <th>Item</th>
-          <th>Appointment</th>
+          <th translate="PUBLIC_BOOKING.BASKET_DETAILS.ITEM_COL_HEADING"></th>
+          <th translate="PUBLIC_BOOKING.BASKET_DETAILS.TIME_DURATION_COL_HEADING"></th>
           <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="item in bb.basket.items">
-          <td >
-            {{ item.service_name }}
-          </td>
           <td>
-            {{ item.date.date | datetime: "ddd Do MMM"}} at {{ item.date.date | datetime: "LT"}} for {{ item.duration | time_period }}
+            {{item.service_name}}
+          </td>
+          <td
+            translate="PUBLIC_BOOKING.BASKET_DETAILS.ITEM_TIME_AND_DURATION"
+            translate-values="{time: item.date.date, duration: item.duration}">
           </td>
           <td class="text-center">
-            <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="deleteBasketItem(item)"></span>
+            <span
+              class="fa fa-trash-o"
+              aria-hidden="true"
+              ng-click="deleteBasketItem(item)">
+            </span>
           </td>
         </tr>
       </tbody>
     </table>
+
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-    <button ng-show="bb.basket.items" class="btn btn-primary" ng-click="checkout('basket') && cancel()">Checkout</button>
+    <button
+      type="button"
+      class="btn btn-default"
+      ng-click="cancel()"
+      translate="PUBLIC_BOOKING.BASKET_DETAILS.CANCEL_BTN">
+    </button>
+    <button
+      type="button"
+      ng-show="bb.basket.items"
+      class="btn btn-primary"
+      ng-click="checkout('basket') && cancel()"
+      translate="PUBLIC_BOOKING.BASKET_DETAILS.CHECKOUT_BTN">
+    </button>
   </div>
 
 </div>

@@ -231,7 +231,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
     # if it's got a person and resource - then it
     Dialog.confirm
-      title: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_TITLE')
+      title: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_HEADING')
       model: event
       body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY')
       success: (model) =>
@@ -376,13 +376,12 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
     getCompanyPromise().then (company) ->
       if vm.showAll
-        BBAssets(company).then((assets)->
+        BBAssets.getAssets(company).then((assets)->
           if calOptions.type
             assets = _.filter assets, (a) -> a.type == calOptions.type
 
           for asset in assets
             asset.id = asset.identifier
-            asset.group = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.' + asset.group.toUpperCase())
 
           vm.loading = false
           callback(assets)
@@ -579,7 +578,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   companyListener = (company) ->
     vm.loading = true
 
-    BBAssets(company).then(assetsListener)
+    BBAssets.getAssets(company).then(assetsListener)
 
     company.$get('services').then(collectionListener)
 

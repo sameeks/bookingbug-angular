@@ -17,7 +17,7 @@ angular.module('BBAdmin.Directives').directive 'bbAdminLogin', () ->
 angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
   $rootScope, $q, $sessionStorage, BBModel) ->
 
-  $scope.login_form =
+  $scope.login_data =
     host: $sessionStorage.getItem('host')
     email: null
     password: null
@@ -28,8 +28,8 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
   $scope.login = () ->
     $scope.alert = ""
     params =
-      email: $scope.login_form.email
-      password: $scope.login_form.password
+      email: $scope.login_data.email
+      password: $scope.login_data.password
     BBModel.Admin.Login.$login(params).then (user) ->
       if user.company_id?
         $scope.user = user
@@ -47,11 +47,11 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
   $scope.selectedCompany = () ->
     $scope.alert = ""
     params =
-      email: $scope.login_form.email
-      password: $scope.login_form.password
-    $scope.login_form.selected_admin.$post('login', {}, params).then (login) ->
-      $scope.login_form.selected_admin.$getCompany().then (company) ->
+      email: $scope.login_data.email
+      password: $scope.login_data.password
+    $scope.login_data.selected_admin.$post('login', {}, params).then (login) ->
+      $scope.login_data.selected_admin.$getCompany().then (company) ->
         $scope.bb.company = company
-        BBModel.Admin.Login.$setLogin($scope.login_form.selected_admin)
+        BBModel.Admin.Login.$setLogin($scope.login_data.selected_admin)
         $scope.onSuccess(company)
 

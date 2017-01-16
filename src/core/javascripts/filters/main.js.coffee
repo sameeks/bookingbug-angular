@@ -1,8 +1,5 @@
 'use strict'
 
-# Filters
-app = angular.module 'BB.Filters'
-
 # strips the postcode from the end of the address. i.e.
 # '15 some address, somwhere, SS1 4RP' becomes '15 some address, somwhere'
 angular.module('BB.Filters').filter 'stripPostcode', ->
@@ -49,7 +46,6 @@ angular.module('BB.Filters').filter 'rag', ->
 angular.module('BB.Filters').filter 'time', ($window) ->
   (v) ->
     return $window.sprintf("%02d:%02d",Math.floor(v / 60), v%60 )
-
 
 angular.module('BB.Filters').filter 'address_single_line', ->
   (address) =>
@@ -105,103 +101,205 @@ angular.module('BB.Filters').filter 'map_lat_long', ->
     cord = /([-+]*\d{1,3}[\.]\d*)[, ]([-+]*\d{1,3}[\.]\d*)/.exec(address.map_url)
     return cord[0]
 
-angular.module('BB.Filters').filter 'currency', ($filter) ->
-  (number, currencyCode) =>
-    return $filter('icurrency')(number, currencyCode)
 
-angular.module('BB.Filters').filter 'icurrency', ($window, CompanyStoreService) ->
-  (number, currencyCode) =>
-    currencyCode ||= CompanyStoreService.currency_code
-    currency = {
-      USD: "$",
-      GBP: "£",
-      AUD: "$",
-      EUR: "€",
-      CAD: "$",
-      MIXED: "~"
-    }
+###
+ * @ngdoc filter
+ * @name distance
+ * @kind function
+ *
+ * @description
+ * Formats distance using current locale.
+ *
+ * @param {number} distance_in_km Distance in kilometres
+ * @param {integer} round_by The number of decimal places to round by
 
-    if $.inArray(currencyCode, ["USD", "AUD", "CAD", "MIXED", "GBP"]) >= 0
-      thousand = ","
-      decimal = "."
-      format = "%s%v"
-    else
-      thousand = "."
-      decimal = ","
-      format = "%s%v"
+ * @returns {string} Formatted distance
+ *
+ *
+ * @example
+   <example module="distanceExample">
+     <file name="index.html">
+       <script>
+         angular.module('distanceExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.distance = 10;
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Price: {{distance | distance:1}}</span><br/>
+       </div>
+     </file>
+   </example>
+###
+angular.module('BB.Filters').filter 'distance', ($translate, bbLocale) ->
+  (distance_in_km, round_by) ->
 
-    number = number / 100.0
+    return '' unless distance_in_km
 
-    $window.accounting.formatMoney(number, currency[currencyCode], 2, thousand, decimal, format)
+    distance  = distance_in_km
+    use_miles = bbLocale.getLocale().match(/^(en|en-gb|en-us)$/gi)
+    distance  *= 0.621371192 if use_miles
+    distance  = Math.round(distance * Math.pow(10, round_by)) / Math.pow(10, round_by) if round_by
+    unit      = if use_miles then $translate.instant('CORE.FILTERS.DISTANCE.MILES') else $translate.instant('CORE.FILTERS.DISTANCE.KILOMETRES')
+    distance  = "#{distance} #{unit}"
 
-
-angular.module('BB.Filters').filter 'raw_currency', () ->
-  (number) =>
-    number / 100.0
-
-
-angular.module('BB.Filters').filter 'pretty_price', ($filter) ->
-  (price, symbol) ->
-    return $filter('ipretty_price')(price, symbol)
-
-
-angular.module('BB.Filters').filter 'ipretty_price', ($window, CompanyStoreService) ->
-  (price, symbol) ->
-    if !symbol
-      currency = {
-        USD: "$",
-        GBP: "£",
-        AUD: "$",
-        EUR: "€",
-        CAD: "$",
-        MIXED: "~"
-      }
-      symbol = currency[CompanyStoreService.currency_code]
-
-    price /= 100.0
-
-    if parseFloat(price) == 0
-      return 'Free'
-    else if parseFloat(price) % 1 == 0
-      return symbol + parseFloat(price)
-    else
-      return symbol + $window.sprintf("%.2f", parseFloat(price))
+    return distance
 
 
-angular.module('BB.Filters').filter 'time_period', ->
-  (v, options) ->
+###
+ * @ngdoc filter
+ * @name currency
+ * @kind function
+ *
+ * @description
+ * Formats price using either the configured Company currency or the provided currency symbol.
+ *
+ * @param {integer} amount Input amount to format
+ * @param {string} currency_code Optional currency symbol
+ * @param {boolean} pretty_price Use to omit decimal places when price is whole. Default is false
+ * @returns {string} Formatted currency.
+ *
+ *
+ * @example
+   <example module="currencyExample">
+     <file name="index.html">
+       <script>
+         angular.module('currencyExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.price = 950;
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Price: {{price | currency}}</span><br/>
+       </div>
+     </file>
+   </example>
+###
+angular.module('BB.Filters').filter 'currency', ($window, $rootScope, CompanyStoreService, $translate) ->
+  (amount, currency_code, pretty_price=false) ->
 
-    return if !angular.isNumber(v)
+    return unless angular.isNumber(amount)
 
-    hour_string = if options && options.abbr_units then "hr"  else "hour"
-    min_string  = if options && options.abbr_units then "min" else "minute"
-    separator   = if options && angular.isString(options.separator) then options.separator else "and"
+    currency_codes = {USD: "$", GBP: "£", AUD: "$", EUR: "€", CAD: "$", MIXED: "~", RUB: "₽"}
 
-    val = parseInt(v)
-    if val < 60
-      str = "#{val} #{min_string}"
-      str += "s" if val != 1
-      return str
+    currency_code ||= CompanyStoreService.currency_code
 
-    hours = parseInt(val / 60)
-    mins = val % 60
+    format = $translate.instant(['CORE.FILTERS.CURRENCY.THOUSANDS_SEPARATOR', 'CORE.FILTERS.CURRENCY.DECIMAL_SEPARATOR', 'CORE.FILTERS.CURRENCY.CURRENCY_FORMAT'])
 
-    if mins == 0
+    hide_decimal   = pretty_price and (amount % 100 is 0)
+    decimal_places = if hide_decimal then 0 else 2
 
-      if hours == 1
-        return "1 #{hour_string}"
-      else
-       return "#{hours} #{hour_string}s"
-    else
-      str = "#{hours} #{hour_string}"
-      str += "s" if hours != 1
-      return str if mins == 0
+    return $window.accounting.formatMoney(amount / 100, currency_codes[currency_code], decimal_places, format.THOUSANDS_SEPARATOR, format.DECIMAL_SEPARATORS, format.CURRENCY_FORMAT)
 
-      str += " #{separator}" if separator.length > 0
-      str += " #{mins} #{min_string}"
-      str += "s" if mins != 1
 
-    return str
+angular.module('BB.Filters').filter 'icurrency', ($filter) ->
+  (number, currency_code) ->
+    return $filter('currency')(number, currency_code)
+
+
+angular.module('BB.Filters').filter 'raw_currency', -> (number) -> number / 100.0
+
+
+angular.module('BB.Filters').filter 'pretty_price', ($translate, $filter) ->
+  (price, currency_code) ->
+    if parseFloat(price) == 0 then $translate.instant('CORE.FILTERS.PRETTY_PRICE.FREE')
+    else $filter('currency')(price, currency_code, true)
+
+
+angular.module('BB.Filters').filter 'ipretty_price', ($filter) ->
+  (number, currencyCode) ->
+    return $filter('pretty_price')(number, currencyCode)
+
+###
+ * @ngdoc filter
+ * @name time_period
+ * @kind function
+ *
+ * @description
+ * Formats a number as a humanized duration, e.g. 1 hour, 2 minutes
+ *
+ * @param {number} minutes Input to format
+ * @returns {string} Humanized duration.
+ *
+ *
+ * @example
+   <example module="timePeriodExample">
+     <file name="index.html">
+       <script>
+         angular.module('timePeriodExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.duration = 90;
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Duration: {{amount | time_period}}</span>
+       </div>
+     </file>
+   </example>
+###
+angular.module('BB.Filters').filter 'time_period', ($translate) ->
+  (v) ->
+
+    return unless angular.isNumber(v)
+
+    minutes = parseInt(v)
+
+    hours          = Math.floor(minutes / 60)
+    minutes        %= 60
+    show_seperator = hours > 0 and minutes > 0
+
+    time_period = $translate.instant('CORE.FILTERS.TIME_PERIOD.TIME_PERIOD', {
+      hours          : hours,
+      minutes        : minutes,
+      show_seperator : +show_seperator
+    }, 'messageformat')
+
+    return time_period
+
+
+###
+ * @ngdoc filter
+ * @name time_period_from_seconds
+ * @kind function
+ *
+ * @description
+ * Formats a number as a humanized duration, e.g. 1 hour, 2 minutes, 5 seconds
+ *
+ * @param {number} seconds Input to format
+ * @returns {string} Humanized duration.
+ *
+ *
+ * @example
+   <example module="timePeriodExample">
+     <file name="index.html">
+       <script>
+         angular.module('timePeriodExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.duration = 90;
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Duration: {{amount | time_period_from_seconds}}</span>
+       </div>
+     </file>
+   </example>
+###
+angular.module('BB.Filters').filter 'time_period_from_seconds', ($translate, $filter) ->
+  (v) ->
+
+    return unless angular.isNumber(v)
+
+    seconds = parseInt(v)
+    time_period = ''
+
+    if seconds >= 60
+      time_period += $filter('time_period')(seconds / 60)
+      if (seconds % 60) > 0
+        time_period += $translate.instant('CORE.FILTERS.TIME_PERIOD.TIME_SEPARATOR')
+    if (seconds % 60) > 0
+      time_period += moment.duration(seconds % 60, 'seconds').humanize()
+
+    return time_period
 
 
 angular.module('BB.Filters').filter 'twelve_hour_time', ($window) ->
@@ -225,30 +323,6 @@ angular.module('BB.Filters').filter 'twelve_hour_time', ($window) ->
     time += suffix
     return time
 
-# TODO refactor to use time_period
-angular.module('BB.Filters').filter 'time_period_from_seconds', ->
-  (v) ->
-    val = parseInt(v)
-    if val < 60
-      return "" + val + " seconds"
-    hours = Math.floor(val / 3600)
-    mins  = Math.floor(val % 3600 / 60)
-    secs  = Math.floor(val % 60)
-    str = ""
-    if hours > 0
-      str += hours + " hour"
-      str += "s" if hours > 1
-      return str if mins == 0 && secs == 0
-      str += " and "
-    if mins > 0
-      str +=  mins + " minute"
-      str += "s" if mins > 1
-      return str if secs == 0
-      str += " and "
-    str += secs + " second"
-    str += "s" if secs > 0
-    return str
-
 
 angular.module('BB.Filters').filter 'round_up', ->
   (number, interval) ->
@@ -260,53 +334,106 @@ angular.module('BB.Filters').filter 'round_up', ->
     return result
 
 
-# Usage:
-# day in days | exclude_days : ['Saturday','Sunday']
+###
+ * @ngdoc filter
+ * @name exclude_days
+ * @kind function
+ *
+ * @description
+ * Formats a phone number using provided country code. If no country code is passed in, the country of the current company is used.
+ *
+ * @param {array} days Array of BBModel.Day objects
+ * @param {array} excluded String array of days to exclude, e.g. ['Saturday','Sunday']
+ * @returns {array} Filtered array excluding specificed days
+ *
+###
 angular.module('BB.Filters').filter 'exclude_days', ->
   (days, excluded) ->
     _.filter days, (day) ->
       excluded.indexOf(day.date.format('dddd')) == -1
 
-# format number as local number
+
+
+###
+ * @ngdoc filter
+ * @name local_phone_number
+ * @kind function
+ *
+ * @description
+ * Formats a phone number using provided country code. If no country code is passed in, the country of the current company is used.
+ *
+ * @param {string} phone_number The phone number to format
+ * @param {string} country_code (Optional) The country code in Alpha-2 ISO-3166 format
+ * @returns {string} Formatted phone number
+ *
+ *
+ * @example
+   <example module="localPhoneNumberExample">
+     <file name="index.html">
+       <script>
+         angular.module('localPhoneNumberExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.number = "+44 7877 123456";
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Phone Number: {{number | local_phone_number}}</span>
+       </div>
+     </file>
+   </example>
+###
 angular.module('BB.Filters').filter 'local_phone_number', (CompanyStoreService, ValidatorService) ->
-  (phone_number) ->
+  (phone_number, country_code) ->
 
     return if !phone_number
 
-    cc = CompanyStoreService.country_code
+    country_code ||= CompanyStoreService.country_code
 
-    switch cc
+    switch country_code
       when "gb" then return phone_number.replace(/^(\+44 \(0\)|\S{0})/, '0')
       when "us" then return phone_number.replace(ValidatorService.us_phone_number, "($1) $2 $3")
       else
         return phone_number
 
-# Checks if a format (option) is set if not checks the country and provides a default.
-# Additionally you can pass in date, time or datetime
-angular.module('BB.Filters').filter 'datetime', (GeneralOptions, CompanyStoreService) ->
 
-  hardcoded_formats =
-    datetime:
-      us: 'MM/DD/YYYY, h:mm a'
-      uk: 'DD/MM/YYYY, HH:mm'
-    date:
-      us: 'MM/DD/YYYY'
-      uk: 'DD/MM/YYYY'
-    time:
-      us: 'h:mm a'
-      uk: 'HH:mm'
-
+###
+ * @ngdoc filter
+ * @name datetime
+ * @kind function
+ *
+ * @description
+ * Format given moment object or datelike string using provided format.
+ *
+ * @param {moment|string} date The date to format
+ * @param {string} format The format to apply. Defaults to LLL
+ * @returns {boolean} show_time_zone Show timezone identifer. Defaults to false
+ *
+ *
+ * @example
+   <example module="dateTimeExample">
+     <file name="index.html">
+       <script>
+         angular.module('dateTimeExample', [])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.date = moment();
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+         <span>Date: {{date | datetime}}</span>
+       </div>
+     </file>
+   </example>
+###
+angular.module('BB.Filters').filter 'datetime', (GeneralOptions) ->
   (date, format="LLL", show_time_zone=false) ->
-    if hardcoded_formats[format]
-      cc = if CompanyStoreService.country_code is 'us' then 'us' else 'uk'
-      format = hardcoded_formats[format][cc]
 
-    if date and moment.isMoment(date)
-      new_date = date.clone()
-      new_date.tz(GeneralOptions.display_time_zone)
-      format += ' (zz)' if show_time_zone
-      return new_date.format(format)
+    return if !date or (date and !moment(date).isValid())
+   
+    new_date = moment(date)
+    new_date.tz(GeneralOptions.display_time_zone)
+    format += ' zz' if show_time_zone
 
+    return new_date.format(format)
 
 
 angular.module('BB.Filters').filter 'range', ->
@@ -360,13 +487,13 @@ angular.module('BB.Filters').filter 'nl2br', ->
       return str.replace(/\n/g, '<br/>')
 
 
-app.filter 'clearTimezone', ->
+angular.module('BB.Filters').filter 'clearTimezone', ->
   (val, offset) ->
     if val != null and val.length > 19
       return val.substring(0, 19)
     val
 
-app.filter "format_answer", ->
+angular.module('BB.Filters').filter "format_answer", ->
   (answer) ->
     if typeof answer == "boolean"
       answer = if answer is true then "Yes" else "No"

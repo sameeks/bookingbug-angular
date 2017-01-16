@@ -35,12 +35,9 @@ angular.module('BB.Services').provider 'GeneralOptions', ->
     set_time_zone_automatically: false
     custom_time_zone: false
     display_time_zone: null
-    use_i18n: false
     update_document_title: false
     scroll_offset: 0
   }
-
-
 
   @setOption = (option, value) ->
     if options.hasOwnProperty(option)

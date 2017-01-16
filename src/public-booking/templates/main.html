@@ -1,40 +1,68 @@
-<div class="header" aria-hidden="{{!isLoaded || coveredByModal}}">
+<div
+  class="header"
+  aria-hidden="{{!isLoaded || coveredByModal}}">
 
   <div bb-form-data-store></div>
+  <div bb-language-picker></div>
 
-  <!-- BREADCRUMB ROUTE
-  <div bb-breadcrumbs class="breadcrumbs_holder" ng-init="setRoute([
-    {page:'map', title: 'Select a store'},
-    {page:'service_list', title: 'Select a service'},
-    {page:'person_list', title: 'Select a person'},
-    {page:'calendar', title: 'Select a time'},
-    {page:'checkout', title: 'Checkout'},
-    {page:'confirmation', title: 'Confirmation'},
-    ])">
+  <!-- BREADCRUMB ROUTE -->
+  <!-- <div
+    bb-breadcrumbs
+    class="breadcrumbs_holder"
+    ng-init="setRoute([
+      {page:'map', title: 'Select a store'},
+      {page:'service_list', title: 'Select a service'},
+      {page:'person_list', title: 'Select a person'},
+      {page:'calendar', title: 'Select a time'},
+      {page:'checkout', title: 'Checkout'},
+      {page:'confirmation', title: 'Confirmation'},
+      ])">
 
     <ol class="breadcrumb">
-      <li ng-repeat="step in bb.allSteps" ng-class="{'active': step.active, 'passed': step.passed, 'disabled': isDisabledStep(step)}">
-        <button type="button" ng-click="loadStep(step.number)" ng-class="{'active': step.active, 'passed': step.passed}" ng-disabled="isDisabledStep(step)">
+      <li
+        ng-repeat="step in bb.allSteps"
+        ng-class="{'active': step.active, 'passed': step.passed, 'disabled': isDisabledStep(step)}">
+        <button
+          type="button"
+          ng-click="loadStep(step.number)"
+          ng-class="{'active': step.active, 'passed': step.passed}"
+          ng-disabled="isDisabledStep(step)">
           <span class="step-num">{{step.number}}.</span>
           <span class="step-title">{{step.title}}</span>
         </button>
       </li>
     </ol>
-  </div>
-  -->
-
-  <!-- PROGRESSBAR
-  <div uib-progressbar value="bb.percentage_complete" type="primary"></div>
-  -->
-
-  <!-- STEP INDICATOR
-  <div ng-if="bb.current_step" class="step-heading">
-    <span ng-if="bb.current_step != 1 && bb.current_step <  bb.allSteps.length" ng-bind="'Step ' + (bb.current_step - 1) + ' of ' + (bb.allSteps.length - 2)"></span>
-    <span ng-if="bb.current_step == bb.allSteps.length" ng-bind="'Complete'"></span>
   </div> -->
 
-  <div class="alerts" bb-scroll-to="alert:raised" bb-always-scroll>
-    <div uib-alert ng-repeat="alert in $root.alerts" ng-class="'alert-' + alert.type">
+  <!-- PROGRESSBAR -->
+  <!-- <div
+    uib-progressbar
+    value="bb.percentage_complete"
+    type="primary">
+  </div> -->
+
+  <!-- STEP INDICATOR -->
+  <!-- <div
+    ng-if="bb.current_step"
+    class="step-heading">
+    <span
+      ng-if="bb.current_step != 1 && bb.current_step <  bb.allSteps.length"
+      ng-bind="'Step ' + (bb.current_step - 1) + ' of ' + (bb.allSteps.length - 2)">
+    </span>
+    <span
+      ng-if="bb.current_step == bb.allSteps.length"
+      ng-bind="'Complete'">
+    </span>
+  </div> -->
+
+  <div
+    class="alerts"
+    bb-scroll-to="alert:raised"
+    bb-always-scroll>
+    <div
+      uib-alert
+      ng-repeat="alert in $root.alerts"
+      ng-class="'alert-' + alert.type">
       <ul>
         <li ng-bind-html="alert.msg"></li>
       </ul>
@@ -43,10 +71,11 @@
 
 </div>
 
-<div class="content" aria-hidden="{{!isLoaded || coveredByModal}}">
+<div
+  class="content"
+  aria-hidden="{{!isLoaded || coveredByModal}}">
 
   <div bb-content class="ng-cloak"></div>
-  <div bb-display-mode></div>
 
   <div bb-loading class="bb-loader" >
     <div id="loading_icon">
@@ -56,8 +85,20 @@
 
 </div>
 
-<div bb-dynamic-footer class="footer" aria-hidden="{{!isLoaded || coveredByModal}}">
+<div
+  bb-dynamic-footer
+  class="footer"
+  aria-hidden="{{!isLoaded || coveredByModal}}">
   <div ng-show="isLoaded" class="powered-by">
-    <span>Bookings powered by <a href="//www.bookingbug.com" style="text-decoration:none" target="_blank"><span style="color:#087f94">booking</span><span style="color:#88c66f">bug</span></a></span>
+    <span>
+      <span translate="PUBLIC_BOOKING.MAIN.POWERED_BY"></span>
+      <a
+        href="//www.bookingbug.com"
+        style="text-decoration:none"
+        target="_blank">
+        <span style="color:#087f94">booking</span>
+        <span style="color:#88c66f">bug</span>
+      </a>
+    </span>
   </div>
 </div>

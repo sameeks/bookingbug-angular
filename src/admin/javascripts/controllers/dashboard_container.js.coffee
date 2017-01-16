@@ -1,7 +1,6 @@
 'use strict'
 
-angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope,
-  $rootScope, $location, $uibModal, $document) ->
+angular.module('BBAdmin.Controllers').controller 'DashboardContainer', ($scope, $rootScope, $location, $uibModal, $document) ->
 
   $scope.selectedBooking = null
   $scope.poppedBooking = null

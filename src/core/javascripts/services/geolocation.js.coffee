@@ -26,14 +26,12 @@ angular.module('BB.Services').factory 'GeolocationService', ($q) ->
         Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(rLat1) * Math.cos(rLat2)
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
     d = R * c
-    # convert to miles
-    d = d * 0.621371192
-    distance = Math.round(d)
 
-    return distance
+    return d
 
 
   geocode: (address, prms = {}) ->
+
     deferred = $q.defer()
     request = {address : address}
     request.region = prms.region if prms.region
@@ -51,4 +49,3 @@ angular.module('BB.Services').factory 'GeolocationService', ($q) ->
         deferred.reject(status)
 
     deferred.promise
-
