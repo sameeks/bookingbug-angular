@@ -1,58 +1,79 @@
 'use strict'
 
-###**
+###*
 * @ngdoc directive
 * @name BB.Directives:bbForm
 * @restrict A
 * @scope true
 *
 * @description
-* Use with forms to add enhanced validation. When using with ng-form, submitForm
-* needs to be called manually as submit event is not raised.
-
+* Use with forms to add enhanced validation.
+* When using with ng-form, submitForm needs to be called manually as submit event is not raised.
 *
 * @example
 * <div ng-form name="example_form" bb-form></div>
 * <form name="example_form" bb-form></form>
-*
-####
-angular.module('BB.Directives').directive 'bbForm', ($bbug, $window, ValidatorService, $timeout, GeneralOptions) ->
-  restrict: 'A'
-  require: '^form'
-  scope: true
-  link: (scope, elem, attrs, ctrls) ->
+###
+bbFormDirective = ($bbug, $window, ValidatorService, $timeout, GeneralOptions) ->
+  'ngInject'
 
-    scope.form = ctrls
+  link = (scope, elem, attrs, ctrls) ->
+    $bbPageCtrl = null
+    $formCtrl = null
 
-    # set up event handler on the form element
-    elem.on "submit", ->
-      scope.submitForm()
-      scope.$apply()
+    init = ->
+      $formCtrl = ctrls[0]
+      $bbPageCtrl = ctrls[1]
+      scope.submitForm = submitForm
+      elem.on "submit", submitForm # doesn't work with ng-form just regular form
+      return
 
+    submitForm = () ->
+      $formCtrl.$setSubmitted()
+      $timeout(scrollAndFocusOnInvalid, 100)
 
-    scope.submitForm = () ->
+      isValid = ValidatorService.validateForm($formCtrl)
 
-      scope.form.submitted = true
+      if isValid
+        serveBBPage()
 
-      # mark nested forms as submitted too
-      for property of scope.form
-        if angular.isObject(scope.form[property]) and scope.form[property].hasOwnProperty('$valid')
-          scope.form[property].submitted = true
+      return isValid
 
-      $timeout ->
-        invalid_form_group = elem.find('.has-error:first')
+    serveBBPage = () ->
+      if $bbPageCtrl? and attrs.bbFormRoute?
+        route = attrs.bbFormRoute
+        $bbPageCtrl.$scope.checkReady()
+        if route.length > 0
+          $bbPageCtrl.$scope.routeReady(route)
+        else
+          $bbPageCtrl.$scope.routeReady()
+      return
 
-        if invalid_form_group and invalid_form_group.length > 0 and !scope.form.raise_alerts
+    scrollAndFocusOnInvalid = () ->
+      invalidFormGroup = elem.find('.has-error:first')
 
-          if 'parentIFrame' of $window
-            parentIFrame.scrollToOffset(0, invalid_form_group.offset().top - GeneralOptions.scroll_offset)
-          else
-            $bbug("html, body").animate
-              scrollTop: invalid_form_group.offset().top - GeneralOptions.scroll_offset
-              , 1000
+      if invalidFormGroup and invalidFormGroup.length > 0 and !$formCtrl.raise_alerts
 
-          invalid_input = invalid_form_group.find('.ng-invalid')
-          invalid_input.focus()
-      , 100
+        if 'parentIFrame' of $window
+          parentIFrame.scrollToOffset(0, invalidFormGroup.offset().top - GeneralOptions.scroll_offset)
+        else
+          $bbug("html, body").animate
+            scrollTop: invalidFormGroup.offset().top - GeneralOptions.scroll_offset
+          , 1000
 
-      return ValidatorService.validateForm(scope.form)
+        invalidInput = invalidFormGroup.find('.ng-invalid')
+        invalidInput.focus()
+        return
+
+    init()
+
+    return
+
+  return {
+    restrict: 'A'
+    require: ['^form', '?^^bbPage']
+    scope: 'true'
+    link: link
+  }
+
+angular.module('BB.Directives').directive 'bbForm', bbFormDirective
