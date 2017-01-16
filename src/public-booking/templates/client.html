@@ -2,7 +2,12 @@
 
   <div
     bb-include="_basket_item_summary"
-    ng-show="bb.current_item.service">
+    ng-show="bb.current_item.service && !bb.stacked_items.length > 1">
+  </div>
+
+  <div
+    bb-include="_multi_service_summary"
+    ng-show="bb.stacked_items.length > 1">
   </div>
 
   <h2 class="booking-form-header">

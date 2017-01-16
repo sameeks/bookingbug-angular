@@ -52,6 +52,6 @@ angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache
       if has_content
         element.html(clone).show()
       else
-        $q.when($templateCache.get('client_form.html')).then (template) ->
+        $q.when($templateCache.get('_client_details.html')).then (template) ->
           element.html(template).show()
           $compile(element.contents())(scope)

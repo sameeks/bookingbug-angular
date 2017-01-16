@@ -20,6 +20,9 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
 
   $rootScope.connection_started.then ->
 
+    for item in $scope.bb.stacked_items
+      item.setDuration(item.service.duration)
+
     # read initialisation attributes
     $scope.options = $scope.$eval($attrs.bbTimeRangeStacked) or {}
 
