@@ -35,7 +35,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     $scope.$on 'refetchBookings', refetchBookingsHandler
     $scope.$on 'newCheckout', newCheckoutHandler
     $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
-    $rootScope.$on 'timezoneUpdated', newTzHandler
+    $rootScope.$on 'timezoneUpdated', newTimezoneHandler
 
     getCompanyPromise().then(companyListener)
 
@@ -191,8 +191,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   fcEventDrop = (event, delta, revertFunc) -> # we need a full move cal if either it has a person and resource, or they've dragged over multiple days
 
     if GeneralOptions.custom_time_zone
-
-      # Set current custom timezone to start/end moments
+      # Add current custom timezone to start/end
       calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar')
       event.start = calendar.moment(moment.tz(event.start.toISOString(), GeneralOptions.display_time_zone))
       event.end = calendar.moment(moment.tz(event.end.toISOString(), GeneralOptions.display_time_zone))
@@ -525,7 +524,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
     return
 
-  newTzHandler = (event, tz) ->
+  newTimezoneHandler = (event, tz) ->
     uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('option', 'timezone', tz)
     return
 

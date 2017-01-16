@@ -14,17 +14,14 @@ angular
       if !attr.allChoices
         throw new Error('ief:ui-select: Attribute all-choices is required in  ui-select-choices so that we can handle  pagination.')
 
-      scope.pagingOptions =
-        allOptions: scope.$eval(attr.allChoices)
-
-      attr.refresh = 'addMoreItems()';
-
-      refreshCallBack = $parse(attr.refresh);
+      scope.pagingOptions = allOptions: scope.$eval(attr.allChoices)
+      attr.refresh = 'addMoreItems()'
+      refreshCallBack = $parse(attr.refresh)
 
       elm.bind('scroll', (event) ->
-        remainingHeight = raw.offsetHeight - raw.scrollHeight;
-        scrollTop = raw.scrollTop;
-        percent = Math.abs((scrollTop / remainingHeight) * 100);
+        remainingHeight = raw.offsetHeight - raw.scrollHeight
+        scrollTop = raw.scrollTop
+        percent = Math.abs(scrollTop / remainingHeight * 100)
 
         if percent >= 80
           if scrollCompleted
@@ -33,31 +30,24 @@ angular
             event.stopPropagation()
             callback = () ->
               scope.addingMore = true
-              refreshCallBack(scope,
-                $event: event
-              )
+              refreshCallBack scope, $event: event
               scrollCompleted = true
+              return
 
             $timeout(callback, 100)
-      )
-
-      closeDestroyer = scope.$on('uis:close', () ->
-        pagingOptions = scope.$select.pagingOptions || {}
-        pagingOptions.filteredItems = undefined
-        pagingOptions.page = 0
+        return
       )
 
       scope.addMoreItems = (doneCalBack) ->
-        console.log('new addMoreItems')
         $select = scope.$select
         allItems = scope.pagingOptions.allOptions
         moreItems = []
         itemsThreshold = 100
         search = $select.search
 
-        pagingOptions = $select.pagingOptions = $select.pagingOptions ||
-          page: 0,
-          pageSize: 20,
+        pagingOptions = $select.pagingOptions = $select.pagingOptions or
+          page: 0
+          pageSize: 20
           items: $select.items
 
         if pagingOptions.page == 0
@@ -66,23 +56,16 @@ angular
         if !pagingOptions.originalAllItems
           pagingOptions.originalAllItems = scope.pagingOptions.allOptions
 
-        console.log('search term=' + search)
-        console.log('prev search term=' + pagingOptions.prevSearch)
+        searchDidNotChange = search and pagingOptions.prevSearch and search == pagingOptions.prevSearch
 
-        searchDidNotChange = search && pagingOptions.prevSearch && search == pagingOptions.prevSearch
-        console.log('isSearchChanged=' + searchDidNotChange)
-
-        if pagingOptions.filteredItems && searchDidNotChange
+        if pagingOptions.filteredItems and searchDidNotChange
           allItems = pagingOptions.filteredItems
 
         pagingOptions.prevSearch = search;
 
-        if search && search.length > 0 && pagingOptions.items.length < allItems.length && !searchDidNotChange
+        if search and search.length > 0 and pagingOptions.items.length < allItems.length and !searchDidNotChange
 
-          if !pagingOptions.filteredItems
-            console.log('previous ' + pagingOptions.filteredItems)
-
-          pagingOptions.filteredItems = undefined
+          pagingOptions.filteredItems = null
           moreItems = $filter('filter')(pagingOptions.originalAllItems, search)
 
           if moreItems.length > itemsThreshold
@@ -98,12 +81,10 @@ angular
           else
             allItems = moreItems
             pagingOptions.items.length = 0
-            pagingOptions.filteredItems = undefined
-
-        else
-          console.log('plain paging')
+            pagingOptions.filteredItems = null
 
         pagingOptions.page++;
+
         if pagingOptions.page * pagingOptions.pageSize < allItems.length
           moreItems = allItems.slice(pagingOptions.items.length, pagingOptions.page * pagingOptions.pageSize)
         else
@@ -116,12 +97,12 @@ angular
         scope.calculateDropdownPos()
         scope.$broadcast('uis:refresh')
 
-        # if doneCalBack
-        #   doneCalBack()
+        if doneCalBack
+          doneCalBack()
 
       scope.$on('$destroy', () ->
         elm.off('scroll');
-        closeDestroyer();
+        return
       )
 
       return

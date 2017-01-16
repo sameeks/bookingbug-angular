@@ -40,7 +40,7 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
   * @param {String} Timezone
   * @returns {Object}
   ###
-  mapTzForDisplay = (location) ->
+  mapTimezoneForDisplay = (location) ->
     city = location.match(/[^/]*$/)[0].replace(/_/g, ' ')
     tz = moment.tz(location)
     localTimezone =
@@ -55,7 +55,7 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
   * @param {String, Array} Restrict the timezones to one region (String) or multiple regions (Array)
   * @returns {Array} A list of timezones
   ###
-  generateTzList = (restrictRegion) ->
+  generateTimezoneList = (restrictRegion) ->
     locationNames = moment.tz.names().filter (tz) -> tz.indexOf('GMT') is -1
     if restrictRegion
       locationNames = restrictToRegion(locationNames, restrictRegion)
@@ -66,8 +66,8 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
     return timezones
 
   return {
-    mapTzForDisplay: mapTzForDisplay
-    generateTzList: generateTzList
+    mapTimezoneForDisplay: mapTimezoneForDisplay
+    generateTimezoneList: generateTimezoneList
   }
 
 angular

@@ -13,12 +13,10 @@ controller = ($scope, $state, company, $uibModalStack, $rootScope, CompanyStoreS
   $scope.bb.company = company
   $scope.user = $rootScope.user
 
-  #Set timezone globally per company basis (company contains timezone info)
-  # moment.tz.setDefault(company.timezone)
-
   if localStorage.selectedTimezone
     moment.tz.setDefault(localStorage.selectedTimezone)
   else
+    #Set timezone globally per company basis (company contains timezone info)
     moment.tz.setDefault(company.timezone)
 
   CompanyStoreService.country_code = company.country_code

@@ -26,4 +26,4 @@ userPreferencesComponent =
 
 angular
   .module 'BBAdminDashboard'
-  .component 'userPreferences', userPreferencesComponent
+  .component 'bbUserPreferences', userPreferencesComponent

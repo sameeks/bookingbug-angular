@@ -4,7 +4,7 @@
   </label>
   <toggle-switch
     ng-change="$ctrl.automaticTimezoneToggle()"
-    ng-model="$ctrl.automaticTz"
+    ng-model="$ctrl.automaticTimezone"
     on-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_ON_LABEL' | translate}}"
     off-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_OFF_LABEL' | translate}}"
     class="switch-primary">
@@ -17,10 +17,10 @@
   </label>
   <!-- Using ui-select-choices-lazyload due to perfomance issues -->
   <ui-select
-    ng-model="$ctrl.selectedTz"
+    ng-model="$ctrl.selectedTimezone"
     theme="bootstrap"
-    ng-disabled="$ctrl.automaticTz"
-    ng-change="$ctrl.setTimezone($ctrl.selectedTz.value);">
+    ng-disabled="$ctrl.automaticTimezone"
+    ng-change="$ctrl.setNewTimezone($ctrl.selectedTimezone.value);">
 
     <ui-select-match placeholder="Select timezone">
      {{$select.selected.display}}
@@ -45,7 +45,7 @@
     style="width: 260px;"
     ng-model="$ctrl.selectedTimezone"
     theme="bootstrap"
-    ng-change="$ctrl.setTimezone($ctrl.selectedTimezone.value, $ctrl.automaticTimezone); resetTimeSelection()">
+    ng-change="$ctrl.setNewTimezone($ctrl.selectedTimezone.value, $ctrl.automaticTimezone); resetTimeSelection()">
 
     <ui-select-match placeholder="Select timezone">
      {{$select.selected.display}}
