@@ -1,4 +1,4 @@
-angular.module('BB').constant 'ROUTE_STATES',
+angular.module('BB').constant 'routeStates',
   Company: 0
   Category: 1
   Service: 2

@@ -1,6 +1,6 @@
 'use strict'
 
-BBCtrl = (ROUTE_STATES,$scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize) ->
+BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize) ->
   'ngInject'
 
   @$scope = $scope
@@ -18,7 +18,7 @@ BBCtrl = (ROUTE_STATES,$scope, $location, $rootScope, halClient, $window, $http,
   widgetStarted = $q.defer()
   $rootScope.widget_started = widgetStarted.promise
 
-  $rootScope.Route = $scope.Route = ROUTE_STATES
+  $rootScope.Route = $scope.Route = routeStates
 
   @$onInit = () ->
 

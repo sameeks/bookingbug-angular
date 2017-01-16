@@ -1,3 +1,6 @@
+'use strict'
+
+
 angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
   FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService) ->
