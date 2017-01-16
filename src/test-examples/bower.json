@@ -12,8 +12,6 @@
     "bower_components"
   ],
   "dependencies": {
-    "angular": "~1.5.8",
-    "angular-mocks": "~1.5.8",
     "angular-ui-router": "~0.2.18",
     "jquery": "~1.11.3"
   }

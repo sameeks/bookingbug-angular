@@ -19,8 +19,7 @@
 ###
 
 
-angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
-  BookableItemModel, BaseModel, $bbug, DateTimeUtilitiesService) ->
+angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, BookableItemModel, BaseModel, $bbug, DateTimeUtilitiesService, $translate) ->
 
   # A class that defines an item in a shopping basket
   # This could represent a time based service, a ticket for an event or class, or any other purchasable item
@@ -35,7 +34,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
       @days_link =  null
       @book_link =  null
       @parts_links = {}
-      @settings or= {}
+      @settings ||= {}
       @has_questions = false
 
       # give the basket item a unique reference so that we can track it
@@ -193,7 +192,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
         # NOTE: time is not set as it might not be available
         date = if defaults.date then defaults.date else moment()
         time = if defaults.time then parseInt(defaults.time) else 0
-        defaults.datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(defaults.date, {time: time})
+        defaults.datetime = DateTimeUtilitiesService.convertTimeToMoment(defaults.date, time)
       if defaults.service_ref
         @service_ref = defaults.service_ref
       if defaults.group
@@ -434,23 +433,35 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     * @returns {array} The returned set event chaint
     ###
     setEventChain: (event_chain, default_questions = null) ->
+
       if @event_chain
+
         if @event_chain.self && event_chain.self && @event_chain.self == event_chain.self # return if it's the same event_chain
           return
+      
       @event_chain = event_chain
       @base_price = parseFloat(event_chain.price)
+
       if @price? and @price != @base_price
         @setPrice(@price)
       else
         @setPrice(@base_price)
+      
       if @event_chain.isSingleBooking() # i.e. does not have tickets sets and max bookings is 1
+        
         # if you can only book one ticket - just use that
-        @tickets = {name: "Admittance", max: 1, type: "normal", price: @base_price}
+        @tickets =
+          name: $translate.instant('COMMON.TERMINOLOGY.ADMITTANCE')
+          max: 1,
+          type: "normal",
+          price: @base_price
+
         @tickets.pre_paid_booking_id = @pre_paid_booking_id
         @tickets.qty = @num_book if @num_book
 
 
       if @event_chain.$has('questions')
+
         @has_questions = true
 
         # we have a questions link - but are there actaully any questions ?
@@ -685,7 +696,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
         @time.select()
 
         if @datetime
-          @datetime = DateTimeUtilitiesService.convertTimeSlotToMoment(@date.date, @time)
+          @datetime = DateTimeUtilitiesService.convertTimeToMoment(@date.date, @time.time)
 
         if @price && @time.price && (@price != @time.price)
           @setPrice(@time.price)
@@ -1067,7 +1078,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
     ###
     start_datetime: () ->
       return null if !@date || !@time
-      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date.date, @time)
+      return DateTimeUtilitiesService.convertTimeToMoment(@date.date, @time.time)
 
 
     startDatetime: () ->
@@ -1087,7 +1098,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel,
       return null if !@date || !@time || (!@listed_duration && !@duration)
       duration = if @listed_duration then @listed_duration else @duration
       time = @time.time + duration
-      return DateTimeUtilitiesService.convertTimeSlotToMoment(@date.date, time)
+      return DateTimeUtilitiesService.convertTimeToMoment(@date.date, time)
 
 
     endDatetime: () ->

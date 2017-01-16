@@ -51,10 +51,10 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
 
       if err.data and err.data.error is "Please Login"
         loader.setLoaded()
-        AlertService.raise('EMAIL_ALREADY_REGISTERED_ADMIN')
+        AlertService.raise('EMAIL_IN_USE')
       else if err.data and err.data.error is "Sorry, it appears that this phone number already exists"
         loader.setLoaded()
-        AlertService.raise('PHONE_NUMBER_ALREADY_REGISTERED_ADMIN')
+        AlertService.raise('PHONE_NUMBER_IN_USE')
       else
         loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
@@ -77,6 +77,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       order_by: params.order_by or $scope.sort_by
       order_by_reverse: params.order_by_reverse
       page: params.page or 1
+    $scope.params.default_company_id = $scope.bb.company.id if AdminBookingOptions.use_default_company_id
 
     $scope.notLoaded $scope
 
@@ -97,6 +98,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     params =
       filter_by: search_text
       company: $scope.bb.company
+    params.default_company_id = $scope.bb.company.id if AdminBookingOptions.use_default_company_id
     BBModel.Admin.Client.$query(params).then (clients) =>
       defer.resolve(clients.items)
     defer.promise
@@ -114,7 +116,7 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
 
   $scope.clearSearch = () ->
     $scope.clients.initialise()
-    $scope.typehead_result = null
+    $scope.typeahead_result = null
     $scope.search_complete = false
 
 

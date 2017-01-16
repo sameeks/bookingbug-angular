@@ -7,22 +7,13 @@
 * @description
 * Representation of an Validator Object
 *
-* @property {string} uk_postcode_regex The UK postcode regex
-* @property {string} uk_postcode_regex_lenient The UK postcode regex (lenient)
-* @property {string} number_only_regex The number only regex
-* @property {integer} uk_mobile_regex_strict The UK mobile regex (strict)
-* @property {integer} mobile_regex_lenient Mobile number regex (lenient)
-* @property {integer} uk_landline_regex_strict The UK landline regex (strict)
-* @property {integer} uk_landline_regex_lenient The UK landline regex (lenient)
-* @property {integer} international_number The international number
-* @property {string} alphanumeric The alphanumeric
-* @property {string} alpha The letters and spaces
-* @property {integer} us_phone_number The Us phone number
+* @property {string} alpha Alpha pattern that accepts letters, hypens and spaces
+* @property {string} us_phone_number US phone number regex
+*
 ###
 
 
-angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
-  AlertService, CompanyStoreService, BBModel, $q, $bbug) ->
+angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertService, CompanyStoreService, BBModel, $q, $bbug) ->
 
   # Use http://regex101.com/ to test patterns
 
@@ -42,13 +33,20 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
   number_only_regex = /^\d+$/
 
   # UK mobile number regex (strict)
-  uk_mobile_regex_strict = /^((\+44\s?|0)7([45789]\d{2}|624)\s?\d{3}\s?\d{3})$/
+  # ----------------------------------------------------------------------------------------------------------------------------------------
+  # +44 or 0 followed by 7 followed by [45789] followed by \d{2} or 624 followed by \d{6} and can contain any number of spaces in between
+  # ----------------------------------------------------------------------------------------------------------------------------------------
+  uk_mobile_regex_strict = /^((\+44|0)\s*7\s*([45789](\s*\d){2}|6\s*2\s*4)(\s*\d){6})$/
 
   # mobile number regex (lenient)
   mobile_regex_lenient = /^(0|\+)([\d \(\)]{9,19})$/
 
   # UK landline regex (strict)
-  uk_landline_regex_strict = /^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/
+  # ----------------------------------------------------------------------------------------------------------------
+  # Will accept numbers like: 0208 695 1232, 020 8695 1232, +44 208 695 1232, +44 1623 431 091
+  # ----------------------------------------------------------------------------------------------------------------
+  uk_landline_regex_strict = /^(\+44|0)\s*[1-9]\s*\d{1,4}\s*\d{3,4}\s*\d{2,4}$/
+
 
   # UK landline regex (lenient)
   uk_landline_regex_lenient = /^(0|\+)([\d \(\)]{9,19})$/
@@ -72,133 +70,144 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
   # https://www.safaribooksonline.com/library/view/regular-expressions-cookbook/9781449327453/ch04s02.html
   us_phone_number: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 
+
   ###**
     * @ngdoc method
     * @name getEmailPattern
     * @methodOf BB.Services:Validator
     * @description
-    * Get the email pattern
+    * Returns a pattern for matching email addresses
     *
-    * @returns {string} The returned the email pattern
+    * @returns {string} Email regex
   ###
   getEmailPattern: () ->
     return email_regex
+
 
   ###**
     * @ngdoc method
     * @name getStandardPassword
     * @methodOf BB.Services:Validator
     * @description
-    * Get the email pattern
+    * Returns a password pattern enforcing at least 7 characters and 1 number
     *
-    * @returns {string} Returns Password must contain at least 7 characters and 1 number password pattern
+    * @returns {string} Password regex 
   ###
   getStandardPassword: () ->
     return standard_password
 
-  ###**
-    * @ngdoc method
-    * @name getUKPostcodePattern
-    * @methodOf BB.Services:Validator
-    * @description
-    * Get the UK postcode pattern
-    *
-    * @returns {string} The returned the UK postcode regex lenient
-  ###
 
   ###**
     * @ngdoc method
     * @name getUKPostcodePattern
     * @methodOf BB.Services:Validator
     * @description
-    * Get the UK postcode patternt
+    * Returns a pattern for matching UK postcodes
     *
-    * @returns {integer} Return the UK postcode pattern
+    * @returns {string} UK Postcode regex
   ###
   getUKPostcodePattern: () ->
     return uk_postcode_regex_lenient
 
 
+  ###**
+    * @ngdoc method
+    * @name getUKPostcodePattern
+    * @methodOf BB.Services:Validator
+    * @description
+    * Returns a pattern for matching local mailing codes based on current companies country
+    *
+    * @returns {string} Mailing code regex
+  ###
+  # We use the country code in favour of the locale given that it's more likley that a user will reside in the same place as the business
   getMailingPattern: () ->
     cc = CompanyStoreService.country_code
-    if cc = "us"
-      return us_postcode_regex
-    else
-      return uk_postcode_regex_lenient
+    switch cc
+      when "us" then return us_postcode_regex
+      when "gb" then return uk_postcode_regex_lenient
+      else return null 
 
   ###**
     * @ngdoc method
     * @name getNumberOnlyPattern
     * @methodOf BB.Services:Validator
     * @description
-    * Get the number only pattern
+    * Returns a pattern for matching numbers only
     *
-    * @returns {integer} Return the number only regex
+    * @returns {string} Number only regex
   ###
   getNumberOnlyPattern: () ->
     return number_only_regex
+
 
   ###**
     * @ngdoc method
     * @name getAlphaNumbericPattern
     * @methodOf BB.Services:Validator
     * @description
-    * Get the alphanumeric pattern
+    * Returns a pattern for matching alpha numeric strings
     *
     * @returns {string} The returned the alphanumeric regex
   ###
   getAlphaNumbericPattern: () ->
     return alphanumeric
 
+
   ###**
     * @ngdoc method
     * @name getUKMobilePattern
     * @methodOf BB.Services:Validator
     * @description
-    * Get the UK mobile pattern if strict is equals with false
+    * Returns a pattern for mathing number like strings between 9 and 19 characters.  If the strict flag is used, the pattern matches UK mobile numbers
     *
-    * @returns {integer} The returned the UK mobile regixt strict if this is strict else return mobile_regex_lenient
+    * @param {boolean} strict Use strict validation. Defaults to false.
+    * @returns {string} The returned the UK mobile regixt strict if this is strict else return mobile_regex_lenient
   ###
   getUKMobilePattern: (strict = false) ->
     return uk_mobile_regex_strict if strict
     return mobile_regex_lenient
+
 
   ###**
     * @ngdoc method
     * @name getMobilePattern
     * @methodOf BB.Services:Validator
     * @description
-    * Get the mobile pattern
+    * Returns a pattern for matching number like strings between 9 and 19 characters
     *
-    * @returns {integer} The returned the mobile regex lenient
+    * @returns {string} Mobile regex
   ###
   getMobilePattern: () ->
     return mobile_regex_lenient
+
 
   ###**
     * @ngdoc method
     * @name getUKLandlinePattern
     * @methodOf BB.Services:Validator
     * @description
-    * Get the UK landline patternt if strict is equals with false
+    * Returns a pattern for matching number like strinsg between 9 and 19 characters.  If the strict flag is used, the pattern matches UK landline numbers
     *
-    * @returns {integer} The returned the UK landline regex strict if this is strict else return UK landline regex lenient
+    * @param {boolean} strict Use strict validation. Defaults to false.
+    * @returns {string} UK landline regex
   ###
   getUKLandlinePattern: (strict = false) ->
     return uk_landline_regex_strict if strict
     return uk_landline_regex_lenient
+
 
   ###**
     * @ngdoc method
     * @name getIntPhonePattern
     * @methodOf BB.Services:Validator
     * @description
-    * Get the international number
+    * Returns a pattern for matching number like strings between 9 and 19 characters
     *
-    * @returns {integer} The returned the international number
+    * @returns {string} International number regex
   ###
   getIntPhonePattern: () ->
     return international_number
+
 
   ###**
     * @ngdoc method
@@ -207,99 +216,128 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope,
     * @description
     * Get the geocode result
     *
-    * @returns {string} The returned geocode result
+    * @returns {object} Geocoder result
   ###
   getGeocodeResult: () ->
     return geocode_result if geocode_result
 
-  # Strict email check that also checks for the top domain level too part 2 of 2.
-  # getEmailPatten: () ->
-  #   return email_pattern
+
   ###**
     * @ngdoc method
     * @name validatePostcode
     * @methodOf BB.Services:Validator
     * @description
-    * Validate the postcode in according with form and prm parameters
+    * Validates a postcode using the Google Maps API
     *
-    * @returns {promise} A promise for valid postocde
+    * @returns {promise|boolean} A promise that resolves to indicate the postcodes valdiity after it has been verified using the Google Maps API or a boolean indicating if the postcode is missing or invalid
   ###
   validatePostcode: (form, prms) ->
+
     AlertService.clear()
+
     return false if !form || !form.postcode
+
     if form.$error.required
+
       AlertService.raise('MISSING_POSTCODE')
       return false
+
     else if form.$error.pattern
-      AlertService.raise('INVALID_POSTCODE')
+
+      AlertService.raise('POSTCODE_INVALID')
       return false
+
     else
+
       deferred = $q.defer()
+
       postcode = form.postcode.$viewValue
+
       req = {address : postcode}
       req.region = prms.region if prms.region
       req.componentRestrictions = {'postalCode': req.address}
+      
       if prms.bounds
         sw = new google.maps.LatLng(prms.bounds.sw.x, prms.bounds.sw.y)
         ne = new google.maps.LatLng(prms.bounds.ne.x, prms.bounds.ne.y)
         req.bounds = new google.maps.LatLngBounds(sw, ne)
+      
       geocoder = new google.maps.Geocoder()
       geocoder.geocode req, (results, status) ->
+
         if results.length == 1 && status == 'OK'
+
           geocode_result = results[0]
           deferred.resolve(true)
+
         else
-          AlertService.raise('INVALID_POSTCODE')
+
+          AlertService.raise('POSTCODE_INVALID')
           $rootScope.$apply()
           deferred.reject(false)
-      deferred.promise
+
+      return deferred.promise
+
 
   ###**
     * @ngdoc method
     * @name validateForm
     * @methodOf BB.Services:Validator
     * @description
-    * Validate the form in according with form parameter
+    * Validate a form
     *
-    * @returns {boolean} Checks if this is valid or not
+    * @returns {boolean} Validity of form
   ###
   validateForm: (form) ->
+
     return false if !form
+
     form.submitted = true
     $rootScope.$broadcast "form:validated", form
+
     if form.$invalid and form.raise_alerts and form.alert
+
       AlertService.danger(form.alert)
       return false
+
     else if form.$invalid and form.raise_alerts
+
       AlertService.danger(ErrorService.getError('FORM_INVALID'))
       return false
+
     else if form.$invalid
+
       return false
+      
     else
+
       return true
+
 
    ###**
     * @ngdoc method
     * @name resetForm
     * @methodOf BB.Services:Validator
     * @description
-    * Reset the form in according with form parameter
+    * Set pristine state on a form
     *
-    * @returns {boolean} Checks if this is reset or not
+    * @param {form} A single instance of a form controller
   ###
   resetForm: (form) ->
+
     if form
       form.submitted = false
       form.$setPristine()
+
 
   ###**
     * @ngdoc method
     * @name resetForms
     * @methodOf BB.Services:Validator
     * @description
-    * Reset the forms in according with forms parameter
+    * Set pristine state on given array of forms
     *
-    * @returns {boolean} Checks if this is reset or not
+    * @param {array} Array of form controllers
   ###
   resetForms: (forms) ->
     if forms && $bbug.isArray(forms)

@@ -33,6 +33,6 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       labelAssembler: '@'
       blockLabelAssembler: '@'
       externalLabelAssembler: '@'
-      model: '='
+      model: '=?'
   }
 

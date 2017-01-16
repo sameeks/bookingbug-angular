@@ -1,29 +1,53 @@
-<div bb-include="_basket_item_summary">
-</div>
+<div bb-include="_basket_item_summary"></div>
 
 <div class="bb-subcontent">
 
-  <div bb-durations ng-init="checkStepTitle('Select Duration')" class="bb-duration-list">
-    <div class="panel panel-default" ng-repeat="duration in durations">
+  <div
+    bb-durations
+    class="bb-duration-list">
+
+    <div
+      class="panel panel-default"
+      ng-repeat="duration in durations">
+
       <div class="panel-body">
         <div class="row">
+
           <div class="col-sm-8 col-xs-6">
-            <h2 class="panel-title">{{duration.pretty}}</h2>
-            <div ng-if="duration.description">
+
+            <h2 class="panel-title">
+              {{duration.pretty}}
+            </h2>
+            <div ng-show="duration.description">
               {{duration.description}}
             </div>
+
           </div>
+
           <div class="col-sm-2 col-xs-6">
+
             <div class="bb-duration-price">
-              <span ng-show="duration.price > 0">{{duration.price | currency}}</span>
+              {{duration.price | pretty_price}}
             </div>
+
           </div>
+
           <div class="col-sm-2 col-xs-12">
-            <button type="button" ng-click="selectDuration(duration)" class="btn btn-primary btn-block">Select</button>
+
+            <button
+              type="button"
+              ng-click="selectDuration(duration)"
+              class="btn btn-primary btn-block"
+              translate="PUBLIC_BOOKING.DURATION_LIST.SELECT_BTN">
+            </button>
+
           </div>
+
         </div>
       </div>
+
     </div>
+
   </div>
 
 </div>
@@ -31,7 +55,14 @@
 <div class="bb-step-navigation">
   <div class="row">
     <div class="col-sm-3">
-      <button type="button" class="btn btn-default" bb-debounce ng-click="loadPreviousStep()" ng-show="bb.current_step > 1">Back</button>
+      <button
+        type="button"
+        class="btn btn-default"
+        bb-debounce
+        ng-click="loadPreviousStep()"
+        ng-show="bb.current_step > 1"
+        translate="PUBLIC_BOOKING.DURATION_LIST.BACK_BTN">
+      </button>
     </div>
   </div>
 </div>

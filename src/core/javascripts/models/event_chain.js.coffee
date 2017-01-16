@@ -20,8 +20,7 @@
 ####
 
 
-angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel,
-  EventChainService) ->
+angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel, EventChainService, $translate) ->
 
   class EventChain extends BaseModel
 
@@ -83,7 +82,7 @@ angular.module('BB.Models').factory "EventChainModel", ($q, BBModel, BaseModel,
             def.resolve(@tickets)
         else
           @tickets = [new BBModel.EventTicket(
-            name: "Admittance"
+            name: $translate.instant('COMMON.TERMINOLOGY.ADMITTANCE')
             min_num_bookings: 1
             max_num_bookings: @max_num_bookings
             type: "normal"

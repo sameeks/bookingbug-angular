@@ -1,9 +1,21 @@
-<button class="btn btn-default" ng-click="newAdministrator()">New Administrator</button>
-<table tr-ng-grid="" items="administrators">
+<button
+  type="button"
+  class="btn btn-default"
+  ng-click="newAdministrator()"
+  translate="SETTINGS.ADMIN_TABLE.NEW_ADMINISTRATOR">
+</button>
+<table
+  tr-ng-grid=""
+  items="administrators">
    <tbody>
     <tr>
       <td>
-        <button class="btn btn-default btn-sm" ng-click="edit(gridDisplayItem.id)">Edit</button>
+        <button
+          type="button"
+          class="btn btn-default btn-sm"
+          ng-click="edit(gridDisplayItem.id)"
+          translate="SETTINGS.ADMIN_TABLE.EDIT"> 
+        </button>
       </td>
     </tr>
   </tbody>

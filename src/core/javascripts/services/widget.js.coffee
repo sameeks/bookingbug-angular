@@ -67,38 +67,38 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       service_name = "-"
       event_group  = "-"
       event        = "-"
-      
+
       if @current_item
 
         service_name = @convertToDashSnakeCase(@current_item.service.name)     if @current_item.service
         event_group  = @convertToDashSnakeCase(@current_item.event_group.name) if @current_item.event_group
         event        = @current_item.event.id                                  if @current_item.event
 
-        date = @current_item.date.date  if @current_item.date  
+        date = @current_item.date.date  if @current_item.date
         date = date.toISODate()         if date and moment.isMoment(date)
         time = @current_item.time.time  if @current_item.time
-        
+
         if @current_item.company
           company = @convertToDashSnakeCase(@current_item.company.name)
         else
           console.log('%c bb_warning: Make sure you are using a valid company_id', 'background: #c0392b; color: #fff')
-      
+
       prms = angular.copy(@route_values) if @route_values
       prms ||= {}
-      
+
       angular.extend(prms,{
         page        : page,
         company     : company,
         service     : service_name,
         event_group : event_group,
-        date        : date, 
-        time        : time, 
+        date        : date,
+        time        : time,
         event       : event
       })
-      
+
       url = pattern.format(prms)
       url = url.replace(/\/+$/, "")
-      
+
       $location.path(url)
 
       @routing = true
@@ -146,10 +146,8 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
     * @returns {integer} Returns the step number
     ###
     matchURLToStep: () ->
-
       page = PathHelper.matchRouteToPath(@routeFormat, 'page')
       step = _.findWhere(@allSteps, {page: page})
-
       if step
         return step.number
       else
@@ -499,4 +497,3 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
       delete @address3
       delete @address4
       delete @address5
-

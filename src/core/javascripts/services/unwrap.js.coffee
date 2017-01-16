@@ -30,6 +30,12 @@ angular.module('BB.Services').factory "BB.Service.address", ($q, BBModel, Unwrap
     UnwrapService.unwrapResource(BBModel.Address, resource)
 
 
+angular.module('BB.Services').factory "BB.Service.addresses", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.Address, 'addresses', resource)
+
+
 angular.module('BB.Services').factory "BB.Service.person", ($q, BBModel, UnwrapService) ->
   unwrap: (resource) ->
     UnwrapService.unwrapResource(BBModel.Person, resource)
@@ -241,6 +247,11 @@ angular.module('BB.Services').factory "BB.Service.purchase_items", ($q, BBModel,
   promise: true
   unwrap: (resource) ->
     UnwrapService.unwrapCollection(BBModel.PurchaseItem, 'purchase_items', resource)
+
+angular.module('BB.Services').factory "BB.Service.payment_callbacks", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.PaymentCallbacks, 'payment_callbacks', resource)
 
 angular.module('BB.Services').factory "BB.Service.events", ($q, BBModel, UnwrapService) ->
   promise: true

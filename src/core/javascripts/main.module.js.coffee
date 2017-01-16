@@ -1,34 +1,35 @@
 'use strict'
 
 angular.module('BB', [
-  'angular-carousel'
-  'ngStorage',
-  'angular-hal',
-  'ui.bootstrap',
-  'ngSanitize',
-  'ui.map',
-  'ui.router.util',
-  'ngAnimate',
-  'angular-data.DSCacheFactory', # newer version of jmdobry angular cache'
-  'ngFileUpload',
-  'schemaForm',
-  'uiGmapgoogle-maps',
-  'angular.filter',
-  'ui-rangeSlider',
-  'ngCookies',
-  'pascalprecht.translate',
-  'vcRecaptcha',
-  'ui.select',
+  'ngStorage'
+  'ngMessages'
+  'ngSanitize'
+  'ngFileUpload'
+  'ngCookies'
+  'ngAnimate'
 
-  'BB.Controllers',
-  'BB.Filters',
-  'BB.Models',
-  'BB.Services',
-  'BB.Directives',
+  'angular-carousel'
+  'angular-hal'
+  'angular-data.DSCacheFactory' # newer version of jmdobry angular cache
+  'angular.filter'
+  'pascalprecht.translate'
+  'schemaForm'
+  'ui.bootstrap'
+  'ui.map'
+  'ui.router.util'
+  'ui.select'
+  'ui-rangeSlider'
+  'uiGmapgoogle-maps'
+  'vcRecaptcha'
+
+  'BB.Controllers'
+  'BB.Filters'
+  'BB.Models'
+  'BB.Services'
+  'BB.Directives'
 
   'BB.i18n'
   'BB.uib'
-
 ])
 
 angular.module('BB.Services', [
