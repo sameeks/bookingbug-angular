@@ -42,16 +42,16 @@ angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache
   restrict: 'AE'
   replace: true
   scope : true
-  transclude: true
+  transclude: true 
   controller : 'ClientDetails'
   link: (scope, element, attrs, controller, transclude) ->
 
     transclude scope, (clone) =>
-      # if there's content compile that or grab the client_form template
+      # if there's content compile that or grab the client_details template
       has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
       if has_content
         element.html(clone).show()
       else
-        $q.when($templateCache.get('client_form.html')).then (template) ->
+        $q.when($templateCache.get('_client_details.html')).then (template) ->
           element.html(template).show()
           $compile(element.contents())(scope)
