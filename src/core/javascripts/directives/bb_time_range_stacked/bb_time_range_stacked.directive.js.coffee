@@ -31,8 +31,33 @@
 ####
 
 
-angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
+angular.module('BB.Directives').directive 'bbTimeRangeStacked', ($q, $templateCache, $compile) ->
   restrict: 'AE'
   replace: true
   scope : true
-  controller : 'TimeRangeListStackedController'
+  transclude: true
+  controller : 'TimeRangeListStackedController',
+  link: (scope, element, attrs, controller, transclude) ->
+    # focus on continue button after slot selected - for screen readers 
+    scope.$on 'time:selected', ->
+      btn = angular.element('#btn-continue')
+      btn[0].disabled = false
+      btn[0].focus()
+
+    # date helpers
+    scope.today = moment().toDate()
+    scope.tomorrow = moment().add(1, 'days').toDate()
+
+    scope.options = scope.$eval(attrs.bbTimeRangeRangeStacked) or {}
+
+    transclude scope, (clone) =>
+
+      # if there's content compile that or grab the week_calendar template
+      has_content = clone.length > 1 || (clone.length is 1 and (!clone[0].wholeText or /\S/.test(clone[0].wholeText)))
+
+      if has_content
+        element.html(clone).show()
+      else
+        $q.when($templateCache.get('_week_calendar.html')).then (template) ->
+          element.html(template).show()
+          $compile(element.contents())(scope)

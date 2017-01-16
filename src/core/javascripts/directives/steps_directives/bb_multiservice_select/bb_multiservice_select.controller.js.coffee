@@ -83,7 +83,29 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       if allCategoryServices[categoryIndex]
         allCategories[categoryIndex].services = allCategoryServices[categoryIndex]
 
-    $scope.categories = _.values(allCategories)
+    allCategoriesArray = _.values(allCategories)
+
+    # if we only have 1 category and some services left over, create a category from the leftover services
+    if categories.length is 1
+      allCategoriesArray.push createCategory(allCategoriesArray, categories[0])
+      $scope.changeCategory(categories[0])
+
+    $scope.categories = allCategoriesArray 
+
+
+  ###**
+  * @ngdoc method
+  * @name createCategory
+  * @methodOf BB.Directives:bbMultiServiceSelect
+  * @description
+  * Create category for uncategorised services
+  ###
+ 
+  createCategory = (allCategoriesArray, category) ->
+    newCategory = new BBModel.Category()
+    newCategory.name = 'Other Services' 
+    newCategory.services = _.difference($scope.items, category.services)
+    return newCategory
 
 
   ###**
@@ -149,7 +171,6 @@ angular.module('BB.Controllers').controller 'MultiServiceSelect', ($scope, $root
       }
 
       $scope.selectedCategoryName = $scope.selectedCategory.name
-      $rootScope.$broadcast "multi_service_select:categoryChanged"
 
 
   ###**
