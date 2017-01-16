@@ -71,10 +71,8 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
     $window.open($scope.bb.partial_url+'print_purchase.html?id='+$scope.total.long_id,'_blank',
                 'width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0')
     return true
-<<<<<<< HEAD:src/core/javascripts/controllers/total.js.coffee
 
   $rootScope.$on "booking:moved", (event, total) ->
     $scope.total = total
     emitSuccess(total)
-=======
->>>>>>> master:src/core/javascripts/directives/steps_directives/bb_total/bb_total.controller.js.coffee
+

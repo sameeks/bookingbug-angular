@@ -62,8 +62,6 @@ angular.module('BB.Directives').directive 'bbTimeRangeStacked', ($q, $templateCa
           $compile(element.contents())(scope)
 
 
-=======
->>>>>>> master:src/core/javascripts/directives/bb_time_range_stacked/bb_time_range_stacked.controller.js.coffee
 angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
   $scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel,
   FormDataStoreService, PersonService, PurchaseService, DateTimeUtilitiesService,
