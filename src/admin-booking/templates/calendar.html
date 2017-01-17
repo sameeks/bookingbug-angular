@@ -6,10 +6,10 @@
 
     <div class="page-header">
 
-      <h1 ng-show="availability_conflict">
+      <h1 ng-show="!availability_conflict">
         <span translate="ADMIN_BOOKING.CALENDAR.STEP_HEADING"></span>
       </h1>
-      <h1 ng-show="!availability_conflict">
+      <h1 ng-show="availability_conflict">
         <span translate="ADMIN_BOOKING.CALENDAR.TIME_NOT_AVAILABLE_STEP_HEADING"></span>
       </h1>
     </div>
@@ -249,7 +249,7 @@
 
       <div class="panel-body">
 
-        <div class="row">
+        <div class="row calendar-controls">
 
           <div class="col-sm-8">
 
