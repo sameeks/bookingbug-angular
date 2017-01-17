@@ -99,7 +99,7 @@
                 translate="ADMIN_BOOKING.CONFIRMATION.DATE_TIME_LBL">
               </div>
               <div class="col-sm-9 bb-summary-value">
-                {{i.describe}}
+                {{i.datetime | datetime: 'llll':true}}
               </div>
             </li>
 
