@@ -1,7 +1,7 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
-    $location, $window, QueryStringService, LoadingService) ->
+angular.module('BB.Controllers').controller 'Total', ($scope, $rootScope, $q,
+    $location, $window, QueryStringService, LoadingService, PurchaseService) ->
 
   $scope.controller = "public.controllers.Total"
   loader = LoadingService.$loader($scope).notLoaded()
@@ -12,7 +12,7 @@ angular.module('BB.Controllers').controller 'Total', ($scope,  $rootScope, $q,
     id = QueryStringService('purchase_id')
 
     if id and !$scope.bb.total
-      BBModel.Purchase.Total.$query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
+      PurchaseService.query({url_root: $scope.bb.api_url, purchase_id: id}).then (total) ->
         $scope.total = total
         loader.setLoaded()
 
