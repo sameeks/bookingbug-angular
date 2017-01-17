@@ -14,7 +14,7 @@
           </h2>
 
           <div ng-if="!total.containsWaitlistItems()">
-            
+
             <p
               id="bb-confirmation-summary-subtitle"
               class="bb-confirmation-p-alignment">
@@ -22,7 +22,7 @@
               <span
                 translate="ADMIN_BOOKING.CONFIRMATION.EMAIL_CONFIRMATION"
                 translate-values="{customer_name: total.client.getName()}"
-                ng-show="total.client.email">  
+                ng-show="total.client.email">
               </span>
             </p>
 
@@ -36,7 +36,7 @@
               <span
                 translate="ADMIN_BOOKING.CONFIRMATION.EMAIL_CONFIRMATION"
                 translate-values="{customer_name: total.client.getName()}"
-                ng-show="total.client.email">  
+                ng-show="total.client.email">
               </span>
             </p>
 
@@ -95,7 +95,7 @@
               class="row confirmation-summary-item">
               <div
                 class="col-sm-3 bb-summary-label"
-                translate="ADMIN_BOOKING.CONFIRMATION.DATE_TIME_LBL">    
+                translate="ADMIN_BOOKING.CONFIRMATION.DATE_TIME_LBL">
               </div>
               <div class="col-sm-9 bb-summary-value">
                 {{i.describe}}
@@ -108,7 +108,7 @@
               class="row confirmation-summary-item">
               <div
                 class="col-sm-3 bb-summary-label"
-                translate="ADMIN_BOOKING.CONFIRMATION.PRICE_LBL">    
+                translate="ADMIN_BOOKING.CONFIRMATION.PRICE_LBL">
               </div>
               <div class="col-sm-9 bb-summary-value">
                 {{i.price | currency}}
@@ -119,7 +119,7 @@
 
           <ul
             ng-show="total.bookings[0].address.lat"
-            class="confirmation-summary">         
+            class="confirmation-summary">
 
             <div class="confirmation-summary-address">
               <div>
@@ -133,7 +133,7 @@
             </div>
 
           </ul>
- 
+
           <div
             bb-custom-confirmation-text
             class="bb-message">
@@ -148,7 +148,7 @@
               type="button"
               class="btn btn-link"
               onclick="window.print()">
-              <span class="fa fa-print fa-2x"></span>			  
+              <span class="fa fa-print fa-2x"></span>
               <span translate="ADMIN_BOOKING.CONFIRMATION.PRINT_BTN"></span>
             </button>
           </div>
@@ -163,7 +163,7 @@
               class="btn btn-primary pull-right">
               <span translate="ADMIN_BOOKING.CONFIRMATION.CLOSE_BTN"></span>
             </button>
-          </div> 
+          </div>
 
         </div>
 
@@ -171,5 +171,5 @@
 
     </div>
   </div>
-  
+
 </div>
