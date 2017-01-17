@@ -13,5 +13,12 @@
 ####
 
 angular.module('BB.Directives').directive 'bbMoveBooking', () ->
-	restrict: 'AE'
-	controller: 'MoveBooking'
+
+	'ngInject'
+	
+	return {
+		controller  : 'MoveBookingCtrl'
+		controllerAs: 'vm'
+		restrict    : 'AE'
+		scope       : true
+	} 

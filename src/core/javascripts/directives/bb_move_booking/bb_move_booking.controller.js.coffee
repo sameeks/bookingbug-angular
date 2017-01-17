@@ -1,9 +1,12 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, $attrs, BBModel, LoadingService, PurchaseService, PurchaseBookingService, AlertService, GeneralOptions, $translate, MemberBookingService, WidgetModalService, QueryStringService, $window) ->
+moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, PurchaseService, PurchaseBookingService, AlertService, GeneralOptions, $translate, MemberBookingService, WidgetModalService, QueryStringService, $window) ->
 
-  loader = LoadingService.$loader($scope)
-  $scope.options = $scope.$eval($attrs.bbMoveBooking) or {}
+  vm = @
+
+  init = () ->
+    loader = LoadingService.$loader($scope)
+    vm.options = $scope.$eval($attrs.bbMoveBooking) or {}
 
   ###**
   * @ngdoc method
@@ -16,10 +19,10 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
   * @param {string} totalId The total id associated with the bookings being moved (optional)
   ###
 
-  $scope.initMove = (bookings, totalId) ->
+  vm.initMove = (bookings, totalId) ->
     # open modal if moving public bookings from purchase template
     # totalId is either passed in from the template or if on view_booking page take from the url
-    if $scope.options.openCalendarInModal 
+    if vm.options.openCalendarInModal 
       totalId = QueryStringService('id') if !totalId
       openCalendarModal(bookings, totalId)
 
@@ -228,3 +231,8 @@ angular.module('BB.Controllers').controller 'MoveBooking', ($scope, $rootScope, 
       AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" }) 
 
     $window.scroll(0, 0)
+
+  init()
+  
+
+angular.module('BB.Controllers').controller 'MoveBookingCtrl', moveBookingCtrl

@@ -35,7 +35,7 @@
           type="button" 
           id="btn-continue" 
           class="btn btn-primary btn-block" 
-          ng-click="initMove(bb.current_item)" 
+          ng-click="vm.initMove(bb.current_item)" 
           bb-debounce
           translate="PUBLIC_BOOKING.CALENDAR.MOVE_BOOKING_BTN">
         </button>
@@ -46,7 +46,7 @@
           type="button" 
           id="btn-continue" 
           class="btn btn-primary btn-block" 
-          ng-click="initMove(bb.purchase.bookings)" 
+          ng-click="vm.initMove(bb.purchase.bookings)" 
           bb-debounce
 		  translate="PUBLIC_BOOKING.CALENDAR.MOVE_BOOKING_BTN">
         </button>

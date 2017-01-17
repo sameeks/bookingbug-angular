@@ -20,7 +20,7 @@
           type="button" 
           id="btn-continue" 
           class="btn btn-primary btn-block" 
-          ng-click="initMove(bb.current_item, 'purchase')" 
+          ng-click="vm.initMove(bb.current_item, 'purchase')" 
           bb-debounce>
           <span>Reschedule</span>
         </button>
@@ -29,7 +29,7 @@
           type="button" 
           id="btn-continue" 
           class="btn btn-primary btn-block" 
-          ng-click="initMove(bb.stacked_items, 'purchase')" 
+          ng-click="vm.initMove(bb.stacked_items, 'purchase')" 
           bb-debounce>
           <span>Reschedule</span>
         </button>
