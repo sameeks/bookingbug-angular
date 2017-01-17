@@ -9,8 +9,8 @@ angular.module("BBAdmin").config ($translateProvider) ->
         TITLE            : "Cancel Booking"
         REASON_LBL       : "Cancel reason"
         SEND_EMAIL_LBL   : "Send cancellation confirmation to {{email}}?"
-        OK_BTN           : "COMMON.BTN.OK"
-        CLOSE_BTN        : "COMMON.BTN.CLOSE"
+        OK_BTN           : "@:COMMON.BTN.OK"
+        CLOSE_BTN        : "@:COMMON.BTN.CLOSE"
       }
       LOGIN: {
         EMAIL_LBL            : "@:COMMON.TERMINOLOGY.EMAIL"
@@ -21,7 +21,7 @@ angular.module("BBAdmin").config ($translateProvider) ->
       }
       PICK_COMPANY : {
         STEP_SUMMARY : "Pick Company"
-        SELECT_BTN   : "COMMON.BTN.SELECT"
+        SELECT_BTN   : "@:COMMON.BTN.SELECT"
       }
       BOOKNG_TABLE : {
         NEW_BOOKING_BTN : "New booking"
