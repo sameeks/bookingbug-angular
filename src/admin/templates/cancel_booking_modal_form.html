@@ -1,7 +1,7 @@
 <div class="modal-header">
   <h3
     class="modal-title"
-    translate="ADMIN.CANCEL_BOOKING_MODAL.TITLE">    
+    translate="ADMIN.CANCEL_BOOKING_MODAL.TITLE">
   </h3>
 </div>
 <form
@@ -9,7 +9,7 @@
   ng-submit="$close(model)">
   <div
     ng-show="loading"
-    class="loader">    
+    class="loader">
   </div>
 
   <div class="modal-body">
@@ -17,7 +17,7 @@
     <div class="checkbox">
       <label>
         <input
-          type="checkbox" 
+          type="checkbox"
           name="notify"
           ng-model="model.notify">
         <span
@@ -32,7 +32,7 @@
       <label
         for="reason"
         class="form-label"
-        translate="ADMIN.CANCEL_BOOKING_MODAL.REASON">
+        translate="ADMIN.CANCEL_BOOKING_MODAL.REASON_LBL">
       </label>
       <input
         id="reason"
@@ -51,14 +51,14 @@
       type="submit"
       class="btn btn-primary"
       ng-disabled="loading"
-      translate="PUBLIC_BOOKING.CANCEL_BOOKING_MODAL.OK_BTN">
+      translate="ADMIN.CANCEL_BOOKING_MODAL.OK_BTN">
     </button>
 
     <button
       type="button"
       class="btn btn-default"
       ng-click="$dismiss()"
-      translate="PUBLIC_BOOKING.CANCEL_BOOKING_MODAL.CLOSE_BTN">
+      translate="ADMIN.CANCEL_BOOKING_MODAL.CLOSE_BTN">
     </button>
 
   </div>
