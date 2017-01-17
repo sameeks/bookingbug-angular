@@ -27,7 +27,7 @@
             <i class="fa fa-calendar" aria-hidden="true"></i>
             <span
               translate="ADMIN_BOOKING.CALENDAR.NOT_AVAILABLE"
-              translate-values="{time: bb.current_item.defaults.datetime}">    
+              translate-values="{time: bb.current_item.defaults.datetime}">
             </span>
           </strong>
         </div>
@@ -106,13 +106,13 @@
                     <i class="fa fa-calendar-times-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.REQUESTED_TIME_BTN"
-                      translate-values="{requested_time: bb.current_item.defaults.datetime}">    
+                      translate-values="{requested_time: bb.current_item.defaults.datetime}">
                     </span>
                   </button>
 
                   <button
                     type="button"
-                    class="btn btn-primary" 
+                    class="btn btn-primary"
                     ng-click="pickTime(best_later)">
                     <i class="fa fa-calendar-check-o"></i>
                     <span
@@ -164,7 +164,7 @@
                     <i class="fa fa-calendar-times-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.REQUESTED_TIME_BTN"
-                      translate-values="{requested_time: bb.current_item.defaults.datetime}">    
+                      translate-values="{requested_time: bb.current_item.defaults.datetime}">
                     </span>
                   </button>
 
@@ -271,7 +271,7 @@
                   ng-options="p.name for p in bookable_people | orderBy: 'name'">
                   <option
                     value=""
-                    translate="ADMIN_BOOKING.CALENDAR.ANY_PERSON_OPTION">    
+                    translate="ADMIN_BOOKING.CALENDAR.ANY_PERSON_OPTION">
                   </option>
                 </select>
               </div>
@@ -444,7 +444,11 @@
                 close-others="false">
 
                 <div
-                  bb-accordion-range-group="{heading: ADMIN_BOOKING.CALENDAR.MORNING_HEADER', range: [0, 720], collapse_when_time_selected: true}"
+                  bb-accordion-range-group="{
+                    heading: 'ADMIN_BOOKING.CALENDAR.MORNING_HEADER',
+                    range: [0, 720],
+                    collapse_when_time_selected: true
+                  }"
                   day="selected_day"
                   slots="slots"
                   select-slot="highlightSlot"
@@ -453,7 +457,11 @@
                 </div>
 
                 <div
-                  bb-accordion-range-group="{heading: 'ADMIN_BOOKING.CALENDAR.AFTERNOON_HEADER', range: [720, 1020], collapse_when_time_selected: true}"
+                  bb-accordion-range-group="{
+                    heading: 'ADMIN_BOOKING.CALENDAR.AFTERNOON_HEADER',
+                    range: [720, 1020],
+                    collapse_when_time_selected: true
+                  }"
                   day="selected_day"
                   slots="slots"
                   select-slot="highlightSlot"
@@ -461,8 +469,12 @@
                   class="accordion-group">
                 </div>
 
-                <div 
-                  bb-accordion-range-group="{heading: 'ADMIN_BOOKING.CALENDAR.EVENING_HEADER', range: [1020, 1440], collapse_when_time_selected: true}"
+                <div
+                  bb-accordion-range-group="{
+                    heading: 'ADMIN_BOOKING.CALENDAR.EVENING_HEADER',
+                    range: [1020, 1440],
+                    collapse_when_time_selected: true
+                  }"
                   day="selected_day"
                   slots="slots"
                   select-slot="highlightSlot"
