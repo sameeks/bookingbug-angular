@@ -447,7 +447,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
               booking_id: booking.id
               total_id: booking.purchase_ref
               first_page: 'calendar'
-              movingBooking: true 
         else 
           uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
           refetchBookingsHandler()

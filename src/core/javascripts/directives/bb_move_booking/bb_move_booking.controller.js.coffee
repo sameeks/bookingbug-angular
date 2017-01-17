@@ -5,7 +5,7 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
   vm = @
 
   init = () ->
-    loader = LoadingService.$loader($scope)
+    vm.loader = LoadingService.$loader($scope)
     vm.options = $scope.$eval($attrs.bbMoveBooking) or {}
 
   ###**
@@ -106,10 +106,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
   ###
 
   updatePurchaseBooking = (basketItem) ->
-    loader.notLoaded()
+    vm.loader.notLoaded()
     PurchaseBookingService.update(basketItem).then (purchaseBooking) ->
       booking = new BBModel.Purchase.Booking(purchaseBooking)
-      loader.setLoaded()
+      vm.loader.setLoaded()
 
       # update the total purchase with the new booking
       if $scope.bb.purchase
@@ -118,7 +118,7 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
 
       resolveCalendarModal(booking)
     , (err) =>
-      loader.setLoaded()
+      vm.loader.setLoaded()
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
 
@@ -133,7 +133,7 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
   ###
 
   updatePurchase = (bookings) ->
-    loader.notLoaded()
+    vm.loader.notLoaded()
     params =
       purchase: $scope.bb.movingPurchase
       bookings: bookings
@@ -143,11 +143,11 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
       $scope.bb.purchase = purchase
       $scope.bb.purchase.$getBookings().then (bookings)->
         $scope.purchase = purchase 
-        loader.setLoaded()
+        vm.loader.setLoaded()
         resolveCalendarModal(bookings)
 
     , (err) ->
-      loader.setLoaded()
+      vm.loader.setLoaded()
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
 
