@@ -15,51 +15,63 @@
 ###
 
 timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions, CompanyStoreService) ->
+  'ngInject'
 
-  this.$onInit = () ->
-    this.timezones = TimezoneOptions.generateTimezoneList(this.restrictRegion)
-    if localStorage.selectedTimezone
-      this.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(localStorage.selectedTimezone)
-      this.automaticTimezone = if moment.tz.guess() is localStorage.selectedTimezone then true else false
-    else
-      this.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(CompanyStoreService.time_zone)
+  ctrl = @
+
+  ctrl.timezones = []
+  ctrl.automaticTimezone = false
+  ctrl.selectedTimezone = null
+
+  ctrl.$onInit = () ->
+    ctrl.timezones = TimezoneOptions.generateTimezoneList(ctrl.restrictRegion)
+    ctrl.setNewTimezone = setNewTimezone
+    setDefaults()
     return
 
-  this.automaticTimezoneToggle = () ->
+  ctrl.automaticTimezoneToggle = () ->
 
-    if this.automaticTimezone
+    if ctrl.automaticTimezone
       tz = moment.tz.guess()
-      this.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(tz)
-      this.setNewTimezone(tz, true)
+      ctrl.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(tz)
+      ctrl.setNewTimezone(tz, true)
 
-    if !this.automaticTimezone
+    if !ctrl.automaticTimezone
       tz = CompanyStoreService.time_zone
-      this.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(tz)
-      this.resetTimezone(tz)
+      ctrl.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(tz)
+      resetTimezone(tz)
 
     $rootScope.$broadcast('close-select')
 
     return
 
-  this.setNewTimezone = (timezone, setTzAutomatically = false) ->
+  setNewTimezone = (timezone, setTzAutomatically = false) ->
     localStorage.selectedTimezone = GeneralOptions.display_time_zone = timezone
-    GeneralOptions.custom_time_zone = if timezone != CompanyStoreService.time_zone then true else false
+    GeneralOptions.custom_time_zone = true if timezone isnt CompanyStoreService.time_zone
     GeneralOptions.set_time_zone_automatically = setTzAutomatically
     moment.tz.setDefault(timezone)
     $rootScope.$emit('timezoneUpdated', timezone)
     return
 
-  this.resetTimezone = (tz) ->
+  resetTimezone = (tz) ->
     localStorage.removeItem('selectedTimezone')
     GeneralOptions.display_time_zone = null
     GeneralOptions.custom_time_zone = GeneralOptions.set_time_zone_automatically = false
     moment.tz.setDefault(tz)
     $rootScope.$emit('timezoneUpdated', null)
 
+  setDefaults = () ->
+    if localStorage.selectedTimezone
+      ctrl.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(localStorage.selectedTimezone)
+      ctrl.automaticTimezone = true if moment.tz.guess() is localStorage.selectedTimezone
+    else
+      ctrl.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(CompanyStoreService.time_zone)
+    return
+
   return
 
 timezoneOptionsComponent =
-  templateUrl: 'core/_timezone-options.html',
+  templateUrl: 'core/_bb-timezone-options.html',
   bindings:
     restrictRegion: '<'
   controller: timezoneOptionsController

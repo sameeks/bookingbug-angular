@@ -9,14 +9,18 @@
 timezoneOptionsFactory = ($translate, orderByFilter) ->
 
   restrictToRegion = (locationNames, restrictRegion) ->
+
+    filterLocations = (filterBy) ->
+      _.filter locationNames, (tz) -> tz.indexOf(filterBy) isnt -1
+
     if angular.isString(restrictRegion)
-      locationNames = _.filter locationNames, (tz) -> tz.indexOf(restrictRegion) isnt -1
+      locationNames = filterLocations(restrictRegion)
       return locationNames
 
     if angular.isArray(restrictRegion)
       locations = []
       _.each restrictRegion, (region) ->
-        locations.push(_.filter locationNames, (tz) -> tz.indexOf(region) isnt -1)
+        locations.push(filterLocations(region))
       locationNames = _.flatten(locations)
       return locationNames
 

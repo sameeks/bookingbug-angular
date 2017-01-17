@@ -42,17 +42,16 @@
 
   <!-- Standard ui-select -->
   <!-- <ui-select
-    style="width: 260px;"
     ng-model="$ctrl.selectedTimezone"
     theme="bootstrap"
-    ng-change="$ctrl.setNewTimezone($ctrl.selectedTimezone.value, $ctrl.automaticTimezone); resetTimeSelection()">
+    ng-change="$ctrl.setNewTimezone($ctrl.selectedTimezone.value);">
 
     <ui-select-match placeholder="Select timezone">
      {{$select.selected.display}}
     </ui-select-match>
 
     <ui-select-choices
-      refresh-delay="400"
+      refresh-delay="0"
       repeat="
         timezone as timezone in $ctrl.timezones |
         props: { display: $select.search}

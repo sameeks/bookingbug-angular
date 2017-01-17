@@ -15,13 +15,13 @@
 
 userPreferencesController = () ->
 
-  this.preventClose = (event) ->
+  @preventClose = (event) ->
     event.stopPropagation()
 
   return
 
 userPreferencesComponent =
-  templateUrl: 'core/_user-preferences.html',
+  templateUrl: 'core/_bb-user-preferences.html',
   controller: userPreferencesController
 
 angular
