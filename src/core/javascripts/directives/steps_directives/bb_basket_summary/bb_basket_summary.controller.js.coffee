@@ -2,8 +2,6 @@
 
 angular.module('BB.Controllers').controller 'BasketSummary', ($scope) ->
 
-  $scope.controller = "public.controllers.BasketSummary"
-
   $scope.basket_items = $scope.bb.basket.items
 
   ###**

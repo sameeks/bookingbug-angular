@@ -2,8 +2,6 @@
 
 angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, GeolocationService) ->
 
-  $scope.controller = "public.controllers.MapCtrl"
-
   FormDataStoreService.init 'MapCtrl', $scope, [
     'address'
     'selectedStore'

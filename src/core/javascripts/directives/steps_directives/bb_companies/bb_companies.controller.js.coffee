@@ -2,7 +2,6 @@
 
 CompanyListBase = ($scope, $rootScope, $q, $attrs, LoadingService) ->
 
-  $scope.controller = "public.controllers.CompanyList"
   loader = LoadingService.$loader($scope).notLoaded()
 
   options = $scope.$eval $attrs.bbCompanies

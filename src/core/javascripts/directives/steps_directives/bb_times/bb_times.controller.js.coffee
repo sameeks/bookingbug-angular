@@ -2,7 +2,6 @@
 
 angular.module('BB.Controllers').controller 'TimeList', ($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, PageControllerService, ValidatorService, LoadingService, ErrorService, $translate) ->
 
-  $scope.controller = "public.controllers.TimeList"
   loader = LoadingService.$loader($scope).notLoaded()
 
   angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))

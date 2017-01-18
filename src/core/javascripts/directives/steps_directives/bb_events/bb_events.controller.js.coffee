@@ -2,8 +2,6 @@
 
 angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, EventGroupService, $q, PageControllerService, FormDataStoreService, $filter, PaginationService, $timeout, ValidatorService, LoadingService, BBModel) ->
 
-
-  $scope.controller = "public.controllers.EventList"
   loader = LoadingService.$loader($scope).notLoaded()
   angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
   $scope.pick = {}

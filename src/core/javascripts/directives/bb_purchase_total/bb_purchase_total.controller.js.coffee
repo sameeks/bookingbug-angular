@@ -3,8 +3,6 @@
 angular.module('BB.Controllers').controller 'PurchaseTotal', ($scope,
   $rootScope, $window, BBModel, $q) ->
 
-  $scope.controller = "public.controllers.PurchaseTotal"
-
   angular.extend(this, new $window.PageController($scope, $q))
 
   ###**

@@ -24,7 +24,6 @@ angular.module('BB.Directives').directive 'bbMiniBasket', () ->
   replace: true
   scope : true
   controller: ($scope, $rootScope, BasketService, $q) ->
-    $scope.controller = "public.controllers.MiniBasket"
     $scope.setUsingBasket(true)
     $rootScope.connection_started.then () =>
 

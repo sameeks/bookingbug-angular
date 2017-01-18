@@ -4,7 +4,6 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
   PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService,
   $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService) ->
 
-  $scope.controller = "public.controllers.ItemDetails"
   loader = LoadingService.$loader($scope)
 
   $scope.suppress_basket_update = $attrs.bbSuppressBasketUpdate?

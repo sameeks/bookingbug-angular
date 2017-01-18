@@ -1,8 +1,5 @@
 angular.module('BB.Controllers').controller 'AccordionRangeGroup', ($scope, $attrs, $rootScope, $q, FormDataStoreService, GeneralOptions, DateTimeUtilitiesService, $translate, CompanyStoreService) ->
 
-  $scope.controller = "public.controllers.AccordionRangeGroup"
-
-
   $scope.$watch 'slots', () ->
     setData()
 
