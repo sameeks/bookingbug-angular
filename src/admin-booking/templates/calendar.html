@@ -27,7 +27,7 @@
             <i class="fa fa-calendar" aria-hidden="true"></i>
             <span
               translate="ADMIN_BOOKING.CALENDAR.NOT_AVAILABLE"
-              translate-values="{time: (bb.current_item.defaults.datetime | datetime: 'lll')}">
+              translate-values="{time: bb.current_item.defaults.datetime}">
             </span>
           </strong>
         </div>
@@ -69,11 +69,7 @@
                   <i class="fa fa-clock-o" aria-hidden="true"></i>
                   <strong
                     translate="ADMIN_BOOKING.CALENDAR.EXTERNAL_BOOKING_DESCRIPTION"
-                    translate-values="{
-                      title: booking.title,
-                      from: (booking.start_time | datetime: 'lll'),
-                      to: (booking.end_time | datetime: 'lll')
-                    }">
+                    translate-values="{title: booking.title, from: booking.start_time, to: booking.end_time}">
                   </strong>
                 </div>
               </div>
@@ -99,7 +95,7 @@
                     <i class="fa fa-calendar-check-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.CLOSEST_EARLIER_TIME_BTN"
-                      translate-values="{closest_earlier: (best_earlier.datetime | datetime: 'LT')}">
+                      translate-values="{closest_earlier: best_earlier.datetime}">
                     </span>
                   </button>
 
@@ -110,7 +106,7 @@
                     <i class="fa fa-calendar-times-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.REQUESTED_TIME_BTN"
-                      translate-values="{requested_time: (bb.current_item.defaults.datetime | datetime: 'LT')}">
+                      translate-values="{requested_time: bb.current_item.defaults.datetime}">
                     </span>
                   </button>
 
@@ -121,7 +117,7 @@
                     <i class="fa fa-calendar-check-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.CLOSEST_LATER_TIME_BTN"
-                      translate-values="{closest_later: (best_later.datetime | datetime: 'LT')}">
+                      translate-values="{closest_later: best_later.datetime}">
                     </span>
                   </button>
 
@@ -157,7 +153,7 @@
                     <i class="fa fa-calendar-check-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.CLOSEST_EARLIER_TIME_BTN"
-                      translate-values="{closest_earlier: (best_earlier.datetime | datetime: 'LT')}">
+                      translate-values="{closest_earlier: best_earlier.datetime}">
                     </span>
                   </button>
 
@@ -168,7 +164,7 @@
                     <i class="fa fa-calendar-times-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.REQUESTED_TIME_BTN"
-                      translate-values="{requested_time: (bb.current_item.defaults.datetime | datetime: 'LT')}">
+                      translate-values="{requested_time: bb.current_item.defaults.datetime}">
                     </span>
                   </button>
 
@@ -180,7 +176,7 @@
                     <i class="fa fa-calendar-check-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.CLOSEST_LATER_TIME_BTN"
-                      translate-values="{closest_later: (best_later.datetime | datetime: 'LT')}">
+                      translate-values="{closest_later: best_later.datetime}">
                     </span>
                   </button>
 
@@ -217,7 +213,7 @@
                   <i class="fa fa-calendar-times-o"></i>
                   <span
                     translate="ADMIN_BOOKING.CALENDAR.REQUESTED_TIME_BTN"
-                    translate-values="{requested_time: (bb.current_item.defaults.datetime | datetime: 'LT')}">
+                    translate-values="{requested_time: bb.current_item.defaults.datetime}">
                   </span>
                 </button>
 
@@ -382,7 +378,7 @@
                       ng-repeat="slot in slots | in_the_future | limitTo: 10">
                       <span
                         translate="ADMIN_BOOKING.CALENDAR.TIME_SLOT_WITH_COUNTDOWN"
-                        translate-values="{datetime: (slot.datetime | datetime: 'LT'), time: slot.time}">
+                        translate-values="{datetime: slot.datetime, time: slot.time}">
                       </span>
                     </li>
 
