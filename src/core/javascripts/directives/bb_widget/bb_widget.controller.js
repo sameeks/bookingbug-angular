@@ -1,14 +1,11 @@
 'use strict';
 var BBCtrl;
 
-BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize) {
+BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize,basketRelated) {
   'ngInject';
-
-  basketRelated.setScope($scope);//test
-
-  basketRelated.first('Passed from controller');
-
+  basketRelated.first('Hello');
   var $debounce, addItemToBasket, base64encode, broadcastItemUpdate, checkStepTitle, clearBasketItem, clearClient, clearPage, companySet, connectionStarted, decideNextPage, deleteBasketItem, determineBBApiUrl, emptyBasket, getCurrentStepTitle, getPartial, getUrlParam, hideLoaderHandler, hidePage, initWidget, initWidget2, initializeBBWidget, isAdmin, isAdminIFrame, isFirstCall, isLoadingPage, isMemberLoggedIn, jumpToPage, loadPreviousStep, loadStep, loadStepByPageName, locationChangeStartHandler, logout, moveToBasket, quickEmptybasket, redirectTo, reloadDashboard, reset, restart, restoreBasket, scrollTo, setActiveCompany, setAffiliate, setBasicRoute, setBasket, setBasketItem, setClient, setCompany, setLastSelectedDate, setLoadingPage, setPageLoaded, setPageRoute, setReadyToCheckout, setRoute, setStepTitle, setUsingBasket, setupDefaults, showCheckout, showLoaderHandler, showPage, skipThisStep, supportsTouch, updateBasket, widgetStarted;
+  this.$scope = $scope;
   $scope.cid = "BBCtrl";
   $scope.controller = "public.controllers.BBCtrl";
   $scope.qs = QueryStringService;
@@ -61,7 +58,7 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
     $scope.setAffiliate = setAffiliate;
     $scope.setBasicRoute = setBasicRoute;
     $scope.setBasket = setBasket;
-    $scope.setBasketItem = setBasketItem;
+    $scope.setBasketItem = basketRelated.setBasketItem;
     $scope.setClient = setClient;
     $scope.setCompany = setCompany;
     $scope.setLastSelectedDate = setLastSelectedDate;
@@ -842,9 +839,6 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
   showCheckout = function() {
     return $scope.bb.current_item.ready;
   };
-
-
-
   addItemToBasket = function() {
     var add_defer;
     add_defer = $q.defer();
@@ -872,11 +866,6 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
     }
     return add_defer.promise;
   };
-
-
-
-
-
   updateBasket = function() {
     var add_defer, current_item_ref, params;
     current_item_ref = $scope.bb.current_item.ref;
@@ -887,10 +876,6 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
       items: $scope.bb.basket.items,
       bb: $scope.bb
     };
-
-
-
-
     BBModel.Basket.$updateBasket($scope.bb.company, params).then(function(basket) {
       var current_item, item, j, len, ref;
       ref = basket.items;
@@ -908,7 +893,7 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
       if (!current_item) {
         current_item = _.last(basket.items);
       }
-      setBasketItem(current_item);
+      $scope.bb.current_item = current_item;
       if (!$scope.bb.current_item) {
         return clearBasketItem().then(function() {
           return add_defer.resolve(basket);
@@ -978,23 +963,11 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
       return setBasket(basket);
     });
   };
-  // deleteBasketItems = function(items) {
-  //   var item, j, len, results;
-  //   results = [];
-  //   for (j = 0, len = items.length; j < len; j++) {
-  //     item = items[j];
-  //     results.push(BBModel.Basket.$deleteItem(item, $scope.bb.company, {
-  //       bb: $scope.bb
-  //     }).then(function(basket) {
-  //       return setBasket(basket);
-  //     }));
-  //   }
-  //   return results;
-  // };
+
   clearBasketItem = function() {
     var def;
     def = $q.defer();
-    setBasketItem(new BBModel.BasketItem(null, $scope.bb));
+    $scope.bb.current_item = new BBModel.BasketItem(null, $scope.bb);
     if ($scope.bb.default_setup_promises) {
       $q.all($scope.bb.default_setup_promises)["finally"](function() {
         $scope.bb.current_item.setDefaults($scope.bb.item_defaults);
@@ -1007,9 +980,6 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
       def.resolve();
     }
     return def.promise;
-  };
-  setBasketItem = function(item) {
-    return $scope.bb.current_item = item;
   };
   setReadyToCheckout = function(ready) {
     return $scope.bb.confirmCheckout = ready;
@@ -1137,7 +1107,7 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
                     })());
                     return $q.all(promises).then(function() {
                       if (basket.items.length > 0) {
-                        setBasketItem(basket.items[0]);
+                        $scope.bb.current_item = basket.items[0];
                       }
                       return restore_basket_defer.resolve();
                     });
@@ -1446,3 +1416,6 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
 };
 
 angular.module('BB.Controllers').controller('BBCtrl', BBCtrl);
+
+// ---
+// generated by coffee-script 1.9.2

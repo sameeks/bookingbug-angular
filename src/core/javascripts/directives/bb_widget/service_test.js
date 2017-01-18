@@ -24,50 +24,7 @@ angular.module('BB.Services').factory("basketRelated", function($q, $window, hal
     }
   };
 
-  addItemToBasket = function() {
-    guardScope();
-    var add_defer;
-    add_defer = $q.defer();
-    if (!$scope.bb.current_item.submitted && !$scope.bb.moving_booking) {
-      moveToBasket();
-      $scope.bb.current_item.submitted = updateBasket();
-      $scope.bb.current_item.submitted.then(function(basket) {
-        return add_defer.resolve(basket);
-      }, function(err) {
-        if (err.status === 409) {
-          $scope.bb.current_item.person = null;
-          $scope.bb.current_item.resource = null;
-          $scope.bb.current_item.setTime(null);
-          if ($scope.bb.current_item.service) {
-            $scope.bb.current_item.setService($scope.bb.current_item.service);
-          }
-        }
-        $scope.bb.current_item.submitted = null;
-        return add_defer.reject(err);
-      });
-    } else if ($scope.bb.current_item.submitted) {
-      return $scope.bb.current_item.submitted;
-    } else {
-      add_defer.resolve();
-    }
-    return add_defer.promise;
-  };
-
-  updateBasket = function() {
-    guardScope();
-    var add_defer, current_item_ref, params;
-    current_item_ref = $scope.bb.current_item.ref;
-    add_defer = $q.defer();
-    params = {
-      member_id: $scope.client.id,
-      member: $scope.client,
-      items: $scope.bb.basket.items,
-      bb: $scope.bb
-    };
-
-    }
-
-    deleteBasketItems = function(items) {
+  deleteBasketItems = function(items) {
       guardScope();
       debugger;
       var item, j, len, results;
@@ -83,13 +40,17 @@ angular.module('BB.Services').factory("basketRelated", function($q, $window, hal
       return results;
     };
 
+  setBasketItem = function(item) {
+      return $scope.bb.current_item = item;
+    };
+
+
   return {
-    updateBasket: updateBasket,
-    addItemToBasket: addItemToBasket,
     getScope: getScope,
     setScope: setScope,
     first: function(prms) {alert(prms);},
     setBasket : setBasket,
-    deleteBasketItems : deleteBasketItems
+    deleteBasketItems : deleteBasketItems,
+    setBasketItem: setBasketItem
   };
 });
