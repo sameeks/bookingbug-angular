@@ -15,7 +15,6 @@ angular.module('BB.Services').factory("basketRelated", function($q, $window, hal
   };
   setBasket = function(basket) {
     guardScope();
-    debugger;
     $scope.bb.basket = basket;
     $scope.basket = basket;
     $scope.bb.basket.company_id = $scope.bb.company_id;
@@ -26,7 +25,6 @@ angular.module('BB.Services').factory("basketRelated", function($q, $window, hal
 
   deleteBasketItems = function(items) {
       guardScope();
-      debugger;
       var item, j, len, results;
       results = [];
       for (j = 0, len = items.length; j < len; j++) {
@@ -41,7 +39,28 @@ angular.module('BB.Services').factory("basketRelated", function($q, $window, hal
     };
 
   setBasketItem = function(item) {
+      guardScope();
       return $scope.bb.current_item = item;
+    };
+
+
+  clearBasketItem = function() {
+      guardScope();
+      var def;
+      def = $q.defer();
+      $scope.bb.current_item = new BBModel.BasketItem(null, $scope.bb);
+      if ($scope.bb.default_setup_promises) {
+        $q.all($scope.bb.default_setup_promises)["finally"](function() {
+          $scope.bb.current_item.setDefaults($scope.bb.item_defaults);
+          return $q.all($scope.bb.current_item.promises)["finally"](function() {
+            return def.resolve();
+          });
+        });
+      } else {
+        $scope.bb.current_item.setDefaults({});
+        def.resolve();
+      }
+      return def.promise;
     };
 
 
@@ -51,6 +70,7 @@ angular.module('BB.Services').factory("basketRelated", function($q, $window, hal
     first: function(prms) {alert(prms);},
     setBasket : setBasket,
     deleteBasketItems : deleteBasketItems,
-    setBasketItem: setBasketItem
+    setBasketItem: setBasketItem,
+    clearBasketItem: clearBasketItem
   };
 });
