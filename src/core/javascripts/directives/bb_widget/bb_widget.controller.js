@@ -4,12 +4,11 @@ var BBCtrl;
 BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize) {
   'ngInject';
 
-  basketRelated.setScope($scope);
+  basketRelated.setScope($scope);//test
 
   basketRelated.first('Passed from controller');
 
   var $debounce, addItemToBasket, base64encode, broadcastItemUpdate, checkStepTitle, clearBasketItem, clearClient, clearPage, companySet, connectionStarted, decideNextPage, deleteBasketItem, determineBBApiUrl, emptyBasket, getCurrentStepTitle, getPartial, getUrlParam, hideLoaderHandler, hidePage, initWidget, initWidget2, initializeBBWidget, isAdmin, isAdminIFrame, isFirstCall, isLoadingPage, isMemberLoggedIn, jumpToPage, loadPreviousStep, loadStep, loadStepByPageName, locationChangeStartHandler, logout, moveToBasket, quickEmptybasket, redirectTo, reloadDashboard, reset, restart, restoreBasket, scrollTo, setActiveCompany, setAffiliate, setBasicRoute, setBasket, setBasketItem, setClient, setCompany, setLastSelectedDate, setLoadingPage, setPageLoaded, setPageRoute, setReadyToCheckout, setRoute, setStepTitle, setUsingBasket, setupDefaults, showCheckout, showLoaderHandler, showPage, skipThisStep, supportsTouch, updateBasket, widgetStarted;
-  this.$scope = $scope;
   $scope.cid = "BBCtrl";
   $scope.controller = "public.controllers.BBCtrl";
   $scope.qs = QueryStringService;
@@ -843,6 +842,9 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
   showCheckout = function() {
     return $scope.bb.current_item.ready;
   };
+
+
+
   addItemToBasket = function() {
     var add_defer;
     add_defer = $q.defer();
@@ -870,6 +872,11 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
     }
     return add_defer.promise;
   };
+
+
+
+
+
   updateBasket = function() {
     var add_defer, current_item_ref, params;
     current_item_ref = $scope.bb.current_item.ref;
@@ -880,6 +887,10 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
       items: $scope.bb.basket.items,
       bb: $scope.bb
     };
+
+
+
+
     BBModel.Basket.$updateBasket($scope.bb.company, params).then(function(basket) {
       var current_item, item, j, len, ref;
       ref = basket.items;
