@@ -20,4 +20,4 @@ angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions, Company
     if GeneralOptions.custom_time_zone
       @is_time_zone_diff = true
 
-    @time_zone_name = moment().tz(GeneralOptions.display_time_zone).format('zz')
+    @time_zone_name = moment.tz(GeneralOptions.display_time_zone).format('zz')
