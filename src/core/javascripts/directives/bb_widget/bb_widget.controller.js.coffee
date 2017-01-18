@@ -1,9 +1,12 @@
 'use strict'
 
-BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize) ->
+BBCtrl = (routeStates, $scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize, widgetPage, widgetStep) ->
   'ngInject'
 
   @$scope = $scope
+
+  widgetPage.setScope($scope)
+  widgetStep.setScope($scope)
 
   $scope.cid = "BBCtrl" # dont change the cid as we use it in the app to identify this as the widget root scope
   $scope.controller = "public.controllers.BBCtrl"
@@ -21,34 +24,33 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
   $rootScope.Route = $scope.Route = routeStates
 
   @$onInit = () ->
-
     $scope.addItemToBasket = addItemToBasket
     $scope.areScopesLoaded = LoadingService.areScopesLoaded
     $scope.base64encode = base64encode
     $scope.broadcastItemUpdate = broadcastItemUpdate
-    $scope.clearPage = clearPage
+    $scope.clearPage = widgetPage.clearPage
     $scope.clearBasketItem = clearBasketItem
     $scope.clearClient = clearClient
-    $scope.checkStepTitle = checkStepTitle
+    $scope.checkStepTitle = widgetStep.checkStepTitle
     $scope.$debounce = $debounce
-    $scope.decideNextPage = decideNextPage
+    $scope.decideNextPage = widgetPage.decideNextPage
     $scope.deleteBasketItem = deleteBasketItem
     $scope.deleteBasketItems = deleteBasketItems
     $scope.emptyBasket = emptyBasket
-    $scope.getCurrentStepTitle = getCurrentStepTitle
+    $scope.getCurrentStepTitle = widgetStep.getCurrentStepTitle
     $scope.getPartial = getPartial
     $scope.getUrlParam = getUrlParam
-    $scope.hidePage = hidePage
+    $scope.hidePage = widgetPage.hidePage
     $scope.isAdmin = isAdmin
     $scope.isAdminIFrame = isAdminIFrame
     $scope.initWidget = initWidget
     $scope.initWidget2 = initWidget2
-    $scope.isLoadingPage = isLoadingPage
+    $scope.isLoadingPage = widgetPage.isLoadingPage
     $scope.isMemberLoggedIn = isMemberLoggedIn
-    $scope.jumpToPage = jumpToPage
-    $scope.loadPreviousStep = loadPreviousStep
-    $scope.loadStep = loadStep
-    $scope.loadStepByPageName = loadStepByPageName
+    $scope.jumpToPage = widgetPage.jumpToPage
+    $scope.loadPreviousStep = widgetStep.loadPreviousStep
+    $scope.loadStep = widgetStep.loadStep
+    $scope.loadStepByPageName = widgetStep.loadStepByPageName
     $scope.logout = logout
     $scope.moveToBasket = moveToBasket
     $scope.notLoaded = LoadingService.notLoaded
@@ -56,8 +58,8 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
     $scope.quickEmptybasket = quickEmptybasket
     $scope.redirectTo = redirectTo
     $scope.reloadDashboard = reloadDashboard
-    $scope.reset = reset
-    $scope.restart = restart
+    $scope.reset = widgetStep.reset
+    $scope.restart = widgetStep.restart
     $scope.scrollTo = scrollTo
     $scope.setAffiliate = setAffiliate
     $scope.setBasicRoute = setBasicRoute
@@ -65,20 +67,20 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
     $scope.setBasketItem = setBasketItem
     $scope.setClient = setClient
     $scope.setCompany = setCompany
-    $scope.setLastSelectedDate = setLastSelectedDate
+    $scope.setLastSelectedDate = widgetStep.setLastSelectedDate
     $scope.setLoaded = LoadingService.setLoaded
     $scope.setLoadedAndShowError = LoadingService.setLoadedAndShowError
-    $scope.setLoadingPage = setLoadingPage
+    $scope.setLoadingPage = widgetPage.setLoadingPage
     $scope.setPageLoaded = setPageLoaded
-    $scope.setPageRoute = setPageRoute
+    $scope.setPageRoute = widgetPage.setPageRoute
     $scope.setReadyToCheckout = setReadyToCheckout
     $scope.setRoute = setRoute
-    $scope.setStepTitle = setStepTitle
+    $scope.setStepTitle = widgetStep.setStepTitle
     $scope.setUsingBasket = setUsingBasket
     $scope.skipThisStep = skipThisStep
     $scope.showCheckout = showCheckout
     $scope.supportsTouch = supportsTouch
-    $scope.showPage = showPage
+    $scope.showPage = widgetPage.showPage
     $scope.updateBasket = updateBasket
 
     initializeBBWidget()
@@ -138,9 +140,9 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
       step_number = $scope.bb.matchURLToStep() # Get the step number to load
 
       if step_number > $scope.bb.current_step
-        loadStep(step_number)
+        widgetStep.loadStep(step_number)
       else if step_number < $scope.bb.current_step
-        loadPreviousStep('locationChangeStart')
+        widgetStep.loadPreviousStep('locationChangeStart')
 
     $scope.bb.routing = false
     return
@@ -483,7 +485,7 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
               page = prms.first_page if prms.first_page
 
               isFirstCall = false
-              decideNextPage(page)
+              widgetPage.decideNextPage(page)
       , (err) ->
         connectionStarted.reject("Failed to start widget")
         LoadingService.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -598,136 +600,12 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
       def.resolve()
     def.promise
 
-  setLoadingPage = (val) =>
-    $scope.loading_page = val
-
-  isLoadingPage = () =>
-    $scope.loading_page
-
-  showPage = (route, dont_record_page) =>
-    $scope.bb.updateRoute(route)
-    $scope.jumped = false
-
-    # don't load a new page if we are still loading an old one - helps prevent double clicks
-    return if isLoadingPage()
-
-    setLoadingPage(true)
-    if $scope.bb.current_page == route
-      $scope.bb_main = ""
-      setTimeout () ->
-        $scope.bb_main = $sce.trustAsResourceUrl($scope.bb.pageURL(route))
-        $scope.$apply()
-      , 0
-    else
-      AlertService.clear() # clear any alerts as part of loading a new page
-      $scope.bb.current_page = route
-      $scope.bb.recordCurrentPage() if !dont_record_page
-      LoadingService.notLoaded($scope)
-      $scope.bb_main = $sce.trustAsResourceUrl($scope.bb.pageURL(route))
-
-    $rootScope.$broadcast "page:loaded"
-
-  jumpToPage = (route) =>
-    $scope.current_page = route
-    $scope.jumped = true
-    $scope.bb_main = $sce.trustAsResourceUrl($scope.partial_url + route + $scope.page_suffix)
-
-  clearPage = () ->
-    $scope.bb_main = ""
-
   getPartial = (file) ->
     $scope.bb.pageURL(file)
 
   setPageLoaded = () ->
     LoadingService.setLoaded($scope)
 
-  setPageRoute = (route) =>
-    $scope.bb.current_page_route = route
-    if $scope.bb.routeSteps && $scope.bb.routeSteps[route]
-      showPage($scope.bb.routeSteps[route])
-      return true
-    return false
-
-  decideNextPage = (route) ->
-    if route
-      if route == 'none'
-        return
-      else
-        if $scope.bb.total && $scope.bb.payment_status == 'complete'
-          return if setPageRoute($rootScope.Route.Confirmation)
-          return showPage('confirmation')
-        else
-          return showPage(route)
-
-    # do we have a pre-set route...
-    if $scope.bb.nextSteps && $scope.bb.current_page && $scope.bb.nextSteps[$scope.bb.current_page] && !$scope.bb.routeSteps
-      return showPage($scope.bb.nextSteps[$scope.bb.current_page])
-    if !$scope.client.valid() && LoginService.isLoggedIn()
-# make sure we set the client to the currently logged in member
-# we should also just check the logged in member is  a member of the company they are currently booking with
-      $scope.client = new BBModel.Client(LoginService.member()._data)
-
-    if ($scope.bb.company && $scope.bb.company.companies) || (!$scope.bb.company && $scope.affiliate)
-      return if setPageRoute($rootScope.Route.Company)
-      return showPage('company_list')
-    else if $scope.bb.total && $scope.bb.payment_status == "complete"
-      return if setPageRoute($rootScope.Route.Confirmation)
-      return showPage('confirmation')
-
-    else if ($scope.bb.total && $scope.bb.payment_status == "pending")
-      return showPage('payment')
-    else if ($scope.bb.company.$has('event_groups') && !$scope.bb.current_item.event_group && !$scope.bb.current_item.service && !$scope.bb.current_item.product && !$scope.bb.current_item.deal) or ($scope.bb.company.$has('events') && $scope.bb.current_item.event_group && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if setPageRoute($rootScope.Route.Event)
-      return showPage('event_list')
-    else if ($scope.bb.company.$has('events') && $scope.bb.current_item.event && !$scope.bb.current_item.num_book && (!$scope.bb.current_item.tickets || !$scope.bb.current_item.tickets.qty) && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return showPage('event')
-    else if ($scope.bb.company.$has('services') && !$scope.bb.current_item.service && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if setPageRoute($rootScope.Route.Service)
-      return showPage('service_list')
-    else if ($scope.bb.company.$has('resources') && !$scope.bb.current_item.resource && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if setPageRoute($rootScope.Route.Resource)
-      return showPage('resource_list')
-    else if ($scope.bb.company.$has('people') && !$scope.bb.current_item.person && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if setPageRoute($rootScope.Route.Person)
-      return showPage('person_list')
-    else if (!$scope.bb.current_item.duration && !$scope.bb.current_item.event? && !$scope.bb.current_item.product && !$scope.bb.current_item.deal)
-      return if setPageRoute($rootScope.Route.Duration)
-      return showPage('duration_list')
-    else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.date && !$scope.bb.current_item.event? && !$scope.bb.current_item.deal)
-      if $scope.bb.company.$has('availability_slots')
-        return if setPageRoute($rootScope.Route.Slot)
-        return showPage('slot_list')
-      else
-        return if setPageRoute($rootScope.Route.Date)
-        # if we're an admin and we've pre-selected a time - route to that instead
-        return showPage('calendar')
-    else if ($scope.bb.current_item.days_link && !$scope.bb.current_item.time && !$scope.bb.current_item.event? && (!$scope.bb.current_item.service || $scope.bb.current_item.service.duration_unit != 'day') && !$scope.bb.current_item.deal)
-      return if setPageRoute($rootScope.Route.Time)
-      return showPage('time')
-    else if ($scope.bb.moving_booking && (!$scope.bb.current_item.ready || !$scope.bb.current_item.move_done))
-      return showPage('check_move')
-    else if (!$scope.client.valid())
-      return if setPageRoute($rootScope.Route.Client)
-      return showPage('client')
-    else if ($scope.bb.current_item.item_details && $scope.bb.current_item.item_details.hasQuestions && !$scope.bb.current_item.asked_questions)
-      return if setPageRoute($rootScope.Route.Questions)
-      return showPage('check_items')
-    else if $scope.bb.moving_booking && $scope.bb.basket.itemsReady()
-      return showPage('purchase')
-    else if !$scope.bb.basket.readyToCheckout()
-      return if setPageRoute($rootScope.Route.Summary)
-      return showPage('basket_summary')
-    else if ($scope.bb.usingBasket && (!$scope.bb.confirmCheckout || $scope.bb.company_settings.has_vouchers || $scope.bb.company.$has('coupon')))
-      return if setPageRoute($rootScope.Route.Basket)
-      return showPage('basket')
-    else if ($scope.bb.basket.readyToCheckout() && $scope.bb.payment_status == null && !$scope.bb.basket.waiting_for_checkout)
-      return if setPageRoute($rootScope.Route.Checkout)
-      return showPage('checkout')
-# else if ($scope.bb.total && $scope.bb.payment_status == "pending")
-#   return showPage('payment')
-    else if $scope.bb.payment_status == "complete"
-      return if setPageRoute($rootScope.Route.Confirmation)
-      return showPage('confirmation')
 
   showCheckout = ->
     $scope.bb.current_item.ready
@@ -806,14 +684,14 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
           else
             if $scope.bb.nextSteps
 # either go back to the Date/Event routes or load the previous step
-              if setPageRoute($rootScope.Route.Date)
+              if widgetPage.setPageRoute($rootScope.Route.Date)
 # already routed
-              else if setPageRoute($rootScope.Route.Event)
+              else if widgetPage.setPageRoute($rootScope.Route.Event)
 # already routed
               else
-                loadPreviousStep()
+                widgetStep.loadPreviousStep()
             else
-              decideNextPage()
+              widgetPage.decideNextPage()
     add_defer.promise
 
 
@@ -895,11 +773,11 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
     if $scope.client && $scope.client.valid()
       LoginService.logout({root: $scope.bb.api_url}).then ->
         $scope.client = new BBModel.Client()
-        decideNextPage(route)
+        widgetPage.decideNextPage(route)
     else if $scope.member
       LoginService.logout({root: $scope.bb.api_url}).then ->
         $scope.member = new BBModel.Member.Member()
-        decideNextPage(route)
+        widgetPage.decideNextPage(route)
 
 
   setAffiliate = (affiliate) ->
@@ -1000,119 +878,30 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
     defer.promise
 
   setActiveCompany = (company, settings) ->
-    # currency code exists in both company and company_settings
-    # get from company if not defined in settings
+# currency code exists in both company and company_settings
+# get from company if not defined in settings
     CompanyStoreService.currency_code = if !settings then company.currency_code else settings.currency
     CompanyStoreService.time_zone = company.timezone
     CompanyStoreService.country_code = company.country_code
     CompanyStoreService.settings = settings
 
-  # set the title fo the current step
-  setStepTitle = (title) ->
-    $scope.bb.steps[$scope.bb.current_step - 1].title = title
 
 
-  getCurrentStepTitle = ->
-    steps = $scope.bb.steps
-
-    if !_.compact(steps).length or steps.length == 1 and steps[0].number != $scope.bb.current_step
-      steps = $scope.bb.allSteps
-
-    if $scope.bb.current_step
-      return steps[$scope.bb.current_step - 1].title
-
-  # conditionally set the title of the current step - if it doesn't have one
-  checkStepTitle = (title) ->
-    if $scope.bb.steps[$scope.bb.current_step - 1] and !$scope.bb.steps[$scope.bb.current_step - 1].title
-      setStepTitle(title)
-
-  loadStep = (step) ->
-    return if step == $scope.bb.current_step
-
-    $scope.bb.calculatePercentageComplete(step)
-
-    # so actually use the data from the "next" page if there is one - but show the correct page
-    # this means we load the completed data from that page
-    # if there isn't a next page - then try the select one
-    st = $scope.bb.steps[step]
-    prev_step = $scope.bb.steps[step - 1]
-    prev_step = st if st && !prev_step
-    st = prev_step if !st
-    if st && !$scope.bb.last_step_reached
-      $scope.bb.stacked_items = [] if !st.stacked_length || st.stacked_length == 0
-      $scope.bb.current_item.loadStep(st.current_item)
-      if $scope.bb.steps.length > 1
-        $scope.bb.steps.splice(step, $scope.bb.steps.length - step)
-      $scope.bb.current_step = step
-      showPage(prev_step.page, true)
-    if $scope.bb.allSteps
-      for step in $scope.bb.allSteps
-        step.active = false
-        step.passed = step.number < $scope.bb.current_step
-      if $scope.bb.allSteps[$scope.bb.current_step - 1]
-        $scope.bb.allSteps[$scope.bb.current_step - 1].active = true
-
-  ###**
-  * @ngdoc method
-  * @name loadPreviousStep
-  * @methodOf BB.Directives:bbWidget
-  * @description
-  * Loads the previous unskipped step
-  *
-  * @param {integer} steps_to_go_back: The number of steps to go back
-  * @param {string} caller: The method that called this function
-  ###
-  loadPreviousStep = (caller) ->
-    past_steps = _.reject($scope.bb.steps, (s) -> s.number >= $scope.bb.current_step)
-
-    # Find the last unskipped step
-    step_to_load = 0
-
-    while past_steps[0]
-      last_step = past_steps.pop()
-      if !last_step
-        break
-      if !last_step.skipped
-        step_to_load = last_step.number
-        break
-
-    # Remove pages from browser history (sync browser history with routing)
-    if $scope.bb.routeFormat
-
-      pages_to_remove_from_history = if step_to_load is 0 then $scope.bb.current_step + 1 else ($scope.bb.current_step - step_to_load)
-
-      # -------------------------------------------------------------------------
-      # Reduce number of pages to remove from browser history by one if this
-      # method was triggered by Angular's $locationChangeStart broadcast
-      # In this instance we can assume that the browser back button was used
-      # and one page has already been removed from the history by the browser
-      # -------------------------------------------------------------------------
-      pages_to_remove_from_history-- if caller is "locationChangeStart"
-
-      window.history.go(pages_to_remove_from_history * -1) if pages_to_remove_from_history > 0
-
-    loadStep(step_to_load) if step_to_load > 0
 
 
-  loadStepByPageName = (page_name) ->
-    for step in $scope.bb.allSteps
-      if step.page == page_name
-        return loadStep(step.number)
-    return loadStep(1)
 
-  reset = () ->
-    $rootScope.$broadcast 'clear:formData'
-    $rootScope.$broadcast 'widget:restart'
-    setLastSelectedDate(null)
-    $scope.client = new BBModel.Client() if !LoginService.isLoggedIn()
-    $scope.bb.last_step_reached = false
-    # This is to remove the current step you are on.
-    $scope.bb.steps.splice(1)
 
-  restart = () ->
-    reset()
-    loadStep(1)
-  # TODO clear current item?
+
+
+
+
+
+
+
+
+
+
+
 
   setRoute = (rdata) ->
     $scope.bb.setRoute(rdata)
@@ -1150,14 +939,8 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
   base64encode = (param) =>
     $window.btoa(param)
 
-  setLastSelectedDate = (date) =>
-    $scope.last_selected_date = date
-
   broadcastItemUpdate = () =>
     $scope.$broadcast("currentItemUpdate", $scope.bb.current_item)
-
-  hidePage = () ->
-    $scope.hide_page = true
 
   companySet = () ->
     $scope.bb.company_id?
