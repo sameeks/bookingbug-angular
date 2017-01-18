@@ -6,7 +6,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
 
   basketRelated.setScope($scope);
   basketRelated.first('Hello');
-  var $debounce, addItemToBasket, base64encode, broadcastItemUpdate, checkStepTitle, clearClient, clearPage, companySet, connectionStarted, decideNextPage, deleteBasketItem, determineBBApiUrl, emptyBasket, getCurrentStepTitle, getPartial, getUrlParam, hideLoaderHandler, hidePage, initWidget, initWidget2, initializeBBWidget, isAdmin, isAdminIFrame, isFirstCall, isLoadingPage, isMemberLoggedIn, jumpToPage, loadPreviousStep, loadStep, loadStepByPageName, locationChangeStartHandler, logout, moveToBasket, quickEmptybasket, redirectTo, reloadDashboard, reset, restart, restoreBasket, scrollTo, setActiveCompany, setAffiliate, setBasicRoute,setClient, setCompany, setLastSelectedDate, setLoadingPage, setPageLoaded, setPageRoute, setReadyToCheckout, setRoute, setStepTitle, setUsingBasket, setupDefaults, showCheckout, showLoaderHandler, showPage, skipThisStep, supportsTouch, widgetStarted;
+  var $debounce,  base64encode, broadcastItemUpdate, checkStepTitle, clearClient, clearPage, companySet, connectionStarted, decideNextPage, determineBBApiUrl, getCurrentStepTitle, getPartial, getUrlParam, hideLoaderHandler, hidePage, initWidget, initWidget2, initializeBBWidget, isAdmin, isAdminIFrame, isFirstCall, isLoadingPage, isMemberLoggedIn, jumpToPage, loadPreviousStep, loadStep, loadStepByPageName, locationChangeStartHandler, logout, redirectTo, reloadDashboard, reset, restart, scrollTo, setActiveCompany, setAffiliate, setBasicRoute,setClient, setCompany, setLastSelectedDate, setLoadingPage, setPageLoaded, setPageRoute, setReadyToCheckout, setRoute, setStepTitle, setUsingBasket, setupDefaults, showCheckout, showLoaderHandler, showPage, skipThisStep, supportsTouch, widgetStarted;
 
   $scope.cid = "BBCtrl";
   $scope.controller = "public.controllers.BBCtrl";
@@ -20,7 +20,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
   $rootScope.widget_started = widgetStarted.promise;
   $rootScope.Route = $scope.Route = routeStates;
   this.$onInit = function() {
-    $scope.addItemToBasket = addItemToBasket;
+    $scope.addItemToBasket = basketRelated.addItemToBasket;
     $scope.areScopesLoaded = LoadingService.areScopesLoaded;
     $scope.base64encode = base64encode;
     $scope.broadcastItemUpdate = broadcastItemUpdate;
@@ -30,9 +30,9 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
     $scope.checkStepTitle = checkStepTitle;
     $scope.$debounce = $debounce;
     $scope.decideNextPage = decideNextPage;
-    $scope.deleteBasketItem = deleteBasketItem;
+    $scope.deleteBasketItem = basketRelated.deleteBasketItem;
     $scope.deleteBasketItems = basketRelated.deleteBasketItems;
-    $scope.emptyBasket = emptyBasket;
+    $scope.emptyBasket = basketRelated.emptyBasket;
     $scope.getCurrentStepTitle = getCurrentStepTitle;
     $scope.getPartial = getPartial;
     $scope.getUrlParam = getUrlParam;
@@ -48,10 +48,10 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
     $scope.loadStep = loadStep;
     $scope.loadStepByPageName = loadStepByPageName;
     $scope.logout = logout;
-    $scope.moveToBasket = moveToBasket;
+    $scope.moveToBasket = basketRelated.moveToBasket;
     $scope.notLoaded = LoadingService.notLoaded;
     $scope.parseDate = moment;
-    $scope.quickEmptybasket = quickEmptybasket;
+    $scope.quickEmptybasket = basketRelated.quickEmptybasket;
     $scope.redirectTo = redirectTo;
     $scope.reloadDashboard = reloadDashboard;
     $scope.reset = reset;
@@ -841,86 +841,9 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
   showCheckout = function() {
     return $scope.bb.current_item.ready;
   };
-  addItemToBasket = function() {
-    var add_defer;
-    add_defer = $q.defer();
-    if (!$scope.bb.current_item.submitted && !$scope.bb.moving_booking) {
-      moveToBasket();
-      $scope.bb.current_item.submitted = basketRelated.updateBasket();
-      $scope.bb.current_item.submitted.then(function(basket) {
-        return add_defer.resolve(basket);
-      }, function(err) {
-        if (err.status === 409) {
-          $scope.bb.current_item.person = null;
-          $scope.bb.current_item.resource = null;
-          $scope.bb.current_item.setTime(null);
-          if ($scope.bb.current_item.service) {
-            $scope.bb.current_item.setService($scope.bb.current_item.service);
-          }
-        }
-        $scope.bb.current_item.submitted = null;
-        return add_defer.reject(err);
-      });
-    } else if ($scope.bb.current_item.submitted) {
-      return $scope.bb.current_item.submitted;
-    } else {
-      add_defer.resolve();
-    }
-    return add_defer.promise;
-  };
-
-  emptyBasket = function() {
-    var defer;
-    defer = $q.defer();
-    if (!$scope.bb.basket.items || ($scope.bb.basket.items && $scope.bb.basket.items.length === 0)) {
-      defer.resolve();
-    } else {
-      BBModel.Basket.$empty($scope.bb).then(function(basket) {
-        if ($scope.bb.current_item.id) {
-          delete $scope.bb.current_item.id;
-        }
-        basketRelated.setBasket(basket);
-        return defer.resolve();
-      }, function(err) {
-        return defer.reject();
-      });
-    }
-    return defer.promise;
-  };
-
-
-  deleteBasketItem = function(item) {
-    return BBModel.Basket.$deleteItem(item, $scope.bb.company, {
-      bb: $scope.bb
-    }).then(function(basket) {
-      return basketRelated.setBasket(basket);
-    });
-  };
-
-
 
   setReadyToCheckout = function(ready) {
     return $scope.bb.confirmCheckout = ready;
-  };
-  moveToBasket = function() {
-    return $scope.bb.basket.addItem($scope.bb.current_item);
-  };
-
-  quickEmptybasket = function(options) {
-    var def, preserve_stacked_items;
-    preserve_stacked_items = options && options.preserve_stacked_items ? true : false;
-    if (!preserve_stacked_items) {
-      $scope.bb.stacked_items = [];
-      basketRelated.setBasket(new BBModel.Basket(null, $scope.bb));
-      return basketRelated.clearBasketItem();
-    } else {
-      $scope.bb.basket = new BBModel.Basket(null, $scope.bb);
-      $scope.basket = $scope.bb.basket;
-      $scope.bb.basket.company_id = $scope.bb.company_id;
-      def = $q.defer();
-      def.resolve();
-      return def.promise;
-    }
   };
 
 
@@ -948,99 +871,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
     $scope.affiliate = affiliate;
     return $scope.affiliate_id = affiliate.id;
   };
-  restoreBasket = function() {
-    var restore_basket_defer;
-    restore_basket_defer = $q.defer();
-    quickEmptybasket().then(function() {
-      var auth_token, href, params, status, uri;
-      auth_token = $localStorage.getItem('auth_token') || $sessionStorage.getItem('auth_token');
-      href = $scope.bb.api_url + '/api/v1/status{?company_id,affiliate_id,clear_baskets,clear_member}';
-      params = {
-        company_id: $scope.bb.company_id,
-        affiliate_id: $scope.bb.affiliate_id,
-        clear_baskets: $scope.bb.clear_basket ? '1' : null,
-        clear_member: $scope.bb.clear_member ? '1' : null
-      };
-      uri = new UriTemplate(href).fillFromObject(params);
-      status = halClient.$get(uri, {
-        "auth_token": auth_token,
-        "no_cache": true
-      });
-      return status.then((function(_this) {
-        return function(res) {
-          if (res.$has('client')) {
-            res.$get('client').then(function(client) {
-              if (!$scope.client || ($scope.client && !$scope.client.valid())) {
-                return $scope.client = new BBModel.Client(client);
-              }
-            });
-          }
-          if (res.$has('member')) {
-            res.$get('member').then(function(member) {
-              if (member.client_type !== 'Contact') {
-                member = LoginService.setLogin(member);
-                return setClient(member);
-              }
-            });
-          }
-          if ($scope.bb.clear_basket) {
-            return restore_basket_defer.resolve();
-          } else {
-            if (res.$has('baskets')) {
-              return res.$get('baskets').then(function(baskets) {
-                var basket;
-                basket = _.find(baskets, function(b) {
-                  return parseInt(b.company_id) === $scope.bb.company_id;
-                });
-                if (basket) {
-                  basket = new BBModel.Basket(basket, $scope.bb);
-                  return basket.$get('items').then(function(items) {
-                    var i, j, len, promises;
-                    items = (function() {
-                      var j, len, results;
-                      results = [];
-                      for (j = 0, len = items.length; j < len; j++) {
-                        i = items[j];
-                        results.push(new BBModel.BasketItem(i));
-                      }
-                      return results;
-                    })();
-                    for (j = 0, len = items.length; j < len; j++) {
-                      i = items[j];
-                      basket.addItem(i);
-                    }
-                    basketRelated.setBasket(basket);
-                    promises = [].concat.apply([], (function() {
-                      var l, len1, results;
-                      results = [];
-                      for (l = 0, len1 = items.length; l < len1; l++) {
-                        i = items[l];
-                        results.push(i.promises);
-                      }
-                      return results;
-                    })());
-                    return $q.all(promises).then(function() {
-                      if (basket.items.length > 0) {
-                        $scope.bb.current_item = basket.items[0];
-                      }
-                      return restore_basket_defer.resolve();
-                    });
-                  });
-                } else {
-                  return restore_basket_defer.resolve();
-                }
-              });
-            } else {
-              return restore_basket_defer.resolve();
-            }
-          }
-        };
-      })(this), function(err) {
-        return restore_basket_defer.resolve();
-      });
-    });
-    return restore_basket_defer.promise;
-  };
+
   setCompany = function(company, keep_basket) {
     var defer;
     defer = $q.defer();
@@ -1062,7 +893,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
           $scope.bb.currency = $scope.bb.company_settings.currency;
           $scope.bb.has_prices = $scope.bb.company_settings.has_prices;
           if (!$scope.bb.basket || ($scope.bb.basket.company_id !== $scope.bb.company_id && !keep_basket)) {
-            return restoreBasket().then(function() {
+            return basketRelated.restoreBasket().then(function() {
               defer.resolve();
               return $scope.$emit('company:setup');
             });
@@ -1074,7 +905,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
       })(this));
     } else {
       if (!$scope.bb.basket || ($scope.bb.basket.company_id !== $scope.bb.company_id && !keep_basket)) {
-        restoreBasket().then(function() {
+        basketRelated.restoreBasket().then(function() {
           defer.resolve();
           return $scope.$emit('company:setup');
         });
