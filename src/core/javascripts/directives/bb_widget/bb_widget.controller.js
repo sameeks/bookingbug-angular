@@ -6,7 +6,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
 
   basketRelated.setScope($scope);
   basketRelated.first('Hello');
-  var $debounce, addItemToBasket, base64encode, broadcastItemUpdate, checkStepTitle, clearClient, clearPage, companySet, connectionStarted, decideNextPage, deleteBasketItem, determineBBApiUrl, emptyBasket, getCurrentStepTitle, getPartial, getUrlParam, hideLoaderHandler, hidePage, initWidget, initWidget2, initializeBBWidget, isAdmin, isAdminIFrame, isFirstCall, isLoadingPage, isMemberLoggedIn, jumpToPage, loadPreviousStep, loadStep, loadStepByPageName, locationChangeStartHandler, logout, moveToBasket, quickEmptybasket, redirectTo, reloadDashboard, reset, restart, restoreBasket, scrollTo, setActiveCompany, setAffiliate, setBasicRoute, setBasket, setBasketItem, setClient, setCompany, setLastSelectedDate, setLoadingPage, setPageLoaded, setPageRoute, setReadyToCheckout, setRoute, setStepTitle, setUsingBasket, setupDefaults, showCheckout, showLoaderHandler, showPage, skipThisStep, supportsTouch, updateBasket, widgetStarted;
+  var $debounce, addItemToBasket, base64encode, broadcastItemUpdate, checkStepTitle, clearClient, clearPage, companySet, connectionStarted, decideNextPage, deleteBasketItem, determineBBApiUrl, emptyBasket, getCurrentStepTitle, getPartial, getUrlParam, hideLoaderHandler, hidePage, initWidget, initWidget2, initializeBBWidget, isAdmin, isAdminIFrame, isFirstCall, isLoadingPage, isMemberLoggedIn, jumpToPage, loadPreviousStep, loadStep, loadStepByPageName, locationChangeStartHandler, logout, moveToBasket, quickEmptybasket, redirectTo, reloadDashboard, reset, restart, restoreBasket, scrollTo, setActiveCompany, setAffiliate, setBasicRoute,setClient, setCompany, setLastSelectedDate, setLoadingPage, setPageLoaded, setPageRoute, setReadyToCheckout, setRoute, setStepTitle, setUsingBasket, setupDefaults, showCheckout, showLoaderHandler, showPage, skipThisStep, supportsTouch, widgetStarted;
 
   $scope.cid = "BBCtrl";
   $scope.controller = "public.controllers.BBCtrl";
@@ -59,7 +59,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
     $scope.scrollTo = scrollTo;
     $scope.setAffiliate = setAffiliate;
     $scope.setBasicRoute = setBasicRoute;
-    $scope.setBasket = setBasket;
+    $scope.setBasket = basketRelated.setBasket;
     $scope.setBasketItem = basketRelated.setBasketItem;
     $scope.setClient = setClient;
     $scope.setCompany = setCompany;
@@ -77,7 +77,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
     $scope.showCheckout = showCheckout;
     $scope.supportsTouch = supportsTouch;
     $scope.showPage = showPage;
-    $scope.updateBasket = updateBasket;
+    $scope.updateBasket = basketRelated.updateBasket;
     initializeBBWidget();
     $rootScope.$on('show:loader', showLoaderHandler);
     $rootScope.$on('hide:loader', hideLoaderHandler);
@@ -846,7 +846,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
     add_defer = $q.defer();
     if (!$scope.bb.current_item.submitted && !$scope.bb.moving_booking) {
       moveToBasket();
-      $scope.bb.current_item.submitted = updateBasket();
+      $scope.bb.current_item.submitted = basketRelated.updateBasket();
       $scope.bb.current_item.submitted.then(function(basket) {
         return add_defer.resolve(basket);
       }, function(err) {
@@ -868,78 +868,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
     }
     return add_defer.promise;
   };
-  updateBasket = function() {
-    var add_defer, current_item_ref, params;
-    current_item_ref = $scope.bb.current_item.ref;
-    add_defer = $q.defer();
-    params = {
-      member_id: $scope.client.id,
-      member: $scope.client,
-      items: $scope.bb.basket.items,
-      bb: $scope.bb
-    };
-    BBModel.Basket.$updateBasket($scope.bb.company, params).then(function(basket) {
-      var current_item, item, j, len, ref;
-      ref = basket.items;
-      for (j = 0, len = ref.length; j < len; j++) {
-        item = ref[j];
-        item.storeDefaults($scope.bb.item_defaults);
-      }
-      halClient.clearCache("time_data");
-      halClient.clearCache("events");
-      basket.setSettings($scope.bb.basket.settings);
-      setBasket(basket);
-      current_item = _.find(basket.items, function(item) {
-        return item.ref === current_item_ref;
-      });
-      if (!current_item) {
-        current_item = _.last(basket.items);
-      }
-      $scope.bb.current_item = current_item;
-      if (!$scope.bb.current_item) {
-        return basketRelated.clearBasketItem().then(function() {
-          return add_defer.resolve(basket);
-        });
-      } else {
-        return add_defer.resolve(basket);
-      }
-    }, function(err) {
-      var error_modal;
-      add_defer.reject(err);
-      if (err.status === 409) {
-        halClient.clearCache("time_data");
-        halClient.clearCache("events");
-        $scope.bb.current_item.person = null;
-        error_modal = $uibModal.open({
-          templateUrl: getPartial('_error_modal'),
-          controller: function($scope, $uibModalInstance) {
-            $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg;
-            return $scope.ok = function() {
-              return $uibModalInstance.close();
-            };
-          }
-        });
-        return error_modal.result["finally"](function() {
-          if ($scope.bb.on_conflict) {
-            return $scope.$eval($scope.bb.on_conflict);
-          } else {
-            if ($scope.bb.nextSteps) {
-              if (setPageRoute($rootScope.Route.Date)) {
 
-              } else if (setPageRoute($rootScope.Route.Event)) {
-
-              } else {
-                return loadPreviousStep();
-              }
-            } else {
-              return decideNextPage();
-            }
-          }
-        });
-      }
-    });
-    return add_defer.promise;
-  };
   emptyBasket = function() {
     var defer;
     defer = $q.defer();
@@ -950,7 +879,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
         if ($scope.bb.current_item.id) {
           delete $scope.bb.current_item.id;
         }
-        setBasket(basket);
+        basketRelated.setBasket(basket);
         return defer.resolve();
       }, function(err) {
         return defer.reject();
@@ -964,7 +893,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
     return BBModel.Basket.$deleteItem(item, $scope.bb.company, {
       bb: $scope.bb
     }).then(function(basket) {
-      return setBasket(basket);
+      return basketRelated.setBasket(basket);
     });
   };
 
@@ -982,7 +911,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
     preserve_stacked_items = options && options.preserve_stacked_items ? true : false;
     if (!preserve_stacked_items) {
       $scope.bb.stacked_items = [];
-      setBasket(new BBModel.Basket(null, $scope.bb));
+      basketRelated.setBasket(new BBModel.Basket(null, $scope.bb));
       return basketRelated.clearBasketItem();
     } else {
       $scope.bb.basket = new BBModel.Basket(null, $scope.bb);
@@ -995,14 +924,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
   };
 
 
-  setBasket = function(basket) {
-    $scope.bb.basket = basket;
-    $scope.basket = basket;
-    $scope.bb.basket.company_id = $scope.bb.company_id;
-    if ($scope.bb.stacked_items) {
-      return $scope.bb.setStackedItems(basket.timeItems());
-    }
-  };
+
   logout = function(route) {
     if ($scope.client && $scope.client.valid()) {
       return LoginService.logout({
@@ -1087,7 +1009,7 @@ BBCtrl = function(routeStates, $scope, $location, $rootScope, halClient, $window
                       i = items[j];
                       basket.addItem(i);
                     }
-                    setBasket(basket);
+                    basketRelated.setBasket(basket);
                     promises = [].concat.apply([], (function() {
                       var l, len1, results;
                       results = [];
