@@ -132,7 +132,6 @@ angular.module('BBMember').controller 'MemberBookings', ($scope, $uibModal,
       templateUrl: "member_booking_delete_modal.html"
       windowClass: "bbug"
       controller: ($scope, $rootScope, $uibModalInstance, booking) ->
-        $scope.controller = "ModalDelete"
         $scope.booking = booking
 
         $scope.confirm_delete = () ->

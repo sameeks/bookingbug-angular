@@ -41,7 +41,7 @@ angular.module('BB.Services').factory "DebugUtilsService",
         scope = $rootScope
         # look for BBCtrl scope object and store it in memory
         while scope
-          if scope.controller is 'public.controllers.BBCtrl'
+          if scope.cid is 'BBCtrl'
             break
           scope  = scope.$$childHead
 

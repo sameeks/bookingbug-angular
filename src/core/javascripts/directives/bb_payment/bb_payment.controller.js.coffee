@@ -3,8 +3,6 @@
 angular.module('BB.Controllers').controller 'Payment', ($scope,  $rootScope,
   $q, $location, $window, $sce, $log, $timeout, LoadingService) ->
 
-  $scope.controller = "public.controllers.Payment"
-
   loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.bb.total = $scope.purchase if $scope.purchase

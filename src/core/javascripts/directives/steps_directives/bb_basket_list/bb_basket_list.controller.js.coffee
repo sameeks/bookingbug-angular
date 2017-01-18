@@ -4,7 +4,6 @@ angular.module('BB.Controllers').controller 'BasketList', ($scope, $rootScope,
   $element, $attrs, $q, AlertService, FormDataStoreService, LoginService,
   LoadingService, BBModel) ->
 
-  $scope.controller = "public.controllers.BasketList"
   $scope.setUsingBasket(true)
   loader = LoadingService.$loader($scope)
   $scope.show_wallet = $scope.bb.company_settings.hasOwnProperty('has_wallets') and $scope.bb.company_settings.has_wallets and $scope.client.valid() and LoginService.isLoggedIn() and LoginService.member().id == $scope.client.id and $scope.client.has_active_wallet

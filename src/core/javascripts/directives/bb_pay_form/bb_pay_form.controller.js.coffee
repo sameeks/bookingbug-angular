@@ -3,8 +3,6 @@
 
 angular.module('BB.Controllers').controller 'PayForm', ($scope, $location) ->
 
-  $scope.controller = "public.controllers.PayForm"
-
   ###**
   * @ngdoc method
   * @name setTotal

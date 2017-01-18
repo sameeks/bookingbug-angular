@@ -2,8 +2,6 @@
 
 angular.module('BB.Controllers').controller 'FileUpload', ($scope, Upload) ->
 
-  $scope.controller = "public.controllers.FileUpload"
-
   ###**
   * @ngdoc method
   * @name uploadFile

@@ -9,7 +9,6 @@ BBCtrl = (routeStates, $scope, $location, $rootScope, halClient, $window, $http,
   widgetStep.setScope($scope)
 
   $scope.cid = "BBCtrl" # dont change the cid as we use it in the app to identify this as the widget root scope
-  $scope.controller = "public.controllers.BBCtrl"
 
   $scope.qs = QueryStringService
   $scope.company_api_path = '/api/v1/company/{company_id}{?embed,category_id}'
