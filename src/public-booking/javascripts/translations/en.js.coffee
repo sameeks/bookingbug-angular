@@ -31,7 +31,7 @@ angular.module("BB.Services").config ($translateProvider) ->
         NO_ITEMS_IN_BASKET        : "No items added to basket yet."
         ITEM_COL_HEADING          : "@:COMMON.TERMINOLOGY.ITEM"
         TIME_DURATION_COL_HEADING : "@:COMMON.TERMINOLOGY.APPOINTMENT"
-        ITEM_TIME_AND_DURATION    : "{{time | datetime: 'LLLL'}} for {{duration | time_period}}"
+        ITEM_TIME_AND_DURATION    : "{{time}} for {{duration | time_period}}"
         CANCEL_BTN                : "@:COMMON.BTN.CANCEL"
         CHECKOUT_BTN              : "@:COMMON.BTN.CHECKOUT"
         BASKET_STATUS             : "{N, plural, =0{empty} one{One item in your basket} other{#items in your basket}}"

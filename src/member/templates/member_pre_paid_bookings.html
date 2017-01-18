@@ -25,8 +25,13 @@
             <span>|</span>
             <span
               translate="MEMBER.PREPAID_BOOKINGS.PREPAID_BOOKING_DATES"
-              translate-values="{booking: booking}">
+              translate-values="{
+                book_by: (booking.book_by | datetime: 'L'),
+                use_from: (booking.use_from | datetime: 'L'),
+                use_by: (booking.use_by | datetime: 'L')
+              }">
             </span>
+          </div>
         </div>
       </li>
     </ul>

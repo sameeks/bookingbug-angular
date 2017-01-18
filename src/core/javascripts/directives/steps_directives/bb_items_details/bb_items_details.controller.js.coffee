@@ -244,7 +244,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       datetime = moment.tz(datetime, GeneralOptions.display_time_zone)
 
     AlertService.add("info", {
-      msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', datetime: $filter('datetime')(datetime, 'llll', true))
+      msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', datetime: $filter('datetime')(datetime, 'LLLL'))
     })
 
   ###**
