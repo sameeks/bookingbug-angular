@@ -2,8 +2,6 @@
 
 angular.module('BB.Controllers').controller 'MonthCalendar', ($scope, $rootScope, $q, AlertService, LoadingService, BBModel, $translate) ->
 
-  $scope.controller = "public.controllers.MonthCalendar"
-
   loader = LoadingService.$loader($scope).notLoaded()
 
 

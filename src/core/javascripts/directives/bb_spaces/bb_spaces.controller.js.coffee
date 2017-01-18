@@ -2,7 +2,6 @@
 
 angular.module('BB.Controllers').controller 'SpaceList',
 ($scope, $rootScope, $q, ServiceService, LoadingService, BBModel) ->
-  $scope.controller = "public.controllers.SpaceList"
 
   loader = LoadingService.$loader($scope)
 

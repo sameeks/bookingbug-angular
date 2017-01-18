@@ -2,7 +2,6 @@
 
 angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
 
-  $scope.controller = "public.controllers.ClientDetails"
   loader = LoadingService.$loader($scope).notLoaded()
   $scope.validator = ValidatorService
   $scope.existing_member = false

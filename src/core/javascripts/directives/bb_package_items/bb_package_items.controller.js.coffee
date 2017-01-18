@@ -3,8 +3,6 @@
 angular.module('BB.Controllers').controller 'PackageItem',
 ($scope, $rootScope, BBModel) ->
 
-  $scope.controller = "public.controllers.PackageItem"
-
   $rootScope.connection_started.then ->
     $scope.init($scope.bb.company) if $scope.bb.company
 

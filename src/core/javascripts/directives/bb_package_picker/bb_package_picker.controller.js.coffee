@@ -3,8 +3,6 @@
 angular.module('BB.Controllers').controller 'PackagePicker',
 ($scope,  $rootScope, $q, TimeService, LoadingService, BBModel) ->
 
-  $scope.controller = "public.controllers.PackagePicker"
-
   $scope.sel_date = moment().add(1, 'days')
   $scope.selected_date = $scope.sel_date.toDate()
   $scope.picked_time = false

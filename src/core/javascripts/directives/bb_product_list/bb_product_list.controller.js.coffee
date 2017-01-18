@@ -4,8 +4,6 @@ angular.module('BB.Controllers').controller 'ProductList', ($scope,
     $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
     PageControllerService, LoadingService, halClient) ->
 
-  $scope.controller = "public.controllers.ProductList"
-
   loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.validator = ValidatorService

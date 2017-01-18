@@ -8,7 +8,6 @@ BBPageCtrl = ($scope, $q, ValidatorService, LoadingService) ->
   # dont' give this $scope a 'controller' property as it's used for controller
   # inheritance, so the $scope agument is not injected but passed in as an
   # argument, so it would overwrite the property set elsewhere
-  $scope.controllerClass = "public.controllers.BBPageCtrl"
   $scope.$has_page_control = true
 
   $scope.validator = ValidatorService
