@@ -13,8 +13,6 @@ angular.module('BB.Services').factory("basketRelated", function($q, $window, hal
     }
   }
 
-
-
   setBasket = function(basket) {
     guardScope();
     this.$scope.bb.basket = basket;

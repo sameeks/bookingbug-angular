@@ -4,9 +4,11 @@ var BBCtrl;
 BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService, LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget, SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage, $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService, viewportSize) {
   'ngInject';
 
+  basketRelated.setScope($scope);
+
   basketRelated.first('Passed from controller');
 
-  var $debounce, addItemToBasket, base64encode, broadcastItemUpdate, checkStepTitle, clearBasketItem, clearClient, clearPage, companySet, connectionStarted, decideNextPage, deleteBasketItem, deleteBasketItems, determineBBApiUrl, emptyBasket, getCurrentStepTitle, getPartial, getUrlParam, hideLoaderHandler, hidePage, initWidget, initWidget2, initializeBBWidget, isAdmin, isAdminIFrame, isFirstCall, isLoadingPage, isMemberLoggedIn, jumpToPage, loadPreviousStep, loadStep, loadStepByPageName, locationChangeStartHandler, logout, moveToBasket, quickEmptybasket, redirectTo, reloadDashboard, reset, restart, restoreBasket, scrollTo, setActiveCompany, setAffiliate, setBasicRoute, setBasket, setBasketItem, setClient, setCompany, setLastSelectedDate, setLoadingPage, setPageLoaded, setPageRoute, setReadyToCheckout, setRoute, setStepTitle, setUsingBasket, setupDefaults, showCheckout, showLoaderHandler, showPage, skipThisStep, supportsTouch, updateBasket, widgetStarted;
+  var $debounce, addItemToBasket, base64encode, broadcastItemUpdate, checkStepTitle, clearBasketItem, clearClient, clearPage, companySet, connectionStarted, decideNextPage, deleteBasketItem, determineBBApiUrl, emptyBasket, getCurrentStepTitle, getPartial, getUrlParam, hideLoaderHandler, hidePage, initWidget, initWidget2, initializeBBWidget, isAdmin, isAdminIFrame, isFirstCall, isLoadingPage, isMemberLoggedIn, jumpToPage, loadPreviousStep, loadStep, loadStepByPageName, locationChangeStartHandler, logout, moveToBasket, quickEmptybasket, redirectTo, reloadDashboard, reset, restart, restoreBasket, scrollTo, setActiveCompany, setAffiliate, setBasicRoute, setBasket, setBasketItem, setClient, setCompany, setLastSelectedDate, setLoadingPage, setPageLoaded, setPageRoute, setReadyToCheckout, setRoute, setStepTitle, setUsingBasket, setupDefaults, showCheckout, showLoaderHandler, showPage, skipThisStep, supportsTouch, updateBasket, widgetStarted;
   this.$scope = $scope;
   $scope.cid = "BBCtrl";
   $scope.controller = "public.controllers.BBCtrl";
@@ -31,7 +33,7 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
     $scope.$debounce = $debounce;
     $scope.decideNextPage = decideNextPage;
     $scope.deleteBasketItem = deleteBasketItem;
-    $scope.deleteBasketItems = deleteBasketItems;
+    $scope.deleteBasketItems = basketRelated.deleteBasketItems;
     $scope.emptyBasket = emptyBasket;
     $scope.getCurrentStepTitle = getCurrentStepTitle;
     $scope.getPartial = getPartial;
@@ -965,19 +967,19 @@ BBCtrl = function(routeStates, $scope,basketRelated, $location, $rootScope, halC
       return setBasket(basket);
     });
   };
-  deleteBasketItems = function(items) {
-    var item, j, len, results;
-    results = [];
-    for (j = 0, len = items.length; j < len; j++) {
-      item = items[j];
-      results.push(BBModel.Basket.$deleteItem(item, $scope.bb.company, {
-        bb: $scope.bb
-      }).then(function(basket) {
-        return setBasket(basket);
-      }));
-    }
-    return results;
-  };
+  // deleteBasketItems = function(items) {
+  //   var item, j, len, results;
+  //   results = [];
+  //   for (j = 0, len = items.length; j < len; j++) {
+  //     item = items[j];
+  //     results.push(BBModel.Basket.$deleteItem(item, $scope.bb.company, {
+  //       bb: $scope.bb
+  //     }).then(function(basket) {
+  //       return setBasket(basket);
+  //     }));
+  //   }
+  //   return results;
+  // };
   clearBasketItem = function() {
     var def;
     def = $q.defer();
