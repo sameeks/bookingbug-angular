@@ -65,9 +65,9 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
 
   checkMultipleBookings = (bookings) ->
     if !bookings[0].datetimeHasChanged() 
-      AlertService.add("warning", { msg: "Your booking is already scheduled for that time." })
+      AlertService.add("warning", { msg: $translate.instant('CORE.ALERTS.APPT_AT_SAME_TIME')}) 
       return
-
+ 
     readyBookings = []
 
     # check if each bookings questions have been answered
@@ -95,12 +95,12 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
 
   checkSingleBooking = (basketItem) ->
     if !basketItem.datetimeHasChanged() 
-      AlertService.add("warning", { msg: "Your booking is already scheduled for that time." })
+      AlertService.add("warning", { msg: $translate.instant('CORE.ALERTS.APPT_AT_SAME_TIME')}) 
+      console.log $rootScope.alerts
       return
 
     # only move purchase once any questions have been answered
-    basketItem.setAskedQuestions() 
-    updatePurchaseBooking(basketItem) if basketItem.ready
+    updatePurchaseBooking(basketItem) if basketItem.setAskedQuestions()  
 
     return 
 
@@ -113,7 +113,7 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
   * Move single booking in purchase 
   *
   * @param {object} basketItem The booking to be moved
-  ###
+  ### 
 
   updatePurchaseBooking = (basketItem) ->
     vm.loader.notLoaded()
@@ -224,10 +224,7 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
   ###
 
   decideMoveMessage = (bookings) ->
-    if bookings.length > 1
-      datetime = bookings[0].datetime
-    else 
-      datetime = bookings.datetime
+    datetime = if bookings.length > 1 then bookings[0].datetime else bookings.datetime
     showMoveMessage(datetime)
 
     return 
@@ -240,18 +237,11 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
   * @description
   * show alert with updated booking time
   *
-  * @param {object} datetime The new booking datetime
+  * @param {object} datetime The updated booking datetime
   ###
 
   showMoveMessage = (datetime) ->
-    if GeneralOptions.use_i18n 
-      $translate('MOVE_BOOKINGS_MSG', { datetime:datetime.format('LLLL') }).then (translated_text) ->
-      AlertService.add("info", { msg: translated_text })
-    else
-      AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" }) 
-
-    $window.scroll(0, 0)
-
+    AlertService.add("info", { msg: $translate.instant('CORE.ALERTS.ATTENDEES_CHANGED')}) 
     return 
 
   init()

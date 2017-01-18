@@ -1469,4 +1469,4 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
     * @returns {boolean}
     ###
     datetimeHasChanged: () ->
-      return @time.datetime._i isnt @srcBooking.datetime._i
+      return !@time.datetime.isSame(@srcBooking.datetime)
