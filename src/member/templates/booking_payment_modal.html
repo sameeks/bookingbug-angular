@@ -21,12 +21,12 @@
       <i class="fa fa-clock-o" aria-hidden="true"></i>
       <span
         translate="MEMBER.MODAL.BOOKING_PAYMENT.TIME_RANGE"
-        translate-values="{start: booking.datetime, end: booking.end_datetime}">
+        translate-values="{start: (booking.datetime | datetime: 'LT'), end: (booking.end_datetime | datetime: 'LT')}">
       </span>
     </li>
     <li>
       {{booking.price | pretty_price}}
-    </li> 
+    </li>
     <!-- <li>
       <span class="bb-btn bb-btn-link">
         More
@@ -48,7 +48,7 @@
       decide-next-page="decideNextPage"
       value="MEMBER.MODAL.BOOKING_PAYMENT.PAY_BTN">
     </div>
-  
+
 </div>
 <div class="modal-footer">
 <!--   <button class="btn btn-primary" ng-click="confirm_delete()"><span>Cancel Booking</span></button>
