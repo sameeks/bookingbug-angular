@@ -66,11 +66,10 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Clie
     * @description
     * Set client time zone in according to time_zone parameter
     * @param {string} time_zone
-    * @returns {string} The returned client time zone 
     ###
     setTimeZone: (time_zone) ->
       @time_zone = time_zone if time_zone?
-      return @time_zone
+      return 
 
 
     ###**
