@@ -5,7 +5,6 @@ angular.module('BB.Controllers').controller 'Checkout', ($scope, $rootScope,
   $attrs, $q, $location, $window, $timeout, $bbug, FormDataStoreService,
   LoadingService, BBModel) ->
 
-  $scope.controller = "public.controllers.Checkout"
   loader = LoadingService.$loader($scope).notLoaded()
 
   $scope.options = $scope.$eval($attrs.bbCheckout) or {}

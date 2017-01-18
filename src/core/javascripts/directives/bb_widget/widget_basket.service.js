@@ -1,7 +1,7 @@
 'use strict';
-angular.module('BB.Services').factory("basketRelated", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage) {
+angular.module('BB.Services').factory("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep) {
 
-  $scope = null;
+  var $scope = null;
   setScope = function ($s) {
     $scope = $s;
   };
@@ -130,15 +130,15 @@ angular.module('BB.Services').factory("basketRelated", function($q, $window, hal
               return $scope.$eval($scope.bb.on_conflict);
             } else {
               if ($scope.bb.nextSteps) {
-                if (setPageRoute($rootScope.Route.Date)) {
+                if (widgetPage.setPageRoute($rootScope.Route.Date)) {
 
-                } else if (setPageRoute($rootScope.Route.Event)) {
+                } else if (widgetPage.setPageRoute($rootScope.Route.Event)) {
 
                 } else {
-                  return loadPreviousStep();
+                  return widgetStep.loadPreviousStep();
                 }
               } else {
-                return decideNextPage();
+                return widgetPage.decideNextPage();
               }
             }
           });
@@ -324,14 +324,9 @@ angular.module('BB.Services').factory("basketRelated", function($q, $window, hal
       return restore_basket_defer.promise;
     };
 
-
-
-
   return {
     getScope: getScope,
     setScope: setScope,
-    first: function(prms) {alert(prms);},
-    setBasket : setBasket,
     deleteBasketItems : deleteBasketItems,
     setBasketItem: setBasketItem,
     clearBasketItem: clearBasketItem,

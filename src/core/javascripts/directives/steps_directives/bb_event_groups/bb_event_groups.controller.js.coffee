@@ -4,8 +4,6 @@ angular.module('BB.Controllers').controller 'EventGroupList', ($scope,
   $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
   PageControllerService, LoadingService, halClient) ->
 
-  $scope.controller = "public.controllers.EventGroupList"
-
   FormDataStoreService.init 'EventGroupList', $scope, [
     'event_group'
   ]
