@@ -127,6 +127,16 @@ WidgetStep = (AlertService, BBModel, LoadingService, LoginService, $rootScope, $
     guardScope()
     $scope.last_selected_date = date
 
+  ###**
+  * @ngdoc method
+  * @name skipThisStep
+  * @methodOf BB.Directives:bbWidget
+  * @description
+  * Marks the current step as skipped
+  ###
+  skipThisStep = () ->
+    $scope.bb.steps[$scope.bb.steps.length - 1].skipped = true if $scope.bb.steps[$scope.bb.steps.length - 1]
+
   return {
     checkStepTitle: checkStepTitle
     getCurrentStepTitle: getCurrentStepTitle
@@ -138,6 +148,7 @@ WidgetStep = (AlertService, BBModel, LoadingService, LoginService, $rootScope, $
     setLastSelectedDate: setLastSelectedDate
     setScope: setScope
     setStepTitle: setStepTitle
+    skipThisStep: skipThisStep
   }
 
 angular.module('BB').service 'widgetStep', WidgetStep

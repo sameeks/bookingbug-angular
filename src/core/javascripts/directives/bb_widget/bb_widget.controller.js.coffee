@@ -71,13 +71,13 @@ BBCtrl = (routeStates, $scope, $location, $rootScope, halClient, $window, $http,
     $scope.setLoaded = LoadingService.setLoaded
     $scope.setLoadedAndShowError = LoadingService.setLoadedAndShowError
     $scope.setLoadingPage = widgetPage.setLoadingPage
-    $scope.setPageLoaded = setPageLoaded
+    $scope.setPageLoaded = widgetPage.setPageLoaded
     $scope.setPageRoute = widgetPage.setPageRoute
     $scope.setReadyToCheckout = setReadyToCheckout
     $scope.setRoute = setRoute
     $scope.setStepTitle = widgetStep.setStepTitle
     $scope.setUsingBasket = setUsingBasket
-    $scope.skipThisStep = skipThisStep
+    $scope.skipThisStep = widgetStep.skipThisStep
     $scope.showCheckout = showCheckout
     $scope.supportsTouch = supportsTouch
     $scope.showPage = widgetPage.showPage
@@ -603,10 +603,6 @@ BBCtrl = (routeStates, $scope, $location, $rootScope, halClient, $window, $http,
   getPartial = (file) ->
     $scope.bb.pageURL(file)
 
-  setPageLoaded = () ->
-    LoadingService.setLoaded($scope)
-
-
   showCheckout = ->
     $scope.bb.current_item.ready
 
@@ -885,39 +881,11 @@ BBCtrl = (routeStates, $scope, $location, $rootScope, halClient, $window, $http,
     CompanyStoreService.country_code = company.country_code
     CompanyStoreService.settings = settings
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   setRoute = (rdata) ->
     $scope.bb.setRoute(rdata)
 
   setBasicRoute = (routes) ->
     $scope.bb.setBasicRoute(routes)
-
-  ###**
-  * @ngdoc method
-  * @name skipThisStep
-  * @methodOf BB.Directives:bbWidget
-  * @description
-  * Marks the current step as skipped
-  ###
-  skipThisStep = () ->
-    $scope.bb.steps[$scope.bb.steps.length - 1].skipped = true if $scope.bb.steps[$scope.bb.steps.length - 1]
 
   setUsingBasket = (usingBasket) =>
     $scope.bb.usingBasket = usingBasket

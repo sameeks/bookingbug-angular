@@ -67,6 +67,9 @@ WidgetPage = (AlertService, BBModel, LoadingService, LoginService, $rootScope, $
 
     $rootScope.$broadcast "page:loaded"
 
+  setPageLoaded = () ->
+    LoadingService.setLoaded($scope)
+
   decideNextPage = (route) ->
     guardScope()
 
@@ -157,6 +160,7 @@ WidgetPage = (AlertService, BBModel, LoadingService, LoginService, $rootScope, $
     isLoadingPage: isLoadingPage
     jumpToPage: jumpToPage
     setLoadingPage: setLoadingPage
+    setPageLoaded: setPageLoaded
     setPageRoute: setPageRoute
     setScope: setScope
     showPage: showPage
