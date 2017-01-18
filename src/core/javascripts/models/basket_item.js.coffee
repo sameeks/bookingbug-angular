@@ -1458,7 +1458,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
       return @service or @event
 
 
-    ###**
+    ###*
     * @ngdoc method
     * @name datetimeHasChanged
     * @methodOf BB.Models:BasketItem

@@ -8,7 +8,9 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
     vm.loader = LoadingService.$loader($scope)
     vm.options = $scope.$eval($attrs.bbMoveBooking) or {}
 
-  ###**
+    return
+
+  ###*
   * @ngdoc method
   * @name initMove
   * @methodOf BB.Directives:bbMoveBooking
@@ -29,8 +31,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
     # else just start moving the bookings
     else decideNumberOfBookings(bookings)
 
+    return
 
-  ###**
+
+  ###*
   * @ngdoc method
   * @name decideNumberOfBookings
   * @methodOf BB.Directives:bbMoveBooking
@@ -46,8 +50,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
 
     else checkSingleBooking(bookings)
 
+    return 
 
-  ###**
+
+  ###*
   * @ngdoc method
   * @name checkMultipleBookings
   * @methodOf BB.Directives:bbMoveBooking
@@ -74,8 +80,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
     # only update puchase if all booking questions are answered
     updatePurchase(bookings) if readyBookings.length is bookings.length
 
+    return 
 
-  ###**
+
+  ###*
   * @ngdoc method
   * @name checkSingleBooking
   * @methodOf BB.Directives:bbMoveBooking
@@ -94,8 +102,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
     basketItem.setAskedQuestions() 
     updatePurchaseBooking(basketItem) if basketItem.ready
 
+    return 
 
-  ###**
+
+  ###*
   * @ngdoc method
   * @name updatePurchaseBooking
   * @methodOf BB.Directives:bbMoveBooking
@@ -121,8 +131,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
       vm.loader.setLoaded()
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
+      return
 
-  ###**
+
+  ###*
   * @ngdoc method
   * @name updatePurchase
   * @methodOf BB.Directives:bbMoveBooking
@@ -150,8 +162,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
       vm.loader.setLoaded()
       AlertService.add("danger", { msg: "Failed to move booking. Please try again." })
 
+    return 
 
-  ###**
+
+  ###*
   * @ngdoc method
   * @name openCalendarModal
   * @methodOf BB.Directives:bbMoveBooking
@@ -170,8 +184,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
       total_id: totalId
       first_page: if bookings.length > 0 then 'multi_service_calendar' else 'calendar'
 
+    return 
 
-  ###**
+
+  ###*
   * @ngdoc method
   * @name resolveCalendarModal
   * @methodOf BB.Directives:bbMoveBooking
@@ -194,8 +210,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
       WidgetModalService.close() 
       decideMoveMessage(bookings) 
 
+    return 
 
-  ###**
+
+  ###*
   * @ngdoc method
   * @name decideMoveMessage
   * @methodOf BB.Directives:bbMoveBooking
@@ -212,8 +230,10 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
       datetime = bookings.datetime
     showMoveMessage(datetime)
 
+    return 
 
-  ###**
+
+  ###*
   * @ngdoc method
   * @name showMoveMessage
   * @methodOf BB.Directives:bbMoveBooking
@@ -231,6 +251,8 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
       AlertService.add("info", { msg: "Your booking has been moved to #{datetime.format('LLLL')}" }) 
 
     $window.scroll(0, 0)
+
+    return 
 
   init()
   

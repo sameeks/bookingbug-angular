@@ -3,13 +3,13 @@
   <div bb-multi-service-select class="section">
 
     <div class="section">
-      <div ng-show="categories">
+      <div ng-show="vm.categories">
         <div bb-include="_category_filter"></div>
       </div>
   
     <!-- If there are no categories configured we should just show all services -->
     <div bb-scroll-to="multi_service_select:categoryChanged" bb-always-scroll>
-      <div ng-show="services">
+      <div ng-show="vm.services">
         <div class="section-heading">
         </div>
           <div class="panel">
@@ -21,7 +21,7 @@
             </div>
           </div>
 
-        <div ng-repeat="service in services">
+        <div ng-repeat="service in vm.services">
           <div class="bb-list-item row">
             <div class="col-sm-6">
               <h4>{{service.name}}</h4>
@@ -42,8 +42,8 @@
               <span class="visible-xs">Price: </span>{{service.price | icurrency}}
             </div>
             <div class="col-sm-2">
-              <button type="button" class="btn btn-block btn-default" ng-if="!service.selected" ng-click="addItem(service, duration)">Add</button>
-              <button type="button" class="btn btn-block btn-default" ng-if="service.selected"  ng-click="removeItem(service)">Remove</button>
+              <button type="button" class="btn btn-block btn-default" ng-if="!service.selected" ng-click="vm.addItem(service, duration)">Add</button>
+              <button type="button" class="btn btn-block btn-default" ng-if="service.selected"  ng-click="vm.removeItem(service)">Remove</button>
             </div>
             <div ng-show="item.description">
               <span class="bb-btn bb-btn-link" ng-hide="service.show_more" ng-click="service.show_more = true">
@@ -85,7 +85,7 @@
                   <button 
                     type="button" 
                     class="btn btn-link" 
-                    ng-click="removeItem(item.service)">
+                    ng-click="vm.removeItem(item.service)">
                     <span>Remove</span>
                   </button>
                 </div>

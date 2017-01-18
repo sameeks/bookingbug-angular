@@ -1,10 +1,10 @@
 <ul class="filters" class="hidden-xs">
   <div class="row">
-    <li class="col-sm-4 col-md-3" ng-repeat="category in categories | orderBy: 'order'">
+    <li class="col-sm-4 col-md-3" ng-repeat="category in vm.categories | orderBy: 'order'">
       <div 
         class="panel panel-service"  
-        ng-click="changeCategory(category)" 
-        ng-class="{'selected': selectedCategory.name == category.name}">
+        ng-click="vm.changeCategory(category)" 
+        ng-class="{'selected': vm.selectedCategory.name == category.name}">
 
         <div class="panel-heading">
           <h3>{{category.name}}</h3>
@@ -16,11 +16,11 @@
 </ul>
 
 <div bb-scroll-to="multi_service_select:categoryChanged" bb-always-scroll>
-  <div ng-if="selectedCategory" ng-show="categories">
+  <div ng-if="vm.selectedCategory" ng-show="vm.categories">
     <div class="section-heading">
-      <h2 class="section-title">{{selectedCategory.name}}</h2>
+      <h2 class="section-title">{{vm.selectedCategory.name}}</h2>
     </div>
-    <p>{{selectedCategory.description}}</p>
+    <p>{{vm.selectedCategory.description}}</p>
 
     <div class="panel">
       <div class="panel-body hidden-xs row">
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-      <div ng-repeat="service in selectedCategory.services">
+      <div ng-repeat="service in vm.selectedCategory.services">
           <div class="bb-list-item row">
             <div class="col-sm-6">
               <h4>{{service.name}}</h4>
@@ -51,7 +51,7 @@
                   ng-show="service.durations.length > 1"    
                   ng-model="service.duration"     
                   ng-options="duration as (duration | time_period) for duration in service.durations"   
-                  ng-change="selectDuration(service, service.duration)">    
+                  ng-change="vm.selectDuration(service, service.duration)">    
                 <option value="">{{duration}}</option>    
                </select>
             </div>
@@ -61,7 +61,7 @@
                 type="button" 
                 class="btn btn-block btn-default" 
                 ng-if="!service.selected" 
-                ng-click="addItem(service, duration)">
+                ng-click="vm.addItem(service, duration)">
                 Add
               </button>
 
@@ -69,7 +69,7 @@
                 type="button" 
                 class="btn btn-block btn-default" 
                 ng-if="service.selected"  
-                ng-click="removeItem(service)">
+                ng-click="vm.removeItem(service)">
                 Remove
               </button>
             </div>

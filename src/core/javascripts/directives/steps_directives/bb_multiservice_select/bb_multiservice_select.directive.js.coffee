@@ -31,3 +31,4 @@ angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
   restrict: 'AE'
   scope : true
   controller : 'MultiServiceSelect'
+  controllerAs: 'vm'
