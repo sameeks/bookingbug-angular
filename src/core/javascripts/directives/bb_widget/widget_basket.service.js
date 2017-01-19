@@ -325,6 +325,13 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
       return restore_basket_defer.promise;
     };
 
+
+    setUsingBasket = function (usingBasket) {
+        return $scope.bb.usingBasket = usingBasket;
+    };
+
+
+
   return {
     getScope: getScope,
     setScope: setScope,
@@ -338,6 +345,7 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
     addItemToBasket:addItemToBasket,
     moveToBasket:moveToBasket,
     quickEmptybasket: quickEmptybasket,
-    restoreBasket:restoreBasket
+    restoreBasket:restoreBasket,
+    setUsingBasket: setUsingBasket
   };
 });

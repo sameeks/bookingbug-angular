@@ -2,7 +2,9 @@
 
 (function () {
 
-    var WidgetInit = function ($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate, PurchaseService, $window, SSOService, widgetBasket, CompanyStoreService, $bbug, widgetPage, LoadingService) {
+    var WidgetInit = function ($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate,
+                               PurchaseService, $window, SSOService, widgetBasket, CompanyStoreService, $bbug, widgetPage,
+                               LoadingService, BBWidget,AppConfig,$location) {
 
         var connectionStarted, isFirstCall, widgetStarted;
 
@@ -27,11 +29,7 @@
         };
 
         var initWidget = function (prms) {
-
-
-
             guardScope();
-
             var url;
             if (prms == null) {
                 prms = {};
@@ -633,6 +631,39 @@
             return CompanyStoreService.settings = settings;
         }.bind(this);
 
+
+        var initializeBBWidget = function () {
+            guardScope();
+            $scope.bb = new BBWidget();
+            AppConfig.uid = $scope.bb.uid;
+            $scope.bb.stacked_items = [];
+            $scope.bb.company_set = ($scope.bb.company_id != null);
+            $scope.recordStep = $scope.bb.recordStep;
+            determineBBApiUrl();
+        };
+
+        determineBBApiUrl = function () {
+            var base, base1;
+            if ($scope.apiUrl) {
+                $scope.bb || ($scope.bb = {});
+                $scope.bb.api_url = $scope.apiUrl;
+            }
+            if ($rootScope.bb && $rootScope.bb.api_url) {
+                $scope.bb.api_url = $rootScope.bb.api_url;
+                if (!$rootScope.bb.partial_url) {
+                    $scope.bb.partial_url = "";
+                } else {
+                    $scope.bb.partial_url = $rootScope.bb.partial_url;
+                }
+            }
+            if ($location.port() !== 80 && $location.port() !== 443) {
+                (base = $scope.bb).api_url || (base.api_url = $location.protocol() + "://" + $location.host() + ":" + $location.port());
+            } else {
+                (base1 = $scope.bb).api_url || (base1.api_url = $location.protocol() + "://" + $location.host());
+            }
+        };
+
+
         return {
             clearClient: clearClient,
             initWidget: initWidget,
@@ -640,7 +671,9 @@
             setActiveCompany: setActiveCompany,
             setCompany: setCompany,
             setClient: setClient,
-            setScope: setScope
+            setScope: setScope,
+            initializeBBWidget:initializeBBWidget,
+            determineBBApiUrl:determineBBApiUrl
         };
 
     };

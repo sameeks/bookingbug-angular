@@ -13,22 +13,23 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     widgetStep.setScope($scope);
     widgetInit.setScope($scope);
 
-    var $debounce, base64encode, broadcastItemUpdate, companySet, determineBBApiUrl,
-        getPartial, getUrlParam, hideLoaderHandler, initializeBBWidget, isAdmin, isAdminIFrame,
-        isMemberLoggedIn, locationChangeStartHandler, logout, redirectTo, reloadDashboard, scrollTo,
-        setBasicRoute, setReadyToCheckout, setRoute, setUsingBasket, showCheckout, showLoaderHandler, supportsTouch;
+    var $debounce, base64encode, broadcastItemUpdate, clearClient, connectionStarted, determineBBApiUrl,
+        getPartial, getUrlParam, hideLoaderHandler, initWidget, initWidget2, initializeBBWidget, isAdminIFrame,
+        isFirstCall, isMemberLoggedIn, locationChangeStartHandler, logout, redirectTo, reloadDashboard, scrollTo,
+        setActiveCompany, setAffiliate, setClient, setCompany, setReadyToCheckout, setRoute,
+        setupDefaults, showCheckout, showLoaderHandler, supportsTouch, widgetStarted;
 
     this.$scope = $scope;
-
     $scope.cid = "BBCtrl";
     $scope.controller = "public.controllers.BBCtrl";
     $scope.qs = QueryStringService;
     $scope.company_api_path = '/api/v1/company/{company_id}{?embed,category_id}';
     $scope.company_admin_api_path = '/api/v1/admin/{company_id}/company{?embed,category_id}';
-
     $rootScope.Route = $scope.Route = routeStates;
 
     this.$onInit = function () {
+        widgetInit.initializeBBWidget();
+
         $scope.addItemToBasket = widgetBasket.addItemToBasket;
         $scope.clearBasketItem = widgetBasket.clearBasketItem;
         $scope.deleteBasketItem = widgetBasket.deleteBasketItem;
@@ -39,8 +40,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.setBasket = widgetBasket.setBasket;
         $scope.setBasketItem = widgetBasket.setBasketItem;
         $scope.updateBasket = widgetBasket.updateBasket;
-
-
         $scope.clearPage = widgetPage.clearPage;
         $scope.decideNextPage = widgetPage.decideNextPage;
         $scope.hidePage = widgetPage.hidePage;
@@ -50,8 +49,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.setPageLoaded = widgetPage.setPageLoaded;
         $scope.setPageRoute = widgetPage.setPageRoute;
         $scope.showPage = widgetPage.showPage;
-
-
         $scope.checkStepTitle = widgetStep.checkStepTitle;
         $scope.getCurrentStepTitle = widgetStep.getCurrentStepTitle;
         $scope.loadPreviousStep = widgetStep.loadPreviousStep;
@@ -62,48 +59,34 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.setLastSelectedDate = widgetStep.setLastSelectedDate;
         $scope.setStepTitle = widgetStep.setStepTitle;
         $scope.skipThisStep = widgetStep.skipThisStep;
-
-
         $scope.initWidget = widgetInit.initWidget;
         $scope.setClient = widgetInit.setClient;
         $scope.clearClient = widgetInit.clearClient;
         $scope.setCompany = widgetInit.setCompany;
         $scope.setAffiliate = widgetInit.setAffiliate;
-
-
-        $scope.setBasicRoute = setBasicRoute;
-        $scope.isAdmin = isAdmin;
+        $scope.setBasicRoute = $scope.bb.setBasicRoute;
+        $scope.isAdmin =  isAdmin;
         $scope.isAdminIFrame = isAdminIFrame;
-
         $scope.base64encode = base64encode;
         $scope.$debounce = $debounce;
         $scope.parseDate = moment;
         $scope.supportsTouch = supportsTouch;
         $scope.scrollTo = scrollTo;
         $scope.redirectTo = redirectTo;
-
-
         $scope.areScopesLoaded = LoadingService.areScopesLoaded;
         $scope.broadcastItemUpdate = broadcastItemUpdate;
         $scope.getPartial = getPartial;
         $scope.getUrlParam = getUrlParam;
-
         $scope.setLoaded = LoadingService.setLoaded;
         $scope.setLoadedAndShowError = LoadingService.setLoadedAndShowError;
-
         $scope.isMemberLoggedIn = isMemberLoggedIn;
         $scope.logout = logout;
         $scope.notLoaded = LoadingService.notLoaded;
-
         $scope.reloadDashboard = reloadDashboard;
         $scope.setReadyToCheckout = setReadyToCheckout;
         $scope.setRoute = setRoute;
-        $scope.setUsingBasket = setUsingBasket;
+        $scope.setUsingBasket = widgetBasket.setUsingBasket;
         $scope.showCheckout = showCheckout;
-
-
-        initializeBBWidget();
-
         $rootScope.$on('show:loader', showLoaderHandler);
         $rootScope.$on('hide:loader', hideLoaderHandler);
         $scope.$on('$locationChangeStart', locationChangeStartHandler);
@@ -112,13 +95,8 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         viewportSize.init();
     };
 
-    initializeBBWidget = function () {
-        $scope.bb = new BBWidget();
-        AppConfig.uid = $scope.bb.uid;
-        $scope.bb.stacked_items = [];
-        $scope.bb.company_set = companySet;
-        $scope.recordStep = $scope.bb.recordStep;
-        determineBBApiUrl();
+    isAdmin = function(){
+      return $scope.bb.isAdmin;
     };
 
     determineBBApiUrl = function () {
@@ -162,8 +140,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         }
         $scope.bb.routing = false;
     };
-
-
     getPartial = function (file) {
         return $scope.bb.pageURL(file);
     };
@@ -190,39 +166,19 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
             });
         }
     };
-
     setRoute = function (rdata) {
         return $scope.bb.setRoute(rdata);
     };
-    setBasicRoute = function (routes) {
-        return $scope.bb.setBasicRoute(routes);
-    };
-
-    setUsingBasket = function (usingBasket) {
-        return $scope.bb.usingBasket = usingBasket;
-    }.bind(this);
-
 
     getUrlParam = function (param) {
         return $window.getURIparam(param);
-    }.bind(this);
-
+    }
     base64encode = function (param) {
         return $window.btoa(param);
-    }.bind(this);
-
+    }
     broadcastItemUpdate = function () {
         return $scope.$broadcast("currentItemUpdate", $scope.bb.current_item);
-    }.bind(this);
-
-    companySet = function () {
-        return $scope.bb.company_id != null;
-    };
-
-    isAdmin = function () {
-        return $scope.bb.isAdmin;
-    };
-
+    }
     isAdminIFrame = function () {
         var err, location;
         if (!$scope.bb.isAdmin) {
@@ -256,16 +212,13 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     supportsTouch = function () {
         return Modernizr.touch;
     };
-
     isMemberLoggedIn = function () {
         return LoginService.isLoggedIn();
     };
-
     scrollTo = function (id) {
         $location.hash(id);
         return $anchorScroll();
     };
-
     redirectTo = function (url) {
         return $window.location.href = url;
     };
