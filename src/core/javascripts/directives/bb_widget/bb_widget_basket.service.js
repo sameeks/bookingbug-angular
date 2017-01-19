@@ -3,18 +3,18 @@
 angular.module('BB.Services').factory("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep) {
 
   var $scope = null;
-  setScope = function ($s) {
+  var setScope = function ($s) {
     $scope = $s;
   };
-  getScope = function () {
+  var getScope = function () {
     return $scope;
   };
-  guardScope = function () {
+  var guardScope = function () {
     if($scope === null){
       throw new Error('please provide scope');
     }
   };
-  setBasket = function(basket) {
+  var setBasket = function(basket) {
     guardScope();
     $scope.bb.basket = basket;
     $scope.basket = basket;
@@ -23,8 +23,7 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
       return $scope.bb.setStackedItems(basket.timeItems());
     }
   };
-
-  deleteBasketItems = function(items) {
+  var deleteBasketItems = function(items) {
       guardScope();
       var item, j, len, results;
       results = [];
@@ -38,14 +37,11 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
       }
       return results;
     };
-
-  setBasketItem = function(item) {
+  var setBasketItem = function(item) {
       guardScope();
       return $scope.bb.current_item = item;
     };
-
-
-  clearBasketItem = function() {
+  var clearBasketItem = function() {
       guardScope();
       var def;
       def = $q.defer();
@@ -330,6 +326,14 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
         return $scope.bb.usingBasket = usingBasket;
     };
 
+    showCheckout = function () {
+        guardScope();
+        return $scope.bb.current_item.ready;
+    };
+    setReadyToCheckout = function (ready) {
+        guardScope();
+        return $scope.bb.confirmCheckout = ready;
+    };
 
 
   return {
@@ -346,6 +350,9 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
     moveToBasket:moveToBasket,
     quickEmptybasket: quickEmptybasket,
     restoreBasket:restoreBasket,
-    setUsingBasket: setUsingBasket
+    setUsingBasket: setUsingBasket,
+    showCheckout:showCheckout,
+    setReadyToCheckout:setReadyToCheckout
+
   };
 });

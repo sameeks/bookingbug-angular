@@ -13,11 +13,9 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     widgetStep.setScope($scope);
     widgetInit.setScope($scope);
 
-    var $debounce, base64encode, broadcastItemUpdate, clearClient, connectionStarted, determineBBApiUrl,
-        getPartial, getUrlParam, hideLoaderHandler, initWidget, initWidget2, initializeBBWidget, isAdminIFrame,
-        isFirstCall, isMemberLoggedIn, locationChangeStartHandler, logout, redirectTo, reloadDashboard, scrollTo,
-        setActiveCompany, setAffiliate, setClient, setCompany, setReadyToCheckout, setRoute,
-        setupDefaults, showCheckout, showLoaderHandler, supportsTouch, widgetStarted;
+    var $debounce, base64encode, broadcastItemUpdate, getPartial, getUrlParam, hideLoaderHandler,
+        isAdminIFrame, isMemberLoggedIn, locationChangeStartHandler, logout, redirectTo, reloadDashboard, scrollTo,
+        setRoute, showLoaderHandler, supportsTouch;
 
     this.$scope = $scope;
     $scope.cid = "BBCtrl";
@@ -29,7 +27,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
 
     this.$onInit = function () {
         widgetInit.initializeBBWidget();
-
         $scope.addItemToBasket = widgetBasket.addItemToBasket;
         $scope.clearBasketItem = widgetBasket.clearBasketItem;
         $scope.deleteBasketItem = widgetBasket.deleteBasketItem;
@@ -83,10 +80,10 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.logout = logout;
         $scope.notLoaded = LoadingService.notLoaded;
         $scope.reloadDashboard = reloadDashboard;
-        $scope.setReadyToCheckout = setReadyToCheckout;
+        $scope.setReadyToCheckout = widgetBasket.setReadyToCheckout;
         $scope.setRoute = setRoute;
         $scope.setUsingBasket = widgetBasket.setUsingBasket;
-        $scope.showCheckout = showCheckout;
+        $scope.showCheckout = widgetBasket.showCheckout;
         $rootScope.$on('show:loader', showLoaderHandler);
         $rootScope.$on('hide:loader', hideLoaderHandler);
         $scope.$on('$locationChangeStart', locationChangeStartHandler);
@@ -97,27 +94,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
 
     isAdmin = function(){
       return $scope.bb.isAdmin;
-    };
-
-    determineBBApiUrl = function () {
-        var base, base1;
-        if ($scope.apiUrl) {
-            $scope.bb || ($scope.bb = {});
-            $scope.bb.api_url = $scope.apiUrl;
-        }
-        if ($rootScope.bb && $rootScope.bb.api_url) {
-            $scope.bb.api_url = $rootScope.bb.api_url;
-            if (!$rootScope.bb.partial_url) {
-                $scope.bb.partial_url = "";
-            } else {
-                $scope.bb.partial_url = $rootScope.bb.partial_url;
-            }
-        }
-        if ($location.port() !== 80 && $location.port() !== 443) {
-            (base = $scope.bb).api_url || (base.api_url = $location.protocol() + "://" + $location.host() + ":" + $location.port());
-        } else {
-            (base1 = $scope.bb).api_url || (base1.api_url = $location.protocol() + "://" + $location.host());
-        }
     };
     showLoaderHandler = function () {
         $scope.loading = true;
@@ -143,12 +119,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     getPartial = function (file) {
         return $scope.bb.pageURL(file);
     };
-    showCheckout = function () {
-        return $scope.bb.current_item.ready;
-    };
-    setReadyToCheckout = function (ready) {
-        return $scope.bb.confirmCheckout = ready;
-    };
     logout = function (route) {
         if ($scope.client && $scope.client.valid()) {
             return LoginService.logout({
@@ -169,7 +139,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     setRoute = function (rdata) {
         return $scope.bb.setRoute(rdata);
     };
-
     getUrlParam = function (param) {
         return $window.getURIparam(param);
     }
