@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('BB.Services').factory("bb_widget_Utilities_Service", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep,AppService, $timeout) {
+angular.module('BB.Services').service("bbWidgetUtilities", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep,AppService, $timeout) {
 
     var $scope = null;
     var setScope = function ($s) {

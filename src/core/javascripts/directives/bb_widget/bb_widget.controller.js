@@ -5,14 +5,14 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
                    LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget,
                    SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage,
                    $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService,
-                   viewportSize, widgetBasket, widgetPage, widgetStep, widgetInit,bb_widget_Utilities_Service) {
+                   viewportSize, widgetBasket, widgetPage, widgetStep, widgetInit,bbWidgetUtilities) {
     'ngInject';
 
     widgetBasket.setScope($scope);
     widgetPage.setScope($scope);
     widgetStep.setScope($scope);
     widgetInit.setScope($scope);
-    bb_widget_Utilities_Service.setScope($scope);
+    bbWidgetUtilities.setScope($scope);
 
     this.$scope = $scope;
     $scope.cid = "BBCtrl";
@@ -67,31 +67,32 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.setAffiliate = widgetInit.setAffiliate;
         $scope.setBasicRoute = $scope.bb.setBasicRoute;
 
-        $scope.isAdmin =  bb_widget_Utilities_Service.isAdmin;
-        $scope.isAdminIFrame = bb_widget_Utilities_Service.isAdminIFrame;
-        $scope.base64encode = bb_widget_Utilities_Service.base64encode;
-        $scope.$debounce = bb_widget_Utilities_Service.$debounce;
+        $scope.isAdmin =  bbWidgetUtilities.isAdmin;
+        $scope.isAdminIFrame = bbWidgetUtilities.isAdminIFrame;
+        $scope.base64encode = bbWidgetUtilities.base64encode;
+        $scope.$debounce = bbWidgetUtilities.$debounce;
         $scope.parseDate = moment;
-        $scope.supportsTouch = bb_widget_Utilities_Service.supportsTouch;
-        $scope.scrollTo = bb_widget_Utilities_Service.scrollTo;
-        $scope.redirectTo = bb_widget_Utilities_Service.redirectTo;
+        $scope.supportsTouch = bbWidgetUtilities.supportsTouch;
+        $scope.scrollTo = bbWidgetUtilities.scrollTo;
+        $scope.redirectTo = bbWidgetUtilities.redirectTo;
         $scope.areScopesLoaded = LoadingService.areScopesLoaded;
-        $scope.broadcastItemUpdate = bb_widget_Utilities_Service.broadcastItemUpdate;
-        $scope.getPartial = bb_widget_Utilities_Service.getPartial;
-        $scope.getUrlParam = bb_widget_Utilities_Service.getUrlParam;
+
+        $scope.broadcastItemUpdate = bbWidgetUtilities.broadcastItemUpdate;
+        $scope.getPartial = bbWidgetUtilities.getPartial;
+        $scope.getUrlParam = bbWidgetUtilities.getUrlParam;
         $scope.setLoaded = LoadingService.setLoaded;
         $scope.setLoadedAndShowError = LoadingService.setLoadedAndShowError;
-        $scope.isMemberLoggedIn = bb_widget_Utilities_Service.isMemberLoggedIn;
-        $scope.logout = bb_widget_Utilities_Service.logout;
+        $scope.isMemberLoggedIn = bbWidgetUtilities.isMemberLoggedIn;
+        $scope.logout = bbWidgetUtilities.logout;
         $scope.notLoaded = LoadingService.notLoaded;
-        $scope.reloadDashboard = bb_widget_Utilities_Service.reloadDashboard;
+        $scope.reloadDashboard = bbWidgetUtilities.reloadDashboard;
         $scope.setReadyToCheckout = widgetBasket.setReadyToCheckout;
-        $scope.setRoute = bb_widget_Utilities_Service.setRoute;
+        $scope.setRoute = bbWidgetUtilities.setRoute;
 
         $scope.showCheckout = widgetBasket.showCheckout;
-        $rootScope.$on('show:loader', bb_widget_Utilities_Service.showLoaderHandler);
-        $rootScope.$on('hide:loader', bb_widget_Utilities_Service.hideLoaderHandler);
-        $scope.$on('$locationChangeStart', bb_widget_Utilities_Service.locationChangeStartHandler);
+        $rootScope.$on('show:loader', bbWidgetUtilities.showLoaderHandler);
+        $rootScope.$on('hide:loader', bbWidgetUtilities.hideLoaderHandler);
+        $scope.$on('$locationChangeStart', bbWidgetUtilities.locationChangeStartHandler);
     };
     this.$postLink = function () {
         viewportSize.init();

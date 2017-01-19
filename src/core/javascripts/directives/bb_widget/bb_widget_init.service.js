@@ -1,6 +1,6 @@
 'use strict';
 
-  angular.module('BB.Services').factory("widgetInit", function ($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate,
+  angular.module('BB.Services').service("widgetInit", function ($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate,
                                                                 PurchaseService, $window, SSOService, widgetBasket, CompanyStoreService, $bbug, widgetPage,
                                                                 LoadingService, BBWidget,AppConfig,$location)
   {
