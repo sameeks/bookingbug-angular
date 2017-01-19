@@ -152,13 +152,12 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         }
         $scope.bb.routing = false;
     };
-    initWidget = (function (_this) {
-        return function (prms) {
+    initWidget =  function (prms) {
             var url;
             if (prms == null) {
                 prms = {};
             }
-            _this.$init_prms = prms;
+            this.$init_prms = prms;
             connectionStarted = $q.defer();
             $rootScope.connection_started = connectionStarted.promise;
             if ((($sniffer.webkit && $sniffer.webkit < 537) || ($sniffer.msie && $sniffer.msie <= 9)) && isFirstCall) {
@@ -182,13 +181,11 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
             } else {
                 initWidget2();
             }
-        };
-    })(this);
-    initWidget2 = (function (_this) {
-        return function () {
+        }.bind(this);
+    initWidget2 =  function () {
             var aff_promise, comp_category_id, comp_def, comp_promise, comp_url, company_id, embed_params, get_total, k, match, options, params, prms, ref, setup_promises, setup_promises2, sso_admin_login, sso_member_login, total_id, v;
             $scope.init_widget_started = true;
-            prms = _this.$init_prms;
+            prms = this.$init_prms;
             if (prms.query) {
                 ref = prms.query;
                 for (k in ref) {
@@ -333,12 +330,12 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
             if (prms.qudini_booking_id) {
                 $scope.bb.qudini_booking_id = prms.qudini_booking_id;
             }
-            _this.waiting_for_conn_started_def = $q.defer();
-            $scope.waiting_for_conn_started = _this.waiting_for_conn_started_def.promise;
+            this.waiting_for_conn_started_def = $q.defer();
+            $scope.waiting_for_conn_started = this.waiting_for_conn_started_def.promise;
             if (company_id || $scope.bb.affiliate_id) {
                 $scope.waiting_for_conn_started = $rootScope.connection_started;
             } else {
-                _this.waiting_for_conn_started_def.resolve();
+                this.waiting_for_conn_started_def.resolve();
             }
             widgetStarted.resolve();
             setup_promises2 = [];
@@ -550,10 +547,8 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
                 connectionStarted.reject("Failed to start widget");
                 return LoadingService.setLoadedAndShowError($scope, err, 'Sorry, something went wrong');
             });
-        };
-    })(this);
-    setupDefaults = (function (_this) {
-        return function (company_id) {
+        }.bind(this);
+    setupDefaults = function (company_id) {
             var category, clinic, def, event, event_chain, event_group, k, person, ref, resource, service, v;
             def = $q.defer();
             if (isFirstCall || ($scope.bb.orginal_company_id && $scope.bb.orginal_company_id !== company_id)) {
@@ -678,22 +673,16 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
                 def.resolve();
             }
             return def.promise;
-        };
-    })(this);
-
+        }.bind(this);
     getPartial = function (file) {
         return $scope.bb.pageURL(file);
     };
-
     showCheckout = function () {
         return $scope.bb.current_item.ready;
     };
-
     setReadyToCheckout = function (ready) {
         return $scope.bb.confirmCheckout = ready;
     };
-
-
     logout = function (route) {
         if ($scope.client && $scope.client.valid()) {
             return LoginService.logout({
@@ -717,7 +706,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.affiliate = affiliate;
         return $scope.affiliate_id = affiliate.id;
     };
-
     setCompany = function (company, keep_basket) {
         var defer;
         defer = $q.defer();
@@ -769,30 +757,22 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         CompanyStoreService.country_code = company.country_code;
         return CompanyStoreService.settings = settings;
     };
-
-
     setRoute = function (rdata) {
         return $scope.bb.setRoute(rdata);
     };
     setBasicRoute = function (routes) {
         return $scope.bb.setBasicRoute(routes);
     };
-
-    setUsingBasket = (function (_this) {
-        return function (usingBasket) {
+    setUsingBasket =  function (usingBasket) {
             return $scope.bb.usingBasket = usingBasket;
-        };
-    })(this);
-    setClient = (function (_this) {
-        return function (client) {
+        }.bind(this);
+    setClient = function (client) {
             $scope.client = client;
             if (client.postcode && !$scope.bb.postcode) {
                 return $scope.bb.postcode = client.postcode;
             }
-        };
-    })(this);
-    clearClient = (function (_this) {
-        return function () {
+        }.bind(this);
+    clearClient = function () {
             $scope.client = new BBModel.Client();
             if ($window.bb_setup) {
                 $scope.client.setDefaults($window.bb_setup);
@@ -800,25 +780,16 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
             if ($scope.bb.client_defaults) {
                 return $scope.client.setDefaults($scope.bb.client_defaults);
             }
-        };
-    })(this);
-    getUrlParam = (function (_this) {
-        return function (param) {
+        }.bind(this);
+    getUrlParam = function (param) {
             return $window.getURIparam(param);
-        };
-    })(this);
-    base64encode = (function (_this) {
-        return function (param) {
+        }.bind(this);
+    base64encode = function (param) {
             return $window.btoa(param);
-        };
-    })(this);
-
-    broadcastItemUpdate = (function (_this) {
-        return function () {
+        }.bind(this);
+    broadcastItemUpdate = function () {
             return $scope.$broadcast("currentItemUpdate", $scope.bb.current_item);
-        };
-    })(this);
-
+        }.bind(this);
     companySet = function () {
         return $scope.bb.company_id != null;
     };
