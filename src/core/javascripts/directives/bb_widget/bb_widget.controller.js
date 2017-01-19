@@ -66,7 +66,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
 
 
         $scope.initWidget = widgetInit.initWidget;
-        $scope.initWidget2 = widgetInit.initWidget2;
         $scope.setClient = widgetInit.setClient;
         $scope.clearClient = widgetInit.clearClient;
         $scope.setCompany = widgetInit.setCompany;
@@ -113,6 +112,7 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     this.$postLink = function () {
         viewportSize.init();
     };
+
     initializeBBWidget = function () {
         $scope.bb = new BBWidget();
         AppConfig.uid = $scope.bb.uid;
@@ -121,6 +121,7 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.recordStep = $scope.bb.recordStep;
         determineBBApiUrl();
     };
+
     determineBBApiUrl = function () {
         var base, base1;
         if ($scope.apiUrl) {
@@ -167,16 +168,12 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     getPartial = function (file) {
         return $scope.bb.pageURL(file);
     };
-
     showCheckout = function () {
         return $scope.bb.current_item.ready;
     };
-
     setReadyToCheckout = function (ready) {
         return $scope.bb.confirmCheckout = ready;
     };
-
-
     logout = function (route) {
         if ($scope.client && $scope.client.valid()) {
             return LoginService.logout({
@@ -202,36 +199,31 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         return $scope.bb.setBasicRoute(routes);
     };
 
-    setUsingBasket = (function (_this) {
-        return function (usingBasket) {
-            return $scope.bb.usingBasket = usingBasket;
-        };
-    })(this);
+    setUsingBasket = function (usingBasket) {
+        return $scope.bb.usingBasket = usingBasket;
+    }.bind(this);
 
 
-    getUrlParam = (function (_this) {
-        return function (param) {
-            return $window.getURIparam(param);
-        };
-    })(this);
-    base64encode = (function (_this) {
-        return function (param) {
-            return $window.btoa(param);
-        };
-    })(this);
+    getUrlParam = function (param) {
+        return $window.getURIparam(param);
+    }.bind(this);
 
-    broadcastItemUpdate = (function (_this) {
-        return function () {
-            return $scope.$broadcast("currentItemUpdate", $scope.bb.current_item);
-        };
-    })(this);
+    base64encode = function (param) {
+        return $window.btoa(param);
+    }.bind(this);
+
+    broadcastItemUpdate = function () {
+        return $scope.$broadcast("currentItemUpdate", $scope.bb.current_item);
+    }.bind(this);
 
     companySet = function () {
         return $scope.bb.company_id != null;
     };
+
     isAdmin = function () {
         return $scope.bb.isAdmin;
     };
+
     isAdminIFrame = function () {
         var err, location;
         if (!$scope.bb.isAdmin) {
@@ -265,13 +257,16 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     supportsTouch = function () {
         return Modernizr.touch;
     };
+
     isMemberLoggedIn = function () {
         return LoginService.isLoggedIn();
     };
+
     scrollTo = function (id) {
         $location.hash(id);
         return $anchorScroll();
     };
+
     redirectTo = function (url) {
         return $window.location.href = url;
     };
