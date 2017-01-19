@@ -6,6 +6,14 @@
 
         var connectionStarted, isFirstCall, widgetStarted;
 
+        connectionStarted = $q.defer();
+        $rootScope.connection_started = connectionStarted.promise;
+
+        isFirstCall = true;
+
+        widgetStarted = $q.defer();
+        $rootScope.widget_started = widgetStarted.promise;
+
         var $scope = null;
 
         var setScope = function ($s) {
@@ -20,13 +28,7 @@
 
         var initWidget = function (prms) {
 
-            connectionStarted = $q.defer();
-            $rootScope.connection_started = connectionStarted.promise;
 
-            isFirstCall = true;
-
-            widgetStarted = $q.defer();
-            $rootScope.widget_started = widgetStarted.promise;
 
             guardScope();
 

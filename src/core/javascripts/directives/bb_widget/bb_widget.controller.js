@@ -13,11 +13,10 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     widgetStep.setScope($scope);
     widgetInit.setScope($scope);
 
-    var $debounce, base64encode, broadcastItemUpdate, clearClient, companySet, connectionStarted, determineBBApiUrl,
-        getPartial, getUrlParam, hideLoaderHandler, initWidget, initWidget2, initializeBBWidget, isAdmin, isAdminIFrame,
-        isFirstCall, isMemberLoggedIn, locationChangeStartHandler, logout, redirectTo, reloadDashboard, scrollTo,
-        setActiveCompany, setAffiliate, setBasicRoute, setClient, setCompany, setReadyToCheckout, setRoute,
-        setUsingBasket, setupDefaults, showCheckout, showLoaderHandler, supportsTouch, widgetStarted;
+    var $debounce, base64encode, broadcastItemUpdate, companySet, determineBBApiUrl,
+        getPartial, getUrlParam, hideLoaderHandler, initializeBBWidget, isAdmin, isAdminIFrame,
+        isMemberLoggedIn, locationChangeStartHandler, logout, redirectTo, reloadDashboard, scrollTo,
+        setBasicRoute, setReadyToCheckout, setRoute, setUsingBasket, showCheckout, showLoaderHandler, supportsTouch;
 
     this.$scope = $scope;
 
