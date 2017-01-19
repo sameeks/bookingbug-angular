@@ -245,7 +245,6 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
       allResults = []
       angular.forEach resolutions, (results, index)->
         allResults = allResults.concat results
-
       deferred.resolve allResults
     , (err)->
       deferred.reject err

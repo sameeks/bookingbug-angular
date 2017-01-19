@@ -15,7 +15,7 @@
     </div>
 
     <div
-      class="page-summary"
+      class="page-summary availability_conflict"
       ng-if="availability_conflict"
       bb-admin-calendar-conflict>
 
@@ -28,7 +28,7 @@
             <i class="fa fa-calendar" aria-hidden="true"></i>
             <span
               translate="ADMIN_BOOKING.CALENDAR.NOT_AVAILABLE"
-              translate-values="{time: (bb.current_item.defaults.datetime | datetime: 'lll')}">
+              translate-values="{time: (bb.current_item.defaults.datetime | datetime: 'lll':true)}">
             </span>
           </strong>
         </div>
@@ -39,43 +39,49 @@
 
             <div ng-if="overlapping_bookings">
               <p translate="ADMIN_BOOKING.CALENDAR.OVERLAPPING_BOOKINGS"></p>
-              <div
-                class="row"
-                ng-repeat="booking in overlapping_bookings">
-                <div class="col-sm-12">
-                  <i class="fa fa-clock-o" aria-hidden="true"></i>
-                  <strong>{{booking.full_describe}}</strong>
+              <div class="bookings-container">
+                <div
+                  class="row"
+                  ng-repeat="booking in overlapping_bookings">
+                  <div class="col-sm-12">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    <strong>{{booking.full_describe}}</strong>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div ng-if="nearby_bookings && !overlapping_bookings">
               <p translate="ADMIN_BOOKING.CALENDAR.NEARBY_BOOKINGS"></p>
-              <div
-                class="row"
-                ng-repeat="booking in nearby_bookings">
-                <div class="col-sm-12">
-                  <i class="fa fa-clock-o" aria-hidden="true"></i>
-                  <strong>{{booking.full_describe}}</strong>
+              <div class="bookings-container">
+                <div
+                  class="row"
+                  ng-repeat="booking in nearby_bookings">
+                  <div class="col-sm-12">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    <strong>{{booking.full_describe}}</strong>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div ng-if="external_bookings">
               <p translate="ADMIN_BOOKING.CALENDAR.EXTERNAL_BOOKINGS"></p>
-              <div
-                class="row"
-                ng-repeat="booking in external_bookings">
-                <div class="col-sm-12">
-                  <i class="fa fa-clock-o" aria-hidden="true"></i>
-                  <strong
-                    translate="ADMIN_BOOKING.CALENDAR.EXTERNAL_BOOKING_DESCRIPTION"
-                    translate-values="{
-                      title: booking.title,
-                      from: (booking.start_time | datetime: 'lll'),
-                      to: (booking.end_time | datetime: 'lll')
-                    }">
-                  </strong>
+              <div class="bookings-container">
+                <div
+                  class="row"
+                  ng-repeat="booking in external_bookings">
+                  <div class="col-sm-12">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    <strong
+                      translate="ADMIN_BOOKING.CALENDAR.EXTERNAL_BOOKING_DESCRIPTION"
+                      translate-values="{
+                        title: booking.title,
+                        from: (booking.start_time | datetime: 'lll'),
+                        to: (booking.end_time | datetime: 'lll')
+                      }">
+                    </strong>
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,7 +106,7 @@
                     <i class="fa fa-calendar-check-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.CLOSEST_EARLIER_TIME_BTN"
-                      translate-values="{closest_earlier: (best_earlier.datetime | datetime: 'LT')}">
+                      translate-values="{closest_earlier: (best_earlier.datetime | datetime: 'LT':true)}">
                     </span>
                   </button>
 
@@ -111,7 +117,7 @@
                     <i class="fa fa-calendar-times-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.REQUESTED_TIME_BTN"
-                      translate-values="{requested_time: (bb.current_item.defaults.datetime | datetime: 'LT')}">
+                      translate-values="{requested_time: (bb.current_item.defaults.datetime | datetime: 'LT':true)}">
                     </span>
                   </button>
 
@@ -122,7 +128,7 @@
                     <i class="fa fa-calendar-check-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.CLOSEST_LATER_TIME_BTN"
-                      translate-values="{closest_later: (best_later.datetime | datetime: 'LT')}">
+                      translate-values="{closest_later: (best_later.datetime | datetime: 'LT':true)}">
                     </span>
                   </button>
 
@@ -158,7 +164,7 @@
                     <i class="fa fa-calendar-check-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.CLOSEST_EARLIER_TIME_BTN"
-                      translate-values="{closest_earlier: (best_earlier.datetime | datetime: 'LT')}">
+                      translate-values="{closest_earlier: (best_earlier.datetime | datetime: 'LT':true)}">
                     </span>
                   </button>
 
@@ -169,7 +175,7 @@
                     <i class="fa fa-calendar-times-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.REQUESTED_TIME_BTN"
-                      translate-values="{requested_time: (bb.current_item.defaults.datetime | datetime: 'LT')}">
+                      translate-values="{requested_time: (bb.current_item.defaults.datetime | datetime: 'LT':true)}">
                     </span>
                   </button>
 
@@ -181,7 +187,7 @@
                     <i class="fa fa-calendar-check-o"></i>
                     <span
                       translate="ADMIN_BOOKING.CALENDAR.CLOSEST_LATER_TIME_BTN"
-                      translate-values="{closest_later: (best_later.datetime | datetime: 'LT')}">
+                      translate-values="{closest_later: (best_later.datetime | datetime: 'LT':true)}">
                     </span>
                   </button>
 
@@ -218,7 +224,7 @@
                   <i class="fa fa-calendar-times-o"></i>
                   <span
                     translate="ADMIN_BOOKING.CALENDAR.REQUESTED_TIME_BTN"
-                    translate-values="{requested_time: (bb.current_item.defaults.datetime | datetime: 'LT')}">
+                    translate-values="{requested_time: (bb.current_item.defaults.datetime | datetime: 'LT':true)}">
                   </span>
                 </button>
 
@@ -356,10 +362,10 @@
           <div class="bb-day-nav">
 
             <h2 class="hidden-xs bb-day-nav-heading">
-              {{selected_date | datetime: 'LL'}}
+              {{selected_date | datetime: 'LL':true }}
             </h2>
             <h2 class="hidden-sm hidden-md hidden-lg bb-day-nav-heading">
-              {{selected_date | datetime: 'll'}}
+              {{selected_date | datetime: 'll':true }}
             </h2>
 
           </div>
@@ -383,7 +389,7 @@
 
                       <span
                         translate="ADMIN_BOOKING.CALENDAR.TIME_SLOT_WITH_COUNTDOWN"
-                        translate-values="{datetime: (slot.datetime | datetime: 'LT'), time: slot.time}">
+                        translate-values="{datetime: (slot.datetime | datetime: 'LT':true), time: slot.time}">
                       </span>
                     </li>
 
@@ -416,10 +422,10 @@
             </button>
 
             <h2 class="hidden-xs bb-day-nav-heading">
-              {{selected_date | datetime: 'Do MMMM YYYY'}}
+              {{selected_date | datetime: 'Do MMMM YYYY':true}}
             </h2>
             <h2 class="hidden-sm hidden-md hidden-lg bb-day-nav-heading">
-              {{selected_date | datetime: 'Do MMMM'}}
+              {{selected_date | datetime: 'Do MMMM':true}}
             </h2>
 
             <button

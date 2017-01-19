@@ -54,4 +54,3 @@ angular.module('BBAdminServices').factory 'AdminPersonService',  ($q, $window,
       , (err) ->
         defer.reject(err)
       defer.promise
-

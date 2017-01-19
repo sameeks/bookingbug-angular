@@ -11,7 +11,7 @@
 * @example_result
 * <span bb-time-zone>All times are shown in British Summer Time.</span>
 ####
-angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions, CompanyStoreService) ->
+angular.module('BB.Directives').directive 'bbTimeZone', (GeneralOptions) ->
   restrict: 'A'
   controllerAs: '$tzCtrl'
   templateUrl: '_time_zone_info.html'

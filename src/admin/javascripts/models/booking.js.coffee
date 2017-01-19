@@ -8,7 +8,7 @@ angular.module('BB.Models').factory "AdminBookingModel", ($q, BBModel, BaseModel
       super
       @datetime = moment(@datetime)
       @start = @datetime
-      @end = @end_datetime
+      @end = moment(@end_datetime)
       @end ||= @datetime.clone().add(@duration, 'minutes')
       @title = @full_describe
       @time = @start.hour()* 60 + @start.minute()

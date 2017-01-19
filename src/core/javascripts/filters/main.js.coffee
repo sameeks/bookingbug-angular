@@ -428,7 +428,7 @@ angular.module('BB.Filters').filter 'datetime', (GeneralOptions) ->
   (date, format="LLL", show_time_zone=false) ->
 
     return if !date or (date and !moment(date).isValid())
-   
+    
     new_date = moment(date)
     new_date.tz(GeneralOptions.display_time_zone)
     format += ' zz' if show_time_zone

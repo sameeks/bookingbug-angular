@@ -299,4 +299,3 @@ angular.module('BB.Models').factory "ScheduleRules", () ->
           end: [date, @formatTime(range.split('-')[1])].join('T')
         ))
       ,[])
-

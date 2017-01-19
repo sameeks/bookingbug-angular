@@ -127,4 +127,3 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
         loadScheduleCaches(assets).then () ->
           $q.all(localMethod(start, end, assets)).then (schedules) ->
             _.flatten(schedules)
-
