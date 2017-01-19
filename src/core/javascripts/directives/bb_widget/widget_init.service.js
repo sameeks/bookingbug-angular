@@ -7,17 +7,12 @@
                                LoadingService, BBWidget,AppConfig,$location) {
 
         var connectionStarted, isFirstCall, widgetStarted;
-
         connectionStarted = $q.defer();
         $rootScope.connection_started = connectionStarted.promise;
-
         isFirstCall = true;
-
         widgetStarted = $q.defer();
         $rootScope.widget_started = widgetStarted.promise;
-
         var $scope = null;
-
         var setScope = function ($s) {
             $scope = $s;
         };
@@ -27,7 +22,6 @@
                 throw new Error('please provide scope');
             }
         };
-
         var initWidget = function (prms) {
             guardScope();
             var url;
@@ -59,7 +53,6 @@
                 initWidget2();
             }
         }.bind(this);
-
         var initWidget2 = function () {
             var aff_promise, comp_category_id, comp_def, comp_promise, comp_url, company_id, embed_params, get_total, k, match, options, params, prms, ref, setup_promises, setup_promises2, sso_admin_login, sso_member_login, total_id, v;
             $scope.init_widget_started = true;
@@ -552,14 +545,12 @@
             }
             return def.promise;
         }.bind(this);
-
         var setAffiliate = function (affiliate) {
             $scope.bb.affiliate_id = affiliate.id;
             $scope.bb.affiliate = affiliate;
             $scope.affiliate = affiliate;
             return $scope.affiliate_id = affiliate.id;
         }.bind(this);
-
         var setCompany = function (company, keep_basket) {
             var defer;
             defer = $q.defer();
@@ -604,16 +595,14 @@
                 setActiveCompany(company);
             }
             return defer.promise;
-        }.bind();
-
+        }.bind(this);
         var setClient = function (client) {
             $scope.client = client;
             if (client.postcode && !$scope.bb.postcode) {
                 return $scope.bb.postcode = client.postcode;
             }
         }.bind(this);
-
-        var clearClient = function () {
+        var clearClient = function clearClient () {
             $scope.client = new BBModel.Client();
             if ($window.bb_setup) {
                 $scope.client.setDefaults($window.bb_setup);
@@ -622,16 +611,12 @@
                 return $scope.client.setDefaults($scope.bb.client_defaults);
             }
         }.bind(this);
-
-
         var setActiveCompany = function (company, settings) {
             CompanyStoreService.currency_code = !settings ? company.currency_code : settings.currency;
             CompanyStoreService.time_zone = company.timezone;
             CompanyStoreService.country_code = company.country_code;
             return CompanyStoreService.settings = settings;
         }.bind(this);
-
-
         var initializeBBWidget = function () {
             guardScope();
             $scope.bb = new BBWidget();
@@ -641,8 +626,7 @@
             $scope.recordStep = $scope.bb.recordStep;
             determineBBApiUrl();
         };
-
-        determineBBApiUrl = function () {
+        var determineBBApiUrl = function () {
             var base, base1;
             if ($scope.apiUrl) {
                 $scope.bb || ($scope.bb = {});
@@ -662,8 +646,6 @@
                 (base1 = $scope.bb).api_url || (base1.api_url = $location.protocol() + "://" + $location.host());
             }
         };
-
-
         return {
             clearClient: clearClient,
             initWidget: initWidget,
@@ -675,7 +657,6 @@
             initializeBBWidget:initializeBBWidget,
             determineBBApiUrl:determineBBApiUrl
         };
-
     };
 
     angular.module('BB').service("widgetInit", WidgetInit);
