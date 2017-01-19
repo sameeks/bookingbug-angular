@@ -66,12 +66,12 @@ angular.module('BB.Services').service 'viewportSize', ($window, $document, $root
 
 
   ###*
-  # @description appends elements to document body for bootstrap to show or hide
+  # @description appends elements to bb element for bootstrap to show or hide
   ###
-  appendViewportElementsToDocumentBody = ->
+  appendViewportElementsToBBElement = ->
     viewportElements = getViewportElementsToAppend()
-    body = $document.find('body')
-    body.append(viewportElements)
+    bb = $document.find('#bb')
+    bb.append(viewportElements)
     return
 
 
@@ -79,7 +79,7 @@ angular.module('BB.Services').service 'viewportSize', ($window, $document, $root
   # @description grabs elements from document after being appended to determin which ones are visible
   # @returns {Array}
   ###
-  getViewportElementsFromDocumentBody = ->
+  getViewportElementsFromDocument = ->
     viewportElements = []
     for size in getSupportedSizes()
       viewportElementId = getElementId(size)
@@ -112,7 +112,7 @@ angular.module('BB.Services').service 'viewportSize', ($window, $document, $root
   # @description determins the current size of the screen
   ###
   findVisibleElement = ->
-    viewportElements = getViewportElementsFromDocumentBody()
+    viewportElements = getViewportElementsFromDocument()
     for viewportElement in viewportElements
       elementSize = getSizeFromElement(viewportElement)
       if isElementVisible(viewportElement)
@@ -140,7 +140,7 @@ angular.module('BB.Services').service 'viewportSize', ($window, $document, $root
   ###
   init = ->
     if !isInitialised
-      appendViewportElementsToDocumentBody()
+      appendViewportElementsToBBElement()
       findVisibleElement()
       listenForResize()
       isInitialised = true
