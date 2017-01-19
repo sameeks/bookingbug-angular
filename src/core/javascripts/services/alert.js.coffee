@@ -11,7 +11,7 @@
 * @property {string} add Add alert message
 ####
 
-angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService, $timeout, $translate) ->
+angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService, $timeout, $translate, $bbug, AppService) ->
 
   $rootScope.alerts = []
 
@@ -25,7 +25,7 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
     * @returns {boolean} The returned title
   ###
   titleLookup = (type, title) ->
-    return title if title
+    return title if title 
     switch type
       when "error", "danger"
         title = $translate.instant('CORE.ERROR_HEADING')
@@ -33,8 +33,14 @@ angular.module('BB.Services').factory 'AlertService', ($rootScope, ErrorService,
         title = null
     title
 
+
+
   alertService =
     add: (type, {title, msg, persist}) ->
+      if AppService.isModalOpen
+        $bbug('[ng-app]').find('.alerts').css('opacity', '0')
+        $bbug('[ng-app]').find('.modal-dialog').find('.alerts').css('opacity', '1')
+
       persist = true if !persist?
       $rootScope.alerts = []
       alert =

@@ -96,7 +96,6 @@ moveBookingCtrl =  ($scope, $rootScope, $attrs, BBModel, LoadingService, Purchas
   checkSingleBooking = (basketItem) ->
     if !basketItem.datetimeHasChanged() 
       AlertService.add("warning", { msg: $translate.instant('CORE.ALERTS.APPT_AT_SAME_TIME')}) 
-      console.log $rootScope.alerts
       return
 
     # only move purchase once any questions have been answered
