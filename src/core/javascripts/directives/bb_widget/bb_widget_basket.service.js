@@ -2,65 +2,55 @@
 
 angular.module('BB.Services').factory("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep) {
 
-  var $scope = null;
-  var setScope = function ($s) {
-    $scope = $s;
-  };
-  var getScope = function () {
-    return $scope;
-  };
-  var guardScope = function () {
-    if($scope === null){
-      throw new Error('please provide scope');
-    }
-  };
-  var setBasket = function(basket) {
-    guardScope();
-    $scope.bb.basket = basket;
-    $scope.basket = basket;
-    $scope.bb.basket.company_id = $scope.bb.company_id;
-    if ($scope.bb.stacked_items) {
-      return $scope.bb.setStackedItems(basket.timeItems());
-    }
-  };
-  var deleteBasketItems = function(items) {
-      guardScope();
-      var item, j, len, results;
-      results = [];
-      for (j = 0, len = items.length; j < len; j++) {
-        item = items[j];
-        results.push(BBModel.Basket.$deleteItem(item, $scope.bb.company, {
-          bb: $scope.bb
-        }).then(function(basket) {
-          return setBasket(basket);
-        }));
+    var $scope = null;
+    var setScope = function ($s) {
+      $scope = $s;
+    };
+    var getScope = function () {
+      return $scope;
+    };
+    var guardScope = function () {
+      if($scope === null){
+        throw new Error('please provide scope');
       }
-      return results;
     };
-  var setBasketItem = function(item) {
-      guardScope();
-      return $scope.bb.current_item = item;
-    };
-  var clearBasketItem = function() {
-      guardScope();
-      var def;
-      def = $q.defer();
-      $scope.bb.current_item = new BBModel.BasketItem(null, $scope.bb);
-      if ($scope.bb.default_setup_promises) {
-        $q.all($scope.bb.default_setup_promises)["finally"](function() {
-          $scope.bb.current_item.setDefaults($scope.bb.item_defaults);
-          return $q.all($scope.bb.current_item.promises)["finally"](function() {
-            return def.resolve();
+    var deleteBasketItems = function(items) {
+        guardScope();
+        var item, j, len, results;
+        results = [];
+        for (j = 0, len = items.length; j < len; j++) {
+          item = items[j];
+          results.push(BBModel.Basket.$deleteItem(item, $scope.bb.company, {
+            bb: $scope.bb
+          }).then(function(basket) {
+            return setBasket(basket);
+          }));
+        }
+        return results;
+      };
+    var setBasketItem = function(item) {
+        guardScope();
+        return $scope.bb.current_item = item;
+      };
+    var clearBasketItem = function() {
+        guardScope();
+        var def;
+        def = $q.defer();
+        $scope.bb.current_item = new BBModel.BasketItem(null, $scope.bb);
+        if ($scope.bb.default_setup_promises) {
+          $q.all($scope.bb.default_setup_promises)["finally"](function() {
+            $scope.bb.current_item.setDefaults($scope.bb.item_defaults);
+            return $q.all($scope.bb.current_item.promises)["finally"](function() {
+              return def.resolve();
+            });
           });
-        });
-      } else {
-        $scope.bb.current_item.setDefaults({});
-        def.resolve();
-      }
-      return def.promise;
-    };
-
-    setBasket = function(basket) {
+        } else {
+          $scope.bb.current_item.setDefaults({});
+          def.resolve();
+        }
+        return def.promise;
+      };
+    var setBasket = function(basket) {
       guardScope();
       $scope.bb.basket = basket;
       $scope.basket = basket;
@@ -69,8 +59,7 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
         return $scope.bb.setStackedItems(basket.timeItems());
       }
     };
-
-    updateBasket = function() {
+    var updateBasket = function() {
       guardScope();
       var add_defer, current_item_ref, params;
       current_item_ref = $scope.bb.current_item.ref;
@@ -143,8 +132,7 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
       });
       return add_defer.promise;
     };
-
-    deleteBasketItem = function(item) {
+    var deleteBasketItem = function(item) {
       guardScope();
       return BBModel.Basket.$deleteItem(item, $scope.bb.company, {
         bb: $scope.bb
@@ -152,8 +140,7 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
         return setBasket(basket);
       });
     };
-
-    emptyBasket = function() {
+    var emptyBasket = function() {
       guardScope();
       var defer;
       defer = $q.defer();
@@ -172,8 +159,7 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
       }
       return defer.promise;
     };
-
-    addItemToBasket = function() {
+    var addItemToBasket = function() {
       guardScope();
       var add_defer;
       add_defer = $q.defer();
@@ -201,14 +187,11 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
       }
       return add_defer.promise;
     };
-
-    moveToBasket = function() {
+    var moveToBasket = function() {
       guardScope();
       return $scope.bb.basket.addItem($scope.bb.current_item);
     };
-
-
-    quickEmptybasket = function(options) {
+    var quickEmptybasket = function(options) {
       guardScope();
       var def, preserve_stacked_items;
       preserve_stacked_items = options && options.preserve_stacked_items ? true : false;
@@ -225,8 +208,7 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
         return def.promise;
       }
     };
-
-    restoreBasket = function() {
+    var restoreBasket = function() {
       guardScope();
       var restore_basket_defer;
       restore_basket_defer = $q.defer();
@@ -320,23 +302,21 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
       });
       return restore_basket_defer.promise;
     };
-
-
-    setUsingBasket = function (usingBasket) {
+    var setUsingBasket = function (usingBasket) {
         return $scope.bb.usingBasket = usingBasket;
     };
-
-    showCheckout = function () {
+    var showCheckout = function () {
         guardScope();
         return $scope.bb.current_item.ready;
     };
-    setReadyToCheckout = function (ready) {
+    var setReadyToCheckout = function (ready) {
         guardScope();
         return $scope.bb.confirmCheckout = ready;
     };
 
 
   return {
+
     getScope: getScope,
     setScope: setScope,
     deleteBasketItems : deleteBasketItems,
