@@ -1,4 +1,5 @@
 'use strict';
+
 angular.module('BB.Services').factory("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep) {
 
   var $scope = null;
@@ -10,7 +11,7 @@ angular.module('BB.Services').factory("widgetBasket", function($q, $window, halC
   };
   guardScope = function () {
     if($scope === null){
-      throw new Erro('please provide scope'); //tewt
+      throw new Error('please provide scope');
     }
   };
   setBasket = function(basket) {
