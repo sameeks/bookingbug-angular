@@ -85,7 +85,6 @@ angular.module("BBAdminBooking").config ($translateProvider) ->
       QUICK_PICK: {
         BLOCK_WHOLE_DAY                : "Block whole day"
         BLOCK_TIME_TAB_HEADING         : "Block time"
-        BLOCK_TIME_TAB_HEADING         : "Block"
         MAKE_BOOKING_TAB_HEADING       : "Make booking"
         PERSON_LABEL                   : "@:COMMON.TERMINOLOGY.PERSON"
         PERSON_DEFAULT_OPTION          : "Any Person"
