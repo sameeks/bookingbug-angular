@@ -38,7 +38,7 @@
           </td>
           <td
             translate="PUBLIC_BOOKING.BASKET_DETAILS.ITEM_TIME_AND_DURATION"
-            translate-values="{time: item.date.date, duration: item.duration}">
+            translate-values="{time: (item.date.date | datetime: 'LLLL'), duration: item.duration}">
           </td>
           <td class="text-center">
             <span

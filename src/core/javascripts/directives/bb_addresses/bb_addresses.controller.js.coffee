@@ -4,7 +4,6 @@ angular.module('BB.Controllers').controller 'AddressList', (
   $scope, $rootScope, $filter, $sniffer, FormDataStoreService, LoadingService,
   BBModel) ->
 
-  $scope.controller = "public.controllers.AddressList"
   $scope.manual_postcode_entry = false
   loader = LoadingService.$loader($scope)
 

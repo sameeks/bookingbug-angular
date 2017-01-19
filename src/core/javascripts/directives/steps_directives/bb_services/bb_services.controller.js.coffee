@@ -3,8 +3,6 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
 
   @$scope = $scope
 
-  $scope.controller = "public.controllers.ServiceList"
-
   FormDataStoreService.init 'ServiceList', $scope, [
     'service'
   ]

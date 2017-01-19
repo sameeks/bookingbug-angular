@@ -148,7 +148,7 @@ angular.module('BB.Directives').directive 'bbWidget', (PathSvc, $http, $log, $te
           else
             renderTemplate(scope, element, prms.design_mode)
           scope.$on 'refreshPage', () ->
-            renderTemplate(scope, element, prms.design_mode)
+            renderTemplate(scope, element, prms.design_mode, prms.template)
         else if prms.custom_partial_url
           appendCustomPartials(scope, element, prms)
           setupPusher(scope, element, prms) if prms.update_design
