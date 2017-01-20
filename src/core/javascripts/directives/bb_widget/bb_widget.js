@@ -1,5 +1,25 @@
 'use strict';
 
+/*
+* @ngdoc service
+* @name BB.Models:BBWidget
+*
+* @description
+* Representation of an BBWidget Object
+*
+* @property {integer} uid The unique id of the widget
+* @property {string} page_suffix Widget page suffix
+* @property {array} steps The widget steps
+* @property {array} allSteps The all steps of the widget
+* @property {object} item_defaults Widget defaults item
+* @property {boolean} Checks if widget using basket or not
+* @property {boolean} confirmCheckout Checks if widget confirm is checkout or not
+* @property {boolean} isAdm,in Verify if user is admin
+* @property {string} payment_status The payment status
+
+*/
+
+
 angular.module('BB.Models').service("BBWidget", function($q, BBModel, BasketService, $urlMatcherFactory, $location,
                                                          BreadcrumbService, $window, $rootScope, PathHelper, GeneralOptions)
   {
@@ -381,7 +401,5 @@ angular.module('BB.Models').service("BBWidget", function($q, BBModel, BasketServ
     };
 
     return Widget;
-
-
 
 });
