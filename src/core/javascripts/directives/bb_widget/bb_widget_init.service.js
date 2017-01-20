@@ -51,7 +51,11 @@
           }
       }.bind(this);
       var initWidget2 = function () {
-      var aff_promise, comp_category_id, comp_def, comp_promise, comp_url, company_id, embed_params, get_total, k, match, options, params, prms, ref, setup_promises, setup_promises2, sso_admin_login, sso_member_login, total_id, v;
+          guardScope();
+          var aff_promise, comp_category_id, comp_def, comp_promise, comp_url, company_id,
+              embed_params, get_total, k, match, options, params, prms, ref, setup_promises,
+              setup_promises2, sso_admin_login, sso_member_login, total_id, v;
+
           $scope.init_widget_started = true;
           prms = this.$init_prms;
           if (prms.query) {
@@ -417,6 +421,7 @@
           });
       }.bind(this);
       var setupDefaults = function (company_id) {
+          guardScope();
           var category, clinic, def, event, event_chain, event_group, k, person, ref, resource, service, v;
           def = $q.defer();
           if (isFirstCall || ($scope.bb.orginal_company_id && $scope.bb.orginal_company_id !== company_id)) {
@@ -541,22 +546,23 @@
               def.resolve();
           }
           return def.promise;
-      }.bind(this);
+      };
       var setAffiliate = function (affiliate) {
+          guardScope();
           $scope.bb.affiliate_id = affiliate.id;
           $scope.bb.affiliate = affiliate;
           $scope.affiliate = affiliate;
           return $scope.affiliate_id = affiliate.id;
-      }.bind(this);
+      };
       var setCompany = function (company, keep_basket) {
+          guardScope();
           var defer;
           defer = $q.defer();
           $scope.bb.company_id = company.id;
           $scope.bb.company = company;
           $scope.bb.item_defaults.company = $scope.bb.company;
           if (company.$has('settings')) {
-              company.getSettings().then((function (_this) {
-                  return function (settings) {
+              company.getSettings().then( function (settings) {
                       $scope.bb.company_settings = settings;
                       setActiveCompany(company, settings);
                       if ($scope.bb.company_settings.merge_resources) {
@@ -577,8 +583,8 @@
                           defer.resolve();
                           return $scope.$emit('company:setup');
                       }
-                  };
-              })(this));
+                  }
+              );
           } else {
               if (!$scope.bb.basket || ($scope.bb.basket.company_id !== $scope.bb.company_id && !keep_basket)) {
                   widgetBasket.restoreBasket().then(function () {
@@ -592,14 +598,16 @@
               setActiveCompany(company);
           }
           return defer.promise;
-      }.bind(this);
+      };
       var setClient = function (client) {
+          guardScope();
           $scope.client = client;
           if (client.postcode && !$scope.bb.postcode) {
               return $scope.bb.postcode = client.postcode;
           }
-      }.bind(this);
+      };
       var clearClient = function clearClient () {
+          guardScope();
           $scope.client = new BBModel.Client();
           if ($window.bb_setup) {
               $scope.client.setDefaults($window.bb_setup);
@@ -607,13 +615,14 @@
           if ($scope.bb.client_defaults) {
               return $scope.client.setDefaults($scope.bb.client_defaults);
           }
-      }.bind(this);
+      };
       var setActiveCompany = function (company, settings) {
+          guardScope();
           CompanyStoreService.currency_code = !settings ? company.currency_code : settings.currency;
           CompanyStoreService.time_zone = company.timezone;
           CompanyStoreService.country_code = company.country_code;
           return CompanyStoreService.settings = settings;
-      }.bind(this);
+      };
       var initializeBBWidget = function () {
           guardScope();
           $scope.bb = new BBWidget();
@@ -624,6 +633,7 @@
           determineBBApiUrl();
       };
       var determineBBApiUrl = function () {
+          guardScope();
           var base, base1;
           if ($scope.apiUrl) {
               $scope.bb || ($scope.bb = {});

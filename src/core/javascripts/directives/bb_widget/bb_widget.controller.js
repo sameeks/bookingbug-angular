@@ -1,12 +1,11 @@
 'use strict';
 var BBCtrl;
 
-BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $window, $http, $q, $timeout, BasketService,
-                   LoginService, AlertService, $sce, $element, $compile, $sniffer, $uibModal, $log, BBModel, BBWidget,
-                   SSOService, ErrorService, AppConfig, QueryStringService, QuestionService, PurchaseService, $sessionStorage,
-                   $bbug, AppService, UriTemplate, LoadingService, $anchorScroll, $localStorage, $document, CompanyStoreService,
+BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $window, $http, BasketService,
+                   LoginService, AlertService, BBWidget,
+                   SSOService, ErrorService, AppConfig, QueryStringService, $bbug, LoadingService,
                    viewportSize, widgetBasket, widgetPage, widgetStep, widgetInit,bbWidgetUtilities) {
-    'ngInject';
+
 
     widgetBasket.setScope($scope);
     widgetPage.setScope($scope);
@@ -27,6 +26,19 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         //Initialization
         widgetInit.initializeBBWidget();
         $scope.initWidget = widgetInit.initWidget;
+
+        //Steps
+        $scope.checkStepTitle = widgetStep.checkStepTitle;
+        $scope.getCurrentStepTitle = widgetStep.getCurrentStepTitle;
+        $scope.loadPreviousStep = widgetStep.loadPreviousStep;
+        $scope.loadStep = widgetStep.loadStep;
+        $scope.loadStepByPageName = widgetStep.loadStepByPageName;
+        $scope.reset = widgetStep.reset;
+        $scope.restart = widgetStep.restart;
+        $scope.setLastSelectedDate = widgetStep.setLastSelectedDate;
+        $scope.setStepTitle = widgetStep.setStepTitle;
+        $scope.skipThisStep = widgetStep.skipThisStep;
+
         //Basket
         $scope.addItemToBasket = widgetBasket.addItemToBasket;
         $scope.clearBasketItem = widgetBasket.clearBasketItem;
@@ -49,17 +61,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.setPageLoaded = widgetPage.setPageLoaded;
         $scope.setPageRoute = widgetPage.setPageRoute;
         $scope.showPage = widgetPage.showPage;
-        //Steps
-        $scope.checkStepTitle = widgetStep.checkStepTitle;
-        $scope.getCurrentStepTitle = widgetStep.getCurrentStepTitle;
-        $scope.loadPreviousStep = widgetStep.loadPreviousStep;
-        $scope.loadStep = widgetStep.loadStep;
-        $scope.loadStepByPageName = widgetStep.loadStepByPageName;
-        $scope.reset = widgetStep.reset;
-        $scope.restart = widgetStep.restart;
-        $scope.setLastSelectedDate = widgetStep.setLastSelectedDate;
-        $scope.setStepTitle = widgetStep.setStepTitle;
-        $scope.skipThisStep = widgetStep.skipThisStep;
 
         $scope.setClient = widgetInit.setClient;
         $scope.clearClient = widgetInit.clearClient;

@@ -19,11 +19,9 @@
 
 */
 
-
 angular.module('BB.Models').service("BBWidget", function($q, BBModel, BasketService, $urlMatcherFactory, $location,
                                                          BreadcrumbService, $window, $rootScope, PathHelper, GeneralOptions)
   {
-
 
     function Widget() {
       this.uid = _.uniqueId('bbwidget_');
