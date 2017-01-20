@@ -1,29 +1,32 @@
-'use strict';
-var WidgetStep;
 
-WidgetStep = function(AlertService, BBModel, LoadingService, LoginService, $rootScope, $sce, widgetPage) {
-  'ngInject';
-  var $scope, checkStepTitle, getCurrentStepTitle, guardScope, loadPreviousStep, loadStep, loadStepByPageName, reset, restart, setLastSelectedDate, setScope, setStepTitle, skipThisStep;
-  $scope = null;
-  setScope = function($s) {
+(function(){
+
+'use strict';
+
+angular.module('BB').service('widgetStep', function(AlertService, BBModel, LoadingService, LoginService, $rootScope, $sce, widgetPage) {
+
+  var $scope;
+  $scope = null
+
+  var setScope = function($s) {
     $scope = $s;
   };
-  guardScope = function() {
+  var guardScope = function() {
     if ($scope === null) {
       throw new Error('please set scope');
     }
   };
-  setStepTitle = function(title) {
+  var setStepTitle = function(title) {
     guardScope();
     return $scope.bb.steps[$scope.bb.current_step - 1].title = title;
   };
-  checkStepTitle = function(title) {
+  var checkStepTitle = function(title) {
     guardScope();
     if ($scope.bb.steps[$scope.bb.current_step - 1] && !$scope.bb.steps[$scope.bb.current_step - 1].title) {
       return setStepTitle(title);
     }
   };
-  getCurrentStepTitle = function() {
+  var getCurrentStepTitle = function() {
     var steps;
     guardScope();
     steps = $scope.bb.steps;
@@ -34,7 +37,7 @@ WidgetStep = function(AlertService, BBModel, LoadingService, LoginService, $root
       return steps[$scope.bb.current_step - 1].title;
     }
   };
-  loadStep = function(step) {
+  var loadStep = function(step) {
     var i, len, prev_step, ref, st;
     guardScope();
     if (step === $scope.bb.current_step) {
@@ -83,7 +86,7 @@ WidgetStep = function(AlertService, BBModel, LoadingService, LoginService, $root
   * @param {integer} steps_to_go_back: The number of steps to go back
   * @param {string} caller: The method that called this function
    */
-  loadPreviousStep = function(caller) {
+  var loadPreviousStep = function(caller) {
     var last_step, pages_to_remove_from_history, past_steps, step_to_load;
     guardScope();
     past_steps = _.reject($scope.bb.steps, function(s) {
@@ -113,7 +116,7 @@ WidgetStep = function(AlertService, BBModel, LoadingService, LoginService, $root
       return loadStep(step_to_load);
     }
   };
-  loadStepByPageName = function(page_name) {
+  var loadStepByPageName = function(page_name) {
     var i, len, ref, step;
     guardScope();
     ref = $scope.bb.allSteps;
@@ -125,7 +128,7 @@ WidgetStep = function(AlertService, BBModel, LoadingService, LoginService, $root
     }
     return loadStep(1);
   };
-  reset = function() {
+  var reset = function() {
     guardScope();
     $rootScope.$broadcast('clear:formData');
     $rootScope.$broadcast('widget:restart');
@@ -136,17 +139,15 @@ WidgetStep = function(AlertService, BBModel, LoadingService, LoginService, $root
     $scope.bb.last_step_reached = false;
     return $scope.bb.steps.splice(1);
   };
-  restart = function() {
+  var restart = function() {
     guardScope();
     reset();
     return loadStep(1);
   };
-  setLastSelectedDate = (function(_this) {
-    return function(date) {
+  var setLastSelectedDate = function(date) {
       guardScope();
       return $scope.last_selected_date = date;
     };
-  })(this);
 
   /***
   * @ngdoc method
@@ -155,11 +156,13 @@ WidgetStep = function(AlertService, BBModel, LoadingService, LoginService, $root
   * @description
   * Marks the current step as skipped
    */
-  skipThisStep = function() {
+  var skipThisStep = function() {
     if ($scope.bb.steps[$scope.bb.steps.length - 1]) {
       return $scope.bb.steps[$scope.bb.steps.length - 1].skipped = true;
     }
   };
+
+
   return {
     checkStepTitle: checkStepTitle,
     getCurrentStepTitle: getCurrentStepTitle,
@@ -173,6 +176,5 @@ WidgetStep = function(AlertService, BBModel, LoadingService, LoginService, $root
     setStepTitle: setStepTitle,
     skipThisStep: skipThisStep
   };
-};
-
-angular.module('BB').service('widgetStep', WidgetStep);
+});
+})();
