@@ -441,6 +441,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     return
 
   editBooking = (booking) ->
+
+    if GeneralOptions.custom_time_zone
+      booking.datetime = moment.tz(moment(booking.datetime.toISOString()), CompanyStoreService.time_zone)
+
     if booking.status == 3
       templateUrl = 'edit_block_modal_form.html'
       title = 'Edit Block'
