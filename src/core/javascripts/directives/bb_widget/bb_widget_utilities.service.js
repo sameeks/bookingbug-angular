@@ -1,5 +1,7 @@
 'use strict';
 
+(function(){
+
 angular.module('BB.Services').service("bbWidgetUtilities", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep,AppService, $timeout) {
 
     var $scope = null;
@@ -138,3 +140,5 @@ angular.module('BB.Services').service("bbWidgetUtilities", function($q, $window,
 
   };
 });
+
+})();
