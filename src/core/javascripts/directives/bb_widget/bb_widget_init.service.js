@@ -1,11 +1,12 @@
 (function () {
-   'use strict';
 
     'use strict';
 
-    angular.module('BB.Services').service("widgetInit", function ($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate,
-                                                                  PurchaseService, $window, SSOService, widgetBasket, CompanyStoreService, $bbug, widgetPage,
-                                                                  LoadingService, BBWidget, AppConfig, $location) {
+    angular.module('BB.Services').service('bbWidgetInit', BBWidgetInit);
+
+    function BBWidgetInit($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate,
+                          PurchaseService, $window, SSOService, bbWidgetBasket, CompanyStoreService, $bbug, bbWidgetPage,
+                          LoadingService, BBWidget, AppConfig, $location) {
 
         var connectionStarted, isFirstCall, widgetStarted;
         var $scope = null;
@@ -387,7 +388,7 @@
                     def_clear = $q.defer();
                     clear_prom = def_clear.promise;
                     if (!$scope.bb.current_item) {
-                        clear_prom = widgetBasket.clearBasketItem();
+                        clear_prom = bbWidgetBasket.clearBasketItem();
                     } else {
                         def_clear.resolve();
                     }
@@ -411,7 +412,7 @@
                                     page = prms.first_page;
                                 }
                                 isFirstCall = false;
-                                return widgetPage.decideNextPage(page);
+                                return bbWidgetPage.decideNextPage(page);
                             }
                         }
                     });
@@ -579,7 +580,7 @@
                         $scope.bb.currency = $scope.bb.company_settings.currency;
                         $scope.bb.has_prices = $scope.bb.company_settings.has_prices;
                         if (!$scope.bb.basket || ($scope.bb.basket.company_id !== $scope.bb.company_id && !keep_basket)) {
-                            return widgetBasket.restoreBasket().then(function () {
+                            return bbWidgetBasket.restoreBasket().then(function () {
                                 defer.resolve();
                                 return $scope.$emit('company:setup');
                             });
@@ -591,7 +592,7 @@
                 );
             } else {
                 if (!$scope.bb.basket || ($scope.bb.basket.company_id !== $scope.bb.company_id && !keep_basket)) {
-                    widgetBasket.restoreBasket().then(function () {
+                    bbWidgetBasket.restoreBasket().then(function () {
                         defer.resolve();
                         return $scope.$emit('company:setup');
                     });
@@ -669,5 +670,5 @@
             initializeBBWidget: initializeBBWidget,
             determineBBApiUrl: determineBBApiUrl
         };
-    });
+    }
 })();

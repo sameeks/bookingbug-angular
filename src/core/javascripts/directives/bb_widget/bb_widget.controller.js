@@ -1,102 +1,101 @@
-'use strict';
-var BBCtrl;
+(function () {
 
-BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $window, $http, BasketService,
-                   LoginService, AlertService, BBWidget,
-                   SSOService, ErrorService, AppConfig, QueryStringService, $bbug, LoadingService,
-                   viewportSize, widgetBasket, widgetPage, widgetStep, widgetInit,bbWidgetUtilities) {
+    'use strict';
 
+    angular.module('BB.Controllers').controller('BBCtrl', BBCtrl);
 
-    widgetBasket.setScope($scope);
-    widgetPage.setScope($scope);
-    widgetStep.setScope($scope);
-    widgetInit.setScope($scope);
-    bbWidgetUtilities.setScope($scope);
+    function BBCtrl(routeStates, $scope, $rootScope, QueryStringService, LoadingService, viewportSize, bbWidgetBasket,
+                    bbWidgetPage, bbWidgetStep, bbWidgetInit, bbWidgetUtilities) {
 
-    this.$scope = $scope;
-    $scope.cid = "BBCtrl";
-    $scope.controller = "public.controllers.BBCtrl";
-    $scope.qs = QueryStringService;
-    $scope.company_api_path = '/api/v1/company/{company_id}{?embed,category_id}';
-    $scope.company_admin_api_path = '/api/v1/admin/{company_id}/company{?embed,category_id}';
-    $rootScope.Route = $scope.Route = routeStates;
+        bbWidgetBasket.setScope($scope);
+        bbWidgetPage.setScope($scope);
+        bbWidgetStep.setScope($scope);
+        bbWidgetInit.setScope($scope);
+        bbWidgetUtilities.setScope($scope);
 
-    this.$onInit = function () {
-        //Initialization
-        widgetInit.initializeBBWidget();
-        $scope.initWidget = widgetInit.initWidget;
-        //Steps
-        $scope.checkStepTitle = widgetStep.checkStepTitle;
-        $scope.getCurrentStepTitle = widgetStep.getCurrentStepTitle;
-        $scope.loadPreviousStep = widgetStep.loadPreviousStep;
-        $scope.loadStep = widgetStep.loadStep;
-        $scope.loadStepByPageName = widgetStep.loadStepByPageName;
-        $scope.reset = widgetStep.reset;
-        $scope.restart = widgetStep.restart;
-        $scope.setLastSelectedDate = widgetStep.setLastSelectedDate;
-        $scope.setStepTitle = widgetStep.setStepTitle;
-        $scope.skipThisStep = widgetStep.skipThisStep;
-        //Pages
-        $scope.clearPage = widgetPage.clearPage;
-        $scope.decideNextPage = widgetPage.decideNextPage;
-        $scope.hidePage = widgetPage.hidePage;
-        $scope.isLoadingPage = widgetPage.isLoadingPage;
-        $scope.jumpToPage = widgetPage.jumpToPage;
-        $scope.setLoadingPage = widgetPage.setLoadingPage;
-        $scope.setPageLoaded = widgetPage.setPageLoaded;
-        $scope.setPageRoute = widgetPage.setPageRoute;
-        $scope.showPage = widgetPage.showPage;
-        //Basket
-        $scope.addItemToBasket = widgetBasket.addItemToBasket;
-        $scope.clearBasketItem = widgetBasket.clearBasketItem;
-        $scope.deleteBasketItem = widgetBasket.deleteBasketItem;
-        $scope.deleteBasketItems = widgetBasket.deleteBasketItems;
-        $scope.emptyBasket = widgetBasket.emptyBasket;
-        $scope.moveToBasket = widgetBasket.moveToBasket;
-        $scope.quickEmptybasket = widgetBasket.quickEmptybasket;
-        $scope.setBasket = widgetBasket.setBasket;
-        $scope.setBasketItem = widgetBasket.setBasketItem;
-        $scope.updateBasket = widgetBasket.updateBasket;
-        $scope.setUsingBasket = widgetBasket.setUsingBasket;
+        this.$scope = $scope;
 
-        $scope.setClient = widgetInit.setClient;
-        $scope.clearClient = widgetInit.clearClient;
-        $scope.setCompany = widgetInit.setCompany;
-        $scope.setAffiliate = widgetInit.setAffiliate;
-        $scope.setBasicRoute = $scope.bb.setBasicRoute;
+        $scope.cid = "BBCtrl";
+        $scope.qs = QueryStringService;
+        $scope.company_api_path = '/api/v1/company/{company_id}{?embed,category_id}';
+        $scope.company_admin_api_path = '/api/v1/admin/{company_id}/company{?embed,category_id}';
+        $rootScope.Route = $scope.Route = routeStates;
 
-        $scope.isAdmin =  bbWidgetUtilities.isAdmin;
-        $scope.isAdminIFrame = bbWidgetUtilities.isAdminIFrame;
-        $scope.base64encode = bbWidgetUtilities.base64encode;
-        $scope.$debounce = bbWidgetUtilities.$debounce;
-        $scope.parseDate = moment;
-        $scope.supportsTouch = bbWidgetUtilities.supportsTouch;
-        $scope.scrollTo = bbWidgetUtilities.scrollTo;
-        $scope.redirectTo = bbWidgetUtilities.redirectTo;
-        $scope.areScopesLoaded = LoadingService.areScopesLoaded;
+        this.$onInit = function () {
+            //Initialization
+            bbWidgetInit.initializeBBWidget();
+            $scope.initWidget = bbWidgetInit.initWidget;
+            //Steps
+            $scope.checkStepTitle = bbWidgetStep.checkStepTitle;
+            $scope.getCurrentStepTitle = bbWidgetStep.getCurrentStepTitle;
+            $scope.loadPreviousStep = bbWidgetStep.loadPreviousStep;
+            $scope.loadStep = bbWidgetStep.loadStep;
+            $scope.loadStepByPageName = bbWidgetStep.loadStepByPageName;
+            $scope.reset = bbWidgetStep.reset;
+            $scope.restart = bbWidgetStep.restart;
+            $scope.setLastSelectedDate = bbWidgetStep.setLastSelectedDate;
+            $scope.setStepTitle = bbWidgetStep.setStepTitle;
+            $scope.skipThisStep = bbWidgetStep.skipThisStep;
+            //Pages
+            $scope.clearPage = bbWidgetPage.clearPage;
+            $scope.decideNextPage = bbWidgetPage.decideNextPage;
+            $scope.hidePage = bbWidgetPage.hidePage;
+            $scope.isLoadingPage = bbWidgetPage.isLoadingPage;
+            $scope.jumpToPage = bbWidgetPage.jumpToPage;
+            $scope.setLoadingPage = bbWidgetPage.setLoadingPage;
+            $scope.setPageLoaded = bbWidgetPage.setPageLoaded;
+            $scope.setPageRoute = bbWidgetPage.setPageRoute;
+            $scope.showPage = bbWidgetPage.showPage;
+            //Basket
+            $scope.addItemToBasket = bbWidgetBasket.addItemToBasket;
+            $scope.clearBasketItem = bbWidgetBasket.clearBasketItem;
+            $scope.deleteBasketItem = bbWidgetBasket.deleteBasketItem;
+            $scope.deleteBasketItems = bbWidgetBasket.deleteBasketItems;
+            $scope.emptyBasket = bbWidgetBasket.emptyBasket;
+            $scope.moveToBasket = bbWidgetBasket.moveToBasket;
+            $scope.quickEmptybasket = bbWidgetBasket.quickEmptybasket;
+            $scope.setBasket = bbWidgetBasket.setBasket;
+            $scope.setBasketItem = bbWidgetBasket.setBasketItem;
+            $scope.updateBasket = bbWidgetBasket.updateBasket;
+            $scope.setUsingBasket = bbWidgetBasket.setUsingBasket;
 
-        $scope.broadcastItemUpdate = bbWidgetUtilities.broadcastItemUpdate;
-        $scope.getPartial = bbWidgetUtilities.getPartial;
-        $scope.getUrlParam = bbWidgetUtilities.getUrlParam;
-        $scope.setLoaded = LoadingService.setLoaded;
-        $scope.setLoadedAndShowError = LoadingService.setLoadedAndShowError;
-        $scope.isMemberLoggedIn = bbWidgetUtilities.isMemberLoggedIn;
-        $scope.logout = bbWidgetUtilities.logout;
-        $scope.notLoaded = LoadingService.notLoaded;
-        $scope.reloadDashboard = bbWidgetUtilities.reloadDashboard;
-        $scope.setReadyToCheckout = widgetBasket.setReadyToCheckout;
-        $scope.setRoute = bbWidgetUtilities.setRoute;
+            $scope.setClient = bbWidgetInit.setClient;
+            $scope.clearClient = bbWidgetInit.clearClient;
+            $scope.setCompany = bbWidgetInit.setCompany;
+            $scope.setAffiliate = bbWidgetInit.setAffiliate;
+            $scope.setBasicRoute = $scope.bb.setBasicRoute;
 
-        $scope.showCheckout = widgetBasket.showCheckout;
-        $rootScope.$on('show:loader', bbWidgetUtilities.showLoaderHandler);
-        $rootScope.$on('hide:loader', bbWidgetUtilities.hideLoaderHandler);
-        $scope.$on('$locationChangeStart', bbWidgetUtilities.locationChangeStartHandler);
-    };
-    this.$postLink = function () {
-        viewportSize.init();
-    };
+            $scope.isAdmin = bbWidgetUtilities.isAdmin;
+            $scope.isAdminIFrame = bbWidgetUtilities.isAdminIFrame;
+            $scope.base64encode = bbWidgetUtilities.base64encode;
+            $scope.$debounce = bbWidgetUtilities.$debounce;
+            $scope.parseDate = moment;
+            $scope.supportsTouch = bbWidgetUtilities.supportsTouch;
+            $scope.scrollTo = bbWidgetUtilities.scrollTo;
+            $scope.redirectTo = bbWidgetUtilities.redirectTo;
+            $scope.areScopesLoaded = LoadingService.areScopesLoaded;
 
+            $scope.broadcastItemUpdate = bbWidgetUtilities.broadcastItemUpdate;
+            $scope.getPartial = bbWidgetUtilities.getPartial;
+            $scope.getUrlParam = bbWidgetUtilities.getUrlParam;
+            $scope.setLoaded = LoadingService.setLoaded;
+            $scope.setLoadedAndShowError = LoadingService.setLoadedAndShowError;
+            $scope.isMemberLoggedIn = bbWidgetUtilities.isMemberLoggedIn;
+            $scope.logout = bbWidgetUtilities.logout;
+            $scope.notLoaded = LoadingService.notLoaded;
+            $scope.reloadDashboard = bbWidgetUtilities.reloadDashboard;
+            $scope.setReadyToCheckout = bbWidgetBasket.setReadyToCheckout;
+            $scope.setRoute = bbWidgetUtilities.setRoute;
 
-};
+            $scope.showCheckout = bbWidgetBasket.showCheckout;
+            $rootScope.$on('show:loader', bbWidgetUtilities.showLoaderHandler);
+            $rootScope.$on('hide:loader', bbWidgetUtilities.hideLoaderHandler);
+            $scope.$on('$locationChangeStart', bbWidgetUtilities.locationChangeStartHandler);
+        };
 
-angular.module('BB.Controllers').controller('BBCtrl', BBCtrl);
+        this.$postLink = function () {
+            viewportSize.init();
+        };
+    }
+
+})();
