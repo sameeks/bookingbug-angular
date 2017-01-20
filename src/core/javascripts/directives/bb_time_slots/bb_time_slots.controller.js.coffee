@@ -4,8 +4,6 @@ angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
     $rootScope, $q, $attrs, FormDataStoreService, ValidatorService,
     PageControllerService, LoadingService, halClient, BBModel) ->
 
-  $scope.controller = "public.controllers.SlotList"
-
   loader = LoadingService.$loader($scope).notLoaded()
   $rootScope.connection_started.then ->
     if $scope.bb.company

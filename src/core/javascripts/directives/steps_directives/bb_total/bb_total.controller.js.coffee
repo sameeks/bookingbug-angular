@@ -3,7 +3,6 @@
 angular.module('BB.Controllers').controller 'Total', ($scope, $rootScope, $q,
     $location, $window, QueryStringService, LoadingService, PurchaseService) ->
 
-  $scope.controller = "public.controllers.Total"
   loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then =>

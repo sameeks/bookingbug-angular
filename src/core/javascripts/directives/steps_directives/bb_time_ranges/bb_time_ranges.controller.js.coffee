@@ -4,8 +4,6 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
   $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
   FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService) ->
 
-  $scope.controller = "public.controllers.TimeRangeList"
-
   # store the form data for the following scope properties
   currentPostcode = $scope.bb.postcode
 

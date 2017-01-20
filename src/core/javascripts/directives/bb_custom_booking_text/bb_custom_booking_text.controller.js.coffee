@@ -3,7 +3,6 @@
 angular.module('BB.Controllers').controller 'CustomBookingText', (
   $scope, $rootScope, $q, CustomTextService, LoadingService) ->
 
-  $scope.controller = "public.controllers.CustomBookingText"
   loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then =>

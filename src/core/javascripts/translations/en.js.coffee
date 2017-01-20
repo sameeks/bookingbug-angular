@@ -133,8 +133,6 @@ angular.module('BB.Services').config ($translateProvider) ->
         BOOKING           : "Booking"
         ADMITTANCE        : "Admittance"
         EDIT              : "Edit"
-        WHEN              : "When"
-        DATE_TIME         : "Date/Time"
         CONFIRMATION      : "Confirmation"
         NAME              : "Name"
         FIRST_NAME        : "First Name"

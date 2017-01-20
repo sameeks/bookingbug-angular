@@ -2,7 +2,6 @@
 
 angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $uibModal, $document, AlertService, FormDataStoreService, ValidatorService, LoadingService, BBModel, $translate) ->
 
-  $scope.controller = "public.controllers.DealList"
   FormDataStoreService.init 'DealList', $scope, [ 'deals' ]
   loader = LoadingService.$loader($scope).notLoaded()
 
@@ -56,7 +55,6 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $ui
         loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
 
   ModalInstanceCtrl = ($scope, $uibModalInstance, item, ValidatorService) ->
-    $scope.controller = 'ModalInstanceCtrl'
     $scope.item = item
     $scope.recipient = false
 

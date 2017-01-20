@@ -58,6 +58,20 @@ angular.module('BB.Models').factory "ClientModel", ($q, BBModel, BaseModel, Clie
       @client_details = details
       @questions = @client_details.questions
 
+
+    ###*
+    * @ngdoc method
+    * @name setTimeZone
+    * @methodOf BB.Models:Client
+    * @description
+    * Set client time zone in according to time_zone parameter
+    * @param {string} time_zone
+    ###
+    setTimeZone: (time_zone) ->
+      @time_zone = time_zone if time_zone?
+      return 
+
+
     ###**
     * @ngdoc method
     * @name setDefaults

@@ -2,9 +2,6 @@
 
 angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, LoadingService, BBModel, $q) ->
 
-  $scope.controller = "public.controllers.Summary"
-
-
   $rootScope.connection_started.then =>
     $scope.item  = $scope.bb.current_item
     $scope.items = $scope.bb.basket.timeItems()

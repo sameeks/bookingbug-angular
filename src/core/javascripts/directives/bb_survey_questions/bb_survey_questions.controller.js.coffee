@@ -3,8 +3,6 @@
 angular.module('BB.Controllers').controller 'SurveyQuestions', ($scope, $rootScope,
   $location, BBModel, ValidatorService, $sessionStorage) ->
 
-  $scope.controller = "SurveyQuestions"
-
   $scope.completed = false
   $scope.login = {email: "", password: ""}
   $scope.login_error = false
