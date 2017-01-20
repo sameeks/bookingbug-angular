@@ -59,6 +59,8 @@ angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
         $scope.date = assembledDate
 
     clearTimezone = (date)->
+      if GeneralOptions.custom_time_zone
+        date = moment.tz(date, GeneralOptions.display_time_zone)
       if date? and moment(date).isValid()
         date = moment(date)
         newDate = new Date();
