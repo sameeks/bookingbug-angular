@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('BB.Services').service("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep) {
+angular.module('BB.Services').service("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep, $uibModal) {
 
     var $scope = null;
     var setScope = function ($s) {

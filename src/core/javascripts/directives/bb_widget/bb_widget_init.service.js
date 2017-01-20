@@ -5,15 +5,22 @@
                                                                 LoadingService, BBWidget,AppConfig,$location)
   {
       var connectionStarted, isFirstCall, widgetStarted;
-      connectionStarted = $q.defer();
-      $rootScope.connection_started = connectionStarted.promise;
-      isFirstCall = true;
-      widgetStarted = $q.defer();
-      $rootScope.widget_started = widgetStarted.promise;
+
       var $scope = null;
+
       var setScope = function ($s) {
           $scope = $s;
+          reinitialise()
       };
+
+      var reinitialise = function () {
+          connectionStarted = $q.defer();
+          $rootScope.connection_started = connectionStarted.promise;
+          isFirstCall = true;
+          widgetStarted = $q.defer();
+          $rootScope.widget_started = widgetStarted.promise;
+      };
+
       var guardScope = function () {
           if ($scope === null) {
               throw new Error('please provide scope');
