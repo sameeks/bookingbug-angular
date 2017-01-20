@@ -1,41 +1,42 @@
-'use strict';
-var WidgetPage;
+(function(){
 
-WidgetPage = function(AlertService, BBModel, LoadingService, LoginService, $rootScope, $sce) {
-  'ngInject';
-  var $scope, clearPage, decideNextPage, guardScope, hidePage, isLoadingPage, jumpToPage, setLoadingPage, setPageLoaded, setPageRoute, setScope, showPage;
+'use strict';
+
+angular.module('BB').service('widgetPage', function(AlertService, BBModel, LoadingService, LoginService, $rootScope, $sce) {
+
+  var $scope;
   $scope = null;
-  setScope = function($s) {
+  var setScope = function($s) {
     $scope = $s;
   };
-  guardScope = function() {
+  var guardScope = function() {
     if ($scope === null) {
       throw new Error('please set scope');
     }
   };
-  clearPage = function() {
+  var clearPage = function() {
     guardScope();
     return $scope.bb_main = "";
   };
-  hidePage = function() {
+  var hidePage = function() {
     guardScope();
     return $scope.hide_page = true;
   };
-  jumpToPage = function(route) {
+  var jumpToPage = function(route) {
       guardScope();
       $scope.current_page = route;
       $scope.jumped = true;
       return $scope.bb_main = $sce.trustAsResourceUrl($scope.partial_url + route + $scope.page_suffix);
   }
-  setLoadingPage =  function(val) {
+  var setLoadingPage =  function(val) {
       guardScope();
       return $scope.loading_page = val;
   }
-  isLoadingPage = function() {
+  var isLoadingPage = function() {
       guardScope();
       return $scope.loading_page;
   }
-  setPageRoute = function(route) {
+  var setPageRoute = function(route) {
       guardScope();
       $scope.bb.current_page_route = route;
       if ($scope.bb.routeSteps && $scope.bb.routeSteps[route]) {
@@ -44,7 +45,7 @@ WidgetPage = function(AlertService, BBModel, LoadingService, LoginService, $root
       }
       return false;
   }
-  showPage =  function(route, dont_record_page) {
+  var showPage =  function(route, dont_record_page) {
       guardScope();
       $scope.bb.updateRoute(route);
       $scope.jumped = false;
@@ -69,10 +70,10 @@ WidgetPage = function(AlertService, BBModel, LoadingService, LoginService, $root
       }
       return $rootScope.$broadcast("page:loaded");
   }
-  setPageLoaded = function() {
+  var setPageLoaded = function() {
     return LoadingService.setLoaded($scope);
   };
-  decideNextPage = function(route) {
+  var decideNextPage = function(route) {
     guardScope();
     if (route) {
       if (route === 'none') {
@@ -198,6 +199,6 @@ WidgetPage = function(AlertService, BBModel, LoadingService, LoginService, $root
     setScope: setScope,
     showPage: showPage
   };
-};
+});
 
-angular.module('BB').service('widgetPage', WidgetPage);
+})();

@@ -1,20 +1,16 @@
-'use strict';
-
 (function () {
+   'use strict';
 
     angular.module('BB.Services').service("widgetInit", function ($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate,
                                                                   PurchaseService, $window, SSOService, widgetBasket, CompanyStoreService, $bbug, widgetPage,
                                                                   LoadingService, BBWidget, AppConfig, $location) {
 
         var connectionStarted, isFirstCall, widgetStarted;
-
         var $scope = null;
-
         var setScope = function ($s) {
             $scope = $s;
             reinitialise()
         };
-
         var reinitialise = function () {
             connectionStarted = $q.defer();
             $rootScope.connection_started = connectionStarted.promise;
@@ -22,7 +18,6 @@
             widgetStarted = $q.defer();
             $rootScope.widget_started = widgetStarted.promise;
         };
-
         var guardScope = function () {
             if ($scope === null) {
                 throw new Error('please provide scope');
@@ -664,7 +659,6 @@
         };
 
         return {
-
             clearClient: clearClient,
             initWidget: initWidget,
             setAffiliate: setAffiliate,

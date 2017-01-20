@@ -1,6 +1,6 @@
-'use strict';
-
 (function(){
+
+'use strict';
 
 angular.module('BB.Services').service("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep,  $uibModal) {
 
