@@ -1,5 +1,7 @@
 'use strict';
 
+(function(){
+
 angular.module('BB.Services').service("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep) {
 
     var $scope = null;
@@ -314,7 +316,6 @@ angular.module('BB.Services').service("widgetBasket", function($q, $window, halC
         return $scope.bb.confirmCheckout = ready;
     };
 
-
   return {
 
     getScope: getScope,
@@ -336,3 +337,4 @@ angular.module('BB.Services').service("widgetBasket", function($q, $window, halC
 
   };
 });
+})();

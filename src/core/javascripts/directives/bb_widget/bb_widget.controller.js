@@ -17,7 +17,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
     $scope.cid = "BBCtrl";
     $scope.controller = "public.controllers.BBCtrl";
     $scope.qs = QueryStringService;
-
     $scope.company_api_path = '/api/v1/company/{company_id}{?embed,category_id}';
     $scope.company_admin_api_path = '/api/v1/admin/{company_id}/company{?embed,category_id}';
     $rootScope.Route = $scope.Route = routeStates;
@@ -26,7 +25,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         //Initialization
         widgetInit.initializeBBWidget();
         $scope.initWidget = widgetInit.initWidget;
-
         //Steps
         $scope.checkStepTitle = widgetStep.checkStepTitle;
         $scope.getCurrentStepTitle = widgetStep.getCurrentStepTitle;
@@ -38,7 +36,16 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.setLastSelectedDate = widgetStep.setLastSelectedDate;
         $scope.setStepTitle = widgetStep.setStepTitle;
         $scope.skipThisStep = widgetStep.skipThisStep;
-
+        //Pages
+        $scope.clearPage = widgetPage.clearPage;
+        $scope.decideNextPage = widgetPage.decideNextPage;
+        $scope.hidePage = widgetPage.hidePage;
+        $scope.isLoadingPage = widgetPage.isLoadingPage;
+        $scope.jumpToPage = widgetPage.jumpToPage;
+        $scope.setLoadingPage = widgetPage.setLoadingPage;
+        $scope.setPageLoaded = widgetPage.setPageLoaded;
+        $scope.setPageRoute = widgetPage.setPageRoute;
+        $scope.showPage = widgetPage.showPage;
         //Basket
         $scope.addItemToBasket = widgetBasket.addItemToBasket;
         $scope.clearBasketItem = widgetBasket.clearBasketItem;
@@ -51,16 +58,6 @@ BBCtrl = function (routeStates, $scope, $location, $rootScope, halClient, $windo
         $scope.setBasketItem = widgetBasket.setBasketItem;
         $scope.updateBasket = widgetBasket.updateBasket;
         $scope.setUsingBasket = widgetBasket.setUsingBasket;
-        //Pages
-        $scope.clearPage = widgetPage.clearPage;
-        $scope.decideNextPage = widgetPage.decideNextPage;
-        $scope.hidePage = widgetPage.hidePage;
-        $scope.isLoadingPage = widgetPage.isLoadingPage;
-        $scope.jumpToPage = widgetPage.jumpToPage;
-        $scope.setLoadingPage = widgetPage.setLoadingPage;
-        $scope.setPageLoaded = widgetPage.setPageLoaded;
-        $scope.setPageRoute = widgetPage.setPageRoute;
-        $scope.showPage = widgetPage.showPage;
 
         $scope.setClient = widgetInit.setClient;
         $scope.clearClient = widgetInit.clearClient;
