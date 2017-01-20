@@ -2,7 +2,7 @@
 
 (function(){
 
-angular.module('BB.Services').service("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep,  $uibModal) {
+angular.module('BB.Services').service("widgetBasket", function($q, $window, halClient, BBModel, $localStorage, $sessionStorage, widgetPage, widgetStep,  $uibModal, bbWidgetUtilities, ErrorService) {
 
     var $scope = null;
     var setScope = function ($s) {
@@ -105,7 +105,7 @@ angular.module('BB.Services').service("widgetBasket", function($q, $window, halC
           halClient.clearCache("events");
           $scope.bb.current_item.person = null;
           error_modal = $uibModal.open({
-            templateUrl: getPartial('_error_modal'),
+            templateUrl: bbWidgetUtilities.getPartial('_error_modal'),
             controller: function($scope, $uibModalInstance) {
               $scope.message = ErrorService.getError('ITEM_NO_LONGER_AVAILABLE').msg;
               return $scope.ok = function() {

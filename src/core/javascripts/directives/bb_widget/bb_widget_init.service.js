@@ -1,6 +1,6 @@
-'use strict';
-
 (function () {
+
+    'use strict';
 
     angular.module('BB.Services').service("widgetInit", function ($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate,
                                                                   PurchaseService, $window, SSOService, widgetBasket, CompanyStoreService, $bbug, widgetPage,
@@ -16,8 +16,6 @@
         };
 
         var reinitialise = function () {
-            connectionStarted = $q.defer();
-            $rootScope.connection_started = connectionStarted.promise;
             isFirstCall = true;
             widgetStarted = $q.defer();
             $rootScope.widget_started = widgetStarted.promise;
