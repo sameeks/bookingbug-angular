@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
-  BBModel, ScheduleRules, BBAssets, GeneralOptions) ->
+  BBModel, ScheduleRules, BBAssets, GeneralOptions, CompanyStoreService) ->
 
   schedule_cache = {}
 
@@ -91,13 +91,17 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
         rules = new ScheduleRules(found)
         events = rules.toEvents()
         _.each events, (e) ->
+          # Set company timezone to start, end dates.
+          e.start = moment.tz(e.start, CompanyStoreService.time_zone)
+          e.end = moment.tz(e.end, CompanyStoreService.time_zone)
+
+          # Convert start, end to custom timezone
           if GeneralOptions.custom_time_zone
-            e.start = moment(new Date(e.start))
-            e.end = moment(new Date(e.end))
+            e.start = moment.tz(e.start, GeneralOptions.display_time_zone)
+            e.end = moment.tz(e.end, GeneralOptions.display_time_zone)
+
           e.resourceId = parseInt(asset.id) + "_" + asset.type[0]
           e.title = asset.name
-          e.start = moment(e.start)
-          e.end = moment(e.end)
           e.rendering = "background"
         prom = $q.defer()
         prom.resolve(events)
