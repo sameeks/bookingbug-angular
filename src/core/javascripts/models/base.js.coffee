@@ -9,7 +9,7 @@ angular.module('BB.Models').service "BBModel", ($q, $injector) ->
 
   # the top level models
   models = ['Address', 'Answer', 'Affiliate', 'Basket', 'BasketItem',
-    'BookableItem', 'Category', 'Client', 'ClientDetails', 'Company',
+    'BookingText', 'BookableItem', 'Category', 'Client', 'ClientDetails', 'Company',
     'CompanySettings', 'Day', 'Event', 'EventChain', 'EventGroup',
     'EventTicket', 'EventSequence', 'ItemDetails', 'Person', 'PurchaseItem',
     'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space', 'Clinic',
@@ -115,8 +115,8 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
       @__linkedPromises[link] = prom.promise
 
       @$get(link).then (res) =>
-        inj = $injector.get('BB.Service.' + link)
-        if inj
+        try
+          inj = $injector.get('BB.Service.' + link)
           if inj.promise
             # unwrap involving another promise
             inj.unwrap(res).then (ans) ->
@@ -125,7 +125,7 @@ angular.module('BB.Models').service "BaseModel", ($q, $injector, $rootScope, $ti
           else
             # unwrap without a promise
             prom.resolve(inj.unwrap(res))
-        else
+        catch
           # no service found - just return the resources as I found it
           prom.resolve(res)
       , (err) -> prom.reject(err)
