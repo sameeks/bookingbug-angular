@@ -86,23 +86,25 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
 
     _.map assets_with_schedule, (asset) ->
 
+      mapEvents = (e) ->
+        e.resourceId = parseInt(asset.id) + "_" + asset.type[0]
+        e.title = asset.name
+        e.rendering = "background"
+        # Set company timezone to start, end dates.
+        e.start = moment.tz(e.start, CompanyStoreService.time_zone)
+        e.end = moment.tz(e.end, CompanyStoreService.time_zone)
+
+        if GeneralOptions.custom_time_zone
+          # Convert start, end to custom timezone
+          e.start = moment.tz(e.start, GeneralOptions.display_time_zone)
+          e.end = moment.tz(e.end, GeneralOptions.display_time_zone)
+        return e
+
       found = getCacheDates(asset, start, end)
       if found
         rules = new ScheduleRules(found)
         events = rules.toEvents()
-        _.each events, (e) ->
-          # Set company timezone to start, end dates.
-          e.start = moment.tz(e.start, CompanyStoreService.time_zone)
-          e.end = moment.tz(e.end, CompanyStoreService.time_zone)
-
-          # Convert start, end to custom timezone
-          if GeneralOptions.custom_time_zone
-            e.start = moment.tz(e.start, GeneralOptions.display_time_zone)
-            e.end = moment.tz(e.end, GeneralOptions.display_time_zone)
-
-          e.resourceId = parseInt(asset.id) + "_" + asset.type[0]
-          e.title = asset.name
-          e.rendering = "background"
+        _.each events, mapEvents
         prom = $q.defer()
         prom.resolve(events)
         prom.promise
@@ -115,12 +117,7 @@ angular.module('BBAdmin.Services').factory 'AdminScheduleService',  ($q,
          # cacheDates(asset, schedules.dates)
           rules = new ScheduleRules(schedules.dates)
           events = rules.toEvents()
-          _.each events, (e) ->
-            e.resourceId = parseInt(asset.id) + "_" + asset.type[0]
-            e.title = asset.name
-            e.start = moment(e.start)
-            e.end = moment(e.end)
-            e.rendering = "background"
+          _.each events, mapEvents
           events
 
   getAssetsScheduleEvents: (company, start, end, filtered = false, requested = []) ->
