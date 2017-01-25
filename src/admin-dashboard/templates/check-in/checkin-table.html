@@ -27,7 +27,7 @@
             <span>{{bmap[gridItem].person_name}}</span>
           </td>
           <td field-name="datetime">
-            <span>{{bmap[gridItem].datetime.format("LT")}}</span>
+            <span>{{bmap[gridItem].datetime | datetime:'LT':true}}</span>
           </td>
           <td>
             <span ng-if="bmap[gridItem].hasStatus('no_show')">
