@@ -60,15 +60,6 @@ angular.module('BB.Directives').directive 'bbPaymentButton', ($compile, $sce, $h
         console.warn("new_payment link missing: payment configuration maybe incorrect")
 
 
-    init = () ->
-      loadTotal(scope.total) if scope.total
-
-
-    killWatch = scope.$watch 'total', (total) ->
-      loadTotal(total)
-
-    init()
-
     return
 
 
