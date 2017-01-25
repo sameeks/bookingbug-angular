@@ -256,3 +256,8 @@ angular.module('BB.Services').factory "BB.Service.child_services", ($q, BBModel,
   promise: true
   unwrap: (resource) ->
     UnwrapService.unwrapCollection(BBModel.Service, 'child_services', resource)
+
+angular.module('BB.Services').factory "BB.Service.booking_text", ($q, BBModel, UnwrapService) ->
+  promise: true
+  unwrap: (resource) ->
+    UnwrapService.unwrapCollection(BBModel.BookingText, 'booking_text', resource)
