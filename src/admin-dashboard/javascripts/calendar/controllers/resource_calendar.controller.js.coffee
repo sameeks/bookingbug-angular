@@ -198,8 +198,14 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
     # not blocked and is a change in person/resource, or over multiple days
     if event.status !=3 && (event.person_id && event.resource_id || delta.days() > 0)
+      
       start = event.start
       end = event.end
+      
+      if GeneralOptions.custom_time_zone
+        start = moment.tz(start, CompanyStoreService.time_zone)
+        end = moment.tz(end, CompanyStoreService.time_zone)
+           
       item_defaults =
         date: start.format('YYYY-MM-DD')
         time: (start.hour() * 60 + start.minute())
@@ -222,11 +228,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
           item_defaults: item_defaults
           company_id: company.id
           booking_id: event.id
-          success: (model) =>
+          success: (model) =>         
             refreshBooking(event)
           fail: () ->
             refreshBooking(event)
-            revertFunc()
       return
 
     # if it's got a person and resource - then it
@@ -236,8 +241,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY')
       success: (model) =>
         if GeneralOptions.custom_time_zone
-          model.start = moment.tz(model.start, CompanyStoreService.time_zone)
-          model.end = moment.tz(event.end, CompanyStoreService.time_zone)
+          event.start = moment.tz(event.start, CompanyStoreService.time_zone)
+          event.end = moment.tz(event.end, CompanyStoreService.time_zone)
         updateBooking(event)
       fail: () ->
         revertFunc()
