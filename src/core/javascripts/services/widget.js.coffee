@@ -296,23 +296,6 @@ angular.module('BB.Models').factory "BBWidget", ($q, BBModel, BasketService, $ur
 
     ###**
     * @ngdoc method
-    * @name setBasicRoute
-    * @methodOf BB.Models:BBWidget
-    * @description
-    * Set basic route in according of routes parameter
-    *
-    * @returns {object} The returned route set
-    ###
-    setBasicRoute: (routes) =>
-      @nextSteps = {}
-      @firstStep = routes[0]
-      for step, i in routes
-        @nextSteps[step] = routes[i+1]
-      if @$wait_for_routing
-        @$wait_for_routing.resolve()
-
-    ###**
-    * @ngdoc method
     * @name waitForRoutes
     * @methodOf BB.Models:BBWidget
     * @description

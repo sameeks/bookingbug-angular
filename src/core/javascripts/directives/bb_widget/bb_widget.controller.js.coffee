@@ -59,7 +59,6 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
     $scope.restart = restart
     $scope.scrollTo = scrollTo
     $scope.setAffiliate = setAffiliate
-    $scope.setBasicRoute = setBasicRoute
     $scope.setBasket = setBasket
     $scope.setBasketItem = setBasketItem
     $scope.setClient = setClient
@@ -1115,9 +1114,6 @@ BBCtrl = ( routeStates, $scope, $location, $rootScope, halClient, $window, $http
 
   setRoute = (rdata) ->
     $scope.bb.setRoute(rdata)
-
-  setBasicRoute = (routes) ->
-    $scope.bb.setBasicRoute(routes)
 
   ###**
   * @ngdoc method
