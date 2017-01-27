@@ -1,10 +1,17 @@
 
 <section class="content-header">
-  <h1 translate="ADMIN_DASHBOARD.CLIENTS_PAGE.CLIENTS"></h1>
+  <div class="row">
+    <div class="col-xs-12 panel-heading">
+      <div class="col-sm-6">
+        <h2 translate="ADMIN_DASHBOARD.CLIENTS_PAGE.CLIENTS"></h2>
+      </div>
+      <div class="col-lg-2 col-lg-push-4 col-md-3 col-md-push-3 col-sm-4 col-sm-push-2">
+        <button class="btn btn-primary btn-block" ui-sref="clients.new"><span class="fa fa-plus"></span> New Customer</button>
+      </div>
+    </div>
+  </div>
 </section>
-
-<button ui-sref="clients.new">New Customer</button>
-
+  
 <section class="content">
   <div class="box">
     <div bb-clients-table class="tablet-search">

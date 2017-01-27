@@ -6,6 +6,22 @@ angular.module('BB.Models').factory "AdminClientModel", (ClientModel, $q, BBMode
 
     constructor: (data) ->
       super(data)
+      
+    @$post: (client, companyId) ->      
+      deferred = $q.defer()
+      
+      url = $rootScope.bb.api_url + '/api/v1/admin/' + companyId + '/client'
+      
+      if client? 
+        new Error 'missing client data'
+      if companyId?
+        new Error 'missing companyId'  
+        
+      halClient.$post(url, {}, client).then (client) ->
+        deferred.resolve(client)
+      , (err) =>
+        deferred.reject(err)
+      return deferred.promise
 
     @$query: (params) ->
       company = params.company
