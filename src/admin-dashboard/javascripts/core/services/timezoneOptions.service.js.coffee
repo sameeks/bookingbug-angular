@@ -8,6 +8,20 @@
 ###
 timezoneOptionsFactory = ($translate, orderByFilter) ->
 
+  cleanUpLocations = () ->
+    locationNames = moment.tz.names().filter (tz) -> 
+      tz.indexOf('GMT') is -1 && tz.indexOf('Etc') is -1 && tz.match(/[^/]*$/)[0] isnt tz.toUpperCase()
+    return locationNames
+
+  mapTimezones = (locationNames) ->
+    timezones = []
+    for location, index in locationNames
+      timezones.push mapTimezoneForDisplay(location, index)
+    timezones = _.uniq(timezones, (timezone) -> timezone.display)
+    # Order here whilst using [ui-select-choices-lazyload] within ui-select
+    timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false)    
+    return timezones
+    
   restrictToRegion = (locationNames, restrictRegion) ->
 
     filterLocations = (filterBy) ->
@@ -22,35 +36,29 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
       _.each restrictRegion, (region) ->
         locations.push(filterLocations(region))
       locationNames = _.flatten(locations)
-      return locationNames
-
-  mapTimezones = (locationNames) ->
-    timezones = []
-    for location, index in locationNames
-      city = location.match(/[^/]*$/)[0].replace(/_/g, ' ')
-      tz = moment.tz(location)
-      timezones.push
-        id: index
-        order: [parseInt(tz.format('Z')), tz.format('zz'), city]
-        display: "(UTC #{tz.format('Z')}) #{$translate.instant(city)} (#{tz.format('zz')})"
-        value: location
-    return timezones
+      return locationNames        
 
   ###*
   * @ngdoc function
   * @name mapTzForDisplay
   * @methodOf BBAdminDashboard.Services:TimezoneOptions
   * @description Prepares a timezone string for display on FE
-  * @param {String} Timezone
+  * @param {String} Location
+  * @param {Integer} Index
   * @returns {Object}
   ###
-  mapTimezoneForDisplay = (location) ->
+  mapTimezoneForDisplay = (location, index) ->
+    timezone = {}
     city = location.match(/[^/]*$/)[0].replace(/_/g, ' ')
     tz = moment.tz(location)
-    localTimezone =
-      display: "(UTC #{tz.format('Z')}) #{$translate.instant(city)} (#{tz.format('zz')})"
-      value: location
-
+    # timezone.display = "(UTC #{tz.format('Z')}) #{$translate.instant("LOCATIONS.#{city}")} (#{tz.format('zz')})"
+    timezone.display = "(UTC #{tz.format('Z')}) #{$translate.instant(city)} (#{tz.format('zz')})"
+    timezone.value = location
+    if index?
+      timezone.id = index
+      timezone.order = [parseInt(tz.format('Z')), tz.format('zz'), city]
+    return timezone     
+      
   ###*
   * @ngdoc function
   * @name generateTzList
@@ -60,13 +68,10 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
   * @returns {Array} A list of timezones
   ###
   generateTimezoneList = (restrictRegion) ->
-    locationNames = moment.tz.names().filter (tz) -> tz.indexOf('GMT') is -1
+    locationNames = cleanUpLocations()
     if restrictRegion
       locationNames = restrictToRegion(locationNames, restrictRegion)
     timezones = mapTimezones(locationNames)
-    timezones = _.uniq(timezones, (timezone) -> timezone.display)
-    # Order here whilst using ui-select-choices-lazyload in ui-select
-    timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false)
     return timezones
 
   return {
