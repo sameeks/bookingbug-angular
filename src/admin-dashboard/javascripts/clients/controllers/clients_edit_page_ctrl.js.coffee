@@ -16,10 +16,10 @@ angular.module('BBAdminDashboard.clients.controllers')
   # Refresh Client Resource after save
   $scope.memberSaveCallback = ()->
     params =
-      company_id: company.id
+      company: company
       id: $state.params.id
-      flush: true
+      flush: true    
 
-    BBModelAdmin.Client.$query(params).then (client)->
+    BBModel.Admin.Client.$query(params).then (client)->
       $scope.client = client
 

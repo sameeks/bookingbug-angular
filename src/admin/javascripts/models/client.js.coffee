@@ -10,7 +10,6 @@ angular.module('BB.Models').factory "AdminClientModel", (ClientModel, $q, BBMode
     @$query: (params) ->
       company = params.company
       defer = $q.defer()
-
       if company.$has('client')
 
         #if params.flush
