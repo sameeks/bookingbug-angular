@@ -1,0 +1,36 @@
+<div class="content">
+  <div class="box">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel-heading">
+          <h3>New Customer</h3>
+        </div>
+        <form name="create_form" role="form">
+          <div class="col-xs-4">
+            <div class="text-center">
+              <strong>Name</strong>
+            </div>
+            <input class="form-control" ng-model="new_client.first_name" type="text" />
+          </div>
+          <div class="col-xs-4">
+            <div class="text-center">
+              <strong>Email</strong>
+            </div>
+            <input class="form-control" ng-model="new_client.email" type="text" />
+          </div>
+          <div class="col-xs-4">
+            <div class="text-center">
+              <strong>Mobile</strong>
+            </div>
+            <input class="form-control" ng-model="new_client.mobile" type="text" />
+          </div>
+        </form>  
+      </div>
+      <div class="col-xs-12 panel-heading">
+        <div class="col-md-2 col-md-push-10">
+          <button class="btn btn-primary btn-block" ng-click="create()"><span class="fa fa-check"></span> Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

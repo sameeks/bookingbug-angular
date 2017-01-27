@@ -15,7 +15,7 @@ angular.module('BBAdminDashboard.clients').run (RuntimeStates, AdminClientsOptio
 
     .state 'clients.new',
       url: "/new"
-      templateUrl: "client_new.html"
+      templateUrl: "clients/new.html"
       controller: 'ClientsNewPageCtrl'
 
     .state 'clients.all',
