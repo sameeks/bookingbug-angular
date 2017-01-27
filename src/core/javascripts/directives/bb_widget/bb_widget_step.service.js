@@ -37,39 +37,40 @@
                 return steps[$scope.bb.current_step - 1].title;
             }
         };
-        var loadStep = function (step) {
-            var i, len, prev_step, ref, st;
+        var loadStep = function (stepClickedNumber) {
             guardScope();
-            if (step === $scope.bb.current_step) {
+            if (stepClickedNumber === $scope.bb.current_step) {
                 return;
             }
-            $scope.bb.calculatePercentageComplete(step);
-            st = $scope.bb.steps[step];
-            prev_step = $scope.bb.steps[step - 1];
-            if (st && !prev_step) {
-                prev_step = st;
+            $scope.bb.calculatePercentageComplete(stepClickedNumber);
+            var stepClickedPlusOne = $scope.bb.steps[stepClickedNumber];
+            var stepClicked = $scope.bb.steps[stepClickedNumber - 1];
+
+            if (stepClickedPlusOne && !stepClicked) {
+                stepClicked = stepClickedPlusOne;
             }
-            if (!st) {
-                st = prev_step;
+
+            if (!stepClickedPlusOne) {
+                stepClickedPlusOne = stepClicked;
             }
-            if (st && !$scope.bb.last_step_reached) {
-                if (!st.stacked_length || st.stacked_length === 0) {
+            if (stepClickedPlusOne && !$scope.bb.last_step_reached) {
+                if (!stepClickedPlusOne.stacked_length || stepClickedPlusOne.stacked_length === 0) {
                     $scope.bb.stacked_items = [];
                 }
-                $scope.bb.current_item.loadStep(st.current_item);
+                $scope.bb.current_item.loadStep(stepClickedPlusOne.current_item);
                 if ($scope.bb.steps.length > 1) {
-                    $scope.bb.steps.splice(step, $scope.bb.steps.length - step);
+                    $scope.bb.steps.splice(stepClickedNumber, $scope.bb.steps.length - stepClickedNumber);
                 }
-                $scope.bb.current_step = step;
-                bbWidgetPage.showPage(prev_step.page, true);
+                $scope.bb.current_step = stepClickedNumber;
+                bbWidgetPage.showPage(stepClicked.page, true);
             }
             if ($scope.bb.allSteps) {
-                ref = $scope.bb.allSteps;
-                for (i = 0, len = ref.length; i < len; i++) {
-                    step = ref[i];
+
+                $scope.bb.allSteps.map(function(step){
                     step.active = false;
                     step.passed = step.number < $scope.bb.current_step;
-                }
+                });
+
                 if ($scope.bb.allSteps[$scope.bb.current_step - 1]) {
                     return $scope.bb.allSteps[$scope.bb.current_step - 1].active = true;
                 }
