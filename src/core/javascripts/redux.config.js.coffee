@@ -72,7 +72,7 @@ angular.module('BB').provider 'bbBasketReducer', () ->
     $get: $get
   }
 
-angular.module('BB').provider 'historyReducer', (immutableProvider) ->
+angular.module('BB').provider 'bbHistoryReducer', (immutableProvider) ->
   'ngInject'
 
   immutable = immutableProvider.$get()
@@ -137,13 +137,17 @@ angular.module('BB').provider 'historyReducer', (immutableProvider) ->
   }
 
 
-angular.module('BB').config (reduxProvider, $ngReduxProvider, $localStorageProvider, bbBasketReducerProvider, bbLoggerMiddlewareProvider, bbPersistenceMiddlewareProvider) ->
+angular.module('BB').config (reduxProvider, $ngReduxProvider, $localStorageProvider, bbBasketReducerProvider, bbLoggerMiddlewareProvider, bbPersistenceMiddlewareProvider, bbHistoryReducerProvider) ->
   'ngInject'
 
   window.$ngReduxProvider = $ngReduxProvider # exposed just for testing
 
+  ###reducers =
+    basket: bbHistoryReducerProvider.$get()(bbBasketReducerProvider.$get())
+    basket2: bbBasketReducerProvider.$get()###
+
   reducers =
-    basket: bbBasketReducerProvider.$get(),
+    basket: bbBasketReducerProvider.$get()
     basket2: bbBasketReducerProvider.$get()
 
   middleware = [
