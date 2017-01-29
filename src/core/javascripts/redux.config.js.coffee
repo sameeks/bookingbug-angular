@@ -49,7 +49,6 @@ angular.module('BB').provider 'bbPersistenceMiddleware', ($localStorageProvider)
 angular.module('BB').provider 'bbBasketReducer', () ->
   $get = () ->
     reducer = (state, action) ->
-      debugger # test
 
       if (angular.equals state, {}) or (!state?)
         state =
