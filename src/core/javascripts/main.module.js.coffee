@@ -7,6 +7,7 @@ angular.module('BB', [
   'ngFileUpload'
   'ngCookies'
   'ngAnimate'
+  'ngRedux'
 
   'angular-carousel'
   'angular-hal'

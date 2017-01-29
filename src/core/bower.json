@@ -74,7 +74,10 @@
     "pusher-angular": "~0.1.4",
     "pusher": "~2.2.4",
     "ng-file-upload": "^12.0.4",
-    "ui-select": "angular-ui-select#^0.16.1"
+    "ui-select": "angular-ui-select#^0.16.1",
+    "immutable": "^3.8.1",
+    "ng-redux": "^3.3.0",
+    "redux": "https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js"
   },
   "resolutions": {
     "jquery": "~1.11.3",
