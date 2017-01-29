@@ -49,19 +49,22 @@ angular.module('BB').provider 'bbPersistenceMiddleware', ($localStorageProvider)
 angular.module('BB').provider 'bbBasketReducer', () ->
   $get = () ->
     reducer = (state, action) ->
-      if !state?
+      debugger # test
+
+      if (angular.equals state, {}) or (!state?)
         state =
           dateTime: new Date()
           number: 0
 
       switch action.type
-
         when "datetime/update"
+          state = angular.copy(state)
           state.dateTime = new Date()
         when "number/increase"
+          state = angular.copy(state)
           state.number++
-
         when "number/decrease"
+          state = angular.copy(state)
           state.number--
 
       return state
@@ -72,33 +75,27 @@ angular.module('BB').provider 'bbBasketReducer', () ->
     $get: $get
   }
 
-angular.module('BB').provider 'bbHistoryReducer', (immutableProvider) ->
+angular.module('BB').provider 'bbHistoryHigherOrderReducer', ($localStorageProvider) ->
   'ngInject'
 
-  immutable = immutableProvider.$get()
-
   $get = () ->
-    ###*
-    # {Function} reducer - higher order reducer
-    ###
+
     historyReducer = (reducer) ->
       initialState = {
-        past: immutable.List([]),
-        present: undefined,
-        future: immutable.List([])
+        past: [],
+        present: $localStorageProvider.$get().getObject("bbState"),
+        future: []
       }
-
-      initialState.present = reducer(initialState.present, {type: 'bb/init'}) # by that time state should be already initialised - @@redux/INIT, should $localStorage restoring happen here ?
 
       return (state = initialState, action) ->
         switch action.type
           when 'UNDO'
-            previous = state.past.last()
+            previous = state.past[state.past.length - 1]
             if angular.isUndefined previous
               return state
 
-            newPast = state.past.slice(0, state.past.count() - 1)
-            newFuture = immutable.List([state.present]).concat(state.future)
+            newPast = state.past.slice(0, state.past.length - 1)
+            newFuture = [angular.copy(state.present)].concat(state.future)
 
             return {
               past: newPast,
@@ -106,7 +103,7 @@ angular.module('BB').provider 'bbHistoryReducer', (immutableProvider) ->
               future: newFuture
             }
           when 'REDO'
-            next = state.future.first()
+            next = state.future[0]
             if angular.isUndefined next
               return state
 
@@ -128,7 +125,7 @@ angular.module('BB').provider 'bbHistoryReducer', (immutableProvider) ->
             return {
               past: state.past.concat([previousStatePresent])
               present: state.present
-              future: immutable.List([])
+              future: []
             }
 
     return historyReducer
@@ -137,17 +134,11 @@ angular.module('BB').provider 'bbHistoryReducer', (immutableProvider) ->
   }
 
 
-angular.module('BB').config (reduxProvider, $ngReduxProvider, $localStorageProvider, bbBasketReducerProvider, bbLoggerMiddlewareProvider, bbPersistenceMiddlewareProvider, bbHistoryReducerProvider) ->
+angular.module('BB').config (reduxProvider, $ngReduxProvider, $localStorageProvider, bbBasketReducerProvider, bbLoggerMiddlewareProvider, bbPersistenceMiddlewareProvider, bbHistoryHigherOrderReducerProvider) ->
   'ngInject'
 
-  window.$ngReduxProvider = $ngReduxProvider # exposed just for testing
-
-  ###reducers =
-    basket: bbHistoryReducerProvider.$get()(bbBasketReducerProvider.$get())
-    basket2: bbBasketReducerProvider.$get()###
-
   reducers =
-    basket: bbBasketReducerProvider.$get()
+    basket: bbHistoryHigherOrderReducerProvider.$get()(bbBasketReducerProvider.$get())
     basket2: bbBasketReducerProvider.$get()
 
   middleware = [
