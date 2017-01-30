@@ -42,6 +42,9 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $roo
 
     $scope.client.setClientDetails($scope.client_details) if $scope.client_details
 
+    # set the default_company_id on the client so that we can filter search results by child company if AdminBookingOptions.use_default_company_id is set
+    $scope.client.default_company_id = $scope.bb.company.id
+
     ClientService.create_or_update($scope.bb.company, $scope.client).then (client) =>
       $scope.setLoaded $scope
       $scope.selectClient(client, route)
