@@ -8,7 +8,7 @@
 * This services exposes methods to get all event-type information to be shown in the calendar
 ###
 angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSources', (AdminScheduleService, BBModel,
-  $exceptionHandler, $q, TitleAssembler, $translate) ->
+  $exceptionHandler, $q, TitleAssembler, $translate, AdminCalendarOptions) ->
   'ngInject'
 
   bookingBelongsToSelectedResources = (resources, booking)->
@@ -163,6 +163,9 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
     deferred = $q.defer()
 
     AdminScheduleService.getAssetsScheduleEvents(company, start, end, !options.showAll, options.selectedResources).then (availabilities) ->
+
+      setCalendarAvailabilityRange(availabilities) if !AdminCalendarOptions.minTime? or !AdminCalendarOptions.maxTime?
+
       if options.calendarView == 'timelineDay'
         deferred.resolve availabilities
       else
@@ -212,15 +215,39 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
               allDay: if options.calendarView == 'month' then true else false
             }
 
-
         #console.log overAllAvailabilities
-
+ 
 
         deferred.resolve overAllAvailabilities
     , (err)->
       deferred.reject err
 
     return deferred.promise
+
+
+  ###
+  * @ngdoc method
+  * @name setCalendarAvailabilityRange
+  * @methodOf BBAdminDashboard.calendar.services.service:CalendarEventSources
+  * @description
+  * Sets AdminCalendarOptions availability range to the minTime and maxTime from all schedules
+  *
+  * @param {array} availabilities  The availabilities to get the min/max time from 
+  ###
+  setCalendarAvailabilityRange = (availabilities) ->
+
+    # set minTime and maxTime to first availabilty and loop through to get earliest start and latest end
+    for availability, index in availabilities
+      minTime = availability.start if availability.start.isBefore(minTime) or index is 0 
+      maxTime = availability.end if availability.end.isAfter(maxTime) or index is 0
+
+    # store on AdminCalendarOptions object to read from in resourceCalendar controller prepareUiCalOptions method
+    AdminCalendarOptions.minTime = minTime.format('HH:mm') 
+    AdminCalendarOptions.maxTime = maxTime.format('HH:mm')
+
+    return
+
+
 
   ###
   * @ngdoc method

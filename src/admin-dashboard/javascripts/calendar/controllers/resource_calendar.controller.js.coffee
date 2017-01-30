@@ -116,12 +116,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     else
       vm.calendar_name = "resourceCalendar"
 
-    if not calOptions.min_time?
-      calOptions.min_time = GeneralOptions.calendar_min_time
-
-    if not calOptions.max_time?
-      calOptions.max_time = GeneralOptions.calendar_max_time
-
     if not calOptions.cal_slot_duration?
       calOptions.cal_slot_duration = GeneralOptions.calendar_slot_duration
 
@@ -134,8 +128,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: false
         eventDurationEditable: false
-        minTime: calOptions.min_time
-        maxTime: calOptions.max_time
+        minTime: AdminCalendarOptions.minTime
+        maxTime: AdminCalendarOptions.maxTime
         height: 'auto'
         buttonText: {
           today: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
@@ -206,8 +200,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
       getCompanyPromise().then (company) ->
         AdminMoveBookingPopup.open
-          min_date: setTimeToMoment(start, calOptions.min_time)
-          max_date: setTimeToMoment(end, calOptions.max_time)
+          min_date: setTimeToMoment(start, AdminCalendarOptions.minTime)
+          max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime)
           from_datetime: moment(start.toISOString())
           to_datetime: moment(end.toISOString())
           item_defaults: item_defaults
@@ -275,7 +269,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     if !calOptions.enforce_schedules || (isTimeRangeAvailable(start, end, resource) || (Math.abs(start.diff(end, 'days')) == 1 && dayHasAvailability(start)))
       if Math.abs(start.diff(end, 'days')) > 0
         end.subtract(1, 'days')
-        end = setTimeToMoment(end, calOptions.max_time)
+        end = setTimeToMoment(end, AdminCalendarOptions.maxTime)
 
       item_defaults =
         date: start.format('YYYY-MM-DD')
@@ -288,8 +282,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
       getCompanyPromise().then (company) ->
         AdminBookingPopup.open
-          min_date: setTimeToMoment(start, calOptions.min_time)
-          max_date: setTimeToMoment(end, calOptions.max_time)
+          min_date: setTimeToMoment(start, AdminCalendarOptions.minTime)
+          max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime)
           from_datetime: moment(start.toISOString())
           to_datetime: moment(end.toISOString())
           item_defaults: item_defaults
