@@ -9,9 +9,13 @@
 timezoneOptionsFactory = ($translate, orderByFilter) ->
 
   cleanUpLocations = () ->
-    locationNames = moment.tz.names().filter (tz) -> 
-      tz.indexOf('GMT') is -1 && tz.indexOf('Etc') is -1 && tz.match(/[^/]*$/)[0] isnt tz.toUpperCase()
-    return locationNames
+    locationNames = moment.tz.names()
+    locationNames = _.chain(locationNames)
+      .filter (tz) -> tz.indexOf('GMT') is -1
+      .filter (tz) -> tz.indexOf('Etc') is -1
+      .filter (tz) -> tz.match(/[^/]*$/)[0] isnt tz.match(/[^/]*$/)[0].toUpperCase()
+      .value()
+    return locationNames 
 
   mapTimezones = (locationNames) ->
     timezones = []
@@ -49,10 +53,9 @@ timezoneOptionsFactory = ($translate, orderByFilter) ->
   ###
   mapTimezoneForDisplay = (location, index) ->
     timezone = {}
-    city = location.match(/[^/]*$/)[0].replace(/_/g, ' ')
+    city = location.match(/[^/]*$/)[0].replace(/-/g, '_').toUpperCase()
     tz = moment.tz(location)
-    # timezone.display = "(UTC #{tz.format('Z')}) #{$translate.instant("LOCATIONS.#{city}")} (#{tz.format('zz')})"
-    timezone.display = "(UTC #{tz.format('Z')}) #{$translate.instant(city)} (#{tz.format('zz')})"
+    timezone.display = "(UTC #{tz.format('Z')}) #{$translate.instant("LOCATIONS.#{city}")} (#{tz.format('zz')})"
     timezone.value = location
     if index?
       timezone.id = index
