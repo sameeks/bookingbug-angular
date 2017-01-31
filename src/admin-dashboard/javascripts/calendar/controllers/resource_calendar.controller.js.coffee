@@ -30,10 +30,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     prepareUiCalOptions()
 
     $scope.$watch 'selectedResources.selected', selectedResourcesListener
-    $scope.$watch 'currentDate', currentDateListener
 
     $scope.$on 'refetchBookings', refetchBookingsHandler
     $scope.$on 'newCheckout', newCheckoutHandler
+    $scope.$on 'datePickerUpdated', updateDateHandler
     $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
 
     getCompanyPromise().then(companyListener)
@@ -317,11 +317,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   fcLoading = (isLoading, view) ->
     vm.calendarLoading = isLoading
 
-  $scope.openDatePicker = ($event) -> #TODO other directive expect this method on scope
-    $event.preventDefault()
-    $event.stopPropagation()
-    $scope.datePickerOpened = true
-
   isTimeRangeAvailable = (start, end, resource) ->
     st = moment(start.toISOString()).unix()
     en = moment(end.toISOString()).unix()
@@ -475,7 +470,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         pusher_channel.bind 'destroy', pusherBooking
     return
 
-  updateDate = (date) ->
+  updateDateHandler = (event, date) ->
     if uiCalendarConfig.calendars[vm.calendar_name]
       assembledDate = moment.utc()
       assembledDate.set({
@@ -486,15 +481,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         'minute': 0
         'second': 0,
       })
-
       uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('gotoDate', assembledDate)
-    return
-
-  lazyUpdateDate = _.debounce(updateDate, 400)
-
-  currentDateListener = (newDate, oldDate) ->
-    if newDate != oldDate && oldDate?
-      lazyUpdateDate(newDate)
     return
 
   refetchBookingsHandler = () ->
@@ -506,7 +493,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     return
 
   languageChangedHandler = () ->
-    $state.go($state.current, {}, {reload: true}) # Horrible hack refresh page because FUllcalendar doesnt have a rerender method  we have to refresh the state to load new translation
+    # prepareUiCalOptions()
+    # $state.go($state.current, {}, {reload: true}) # Horrible hack refresh page because FUllcalendar doesnt have a rerender method  we have to refresh the state to load new translation
     return
 
   getCompanyPromise = () ->
