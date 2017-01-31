@@ -5,12 +5,13 @@
     angular.module('BB.Controllers').controller('BBCtrl', BBCtrl);
 
     function BBCtrl(routeStates, $scope, $rootScope, QueryStringService, LoadingService, viewportSize, bbWidgetBasket,
-                    bbWidgetPage, bbWidgetStep, bbWidgetInit, bbWidgetUtilities) {
+                    bbWidgetPage, bbWidgetStep, bbWidgetInit, bbWidgetUtilities, bbWidgetRestore, $localStorage) {
 
         bbWidgetBasket.setScope($scope);
         bbWidgetPage.setScope($scope);
         bbWidgetStep.setScope($scope);
         bbWidgetInit.setScope($scope);
+        bbWidgetRestore.setScope($scope);
         bbWidgetUtilities.setScope($scope);
 
         this.$scope = $scope;
@@ -24,6 +25,7 @@
         this.$onInit = function () {
             //Initialization
             bbWidgetInit.initializeBBWidget();
+
             $scope.initWidget = bbWidgetInit.initWidget;
             //Steps
             $scope.checkStepTitle = bbWidgetStep.checkStepTitle;
@@ -91,6 +93,11 @@
             $rootScope.$on('show:loader', bbWidgetUtilities.showLoaderHandler);
             $rootScope.$on('hide:loader', bbWidgetUtilities.hideLoaderHandler);
             $scope.$on('$locationChangeStart', bbWidgetUtilities.locationChangeStartHandler);
+
+            window.bbScope = $scope;
+            window.$localStorage = $localStorage;
+
+            bbWidgetRestore.attemptRestore();
         };
 
         this.$postLink = function () {

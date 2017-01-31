@@ -1,12 +1,15 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, GeolocationService) ->
+angular.module('BB.Controllers').controller 'MapCtrl', ($localStorage, $scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, GeolocationService) ->
 
   FormDataStoreService.init 'MapCtrl', $scope, [
     'address'
     'selectedStore'
     'search_prms'
   ]
+
+  store = $localStorage.getObject('bb')
+
 
   # init vars
   $scope.options = $scope.$eval($attrs.bbMap) or {}
@@ -457,6 +460,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (company, route) ->
+    debugger
     return if !$scope.$debounce(1000)
 
     if !company
@@ -475,6 +479,8 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
     if $scope.selectedStore and $scope.selectedStore.id isnt company.id
       $scope.$emit 'change:storeLocation'
 
+    store.companyId = company.id
+
     $scope.selectedStore = company
 
     # Add answers object to the item_defaults if questions have already been asked before the map step
@@ -483,11 +489,15 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($scope, $element, $attrs
 
     if company.service
       $scope.bb.item_defaults.service = company.service.id
+      store.serviceId = company.service.id
+
 
     init_obj =
       company_id: company.id
       item_defaults: $scope.bb.item_defaults
     init_obj.first_page = route if route
+
+    $localStorage.setObject('bb', store)
 
     $scope.initWidget init_obj
 

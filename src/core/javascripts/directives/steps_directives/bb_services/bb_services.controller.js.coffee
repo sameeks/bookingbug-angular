@@ -1,7 +1,9 @@
-BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
+BBServicesCtrl = ($localStorage, $scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
   'ngInject'
 
   @$scope = $scope
+
+  store = $localStorage.getObject('bb')
 
   FormDataStoreService.init 'ServiceList', $scope, [
     'service'
@@ -165,6 +167,9 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
   * @param {string=} route A specific route to load
   ###
   $scope.selectItem = (item, route, options={}) =>
+
+    store.serviceId = item.id
+    $localStorage.setObject('bb', store)
 
     if $scope.routed
       return true
