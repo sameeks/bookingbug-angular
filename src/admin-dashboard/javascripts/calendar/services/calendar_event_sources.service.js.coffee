@@ -162,9 +162,10 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
   getAvailabilityBackground = (company, start, end, options = {})->
     deferred = $q.defer()
 
+
     AdminScheduleService.getAssetsScheduleEvents(company, start, end, !options.showAll, options.selectedResources).then (availabilities) ->
 
-      setCalendarAvailabilityRange(availabilities) if !AdminCalendarOptions.minTime? or !AdminCalendarOptions.maxTime?
+      setCalendarAvailabilityRange(availabilities) if !AdminCalendarOptions.minTime? or !AdminCalendarOptions.maxTime? 
 
       if options.calendarView == 'timelineDay'
         deferred.resolve availabilities

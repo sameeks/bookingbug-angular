@@ -173,6 +173,15 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         loading: fcLoading
     return
 
+  updateCalendarLanguage = () ->
+    vm.uiCalOptions.calendar.locale = $translate.use()
+    vm.uiCalOptions.calendar.buttonText.today = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
+    vm.uiCalOptions.calendar.views.listDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
+    vm.uiCalOptions.calendar.views.agendaWeek.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
+    vm.uiCalOptions.calendar.views.month.buttonText =  $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
+    vm.uiCalOptions.calendar.views.timelineDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration})
+    return
+
   fcResources = (callback) ->
     getCalendarAssets(callback)
 
@@ -486,6 +495,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
   lazyUpdateDate = _.debounce(updateDate, 400)
 
+
   currentDateListener = (newDate, oldDate) ->
     if newDate != oldDate && oldDate?
       lazyUpdateDate(newDate)
@@ -500,7 +510,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     return
 
   languageChangedHandler = () ->
-    $state.go($state.current, {}, {reload: true}) # Horrible hack refresh page because FUllcalendar doesnt have a rerender method  we have to refresh the state to load new translation
+    updateCalendarLanguage()
     return
 
   getCompanyPromise = () ->
