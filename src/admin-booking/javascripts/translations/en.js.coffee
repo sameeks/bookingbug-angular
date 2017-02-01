@@ -86,6 +86,7 @@ angular.module("BBAdminBooking").config ($translateProvider) ->
         BLOCK_WHOLE_DAY                : "Block whole day"
         BLOCK_TIME_TAB_HEADING         : "Block time"
         MAKE_BOOKING_TAB_HEADING       : "Make booking"
+        FOR                            : "For"
         PERSON_LABEL                   : "@:COMMON.TERMINOLOGY.PERSON"
         PERSON_DEFAULT_OPTION          : "Any Person"
         RESOURCE_LABEL                 : "@:COMMON.TERMINOLOGY.RESOURCE"
@@ -98,6 +99,7 @@ angular.module("BBAdminBooking").config ($translateProvider) ->
         YES_OPTION                     : "@:COMMON.BTN.YES"
         NO_OPTION                      : "@:COMMON.BTN.NO"
         NEXT_BTN                       : "@:COMMON.BTN.NEXT"
+        BLOCK_TIME_BTN                 : "Block Time"
         FIELD_REQUIRED                 : "@:COMMON.FORM.FIELD_REQUIRED"
       }
       BOOKINGS_TABLE : {
