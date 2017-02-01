@@ -1,7 +1,7 @@
 (function () {
 
     'use strict';
-
+    //
     angular.module('BB.Services').service('bbWidgetInit', BBWidgetInit);
 
     function BBWidgetInit($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate,
