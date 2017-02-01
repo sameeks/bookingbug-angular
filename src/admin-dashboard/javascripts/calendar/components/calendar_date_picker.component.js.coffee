@@ -19,7 +19,7 @@ calendarDatePickerController = () ->
   return
 
 calendarDatePickerComponent =
-  templateUrl: 'bb_calendar_date_picker.html'
+  templateUrl: 'calendar/bb_calendar_date_picker.html'
   bindings:
     onChangeDate: '&'
     currentDate: '<'
