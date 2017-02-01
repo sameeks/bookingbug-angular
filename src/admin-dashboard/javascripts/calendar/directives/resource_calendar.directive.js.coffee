@@ -2,7 +2,7 @@
 
 angular
   .module('BBAdminDashboard.calendar.directives')
-  .directive 'bbResourceCalendar', ($compile, $templateCache, $timeout) ->
+  .directive 'bbResourceCalendar', ($compile, $timeout) ->
     'ngInject'
 
     link = (scope, element, attrs) ->
