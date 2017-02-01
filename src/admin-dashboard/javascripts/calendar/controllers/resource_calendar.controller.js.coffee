@@ -33,12 +33,12 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
     $scope.$on 'refetchBookings', refetchBookingsHandler
     $scope.$on 'newCheckout', newCheckoutHandler
-    $scope.$on 'datePickerUpdated', updateDateHandler
     $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
 
     getCompanyPromise().then(companyListener)
 
     vm.changeSelectedResources = changeSelectedResources
+    vm.updateDateHandler = updateDateHandler
     return
 
   applyFilters = () ->
@@ -308,7 +308,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       'minute': 0
       'second': 0
     })
-    $scope.currentDate = newDate.toDate() #TODO other directive expect this variable on scope
+    vm.currentDate = newDate.toDate() #TODO other directive expect this variable on scope
 
   fcEventResize = (event, delta, revertFunc, jsEvent, ui, view) ->
     event.duration = event.end.diff(event.start, 'minutes')
@@ -470,13 +470,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         pusher_channel.bind 'destroy', pusherBooking
     return
 
-  updateDateHandler = (event, date) ->
+  updateDateHandler = (data) ->
     if uiCalendarConfig.calendars[vm.calendar_name]
       assembledDate = moment.utc()
       assembledDate.set({
-        'year': parseInt(date.getFullYear())
-        'month': parseInt(date.getMonth())
-        'date': parseInt(date.getDate())
+        'year': parseInt(data.date.getFullYear())
+        'month': parseInt(data.date.getMonth())
+        'date': parseInt(data.date.getDate())
         'hour': 0
         'minute': 0
         'second': 0,
