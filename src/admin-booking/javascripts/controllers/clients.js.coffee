@@ -8,10 +8,10 @@ angular.module('BBAdminBooking').directive 'bbAdminBookingClients', () ->
   templateUrl: 'admin_booking_clients.html'
 
 
-angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $rootScope, $q, AlertService,
-  ValidatorService, ErrorService, $log, BBModel,  $timeout, LoadingService, AdminBookingOptions, $translate) ->
+angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope, $rootScope, $q, AlertService,
+  ValidatorService, ErrorService, $log, BBModel, $timeout, LoadingService, AdminBookingOptions, $translate) ->
 
-  $scope.validator  = ValidatorService
+  $scope.validator = ValidatorService
   $scope.admin_options = AdminBookingOptions
   $scope.clients = new BBModel.Pagination({page_size: 10, max_size: 5, request_page_size: 10})
   loader = LoadingService.$loader($scope)
@@ -43,9 +43,6 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
       $scope.client.parent_client_id = $scope.bb.parent_client.id
 
     $scope.client.setClientDetails($scope.client_details) if $scope.client_details
-
-    # set the default_company_id on the client so that we can filter search results by child company if AdminBookingOptions.use_default_company_id is set
-    $scope.client.default_company_id = $scope.bb.company.id
 
     BBModel.Client.$create_or_update($scope.bb.company, $scope.client).then (client) =>
       loader.setLoaded()
@@ -140,4 +137,3 @@ angular.module('BBAdminBooking').controller 'adminBookingClients', ($scope,  $ro
     $scope.params.order_by = sort_by
     $scope.params.page = 1
     $scope.getClients($scope.params)
-
