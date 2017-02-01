@@ -1,4 +1,11 @@
-angular.module('BB.Services').factory "ClientService",  ($q, BBModel, MutexService) ->
+angular.module('BB.Services').factory "ClientService", ($q, BBModel, MutexService) ->
+
+
+  setDefaultCompanyId = (company, client) ->
+    # set the default_company_id on the client so that we can filter search results by child company if AdminBookingOptions.use_default_company_id is set
+    client.default_company_id = company.id
+    return
+
 
   create: (company, client) ->
     deferred = $q.defer()
@@ -7,6 +14,7 @@ angular.module('BB.Services').factory "ClientService",  ($q, BBModel, MutexServi
       deferred.reject("Cannot create new people for this company")
     else
       MutexService.getLock().then (mutex) ->
+        setDefaultCompanyId(company, client)
         company.$post('client', {}, client.getPostData()).then (cl) =>
           deferred.resolve(new BBModel.Client(cl))
           MutexService.unlock(mutex)
@@ -21,6 +29,7 @@ angular.module('BB.Services').factory "ClientService",  ($q, BBModel, MutexServi
     deferred = $q.defer()
 
     MutexService.getLock().then (mutex) ->
+      setDefaultCompanyId(company, client)
       client.$put('self', {}, client.getPostData()).then (cl) =>
         deferred.resolve(new BBModel.Client(cl))
         MutexService.unlock(mutex)
