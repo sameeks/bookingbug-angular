@@ -493,8 +493,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     return
 
   languageChangedHandler = () ->
-    # prepareUiCalOptions()
-    # $state.go($state.current, {}, {reload: true}) # Horrible hack refresh page because FUllcalendar doesnt have a rerender method  we have to refresh the state to load new translation
+    prepareUiCalOptions()
     return
 
   getCompanyPromise = () ->
