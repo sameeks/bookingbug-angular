@@ -6,13 +6,15 @@
 
     function BBWidgetInit($rootScope, $sessionStorage, $q, $sniffer, QueryStringService, halClient, BBModel, UriTemplate,
                           PurchaseService, $window, SSOService, bbWidgetBasket, CompanyStoreService, $bbug, bbWidgetPage,
-                          LoadingService, BBWidget, AppConfig, $location) {
+                          LoadingService, BBWidget, AppConfig, $location, bbWidgetRestore) {
 
         var connectionStarted, isFirstCall, widgetStarted;
         var $scope = null;
+
         var setScope = function ($s) {
             $scope = $s;
-            reinitialise()
+            bbWidgetRestore.setScope($s);
+            reinitialise();
         };
         var reinitialise = function () {
             isFirstCall = true;
@@ -30,6 +32,7 @@
             prms = prms == null ? {} : prms;
 
             connectionStarted = $q.defer();
+            connectionStarted.promise.then(connectionStartedHandler.bind(null, prms));
 
             $rootScope.connection_started = connectionStarted.promise;
             if ((($sniffer.webkit && $sniffer.webkit < 537) || ($sniffer.msie && $sniffer.msie <= 9)) && isFirstCall) {
@@ -54,6 +57,24 @@
                 initWidget2(prms);
             }
         };
+
+        function connectionStartedHandler (prms){
+            bbWidgetRestore.attemptRestore();
+
+            $scope.done_starting = true;
+            if (!prms.no_route) {
+                var page = null;
+                if (isFirstCall && $bbug.isEmptyObject($scope.bb.routeSteps)) {
+                    page = $scope.bb.firstStep;
+                }
+                if (prms.first_page) {
+                    page = prms.first_page;
+                }
+                isFirstCall = false;
+                return bbWidgetPage.decideNextPage(page);
+            }
+        }
+
         var initWidget2 = function (prms) {
             guardScope();
             var aff_promise, comp_category_id, comp_def, comp_promise, comp_url, company_id,
@@ -392,7 +413,6 @@
                         def_clear.resolve();
                     }
                     return clear_prom.then(function () {
-                        var page;
                         if (!$scope.client_details) {
                             $scope.client_details = new BBModel.ClientDetails();
                         }
@@ -401,18 +421,6 @@
                         }
                         if ($scope.bb.company || $scope.bb.affiliate) {
                             connectionStarted.resolve();
-                            $scope.done_starting = true;
-                            if (!prms.no_route) {
-                                page = null;
-                                if (isFirstCall && $bbug.isEmptyObject($scope.bb.routeSteps)) {
-                                    page = $scope.bb.firstStep;
-                                }
-                                if (prms.first_page) {
-                                    page = prms.first_page;
-                                }
-                                isFirstCall = false;
-                                return bbWidgetPage.decideNextPage(page);
-                            }
                         }
                     });
                 }, function (err) {

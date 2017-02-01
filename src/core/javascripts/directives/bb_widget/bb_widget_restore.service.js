@@ -20,7 +20,7 @@
         }
 
         function restore(state) {
-            if(state.companyId != null){
+            if(state.companyId != null && state.companyId != $scope.bb.company.id){
                 restoreCompany(state.companyId);
             }
 
@@ -30,7 +30,15 @@
         }
 
         function restoreCompany(companyId) {
+
+            var prms = {
+                company_id: companyId,
+                item_defaults: $scope.bb.item_defaults
+            };
+
             console.log('restoreCompany', companyId);
+
+            $scope.initWidget(prms);
         }
 
         function restoreService(serviceId) {
