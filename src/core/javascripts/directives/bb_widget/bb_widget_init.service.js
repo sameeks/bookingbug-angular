@@ -27,42 +27,41 @@
         var initWidget = function (prms) {
             guardScope();
             var url;
-            if (prms == null) {
-                prms = {};
-            }
-            this.$init_prms = prms;
+            prms = prms == null ? {} : prms;
+
             connectionStarted = $q.defer();
+
             $rootScope.connection_started = connectionStarted.promise;
             if ((($sniffer.webkit && $sniffer.webkit < 537) || ($sniffer.msie && $sniffer.msie <= 9)) && isFirstCall) {
                 if ($scope.bb.api_url) {
                     url = document.createElement('a');
                     url.href = $scope.bb.api_url;
                     if (url.host === '' || url.host === $location.host() || url.host === (($location.host()) + ":" + ($location.port()))) {
-                        initWidget2();
+                        initWidget2(prms);
                         return;
                     }
                 }
                 if ($rootScope.iframe_proxy_ready) {
-                    initWidget2();
+                    initWidget2(prms);
                 } else {
                     $scope.$on('iframe_proxy_ready', function (event, args) {
                         if (args.iframe_proxy_ready) {
-                            return initWidget2();
+                            return initWidget2(prms);
                         }
                     });
                 }
             } else {
-                initWidget2();
+                initWidget2(prms);
             }
-        }.bind(this);
-        var initWidget2 = function () {
+        };
+        var initWidget2 = function (prms) {
             guardScope();
             var aff_promise, comp_category_id, comp_def, comp_promise, comp_url, company_id,
-                embed_params, get_total, k, match, options, params, prms, ref, setup_promises,
+                embed_params, get_total, k, match, options, params, ref, setup_promises,
                 setup_promises2, sso_admin_login, sso_member_login, total_id, v;
 
             $scope.init_widget_started = true;
-            prms = this.$init_prms;
+
             if (prms.query) {
                 ref = prms.query;
                 for (k in ref) {
@@ -207,12 +206,12 @@
             if (prms.qudini_booking_id) {
                 $scope.bb.qudini_booking_id = prms.qudini_booking_id;
             }
-            this.waiting_for_conn_started_def = $q.defer();
-            $scope.waiting_for_conn_started = this.waiting_for_conn_started_def.promise;
+            var waiting_for_conn_started_def = $q.defer();
+            $scope.waiting_for_conn_started = waiting_for_conn_started_def.promise;
             if (company_id || $scope.bb.affiliate_id) {
                 $scope.waiting_for_conn_started = $rootScope.connection_started;
             } else {
-                this.waiting_for_conn_started_def.resolve();
+                waiting_for_conn_started_def.resolve();
             }
             widgetStarted.resolve();
             setup_promises2 = [];
@@ -424,7 +423,7 @@
                 connectionStarted.reject("Failed to start widget");
                 return LoadingService.setLoadedAndShowError($scope, err, 'Sorry, something went wrong');
             });
-        }.bind(this);
+        };
         var setupDefaults = function (company_id) {
             guardScope();
             var category, clinic, def, event, event_chain, event_group, k, person, ref, resource, service, v;
