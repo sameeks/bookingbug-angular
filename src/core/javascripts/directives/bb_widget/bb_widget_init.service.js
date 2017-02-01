@@ -59,20 +59,22 @@
         };
 
         function connectionStartedHandler (prms){
-            bbWidgetRestore.attemptRestore();
+            var restorePromise = bbWidgetRestore.attemptRestore();
 
-            $scope.done_starting = true;
-            if (!prms.no_route) {
-                var page = null;
-                if (isFirstCall && $bbug.isEmptyObject($scope.bb.routeSteps)) {
-                    page = $scope.bb.firstStep;
+            restorePromise.then(function () {
+                $scope.done_starting = true;
+                if (!prms.no_route) {
+                    var page = null;
+                    if (isFirstCall && $bbug.isEmptyObject($scope.bb.routeSteps)) {
+                        page = $scope.bb.firstStep;
+                    }
+                    if (prms.first_page) {
+                        page = prms.first_page;
+                    }
+                    isFirstCall = false;
+                    return bbWidgetPage.decideNextPage(page);
                 }
-                if (prms.first_page) {
-                    page = prms.first_page;
-                }
-                isFirstCall = false;
-                return bbWidgetPage.decideNextPage(page);
-            }
+            });
         }
 
         var initWidget2 = function (prms) {
@@ -483,7 +485,7 @@
                     if ($scope.bb.isAdmin) {
                         service = halClient.$get($scope.bb.api_url + '/api/v1/admin/' + company_id + '/services/' + $scope.bb.item_defaults.service);
                     } else {
-                        service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '/services/' + $scope.bb.item_defaults.service);
+                        service = halClient.$get($scope.bb.api_url + '/api/v1/' + company_id + '//services' + $scope.bb.item_defaults.service);
                     }
                     $scope.bb.default_setup_promises.push(service);
                     service.then(function (res) {
