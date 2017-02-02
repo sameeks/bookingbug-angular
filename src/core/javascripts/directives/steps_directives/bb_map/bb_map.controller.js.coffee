@@ -160,7 +160,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($localStorage, $scope, $
 
     $timeout ->
       $scope.myMap.fitBounds($scope.mapBounds)
-      $scope.myMap.setZoom(15)
+      $scope.myMap.setZoom($scope.default_zoom) if $scope.options.default_zoom
       if $scope.bb.current_item.service and $scope.options and $scope.filter_by_service
         loader.setLoaded()
     checkDataStore()
@@ -295,7 +295,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($localStorage, $scope, $
     $scope.loc           = result.geometry.location
     $scope.formatted_address = result.formatted_address
     $scope.myMap.setCenter $scope.loc
-    $scope.myMap.setZoom 15
+    $scope.myMap.setZoom($scope.default_zoom) if $scope.options.default_zoom
     $scope.showClosestMarkers $scope.loc
     $rootScope.$broadcast "map:search_success"
 
@@ -441,6 +441,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($localStorage, $scope, $
     $timeout ->
 
       $scope.currentMarker = marker
+      $scope.myMap.setCenter(marker.position)
       $scope.myInfoWindow.open($scope.myMap, marker)
       for shown_marker in $scope.shownMarkers
         if shown_marker.company.id is marker.company.id
@@ -603,7 +604,7 @@ angular.module('BB.Controllers').controller 'MapCtrl', ($localStorage, $scope, $
     if new_value != old_value and $scope.loc
       $scope.myInfoWindow.close()
       $scope.myMap.setCenter $scope.loc
-      $scope.myMap.setZoom 15
+      $scope.myMap.setZoom($scope.default_zoom) if $scope.options.default_zoom
       $scope.showClosestMarkers $scope.loc
 
 
