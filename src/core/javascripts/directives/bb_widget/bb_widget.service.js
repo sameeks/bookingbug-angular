@@ -21,7 +21,7 @@
      */
     angular.module('BB.Models').service('BBWidget', BBWidget);
 
-    function BBWidget($q, BBModel, $urlMatcherFactory, $location, BreadcrumbService, PathHelper, GeneralOptions) {
+    function BBWidget($q, BBModel, $urlMatcherFactory, $location, BreadcrumbService, PathHelper, GeneralOptions, $translate) {
 
         function Widget() {
             this.uid = _.uniqueId('bbwidget_');
@@ -155,7 +155,7 @@
             var j, k, l, len, len1, len2, match, ref, ref1, ref2, setDocumentTitle, step, title;
             setDocumentTitle = function (title) {
                 if (GeneralOptions.update_document_title && title) {
-                    return document.title = title;
+                    return document.title = $translate.instant(title);
                 }
             };
             if (!this.current_step) {
