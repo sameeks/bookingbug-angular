@@ -11,7 +11,7 @@
         </h2>
         <div
           class="bb-empty-basket-full-screen"
-          ng-hide="items">
+          ng-hide="bb.basket.items">
           <h3 translate="PUBLIC_BOOKING.BASKET.NO_ITEMS_HEADING"></h3>
           <p translate="PUBLIC_BOOKING.BASKET.NO_ITEMS_DESCRIBE"></p>
         </div>
@@ -258,18 +258,18 @@
         <div class="row">
           <div class="col-sm-9 col-sm-push-3 text-right">
             <button
-              ng-show="bb.company.$has('events') && !bb.isAdmin"
+              ng-show="!bb.current_item.service && bb.company.$has('events') && !bb.isAdmin"
               type="button"
               class="btn btn-primary"
               ng-click="addAnother('event_list')"
-              translate="PUBLIC_BOOKING.BASKET.ADD_ANOTHER_BTN">
+              translate="PUBLIC_BOOKING.BASKET.ADD_ANOTHER_EVENT_BTN">
             </button>
             <button
-              ng-show="bb.company.$has('services') && !bb.isAdmin"
+              ng-show="bb.current_item.service && bb.company.$has('services') && !bb.isAdmin"
               type="button"
               class="btn btn-primary"
               ng-click="addAnother('service_list')"
-              translate="PUBLIC_BOOKING.BASKET.ADD_ANOTHER_BTN">
+              translate="PUBLIC_BOOKING.BASKET.ADD_ANOTHER_SERVICE_BTN">
             </button>
             <button
               type="button"

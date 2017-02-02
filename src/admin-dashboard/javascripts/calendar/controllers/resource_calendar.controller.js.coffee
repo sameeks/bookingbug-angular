@@ -267,7 +267,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       PrePostTime.apply(event, elements, view, $scope)
 
   fcSelect = (start, end, jsEvent, view, resource) -> # For some reason clicking on the scrollbars triggers this event therefore we filter based on the jsEvent target
-    if jsEvent.target.className == 'fc-scroller'
+    if jsEvent and jsEvent.target.className == 'fc-scroller'
       return
 
     view.calendar.unselect()
