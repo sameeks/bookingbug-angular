@@ -27,10 +27,6 @@ angular.module('BB').config ($locationProvider, $httpProvider, $provide, ie8Http
     libraries: 'weather,geometry,visualization'
   })
 
-  # sanitize just translation text using escape strategy as interpolation
-  # param sanitization (sanitizeParameters) invalidates moment objects
-  $translateProvider.useSanitizeValueStrategy('escape')
-
   $httpProvider.defaults.headers.common =
     'App-Id': 'f6b16c23',
     'App-Key': 'f0bc4f65f4fbfe7b4b3b7264b655f5eb'
