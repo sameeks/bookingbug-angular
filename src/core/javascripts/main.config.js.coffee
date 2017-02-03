@@ -19,7 +19,7 @@ else
 
 angular.module('BB').constant('UriTemplate', window.UriTemplate)
 
-angular.module('BB').config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider, uiGmapGoogleMapApiProvider, $translateProvider) ->
+angular.module('BB').config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider, uiGmapGoogleMapApiProvider) ->
   'ngInject'
 
   uiGmapGoogleMapApiProvider.configure({
