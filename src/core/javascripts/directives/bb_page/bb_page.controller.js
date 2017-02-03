@@ -19,8 +19,7 @@
         }
 
         function isScopeReady(childScope) {
-
-            var ready_list = [],
+            var readyList = [],
                 children = [],
                 child = childScope.$$childHead;
 
@@ -32,20 +31,23 @@
             children.sort(sortChildrenScopes);
 
             for (var i = 0; i < children.length; i++) {
-                child = children[i];
-                var ready = isScopeReady(child);
-                if (angular.isArray(ready)) {
-                    Array.prototype.push.apply(ready_list, ready);
-                } else {
-                    ready_list.push(ready);
-                }
+                areChildrenScopesReady(children[i], readyList);
             }
 
             if (childScope.hasOwnProperty('setReady')) {
-                ready_list.push(childScope.setReady());
+                readyList.push(childScope.setReady());
             }
 
-            return ready_list;
+            return readyList;
+        }
+
+        function areChildrenScopesReady(child, readyList) {
+            var ready = isScopeReady(child);
+            if (angular.isArray(ready)) {
+                Array.prototype.push.apply(readyList, ready);
+            } else {
+                readyList.push(ready);
+            }
         }
 
         function sortChildrenScopes(a, b) {
@@ -103,7 +105,6 @@
          * @name routeReady
          * @methodOf BB.Directives:bbPage
          * @description
-         * Check the page route ready
          *
          * @param {string=} route A specific route to load
          */
