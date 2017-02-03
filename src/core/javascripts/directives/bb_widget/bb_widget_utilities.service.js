@@ -4,7 +4,7 @@
 
     angular.module('BB.Services').service('bbWidgetUtilities', BBWidgetUtilities);
 
-    function BBWidgetUtilities($window, BBModel, bbWidgetPage, bbWidgetStep, AppService, $timeout) {
+    function BBWidgetUtilities($window, BBModel, bbWidgetPage, bbWidgetStep, AppService, $timeout, LoginService) {
 
         var $scope = null;
         var setScope = function ($s) {
