@@ -474,7 +474,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       pusher_channel = company.getPusherChannel('bookings')
       if pusher_channel
         pusher_channel.bind 'create', pusherBooking
-        pusher_channel.bind 'update', pusherBooking
+        pusher_channel.bind 'update', pusherBooking 
         pusher_channel.bind 'destroy', pusherBooking
     return
 

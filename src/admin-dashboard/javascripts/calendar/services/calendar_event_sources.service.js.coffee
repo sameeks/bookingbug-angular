@@ -170,7 +170,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
       if options.calendarView == 'timelineDay'
         deferred.resolve availabilities
       else
-        overAllAvailabilities = []
+        overAllAvailabilities = [] 
 
      
         for avail in availabilities
