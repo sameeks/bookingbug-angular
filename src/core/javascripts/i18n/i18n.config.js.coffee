@@ -3,7 +3,9 @@
 angular.module('BB.i18n').config (bbi18nOptionsProvider, tmhDynamicLocaleProvider, $translateProvider) ->
   'ngInject'
 
-  $translateProvider.useSanitizeValueStrategy('sanitizeParameters'); # TODO use sanitize strategy once it's reliable: https://angular-translate.github.io/docs/#/guide/19_security
+  # sanitize just the translation text using the sanitize strategy as interpolation
+  # param sanitization (sanitizeParameters) invalidates moment objects
+  $translateProvider.useSanitizeValueStrategy('escape'); # TODO use sanitize strategy once it's reliable: https://angular-translate.github.io/docs/#/guide/19_security
 
   $translateProvider.useLocalStorage()
 

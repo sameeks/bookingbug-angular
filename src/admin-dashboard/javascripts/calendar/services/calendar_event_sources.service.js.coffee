@@ -8,7 +8,7 @@
 * This services exposes methods to get all event-type information to be shown in the calendar
 ###
 angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSources', (AdminScheduleService, BBModel,
-  $exceptionHandler, $q, TitleAssembler, $translate, AdminCalendarOptions) ->
+  $exceptionHandler, $q, TitleAssembler, $translate, AdminCalendarOptions, $rootScope) ->
   'ngInject'
 
   bookingBelongsToSelectedResources = (resources, booking)->
@@ -170,7 +170,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
       if options.calendarView == 'timelineDay'
         deferred.resolve availabilities
       else
-        overAllAvailabilities = []
+        overAllAvailabilities = [] 
 
      
         for avail in availabilities
@@ -226,7 +226,7 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
     return deferred.promise
 
 
-  ###
+  ###*
   * @ngdoc method
   * @name setCalendarAvailabilityRange
   * @methodOf BBAdminDashboard.calendar.services.service:CalendarEventSources
@@ -236,7 +236,8 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
   * @param {array} availabilities  The availabilities to get the min/max time from 
   ###
   setCalendarAvailabilityRange = (availabilities) ->
-
+    if availabilities.length is 0                                                                     
+      return
     # set minTime and maxTime to first availabilty and loop through to get earliest start and latest end
     for availability, index in availabilities
       minTime = availability.start if availability.start.isBefore(minTime) or index is 0 
@@ -246,11 +247,31 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
     AdminCalendarOptions.minTime = minTime.format('HH:mm') 
     AdminCalendarOptions.maxTime = maxTime.format('HH:mm')
 
+    guardMidnightFormat(minTime, maxTime)
+
+    $rootScope.$broadcast 'CalendarEventSources:timeRangeChanged'
+
+
     return
 
 
-
+  ###*
+  * @ngdoc method
+  * @name guardMidnightFormat
+  * @methodOf BBAdminDashboard.calendar.services.service:CalendarEventSources
+  * @description
+  * Formats maxTime from 00:00 to 24:00 when using 24 hour availability 
+  *
+  * @param {Moment} minTime Moment object containing minimum availability time
+  * @param {Moment} maxTime Moment object containing maximum availability time
   ###
+  guardMidnightFormat = (minTime, maxTime) ->
+    if !minTime.isSame(maxTime, 'day') and AdminCalendarOptions.maxTime is '00:00'
+      AdminCalendarOptions.maxTime = '24:00'
+    return 
+    
+
+  ###*
   * @ngdoc method
   * @name getAllCalendarEntries
   * @methodOf BBAdminDashboard.calendar.services.service:CalendarEventSources
