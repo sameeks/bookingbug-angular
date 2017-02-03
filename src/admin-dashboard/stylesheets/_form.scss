@@ -36,3 +36,11 @@
     }
   }
 }
+.new-client-form{
+  label{
+    @media(min-width: $screen-xs-max){
+      padding-top: 7px;
+      text-align: right;
+    }
+  }
+}

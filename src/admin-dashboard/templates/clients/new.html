@@ -5,30 +5,147 @@
         <div class="panel-heading">
           <h3>New Customer</h3>
         </div>
-        <form name="create_form" role="form">
-          <div class="col-xs-4">
-            <div class="text-center">
-              <strong>Name</strong>
+        <div class="panel-heading">
+          <h4>Basic Information</h4>
+        </div>
+        <form class="new-client-form" bb-form name="newClientForm">
+          
+          <!-- Static Questions Start -->
+          
+          <!-- Required Static Questions Start -->
+          
+          <div class="form-group col-xs-12" ng-class="{'has-error': newClientForm.first_name.$invalid && (newClientForm.first_name.$dirty || newClientForm.$submitted)}">
+            <label class="col-sm-4">
+              <span>First Name:</span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="first_name" ng-model="newClient.first_name" type="text" required>
             </div>
-            <input class="form-control" name="name" ng-model="new_client.first_name" type="text" />
-          </div>
-          <div class="col-xs-4">
-            <div class="text-center">
-              <strong>Email</strong>
+            <div class="col-sm-4" ng-messages="newClientForm.first_name.$error" role="alert">
+              <div ng-if="newClientForm.first_name.$dirty || newClientForm.$submitted">
+                <div class="error-message" ng-message="required">
+                  <span> Yo fill this badboy in!</span>
+                </div>
+              </div>
             </div>
-            <input class="form-control" name="email" ng-model="new_client.email" type="text" />
           </div>
-          <div class="col-xs-4">
-            <div class="text-center">
-              <strong>Mobile</strong>
+          
+          <div class="form-group col-xs-12" ng-class="{'has-error': newClientForm.last_name.$invalid && (newClientForm.last_name.$dirty || newClientForm.$submitted)}">
+            <label class="col-sm-4">
+              <span>Last Name:</span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="last_name" ng-model="newClient.last_name" type="text" required/>
             </div>
-            <input class="form-control" name="mobile" ng-model="new_client.mobile" type="text" />
+            <div class="col-sm-4" ng-messages="newClientForm.last_name.$error" role="alert">
+              <div ng-if="newClientForm.last_name.$dirty || newClientForm.$submitted">
+                <div class="error-message" ng-message="required">
+                  <span> Yo fill this badboy in!</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </form>  
+          
+          <div class="form-group col-xs-12" ng-class="{'has-error': newClientForm.email.$invalid && (newClientForm.email.$dirty || newClientForm.$submitted)}">
+            <label class="col-sm-4">
+              <span>Email:</span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="email" ng-model="newClient.email" type="email" required/>
+            </div>
+            <div class="col-sm-4" ng-messages="newClientForm.email.$error" role="alert">
+              <div ng-if="newClientForm.email.$dirty || newClientForm.$submitted">
+                <div class="error-message" ng-message="required">
+                  <span> Yo fill this badboy in!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Required Static Questions End -->
+          
+          <!-- Additional Static Questions Start -->
+          
+          <div class="form-group col-xs-12">
+            <label class="col-sm-4">
+              <span>mobile:</span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="mobile" ng-model="newClient.mobile" type="number"/>
+            </div>
+          </div>
+          
+          <div class="form-group col-xs-12">
+            <label class="col-sm-4">
+              <span>Address:</span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="address1" ng-model="newClient.address1" type="text"/>
+            </div>
+          </div>
+          
+          <div class="form-group col-xs-12">
+            <label class="col-sm-4">
+              <span></span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="address2" ng-model="newClient.address2" type="text"/>
+            </div>
+          </div>
+            
+          <div class="form-group col-xs-12">
+            <label class="col-sm-4">
+              <span></span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="address3" ng-model="newClient.address3" type="text"/>
+            </div>
+          </div>
+          
+          <div class="form-group col-xs-12">
+            <label class="col-sm-4">
+              <span>Town:</span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="address4" ng-model="newClient.address4" type="text"/>
+            </div>
+          </div>
+          
+          <div class="form-group col-xs-12">
+            <label class="col-sm-4">
+              <span>County:</span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="address5" ng-model="newClient.address5" type="text"/>
+            </div>
+          </div>
+          
+          <div class="form-group col-xs-12">
+            <label class="col-sm-4">
+              <span>Postcode:</span>
+            </label>
+            <div class="col-sm-4">
+              <input class="form-control" name="postcode" ng-model="newClient.postcode" type="text"/>
+            </div>
+          </div>
+            
+        
+          <!-- Additional Static Questions End-->
+          
+          <!-- Static Questions End -->
+          
+          <!-- Customer Questions Start -->
+          
+          <div class="panel-heading">
+            <h4>Additional Information</h4>
+          </div>
+          
+        </form> 
+        
       </div>
       <div class="col-xs-12 panel-heading">
-        <div class="col-md-2 col-md-push-10">
-          <button class="btn btn-primary btn-block" ng-click="create()"><span class="fa fa-check"></span> Done</button>
+        <div class="col-sm-3 col-sm-push-9 col-md-2 col-md-push-10">
+          <button class="btn btn-primary btn-block" ng-click="createClient()"><span class="fa fa-check"></span> Done</button>
         </div>
       </div>
     </div>
