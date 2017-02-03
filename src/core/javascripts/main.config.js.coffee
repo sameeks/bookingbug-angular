@@ -19,13 +19,17 @@ else
 
 angular.module('BB').constant('UriTemplate', window.UriTemplate)
 
-angular.module('BB').config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider, uiGmapGoogleMapApiProvider) ->
+angular.module('BB').config ($locationProvider, $httpProvider, $provide, ie8HttpBackendProvider, uiGmapGoogleMapApiProvider, $translateProvider) ->
   'ngInject'
 
   uiGmapGoogleMapApiProvider.configure({
     v: '3.20',
     libraries: 'weather,geometry,visualization'
   })
+
+  # sanitize just translation text using escape strategy as interpolation
+  # param sanitization (sanitizeParameters) invalidates moment objects
+  $translateProvider.useSanitizeValueStrategy('escape')
 
   $httpProvider.defaults.headers.common =
     'App-Id': 'f6b16c23',
