@@ -34,7 +34,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
     $scope.$on 'refetchBookings', refetchBookingsHandler
     $scope.$on 'newCheckout', newCheckoutHandler
-    $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
+    $scope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
+    $scope.$on 'CalendarEventSources:timeRangeChanged', timeRangeChangedHandler
 
     getCompanyPromise().then(companyListener)
 
@@ -124,36 +125,27 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   prepareUiCalOptions = () ->
     vm.uiCalOptions = # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
       calendar:
-        locale: $translate.use()
         schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: false
         eventDurationEditable: false
-        minTime: AdminCalendarOptions.minTime
-        maxTime: AdminCalendarOptions.maxTime
         height: 'auto'
-        buttonText: {
-          today: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
-        }
+        buttonText: {}
         header:
           left: 'today,prev,next'
           center: 'title'
           right: calOptions.views
         defaultView: calOptions.defaultView
         views:
-          listDay:
-            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.AGENDA')
+          listDay: {}
           agendaWeek:
             slotDuration: $filter('minutesToString')(calOptions.cal_slot_duration)
-            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
             groupByDateAndResource: false
           month:
             eventLimit: 5
-            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
           timelineDay:
             slotDuration: $filter('minutesToString')(calOptions.cal_slot_duration)
             eventOverlap: false
             slotWidth: 25
-            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration})
             resourceAreaWidth: '18%'
         resourceGroupField: 'group'
         resourceLabelText: ' '
@@ -171,6 +163,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         viewRender: fcViewRender
         eventResize: fcEventResize
         loading: fcLoading
+    updateCalendarLanguage()
+    updateCalendarTimeRange()
     return
 
   updateCalendarLanguage = () ->
@@ -181,6 +175,12 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     vm.uiCalOptions.calendar.views.month.buttonText =  $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
     vm.uiCalOptions.calendar.views.timelineDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration})
     return
+
+  updateCalendarTimeRange = () ->
+    vm.uiCalOptions.calendar.minTime = AdminCalendarOptions.minTime
+    vm.uiCalOptions.calendar.maxTime = AdminCalendarOptions.maxTime
+    return
+
 
   fcResources = (callback) ->
     getCalendarAssets(callback)
@@ -511,6 +511,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
   languageChangedHandler = () ->
     updateCalendarLanguage()
+    return
+
+  timeRangeChangedHandler = () ->
+    updateCalendarTimeRange()
     return
 
   getCompanyPromise = () ->
