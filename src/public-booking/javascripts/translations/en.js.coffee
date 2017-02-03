@@ -9,7 +9,7 @@ angular.module("BB.Services").config ($translateProvider) ->
         NUM_SLOTS_AVAILABLE : "{SLOTS_NUMBER, plural, =0{0 available} =1{1 available} other{{SLOTS_NUMBER} available}}"
       }
       ITEM_DETAILS: {
-        MOVE_BOOKING_SUCCESS_ALERT : "Your booking has been moved to {{datetime}}"
+        MOVE_BOOKING_SUCCESS_ALERT : "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
         MOVE_BOOKING_FAIL_ALERT    : "Failed to move booking. Please try again."
         FIELD_REQUIRED             : "@:COMMON.FORM.FIELD_REQUIRED"
       }
@@ -31,7 +31,7 @@ angular.module("BB.Services").config ($translateProvider) ->
         NO_ITEMS_IN_BASKET        : "No items added to basket yet."
         ITEM_COL_HEADING          : "@:COMMON.TERMINOLOGY.ITEM"
         TIME_DURATION_COL_HEADING : "@:COMMON.TERMINOLOGY.APPOINTMENT"
-        ITEM_TIME_AND_DURATION    : "{{time}} for {{duration | time_period}}"
+        ITEM_TIME_AND_DURATION    : "{{time | datetime: 'LLLL'}} for {{duration | time_period}}"
         CANCEL_BTN                : "@:COMMON.BTN.CANCEL"
         CHECKOUT_BTN              : "@:COMMON.BTN.CHECKOUT"
         BASKET_STATUS             : "{N, plural, =0{empty} one{One item in your basket} other{#items in your basket}}"
