@@ -5,7 +5,7 @@
     angular.module('BB.Services').service('bbWidgetBasket', BBWidgetBasket);
 
     function BBWidgetBasket($q, halClient, BBModel, $localStorage, $sessionStorage, bbWidgetPage, bbWidgetStep, $uibModal,
-                            bbWidgetUtilities, ErrorService) {
+                            bbWidgetUtilities, ErrorService, LoginService) {
 
         var $scope = null;
         var setScope = function ($s) {
@@ -242,7 +242,7 @@
                             res.$get('member').then(function (member) {
                                 if (member.client_type !== 'Contact') {
                                     member = LoginService.setLogin(member);
-                                    return setClient(member);
+                                    return $scope.setClient(member);
                                 }
                             });
                         }
