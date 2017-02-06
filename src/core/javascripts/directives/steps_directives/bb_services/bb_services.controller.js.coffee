@@ -1,36 +1,57 @@
-BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
+BBServicesCtrl = (
+  $scope, $rootScope, $q, $attrs, $uibModal, $document, $filter,
+  BBModel, FormDataStoreService, PageControllerService, ErrorService, LoadingService) ->
   'ngInject'
 
   @$scope = $scope
+  vm = @
 
   FormDataStoreService.init 'ServiceList', $scope, [
     'service'
   ]
 
-  loader = LoadingService.$loader($scope).notLoaded()
-  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
-
-  $scope.validator = ValidatorService
-  $scope.filters = {category_name: null, service_name: null, price: { min: 0, max: 100}, custom_array_value: null}
-  $scope.show_custom_array = false
-
-  $scope.options = $scope.$eval($attrs.bbServices) or {}
-
-  $scope.booking_item = $scope.$eval($attrs.bbItem) if $attrs.bbItem
-  $scope.show_all = true if $attrs.bbShowAll or $scope.options.show_all
-  $scope.allowSinglePick = true if $scope.options.allow_single_pick
-  $scope.hide_disabled = true if $scope.options.hide_disabled
-
-  $scope.price_options = {min: 0, max: 100}
 
   $rootScope.connection_started.then () =>
     if $scope.bb.company
-      $scope.init($scope.bb.company)
-  , (err) -> loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      initCompany($scope.bb.company)
+  , (err) -> 
+    vm.loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-  $scope.init = (comp) ->
-    $scope.booking_item ||= $scope.bb.current_item
+  init = () ->
+    vm.loader = LoadingService.$loader($scope).notLoaded()
+    angular.extend(this, new PageControllerService($scope, $q, LoadingService))
+    initOptions()
+    initFilters()
+
+    return
+
+  initOptions = () ->
+    vm.filters = 
+      categoryName: null
+      serviceName: null
+      price: 
+        min: 0
+        max: 100
+      customArrayValue: null
+
+
+  initFilters = () ->
+
+    $scope.showCustomArray = false
+
+    $scope.options = $scope.$eval($attrs.bbServices) or {}
+
+    $scope.bookingItem = $scope.$eval($attrs.bbItem) if $attrs.bbItem
+    $scope.showAll = true if $attrs.bbShowAll or $scope.options.showAll
+    $scope.allowSinglePick = true if $scope.options.allow_single_pick 
+    $scope.hideDisabled = true if $scope.options.hideDisabled
+
+    $scope.price_options = {min: 0, max: 100}
+
+
+  initCompany = (comp) ->
+    $scope.bookingItem ||= $scope.bb.current_item
 
     if $scope.bb.company.$has('named_categories')
       BBModel.Category.$query($scope.bb.company).then (items) =>
@@ -43,94 +64,119 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
     if $scope.service && $scope.service.company_id != $scope.bb.company.id
       $scope.service = null
 
-    ppromise = comp.$getServices()
+    promises = []
 
-    all_loaded = [ppromise]
+    servicePromise = comp.$getServices()
 
-    ppromise.then (items) =>
-      if $scope.options.hide_disabled
-        # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
-        items = items.filter (x) -> !x.disabled && !x.deleted
+    promises.push servicePromise
 
-      # not all service lists need filtering. check for attribute first
-      filterItems = if $attrs.filterServices is 'false' then false else true
+    getCompanyServices(servicePromise, promises)
 
-      if filterItems
-        if $scope.booking_item.service_ref && !$scope.options.show_all
-          items = items.filter (x) -> x.api_ref is $scope.booking_item.service_ref
-        else if $scope.booking_item.category && !$scope.options.show_all
-          # if we've selected a category for the current item - limit the list
-          # of services to ones that are relevant
-          items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.booking_item.category.self
 
-      # filter out event groups unless explicity requested
-      if !$scope.options.show_event_groups
-        items = items.filter (x) -> !x.is_event_group
-
-      # if there's only one service and single pick hasn't been enabled,
-      # automatically select the service.
-      if (items.length is 1 && !$scope.options.allow_single_pick)
-        if !$scope.selectItem(items[0], $scope.nextRoute, {skip_step: true})
-          setServiceItem items
-      else
-        setServiceItem items
-
-      # if there's a default - pick it and move on
-      if $scope.booking_item.defaultService()
-        for item in items
-          if item.self == $scope.booking_item.defaultService().self or (item.name is $scope.booking_item.defaultService().name and !item.deleted)
-            $scope.selectItem(item, $scope.nextRoute, {skip_step: true})
-
-      # if there's one selected - just select it
-      if $scope.booking_item.service
-        for item in items
-          item.selected = false
-          if item.self is $scope.booking_item.service.self
-            $scope.service = item
-            item.selected = true
-            $scope.booking_item.setService($scope.service)
-
-      if $scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))
-        # the "bookable services" are the service unless we've pre-selected something!
-        items = setServicesDisplayName(items)
-        $scope.bookable_services = items
+  getCompanyServices = (servicePromise, promises) ->
+    servicePromise.then (items) =>
+      readyServicesWithOptions(items)
     , (err) ->
-      loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      vm.loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-    if ($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource())
-      # if we've already picked a service or a resource - get a more limited service selection
-      ispromise = BBModel.BookableItem.$query({company: $scope.bb.company, cItem: $scope.booking_item, wait: ppromise, item: 'service'})
-      all_loaded.push(ispromise)
-      ispromise.then (items) =>
-        if $scope.booking_item.service_ref
-          items = items.filter (x) -> x.api_ref == $scope.booking_item.service_ref
-        if $scope.booking_item.group
-          items = items.filter (x) -> !x.group_id || x.group_id == $scope.booking_item.group
 
-        if $scope.options.hide_disabled
-          # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
-          items = items.filter (x) -> !x.item? || (!x.item.disabled && !x.item.deleted)
+    if ($scope.bookingItem.person && !$scope.bookingItem.anyPerson()) || ($scope.bookingItem.resource && !$scope.bookingItem.anyResource())
+      readyServicesWithSelectedItem(servicePromise, promises) 
 
-        services = (i.item for i in items when i.item?)
+    $q.all(promises).then () ->
+      vm.loader.setLoaded()
 
-        services = setServicesDisplayName(services)
 
-        $scope.bookable_services = services
 
-        $scope.bookable_items = items
+  readyServicesWithOptions = (items) ->
+    if $scope.options.hideDisabled
+      # this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
+      items = items.filter (x) -> !x.disabled && !x.deleted
 
-        if services.length is 1 and !$scope.options.allow_single_pick
-          if !$scope.selectItem(services[0], $scope.nextRoute, {skip_step: true})
-            setServiceItem services
-        else
-          # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages.
+    # not all service lists need filtering. check for attribute first
+    filterItems = if $scope.filterServices is 'false' then false else true
+
+    if filterItems
+      if $scope.bookingItem.service_ref && !$scope.options.showAll
+        items = items.filter (x) -> x.api_ref is $scope.bookingItem.service_ref
+      else if $scope.bookingItem.category && !$scope.options.showAll
+        # if we've selected a category for the current item - limit the list
+        # of services to ones that are relevant
+        items = items.filter (x) -> x.$has('category') && x.$href('category') is $scope.bookingItem.category.self
+
+    # filter out event groups unless explicity requested
+    if !$scope.options.show_event_groups
+      items = items.filter (x) -> !x.is_event_group
+
+    # if there's only one service and single pick hasn't been enabled,
+    # automatically select the service.
+    if (items.length is 1 && !$scope.options.allow_single_pick)
+      if !$scope.selectItem(items[0], $scope.nextRoute, {skip_step: true})
+        setServiceItem items
+    else
+      setServiceItem items
+
+    checkIfSelectedService(items)
+
+
+  checkIfSelectedService = (items) ->
+    # if there's a default - pick it and move on
+    if $scope.bookingItem.defaultService()
+      for item in items
+        if item.self == $scope.bookingItem.defaultService().self or (item.name is $scope.bookingItem.defaultService().name and !item.deleted)
+          $scope.selectItem(item, $scope.nextRoute, {skip_step: true})
+
+    # if there's one selected - just select it
+    if $scope.bookingItem.service
+      for item in items
+        item.selected = false
+        if item.self is $scope.bookingItem.service.self
+          $scope.service = item
+          item.selected = true
+          $scope.bookingItem.setService($scope.service)
+
+    if $scope.bookingItem.service || !(($scope.bookingItem.person && !$scope.bookingItem.anyPerson()) || ($scope.bookingItem.resource && !$scope.bookingItem.anyResource()))
+      # the "bookable services" are the service unless we've pre-selected something!
+      items = setServicesDisplayName(items)
+      $scope.bookable_services = items
+
+    return
+
+
+  readyServicesWithSelectedItem = (servicePromise, promises) ->
+    # if we've already picked a service or a resource - get a more limited service selection
+    ispromise = BBModel.BookableItem.$query({company: $scope.bb.company, cItem: $scope.bookingItem, wait: servicePromise, item: 'service'})
+    promises.push(ispromise)
+    ispromise.then (items) =>
+      if $scope.bookingItem.service_ref
+        items = items.filter (x) -> x.api_ref == $scope.bookingItem.service_ref
+      if $scope.bookingItem.group
+        items = items.filter (x) -> !x.group_id || x.group_id == $scope.bookingItem.group
+
+      if $scope.options.hideDisabled
+        # this might happen to have been an admin api call which would include disabled services - and we migth to hide them
+        items = items.filter (x) -> !x.item? || (!x.item.disabled && !x.item.deleted)
+
+      services = (i.item for i in items when i.item?)
+
+      services = setServicesDisplayName(services)
+
+      $scope.bookable_services = services
+
+      $scope.bookable_items = items
+
+      if services.length is 1 and !$scope.options.allow_single_pick
+        if !$scope.selectItem(services[0], $scope.nextRoute, {skip_step: true})
           setServiceItem services
+      else
+        # The ServiceModel is more relevant than the BookableItem when price and duration needs to be listed in the view pages.
+        setServiceItem services
 
-      , (err) ->
-        loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    , (err) ->
+      vm.loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
-    $q.all(all_loaded).then () ->
-      loader.setLoaded()
+    return
+
 
 
   setServicesDisplayName = (items)->
@@ -140,19 +186,20 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
       else
         item.display_name = item.name
 
-    items
+    return items
 
 
   # set the service item so the correct item is displayed in the dropdown menu.
   # without doing this the menu will default to 'please select'
   setServiceItem = (items) ->
-    $scope.items = items
-    $scope.filtered_items = $scope.items
+    vm.items = items
+    $scope.filtered_items = vm.items
     if $scope.service
         _.each items, (item) ->
           if item.id is $scope.service.id
             $scope.service = item
 
+    return
 
   ###**
   * @ngdoc method
@@ -173,25 +220,27 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
       $scope.service = item
       return false
     else if item.is_event_group
-      $scope.booking_item.setEventGroup(item)
+      $scope.bookingItem.setEventGroup(item)
       $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       $scope.routed = true
     else
-      $scope.booking_item.setService(item)
+      $scope.bookingItem.setService(item)
       # -----------------------------------------------------------
-      $scope.bb.selected_service = $scope.booking_item.service
+      $scope.bb.selected_service = $scope.bookingItem.service
       # -----------------------------------------------------------
       $scope.skipThisStep() if options.skip_step
       $scope.decideNextPage(route)
       $scope.routed = true
       return true
 
+    return
+
   $scope.$watch 'service', (newval, oldval) =>
-    if $scope.service && $scope.booking_item
-      if !$scope.booking_item.service or $scope.booking_item.service.self isnt $scope.service.self
+    if $scope.service && $scope.bookingItem
+      if !$scope.bookingItem.service or $scope.bookingItem.service.self isnt $scope.service.self
         # only set and broadcast if it's changed
-        $scope.booking_item.setService($scope.service)
+        $scope.bookingItem.setService($scope.service)
         $scope.broadcastItemUpdate()
         $scope.bb.selected_service = $scope.service
 
@@ -202,9 +251,10 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
   * @description
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
   ###
-  $scope.setReady = () =>
+  setReady = () =>
+    # this method is not being invoked anywhere ?
     if $scope.service
-      $scope.booking_item.setService($scope.service)
+      $scope.bookingItem.setService($scope.service)
       return true
     else if $scope.bb.stacked_items and $scope.bb.stacked_items.length > 0
       return true
@@ -219,6 +269,7 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
   * Display error message in modal
   ###
   $scope.errorModal = () ->
+    # this method is not being invoked anywhere ?
     error_modal = $uibModal.open
       templateUrl: $scope.getPartial('_error_modal')
       controller: ($scope, $uibModalInstance) ->
@@ -245,7 +296,7 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
         for item in service.extra[$scope.options.custom_filter]
           item = item.toLowerCase()
           if item is match
-            $scope.show_custom_array = true
+            $scope.showCustomArray = true
             return true
         return false
     $scope.service_name_include = (match) ->
@@ -258,37 +309,41 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
           return true
         else
           false
-    return (!$scope.filters.category_name or service.category_id is $scope.filters.category_name.id) and
-      (!$scope.filters.service_name or $scope.service_name_include($scope.filters.service_name)) and
-      (!$scope.filters.custom_array_value or $scope.custom_array($scope.filters.custom_array_value)) and
-      (!service.price or (service.price >= $scope.filters.price.min * 100 and service.price <= $scope.filters.price.max * 100 ))
+    return (!vm.filters.categoryName or service.category_id is vm.filters.categoryName.id) and
+      (!vm.filters.serviceName or $scope.serviceName_include(vm.filters.serviceName)) and
+      (!vm.filters.customArrayValue or $scope.custom_array(vm.filters.customArrayValue)) and
+      (!service.price or (service.price >= vm.filters.price.min * 100 and service.price <= vm.filters.price.max * 100 ))
 
   ###**
   * @ngdoc method
-  * @name resetFilters
+  * @namvm.Filters
   * @methodOf BB.Directives:bbServices
   * @description
-  * Clear the filters
+  * Clear filters
   ###
-  $scope.resetFilters = () ->
+  $scope.filters = () ->
     if $scope.options.clear_results
-      $scope.show_custom_array = false
-    $scope.filters.category_name = null
-    $scope.filters.service_name = null
-    $scope.filters.price.min = 0
-    $scope.filters.price.max = 100
-    $scope.filters.custom_array_value = null
-    $scope.filterChanged()
+      $scope.showCustomArray = false
+    vm.filters.categoryName = null
+    vm.filters.serviceName = null
+    vm.filters.price.min = 0
+    vm.filters.price.max = 100
+    vm.filters.customArrayValue = null
+
+    updateFilteredItems()
 
   ###**
   * @ngdoc method
-  * @name filterChanged
+  * @name updateFilteredItems
   * @methodOf BB.Directives:bbServices
   * @description
   * Filter changed
   ###
-  $scope.filterChanged = () ->
-    $scope.filtered_items = $filter('filter')($scope.items, $scope.filterFunction)
+  updateFilteredItems = () ->
+    $scope.filtered_items = $filter('filter')(vm.items, $scope.filterFunction)
+
+
+  init()
 
   return
 
