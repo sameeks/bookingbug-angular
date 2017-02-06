@@ -14,3 +14,4 @@ docs/*
 /build/admin-dashboard/
 /build/member/
 /.idea/
+/build/core/
