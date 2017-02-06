@@ -4,3 +4,13 @@ npm-debug.log
 .DS_Store
 release/*
 docs/*
+/test/unit/
+/build/services/
+/build/public-booking/
+/build/settings/
+/build/events/
+/build/admin/
+/build/admin-booking/
+/build/admin-dashboard/
+/build/member/
+/.idea/
