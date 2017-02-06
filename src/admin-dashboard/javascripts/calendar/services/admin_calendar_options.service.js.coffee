@@ -25,15 +25,16 @@
 angular.module('BBAdminDashboard.calendar.services').provider 'AdminCalendarOptions', [ ->
   # This list of options is meant to grow
   options = {
-    use_default_states       : true
-    show_in_navigation       : true
-    parent_state             : 'root'
-    column_format            : null
-    bookings_label_assembler : '{service_name} - {client_name}'
-    block_label_assembler    : 'Blocked'
-    external_label_assembler : '{title}'
-    minTime                 : null
-    maxTime                 : null
+    useDefaultStates         : true
+    showInNavigation         : true
+    parentState              : 'root'
+    columnFormat             : null
+    bookingsLabelAssembler   : '{service_name} - {client_name}'
+    blockLevelAssembler      : 'Blocked'
+    externalLabelAssembler   : '{title}'
+    minTime                  : null
+    maxTime                  : null
+    slotDuration             : 15
   }
 
   @setOption = (option, value) ->

@@ -73,14 +73,14 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     vm.loading = true
     getCompanyPromise().then (company) ->
       options =
-        labelAssembler: if $scope.labelAssembler then $scope.labelAssembler else AdminCalendarOptions.bookings_label_assembler
-        blockLabelAssembler: if $scope.blockLabelAssembler then $scope.blockLabelAssembler else AdminCalendarOptions.block_label_assembler
-        externalLabelAssembler: if $scope.externalLabelAssembler then $scope.externalLabelAssembler else AdminCalendarOptions.external_label_assembler
+        labelAssembler: if $scope.labelAssembler then $scope.labelAssembler else AdminCalendarOptions.bookingsLabelAssembler
+        blockLabelAssembler: if $scope.blockLabelAssembler then $scope.blockLabelAssembler else AdminCalendarOptions.blockLabelAssembler
+        externalLabelAssembler: if $scope.externalLabelAssembler then $scope.externalLabelAssembler else AdminCalendarOptions.externalLabelAssembler
         noCache: true
         showAll: vm.showAll
         type: calOptions.type
         selectedResources: vm.selectedResources.selected
-        calendarView: uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getView').type
+        calendarView: uiCalendarConfig.calendars[vm.calendarName].fullCalendar('getView').type
 
       if $scope.model
         options.showAll = false
@@ -97,7 +97,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
     if !calOptions.defaultView
       if $scope.model
-        calOptions.defaultView = 'agendaWeek'
+        calOptions.defaultView = 'agendaWeek' 
       else
         calOptions.defaultView = 'timelineDay'
 
@@ -107,18 +107,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       else
         calOptions.views = 'timelineDay,listDay,timelineDayThirty,agendaWeek,month'
 
-    # height = if calOptions.header_height
-    #   $bbug($window).height() - calOptions.header_height
-    # else
-    #   800
-
     if calOptions.name
-      vm.calendar_name = calOptions.name
+      vm.calendarName = calOptions.name
     else
-      vm.calendar_name = "resourceCalendar"
-
-    if not calOptions.cal_slot_duration?
-      calOptions.cal_slot_duration = GeneralOptions.calendar_slot_duration
+      vm.calendarName = "resourceCalendar"
 
     return
 
@@ -138,12 +130,12 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         views:
           listDay: {}
           agendaWeek:
-            slotDuration: $filter('minutesToString')(calOptions.cal_slot_duration)
+            slotDuration: $filter('minutesToString')(AdminCalendarOptions.slotDuration)
             groupByDateAndResource: false
           month:
             eventLimit: 5
           timelineDay:
-            slotDuration: $filter('minutesToString')(calOptions.cal_slot_duration)
+            slotDuration: $filter('minutesToString')(AdminCalendarOptions.slotDuration)
             eventOverlap: false
             slotWidth: 25
             resourceAreaWidth: '18%'
@@ -173,7 +165,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     vm.uiCalOptions.calendar.views.listDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
     vm.uiCalOptions.calendar.views.agendaWeek.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
     vm.uiCalOptions.calendar.views.month.buttonText =  $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
-    vm.uiCalOptions.calendar.views.timelineDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration})
+    vm.uiCalOptions.calendar.views.timelineDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: AdminCalendarOptions.slotDuration})
     return
 
   updateCalendarTimeRange = () ->
@@ -238,7 +230,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       editBooking(new BBModel.Admin.Booking(event))
 
   fcEventRender = (event, element) ->
-    type = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getView').type
+    type = uiCalendarConfig.calendars[vm.calendarName].fullCalendar('getView').type
     service = _.findWhere(companyServices, {id: event.service_id})
     if !$scope.model  # if not a single item view
       if type == "listDay"
@@ -301,7 +293,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
           company_id: company.id
 
   fcViewRender = (view, element) ->
-    date = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getDate')
+    date = uiCalendarConfig.calendars[vm.calendarName].fullCalendar('getDate')
     newDate = moment().tz(moment.tz.guess())
     newDate.set({
       'year': parseInt(date.get('year'))
@@ -328,13 +320,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   isTimeRangeAvailable = (start, end, resource) ->
     st = moment(start.toISOString()).unix()
     en = moment(end.toISOString()).unix()
-    events = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', (event)->
+    events = uiCalendarConfig.calendars[vm.calendarName].fullCalendar('clientEvents', (event)->
       event.rendering == 'background' && st >= event.start.unix() && event.end && en <= event.end.unix() && ((resource && parseInt(event.resourceId) == parseInt(resource.id)) || !resource)
     )
     return events.length > 0
 
   dayHasAvailability = (start)->
-    events = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', (event)->
+    events = uiCalendarConfig.calendars[vm.calendarName].fullCalendar('clientEvents', (event)->
       event.rendering == 'background' && event.start.year() == start.year() && event.start.month() == start.month() && event.start.date() == start.date()
     )
 
@@ -380,14 +372,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
 
   getBookingTitle = (booking)->
-    labelAssembler = if $scope.labelAssembler then $scope.labelAssembler else AdminCalendarOptions.bookings_label_assembler
-    blockLabelAssembler = if $scope.blockLabelAssembler then $scope.blockLabelAssembler else AdminCalendarOptions.block_label_assembler
+    labelAssembler = if $scope.labelAssembler then $scope.labelAssembler else AdminCalendarOptions.bookingsLabelAssembler
+    blockLabelAssembler = if $scope.blockLabelAssembler then $scope.blockLabelAssembler else AdminCalendarOptions.blockLabelAssembler
 
     if booking.status != 3 && labelAssembler
       return TitleAssembler.getTitle(booking, labelAssembler)
     else if booking.status == 3 && blockLabelAssembler
       return TitleAssembler.getTitle(booking, blockLabelAssembler)
-
     return booking.title
 
   refreshBooking = (booking) ->
@@ -400,8 +391,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         booking.resourceIds.push booking.resource_id + '_r'
 
       booking.title = getBookingTitle(booking)
-
-      uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
+      uiCalendarConfig.calendars[vm.calendarName].fullCalendar('updateEvent', booking)
     return
 
   updateBooking = (booking) ->
@@ -422,7 +412,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
       booking.title = getBookingTitle(booking)
 
-      uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
+      uiCalendarConfig.calendars[vm.calendarName].fullCalendar('updateEvent', booking)
     return
 
   editBooking = (booking) ->
@@ -452,21 +442,19 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
                 fail: () ->
                   refreshBooking(booking)
         if response.is_cancelled
-          uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('removeEvents', [response.id])
+          uiCalendarConfig.calendars[vm.calendarName].fullCalendar('removeEvents', [response.id])
         else
           booking.title = getBookingTitle(booking)
-          uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
+          uiCalendarConfig.calendars[vm.calendarName].fullCalendar('updateEvent', booking)
     return
 
   pusherBooking = (res) ->
     if res.id?
-      booking = _.first(uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', res.id))
+      booking = _.first(uiCalendarConfig.calendars[vm.calendarName].fullCalendar('clientEvents', res.id))
       if booking && booking.$refetch
-        booking.$refetch().then () ->
-          booking.title = getBookingTitle(booking)
-          uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('updateEvent', booking)
+        refreshBooking(booking)
       else
-        uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
+        uiCalendarConfig.calendars[vm.calendarName].fullCalendar('refetchEvents')
     return
 
   pusherSubscribe = () =>
@@ -479,7 +467,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     return
 
   updateDate = (date) ->
-    if uiCalendarConfig.calendars[vm.calendar_name]
+    if uiCalendarConfig.calendars[vm.calendarName]
       assembledDate = moment.utc()
       assembledDate.set({
         'year': parseInt(date.getFullYear())
@@ -490,7 +478,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         'second': 0,
       })
 
-      uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('gotoDate', assembledDate)
+      uiCalendarConfig.calendars[vm.calendarName].fullCalendar('gotoDate', assembledDate)
     return
 
   lazyUpdateDate = _.debounce(updateDate, 400)
@@ -502,11 +490,11 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     return
 
   refetchBookingsHandler = () ->
-    uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
+    uiCalendarConfig.calendars[vm.calendarName].fullCalendar('refetchEvents')
     return
 
   newCheckoutHandler = () ->
-    uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
+    uiCalendarConfig.calendars[vm.calendarName].fullCalendar('refetchEvents')
     return
 
   languageChangedHandler = () ->
@@ -531,8 +519,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     if vm.showAll
       vm.selectedResources.selected = []
 
-    uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchResources')
-    uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
+    uiCalendarConfig.calendars[vm.calendarName].fullCalendar('refetchResources')
+    uiCalendarConfig.calendars[vm.calendarName].fullCalendar('refetchEvents')
     return
 
   assetsListener = (assets)->

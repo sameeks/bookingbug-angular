@@ -36,7 +36,12 @@
       ng-click="newBooking()" bb-debounce="" translate="ADMIN_DASHBOARD.CALENDAR_PAGE.ADD_BOOKING"></button>-->
   </div>
 
-  <div id="uicalendar" ui-calendar="vm.uiCalOptions.calendar" ng-model="vm.eventSources" ng-if="vm.eventSources"
-       calendar="{{vm.calendar_name}}" class="resource-calendar">
+  <div 
+    id="uicalendar" 
+    ui-calendar="vm.uiCalOptions.calendar" 
+    ng-model="vm.eventSources" 
+    ng-if="vm.eventSources"
+    calendar="{{vm.calendarName}}" 
+    class="resource-calendar">
   </div>
 </div>

@@ -3,11 +3,11 @@ angular.module('BBAdminDashboard.calendar').run (RuntimeStates, AdminCalendarOpt
   'ngInject'
   
   # Choose to opt out of the default routing
-  if AdminCalendarOptions.use_default_states
+  if AdminCalendarOptions.useDefaultStates
 
     RuntimeStates
     .state 'calendar',
-      parent: AdminCalendarOptions.parent_state
+      parent: AdminCalendarOptions.parentState
       url: "calendar"
       templateUrl: "calendar/index.html"
       controller: 'CalendarPageCtrl'
@@ -18,7 +18,7 @@ angular.module('BBAdminDashboard.calendar').run (RuntimeStates, AdminCalendarOpt
       url: "/resources/:assets"
       templateUrl: "calendar/resources.html"
 
-  if AdminCalendarOptions.show_in_navigation
+  if AdminCalendarOptions.showInNavigation
     SideNavigationPartials.addPartialTemplate('calendar', 'calendar/nav.html')
 
   return
