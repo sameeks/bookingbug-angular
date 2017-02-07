@@ -33,7 +33,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
     $scope.$on 'refetchBookings', refetchBookingsHandler
     $scope.$on 'newCheckout', newCheckoutHandler
-    $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
+    $scope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
+    $scope.$on 'CalendarEventSources:timeRangeChanged', timeRangeChangedHandler
 
     getCompanyPromise().then(companyListener)
 
@@ -116,12 +117,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     else
       vm.calendar_name = "resourceCalendar"
 
-    if not calOptions.min_time?
-      calOptions.min_time = GeneralOptions.calendar_min_time
-
-    if not calOptions.max_time?
-      calOptions.max_time = GeneralOptions.calendar_max_time
-
     if not calOptions.cal_slot_duration?
       calOptions.cal_slot_duration = GeneralOptions.calendar_slot_duration
 
@@ -130,36 +125,27 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   prepareUiCalOptions = () ->
     vm.uiCalOptions = # @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
       calendar:
-        locale: $translate.use()
         schedulerLicenseKey: '0598149132-fcs-1443104297'
         eventStartEditable: false
         eventDurationEditable: false
-        minTime: calOptions.min_time
-        maxTime: calOptions.max_time
         height: 'auto'
-        buttonText: {
-          today: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
-        }
+        buttonText: {}
         header:
           left: 'today,prev,next'
           center: 'title'
           right: calOptions.views
         defaultView: calOptions.defaultView
         views:
-          listDay:
-            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.AGENDA')
+          listDay: {}
           agendaWeek:
             slotDuration: $filter('minutesToString')(calOptions.cal_slot_duration)
-            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
             groupByDateAndResource: false
           month:
             eventLimit: 5
-            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
           timelineDay:
             slotDuration: $filter('minutesToString')(calOptions.cal_slot_duration)
             eventOverlap: false
             slotWidth: 25
-            buttonText: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration})
             resourceAreaWidth: '18%'
         resourceGroupField: 'group'
         resourceLabelText: ' '
@@ -177,7 +163,24 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         viewRender: fcViewRender
         eventResize: fcEventResize
         loading: fcLoading
+    updateCalendarLanguage()
+    updateCalendarTimeRange()
     return
+
+  updateCalendarLanguage = () ->
+    vm.uiCalOptions.calendar.locale = $translate.use()
+    vm.uiCalOptions.calendar.buttonText.today = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
+    vm.uiCalOptions.calendar.views.listDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
+    vm.uiCalOptions.calendar.views.agendaWeek.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
+    vm.uiCalOptions.calendar.views.month.buttonText =  $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
+    vm.uiCalOptions.calendar.views.timelineDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration})
+    return
+
+  updateCalendarTimeRange = () ->
+    vm.uiCalOptions.calendar.minTime = AdminCalendarOptions.minTime
+    vm.uiCalOptions.calendar.maxTime = AdminCalendarOptions.maxTime
+    return
+
 
   fcResources = (callback) ->
     getCalendarAssets(callback)
@@ -206,8 +209,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
       getCompanyPromise().then (company) ->
         AdminMoveBookingPopup.open
-          min_date: setTimeToMoment(start, calOptions.min_time)
-          max_date: setTimeToMoment(end, calOptions.max_time)
+          min_date: setTimeToMoment(start, AdminCalendarOptions.minTime)
+          max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime)
           from_datetime: moment(start.toISOString())
           to_datetime: moment(end.toISOString())
           item_defaults: item_defaults
@@ -275,7 +278,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     if !calOptions.enforce_schedules || (isTimeRangeAvailable(start, end, resource) || (Math.abs(start.diff(end, 'days')) == 1 && dayHasAvailability(start)))
       if Math.abs(start.diff(end, 'days')) > 0
         end.subtract(1, 'days')
-        end = setTimeToMoment(end, calOptions.max_time)
+        end = setTimeToMoment(end, AdminCalendarOptions.maxTime)
 
       item_defaults =
         date: start.format('YYYY-MM-DD')
@@ -288,8 +291,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
       getCompanyPromise().then (company) ->
         AdminBookingPopup.open
-          min_date: setTimeToMoment(start, calOptions.min_time)
-          max_date: setTimeToMoment(end, calOptions.max_time)
+          min_date: setTimeToMoment(start, AdminCalendarOptions.minTime)
+          max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime)
           from_datetime: moment(start.toISOString())
           to_datetime: moment(end.toISOString())
           item_defaults: item_defaults
@@ -466,7 +469,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       pusher_channel = company.getPusherChannel('bookings')
       if pusher_channel
         pusher_channel.bind 'create', pusherBooking
-        pusher_channel.bind 'update', pusherBooking
+        pusher_channel.bind 'update', pusherBooking 
         pusher_channel.bind 'destroy', pusherBooking
     return
 
@@ -493,7 +496,11 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     return
 
   languageChangedHandler = () ->
-    prepareUiCalOptions()
+    updateCalendarLanguage()
+    return
+
+  timeRangeChangedHandler = () ->
+    updateCalendarTimeRange()
     return
 
   getCompanyPromise = () ->

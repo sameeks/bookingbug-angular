@@ -5,13 +5,7 @@ angular.module('BBAdminBooking').directive 'bbAdminMoveBooking', ($log,
 
   getTemplate = (template) ->
     partial = if template then template else 'main'
-    fromTemplateCache = $templateCache.get(partial)
-    if fromTemplateCache
-      fromTemplateCache
-    else
-      src = PathSvc.directivePartial(partial).$$unwrapTrustedValue()
-      $http.get(src, {cache: $templateCache}).then (response) ->
-        response.data
+    $templateCache.get(partial + '.html')
 
   renderTemplate = (scope, element, design_mode, template) ->
     $q.when(getTemplate(template)).then (template) ->

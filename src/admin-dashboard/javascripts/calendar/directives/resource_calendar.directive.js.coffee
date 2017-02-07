@@ -6,6 +6,7 @@ angular
     'ngInject'
 
     link = (scope, element, attrs) ->
+      
       init = () ->
         $timeout(documentReadyListener, 0)
         return
@@ -24,8 +25,9 @@ angular
         return
 
       scope.$on 'BBLanguagePicker:languageChanged', init
-        
+
       init()
+
       return
 
     return {
