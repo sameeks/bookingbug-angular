@@ -1,7 +1,6 @@
-'use strict'
+'use strict';
 
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbServices
 * @restrict AE
@@ -42,28 +41,32 @@
 *   </file>
 *  </example>
 *
-####
+ */
+angular.module('BB.Directives').directive('bbServices', function($q, $compile, $templateCache) {
+  return {
+    restrict: 'AE',
+    replace: true,
+    scope: true,
+    transclude: true,
+    controller: 'BBServicesCtrl',
+    controllerAs: '$bbServicesCtrl',
+    link: function(scope, element, attrs, ctrls, transclude) {
+      scope.directives = "public.ServiceList";
+      return transclude(scope, (function(_this) {
+        return function(clone) {
+          var has_content;
+          has_content = clone.length > 1 || (clone.length === 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)));
+          if (has_content) {
+            return element.html(clone).show();
+          } else {
+            return $q.when($templateCache.get('_services.html')).then(function(template) {
+              element.html(template).show();
+              return $compile(element.contents())(scope);
+            });
+          }
+        };
+      })(this));
+    }
+  };
+});
 
-
-angular.module('BB.Directives').directive 'bbServices', ($q, $compile, $templateCache) ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  transclude: true
-  controller : 'BBServicesCtrl'
-  controllerAs: '$bbServicesCtrl'
-  link : (scope, element, attrs, ctrls, transclude) ->
-
-    scope.directives = "public.ServiceList"
-
-    transclude scope, (clone) =>
-
-      # if there's content compile that or grab the _services template
-      has_content = clone.length > 1 || (clone.length == 1 and (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
-
-      if has_content
-        element.html(clone).show()
-      else
-        $q.when($templateCache.get('_services.html')).then (template) ->
-          element.html(template).show()
-          $compile(element.contents())(scope)
