@@ -2,9 +2,11 @@ var BBServicesCtrl;
 
 BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, $filter, BBModel, FormDataStoreService, PageControllerService, ErrorService, LoadingService) {
   'ngInject';
+
   var checkIfSelectedService, filterServices, filterServicesWithSelectedItem, getCompanyServices, init, initCompany, initFilters, initOptions, preselectService, readyServicesWithOptions, resourceIsSelected, setReady, setServiceItem, setServicesDisplayName, updateFilteredItems;
   this.$scope = $scope;
   FormDataStoreService.init('ServiceList', $scope, ['service']);
+
   $rootScope.connection_started.then((function(_this) {
     return function() {
       if ($scope.bb.company) {
@@ -14,6 +16,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
   })(this), function(err) {
     return this.loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong');
   });
+
   init = function() {
     this.items = [];
     this.loader = LoadingService.$loader($scope).notLoaded();
@@ -21,6 +24,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
     initOptions();
     initFilters();
   };
+
   initOptions = function() {
     return this.filters = {
       categoryName: null,
@@ -32,6 +36,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
       customArrayValue: null
     };
   };
+
   initFilters = function() {
     var options;
     this.showCustomArray = false;
@@ -53,6 +58,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
       max: 100
     }; 
   };
+
   initCompany = function(comp) {
     var promises, servicePromise;
     this.bookingItem || (this.bookingItem = $scope.bb.current_item);
@@ -75,12 +81,11 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
     promises.push(servicePromise);
     return getCompanyServices(servicePromise, promises);
   }.bind(this);
+
   getCompanyServices = function(servicePromise, promises) {
-    servicePromise.then((function(_this) {
-      return function(items) {
-        return readyServicesWithOptions(items);
-      };
-    })(this), function(err) {
+    servicePromise.then((function(items) {
+      return readyServicesWithOptions(items);
+    }), function(err) {
       return this.loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong');
     });
     if ((this.bookingItem.person && !this.bookingItem.anyPerson()) || (this.bookingItem.resource && !this.bookingItem.anyResource())) {
@@ -90,6 +95,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
       return this.loader.setLoaded();
     });
   }.bind(this);
+
   readyServicesWithOptions = function(items) {
     var filterItems;
     if (this.hideDisabled) {
@@ -125,6 +131,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
     }
     return checkIfSelectedService(items);
   }.bind(this);
+
   checkIfSelectedService = function(items) {
     var item, j, len;
     if (this.bookingItem.defaultService()) {
@@ -145,6 +152,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
       $scope.bookable_services = items;
     }
   }.bind(this);
+
   preselectService = function(bookingItem, items) {
     var item, j, len, results;
     results = [];
@@ -161,6 +169,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
     }
     return results;
   };
+
   resourceIsSelected = function(bookingItem) {
     var selected;
     selected = false;
@@ -169,6 +178,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
     }
     return selected;
   };
+
   filterServicesWithSelectedItem = function(servicePromise, promises) {
     var ispromise;
     ispromise = BBModel.BookableItem.$query({
@@ -224,6 +234,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
       return this.loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong');
     });
   };
+
   setServicesDisplayName = function(items) {
     var item, j, len;
     for (j = 0, len = items.length; j < len; j++) {
@@ -236,17 +247,18 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
     }
     return items;
   };
+
   setServiceItem = function(items) {
     this.items = items;
-    $scope.filtered_items = this.items;
+    this.filtered_items = this.items;
     if ($scope.service) {
       _.each(items, function(item) {
         if (item.id === $scope.service.id) {
           return $scope.service = item;
-        }
+        } 
       });
     }
-  };
+  }.bind(this);
 
   /**
   * @ngdoc method
@@ -258,48 +270,44 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
   * @param {object} item The Service or BookableItem to select
   * @param {string=} route A specific route to load
    */
-  $scope.selectItem = (function(_this) {
-    return function(item, route, options) {
-      if (options == null) {
-        options = {};
+  this.selectItem = function(item, route, options) {
+    if (options == null) {
+      options = {};
+    }
+    if ($scope.routed) {
+      return true;
+    }
+    if ($scope.$parent.$has_page_control) {
+      $scope.service = item;
+      return false;
+    } else if (item.is_event_group) {
+      this.bookingItem.setEventGroup(item);
+      if (options.skip_step) {
+        $scope.skipThisStep();
       }
-      console.log(_this);
-      if ($scope.routed) {
-        return true;
+      $scope.decideNextPage(route);
+      $scope.routed = true;
+    } else {
+      this.bookingItem.setService(item);
+      $scope.bb.selected_service = this.bookingItem.service;
+      if (options.skip_step) {
+        $scope.skipThisStep();
       }
-      if ($scope.$parent.$has_page_control) {
-        $scope.service = item;
-        return false;
-      } else if (item.is_event_group) {
-        _this.bookingItem.setEventGroup(item);
-        if (options.skip_step) {
-          $scope.skipThisStep();
-        }
-        $scope.decideNextPage(route);
-        $scope.routed = true;
-      } else {
-        _this.bookingItem.setService(item);
-        $scope.bb.selected_service = _this.bookingItem.service;
-        if (options.skip_step) {
-          $scope.skipThisStep();
-        }
-        $scope.decideNextPage(route);
-        $scope.routed = true;
-        return true;
-      }
+      $scope.decideNextPage(route);
+      $scope.routed = true;
+      return true;
     };
-  })(this);
-  $scope.$watch('service', (function(_this) {
-    return function(newval, oldval) {
-      if ($scope.service && _this.bookingItem) {
-        if (!_this.bookingItem.service || _this.bookingItem.service.self !== $scope.service.self) {
-          _this.bookingItem.setService($scope.service);
-          $scope.broadcastItemUpdate();
-          return $scope.bb.selected_service = $scope.service;
-        }
+  }.bind(this);
+
+  $scope.$watch('service', function(newval, oldval) {
+    if ($scope.service && this.bookingItem) {
+      if (!this.bookingItem.service || this.bookingItem.service.self !== $scope.service.self) {
+        this.bookingItem.setService($scope.service);
+        $scope.broadcastItemUpdate();
+        return $scope.bb.selected_service = $scope.service;
       }
-    };
-  })(this));
+    }
+  }.bind(this));
 
   /**
   * @ngdoc method
@@ -308,18 +316,16 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
   * @description
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
    */
-  setReady = (function(_this) {
-    return function() {
-      if ($scope.service) {
-        _this.bookingItem.setService($scope.service);
-        return true;
-      } else if ($scope.bb.stacked_items && $scope.bb.stacked_items.length > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    };
-  })(this);
+  setReady = function() {
+    if ($scope.service) {
+      this.bookingItem.setService($scope.service);
+      return true;
+    } else if ($scope.bb.stacked_items && $scope.bb.stacked_items.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }.bind(this);
 
   /**
   * @ngdoc method
@@ -417,7 +423,7 @@ BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, 
   * Filter changed
    */
   updateFilteredItems = function() {
-    return $scope.filtered_items = $filter('filter')(this.items, filterServices);
+    this.filtered_items = $filter('filter')(this.items, filterServices);
   };
   init();
 };

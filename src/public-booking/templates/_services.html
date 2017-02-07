@@ -1,6 +1,6 @@
 <ul class="bb-list bb-list-bordered bb-list-md">
   
-  <li ng-repeat="item in filtered_items | orderBy: 'order'">
+  <li ng-repeat="item in $bbServicesCtrl.filtered_items | orderBy: 'order'">
 
     <div
       class="row"
@@ -57,7 +57,7 @@
         <div class="col-sm-2 col-xs-12">
           <button
             type="button"
-            ng-click="selectItem(item)"
+            ng-click="$bbServicesCtrl.selectItem(item)"
             class="btn btn-primary btn-block"
             translate="PUBLIC_BOOKING.SERVICES.SELECT_BTN">
           </button>
