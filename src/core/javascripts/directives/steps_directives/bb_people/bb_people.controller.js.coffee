@@ -1,11 +1,9 @@
 'use strict'
 
-BBPeopleCtrl = ($scope, $rootScope, PageControllerService, $q, BBModel, PersonModel, FormDataStoreService, ValidatorService, LoadingService) ->
+BBPeopleCtrl = ($scope, $rootScope, $q, BBModel, PersonModel, FormDataStoreService, ValidatorService, LoadingService) ->
   'ngInject'
 
   @$scope = $scope
-
-  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   chosenService = null
   loader = null

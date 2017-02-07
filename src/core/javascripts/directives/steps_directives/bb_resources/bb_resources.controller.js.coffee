@@ -1,9 +1,7 @@
-BBResourcesCtrl = ($scope, $rootScope, $attrs, PageControllerService, $q, BBModel, ResourceModel, ValidatorService, LoadingService) ->
+BBResourcesCtrl = ($scope, $rootScope, $attrs, $q, BBModel, ResourceModel, ValidatorService, LoadingService) ->
   'ngInject'
 
   @$scope = $scope
-
-  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   loader = null
 

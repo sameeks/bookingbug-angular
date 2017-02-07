@@ -1,4 +1,4 @@
-BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService,PageControllerService, ErrorService, $filter, LoadingService) ->
+BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService, ErrorService, $filter, LoadingService) ->
   'ngInject'
 
   @$scope = $scope
@@ -8,7 +8,6 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
   ]
 
   loader = LoadingService.$loader($scope).notLoaded()
-  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.validator = ValidatorService
   $scope.filters = {category_name: null, service_name: null, price: { min: 0, max: 100}, custom_array_value: null}
