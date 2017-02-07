@@ -1,11 +1,9 @@
 'use strict'
 
 angular.module('BB.Controllers').controller 'CategoryList', (
-  $scope, $rootScope, $q, PageControllerService, LoadingService, BBModel, ValidatorService) ->
+  $scope, $rootScope, $q, LoadingService, BBModel) ->
 
   loader = LoadingService.$loader($scope).notLoaded()
-
-  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $rootScope.connection_started.then =>
     if $scope.bb.company
