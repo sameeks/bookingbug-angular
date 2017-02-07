@@ -1,15 +1,11 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'EventGroupList', ($scope,
-  $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
-  PageControllerService, LoadingService, halClient) ->
+angular.module('BB.Controllers').controller 'EventGroupList', ($scope, $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, LoadingService) ->
 
   FormDataStoreService.init 'EventGroupList', $scope, [
     'event_group'
   ]
   loader = LoadingService.$loader($scope).notLoaded()
-
-  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   $scope.validator = ValidatorService
 

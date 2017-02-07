@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file using [CHANG
 ## [Unreleased] 
 * GeneralOptions.calendar_min_time, calOptions.min_time replaced with AdminCalendarOptions.minTime
 * GeneralOptions.calendar_max_time, calOptions.max_time replaced with AdminCalendarOptions.maxTime
+* PageControllerService removed
 
 ## [2.1.0] - 2017-01-12
 ### Added

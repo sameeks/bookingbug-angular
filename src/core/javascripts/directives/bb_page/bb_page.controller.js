@@ -3,8 +3,6 @@
 
     angular.module('BB').controller('BBPageCtrl', BBPageCtrl);
 
-    angular.module('BB').value("PageControllerService", BBPageCtrl);
-
     function BBPageCtrl($scope, $q, ValidatorService, LoadingService) {
         'ngInject';
 
