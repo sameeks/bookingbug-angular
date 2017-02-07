@@ -1,10 +1,8 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $rootScope, $q, $filter, PageControllerService, AlertService, ValidatorService, LoadingService, $translate) ->
+angular.module('BB.Controllers').controller 'DurationList', ($scope, $attrs, $rootScope, $q, $filter, AlertService, ValidatorService, LoadingService, $translate) ->
 
   loader = LoadingService.$loader($scope).notLoaded()
-
-  angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   options = $scope.$eval($attrs.bbDurations) or {}
 

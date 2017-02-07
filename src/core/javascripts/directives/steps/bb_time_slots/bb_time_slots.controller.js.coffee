@@ -1,8 +1,6 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'TimeSlots', ($scope,
-    $rootScope, $q, $attrs, FormDataStoreService, ValidatorService,
-    PageControllerService, LoadingService, halClient, BBModel) ->
+angular.module('BB.Controllers').controller 'TimeSlots', ($scope, $rootScope, $q, $attrs, FormDataStoreService, ValidatorService, LoadingService, halClient, BBModel) ->
 
   loader = LoadingService.$loader($scope).notLoaded()
   $rootScope.connection_started.then ->

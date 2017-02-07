@@ -1,8 +1,7 @@
 'use strict'
 
 angular.module('BB.Controllers').controller 'ProductList', ($scope,
-    $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService,
-    PageControllerService, LoadingService, halClient) ->
+    $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, LoadingService) ->
 
   loader = LoadingService.$loader($scope).notLoaded()
 
