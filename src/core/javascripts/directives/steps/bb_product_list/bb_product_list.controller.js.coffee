@@ -1,11 +1,8 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'ProductList', ($scope,
-    $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, LoadingService) ->
+angular.module('BB.Controllers').controller 'ProductList', ($scope, $rootScope, $q, $attrs, ItemService, FormDataStoreService, ValidatorService, LoadingService) ->
 
   loader = LoadingService.$loader($scope).notLoaded()
-
-  $scope.validator = ValidatorService
 
   $rootScope.connection_started.then ->
     if $scope.bb.company

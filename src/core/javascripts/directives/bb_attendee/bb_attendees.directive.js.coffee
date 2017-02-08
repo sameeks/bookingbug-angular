@@ -6,7 +6,6 @@ angular.module('BB.Directives').directive 'bbAttendees', () ->
   scope : true
   controller: ($scope, $rootScope, $q, PurchaseService, AlertService, ValidatorService, LoadingService, BBModel) ->
 
-    $scope.validator = ValidatorService
     loader = LoadingService.$loader($scope)
 
     $rootScope.connection_started.then () ->
