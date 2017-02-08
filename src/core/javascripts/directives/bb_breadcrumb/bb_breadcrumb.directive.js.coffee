@@ -9,7 +9,7 @@
 # initialise options example
 # ng-init="setBasicRoute(['client','service_list'])"
 
-angular.module('BB.Directives').directive 'bbBreadcrumb', (PathSvc) ->
+angular.module('BB.Directives').directive 'bbBreadcrumbs', (PathSvc) ->
   restrict: 'A'
   replace: true
   scope : true

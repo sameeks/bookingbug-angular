@@ -32,6 +32,8 @@ angular.module('BBAdminDashboard.calendar.services').provider 'AdminCalendarOpti
     bookings_label_assembler : '{service_name} - {client_name}'
     block_label_assembler    : 'Blocked'
     external_label_assembler : '{title}'
+    minTime                 : null
+    maxTime                 : null
   }
 
   @setOption = (option, value) ->

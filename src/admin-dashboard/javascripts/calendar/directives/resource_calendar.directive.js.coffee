@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCalendar', ($compile, $templateCache, $timeout) ->
+angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCalendar', ($compile, $templateCache, $timeout, $rootScope) ->
   'ngInject'
 
   link = (scope, element, attrs) ->
@@ -19,6 +19,8 @@ angular.module('BBAdminDashboard.calendar.directives').directive 'bbResourceCale
       datePickerElement = $compile($templateCache.get('calendar_date_picker.html'))(scope)
       toolbarLeftElement.append(datePickerElement)
       return
+
+    scope.$on 'BBLanguagePicker:languageChanged', init
 
     init()
     return
