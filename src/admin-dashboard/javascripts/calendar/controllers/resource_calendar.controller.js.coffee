@@ -35,7 +35,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     $scope.$on 'refetchBookings', refetchBookingsHandler
     $scope.$on 'newCheckout', newCheckoutHandler
     $rootScope.$on 'BBLanguagePicker:languageChanged', languageChangedHandler
-    $rootScope.$on 'timezoneUpdated', newTimezoneHandler
+    $rootScope.$on 'BBTimezoneOptions:timezoneChanged', timezoneChangedHandler
 
     getCompanyPromise().then(companyListener)
 
@@ -532,7 +532,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents')
     return
 
-  newTimezoneHandler = (event, tz) ->
+  timezoneChangedHandler = (event, tz) ->
     uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('option', 'timezone', tz)
     return
 

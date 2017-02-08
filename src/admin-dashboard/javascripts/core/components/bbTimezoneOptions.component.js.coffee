@@ -14,7 +14,7 @@
 * </example>
 ###
 
-timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions, CompanyStoreService) ->
+timezoneOptionsController = ($scope, $rootScope, TimezoneOptions, GeneralOptions, CompanyStoreService) ->
   'ngInject'
 
   ctrl = @
@@ -41,7 +41,7 @@ timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions, Compan
       ctrl.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(tz)
       resetTimezone(tz)
 
-    $rootScope.$broadcast('close-select')
+    $scope.$broadcast('UISelect:CloseSelect')
 
     return
 
@@ -50,7 +50,7 @@ timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions, Compan
     GeneralOptions.custom_time_zone = true if timezone isnt CompanyStoreService.time_zone
     GeneralOptions.set_time_zone_automatically = setTzAutomatically
     moment.tz.setDefault(timezone)
-    $rootScope.$emit('timezoneUpdated', timezone)
+    $rootScope.$emit('BBTimezoneOptions:timezoneChanged', timezone)
     return
 
   resetTimezone = (tz) ->
@@ -58,7 +58,7 @@ timezoneOptionsController = ($rootScope, TimezoneOptions, GeneralOptions, Compan
     GeneralOptions.display_time_zone = null
     GeneralOptions.custom_time_zone = GeneralOptions.set_time_zone_automatically = false
     moment.tz.setDefault(tz)
-    $rootScope.$emit('timezoneUpdated', null)
+    $rootScope.$emit('BBTimezoneOptions:timezoneChanged', null)
 
   setDefaults = () ->
     if localStorage.selectedTimezone
