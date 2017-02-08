@@ -37,5 +37,4 @@ angular
         blockLabelAssembler: '@'
         externalLabelAssembler: '@'
         model: '=?'
-    }
-
+    }    

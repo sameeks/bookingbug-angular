@@ -173,7 +173,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     vm.uiCalOptions.calendar.buttonText.today = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
     vm.uiCalOptions.calendar.views.listDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
     vm.uiCalOptions.calendar.views.agendaWeek.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
-    vm.uiCalOptions.calendar.views.month.buttonText =  $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
+    vm.uiCalOptions.calendar.views.month.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
     vm.uiCalOptions.calendar.views.timelineDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration})
     return
 
@@ -190,8 +190,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
   fcEventDrop = (event, delta, revertFunc) -> # we need a full move cal if either it has a person and resource, or they've dragged over multiple days
 
-    # not blocked and is a change in person/resource, or over multiple days
-    if event.status !=3 && (event.person_id && event.resource_id || delta.days() > 0)
+# not blocked and is a change in person/resource, or over multiple days
+    if event.status != 3 && (event.person_id && event.resource_id || delta.days() > 0)
       start = event.start
       end = event.end
       item_defaults =
@@ -472,7 +472,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       pusher_channel = company.getPusherChannel('bookings')
       if pusher_channel
         pusher_channel.bind 'create', pusherBooking
-        pusher_channel.bind 'update', pusherBooking 
+        pusher_channel.bind 'update', pusherBooking
         pusher_channel.bind 'destroy', pusherBooking
     return
 
