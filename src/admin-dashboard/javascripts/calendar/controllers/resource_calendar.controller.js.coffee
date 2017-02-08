@@ -159,6 +159,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         eventClick: fcEventClick
         eventRender: fcEventRender
         eventAfterRender: fcEventAfterRender
+        eventAfterAllRender: fcEventAfterAllRender
         select: fcSelect
         viewRender: fcViewRender
         eventResize: fcEventResize
@@ -180,7 +181,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     vm.uiCalOptions.calendar.minTime = AdminCalendarOptions.minTime
     vm.uiCalOptions.calendar.maxTime = AdminCalendarOptions.maxTime
     return
-
 
   fcResources = (callback) ->
     getCalendarAssets(callback)
@@ -268,6 +268,9 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   fcEventAfterRender = (event, elements, view) ->
     if not event.rendering? or event.rendering != 'background'
       PrePostTime.apply(event, elements, view, $scope)
+      
+  fcEventAfterAllRender = () ->
+    $scope.$emit 'UICalendar:EventAfterAllRender'
 
   fcSelect = (start, end, jsEvent, view, resource) -> # For some reason clicking on the scrollbars triggers this event therefore we filter based on the jsEvent target
     if jsEvent and jsEvent.target.className == 'fc-scroller'
