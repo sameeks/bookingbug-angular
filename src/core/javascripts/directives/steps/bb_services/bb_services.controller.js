@@ -138,8 +138,8 @@
                     item: 'service'
                 });
                 all_loaded.push(ispromise);
-                ispromise.then((function (_this) {
-                    return function (items) {
+                ispromise.then(
+                    function (items) {
                         var i, services;
                         if ($scope.booking_item.service_ref) {
                             items = items.filter(function (x) {
@@ -179,16 +179,17 @@
                         } else {
                             return setServiceItem(services);
                         }
-                    };
-                })(this), function (err) {
-                    return loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong');
-                });
+                    },
+                    function (err) {
+                        return loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong');
+                    }
+                );
             }
             return $q.all(all_loaded).then(function () {
                 return loader.setLoaded();
             });
         };
-         function setServicesDisplayName(items) {
+        function setServicesDisplayName(items) {
             var item, j, len;
             for (j = 0, len = items.length; j < len; j++) {
                 item = items[j];
@@ -200,6 +201,7 @@
             }
             return items;
         }
+
         function setServiceItem(items) {
             $scope.items = items;
             $scope.filtered_items = $scope.items;
@@ -222,47 +224,44 @@
          * @param {object} item The Service or BookableItem to select
          * @param {string=} route A specific route to load
          */
-        $scope.selectItem = (function (_this) {
-            return function (item, route, options) {
-                if (options == null) {
-                    options = {};
+        $scope.selectItem = function (item, route, options) {
+            if (options == null) {
+                options = {};
+            }
+            if ($scope.routed) {
+                return true;
+            }
+            if ($scope.$parent.$has_page_control) {
+                $scope.service = item;
+                return false;
+            } else if (item.is_event_group) {
+                $scope.booking_item.setEventGroup(item);
+                if (options.skip_step) {
+                    $scope.skipThisStep();
                 }
-                if ($scope.routed) {
-                    return true;
+                $scope.decideNextPage(route);
+                return $scope.routed = true;
+            } else {
+                $scope.booking_item.setService(item);
+                $scope.bb.selected_service = $scope.booking_item.service;
+                if (options.skip_step) {
+                    $scope.skipThisStep();
                 }
-                if ($scope.$parent.$has_page_control) {
-                    $scope.service = item;
-                    return false;
-                } else if (item.is_event_group) {
-                    $scope.booking_item.setEventGroup(item);
-                    if (options.skip_step) {
-                        $scope.skipThisStep();
-                    }
-                    $scope.decideNextPage(route);
-                    return $scope.routed = true;
-                } else {
-                    $scope.booking_item.setService(item);
-                    $scope.bb.selected_service = $scope.booking_item.service;
-                    if (options.skip_step) {
-                        $scope.skipThisStep();
-                    }
-                    $scope.decideNextPage(route);
-                    $scope.routed = true;
-                    return true;
+                $scope.decideNextPage(route);
+                $scope.routed = true;
+                return true;
+            }
+        };
+
+        $scope.$watch('service', function (newval, oldval) {
+            if ($scope.service && $scope.booking_item) {
+                if (!$scope.booking_item.service || $scope.booking_item.service.self !== $scope.service.self) {
+                    $scope.booking_item.setService($scope.service);
+                    $scope.broadcastItemUpdate();
+                    return $scope.bb.selected_service = $scope.service;
                 }
-            };
-        })(this);
-        $scope.$watch('service', (function (_this) {
-            return function (newval, oldval) {
-                if ($scope.service && $scope.booking_item) {
-                    if (!$scope.booking_item.service || $scope.booking_item.service.self !== $scope.service.self) {
-                        $scope.booking_item.setService($scope.service);
-                        $scope.broadcastItemUpdate();
-                        return $scope.bb.selected_service = $scope.service;
-                    }
-                }
-            };
-        })(this));
+            }
+        });
 
         /***
          * @ngdoc method
@@ -271,18 +270,16 @@
          * @description
          * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
          */
-        $scope.setReady = (function (_this) {
-            return function () {
-                if ($scope.service) {
-                    $scope.booking_item.setService($scope.service);
-                    return true;
-                } else if ($scope.bb.stacked_items && $scope.bb.stacked_items.length > 0) {
-                    return true;
-                } else {
-                    return false;
-                }
-            };
-        })(this);
+        $scope.setReady = function () {
+            if ($scope.service) {
+                $scope.booking_item.setService($scope.service);
+                return true;
+            } else if ($scope.bb.stacked_items && $scope.bb.stacked_items.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        };
 
         /***
          * @ngdoc method
