@@ -17,9 +17,21 @@
     "tests"
   ],
   "resolutions": {
-    "angular": "1.2.28",
-    "moment": "master",
-    "bookingbug-angular-core": "*"
+    "angular": "~1.5.8",
+    "moment": "~2.14.0",
+    "bookingbug-angular-core": "*",
+    "angular-animate": "~1.5.8",
+    "angular-sanitize": "~1.5.8",
+    "angular-resource": "~1.5.8",
+    "angular-bootstrap": "~2.0.0",
+    "angular-cookies": "~1.5.8",
+    "fontawesome": "~4.6.3",
+    "angular-mocks": "~1.5.8",
+    "angular-google-maps": "2.3.2",
+    "angular-schema-form": "~0.8.13",
+    "trNgGrid": "~3.1.7",
+    "jquery": "~1.11.3",
+    "fullcalendar": "~3.0.0"
   },
   "dependencies": {
     "bookingbug-angular-core": "../core",
