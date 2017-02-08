@@ -32,12 +32,7 @@
                     'settings'
                 ],
                 environment: args.getEnvironment(),
-                rootPath: sdkRootPath,
-                testProjectConfig: projectConfig.getConfig(path.join(sdkRootPath, args.getTestProjectRootPath())),
-                testProjectReleasePath: path.join(sdkRootPath, args.getTestProjectRootPath(), 'release'),
-                testProjectRootPath: path.join(sdkRootPath, args.getTestProjectRootPath()),
-                testProjectSpecsRootPath: path.join(sdkRootPath, args.getTestProjectSpecsRootPath()),
-                testProjectTmpPath: path.join(sdkRootPath, args.getTestProjectRootPath(), 'tmp')
+                rootPath: sdkRootPath
             };
         }
 
