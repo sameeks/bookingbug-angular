@@ -3,8 +3,8 @@
     <span translate="ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_LABEL"></span>
   </label>
   <toggle-switch
-    ng-change="$ctrl.automaticTimezoneToggle()"
-    ng-model="$ctrl.automaticTimezone"
+    ng-change="$bbTimezoneOptionsCtrl.automaticTimezoneToggle()"
+    ng-model="$bbTimezoneOptionsCtrl.automaticTimezone"
     on-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_ON_LABEL' | translate}}"
     off-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_OFF_LABEL' | translate}}"
     class="switch-primary">
@@ -17,10 +17,10 @@
   </label>
   <!-- Using ui-select-choices-lazyload due to perfomance issues -->
   <ui-select
-    ng-model="$ctrl.selectedTimezone"
+    ng-model="$bbTimezoneOptionsCtrl.selectedTimezone"
     theme="bootstrap"
-    ng-disabled="$ctrl.automaticTimezone"
-    ng-change="$ctrl.setNewTimezone($ctrl.selectedTimezone.value);">
+    ng-disabled="$bbTimezoneOptionsCtrl.automaticTimezone"
+    ng-change="$bbTimezoneOptionsCtrl.setNewTimezone($bbTimezoneOptionsCtrl.selectedTimezone.value);">
 
     <ui-select-match placeholder="Select timezone">
      {{$select.selected.display}}
@@ -28,7 +28,7 @@
 
     <ui-select-choices
       ui-select-choices-lazyload
-      all-choices="$ctrl.timezones"
+      all-choices="$bbTimezoneOptionsCtrl.timezones"
       refresh-delay="0"
       repeat="
         timezone as timezone in $select.pagingOptions.items |
@@ -42,9 +42,9 @@
 
   <!-- Standard ui-select -->
   <!-- <ui-select
-    ng-model="$ctrl.selectedTimezone"
+    ng-model="$bbTimezoneOptionsCtrl.selectedTimezone"
     theme="bootstrap"
-    ng-change="$ctrl.setNewTimezone($ctrl.selectedTimezone.value);">
+    ng-change="$bbTimezoneOptionsCtrl.setNewTimezone($bbTimezoneOptionsCtrl.selectedTimezone.value);">
 
     <ui-select-match placeholder="Select timezone">
      {{$select.selected.display}}
@@ -53,7 +53,7 @@
     <ui-select-choices
       refresh-delay="0"
       repeat="
-        timezone as timezone in $ctrl.timezones |
+        timezone as timezone in $bbTimezoneOptionsCtrl.timezones |
         props: { display: $select.search}
         track by timezone.id">
       <div ng-bind-html="timezone.display | highlight: $select.search"></div>
