@@ -2,9 +2,18 @@
 All notable changes to this project will be documented in this file using [CHANGELOG](http://keepachangelog.com/en/0.3.0/) convention.
 
 ## [Unreleased] 
+
+### Changed
 * GeneralOptions.calendar_min_time, calOptions.min_time replaced with AdminCalendarOptions.minTime
 * GeneralOptions.calendar_max_time, calOptions.max_time replaced with AdminCalendarOptions.maxTime
+
+### Removed
 * PageControllerService removed
+
+### Deprecated
+* Use of `ValidatorService` in step directives.  Use `bbForm.submitForm()` instead. See Issue [#638](https://github.com/BookingBug/bookingbug-angular/issues/638)
+* Use of `submitted` flag on forms, `$submitted` should be used on favour
+
 
 ## [2.1.0] - 2017-01-12
 ### Added
