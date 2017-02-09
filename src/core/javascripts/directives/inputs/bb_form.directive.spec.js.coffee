@@ -195,7 +195,7 @@ describe 'bbForm directive', ->
       expect $bbPageController.$scope.checkReady
         .toHaveBeenCalled()
 
-    it 'routeReady will be not triggered with no argument', ->
+    it 'routeReady will be triggered with no argument', ->
       element.scope().submitForm()
 
       expect $bbPageController.$scope.routeReady
