@@ -10,6 +10,8 @@
 
         function init() {
             $scope.$has_page_control = true;
+
+            console.warn('Deprecation warning: validator.validateForm() will be removed from bbPage in an upcoming major release, please update your template to use bbForm and submitForm() instead. See https://github.com/bookingbug/bookingbug-angular/issues/638')
             $scope.validator = ValidatorService;
 
             $scope.checkReady = checkReady;

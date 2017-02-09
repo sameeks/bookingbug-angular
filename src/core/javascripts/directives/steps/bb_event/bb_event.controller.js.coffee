@@ -4,7 +4,9 @@ angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope
 
   loader = LoadingService.$loader($scope).notLoaded()
 
+  console.warn('Deprecation warning: validator.validateForm() will be removed from bbEvent in an upcoming major release, please update your template to use bbForm and submitForm() instead. See https://github.com/bookingbug/bookingbug-angular/issues/638')
   $scope.validator = ValidatorService
+
   $scope.event_options = $scope.$eval($attrs.bbEvent) or {}
 
   ticket_refs = []

@@ -4,7 +4,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
 
   loader = LoadingService.$loader($scope).notLoaded()
 
-  console.warn('Deprecation warning: validator.validateForm() will be removed from bbClientDetails in an upcoming major release, please update your template to use bbForm and submitForm() instead. See https://github.com/bookingbug/bookingbug-angular/issues/1')
+  console.warn('Deprecation warning: validator.validateForm() will be removed from bbClientDetails in an upcoming major release, please update your template to use bbForm and submitForm() instead. See https://github.com/bookingbug/bookingbug-angular/issues/638')
   $scope.validator = ValidatorService
 
   $scope.existing_member = false
