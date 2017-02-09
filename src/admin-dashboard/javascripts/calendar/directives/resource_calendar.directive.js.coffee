@@ -6,11 +6,11 @@ angular
     'ngInject'
 
     link = (scope, element, attrs) ->
-      
+
       init = () ->
-        addDatePickerToFCToolbar()
+        scope.$on 'UICalendar:EventAfterAllRender', addDatePickerToFCToolbar
         return
-        
+
       addDatePickerToFCToolbar = () ->
         uiCalElement = angular.element(document.getElementById('uicalendar'))
         datePicker = uiCalElement.find('bb-calendar-date-picker')
@@ -22,7 +22,7 @@ angular
           toolbarLeftElement.append(datePickerElement)
         return
 
-      scope.$on 'UICalendar:EventAfterAllRender', init
+      init()
 
       return
 
@@ -37,4 +37,4 @@ angular
         blockLabelAssembler: '@'
         externalLabelAssembler: '@'
         model: '=?'
-    }    
+    }

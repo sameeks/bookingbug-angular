@@ -312,9 +312,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       'date': parseInt(date.get('date'))
       'hour': 0
       'minute': 0
+      'minute': 0
       'second': 0
     })
-    vm.currentDate = newDate.toDate() #TODO other directive expect this variable on scope
+    vm.currentDate = newDate.toDate()
 
   fcEventResize = (event, delta, revertFunc, jsEvent, ui, view) ->
     event.duration = event.end.diff(event.start, 'minutes')
