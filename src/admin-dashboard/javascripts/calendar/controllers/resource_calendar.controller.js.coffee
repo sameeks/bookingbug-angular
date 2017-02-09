@@ -30,7 +30,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     prepareUiCalOptions()
 
     $scope.$watch 'selectedResources.selected', selectedResourcesListener
-    $scope.$watch 'currentDate', currentDateListener
 
     $scope.$on 'refetchBookings', refetchBookingsHandler
     $scope.$on 'newCheckout', newCheckoutHandler
@@ -40,6 +39,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     getCompanyPromise().then(companyListener)
 
     vm.changeSelectedResources = changeSelectedResources
+    vm.updateDateHandler = updateDateHandler
     return
 
   applyFilters = () ->
@@ -159,6 +159,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
         eventClick: fcEventClick
         eventRender: fcEventRender
         eventAfterRender: fcEventAfterRender
+        eventAfterAllRender: fcEventAfterAllRender
         select: fcSelect
         viewRender: fcViewRender
         eventResize: fcEventResize
@@ -172,7 +173,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     vm.uiCalOptions.calendar.buttonText.today = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
     vm.uiCalOptions.calendar.views.listDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY')
     vm.uiCalOptions.calendar.views.agendaWeek.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.WEEK')
-    vm.uiCalOptions.calendar.views.month.buttonText =  $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
+    vm.uiCalOptions.calendar.views.month.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MONTH')
     vm.uiCalOptions.calendar.views.timelineDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration})
     return
 
@@ -180,7 +181,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
     vm.uiCalOptions.calendar.minTime = AdminCalendarOptions.minTime
     vm.uiCalOptions.calendar.maxTime = AdminCalendarOptions.maxTime
     return
-
 
   fcResources = (callback) ->
     getCalendarAssets(callback)
@@ -190,8 +190,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
   fcEventDrop = (event, delta, revertFunc) -> # we need a full move cal if either it has a person and resource, or they've dragged over multiple days
 
-    # not blocked and is a change in person/resource, or over multiple days
-    if event.status !=3 && (event.person_id && event.resource_id || delta.days() > 0)
+# not blocked and is a change in person/resource, or over multiple days
+    if event.status != 3 && (event.person_id && event.resource_id || delta.days() > 0)
       start = event.start
       end = event.end
       item_defaults =
@@ -268,6 +268,9 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
   fcEventAfterRender = (event, elements, view) ->
     if not event.rendering? or event.rendering != 'background'
       PrePostTime.apply(event, elements, view, $scope)
+      
+  fcEventAfterAllRender = () ->
+    $scope.$emit 'UICalendar:EventAfterAllRender'
 
   fcSelect = (start, end, jsEvent, view, resource) -> # For some reason clicking on the scrollbars triggers this event therefore we filter based on the jsEvent target
     if jsEvent and jsEvent.target.className == 'fc-scroller'
@@ -309,9 +312,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       'date': parseInt(date.get('date'))
       'hour': 0
       'minute': 0
+      'minute': 0
       'second': 0
     })
-    $scope.currentDate = newDate.toDate() #TODO other directive expect this variable on scope
+    vm.currentDate = newDate.toDate()
 
   fcEventResize = (event, delta, revertFunc, jsEvent, ui, view) ->
     event.duration = event.end.diff(event.start, 'minutes')
@@ -319,11 +323,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
 
   fcLoading = (isLoading, view) ->
     vm.calendarLoading = isLoading
-
-  $scope.openDatePicker = ($event) -> #TODO other directive expect this method on scope
-    $event.preventDefault()
-    $event.stopPropagation()
-    $scope.datePickerOpened = true
 
   isTimeRangeAvailable = (start, end, resource) ->
     st = moment(start.toISOString()).unix()
@@ -474,31 +473,22 @@ angular.module('BBAdminDashboard.calendar.controllers').controller 'bbResourceCa
       pusher_channel = company.getPusherChannel('bookings')
       if pusher_channel
         pusher_channel.bind 'create', pusherBooking
-        pusher_channel.bind 'update', pusherBooking 
+        pusher_channel.bind 'update', pusherBooking
         pusher_channel.bind 'destroy', pusherBooking
     return
 
-  updateDate = (date) ->
+  updateDateHandler = (data) ->
     if uiCalendarConfig.calendars[vm.calendar_name]
       assembledDate = moment.utc()
       assembledDate.set({
-        'year': parseInt(date.getFullYear())
-        'month': parseInt(date.getMonth())
-        'date': parseInt(date.getDate())
+        'year': parseInt(data.date.getFullYear())
+        'month': parseInt(data.date.getMonth())
+        'date': parseInt(data.date.getDate())
         'hour': 0
         'minute': 0
         'second': 0,
       })
-
       uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('gotoDate', assembledDate)
-    return
-
-  lazyUpdateDate = _.debounce(updateDate, 400)
-
-
-  currentDateListener = (newDate, oldDate) ->
-    if newDate != oldDate && oldDate?
-      lazyUpdateDate(newDate)
     return
 
   refetchBookingsHandler = () ->
