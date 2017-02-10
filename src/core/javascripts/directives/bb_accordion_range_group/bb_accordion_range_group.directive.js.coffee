@@ -17,7 +17,7 @@
 * </pre>
 *
 * @param {hash} bbAccordionRangeGroup  A hash of options
-* @property {boolean} collaspe_when_time_selected Collapse when time is selected
+* @property {boolean} collapse_when_time_selected Collapse when time is selected
 * @property {string} setRange Set time range for start and end
 * @property {string} start_time The start time
 * @property {string} end_time The end time

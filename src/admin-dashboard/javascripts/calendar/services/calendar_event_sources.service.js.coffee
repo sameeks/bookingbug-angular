@@ -8,7 +8,7 @@
 * This services exposes methods to get all event-type information to be shown in the calendar
 ###
 angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSources', (AdminScheduleService, BBModel,
-  $exceptionHandler, $q, TitleAssembler, $translate) ->
+  $exceptionHandler, $q, TitleAssembler, $translate, AdminCalendarOptions, $rootScope) ->
   'ngInject'
 
   bookingBelongsToSelectedResources = (resources, booking)->
@@ -162,11 +162,15 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
   getAvailabilityBackground = (company, start, end, options = {})->
     deferred = $q.defer()
 
+
     AdminScheduleService.getAssetsScheduleEvents(company, start, end, !options.showAll, options.selectedResources).then (availabilities) ->
+
+      setCalendarAvailabilityRange(availabilities) if !AdminCalendarOptions.minTime? or !AdminCalendarOptions.maxTime? 
+
       if options.calendarView == 'timelineDay'
         deferred.resolve availabilities
       else
-        overAllAvailabilities = []
+        overAllAvailabilities = [] 
 
      
         for avail in availabilities
@@ -212,9 +216,8 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
               allDay: if options.calendarView == 'month' then true else false
             }
 
-
         #console.log overAllAvailabilities
-
+ 
 
         deferred.resolve overAllAvailabilities
     , (err)->
@@ -222,7 +225,53 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
 
     return deferred.promise
 
+
+  ###*
+  * @ngdoc method
+  * @name setCalendarAvailabilityRange
+  * @methodOf BBAdminDashboard.calendar.services.service:CalendarEventSources
+  * @description
+  * Sets AdminCalendarOptions availability range to the minTime and maxTime from all schedules
+  *
+  * @param {array} availabilities  The availabilities to get the min/max time from 
   ###
+  setCalendarAvailabilityRange = (availabilities) ->
+    if availabilities.length is 0                                                                     
+      return
+    # set minTime and maxTime to first availabilty and loop through to get earliest start and latest end
+    for availability, index in availabilities
+      minTime = availability.start if availability.start.isBefore(minTime) or index is 0 
+      maxTime = availability.end if availability.end.isAfter(maxTime) or index is 0
+
+    # store on AdminCalendarOptions object to read from in resourceCalendar controller prepareUiCalOptions method
+    AdminCalendarOptions.minTime = minTime.format('HH:mm') 
+    AdminCalendarOptions.maxTime = maxTime.format('HH:mm')
+
+    guardMidnightFormat(minTime, maxTime)
+
+    $rootScope.$broadcast 'CalendarEventSources:timeRangeChanged'
+
+
+    return
+
+
+  ###*
+  * @ngdoc method
+  * @name guardMidnightFormat
+  * @methodOf BBAdminDashboard.calendar.services.service:CalendarEventSources
+  * @description
+  * Formats maxTime from 00:00 to 24:00 when using 24 hour availability 
+  *
+  * @param {Moment} minTime Moment object containing minimum availability time
+  * @param {Moment} maxTime Moment object containing maximum availability time
+  ###
+  guardMidnightFormat = (minTime, maxTime) ->
+    if !minTime.isSame(maxTime, 'day') and AdminCalendarOptions.maxTime is '00:00'
+      AdminCalendarOptions.maxTime = '24:00'
+    return 
+    
+
+  ###*
   * @ngdoc method
   * @name getAllCalendarEntries
   * @methodOf BBAdminDashboard.calendar.services.service:CalendarEventSources

@@ -3,7 +3,6 @@
 angular.module('BB.Controllers').controller 'CategoryList', (
   $scope, $rootScope, $q, PageControllerService, LoadingService, BBModel, ValidatorService) ->
 
-  $scope.controller = "public.controllers.CategoryList"
   loader = LoadingService.$loader($scope).notLoaded()
 
   angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))

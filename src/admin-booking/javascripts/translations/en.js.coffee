@@ -50,7 +50,7 @@ angular.module("BBAdminBooking").config ($translateProvider) ->
         CLOSEST_TIME_ALLOW_OVERBOOKING     : "Looks like that time wasn\'t available. This could just be because it would be outside of their normal schedule. This was the closest time I found. You can select an alternative time, or you can try booking the requested time anyway"
 
         CLOSEST_EARLIER_TIME_BTN           : "Closest Earlier: {{closest_earlier | datetime: 'LT'}}"
-        CLOSEST_LATER_TIME_BTN             : "Closest Later: {{cloest_later | datetime: 'LT'}}"
+        CLOSEST_LATER_TIME_BTN             : "Closest Later: {{closest_later | datetime: 'LT'}}"
         REQUESTED_TIME_BTN                 : "Requested Time: {{requested_time: datetime: 'LT'}}"
         FIND_ANOTHER_TIME_BTN              : "Find another time"
         MORNING_HEADER                     : "@:COMMON.TERMINOLOGY.MORNING"
@@ -86,8 +86,8 @@ angular.module("BBAdminBooking").config ($translateProvider) ->
       QUICK_PICK: {
         BLOCK_WHOLE_DAY                : "Block whole day"
         BLOCK_TIME_TAB_HEADING         : "Block time"
-        BLOCK_TIME_TAB_HEADING         : "Block"
         MAKE_BOOKING_TAB_HEADING       : "Make booking"
+        FOR                            : "For"
         PERSON_LABEL                   : "@:COMMON.TERMINOLOGY.PERSON"
         PERSON_DEFAULT_OPTION          : "Any Person"
         RESOURCE_LABEL                 : "@:COMMON.TERMINOLOGY.RESOURCE"
@@ -100,6 +100,7 @@ angular.module("BBAdminBooking").config ($translateProvider) ->
         YES_OPTION                     : "@:COMMON.BTN.YES"
         NO_OPTION                      : "@:COMMON.BTN.NO"
         NEXT_BTN                       : "@:COMMON.BTN.NEXT"
+        BLOCK_TIME_BTN                 : "Block Time"
         FIELD_REQUIRED                 : "@:COMMON.FORM.FIELD_REQUIRED"
       }
       BOOKINGS_TABLE : {

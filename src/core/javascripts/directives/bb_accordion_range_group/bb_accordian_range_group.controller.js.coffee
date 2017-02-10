@@ -1,8 +1,5 @@
 angular.module('BB.Controllers').controller 'AccordionRangeGroup', ($scope, $attrs, $rootScope, $q, FormDataStoreService, GeneralOptions, DateTimeUtilitiesService, $translate, CompanyStoreService) ->
 
-  $scope.controller = "public.controllers.AccordionRangeGroup"
-
-
   $scope.$watch 'slots', () ->
     setData()
 
@@ -39,7 +36,7 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', ($scope, $att
     $scope.start_time = $scope.options.range[0]
     $scope.end_time   = $scope.options.range[1]
 
-    $scope.options.collaspe_when_time_selected = if _.isBoolean($scope.options.collaspe_when_time_selected) then $scope.options.collaspe_when_time_selected else true
+    $scope.options.collapse_when_time_selected = if _.isBoolean($scope.options.collapse_when_time_selected) then $scope.options.collapse_when_time_selected else true
     $scope.options.hide_availability_summary = if _.isBoolean($scope.options.hide_availability_summary) then $scope.options.hide_availability_summary else false
 
     $scope.heading = $translate.instant($scope.options.heading)
@@ -129,10 +126,10 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', ($scope, $att
     if $scope.selected_slot
       $scope.hideHeading = true
       $scope.is_selected = true
-      $scope.is_open = false if $scope.options.collaspe_when_time_selected
+      $scope.is_open = false if $scope.options.collapse_when_time_selected
     else
       $scope.is_selected = false
-      $scope.is_open = false if $scope.options.collaspe_when_time_selected
+      $scope.is_open = false if $scope.options.collapse_when_time_selected
 
 
   ###**

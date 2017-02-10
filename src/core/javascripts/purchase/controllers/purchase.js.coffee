@@ -14,7 +14,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
   SSOService, AlertService, LoginService, $window, $sessionStorage, LoadingService,
   $translate, ReasonService, $document) ->
 
-  $scope.controller = "Purchase"
   $scope.is_waitlist = false
   $scope.make_payment = false
   loader = LoadingService.$loader($scope)
@@ -312,7 +311,6 @@ angular.module('BB.Controllers').controller 'Purchase', ($scope,  $rootScope,
 
 # Simple modal controller for handling the 'delete' modal
 ModalDelete = ($scope,  $rootScope, $uibModalInstance, booking, AlertService, cancel_reasons) ->
-  $scope.controller = "ModalDelete"
   $scope.booking = booking
   $scope.cancel_reasons = cancel_reasons
 
@@ -325,7 +323,6 @@ ModalDelete = ($scope,  $rootScope, $uibModalInstance, booking, AlertService, ca
 
 # Simple modal controller for handling the 'delete all' modal
 ModalDeleteAll = ($scope,  $rootScope, $uibModalInstance, purchase) ->
-  $scope.controller = "ModalDeleteAll"
   $scope.purchase = purchase
 
   $scope.confirmDelete = () ->

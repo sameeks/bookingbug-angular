@@ -6,8 +6,6 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', (
   FormDataStoreService, PersonService, PurchaseService, DateTimeUtilitiesService,
   LoadingService) ->
 
-  $scope.controller = "public.controllers.TimeRangeListStacked"
-
   FormDataStoreService.init 'TimeRangeListStacked', $scope, [
     'selected_slot'
     'original_start_date'

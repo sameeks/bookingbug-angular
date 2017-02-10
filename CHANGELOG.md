@@ -1,8 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file using [CHANGELOG](http://keepachangelog.com/en/0.3.0/) convention.
 
-## [Unreleased]
--
+## [Unreleased] 
+* GeneralOptions.calendar_min_time, calOptions.min_time replaced with AdminCalendarOptions.minTime
+* GeneralOptions.calendar_max_time, calOptions.max_time replaced with AdminCalendarOptions.maxTime
 
 ## [2.1.0] - 2017-01-12
 ### Added

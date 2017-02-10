@@ -178,7 +178,8 @@ angular.module("BB.Services").config ($translateProvider) ->
           CODE_PLACEHOLDER  : "Enter a certificate code"
           APPLY_BTN         : "@:COMMON.BTN.APPLY"
         }
-        ADD_ANOTHER_BTN : "Add another item"
+        ADD_ANOTHER_EVENT_BTN : "Add another event"
+        ADD_ANOTHER_SERVICE_BTN : "Add another service"
         CHECKOUT_BTN    : "@:COMMON.BTN.CHECKOUT"
         BACK_BTN        : "@:COMMON.BTN.BACK"
       }

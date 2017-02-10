@@ -2,8 +2,6 @@
 
 angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q, DayService) ->
 
-  $scope.controller = "public.controllers.DayList"
-
   # Load up some day based data
   $rootScope.connection_started.then ->
     if !$scope.current_date && $scope.last_selected_date

@@ -2,8 +2,6 @@
 
 angular.module('BB.Controllers').controller 'Event', ($scope, $attrs, $rootScope, EventService, $q, PageControllerService, BBModel, ValidatorService, FormDataStoreService, LoadingService) ->
 
-  $scope.controller = "public.controllers.Event"
-
   loader = LoadingService.$loader($scope).notLoaded()
 
   angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))

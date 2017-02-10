@@ -5,7 +5,6 @@ BBPeopleCtrl = ($scope, $rootScope, PageControllerService, $q, BBModel, PersonMo
 
   @$scope = $scope
 
-  $scope.controller = "public.controllers.BBPeopleCtrl"
   angular.extend(this, new PageControllerService($scope, $q, ValidatorService, LoadingService))
 
   chosenService = null
