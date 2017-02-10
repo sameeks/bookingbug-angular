@@ -1,10 +1,5 @@
 'use strict'
 
-###*
-# Breadcrumb Directive
-# Example usage;
-# <div bb-breadcrumb></div>
-###
 angular.module('BB.Directives').directive 'bbBreadcrumbs', (PathSvc) ->
   restrict: 'A'
   replace: true
