@@ -8,7 +8,7 @@
 * Controller for the reset password functionality
 ###
 
-ResetPasswordCtrl = ($scope, $state, AdminLoginOptions, AdminLoginService, QueryStringService, ValidatorService, ResetPasswordService, ResetPasswordSchemaFormService) ->
+ResetPasswordCtrl = ($scope, $state, AdminLoginOptions, AdminLoginService, QueryStringService, ResetPasswordService, ResetPasswordSchemaFormService) ->
   'ngInject'
 
   $resetPasswordCtrl = @
@@ -24,8 +24,6 @@ ResetPasswordCtrl = ($scope, $state, AdminLoginOptions, AdminLoginService, Query
 
     if $resetPasswordCtrl.showApiField
       $resetPasswordCtrl.resetPasswordSite = angular.copy($scope.bb.api_url)
-
-    $resetPasswordCtrl.validator = ValidatorService
 
     $resetPasswordCtrl.formErrors = []
 

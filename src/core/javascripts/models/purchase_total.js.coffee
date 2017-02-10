@@ -16,7 +16,7 @@
 
 
 angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel,
-  BaseModel, PurchaseTotalService) ->
+  BaseModel, PurchaseService) ->
 
   class PurchaseTotal extends BaseModel
 

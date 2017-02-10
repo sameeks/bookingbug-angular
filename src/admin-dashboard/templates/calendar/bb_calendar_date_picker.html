@@ -1,0 +1,19 @@
+<p class="input-group datepicker">
+  <input
+  	type="text"
+  	uib-datepicker-popup="dd-MMMM-yyyy"
+  	ng-model="$bbCalendarDatePickerCtrl.currentDate"
+    ng-change="$bbCalendarDatePickerCtrl.datePickerUpdated();"
+    is-open="$bbCalendarDatePickerCtrl.datePickerOpened"
+    ng-focus="$bbCalendarDatePickerCtrl.datePickerOpened=true"
+    datepicker-options="{'startingDay': 1, 'showButtonBar': false,'showWeeks': false}"
+    show-button-bar="false"
+    class="form-control"
+    >
+  <span class="input-group-btn">
+    <button type="button" class="btn btn-default datepicker-popup"
+      ng-click="$bbCalendarDatePickerCtrl.openDatePicker($event);">
+      <i class="fa fa-calendar"></i>
+    </button>
+  </span>
+</p>
