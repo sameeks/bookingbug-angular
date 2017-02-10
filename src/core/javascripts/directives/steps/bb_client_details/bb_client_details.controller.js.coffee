@@ -3,7 +3,10 @@
 angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $rootScope, LoginService, ValidatorService, AlertService, LoadingService, BBModel) ->
 
   loader = LoadingService.$loader($scope).notLoaded()
+
+  console.warn('Deprecation warning: validator.validateForm() will be removed from bbClientDetails in an upcoming major release, please update your template to use bbForm and submitForm() instead. See https://github.com/bookingbug/bookingbug-angular/issues/638')
   $scope.validator = ValidatorService
+
   $scope.existing_member = false
   $scope.login_error = false
 
@@ -11,15 +14,15 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   options = $scope.$eval($attrs.bbClientDetails) or {}
   $scope.suppress_client_create = $attrs.bbSuppressCreate? or options.suppress_client_create
 
-  $rootScope.connection_started.then =>
+  $rootScope.connection_started.then ->
 
     $scope.initClientDetails()
 
   , (err) ->  loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
 
 
-  $rootScope.$watch 'member', (oldmem, newmem) =>
-    if !$scope.client.valid() && LoginService.isLoggedIn()
+  $rootScope.$watch 'member', (oldmem, newmem) ->
+    if !$scope.client.valid() and LoginService.isLoggedIn()
       $scope.setClient(new BBModel.Client(LoginService.member()._data))
 
 
@@ -31,12 +34,13 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   * initialise the client object
   ###
   $scope.initClientDetails = () ->
-    if !$scope.client.valid() && LoginService.isLoggedIn()
+
+    if !$scope.client.valid() and LoginService.isLoggedIn()
       # make sure we set the client to the currently logged in member
       # we should also just check the logged in member is a member of the company they are currently booking with
       $scope.setClient(new BBModel.Client(LoginService.member()._data))
 
-    if LoginService.isLoggedIn() && LoginService.member().$has("child_clients") && LoginService.member()
+    if LoginService.isLoggedIn() and LoginService.member().$has("child_clients") and LoginService.member()
       LoginService.member().$getChildClients().then (children) =>
         $scope.bb.parent_client = new BBModel.Client(LoginService.member()._data)
         $scope.bb.child_clients = children
@@ -69,7 +73,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
     $scope.existing_member = false
 
     # we need to validate teh client information has been correctly entered here
-    if $scope.bb && $scope.bb.parent_client
+    if $scope.bb and $scope.bb.parent_client
       $scope.client.parent_client_id = $scope.bb.parent_client.id
     $scope.client.setClientDetails($scope.client_details)
 
@@ -138,7 +142,7 @@ angular.module('BB.Controllers').controller 'ClientDetails', ($scope, $attrs, $r
   * Client search
   ###
   $scope.clientSearch = () ->
-    if $scope.client? && $scope.client.email? && $scope.client.email != ""
+    if $scope.client? and $scope.client.email? and $scope.client.email != ""
       loader.notLoaded()
       BBModel.Client.$query_by_email($scope.bb.company, $scope.client.email).then (client) ->
         if client?

@@ -1,8 +1,7 @@
 angular.module('BB.Controllers').controller 'PostcodeLookup', ($scope,  $rootScope, $q, ValidatorService, AlertService, LoadingService, $attrs) ->
+  
   angular.extend(this, new CompanyListBase($scope, $rootScope, $q, $attrs))
 
-
-  $scope.validator = ValidatorService
   loader = LoadingService.$loader($scope)
 
   ###**

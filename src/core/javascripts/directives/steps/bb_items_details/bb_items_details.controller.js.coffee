@@ -1,8 +1,6 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope,
-  PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService,
-  $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService) ->
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService) ->
 
   loader = LoadingService.$loader($scope)
 
@@ -26,7 +24,9 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
     'mobile'
   ])
 
+  console.warn('Deprecation warning: validator.validateForm() will be removed from bbItemDetails in an upcoming major release, please update your template to use bbForm and submitForm() instead. See https://github.com/bookingbug/bookingbug-angular/issues/638')
   $scope.validator = ValidatorService
+
   confirming = false
 
 
