@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file using [CHANG
 
 ### Removed
 * PageControllerService removed
+* $scope.setBasicRoute removed 
 
 ### Deprecated
 * Use of `ValidatorService` in step directives.  Use `bbForm.submitForm()` instead. See Issue [#638](https://github.com/BookingBug/bookingbug-angular/issues/638)
