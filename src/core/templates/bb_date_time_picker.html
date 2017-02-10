@@ -1,12 +1,14 @@
 <div class="row bb-date-picker">
-  <div ng-class="{'col-sm-7': !dateOnly, 'col-sm-12': dateOnly}">
+  <div ng-class="{'col-xs-7': !dateOnly, 'col-xs-12': dateOnly}">
     <div class="input-group">
       <input type="text" ng-model="datetimeWithNoTz" class="form-control"
         uib-datepicker-popup="{{format}}"
         is-open="opened"
-        datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'maxDate': maxDateClean, 'minDate': minDateClean}"
+        datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'showWeeks': false, 'maxDate': maxDateClean, 'minDate': minDateClean}"
         show-button-bar="false"
+        ng-class="{'datepicker-show-focus': opened}"
         ng-disabled="bbDisabled"
+        ng-readonly="true"
         ng-focus="opened=true"
       />
       <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
@@ -14,8 +16,8 @@
       </span>
     </div>
   </div>
-  <div class="col-sm-5" ng-show="!dateOnly">
+  <div class="col-xs-5" ng-show="!dateOnly">
     <div uib-timepicker ng-model="datetimeWithNoTz" show-meridian="showMeridian"
-      minute-step="minuteStep" max="maxDateClean" min="minDateClean" readonly-input="bbDisabled"></div>
+      minute-step="minuteStep" max="maxDateClean" min="minDateClean" readonly-input="true"></div>
   </div>
 </div>
