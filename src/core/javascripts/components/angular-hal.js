@@ -77,8 +77,8 @@ angular
                     }
                     var resource = store.data;
                     resource._links = store.links;
-                    key = store.links.self.href;
-                    options = store.options;
+                    var key = store.links.self.href;
+                    var options = store.options;
                     return new BaseResource(key, options, resource)
                 },
                 $get: function (href, options) {
