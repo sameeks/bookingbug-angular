@@ -51,7 +51,7 @@ angular.module("BBAdminBooking").config ($translateProvider) ->
 
         CLOSEST_EARLIER_TIME_BTN           : "Closest Earlier: {{closest_earlier | datetime: 'LT'}}"
         CLOSEST_LATER_TIME_BTN             : "Closest Later: {{closest_later | datetime: 'LT'}}"
-        REQUESTED_TIME_BTN                 : "Requested Time: {{requested_time: datetime: 'LT'}}"
+        REQUESTED_TIME_BTN                 : "Requested Time: {{requested_time | datetime: 'LT'}}"
         FIND_ANOTHER_TIME_BTN              : "Find another time"
         MORNING_HEADER                     : "@:COMMON.TERMINOLOGY.MORNING"
         AFTERNOON_HEADER                   : "@:COMMON.TERMINOLOGY.AFTERNOON"
