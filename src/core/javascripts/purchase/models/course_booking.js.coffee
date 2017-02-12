@@ -6,7 +6,7 @@ angular.module('BB.Models').factory "Purchase.CourseBookingModel", ($q, BBModel,
     constructor: (data) ->
       super(data)
 
-    getBookings: =>
+    getBookings: ->
       defer = $q.defer()
       defer.resolve(@bookings) if @bookings
       if @_data.$has('bookings')

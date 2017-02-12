@@ -314,7 +314,7 @@ angular.module('BB.Services').factory 'ValidatorService', ($rootScope, AlertServ
       return true
 
 
-   ###**
+  ###**
     * @ngdoc method
     * @name resetForm
     * @methodOf BB.Services:Validator

@@ -42,7 +42,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           @company
 
 
-    $getAnswers: () =>
+    $getAnswers: () ->
       defer = $q.defer()
       if @answers?
         defer.resolve(@answers)
@@ -56,7 +56,7 @@ angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBMod
           defer.resolve([])
       defer.promise
 
-    $getSurveyAnswers: () =>
+    $getSurveyAnswers: () ->
       defer = $q.defer()
       defer.resolve(@survey_answers) if @survey_answers
       if @_data.$has('survey_answers')

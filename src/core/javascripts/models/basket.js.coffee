@@ -20,6 +20,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
   class Basket extends BaseModel
 
     constructor: (data, scope) ->
+      super(data)
       if scope && scope.isAdmin
         @is_admin = scope.isAdmin
       else
@@ -27,9 +28,7 @@ angular.module('BB.Models').factory "BasketModel", ($q, BBModel, BaseModel, Bask
       if scope? && scope.parent_client
         @parent_client_id = scope.parent_client.id
       @items = []
-      super(data)
       @reviewed = false
-
     ###**
     * @ngdoc method
     * @name addItem

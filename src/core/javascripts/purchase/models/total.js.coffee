@@ -24,7 +24,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
     gcalLink: ->
       @_data.$href('gcal')
 
-    getItems: =>
+    getItems: ->
       defer = $q.defer()
       defer.resolve(@items) if @items
       $q.all([
@@ -38,7 +38,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve(items)
       defer.promise
 
-    $getBookings: =>
+    $getBookings: ->
       defer = $q.defer()
       defer.resolve(@bookings) if @bookings
       if @_data.$has('bookings')
@@ -50,7 +50,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
-    $getCourseBookings: =>
+    $getCourseBookings: ->
       defer = $q.defer()
       defer.resolve(@course_bookings) if @course_bookings
       if @_data.$has('course_bookings')
@@ -62,7 +62,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
-    getPackages: =>
+    getPackages: ->
       defer = $q.defer()
       defer.resolve(@packages) if @packages
       if @_data.$has('packages')
@@ -73,7 +73,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
-    getProducts: =>
+    getProducts: ->
       defer = $q.defer()
       defer.resolve(@products) if @products
       if @_data.$has('products')
@@ -84,7 +84,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
-    getDeals: =>
+    getDeals: ->
       defer = $q.defer()
       defer.resolve(@deals) if @deals
       if @_data.$has('deals')
@@ -95,7 +95,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.resolve([])
       defer.promise
 
-    getMessages: (booking_texts, msg_type) =>
+    getMessages: (booking_texts, msg_type) ->
       defer = $q.defer()
       booking_texts = (bt for bt in booking_texts when bt.message_type == msg_type)
       if booking_texts.length == 0
@@ -112,7 +112,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
           defer.resolve(msgs)
       defer.promise
 
-    getClient: =>
+    getClient: ->
       defer = $q.defer()
       if @_data.$has('client')
         @_data.$get('client').then (client) =>
@@ -122,7 +122,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.reject('No client')
       defer.promise
 
-    getMember: =>
+    getMember: ->
       defer = $q.defer()
       if @_data.$has('member')
         @_data.$get('member').then (member) =>
@@ -132,7 +132,7 @@ angular.module('BB.Models').factory "Purchase.TotalModel", ($q, $window, BBModel
         defer.reject('No member')
       defer.promise
 
-    getConfirmMessages: () =>
+    getConfirmMessages: () ->
       defer = $q.defer()
       if @_data.$has('confirm_messages')
         @_data.$get('confirm_messages').then (msgs) =>

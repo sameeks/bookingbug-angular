@@ -60,7 +60,7 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     *
     * @returns {object} The returning category promise
     ###
-    $getCategory: () =>
+    $getCategory: () ->
       return null if !@$has('category')
       prom = @$get('category')
       prom.then (cat) =>
@@ -76,7 +76,7 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     *
     * @returns {array} The returning days array
     ###
-    days_array: () =>
+    days_array: () ->
       arr = []
       for x in [@min_bookings..@max_bookings]
         str = "" + x + " day"

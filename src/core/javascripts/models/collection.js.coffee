@@ -4,7 +4,7 @@ angular.module('BB.Models').factory "BBCollectionModel", ($q, BBModel, BaseModel
 
   class BBCollection extends BaseModel
 
-    getNextPage: (params) =>
+    getNextPage: (params) ->
 
       deferred = $q.defer()
 

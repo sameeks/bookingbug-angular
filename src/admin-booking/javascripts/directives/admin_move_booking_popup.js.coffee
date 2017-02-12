@@ -25,7 +25,7 @@ angular.module('BBAdminBooking').factory 'AdminMoveBookingPopup', ($uibModal, $t
       # success
       if config.success
         config.success()
-      return result;
+      return result
     , (err) ->
       if config.fail
         config.fail()

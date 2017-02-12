@@ -60,7 +60,7 @@ angular.module('BB.Models').factory "Member.BookingModel", ($q, $window, $bbug,
       return "£" + @price if parseFloat(@price) % 1 == 0
       return $window.sprintf("£%.2f", parseFloat(@price))
 
-    $getMember: () =>
+    $getMember: () ->
       defer = $q.defer()
       defer.resolve(@member) if @member
       if @_data.$has('member')

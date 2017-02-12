@@ -73,7 +73,6 @@ angular.module('BB.Directives').directive 'bbDatepickerPopup', ($parse, $documen
       e.stopPropagation()
       $timeout ->
         scope.opened = true
-      ,
 
     # completely disable focus for the input, but only if input is readonly
     $bbug(element).on 'focus', () ->

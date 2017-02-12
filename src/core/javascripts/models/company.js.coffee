@@ -125,7 +125,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     *
     * @returns {object} Subscriber company
     ###
-    pusherSubscribe: (callback, options = {}) =>
+    pusherSubscribe: (callback, options = {}) ->
       if Pusher? && !@pusher?
         return if !@$has('pusher')
         @pusher = new Pusher 'c8d8cea659cc46060608',
@@ -157,7 +157,7 @@ angular.module('BB.Models').factory "CompanyModel", ($q, BBModel, BaseModel, hal
     *
     * @returns {object} Pusher channel
     ###
-    getPusherChannel: (model, options = {}) =>
+    getPusherChannel: (model, options = {}) ->
       unless @pusher
         return if !@$has('pusher')
         @pusher = new Pusher 'c8d8cea659cc46060608',

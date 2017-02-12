@@ -22,6 +22,7 @@ angular.module('BB.Models').factory "ItemDetailsModel", ($q, $bbug, ItemDetailsS
   class ItemDetails extends BaseModel
 
     constructor: (data) ->
+      super(data)
       @_data = data
       if @_data
         @self = @_data.$href("self")

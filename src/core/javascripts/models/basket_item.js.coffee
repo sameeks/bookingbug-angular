@@ -1181,7 +1181,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
     *
     * @returns {integer} The returned question price
     ###
-    questionPrice: =>
+    questionPrice: ->
 
       return 0 if !@item_details
       return @item_details.questionPrice(@getQty())
@@ -1196,7 +1196,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
     *
     * @returns {integer} The returned quatity of tickets
     ###
-    getQty: =>
+    getQty: ->
       return @qty if @qty
       return @tickets.qty if @tickets
       return 1
@@ -1211,7 +1211,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
     *
     * @returns {integer} The returned total price
     ###
-    totalPrice: =>
+    totalPrice: ->
       if @tickets && @tickets.pre_paid_booking_id
         return 0
       if @pre_paid_booking_id
@@ -1233,7 +1233,7 @@ angular.module('BB.Models').factory "BasketItemModel", ($q, $window, BBModel, Bo
     *
     * @returns {integer} The returned full price
     ###
-    fullPrice: =>
+    fullPrice: ->
       pr = @base_price
       pr ||= @total_price
       pr ||= @price
