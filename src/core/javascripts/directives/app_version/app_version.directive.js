@@ -1,4 +1,4 @@
-(function (angular) {
+(function () {
     'use strict';
 
     angular.module('BB.Directives').directive('appVersion', function (version) {
