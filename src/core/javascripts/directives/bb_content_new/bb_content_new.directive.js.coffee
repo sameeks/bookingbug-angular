@@ -1,10 +1,7 @@
 'use strict'
 
-# Directives
-app = angular.module 'BB.Directives'
-
 # Used to load the application's content. It uses ng-include.
-app.directive 'bbContentNew', (PathSvc) ->
+angular.module('BB.Directives').directive 'bbContentNew', (PathSvc) ->
   restrict: 'A'
   replace: true
   scope : true

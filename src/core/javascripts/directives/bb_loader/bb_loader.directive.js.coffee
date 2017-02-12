@@ -10,9 +10,7 @@
 # classes or ids will be added to the loading item so they can be styled
 # individually.
 
-app = angular.module 'BB.Directives'
-
-app.directive 'bbLoader', ($rootScope, $compile, PathSvc, TemplateSvc) ->
+angular.module('BB.Directives').directive 'bbLoader', ($rootScope, $compile, PathSvc, TemplateSvc) ->
   restrict: 'A'
   replace : false
   scope : {}
@@ -99,7 +97,7 @@ app.directive 'bbLoader', ($rootScope, $compile, PathSvc, TemplateSvc) ->
 # Example usage;
 # <div bb-loading-spinner>
 
-app.directive 'bbLoadingSpinner', ($compile) ->
+angular.module('BB.Directives').directive 'bbLoadingSpinner', ($compile) ->
 
   transclude: true
 

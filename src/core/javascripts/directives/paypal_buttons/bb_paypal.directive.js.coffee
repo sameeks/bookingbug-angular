@@ -1,9 +1,6 @@
 'use strict'
 
-# Directives
-app = angular.module 'BB.Directives'
-
-app.directive 'bbPaypal', (PathSvc) ->
+angular.module('BB.Directives').directive 'bbPaypal', (PathSvc) ->
   restrict: 'A'
   replace: true
   scope : {

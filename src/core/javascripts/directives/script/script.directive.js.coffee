@@ -1,10 +1,6 @@
 'use strict'
 
-# Directives
-app = angular.module 'BB.Directives'
-
-
-app.directive 'script', ($compile, halClient) ->
+angular.module('BB.Directives').directive 'script', ($compile, halClient) ->
   transclude: false,
   restrict: 'E',
   link: (scope, element, attrs) ->
