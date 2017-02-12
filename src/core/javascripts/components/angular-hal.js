@@ -3,13 +3,13 @@ angular
 .module('angular-hal', []).provider('data_cache', function() {
 
     this.$get = function() {
-      data = [];
+      var data = [];
 
       return {
 
         set: function(key, val)
         {
-          data[key] = val
+          data[key] = val;
           return val
         },
         get: function(key)
@@ -38,15 +38,15 @@ angular
 })
 .provider('shared_header', function() {
    this.$get = function() {
-      data = {};
+      var data = {};
 
       return {
 
         set: function(key, val, store)
         {
           // also store this in the session store
-          store.setItem(key, val)
-          data[key] = val
+          store.setItem(key, val);
+          data[key] = val;
           return val
         },
         get: function(key)
@@ -71,7 +71,7 @@ angular
   ){
 
     if ($sessionStorage.getItem('auth_token'))
-      shared_header.set('auth_token', $sessionStorage.getItem('auth_token'), $sessionStorage)
+      shared_header.set('auth_token', $sessionStorage.getItem('auth_token'), $sessionStorage);
     else if ($cookies.get('Auth-Token') && !shared_header.has('auth_token')){
       shared_header.set('auth_token', $cookies.get('Auth-Token'), $sessionStorage)
     }
@@ -88,10 +88,10 @@ angular
         if (typeof store === 'string') {
           store = JSON.parse(store)
         }
-        resource = store.data
-        resource._links = store.links
-        key = store.links.self.href
-        options = store.options
+        var resource = store.data;
+        resource._links = store.links;
+        key = store.links.self.href;
+        options = store.options;
         return new BaseResource(key, options, resource)
       },
       $get: function(href, options){
@@ -182,7 +182,7 @@ angular
         return !~['_', '$'].indexOf(key[0]);
       })
       .forEach(function(key){
-        this[key] = data[key]
+        this[key] = data[key];
 //        Object.defineProperty(this, key, {
   //        configurable: false
   //        , enumerable: true

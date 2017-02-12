@@ -2,13 +2,13 @@ angular.module('ngStorage', [])
 .factory('$fakeStorage', [
   '$cookies',
   function($cookies){
-    function FakeStorage() {};
+    function FakeStorage() {}
     FakeStorage.prototype.setItem = function (key, value) {
       $cookies.put(key, value);
     };
     FakeStorage.prototype.getItem = function (key) {
       return typeof $cookies.get(key) == 'undefined' ? null : $cookies.get(key);
-    }
+    };
     FakeStorage.prototype.removeItem = function (key) {
       if ($cookies.get(key)){
         $cookies.remove(key);
@@ -28,7 +28,7 @@ angular.module('ngStorage', [])
 .factory('$localStorage', [
   '$window', '$fakeStorage',
   function($window, $fakeStorage) {
-    function isStorageSupported(storageName) 
+    function isStorageSupported(storageName)
     {
       var testKey = 'test',
         storage = $window[storageName];
@@ -37,8 +37,8 @@ angular.module('ngStorage', [])
         storage.setItem(testKey, '1');
         storage.removeItem(testKey);
         return true;
-      } 
-      catch (error) 
+      }
+      catch (error)
       {
         return false;
       }
@@ -72,7 +72,7 @@ angular.module('ngStorage', [])
 .factory('$sessionStorage', [
   '$window', '$fakeStorage',
   function($window, $fakeStorage) {
-    function isStorageSupported(storageName) 
+    function isStorageSupported(storageName)
     {
       var testKey = 'test',
         storage = $window[storageName];
@@ -81,8 +81,8 @@ angular.module('ngStorage', [])
         storage.setItem(testKey, '1');
         storage.removeItem(testKey);
         return true;
-      } 
-      catch (error) 
+      }
+      catch (error)
       {
         return false;
       }

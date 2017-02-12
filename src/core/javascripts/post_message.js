@@ -433,7 +433,7 @@ var NO_JQUERY = {};
                   }
               });
 
- })(this, typeof jQuery === "undefined" ? NO_JQUERY : jQuery);
+ })(window, typeof jQuery === "undefined" ? NO_JQUERY : jQuery);
 
 /**
  * http://www.JSON.org/json2.js

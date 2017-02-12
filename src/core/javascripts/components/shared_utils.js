@@ -1,13 +1,13 @@
 
 /* Usefull javascript functions usable directly withing html views - often for getting scope related data */
 
-getControllerScope = function(controller, fn){
+var getControllerScope = function(controller, fn){
   $(document).ready(function(){
     var $element = $('div[data-ng-controller="' + controller + '"]');
     var scope = angular.element($element).scope();
-    fn(scope); 
+    fn(scope);
   });
-}
+};
 
 
 function getURIparam( name ){
