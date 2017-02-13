@@ -238,10 +238,12 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
           company_id: company.id,
           booking_id: event.id,
           success: model => {
-            return refreshBooking(event);
+            let adminBooking = new BBModel.Admin.Booking(event);
+            return refreshBooking(adminBooking);
           },
           fail() {
-            refreshBooking(event);
+            let adminBooking = new BBModel.Admin.Booking(event);
+            refreshBooking(adminBooking);
             return revertFunc();
           }
         })
@@ -505,7 +507,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
       params: {
         locale: $translate.use()
       },
-      success: response => {
+      successFn: response => {
         if (typeof response === 'string') {
           if (response === "move") {
             let item_defaults = {person: booking.person_id, resource: booking.resource_id};
@@ -515,6 +517,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                 company_id: company.id,
                 booking_id: booking.id,
                 success: model => {
+
                   return refreshBooking(booking);
                 },
                 fail() {

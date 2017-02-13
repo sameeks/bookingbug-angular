@@ -79,7 +79,7 @@
     };
 
 
-    let editForm = function ($scope, $uibModalInstance, model, title, successFn, failFn, params, $document, $log, Dialog, FormTransform, $translate) {
+    let editForm = function ($scope, $uibModal, $uibModalInstance, model, title, successFn, failFn, params, $document, $log, Dialog, FormTransform, $translate) {
         $scope.loading = true;
         $scope.title = title;
         $scope.model = model;
@@ -310,8 +310,6 @@
                 if (!templateUrl) {
                     templateUrl = 'modal_form.html';
                 }
-
-                debugger
                 return $uibModal.open({
                     templateUrl,
                     controller: editForm,
@@ -324,7 +322,6 @@
                             return config.title;
                         },
                         successFn() {
-                            debugger;
                             return config.success;
                         },
                         failFn() {
