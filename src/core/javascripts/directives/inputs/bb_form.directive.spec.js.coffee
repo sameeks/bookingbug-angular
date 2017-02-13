@@ -86,20 +86,19 @@ describe 'bbForm directive', ->
 
       return
 
-    it 'parent form is submitted', ->
+    it 'parent form is submitted', ->      
+
       expect element.scope().parent.$submitted
         .toBe true
 
-    it 'child form is submitted', ->
-      childForm = angular.element(element.find('[name=child]'))
+    it 'child form is submitted', ->      
 
-      expect childForm.scope().parent.$submitted
+      expect element.scope().parent.child.$submitted
         .toBe true
 
     it 'inner-child form is submitted', ->
-      childForm = angular.element(element.find('[name=inner-child]'))
-
-      expect childForm.scope().parent.$submitted
+      
+      expect element.scope().parent.child['inner-child'].$submitted
         .toBe true
 
   describe 'when bb-form is wrapped with bb-page and bb-form-route attribute is present with no value', ->
@@ -162,7 +161,7 @@ describe 'bbForm directive', ->
       expect $bbPageController.$scope.checkReady
         .toHaveBeenCalled()
 
-    it 'routeReady will be triggered with no argument', ->
+    it 'routeReady will be triggered with argument', ->
       element.scope().submitForm()
 
       expect $bbPageController.$scope.routeReady
@@ -190,17 +189,17 @@ describe 'bbForm directive', ->
 
       return
 
-    it 'checkReady will be not triggered ', ->
+    it 'checkReady will be triggered ', ->
       element.scope().submitForm()
 
       expect $bbPageController.$scope.checkReady
-        .not.toHaveBeenCalled()
+        .toHaveBeenCalled()
 
-    it 'routeReady will be not triggered with no argument', ->
+    it 'routeReady will be triggered with no argument', ->
       element.scope().submitForm()
 
       expect $bbPageController.$scope.routeReady
-        .not.toHaveBeenCalledWith()
+        .toHaveBeenCalledWith()
 
   describe 'when bb-form is wrapped with bb-page and bb-form-route attribute but form is invalid', ->
     $bbPageController = null

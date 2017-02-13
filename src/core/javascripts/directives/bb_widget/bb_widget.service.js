@@ -266,18 +266,6 @@
                 return this.$wait_for_routing.resolve();
             }
         };
-        Widget.prototype.setBasicRoute = function (routes) {
-            var i, j, len, step;
-            this.nextSteps = {};
-            this.firstStep = routes[0];
-            for (i = j = 0, len = routes.length; j < len; i = ++j) {
-                step = routes[i];
-                this.nextSteps[step] = routes[i + 1];
-            }
-            if (this.$wait_for_routing) {
-                return this.$wait_for_routing.resolve();
-            }
-        };
         Widget.prototype.waitForRoutes = function () {
             if (!this.$wait_for_routing) {
                 return this.$wait_for_routing = $q.defer();

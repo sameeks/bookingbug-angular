@@ -64,7 +64,6 @@
             $scope.clearClient = bbWidgetInit.clearClient;
             //$scope.setCompany = bbWidgetInit.setCompany;
             $scope.setAffiliate = bbWidgetInit.setAffiliate;
-            $scope.setBasicRoute = $scope.bb.setBasicRoute;
 
             $scope.isAdmin = bbWidgetUtilities.isAdmin;
             $scope.isAdminIFrame = bbWidgetUtilities.isAdminIFrame;

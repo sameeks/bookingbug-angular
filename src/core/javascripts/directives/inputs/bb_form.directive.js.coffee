@@ -18,18 +18,32 @@ bbFormDirective = ($bbug, $window, ValidatorService, $timeout, GeneralOptions) -
   'ngInject'
 
   link = (scope, elem, attrs, ctrls) ->
+
     $bbPageCtrl = null
     $formCtrl = null
 
     init = ->
+
       $formCtrl = ctrls[0]
       $bbPageCtrl = ctrls[1]
       scope.submitForm = submitForm
       elem.on "submit", submitForm # doesn't work with ng-form just regular form
       return
 
+    # marks child forms as submitted
+    # See https://github.com/angular/angular.js/issues/10071
+    setSubmitted = (form) ->
+
+      form.$setSubmitted()
+      form.submitted = true # DEPRECATED - $submitted should be used in favour
+      angular.forEach form, (item) ->
+        setSubmitted(item) if item and item.$$parentForm is form and item.$setSubmitted
+
+
     submitForm = () ->
-      $formCtrl.$setSubmitted()
+
+      setSubmitted($formCtrl)
+
       $timeout(scrollAndFocusOnInvalid, 100)
 
       isValid = ValidatorService.validateForm($formCtrl)
@@ -40,16 +54,21 @@ bbFormDirective = ($bbug, $window, ValidatorService, $timeout, GeneralOptions) -
       return isValid
 
     serveBBPage = () ->
-      if $bbPageCtrl? and attrs.bbFormRoute?
+
+      if $bbPageCtrl?
+        
         route = attrs.bbFormRoute
         $bbPageCtrl.$scope.checkReady()
-        if route.length > 0
+
+        if route? and route.length > 0
           $bbPageCtrl.$scope.routeReady(route)
         else
           $bbPageCtrl.$scope.routeReady()
+
       return
 
     scrollAndFocusOnInvalid = () ->
+
       invalidFormGroup = elem.find('.has-error:first')
 
       if invalidFormGroup and invalidFormGroup.length > 0 and !$formCtrl.raise_alerts

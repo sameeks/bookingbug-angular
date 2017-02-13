@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'CustomConfirmationText', ($scope, $rootScope, CustomTextService, $q, PageControllerService, LoadingService) ->
+angular.module('BB.Controllers').controller 'CustomConfirmationText', ($scope, $rootScope, CustomTextService, $q, LoadingService) ->
   loader = LoadingService.$loader($scope).notLoaded()
 
   $rootScope.connection_started.then ->

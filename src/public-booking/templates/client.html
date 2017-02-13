@@ -16,7 +16,8 @@
     </span>
   </h2>
 
-  <form
+  <div
+    ng-form
     name="client_form"
     role="form"
     novalidate
@@ -33,7 +34,7 @@
           <button
             type="submit"
             class="btn btn-primary"
-            ng-click="validator.validateForm(client_form) && checkReady() && routeReady()"
+            ng-click="submitForm()"
             translate="PUBLIC_BOOKING.CLIENT_FORM.NEXT_BTN">
           </button>
         </div>
