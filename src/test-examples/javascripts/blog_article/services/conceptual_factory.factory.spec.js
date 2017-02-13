@@ -19,5 +19,3 @@ describe('bbTe.blogArticle, bbTeBaConceptualFactory factory', function() {
     .toBe('Hi test!')
   );
 });
-
-return;

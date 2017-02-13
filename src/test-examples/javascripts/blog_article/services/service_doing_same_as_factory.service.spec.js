@@ -20,5 +20,3 @@ describe('bbTe.blogArticle, bbTeBaServiceDoingSameAsFactory service', function()
   );
 
 });
-
-return;

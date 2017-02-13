@@ -19,5 +19,3 @@ describe('bbTe.blogArticle, bbTeBaConceptualService service', function() {
   );
 
 });
-
-return;

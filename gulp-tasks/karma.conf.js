@@ -5,18 +5,17 @@
         return config.set({
             autoWatch: true,
             browsers: ['PhantomJS'],
-            coffeeCoverage: {
-                preprocessor: {
-                    instrumentor: 'istanbul'
-                }
-            },
-            coffeePreprocessor: {
+
+            babelPreprocessor: {
                 options: {
-                    bare: false,
-                    sourceMap: true
+                    presets: ['es2015'],
+                    sourceMap: 'inline'
                 },
-                transformPath: function (path) {
-                    return path.replace(/\.coffee$/, '.js');
+                filename: function (file) {
+                    return file.originalPath.replace(/\.js$/, '.es5.js');
+                },
+                sourceFileName: function (file) {
+                    return file.originalPath;
                 }
             },
             coverageReporter: {
@@ -36,14 +35,33 @@
             preprocessors: {
                 'src/*/javascripts/*.html': 'html2js',
                 'src/*/javascripts/**/*.html': 'html2js',
-                'src/*/javascripts/*.spec.js.coffee': ['coffee'],
-                'src/*/javascripts/**/*.spec.js.coffee': ['coffee'],
-                'src/*/javascripts/!(*.spec).js.coffee': ['coffee-coverage'],
-                'src/*/javascripts/**/!(*.spec).js.coffee': ['coffee-coverage']
+                'src/*/javascripts/*.js': ['babel'],
+                'src/*/javascripts/**/*.js': ['babel']
             },
+
+
             reporters: ['dots', 'coverage'],
             singleRun: false
         });
+
+        /*
+         coffeeCoverage: {
+         preprocessor: {
+         instrumentor: 'istanbul'
+         }
+         },
+         coffeePreprocessor: {
+         options: {
+         bare: false,
+         sourceMap: true
+         },
+         transformPath: function (path) {
+         return path.replace(/\.coffee$/, '.js');
+         }
+         },
+         */
+        /*'src/!*!/javascripts/!(*.spec).js': ['coffee-coverage'],
+            'src/!*!/javascripts/!**!/!(*.spec).js': ['coffee-coverage']*/
     };
 
 }).call(this);
