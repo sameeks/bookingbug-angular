@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // Directive for testing if a input is focused
 // Provided by http://www.ng-newsletter.com/posts/validations.html
 angular.module('BB.Directives').directive("bbFocus", [function() {

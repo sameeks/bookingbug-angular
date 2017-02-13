@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // bbAddressMap
 // Adds behaviour to select first invalid input
 angular.module('BB.Directives').directive('bbAddressMap', $document =>

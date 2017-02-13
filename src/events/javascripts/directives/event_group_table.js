@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BBAdminEvents').directive('eventGroupTable', function(BBModel, $log, ModalForm) {
 
   let controller = function($scope) {

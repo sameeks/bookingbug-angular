@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // bbScrollTo
 // Allows you to scroll to a specific element
 angular.module('BB.Directives').directive('bbScrollTo', ($rootScope, AppConfig, BreadcrumbService, $bbug, $window, GeneralOptions, viewportSize) =>

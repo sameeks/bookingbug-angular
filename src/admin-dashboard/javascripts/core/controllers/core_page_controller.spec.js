@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 describe('BBAdminDashboard, CorePageController', function() {
   let $controller = null;
   let $state = null;

@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BBAdminServices').directive('scheduleEdit', function() {
 
   let link = function(scope, element, attrs, ngModel) {

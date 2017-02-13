@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BB.Controllers').controller('PostcodeLookup', function($scope,  $rootScope, $q, ValidatorService, AlertService, LoadingService, $attrs) {
   
   angular.extend(this, new CompanyListBase($scope, $rootScope, $q, $attrs));

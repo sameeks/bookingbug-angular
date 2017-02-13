@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BBAdminDashboard.members-iframe.controllers', []);
 angular.module('BBAdminDashboard.members-iframe.services', []);
 angular.module('BBAdminDashboard.members-iframe.directives', []);

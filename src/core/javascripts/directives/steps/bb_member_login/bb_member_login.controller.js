@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BB.Controllers').controller('MemberLogin', function($scope, $log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, ValidatorService, LoadingService) {
 
   $scope.login = {};

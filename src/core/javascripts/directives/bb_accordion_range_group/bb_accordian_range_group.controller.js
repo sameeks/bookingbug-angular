@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BB.Controllers').controller('AccordionRangeGroup', function($scope, $attrs, $rootScope, $q, FormDataStoreService, GeneralOptions, DateTimeUtilitiesService, $translate, CompanyStoreService) {
 
   $scope.$watch('slots', () => setData());

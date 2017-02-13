@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BB.Services').factory('Dialog', function($uibModal, $log, $document) {
 
   let controller = function($scope, $uibModalInstance, model, title, success, fail, body) {

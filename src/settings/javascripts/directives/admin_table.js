@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BBAdminSettings').directive('adminTable', function($log,
   ModalForm, BBModel) {
 

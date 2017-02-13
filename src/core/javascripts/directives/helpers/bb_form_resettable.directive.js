@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // bbFormResettable
 // Adds field clearing behaviour to forms.
 angular.module('BB.Directives').directive('bbFormResettable', $parse =>

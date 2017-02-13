@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // Filters
 angular.module('BB.Services').factory('FormDataStoreService', function($rootScope,
   $window, $log, $parse) {

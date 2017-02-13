@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BBAdminDashboard.calendar.controllers', []);
 angular.module('BBAdminDashboard.calendar.services', []);
 angular.module('BBAdminDashboard.calendar.directives', []);

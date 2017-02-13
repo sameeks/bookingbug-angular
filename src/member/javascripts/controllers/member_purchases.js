@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module("BBMember").controller("MemberPurchases", ($scope, $q, $log, LoadingService, BBModel) =>
 
   $scope.getPurchases = function() {

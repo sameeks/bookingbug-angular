@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // build a dynamic injector for each of the models!
 // This creates a service that is capable of creating any given model
 // It uses dynamic injection, to avoid a cuicular dependancy - as any model, needs to be able to create instances of other models

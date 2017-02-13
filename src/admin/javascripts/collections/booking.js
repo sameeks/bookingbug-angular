@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 window.Collection.Booking = class Booking extends window.Collection.Base {
 
   checkItem(item) {

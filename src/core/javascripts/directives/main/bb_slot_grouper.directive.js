@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // bbSlotGrouper
 // group time slots together based on a given start time and end time
 angular.module('BB.Directives').directive('bbSlotGrouper', () =>

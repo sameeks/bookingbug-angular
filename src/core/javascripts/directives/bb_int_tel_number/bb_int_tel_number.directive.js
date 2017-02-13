@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // International Telephone Input directive
 // http://www.tooorangey.co.uk/posts/that-international-telephone-input-umbraco-7-property-editor/
 // https://github.com/Bluefieldscom/intl-tel-input

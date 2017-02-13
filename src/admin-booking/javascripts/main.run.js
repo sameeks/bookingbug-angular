@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BBAdminBooking').run(function($rootScope, $log, DebugUtilsService, $bbug, $document,
   $sessionStorage, FormDataStoreService, AppConfig, BBModel) {
   'ngInject';

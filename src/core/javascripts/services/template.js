@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // Service for loading templates and partials. return rasterized dom elements
 angular.module('BB.Services').factory("TemplateSvc", ($q, $http, $templateCache, BBModel) =>
 

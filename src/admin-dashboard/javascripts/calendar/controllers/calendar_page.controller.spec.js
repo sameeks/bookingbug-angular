@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 describe('BBAdminDashboard.calendar.controllers, CalendarPageCtrl', function() {
   let $compile = null;
   let $controller = null;

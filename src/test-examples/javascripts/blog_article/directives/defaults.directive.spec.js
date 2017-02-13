@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 describe('bbTe.blogArticle, bbTeBaDefaults directive', function() {
   let $compile = null;
   let $httpBackend = null;

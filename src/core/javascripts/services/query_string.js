@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // returns a object literal version of the querystring. you can pass in a key
 // name and it will return a value i.e. QueryStringService('ref')
 angular.module('BB.Services').factory('QueryStringService', $window =>

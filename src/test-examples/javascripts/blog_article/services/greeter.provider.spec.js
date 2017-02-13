@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 describe('bbTe.blogArticle, BbTeBaGreeter provider', function() {
   let GreeterProviderObj = null;
   let Greeter = null;

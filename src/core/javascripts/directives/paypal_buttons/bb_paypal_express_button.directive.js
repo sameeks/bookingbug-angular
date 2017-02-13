@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BB.Directives').directive('bbPaypalExpressButton', ($compile,
   $sce, $http, $templateCache, $q, $log, $window, UriTemplate) =>
 

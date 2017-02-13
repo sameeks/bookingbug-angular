@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 /*
   Conceptually:
     - service is just a constructor function that will be called with 'new'

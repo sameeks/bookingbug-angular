@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 //  the default behavior for the 'click' event for the popover is to hide the
 //  popover if the click occurs on the element but it doesn't hide if you click
 //  anywhere else as the event has to occur on the element. so we add additional

@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module("BBMember").controller("Wallet", function($scope, $rootScope, $q,
   $log, AlertService, LoadingService, BBModel) {
 

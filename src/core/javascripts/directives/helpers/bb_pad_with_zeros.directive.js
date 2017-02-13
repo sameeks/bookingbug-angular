@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // bbPadWithZeros
 // Adds a formatter that prepends the model value with the specified number of zeros
 angular.module('BB.Directives').directive('bbPadWithZeros', () =>

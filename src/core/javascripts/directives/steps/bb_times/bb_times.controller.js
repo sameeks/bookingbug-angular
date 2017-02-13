@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BB.Controllers').controller('TimeList', function($attrs, $element, $scope,  $rootScope, $q, TimeService, AlertService, BBModel, DateTimeUtilitiesService, ValidatorService, LoadingService, ErrorService, $translate) {
 
   let loader = LoadingService.$loader($scope).notLoaded();

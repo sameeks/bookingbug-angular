@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // strips the postcode from the end of the address. i.e.
 // '15 some address, somwhere, SS1 4RP' becomes '15 some address, somwhere'
 angular.module('BB.Filters').filter('stripPostcode', () =>

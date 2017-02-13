@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BBQueue').directive('bbAdminQueueTable', function(BBModel) {
 
   let link = function(scope, element, attrs) {

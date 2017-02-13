@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BBQueue').controller('bbQueuers', function($scope, $log,
     AdminQueuerService, ModalForm, $interval) {
 

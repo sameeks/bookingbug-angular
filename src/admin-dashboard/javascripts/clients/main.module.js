@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BBAdminDashboard.clients.controllers', []);
 angular.module('BBAdminDashboard.clients.services', []);
 angular.module('BBAdminDashboard.clients.directives', []);

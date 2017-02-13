@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 // Input match test
 angular.module('BB.Directives').directive("bbMatchInput", () =>
   ({

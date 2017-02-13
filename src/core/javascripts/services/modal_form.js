@@ -1,3 +1,5 @@
+// TODO: This file was created by bulk-decaffeinate.
+// Sanity-check the conversion and remove this comment.
 angular.module('BB.Services').factory('ModalForm', function($uibModal, $document, $log, Dialog, FormTransform, $translate) {
   let newForm = function($scope, $uibModalInstance, company, title, new_rel, post_rel,
     success, fail) {
