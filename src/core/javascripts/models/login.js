@@ -1,52 +1,67 @@
-'use strict'
+angular.module('BB.Models').factory("LoginModel", (
+  $q, LoginService, BBModel, BaseModel) =>
 
-angular.module('BB.Models').factory "LoginModel", (
-  $q, LoginService, BBModel, BaseModel) ->
+  class Login extends BaseModel {
 
-  class Login extends BaseModel
+    constructor(data) {
+      super(data);
+    }
 
-    constructor: (data) ->
-      super(data)
+    static $companyLogin(company, params, form) {
+      return LoginService.companyLogin(company, params, form);
+    }
 
-    @$companyLogin: (company, params, form) ->
-      LoginService.companyLogin(company, params, form)
+    static $login(form, options) {
+      return LoginService.login(form, options);
+    }
 
-    @$login: (form, options) ->
-      LoginService.login(form, options)
+    static $FBLogin(company, params) {
+      return LoginService.FBLogin(company, params);
+    }
 
-    @$FBLogin: (company, params) ->
-      LoginService.FBLogin(company, params)
+    static $companyQuery(id) {
+      return LoginService.companyQuery(id);
+    }
 
-    @$companyQuery: (id) ->
-      LoginService.companyQuery(id)
+    static $memberQuery(params) {
+      return LoginService.memberQuery(params);
+    }
 
-    @$memberQuery: (params) ->
-      LoginService.memberQuery(params)
+    static $ssoLogin(options, data) {
+      return LoginService.ssoLogin(options, data);
+    }
 
-    @$ssoLogin: (options, data) ->
-      LoginService.ssoLogin(options, data)
+    static $isLoggedIn() {
+      return LoginService.isLoggedIn();
+    }
 
-    @$isLoggedIn: () ->
-      LoginService.isLoggedIn()
+    static $setLogin(member, persist) {
+      return LoginService.setLogin(member, persist);
+    }
 
-    @$setLogin: (member, persist) ->
-      LoginService.setLogin(member, persist)
+    static $member() {
+      return LoginService.member();
+    }
 
-    @$member: () ->
-      LoginService.member()
+    static $checkLogin() {
+      return LoginService.checkLogin();
+    }
 
-    @$checkLogin: () ->
-      LoginService.checkLogin()
+    static $logout() {
+      return LoginService.logout();
+    }
 
-    @$logout: () ->
-      LoginService.logout()
+    static $FBLogout(options) {
+      return LoginService.FBLogout(options);
+    }
 
-    @$FBLogout: (options) ->
-      LoginService.FBLogout(options)
+    static $sendPasswordReset(company, params) {
+      return LoginService.sendPasswordReset(company, params);
+    }
 
-    @$sendPasswordReset: (company, params) ->
-      LoginService.sendPasswordReset(company, params)
-
-    @$updatePassword: (member, params) ->
-      LoginService.updatePassword(member, params)
+    static $updatePassword(member, params) {
+      return LoginService.updatePassword(member, params);
+    }
+  }
+);
 

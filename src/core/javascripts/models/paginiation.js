@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:Service
 *
@@ -70,12 +68,12 @@
 *       </file>
 *  </example>
 *
-###
-angular.module('BB.Models').factory "PaginationModel", () ->
+*/
+angular.module('BB.Models').factory("PaginationModel", () =>
 
-  class Pagination
+  class Pagination {
 
-    ###**
+    /***
     * @ngdoc method
     * @name constructor
     * @methodOf BB.Models:Service
@@ -83,18 +81,19 @@ angular.module('BB.Models').factory "PaginationModel", () ->
     * Constructor method
     *
     * @param {object} Options hash used to set page_size and max_size
-    ###
-    constructor: (options) ->
-      @current_page = 1
-      @page_size = options.page_size or 10
-      @request_page_size = options.request_page_size or @page_size
-      @max_size = options.max_size or 5
-      @num_pages = null
-      @num_items = null
-      @items = []
+    */
+    constructor(options) {
+      this.current_page = 1;
+      this.page_size = options.page_size || 10;
+      this.request_page_size = options.request_page_size || this.page_size;
+      this.max_size = options.max_size || 5;
+      this.num_pages = null;
+      this.num_items = null;
+      this.items = [];
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name initialise
     * @methodOf BB.Models:Service
@@ -103,15 +102,16 @@ angular.module('BB.Models').factory "PaginationModel", () ->
     *
     * @param {array} The first page of items returned by the API
     * @param {integer} The total number of items
-    ###
-    initialise: (items, total_items) ->
-      @current_page = 1
-      @items = items or []
-      @num_items = total_items or 0
-      @update()
+    */
+    initialise(items, total_items) {
+      this.current_page = 1;
+      this.items = items || [];
+      this.num_items = total_items || 0;
+      return this.update();
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name update
     * @methodOf BB.Models:Service
@@ -120,20 +120,21 @@ angular.module('BB.Models').factory "PaginationModel", () ->
     *
     * @returns {boolean} Flag to indicate if items in current page are present
     * @returns {integer} The page to load based on
-    ###
-    update: () ->
-      start = ((@current_page - 1) * @page_size) + 1
-      end   = @current_page * @page_size
-      end = if @num_items < end then @num_items else end
-      total = if end >= 100 then "100+" else end
-      @summary = $translate.instant('CORE.PAGINATION.SUMMARY', {start: start, end: end, total: total})
+    */
+    update() {
+      let start = ((this.current_page - 1) * this.page_size) + 1;
+      let end   = this.current_page * this.page_size;
+      end = this.num_items < end ? this.num_items : end;
+      let total = end >= 100 ? "100+" : end;
+      this.summary = $translate.instant('CORE.PAGINATION.SUMMARY', {start, end, total});
 
-      page_to_load = Math.ceil((@current_page * @page_size) / @request_page_size)
+      let page_to_load = Math.ceil((this.current_page * this.page_size) / this.request_page_size);
 
-      return [@items[start-1]?, page_to_load]
+      return [(this.items[start-1] != null), page_to_load];
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name add
     * @methodOf BB.Models:Service
@@ -143,9 +144,12 @@ angular.module('BB.Models').factory "PaginationModel", () ->
     * @param {integer} The page number of the data request
     * @param {array} The new items
     *
-    ###
-    add: (request_page, new_items) ->
-      start = (request_page - 1) * @request_page_size
-      for item, index in new_items
-        @items[start + index] = item
+    */
+    add(request_page, new_items) {
+      let start = (request_page - 1) * this.request_page_size;
+      return Array.from(new_items).map((item, index) =>
+        this.items[start + index] = item);
+    }
+  }
+);
 

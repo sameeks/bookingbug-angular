@@ -1,2 +1,2 @@
 angular
-.module('bbTe.blogArticle', [])
+.module('bbTe.blogArticle', []);

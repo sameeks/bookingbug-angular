@@ -1,22 +1,21 @@
-'use strict';
+describe('bbTe.blogArticle, bbTeBaConceptualFactory factory', function() {
+  let conceptualFactory = null;
 
-describe 'bbTe.blogArticle, bbTeBaConceptualFactory factory', () ->
-  conceptualFactory = null
+  let beforeEachFn = function() {
+    module('bbTe.blogArticle');
 
-  beforeEachFn = () ->
-    module('bbTe.blogArticle')
+    inject(function($injector) {
+      conceptualFactory = $injector.get('bbTeBaConceptualFactory');
+    });
+  };
 
-    inject ($injector) ->
-      conceptualFactory = $injector.get 'bbTeBaConceptualFactory'
-      return
-    return
+  beforeEach(beforeEachFn);
 
-  beforeEach beforeEachFn
+  it('can say hello', () =>
 
-  it 'can say hello', ->
+    expect(conceptualFactory.sayHello('test'))
+    .toBe('Hi test!')
+  );
+});
 
-    expect conceptualFactory.sayHello('test')
-    .toBe 'Hi test!'
-  return
-
-return
+return;

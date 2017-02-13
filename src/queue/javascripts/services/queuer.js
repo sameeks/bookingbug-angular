@@ -1,30 +1,37 @@
-'use strict'
+angular.module('BBQueue.Services').factory('QueuerService', ($q, UriTemplate, halClient, BBModel) =>
 
-angular.module('BBQueue.Services').factory 'QueuerService', ($q, UriTemplate, halClient, BBModel) ->
+	({
+		query(params) {
+			let deferred = $q.defer();
 
-	query: (params) ->
-		deferred = $q.defer()
+			let url = "";
+			if (params.url) { ({ url } = params); }
+			let href = url + "/api/v1/queuers/{id}";
+			let uri = new UriTemplate(href).fillFromObject(params || {});
 
-		url = ""
-		url = params.url if params.url
-		href = url + "/api/v1/queuers/{id}"
-		uri = new UriTemplate(href).fillFromObject(params || {})
+			halClient.$get(uri, {}).then(found => {
+				return deferred.resolve(found);
+			}
+			);
 
-		halClient.$get(uri, {}).then (found) =>
-			deferred.resolve(found)
+			return deferred.promise;
+		},
 
-		deferred.promise
+		removeFromQueue(params) {
+			let deferred = $q.defer();
 
-	removeFromQueue: (params) ->
-		deferred = $q.defer()
+			let url = "";
+			if (params.url) { ({ url } = params); }
+			let href = url + "/api/v1/queuers/{id}";
+			let uri = new UriTemplate(href).fillFromObject(params || {});
 
-		url = ""
-		url = params.url if params.url
-		href = url + "/api/v1/queuers/{id}"
-		uri = new UriTemplate(href).fillFromObject(params || {})
+			halClient.$del(uri).then(found => {
+				return deferred.resolve(found);
+			}
+			);
 
-		halClient.$del(uri).then (found) =>
-			deferred.resolve(found)
-
-		deferred.promise
+			return deferred.promise;
+		}
+	})
+);
 

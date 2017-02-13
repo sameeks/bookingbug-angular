@@ -1,31 +1,30 @@
-'use strict'
+angular.module('BB.i18n').provider('bbi18nOptions', function() {
+  'ngInject';
 
-angular.module('BB.i18n').provider 'bbi18nOptions', () ->
-  'ngInject'
-
-  options = {
+  let options = {
     default_language: 'en',
     use_browser_language: true,
     available_languages: ['en', 'de', 'es', 'fr'],
     available_language_associations: {
-      'en_*': 'en'
-      'de_*': 'de'
-      'es_*': 'de'
+      'en_*': 'en',
+      'de_*': 'de',
+      'es_*': 'de',
       'fr_*': 'fr'
     }
-  }
+  };
 
-  @setOption = (option, value) ->
-    if options.hasOwnProperty(option)
-      options[option] = value
-    return
+  this.setOption = function(option, value) {
+    if (options.hasOwnProperty(option)) {
+      options[option] = value;
+    }
+  };
 
-  @getOption = (option) ->
-    if options.hasOwnProperty(option)
-      return options[option]
-    return
+  this.getOption = function(option) {
+    if (options.hasOwnProperty(option)) {
+      return options[option];
+    }
+  };
 
-  @$get = ->
-    return options
+  this.$get = () => options;
 
-  return
+});

@@ -1,25 +1,24 @@
-'use strict'
+describe('BBAdmin.Controllers, CalendarCtrl', function() {
+  let $compile = null;
+  let $rootScope = null;
+  let $scope = null;
 
-describe 'BBAdmin.Controllers, CalendarCtrl', () ->
-  $compile = null
-  $rootScope = null
-  $scope = null
+  let setup = function() {
+    module('BBAdminBooking');
+    module('BBAdmin');
 
-  setup = () ->
-    module 'BBAdminBooking'
-    module 'BBAdmin'
+    inject(function($injector) {
+      $rootScope = $injector.get('$rootScope');
+      $scope = $rootScope.$new();
+    });
 
-    inject ($injector) ->
-      $rootScope = $injector.get '$rootScope'
-      $scope = $rootScope.$new()
-      return
+  };
 
-    return
+  beforeEach(setup);
 
-  beforeEach setup
+  it('dummy test', () =>
+    expect(true)
+    .toBe(true)
+  );
 
-  it 'dummy test', ->
-    expect true
-    .toBe true
-
-  return
+});

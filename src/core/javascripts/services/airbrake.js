@@ -1,32 +1,35 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Services:Airbrake
 *
 * @description
 * JavaScript notifier for capturing errors in web browsers and reporting them to Airbrake.
 *
-####
+*///
 
-angular.module('BB.Services').factory '$exceptionHandler', ($log, AirbrakeConfig) ->
+angular.module('BB.Services').factory('$exceptionHandler', function($log, AirbrakeConfig) {
 
-  airbrake = new airbrakeJs.Client(
-    projectId: AirbrakeConfig.projectId
+  let airbrake = new airbrakeJs.Client({
+    projectId: AirbrakeConfig.projectId,
     projectKey: AirbrakeConfig.projectKey
-  )
+  });
 
-  airbrake.addFilter (notice) ->
-    if AirbrakeConfig.environment is 'development' || !notice.params.from_sdk
-      return false
+  airbrake.addFilter(function(notice) {
+    if ((AirbrakeConfig.environment === 'development') || !notice.params.from_sdk) {
+      return false;
+    }
 
-    notice.context.environment = 'production'
-    notice
+    notice.context.environment = 'production';
+    return notice;
+  });
 
-  (exception, cause, sdkError) ->
-    $log.error exception
-    airbrake.notify
-      error: exception
-      params: angular_cause: cause, from_sdk: sdkError
-    return
+  return function(exception, cause, sdkError) {
+    $log.error(exception);
+    airbrake.notify({
+      error: exception,
+      params: { angular_cause: cause, from_sdk: sdkError
+    }
+    });
+  };
+});
 

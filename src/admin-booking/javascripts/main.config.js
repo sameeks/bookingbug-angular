@@ -1,7 +1,5 @@
-'use strict'
+angular.module('BBAdminBooking').config(function($logProvider) {
+  'ngInject';
 
-angular.module('BBAdminBooking').config ($logProvider) ->
-  'ngInject'
-
-  $logProvider.debugEnabled(true)
-  return
+  $logProvider.debugEnabled(true);
+});

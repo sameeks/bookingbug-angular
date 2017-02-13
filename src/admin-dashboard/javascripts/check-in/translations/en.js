@@ -1,14 +1,12 @@
-'use strict';
-
-###
+/*
 * @ngdoc overview
 * @name BBAdminDashboard.check-in.translations
-#
+*
 * @description
 * Translations for the admin check-in module
-###
+*/
 angular.module('BBAdminDashboard.check-in.translations')
-.config ['$translateProvider', ($translateProvider)->
+.config(['$translateProvider', $translateProvider=>
   $translateProvider.translations('en', {
 
     'ADMIN_DASHBOARD': {
@@ -17,7 +15,7 @@ angular.module('BBAdminDashboard.check-in.translations')
         'CHECK_IN_PAGE': {
           'CHECK_IN': 'Check in'
         }
-      }
+      },
 
       'CHECK_IN_PAGE': {
         'CHECK_IN'        : 'Check in',
@@ -41,4 +39,5 @@ angular.module('BBAdminDashboard.check-in.translations')
     }
 
   })
-]
+
+]);

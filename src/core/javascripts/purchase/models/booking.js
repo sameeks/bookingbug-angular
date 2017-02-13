@@ -1,186 +1,231 @@
-'use strict'
-
-angular.module('BB.Models').factory "Purchase.BookingModel", ($q, $window, BBModel, BaseModel, $bbug) ->
+angular.module('BB.Models').factory("Purchase.BookingModel", ($q, $window, BBModel, BaseModel, $bbug) =>
 
 
-  class Purchase_Booking extends BaseModel
-    constructor: (data) ->
-      super(data)
-      @ready = false
+  class Purchase_Booking extends BaseModel {
+    constructor(data) {
+      super(data);
+      this.ready = false;
 
-      @datetime = moment.parseZone(@datetime)
-      @datetime.tz(@time_zone) if @time_zone
+      this.datetime = moment.parseZone(this.datetime);
+      if (this.time_zone) { this.datetime.tz(this.time_zone); }
 
-      @original_datetime = moment(@datetime)
+      this.original_datetime = moment(this.datetime);
 
-      @end_datetime = moment.parseZone(@end_datetime)
-      @end_datetime.tz(@time_zone) if @time_zone
+      this.end_datetime = moment.parseZone(this.end_datetime);
+      if (this.time_zone) { this.end_datetime.tz(this.time_zone); }
 
-      @min_cancellation_time = moment(@min_cancellation_time)
-      @min_cancellation_hours = @datetime.diff(@min_cancellation_time, 'hours')
+      this.min_cancellation_time = moment(this.min_cancellation_time);
+      this.min_cancellation_hours = this.datetime.diff(this.min_cancellation_time, 'hours');
+    }
 
-    getGroup: () ->
-      return @group if @group
-      if @_data.$has('event_groups')
-        @_data.$get('event_groups').then (group) =>
-          @group = group
-          @group
-
-
-    getColour: () ->
-      if @getGroup()
-        return @getGroup().colour
-      else
-        return "#FFFFFF"
+    getGroup() {
+      if (this.group) { return this.group; }
+      if (this._data.$has('event_groups')) {
+        return this._data.$get('event_groups').then(group => {
+          this.group = group;
+          return this.group;
+        }
+        );
+      }
+    }
 
 
-    getCompany: () ->
-      return @company if @company
-      if @$has('company')
-        @_data.$get('company').then (company) =>
-          @company = new BBModel.Company(company)
-          @company
+    getColour() {
+      if (this.getGroup()) {
+        return this.getGroup().colour;
+      } else {
+        return "#FFFFFF";
+      }
+    }
 
 
-    $getAnswers: () ->
-      defer = $q.defer()
-      if @answers?
-        defer.resolve(@answers)
-      else
-        @answers = []
-        if @_data.$has('answers')
-          @_data.$get('answers').then (answers) =>
-            @answers = (new BBModel.Answer(a) for a in answers)
-            defer.resolve(@answers)
-        else
-          defer.resolve([])
-      defer.promise
-
-    $getSurveyAnswers: () ->
-      defer = $q.defer()
-      defer.resolve(@survey_answers) if @survey_answers
-      if @_data.$has('survey_answers')
-        @_data.$get('survey_answers').then (survey_answers) =>
-          @survey_answers = (new BBModel.Answer(a) for a in survey_answers)
-          defer.resolve(@survey_answers)
-      else
-        defer.resolve([])
-      defer.promise
+    getCompany() {
+      if (this.company) { return this.company; }
+      if (this.$has('company')) {
+        return this._data.$get('company').then(company => {
+          this.company = new BBModel.Company(company);
+          return this.company;
+        }
+        );
+      }
+    }
 
 
-    answer: (q) ->
-      if @answers?
-        for a in @answers
-          if a.name && a.name == q
-            return a.answer
-          if a.question_text && a.question_text == q
-            return a.value
-      else
-        @$getAnswers()
-      return null
+    $getAnswers() {
+      let defer = $q.defer();
+      if (this.answers != null) {
+        defer.resolve(this.answers);
+      } else {
+        this.answers = [];
+        if (this._data.$has('answers')) {
+          this._data.$get('answers').then(answers => {
+            this.answers = (Array.from(answers).map((a) => new BBModel.Answer(a)));
+            return defer.resolve(this.answers);
+          }
+          );
+        } else {
+          defer.resolve([]);
+        }
+      }
+      return defer.promise;
+    }
+
+    $getSurveyAnswers() {
+      let defer = $q.defer();
+      if (this.survey_answers) { defer.resolve(this.survey_answers); }
+      if (this._data.$has('survey_answers')) {
+        this._data.$get('survey_answers').then(survey_answers => {
+          this.survey_answers = (Array.from(survey_answers).map((a) => new BBModel.Answer(a)));
+          return defer.resolve(this.survey_answers);
+        }
+        );
+      } else {
+        defer.resolve([]);
+      }
+      return defer.promise;
+    }
 
 
-    getPostData: () ->
-      data = {}
-
-      data.attended = @attended
-      data.client_id = @client_id
-      data.company_id = @company_id
-      data.time = (@datetime.hour() * 60) + @datetime.minute()
-      data.date = @datetime.toISODate()
-      data.deleted = @deleted
-      data.describe = @describe
-      data.duration = @duration
-      data.end_datetime = @end_datetime
-
-      # is the booking being moved (i.e. new time/new event) or are we just updating
-      # the existing booking
-      if @time and @time.event_id and !@isEvent()
-        data.event_id = @time.event_id
-      else if @event
-        data.event_id = @event.id
-      else
-        data.event_id = @slot_id
-
-      data.full_describe = @full_describe
-      data.id = @id
-      data.min_cancellation_time =  @min_cancellation_time
-      data.on_waitlist = @on_waitlist
-      data.paid = @paid
-      data.person_name = @person_name
-      data.price = @price
-      data.purchase_id = @purchase_id
-      data.purchase_ref = @purchase_ref
-      data.quantity = @quantity
-      data.self = @self
-      data.move_item_id = @move_item_id if @move_item_id
-      data.move_item_id = @srcBooking.id if @srcBooking
-      data.person_id = @person.id if @person
-      data.service_id = @service.id if @service
-      data.resource_id = @resource.id if @resource
-      data.questions = @item_details.getPostData() if @item_details
-      data.move_reason = @move_reason if @move_reason
-      data.service_name = @service_name
-      data.settings = @settings
-      data.status = @status if @status
-      if @email?
-        data.email = @email
-      if @email_admin?
-        data.email_admin = @email_admin
-      data.first_name = @first_name if @first_name
-      data.last_name = @last_name if @last_name
-
-      formatted_survey_answers = []
-      if @survey_questions
-        data.survey_questions = @survey_questions
-        for q in @survey_questions
-          formatted_survey_answers.push({value: q.answer, outcome: q.outcome, detail_type_id: q.id, price: q.price})
-        data.survey_answers = formatted_survey_answers
-
-      return data
-
-    checkReady: ->
-      if (@datetime && @id && @purchase_ref)
-        @ready = true
+    answer(q) {
+      if (this.answers != null) {
+        for (let a of Array.from(this.answers)) {
+          if (a.name && (a.name === q)) {
+            return a.answer;
+          }
+          if (a.question_text && (a.question_text === q)) {
+            return a.value;
+          }
+        }
+      } else {
+        this.$getAnswers();
+      }
+      return null;
+    }
 
 
-    printed_price: () ->
-      return "£" + parseInt(@price) if parseFloat(@price) % 1 == 0
-      return $window.sprintf("£%.2f", parseFloat(@price))
+    getPostData() {
+      let data = {};
+
+      data.attended = this.attended;
+      data.client_id = this.client_id;
+      data.company_id = this.company_id;
+      data.time = (this.datetime.hour() * 60) + this.datetime.minute();
+      data.date = this.datetime.toISODate();
+      data.deleted = this.deleted;
+      data.describe = this.describe;
+      data.duration = this.duration;
+      data.end_datetime = this.end_datetime;
+
+      // is the booking being moved (i.e. new time/new event) or are we just updating
+      // the existing booking
+      if (this.time && this.time.event_id && !this.isEvent()) {
+        data.event_id = this.time.event_id;
+      } else if (this.event) {
+        data.event_id = this.event.id;
+      } else {
+        data.event_id = this.slot_id;
+      }
+
+      data.full_describe = this.full_describe;
+      data.id = this.id;
+      data.min_cancellation_time =  this.min_cancellation_time;
+      data.on_waitlist = this.on_waitlist;
+      data.paid = this.paid;
+      data.person_name = this.person_name;
+      data.price = this.price;
+      data.purchase_id = this.purchase_id;
+      data.purchase_ref = this.purchase_ref;
+      data.quantity = this.quantity;
+      data.self = this.self;
+      if (this.move_item_id) { data.move_item_id = this.move_item_id; }
+      if (this.srcBooking) { data.move_item_id = this.srcBooking.id; }
+      if (this.person) { data.person_id = this.person.id; }
+      if (this.service) { data.service_id = this.service.id; }
+      if (this.resource) { data.resource_id = this.resource.id; }
+      if (this.item_details) { data.questions = this.item_details.getPostData(); }
+      if (this.move_reason) { data.move_reason = this.move_reason; }
+      data.service_name = this.service_name;
+      data.settings = this.settings;
+      if (this.status) { data.status = this.status; }
+      if (this.email != null) {
+        data.email = this.email;
+      }
+      if (this.email_admin != null) {
+        data.email_admin = this.email_admin;
+      }
+      if (this.first_name) { data.first_name = this.first_name; }
+      if (this.last_name) { data.last_name = this.last_name; }
+
+      let formatted_survey_answers = [];
+      if (this.survey_questions) {
+        data.survey_questions = this.survey_questions;
+        for (let q of Array.from(this.survey_questions)) {
+          formatted_survey_answers.push({value: q.answer, outcome: q.outcome, detail_type_id: q.id, price: q.price});
+        }
+        data.survey_answers = formatted_survey_answers;
+      }
+
+      return data;
+    }
+
+    checkReady() {
+      if (this.datetime && this.id && this.purchase_ref) {
+        return this.ready = true;
+      }
+    }
 
 
-    getDateString: () ->
-      @datetime.toISODate()
+    printed_price() {
+      if ((parseFloat(this.price) % 1) === 0) { return `£${parseInt(this.price)}`; }
+      return $window.sprintf("£%.2f", parseFloat(this.price));
+    }
 
 
-    # return the time of day in total minutes
-    getTimeInMins: () ->
-      (@datetime.hour() * 60) + @.datetime.minute()
+    getDateString() {
+      return this.datetime.toISODate();
+    }
 
 
-    getAttachments: () ->
-      return @attachments if @attachments
-      if @$has('attachments')
-        @_data.$get('attachments').then (atts) =>
-          @attachments = atts.attachments
-          @attachments
+    // return the time of day in total minutes
+    getTimeInMins() {
+      return (this.datetime.hour() * 60) + this.datetime.minute();
+    }
 
 
-    canCancel: () ->
-      return moment(@min_cancellation_time).isAfter(moment())
+    getAttachments() {
+      if (this.attachments) { return this.attachments; }
+      if (this.$has('attachments')) {
+        return this._data.$get('attachments').then(atts => {
+          this.attachments = atts.attachments;
+          return this.attachments;
+        }
+        );
+      }
+    }
 
 
-    canMove: () ->
-      return @canCancel()
+    canCancel() {
+      return moment(this.min_cancellation_time).isAfter(moment());
+    }
 
 
-    getAttendeeName: () ->
-      return "#{@first_name} #{@last_name}"
+    canMove() {
+      return this.canCancel();
+    }
 
 
-    isEvent: () ->
-      return @event_chain?
+    getAttendeeName() {
+      return `${this.first_name} ${this.last_name}`;
+    }
 
-    @$addSurveyAnswersToBooking: (booking) ->
-      PurchaseBookingService.addSurveyAnswersToBooking(booking)
+
+    isEvent() {
+      return (this.event_chain != null);
+    }
+
+    static $addSurveyAnswersToBooking(booking) {
+      return PurchaseBookingService.addSurveyAnswersToBooking(booking);
+    }
+  }
+);
 

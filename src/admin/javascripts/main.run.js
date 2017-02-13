@@ -1,15 +1,14 @@
-'use strict'
+angular.module('BBAdmin.Services').run(function($q, $injector, BBModel) {
+  'ngInject';
 
-angular.module('BBAdmin.Services').run ($q, $injector, BBModel) ->
-  'ngInject'
-
-  models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
+  let models = ['Booking', 'Slot', 'User', 'Administrator', 'Schedule', 'Address',
     'Resource', 'Person', 'Service', 'Login', 'EventChain', 'EventGroup',
-    'Event', 'Clinic', 'Company', 'Client']
+    'Event', 'Clinic', 'Company', 'Client'];
 
-  afuncs = {}
-  for model in models
-    afuncs[model] = $injector.get("Admin" + model + "Model")
-  BBModel['Admin'] = afuncs
+  let afuncs = {};
+  for (let model of Array.from(models)) {
+    afuncs[model] = $injector.get(`Admin${model}Model`);
+  }
+  BBModel['Admin'] = afuncs;
 
-  return
+});

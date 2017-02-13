@@ -1,85 +1,83 @@
-'use strict';
+describe('BB.Services, PathSvc service', function() {
+  let $sce = null;
+  let AppConfig = null;
 
-describe 'BB.Services, PathSvc service', () ->
-  $sce = null
-  AppConfig = null
+  let $http = null;
+  let $httpBackend = null;
 
-  $http = null
-  $httpBackend = null
+  let PathSvc = null;
 
-  PathSvc = null
-
-  appConfigMock = {
+  let appConfigMock = {
     partial_url: 'some-partial'
-  }
+  };
 
-  sampleFileName = 'some-filename'
+  let sampleFileName = 'some-filename';
 
-  beforeEachFn = () ->
-    module('BB')
-    return
+  let beforeEachFn = function() {
+    module('BB');
+  };
 
-  beforeEach beforeEachFn
+  beforeEach(beforeEachFn);
 
-  injectDependencies = () ->
-    inject ($injector) ->
-      $sce = $injector.get '$sce'
-      AppConfig = $injector.get 'AppConfig'
-      $http = $injector.get '$http'
-      $httpBackend = $injector.get '$httpBackend'
-      PathSvc = $injector.get 'PathSvc'
-      return
+  let injectDependencies = function() {
+    inject(function($injector) {
+      $sce = $injector.get('$sce');
+      AppConfig = $injector.get('AppConfig');
+      $http = $injector.get('$http');
+      $httpBackend = $injector.get('$httpBackend');
+      PathSvc = $injector.get('PathSvc');
+    });
 
-    spyOn($sce, 'trustAsResourceUrl').and.callThrough()
+    spyOn($sce, 'trustAsResourceUrl').and.callThrough();
 
-    return
+  };
 
-  describe 'when "partial_url" is not defined in AppConfig', ()->
-    beforeEach2LvlFn = ()->
-      module ($provide) ->
-        $provide.value 'AppConfig', {}
-        return
+  describe('when "partial_url" is not defined in AppConfig', function(){
+    let beforeEach2LvlFn = function(){
+      module(function($provide) {
+        $provide.value('AppConfig', {});
+      });
 
-      injectDependencies()
+      injectDependencies();
 
-      return
+    };
 
-    beforeEach beforeEach2LvlFn
+    beforeEach(beforeEach2LvlFn);
 
-    it 'proper url is used', () ->
-      result = PathSvc.directivePartial sampleFileName
+    it('proper url is used', function() {
+      let result = PathSvc.directivePartial(sampleFileName);
 
-      expect $sce.trustAsResourceUrl
-      .toHaveBeenCalledWith sampleFileName + '.html'
+      expect($sce.trustAsResourceUrl)
+      .toHaveBeenCalledWith(sampleFileName + '.html');
 
-      expect result
-      .toBeDefined()
+      expect(result)
+      .toBeDefined();
 
-      return
-    return
+    });
+  });
 
-  describe 'when "partial_url" is defined in AppConfig', ()->
-    beforeEach2LvlFn = ()->
-      module ($provide) ->
-        $provide.value 'AppConfig', appConfigMock
-        return
+  describe('when "partial_url" is defined in AppConfig', function(){
+    let beforeEach2LvlFn = function(){
+      module(function($provide) {
+        $provide.value('AppConfig', appConfigMock);
+      });
 
-      injectDependencies()
+      injectDependencies();
 
-      return
+    };
 
-    beforeEach beforeEach2LvlFn
+    beforeEach(beforeEach2LvlFn);
 
-    it 'proper url is used', () ->
-      result = PathSvc.directivePartial sampleFileName
+    it('proper url is used', function() {
+      let result = PathSvc.directivePartial(sampleFileName);
 
-      expect $sce.trustAsResourceUrl
-      .toHaveBeenCalledWith appConfigMock['partial_url'] + '/' + sampleFileName + '.html'
+      expect($sce.trustAsResourceUrl)
+      .toHaveBeenCalledWith(appConfigMock['partial_url'] + '/' + sampleFileName + '.html');
 
-      expect result
-      .toBeDefined()
+      expect(result)
+      .toBeDefined();
 
-      return
-    return
+    });
+  });
 
-  return
+});

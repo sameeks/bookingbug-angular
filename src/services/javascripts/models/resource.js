@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:AdminResource
 *
@@ -14,13 +12,13 @@
 * @propertu {string} type Type of resources
 * @property {boolean} deleted Verify if resources is deleted or not
 * @property {boolean} disabled Verify if resources is disabled or not
-####
+*///
 
-angular.module('BB.Models').factory "AdminResourceModel", ($q, AdminResourceService, BBModel, BaseModel, ResourceModel) ->
+angular.module('BB.Models').factory("AdminResourceModel", ($q, AdminResourceService, BBModel, BaseModel, ResourceModel) =>
 
-  class Admin_Resource extends ResourceModel
+  class Admin_Resource extends ResourceModel {
 
-    ###**
+    /***
     * @ngdoc method
     * @name isAvailable
     * @methodOf BB.Models:AdminResource
@@ -30,29 +28,38 @@ angular.module('BB.Models').factory "AdminResourceModel", ($q, AdminResourceServ
     * Look up a schedule for a time range to see if this available
     *
     * @returns {string} Returns yes if availability of resource is valid
-    ###
-    # look up a schedule for a time range to see if this available
-    # currently just checks the date - but chould really check the time too
-    isAvailable: (start, end) ->
-      str = start.format("YYYY-MM-DD") + "-" + end.format("YYYY-MM-DD")
-      @availability ||= {}
+    */
+    // look up a schedule for a time range to see if this available
+    // currently just checks the date - but chould really check the time too
+    isAvailable(start, end) {
+      let str = start.format("YYYY-MM-DD") + "-" + end.format("YYYY-MM-DD");
+      if (!this.availability) { this.availability = {}; }
 
-      return @availability[str] == "Yes" if @availability[str]
-      @availability[str] = "-"
+      if (this.availability[str]) { return this.availability[str] === "Yes"; }
+      this.availability[str] = "-";
 
-      if @$has('schedule')
-        @$get('schedule', {start_date: start.format("YYYY-MM-DD"), end_date: end.format("YYYY-MM-DD")}).then (sched) =>
-          @availability[str] = "No"
-          if sched && sched.dates && sched.dates[start.format("YYYY-MM-DD")] && sched.dates[start.format("YYYY-MM-DD")] != "None"
-            @availability[str] = "Yes"
-      else
-        @availability[str] = "Yes"
+      if (this.$has('schedule')) {
+        this.$get('schedule', {start_date: start.format("YYYY-MM-DD"), end_date: end.format("YYYY-MM-DD")}).then(sched => {
+          this.availability[str] = "No";
+          if (sched && sched.dates && sched.dates[start.format("YYYY-MM-DD")] && (sched.dates[start.format("YYYY-MM-DD")] !== "None")) {
+            return this.availability[str] = "Yes";
+          }
+        }
+        );
+      } else {
+        this.availability[str] = "Yes";
+      }
 
-      return @availability[str] == "Yes"
+      return this.availability[str] === "Yes";
+    }
 
-    @$query: (params) ->
-      AdminResourceService.query(params)
+    static $query(params) {
+      return AdminResourceService.query(params);
+    }
 
-    @$block: (company, resource, data) ->
-      AdminResourceService.block(company, resource, data)
+    static $block(company, resource, data) {
+      return AdminResourceService.block(company, resource, data);
+    }
+  }
+);
 

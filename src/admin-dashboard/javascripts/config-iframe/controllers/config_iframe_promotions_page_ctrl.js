@@ -1,15 +1,13 @@
-'use strict';
-
-###
+/*
 * @ngdoc controller
 * @name BBAdminDashboard.config-iframe.controllers.controller:ConfigIframePromotionsPageCtrl
-#
+*
 * @description
 * Controller for the config page
-###
+*/
 angular.module('BBAdminDashboard.config-iframe.controllers')
-.controller 'ConfigIframePromotionsPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'ADMIN_DASHBOARD.CONFIG_IFRAME_PAGE.PROMOTIONS.TITLE'
+.controller('ConfigIframePromotionsPageCtrl',['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
+  $scope.pageHeader = 'ADMIN_DASHBOARD.CONFIG_IFRAME_PAGE.PROMOTIONS.TITLE';
 
   $scope.tabs = [
     {
@@ -32,14 +30,15 @@ angular.module('BBAdminDashboard.config-iframe.controllers')
       icon: 'fa fa-gift',
       path: 'config.promotions.page({path: "package"})'
     }
-  ]
+  ];
 
-  $scope.contentsLoading = false
+  $scope.contentsLoading = false;
 
-  $scope.$on 'iframeLoaded', ()->
-    $scope.contentsLoading = false
-    $scope.$apply()
+  $scope.$on('iframeLoaded', function(){
+    $scope.contentsLoading = false;
+    return $scope.$apply();
+  });
 
-  $scope.$on 'iframeLoading', ()->
-    $scope.contentsLoading = true
-]
+  return $scope.$on('iframeLoading', ()=> $scope.contentsLoading = true);
+}
+]);

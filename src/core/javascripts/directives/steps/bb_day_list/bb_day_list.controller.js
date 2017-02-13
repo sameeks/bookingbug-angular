@@ -1,74 +1,85 @@
-'use strict';
+angular.module('BB.Controllers').controller('DayList', function($scope,  $rootScope, $q, DayService) {
 
-angular.module('BB.Controllers').controller 'DayList', ($scope,  $rootScope, $q, DayService) ->
-
-  # Load up some day based data
-  $rootScope.connection_started.then ->
-    if !$scope.current_date && $scope.last_selected_date
-      $scope.selected_date = $scope.last_selected_date.clone()
-      setCurrentDate($scope.last_selected_date.clone().startOf('week'))
-    else if !$scope.current_date
-      setCurrentDate(moment().startOf('week'))
-    $scope.loadData()
-  , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
-
-
-  $scope.selectDay = (day) =>
-    return if !day.spaces || (day.spaces and day.spaces == 0)
-    $scope.setLastSelectedDate(day.date)
-    $scope.selected_date = day.date
-    $scope.bb.current_item.setDate(day)
-    $scope.$broadcast('dateChanged', day.date)
+  // Load up some day based data
+  $rootScope.connection_started.then(function() {
+    if (!$scope.current_date && $scope.last_selected_date) {
+      $scope.selected_date = $scope.last_selected_date.clone();
+      setCurrentDate($scope.last_selected_date.clone().startOf('week'));
+    } else if (!$scope.current_date) {
+      setCurrentDate(moment().startOf('week'));
+    }
+    return $scope.loadData();
+  }
+  , err => $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
 
 
-  setCurrentDate = (date) ->
-    $scope.current_date = date
-    $scope.current_date_js = $scope.current_date.toDate()
+  $scope.selectDay = day => {
+    if (!day.spaces || (day.spaces && (day.spaces === 0))) { return; }
+    $scope.setLastSelectedDate(day.date);
+    $scope.selected_date = day.date;
+    $scope.bb.current_item.setDate(day);
+    return $scope.$broadcast('dateChanged', day.date);
+  };
 
 
-  $scope.add = (type, amount) =>
-    setCurrentDate($scope.current_date.add(amount, type))
-    $scope.loadData()
+  var setCurrentDate = function(date) {
+    $scope.current_date = date;
+    return $scope.current_date_js = $scope.current_date.toDate();
+  };
 
 
-  $scope.subtract = (type, amount) =>
-    $scope.add(type, -amount)
+  $scope.add = (type, amount) => {
+    setCurrentDate($scope.current_date.add(amount, type));
+    return $scope.loadData();
+  };
 
 
-  $scope.currentDateChanged = () ->
-    date = moment($scope.current_date_js).startOf('week')
-    setCurrentDate(date)
-    $scope.loadData()
+  $scope.subtract = (type, amount) => {
+    return $scope.add(type, -amount);
+  };
 
 
-   # disable any day but monday
-  $scope.isDateDisabled = (date, mode) ->
-    date = moment(date)
-    result = mode is 'day' and (date.day() != 1 or date.isBefore(moment(),'day'))
-    return result
+  $scope.currentDateChanged = function() {
+    let date = moment($scope.current_date_js).startOf('week');
+    setCurrentDate(date);
+    return $scope.loadData();
+  };
 
 
-  # calculate if the current earlist date is in the past - in which case we might want to disable going backwards
-  $scope.isPast = () =>
-    return true if !$scope.current_date
-    return moment().isAfter($scope.current_date)
+   // disable any day but monday
+  $scope.isDateDisabled = function(date, mode) {
+    date = moment(date);
+    let result = (mode === 'day') && ((date.day() !== 1) || date.isBefore(moment(),'day'));
+    return result;
+  };
 
 
-  $scope.loadData = () ->
-    $scope.day_data = {}
-    $scope.notLoaded $scope
-    $scope.end_date = moment($scope.current_date).add(5, 'weeks')
+  // calculate if the current earlist date is in the past - in which case we might want to disable going backwards
+  $scope.isPast = () => {
+    if (!$scope.current_date) { return true; }
+    return moment().isAfter($scope.current_date);
+  };
 
-    promise = DayService.query({company: $scope.bb.company, cItem: $scope.bb.current_item, date: $scope.current_date.toISODate(), edate: $scope.end_date.toISODate(), client: $scope.client })
 
-    promise.then (days) ->
-      for day in days
-        $scope.day_data[day.string_date] = {spaces:day.spaces, date: day.date}
+  return $scope.loadData = function() {
+    $scope.day_data = {};
+    $scope.notLoaded($scope);
+    $scope.end_date = moment($scope.current_date).add(5, 'weeks');
 
-      # group the day data by week
-      $scope.weeks = _.groupBy $scope.day_data, (day) -> day.date.week()
-      $scope.weeks = _.toArray $scope.weeks
+    let promise = DayService.query({company: $scope.bb.company, cItem: $scope.bb.current_item, date: $scope.current_date.toISODate(), edate: $scope.end_date.toISODate(), client: $scope.client });
 
-      $scope.setLoaded $scope
+    return promise.then(function(days) {
+      for (let day of Array.from(days)) {
+        $scope.day_data[day.string_date] = {spaces:day.spaces, date: day.date};
+      }
 
-    , (err) ->  $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+      // group the day data by week
+      $scope.weeks = _.groupBy($scope.day_data, day => day.date.week());
+      $scope.weeks = _.toArray($scope.weeks);
+
+      return $scope.setLoaded($scope);
+    }
+
+    , err => $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
+  };
+});

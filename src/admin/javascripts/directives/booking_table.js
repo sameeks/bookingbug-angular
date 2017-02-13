@@ -1,42 +1,49 @@
-'use strict'
+angular.module('BBAdmin').directive('bookingTable', function(BBModel, ModalForm) {
 
-angular.module('BBAdmin').directive 'bookingTable', (BBModel, ModalForm) ->
+  let controller = function($scope) {
 
-  controller = ($scope) ->
+    $scope.fields = ['id', 'datetime'];
 
-    $scope.fields = ['id', 'datetime']
+    $scope.getBookings = function() {
+      let params =
+        {company: $scope.company};
+      return BBModel.Admin.Booking.$query(params).then(bookings => $scope.bookings = bookings.items);
+    };
 
-    $scope.getBookings = () ->
-      params =
-        company: $scope.company
-      BBModel.Admin.Booking.$query(params).then (bookings) ->
-        $scope.bookings = bookings.items
+    $scope.newBooking = () =>
+      ModalForm.new({
+        company: $scope.company,
+        title: 'New Booking',
+        new_rel: 'new_booking',
+        post_rel: 'bookings',
+        success(booking) {
+          return $scope.bookings.push(booking);
+        }
+      })
+    ;
 
-    $scope.newBooking = () ->
-      ModalForm.new
-        company: $scope.company
-        title: 'New Booking'
-        new_rel: 'new_booking'
-        post_rel: 'bookings'
-        success: (booking) ->
-          $scope.bookings.push(booking)
-
-    $scope.edit = (booking) ->
-      ModalForm.edit
-        model: booking
+    return $scope.edit = booking =>
+      ModalForm.edit({
+        model: booking,
         title: 'Edit Booking'
+      })
+    ;
+  };
 
-  link = (scope, element, attrs) ->
-    if scope.company
-      scope.getBookings()
-    else
-      BBModel.Admin.Company.$query(attrs).then (company) ->
-        scope.company = company
-        scope.getBookings()
+  let link = function(scope, element, attrs) {
+    if (scope.company) {
+      return scope.getBookings();
+    } else {
+      return BBModel.Admin.Company.$query(attrs).then(function(company) {
+        scope.company = company;
+        return scope.getBookings();
+      });
+    }
+  };
 
-  {
-    controller: controller
-    link: link
+  return {
+    controller,
+    link,
     templateUrl: 'booking_table_main.html'
-  }
+  };});
 

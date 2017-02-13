@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbServices
 * @restrict AE
@@ -42,28 +39,36 @@
 *   </file>
 *  </example>
 *
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbServices', ($q, $compile, $templateCache) ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  transclude: true
-  controller : 'BBServicesCtrl'
-  controllerAs: '$bbServicesCtrl'
-  link : (scope, element, attrs, ctrls, transclude) ->
+angular.module('BB.Directives').directive('bbServices', ($q, $compile, $templateCache) =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    transclude: true,
+    controller : 'BBServicesCtrl',
+    controllerAs: '$bbServicesCtrl',
+    link(scope, element, attrs, ctrls, transclude) {
 
-    scope.directives = "public.ServiceList"
+      scope.directives = "public.ServiceList";
 
-    transclude scope, (clone) =>
+      return transclude(scope, clone => {
 
-      # if there's content compile that or grab the _services template
-      has_content = clone.length > 1 || (clone.length == 1 and (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
+        // if there's content compile that or grab the _services template
+        let has_content = (clone.length > 1) || ((clone.length === 1) && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)));
 
-      if has_content
-        element.html(clone).show()
-      else
-        $q.when($templateCache.get('_services.html')).then (template) ->
-          element.html(template).show()
-          $compile(element.contents())(scope)
+        if (has_content) {
+          return element.html(clone).show();
+        } else {
+          return $q.when($templateCache.get('_services.html')).then(function(template) {
+            element.html(template).show();
+            return $compile(element.contents())(scope);
+          });
+        }
+      }
+      );
+    }
+  })
+);

@@ -1,79 +1,79 @@
-service = (bbTeBaTextSanitizer, $http, $log, $q) ->
-  'ngInject'
+let service = function(bbTeBaTextSanitizer, $http, $log, $q) {
+  'ngInject';
 
-  endpoint = 'http://some.endpoint.com'
+  let endpoint = 'http://some.endpoint.com';
 
-  getArticles = () ->
-    defer = $q.defer()
+  let getArticles = function() {
+    let defer = $q.defer();
 
     $http.get(endpoint + '/article')
-    .then (response) ->
-      getArticlesSuccessHandler(defer, response)
-      return
-    .catch (response) ->
-      defer.reject('could not load articles')
-      return
+    .then(function(response) {
+      getArticlesSuccessHandler(defer, response);}).catch(function(response) {
+      defer.reject('could not load articles');
+    });
 
-    return defer.promise
+    return defer.promise;
+  };
 
-  getArticlesSuccessHandler = (defer, response) ->
-    articles = response.data
+  var getArticlesSuccessHandler = function(defer, response) {
+    let articles = response.data;
 
-    for article in articles
-      do (article) ->
-        sanitizeArticle article
-        return
-    defer.resolve articles
-    return
+    for (let article of Array.from(articles)) {
+      (function(article) {
+        sanitizeArticle(article);
+      })(article);
+    }
+    defer.resolve(articles);
+  };
 
-  getArticle = (articleId) ->
-    defer = $q.defer()
+  let getArticle = function(articleId) {
+    let defer = $q.defer();
 
     $http.get(endpoint + '/article/' + articleId)
-    .then (response) ->
-      article = response.data
-      sanitizeArticle article
-      defer.resolve article
-      return
-    .catch (response) ->
-      defer.reject('could not load article with id:' + articleId)
-      return
+    .then(function(response) {
+      let article = response.data;
+      sanitizeArticle(article);
+      defer.resolve(article);}).catch(function(response) {
+      defer.reject(`could not load article with id:${articleId}`);
+    });
 
-    return defer.promise
+    return defer.promise;
+  };
 
-  deleteArticle = (articleId) ->
-    defer = $q.defer()
+  let deleteArticle = function(articleId) {
+    let defer = $q.defer();
 
     $http.delete(endpoint + '/article/' + articleId)
-    .then (response) ->
-      if response.data is 'OK'
-        defer.resolve true
-      else
-        deleteArticleErrorLog articleId, response.data
-        defer.reject false
-      return
-    .catch (response) ->
-      deleteArticleErrorLog articleId, response.data
-      defer.reject false
-      return
+    .then(function(response) {
+      if (response.data === 'OK') {
+        defer.resolve(true);
+      } else {
+        deleteArticleErrorLog(articleId, response.data);
+        defer.reject(false);
+      }}).catch(function(response) {
+      deleteArticleErrorLog(articleId, response.data);
+      defer.reject(false);
+    });
 
-    return defer.promise
+    return defer.promise;
+  };
 
-  deleteArticleErrorLog = (articleId, responseData) ->
-    $log.error 'could not remove article with id:' + articleId, responseData
-    return
+  var deleteArticleErrorLog = function(articleId, responseData) {
+    $log.error(`could not remove article with id:${articleId}`, responseData);
+  };
 
-  sanitizeArticle = (article) ->
-    article.content = bbTeBaTextSanitizer.sanitize article.content
-    return
+  var sanitizeArticle = function(article) {
+    article.content = bbTeBaTextSanitizer.sanitize(article.content);
+  };
 
   return {
-    getArticles: getArticles
-    getArticle: getArticle
-    deleteArticle: deleteArticle
-  }
+    getArticles,
+    getArticle,
+    deleteArticle
+  };
+};
 
 angular
 .module('bbTe.blogArticle')
-.service('bbTeBaArticleGateway', service)
+.service('bbTeBaArticleGateway', service);
 

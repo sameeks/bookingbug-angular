@@ -1,55 +1,53 @@
-'use strict'
-
-###
+/*
 * @ngdoc service
 * @name BBAdminDashboard.reset-password.service:ResetPasswordSchemaFormService
 *
 * @description
 * This service enables the user to fetch/submit a schema form from/to the server and also post the new password.
-###
+*/
 
-ResetPasswordSchemaFormService = ($q, $http, QueryStringService) ->
-  'ngInject'
+let ResetPasswordSchemaFormService = function($q, $http, QueryStringService) {
+  'ngInject';
 
-  passwordPattern = ''
+  let passwordPattern = '';
 
-  setPasswordPattern = (pattern) ->
-    password_pattern = pattern
+  let setPasswordPattern = function(pattern) {
+    let password_pattern;
+    return password_pattern = pattern;
+  };
 
-  getPasswordPattern = () ->
-    return passwordPattern
+  let getPasswordPattern = () => passwordPattern;
 
-  getSchemaForm = (baseUrl) ->
-    deferred = $q.defer()
-    src = baseUrl + "/api/v1/login/admin/reset_password_schema"
+  let getSchemaForm = function(baseUrl) {
+    let deferred = $q.defer();
+    let src = baseUrl + "/api/v1/login/admin/reset_password_schema";
 
-    $http.get(src, {}).then (response) ->
-      deferred.resolve(response)
-    , (err) ->
-      deferred.reject(err)
-    deferred.promise
+    $http.get(src, {}).then(response => deferred.resolve(response)
+    , err => deferred.reject(err));
+    return deferred.promise;
+  };
 
-  postSchemaForm = (password, baseUrl) ->
-    deferred = $q.defer()
-    src = baseUrl + "/api/v1/login/admin/reset_password"
+  let postSchemaForm = function(password, baseUrl) {
+    let deferred = $q.defer();
+    let src = baseUrl + "/api/v1/login/admin/reset_password";
 
-    resetPasswordToken = QueryStringService('reset_password_token')
+    let resetPasswordToken = QueryStringService('reset_password_token');
 
-    body = {"password": password, "reset_password_token": resetPasswordToken}
+    let body = {"password": password, "reset_password_token": resetPasswordToken};
 
-    $http.put(src, body).then (response) ->
-      deferred.resolve(response)
-    , (err) ->
-      deferred.reject(err)
-    deferred.promise
+    $http.put(src, body).then(response => deferred.resolve(response)
+    , err => deferred.reject(err));
+    return deferred.promise;
+  };
 
   return {
-    setPasswordPattern: setPasswordPattern
-    getPasswordPattern: getPasswordPattern
-    getSchemaForm: getSchemaForm
-    postSchemaForm: postSchemaForm
-  }
+    setPasswordPattern,
+    getPasswordPattern,
+    getSchemaForm,
+    postSchemaForm
+  };
+};
 
 angular
   .module('BBAdminDashboard.reset-password')
-  .factory('ResetPasswordSchemaFormService', ResetPasswordSchemaFormService)
+  .factory('ResetPasswordSchemaFormService', ResetPasswordSchemaFormService);

@@ -1,39 +1,47 @@
-'use strict'
+angular.module('BBQueue').controller('bbQueuers', function($scope, $log,
+    AdminQueuerService, ModalForm, $interval) {
 
-angular.module('BBQueue').controller 'bbQueuers', ($scope, $log,
-    AdminQueuerService, ModalForm, $interval) ->
+  $scope.loading = true;
 
-  $scope.loading = true
+  $scope.getQueuers = function() {
+    let params =
+      {company: $scope.company};
+    return AdminQueuerService.query(params).then(function(queuers) {
+      $scope.queuers = queuers;
+      $scope.waiting_queuers = [];
+      for (let queuer of Array.from(queuers)) {
+        queuer.remaining();
+        if (queuer.position > 0) { $scope.waiting_queuers.push(queuer); }
+      }
 
-  $scope.getQueuers = () ->
-    params =
-      company: $scope.company
-    AdminQueuerService.query(params).then (queuers) ->
-      $scope.queuers = queuers
-      $scope.waiting_queuers = []
-      for queuer in queuers
-        queuer.remaining()
-        $scope.waiting_queuers.push(queuer) if queuer.position > 0
+      return $scope.loading = false;
+    }
+    , function(err) {
+      $log.error(err.data);
+      return $scope.loading = false;
+    });
+  };
 
-      $scope.loading = false
-    , (err) ->
-      $log.error err.data
-      $scope.loading = false
-
-  $scope.newQueuerModal = () ->
-    ModalForm.new
-      company: $scope.company
-      title: 'New Queuer'
-      new_rel: 'new_queuer'
-      post_rel: 'queuers'
-      success: (queuer) ->
-        $scope.queuers.push(queuer)
+  $scope.newQueuerModal = () =>
+    ModalForm.new({
+      company: $scope.company,
+      title: 'New Queuer',
+      new_rel: 'new_queuer',
+      post_rel: 'queuers',
+      success(queuer) {
+        return $scope.queuers.push(queuer);
+      }
+    })
+  ;
 
 
-    # this is used to retrigger a scope check that will update service time
-  $interval(->
-    if $scope.queuers
-      for queuer in $scope.queuers
-        queuer.remaining()
-  , 5000)
+    // this is used to retrigger a scope check that will update service time
+  return $interval(function() {
+    if ($scope.queuers) {
+      return Array.from($scope.queuers).map((queuer) =>
+        queuer.remaining());
+    }
+  }
+  , 5000);
+});
 

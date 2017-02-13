@@ -1,193 +1,216 @@
-'use strict'
+angular.module('BB.Controllers').controller('EventList', function($scope, $rootScope, EventService, EventChainService, EventGroupService, $q, FormDataStoreService, $filter, PaginationService, $timeout, ValidatorService, LoadingService, BBModel) {
 
-angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, EventService, EventChainService, EventGroupService, $q, FormDataStoreService, $filter, PaginationService, $timeout, ValidatorService, LoadingService, BBModel) ->
+  let i;
+  let loader = LoadingService.$loader($scope).notLoaded();
 
-  loader = LoadingService.$loader($scope).notLoaded()
+  $scope.pick = {};
+  $scope.start_date = moment();
+  $scope.end_date = moment().add(1, 'year');
+  $scope.filters = {hide_fully_booked_events: false};
+  $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5});
+  $scope.events = {};
+  $scope.fully_booked = false;
+  $scope.event_data_loaded = false;
 
-  $scope.pick = {}
-  $scope.start_date = moment()
-  $scope.end_date = moment().add(1, 'year')
-  $scope.filters = {hide_fully_booked_events: false}
-  $scope.pagination = PaginationService.initialise({page_size: 10, max_size: 5})
-  $scope.events = {}
-  $scope.fully_booked = false
-  $scope.event_data_loaded = false
-
-  FormDataStoreService.init 'EventList', $scope, [
+  FormDataStoreService.init('EventList', $scope, [
     'selected_date',
     'event_group_id',
     'event_group_manually_set'
-  ]
+  ]);
 
-  $rootScope.connection_started.then ->
+  $rootScope.connection_started.then(function() {
 
-    if $scope.bb.company
-      # if there's a default event, skip this step
-      if ($scope.bb.item_defaults and $scope.bb.item_defaults.event) or ($scope.bb.current_item.defaults and $scope.bb.current_item.defaults.event)
+    if ($scope.bb.company) {
+      // if there's a default event, skip this step
+      if (($scope.bb.item_defaults && $scope.bb.item_defaults.event) || ($scope.bb.current_item.defaults && $scope.bb.current_item.defaults.event)) {
 
-        $scope.skipThisStep()
-        $scope.decideNextPage()
-        return
+        $scope.skipThisStep();
+        $scope.decideNextPage();
+        return;
 
-      else if $scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')
+      } else if ($scope.bb.company.$has('parent') && !$scope.bb.company.$has('company_questions')) {
 
-        $scope.bb.company.$getParent().then (parent) ->
-          $scope.company_parent = parent
-          $scope.initialise()
-        , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+        return $scope.bb.company.$getParent().then(function(parent) {
+          $scope.company_parent = parent;
+          return $scope.initialise();
+        }
+        , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
 
-      else
+      } else {
 
-        $scope.initialise()
+        return $scope.initialise();
+      }
+    }
+  }
 
-  , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
-
-
-
-  $scope.initialise = () ->
-
-    loader.notLoaded()
-
-    delete $scope.selected_date if $scope.mode != 0
-
-    # has the event group been manually set (i.e. in the step before)
-    if !$scope.event_group_manually_set and !$scope.bb.current_item.event_group?
-      $scope.event_group_manually_set = !$scope.event_group_manually_set? and $scope.bb.current_item.event_group?
-
-    # clear current item
-    if $scope.bb.current_item.event
-      event_group = $scope.bb.current_item.event_group
-      $scope.clearBasketItem()
-      # TODO only remove the basket items added in this session
-      $scope.emptyBasket()
-      $scope.bb.current_item.setEventGroup(event_group) if $scope.event_group_manually_set
-
-    promises = []
-
-    # company question promise
-    if $scope.bb.company.$has('company_questions')
-      promises.push($scope.bb.company.$getCompanyQuestions())
-    else if $scope.company_parent? && $scope.company_parent.$has('company_questions')
-      promises.push($scope.company_parent.$getCompanyQuestions())
-    else
-      promises.push($q.when([]))
-      $scope.has_company_questions = false
-
-    # event group promise
-    if $scope.bb.item_defaults and $scope.bb.item_defaults.event_group
-      $scope.bb.current_item.setEventGroup($scope.bb.item_defaults.event_group)
-    else if !$scope.bb.current_item.event_group and $scope.bb.company.$has('event_groups')
-      # --------------------------------------------------------------------------------
-      # By default, the API returns the first 100 event_groups. We don't really want
-      # to paginate event_groups (athough we DO want to paginate events)
-      # so I have hardcoded the EventGroupService query to return all event_groups
-      # by passing in a suitably high number for the per_page param
-      # ---------------------------------------------------------------------------------
-      promises.push EventGroupService.query($scope.bb.company, {per_page: 500})
-    else
-      promises.push($q.when([]))
-
-    # event summary promise
-    if $scope.mode is 0 or $scope.mode is 2
-      promises.push($scope.loadEventSummary())
-    else
-      promises.push($q.when([]))
-
-    # event data promise
-    # TODO - always load some event data?
-    if $scope.mode is 1 or $scope.mode is 2
-      promises.push($scope.loadEventData())
-    else
-      promises.push($q.when([]))
-
-
-    $q.all(promises).then (result) ->
-      company_questions = result[0]
-      event_groups      = result[1]
-      event_summary     = result[2]
-      event_data        = result[3]
-
-      $scope.has_company_questions = company_questions? && company_questions.length > 0
-      buildDynamicFilters(company_questions) if company_questions
-      $scope.event_groups = event_groups
-
-      # Add EventGroup to Event so we don't have to make network requests using item.getGroup() from the view
-      event_groups_collection = _.indexBy(event_groups, 'id')
-      if $scope.items
-        for item in $scope.items
-          item.group = event_groups_collection[item.service_id]
-
-      # Remove loading icon
-      loader.setLoaded()
-
-    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+  , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
 
 
 
-  ###**
+  $scope.initialise = function() {
+
+    let event_group;
+    loader.notLoaded();
+
+    if ($scope.mode !== 0) { delete $scope.selected_date; }
+
+    // has the event group been manually set (i.e. in the step before)
+    if (!$scope.event_group_manually_set && ($scope.bb.current_item.event_group == null)) {
+      $scope.event_group_manually_set = ($scope.event_group_manually_set == null) && ($scope.bb.current_item.event_group != null);
+    }
+
+    // clear current item
+    if ($scope.bb.current_item.event) {
+      ({ event_group } = $scope.bb.current_item);
+      $scope.clearBasketItem();
+      // TODO only remove the basket items added in this session
+      $scope.emptyBasket();
+      if ($scope.event_group_manually_set) { $scope.bb.current_item.setEventGroup(event_group); }
+    }
+
+    let promises = [];
+
+    // company question promise
+    if ($scope.bb.company.$has('company_questions')) {
+      promises.push($scope.bb.company.$getCompanyQuestions());
+    } else if (($scope.company_parent != null) && $scope.company_parent.$has('company_questions')) {
+      promises.push($scope.company_parent.$getCompanyQuestions());
+    } else {
+      promises.push($q.when([]));
+      $scope.has_company_questions = false;
+    }
+
+    // event group promise
+    if ($scope.bb.item_defaults && $scope.bb.item_defaults.event_group) {
+      $scope.bb.current_item.setEventGroup($scope.bb.item_defaults.event_group);
+    } else if (!$scope.bb.current_item.event_group && $scope.bb.company.$has('event_groups')) {
+      // --------------------------------------------------------------------------------
+      // By default, the API returns the first 100 event_groups. We don't really want
+      // to paginate event_groups (athough we DO want to paginate events)
+      // so I have hardcoded the EventGroupService query to return all event_groups
+      // by passing in a suitably high number for the per_page param
+      // ---------------------------------------------------------------------------------
+      promises.push(EventGroupService.query($scope.bb.company, {per_page: 500}));
+    } else {
+      promises.push($q.when([]));
+    }
+
+    // event summary promise
+    if (($scope.mode === 0) || ($scope.mode === 2)) {
+      promises.push($scope.loadEventSummary());
+    } else {
+      promises.push($q.when([]));
+    }
+
+    // event data promise
+    // TODO - always load some event data?
+    if (($scope.mode === 1) || ($scope.mode === 2)) {
+      promises.push($scope.loadEventData());
+    } else {
+      promises.push($q.when([]));
+    }
+
+
+    return $q.all(promises).then(function(result) {
+      let company_questions = result[0];
+      let event_groups      = result[1];
+      let event_summary     = result[2];
+      let event_data        = result[3];
+
+      $scope.has_company_questions = (company_questions != null) && (company_questions.length > 0);
+      if (company_questions) { buildDynamicFilters(company_questions); }
+      $scope.event_groups = event_groups;
+
+      // Add EventGroup to Event so we don't have to make network requests using item.getGroup() from the view
+      let event_groups_collection = _.indexBy(event_groups, 'id');
+      if ($scope.items) {
+        for (let item of Array.from($scope.items)) {
+          item.group = event_groups_collection[item.service_id];
+        }
+      }
+
+      // Remove loading icon
+      return loader.setLoaded();
+    }
+
+    , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+  };
+
+
+
+  /***
   * @ngdoc method
   * @name loadEventSummary
   * @methodOf BB.Directives:bbEvents
   * @description
   * Load event summary
-  ###
-  $scope.loadEventSummary = () ->
+  */
+  $scope.loadEventSummary = function() {
 
-    deferred = $q.defer()
-    current_event = $scope.bb.current_item.event
+    let deferred = $q.defer();
+    let current_event = $scope.bb.current_item.event;
 
-    # de-select the event chain if there's one already picked - as it's hiding other events in the same group
-    if $scope.bb.current_item && ($scope.bb.current_item.event_chain_id || $scope.bb.current_item.event_chain)
-      delete $scope.bb.current_item.event_chain
-      delete $scope.bb.current_item.event_chain_id
+    // de-select the event chain if there's one already picked - as it's hiding other events in the same group
+    if ($scope.bb.current_item && ($scope.bb.current_item.event_chain_id || $scope.bb.current_item.event_chain)) {
+      delete $scope.bb.current_item.event_chain;
+      delete $scope.bb.current_item.event_chain_id;
+    }
 
-    comp = $scope.bb.company
+    let comp = $scope.bb.company;
 
-    params =
-      item       : $scope.bb.current_item
-      start_date : $scope.start_date.toISODate()
+    let params = {
+      item       : $scope.bb.current_item,
+      start_date : $scope.start_date.toISODate(),
       end_date   : $scope.end_date.toISODate()
+    };
 
-    params.event_chain_id = $scope.bb.item_defaults.event_chain.id if $scope.bb.item_defaults.event_chain
+    if ($scope.bb.item_defaults.event_chain) { params.event_chain_id = $scope.bb.item_defaults.event_chain.id; }
 
-    BBModel.Event.$summary(comp, params).then (items) ->
+    BBModel.Event.$summary(comp, params).then(function(items) {
 
-      if items and items.length > 0
+      let item_dates;
+      if (items && (items.length > 0)) {
 
-        item_dates = []
-        for item in items
-          d = moment(item)
+        item_dates = [];
+        for (let item of Array.from(items)) {
+          let d = moment(item);
           item_dates.push({
             date   : d,
             idate  : parseInt(d.format("YYYYDDDD")),
             count  : 1,
             spaces : 1,
-          })
+          });
+        }
 
-        $scope.item_dates = item_dates.sort (a,b) -> (a.idate - b.idate)
+        $scope.item_dates = item_dates.sort((a,b) => a.idate - b.idate);
 
-        # TODO clear the selected date if the event group has changed (but only when event group has been explicity set)
-        # if $scope.bb.current_item? and $scope.bb.current_item.event_group?
-        #   if $scope.bb.current_item.event_group.id != $scope.event_group_id
-        #     $scope.showDay($scope.item_dates[0].date)
-        #   $scope.event_group_id = $scope.bb.current_item.event_group.id
+        // TODO clear the selected date if the event group has changed (but only when event group has been explicity set)
+        // if $scope.bb.current_item? and $scope.bb.current_item.event_group?
+        //   if $scope.bb.current_item.event_group.id != $scope.event_group_id
+        //     $scope.showDay($scope.item_dates[0].date)
+        //   $scope.event_group_id = $scope.bb.current_item.event_group.id
 
-        # if the selected date is within range of the dates loaded, show it, else show the first day loaded
-        if $scope.mode is 0
-          if ($scope.selected_date and ($scope.selected_date.isAfter($scope.item_dates[0].date) or $scope.selected_date.isSame($scope.item_dates[0].date)) and ($scope.selected_date.isBefore($scope.item_dates[$scope.item_dates.length-1].date) || $scope.selected_date.isSame($scope.item_dates[$scope.item_dates.length-1].date)))
-            $scope.showDay($scope.selected_date)
-          else
-            $scope.showDay($scope.item_dates[0].date)
+        // if the selected date is within range of the dates loaded, show it, else show the first day loaded
+        if ($scope.mode === 0) {
+          if ($scope.selected_date && ($scope.selected_date.isAfter($scope.item_dates[0].date) || $scope.selected_date.isSame($scope.item_dates[0].date)) && ($scope.selected_date.isBefore($scope.item_dates[$scope.item_dates.length-1].date) || $scope.selected_date.isSame($scope.item_dates[$scope.item_dates.length-1].date))) {
+            $scope.showDay($scope.selected_date);
+          } else {
+            $scope.showDay($scope.item_dates[0].date);
+          }
+        }
+      }
 
-      deferred.resolve($scope.item_dates)
+      return deferred.resolve($scope.item_dates);
+    }
 
-    , (err) -> deferred.reject()
+    , err => deferred.reject());
 
-    return deferred.promise
+    return deferred.promise;
+  };
 
 
 
-  ###**
+  /***
   * @ngdoc method
   * @name loadEventChainData
   * @methodOf BB.Directives:bbEvents
@@ -195,34 +218,38 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Load event chain data in according of comp parameter
   *
   * @param {array} comp The company
-  ###
-  $scope.loadEventChainData = (comp) ->
+  */
+  $scope.loadEventChainData = function(comp) {
 
-    deferred = $q.defer()
+    let deferred = $q.defer();
 
-    if $scope.bb.item_defaults.event_chain
-      deferred.resolve([])
-    else
-      loader.notLoaded()
-      comp ||= $scope.bb.company
+    if ($scope.bb.item_defaults.event_chain) {
+      deferred.resolve([]);
+    } else {
+      loader.notLoaded();
+      if (!comp) { comp = $scope.bb.company; }
 
-      params =
-        item       : $scope.bb.current_item
-        start_date : $scope.start_date.toISODate()
+      let params = {
+        item       : $scope.bb.current_item,
+        start_date : $scope.start_date.toISODate(),
         end_date   : $scope.end_date.toISODate()
-      params.embed = $scope.events_options.embed if $scope.events_options.embed
-      params.member_level_id = $scope.client.member_level_id if $scope.client
+      };
+      if ($scope.events_options.embed) { params.embed = $scope.events_options.embed; }
+      if ($scope.client) { params.member_level_id = $scope.client.member_level_id; }
 
-      BBModel.EventChain.$query(comp, params).then (event_chains) ->
-        loader.setLoaded()
-        deferred.resolve(event_chains)
-      , (err) ->  deferred.reject()
+      BBModel.EventChain.$query(comp, params).then(function(event_chains) {
+        loader.setLoaded();
+        return deferred.resolve(event_chains);
+      }
+      , err => deferred.reject());
+    }
 
-    return deferred.promise
+    return deferred.promise;
+  };
 
 
 
-  ###**
+  /***
   * @ngdoc method
   * @name loadEventData
   * @methodOf BB.Directives:bbEvents
@@ -230,154 +257,178 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Load event data. De-select the event chain if there's one already picked - as it's hiding other events in the same group
   *
   * @param {array} comp The company parameter
-  ###
-  $scope.loadEventData = (comp) ->
+  */
+  $scope.loadEventData = function(comp) {
 
-    loader.notLoaded()
+    loader.notLoaded();
 
-    $scope.event_data_loaded = false
+    $scope.event_data_loaded = false;
 
-    # clear the items when in summary mode
-    delete $scope.items if $scope.mode is 0
+    // clear the items when in summary mode
+    if ($scope.mode === 0) { delete $scope.items; }
 
-    deferred = $q.defer()
+    let deferred = $q.defer();
 
-    current_event = $scope.bb.current_item.event
+    let current_event = $scope.bb.current_item.event;
 
-    comp ||= $scope.bb.company
+    if (!comp) { comp = $scope.bb.company; }
 
-    # de-select the event chain if there's one already picked - as it's hiding other events in the same group
-    if $scope.bb.current_item && ($scope.bb.current_item.event_chain_id || $scope.bb.current_item.event_chain)
-      delete $scope.bb.current_item.event_chain
-      delete $scope.bb.current_item.event_chain_id
+    // de-select the event chain if there's one already picked - as it's hiding other events in the same group
+    if ($scope.bb.current_item && ($scope.bb.current_item.event_chain_id || $scope.bb.current_item.event_chain)) {
+      delete $scope.bb.current_item.event_chain;
+      delete $scope.bb.current_item.event_chain_id;
+    }
 
-    params =
-      item                 : $scope.bb.current_item
-      start_date           : $scope.start_date.toISODate()
-      end_date             : $scope.end_date.toISODate()
+    let params = {
+      item                 : $scope.bb.current_item,
+      start_date           : $scope.start_date.toISODate(),
+      end_date             : $scope.end_date.toISODate(),
       include_non_bookable : true
+    };
 
-    params.embed = $scope.events_options.event_data_embed if $scope.events_options.event_data_embed
+    if ($scope.events_options.event_data_embed) { params.embed = $scope.events_options.event_data_embed; }
 
-    params.event_chain_id = $scope.bb.item_defaults.event_chain.id if $scope.bb.item_defaults.event_chain
+    if ($scope.bb.item_defaults.event_chain) { params.event_chain_id = $scope.bb.item_defaults.event_chain.id; }
 
-    params.per_page = $scope.per_page if $scope.per_page
+    if ($scope.per_page) { params.per_page = $scope.per_page; }
 
-    chains = $scope.loadEventChainData(comp)
+    let chains = $scope.loadEventChainData(comp);
 
-    $scope.events = {}
+    $scope.events = {};
 
-    BBModel.Event.$query(comp, params).then (events) ->
+    BBModel.Event.$query(comp, params).then(function(events) {
 
-      # Flatten events array
-      $scope.items = _.flatten(events)
+      // Flatten events array
+      $scope.items = _.flatten(events);
 
-      # Add spaces_left prop - so we don't need to use ng-init="spaces_left = getSpacesLeft()" in the html template
-      for item in $scope.items
-        item.spaces_left = item.getSpacesLeft()
+      // Add spaces_left prop - so we don't need to use ng-init="spaces_left = getSpacesLeft()" in the html template
+      for (var item of Array.from($scope.items)) {
+        item.spaces_left = item.getSpacesLeft();
+      }
 
-      # Add address prop from the company to the item
-      if $scope.bb.company.$has('address')
+      // Add address prop from the company to the item
+      if ($scope.bb.company.$has('address')) {
 
-        $scope.bb.company.$getAddress().then (address) ->
+        $scope.bb.company.$getAddress().then(address =>
 
-          for item in $scope.items
-            item.address = address
+          (() => {
+            let result = [];
+            for (item of Array.from($scope.items)) {
+              result.push(item.address = address);
+            }
+            return result;
+          })()
+        );
+      }
 
-      # TODO make this behave like the frame timetable
-      # get all data then process events
-      chains.then () ->
+      // TODO make this behave like the frame timetable
+      // get all data then process events
+      return chains.then(function() {
 
-        # get more event details
-        for item in $scope.items
+        // get more event details
+        for (item of Array.from($scope.items)) {
 
           params =
-            embed: $scope.events_options.embed
-          params.member_level_id = $scope.client.member_level_id if $scope.client
-          item.prepEvent(params)
+            {embed: $scope.events_options.embed};
+          if ($scope.client) { params.member_level_id = $scope.client.member_level_id; }
+          item.prepEvent(params);
 
-          # check if the current item already has the same event selected
-          if $scope.mode is 0 and current_event and current_event.self == item.self
+          // check if the current item already has the same event selected
+          if (($scope.mode === 0) && current_event && (current_event.self === item.self)) {
 
-            item.select()
-            $scope.event = item
+            item.select();
+            $scope.event = item;
+          }
+        }
 
-        # only build item_dates if we're in 'next 100 event' mode
-        if $scope.mode is 1
+        // only build item_dates if we're in 'next 100 event' mode
+        if ($scope.mode === 1) {
 
-          item_dates = {}
+          let idate;
+          let item_dates = {};
 
-          if items.length > 0
+          if (items.length > 0) {
 
-            for item in items
+            for (item of Array.from(items)) {
 
-              item.getDuration()
-              idate = parseInt(item.date.format("YYYYDDDD"))
-              item.idate = idate
+              item.getDuration();
+              idate = parseInt(item.date.format("YYYYDDDD"));
+              item.idate = idate;
 
-              if !item_dates[idate]
-                item_dates[idate] = {date:item.date, idate: idate, count:0, spaces:0}
+              if (!item_dates[idate]) {
+                item_dates[idate] = {date:item.date, idate, count:0, spaces:0};
+              }
 
-              item_dates[idate].count  += 1
-              item_dates[idate].spaces += item.num_spaces
+              item_dates[idate].count  += 1;
+              item_dates[idate].spaces += item.num_spaces;
+            }
 
-            $scope.item_dates = []
+            $scope.item_dates = [];
 
-            for x,y of item_dates
+            for (let x in item_dates) {
 
-              $scope.item_dates.push(y)
+              let y = item_dates[x];
+              $scope.item_dates.push(y);
+            }
 
-            $scope.item_dates = $scope.item_dates.sort (a,b) -> (a.idate - b.idate)
+            $scope.item_dates = $scope.item_dates.sort((a,b) => a.idate - b.idate);
 
-          else
+          } else {
 
-            idate = parseInt($scope.start_date.format("YYYYDDDD"))
-            $scope.item_dates = [{date:$scope.start_date, idate: idate, count:0, spaces:0}]
+            idate = parseInt($scope.start_date.format("YYYYDDDD"));
+            $scope.item_dates = [{date:$scope.start_date, idate, count:0, spaces:0}];
+          }
+        }
 
-        # determine if all events are fully booked
-        $scope.isFullyBooked()
+        // determine if all events are fully booked
+        $scope.isFullyBooked();
 
-        $scope.filtered_items = $scope.items
+        $scope.filtered_items = $scope.items;
 
-        # run the filters to ensure any default filters get applied
-        $scope.filterChanged()
+        // run the filters to ensure any default filters get applied
+        $scope.filterChanged();
 
-        # update the paging
-        PaginationService.update($scope.pagination, $scope.filtered_items.length)
+        // update the paging
+        PaginationService.update($scope.pagination, $scope.filtered_items.length);
 
-        loader.setLoaded()
-        $scope.event_data_loaded = true
+        loader.setLoaded();
+        $scope.event_data_loaded = true;
 
-        deferred.resolve($scope.items)
+        return deferred.resolve($scope.items);
+      }
 
-      , (err) ->  deferred.reject()
+      , err => deferred.reject());
+    }
 
-    , (err) ->  deferred.reject()
+    , err => deferred.reject());
 
-    return deferred.promise
+    return deferred.promise;
+  };
 
 
 
-  ###**
+  /***
   * @ngdoc method
   * @name isFullyBooked
   * @methodOf BB.Directives:bbEvents
   * @description
   * Verify if the items from event list are be fully booked
-  ###
-  $scope.isFullyBooked = () ->
+  */
+  $scope.isFullyBooked = function() {
 
-    full_events = []
+    let full_events = [];
 
-    for item in $scope.items
+    for (let item of Array.from($scope.items)) {
 
-      full_events.push(item) if item.num_spaces == item.spaces_booked
+      if (item.num_spaces === item.spaces_booked) { full_events.push(item); }
+    }
 
-    return $scope.fully_booked = true if full_events.length == $scope.items.length
+    if (full_events.length === $scope.items.length) { return $scope.fully_booked = true; }
+  };
 
 
 
-  ###**
+  /***
   * @ngdoc method
   * @name showDay
   * @methodOf BB.Directives:bbEvents
@@ -385,48 +436,55 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Selects a day or filters events by day selected
   *
   * @param {moment} the day to select or filter by
-  ###
-  $scope.showDay = (date) ->
+  */
+  $scope.showDay = function(date) {
 
-    return if !moment.isMoment(date)
+    let new_date;
+    if (!moment.isMoment(date)) { return; }
 
-    if $scope.mode is 0
+    if ($scope.mode === 0) {
 
-      # unselect the event if it's not on the day being selected
-      delete $scope.event if $scope.event and !$scope.selected_date.isSame(date, 'day')
-      new_date = date
-      $scope.start_date = moment(date)
-      $scope.end_date = moment(date)
-      $scope.loadEventData()
+      // unselect the event if it's not on the day being selected
+      if ($scope.event && !$scope.selected_date.isSame(date, 'day')) { delete $scope.event; }
+      new_date = date;
+      $scope.start_date = moment(date);
+      $scope.end_date = moment(date);
+      $scope.loadEventData();
 
-    else
+    } else {
 
-      new_date = date if !$scope.selected_date or !date.isSame($scope.selected_date, 'day')
+      if (!$scope.selected_date || !date.isSame($scope.selected_date, 'day')) { new_date = date; }
+    }
 
-    if new_date
+    if (new_date) {
 
-      $scope.selected_date = new_date
-      $scope.filters.date  = new_date.toDate()
+      $scope.selected_date = new_date;
+      $scope.filters.date  = new_date.toDate();
 
-    else
+    } else {
 
-      delete $scope.selected_date
-      delete $scope.filters.date
+      delete $scope.selected_date;
+      delete $scope.filters.date;
+    }
 
-    $scope.filterChanged()
-
-
-  $scope.$watch 'pick.date', (new_val, old_val) =>
-
-    if new_val
-
-      $scope.start_date = moment(new_val)
-      $scope.end_date = moment(new_val)
-      $scope.loadEventData()
+    return $scope.filterChanged();
+  };
 
 
+  $scope.$watch('pick.date', (new_val, old_val) => {
 
-  ###**
+    if (new_val) {
+
+      $scope.start_date = moment(new_val);
+      $scope.end_date = moment(new_val);
+      return $scope.loadEventData();
+    }
+  }
+  );
+
+
+
+  /***
   * @ngdoc method
   * @name selectItem
   * @methodOf BB.Directives:bbEvents
@@ -435,59 +493,61 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   *
   * @param {array} item The Event or BookableItem to select
   * @param {string=} route A specific route to load
-  ###
-  $scope.selectItem = (item, route) =>
+  */
+  $scope.selectItem = (item, route) => {
 
-    return false unless (item.getSpacesLeft() <= 0 && $scope.bb.company.settings.has_waitlists) || item.hasSpace()
+    if (((item.getSpacesLeft() > 0) || !$scope.bb.company.settings.has_waitlists) && !item.hasSpace()) { return false; }
 
-    loader.notLoaded()
+    loader.notLoaded();
 
-    if $scope.$parent.$has_page_control
+    if ($scope.$parent.$has_page_control) {
 
-      $scope.event.unselect() if $scope.event
-      $scope.event = item
-      $scope.event.select()
-      loader.setLoaded()
+      if ($scope.event) { $scope.event.unselect(); }
+      $scope.event = item;
+      $scope.event.select();
+      loader.setLoaded();
 
-      return false
+      return false;
 
-    else
+    } else {
 
-      if $scope.bb.moving_purchase
+      if ($scope.bb.moving_purchase) {
 
-        i.setEvent(item) for i in $scope.bb.basket.items
+        for (i of Array.from($scope.bb.basket.items)) { i.setEvent(item); }
+      }
 
-      $scope.bb.current_item.setEvent(item)
-      $scope.bb.current_item.ready = false
+      $scope.bb.current_item.setEvent(item);
+      $scope.bb.current_item.ready = false;
 
-      $q.all($scope.bb.current_item.promises).then () ->
+      $q.all($scope.bb.current_item.promises).then(() => $scope.decideNextPage(route)
 
-        $scope.decideNextPage(route)
+      , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
 
-      , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+      return true;
+    }
+  };
 
-      return true
 
 
-
-  ###**
+  /***
   * @ngdoc method
   * @name setReady
   * @methodOf BB.Directives:bbEvents
   * @description
   * Set this page section as ready - see {@link BB.Directives:bbPage Page Control}
-  ###
-  $scope.setReady = () ->
+  */
+  $scope.setReady = function() {
 
-    return false if !$scope.event
+    if (!$scope.event) { return false; }
 
-    $scope.bb.current_item.setEvent($scope.event)
+    $scope.bb.current_item.setEvent($scope.event);
 
-    return true
+    return true;
+  };
 
 
 
-  ###**
+  /***
   * @ngdoc method
   * @name filterEvents
   * @methodOf BB.Directives:bbEvents
@@ -495,154 +555,172 @@ angular.module('BB.Controllers').controller 'EventList', ($scope, $rootScope, Ev
   * Filter events from the event list in according of item parameter
   *
   * @param {array} item The Event or BookableItem to select
-  ###
-  $scope.filterEvents = (item) ->
-    result = item.bookable and
-      (moment($scope.filters.date).isSame(item.date, 'day') or !$scope.filters.date?) and
-      (($scope.filters.event_group and item.service_id == $scope.filters.event_group.id) or !$scope.filters.event_group?) and
-      (($scope.filters.price? and (item.price_range.from <= $scope.filters.price)) or !$scope.filters.price?) and
-      (($scope.filters.hide_fully_booked_events and item.getSpacesLeft() > 0) or !$scope.filters.hide_fully_booked_events) and
-      $scope.filterEventsWithDynamicFilters(item)
+  */
+  $scope.filterEvents = function(item) {
+    let result = item.bookable &&
+      (moment($scope.filters.date).isSame(item.date, 'day') || ($scope.filters.date == null)) &&
+      (($scope.filters.event_group && (item.service_id === $scope.filters.event_group.id)) || ($scope.filters.event_group == null)) &&
+      ((($scope.filters.price != null) && (item.price_range.from <= $scope.filters.price)) || ($scope.filters.price == null)) &&
+      (($scope.filters.hide_fully_booked_events && (item.getSpacesLeft() > 0)) || !$scope.filters.hide_fully_booked_events) &&
+      $scope.filterEventsWithDynamicFilters(item);
 
-    return result
-
-
-
-  $scope.filterEventsWithDynamicFilters = (item) ->
-
-    return true if !$scope.has_company_questions or !$scope.dynamic_filters
-
-    result = true
-
-    for type in $scope.dynamic_filters.question_types
-
-      if type is 'check'
-
-        for dynamic_filter in $scope.dynamic_filters['check']
-
-          name = dynamic_filter.name.parameterise('_')
-          filter = false
-
-          if item.chain and item.chain.extra[name]
-
-            for i in item.chain.extra[name]
-              filter = ($scope.dynamic_filters.values[dynamic_filter.name] and i is $scope.dynamic_filters.values[dynamic_filter.name].name) or !$scope.dynamic_filters.values[dynamic_filter.name]?
-
-              break if filter
-
-          else if (item.chain.extra[name] is undefined && (_.isEmpty($scope.dynamic_filters.values) || !$scope.dynamic_filters.values[dynamic_filter.name]?))
-
-            filter = true
-
-          result = result and filter
-
-      else
-
-        for dynamic_filter in $scope.dynamic_filters[type]
-
-          name = dynamic_filter.name.parameterise('_')
-          filter = ($scope.dynamic_filters.values[dynamic_filter.name] and item.chain.extra[name] is $scope.dynamic_filters.values[dynamic_filter.name].name) or !$scope.dynamic_filters.values[dynamic_filter.name]?
-          result = result and filter
-
-    return result
+    return result;
+  };
 
 
 
-  ###**
+  $scope.filterEventsWithDynamicFilters = function(item) {
+
+    if (!$scope.has_company_questions || !$scope.dynamic_filters) { return true; }
+
+    let result = true;
+
+    for (let type of Array.from($scope.dynamic_filters.question_types)) {
+
+      var dynamic_filter, filter, name;
+      if (type === 'check') {
+
+        for (dynamic_filter of Array.from($scope.dynamic_filters['check'])) {
+
+          name = dynamic_filter.name.parameterise('_');
+          filter = false;
+
+          if (item.chain && item.chain.extra[name]) {
+
+            for (i of Array.from(item.chain.extra[name])) {
+              filter = ($scope.dynamic_filters.values[dynamic_filter.name] && (i === $scope.dynamic_filters.values[dynamic_filter.name].name)) || ($scope.dynamic_filters.values[dynamic_filter.name] == null);
+
+              if (filter) { break; }
+            }
+
+          } else if ((item.chain.extra[name] === undefined) && (_.isEmpty($scope.dynamic_filters.values) || ($scope.dynamic_filters.values[dynamic_filter.name] == null))) {
+
+            filter = true;
+          }
+
+          result = result && filter;
+        }
+
+      } else {
+
+        for (dynamic_filter of Array.from($scope.dynamic_filters[type])) {
+
+          name = dynamic_filter.name.parameterise('_');
+          filter = ($scope.dynamic_filters.values[dynamic_filter.name] && (item.chain.extra[name] === $scope.dynamic_filters.values[dynamic_filter.name].name)) || ($scope.dynamic_filters.values[dynamic_filter.name] == null);
+          result = result && filter;
+        }
+      }
+    }
+
+    return result;
+  };
+
+
+
+  /***
   * @ngdoc method
   * @name filterDateChanged
   * @methodOf BB.Directives:bbEvents
   * @description
   * Filtering data exchanged from the list of events
-  ###
-  $scope.filterDateChanged = (options = {reset: false}) ->
+  */
+  $scope.filterDateChanged = function(options) {
 
-    if $scope.filters.date
-      date = moment($scope.filters.date)
-      $scope.$broadcast "event_list_filter_date:changed", date
-      $scope.showDay(date)
+    if (options == null) { options = {reset: false}; }
+    if ($scope.filters.date) {
+      let date = moment($scope.filters.date);
+      $scope.$broadcast("event_list_filter_date:changed", date);
+      $scope.showDay(date);
 
-      if options.reset == true || !$scope.selected_date?
+      if ((options.reset === true) || ($scope.selected_date == null)) {
 
-        $timeout () ->
-          delete $scope.filters.date
-        , 250
+        return $timeout(() => delete $scope.filters.date
+        , 250);
+      }
+    }
+  };
 
 
-  ###**
+  /***
   * @ngdoc method
   * @name resetFilters
   * @methodOf BB.Directives:bbEvents
   * @description
   * Reset the filters
-  ###
-  $scope.resetFilters = () ->
+  */
+  $scope.resetFilters = function() {
 
-    $scope.filters = {}
-    $scope.dynamic_filters.values = {} if $scope.has_company_questions
-    $scope.filterChanged()
+    $scope.filters = {};
+    if ($scope.has_company_questions) { $scope.dynamic_filters.values = {}; }
+    $scope.filterChanged();
 
-    delete $scope.selected_date
-    $rootScope.$broadcast "event_list_filter_date:cleared"
-
-
-  # build dynamic filters using company questions
-  buildDynamicFilters = (questions) ->
-
-    questions = _.each questions, (question) -> question.name = $filter('wordCharactersAndSpaces')(question.name)
-
-    $scope.dynamic_filters                = _.groupBy(questions, 'question_type')
-    $scope.dynamic_filters.question_types = _.uniq(_.pluck(questions, 'question_type'))
-    $scope.dynamic_filters.values         = {}
+    delete $scope.selected_date;
+    return $rootScope.$broadcast("event_list_filter_date:cleared");
+  };
 
 
-  # TODO build price filter by determiniug price range, if range is large enough, display price filter
-  # buildPriceFilter = () ->
-  #   for item in items
+  // build dynamic filters using company questions
+  var buildDynamicFilters = function(questions) {
+
+    questions = _.each(questions, question => question.name = $filter('wordCharactersAndSpaces')(question.name));
+
+    $scope.dynamic_filters                = _.groupBy(questions, 'question_type');
+    $scope.dynamic_filters.question_types = _.uniq(_.pluck(questions, 'question_type'));
+    return $scope.dynamic_filters.values         = {};
+  };
 
 
-  sort = () ->
-   # TODO allow sorting by price/date (default)
+  // TODO build price filter by determiniug price range, if range is large enough, display price filter
+  // buildPriceFilter = () ->
+  //   for item in items
+
+
+  let sort = function() {};
+   // TODO allow sorting by price/date (default)
 
 
 
-  ###**
+  /***
   * @ngdoc method
   * @name filterChanged
   * @methodOf BB.Directives:bbEvents
   * @description
   * Change filter of the event list
-  ###
-  $scope.filterChanged = () ->
+  */
+  $scope.filterChanged = function() {
 
-    if $scope.items
+    if ($scope.items) {
 
-      $scope.filtered_items = $filter('filter')($scope.items, $scope.filterEvents)
-      $scope.pagination.num_items = $scope.filtered_items.length
-      $scope.filter_active = $scope.filtered_items.length != $scope.items.length
-      PaginationService.update($scope.pagination, $scope.filtered_items.length)
+      $scope.filtered_items = $filter('filter')($scope.items, $scope.filterEvents);
+      $scope.pagination.num_items = $scope.filtered_items.length;
+      $scope.filter_active = $scope.filtered_items.length !== $scope.items.length;
+      return PaginationService.update($scope.pagination, $scope.filtered_items.length);
+    }
+  };
 
 
 
-  ###**
+  /***
   * @ngdoc method
   * @name pageChanged
   * @methodOf BB.Directives:bbEvents
   * @description
   * Change page of the event list
-  ###
-  $scope.pageChanged = () ->
+  */
+  return $scope.pageChanged = function() {
 
-    PaginationService.update($scope.pagination, $scope.filtered_items.length)
-    $rootScope.$broadcast "page:changed"
+    PaginationService.update($scope.pagination, $scope.filtered_items.length);
+    return $rootScope.$broadcast("page:changed");
+  };
+});
 
 
 
-  # TODO load more events when end of initial collection is reached/next collection is requested/data is loaded when no event data is present
-  # $scope.$on 'month_picker:month_changed', (event, month, last_month_shown) ->
-  #   return if !$scope.items or $scope.mode is 0
-  #   last_event = _.last($scope.items).date
-  #   # if the last event is in the same month as the last one shown, get more events
-  #   if last_month_shown.start_date.isSame(last_event, 'month')
-  #     $scope.start_date = last_month_shown.start_date
-  #     $scope.loadEventData()
+  // TODO load more events when end of initial collection is reached/next collection is requested/data is loaded when no event data is present
+  // $scope.$on 'month_picker:month_changed', (event, month, last_month_shown) ->
+  //   return if !$scope.items or $scope.mode is 0
+  //   last_event = _.last($scope.items).date
+  //   # if the last event is in the same month as the last one shown, get more events
+  //   if last_month_shown.start_date.isSame(last_event, 'month')
+  //     $scope.start_date = last_month_shown.start_date
+  //     $scope.loadEventData()

@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:PurchaseTotal
 *
@@ -12,30 +9,36 @@
 * @property {float} price Price of items
 * @property {float} tax_payable_on_price The tax payable on price of the item
 * @property {float} due_now The due now
-####
+*///
 
 
-angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel,
-  BaseModel, PurchaseService) ->
+angular.module('BB.Models').factory("PurchaseTotalModel", ($q, BBModel,
+  BaseModel, PurchaseService) =>
 
-  class PurchaseTotal extends BaseModel
+  class PurchaseTotal extends BaseModel {
 
-    constructor: (data) ->
-      super(data)
-      @promise = @_data.$get('purchase_items')
-      @purchase_items = []
-      @promise.then (items) =>
-        for item in items
-          @purchase_items.push(new BBModel.PurchaseItem(item))
-      if @_data.$has('client')
-       cprom = data.$get('client')
-       cprom.then (client) =>
-         @client = new BBModel.Client(client)
-      @created_at = moment.parseZone(@created_at)
-      @created_at.tz(@time_zone) if @time_zone
+    constructor(data) {
+      super(data);
+      this.promise = this._data.$get('purchase_items');
+      this.purchase_items = [];
+      this.promise.then(items => {
+        return Array.from(items).map((item) =>
+          this.purchase_items.push(new BBModel.PurchaseItem(item)));
+      }
+      );
+      if (this._data.$has('client')) {
+       let cprom = data.$get('client');
+       cprom.then(client => {
+         return this.client = new BBModel.Client(client);
+       }
+       );
+     }
+      this.created_at = moment.parseZone(this.created_at);
+      if (this.time_zone) { this.created_at.tz(this.time_zone); }
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name icalLink
     * @methodOf BB.Models:PurchaseTotal
@@ -43,11 +46,12 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel,
     * Get the icalLink
     *
     * @returns {object} The returned icalLink
-    ###
-    icalLink: ->
-      @_data.$href('ical')
+    */
+    icalLink() {
+      return this._data.$href('ical');
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name webcalLink
     * @methodOf BB.Models:PurchaseTotal
@@ -55,11 +59,12 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel,
     * Get webcalLink
     *
     * @returns {object} The returned webcalLink
-    ###
-    webcalLink: ->
-      @_data.$href('ical')
+    */
+    webcalLink() {
+      return this._data.$href('ical');
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name gcalLink
     * @methodOf BB.Models:PurchaseTotal
@@ -67,11 +72,12 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel,
     * Get the gcalLink
     *
     * @returns {object} The returned gcalLink
-    ###
-    gcalLink: ->
-      @_data.$href('gcal')
+    */
+    gcalLink() {
+      return this._data.$href('gcal');
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name id
     * @methodOf BB.Models:PurchaseTotal
@@ -79,13 +85,18 @@ angular.module('BB.Models').factory "PurchaseTotalModel", ($q, BBModel,
     * Get the id
     *
     * @returns {object} The returned id
-    ###
-    id: ->
-      @get('id')
+    */
+    id() {
+      return this.get('id');
+    }
 
-    @$query: (params) ->
-      PurchaseService.query (params)
+    static $query(params) {
+      return PurchaseService.query((params));
+    }
 
-    @$bookingRefQuery: (params) ->
-      PurchaseService.query (params)
+    static $bookingRefQuery(params) {
+      return PurchaseService.query((params));
+    }
+  }
+);
 

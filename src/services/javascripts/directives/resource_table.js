@@ -1,56 +1,65 @@
-'use strict'
+angular.module('BBAdminServices').directive('resourceTable', function(BBModel, $log,
+  ModalForm) {
 
-angular.module('BBAdminServices').directive 'resourceTable', (BBModel, $log,
-  ModalForm) ->
+  let controller = function($scope) {
 
-  controller = ($scope) ->
+    $scope.fields = ['id','name'];
 
-    $scope.fields = ['id','name']
+    $scope.getResources = function() {
+      let params =
+        {company: $scope.company};
+      return BBModel.Admin.Resource.$query(params).then(resources => $scope.resources = resources);
+    };
 
-    $scope.getResources = () ->
-      params =
-        company: $scope.company
-      BBModel.Admin.Resource.$query(params).then (resources) ->
-        $scope.resources = resources
+    $scope.newResource = () =>
+      ModalForm.new({
+        company: $scope.company,
+        title: 'New Resource',
+        new_rel: 'new_resource',
+        post_rel: 'resources',
+        size: 'lg',
+        success(resource) {
+          return $scope.resources.push(resource);
+        }
+      })
+    ;
 
-    $scope.newResource = () ->
-      ModalForm.new
-        company: $scope.company
-        title: 'New Resource'
-        new_rel: 'new_resource'
-        post_rel: 'resources'
-        size: 'lg'
-        success: (resource) ->
-          $scope.resources.push(resource)
+    $scope.delete = resource =>
+      resource.$del('self').then(() => $scope.resources = _.reject($scope.resources, p => p.id === id)
+      , err => $log.error("Failed to delete resource"))
+    ;
 
-    $scope.delete = (resource) ->
-      resource.$del('self').then () ->
-        $scope.resources = _.reject $scope.resources, (p) -> p.id == id
-      , (err) ->
-        $log.error "Failed to delete resource"
-
-    $scope.edit = (resource) ->
-      ModalForm.edit
-        model: resource
+    $scope.edit = resource =>
+      ModalForm.edit({
+        model: resource,
         title: 'Edit Resource'
+      })
+    ;
 
-    $scope.schedule = (resource) ->
-      resource.$get('schedule').then (schedule) ->
-        ModalForm.edit
-          model: schedule
+    return $scope.schedule = resource =>
+      resource.$get('schedule').then(schedule =>
+        ModalForm.edit({
+          model: schedule,
           title: 'Edit Schedule'
+        })
+      )
+    ;
+  };
 
-  link = (scope, element, attrs) ->
-    if scope.company
-      scope.getResources()
-    else
-      BBModel.Admin.Company.$query(attrs).then (company) ->
-        scope.company = company
-        scope.getResources()
+  let link = function(scope, element, attrs) {
+    if (scope.company) {
+      return scope.getResources();
+    } else {
+      return BBModel.Admin.Company.$query(attrs).then(function(company) {
+        scope.company = company;
+        return scope.getResources();
+      });
+    }
+  };
 
-  {
-    controller: controller
-    link: link
+  return {
+    controller,
+    link,
     templateUrl: 'resource_table_main.html'
-  }
+  };});
 

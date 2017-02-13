@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives.directive:autofocus
 * @scope
@@ -12,14 +10,17 @@
 * Usage:
 * <input type="text" autofocus="isTrue">
 *
-###
+*/
 angular.module('BB.Directives')
-.directive 'autofocus', ($timeout) ->
-  {
-    restrict: 'A'
-    link: (scope, element, attr) ->
-      $timeout () ->
-        if attr.autofocus == '' || scope.$eval(attr.autofocus)
-          element[0].focus()
-  }
+.directive('autofocus', $timeout =>
+  ({
+    restrict: 'A',
+    link(scope, element, attr) {
+      return $timeout(function() {
+        if ((attr.autofocus === '') || scope.$eval(attr.autofocus)) {
+          return element[0].focus();
+        }
+      });
+    }
+  }));
 

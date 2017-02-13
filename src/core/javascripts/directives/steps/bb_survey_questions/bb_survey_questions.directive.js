@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbSurveyQuestions
 * @restrict AE
@@ -21,10 +19,13 @@
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
 * @property {object} widget The widget service - see {@link BB.Models:BBWidget Widget Service}
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-####
+*///
 
-angular.module('BB.Directives').directive 'bbSurveyQuestions', () ->
-  restrict: 'AE'
-  replace: true
-  scope: true
-  controller : 'SurveyQuestions'
+angular.module('BB.Directives').directive('bbSurveyQuestions', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope: true,
+    controller : 'SurveyQuestions'
+  })
+);

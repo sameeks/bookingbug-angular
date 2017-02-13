@@ -1,14 +1,12 @@
-'use strict'
-
-###*
+/**
 * @ngdoc service
 * @name BB.i18n.RuntimeTranslate
 *
 * @description
 * Returns an instance of $translateProvider that allows late language binding (on runtime)
-###
+*/
 
-###*
+/**
 * @ngdoc service
 * @name BB.i18n.RuntimeTranslateProvider
 *
@@ -21,13 +19,11 @@
     RuntimeTranslateProvider.setProvider($translateProvider)
   ]
   </pre>
-###
-angular.module('BB.i18n').provider 'RuntimeTranslate', ($translateProvider)->
-  'ngInject'
+*/
+angular.module('BB.i18n').provider('RuntimeTranslate', function($translateProvider){
+  'ngInject';
 
-  translateProvider = $translateProvider
-  @setProvider = (provider)->
-    translateProvider = provider
-  @$get = ->
-    translateProvider
-  return
+  let translateProvider = $translateProvider;
+  this.setProvider = provider=> translateProvider = provider;
+  this.$get = () => translateProvider;
+});

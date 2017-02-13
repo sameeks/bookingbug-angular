@@ -1,15 +1,21 @@
-'use strict'
+angular.module('BB.Directives').directive('bbDebounce', $timeout =>
+  ({
+    restrict: 'A',
+    link(scope, element, attrs) {
+      let delay = 400;
+      if (attrs.bbDebounce) { delay = attrs.bbDebounce; }
 
-angular.module('BB.Directives').directive 'bbDebounce', ($timeout) ->
-  restrict: 'A',
-  link: (scope, element, attrs) ->
-    delay = 400
-    delay = attrs.bbDebounce if attrs.bbDebounce
-
-    element.bind 'click', () =>
-      $timeout () =>
-        element.attr('disabled', true)
-      , 0
-      $timeout () =>
-        element.attr('disabled', false)
-      , delay
+      return element.bind('click', () => {
+        $timeout(() => {
+          return element.attr('disabled', true);
+        }
+        , 0);
+        return $timeout(() => {
+          return element.attr('disabled', false);
+        }
+        , delay);
+      }
+      );
+    }
+  })
+);

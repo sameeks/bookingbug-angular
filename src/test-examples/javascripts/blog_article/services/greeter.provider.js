@@ -1,26 +1,30 @@
-provider = ($logProvider) ->
-  'ngInject'
+let provider = function($logProvider) {
+  'ngInject';
 
-  greeting = 'Hello'
+  let greeting = 'Hello';
 
-  @setGreeting = (newGreeting) ->
-    greeting = newGreeting
-    return
+  this.setGreeting = function(newGreeting) {
+    greeting = newGreeting;
+  };
 
-  @$get = ($log) ->
-    'ngInject'
+  this.$get = function($log) {
+    'ngInject';
 
-    class Greeter
-      constructor: () ->
-        return
+    class Greeter {
+      constructor() {
+        
+      }
 
-      greet: (employeeName) ->
-        return greeting + ' ' + employeeName + '!'
+      greet(employeeName) {
+        return greeting + ' ' + employeeName + '!';
+      }
+    }
 
-    return Greeter
+    return Greeter;
+  };
 
-  return
+};
 
 angular
 .module('bbTe.blogArticle')
-.provider('BbTeBaGreeter', provider)
+.provider('BbTeBaGreeter', provider);

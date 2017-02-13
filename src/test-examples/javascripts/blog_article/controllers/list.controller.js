@@ -1,8 +1,8 @@
-controller = () ->
-  'ngInject'
+let controller = function() {
+  'ngInject';
 
-  return
+};
 
 angular
 .module('bbTe.blogArticle')
-.controller('BbTeBaListController', controller)
+.controller('BbTeBaListController', controller);

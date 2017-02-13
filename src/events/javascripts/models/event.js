@@ -1,9 +1,10 @@
-'use strict'
+angular.module('BB.Models').factory("AdminEventModel", ($q, BBModel, BaseModel) =>
 
-angular.module('BB.Models').factory "AdminEventModel", ($q, BBModel, BaseModel) ->
+  class Admin_Event extends BaseModel {
 
-  class Admin_Event extends BaseModel
-
-    constructor: (data) ->
-      super(data)
+    constructor(data) {
+      super(data);
+    }
+  }
+);
 

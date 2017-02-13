@@ -1,101 +1,104 @@
-'use strict'
+angular.module('schemaForm').config(function(schemaFormProvider,
+    schemaFormDecoratorsProvider, sfPathProvider) {
 
-angular.module('schemaForm').config (schemaFormProvider,
-    schemaFormDecoratorsProvider, sfPathProvider) ->
+  let timepicker = function(name, schema, options) {
+    if ((schema.type === 'string') && (schema.format === 'time')) {
+      let f = schemaFormProvider.stdFormObj(name, schema, options);
+      f.key = options.path;
+      f.type = 'timepicker';
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+      return f;
+    }
+  };
 
-  timepicker = (name, schema, options) ->
-    if schema.type == 'string' && (schema.format == 'time')
-      f = schemaFormProvider.stdFormObj(name, schema, options)
-      f.key = options.path
-      f.type = 'timepicker'
-      options.lookup[sfPathProvider.stringify(options.path)] = f
-      f
+  schemaFormProvider.defaults.string.unshift(timepicker);
 
-  schemaFormProvider.defaults.string.unshift(timepicker)
+  let datetimepicker = function(name, schema, options) {
+    if ((schema.type === 'string') && (schema.format === 'datetime')) {
+      let f = schemaFormProvider.stdFormObj(name, schema, options);
+      f.key = options.path;
+      f.type = 'datetime';
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+      return f;
+    }
+  };
 
-  datetimepicker = (name, schema, options) ->
-    if schema.type == 'string' && (schema.format == 'datetime')
-      f = schemaFormProvider.stdFormObj(name, schema, options)
-      f.key = options.path
-      f.type = 'datetime'
-      options.lookup[sfPathProvider.stringify(options.path)] = f
-      f
-
-  schemaFormProvider.defaults.string.unshift(datetimepicker)
+  schemaFormProvider.defaults.string.unshift(datetimepicker);
 
   schemaFormDecoratorsProvider.addMapping(
-    'bootstrapDecorator'
-    'time'
+    'bootstrapDecorator',
+    'time',
     'bootstrap_ui_time_form.html'
-  )
+  );
 
   schemaFormDecoratorsProvider.createDirective(
-    'time'
+    'time',
     'bootstrap_ui_time_form.html'
-  )
+  );
 
   schemaFormDecoratorsProvider.addMapping(
-    'bootstrapDecorator'
-    'datetime'
+    'bootstrapDecorator',
+    'datetime',
     'bootstrap_ui_datetime_form.html'
-  )
+  );
 
   schemaFormDecoratorsProvider.createDirective(
-    'datetime'
+    'datetime',
     'bootstrap_ui_datetime_form.html'
-  )
+  );
 
   schemaFormDecoratorsProvider.addMapping(
-    'bootstrapDecorator'
-    'price'
+    'bootstrapDecorator',
+    'price',
     'price_form.html'
-  )
+  );
 
   schemaFormDecoratorsProvider.createDirective(
-    'price'
+    'price',
     'price_form.html'
-  )
+  );
 
   schemaFormDecoratorsProvider.addMapping(
-    'bootstrapDecorator'
-    'date'
+    'bootstrapDecorator',
+    'date',
     'date_form.html'
-  )
+  );
 
   schemaFormDecoratorsProvider.createDirective(
-    'date'
+    'date',
     'date_form.html'
-  )
+  );
 
 
   schemaFormDecoratorsProvider.addMapping(
-    'bootstrapDecorator'
-    'radios'
+    'bootstrapDecorator',
+    'radios',
     'radios.html'
-  )
+  );
 
   schemaFormDecoratorsProvider.createDirective(
-    'radios'
+    'radios',
     'radios.html'
-  )
+  );
   schemaFormDecoratorsProvider.addMapping(
-    'bootstrapDecorator'
-    'radios-inline'
+    'bootstrapDecorator',
+    'radios-inline',
     'radios-inline.html'
-  )
+  );
 
   schemaFormDecoratorsProvider.createDirective(
-    'radios-inline'
+    'radios-inline',
     'radios-inline.html'
-  )
+  );
   schemaFormDecoratorsProvider.addMapping(
-    'bootstrapDecorator'
-    'radiobuttons'
+    'bootstrapDecorator',
+    'radiobuttons',
     'radio-buttons.html'
-  )
+  );
 
-  schemaFormDecoratorsProvider.createDirective(
-    'radiobuttons'
+  return schemaFormDecoratorsProvider.createDirective(
+    'radiobuttons',
     'radio-buttons.html'
-  )
+  );
+});
 

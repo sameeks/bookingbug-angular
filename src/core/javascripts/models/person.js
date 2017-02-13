@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:Person
 *
@@ -15,15 +12,15 @@
 * @property {boolean} deleted Verify if person is deleted or not
 * @property {boolean} disabled Verify if person is disabled or not
 * @property {integer} order The person order
-####
+*///
 
 
-angular.module('BB.Models').factory "PersonModel", ($q, BBModel, BaseModel, PersonService) ->
+angular.module('BB.Models').factory("PersonModel", ($q, BBModel, BaseModel, PersonService) =>
 
-  class Person extends BaseModel
+  class Person extends BaseModel {
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name $query
     * @methodOf BB.Models:Person
@@ -31,7 +28,10 @@ angular.module('BB.Models').factory "PersonModel", ($q, BBModel, BaseModel, Pers
     * Static function that loads an array of people from a company object
     *
     * @returns {promise} A returned promise
-    ###
-    @$query: (company) ->
-      PersonService.query(company)
+    */
+    static $query(company) {
+      return PersonService.query(company);
+    }
+  }
+);
 

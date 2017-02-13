@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbTimeRangeStacked
 * @restrict AE
@@ -28,11 +25,14 @@
 * @property {object} selected_slot The selected slot from multi time range list
 * @property {object} selected_date The selected date from multi time range list
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'TimeRangeListStackedController'
+angular.module('BB.Directives').directive('bbTimeRangeStacked', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'TimeRangeListStackedController'
+  })
+);

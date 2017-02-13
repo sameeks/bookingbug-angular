@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:Clinic
 *
@@ -24,21 +21,22 @@
 * @property {string} end_time The clinic end time
 * @property {string} end The clinic end
 * @property {string} title The title
-####
+*///
 
 
-angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory("ClinicModel", ($q, BBModel, BaseModel) =>
 
-  class Clinic extends BaseModel
+  class Clinic extends BaseModel {
 
-    constructor: (data) ->
-      super(data)
-      @setTimes()
-      @setResourcesAndPeople()
-      @settings ||= {}
+    constructor(data) {
+      super(data);
+      this.setTimes();
+      this.setResourcesAndPeople();
+      if (!this.settings) { this.settings = {}; }
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name setResourcesAndPeople
     * @methodOf BB.Models:Clinic
@@ -46,28 +44,33 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel) ->
     * Set resources and people for clinic
     *
     * @returns {object} The returned resources and people
-    ###
-    setResourcesAndPeople: () ->
-      @resources = _.reduce(@resource_ids, (h, id) ->
-        h[id] = true
-        h
-      , {})
-      @people = _.reduce(@person_ids, (h, id) ->
-        h[id] = true
-        h
-      , {})
-      @services = _.reduce(@service_ids, (h, id) ->
-        h[id] = true
-        h
-      , {})
-      @uncovered = !@person_ids || @person_ids.length == 0
-      if @uncovered
-        @className = "clinic_uncovered"
-      else
-        @className = "clinic_covered"
+    */
+    setResourcesAndPeople() {
+      this.resources = _.reduce(this.resource_ids, function(h, id) {
+        h[id] = true;
+        return h;
+      }
+      , {});
+      this.people = _.reduce(this.person_ids, function(h, id) {
+        h[id] = true;
+        return h;
+      }
+      , {});
+      this.services = _.reduce(this.service_ids, function(h, id) {
+        h[id] = true;
+        return h;
+      }
+      , {});
+      this.uncovered = !this.person_ids || (this.person_ids.length === 0);
+      if (this.uncovered) {
+        return this.className = "clinic_uncovered";
+      } else {
+        return this.className = "clinic_covered";
+      }
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name setTimes
     * @methodOf BB.Models:Clinic
@@ -75,13 +78,18 @@ angular.module('BB.Models').factory "ClinicModel", ($q, BBModel, BaseModel) ->
     * Set time for clinic
     *
     * @returns {object} The returned time
-    ###
-    setTimes: () ->
-      if @start_time
-        @start_time = moment(@start_time)
-        @start = @start_time
-      if @end_time
-        @end_time = moment(@end_time)
-        @end = @end_time
-      @title = @name
+    */
+    setTimes() {
+      if (this.start_time) {
+        this.start_time = moment(this.start_time);
+        this.start = this.start_time;
+      }
+      if (this.end_time) {
+        this.end_time = moment(this.end_time);
+        this.end = this.end_time;
+      }
+      return this.title = this.name;
+    }
+  }
+);
 

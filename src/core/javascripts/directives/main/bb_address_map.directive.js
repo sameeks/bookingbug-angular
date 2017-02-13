@@ -1,41 +1,41 @@
-'use strict'
+// bbAddressMap
+// Adds behaviour to select first invalid input
+angular.module('BB.Directives').directive('bbAddressMap', $document =>
+  ({
+    restrict: 'A',
+    scope: true,
+    replace: true,
+    controller($scope, $element, $attrs, uiGmapGoogleMapApi) {
 
+      $scope.isDraggable = $document.width() > 480;
 
-# bbAddressMap
-# Adds behaviour to select first invalid input
-angular.module('BB.Directives').directive 'bbAddressMap', ($document) ->
-  restrict: 'A'
-  scope: true
-  replace: true
-  controller: ($scope, $element, $attrs, uiGmapGoogleMapApi) ->
+      return uiGmapGoogleMapApi.then(function(maps){
+        maps.visualRefresh = true;
+        return $scope.$watch($attrs.bbAddressMap, function(new_val, old_val) {
 
-    $scope.isDraggable = $document.width() > 480
+          if (!new_val) { return; }
 
-    uiGmapGoogleMapApi.then (maps)->
-      maps.visualRefresh = true
-      $scope.$watch $attrs.bbAddressMap, (new_val, old_val) ->
+          let map_item = new_val;
 
-        return if !new_val
+          $scope.map = {
+            center: {
+              latitude: map_item.lat,
+              longitude: map_item.long
+            },
+            zoom: 15
+          };
 
-        map_item = new_val
+          $scope.options = {
+            scrollwheel: false,
+            draggable: $scope.isDraggable
+          };
 
-        $scope.map = {
-          center: {
-            latitude: map_item.lat,
-            longitude: map_item.long
-          },
-          zoom: 15
-        }
-
-        $scope.options = {
-          scrollwheel: false,
-          draggable: $scope.isDraggable
-        }
-
-        $scope.marker = {
-          id: 0,
-          coords: {
-            latitude: map_item.lat,
-            longitude: map_item.long
-          }
-        }
+          return $scope.marker = {
+            id: 0,
+            coords: {
+              latitude: map_item.lat,
+              longitude: map_item.long
+            }
+          };});});
+    }
+  }));

@@ -1,36 +1,34 @@
-'use strict';
+describe('bbTe.blogArticle, BbTeBaGreeter provider', function() {
+  let GreeterProviderObj = null;
+  let Greeter = null;
 
-describe 'bbTe.blogArticle, BbTeBaGreeter provider', () ->
-  GreeterProviderObj = null
-  Greeter = null
+  let beforeEachFn = function() {
+    module('bbTe.blogArticle');
 
-  beforeEachFn = () ->
-    module 'bbTe.blogArticle'
+    module(function(BbTeBaGreeterProvider) {
+      GreeterProviderObj = BbTeBaGreeterProvider;
+    });
 
-    module (BbTeBaGreeterProvider) ->
-      GreeterProviderObj = BbTeBaGreeterProvider
-      return
+    inject(function($injector) {
+      Greeter = $injector.get('BbTeBaGreeter');
+    });
 
-    inject ($injector) ->
-      Greeter = $injector.get 'BbTeBaGreeter'
-      return
+  };
 
-    return
+  beforeEach(beforeEachFn);
 
-  beforeEach beforeEachFn
+  it('can use provider to modify greeting', function() {
 
-  it 'can use provider to modify greeting', ->
+    let greeter = new Greeter;
 
-    greeter = new Greeter
+    expect(greeter.greet('B'))
+    .toBe('Hello B!');
 
-    expect greeter.greet 'B'
-    .toBe 'Hello B!'
+    GreeterProviderObj.setGreeting('Hi');
 
-    GreeterProviderObj.setGreeting 'Hi'
+    expect(greeter.greet('B'))
+    .toBe('Hi B!');
 
-    expect greeter.greet 'B'
-    .toBe 'Hi B!'
+  });
 
-    return
-
-  return
+});

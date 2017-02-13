@@ -1,16 +1,21 @@
-'use strict'
+angular.module('BB.Services').factory("BulkPurchaseService", ($q, BBModel) =>
 
-angular.module('BB.Services').factory "BulkPurchaseService", ($q, BBModel) ->
-
-  query: (company) ->
-    deferred = $q.defer()
-    if !company.$has('bulk_purchases')
-      deferred.reject("No bulk purchases found")
-    else
-      company.$get('bulk_purchases').then (resource) ->
-        resource.$get('bulk_purchases').then (bulk_purchases) ->
-          deferred.resolve(new BBModel.BulkPurchase(i) for i in bulk_purchases)
-      , (err) =>
-        deferred.reject(err)
-    deferred.promise
+  ({
+    query(company) {
+      let deferred = $q.defer();
+      if (!company.$has('bulk_purchases')) {
+        deferred.reject("No bulk purchases found");
+      } else {
+        company.$get('bulk_purchases').then(resource =>
+          resource.$get('bulk_purchases').then(bulk_purchases => deferred.resolve(Array.from(bulk_purchases).map((i) => new BBModel.BulkPurchase(i))))
+        
+        , err => {
+          return deferred.reject(err);
+        }
+        );
+      }
+      return deferred.promise;
+    }
+  })
+);
 

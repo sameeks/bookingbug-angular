@@ -1,6 +1,4 @@
-'use strict'
-
-###*
+/**
  * @ngdoc directive
  * @name BBAdminDashboard.directive:contentHeight
  * @scope
@@ -12,40 +10,40 @@
  *
  * @param {boolean}  includeHeader  (optional) include the header in the calculation of the content height
  * @param {boolean}  includeFooter  (optional) include the footer in the calculation of the content height
-###
-angular.module('BBAdminDashboard').directive 'contentHeight', ['$window', '$timeout', ($window, $timeout) ->
-  {
+*/
+angular.module('BBAdminDashboard').directive('contentHeight', ['$window', '$timeout', ($window, $timeout) =>
+  ({
     restrict: 'A',
-    link: (scope, element, attributes) ->
+    link(scope, element, attributes) {
 
-      includeFooter = true
-      includeHeader = true
+      let includeFooter = true;
+      let includeHeader = true;
 
-      includeHeader = attributes.includeHeader if attributes.includeHeader?
-      includeFooter = attributes.includeFooter if attributes.includeFooter?
+      if (attributes.includeHeader != null) { ({ includeHeader } = attributes); }
+      if (attributes.includeFooter != null) { ({ includeFooter } = attributes); }
 
-      $timeout (->
-        _contentHeightSetup()
-        return
-      ), 10
-      angular.element($window).bind 'resize', ->
-        _contentHeightSetup()
-        return
+      $timeout((function() {
+        _contentHeightSetup();
+      }), 10);
+      angular.element($window).bind('resize', function() {
+        _contentHeightSetup();
+      });
 
-      _contentHeightSetup = ->
-        height = $window.innerHeight
-        #subtrackt the header height
-        height = height-angular.element(document).find('header')[0].offsetHeight if includeHeader == true
-        #subtrackt the footer height
-        height = height-angular.element(document).find('footer')[0].offsetHeight if includeFooter == true
+      var _contentHeightSetup = function() {
+        let height = $window.innerHeight;
+        //subtrackt the header height
+        if (includeHeader === true) { height = height-angular.element(document).find('header')[0].offsetHeight; }
+        //subtrackt the footer height
+        if (includeFooter === true) { height = height-angular.element(document).find('footer')[0].offsetHeight; }
 
-        element.css {
+        element.css({
           height : height + 'px'
-        }
-        #inform parents and children (custom-scrollbars, full-height iframes etc) that height has changed
-        scope.$emit 'content.changed', {height : height}
-        scope.$broadcast 'content.changed', {height : height}
-        return
-      return
-  }
-]
+        });
+        //inform parents and children (custom-scrollbars, full-height iframes etc) that height has changed
+        scope.$emit('content.changed', {height});
+        scope.$broadcast('content.changed', {height});
+      };
+    }
+  })
+
+]);

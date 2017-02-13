@@ -1,12 +1,16 @@
-'use strict'
+window.Collection.Client = class Client extends window.Collection.Base {
 
-class window.Collection.Client extends window.Collection.Base
+  checkItem(item) {
+    return super.checkItem(...arguments);
+  }
+};
 
-  checkItem: (item) ->
-    super
 
-
-angular.module('BB.Services').provider "ClientCollections", () ->
-  $get: ->
-    new  window.BaseCollections()
+angular.module('BB.Services').provider("ClientCollections", () =>
+  ({
+    $get() {
+      return new  window.BaseCollections();
+    }
+  })
+);
 

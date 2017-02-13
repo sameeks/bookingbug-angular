@@ -1,277 +1,277 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Services:ErrorService
 *
 * @description
 * Defines different alerts and errors that are raised by the SDK.
 *
-####
-angular.module('BB.Services').factory 'ErrorService', ($translate) ->
+*///
+angular.module('BB.Services').factory('ErrorService', function($translate) {
 
-  alerts = [
+  let alerts = [
     {
-      key: 'GENERIC'
-      type: 'error'
+      key: 'GENERIC',
+      type: 'error',
       persist: true
     },
     {
-      key: 'LOCATION_NOT_FOUND'
-      type: 'warning'
+      key: 'LOCATION_NOT_FOUND',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'MISSING_LOCATION'
-      type: 'warning'
+      key: 'MISSING_LOCATION',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'MISSING_POSTCODE'
-      type: 'warning'
+      key: 'MISSING_POSTCODE',
+      type: 'warning',
       persist: true,
     },
     {
-      key: 'POSTCODE_INVALID'
-      type: 'warning'
+      key: 'POSTCODE_INVALID',
+      type: 'warning',
       persist: true
       },
     {
-      key: 'ITEM_NO_LONGER_AVAILABLE'
-      type: 'error'
+      key: 'ITEM_NO_LONGER_AVAILABLE',
+      type: 'error',
       persist: true
     },
     {
-      key: 'NO_WAITLIST_SPACES_LEFT'
-      type: 'error'
+      key: 'NO_WAITLIST_SPACES_LEFT',
+      type: 'error',
       persist: true
     },
     {
-      key: 'FORM_INVALID'
-      type: 'warning'
+      key: 'FORM_INVALID',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'GEOLOCATION_ERROR'
-      type: 'error'
+      key: 'GEOLOCATION_ERROR',
+      type: 'error',
       persist: true
     },
     {
-      key: 'EMPTY_BASKET_FOR_CHECKOUT'
-      type: 'warning'
+      key: 'EMPTY_BASKET_FOR_CHECKOUT',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'MAXIMUM_TICKETS'
-      type: 'warning'
+      key: 'MAXIMUM_TICKETS',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'GIFT_CERTIFICATE_REQUIRED'
-      type: 'warning'
+      key: 'GIFT_CERTIFICATE_REQUIRED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'TIME_SLOT_NOT_SELECTED'
-      type: 'warning'
+      key: 'TIME_SLOT_NOT_SELECTED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'STORE_NOT_SELECTED'
-      type: 'warning'
+      key: 'STORE_NOT_SELECTED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'APPT_AT_SAME_TIME'
-      type: 'warning'
+      key: 'APPT_AT_SAME_TIME',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'REQ_TIME_NOT_AVAIL'
-      type: 'warning'
+      key: 'REQ_TIME_NOT_AVAIL',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'TOPUP_SUCCESS'
-      type: 'success'
+      key: 'TOPUP_SUCCESS',
+      type: 'success',
       persist: true
     },
     {
-      key: 'TOPUP_FAILED'
-      type: 'warning'
+      key: 'TOPUP_FAILED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'UPDATE_SUCCESS'
-      type: 'success'
+      key: 'UPDATE_SUCCESS',
+      type: 'success',
       persist: true
     },
     {
-      key: 'UPDATE_FAILED'
-      type: 'warning'
+      key: 'UPDATE_FAILED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'ALREADY_REGISTERED'
-      type: 'warning'
+      key: 'ALREADY_REGISTERED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'LOGIN_FAILED'
-      type: 'warning'
+      key: 'LOGIN_FAILED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'SSO_LOGIN_FAILED'
-      type: 'warning'
+      key: 'SSO_LOGIN_FAILED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'PASSWORD_INVALID'
-      type: 'warning'
+      key: 'PASSWORD_INVALID',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'PASSWORD_RESET_REQ_SUCCESS'
-      type: 'success'
+      key: 'PASSWORD_RESET_REQ_SUCCESS',
+      type: 'success',
       persist: true
     },
     {
-      key: 'PASSWORD_RESET_REQ_FAILED'
-      type: 'warning'
+      key: 'PASSWORD_RESET_REQ_FAILED',
+      type: 'warning',
       persist: true,
     },
     {
-      key: 'PASSWORD_RESET_SUCESS'
-      type: 'success'
+      key: 'PASSWORD_RESET_SUCESS',
+      type: 'success',
       persist: true
     },
     {
-      key: 'PASSWORD_RESET_FAILED'
-      type: 'warning'
+      key: 'PASSWORD_RESET_FAILED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'PASSWORD_MISMATCH'
-      type: 'warning'
+      key: 'PASSWORD_MISMATCH',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'ATTENDEES_CHANGED'
-      type: 'info'
+      key: 'ATTENDEES_CHANGED',
+      type: 'info',
       persist: true
     },
     {
-      key: 'PAYMENT_FAILED'
-      type: 'danger'
+      key: 'PAYMENT_FAILED',
+      type: 'danger',
       persist: true
     },
     {
-      key: 'ACCOUNT_DISABLED'
-      type: 'warning'
+      key: 'ACCOUNT_DISABLED',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'FB_LOGIN_NOT_A_MEMBER'
-      type: 'warning'
+      key: 'FB_LOGIN_NOT_A_MEMBER',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'PHONE_NUMBER_IN_USE'
-      type: 'warning'
+      key: 'PHONE_NUMBER_IN_USE',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'EMAIL_IN_USE'
-      type: 'warning'
+      key: 'EMAIL_IN_USE',
+      type: 'warning',
       persist: true
     },
     {
-      key: 'WAITLIST_ACCEPTED'
-      type: 'success'
+      key: 'WAITLIST_ACCEPTED',
+      type: 'success',
       persist: false
     },
     {
-      key: 'BOOKING_CANCELLED'
-      type: 'success'
+      key: 'BOOKING_CANCELLED',
+      type: 'success',
       persist: false
     },
     {
-      key: 'NOT_BOOKABLE_PERSON'
-      type: 'warning'
+      key: 'NOT_BOOKABLE_PERSON',
+      type: 'warning',
       persist: false
     },
     {
-      key: 'NOT_BOOKABLE_RESOURCE'
-      type: 'warning'
+      key: 'NOT_BOOKABLE_RESOURCE',
+      type: 'warning',
       persist: false
     },
     {
-      key: 'COUPON_APPLY_FAILED'
-      type: 'warning'
-      title: ''
+      key: 'COUPON_APPLY_FAILED',
+      type: 'warning',
+      title: '',
       persist: true
     },
     {
-      key: 'DEAL_APPLY_FAILED'
-      type: 'warning'
-      title: ''
+      key: 'DEAL_APPLY_FAILED',
+      type: 'warning',
+      title: '',
       persist: true
     },
     {
-      key: 'DEAL_REMOVE_FAILED'
-      type: 'warning'
-      title: ''
+      key: 'DEAL_REMOVE_FAILED',
+      type: 'warning',
+      title: '',
       persist: true
     }
-  ]
+  ];
 
-  ###*
-  # @param {String} msg
-  # @returns {{msg: String}}
-  ###
-  createCustomError = (msg) ->
-    return {msg: msg}
+  /**
+   * @param {String} msg
+   * @returns {{msg: String}}
+   */
+  let createCustomError = msg => ({msg});
 
-  ###**
+  /***
   * @ngdoc method
   * @name getError
   * @methodOf BB.Directives:bbServices
   * @description
   * Returns error, always setting persist to true. Returns generic error if error with given key is not found.
-  ###
-  getError =  (key) ->
+  */
+  let getError =  function(key) {
 
-    error = getAlert(key)
-    # return generic error if we can't find the key
-    error = getAlert('GENERIC') if !error
-    error.persist = true
+    let error = getAlert(key);
+    // return generic error if we can't find the key
+    if (!error) { error = getAlert('GENERIC'); }
+    error.persist = true;
 
-    return error
+    return error;
+  };
 
-  ###**
+  /***
   * @ngdoc method
   * @name getAlert
   * @methodOf BB.Directives:bbServices
   * @description
   * Returns alert by given key
-  ###
-  getAlert = (key) ->
+  */
+  var getAlert = function(key) {
 
-    alert = _.findWhere(alerts, {key: key})
+    let alert = _.findWhere(alerts, {key});
 
-    if alert
+    if (alert) {
 
-      alert.msg = $translate.instant("CORE.ALERTS.#{key}")
+      alert.msg = $translate.instant(`CORE.ALERTS.${key}`);
 
-      return alert
+      return alert;
 
-    else
+    } else {
 
-      return null
+      return null;
+    }
+  };
 
   return {
-    createCustomError: createCustomError
-    getAlert: getAlert
-    getError: getError
-  }
+    createCustomError,
+    getAlert,
+    getError
+  };});

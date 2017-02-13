@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:Service
 *
@@ -16,28 +13,33 @@
 * @property {date} booking_time_step The time step of the booking
 * @property {integer} min_bookings The minimum number of bookings
 * @property {integer} max_booings The maximum number of bookings
-###
+*/
 
 
-angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, ServiceService) ->
+angular.module('BB.Models').factory("ServiceModel", ($q, BBModel, BaseModel, ServiceService) =>
 
-  class Service extends BaseModel
+  class Service extends BaseModel {
 
-    constructor: (data) ->
-      super
-      if @prices && @prices.length > 0
-        @price = @prices[0]
-      if @durations && @durations.length > 0
-        @duration = @durations[0]
-      if !@listed_durations
-        @listed_durations = @durations
-      if @listed_durations && @listed_durations.length > 0
-        @listed_duration = @listed_durations[0]
+    constructor(data) {
+      super(...arguments);
+      if (this.prices && (this.prices.length > 0)) {
+        this.price = this.prices[0];
+      }
+      if (this.durations && (this.durations.length > 0)) {
+        this.duration = this.durations[0];
+      }
+      if (!this.listed_durations) {
+        this.listed_durations = this.durations;
+      }
+      if (this.listed_durations && (this.listed_durations.length > 0)) {
+        this.listed_duration = this.listed_durations[0];
+      }
 
-      @min_advance_datetime = moment().add(@min_advance_period, 'seconds')
-      @max_advance_datetime = moment().add(@max_advance_period, 'seconds')
+      this.min_advance_datetime = moment().add(this.min_advance_period, 'seconds');
+      this.max_advance_datetime = moment().add(this.max_advance_period, 'seconds');
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getPriceByDuration
     * @methodOf BB.Models:Service
@@ -45,13 +47,16 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     * Get price by duration in function of duration
     *
     * @returns {object} The returning price by duration
-    ###
-    getPriceByDuration: (dur) ->
-      for d,i in @durations
-        return @prices[i] if d == dur
-      # return price
+    */
+    getPriceByDuration(dur) {
+      for (let i = 0; i < this.durations.length; i++) {
+        let d = this.durations[i];
+        if (d === dur) { return this.prices[i]; }
+      }
+    }
+      // return price
 
-    ###**
+    /***
     * @ngdoc method
     * @name $getCategory
     * @methodOf BB.Models:Service
@@ -59,15 +64,18 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     * Get category promise
     *
     * @returns {object} The returning category promise
-    ###
-    $getCategory: () ->
-      return null if !@$has('category')
-      prom = @$get('category')
-      prom.then (cat) =>
-        @category = new BBModel.Category(cat)
-      prom
+    */
+    $getCategory() {
+      if (!this.$has('category')) { return null; }
+      let prom = this.$get('category');
+      prom.then(cat => {
+        return this.category = new BBModel.Category(cat);
+      }
+      );
+      return prom;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name days_array
     * @methodOf BB.Models:Service
@@ -75,17 +83,19 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     * Put days in array
     *
     * @returns {array} The returning days array
-    ###
-    days_array: () ->
-      arr = []
-      for x in [@min_bookings..@max_bookings]
-        str = "" + x + " day"
-        str += "s" if x > 1
-        arr.push({name: str, val: x})
-      arr
+    */
+    days_array() {
+      let arr = [];
+      for (let x = this.min_bookings, end = this.max_bookings, asc = this.min_bookings <= end; asc ? x <= end : x >= end; asc ? x++ : x--) {
+        let str = `${x} day`;
+        if (x > 1) { str += "s"; }
+        arr.push({name: str, val: x});
+      }
+      return arr;
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name $query
     * @methodOf BB.Models:Service
@@ -93,7 +103,10 @@ angular.module('BB.Models').factory "ServiceModel", ($q, BBModel, BaseModel, Ser
     * Static function that loads an array of services from a company object
     *
     * @returns {promise} A returned promise
-    ###
-    @$query: (company) ->
-      ServiceService.query(company)
+    */
+    static $query(company) {
+      return ServiceService.query(company);
+    }
+  }
+);
 

@@ -1,27 +1,26 @@
-'use strict';
-
-###
+/*
 * @ngdoc controller
 * @name BBAdminDashboard.reset-password.controller:ResetPasswordPageCtrl
-#
+*
 * @description
 * Controller for the reset password page
-###
+*/
 
-ResetPasswordPageCtrl = ($scope) ->
-  'ngInject'
+let ResetPasswordPageCtrl = function($scope) {
+  'ngInject';
 
-  init = () ->
+  let init = function() {
 
-    if $scope.bb.api_url? and $scope.bb.api_url != ''
-      $scope.baseUrl = angular.copy($scope.bb.api_url)
+    if (($scope.bb.api_url != null) && ($scope.bb.api_url !== '')) {
+      $scope.baseUrl = angular.copy($scope.bb.api_url);
+    }
 
-    return
+  };
 
-  init()
+  init();
 
-  return
+};
 
 angular
   .module('BBAdminDashboard.reset-password')
-  .controller('ResetPasswordPageCtrl', ResetPasswordPageCtrl)
+  .controller('ResetPasswordPageCtrl', ResetPasswordPageCtrl);

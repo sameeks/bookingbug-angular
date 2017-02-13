@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbPurchaseTotal
 * @restrict AE
@@ -18,11 +15,14 @@
 * </pre>
 *
 * @property {array} total The total purchase
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbPurchaseTotal', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'PurchaseTotal'
+angular.module('BB.Directives').directive('bbPurchaseTotal', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'PurchaseTotal'
+  })
+);

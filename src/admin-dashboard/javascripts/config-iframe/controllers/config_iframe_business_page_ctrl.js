@@ -1,15 +1,13 @@
-'use strict';
-
-###
+/*
 * @ngdoc controller
 * @name BBAdminDashboard.config-iframe.controllers.controller:ConfigIframeBusinessPageCtrl
-#
+*
 * @description
 * Controller for the config page
-###
+*/
 angular.module('BBAdminDashboard.config-iframe.controllers')
-.controller 'ConfigIframeBusinessPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'ADMIN_DASHBOARD.CONFIG_IFRAME_PAGE.BUSINESS.TITLE'
+.controller('ConfigIframeBusinessPageCtrl',['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
+  $scope.pageHeader = 'ADMIN_DASHBOARD.CONFIG_IFRAME_PAGE.BUSINESS.TITLE';
 
   $scope.tabs = [
     {
@@ -37,14 +35,15 @@ angular.module('BBAdminDashboard.config-iframe.controllers')
       icon: 'fa fa-users',
       path: 'config.business.page({path: "client_queue"})'
     }
-  ]
+  ];
 
-  $scope.contentsLoading = false
+  $scope.contentsLoading = false;
 
-  $scope.$on 'iframeLoaded', ()->
-    $scope.contentsLoading = false
-    $scope.$apply()
+  $scope.$on('iframeLoaded', function(){
+    $scope.contentsLoading = false;
+    return $scope.$apply();
+  });
 
-  $scope.$on 'iframeLoading', ()->
-    $scope.contentsLoading = true
-]
+  return $scope.$on('iframeLoading', ()=> $scope.contentsLoading = true);
+}
+]);

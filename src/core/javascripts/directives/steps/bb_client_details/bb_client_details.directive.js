@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbClientDetails
 * @restrict AE
@@ -35,23 +33,31 @@
 *   </file>
 *  </example>
 *
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbClientDetails', ($q, $templateCache, $compile) ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  transclude: true 
-  controller : 'ClientDetails'
-  link: (scope, element, attrs, controller, transclude) ->
+angular.module('BB.Directives').directive('bbClientDetails', ($q, $templateCache, $compile) =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    transclude: true, 
+    controller : 'ClientDetails',
+    link(scope, element, attrs, controller, transclude) {
 
-    transclude scope, (clone) =>
-      # if there's content compile that or grab the client_details template
-      has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
-      if has_content
-        element.html(clone).show()
-      else
-        $q.when($templateCache.get('_client_details.html')).then (template) ->
-          element.html(template).show()
-          $compile(element.contents())(scope)
+      return transclude(scope, clone => {
+        // if there's content compile that or grab the client_details template
+        let has_content = (clone.length > 1) || ((clone.length === 1) && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)));
+        if (has_content) {
+          return element.html(clone).show();
+        } else {
+          return $q.when($templateCache.get('_client_details.html')).then(function(template) {
+            element.html(template).show();
+            return $compile(element.contents())(scope);
+          });
+        }
+      }
+      );
+    }
+  })
+);

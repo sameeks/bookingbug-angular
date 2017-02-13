@@ -1,21 +1,27 @@
-angular.module("BB.Models").factory "Member.PurchaseModel", ($q,
-  MemberPurchaseService, BBModel, BaseModel) ->
+angular.module("BB.Models").factory("Member.PurchaseModel", ($q,
+  MemberPurchaseService, BBModel, BaseModel) =>
 
-  class Member_Purchase extends BaseModel
+  class Member_Purchase extends BaseModel {
 
-    constructor: (data) ->
-      super(data)
+    constructor(data) {
+      super(data);
 
-      @created_at = moment.parseZone(@created_at)
-      @created_at.tz(@time_zone) if @time_zone
+      this.created_at = moment.parseZone(this.created_at);
+      if (this.time_zone) { this.created_at.tz(this.time_zone); }
+    }
 
-    getItems: ->
-      deferred = $q.defer()
-      @_data.$get('purchase_items').then (items) ->
-        @items = for item in items
-          new BBModel.Member.PurchaseItem(item)
-        deferred.resolve(@items)
-      deferred.promise
+    getItems() {
+      let deferred = $q.defer();
+      this._data.$get('purchase_items').then(function(items) {
+        this.items = Array.from(items).map((item) =>
+          new BBModel.Member.PurchaseItem(item));
+        return deferred.resolve(this.items);
+      });
+      return deferred.promise;
+    }
 
-    @$query: (member, params) ->
-      MemberPurchaseService.query(member, params)
+    static $query(member, params) {
+      return MemberPurchaseService.query(member, params);
+    }
+  }
+);

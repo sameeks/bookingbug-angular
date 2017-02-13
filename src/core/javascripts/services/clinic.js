@@ -1,24 +1,27 @@
-'use strict'
+angular.module('BB.Services').factory('ClinicService',  ($q, BBModel, $window) =>
 
-angular.module('BB.Services').factory 'ClinicService',  ($q, BBModel, $window) ->
-
-  query: (params) ->
-    company = params.company
-    defer = $q.defer()
-    if params.id # request for a single one
-      company.$get('clinics', params).then (clinic) ->
-        clinic = new BBModel.Clinic(clinic)
-        defer.resolve(clinic)
-      , (err) ->
-        defer.reject(err)
-    else
-      company.$get('clinics', params).then (collection) ->
-        collection.$get('clinics').then (clinics) ->
-          clinics = (new BBModel.Clinic(s) for s in clinics)
-          defer.resolve(clinics)
-        , (err) ->
-          defer.reject(err)
-      , (err) ->
-        defer.reject(err)
-    defer.promise
+  ({
+    query(params) {
+      let { company } = params;
+      let defer = $q.defer();
+      if (params.id) { // request for a single one
+        company.$get('clinics', params).then(function(clinic) {
+          clinic = new BBModel.Clinic(clinic);
+          return defer.resolve(clinic);
+        }
+        , err => defer.reject(err));
+      } else {
+        company.$get('clinics', params).then(collection =>
+          collection.$get('clinics').then(function(clinics) {
+            clinics = (Array.from(clinics).map((s) => new BBModel.Clinic(s)));
+            return defer.resolve(clinics);
+          }
+          , err => defer.reject(err))
+        
+        , err => defer.reject(err));
+      }
+      return defer.promise;
+    }
+  })
+);
 

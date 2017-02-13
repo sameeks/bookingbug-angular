@@ -1,5 +1,3 @@
-'use strict'
-
 angular.module('BBAdminDashboard', [
   'ngStorage',
   'ngResource',
@@ -7,7 +5,7 @@ angular.module('BBAdminDashboard', [
   'ngSanitize',
   'ngLocalData',
   'ngCookies',
-  'ngMessages'
+  'ngMessages',
 
   'BBAdmin',
   'BBAdminServices',
@@ -37,6 +35,6 @@ angular.module('BBAdminDashboard', [
   'BBAdminDashboard.settings-iframe',
   'BBAdminDashboard.config-iframe',
   'BBAdminDashboard.publish-iframe'
-])
+]);
 
 

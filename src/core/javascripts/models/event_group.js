@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:EventGroup
 *
@@ -10,16 +7,20 @@
 *
 * @property {integer} total_entries The total of entries in  event groupst
 * @property {array} event_chains An array with items of the event  
-####
+*///
 
 
-angular.module('BB.Models').factory "EventGroupModel", ($q, BBModel, BaseModel) ->
+angular.module('BB.Models').factory("EventGroupModel", ($q, BBModel, BaseModel) =>
 
-  class EventGroup extends BaseModel
+  class EventGroup extends BaseModel {
 
-    name: () ->
-      @_data.name
+    name() {
+      return this._data.name;
+    }
 
-    colour: () ->
-      @_data.colour
+    colour() {
+      return this._data.colour;
+    }
+  }
+);
 

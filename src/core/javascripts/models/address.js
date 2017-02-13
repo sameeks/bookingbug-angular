@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:Address
 *
@@ -15,21 +12,23 @@
 * @property {string} address5 Fifth line of the address
 * @property {string} postcode The Postcode/Zipcode
 * @property {string} country The country
-####
+*///
 
 
-angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, AddressListService) ->
+angular.module('BB.Models').factory("AddressModel", ($q, BBModel, BaseModel, AddressListService) =>
 
-  class Address extends BaseModel
+  class Address extends BaseModel {
 
-    constructor: (data) ->
-      super(data)
-      # Assign value to map_url if the value is an empty String
-      # Note: This is not ideal as it will not show a map marker. But the map_url prop should already be set, so this is just a fallback
-      if !@map_url or @map_url == ""
-        @map_url = "https://www.google.com/maps/@" + @lat + "," + @long + ",17z" if @lat and @long
+    constructor(data) {
+      super(data);
+      // Assign value to map_url if the value is an empty String
+      // Note: This is not ideal as it will not show a map marker. But the map_url prop should already be set, so this is just a fallback
+      if (!this.map_url || (this.map_url === "")) {
+        if (this.lat && this.long) { this.map_url = `https://www.google.com/maps/@${this.lat},${this.long},17z`; }
+      }
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name addressSingleLine
     * @methodOf BB.Models:Address
@@ -37,23 +36,24 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * Get a the address as a single comma sepeated line
     *
     * @returns {string} The returned address
-    ###
-    addressSingleLine: ->
-      str = ""
-      str += @address1 if @address1
-      str += ", " if @address2 && str.length > 0
-      str += @address2 if @address2
-      str += ", " if @address3 && str.length > 0
-      str += @address3 if @address3
-      str += ", " if @address4 && str.length > 0
-      str += @address4 if @address4
-      str += ", " if @address5 && str.length > 0
-      str += @address5 if @address5
-      str += ", " if @postcode && str.length > 0
-      str += @postcode if @postcode
-      str
+    */
+    addressSingleLine() {
+      let str = "";
+      if (this.address1) { str += this.address1; }
+      if (this.address2 && (str.length > 0)) { str += ", "; }
+      if (this.address2) { str += this.address2; }
+      if (this.address3 && (str.length > 0)) { str += ", "; }
+      if (this.address3) { str += this.address3; }
+      if (this.address4 && (str.length > 0)) { str += ", "; }
+      if (this.address4) { str += this.address4; }
+      if (this.address5 && (str.length > 0)) { str += ", "; }
+      if (this.address5) { str += this.address5; }
+      if (this.postcode && (str.length > 0)) { str += ", "; }
+      if (this.postcode) { str += this.postcode; }
+      return str;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name hasAddress
     * @methodOf BB.Models:Address
@@ -61,11 +61,12 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * Checks if this is considered a valid address
     *
     * @returns {boolean} If this is a valid address
-    ###
-    hasAddress: ->
-      return @address1 || @address2 || @postcode
+    */
+    hasAddress() {
+      return this.address1 || this.address2 || this.postcode;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name addressCsvLine
     * @methodOf BB.Models:Address
@@ -73,25 +74,26 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * Get all address fields as a single comma sepeated line - suitable for csv export
     *
     * @returns {string} The returned address
-    ###
-    addressCsvLine: ->
-      str = ""
-      str += @address1 if @address1
-      str += ", "
-      str += @address2 if @address2
-      str += ", "
-      str += @address3 if @address3
-      str += ", "
-      str += @address4 if @address4
-      str += ", "
-      str += @address5 if @address5
-      str += ", "
-      str += @postcode if @postcode
-      str += ", "
-      str += @country if @country
-      return str
+    */
+    addressCsvLine() {
+      let str = "";
+      if (this.address1) { str += this.address1; }
+      str += ", ";
+      if (this.address2) { str += this.address2; }
+      str += ", ";
+      if (this.address3) { str += this.address3; }
+      str += ", ";
+      if (this.address4) { str += this.address4; }
+      str += ", ";
+      if (this.address5) { str += this.address5; }
+      str += ", ";
+      if (this.postcode) { str += this.postcode; }
+      str += ", ";
+      if (this.country) { str += this.country; }
+      return str;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name addressMultiLine
     * @methodOf BB.Models:Address
@@ -99,25 +101,30 @@ angular.module('BB.Models').factory "AddressModel", ($q, BBModel, BaseModel, Add
     * Get a the address as multiple lines with line feeds
     *
     * @returns {string} The returned address
-    ###
-    addressMultiLine: ->
-      str = ""
-      str += @address1 if @address1
-      str += "<br/>" if @address2 && str.length > 0
-      str += @address2 if @address2
-      str += "<br/>" if @address3 && str.length > 0
-      str += @address3 if @address3
-      str += "<br/>" if @address4 && str.length > 0
-      str += @address4 if @address4
-      str += "<br/>" if @address5 && str.length > 0
-      str += @address5 if @address5
-      str += "<br/>" if @postcode && str.length > 0
-      str += @postcode if @postcode
-      str
+    */
+    addressMultiLine() {
+      let str = "";
+      if (this.address1) { str += this.address1; }
+      if (this.address2 && (str.length > 0)) { str += "<br/>"; }
+      if (this.address2) { str += this.address2; }
+      if (this.address3 && (str.length > 0)) { str += "<br/>"; }
+      if (this.address3) { str += this.address3; }
+      if (this.address4 && (str.length > 0)) { str += "<br/>"; }
+      if (this.address4) { str += this.address4; }
+      if (this.address5 && (str.length > 0)) { str += "<br/>"; }
+      if (this.address5) { str += this.address5; }
+      if (this.postcode && (str.length > 0)) { str += "<br/>"; }
+      if (this.postcode) { str += this.postcode; }
+      return str;
+    }
 
-    @$query: (prms) ->
-      AddressListService.query(prms)
+    static $query(prms) {
+      return AddressListService.query(prms);
+    }
 
-    @$getAddress: (prms) ->
-      AddressListService.getAddress(prms)
+    static $getAddress(prms) {
+      return AddressListService.getAddress(prms);
+    }
+  }
+);
 

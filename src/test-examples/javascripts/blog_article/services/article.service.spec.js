@@ -1,49 +1,47 @@
-'use strict';
+describe('bbTe.blogArticle, BbTeBaBlogArticle service', function() {
+  let BlogArticle = null;
 
-describe 'bbTe.blogArticle, BbTeBaBlogArticle service', () ->
-  BlogArticle = null
+  let beforeEachFn = function() {
+    module('bbTe.blogArticle');
 
-  beforeEachFn = () ->
-    module('bbTe.blogArticle')
+    inject(function($injector) {
+      BlogArticle = $injector.get('BbTeBaBlogArticle');
+    });
+  };
 
-    inject ($injector) ->
-      BlogArticle = $injector.get 'BbTeBaBlogArticle'
-      return
-    return
+  beforeEach(beforeEachFn);
 
-  beforeEach beforeEachFn
+  it('can instantiate using defaults', function() {
 
-  it 'can instantiate using defaults', ->
+    let article = new BlogArticle;
 
-    article = new BlogArticle
+    expect(article.title)
+    .toBe('default title');
 
-    expect article.title
-    .toBe 'default title'
+    expect(article.content)
+    .toBe('default content');
 
-    expect article.content
-    .toBe 'default content'
+  });
 
-    return
+  it('can instantiate with custom title and content', function() {
+    let article1 = new BlogArticle('some custom title', 'some custom content');
 
-  it 'can instantiate with custom title and content', ->
-    article1 = new BlogArticle 'some custom title', 'some custom content'
+    expect(article1.title)
+    .toMatch(/custom/);
 
-    expect article1.title
-    .toMatch /custom/
+    expect(article1.content)
+    .toMatch(/custom/);
 
-    expect article1.content
-    .toMatch /custom/
+  });
 
-    return
+  it('can can change title', function() {
+    let article = new BlogArticle('aaa');
 
-  it 'can can change title', ->
-    article = new BlogArticle 'aaa'
+    article.setTitle('changed');
 
-    article.setTitle 'changed'
+    expect(article.getTitle())
+    .toBe('changed');
 
-    expect article.getTitle()
-    .toBe 'changed'
+  });
 
-    return
-
-  return
+});

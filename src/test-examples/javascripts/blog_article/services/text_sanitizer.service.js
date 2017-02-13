@@ -1,30 +1,29 @@
-service = ($log) ->
-  'ngInject'
+let service = function($log) {
+  'ngInject';
 
-  currentText = null;
+  let currentText = null;
 
-  lowercase = () ->
-    currentText = currentText.toLowerCase()
+  let lowercase = () => currentText = currentText.toLowerCase();
 
-  shorten = () ->
-    currentText = currentText.substr(0, 10)
+  let shorten = () => currentText = currentText.substr(0, 10);
 
-  trim = () ->
-    currentText = currentText.trim()
+  let trim = () => currentText = currentText.trim();
 
-  sanitize = (text)->
-    currentText = text
+  let sanitize = function(text){
+    currentText = text;
 
-    trim()
-    shorten()
-    lowercase()
+    trim();
+    shorten();
+    lowercase();
 
-    currentText
+    return currentText;
+  };
 
   return {
-    sanitize: sanitize
-  }
+    sanitize
+  };
+};
 
 angular
 .module('bbTe.blogArticle')
-.service('bbTeBaTextSanitizer', service)
+.service('bbTeBaTextSanitizer', service);

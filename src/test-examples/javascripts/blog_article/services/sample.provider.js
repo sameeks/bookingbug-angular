@@ -1,27 +1,26 @@
-provider = ($logProvider) ->
-  'ngInject'
+let provider = function($logProvider) {
+  'ngInject';
 
-  companyName = 'Default Company'
+  let companyName = 'Default Company';
 
-  @getCompanyName = () ->
-    return companyName
+  this.getCompanyName = () => companyName;
 
-  @setCompanyName = (name) ->
-    companyName = name
-    return
+  this.setCompanyName = function(name) {
+    companyName = name;
+  };
 
-  @$get = () ->
-    'ngInject'
+  this.$get = function() {
+    'ngInject';
 
-    introduceEmployee = (employeeName) ->
-      return employeeName + ' works at ' + companyName
+    let introduceEmployee = employeeName => employeeName + ' works at ' + companyName;
 
     return {
-      introduceEmployee: introduceEmployee
-    }
+      introduceEmployee
+    };
+  };
 
-  return
+};
 
 angular
 .module('bbTe.blogArticle')
-.provider('bbTeBaSample', provider)
+.provider('bbTeBaSample', provider);

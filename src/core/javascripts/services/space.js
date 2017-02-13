@@ -1,19 +1,28 @@
-'use strict'
+angular.module('BB.Services').factory("SpaceService", ($q, BBModel) =>
 
-angular.module('BB.Services').factory "SpaceService", ($q, BBModel) ->
-
-  query: (company) ->
-    deferred = $q.defer()
-    if !company.$has('spaces')
-      deferred.reject("No spaces found")
-    else
-      company.$get('spaces').then (resource) =>
-        resource.$get('spaces').then (items) =>
-          spaces = []
-          for i in items
-            spaces.push(new BBModel.Space(i))
-          deferred.resolve(spaces)
-      , (err) =>
-        deferred.reject(err)
-    deferred.promise
+  ({
+    query(company) {
+      let deferred = $q.defer();
+      if (!company.$has('spaces')) {
+        deferred.reject("No spaces found");
+      } else {
+        company.$get('spaces').then(resource => {
+          return resource.$get('spaces').then(items => {
+            let spaces = [];
+            for (let i of Array.from(items)) {
+              spaces.push(new BBModel.Space(i));
+            }
+            return deferred.resolve(spaces);
+          }
+          );
+        }
+        , err => {
+          return deferred.reject(err);
+        }
+        );
+      }
+      return deferred.promise;
+    }
+  })
+);
 

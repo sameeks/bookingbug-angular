@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbAccordionRangeGroup
 * @restrict AE
@@ -28,20 +26,25 @@
 * @property {string} source_slots Source of slots
 * @property {boolean} selected_slot Range group selected slot
 * @property {boolean} hideHeading Range group hide heading
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbAccordionRangeGroup', (PathSvc) ->
-  restrict: 'AE'
-  replace: false
-  scope: {
-    day: '=',
-    slots: '=',
-    selectSlot: '=',
-    disabled_slot: "=disabledSlot"
-  }
-  controller: 'AccordionRangeGroup'
-  link: (scope, element, attrs) ->
-    scope.options = scope.$eval(attrs.bbAccordionRangeGroup) or {}
-  templateUrl : (element, attrs) ->
-    PathSvc.directivePartial "_accordion_range_group"
+angular.module('BB.Directives').directive('bbAccordionRangeGroup', PathSvc =>
+  ({
+    restrict: 'AE',
+    replace: false,
+    scope: {
+      day: '=',
+      slots: '=',
+      selectSlot: '=',
+      disabled_slot: "=disabledSlot"
+    },
+    controller: 'AccordionRangeGroup',
+    link(scope, element, attrs) {
+      return scope.options = scope.$eval(attrs.bbAccordionRangeGroup) || {};
+    },
+    templateUrl(element, attrs) {
+      return PathSvc.directivePartial("_accordion_range_group");
+    }
+  })
+);

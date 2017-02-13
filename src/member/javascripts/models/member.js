@@ -1,20 +1,27 @@
-angular.module('BB.Models').factory "Member.MemberModel", ($q, MemberService,
-  BBModel, BaseModel, ClientModel) ->
+angular.module('BB.Models').factory("Member.MemberModel", ($q, MemberService,
+  BBModel, BaseModel, ClientModel) =>
 
-  class Member_Member extends ClientModel
+  class Member_Member extends ClientModel {
 
-    @$refresh: (member) ->
-      MemberService.refresh(member)
+    static $refresh(member) {
+      return MemberService.refresh(member);
+    }
 
-    @$current: () ->
-      MemberService.current()
+    static $current() {
+      return MemberService.current();
+    }
 
-    @$updateMember: (member, params) ->
-      MemberService.updateMember(member, params)
+    static $updateMember(member, params) {
+      return MemberService.updateMember(member, params);
+    }
 
-    @$sendWelcomeEmail: (member, params) ->
-      MemberService.sendWelcomeEmail(member, params)
+    static $sendWelcomeEmail(member, params) {
+      return MemberService.sendWelcomeEmail(member, params);
+    }
 
-    getBookings: (params) ->
-      BBModel.Member.Booking.$query(@, params)
+    getBookings(params) {
+      return BBModel.Member.Booking.$query(this, params);
+    }
+  }
+);
 

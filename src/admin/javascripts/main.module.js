@@ -1,5 +1,3 @@
-'use strict'
-
 angular.module('BBAdmin', [
   'BB',
   'BBAdmin.Services',
@@ -9,21 +7,21 @@ angular.module('BBAdmin', [
   'BBAdmin.Models',
   'BBAdmin.Directives',
   'trNgGrid'
-])
+]);
 
-angular.module('BBAdmin.Directives', [])
+angular.module('BBAdmin.Directives', []);
 
-angular.module('BBAdmin.Filters', [])
+angular.module('BBAdmin.Filters', []);
 
-angular.module('BBAdmin.Models', [])
+angular.module('BBAdmin.Models', []);
 
 angular.module('BBAdmin.Services', [
   'ngResource',
   'ngSanitize',
-])
+]);
 
 angular.module('BBAdmin.Controllers', [
   'ngSanitize'
-])
+]);
 
 

@@ -1,12 +1,16 @@
-'use strict'
+window.Collection.Day = class Day extends window.Collection.Base {
 
-class window.Collection.Day extends window.Collection.Base
+  checkItem(item) {
+    return super.checkItem(...arguments);
+  }
+};
 
-  checkItem: (item) ->
-    super
 
-
-angular.module('BB.Services').provider "DayCollections", () ->
-  $get: ->
-    new  window.BaseCollections()
+angular.module('BB.Services').provider("DayCollections", () =>
+  ({
+    $get() {
+      return new  window.BaseCollections();
+    }
+  })
+);
 

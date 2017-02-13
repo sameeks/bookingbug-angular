@@ -1,15 +1,12 @@
-angular.module('BB.Services').provider 'FormTransform', () ->
+angular.module('BB.Services').provider('FormTransform', function() {
 
-  options = {new: {}, edit: {}}
+  let options = {new: {}, edit: {}};
 
-  @getTransform = (type, model) ->
-    options[type][model]
+  this.getTransform = (type, model) => options[type][model];
 
-  @setTransform = (type, model, fn) ->
-    options[type][model] = fn
+  this.setTransform = (type, model, fn) => options[type][model] = fn;
 
-  @$get = ->
-    options
+  this.$get = () => options;
 
-  return
+});
 

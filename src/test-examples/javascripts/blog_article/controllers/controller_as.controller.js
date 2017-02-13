@@ -1,27 +1,25 @@
-controller = ($scope) ->
-  'ngInject'
+let controller = function($scope) {
+  'ngInject';
 
-  ###jshint validthis: true ###
-  vm = @
+  /*jshint validthis: true */
+  let vm = this;
 
-  init = () ->
-    vm.someTextValue = 'random text'
-    vm.someNumber = 7
-    vm.someData = $scope.someData
-    vm.prepareMessage = prepareMessage
+  let init = function() {
+    vm.someTextValue = 'random text';
+    vm.someNumber = 7;
+    vm.someData = $scope.someData;
+    vm.prepareMessage = prepareMessage;
 
-    return
+  };
 
-  prepareMessage = (msg) ->
-    return trimMessage(msg) + '!'
+  var prepareMessage = msg => trimMessage(msg) + '!';
 
-  trimMessage = (msg) ->
-    return msg.trim()
+  var trimMessage = msg => msg.trim();
 
-  init()
+  init();
 
-  return
+};
 
 angular
 .module('bbTe.blogArticle')
-.controller('BbTeBaControllerAsController', controller)
+.controller('BbTeBaControllerAsController', controller);

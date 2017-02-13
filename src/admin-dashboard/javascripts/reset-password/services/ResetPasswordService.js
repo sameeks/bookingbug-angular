@@ -1,35 +1,33 @@
-'use strict'
-
-###
+/*
 * @ngdoc service
 * @name BBAdminDashboard.reset-password.service:ResetPasswordService
 *
 * @description
 * This service enables the user to send a request to reset he's password
-###
+*/
 
-ResetPasswordService = ($q, $window, $http) ->
-  'ngInject'
+let ResetPasswordService = function($q, $window, $http) {
+  'ngInject';
 
-  postRequest = (email, baseUrl) ->
-    deferred = $q.defer()
+  let postRequest = function(email, baseUrl) {
+    let deferred = $q.defer();
 
-    url = baseUrl + "/api/v1/login/admin/reset_password_email"
+    let url = baseUrl + "/api/v1/login/admin/reset_password_email";
 
-    path = $window.location.pathname + '#/reset-password'
+    let path = $window.location.pathname + '#/reset-password';
 
-    body = {"email": email, "path": path}
+    let body = {"email": email, "path": path};
 
-    $http.post(url, body).then (response) ->
-      deferred.resolve(response)
-    , (err) ->
-      deferred.reject(err)
-    deferred.promise
+    $http.post(url, body).then(response => deferred.resolve(response)
+    , err => deferred.reject(err));
+    return deferred.promise;
+  };
 
   return {
-    postRequest: postRequest
-  }
+    postRequest
+  };
+};
 
 angular
   .module('BBAdminDashboard.reset-password')
-  .factory('ResetPasswordService', ResetPasswordService)
+  .factory('ResetPasswordService', ResetPasswordService);

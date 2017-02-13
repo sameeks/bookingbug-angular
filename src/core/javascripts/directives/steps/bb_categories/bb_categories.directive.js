@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbCategories
 * @restrict AE
@@ -32,11 +30,14 @@
 *   </file>
 *  </example>
 *
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbCategories', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'CategoryList'
+angular.module('BB.Directives').directive('bbCategories', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'CategoryList'
+  })
+);

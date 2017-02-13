@@ -1,25 +1,24 @@
-'use strict'
+describe('BBAdminEvents, eventChainTable directive', function() {
+  let $rootScope = null;
+  let $scope = null;
 
-describe 'BBAdminEvents, eventChainTable directive', () ->
-  $rootScope = null
-  $scope = null
+  let setup = function() {
 
-  setup = () ->
+    module('BBAdminBooking');
+    module('BBAdminEvents');
 
-    module 'BBAdminBooking'
-    module 'BBAdminEvents'
+    inject(function($injector) {
+      $rootScope = $injector.get('$rootScope');
+      $scope = $rootScope.$new();
+    });
 
-    inject ($injector) ->
-      $rootScope = $injector.get '$rootScope'
-      $scope = $rootScope.$new()
-      return
+  };
 
-    return
+  beforeEach(setup);
 
-  beforeEach setup
+  it('dummy test', () =>
+    expect(true)
+    .toBe(true)
+  );
 
-  it 'dummy test', ->
-    expect true
-    .toBe true
-
-  return
+});

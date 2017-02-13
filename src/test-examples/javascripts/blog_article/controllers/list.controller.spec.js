@@ -1,31 +1,30 @@
-'use strict';
+describe('bbTe.blogArticle, BbTeBaListController', function() {
+  let $controller = null;
+  let $rootScope = null;
 
-describe 'bbTe.blogArticle, BbTeBaListController', () ->
-  $controller = null
-  $rootScope = null
+  let controllerInstance = null;
+  let $scope = null;
 
-  controllerInstance = null
-  $scope = null
+  let setup = function() {
+    module('bbTe.blogArticle');
 
-  setup = () ->
-    module('bbTe.blogArticle')
+    inject(function($injector) {
+      $controller = $injector.get('$controller');
+      $rootScope = $injector.get('$rootScope');
+      $scope = $rootScope.$new();
+    });
 
-    inject ($injector) ->
-      $controller = $injector.get '$controller'
-      $rootScope = $injector.get '$rootScope'
-      $scope = $rootScope.$new()
-      return
+  };
 
-    return
+  beforeEach(setup);
 
-  beforeEach setup
-
-  it 'initialise controller', () ->
+  return it('initialise controller', function() {
     controllerInstance = $controller(
-      'BbTeBaListController'
-      '$scope': $scope
-    )
+      'BbTeBaListController',
+      {'$scope': $scope}
+    );
 
-    return
+  });
+});
 
 

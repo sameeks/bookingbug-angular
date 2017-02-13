@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:Resource
 *
@@ -15,15 +12,15 @@
 * @property {hash} extra Any extra custom business information
 * @property {boolean} deleted Verify if resources is deleted or not
 * @property {boolean} disabled Verify if resources is disabled or not
-####
+*///
 
 
-angular.module('BB.Models').factory "ResourceModel", ($q, BBModel, BaseModel, ResourceService) ->
+angular.module('BB.Models').factory("ResourceModel", ($q, BBModel, BaseModel, ResourceService) =>
 
-  class Resource extends BaseModel
+  class Resource extends BaseModel {
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name $query
     * @methodOf BB.Models:Resource
@@ -31,7 +28,10 @@ angular.module('BB.Models').factory "ResourceModel", ($q, BBModel, BaseModel, Re
     * Static function that loads an array of resources from a company object
     *
     * @returns {promise} A returned promise
-    ###
-    @$query: (company) ->
-      ResourceService.query(company)
+    */
+    static $query(company) {
+      return ResourceService.query(company);
+    }
+  }
+);
 

@@ -1,15 +1,13 @@
-'use strict';
-
-###
+/*
 * @ngdoc controller
 * @name BBAdminDashboard.settings-iframe.controllers.controller:SettingsIframeBasicSettingsPageCtrl
-#
+*
 * @description
 * Controller for the settings page
-###
+*/
 angular.module('BBAdminDashboard.settings-iframe.controllers')
-.controller 'SettingsIframeBasicSettingsPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.BASIC_SETTINGS.TITLE'
+.controller('SettingsIframeBasicSettingsPageCtrl',['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
+  $scope.pageHeader = 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.BASIC_SETTINGS.TITLE';
 
   $scope.tabs = [
     {
@@ -67,14 +65,15 @@ angular.module('BBAdminDashboard.settings-iframe.controllers')
       icon: 'fa fa-trophy',
       path: 'settings.basic-settings.page({path: "conf/setting/features_edit"})'
     }
-  ]
+  ];
 
-  $scope.contentsLoading = false
+  $scope.contentsLoading = false;
 
-  $scope.$on 'iframeLoaded', ()->
-    $scope.contentsLoading = false
-    $scope.$apply()
+  $scope.$on('iframeLoaded', function(){
+    $scope.contentsLoading = false;
+    return $scope.$apply();
+  });
 
-  $scope.$on 'iframeLoading', ()->
-    $scope.contentsLoading = true
-]
+  return $scope.$on('iframeLoading', ()=> $scope.contentsLoading = true);
+}
+]);

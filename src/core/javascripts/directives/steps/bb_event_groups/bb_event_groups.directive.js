@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbEventGroups
 * @restrict AE
@@ -21,17 +18,22 @@
 * @property {array} events The events array
 * @property {hash} filters A hash of filters
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbEventGroups', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'EventGroupList'
-  link : (scope, element, attrs) ->
-    if attrs.bbItem
-      scope.booking_item = scope.$eval( attrs.bbItem )
-    if attrs.bbShowAll
-      scope.show_all = true
-    return
+angular.module('BB.Directives').directive('bbEventGroups', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'EventGroupList',
+    link(scope, element, attrs) {
+      if (attrs.bbItem) {
+        scope.booking_item = scope.$eval( attrs.bbItem );
+      }
+      if (attrs.bbShowAll) {
+        scope.show_all = true;
+      }
+    }
+  })
+);

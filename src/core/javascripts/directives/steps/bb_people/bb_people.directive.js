@@ -1,6 +1,4 @@
-'use strict'
-
-###*
+/**
 * @ngdoc directive
 * @name BB.Directives:bbPeople
 * @restrict AE
@@ -17,7 +15,7 @@
 * </pre>
 *
 * @param {BasketItem} bbItem The BasketItem that will be updated with the selected person. If no item is provided, bb.current_item is used as the default
-# @param {array} bbItems An array of BasketItem's that will be updated with the selected person.
+* @param {array} bbItems An array of BasketItem's that will be updated with the selected person.
 * @property {array} items A list of people
 * @property {array} bookable_people The bookable people from the person list
 * @property {array} bookable_items The bookable items from the person list
@@ -36,17 +34,21 @@
 *     </div>
 *   </file>
 *  </example>
-###
-angular.module('BB.Directives').directive 'bbPeople', () ->
-  restrict: 'AE'
-  replace: true
-  scope: true
-  controller: 'BBPeopleCtrl'
-  controllerAs: '$bbPeopleCtrl'
-  link: (scope, element, attrs) ->
-    if attrs.bbItems
-      scope.booking_items = scope.$eval(attrs.bbItems) or []
-      scope.booking_item = scope.booking_items[0]
-    else
-      scope.booking_item = scope.$eval(attrs.bbItem) or scope.bb.current_item
-      scope.booking_items = [scope.booking_item]
+*/
+angular.module('BB.Directives').directive('bbPeople', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope: true,
+    controller: 'BBPeopleCtrl',
+    controllerAs: '$bbPeopleCtrl',
+    link(scope, element, attrs) {
+      if (attrs.bbItems) {
+        scope.booking_items = scope.$eval(attrs.bbItems) || [];
+        return scope.booking_item = scope.booking_items[0];
+      } else {
+        scope.booking_item = scope.$eval(attrs.bbItem) || scope.bb.current_item;
+        return scope.booking_items = [scope.booking_item];
+      }
+    }
+  }));

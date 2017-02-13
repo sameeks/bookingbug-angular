@@ -1,11 +1,10 @@
-'use strict'
+angular.module('BBQueue').run(function() {
+  'ngInject';
 
-angular.module('BBQueue').run () ->
-  'ngInject'
+  let models = ['Queuer', 'ClientQueue'];
+  for (let model of Array.from(models)) {
+    BBModel['Admin'][model] = $injector.get(`Admin${model}Model`);
+  }
+  BBModel['Admin']['Person'] = $injector.get("AdminQueuerPersonModel");
 
-  models = ['Queuer', 'ClientQueue']
-  for model in models
-    BBModel['Admin'][model] = $injector.get("Admin#{model}Model")
-  BBModel['Admin']['Person'] = $injector.get("AdminQueuerPersonModel")
-
-  return
+});

@@ -1,15 +1,20 @@
-directive = () ->
-  'ngInject'
+let directive = function() {
+  'ngInject';
 
-  templateUrl = (tElem, tAttrs) ->
-    defaultTemplateUrl = '/templates/blog-article/display.html'
-    if angular.isString tAttrs.templateUrl
-      return tAttrs.templateUrl
-    defaultTemplateUrl
+  let templateUrl = function(tElem, tAttrs) {
+    let defaultTemplateUrl = '/templates/blog-article/display.html';
+    if (angular.isString(tAttrs.templateUrl)) {
+      return tAttrs.templateUrl;
+    }
+    return defaultTemplateUrl;
+  };
 
-  restrict: 'EA'
-  templateUrl: templateUrl
+  return {
+    restrict: 'EA',
+    templateUrl
+  };
+};
 
 angular
 .module('bbTe.blogArticle')
-.directive('bbTeBaCustomizableTemplate', directive)
+.directive('bbTeBaCustomizableTemplate', directive);

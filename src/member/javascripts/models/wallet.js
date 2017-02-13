@@ -1,20 +1,28 @@
-angular.module("BB.Models").factory "Member.WalletModel", (WalletService, BBModel, BaseModel) ->
+angular.module("BB.Models").factory("Member.WalletModel", (WalletService, BBModel, BaseModel) =>
 
-  class Member_Wallet extends BaseModel
-    constructor: (data) ->
-      super(data)
+  class Member_Wallet extends BaseModel {
+    constructor(data) {
+      super(data);
+    }
 
-    @$getWalletForMember: (member, params) ->
-      WalletService.getWalletForMember(member, params)
+    static $getWalletForMember(member, params) {
+      return WalletService.getWalletForMember(member, params);
+    }
 
-    @$getWalletLogs: (wallet) ->
-      WalletService.getWalletLogs(wallet)
+    static $getWalletLogs(wallet) {
+      return WalletService.getWalletLogs(wallet);
+    }
 
-    @$getWalletPurchaseBandsForWallet: (wallet) ->
-      WalletService.getWalletPurchaseBandsForWallet(wallet)
+    static $getWalletPurchaseBandsForWallet(wallet) {
+      return WalletService.getWalletPurchaseBandsForWallet(wallet);
+    }
 
-    @$updateWalletForMember: (member, params) ->
-      WalletService.updateWalletForMember(member, params)
+    static $updateWalletForMember(member, params) {
+      return WalletService.updateWalletForMember(member, params);
+    }
 
-    @$createWalletForMember: (member) ->
-      WalletService.createWalletForMember(member)
+    static $createWalletForMember(member) {
+      return WalletService.createWalletForMember(member);
+    }
+  }
+);

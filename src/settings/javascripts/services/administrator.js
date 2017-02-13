@@ -1,17 +1,19 @@
-'use strict'
+angular.module('BBAdmin.Services').factory('AdminAdministratorService', ($q, BBModel) =>
 
-angular.module('BBAdmin.Services').factory 'AdminAdministratorService', ($q, BBModel) ->
-
-  query: (params) ->
-    company = params.company
-    defer = $q.defer()
-    company.$get('administrators').then (collection) ->
-      collection.$get('administrators').then (administrators) ->
-        models = (new BBModel.Admin.Administrator(a) for a in administrators)
-        defer.resolve(models)
-      , (err) ->
-        defer.reject(err)
-    , (err) ->
-      defer.reject(err)
-    defer.promise
+  ({
+    query(params) {
+      let { company } = params;
+      let defer = $q.defer();
+      company.$get('administrators').then(collection =>
+        collection.$get('administrators').then(function(administrators) {
+          let models = (Array.from(administrators).map((a) => new BBModel.Admin.Administrator(a)));
+          return defer.resolve(models);
+        }
+        , err => defer.reject(err))
+      
+      , err => defer.reject(err));
+      return defer.promise;
+    }
+  })
+);
 

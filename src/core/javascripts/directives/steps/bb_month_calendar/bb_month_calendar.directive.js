@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbMonthCalendar
 * @restrict AE
@@ -20,11 +18,14 @@
 * @property {string} setLoaded  Set the day list loaded
 * @property {object} setLoadedAndShowError Set loaded and show error
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-###
+*/
 
 
-angular.module('BB.Directives').directive 'bbMonthCalendar', () ->
-  restrict: 'A'
-  replace: true
-  scope : true
-  controller : 'MonthCalendar'
+angular.module('BB.Directives').directive('bbMonthCalendar', () =>
+  ({
+    restrict: 'A',
+    replace: true,
+    scope : true,
+    controller : 'MonthCalendar'
+  })
+);

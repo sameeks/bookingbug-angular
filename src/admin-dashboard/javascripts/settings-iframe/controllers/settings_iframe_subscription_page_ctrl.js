@@ -1,15 +1,13 @@
-'use strict';
-
-###
+/*
 * @ngdoc controller
 * @name BBAdminDashboard.settings-iframe.controllers.controller:SettingsIframeSubscriptionPageCtrl
-#
+*
 * @description
 * Controller for the settings page
-###
+*/
 angular.module('BBAdminDashboard.settings-iframe.controllers')
-.controller 'SettingsIframeSubscriptionPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TITLE'
+.controller('SettingsIframeSubscriptionPageCtrl',['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
+  $scope.pageHeader = 'ADMIN_DASHBOARD.SETTINGS_IFRAME_PAGE.SUBSCRIPTION.TITLE';
 
   $scope.tabs = [
     {
@@ -27,14 +25,15 @@ angular.module('BBAdminDashboard.settings-iframe.controllers')
       icon: null,
       path: 'settings.subscription.page({path: "payment_invoice"})'
     }
-  ]
+  ];
 
-  $scope.contentsLoading = false
+  $scope.contentsLoading = false;
 
-  $scope.$on 'iframeLoaded', ()->
-    $scope.contentsLoading = false
-    $scope.$apply()
+  $scope.$on('iframeLoaded', function(){
+    $scope.contentsLoading = false;
+    return $scope.$apply();
+  });
 
-  $scope.$on 'iframeLoading', ()->
-    $scope.contentsLoading = true
-]
+  return $scope.$on('iframeLoading', ()=> $scope.contentsLoading = true);
+}
+]);

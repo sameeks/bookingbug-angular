@@ -1,24 +1,23 @@
-'use strict'
+describe('BBAdminServices, personTable directive', function() {
+  let $rootScope = null;
+  let $scope = null;
 
-describe 'BBAdminServices, personTable directive', () ->
-  $rootScope = null
-  $scope = null
+  let setup = function() {
+    module('BBAdminBooking');
+    module('BBAdminServices');
 
-  setup = () ->
-    module 'BBAdminBooking'
-    module 'BBAdminServices'
+    inject(function($injector) {
+      $rootScope = $injector.get('$rootScope');
+      $scope = $rootScope.$new();
+    });
 
-    inject ($injector) ->
-      $rootScope = $injector.get '$rootScope'
-      $scope = $rootScope.$new()
-      return
+  };
 
-    return
+  beforeEach(setup);
 
-  beforeEach setup
+  it('dummy test', () =>
+    expect(true)
+    .toBe(true)
+  );
 
-  it 'dummy test', ->
-    expect true
-    .toBe true
-
-  return
+});

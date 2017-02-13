@@ -1,19 +1,21 @@
-'use strict'
-angular.module('BB.Directives').directive "cardSecurityCode", ->
+angular.module('BB.Directives').directive("cardSecurityCode", function() {
 
-  linker = (scope, element, attributes) ->
-    scope.$watch 'cardType', (newValue) ->
-      if newValue == 'american_express'
-        element.attr('maxlength', 4)
-        element.attr('placeholder', "••••")
-      else
-        element.attr('maxlength', 3)
-        element.attr('placeholder', "•••")
+  let linker = (scope, element, attributes) =>
+    scope.$watch('cardType', function(newValue) {
+      if (newValue === 'american_express') {
+        element.attr('maxlength', 4);
+        return element.attr('placeholder', "••••");
+      } else {
+        element.attr('maxlength', 3);
+        return element.attr('placeholder', "•••");
+      }
+    })
+  ;
 
   return {
-    restrict: "AC"
-    link: linker
+    restrict: "AC",
+    link: linker,
     scope: {
       'cardType': '='
     }
-  }
+  };});

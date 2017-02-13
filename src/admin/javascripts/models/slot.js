@@ -1,99 +1,116 @@
-'use strict'
+angular.module('BB.Models').factory("AdminSlotModel", ($q, BBModel, BaseModel, TimeSlotModel, SlotCollections, $window) =>
 
-angular.module('BB.Models').factory "AdminSlotModel", ($q, BBModel, BaseModel, TimeSlotModel, SlotCollections, $window) ->
+  class Admin_Slot extends TimeSlotModel {
 
-  class Admin_Slot extends TimeSlotModel
-
-    constructor: (data) ->
-      super(data)
-      @title = @full_describe
-      if @status == 0
-        @title = "Available"
-      @datetime = moment(@datetime)
-      @start = @datetime
-      @end = @end_datetime
-      @end = @datetime.clone().add(@duration, 'minutes')
-      @time = @start.hour()* 60 + @start.minute()
-      @title = @full_describe
-   #   @startEditable  = false
-   #   @durationEditable  = false
-      # set to all day if it's a 24 hours span
-      @allDay = false
-      @allDay = true if (@duration_span && @duration_span == 86400)
-      if @status == 3
-        @startEditable  = true
-        @durationEditable  = true
-        @className = "status_blocked"
-      else if @status == 4
-        @className = "status_booked"
-      else if @status == 0
-        @className = "status_available"
-      if @multi_status
-        for k,v of @multi_status
-          @className += " status_" + k
-
-
-    useFullTime: () ->
-      @using_full_time = true
-      @start = @datetime.clone().subtract(@pre_time, 'minutes') if @pre_time
-      @end = @datetime.clone().add(@duration + @post_time, 'minutes') if @post_time
+    constructor(data) {
+      super(data);
+      this.title = this.full_describe;
+      if (this.status === 0) {
+        this.title = "Available";
+      }
+      this.datetime = moment(this.datetime);
+      this.start = this.datetime;
+      this.end = this.end_datetime;
+      this.end = this.datetime.clone().add(this.duration, 'minutes');
+      this.time = (this.start.hour()* 60) + this.start.minute();
+      this.title = this.full_describe;
+   //   @startEditable  = false
+   //   @durationEditable  = false
+      // set to all day if it's a 24 hours span
+      this.allDay = false;
+      if (this.duration_span && (this.duration_span === 86400)) { this.allDay = true; }
+      if (this.status === 3) {
+        this.startEditable  = true;
+        this.durationEditable  = true;
+        this.className = "status_blocked";
+      } else if (this.status === 4) {
+        this.className = "status_booked";
+      } else if (this.status === 0) {
+        this.className = "status_available";
+      }
+      if (this.multi_status) {
+        for (let k in this.multi_status) {
+          let v = this.multi_status[k];
+          this.className += ` status_${k}`;
+        }
+      }
+    }
 
 
-
-    $refetch: () ->
-      defer = $q.defer()
-      @$flush('self')
-      @$get('self').then (res) =>
-        @constructor(res)
-        if @using_full_time
-          @useFullTime()
-        BookingCollections.checkItems(@)
-        defer.resolve(@)
-      , (err) ->
-        defer.reject(err)
-      defer.promise
+    useFullTime() {
+      this.using_full_time = true;
+      if (this.pre_time) { this.start = this.datetime.clone().subtract(this.pre_time, 'minutes'); }
+      if (this.post_time) { return this.end = this.datetime.clone().add(this.duration + this.post_time, 'minutes'); }
+    }
 
 
 
+    $refetch() {
+      let defer = $q.defer();
+      this.$flush('self');
+      this.$get('self').then(res => {
+        this.constructor(res);
+        if (this.using_full_time) {
+          this.useFullTime();
+        }
+        BookingCollections.checkItems(this);
+        return defer.resolve(this);
+      }
+      , err => defer.reject(err));
+      return defer.promise;
+    }
 
-    @$query: (params) ->
-      if params.slot
-        params.slot_id = params.slot.id
-      if params.date
-        params.start_date = params.date
-        params.end_date = params.date
-      if params.company
-        company = params.company
-        delete params.company
-        params.company_id = company.id
-      params.per_page = 1024 if !params.per_page?
-      params.include_cancelled = false if !params.include_cancelled?
-      defer = $q.defer()
-      existing = SlotCollections.find(params)
-      if existing  && !params.skip_cache
-        defer.resolve(existing)
-      else
-        src = company
-        src ||= params.src
-        delete params.src if params.src
-        if params.skip_cache
-          SlotCollections.delete(existing) if existing
-          src.$flush('slots', params)
 
-        src.$get('slots', params).then (resource) ->
-          if resource.$has('slots')
-            resource.$get('slots').then (slots) ->
-              models = (new BBModel.Admin.Slot(b) for b in slots)
-              spaces = new $window.Collection.Slot(resource, models, params)
-              SlotCollections.add(spaces)
-              defer.resolve(spaces)
-            , (err) ->
-              defer.reject(err)
-          else
-            slot = new BBModel.Admin.Slot(resource)
-            defer.resolve(slot)
 
-        , (err) ->
-          defer.reject(err)
-      defer.promise
+
+    static $query(params) {
+      let company;
+      if (params.slot) {
+        params.slot_id = params.slot.id;
+      }
+      if (params.date) {
+        params.start_date = params.date;
+        params.end_date = params.date;
+      }
+      if (params.company) {
+        ({ company } = params);
+        delete params.company;
+        params.company_id = company.id;
+      }
+      if (params.per_page == null) { params.per_page = 1024; }
+      if (params.include_cancelled == null) { params.include_cancelled = false; }
+      let defer = $q.defer();
+      let existing = SlotCollections.find(params);
+      if (existing  && !params.skip_cache) {
+        defer.resolve(existing);
+      } else {
+        let src = company;
+        if (!src) { ({ src } = params); }
+        if (params.src) { delete params.src; }
+        if (params.skip_cache) {
+          if (existing) { SlotCollections.delete(existing); }
+          src.$flush('slots', params);
+        }
+
+        src.$get('slots', params).then(function(resource) {
+          if (resource.$has('slots')) {
+            return resource.$get('slots').then(function(slots) {
+              let models = (Array.from(slots).map((b) => new BBModel.Admin.Slot(b)));
+              let spaces = new $window.Collection.Slot(resource, models, params);
+              SlotCollections.add(spaces);
+              return defer.resolve(spaces);
+            }
+            , err => defer.reject(err));
+          } else {
+            let slot = new BBModel.Admin.Slot(resource);
+            return defer.resolve(slot);
+          }
+        }
+
+        , err => defer.reject(err));
+      }
+      return defer.promise;
+    }
+  }
+);
 

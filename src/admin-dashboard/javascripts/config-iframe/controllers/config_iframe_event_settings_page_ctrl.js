@@ -1,15 +1,13 @@
-'use strict';
-
-###
+/*
 * @ngdoc controller
 * @name BBAdminDashboard.config-iframe.controllers.controller:ConfigIframeEventSettingsPageCtrl
-#
+*
 * @description
 * Controller for the config page
-###
+*/
 angular.module('BBAdminDashboard.config-iframe.controllers')
-.controller 'ConfigIframeEventSettingsPageCtrl',['$scope', '$state', '$rootScope', ($scope, $state, $rootScope) ->
-  $scope.pageHeader = 'ADMIN_DASHBOARD.CONFIG_IFRAME_PAGE.EVENT_SETTINGS.TITLE'
+.controller('ConfigIframeEventSettingsPageCtrl',['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
+  $scope.pageHeader = 'ADMIN_DASHBOARD.CONFIG_IFRAME_PAGE.EVENT_SETTINGS.TITLE';
 
   $scope.tabs = [
     {
@@ -37,14 +35,15 @@ angular.module('BBAdminDashboard.config-iframe.controllers')
       icon: 'fa fa-folder-open',
       path: 'config.event-settings.page({path: "sessions/template"})'
     }
-  ]
+  ];
 
-  $scope.contentsLoading = false
+  $scope.contentsLoading = false;
 
-  $scope.$on 'iframeLoaded', ()->
-    $scope.contentsLoading = false
-    $scope.$apply()
+  $scope.$on('iframeLoaded', function(){
+    $scope.contentsLoading = false;
+    return $scope.$apply();
+  });
 
-  $scope.$on 'iframeLoading', ()->
-    $scope.contentsLoading = true
-]
+  return $scope.$on('iframeLoading', ()=> $scope.contentsLoading = true);
+}
+]);

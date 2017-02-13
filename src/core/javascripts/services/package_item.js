@@ -1,27 +1,32 @@
-'use strict'
+angular.module('BB.Services').factory("PackageItemService", ($q, BBModel) =>
 
-angular.module('BB.Services').factory "PackageItemService", ($q, BBModel) ->
+  ({
+    query(company) {
+      let deferred = $q.defer();
+      if (!company.$has('packages')) {
+        deferred.reject("No packages found");
+      } else {
+        company.$get('packages').then(resource =>
+          resource.$get('packages').then(package_items => deferred.resolve(Array.from(package_items).map((i) => new BBModel.PackageItem(i))))
+        
+        , err => deferred.reject(err));
+      }
+      return deferred.promise;
+    },
 
-  query: (company) ->
-    deferred = $q.defer()
-    if !company.$has('packages')
-      deferred.reject("No packages found")
-    else
-      company.$get('packages').then (resource) ->
-        resource.$get('packages').then (package_items) ->
-          deferred.resolve(new BBModel.PackageItem(i) for i in package_items)
-      , (err) ->
-        deferred.reject(err)
-    deferred.promise
-
-  getPackageServices: (package_item) ->
-    deferred = $q.defer()
-    if !package_item.$has('services')
-      deferred.reject("No services found")
-    else
-      package_item.$get('services').then (services) ->
-        deferred.resolve((new BBModel.Service(s) for s in services))
-      , (err) =>
-        deferred.reject(err)
-    deferred.promise
+    getPackageServices(package_item) {
+      let deferred = $q.defer();
+      if (!package_item.$has('services')) {
+        deferred.reject("No services found");
+      } else {
+        package_item.$get('services').then(services => deferred.resolve((Array.from(services).map((s) => new BBModel.Service(s))))
+        , err => {
+          return deferred.reject(err);
+        }
+        );
+      }
+      return deferred.promise;
+    }
+  })
+);
 

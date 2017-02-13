@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbMap
 * @restrict AE
@@ -30,11 +28,14 @@
 * @property {object} address The address
 * @property {object} error_msg The error message
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbMap', () ->
-  restrict: 'A'
-  replace: true
-  scope : true
-  controller : 'MapCtrl'
+angular.module('BB.Directives').directive('bbMap', () =>
+  ({
+    restrict: 'A',
+    replace: true,
+    scope : true,
+    controller : 'MapCtrl'
+  })
+);

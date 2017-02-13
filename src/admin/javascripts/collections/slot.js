@@ -1,21 +1,28 @@
-'use strict'
+window.Collection.Slot = class Slot extends window.Collection.Base {
 
-class window.Collection.Slot extends window.Collection.Base
+  checkItem(item) {
+    return super.checkItem(...arguments);
+  }
 
-  checkItem: (item) ->
-    super
+  matchesParams(item) {
+    if (this.params.start_date) {
+      if (!this.start_date) { this.start_date = moment(this.params.start_date); }
+      if (this.start_date.isAfter(item.date)) { return false; }
+    }
+    if (this.params.end_date) {
+      if (!this.end_date) { this.end_date = moment(this.params.end_date); }
+      if (this.end_date.isBefore(item.date)) { return false; }
+    }
+    return true;
+  }
+};
 
-  matchesParams: (item) ->
-    if @params.start_date
-      @start_date ||= moment(@params.start_date)
-      return false if @start_date.isAfter(item.date)
-    if @params.end_date
-      @end_date ||= moment(@params.end_date)
-      return false if @end_date.isBefore(item.date)
-    return true
 
-
-angular.module('BB.Services').provider "SlotCollections", () ->
-  $get: ->
-    new window.BaseCollections()
+angular.module('BB.Services').provider("SlotCollections", () =>
+  ({
+    $get() {
+      return new window.BaseCollections();
+    }
+  })
+);
 

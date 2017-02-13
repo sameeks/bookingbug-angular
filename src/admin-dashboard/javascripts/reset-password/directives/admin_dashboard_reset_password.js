@@ -1,6 +1,4 @@
-'use strict'
-
-###
+/*
  * @ngdoc directive
  * @name BBAdminDashboard.reset-password.directive:adminDashboardResetPassword
  * @scope
@@ -8,20 +6,22 @@
  *
  * @description
  * Admin Dashboard ResetPassword journey directive
-###
+*/
 
-adminDashboardResetPassword = () ->
+let adminDashboardResetPassword = function() {
 
-  directive =
-    restrict: 'AE'
-    replace: true
-    scope : true
-    template: '<div ng-include="$resetPasswordCtrl.resetPasswordTemplate"></div>'
-    controller: 'ResetPasswordCtrl'
+  let directive = {
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    template: '<div ng-include="$resetPasswordCtrl.resetPasswordTemplate"></div>',
+    controller: 'ResetPasswordCtrl',
     controllerAs: '$resetPasswordCtrl'
+  };
 
-  return directive
+  return directive;
+};
 
 angular
   .module('BBAdminDashboard.reset-password')
-  .directive('adminDashboardResetPassword', adminDashboardResetPassword)
+  .directive('adminDashboardResetPassword', adminDashboardResetPassword);

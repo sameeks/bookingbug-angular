@@ -1,45 +1,60 @@
-'use strict'
+angular.module('BB.Directives').directive('bbMembershipLevels', ($rootScope, BBModel) =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller($scope, $element, $attrs, LoadingService) {
 
-angular.module('BB.Directives').directive 'bbMembershipLevels', ($rootScope, BBModel) ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller: ($scope, $element, $attrs, LoadingService) ->
+      let loader = LoadingService.$loader($scope);
 
-    loader = LoadingService.$loader($scope)
+      $rootScope.connection_started.then(() => $scope.initialise());
 
-    $rootScope.connection_started.then ->
-      $scope.initialise()
+      $scope.initialise = function() {
+        if ($scope.bb.company && $scope.bb.company.$has('member_levels')) {
+          loader.notLoaded();
+          return BBModel.MembershipLevels.$getMembershipLevels($scope.bb.company).then(function(member_levels) {
+            loader.setLoaded();
+            return $scope.membership_levels = member_levels;
+          }
+            //checkClientDefaults()
+          , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+        }
+      };
 
-    $scope.initialise = () ->
-      if $scope.bb.company and $scope.bb.company.$has('member_levels')
-        loader.notLoaded()
-        BBModel.MembershipLevels.$getMembershipLevels($scope.bb.company).then (member_levels) ->
-          loader.setLoaded()
-          $scope.membership_levels = member_levels
-          #checkClientDefaults()
-        , (err) ->
-          loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+      $scope.selectMemberLevel = function(level) {
+        if (level && $scope.client) {
+          $scope.client.member_level_id = level.id;
 
-    $scope.selectMemberLevel = (level) ->
-      if level and $scope.client
-        $scope.client.member_level_id = level.id
+          if ($scope.$parent.$has_page_control) {
+            return;
+          } else {
+            return $scope.decideNextPage();
+          }
+        }
+      };
 
-        if $scope.$parent.$has_page_control
-          return
-        else
-          $scope.decideNextPage()
+      let checkClientDefaults = function() {
+        if (!$scope.bb.client_defaults.membership_ref) { return; }
+        return (() => {
+          let result = [];
+          for (let membership_level of Array.from($scope.membership_levels)) {
+            let item;
+            if (membership_level.name === $scope.bb.client_defaults.membership_ref) {
+              item = $scope.selectMemberLevel(membership_level);
+            }
+            result.push(item);
+          }
+          return result;
+        })();
+      };
 
-    checkClientDefaults = () ->
-      return if !$scope.bb.client_defaults.membership_ref
-      for membership_level in $scope.membership_levels
-        if membership_level.name is $scope.bb.client_defaults.membership_ref
-          $scope.selectMemberLevel(membership_level)
+      $scope.setReady = function() {
+        if (!$scope.client.member_level_id) { return false; }
+        return true;
+      };
 
-    $scope.setReady = () ->
-      return false if !$scope.client.member_level_id
-      return true
-
-    $scope.getMembershipLevel = (member_level_id) ->
-      return _.find $scope.membership_levels, (level) -> level.id is member_level_id
+      return $scope.getMembershipLevel = member_level_id => _.find($scope.membership_levels, level => level.id === member_level_id);
+    }
+  })
+);
 

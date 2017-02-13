@@ -1,17 +1,25 @@
-'use strict'
+angular.module('BB.Services').factory("DealService", ($q, BBModel) =>
 
-angular.module('BB.Services').factory "DealService", ($q, BBModel) ->
-
-  query: (company) ->
-    deferred = $q.defer()
-    if !company.$has('deals')
-      deferred.reject("No Deals found")
-    else
-      company.$get('deals').then (resource) =>
-        resource.$get('deals').then (deals) =>
-          deals = (new BBModel.Deal(deal) for deal in deals)
-          deferred.resolve(deals)
-      , (err) =>
-        deferred.reject(err)
-    deferred.promise
+  ({
+    query(company) {
+      let deferred = $q.defer();
+      if (!company.$has('deals')) {
+        deferred.reject("No Deals found");
+      } else {
+        company.$get('deals').then(resource => {
+          return resource.$get('deals').then(deals => {
+            deals = (Array.from(deals).map((deal) => new BBModel.Deal(deal)));
+            return deferred.resolve(deals);
+          }
+          );
+        }
+        , err => {
+          return deferred.reject(err);
+        }
+        );
+      }
+      return deferred.promise;
+    }
+  })
+);
 

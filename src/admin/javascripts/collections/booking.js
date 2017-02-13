@@ -1,22 +1,29 @@
-'use strict'
+window.Collection.Booking = class Booking extends window.Collection.Base {
 
-class window.Collection.Booking extends window.Collection.Base
+  checkItem(item) {
+    return super.checkItem(...arguments);
+  }
 
-  checkItem: (item) ->
-    super
+  matchesParams(item) {
+    if ((this.params.start_date != null) && item.start) {
+      if (this.start_date == null) { this.start_date = moment(this.params.start_date); }
+      if (this.start_date.isAfter(item.start)) { return false; }
+    }
+    if ((this.params.end_date != null) && item.start) {
+      if (this.end_date == null) { this.end_date = moment(this.params.end_date); }
+      if (this.end_date.isBefore(item.start.clone().startOf('day'))) { return false; }
+    }
+    if (!this.params.include_cancelled && item.is_cancelled) { return false; }
+    return true;
+  }
+};
 
-  matchesParams: (item) ->
-    if @params.start_date? && item.start
-      @start_date ?= moment(@params.start_date)
-      return false if @start_date.isAfter(item.start)
-    if @params.end_date? && item.start
-      @end_date ?= moment(@params.end_date)
-      return false if @end_date.isBefore(item.start.clone().startOf('day'))
-    return false if !@params.include_cancelled && item.is_cancelled
-    return true
 
-
-angular.module('BB.Services').provider "BookingCollections", () ->
-  $get: ->
-    new  window.BaseCollections()
+angular.module('BB.Services').provider("BookingCollections", () =>
+  ({
+    $get() {
+      return new  window.BaseCollections();
+    }
+  })
+);
 

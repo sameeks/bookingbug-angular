@@ -1,68 +1,68 @@
-'use strict';
+describe('BBAdminDashboard, CorePageController', function() {
+  let $controller = null;
+  let $state = null;
+  let company = null;
 
-describe 'BBAdminDashboard, CorePageController', () ->
-  $controller = null
-  $state = null
-  company = null
+  let controllerInstance = null;
+  let $scope = null;
 
-  controllerInstance = null
-  $scope = null
-
-  companyMock = {
+  let companyMock = {
     timezone: 'Europe/London'
-  }
+  };
 
-  beforeEachFn = () ->
+  let beforeEachFn = function() {
 
-    module('BBAdminDashboard')
+    module('BBAdminDashboard');
 
-    module ($provide) ->
-      $provide.value 'company', companyMock
-      return
+    module(function($provide) {
+      $provide.value('company', companyMock);
+    });
 
-    inject ($injector) ->
-      $controller = $injector.get '$controller'
-      $scope = $injector.get '$rootScope'
-      $state = $injector.get '$state'
-      company = $injector.get 'company'
-      return
+    inject(function($injector) {
+      $controller = $injector.get('$controller');
+      $scope = $injector.get('$rootScope');
+      $state = $injector.get('$state');
+      company = $injector.get('company');
+    });
 
-    spyOn moment.tz, 'setDefault'
-    spyOn $state, 'includes'
+    spyOn(moment.tz, 'setDefault');
+    spyOn($state, 'includes');
 
     controllerInstance = $controller(
-      'CorePageController'
-      '$scope': $scope
-      '$state': $state
+      'CorePageController',{
+      '$scope': $scope,
+      '$state': $state,
       'company': companyMock
-    )
+    }
+    );
 
-    $scope.$apply()
+    $scope.$apply();
 
-    return
+  };
 
-  beforeEach beforeEachFn
+  beforeEach(beforeEachFn);
 
-  it 'defines "company" and "bb.company" properties on $scope', () ->
-    expect $scope.company
-    .toBe companyMock
+  it('defines "company" and "bb.company" properties on $scope', function() {
+    expect($scope.company)
+    .toBe(companyMock);
 
-    expect $scope.bb.company
-    .toBe companyMock
+    expect($scope.bb.company)
+    .toBe(companyMock);
 
-    return
+  });
 
-  it 'uses company timezone globally', () ->
-    expect moment.tz.setDefault
-    .toHaveBeenCalledWith company.timezone
-    return
+  it('uses company timezone globally', function() {
+    expect(moment.tz.setDefault)
+    .toHaveBeenCalledWith(company.timezone);
+  });
 
-  it 'defines isState function on $scope', () ->
-    testStateName = 'dashboard'
+  return it('defines isState function on $scope', function() {
+    let testStateName = 'dashboard';
 
-    $scope.isState testStateName
+    $scope.isState(testStateName);
 
-    expect $state.includes
-    .toHaveBeenCalledWith(testStateName)
+    expect($state.includes)
+    .toHaveBeenCalledWith(testStateName);
 
-    return
+  });
+});

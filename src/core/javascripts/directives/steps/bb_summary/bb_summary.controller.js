@@ -1,39 +1,43 @@
-'use strict'
+angular.module('BB.Controllers').controller('Summary', function($scope, $rootScope, LoadingService, BBModel, $q) {
 
-angular.module('BB.Controllers').controller 'Summary', ($scope, $rootScope, LoadingService, BBModel, $q) ->
+  $rootScope.connection_started.then(() => {
+    $scope.item  = $scope.bb.current_item;
+    return $scope.items = $scope.bb.basket.timeItems();
+  }
+  );
 
-  $rootScope.connection_started.then =>
-    $scope.item  = $scope.bb.current_item
-    $scope.items = $scope.bb.basket.timeItems()
 
-
-  ###**
+  /***
   * @ngdoc method
   * @name confirm
   * @methodOf BB.Directives:bbSummary
   * @description
   * Submits the client and BasketItem to the API
-  ###
-  $scope.confirm = () =>
+  */
+  return $scope.confirm = () => {
 
-    loader = LoadingService.$loader($scope).notLoaded()
+    let loader = LoadingService.$loader($scope).notLoaded();
 
-    promises = [
+    let promises = [
       BBModel.Client.$create_or_update($scope.bb.company, $scope.client),
-    ]
+    ];
 
-    if $scope.bb.current_item.service
-      promises.push($scope.addItemToBasket())
+    if ($scope.bb.current_item.service) {
+      promises.push($scope.addItemToBasket());
+    }
 
-    $q.all(promises).then (result) ->
-      client = result[0]
-      $scope.setClient(client)
+    return $q.all(promises).then(function(result) {
+      let client = result[0];
+      $scope.setClient(client);
 
-      if client.waitingQuestions
-        client.gotQuestions.then () ->
-          $scope.client_details = client.client_details
+      if (client.waitingQuestions) {
+        client.gotQuestions.then(() => $scope.client_details = client.client_details);
+      }
 
-      loader.setLoaded()
-      $scope.decideNextPage()
+      loader.setLoaded();
+      return $scope.decideNextPage();
+    }
 
-    , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+    , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+  };
+});

@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbSpaces
 * @restrict AE
@@ -19,11 +16,14 @@
 *
 * @property {array} items An array of all services
 * @property {space} space The currectly selected space
-###
+*/
 
 
-angular.module('BB.Directives').directive 'bbSpaces', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'SpaceList'
+angular.module('BB.Directives').directive('bbSpaces', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'SpaceList'
+  })
+);

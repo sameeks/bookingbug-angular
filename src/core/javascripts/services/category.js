@@ -1,21 +1,31 @@
-'use strict'
+angular.module('BB.Services').factory("CategoryService", ($q, BBModel) =>
 
-angular.module('BB.Services').factory "CategoryService", ($q, BBModel) ->
-
-  query: (company) ->
-    deferred = $q.defer()
-    if !company.$has('categories')
-      deferred.reject("No categories found")
-    else
-      company.$get('named_categories').then (resource) =>
-        resource.$get('categories').then (items) =>
-          categories = []
-          for i, _i in items
-            cat = new BBModel.Category(i)
-            cat.order ||= _i
-            categories.push(cat)
-          deferred.resolve(categories)
-      , (err) =>
-        deferred.reject(err)
-    deferred.promise
+  ({
+    query(company) {
+      let deferred = $q.defer();
+      if (!company.$has('categories')) {
+        deferred.reject("No categories found");
+      } else {
+        company.$get('named_categories').then(resource => {
+          return resource.$get('categories').then(items => {
+            let categories = [];
+            for (let _i = 0; _i < items.length; _i++) {
+              let i = items[_i];
+              let cat = new BBModel.Category(i);
+              if (!cat.order) { cat.order = _i; }
+              categories.push(cat);
+            }
+            return deferred.resolve(categories);
+          }
+          );
+        }
+        , err => {
+          return deferred.reject(err);
+        }
+        );
+      }
+      return deferred.promise;
+    }
+  })
+);
 

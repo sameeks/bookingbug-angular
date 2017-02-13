@@ -1,95 +1,135 @@
-'use strict'
+window.Collection = class Collection {};
 
-class window.Collection
+window.Collection.Base = class Base {
 
-class window.Collection.Base
+  constructor(res, items, params) {
+    this.res = res;
+    this.items = items;
+    this.params = params;
+    this.callbacks = [];
 
-  constructor: (res, items, params) ->
-    @res = res
-    @items = items
-    @params = params
-    @callbacks = []
+    let clean_params = {};
+    for (let key in params) {
+      let val = params[key];
+      if (val != null) {
+        if (val.id != null) {
+          clean_params[key+ "_id"] = val.id;
+        } else {
+          clean_params[key] = val;
+        }
+      }
+    }
+    this.jparams = JSON.stringify(clean_params);
+    if (res) {
+      for (let n in res) {
+        let m = res[n];
+        this[n] = m;
+      }
+    }
+  }
 
-    clean_params = {}
-    for key,val of params
-      if val?
-        if val.id?
-          clean_params[key+ "_id"] = val.id
-        else
-          clean_params[key] = val
-    @jparams = JSON.stringify(clean_params)
-    if res
-      for n,m of res
-        @[n] = m
+  checkItem(item) {
+    let call;
+    if (!this.matchesParams(item)) {
+      this.deleteItem(item);  //delete if it is in the collection at the moment
+      return true;
+    } else {
+      for (let index = 0; index < this.items.length; index++) {
+        let existingItem = this.items[index];
+        if (item.self === existingItem.self) {
+          this.items[index] = item;
+          for (call of Array.from(this.callbacks)) {
+            call[1](item, "update");
+          }
+          return true;
+        }
+      }
+    }
 
-  checkItem: (item) ->
-    if !@matchesParams(item)
-      @deleteItem(item)  #delete if it is in the collection at the moment
-      return true
-    else
-      for existingItem, index in @items
-        if item.self == existingItem.self
-          @items[index] = item
-          for call in @callbacks
-            call[1](item, "update")
-          return true
+    this.items.push(item);
+    return (() => {
+      let result = [];
+      for (call of Array.from(this.callbacks)) {
+        result.push(call[1](item, "add"));
+      }
+      return result;
+    })();
+  }
 
-    @items.push(item)
-    for call in @callbacks
-      call[1](item, "add")
+  deleteItem(item) {
+    let len = this.items.length;
+    this.items = this.items.filter(x => x.self !== item.self);
+    if (this.items.length !== len) {
+      return Array.from(this.callbacks).map((call) =>
+        call[1](item, "delete"));
+    }
+  }
 
-  deleteItem: (item) ->
-    len = @items.length
-    @items = @items.filter (x) -> x.self != item.self
-    if @items.length != len
-      for call in @callbacks
-        call[1](item, "delete")
+  getItems() {
+    return this.items;
+  }
 
-  getItems: ->
-    @items
+  addCallback(obj, fn) {
+    for (let call of Array.from(this.callbacks)) {
+      if (call[0] === obj) {
+        return;
+      }
+    }
+    return this.callbacks.push([obj, fn]);
+  }
 
-  addCallback: (obj, fn) ->
-    for call in @callbacks
-      if call[0] == obj
-        return
-    @callbacks.push([obj, fn])
-
-  matchesParams: (item) ->
-    true
+  matchesParams(item) {
+    return true;
+  }
+};
 
 
-class window.BaseCollections
+window.BaseCollections = class BaseCollections {
 
-  constructor: () ->
-    @collections = []
+  constructor() {
+    this.collections = [];
+  }
 
-  count: () ->
-    @collections.length
+  count() {
+    return this.collections.length;
+  }
 
-  add: (col) ->
-    @collections.push(col)
+  add(col) {
+    return this.collections.push(col);
+  }
 
-  checkItems: (item) ->
-   for col in @collections
-     col.checkItem(item)
+  checkItems(item) {
+   return Array.from(this.collections).map((col) =>
+     col.checkItem(item));
+ }
 
-  deleteItems: (item) ->
-   for col in @collections
-     col.deleteItem(item)
+  deleteItems(item) {
+   return Array.from(this.collections).map((col) =>
+     col.deleteItem(item));
+ }
 
-  find: (prms) ->
-    clean_params = {}
-    for key,val of prms
-      if val?
-        if val.id?
-          clean_params[key+ "_id"] = val.id
-        else
-          clean_params[key] = val
-    jprms =  JSON.stringify(clean_params)
-    for col in @collections
-      if jprms == col.jparams
-        return col
+  find(prms) {
+    let clean_params = {};
+    for (let key in prms) {
+      let val = prms[key];
+      if (val != null) {
+        if (val.id != null) {
+          clean_params[key+ "_id"] = val.id;
+        } else {
+          clean_params[key] = val;
+        }
+      }
+    }
+    let jprms =  JSON.stringify(clean_params);
+    for (let col of Array.from(this.collections)) {
+      if (jprms === col.jparams) {
+        return col;
+      }
+    }
+  }
 
-  delete: (col) ->
-    @collections = _.without(@collections, col)
+  delete(col) {
+    return this.collections = _.without(this.collections, col);
+  }
+};
 

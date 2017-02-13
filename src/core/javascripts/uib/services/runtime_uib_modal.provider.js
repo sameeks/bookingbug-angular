@@ -1,18 +1,14 @@
-'use strict'
-
-###*
+/**
 * @ngdoc service
 * @name BB.uib.runtimeUibModal
 *
 * @description
 * Returns an instance of $uibModalProvider that allows to set modal default options (on runtime)
-###
-angular.module('BB.uib').provider 'runtimeUibModal', ($uibModalProvider)->
-  'ngInject'
+*/
+angular.module('BB.uib').provider('runtimeUibModal', function($uibModalProvider){
+  'ngInject';
 
-  uibModalProvider = $uibModalProvider
-  @setProvider = (provider)->
-    uibModalProvider = provider
-  @$get = ->
-    uibModalProvider
-  return
+  let uibModalProvider = $uibModalProvider;
+  this.setProvider = provider=> uibModalProvider = provider;
+  this.$get = () => uibModalProvider;
+});

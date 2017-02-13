@@ -1,72 +1,80 @@
-'use strict'
-
-###*
+/**
 * @ngdoc service
 * @name BBAdminDashboard.SideNavigationPartials
 *
 * @description
 * This service assembles the navigation partials for the side-navigation
 *
-###
-angular.module('BBAdminDashboard').factory 'SideNavigationPartials', [
+*/
+angular.module('BBAdminDashboard').factory('SideNavigationPartials', [
   'AdminCoreOptions',
-  (AdminCoreOptions) ->
-    templatesArray = []
+  function(AdminCoreOptions) {
+    let templatesArray = [];
 
-    {
-      addPartialTemplate: (identifier, partial)->
-        if !_.find(templatesArray, (item)-> item.module == identifier )
-          templatesArray.push {
+    return {
+      addPartialTemplate(identifier, partial){
+        if (!_.find(templatesArray, item=> item.module === identifier)) {
+          templatesArray.push({
             module     : identifier,
             navPartial : partial
-          }
+          });
+        }
 
-        return
+      },
 
-      getPartialTemplates: ()->
-        templatesArray
+      getPartialTemplates(){
+        return templatesArray;
+      },
 
-      getOrderedPartialTemplates: (flat = false)->
-        orderedList     = []
-        flatOrderedList = []
+      getOrderedPartialTemplates(flat){
+        if (flat == null) { flat = false; }
+        let orderedList     = [];
+        let flatOrderedList = [];
 
-        angular.forEach(AdminCoreOptions.side_navigation, (group, index)->
-          if angular.isArray(group.items) && group.items.length
-            newGroup = {
-              group_name: group.group_name
+        angular.forEach(AdminCoreOptions.side_navigation, function(group, index){
+          if (angular.isArray(group.items) && group.items.length) {
+            let newGroup = {
+              group_name: group.group_name,
               items: []
-            }
+            };
 
-            angular.forEach(group.items, (item, index)->
-              existing = _.find(templatesArray, (template)-> template.module == item )
+            angular.forEach(group.items, function(item, index){
+              let existing = _.find(templatesArray, template=> template.module === item);
 
-              if existing
-                flatOrderedList.push existing
-                newGroup.items.push existing
-            )
+              if (existing) {
+                flatOrderedList.push(existing);
+                return newGroup.items.push(existing);
+              }
+            });
 
-            orderedList.push newGroup
-        )
-
-        orphanItems = []
-
-        angular.forEach(templatesArray, (partial, index)->
-          existing = _.find(flatOrderedList, (item)-> item.module == partial.module )
-
-          if !existing
-            flatOrderedList.push partial
-            orphanItems.push partial
-        )
-
-        if orphanItems.length
-          orderedList.push {
-            group_name: '&nbsp;'
-            items: orphanItems
+            return orderedList.push(newGroup);
           }
+        });
 
-        if flat
-          flatOrderedList
-        else
-          orderedList
-    }
-]
+        let orphanItems = [];
+
+        angular.forEach(templatesArray, function(partial, index){
+          let existing = _.find(flatOrderedList, item=> item.module === partial.module);
+
+          if (!existing) {
+            flatOrderedList.push(partial);
+            return orphanItems.push(partial);
+          }
+        });
+
+        if (orphanItems.length) {
+          orderedList.push({
+            group_name: '&nbsp;',
+            items: orphanItems
+          });
+        }
+
+        if (flat) {
+          return flatOrderedList;
+        } else {
+          return orderedList;
+        }
+      }
+    };
+  }
+]);

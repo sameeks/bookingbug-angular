@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbItemDetails
 * @restrict AE
@@ -23,28 +20,37 @@
 * @property {array} upload_progress The item upload progress
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-###
+*/
 
 
-angular.module('BB.Directives').directive 'bbItemDetails', ($q, $templateCache, $compile) ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  transclude: true
-  controller : 'ItemDetails'
-  link: (scope, element, attrs, controller, transclude) ->
-    if attrs.bbItemDetails
-      item = scope.$eval(attrs.bbItemDetails)
-      scope.item_from_param = item
-      delete scope.item_details if scope.item_details
-      scope.loadItem(item) if item
+angular.module('BB.Directives').directive('bbItemDetails', ($q, $templateCache, $compile) =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    transclude: true,
+    controller : 'ItemDetails',
+    link(scope, element, attrs, controller, transclude) {
+      if (attrs.bbItemDetails) {
+        let item = scope.$eval(attrs.bbItemDetails);
+        scope.item_from_param = item;
+        if (scope.item_details) { delete scope.item_details; }
+        if (item) { scope.loadItem(item); }
+      }
 
-    transclude scope, (clone) =>
-      # if there's content compile that or grab the week_calendar template
-      has_content = clone.length > 1 || (clone.length == 1 && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)))
-      if has_content
-        element.html(clone).show()
-      else
-        $q.when($templateCache.get('_item_details.html')).then (template) ->
-          element.html(template).show()
-          $compile(element.contents())(scope)
+      return transclude(scope, clone => {
+        // if there's content compile that or grab the week_calendar template
+        let has_content = (clone.length > 1) || ((clone.length === 1) && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)));
+        if (has_content) {
+          return element.html(clone).show();
+        } else {
+          return $q.when($templateCache.get('_item_details.html')).then(function(template) {
+            element.html(template).show();
+            return $compile(element.contents())(scope);
+          });
+        }
+      }
+      );
+    }
+  })
+);

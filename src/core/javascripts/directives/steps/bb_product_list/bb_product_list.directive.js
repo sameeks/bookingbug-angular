@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbProductList
 * @restrict AE
@@ -21,17 +18,22 @@
 * @property {array} item The item of the product list
 * @property {array} booking_item The booking item
 * @property {product} product The currectly selected product
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbProductList', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'ProductList'
-  link : (scope, element, attrs) ->
-    if attrs.bbItem
-      scope.booking_item = scope.$eval( attrs.bbItem )
-    if attrs.bbShowAll
-      scope.show_all = true
-    return
+angular.module('BB.Directives').directive('bbProductList', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'ProductList',
+    link(scope, element, attrs) {
+      if (attrs.bbItem) {
+        scope.booking_item = scope.$eval( attrs.bbItem );
+      }
+      if (attrs.bbShowAll) {
+        scope.show_all = true;
+      }
+    }
+  })
+);

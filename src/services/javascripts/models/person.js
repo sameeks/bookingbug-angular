@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:AdminPerson
 *
@@ -12,17 +10,18 @@
 * @property {boolean} deleted Verify if person is deleted or not
 * @property {boolean} disabled Verify if person is disabled or not
 * @property {integer} order The person order
-####
+*///
 
-angular.module('BB.Models').factory "AdminPersonModel", ($q,
-  AdminPersonService, BBModel, BaseModel, PersonModel) ->
+angular.module('BB.Models').factory("AdminPersonModel", ($q,
+  AdminPersonService, BBModel, BaseModel, PersonModel) =>
 
-  class Admin_Person extends PersonModel
+  class Admin_Person extends PersonModel {
 
-    constructor: (data) ->
-      super(data)
+    constructor(data) {
+      super(data);
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name setAttendance
     * @methodOf BB.Models:AdminPerson
@@ -32,17 +31,21 @@ angular.module('BB.Models').factory "AdminPersonModel", ($q,
     * Set attendance in according of the status parameter
     *
     * @returns {Promise} Returns a promise that rezolve the attendance
-    ###
-    setAttendance: (status, duration) ->
-      defer = $q.defer()
-      @$put('attendance', {}, {status: status, estimated_duration: duration}).then  (p) =>
-        @updateModel(p)
-        defer.resolve(@)
-      , (err) =>
-        defer.reject(err)
-      defer.promise
+    */
+    setAttendance(status, duration) {
+      let defer = $q.defer();
+      this.$put('attendance', {}, {status, estimated_duration: duration}).then(p => {
+        this.updateModel(p);
+        return defer.resolve(this);
+      }
+      , err => {
+        return defer.reject(err);
+      }
+      );
+      return defer.promise;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name finishServing
     * @methodOf BB.Models:AdminPerson
@@ -50,22 +53,27 @@ angular.module('BB.Models').factory "AdminPersonModel", ($q,
     * Finish serving
     *
     * @returns {Promise} Returns a promise that rezolve the finish serving
-    ###
-    finishServing: () ->
-      defer = $q.defer()
-      if @$has('finish_serving')
-        @$flush('self')
-        @$post('finish_serving').then (q) =>
-          @$get('self').then (p) => @updateModel(p)
-          @serving = null
-          defer.resolve(q)
-        , (err) =>
-          defer.reject(err)
-      else
-        defer.reject('finish_serving link not available')
-      defer.promise
+    */
+    finishServing() {
+      let defer = $q.defer();
+      if (this.$has('finish_serving')) {
+        this.$flush('self');
+        this.$post('finish_serving').then(q => {
+          this.$get('self').then(p => this.updateModel(p));
+          this.serving = null;
+          return defer.resolve(q);
+        }
+        , err => {
+          return defer.reject(err);
+        }
+        );
+      } else {
+        defer.reject('finish_serving link not available');
+      }
+      return defer.promise;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name isAvailable
     * @methodOf BB.Models:AdminPerson
@@ -75,27 +83,32 @@ angular.module('BB.Models').factory "AdminPersonModel", ($q,
     * Look up a schedule for a time range to see if this available.
     *
     * @returns {string} Returns yes if schedule is available or not.
-    ###
-    # look up a schedule for a time range to see if this available
-    # currently just checks the date - but chould really check the time too
-    isAvailable: (start, end) ->
-      str = start.format("YYYY-MM-DD") + "-" + end.format("YYYY-MM-DD")
-      @availability ||= {}
+    */
+    // look up a schedule for a time range to see if this available
+    // currently just checks the date - but chould really check the time too
+    isAvailable(start, end) {
+      let str = start.format("YYYY-MM-DD") + "-" + end.format("YYYY-MM-DD");
+      if (!this.availability) { this.availability = {}; }
 
-      return @availability[str] == "Yes" if @availability[str]
-      @availability[str] = "-"
+      if (this.availability[str]) { return this.availability[str] === "Yes"; }
+      this.availability[str] = "-";
 
-      if @$has('schedule')
-        @$get('schedule', {start_date: start.format("YYYY-MM-DD"), end_date: end.format("YYYY-MM-DD")}).then (sched) =>
-          @availability[str] = "No"
-          if sched && sched.dates && sched.dates[start.format("YYYY-MM-DD")] && sched.dates[start.format("YYYY-MM-DD")] != "None"
-            @availability[str] = "Yes"
-      else
-        @availability[str] = "Yes"
+      if (this.$has('schedule')) {
+        this.$get('schedule', {start_date: start.format("YYYY-MM-DD"), end_date: end.format("YYYY-MM-DD")}).then(sched => {
+          this.availability[str] = "No";
+          if (sched && sched.dates && sched.dates[start.format("YYYY-MM-DD")] && (sched.dates[start.format("YYYY-MM-DD")] !== "None")) {
+            return this.availability[str] = "Yes";
+          }
+        }
+        );
+      } else {
+        this.availability[str] = "Yes";
+      }
 
-      return @availability[str] == "Yes"
+      return this.availability[str] === "Yes";
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name startServing
     * @methodOf BB.Models:AdminPerson
@@ -104,24 +117,29 @@ angular.module('BB.Models').factory "AdminPersonModel", ($q,
     * Start serving in according of the queuer parameter
     *
     * @returns {Promise} Returns a promise that rezolve the start serving link
-    ###
-    startServing: (queuer) ->
-      defer = $q.defer()
-      if @$has('start_serving')
-        @$flush('self')
-        params =
-          queuer_id: if queuer then queuer.id else null
-        @$post('start_serving', params).then (q) =>
-          @$get('self').then (p) => @updateModel(p)
-          @serving = q
-          defer.resolve(q)
-        , (err) =>
-          defer.reject(err)
-      else
-        defer.reject('start_serving link not available')
-      defer.promise
+    */
+    startServing(queuer) {
+      let defer = $q.defer();
+      if (this.$has('start_serving')) {
+        this.$flush('self');
+        let params =
+          {queuer_id: queuer ? queuer.id : null};
+        this.$post('start_serving', params).then(q => {
+          this.$get('self').then(p => this.updateModel(p));
+          this.serving = q;
+          return defer.resolve(q);
+        }
+        , err => {
+          return defer.reject(err);
+        }
+        );
+      } else {
+        defer.reject('start_serving link not available');
+      }
+      return defer.promise;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getQueuers
     * @methodOf BB.Models:AdminPerson
@@ -129,25 +147,33 @@ angular.module('BB.Models').factory "AdminPersonModel", ($q,
     * Get the queuers
     *
     * @returns {Promise} Returns a promise that rezolve the queuer links
-    ###
-    getQueuers: () ->
-      defer = $q.defer()
-      if @$has('queuers')
-        @$flush('queuers')
-        @$get('queuers').then (collection) =>
-          collection.$get('queuers').then (queuers) =>
-            models = (new BBModel.Admin.Queuer(q) for q in queuers)
-            @queuers = models
-            defer.resolve(models)
-          , (err) =>
-            defer.reject(err)
-        , (err) =>
-          defer.reject(err)
-      else
-        defer.reject('queuers link not available')
-      defer.promise
+    */
+    getQueuers() {
+      let defer = $q.defer();
+      if (this.$has('queuers')) {
+        this.$flush('queuers');
+        this.$get('queuers').then(collection => {
+          return collection.$get('queuers').then(queuers => {
+            let models = (Array.from(queuers).map((q) => new BBModel.Admin.Queuer(q)));
+            this.queuers = models;
+            return defer.resolve(models);
+          }
+          , err => {
+            return defer.reject(err);
+          }
+          );
+        }
+        , err => {
+          return defer.reject(err);
+        }
+        );
+      } else {
+        defer.reject('queuers link not available');
+      }
+      return defer.promise;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getPostData
     * @methodOf BB.Models:AdminPerson
@@ -155,16 +181,17 @@ angular.module('BB.Models').factory "AdminPersonModel", ($q,
     * Get post data
     *
     * @returns {array} Returns data
-    ###
-    getPostData: () ->
-      data = {}
-      data.id = @id
-      data.name = @name
-      data.extra = @extra
-      data.description = @description
-      data
+    */
+    getPostData() {
+      let data = {};
+      data.id = this.id;
+      data.name = this.name;
+      data.extra = this.extra;
+      data.description = this.description;
+      return data;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name update
     * @methodOf BB.Models:AdminPerson
@@ -173,27 +200,36 @@ angular.module('BB.Models').factory "AdminPersonModel", ($q,
     * Update the data in according of the data parameter
     *
     * @returns {array} Returns the updated array
-    ###
-    $update: (data) ->
-      data ||= @getPostData()
-      @$put('self', {}, data).then (res) =>
-        @constructor(res)
+    */
+    $update(data) {
+      if (!data) { data = this.getPostData(); }
+      return this.$put('self', {}, data).then(res => {
+        return this.constructor(res);
+      }
+      );
+    }
 
-    @$query: (params) ->
-      AdminPersonService.query(params)
+    static $query(params) {
+      return AdminPersonService.query(params);
+    }
 
-    @$block: (company, person, data) ->
-      AdminPersonService.block(company, person, data)
+    static $block(company, person, data) {
+      return AdminPersonService.block(company, person, data);
+    }
 
-    @$signup: (user, data) ->
-      AdminPersonService.signup(user, data)
+    static $signup(user, data) {
+      return AdminPersonService.signup(user, data);
+    }
 
-    $refetch: () ->
-      defer = $q.defer()
-      @$flush('self')
-      @$get('self').then (res) =>
-        @constructor(res)
-        defer.resolve(@)
-      , (err) ->
-        defer.reject(err)
-      defer.promise
+    $refetch() {
+      let defer = $q.defer();
+      this.$flush('self');
+      this.$get('self').then(res => {
+        this.constructor(res);
+        return defer.resolve(this);
+      }
+      , err => defer.reject(err));
+      return defer.promise;
+    }
+  }
+);

@@ -1,40 +1,48 @@
-'use strict'
+angular.module('BB.Directives').directive('bbPriceFilter', PathSvc =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope: false,
+    require: '^?bbServices',
+    templateUrl(element, attrs) {
+      return PathSvc.directivePartial("_price_filter");
+    },
+    controller($scope, $attrs) {
+      $scope.$watch('items', function(new_val, old_val) {
+        if (new_val) { return setPricefilter(new_val); }
+      });
 
-angular.module('BB.Directives').directive 'bbPriceFilter', (PathSvc) ->
-  restrict: 'AE'
-  replace: true
-  scope: false
-  require: '^?bbServices'
-  templateUrl : (element, attrs) ->
-    PathSvc.directivePartial "_price_filter"
-  controller : ($scope, $attrs) ->
-    $scope.$watch 'items', (new_val, old_val) ->
-      setPricefilter new_val if new_val
+      var setPricefilter = function(items) {
+        $scope.price_array = _.uniq(_.map(items, item => (item.price / 100) || 0)
+        );
+        $scope.price_array.sort((a, b) => a - b);
+        return suitable_max();
+      };
 
-    setPricefilter = (items) ->
-      $scope.price_array = _.uniq _.map items, (item) ->
-        return item.price / 100 or 0
-      $scope.price_array.sort (a, b) ->
-        return a - b
-      suitable_max()
+      var suitable_max = function() {
+        let top_number = _.last($scope.price_array);
+        let max_number = (() => { switch (false) {
+          case top_number >= 1: return 0;
+          case top_number >= 11: return 10;
+          case top_number >= 51: return 50;
+          case top_number >= 101: return 100;
+          case top_number >= 1000: return ( Math.ceil( top_number / 100 ) ) * 100;
+        } })();
+        let min_number = 0;
+        $scope.price_options = {
+          min: min_number,
+          max: max_number
+        };
+        return $scope.filters.price = {min: min_number, max: max_number};
+      };
 
-    suitable_max = () ->
-      top_number = _.last($scope.price_array)
-      max_number = switch
-        when top_number < 1 then 0
-        when top_number < 11 then 10
-        when top_number < 51 then 50
-        when top_number < 101 then 100
-        when top_number < 1000 then ( Math.ceil( top_number / 100 ) ) * 100
-      min_number = 0
-      $scope.price_options = {
-        min: min_number
-        max: max_number
-      }
-      $scope.filters.price = {min: min_number, max: max_number}
+      $scope.$watch('filters.price.min', function(new_val, old_val) {
+        if (new_val !== old_val) { return $scope.filterChanged(); }
+      });
 
-    $scope.$watch 'filters.price.min', (new_val, old_val) ->
-      $scope.filterChanged() if new_val != old_val
-
-    $scope.$watch 'filters.price.max', (new_val, old_val) ->
-      $scope.filterChanged() if new_val != old_val
+      return $scope.$watch('filters.price.max', function(new_val, old_val) {
+        if (new_val !== old_val) { return $scope.filterChanged(); }
+      });
+    }
+  })
+);

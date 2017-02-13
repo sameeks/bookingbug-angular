@@ -1,14 +1,12 @@
-'use strict'
-
-###*
+/**
 * @ngdoc service
 * @name BBAdminDashboard.AdminCoreOptions
 *
 * @description
 * Returns a set of General configuration options
-###
+*/
 
-###*
+/**
 * @ngdoc service
 * @name BBAdminDashboard.AdminCoreOptionsProvider
 *
@@ -26,20 +24,20 @@
 
   angular.module('ExampleModule').config config
 </pre>
-###
+*/
 
-angular.module('BBAdminDashboard').provider 'AdminCoreOptions', () ->
-  'ngInject'
+angular.module('BBAdminDashboard').provider('AdminCoreOptions', function() {
+  'ngInject';
 
-  options = {
-    default_state          : 'calendar'
+  let options = {
+    default_state          : 'calendar',
     deactivate_sidenav     : false,
     deactivate_boxed_layout: false,
     sidenav_start_open     : true,
     boxed_layout_start     : false,
     side_navigation        : [
       {
-        group_name: 'SIDE_NAV_BOOKINGS'
+        group_name: 'SIDE_NAV_BOOKINGS',
         items     : [
           'calendar',
           'clients',
@@ -49,7 +47,7 @@ angular.module('BBAdminDashboard').provider 'AdminCoreOptions', () ->
         ]
       },
       {
-        group_name: 'SIDE_NAV_CONFIG'
+        group_name: 'SIDE_NAV_CONFIG',
         items     : [
           'config-iframe',
           'publish-iframe',
@@ -57,21 +55,22 @@ angular.module('BBAdminDashboard').provider 'AdminCoreOptions', () ->
         ]
       }
     ]
-  }
+  };
 
-  @setOption = (option, value) ->
-    if options.hasOwnProperty(option)
-      options[option] = value
-    return
+  this.setOption = function(option, value) {
+    if (options.hasOwnProperty(option)) {
+      options[option] = value;
+    }
+  };
 
-  @getOption = (option) ->
-    if options.hasOwnProperty(option)
-      return options[option]
-    return
+  this.getOption = function(option) {
+    if (options.hasOwnProperty(option)) {
+      return options[option];
+    }
+  };
 
-  @$get = ->
-    return options
+  this.$get = () => options;
 
-  return
+});
 
 

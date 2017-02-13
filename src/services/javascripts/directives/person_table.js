@@ -1,53 +1,62 @@
-'use strict'
+angular.module('BBAdminServices').directive('personTable', function($log, ModalForm,
+  BBModel) {
 
-angular.module('BBAdminServices').directive 'personTable', ($log, ModalForm,
-  BBModel) ->
+  let controller = function($scope) {
 
-  controller = ($scope) ->
+    $scope.fields = ['id', 'name', 'mobile'];
 
-    $scope.fields = ['id', 'name', 'mobile']
+    $scope.getPeople = () =>
+      BBModel.Admin.Person.$query({company: $scope.company}).then(people => $scope.people = people)
+    ;
 
-    $scope.getPeople = () ->
-      BBModel.Admin.Person.$query(company: $scope.company).then (people) ->
-        $scope.people = people
+    $scope.newPerson = () =>
+      ModalForm.new({
+        company: $scope.company,
+        title: 'New Person',
+        new_rel: 'new_person',
+        post_rel: 'people',
+        success(person) {
+          return $scope.people.push(person);
+        }
+      })
+    ;
 
-    $scope.newPerson = () ->
-      ModalForm.new
-        company: $scope.company
-        title: 'New Person'
-        new_rel: 'new_person'
-        post_rel: 'people'
-        success: (person) ->
-          $scope.people.push(person)
+    $scope.delete = person =>
+      person.$del('self').then(() => $scope.people = _.reject($scope.people, person)
+      , err => $log.error("Failed to delete person"))
+    ;
 
-    $scope.delete = (person) ->
-      person.$del('self').then () ->
-        $scope.people = _.reject $scope.people, person
-      , (err) ->
-        $log.error "Failed to delete person"
-
-    $scope.edit = (person) ->
-      ModalForm.edit
-        model: person
+    $scope.edit = person =>
+      ModalForm.edit({
+        model: person,
         title: 'Edit Person'
+      })
+    ;
 
-    $scope.schedule = (person) ->
-      person.$get('schedule').then (schedule) ->
-        ModalForm.edit
-          model: schedule
+    return $scope.schedule = person =>
+      person.$get('schedule').then(schedule =>
+        ModalForm.edit({
+          model: schedule,
           title: 'Edit Schedule'
+        })
+      )
+    ;
+  };
 
-  link = (scope, element, attrs) ->
-    if scope.company
-      scope.getPeople()
-    else
-      BBModel.Admin.Company.$query(attrs).then (company) ->
-        scope.company = company
-        scope.getPeople()
+  let link = function(scope, element, attrs) {
+    if (scope.company) {
+      return scope.getPeople();
+    } else {
+      return BBModel.Admin.Company.$query(attrs).then(function(company) {
+        scope.company = company;
+        return scope.getPeople();
+      });
+    }
+  };
 
-  {
-    controller: controller
-    link: link
+  return {
+    controller,
+    link,
     templateUrl: 'person_table_main.html'
-  }
+  };});
 

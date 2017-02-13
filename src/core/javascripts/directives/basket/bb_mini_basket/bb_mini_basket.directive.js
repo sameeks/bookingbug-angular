@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbMiniBasket
 * @restrict AE
@@ -16,32 +14,38 @@
 * </pre>
 *
 * @property {boolean} setUsingBasket Set using basket  or not
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbMiniBasket', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller: ($scope, $rootScope, BasketService, $q) ->
-    $scope.setUsingBasket(true)
-    $rootScope.connection_started.then () =>
+angular.module('BB.Directives').directive('bbMiniBasket', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller($scope, $rootScope, BasketService, $q) {
+      $scope.setUsingBasket(true);
+      $rootScope.connection_started.then(() => {});
 
-    ###**
-    * @ngdoc method
-    * @name basketDescribe
-    * @methodOf BB.Directives:bbMiniBasket
-    * @description
-    * Basked describe in according of basket length
-    *
-    * @param {string} nothing Nothing to describe
-    * @param {string} single The single describe
-    * @param {string} plural The plural describe
-    ###
-    $scope.basketDescribe = (nothing, single, plural) =>
-      if !$scope.bb.basket || $scope.bb.basket.length() == 0
-        nothing
-      else if $scope.bb.basket.length() == 1
-        single
-      else
-        plural.replace("$0", $scope.bb.basket.length())
+      /***
+      * @ngdoc method
+      * @name basketDescribe
+      * @methodOf BB.Directives:bbMiniBasket
+      * @description
+      * Basked describe in according of basket length
+      *
+      * @param {string} nothing Nothing to describe
+      * @param {string} single The single describe
+      * @param {string} plural The plural describe
+      */
+      return $scope.basketDescribe = (nothing, single, plural) => {
+        if (!$scope.bb.basket || ($scope.bb.basket.length() === 0)) {
+          return nothing;
+        } else if ($scope.bb.basket.length() === 1) {
+          return single;
+        } else {
+          return plural.replace("$0", $scope.bb.basket.length());
+        }
+      };
+    }
+  })
+);

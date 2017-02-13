@@ -1,18 +1,19 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:BulkPurchase
 *
 * @description
 * Representation of a BulkPurchase Object
-####
+*///
 
-angular.module('BB.Models').factory "BulkPurchaseModel", ($q, BBModel,
-  BaseModel, BulkPurchaseService) ->
+angular.module('BB.Models').factory("BulkPurchaseModel", ($q, BBModel,
+  BaseModel, BulkPurchaseService) =>
 
-  class BulkPurchase extends BaseModel
+  class BulkPurchase extends BaseModel {
 
-    @$query: (company) ->
-      BulkPurchaseService.query(company)
+    static $query(company) {
+      return BulkPurchaseService.query(company);
+    }
+  }
+);
 

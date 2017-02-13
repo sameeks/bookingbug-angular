@@ -1,51 +1,57 @@
-'use strict'
+angular.module('BBAdminServices').directive('scheduleTable', function(
+  BBModel, $log, ModalForm) {
 
-angular.module('BBAdminServices').directive 'scheduleTable', (
-  BBModel, $log, ModalForm) ->
+  let controller = function($scope) {
 
-  controller = ($scope) ->
+    $scope.fields = ['id', 'name', 'mobile'];
 
-    $scope.fields = ['id', 'name', 'mobile']
+    $scope.getSchedules = function() {
+      let params =
+        {company: $scope.company};
+      return BBModel.Admin.Schedule.query(params).then(schedules => $scope.schedules = schedules);
+    };
 
-    $scope.getSchedules = () ->
-      params =
-        company: $scope.company
-      BBModel.Admin.Schedule.query(params).then (schedules) ->
-        $scope.schedules = schedules
+    $scope.newSchedule = () =>
+      ModalForm.new({
+        company: $scope.company,
+        title: 'New Schedule',
+        new_rel: 'new_schedule',
+        post_rel: 'schedules',
+        size: 'lg',
+        success(schedule) {
+          return $scope.schedules.push(schedule);
+        }
+      })
+    ;
 
-    $scope.newSchedule = () ->
-      ModalForm.new
-        company: $scope.company
-        title: 'New Schedule'
-        new_rel: 'new_schedule'
-        post_rel: 'schedules'
+    $scope.delete = schedule =>
+      schedule.$del('self').then(() => $scope.schedules = _.reject($scope.schedules, schedule)
+      , err => $log.error("Failed to delete schedule"))
+    ;
+
+    return $scope.edit = schedule =>
+      ModalForm.edit({
+        model: schedule,
+        title: 'Edit Schedule',
         size: 'lg'
-        success: (schedule) ->
-          $scope.schedules.push(schedule)
+      })
+    ;
+  };
 
-    $scope.delete = (schedule) ->
-      schedule.$del('self').then () ->
-        $scope.schedules = _.reject $scope.schedules, schedule
-      , (err) ->
-        $log.error "Failed to delete schedule"
+  let link = function(scope, element, attrs) {
+    if (scope.company) {
+      return scope.getSchedules();
+    } else {
+      return BBModel.Admin.Company.query(attrs).then(function(company) {
+        scope.company = company;
+        return scope.getSchedules();
+      });
+    }
+  };
 
-    $scope.edit = (schedule) ->
-      ModalForm.edit
-        model: schedule
-        title: 'Edit Schedule'
-        size: 'lg'
-
-  link = (scope, element, attrs) ->
-    if scope.company
-      scope.getSchedules()
-    else
-      BBModel.Admin.Company.query(attrs).then (company) ->
-        scope.company = company
-        scope.getSchedules()
-
-  {
-    controller: controller
-    link: link
+  return {
+    controller,
+    link,
     templateUrl: 'schedule_table_main.html'
-  }
+  };});
 

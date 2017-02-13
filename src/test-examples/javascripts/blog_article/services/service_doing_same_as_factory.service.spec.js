@@ -1,23 +1,22 @@
-'use strict';
+describe('bbTe.blogArticle, bbTeBaServiceDoingSameAsFactory service', function() {
+  let bbTeBaServiceDoingSameAsFactory = null;
 
-describe 'bbTe.blogArticle, bbTeBaServiceDoingSameAsFactory service', () ->
-  bbTeBaServiceDoingSameAsFactory = null
+  let beforeEachFn = function() {
+    module('bbTe.blogArticle');
 
-  beforeEachFn = () ->
-    module('bbTe.blogArticle')
+    inject(function($injector) {
+      bbTeBaServiceDoingSameAsFactory = $injector.get('bbTeBaServiceDoingSameAsFactory');
+    });
+  };
 
-    inject ($injector) ->
-      bbTeBaServiceDoingSameAsFactory = $injector.get 'bbTeBaServiceDoingSameAsFactory'
-      return
-    return
+  beforeEach(beforeEachFn);
 
-  beforeEach beforeEachFn
+  it('can say hello', () =>
 
-  it 'can say hello', ->
+    expect(bbTeBaServiceDoingSameAsFactory.sayHello('test'))
+    .toBe('Hi test!')
+  );
 
-    expect bbTeBaServiceDoingSameAsFactory.sayHello('test')
-    .toBe 'Hi test!'
+});
 
-  return
-
-return
+return;

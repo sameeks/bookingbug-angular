@@ -1,6 +1,4 @@
-'use strict';
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbDayList
 * @restrict AE
@@ -16,11 +14,14 @@
 * scope: true
 * </pre>
 *ice}
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbDayList', () ->
-  restrict: 'A'
-  replace: true
-  scope : true
-  controller : 'DayList'
+angular.module('BB.Directives').directive('bbDayList', () =>
+  ({
+    restrict: 'A',
+    replace: true,
+    scope : true,
+    controller : 'DayList'
+  })
+);

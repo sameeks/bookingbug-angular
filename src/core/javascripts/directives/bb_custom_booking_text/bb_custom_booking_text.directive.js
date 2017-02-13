@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbCustomBookingText
 * @restrict AE
@@ -20,13 +17,16 @@
 * @property {string} messages The messages text
 * @property {string} setLoaded Loading set of custom text
 * @property {object} setLoadedAndShowError Set loaded and show error
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbCustomBookingText', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'CustomBookingText'
+angular.module('BB.Directives').directive('bbCustomBookingText', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'CustomBookingText'
+  })
+);
 
 

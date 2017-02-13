@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:Day
 *
@@ -9,18 +7,19 @@
 *
 * @property {string} string_date The string date
 * @property {date} date Second The date
-####
+*///
 
-angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayService) ->
+angular.module('BB.Models').factory("DayModel", ($q, BBModel, BaseModel, DayService) =>
 
-  class Day extends BaseModel
+  class Day extends BaseModel {
 
-    constructor: (data) ->
-      super
-      @string_date = @date
-      @date = moment(@date)
+    constructor(data) {
+      super(...arguments);
+      this.string_date = this.date;
+      this.date = moment(this.date);
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name day
     * @methodOf BB.Models:Day
@@ -28,11 +27,12 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayServ
     * Get day date
     *
     * @returns {date} The returned day
-    ###
-    day: ->
-      @date.date()
+    */
+    day() {
+      return this.date.date();
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name off
     * @methodOf BB.Models:Day
@@ -40,11 +40,12 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayServ
     * Get off by month
     *
     * @returns {date} The returned off
-    ###
-    off: (month) ->
-      @date.month() != month
+    */
+    off(month) {
+      return this.date.month() !== month;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name class
     * @methodOf BB.Models:Day
@@ -52,17 +53,24 @@ angular.module('BB.Models').factory "DayModel", ($q, BBModel, BaseModel, DayServ
     * Get class in according of month
     *
     * @returns {string} The returned class
-    ###
-    class: (month) ->
-      str = ""
-      if @date.month() < month
-        str += "off off-prev"
-      if @date.month() > month
-        str += "off off-next"
-      if @spaces == 0
-        str += " not-avail"
-      str
+    */
+    class(month) {
+      let str = "";
+      if (this.date.month() < month) {
+        str += "off off-prev";
+      }
+      if (this.date.month() > month) {
+        str += "off off-next";
+      }
+      if (this.spaces === 0) {
+        str += " not-avail";
+      }
+      return str;
+    }
 
-    @$query: (prms) ->
-      DayService.query(prms)
+    static $query(prms) {
+      return DayService.query(prms);
+    }
+  }
+);
 

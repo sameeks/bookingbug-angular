@@ -1,8 +1,6 @@
-'use strict'
+angular.module('BBMember').config(function($logProvider) {
+  'ngInject';
 
-angular.module('BBMember').config ($logProvider) ->
-  'ngInject'
+  $logProvider.debugEnabled(true);
 
-  $logProvider.debugEnabled(true)
-
-  return
+});

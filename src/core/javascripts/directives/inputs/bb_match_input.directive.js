@@ -1,17 +1,21 @@
-'use strict'
+// Input match test
+angular.module('BB.Directives').directive("bbMatchInput", () =>
+  ({
+    restrict: "A",
+    require: 'ngModel',
+    link(scope, element, attrs, ctrl, ngModel) {
 
-# Input match test
-angular.module('BB.Directives').directive "bbMatchInput", ->
-  restrict: "A"
-  require: 'ngModel'
-  link: (scope, element, attrs, ctrl, ngModel) ->
+      scope.$watch(attrs.bbMatchInput, function() {
+        scope.val_1 = scope.$eval(attrs.bbMatchInput);
+        return compare(ctrl.$viewValue);
+      });
 
-    scope.$watch attrs.bbMatchInput, ->
-      scope.val_1 = scope.$eval(attrs.bbMatchInput)
-      compare(ctrl.$viewValue)
+      var compare = function(value) {
+        ctrl.$setValidity('match', scope.val_1 === value);
+        return value;
+      };
 
-    compare = (value) ->
-      ctrl.$setValidity 'match', scope.val_1 == value
-      value
-
-    ctrl.$parsers.push compare
+      return ctrl.$parsers.push(compare);
+    }
+  })
+);

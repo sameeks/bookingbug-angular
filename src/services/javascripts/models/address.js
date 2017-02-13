@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:AdminAddress
 *
@@ -14,11 +12,11 @@
 * @property {string} address5 Fifth line of the address
 * @property {string} postcode The Postcode/Zipcode
 * @property {string} country The country
-####
+*///
 
-angular.module('BB.Models').factory "AdminAddressModel", ($q, BBModel, BaseModel, AddressModel) ->
+angular.module('BB.Models').factory("AdminAddressModel", ($q, BBModel, BaseModel, AddressModel) =>
 
-  ###**
+  /***
   * @ngdoc method
   * @name distanceFrom
   * @methodOf BB.Models:AdminAddress
@@ -28,12 +26,14 @@ angular.module('BB.Models').factory "AdminAddressModel", ($q, BBModel, BaseModel
   * Calculate the address distance in according of the address and options parameters
   *
   * @returns {array} Returns an array of address
-  ###
-  class Admin_Address extends AddressModel
+  */
+  class Admin_Address extends AddressModel {
 
-    distanceFrom: (address, options) ->
+    distanceFrom(address, options) {
 
-      @dists ||= []
-      @dists[address] ||= Math.round(Math.random() * 50, 0)
-      return @dists[address]
+      if (!this.dists) { this.dists = []; }
+      if (!this.dists[address]) { this.dists[address] = Math.round(Math.random() * 50, 0); }
+      return this.dists[address];
+    }
+  });
 

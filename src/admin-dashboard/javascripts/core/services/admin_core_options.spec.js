@@ -1,73 +1,71 @@
-'use strict';
+describe('BBAdminDashboard, AdminCoreOptions provider', function() {
+  let AdminCoreOptionsProviderObj = null;
+  let AdminCoreOptions = null;
 
-describe 'BBAdminDashboard, AdminCoreOptions provider', () ->
-  AdminCoreOptionsProviderObj = null
-  AdminCoreOptions = null
+  let beforeEachFn = function() {
+    module('BBAdminDashboard');
 
-  beforeEachFn = () ->
-    module 'BBAdminDashboard'
+    module(function(AdminCoreOptionsProvider) {
+      AdminCoreOptionsProviderObj = AdminCoreOptionsProvider;
+    });
 
-    module (AdminCoreOptionsProvider) ->
-      AdminCoreOptionsProviderObj = AdminCoreOptionsProvider
-      return
+    inject(function($injector) {
+      AdminCoreOptions = $injector.get('AdminCoreOptions');
+    });
 
-    inject ($injector) ->
-      AdminCoreOptions = $injector.get 'AdminCoreOptions'
-      return
+  };
 
-    return
+  beforeEach(beforeEachFn);
 
-  beforeEach beforeEachFn
+  it('has predefined options', function() {
+    let options = AdminCoreOptionsProviderObj.$get();
 
-  it 'has predefined options', ->
-    options = AdminCoreOptionsProviderObj.$get()
+    expect(options.default_state)
+    .toBeDefined();
+    expect(options.deactivate_sidenav)
+    .toBeDefined();
+    expect(options.deactivate_boxed_layout)
+    .toBeDefined();
+    expect(options.sidenav_start_open)
+    .toBeDefined();
+    expect(options.boxed_layout_start)
+    .toBeDefined();
+    expect(options.side_navigation)
+    .toBeDefined();
 
-    expect options.default_state
-    .toBeDefined()
-    expect options.deactivate_sidenav
-    .toBeDefined()
-    expect options.deactivate_boxed_layout
-    .toBeDefined()
-    expect options.sidenav_start_open
-    .toBeDefined()
-    expect options.boxed_layout_start
-    .toBeDefined()
-    expect options.side_navigation
-    .toBeDefined()
-
-    return
+  });
 
 
-  it 'allows to override predefined options', ->
-    testOptionKey = 'default_state'
-    testOptionOldValue = 'calendar'
-    testOptionNewValue = 'some_value'
+  it('allows to override predefined options', function() {
+    let testOptionKey = 'default_state';
+    let testOptionOldValue = 'calendar';
+    let testOptionNewValue = 'some_value';
 
-    expect AdminCoreOptionsProviderObj.getOption testOptionKey
-    .toBe testOptionOldValue
+    expect(AdminCoreOptionsProviderObj.getOption(testOptionKey))
+    .toBe(testOptionOldValue);
 
-    AdminCoreOptionsProviderObj.setOption testOptionKey, testOptionNewValue
+    AdminCoreOptionsProviderObj.setOption(testOptionKey, testOptionNewValue);
 
-    expect AdminCoreOptionsProviderObj.getOption testOptionKey
-    .toBe testOptionNewValue
+    expect(AdminCoreOptionsProviderObj.getOption(testOptionKey))
+    .toBe(testOptionNewValue);
 
-    return
+  });
 
-  it 'doesn\'t allow to create new options', ->
-    newOptionKey = 'some_new_option'
-    newOptionValue = 'some_new_option_value'
+  it('doesn\'t allow to create new options', function() {
+    let newOptionKey = 'some_new_option';
+    let newOptionValue = 'some_new_option_value';
 
-    AdminCoreOptionsProviderObj.setOption newOptionKey, newOptionValue
+    AdminCoreOptionsProviderObj.setOption(newOptionKey, newOptionValue);
 
-    expect AdminCoreOptionsProviderObj.getOption newOptionKey
-    .toBeUndefined()
+    expect(AdminCoreOptionsProviderObj.getOption(newOptionKey))
+    .toBeUndefined();
 
-    return
+  });
 
-  it 'provider @get returns object with available options', ->
-    expect AdminCoreOptions
-    .toBe AdminCoreOptionsProviderObj.$get()
+  it('provider @get returns object with available options', function() {
+    expect(AdminCoreOptions)
+    .toBe(AdminCoreOptionsProviderObj.$get());
 
-    return
+  });
 
-  return
+});

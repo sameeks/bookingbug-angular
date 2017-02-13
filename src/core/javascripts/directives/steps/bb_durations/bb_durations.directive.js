@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbDurations
 * @restrict AE
@@ -19,11 +16,14 @@
 *
 * @property {array} duration The duration list
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbDurations', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'DurationList'
+angular.module('BB.Directives').directive('bbDurations', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'DurationList'
+  })
+);

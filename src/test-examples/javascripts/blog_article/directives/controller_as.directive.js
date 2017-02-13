@@ -1,18 +1,23 @@
-directive = () ->
-  'ngInject'
+let directive = function() {
+  'ngInject';
 
-  link = (scope, element, attrs, ctrls) ->
-    ###some dome manipulation###
-    return
+  let link = function(scope, element, attrs, ctrls) {
+    /*some dome manipulation*/
+    
+  };
 
-  controller: 'BbTeBaControllerAsController'
-  controllerAs: 'vm'
-  link: link
-  restrict: 'E'
-  scope:
-    someData: '='
-  templateUrl: '/templates/blog-article/bindsToController.html'
+  return {
+    controller: 'BbTeBaControllerAsController',
+    controllerAs: 'vm',
+    link,
+    restrict: 'E',
+    scope: {
+      someData: '='
+    },
+    templateUrl: '/templates/blog-article/bindsToController.html'
+  };
+};
 
 angular
 .module('bbTe.blogArticle')
-.directive('bbTeBaControllerAs', directive)
+.directive('bbTeBaControllerAs', directive);

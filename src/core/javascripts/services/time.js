@@ -1,209 +1,241 @@
-'use strict'
+angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, GeneralOptions, CompanyStoreService, DateTimeUtilitiesService) =>
 
-angular.module('BB.Services').factory "TimeService", ($q, BBModel, halClient, GeneralOptions, CompanyStoreService, DateTimeUtilitiesService) ->
+  ({
+    query(prms) {
 
-  query: (prms) ->
+      let deferred = $q.defer();
 
-    deferred = $q.defer()
+      let start_date = null;
+      let end_date   = null;
 
-    start_date = null
-    end_date   = null
+      if (prms.date) {
+        prms.start_date = prms.date;
+      } else if (prms.cItem.date) {
+        prms.start_date = prms.cItem.date.date;
+      } else {
+        deferred.reject("No date set");
+        return deferred.promise;
+      }
 
-    if prms.date
-      prms.start_date = prms.date
-    else if prms.cItem.date
-      prms.start_date = prms.cItem.date.date
-    else
-      deferred.reject("No date set")
-      return deferred.promise
+      ({ start_date } = prms);
+      if (prms.end_date) { ({ end_date }   = prms); }
 
-    start_date = prms.start_date
-    end_date   = prms.end_date if prms.end_date
-
-    display_time_zone = GeneralOptions.display_time_zone
-    company_time_zone = CompanyStoreService.time_zone
-
-
-    # Adjust time range based on UTC offset between company time zone and display time zone
-    if display_time_zone? and display_time_zone != company_time_zone 
-
-      display_utc_offset = moment().tz(display_time_zone).utcOffset()
-      company_utc_offset = moment().tz(company_time_zone).utcOffset()
-
-      if company_utc_offset < display_utc_offset
-        start_date = prms.start_date.clone().subtract(1, 'day')
-      else if company_utc_offset > display_utc_offset and prms.end_date
-        end_date = prms.end_date.clone().add(1, 'day')
-
-      prms.time_zone = display_time_zone
-
-    # If there was no duration passed in get the default duration off the
-    # current item
-    if !prms.duration?
-      prms.duration = prms.cItem.duration if prms.cItem and prms.cItem.duration
-
-    item_link = prms.item_link
-
-    if prms.cItem and prms.cItem.days_link and !item_link
-      item_link = prms.cItem.days_link
-
-    if item_link
-
-      extra                 = {}
-      extra.date            = start_date.toISODate()
-      extra.location        = prms.location if prms.location
-      extra.event_id        = prms.cItem.event_id if prms.cItem.event_id
-      extra.person_id       = prms.cItem.person.id if prms.cItem.person and !prms.cItem.anyPerson() and !item_link.event_id and !extra.event_id
-      extra.resource_id     = prms.cItem.resource.id if prms.cItem.resource and !prms.cItem.anyResource() and !item_link.event_id  and !extra.event_id
-      extra.end_date        = end_date.toISODate() if end_date
-      extra.duration        = prms.duration
-      extra.person_group_id = prms.cItem.person_group_id
-      extra.num_resources   = prms.num_resources
-      extra.time_zone       = prms.time_zone if prms.time_zone
-      extra.ignore_booking  = prms.cItem.id if prms.cItem.id
-      extra.people_ids      = prms.people_ids if prms.people_ids
-      extra.resource_ids    = prms.resource_ids if prms.resource_ids
-
-      item_link             = prms.company if extra.event_id # if we have an event - the the company link - so we don't add in extra params
-
-      item_link.$get('times', extra).then (results) =>
-
-        if results.$has('date_links')
-
-          # it's a date range - we're expecting several dates - lets build up a hash of dates
-          results.$get('date_links').then (all_days) =>
-
-            date_times = {}
-            all_days_def = []
-
-            for day in all_days
-
-              do (day) =>
-
-                # there's several days - get them all
-                day.elink = $q.defer()
-                all_days_def.push(day.elink.promise)
-
-                if day.$has('event_links')
-
-                  day.$get('event_links').then (all_events) =>
-                    times = @merge_times(all_events, prms.cItem.service, prms.cItem, day.date)
-                    times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-                    day.elink.resolve(times)
-
-                else if day.times
-
-                  times = @merge_times([day], prms.cItem.service, prms.cItem, day.date)
-                  times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-                  day.elink.resolve(times)
-
-            $q.all(all_days_def).then (times) ->
-
-              # build day/slot array ensuring slots are grouped by the display time zone
-              date_times = _.chain(times)
-                .flatten()
-                .sortBy((slot) -> slot.datetime.unix())
-                .groupBy((slot) -> slot.datetime.toISODate())
-                .value()
-
-              # add days back that don't have any availabiity and return originally requested range only
-              new_date_times = {}
-              d = prms.start_date.clone()
-              while d <= prms.end_date
-                key = d.toISODate()
-                new_date_times[key] = if date_times[key] then date_times[key] else []
-                d = d.clone().add(1, 'day')
-
-              deferred.resolve(new_date_times)
-
-        else if results.$has('event_links')
-
-          # single day - but a list of bookable events
-          results.$get('event_links').then (all_events) =>
-            times = @merge_times(all_events, prms.cItem.service, prms.cItem, prms.start_date)
-            times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-
-            # returns array of time slots
-            deferred.resolve(times)
-
-        else if results.times
-          times = @merge_times([results], prms.cItem.service, prms.cItem, prms.start_date)
-          times = _.filter(times, (t) -> t.avail >= prms.available) if prms.available
-
-          # returns array of time slots
-          deferred.resolve(times)
-      , (err) ->
-        deferred.reject(err)
-
-    else
-      deferred.reject("No day data")
-
-    return deferred.promise
+      let { display_time_zone } = GeneralOptions;
+      let company_time_zone = CompanyStoreService.time_zone;
 
 
-  # query a set of basket items for the same time data
-  queryItems: (prms) ->
+      // Adjust time range based on UTC offset between company time zone and display time zone
+      if ((display_time_zone != null) && (display_time_zone !== company_time_zone)) { 
 
-    defer = $q.defer()
+        let display_utc_offset = moment().tz(display_time_zone).utcOffset();
+        let company_utc_offset = moment().tz(company_time_zone).utcOffset();
 
-    pslots = []
+        if (company_utc_offset < display_utc_offset) {
+          start_date = prms.start_date.clone().subtract(1, 'day');
+        } else if ((company_utc_offset > display_utc_offset) && prms.end_date) {
+          end_date = prms.end_date.clone().add(1, 'day');
+        }
 
-    for item in prms.items
-      pslots.push(@query({
-        company: prms.company
-        cItem: item
-        date: prms.start_date
-        end_date: prms.end_date
-        client: prms.client
-        available: 1
-      }))
+        prms.time_zone = display_time_zone;
+      }
 
-    $q.all(pslots).then (res) ->
-      defer.resolve(res)
-    , (err) ->
-      defer.reject()
+      // If there was no duration passed in get the default duration off the
+      // current item
+      if (prms.duration == null) {
+        if (prms.cItem && prms.cItem.duration) { prms.duration = prms.cItem.duration; }
+      }
 
-    return defer.promise
+      let { item_link } = prms;
+
+      if (prms.cItem && prms.cItem.days_link && !item_link) {
+        item_link = prms.cItem.days_link;
+      }
+
+      if (item_link) {
+
+        let extra                 = {};
+        extra.date            = start_date.toISODate();
+        if (prms.location) { extra.location        = prms.location; }
+        if (prms.cItem.event_id) { extra.event_id        = prms.cItem.event_id; }
+        if (prms.cItem.person && !prms.cItem.anyPerson() && !item_link.event_id && !extra.event_id) { extra.person_id       = prms.cItem.person.id; }
+        if (prms.cItem.resource && !prms.cItem.anyResource() && !item_link.event_id  && !extra.event_id) { extra.resource_id     = prms.cItem.resource.id; }
+        if (end_date) { extra.end_date        = end_date.toISODate(); }
+        extra.duration        = prms.duration;
+        extra.person_group_id = prms.cItem.person_group_id;
+        extra.num_resources   = prms.num_resources;
+        if (prms.time_zone) { extra.time_zone       = prms.time_zone; }
+        if (prms.cItem.id) { extra.ignore_booking  = prms.cItem.id; }
+        if (prms.people_ids) { extra.people_ids      = prms.people_ids; }
+        if (prms.resource_ids) { extra.resource_ids    = prms.resource_ids; }
+
+        if (extra.event_id) { item_link             = prms.company; } // if we have an event - the the company link - so we don't add in extra params
+
+        item_link.$get('times', extra).then(results => {
+
+          let times;
+          if (results.$has('date_links')) {
+
+            // it's a date range - we're expecting several dates - lets build up a hash of dates
+            return results.$get('date_links').then(all_days => {
+
+              let date_times = {};
+              let all_days_def = [];
+
+              for (let day of Array.from(all_days)) {
+
+                (day => {
+
+                  // there's several days - get them all
+                  day.elink = $q.defer();
+                  all_days_def.push(day.elink.promise);
+
+                  if (day.$has('event_links')) {
+
+                    return day.$get('event_links').then(all_events => {
+                      times = this.merge_times(all_events, prms.cItem.service, prms.cItem, day.date);
+                      if (prms.available) { times = _.filter(times, t => t.avail >= prms.available); }
+                      return day.elink.resolve(times);
+                    }
+                    );
+
+                  } else if (day.times) {
+
+                    times = this.merge_times([day], prms.cItem.service, prms.cItem, day.date);
+                    if (prms.available) { times = _.filter(times, t => t.avail >= prms.available); }
+                    return day.elink.resolve(times);
+                  }
+                })(day);
+              }
+
+              return $q.all(all_days_def).then(function(times) {
+
+                // build day/slot array ensuring slots are grouped by the display time zone
+                date_times = _.chain(times)
+                  .flatten()
+                  .sortBy(slot => slot.datetime.unix())
+                  .groupBy(slot => slot.datetime.toISODate())
+                  .value();
+
+                // add days back that don't have any availabiity and return originally requested range only
+                let new_date_times = {};
+                let d = prms.start_date.clone();
+                while (d <= prms.end_date) {
+                  let key = d.toISODate();
+                  new_date_times[key] = date_times[key] ? date_times[key] : [];
+                  d = d.clone().add(1, 'day');
+                }
+
+                return deferred.resolve(new_date_times);
+              });
+            }
+            );
+
+          } else if (results.$has('event_links')) {
+
+            // single day - but a list of bookable events
+            return results.$get('event_links').then(all_events => {
+              times = this.merge_times(all_events, prms.cItem.service, prms.cItem, prms.start_date);
+              if (prms.available) { times = _.filter(times, t => t.avail >= prms.available); }
+
+              // returns array of time slots
+              return deferred.resolve(times);
+            }
+            );
+
+          } else if (results.times) {
+            times = this.merge_times([results], prms.cItem.service, prms.cItem, prms.start_date);
+            if (prms.available) { times = _.filter(times, t => t.avail >= prms.available); }
+
+            // returns array of time slots
+            return deferred.resolve(times);
+          }
+        }
+        , err => deferred.reject(err));
+
+      } else {
+        deferred.reject("No day data");
+      }
+
+      return deferred.promise;
+    },
 
 
-  merge_times: (all_events, service, item, date) ->
+    // query a set of basket items for the same time data
+    queryItems(prms) {
 
-    return [] if !all_events or all_events.length == 0
+      let defer = $q.defer();
 
-    all_events = _.shuffle(all_events)
-    sorted_times = []
-    for ev in all_events
-      if ev.times
-        for i in ev.times
-          # set it not set, currently unavailable, or randomly based on the number of events
-          if !sorted_times[i.time] or sorted_times[i.time].avail == 0 or (Math.floor(Math.random()*all_events.length) == 0 and i.avail > 0)
-            i.event_id = ev.event_id
-            sorted_times[i.time] = i
-        # if we have an item - which an already booked item - make sure that it's the list of time slots we can select - i.e. that we can select the current slot
-        @checkCurrentItem(item.held, sorted_times, ev) if item.held
-        @checkCurrentItem(item, sorted_times, ev)
+      let pslots = [];
 
-    times = []
-    date_times = {}
+      for (let item of Array.from(prms.items)) {
+        pslots.push(this.query({
+          company: prms.company,
+          cItem: item,
+          date: prms.start_date,
+          end_date: prms.end_date,
+          client: prms.client,
+          available: 1
+        }));
+      }
 
-    for i in sorted_times
-      if i
+      $q.all(pslots).then(res => defer.resolve(res)
+      , err => defer.reject());
 
-        # add datetime if not provided by the API (versions < 1.5.4-1 )
-        if !i.datetime
-          i.datetime = DateTimeUtilitiesService.convertTimeToMoment(moment(date), i.time)
-
-        times.push(new BBModel.TimeSlot(i, service))
-
-    times
+      return defer.promise;
+    },
 
 
-  checkCurrentItem: (item, sorted_times, ev) ->
-    if item and item.id and item.event_id == ev.event_id and item.time and !sorted_times[item.time.time] and item.date and item.date.date.toISODate() == ev.date
-      # calculate the correct datetime for time slot
-      item.time.datetime = DateTimeUtilitiesService.convertTimeToMoment(item.date.date, item.time.time)
-      sorted_times[item.time.time] = item.time
-      # remote this entry from the cache - just in case - we know it has a held item in it so lets just not keep it in case that goes later!
-      halClient.clearCache(ev.$href("self"))
-    else if item and item.id and item.event_id == ev.event_id and item.time and sorted_times[item.time.time] and item.date and item.date.date.toISODate() == ev.date
-      sorted_times[item.time.time].avail = 1
+    merge_times(all_events, service, item, date) {
+
+      let i;
+      if (!all_events || (all_events.length === 0)) { return []; }
+
+      all_events = _.shuffle(all_events);
+      let sorted_times = [];
+      for (let ev of Array.from(all_events)) {
+        if (ev.times) {
+          for (i of Array.from(ev.times)) {
+            // set it not set, currently unavailable, or randomly based on the number of events
+            if (!sorted_times[i.time] || (sorted_times[i.time].avail === 0) || ((Math.floor(Math.random()*all_events.length) === 0) && (i.avail > 0))) {
+              i.event_id = ev.event_id;
+              sorted_times[i.time] = i;
+            }
+          }
+          // if we have an item - which an already booked item - make sure that it's the list of time slots we can select - i.e. that we can select the current slot
+          if (item.held) { this.checkCurrentItem(item.held, sorted_times, ev); }
+          this.checkCurrentItem(item, sorted_times, ev);
+        }
+      }
+
+      let times = [];
+      let date_times = {};
+
+      for (i of Array.from(sorted_times)) {
+        if (i) {
+
+          // add datetime if not provided by the API (versions < 1.5.4-1 )
+          if (!i.datetime) {
+            i.datetime = DateTimeUtilitiesService.convertTimeToMoment(moment(date), i.time);
+          }
+
+          times.push(new BBModel.TimeSlot(i, service));
+        }
+      }
+
+      return times;
+    },
+
+
+    checkCurrentItem(item, sorted_times, ev) {
+      if (item && item.id && (item.event_id === ev.event_id) && item.time && !sorted_times[item.time.time] && item.date && (item.date.date.toISODate() === ev.date)) {
+        // calculate the correct datetime for time slot
+        item.time.datetime = DateTimeUtilitiesService.convertTimeToMoment(item.date.date, item.time.time);
+        sorted_times[item.time.time] = item.time;
+        // remote this entry from the cache - just in case - we know it has a held item in it so lets just not keep it in case that goes later!
+        return halClient.clearCache(ev.$href("self"));
+      } else if (item && item.id && (item.event_id === ev.event_id) && item.time && sorted_times[item.time.time] && item.date && (item.date.date.toISODate() === ev.date)) {
+        return sorted_times[item.time.time].avail = 1;
+      }
+    }
+  })
+);

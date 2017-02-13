@@ -1,21 +1,29 @@
-angular.module("BB.Directives").directive "bbWalletPurchaseBands", ($rootScope) ->
+angular.module("BB.Directives").directive("bbWalletPurchaseBands", $rootScope =>
 
-  scope: true
-  restrict: "AE"
-  templateUrl: "wallet_purchase_bands.html"
-  controller: "Wallet"
-  require: '^?bbWallet'
-  link: (scope, attr, elem, ctrl) ->
+  ({
+    scope: true,
+    restrict: "AE",
+    templateUrl: "wallet_purchase_bands.html",
+    controller: "Wallet",
+    require: '^?bbWallet',
+    link(scope, attr, elem, ctrl) {
 
-    scope.member = scope.$eval(attr.member)
-    scope.member ||= $rootScope.member if $rootScope.member
+      scope.member = scope.$eval(attr.member);
+      if ($rootScope.member) { if (!scope.member) { scope.member = $rootScope.member; } }
 
-    $rootScope.connection_started.then () ->
-      if ctrl
-        deregisterWatch = scope.$watch 'wallet', () ->
-          if scope.wallet
-            scope.getWalletPurchaseBandsForWallet(scope.wallet)
-            deregisterWatch()
-      else
-        scope.getWalletForMember(scope.member).then () ->
-          scope.getWalletPurchaseBandsForWallet(scope.wallet)
+      return $rootScope.connection_started.then(function() {
+        if (ctrl) {
+          let deregisterWatch;
+          return deregisterWatch = scope.$watch('wallet', function() {
+            if (scope.wallet) {
+              scope.getWalletPurchaseBandsForWallet(scope.wallet);
+              return deregisterWatch();
+            }
+          });
+        } else {
+          return scope.getWalletForMember(scope.member).then(() => scope.getWalletPurchaseBandsForWallet(scope.wallet));
+        }
+      });
+    }
+  })
+);

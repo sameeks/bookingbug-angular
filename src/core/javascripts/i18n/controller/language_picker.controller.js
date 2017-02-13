@@ -1,56 +1,54 @@
-'use strict'
+angular.module('BB.i18n').controller('bbLanguagePickerController', function(bbLocale, $locale, $rootScope, tmhDynamicLocale, $translate,
+  bbi18nOptions, $scope) {
+  'ngInject';
 
-angular.module('BB.i18n').controller 'bbLanguagePickerController', (bbLocale, $locale, $rootScope, tmhDynamicLocale, $translate,
-  bbi18nOptions, $scope) ->
-  'ngInject'
+  /*jshint validthis: true */
+  let vm = this;
 
-  ###jshint validthis: true ###
-  vm = @
+  vm.language = null;
+  vm.availableLanguages = [];
+  vm.enableSearch = false;
 
-  vm.language = null
-  vm.availableLanguages = []
-  vm.enableSearch = false
-
-  init = () ->
+  let init = function() {
     setAvailableLanguages();
     setCurrentLanguage();
-    $scope.$on 'BBLanguagePicker:refresh', setCurrentLanguage
-    vm.pickLanguage = pickLanguage
-    return
+    $scope.$on('BBLanguagePicker:refresh', setCurrentLanguage);
+    vm.pickLanguage = pickLanguage;
+  };
 
-  setAvailableLanguages = () ->
-    angular.forEach bbi18nOptions.available_languages, (languageKey) ->
-      vm.availableLanguages.push(createLanguage(languageKey))
-    vm.enableSearch = vm.availableLanguages.length >= 10
-    return
+  var setAvailableLanguages = function() {
+    angular.forEach(bbi18nOptions.available_languages, languageKey => vm.availableLanguages.push(createLanguage(languageKey)));
+    vm.enableSearch = vm.availableLanguages.length >= 10;
+  };
 
-  setCurrentLanguage = () ->
-    tmhDynamicLocale.set(bbLocale.getLocale()).then () ->
+  var setCurrentLanguage = function() {
+    tmhDynamicLocale.set(bbLocale.getLocale()).then(function() {
       vm.language =
-        selected: createLanguage(bbLocale.getLocale())
-      return
+        {selected: createLanguage(bbLocale.getLocale())};
+    });
 
-    return
+  };
 
-  ###
-  # @param {String]
-  ###
-  createLanguage = (languageKey) ->
-    return {
-      identifier: languageKey
-      label: 'COMMON.LANGUAGE.' + languageKey.toUpperCase()
-    }
+  /*
+   * @param {String]
+   */
+  var createLanguage = languageKey =>
+    ({
+      identifier: languageKey,
+      label: `COMMON.LANGUAGE.${languageKey.toUpperCase()}`
+    })
+  ;
 
-  ###
-  # @param {String]
-  ###
-  pickLanguage = (languageKey) ->
-    tmhDynamicLocale.set(languageKey).then () ->
-      bbLocale.setLocale(languageKey, 'bbLanguagePicker.pickLanguage')
-      $rootScope.$broadcast 'BBLanguagePicker:languageChanged'
-      return
-    return
+  /*
+   * @param {String]
+   */
+  var pickLanguage = function(languageKey) {
+    tmhDynamicLocale.set(languageKey).then(function() {
+      bbLocale.setLocale(languageKey, 'bbLanguagePicker.pickLanguage');
+      $rootScope.$broadcast('BBLanguagePicker:languageChanged');
+    });
+  };
 
   init();
 
-  return
+});

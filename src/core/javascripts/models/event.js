@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:Event
 *
@@ -13,22 +11,23 @@
 * @property {integer} status Status of the event
 * @property {integer} spaces_booked The booked spaces
 * @property {integer} duration Duration of the event
-####
+*///
 
 
-angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateTimeUtilitiesService, EventService, $translate) ->
+angular.module('BB.Models').factory("EventModel", ($q, BBModel, BaseModel, DateTimeUtilitiesService, EventService, $translate) =>
 
 
-  class Event extends BaseModel
+  class Event extends BaseModel {
 
-    constructor: (data) ->
-      super(data)
-      @date = moment.parseZone(@datetime)
-      @time = new BBModel.TimeSlot(time: DateTimeUtilitiesService.convertMomentToTime(@date))
-      @end_datetime = @date.clone().add(@duration, 'minutes') if @duration
-      @date_unix = @date.unix()
+    constructor(data) {
+      super(data);
+      this.date = moment.parseZone(this.datetime);
+      this.time = new BBModel.TimeSlot({time: DateTimeUtilitiesService.convertMomentToTime(this.date)});
+      if (this.duration) { this.end_datetime = this.date.clone().add(this.duration, 'minutes'); }
+      this.date_unix = this.date.unix();
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getGroup
     * @methodOf BB.Models:Event
@@ -36,24 +35,26 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get event groups
     *
     * @returns {promise} A promise for the group event
-    ###
-    getGroup: () ->
-      defer = $q.defer()
-      if @group
-        defer.resolve(@group)
-      else if @$has('event_groups') or @$has('event_group')
-        event_group = 'event_group'
-        event_group = 'event_groups' if @$has('event_groups')
-        @$get(event_group).then (group) =>
-          @group = new BBModel.EventGroup(group)
-          defer.resolve(@group)
-        , (err) ->
-          defer.reject(err)
-      else
-        defer.reject("No event group")
-      defer.promise
+    */
+    getGroup() {
+      let defer = $q.defer();
+      if (this.group) {
+        defer.resolve(this.group);
+      } else if (this.$has('event_groups') || this.$has('event_group')) {
+        let event_group = 'event_group';
+        if (this.$has('event_groups')) { event_group = 'event_groups'; }
+        this.$get(event_group).then(group => {
+          this.group = new BBModel.EventGroup(group);
+          return defer.resolve(this.group);
+        }
+        , err => defer.reject(err));
+      } else {
+        defer.reject("No event group");
+      }
+      return defer.promise;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getGroup
     * @methodOf BB.Models:Event
@@ -61,23 +62,28 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the chains of the event
     *
     * @returns {promise} A promise for the chains event
-    ###
-    getChain: (params) ->
-      defer = $q.defer()
-      if @chain
-        defer.resolve(@chain)
-      else
-        if @$has('event_chains') or @$has('event_chain')
-          event_chain = 'event_chain'
-          event_chain = 'event_chains' if @$has('event_chains')
-          @$get(event_chain, params).then (chain) =>
-            @chain = new BBModel.EventChain(chain)
-            defer.resolve(@chain)
-        else
-          defer.reject("No event chain")
-      defer.promise
+    */
+    getChain(params) {
+      let defer = $q.defer();
+      if (this.chain) {
+        defer.resolve(this.chain);
+      } else {
+        if (this.$has('event_chains') || this.$has('event_chain')) {
+          let event_chain = 'event_chain';
+          if (this.$has('event_chains')) { event_chain = 'event_chains'; }
+          this.$get(event_chain, params).then(chain => {
+            this.chain = new BBModel.EventChain(chain);
+            return defer.resolve(this.chain);
+          }
+          );
+        } else {
+          defer.reject("No event chain");
+        }
+      }
+      return defer.promise;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getDuration
     * @methodOf BB.Models:Event
@@ -85,19 +91,23 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get duration of the event chains
     *
     * @returns {promise} A promise for duration of the event
-    ###
-    getDuration: () ->
-      defer = new $q.defer()
-      if @duration
-        defer.resolve(@duration)
-      else
-        @getChain().then (chain) =>
-          @duration = chain.duration
-          defer.resolve(@duration)
-      defer.promise
+    */
+    getDuration() {
+      let defer = new $q.defer();
+      if (this.duration) {
+        defer.resolve(this.duration);
+      } else {
+        this.getChain().then(chain => {
+          this.duration = chain.duration;
+          return defer.resolve(this.duration);
+        }
+        );
+      }
+      return defer.promise;
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name getDescription
     * @methodOf BB.Models:Event
@@ -105,11 +115,12 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get duration of the event
     *
     * @returns {object} The returned description
-    ###
-    getDescription: () ->
-      @getChain().description
+    */
+    getDescription() {
+      return this.getChain().description;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getColour
     * @methodOf BB.Models:Event
@@ -117,15 +128,17 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the colour
     *
     * @returns {string} The returned colour
-    ###
-    getColour: () ->
-      if @getGroup()
-        return @getGroup().colour
-      else
-        return "#FFFFFF"
+    */
+    getColour() {
+      if (this.getGroup()) {
+        return this.getGroup().colour;
+      } else {
+        return "#FFFFFF";
+      }
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name getPounds
     * @methodOf BB.Models:Event
@@ -133,12 +146,14 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get pounts
     *
     * @returns {integer} The returned pounts
-    ###
-    getPounds: () ->
-      if @chain
-        Math.floor(@getPrice()).toFixed(0)
+    */
+    getPounds() {
+      if (this.chain) {
+        return Math.floor(this.getPrice()).toFixed(0);
+      }
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getPrice
     * @methodOf BB.Models:Event
@@ -146,11 +161,12 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get price
     *
     * @returns {integer} The returned price
-    ###
-    getPrice: () ->
-      0
+    */
+    getPrice() {
+      return 0;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getPence
     * @methodOf BB.Models:Event
@@ -158,12 +174,14 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get price
     *
     * @returns {integer} The returned pence
-    ###
-    getPence: () ->
-      if @chain
-        (@getPrice() % 1).toFixed(2)[-2..-1]
+    */
+    getPence() {
+      if (this.chain) {
+        return (this.getPrice() % 1).toFixed(2).slice(-2);
+      }
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getNumBooked
     * @methodOf BB.Models:Event
@@ -171,11 +189,12 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the number booked
     *
     * @returns {object} The returned number booked
-    ###
-    getNumBooked: () ->
-      @spaces_blocked + @spaces_booked + @spaces_reserved + @spaces_held
+    */
+    getNumBooked() {
+      return this.spaces_blocked + this.spaces_booked + this.spaces_reserved + this.spaces_held;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getSpacesLeft
     * @methodOf BB.Models:Event
@@ -183,17 +202,20 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the number of spaces left (possibly limited by a specific ticket pool)
     *
     * @returns {object} The returned spaces left
-    ###
-    getSpacesLeft: (pool = null) ->
-      if pool && @ticket_spaces && @ticket_spaces[pool]
-        return @ticket_spaces[pool].left
-      else
-        x =  @num_spaces - @getNumBooked()
-        return 0 if x < 0
-        return x
+    */
+    getSpacesLeft(pool) {
+      if (pool == null) { pool = null; }
+      if (pool && this.ticket_spaces && this.ticket_spaces[pool]) {
+        return this.ticket_spaces[pool].left;
+      } else {
+        let x =  this.num_spaces - this.getNumBooked();
+        if (x < 0) { return 0; }
+        return x;
+      }
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name getWaitSpacesLeft
     * @methodOf BB.Models:Event
@@ -201,17 +223,18 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the number of waitlist spaces left (possibly limited by a specific ticket pool)
     *
     * @returns {object} The returned spaces left
-    ###
-    getWaitSpacesLeft: () ->
-      wait = @chain.waitlength
-      wait ||= 0
-      wait = wait - @spaces_wait
-      return 0 if wait <= 0
+    */
+    getWaitSpacesLeft() {
+      let wait = this.chain.waitlength;
+      if (!wait) { wait = 0; }
+      wait = wait - this.spaces_wait;
+      if (wait <= 0) { return 0; }
 
-      return wait
+      return wait;
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name hasSpace
     * @methodOf BB.Models:Event
@@ -219,12 +242,13 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid space
     *
     * @returns {boolean} If this is a valid space
-    ###
-    hasSpace: () ->
-      (@getSpacesLeft() > 0)
+    */
+    hasSpace() {
+      return (this.getSpacesLeft() > 0);
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name hasWaitlistSpace
     * @methodOf BB.Models:Event
@@ -232,11 +256,12 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks if this considered a valid waiting list space
     *
     * @returns {boolean} If this is a valid waiting list space
-    ###
-    hasWaitlistSpace: () ->
-      (@getSpacesLeft() <= 0 && @getChain().waitlength > @spaces_wait)
+    */
+    hasWaitlistSpace() {
+      return ((this.getSpacesLeft() <= 0) && (this.getChain().waitlength > this.spaces_wait));
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getRemainingDescription
     * @methodOf BB.Models:Event
@@ -244,16 +269,19 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Get the remaining description
     *
     * @returns {object} The returned remaining description
-    ###
-    getRemainingDescription: () ->
-      left = @getSpacesLeft()
-      if left > 0 && left < 3
-        return $translate.instant("CORE.EVENT.SPACES_LEFT", {N: left}, 'messageformat')
-      if @hasWaitlistSpace()
-        return $translate.instant("CORE.EVENT.JOIN_WAITLIST")
-      return ""
+    */
+    getRemainingDescription() {
+      let left = this.getSpacesLeft();
+      if ((left > 0) && (left < 3)) {
+        return $translate.instant("CORE.EVENT.SPACES_LEFT", {N: left}, 'messageformat');
+      }
+      if (this.hasWaitlistSpace()) {
+        return $translate.instant("CORE.EVENT.JOIN_WAITLIST");
+      }
+      return "";
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name select
     * @methodOf BB.Models:Event
@@ -261,12 +289,13 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Checks is this considered a selected
     *
     * @returns {boolean} If this is a selected
-    ###
-    select: ->
-      @selected = true
+    */
+    select() {
+      return this.selected = true;
+    }
 
 
-    ###**
+    /***
     * @ngdoc method
     * @name unselect
     * @methodOf BB.Models:Event
@@ -274,11 +303,12 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Unselect if is selected
     *
     * @returns {boolean} If this is a unselected
-    ###
-    unselect: ->
-      delete @selected if @selected
+    */
+    unselect() {
+      if (this.selected) { return delete this.selected; }
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name prepEvent
     * @methodOf BB.Models:Event
@@ -286,35 +316,45 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Prepare the event
     *
     * @returns {promise} A promise for the event
-    ###
-    prepEvent: (params) ->
-      # build out some useful event stuff
-      def = $q.defer()
-      @getChain(params).then () =>
+    */
+    prepEvent(params) {
+      // build out some useful event stuff
+      let def = $q.defer();
+      this.getChain(params).then(() => {
 
-        if @chain.$has('address')
-          @chain.$getAddress().then (address) =>
-            @chain.address = address
+        if (this.chain.$has('address')) {
+          this.chain.$getAddress().then(address => {
+            return this.chain.address = address;
+          }
+          );
+        }
 
-        @chain.getTickets().then (tickets) =>
-          @tickets = tickets
+        return this.chain.getTickets().then(tickets => {
+          this.tickets = tickets;
 
-          @price_range = {}
-          if tickets and tickets.length > 0
-            for ticket in @tickets
-              @price_range.from = ticket.price if !@price_range.from or (@price_range.from and ticket.price < @price_range.from)
-              @price_range.to = ticket.price if !@price_range.to or (@price_range.to and ticket.price > @price_range.to)
-              ticket.old_price = ticket.price
-          else
-            @price_range.from  = @price
-            @price_range.to = @price
+          this.price_range = {};
+          if (tickets && (tickets.length > 0)) {
+            for (let ticket of Array.from(this.tickets)) {
+              if (!this.price_range.from || (this.price_range.from && (ticket.price < this.price_range.from))) { this.price_range.from = ticket.price; }
+              if (!this.price_range.to || (this.price_range.to && (ticket.price > this.price_range.to))) { this.price_range.to = ticket.price; }
+              ticket.old_price = ticket.price;
+            }
+          } else {
+            this.price_range.from  = this.price;
+            this.price_range.to = this.price;
+          }
 
-          @ticket_prices = _.indexBy(tickets, 'name')
+          this.ticket_prices = _.indexBy(tickets, 'name');
 
-          def.resolve(@)
-      def.promise
+          return def.resolve(this);
+        }
+        );
+      }
+      );
+      return def.promise;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name updatePrice
     * @methodOf BB.Models:Event
@@ -322,21 +362,24 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     * Update price for the ticket
     *
     * @returns {object} The returned update price
-    ###
-    updatePrice: () ->
-      for ticket in @tickets
-        if ticket.pre_paid_booking_id
+    */
+    updatePrice() {
+      return Array.from(this.tickets).map((ticket) =>
+        ticket.pre_paid_booking_id ?
           ticket.price = 0
-        else
-          ticket.price = ticket.old_price
+        :
+          ticket.price = ticket.old_price);
+    }
 
-    @$query: (company, params) ->
-      EventService.query(company, params)
+    static $query(company, params) {
+      return EventService.query(company, params);
+    }
 
-    @$summary: (company, params) ->
-      EventService.summary(company, params)
+    static $summary(company, params) {
+      return EventService.summary(company, params);
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name numTicketsSelected
     * @methodOf BB.Models:Event
@@ -344,10 +387,14 @@ angular.module('BB.Models').factory "EventModel", ($q, BBModel, BaseModel, DateT
     *
     *
     * @returns {object} get number of tickets selected
-    ###
-    numTicketsSelected: () ->
-      num = 0
-      for ticket in @tickets
-        num += ticket.qty
-      num
+    */
+    numTicketsSelected() {
+      let num = 0;
+      for (let ticket of Array.from(this.tickets)) {
+        num += ticket.qty;
+      }
+      return num;
+    }
+  }
+);
 

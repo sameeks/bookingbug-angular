@@ -1,118 +1,123 @@
-'use strict';
+describe('BBAdminDashboard.calendar.controllers, CalendarPageCtrl', function() {
+  let $compile = null;
+  let $controller = null;
+  let $httpBackend = null;
+  let $rootScope = null;
+  let $state = null;
+  let $log = null;
 
-describe 'BBAdminDashboard.calendar.controllers, CalendarPageCtrl', () ->
-  $compile = null
-  $controller = null
-  $httpBackend = null
-  $rootScope = null
-  $state = null
-  $log = null
+  let controllerInstance = null;
+  let $scope = null;
 
-  controllerInstance = null
-  $scope = null
+  let pusherChannelMock = {
+    bind() {}
+  };
 
-  pusherChannelMock = {
-    bind: () ->
-  }
+  let companyMock = {
+    getPusherChannel(channelName) {
+      return pusherChannelMock;
+    }
+  };
 
-  companyMock = {
-    getPusherChannel: (channelName) ->
-      pusherChannelMock
-  }
-
-  bbMockCompanyHasPeople = {
+  let bbMockCompanyHasPeople = {
     company: {
-      $has: (type) ->
-        if type is 'people'
+      $has(type) {
+        if (type === 'people') {
           return true;
+        }
 
         return false;
+      }
     }
-  }
+  };
 
-  bbMockCompanyHasResources = {
+  let bbMockCompanyHasResources = {
     company: {
-      $has: (type) ->
-        if type is 'resources'
-          return true
+      $has(type) {
+        if (type === 'resources') {
+          return true;
+        }
 
-        return false
+        return false;
+      }
     }
-  }
+  };
 
-  setup = () ->
-    module('BBAdminDashboard')
-    module('BB')
+  let setup = function() {
+    module('BBAdminDashboard');
+    module('BB');
 
-    inject ($injector) ->
-      $compile = $injector.get '$compile'
-      $controller = $injector.get '$controller'
-      $httpBackend = $injector.get '$httpBackend'
-      $rootScope = $injector.get '$rootScope'
-      $scope = $rootScope.$new()
-      $state = $injector.get '$state'
-      $log = $injector.get '$log'
+    inject(function($injector) {
+      $compile = $injector.get('$compile');
+      $controller = $injector.get('$controller');
+      $httpBackend = $injector.get('$httpBackend');
+      $rootScope = $injector.get('$rootScope');
+      $scope = $rootScope.$new();
+      $state = $injector.get('$state');
+      return $log = $injector.get('$log');
+    });
 
-    $scope.adminlte = {}
+    $scope.adminlte = {};
     $scope.company = companyMock;
 
-    spyOn pusherChannelMock, 'bind'
-    spyOn $state, 'go'
-    .and.callThrough()
+    spyOn(pusherChannelMock, 'bind');
+    spyOn($state, 'go')
+    .and.callThrough();
 
-    return
+  };
 
-  beforeEach setup
+  beforeEach(setup);
 
-  getControllerInstance = () ->
-    return $controller(
-      'CalendarPageCtrl'
-      '$log': $log
-      '$scope': $scope
+  let getControllerInstance = () =>
+    $controller(
+      'CalendarPageCtrl',{
+      '$log': $log,
+      '$scope': $scope,
       '$state': $state
+    }
     )
-    return
+  ;
 
-  it 'bind proper events on company "bookings" pusher channel', () ->
-    controllerInstance = getControllerInstance()
+  it('bind proper events on company "bookings" pusher channel', function() {
+    controllerInstance = getControllerInstance();
 
-    expect pusherChannelMock.bind.calls.argsFor(0)[0]
-    .toEqual('create')
+    expect(pusherChannelMock.bind.calls.argsFor(0)[0])
+    .toEqual('create');
 
-    expect pusherChannelMock.bind.calls.argsFor(1)[0]
-    .toEqual('update')
+    expect(pusherChannelMock.bind.calls.argsFor(1)[0])
+    .toEqual('update');
 
-    expect pusherChannelMock.bind.calls.argsFor(2)[0]
-    .toEqual('destroy')
+    expect(pusherChannelMock.bind.calls.argsFor(2)[0])
+    .toEqual('destroy');
 
-    return
+  });
 
-  describe 'current state is different than calendar', () ->
-    beforeEach () ->
-      $state.current.name = 'calendar' # TODO find better way to set current state
-      return
+  describe('current state is different than calendar', function() {
+    beforeEach(function() {
+      $state.current.name = 'calendar'; // TODO find better way to set current state
+    });
 
-    afterEach () ->
-      expect pusherChannelMock.bind.calls.count()
-      .toEqual 3
-      return
+    afterEach(function() {
+      expect(pusherChannelMock.bind.calls.count())
+      .toEqual(3);
+    });
 
-    it 'redirects to people', () ->
-      $scope.bb = bbMockCompanyHasPeople
-      controllerInstance = getControllerInstance()
+    it('redirects to people', function() {
+      $scope.bb = bbMockCompanyHasPeople;
+      controllerInstance = getControllerInstance();
 
-      expect $state.go
-      .toHaveBeenCalledWith('calendar.people')
-      return
+      expect($state.go)
+      .toHaveBeenCalledWith('calendar.people');
+    });
 
-    it 'redirects to resources', () ->
-      $scope.bb = bbMockCompanyHasResources
-      controllerInstance = getControllerInstance()
+    it('redirects to resources', function() {
+      $scope.bb = bbMockCompanyHasResources;
+      controllerInstance = getControllerInstance();
 
-      expect $state.go
-      .toHaveBeenCalledWith('calendar.resources')
-      return
+      expect($state.go)
+      .toHaveBeenCalledWith('calendar.resources');
+    });
 
-    return
+  });
 
-  return
+});

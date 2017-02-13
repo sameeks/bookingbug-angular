@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbTimeSlots
 * @restrict AE
@@ -23,17 +20,22 @@
 * @property {array} slots The slots
 * @property {object} validator The validator service - see {@link BB.Services:Validator validator Service}
 *
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbTimeSlots', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'TimeSlots'
-  link : (scope, element, attrs) ->
-    if attrs.bbItem
-      scope.booking_item = scope.$eval( attrs.bbItem )
-    if attrs.bbShowAll
-      scope.show_all = true
-    return
+angular.module('BB.Directives').directive('bbTimeSlots', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'TimeSlots',
+    link(scope, element, attrs) {
+      if (attrs.bbItem) {
+        scope.booking_item = scope.$eval( attrs.bbItem );
+      }
+      if (attrs.bbShowAll) {
+        scope.show_all = true;
+      }
+    }
+  })
+);

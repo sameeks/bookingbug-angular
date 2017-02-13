@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbCheckout
 * @restrict AE
@@ -24,11 +21,14 @@
 * @property {string} setLoaded The set loaded
 * @property {string} setLoadedAndShowError The set loaded and show error
 * @property {boolean} checkoutFailed The checkout failed
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbCheckout', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'Checkout'
+angular.module('BB.Directives').directive('bbCheckout', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'Checkout'
+  })
+);

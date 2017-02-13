@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:AdminService
 *
@@ -15,13 +13,16 @@
 * @property {date} booking_time_step The time step of the booking
 * @property {integer} min_bookings The minimum number of bookings
 * @property {integer} max_booings The maximum number of bookings
-###
+*/
 
-angular.module('BB.Models').factory "AdminServiceModel", (
-  $q, AdminServiceService, BBModel, ServiceModel) ->
+angular.module('BB.Models').factory("AdminServiceModel", (
+  $q, AdminServiceService, BBModel, ServiceModel) =>
 
-  class Admin_Service extends ServiceModel
+  class Admin_Service extends ServiceModel {
 
-    @$query: (params) ->
-      AdminServiceService.query(params)
+    static $query(params) {
+      return AdminServiceService.query(params);
+    }
+  }
+);
 

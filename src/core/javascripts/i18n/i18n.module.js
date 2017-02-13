@@ -1,3 +1,1 @@
-'use strict'
-
-angular.module('BB.i18n', ['tmh.dynamicLocale'])
+angular.module('BB.i18n', ['tmh.dynamicLocale']);

@@ -1,8 +1,6 @@
-'use strict'
+//# Address List
 
-## Address List
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbAddresses
 * @restrict AE
@@ -29,10 +27,13 @@
 * @property {string} findByPostcode Find address by postcode
 * @property {string} setLoaded Set loaded address list
 * @property {string} notLoaded Address list not loaded
-####
+*///
 
-angular.module('BB.Directives').directive 'bbAddresses', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'AddressList'
+angular.module('BB.Directives').directive('bbAddresses', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'AddressList'
+  })
+);

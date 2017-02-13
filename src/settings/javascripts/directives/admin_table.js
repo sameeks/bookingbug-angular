@@ -1,44 +1,52 @@
-'use strict'
+angular.module('BBAdminSettings').directive('adminTable', function($log,
+  ModalForm, BBModel) {
 
-angular.module('BBAdminSettings').directive 'adminTable', ($log,
-  ModalForm, BBModel) ->
+  let controller = function($scope) {
 
-  controller = ($scope) ->
+    $scope.getAdministrators = function() {
+      let params =
+        {company: $scope.company};
+      return BBModel.Admin.Administrator.$query(params).then(function(administrators) {
+        $scope.admin_models = administrators;
+        return $scope.administrators = _.map(administrators, administrator => _.pick(administrator, 'id', 'name', 'email', 'role'));
+      });
+    };
 
-    $scope.getAdministrators = () ->
-      params =
-        company: $scope.company
-      BBModel.Admin.Administrator.$query(params).then (administrators) ->
-        $scope.admin_models = administrators
-        $scope.administrators = _.map administrators, (administrator) ->
-          _.pick administrator, 'id', 'name', 'email', 'role'
+    $scope.newAdministrator = () =>
+      ModalForm.new({
+        company: $scope.company,
+        title: 'New Administrator',
+        new_rel: 'new_administrator',
+        post_rel: 'administrators',
+        success(administrator) {
+          return $scope.administrators.push(administrator);
+        }
+      })
+    ;
 
-    $scope.newAdministrator = () ->
-      ModalForm.new
-        company: $scope.company
-        title: 'New Administrator'
-        new_rel: 'new_administrator'
-        post_rel: 'administrators'
-        success: (administrator) ->
-          $scope.administrators.push(administrator)
-
-    $scope.edit = (id) ->
-      admin = _.find $scope.admin_models, (p) -> p.id == id
-      ModalForm.edit
-        model: admin
+    return $scope.edit = function(id) {
+      let admin = _.find($scope.admin_models, p => p.id === id);
+      return ModalForm.edit({
+        model: admin,
         title: 'Edit Administrator'
+      });
+    };
+  };
 
-  link = (scope, element, attrs) ->
-    if scope.company
-      scope.getAdministrators()
-    else
-      BBModel.Admin.Company.$query(attrs).then (company) ->
-        scope.company = company
-        scope.getAdministrators()
+  let link = function(scope, element, attrs) {
+    if (scope.company) {
+      return scope.getAdministrators();
+    } else {
+      return BBModel.Admin.Company.$query(attrs).then(function(company) {
+        scope.company = company;
+        return scope.getAdministrators();
+      });
+    }
+  };
 
-  {
-    controller: controller
-    link: link
+  return {
+    controller,
+    link,
     templateUrl: 'admin-table/admin_table_main.html'
-  }
+  };});
 

@@ -1,14 +1,12 @@
-'use strict';
-
-###
+/*
 * @ngdoc overview
 * @name BBAdminDashboard.dashboard-iframe.translations
-#
+*
 * @description
 * Translations for the admin dashboard-iframe module
-###
+*/
 angular.module('BBAdminDashboard.dashboard-iframe.translations')
-.config ['$translateProvider', ($translateProvider)->
+.config(['$translateProvider', $translateProvider=>
   $translateProvider.translations('en', {
     'ADMIN_DASHBOARD': {
       'SIDE_NAV': {
@@ -22,4 +20,5 @@ angular.module('BBAdminDashboard.dashboard-iframe.translations')
       }
     }
   })
-]
+
+]);

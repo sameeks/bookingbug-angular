@@ -1,14 +1,21 @@
-'use strict'
+angular.module('BB.Services').factory("MembershipLevelsService", ($q, BBModel) =>
 
-angular.module('BB.Services').factory "MembershipLevelsService", ($q, BBModel) ->
-
- getMembershipLevels: (company) ->
-    deferred = $q.defer()
-    company.$get("member_levels").then (resource) ->
-    	resource.$get('membership_levels').then (membership_levels) =>
-      levels = (new BBModel.MembershipLevel(level) for level in membership_levels)
-      deferred.resolve(levels)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+ ({
+   getMembershipLevels(company) {
+      let deferred = $q.defer();
+      company.$get("member_levels").then(resource =>
+    	  resource.$get('membership_levels').then(membership_levels => {
+        let levels = (Array.from(membership_levels).map((level) => new BBModel.MembershipLevel(level)));
+        return deferred.resolve(levels);
+      }
+      )
+    
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    }
+ })
+);
 

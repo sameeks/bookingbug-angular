@@ -1,16 +1,19 @@
-angular.module('BBQueue').directive 'bbAdminQueueTable', (BBModel) ->
+angular.module('BBQueue').directive('bbAdminQueueTable', function(BBModel) {
 
-  link = (scope, element, attrs) ->
-    scope.fields ||= ['ticket_number', 'first_name', 'last_name', 'email']
-    if scope.company
-      scope.getQueuers()
-    else
-      BBModel.Admin.Company.$query(attrs).then (company) ->
-        scope.company = company
-        scope.getQueuers()
+  let link = function(scope, element, attrs) {
+    if (!scope.fields) { scope.fields = ['ticket_number', 'first_name', 'last_name', 'email']; }
+    if (scope.company) {
+      return scope.getQueuers();
+    } else {
+      return BBModel.Admin.Company.$query(attrs).then(function(company) {
+        scope.company = company;
+        return scope.getQueuers();
+      });
+    }
+  };
 
-  {
-    link: link
-    controller: 'bbQueuers'
+  return {
+    link,
+    controller: 'bbQueuers',
     templateUrl: 'queuer_table.html'
-  }
+  };});

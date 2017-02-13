@@ -1,78 +1,83 @@
-'use strict'
-
-angular.module('BBAdminBooking').component 'bbAdminResourcesDropdown', {
+angular.module('BBAdminBooking').component('bbAdminResourcesDropdown', {
   bindings: {
     formCtrl: '<'
-  }
-  controller: 'BBAdminResourcesDropdownCtrl'
-  controllerAs: '$bbAdminResourcesDropdownCtrl'
+  },
+  controller: 'BBAdminResourcesDropdownCtrl',
+  controllerAs: '$bbAdminResourcesDropdownCtrl',
   require: {
     $bbCtrl: '^^bbAdminBooking'
-  }
+  },
   templateUrl: 'admin-booking/admin_resources_dropdown.html'
-}
+});
 
-BBAdminResourcesDropdownCtrl = (BBAssets, $rootScope, $scope) ->
-  'ngInject'
+let BBAdminResourcesDropdownCtrl = function(BBAssets, $rootScope, $scope) {
+  'ngInject';
 
-  @pickedResource = null
-  @resources = []
-  @_resourceChangedUnSubscribe = null
+  let resource;
+  this.pickedResource = null;
+  this.resources = [];
+  this._resourceChangedUnSubscribe = null;
 
-  @$onInit = () =>
-    @changeResource = changeResource
+  this.$onInit = () => {
+    this.changeResource = changeResource;
 
-    BBAssets.getAssets(@$bbCtrl.$scope.bb.company).then setLoadedResources
-    @_resourceChangedUnSubscribe = $scope.$on 'bbAdminResourcesDropdown:resourceChanged', resourceChangedListener
-    return
+    BBAssets.getAssets(this.$bbCtrl.$scope.bb.company).then(setLoadedResources);
+    this._resourceChangedUnSubscribe = $scope.$on('bbAdminResourcesDropdown:resourceChanged', resourceChangedListener);
+  };
 
-  @$onDestroy = () =>
-    @_resourceChangedUnSubscribe()
-    return
+  this.$onDestroy = () => {
+    this._resourceChangedUnSubscribe();
+  };
 
-  resourceChangedListener = (event) =>
-    if not @pickedResource?
-      delete @$bbCtrl.$scope.bb.current_item.resource
-      delete @$bbCtrl.$scope.bb.current_item.person
-      return
+  var resourceChangedListener = event => {
+    if (this.pickedResource == null) {
+      delete this.$bbCtrl.$scope.bb.current_item.resource;
+      delete this.$bbCtrl.$scope.bb.current_item.person;
+      return;
+    }
 
-    type = @pickedResource.split('_')[1]
-    for resource, resourceKey in  @resources
-      if resource.identifier == @pickedResource
-        if type == 'p'
-          @$bbCtrl.$scope.bb.current_item.person = resource
-          @pickedResource = resource
-          delete @$bbCtrl.$scope.bb.current_item.resource
-        else if type == 'r'
-          @$bbCtrl.$scope.bb.current_item.resource = resource
-          @pickedResource = resource
-          delete @$bbCtrl.$scope.bb.current_item.person
-        break
+    let type = this.pickedResource.split('_')[1];
+    for (let resourceKey = 0; resourceKey < this.resources.length; resourceKey++) {
+      resource = this.resources[resourceKey];
+      if (resource.identifier === this.pickedResource) {
+        if (type === 'p') {
+          this.$bbCtrl.$scope.bb.current_item.person = resource;
+          this.pickedResource = resource;
+          delete this.$bbCtrl.$scope.bb.current_item.resource;
+        } else if (type === 'r') {
+          this.$bbCtrl.$scope.bb.current_item.resource = resource;
+          this.pickedResource = resource;
+          delete this.$bbCtrl.$scope.bb.current_item.person;
+        }
+        break;
+      }
+    }
 
-    return
+  };
 
-  ###*
+  /**
   * @param {Array} resources
-  ###
-  setLoadedResources = (resources) =>
-    @resources = resources
-    setCurrentResource()
-    return
+  */
+  var setLoadedResources = resources => {
+    this.resources = resources;
+    setCurrentResource();
+  };
 
-  setCurrentResource = () =>
-    if @$bbCtrl.$scope.bb.current_item.person? and @$bbCtrl.$scope.bb.current_item.person.id?
-      @pickedResource = @$bbCtrl.$scope.bb.current_item.person
-      @pickedResource.identifier = @$bbCtrl.$scope.bb.current_item.person.id + '_p'
-    else if @$bbCtrl.$scope.bb.current_item.resource? and @$bbCtrl.$scope.bb.current_item.resource.id?
-      @pickedResource = @$bbCtrl.$scope.bb.current_item.resource
-      @pickedResource.identifier = @$bbCtrl.$scope.bb.current_item.resource.id + '_r'
+  var setCurrentResource = () => {
+    if ((this.$bbCtrl.$scope.bb.current_item.person != null) && (this.$bbCtrl.$scope.bb.current_item.person.id != null)) {
+      this.pickedResource = this.$bbCtrl.$scope.bb.current_item.person;
+      this.pickedResource.identifier = this.$bbCtrl.$scope.bb.current_item.person.id + '_p';
+    } else if ((this.$bbCtrl.$scope.bb.current_item.resource != null) && (this.$bbCtrl.$scope.bb.current_item.resource.id != null)) {
+      this.pickedResource = this.$bbCtrl.$scope.bb.current_item.resource;
+      this.pickedResource.identifier = this.$bbCtrl.$scope.bb.current_item.resource.id + '_r';
+    }
 
-    return
+  };
 
-  changeResource = () =>
-    $rootScope.$broadcast 'bbAdminResourcesDropdown:resourceChanged'
-    return
+  var changeResource = () => {
+    $rootScope.$broadcast('bbAdminResourcesDropdown:resourceChanged');
+  };
 
-  return
+};
 
-angular.module('BBAdminBooking').controller 'BBAdminResourcesDropdownCtrl', BBAdminResourcesDropdownCtrl
+angular.module('BBAdminBooking').controller('BBAdminResourcesDropdownCtrl', BBAdminResourcesDropdownCtrl);

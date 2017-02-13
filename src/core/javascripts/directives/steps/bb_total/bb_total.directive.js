@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbTotal
 * @restrict AE
@@ -20,11 +17,14 @@
 * @param {hash}  bbTotal A hash of options
 * @property {array} payment_status The payment status
 * @property {array} total The total
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbTotal', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'Total'
+angular.module('BB.Directives').directive('bbTotal', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'Total'
+  })
+);

@@ -1,23 +1,22 @@
-'use strict'
+describe('BBMember, MemberBookings controller', function() {
+  let $rootScope = null;
+  let $scope = null;
 
-describe 'BBMember, MemberBookings controller', () ->
-  $rootScope = null
-  $scope = null
+  let setup = function() {
+    module('BBMember');
 
-  setup = () ->
-    module 'BBMember'
+    inject(function($injector) {
+      $rootScope = $injector.get('$rootScope');
+      $scope = $rootScope.$new();
+    });
 
-    inject ($injector) ->
-      $rootScope = $injector.get '$rootScope'
-      $scope = $rootScope.$new()
-      return
+  };
 
-    return
+  beforeEach(setup);
 
-  beforeEach setup
+  it('dummy test', () =>
+    expect(true)
+    .toBe(true)
+  );
 
-  it 'dummy test', ->
-    expect true
-    .toBe true
-
-  return
+});

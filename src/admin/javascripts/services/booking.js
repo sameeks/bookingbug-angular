@@ -1,178 +1,226 @@
-'use strict'
+angular.module('BBAdmin.Services').factory('AdminBookingService', ($q, $window,
+    halClient, BookingCollections, BBModel, UriTemplate) =>
 
-angular.module('BBAdmin.Services').factory 'AdminBookingService', ($q, $window,
-    halClient, BookingCollections, BBModel, UriTemplate) ->
+  ({
+    query(prms) {
 
-  query: (prms) ->
+      let company;
+      if (prms.slot) {
+        prms.slot_id = prms.slot.id;
+      }
+      if (prms.date) {
+        prms.start_date = prms.date;
+        prms.end_date = prms.date;
+      }
+      if (prms.company) {
+        ({ company } = prms);
+        delete prms.company;
+        prms.company_id = company.id;
+      }
 
-    if prms.slot
-      prms.slot_id = prms.slot.id
-    if prms.date
-      prms.start_date = prms.date
-      prms.end_date = prms.date
-    if prms.company
-      company = prms.company
-      delete prms.company
-      prms.company_id = company.id
+      if (prms.per_page == null) { prms.per_page = 1024; }
+      if (prms.include_cancelled == null) { prms.include_cancelled = false; }
 
-    prms.per_page = 1024 if !prms.per_page?
-    prms.include_cancelled = false if !prms.include_cancelled?
+      let deferred = $q.defer();
+      let existing = BookingCollections.find(prms);
+      if (existing  && !prms.skip_cache) {
+        deferred.resolve(existing);
+      } else if (company) {
+        if (prms.skip_cache) {
+          if (existing) { BookingCollections.delete(existing); }
+          company.$flush('bookings', prms);
+        }
+        company.$get('bookings', prms).then(collection =>
+          collection.$get('bookings').then(function(bookings) {
+            let models = (Array.from(bookings).map((b) => new BBModel.Admin.Booking(b)));
+            let spaces = new $window.Collection.Booking(collection, models, prms);
+            BookingCollections.add(spaces);
+            return deferred.resolve(spaces);
+          }
+          , err => deferred.reject(err))
+        
+        , err => deferred.reject(err));
+      } else {
+        let url = "";
+        if (prms.url) { ({ url } = prms); }
+        let href = url + "/api/v1/admin/{company_id}/bookings{?slot_id,start_date,end_date,service_id,resource_id,person_id,page,per_page,include_cancelled,embed,client_id}";
+        let uri = new UriTemplate(href).fillFromObject(prms || {});
 
-    deferred = $q.defer()
-    existing = BookingCollections.find(prms)
-    if existing  && !prms.skip_cache
-      deferred.resolve(existing)
-    else if company
-      if prms.skip_cache
-        BookingCollections.delete(existing) if existing
-        company.$flush('bookings', prms)
-      company.$get('bookings', prms).then (collection) ->
-        collection.$get('bookings').then (bookings) ->
-          models = (new BBModel.Admin.Booking(b) for b in bookings)
-          spaces = new $window.Collection.Booking(collection, models, prms)
-          BookingCollections.add(spaces)
-          deferred.resolve(spaces)
-        , (err) ->
-          deferred.reject(err)
-      , (err) ->
-        deferred.reject(err)
-    else
-      url = ""
-      url = prms.url if prms.url
-      href = url + "/api/v1/admin/{company_id}/bookings{?slot_id,start_date,end_date,service_id,resource_id,person_id,page,per_page,include_cancelled,embed,client_id}"
-      uri = new UriTemplate(href).fillFromObject(prms || {})
+        halClient.$get(uri, {}).then(found => {
+          return found.$get('bookings').then(items => {
+            let sitems = [];
+            for (let item of Array.from(items)) {
+              sitems.push(new BBModel.Admin.Booking(item));
+            }
+            let spaces = new $window.Collection.Booking(found, sitems, prms);
+            BookingCollections.add(spaces);
+            return deferred.resolve(spaces);
+          }
+          );
+        }
+        , err => {
+          return deferred.reject(err);
+        }
+        );
+      }
 
-      halClient.$get(uri, {}).then  (found) =>
-        found.$get('bookings').then (items) =>
-          sitems = []
-          for item in items
-            sitems.push(new BBModel.Admin.Booking(item))
-          spaces = new $window.Collection.Booking(found, sitems, prms)
-          BookingCollections.add(spaces)
-          deferred.resolve(spaces)
-      , (err) =>
-        deferred.reject(err)
+      return deferred.promise;
+    },
 
-    deferred.promise
+    getBooking(prms) {
+      let deferred = $q.defer();
+      if (prms.company && !prms.company_id) {
+        prms.company_id = prms.company.id;
+      }
 
-  getBooking: (prms) ->
-    deferred = $q.defer()
-    if prms.company && !prms.company_id
-      prms.company_id = prms.company.id
+      let url = "";
+      if (prms.url) { ({ url } = prms); }
+      let href = url + "/api/v1/admin/{company_id}/bookings/{id}{?embed}";
+      let uri = new UriTemplate(href).fillFromObject(prms || {});
+      halClient.$get(uri, { no_cache: true }).then(function(item) {
+        let booking  = new BBModel.Admin.Booking(item);
+        BookingCollections.checkItems(booking);
+        return deferred.resolve(booking);
+      }
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    },
 
-    url = ""
-    url = prms.url if prms.url
-    href = url + "/api/v1/admin/{company_id}/bookings/{id}{?embed}"
-    uri = new UriTemplate(href).fillFromObject(prms || {})
-    halClient.$get(uri, { no_cache: true }).then (item) ->
-      booking  = new BBModel.Admin.Booking(item)
-      BookingCollections.checkItems(booking)
-      deferred.resolve(booking)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+    cancelBooking(prms, booking) {
+      let deferred = $q.defer();
+      let href = "/api/v1/admin/{company_id}/bookings/{id}?notify={notify}";
+      if (prms.id == null) { prms.id = booking.id; }
 
-  cancelBooking: (prms, booking) ->
-    deferred = $q.defer()
-    href = "/api/v1/admin/{company_id}/bookings/{id}?notify={notify}"
-    prms.id ?= booking.id
+      let { notify } = prms;
+      if (notify == null) { notify = true; }
 
-    notify = prms.notify
-    notify ?= true
+      let uri = new UriTemplate(href).fillFromObject(prms || {});
+      halClient.$del(uri, { notify }).then(function(item) {
+        booking = new BBModel.Admin.Booking(item);
+        BookingCollections.checkItems(booking);
+        return deferred.resolve(booking);
+      }
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    },
 
-    uri = new UriTemplate(href).fillFromObject(prms || {})
-    halClient.$del(uri, { notify: notify }).then (item) ->
-      booking = new BBModel.Admin.Booking(item)
-      BookingCollections.checkItems(booking)
-      deferred.resolve(booking)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+    updateBooking(prms, booking) {
+      let deferred = $q.defer();
+      let href = "/api/v1/admin/{company_id}/bookings/{id}";
+      if (prms.id == null) { prms.id = booking.id; }
 
-  updateBooking: (prms, booking) ->
-    deferred = $q.defer()
-    href = "/api/v1/admin/{company_id}/bookings/{id}"
-    prms.id ?= booking.id
+      let uri = new UriTemplate(href).fillFromObject(prms || {});
+      halClient.$put(uri, {}, prms).then(function(item) {
+        booking = new BBModel.Admin.Booking(item);
+        BookingCollections.checkItems(booking);
+        return deferred.resolve(booking);
+      }
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    },
 
-    uri = new UriTemplate(href).fillFromObject(prms || {})
-    halClient.$put(uri, {}, prms).then (item) ->
-      booking = new BBModel.Admin.Booking(item)
-      BookingCollections.checkItems(booking)
-      deferred.resolve(booking)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+    blockTimeForPerson(prms, person) {
+      let deferred = $q.defer();
+      let href = "/api/v1/admin/{company_id}/people/{person_id}/block";
+      if (prms.person_id == null) { prms.person_id = person.id; }
+      prms.booking = true;
+      let uri = new UriTemplate(href).fillFromObject(prms || {});
+      halClient.$put(uri, {}, prms).then(function(item) {
+        let booking = new BBModel.Admin.Booking(item);
+        BookingCollections.checkItems(booking);
+        return deferred.resolve(booking);
+      }
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    },
 
-  blockTimeForPerson: (prms, person) ->
-    deferred = $q.defer()
-    href = "/api/v1/admin/{company_id}/people/{person_id}/block"
-    prms.person_id ?= person.id
-    prms.booking = true
-    uri = new UriTemplate(href).fillFromObject(prms || {})
-    halClient.$put(uri, {}, prms).then (item) ->
-      booking = new BBModel.Admin.Booking(item)
-      BookingCollections.checkItems(booking)
-      deferred.resolve(booking)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+    addStatusToBooking(prms, booking, status) {
+      let deferred = $q.defer();
+      let href = "/api/v1/admin/{company_id}/bookings/{booking_id}/multi_status";
+      if (prms.booking_id == null) { prms.booking_id = booking.id; }
+      let uri = new UriTemplate(href).fillFromObject(prms || {});
+      halClient.$put(uri, {}, { status }).then(function(item) {
+        booking  = new BBModel.Admin.Booking(item);
+        BookingCollections.checkItems(booking);
+        return deferred.resolve(booking);
+      }
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    },
 
-  addStatusToBooking: (prms, booking, status) ->
-    deferred = $q.defer()
-    href = "/api/v1/admin/{company_id}/bookings/{booking_id}/multi_status"
-    prms.booking_id ?= booking.id
-    uri = new UriTemplate(href).fillFromObject(prms || {})
-    halClient.$put(uri, {}, { status: status }).then (item) ->
-      booking  = new BBModel.Admin.Booking(item)
-      BookingCollections.checkItems(booking)
-      deferred.resolve(booking)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+    addPrivateNoteToBooking(prms, booking, note) {
+      let noteParam;
+      let deferred = $q.defer();
+      let href = "/api/v1/admin/{company_id}/bookings/{booking_id}/private_notes";
+      if (prms.booking_id == null) { prms.booking_id = booking.id; }
 
-  addPrivateNoteToBooking: (prms, booking, note) ->
-    deferred = $q.defer()
-    href = "/api/v1/admin/{company_id}/bookings/{booking_id}/private_notes"
-    prms.booking_id ?= booking.id
+      if (note.note != null) { noteParam = note.note; }
+      if (noteParam == null) { noteParam = note; }
 
-    noteParam = note.note if note.note?
-    noteParam ?= note
+      let uri = new UriTemplate(href).fillFromObject(prms || {});
+      halClient.$put(uri, {}, { note: noteParam }).then(function(item) {
+        booking  = new BBModel.Admin.Booking(item);
+        BookingCollections.checkItems(booking);
+        return deferred.resolve(booking);
+      }
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    },
 
-    uri = new UriTemplate(href).fillFromObject(prms || {})
-    halClient.$put(uri, {}, { note: noteParam }).then (item) ->
-      booking  = new BBModel.Admin.Booking(item)
-      BookingCollections.checkItems(booking)
-      deferred.resolve(booking)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+    updatePrivateNoteForBooking(prms, booking, note) {
+      let deferred = $q.defer();
+      let href = "/api/v1/admin/{company_id}/bookings/{booking_id}/private_notes/{id}";
+      if (prms.booking_id == null) { prms.booking_id = booking.id; }
+      if (prms.id == null) { prms.id = note.id; }
 
-  updatePrivateNoteForBooking: (prms, booking, note) ->
-    deferred = $q.defer()
-    href = "/api/v1/admin/{company_id}/bookings/{booking_id}/private_notes/{id}"
-    prms.booking_id ?= booking.id
-    prms.id ?= note.id
+      let uri = new UriTemplate(href).fillFromObject(prms || {});
+      halClient.$put(uri, {}, { note: note.note }).then(function(item) {
+        booking  = new BBModel.Admin.Booking(item);
+        BookingCollections.checkItems(booking);
+        return deferred.resolve(booking);
+      }
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    },
 
-    uri = new UriTemplate(href).fillFromObject(prms || {})
-    halClient.$put(uri, {}, { note: note.note }).then (item) ->
-      booking  = new BBModel.Admin.Booking(item)
-      BookingCollections.checkItems(booking)
-      deferred.resolve(booking)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+    deletePrivateNoteFromBooking(prms, booking, note) {
+      let deferred = $q.defer();
+      let href = "/api/v1/admin/{company_id}/bookings/{booking_id}/private_notes/{id}";
+      if (prms.booking_id == null) { prms.booking_id = booking.id; }
+      if (prms.id == null) { prms.id = note.id; }
 
-  deletePrivateNoteFromBooking: (prms, booking, note) ->
-    deferred = $q.defer()
-    href = "/api/v1/admin/{company_id}/bookings/{booking_id}/private_notes/{id}"
-    prms.booking_id ?= booking.id
-    prms.id ?= note.id
-
-    uri = new UriTemplate(href).fillFromObject(prms || {})
-    halClient.$del(uri, {}).then (item) ->
-      booking  = new BBModel.Admin.Booking(item)
-      BookingCollections.checkItems(booking)
-      deferred.resolve(booking)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+      let uri = new UriTemplate(href).fillFromObject(prms || {});
+      halClient.$del(uri, {}).then(function(item) {
+        booking  = new BBModel.Admin.Booking(item);
+        BookingCollections.checkItems(booking);
+        return deferred.resolve(booking);
+      }
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    }
+  })
+);

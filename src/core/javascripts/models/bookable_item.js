@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:BookableItem
 *
@@ -12,52 +9,79 @@
 * @property {string} ready The ready
 * @property {string} promise The promise
 * @property {string} item Bookable item
-####
+*///
 
 
-angular.module('BB.Models').factory "BookableItemModel", ($q, BBModel, BaseModel, ItemService) ->
+angular.module('BB.Models').factory("BookableItemModel", ($q, BBModel, BaseModel, ItemService) =>
 
-  class BookableItem extends BaseModel
+  __initClass__(class BookableItem extends BaseModel {
+    static initClass() {
+  
+      this.prototype.item = null;
+  
+      this.prototype.promise = null;
+    }
 
-    item: null
 
-    promise: null
+    constructor(data) {
+      super(...arguments);
+      this.name = "-Waiting-";
+      this.ready = $q.defer();
+      this.promise = this._data.$get('item');
+      this.promise.then(val => {
+        let m, n;
+        if (val.type === "person") {
+          this.item = new BBModel.Person(val);
+          if (this.item) {
+            for (n in this.item._data) {
+              m = this.item._data[n];
+              if (this.item._data.hasOwnProperty(n) && (typeof m !== 'function')) {
+                this[n] = m;
+              }
+            }
+            return this.ready.resolve();
+          } else {
+            return this.ready.resolve();
+          }
+        } else if (val.type === "resource") {
+          this.item = new BBModel.Resource(val);
+          if (this.item) {
+            for (n in this.item._data) {
+              m = this.item._data[n];
+              if (this.item._data.hasOwnProperty(n) && (typeof m !== 'function')) {
+                this[n] = m;
+              }
+            }
+            return this.ready.resolve();
+          } else {
+            return this.ready.resolve();
+          }
+        } else if (val.type === "service") {
+          this.item = new BBModel.Service(val);
+          if (this.item) {
+            for (n in this.item._data) {
+              m = this.item._data[n];
+              if (this.item._data.hasOwnProperty(n) && (typeof m !== 'function')) {
+                this[n] = m;
+              }
+            }
+            return this.ready.resolve();
+          } else {
+            return this.ready.resolve();
+          }
+        }
+      }
+      );
+    }
+
+    static $query(params) {
+      return ItemService.query(params);
+    }
+  })
+);
 
 
-    constructor: (data) ->
-      super
-      @name = "-Waiting-"
-      @ready = $q.defer()
-      @promise = @_data.$get('item')
-      @promise.then (val) =>
-        if val.type == "person"
-          @item = new BBModel.Person(val)
-          if @item
-            for n,m of @item._data
-              if @item._data.hasOwnProperty(n) && typeof m != 'function'
-                @[n] = m
-            @ready.resolve()
-          else
-            @ready.resolve()
-        else if val.type == "resource"
-          @item = new BBModel.Resource(val)
-          if @item
-            for n,m of @item._data
-              if @item._data.hasOwnProperty(n) && typeof m != 'function'
-                @[n] = m
-            @ready.resolve()
-          else
-            @ready.resolve()
-        else if val.type == "service"
-          @item = new BBModel.Service(val)
-          if @item
-            for n,m of @item._data
-              if @item._data.hasOwnProperty(n) && typeof m != 'function'
-                @[n] = m
-            @ready.resolve()
-          else
-            @ready.resolve()
-
-    @$query: (params) ->
-      ItemService.query(params)
-
+function __initClass__(c) {
+  c.initClass();
+  return c;
+}

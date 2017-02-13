@@ -1,14 +1,14 @@
-'use strict'
+angular.module('BB.Services').config($provide =>
 
-angular.module('BB.Services').config ($provide) ->
+  $provide.decorator('$sniffer', function($delegate) {
 
-  $provide.decorator '$sniffer', ($delegate) ->
+    let regexp = /Safari\/([\d.]+)/;
+    let result = regexp.exec(navigator.userAgent);
+    let webkit_version = result ? parseFloat(result[1]) : null;
 
-    regexp = /Safari\/([\d.]+)/
-    result = regexp.exec(navigator.userAgent)
-    webkit_version = if result then parseFloat(result[1]) else null
+    _.extend($delegate, {webkit: webkit_version});
 
-    _.extend($delegate, {webkit: webkit_version})
-
-    $delegate
+    return $delegate;
+  })
+);
 

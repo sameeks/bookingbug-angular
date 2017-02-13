@@ -1,46 +1,44 @@
-'use strict';
+describe('bbTe.blogArticle, bbTeBaSample provider', function() {
+  let sampleProviderObj = null;
+  let sample = null;
 
-describe 'bbTe.blogArticle, bbTeBaSample provider', () ->
-  sampleProviderObj = null
-  sample = null
+  let beforeEachFn = function() {
+    module('bbTe.blogArticle');
 
-  beforeEachFn = () ->
-    module 'bbTe.blogArticle'
+    module(function(bbTeBaSampleProvider) {
+      sampleProviderObj = bbTeBaSampleProvider;
+    });
 
-    module (bbTeBaSampleProvider) ->
-      sampleProviderObj = bbTeBaSampleProvider
-      return
+    inject(function($injector) {
+      sample = $injector.get('bbTeBaSample');
+    });
 
-    inject ($injector) ->
-      sample = $injector.get 'bbTeBaSample'
-      return
+  };
 
-    return
+  beforeEach(beforeEachFn);
 
-  beforeEach beforeEachFn
+  it('use default company name to introduce employee', function() {
+    expect(sample.introduceEmployee('B'))
+    .toBe('B works at Default Company');
 
-  it 'use default company name to introduce employee', ->
-    expect sample.introduceEmployee 'B'
-    .toBe 'B works at Default Company'
+  });
 
-    return
+  it('use specific company name to introduce employee - by using provider method', function() {
+    sampleProviderObj.setCompanyName('BookingBug');
 
-  it 'use specific company name to introduce employee - by using provider method', ->
-    sampleProviderObj.setCompanyName 'BookingBug'
+    expect(sample.introduceEmployee('B'))
+    .toBe('B works at BookingBug');
 
-    expect sample.introduceEmployee 'B'
-    .toBe 'B works at BookingBug'
+    expect(sample.introduceEmployee('C'))
+    .toBe('C works at BookingBug');
 
-    expect sample.introduceEmployee 'C'
-    .toBe 'C works at BookingBug'
-
-    return
+  });
 
 
-  it 'use specific company name to introduce employee - by using provider method', ->
-    expect sample.introduceEmployee 'B'
-    .toBe 'B works at Default Company'
+  it('use specific company name to introduce employee - by using provider method', function() {
+    expect(sample.introduceEmployee('B'))
+    .toBe('B works at Default Company');
 
-    return
+  });
 
-  return
+});

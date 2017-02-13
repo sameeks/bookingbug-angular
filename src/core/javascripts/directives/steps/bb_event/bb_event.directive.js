@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbEvent
 * @restrict AE
@@ -19,11 +16,14 @@
 * @property {integer} total_entries The total entries of the event
 * @property {array} events The events array
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbEvent', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'Event'
+angular.module('BB.Directives').directive('bbEvent', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'Event'
+  })
+);

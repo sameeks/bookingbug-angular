@@ -1,11 +1,11 @@
-'use strict'
-
-angular.module('BBAdminDashboard.logout').config ($stateProvider, $urlRouterProvider) ->
-  'ngInject'
+angular.module('BBAdminDashboard.logout').config(function($stateProvider, $urlRouterProvider) {
+  'ngInject';
 
   $stateProvider
-  .state 'logout',
-    url: '/logout'
+  .state('logout', {
+    url: '/logout',
     controller: 'LogoutPageCtrl'
+  }
+  );
 
-  return
+});

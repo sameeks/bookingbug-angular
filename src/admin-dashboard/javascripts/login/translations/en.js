@@ -1,14 +1,12 @@
-'use strict';
-
-###
+/*
 * @ngdoc overview
 * @name BBAdminDashboard.login.translations
-#
+*
 * @description
 * Translations for the admin login module
-###
+*/
 angular.module('BBAdminDashboard.login.translations')
-.config ['$translateProvider', ($translateProvider)->
+.config(['$translateProvider', $translateProvider=>
   $translateProvider.translations('en', {
     'ADMIN_DASHBOARD': {
       'LOGIN_PAGE': {
@@ -23,7 +21,7 @@ angular.module('BBAdminDashboard.login.translations')
         'SEARCH_DEPARTMENT_PLACEHOLDER': 'Select or search a department in the list...',
         'SELECT'                       : 'Select',
         'SELECT_COMPANY'               : 'Select company',
-        'USERNAME'                     : 'Username'
+        'USERNAME'                     : 'Username',
         'ERROR_ISSUE_WITH_COMPANY'     : 'Sorry, there seems to be a problem with the company associated with this account',
         'ERROR_INCORRECT_CREDS'        : 'Sorry, either your email or password was incorrect',
         'ERROR_ACCOUNT_ISSUES'         : 'Sorry, there seems to be a problem with this account',
@@ -31,4 +29,5 @@ angular.module('BBAdminDashboard.login.translations')
       }
     }
   })
-]
+
+]);

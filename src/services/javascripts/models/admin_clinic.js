@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:AdminClinic
 *
@@ -20,18 +18,19 @@
 * @property {string} className The class Name
 * @property {string} start_time The clinic start thime
 * @property {string} end_time The clinic end time
-####
+*///
 
-angular.module('BB.Models').factory "AdminClinicModel", ($q, BBModel, BaseModel, ClinicModel) ->
+angular.module('BB.Models').factory("AdminClinicModel", ($q, BBModel, BaseModel, ClinicModel) =>
 
-  class Admin_Clinic extends ClinicModel
+  class Admin_Clinic extends ClinicModel {
 
-    constructor: (data) ->
-      super(data)
-      @repeat_rule ||= {}
-      @repeat_rule.rules ||= {}
+    constructor(data) {
+      super(data);
+      if (!this.repeat_rule) { this.repeat_rule = {}; }
+      if (!this.repeat_rule.rules) { this.repeat_rule.rules = {}; }
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name calcRepeatRule
     * @methodOf BB.Models:AdminClinic
@@ -39,27 +38,35 @@ angular.module('BB.Models').factory "AdminClinicModel", ($q, BBModel, BaseModel,
     * Calculate the repeat rule
     *
     * @returns {array} Returns an array of repeat rules
-    ###
-    calcRepeatRule: () ->
-      vals = {}
-      vals.name = @name
-      vals.start_time = @start_time.format("HH:mm")
-      vals.end_time = @end_time.format("HH:mm")
-      vals.address_id = @address_id
-      vals.resource_ids = []
-      for id, en of @resources
-        vals.resource_ids.push(id) if en
-      vals.person_ids = []
-      for id, en of @people
-        vals.person_ids.push(id) if en
-      vals.service_ids = []
-      for id, en of @services
-        vals.service_ids.push(id) if en
+    */
+    calcRepeatRule() {
+      let en;
+      let vals = {};
+      vals.name = this.name;
+      vals.start_time = this.start_time.format("HH:mm");
+      vals.end_time = this.end_time.format("HH:mm");
+      vals.address_id = this.address_id;
+      vals.resource_ids = [];
+      for (var id in this.resources) {
+        en = this.resources[id];
+        if (en) { vals.resource_ids.push(id); }
+      }
+      vals.person_ids = [];
+      for (id in this.people) {
+        en = this.people[id];
+        if (en) { vals.person_ids.push(id); }
+      }
+      vals.service_ids = [];
+      for (id in this.services) {
+        en = this.services[id];
+        if (en) { vals.service_ids.push(id); }
+      }
 
-      @repeat_rule.properties = vals
-      return @repeat_rule
+      this.repeat_rule.properties = vals;
+      return this.repeat_rule;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getPostData
     * @methodOf BB.Models:AdminClinic
@@ -67,30 +74,39 @@ angular.module('BB.Models').factory "AdminClinicModel", ($q, BBModel, BaseModel,
     * Get post data
     *
     * @returns {array} Returns an array with data
-    ###
-    getPostData: () ->
-      data = {}
-      data.name = @name
-      data.repeat_rule = @repeat_rule
-      data.start_time = @start_time
-      data.end_time = @end_time
-      data.resource_ids = []
-      data.update_for_repeat = @update_for_repeat
-      for id, en of @resources
-        data.resource_ids.push(id) if en
-      data.person_ids = []
-      for id, en of @people
-        data.person_ids.push(id) if en
-      data.service_ids = []
-      for id, en of @services
-        data.service_ids.push(id) if en
-      data.address_id = @address.id if @address
-      data.settings = @settings if @settings
-      if @repeat_rule && @repeat_rule.rules && @repeat_rule.rules.frequency
-        data.repeat_rule = @calcRepeatRule()
-      data
+    */
+    getPostData() {
+      let en;
+      let data = {};
+      data.name = this.name;
+      data.repeat_rule = this.repeat_rule;
+      data.start_time = this.start_time;
+      data.end_time = this.end_time;
+      data.resource_ids = [];
+      data.update_for_repeat = this.update_for_repeat;
+      for (var id in this.resources) {
+        en = this.resources[id];
+        if (en) { data.resource_ids.push(id); }
+      }
+      data.person_ids = [];
+      for (id in this.people) {
+        en = this.people[id];
+        if (en) { data.person_ids.push(id); }
+      }
+      data.service_ids = [];
+      for (id in this.services) {
+        en = this.services[id];
+        if (en) { data.service_ids.push(id); }
+      }
+      if (this.address) { data.address_id = this.address.id; }
+      if (this.settings) { data.settings = this.settings; }
+      if (this.repeat_rule && this.repeat_rule.rules && this.repeat_rule.rules.frequency) {
+        data.repeat_rule = this.calcRepeatRule();
+      }
+      return data;
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name save
     * @methodOf BB.Models:AdminClinic
@@ -98,24 +114,32 @@ angular.module('BB.Models').factory "AdminClinicModel", ($q, BBModel, BaseModel,
     * Save person id, resource id and service id
     *
     * @returns {array} Returns an array with resources and peoples
-    ###
-    save: () ->
-      @person_ids = _.compact(_.map(@people, (present, person_id) ->
-        person_id if present
-      ))
-      @resource_ids = _.compact(_.map(@resources, (present, resource_id) ->
-        resource_id if present
-      ))
-      @service_ids = _.compact(_.map(@services, (present, service_id) ->
-        service_id if present
-      ))
-      @$put('self', {}, @).then (clinic) =>
-        @updateModel(clinic)
-        @setTimes()
-        @setResourcesAndPeople()
+    */
+    save() {
+      this.person_ids = _.compact(_.map(this.people, function(present, person_id) {
+        if (present) { return person_id; }
+      }));
+      this.resource_ids = _.compact(_.map(this.resources, function(present, resource_id) {
+        if (present) { return resource_id; }
+      }));
+      this.service_ids = _.compact(_.map(this.services, function(present, service_id) {
+        if (present) { return service_id; }
+      }));
+      return this.$put('self', {}, this).then(clinic => {
+        this.updateModel(clinic);
+        this.setTimes();
+        return this.setResourcesAndPeople();
+      }
+      );
+    }
 
-    $update: (data) ->
-      data ||= @
-      @$put('self', {}, data).then (res) =>
-        @constructor(res)
+    $update(data) {
+      if (!data) { data = this; }
+      return this.$put('self', {}, data).then(res => {
+        return this.constructor(res);
+      }
+      );
+    }
+  }
+);
 

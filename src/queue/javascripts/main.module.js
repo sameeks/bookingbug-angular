@@ -1,5 +1,3 @@
-'use strict'
-
 angular.module('BBQueue', [
   'BB',
   'BBAdmin.Services',
@@ -10,20 +8,20 @@ angular.module('BBQueue', [
   'trNgGrid',
   'ngDragDrop',
   'pusher-angular'
-])
+]);
 
 angular.module('BBQueue.Directives', [
   'timer'
-])
+]);
 
-angular.module('BBQueue.Controllers', [])
+angular.module('BBQueue.Controllers', []);
 
 angular.module('BBQueue.Services', [
   'ngResource',
   'ngSanitize'
-])
+]);
 
-angular.module('BBQueueMockE2E', ['BBQueue', 'BBAdminMockE2E'])
+angular.module('BBQueueMockE2E', ['BBQueue', 'BBAdminMockE2E']);
 
 
 

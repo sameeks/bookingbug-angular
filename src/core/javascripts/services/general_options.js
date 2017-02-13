@@ -1,15 +1,13 @@
-'use strict'
-
-###
+/*
 * @ngdoc service
 * @module BB.Services
 * @name GeneralOptions
 *
 * @description
 * Returns a set of General configuration options
-###
+*/
 
-###
+/*
 * @ngdoc service
 * @module BB.Services
 * @name GeneralOptionsProvider
@@ -23,30 +21,30 @@
     GeneralOptionsProvider.setOption('twelve_hour_format', true)
   ]
   </example>
-###
-angular.module('BB.Services').provider 'GeneralOptions', ->
+*/
+angular.module('BB.Services').provider('GeneralOptions', function() {
 
-  options = {
-    twelve_hour_format: false
-    calendar_minute_step: 5
-    calendar_min_time: "09:00"
-    calendar_max_time: "18:00"
-    calendar_slot_duration: 5
-    use_local_time_zone: false 
-    display_time_zone: null
-    update_document_title: false 
+  let options = {
+    twelve_hour_format: false,
+    calendar_minute_step: 5,
+    calendar_min_time: "09:00",
+    calendar_max_time: "18:00",
+    calendar_slot_duration: 5,
+    use_local_time_zone: false, 
+    display_time_zone: null,
+    update_document_title: false, 
     scroll_offset: 0
-  }
+  };
 
 
 
-  @setOption = (option, value) ->
-    if options.hasOwnProperty(option)
-      options[option] = value
-    return
+  this.setOption = function(option, value) {
+    if (options.hasOwnProperty(option)) {
+      options[option] = value;
+    }
+  };
 
-  @$get = ->
-    options
+  this.$get = () => options;
 
-  return
+});
 

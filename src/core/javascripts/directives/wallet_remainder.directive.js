@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbWalletRemainder
 * @restrict A
@@ -11,15 +9,20 @@
 *
 * Calculates wallet remainder
 *
-### 
+*/ 
 
-angular.module('BB.Directives').directive 'bbWalletRemainder', () ->
-  restrict: 'A'
-  scope:
-    totalPrice: '='
-    walletAmount: '='
-  controllerAs: 'vm'
-  bindToController: true
-  template: '<span translate="PUBLIC_BOOKING.BASKET.WALLET.REMAINDER" translate-values="{remainder: vm.amountRemaining}"></span>'
-  controller: () ->
-    @amountRemaining = @walletAmount - @totalPrice
+angular.module('BB.Directives').directive('bbWalletRemainder', () =>
+  ({
+    restrict: 'A',
+    scope: {
+      totalPrice: '=',
+      walletAmount: '='
+    },
+    controllerAs: 'vm',
+    bindToController: true,
+    template: '<span translate="PUBLIC_BOOKING.BASKET.WALLET.REMAINDER" translate-values="{remainder: vm.amountRemaining}"></span>',
+    controller() {
+      return this.amountRemaining = this.walletAmount - this.totalPrice;
+    }
+  })
+);

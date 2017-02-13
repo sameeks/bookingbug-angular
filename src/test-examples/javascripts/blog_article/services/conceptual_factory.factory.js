@@ -1,18 +1,19 @@
-factory = ($log) ->
-  'ngInject'
+let factory = function($log) {
+  'ngInject';
 
-  init = () ->
-    return
+  let init = function() {
+    
+  };
 
-  sayHello = (name) ->
-    return "Hi " + name + "!"
+  let sayHello = name => `Hi ${name}!`;
 
-  init()
+  init();
 
   return {
-    sayHello: sayHello
-  } # it's important to return an object
+    sayHello
+  }; // it's important to return an object
+};
 
 angular
 .module('bbTe.blogArticle')
-.factory('bbTeBaConceptualFactory', factory)
+.factory('bbTeBaConceptualFactory', factory);

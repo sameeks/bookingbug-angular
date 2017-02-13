@@ -1,13 +1,15 @@
-'use strict'
+angular.module('BB.Models').factory("AdminEventChainModel", ($q, BBModel,
+  BaseModel, EventChainService) =>
 
-angular.module('BB.Models').factory "AdminEventChainModel", ($q, BBModel,
-  BaseModel, EventChainService) ->
+  class Admin_EventChain extends BaseModel {
 
-  class Admin_EventChain extends BaseModel
+    constructor(data) {
+      super(data);
+    }
 
-    constructor: (data) ->
-      super(data)
-
-    @$query: (params) ->
-      EventChainService.query(params)
+    static $query(params) {
+      return EventChainService.query(params);
+    }
+  }
+);
 

@@ -1,55 +1,54 @@
-'use strict';
+describe('bbTe.blogArticle, bbTeBaCustomizableTemplate directive', function() {
+  let $compile = null;
+  let $httpBackend = null;
+  let $scope = null;
 
-describe 'bbTe.blogArticle, bbTeBaCustomizableTemplate directive', () ->
-  $compile = null
-  $httpBackend = null
-  $scope = null
+  let directive = null;
 
-  directive = null
+  let directiveDefaultTemplatePath = '/templates/blog-article/display.html';
+  let directiveDefaultHtml = '<bb-te-ba-customizable-template some-data="anyData"></bb-te-ba-customizable-template>';
 
-  directiveDefaultTemplatePath = '/templates/blog-article/display.html';
-  directiveDefaultHtml = '<bb-te-ba-customizable-template some-data="anyData"></bb-te-ba-customizable-template>'
+  let directiveCustomizedTemplatePath = '/templates/blog-article/display-customized.html';
+  let directiveCustomizedHtml = `<bb-te-ba-customizable-template template-url="${directiveCustomizedTemplatePath}"></bb-te-ba-customizable-template>`;
 
-  directiveCustomizedTemplatePath = '/templates/blog-article/display-customized.html';
-  directiveCustomizedHtml = '<bb-te-ba-customizable-template template-url="' + directiveCustomizedTemplatePath + '"></bb-te-ba-customizable-template>'
+  let beforeEachFn = function() {
+    module('bbTe.blogArticle');
 
-  beforeEachFn = () ->
-    module('bbTe.blogArticle')
+    inject(function($injector) {
+      $compile = $injector.get('$compile');
+      $httpBackend = $injector.get('$httpBackend');
+      $scope = $injector.get('$rootScope').$new();
+    });
 
-    inject ($injector) ->
-      $compile = $injector.get '$compile'
-      $httpBackend = $injector.get '$httpBackend'
-      $scope = $injector.get('$rootScope').$new()
-      return
+    $httpBackend.whenGET(directiveDefaultTemplatePath).respond(200, '<span>directive default content!</span>');
+    $httpBackend.whenGET(directiveCustomizedTemplatePath).respond(200, '<span>directive customized content!</span>');
 
-    $httpBackend.whenGET(directiveDefaultTemplatePath).respond(200, '<span>directive default content!</span>')
-    $httpBackend.whenGET(directiveCustomizedTemplatePath).respond(200, '<span>directive customized content!</span>')
+  };
 
-    return
-
-  afterEachFn = () ->
+  let afterEachFn = function() {
     $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest()
+    return $httpBackend.verifyNoOutstandingRequest();
+  };
 
-  beforeEach beforeEachFn
-  afterEach afterEachFn
+  beforeEach(beforeEachFn);
+  afterEach(afterEachFn);
 
-  it 'use default template', () ->
+  it('use default template', function() {
     directive = $compile(directiveDefaultHtml)($scope);
 
-    $httpBackend.flush()
+    $httpBackend.flush();
 
     expect(directive.html()).toContain('directive default content!');
-    return
+  });
 
-  it 'use customized template', () ->
+  it('use customized template', function() {
     directive = $compile(directiveCustomizedHtml)($scope);
 
-    $httpBackend.flush()
+    $httpBackend.flush();
 
     expect(directive.html()).toContain('directive customized content!');
-    return
+  });
 
-  return
+});
 
 

@@ -1,4 +1,4 @@
-###
+/*
   Conceptually:
     - service is just a constructor function that will be called with 'new'
     - factory returns an object so you can run some configuration code before or conditionally create an object or not
@@ -13,22 +13,23 @@
 
   @see http://blog.thoughtram.io/angular/2015/07/07/service-vs-factory-once-and-for-all.html
 
-###
-service = ($log) ->
-  'ngInject'
-  ### do whatever you want inside init function ###
-  init = () ->
-    return
+*/
+let service = function($log) {
+  'ngInject';
+  /* do whatever you want inside init function */
+  let init = function() {
+    
+  };
 
-  sayHello = (name) ->
-    return "Hi " + name + "!"
+  let sayHello = name => `Hi ${name}!`;
 
-  init()
+  init();
 
   return {
-    sayHello: sayHello
-  } # it's important to return an object
+    sayHello
+  }; // it's important to return an object
+};
 
 angular
 .module('bbTe.blogArticle')
-.factory('bbTeBaServiceDoingSameAsFactory', service)
+.factory('bbTeBaServiceDoingSameAsFactory', service);

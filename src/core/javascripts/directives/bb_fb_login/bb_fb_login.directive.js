@@ -1,61 +1,69 @@
-'use strict'
+angular.module("BB.Directives").directive("bbFbLogin", (LoginService,
+    $rootScope, AlertService, $window) =>
 
-angular.module("BB.Directives").directive "bbFbLogin", (LoginService,
-    $rootScope, AlertService, $window) ->
+  ({
+    restrict: 'A',
+    scope: true,
+    link(scope, element, attrs) {
 
-  restrict: 'A'
-  scope: true
-  link: (scope, element, attrs) ->
+      let options = scope.$eval(attrs.bbFbLogin) || {};
+      $rootScope.connection_started.then(() => checkLoginState());
 
-    options = scope.$eval(attrs.bbFbLogin) or {}
-    $rootScope.connection_started.then ->
-      checkLoginState()
+      let statusChangeCallback = function(response) {
+        if (response.status === 'connected') {
+          let params = {};
+          params.access_token = response.authResponse.accessToken;
+          if (options.login_only) { params.login_only = options.login_only; }
+          loginToBBWithFBUser(params);
+        } else if (response.status === 'not_authorized') {
+           scope.loginFB();
+        } else {
+          scope.loginFB();
+        }
+      };
 
-    statusChangeCallback = (response) ->
-      if response.status == 'connected'
-        params = {}
-        params.access_token = response.authResponse.accessToken
-        params.login_only = options.login_only if options.login_only
-        loginToBBWithFBUser(params)
-      else if response.status == 'not_authorized'
-         scope.loginFB()
-      else
-        scope.loginFB()
-      return
+      var checkLoginState = function() {
+        FB.getLoginStatus(function(response) {
+          statusChangeCallback(response);
+        });
+      };
 
-    checkLoginState = () ->
-      FB.getLoginStatus (response) ->
-        statusChangeCallback response
-        return
-      return
-
-    loginToBBWithFBUser = (params) ->
-      LoginService.FBLogin(scope.bb.company, params).then (member) ->
-        $rootScope.member = member
-        scope.setClient($rootScope.member)
-        if scope.bb.destination
-          scope.redirectTo(scope.bb.destination)
-        else
-          scope.setLoaded scope
-          scope.decideNextPage()
-      , (err) ->
-        if err.data.error == "FACEBOOK-LOGIN-MEMBER-NOT-FOUND"
-          AlertService.raise('FB_LOGIN_NOT_A_MEMBER')
-        else
-          AlertService.raise('LOGIN_FAILED')
+      var loginToBBWithFBUser = params =>
+        LoginService.FBLogin(scope.bb.company, params).then(function(member) {
+          $rootScope.member = member;
+          scope.setClient($rootScope.member);
+          if (scope.bb.destination) {
+            return scope.redirectTo(scope.bb.destination);
+          } else {
+            scope.setLoaded(scope);
+            return scope.decideNextPage();
+          }
+        }
+        , function(err) {
+          if (err.data.error === "FACEBOOK-LOGIN-MEMBER-NOT-FOUND") {
+            return AlertService.raise('FB_LOGIN_NOT_A_MEMBER');
+          } else {
+            return AlertService.raise('LOGIN_FAILED');
+          }
+        })
+      ;
 
 
-    scope.loginFB = () ->
-      FB.login ((response) ->
-        if response.status == 'connected'
-          params = {}
-          params.access_token = response.authResponse.accessToken
-          params.login_only = options.login_only if options.login_only
-          loginToBBWithFBUser(params)
-        else if response.status == 'not_authorized'
-          AlertService.raise('LOGIN_FAILED')
-        else
-          AlertService.raise('LOGIN_FAILED')
-        return
-      ), scope: 'public_profile,email'
+      return scope.loginFB = () =>
+        FB.login((function(response) {
+          if (response.status === 'connected') {
+            let params = {};
+            params.access_token = response.authResponse.accessToken;
+            if (options.login_only) { params.login_only = options.login_only; }
+            loginToBBWithFBUser(params);
+          } else if (response.status === 'not_authorized') {
+            AlertService.raise('LOGIN_FAILED');
+          } else {
+            AlertService.raise('LOGIN_FAILED');
+          }
+        }), {scope: 'public_profile,email'})
+      ;
+    }
+  })
+);
 

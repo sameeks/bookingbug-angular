@@ -1,12 +1,16 @@
-'use strict'
+window.Collection.Space = class Space extends window.Collection.Base {
 
-class window.Collection.Space extends window.Collection.Base
+  checkItem(item) {
+    return super.checkItem(...arguments);
+  }
+};
 
-  checkItem: (item) ->
-    super
 
-
-angular.module('BB.Services').provider "SpaceCollections", () ->
-  $get: ->
-    new  window.BaseCollections()
+angular.module('BB.Services').provider("SpaceCollections", () =>
+  ({
+    $get() {
+      return new  window.BaseCollections();
+    }
+  })
+);
 

@@ -1,18 +1,26 @@
-'use strict'
+angular.module('BB.Services').factory("EventGroupService",  ($q, BBModel) =>
 
-angular.module('BB.Services').factory "EventGroupService",  ($q, BBModel) ->
-
-  query: (company, params) ->
-    deferred = $q.defer()
-    if !company.$has('event_groups')
-      deferred.reject("company does not have event_groups")
-    else
-      company.$get('event_groups', params).then (resource) =>
-        resource.$get('event_groups', params).then (event_groups) =>
-          event_groups = for event_group in event_groups
-            new BBModel.EventGroup(event_group)
-          deferred.resolve(event_groups)
-      , (err) =>
-        deferred.reject(err)
-    deferred.promise
+  ({
+    query(company, params) {
+      let deferred = $q.defer();
+      if (!company.$has('event_groups')) {
+        deferred.reject("company does not have event_groups");
+      } else {
+        company.$get('event_groups', params).then(resource => {
+          return resource.$get('event_groups', params).then(event_groups => {
+            event_groups = Array.from(event_groups).map((event_group) =>
+              new BBModel.EventGroup(event_group));
+            return deferred.resolve(event_groups);
+          }
+          );
+        }
+        , err => {
+          return deferred.reject(err);
+        }
+        );
+      }
+      return deferred.promise;
+    }
+  })
+);
 

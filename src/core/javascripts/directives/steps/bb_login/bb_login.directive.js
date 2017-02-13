@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbLogin
 * @restrict AE
@@ -23,11 +20,14 @@
 * @property {boolean} success If user are log in with success
 * @property {boolean} login_error If user have some errors when try to log in
 * @property {object} validator The validator service - see {@link BB.Services:Validator Validator Service}
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbLogin', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'Login'
+angular.module('BB.Directives').directive('bbLogin', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'Login'
+  })
+);

@@ -1,24 +1,27 @@
-'use strict'
+angular.module('BBQueue.Controllers').controller('QueuerPosition', function(
+  QueuerService, $scope, $pusher, QueryStringService) {
 
-angular.module('BBQueue.Controllers').controller 'QueuerPosition', (
-  QueuerService, $scope, $pusher, QueryStringService) ->
-
-	params =
-		id: QueryStringService('id')
+	let params = {
+		id: QueryStringService('id'),
 		url: $scope.apiUrl
-	QueuerService.query(params).then (queuer) ->
-		$scope.queuer =
+	};
+	return QueuerService.query(params).then(function(queuer) {
+		$scope.queuer = {
 			name: queuer.first_name,
 			position: queuer.position,
 			dueTime: queuer.due.valueOf(),
-			serviceName: queuer.service.name
-			spaceId: queuer.space_id
+			serviceName: queuer.service.name,
+			spaceId: queuer.space_id,
 			ticketNumber: queuer.ticket_number
-		client = new Pusher("c8d8cea659cc46060608")
-		pusher = $pusher(client)
-		channel = pusher.subscribe("mobile-queue-#{$scope.queuer.spaceId}")
-		channel.bind 'notification', (data) ->
-			$scope.queuer.dueTime = data.due.valueOf()
-			$scope.queuer.ticketNumber = data.ticket_number
-			$scope.queuer.position = data.position
+		};
+		let client = new Pusher("c8d8cea659cc46060608");
+		let pusher = $pusher(client);
+		let channel = pusher.subscribe(`mobile-queue-${$scope.queuer.spaceId}`);
+		return channel.bind('notification', function(data) {
+			$scope.queuer.dueTime = data.due.valueOf();
+			$scope.queuer.ticketNumber = data.ticket_number;
+			return $scope.queuer.position = data.position;
+		});
+	});
+});
 

@@ -1,6 +1,4 @@
-'use strict'
-
-###*
+/**
 * @ngdoc directive
 * @name BB.Directives:bbResources
 * @restrict AE
@@ -39,19 +37,23 @@
 *   </file>
 *  </example>
 *
-###
+*/
 
-angular.module('BB.Directives').directive 'bbResources', () ->
-  restrict: 'AE'
-  replace: true
-  scope: true
-  controller: 'BBResourcesCtrl'
-  controllerAs: '$bbResourcesCtrl'
-  link: (scope, element, attrs) ->
-    scope.options = scope.$eval(attrs.bbResources) or {}
-    if attrs.bbItems
-      scope.booking_items = scope.$eval(attrs.bbItems) or []
-      scope.booking_item = scope.booking_items[0]
-    else
-      scope.booking_item = scope.$eval(attrs.bbItem) or scope.bb.current_item
-      scope.booking_items = [scope.booking_item]
+angular.module('BB.Directives').directive('bbResources', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope: true,
+    controller: 'BBResourcesCtrl',
+    controllerAs: '$bbResourcesCtrl',
+    link(scope, element, attrs) {
+      scope.options = scope.$eval(attrs.bbResources) || {};
+      if (attrs.bbItems) {
+        scope.booking_items = scope.$eval(attrs.bbItems) || [];
+        return scope.booking_item = scope.booking_items[0];
+      } else {
+        scope.booking_item = scope.$eval(attrs.bbItem) || scope.bb.current_item;
+        return scope.booking_items = [scope.booking_item];
+      }
+    }
+  }));

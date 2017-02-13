@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives.directive:bbDateTimePicker
 * @scope
@@ -15,78 +13,95 @@
 * @param {number}  minuteStep Step for the timepicker (optional, default:10)
 * @param {object}  minDate Min date value for datetimepicker
 * @param {object}  maxDate Max date value for datetimepicker
-###
-angular.module('BB.Directives').directive 'bbDateTimePicker', (PathSvc) ->
-  scope:
-    date: '='
-    showMeridian: '=?'
-    minuteStep: '=?'
-    minDate: '=?'
-    maxDate: '=?'
-    format: '=?'
-    dateOnly: '=?'
-    bbDisabled: '=?'
-  restrict: 'A'
-  templateUrl : 'bb_date_time_picker.html'
-  controller: ($scope, $filter, $timeout, GeneralOptions) ->
-    if !$scope.format?
-      $scope.format = 'dd/MM/yyyy'
+*/
+angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc =>
+  ({
+    scope: {
+      date: '=',
+      showMeridian: '=?',
+      minuteStep: '=?',
+      minDate: '=?',
+      maxDate: '=?',
+      format: '=?',
+      dateOnly: '=?',
+      bbDisabled: '=?'
+    },
+    restrict: 'A',
+    templateUrl : 'bb_date_time_picker.html',
+    controller($scope, $filter, $timeout, GeneralOptions) {
+      if ($scope.format == null) {
+        $scope.format = 'dd/MM/yyyy';
+      }
 
-    unless $scope.bbDisabled?
-      $scope.bbDisabled = false
+      if ($scope.bbDisabled == null) {
+        $scope.bbDisabled = false;
+      }
 
-    # Default minuteStep value
-    $scope.minuteStep = GeneralOptions.calendar_minute_step if not $scope.minuteStep or typeof $scope.minuteStep == 'undefined'
+      // Default minuteStep value
+      if (!$scope.minuteStep || (typeof $scope.minuteStep === 'undefined')) { $scope.minuteStep = GeneralOptions.calendar_minute_step; }
 
-    # Default showMeridian value
-    $scope.showMeridian = GeneralOptions.twelve_hour_format if not $scope.showMeridian or typeof $scope.showMeridian == 'undefined'
+      // Default showMeridian value
+      if (!$scope.showMeridian || (typeof $scope.showMeridian === 'undefined')) { $scope.showMeridian = GeneralOptions.twelve_hour_format; }
 
-    # Watch for changes in the timepicker and reassemble the new datetime
-    $scope.$watch 'datetimeWithNoTz', (newValue, oldValue) ->
+      // Watch for changes in the timepicker and reassemble the new datetime
+      $scope.$watch('datetimeWithNoTz', function(newValue, oldValue) {
 
-      if newValue? and moment(newValue).isValid() and newValue.getTime() != oldValue.getTime()
-        assembledDate = moment()
-        assembledDate.set({
-          'year': parseInt(newValue.getFullYear())
-          'month': parseInt(newValue.getMonth())
-          'date': parseInt(newValue.getDate())
-          'hour': parseInt(newValue.getHours())
-          'minute': parseInt(newValue.getMinutes())
-          'second': 0,
-          'milliseconds': 0
-        })
+        if ((newValue != null) && moment(newValue).isValid() && (newValue.getTime() !== oldValue.getTime())) {
+          let assembledDate = moment();
+          assembledDate.set({
+            'year': parseInt(newValue.getFullYear()),
+            'month': parseInt(newValue.getMonth()),
+            'date': parseInt(newValue.getDate()),
+            'hour': parseInt(newValue.getHours()),
+            'minute': parseInt(newValue.getMinutes()),
+            'second': 0,
+            'milliseconds': 0
+          });
 
-        $scope.date = assembledDate
+          return $scope.date = assembledDate;
+        }
+      });
 
-    clearTimezone = (date)->
-      if date? and moment(date).isValid()
-        date = moment(date)
-        newDate = new Date();
-        newDate.setFullYear(date.year())
-        newDate.setMonth(date.month())
-        newDate.setDate(date.date())
-        newDate.setHours(date.hours())
-        newDate.setMinutes(date.minutes())
-        newDate.setSeconds(0)
-        newDate.setMilliseconds(0)
+      let clearTimezone = function(date){
+        if ((date != null) && moment(date).isValid()) {
+          date = moment(date);
+          let newDate = new Date();
+          newDate.setFullYear(date.year());
+          newDate.setMonth(date.month());
+          newDate.setDate(date.date());
+          newDate.setHours(date.hours());
+          newDate.setMinutes(date.minutes());
+          newDate.setSeconds(0);
+          newDate.setMilliseconds(0);
 
-        return newDate
-      # otherwise undefined (important for timepicker)
-      return undefined
+          return newDate;
+        }
+        // otherwise undefined (important for timepicker)
+        return undefined;
+      };
 
-    $scope.datetimeWithNoTz = clearTimezone($scope.date)
+      $scope.datetimeWithNoTz = clearTimezone($scope.date);
 
-    $scope.$watch 'date', (newValue, oldValue) ->
-      if newValue != oldValue && clearTimezone(newValue) != oldValue
-        $scope.datetimeWithNoTz = clearTimezone(newValue)
+      $scope.$watch('date', function(newValue, oldValue) {
+        if ((newValue !== oldValue) && (clearTimezone(newValue) !== oldValue)) {
+          return $scope.datetimeWithNoTz = clearTimezone(newValue);
+        }
+      });
 
-    $scope.$watch 'minDate', (newValue, oldValue) ->
-      if newValue != oldValue
-        $scope.minDateClean = clearTimezone(newValue)
+      $scope.$watch('minDate', function(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          return $scope.minDateClean = clearTimezone(newValue);
+        }
+      });
 
-    $scope.$watch 'maxDate', (newValue, oldValue) ->
-      if newValue != oldValue
-        $scope.maxDateClean = clearTimezone(newValue)
+      $scope.$watch('maxDate', function(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          return $scope.maxDateClean = clearTimezone(newValue);
+        }
+      });
 
-    $scope.minDateClean = clearTimezone($scope.minDate)
-    $scope.maxDateClean = clearTimezone($scope.maxDate)
+      $scope.minDateClean = clearTimezone($scope.minDate);
+      return $scope.maxDateClean = clearTimezone($scope.maxDate);
+    }
+  })
+);

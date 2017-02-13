@@ -1,33 +1,40 @@
-'use strict'
+angular.module('BBAdmin.Services').factory('AdminResourceService', ($q,
+  UriTemplate, halClient, SlotCollections, BBModel, BookingCollections) =>
 
-angular.module('BBAdmin.Services').factory 'AdminResourceService', ($q,
-  UriTemplate, halClient, SlotCollections, BBModel, BookingCollections) ->
+  ({
+    query(params) {
+      let { company } = params;
+      let defer = $q.defer();
+      company.$get('resources', params).then(collection =>
+        collection.$get('resources').then(function(resources) {
+          let models = (Array.from(resources).map((r) => new BBModel.Admin.Resource(r)));
+          return defer.resolve(models);
+        }
+        , err => defer.reject(err))
+      
+      , err => defer.reject(err));
+      return defer.promise;
+    },
 
-  query: (params) ->
-    company = params.company
-    defer = $q.defer()
-    company.$get('resources', params).then (collection) ->
-      collection.$get('resources').then (resources) ->
-        models = (new BBModel.Admin.Resource(r) for r in resources)
-        defer.resolve(models)
-      , (err) ->
-        defer.reject(err)
-    , (err) ->
-      defer.reject(err)
-    defer.promise
-
-  block: (company, resource, data) ->
-    deferred = $q.defer()
-    resource.$put('block', {}, data).then  (response) =>
-      if response.$href('self').indexOf('bookings') > -1
-        booking = new BBModel.Admin.Booking(response)
-        BookingCollections.checkItems(booking)
-        deferred.resolve(booking)
-      else
-        slot = new BBModel.Admin.Slot(response)
-        SlotCollections.checkItems(slot)
-        deferred.resolve(slot)
-    , (err) =>
-      deferred.reject(err)
-    deferred.promise
+    block(company, resource, data) {
+      let deferred = $q.defer();
+      resource.$put('block', {}, data).then(response => {
+        if (response.$href('self').indexOf('bookings') > -1) {
+          let booking = new BBModel.Admin.Booking(response);
+          BookingCollections.checkItems(booking);
+          return deferred.resolve(booking);
+        } else {
+          let slot = new BBModel.Admin.Slot(response);
+          SlotCollections.checkItems(slot);
+          return deferred.resolve(slot);
+        }
+      }
+      , err => {
+        return deferred.reject(err);
+      }
+      );
+      return deferred.promise;
+    }
+  })
+);
 

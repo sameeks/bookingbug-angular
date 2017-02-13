@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbPackagePicker
 * @restrict AE
@@ -22,11 +19,14 @@
 * @property {boolean} picked_time The picked time
 * @property {array} timeSlots The time slots
 * @property {boolean} data_valid The valid data
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbPackagePicker', () ->
-  restrict: 'AE'
-  replace: true
-  scope : true
-  controller : 'PackagePicker'
+angular.module('BB.Directives').directive('bbPackagePicker', () =>
+  ({
+    restrict: 'AE',
+    replace: true,
+    scope : true,
+    controller : 'PackagePicker'
+  })
+);

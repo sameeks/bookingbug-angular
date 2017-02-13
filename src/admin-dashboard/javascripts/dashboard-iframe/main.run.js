@@ -1,33 +1,36 @@
-'use strict'
+angular.module('BBAdminDashboard.dashboard-iframe').run(function(RuntimeStates, AdminDashboardIframeOptions, SideNavigationPartials) {
+  'ngInject';
 
-angular.module('BBAdminDashboard.dashboard-iframe').run (RuntimeStates, AdminDashboardIframeOptions, SideNavigationPartials) ->
-  'ngInject'
-
-  # Choose to opt out of the default routing
-  if AdminDashboardIframeOptions.use_default_states
+  // Choose to opt out of the default routing
+  if (AdminDashboardIframeOptions.use_default_states) {
 
     RuntimeStates
-    .state 'dashboard',
-      parent: AdminDashboardIframeOptions.parent_state
-      url: "dashboard"
-      controller: "DashboardIframePageCtrl"
-      templateUrl: "dashboard-iframe/index.html"
+    .state('dashboard', {
+      parent: AdminDashboardIframeOptions.parent_state,
+      url: "dashboard",
+      controller: "DashboardIframePageCtrl",
+      templateUrl: "dashboard-iframe/index.html",
       deepStateRedirect: {
         default: {
-          state: 'dashboard.page'
+          state: 'dashboard.page',
           params: {
-            path: 'view/dashboard/index'
+            path: 'view/dashboard/index',
             fixed: true
           }
         }
       }
+    })
 
-    .state 'dashboard.page',
-      url: "/page/:path"
-      controller: 'DashboardSubIframePageCtrl'
+    .state('dashboard.page', {
+      url: "/page/:path",
+      controller: 'DashboardSubIframePageCtrl',
       templateUrl: "core/iframe-page.html"
+    }
+    );
+  }
 
-  if AdminDashboardIframeOptions.show_in_navigation
-    SideNavigationPartials.addPartialTemplate('dashboard-iframe', 'dashboard-iframe/nav.html')
+  if (AdminDashboardIframeOptions.show_in_navigation) {
+    SideNavigationPartials.addPartialTemplate('dashboard-iframe', 'dashboard-iframe/nav.html');
+  }
 
-  return
+});

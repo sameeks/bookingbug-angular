@@ -1,17 +1,19 @@
-'use strict'
+angular.module('BBQueue').controller('bbQueues', function($scope, $log,
+    AdminQueueService, ModalForm) {
 
-angular.module('BBQueue').controller 'bbQueues', ($scope, $log,
-    AdminQueueService, ModalForm) ->
+  $scope.loading = true;
 
-  $scope.loading = true
-
-  $scope.getQueues = () ->
-    params =
-      company: $scope.company
-    AdminQueueService.query(params).then (queues) ->
-      $scope.queues = queues
-      $scope.loading = false
-    , (err) ->
-      $log.error err.data
-      $scope.loading = false
+  return $scope.getQueues = function() {
+    let params =
+      {company: $scope.company};
+    return AdminQueueService.query(params).then(function(queues) {
+      $scope.queues = queues;
+      return $scope.loading = false;
+    }
+    , function(err) {
+      $log.error(err.data);
+      return $scope.loading = false;
+    });
+  };
+});
 

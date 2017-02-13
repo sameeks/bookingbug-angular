@@ -1,15 +1,13 @@
-'use strict'
+angular.module('BB.uib').run(function($document, runtimeUibModal) {
+  'ngInject';
 
-angular.module('BB.uib').run ($document, runtimeUibModal) ->
-  'ngInject'
+  let init = function() {
+    setUibModalDefaults();
+  };
 
-  init = () ->
-    setUibModalDefaults()
-    return
+  var setUibModalDefaults = function() {
+    runtimeUibModal.options.appendTo = angular.element($document[0].getElementById('bb'));
+  };
 
-  setUibModalDefaults = () ->
-    runtimeUibModal.options.appendTo = angular.element($document[0].getElementById('bb'))
-    return
-
-  init()
-  return
+  init();
+});

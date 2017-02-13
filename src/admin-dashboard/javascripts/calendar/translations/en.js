@@ -1,22 +1,20 @@
-'use strict';
-
-###
+/*
 * @ngdoc overview
 * @name BBAdminDashboard.calendar.translations
-#
+*
 * @description
 * Translations for the admin calendar module
-###
+*/
 angular.module('BBAdminDashboard.calendar.translations')
-.config ['$translateProvider', ($translateProvider)->
+.config(['$translateProvider', $translateProvider=>
   $translateProvider.translations('en', {
 
     'ADMIN_DASHBOARD': {
 
       'SIDE_NAV': {
         'CALENDAR_PAGE': {
-          'CALENDAR': 'Calendar'
-          'PEOPLE': 'Staff'
+          'CALENDAR': 'Calendar',
+          'PEOPLE': 'Staff',
           'RESOURCES': 'Resources'
         }
       },
@@ -25,9 +23,9 @@ angular.module('BBAdminDashboard.calendar.translations')
         'SHOW'                  : 'Show',
         'ALL'                   : 'all',
         'SOME'                  : 'some',
-        'SELECT_STAFF_RESOURCES': 'Select staff or resource...'
+        'SELECT_STAFF_RESOURCES': 'Select staff or resource...',
         'EMAIL'                 : 'email',
-        'TODAY'                 : 'Today'
+        'TODAY'                 : 'Today',
         'WEEK'                  : 'Week',
         'MONTH'                 : 'Month',
         'DAY'                   : 'Day ({{minutes}}m)',
@@ -40,4 +38,5 @@ angular.module('BBAdminDashboard.calendar.translations')
       }
     }
   })
-]
+
+]);

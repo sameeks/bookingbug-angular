@@ -1,13 +1,16 @@
 
-angular.module('BBAdminBooking').directive 'bbAdminBookingPopup', (AdminBookingPopup) ->
-  restrict: 'A'
-  link: (scope, element, attrs) ->
+angular.module('BBAdminBooking').directive('bbAdminBookingPopup', AdminBookingPopup =>
+  ({
+    restrict: 'A',
+    link(scope, element, attrs) {
 
-    element.bind 'click', () ->
-      scope.open()
+      return element.bind('click', () => scope.open());
+    },
 
-  controller: ($scope) ->
+    controller($scope) {
 
-    $scope.open = () ->
-      AdminBookingPopup.open()
+      return $scope.open = () => AdminBookingPopup.open();
+    }
+  })
+);
 

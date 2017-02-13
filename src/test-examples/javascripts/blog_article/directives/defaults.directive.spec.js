@@ -1,128 +1,121 @@
-'use strict';
+describe('bbTe.blogArticle, bbTeBaDefaults directive', function() {
+  let $compile = null;
+  let $httpBackend = null;
+  let $rootScope = null;
 
-describe 'bbTe.blogArticle, bbTeBaDefaults directive', () ->
-  $compile = null
-  $httpBackend = null
-  $rootScope = null
+  let compiled = null;
 
-  compiled = null
+  let directiveTemplatePath = '/templates/blog-article/defaults.html';
+  let directiveHtmlAttribute = '<span bb-te-ba-defaults></span>';
+  let directiveHtmlElement = '<bb-te-ba-defaults></bb-te-ba-defaults>';
+  let directiveHtmlClass = '<span class="bb-te-ba-defaults"></span>';
+  let directiveHtmlComment = '<!-- directive: bb-te-ba-defaults  -->';
 
-  directiveTemplatePath = '/templates/blog-article/defaults.html';
-  directiveHtmlAttribute = '<span bb-te-ba-defaults></span>'
-  directiveHtmlElement = '<bb-te-ba-defaults></bb-te-ba-defaults>'
-  directiveHtmlClass = '<span class="bb-te-ba-defaults"></span>'
-  directiveHtmlComment = '<!-- directive: bb-te-ba-defaults  -->'
+  let htmlScopeTest = '<div class="app-level"><span bb-te-ba-defaults></span></div>';
 
-  htmlScopeTest = '<div class="app-level"><span bb-te-ba-defaults></span></div>'
+  let beforeEachFn = function() {
+    module('bbTe.blogArticle');
 
-  beforeEachFn = () ->
-    module('bbTe.blogArticle')
+    inject(function($injector) {
+      $compile = $injector.get('$compile');
+      $httpBackend = $injector.get('$httpBackend');
+      $rootScope = $injector.get('$rootScope');
+    });
 
-    inject ($injector) ->
-      $compile = $injector.get '$compile'
-      $httpBackend = $injector.get '$httpBackend'
-      $rootScope = $injector.get('$rootScope')
-      return
+    $httpBackend.whenGET(directiveTemplatePath).respond(200, '<span>some content!</span>');
 
-    $httpBackend.whenGET(directiveTemplatePath).respond(200, '<span>some content!</span>')
+  };
 
-    return
-
-  afterEachFn = () ->
+  let afterEachFn = function() {
     $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest()
+    return $httpBackend.verifyNoOutstandingRequest();
+  };
 
-  beforeEach beforeEachFn
-  afterEach afterEachFn
+  beforeEach(beforeEachFn);
+  afterEach(afterEachFn);
 
-  describe '"restrict" property', ->
-    it 'can be declared as an attribute by default', () ->
+  describe('"restrict" property', function() {
+    it('can be declared as an attribute by default', function() {
       compiled = $compile(directiveHtmlAttribute)($rootScope);
 
-      expect ->
-        $httpBackend.flush()
-      .not.toThrow()
+      expect(() => $httpBackend.flush()).not.toThrow();
 
       expect(compiled.html()).toContain('some content!');
-      return
+    });
 
-    it 'can be declared as an element by default', () ->
+    it('can be declared as an element by default', function() {
       compiled = $compile(directiveHtmlElement)($rootScope);
 
-      expect ->
-        $httpBackend.flush()
-      .not.toThrow()
-      return
+      expect(() => $httpBackend.flush()).not.toThrow();
+    });
 
-    it 'cannot be declared using a class', () ->
+    it('cannot be declared using a class', function() {
       compiled = $compile(directiveHtmlClass)($rootScope);
 
-      expect ->
-        $httpBackend.flush()
-      .toThrow()
-      return
+      expect(() => $httpBackend.flush()).toThrow();
+    });
 
-    it 'cannot be declared using a comment', () ->
+    it('cannot be declared using a comment', function() {
       compiled = $compile(directiveHtmlComment)($rootScope);
 
-      expect ->
-        $httpBackend.flush()
-      .toThrow()
-      return
+      expect(() => $httpBackend.flush()).toThrow();
+    });
 
-    return
+  });
 
-  describe '"scope" property is set by default to false which means surrounding scope', ->
+  describe('"scope" property is set by default to false which means surrounding scope', function() {
 
-    surroundingScope = null
-    directiveScope = null
+    let surroundingScope = null;
+    let directiveScope = null;
 
-    beforeEachLvl2 = ->
-      $rootScope.appLevelParam = 'anything'
+    let beforeEachLvl2 = function() {
+      $rootScope.appLevelParam = 'anything';
       compiled = $compile(htmlScopeTest)($rootScope);
-      $httpBackend.flush()
+      $httpBackend.flush();
 
-      surroundingScope = compiled.scope()
-      directiveScope = compiled.find('span').scope()
+      surroundingScope = compiled.scope();
+      return directiveScope = compiled.find('span').scope();
+    };
 
-    beforeEach  beforeEachLvl2
+    beforeEach(beforeEachLvl2);
 
-    it 'changes on parent scope are visible in directive', ->
+    it('changes on parent scope are visible in directive', function() {
 
-      surroundingScope.appLevelParam = 'aaa'
+      surroundingScope.appLevelParam = 'aaa';
 
-      expect surroundingScope.appLevelParam
-      .toBe directiveScope.appLevelParam
+      expect(surroundingScope.appLevelParam)
+      .toBe(directiveScope.appLevelParam);
 
-      return
+    });
 
-    it 'directive.scope() returns surrounding scope so any changes on directive scope are actually changes on surrounding scope', ->
+    it('directive.scope() returns surrounding scope so any changes on directive scope are actually changes on surrounding scope', function() {
 
-      directiveScope.appLevelParam = 'aaa'
+      directiveScope.appLevelParam = 'aaa';
 
-      expect surroundingScope.appLevelParam
-      .toBe directiveScope.appLevelParam
+      expect(surroundingScope.appLevelParam)
+      .toBe(directiveScope.appLevelParam);
 
-      return
+    });
 
-    it 'does not create child scope or isolated scope', ->
+    it('does not create child scope or isolated scope', function() {
 
-      directive = compiled.find('span')
+      let directive = compiled.find('span');
 
-      expect directive.hasClass('ng-scope')
-      .toBe false
+      expect(directive.hasClass('ng-scope'))
+      .toBe(false);
 
-      expect directive.isolateScope()
-      .toBeUndefined()
+      expect(directive.isolateScope())
+      .toBeUndefined();
 
-      expect directive.hasClass('ng-scope-isolated')
-      .toBe false
+      expect(directive.hasClass('ng-scope-isolated'))
+      .toBe(false);
 
-      return
-    return
+    });
+    return;
 
-    describe ''
+    return describe('');
+  });
 
-  return
+});
 
 

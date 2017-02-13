@@ -1,20 +1,25 @@
-service = ($log) ->
-  'ngInject'
-  class BbTeBlogArticle
-    constructor: (title = 'default title', content = 'default content') ->
-      @title = title
-      @content = content
-      return
+let service = function($log) {
+  'ngInject';
+  class BbTeBlogArticle {
+    constructor(title, content) {
+      if (title == null) { title = 'default title'; }
+      if (content == null) { content = 'default content'; }
+      this.title = title;
+      this.content = content;
+    }
 
-    getTitle: () ->
-      return @title
+    getTitle() {
+      return this.title;
+    }
 
-    setTitle: (title) ->
-      @title = title
-      return
+    setTitle(title) {
+      this.title = title;
+    }
+  }
 
-  return BbTeBlogArticle
+  return BbTeBlogArticle;
+};
 
 angular
 .module('bbTe.blogArticle')
-.service('BbTeBaBlogArticle', service)
+.service('BbTeBaBlogArticle', service);

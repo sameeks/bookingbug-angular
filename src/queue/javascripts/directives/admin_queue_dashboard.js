@@ -1,56 +1,57 @@
-'use strict'
+angular.module('BBQueue').directive('bbIfLogin', function($q, $compile, BBModel) {
 
-angular.module('BBQueue').directive 'bbIfLogin', ($q, $compile, BBModel) ->
-
-  compile = () ->
-    {
-      pre: ( scope, element, attributes ) ->
-        @whenready = $q.defer()
-        scope.loggedin = @whenready.promise
-        BBModel.Admin.Company.$query(attributes).then (company) ->
-          scope.company = company
-          @whenready.resolve()
+  let compile = () =>
+    ({
+      pre( scope, element, attributes ) {
+        this.whenready = $q.defer();
+        scope.loggedin = this.whenready.promise;
+        return BBModel.Admin.Company.$query(attributes).then(function(company) {
+          scope.company = company;
+          return this.whenready.resolve();
+        });
+      }
       ,
-      post: ( scope, element, attributes ) ->
-    }
+      post( scope, element, attributes ) {}
+    })
+  ;
 
-  link = (scope, element, attrs) ->
-  {
+  let link = function(scope, element, attrs) {};
+  return {
     compile: $compile
-  }
+  };});
 
 
-angular.module('BBQueue').directive 'bbQueueDashboard', () ->
+angular.module('BBQueue').directive('bbQueueDashboard', function() {
 
-  link = (scope, element, attrs) ->
-    scope.loggedin.then () ->
-      scope.getSetup()
+  let link = (scope, element, attrs) =>
+    scope.loggedin.then(() => scope.getSetup())
+  ;
 
-  {
-    link: link
+  return {
+    link,
     controller: 'bbQueueDashboardController'
-  }
+  };});
 
 
-angular.module('BBQueue').directive 'bbQueues', () ->
+angular.module('BBQueue').directive('bbQueues', function() {
 
-  link = (scope, element, attrs) ->
-    scope.loggedin.then () ->
-      scope.getQueues()
+  let link = (scope, element, attrs) =>
+    scope.loggedin.then(() => scope.getQueues())
+  ;
 
-  {
-    link: link
+  return {
+    link,
     controller: 'bbQueues'
-  }
+  };});
 
-angular.module('BBQueue').directive 'bbQueueServers', () ->
+angular.module('BBQueue').directive('bbQueueServers', function() {
 
-  link = (scope, element, attrs) ->
-    scope.loggedin.then () ->
-      scope.getServers()
+  let link = (scope, element, attrs) =>
+    scope.loggedin.then(() => scope.getServers())
+  ;
 
-  {
-    link: link
+  return {
+    link,
     controller: 'bbQueueServers'
-  }
+  };});
 

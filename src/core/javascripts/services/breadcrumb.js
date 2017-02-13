@@ -1,12 +1,15 @@
-'use strict'
+angular.module('BB.Services').factory("BreadcrumbService",  function() {
 
-angular.module('BB.Services').factory "BreadcrumbService",  () ->
+  let current_step = 1;
 
-  current_step = 1
+  return {
+    setCurrentStep(step) {
+      return current_step = step;
+    },
 
-  setCurrentStep: (step) ->
-    current_step = step
-
-  getCurrentStep: () ->
-    return current_step
+    getCurrentStep() {
+      return current_step;
+    }
+  };
+});
 

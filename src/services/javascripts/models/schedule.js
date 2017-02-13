@@ -1,6 +1,4 @@
-'use strict'
-
-###**
+/***
 * @ngdoc service
 * @name BB.Models:AdminSchedule
 *
@@ -12,16 +10,17 @@
 * @property {string} name Schedule name
 * @property {integer} company_id The company id
 * @property {date} duration The schedule duration
-####
+*///
 
-angular.module('BB.Models').factory "AdminScheduleModel", ($q, AdminScheduleService, BBModel, BaseModel, ScheduleRules) ->
+angular.module('BB.Models').factory("AdminScheduleModel", ($q, AdminScheduleService, BBModel, BaseModel, ScheduleRules) =>
 
-  class Admin_Schedule extends BaseModel
+  class Admin_Schedule extends BaseModel {
 
-    constructor: (data) ->
-      super(data)
+    constructor(data) {
+      super(data);
+    }
 
-    ###**
+    /***
     * @ngdoc method
     * @name getPostData
     * @methodOf BB.Models:AdminSchedule
@@ -29,22 +28,28 @@ angular.module('BB.Models').factory "AdminScheduleModel", ($q, AdminScheduleServ
     * Get post data
     *
     * @returns {array} Returns data.
-    ###
-    getPostData: () ->
-      data = {}
-      data.id = @id
-      data.rules = @rules
-      data.name = @name
-      data.company_id = @company_id
-      data.duration = @duration
-      data
+    */
+    getPostData() {
+      let data = {};
+      data.id = this.id;
+      data.rules = this.rules;
+      data.name = this.name;
+      data.company_id = this.company_id;
+      data.duration = this.duration;
+      return data;
+    }
 
-    @$query: (params) ->
-      AdminScheduleService.query(params)
+    static $query(params) {
+      return AdminScheduleService.query(params);
+    }
 
-    @$delete: (schedule) ->
-      AdminScheduleService.delete(schedule)
+    static $delete(schedule) {
+      return AdminScheduleService.delete(schedule);
+    }
 
-    @$update: (schedule) ->
-      AdminScheduleService.update(schedule)
+    static $update(schedule) {
+      return AdminScheduleService.update(schedule);
+    }
+  }
+);
 

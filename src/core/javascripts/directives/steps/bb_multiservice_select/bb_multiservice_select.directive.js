@@ -1,7 +1,4 @@
-'use strict'
-
-
-###**
+/***
 * @ngdoc directive
 * @name BB.Directives:bbMultiServiceSelect
 * @restrict AE
@@ -24,10 +21,13 @@
 * @property {array} company The company
 * @property {array} items An array of items service
 * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
-####
+*///
 
 
-angular.module('BB.Directives').directive 'bbMultiServiceSelect', () ->
-  restrict: 'AE'
-  scope : true
-  controller : 'MultiServiceSelect'
+angular.module('BB.Directives').directive('bbMultiServiceSelect', () =>
+  ({
+    restrict: 'AE',
+    scope : true,
+    controller : 'MultiServiceSelect'
+  })
+);

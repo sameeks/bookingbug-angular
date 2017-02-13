@@ -1,8 +1,9 @@
-directive = () ->
-  'ngInject'
+let directive = function() {
+  'ngInject';
 
-  templateUrl: '/templates/blog-article/defaults.html'
+  return {templateUrl: '/templates/blog-article/defaults.html'};
+};
 
 angular
 .module('bbTe.blogArticle')
-.directive('bbTeBaDefaults', directive)
+.directive('bbTeBaDefaults', directive);

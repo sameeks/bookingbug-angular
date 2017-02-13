@@ -1,45 +1,44 @@
-'use strict';
+describe('bbTe.blogArticle, bbTeBaTextSanitizer service', function() {
+  let articleSanitizer = null;
 
-describe 'bbTe.blogArticle, bbTeBaTextSanitizer service', () ->
-  articleSanitizer = null
+  let sampleText = ' SomE Sample text, SomE Sample text    ';
+  let expected = null;
 
-  sampleText = ' SomE Sample text, SomE Sample text    ';
-  expected = null;
+  let setup = function() {
+    module('bbTe.blogArticle');
 
-  setup = () ->
-    module('bbTe.blogArticle')
+    inject(function($injector) {
+      articleSanitizer = $injector.get('bbTeBaTextSanitizer');
 
-    inject ($injector) ->
-      articleSanitizer = $injector.get 'bbTeBaTextSanitizer'
+    });
 
-      return
+    expected = articleSanitizer.sanitize(sampleText);
 
-    expected = articleSanitizer.sanitize(sampleText)
+  };
 
-    return
+  beforeEach(setup);
 
-  beforeEach setup
+  it('remove trailing whitespaces', function() {
 
-  it 'remove trailing whitespaces', () ->
+    expect(expected[0])
+    .not.toBe(' ');
 
-    expect expected[0]
-    .not.toBe ' '
+  });
 
-    return
+  it('returns only 10 characters', function() {
 
-  it 'returns only 10 characters', () ->
+    expect(expected.length)
+    .toBe(10);
 
-    expect expected.length
-    .toBe 10
+  });
 
-    return
+  return it('lowercase the text', function() {
 
-  it 'lowercase the text', () ->
+    expect(expected)
+    .toBe(expected.toLowerCase());
 
-    expect expected
-    .toBe expected.toLowerCase()
-
-    return
+  });
+});
 
 
 

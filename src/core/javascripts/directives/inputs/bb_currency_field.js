@@ -1,16 +1,15 @@
-'use strict'
+angular.module('BB.Directives').directive('bbCurrencyField', $filter =>
+  ({
+    restrict: 'A',
+    require: 'ngModel',
+    link(scope, element, attrs, ctrl) {
 
+      let convertToCurrency = value => value / 100;
 
-angular.module('BB.Directives').directive  'bbCurrencyField', ($filter) ->
-  restrict: 'A',
-  require: 'ngModel',
-  link: (scope, element, attrs, ctrl) ->
+      let convertToInteger = value => value * 100;
 
-    convertToCurrency = (value) ->
-      value / 100
-
-    convertToInteger = (value) ->
-      value * 100
-
-    ctrl.$formatters.push(convertToCurrency)
-    ctrl.$parsers.push(convertToInteger)
+      ctrl.$formatters.push(convertToCurrency);
+      return ctrl.$parsers.push(convertToInteger);
+    }
+  })
+);
