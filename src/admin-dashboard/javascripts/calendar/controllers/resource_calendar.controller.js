@@ -264,8 +264,9 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
   };
 
   var fcEventClick = function(event, jsEvent, view) {
-    if (event.$has('edit')) {
-      return editBooking(new BBModel.Admin.Booking(event));
+    let adminBooking = new BBModel.Admin.Booking(event);
+    if (adminBooking.$has('edit')) {
+      return editBooking(adminBooking);
     }
   };
 
@@ -313,7 +314,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
       return PrePostTime.apply(event, elements, view, $scope);
     }
   };
-      
+
   var fcEventAfterAllRender = () => $scope.$emit('UICalendar:EventAfterAllRender');
 
   var fcSelect = function(start, end, jsEvent, view, resource) { // For some reason clicking on the scrollbars triggers this event therefore we filter based on the jsEvent target
