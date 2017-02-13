@@ -9,7 +9,6 @@ BBServicesCtrl = ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel,
 
   loader = LoadingService.$loader($scope).notLoaded()
 
-  $scope.validator = ValidatorService
   $scope.filters = {category_name: null, service_name: null, price: { min: 0, max: 100}, custom_array_value: null}
   $scope.show_custom_array = false
 

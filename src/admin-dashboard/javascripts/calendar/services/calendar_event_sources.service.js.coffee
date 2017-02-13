@@ -248,7 +248,6 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
 
     $rootScope.$broadcast 'CalendarEventSources:timeRangeChanged'
 
-
     return
 
 

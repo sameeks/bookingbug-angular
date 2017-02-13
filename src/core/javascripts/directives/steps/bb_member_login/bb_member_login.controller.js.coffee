@@ -1,11 +1,10 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log,
-  $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window,
-  AlertService, ValidatorService, LoadingService) ->
+angular.module('BB.Controllers').controller 'MemberLogin', ($scope, $log, $rootScope, $templateCache, $q, halClient, BBModel, $sessionStorage, $window, AlertService, ValidatorService, LoadingService) ->
 
   $scope.login = {}
 
+  console.warn('Deprecation warning: validator.validateForm() will be removed from bbMemberLogin in an upcoming major release, please update your template to use bbForm and submitForm() instead. See https://github.com/bookingbug/bookingbug-angular/issues/638')
   $scope.validator = ValidatorService
 
   loader = LoadingService.$loader($scope).notLoaded()

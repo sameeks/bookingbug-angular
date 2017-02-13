@@ -7,8 +7,6 @@ angular.module('BB.Controllers').controller 'EventGroupList', ($scope, $rootScop
   ]
   loader = LoadingService.$loader($scope).notLoaded()
 
-  $scope.validator = ValidatorService
-
   $rootScope.connection_started.then =>
     if $scope.bb.company
       $scope.init($scope.bb.company)

@@ -5,6 +5,9 @@ angular.module('BB.Controllers').controller 'DealList', ($scope, $rootScope, $ui
   FormDataStoreService.init 'DealList', $scope, [ 'deals' ]
   loader = LoadingService.$loader($scope).notLoaded()
 
+  console.warn('Deprecation warning: validator.validateForm() will be removed from bbDealList in an upcoming major release, please update your template to use bbForm and submitForm() instead. See https://github.com/bookingbug/bookingbug-angular/issues/638')
+  $scope.validator = ValidatorService
+
   $rootScope.connection_started.then ->
     init()
   , (err) -> loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
