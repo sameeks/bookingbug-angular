@@ -19,6 +19,10 @@
                 }
             },
             coverageReporter: {
+                instrumenters: {isparta: require('isparta')},
+                instrumenter: {
+                    'src/*.js': 'isparta'
+                },
                 reporters: [
                     {
                         type: 'lcov',
@@ -39,25 +43,6 @@
             reporters: ['dots', 'coverage'],
             singleRun: false
         });
-
-        /*
-         coffeeCoverage: {
-         preprocessor: {
-         instrumentor: 'istanbul'
-         }
-         },
-         coffeePreprocessor: {
-         options: {
-         bare: false,
-         sourceMap: true
-         },
-         transformPath: function (path) {
-         return path.replace(/\.coffee$/, '.js');
-         }
-         },
-         */
-        /*'src/!*!/javascripts/!(*.spec).js': ['coffee-coverage'],
-            'src/!*!/javascripts/!**!/!(*.spec).js': ['coffee-coverage']*/
     };
 
 }).call(this);
