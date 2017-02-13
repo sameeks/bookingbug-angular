@@ -507,7 +507,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
       params: {
         locale: $translate.use()
       },
-      successFn: response => {
+      success: response => {
         if (typeof response === 'string') {
           if (response === "move") {
             let item_defaults = {person: booking.person_id, resource: booking.resource_id};
