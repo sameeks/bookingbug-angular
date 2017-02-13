@@ -26,15 +26,15 @@
             releasepath || (releasepath = './build');
 
             var files = [
-                srcpath + '/' + module + '/javascripts/main.js.coffee',
-                srcpath + '/' + module + '/javascripts/**/*.module.js.coffee',
+                srcpath + '/' + module + '/javascripts/main.js',
+                srcpath + '/' + module + '/javascripts/**/*.module.js',
                 srcpath + '/' + module + '/javascripts/**/*',
                 srcpath + '/' + module + '/i18n/en.js',
                 '!' + srcpath + '/' + module + '/javascripts/**/*~',
                 '!' + srcpath + '/' + module + '/javascripts/**/*.js.js',
                 '!' + srcpath + '/' + module + '/javascripts/**/*.js.js.map',
-                '!' + srcpath + '/**/*_test.js.coffee',
-                '!' + srcpath + '/**/*.spec.js.coffee'
+                '!' + srcpath + '/**/*_test.js',
+                '!' + srcpath + '/**/*.spec.js'
             ];
 
             var stream = gulp.src(files, {allowEmpty: true})
