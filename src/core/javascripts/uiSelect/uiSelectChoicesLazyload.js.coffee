@@ -5,7 +5,7 @@ angular
   .directive 'uiSelectChoicesLazyload', ($timeout, $parse, $compile, $document, $filter) ->
     (scope, elm, attr) ->
 
-      scope.$on 'UISelect:CloseSelect', () ->
+      scope.$on 'UISelect:closeSelect', () ->
         scope.$select.close()
 
       raw = elm[0]

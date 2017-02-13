@@ -42,7 +42,6 @@
         };
 
         function automaticTimezoneToggle () {
-
             var tz;
 
             if (ctrl.automaticTimezone) {
@@ -57,14 +56,14 @@
                 resetTimezone(tz);
             }
 
-            $scope.$broadcast('UISelect:CloseSelect');
+            $scope.$broadcast('UISelect:closeSelect');
 
         }
 
-        function setNewTimezone (timezone) {
+        function setNewTimezone (timezone, setTzAutomatically) {
             localStorage.selectedTimezone = GeneralOptions.display_time_zone = timezone;
             GeneralOptions.custom_time_zone = CompanyStoreService.time_zone !== timezone ? true : false;
-            GeneralOptions.set_time_zone_automatically = setTzAutomatically;
+            GeneralOptions.set_time_zone_automatically = setTzAutomatically ? setTzAutomatically : false;
             moment.tz.setDefault(timezone);
             $rootScope.$emit('BBTimezoneOptions:timezoneChanged', timezone);
         }
