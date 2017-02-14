@@ -1,21 +1,21 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-describe('bbTe.blogArticle, bbTeBaConceptualService service', function() {
-  let conceptualService = null;
+describe('bbTe.blogArticle, bbTeBaConceptualService service', function () {
+    let conceptualService = null;
 
-  let beforeEachFn = function() {
-    module('bbTe.blogArticle');
+    let beforeEachFn = function () {
+        module('bbTe.blogArticle');
 
-    inject(function($injector) {
-      conceptualService = $injector.get('bbTeBaConceptualService');
-    });
-  };
+        inject(function ($injector) {
+            conceptualService = $injector.get('bbTeBaConceptualService');
+        });
+    };
 
-  beforeEach(beforeEachFn);
+    beforeEach(beforeEachFn);
 
-  it('can say hello', () =>
-    expect(conceptualService.sayHello('test'))
-    .toBe('Hi test!')
-  );
+    it('can say hello', () =>
+        expect(conceptualService.sayHello('test'))
+            .toBe('Hi test!')
+    );
 
 });

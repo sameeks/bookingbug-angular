@@ -2,17 +2,17 @@
 // Sanity-check the conversion and remove this comment.
 angular.module('BB.Models').factory("BBCollectionModel", ($q, BBModel, BaseModel) =>
 
-  class BBCollection extends BaseModel {
+    class BBCollection extends BaseModel {
 
-    getNextPage(params) {
+        getNextPage(params) {
 
-      let deferred = $q.defer();
+            let deferred = $q.defer();
 
-      this.$get('next', params).then(collection => deferred.resolve(new BBModel.BBCollection(collection))
-      , () => deferred.reject());
+            this.$get('next', params).then(collection => deferred.resolve(new BBModel.BBCollection(collection))
+                , () => deferred.reject());
 
-      return deferred.promise;
+            return deferred.promise;
+        }
     }
-  }
 );
 

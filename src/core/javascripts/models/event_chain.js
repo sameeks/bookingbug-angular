@@ -37,7 +37,7 @@ angular.module('BB.Models').factory("EventChainModel", ($q, BBModel, BaseModel, 
             }
         }
 
-        setCapacityView (capacity_view) {
+        setCapacityView(capacity_view) {
             let capacity_view_str;
             switch (capacity_view) {
                 case 0:
@@ -155,5 +155,4 @@ angular.module('BB.Models').factory("EventChainModel", ($q, BBModel, BaseModel, 
             return EventChainService.query(prms);
         }
     }
-
 );

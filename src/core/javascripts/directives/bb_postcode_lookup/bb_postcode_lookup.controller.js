@@ -1,76 +1,77 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BB.Controllers').controller('PostcodeLookup', function($scope,  $rootScope, $q, ValidatorService, AlertService, LoadingService, $attrs) {
-  
-  angular.extend(this, new CompanyListBase($scope, $rootScope, $q, $attrs));
+angular.module('BB.Controllers').controller('PostcodeLookup', function ($scope, $rootScope, $q, ValidatorService, AlertService, LoadingService, $attrs) {
 
-  let loader = LoadingService.$loader($scope);
+    angular.extend(this, new CompanyListBase($scope, $rootScope, $q, $attrs));
 
-  /***
-  * @ngdoc method
-  * @name searchPostcode
-  * @methodOf BB.Directives:bbCompanies
-  * @description
-  * Search the postcode
-  *
-  * @param {object} form The form where postcode has been searched
-  * @param {object} prms The parameters of postcode searching
-  */
-  $scope.searchPostcode = (form, prms) => {
+    let loader = LoadingService.$loader($scope);
 
-    loader.notLoaded();
+    /***
+     * @ngdoc method
+     * @name searchPostcode
+     * @methodOf BB.Directives:bbCompanies
+     * @description
+     * Search the postcode
+     *
+     * @param {object} form The form where postcode has been searched
+     * @param {object} prms The parameters of postcode searching
+     */
+    $scope.searchPostcode = (form, prms) => {
 
-    let promise = ValidatorService.validatePostcode(form, prms);
-    if (promise) {
-      return promise.then(function() {
-        $scope.bb.postcode = ValidatorService.getGeocodeResult().address_components[0].short_name;
-        $scope.postcode = $scope.bb.postcode;
-        let loc = ValidatorService.getGeocodeResult().geometry.location;
-        return $scope.selectItem($scope.getNearestCompany({center: loc}));
-      }
-      ,err => loader.setLoaded());
-    } else {
-      return loader.setLoaded();
-    }
-  };
+        loader.notLoaded();
 
-  /***
-  * @ngdoc method
-  * @name getNearestCompany
-  * @methodOf BB.Directives:bbCompanies
-  * @description
-  * Get nearest company in according of centre parameter
-  *
-  * @param {string} centre Map centre
-  */
-  return $scope.getNearestCompany = ({centre}) => {
+        let promise = ValidatorService.validatePostcode(form, prms);
+        if (promise) {
+            return promise.then(function () {
+                    $scope.bb.postcode = ValidatorService.getGeocodeResult().address_components[0].short_name;
+                    $scope.postcode = $scope.bb.postcode;
+                    let loc = ValidatorService.getGeocodeResult().geometry.location;
+                    return $scope.selectItem($scope.getNearestCompany({center: loc}));
+                }
+                , err => loader.setLoaded());
+        } else {
+            return loader.setLoaded();
+        }
+    };
 
-    let distances = [];
+    /***
+     * @ngdoc method
+     * @name getNearestCompany
+     * @methodOf BB.Directives:bbCompanies
+     * @description
+     * Get nearest company in according of centre parameter
+     *
+     * @param {string} centre Map centre
+     */
+    return $scope.getNearestCompany = ({centre}) => {
 
-    for (let company of Array.from($scope.items)) {
+        let distances = [];
 
-      if (company.address.lat && company.address.long && company.live) {
+        for (let company of Array.from($scope.items)) {
 
-        let map_centre = {
-          lat:  center.lat(),
-          long: centre.lng()
-        };
+            if (company.address.lat && company.address.long && company.live) {
 
-        let company_position = {
-          lat:  company.address.lat,
-          long: company.address.long
-        };
+                let map_centre = {
+                    lat: center.lat(),
+                    long: centre.lng()
+                };
 
-        company.distance = GeolocationService.haversine(map_centre, company_position);
+                let company_position = {
+                    lat: company.address.lat,
+                    long: company.address.long
+                };
 
-        distances.push(company);
-      }
-    }
+                company.distance = GeolocationService.haversine(map_centre, company_position);
 
-    distances.sort((a,b) => {
-      return a.distance - b.distance;
-    }
-    );
+                distances.push(company);
+            }
+        }
 
-    return distances[0];
-  };});
+        distances.sort((a, b) => {
+                return a.distance - b.distance;
+            }
+        );
+
+        return distances[0];
+    };
+});

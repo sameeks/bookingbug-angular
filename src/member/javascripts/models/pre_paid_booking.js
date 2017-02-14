@@ -2,9 +2,9 @@
 // Sanity-check the conversion and remove this comment.
 angular.module('BB.Models').factory("Member.PrePaidBookingModel", BaseModel =>
 
-  class Member_PrePaidBooking extends BaseModel {
-    constructor(data) {
-      super(data);
+    class Member_PrePaidBooking extends BaseModel {
+        constructor(data) {
+            super(data);
+        }
     }
-  }
 );

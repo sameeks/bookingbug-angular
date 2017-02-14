@@ -1,116 +1,117 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BBAdmin.Controllers').controller('CalendarCtrl', function($scope,
-  BBModel, $rootScope) {
+angular.module('BBAdmin.Controllers').controller('CalendarCtrl', function ($scope,
+                                                                           BBModel, $rootScope) {
 
-  $scope.eventsF = function(start, end, tz, callback) {
-    let prms = {company_id: 21};
-    prms.start_date = start.format("YYYY-MM-DD");
-    prms.end_date = end.format("YYYY-MM-DD");
-    let bookings = BBModel.Admin.Booking.$query(prms);
-    return bookings.then(s => {
-      callback(s.items);
-      return s.addCallback(booking => {
-        return $scope.myCalendar.fullCalendar('renderEvent',booking, true);
-      }
-      );
-    }
-    );
-  };
-
-
-  $scope.dayClick = ( date, allDay, jsEvent, view ) =>
-    $scope.$apply(() => {
-      return $scope.alertMessage = (`Day Clicked ${date}`);
-    }
-    )
-  ;
-
-  // alert on Drop
-  $scope.alertOnDrop = (event, revertFunc, jsEvent, ui, view) =>
-    $scope.$apply(() => {
-      return $scope.popupTimeAction({action: "move", booking: event, newdate: event.start, onCancel: revertFunc});
-    }
-    )
-  ;
+    $scope.eventsF = function (start, end, tz, callback) {
+        let prms = {company_id: 21};
+        prms.start_date = start.format("YYYY-MM-DD");
+        prms.end_date = end.format("YYYY-MM-DD");
+        let bookings = BBModel.Admin.Booking.$query(prms);
+        return bookings.then(s => {
+                callback(s.items);
+                return s.addCallback(booking => {
+                        return $scope.myCalendar.fullCalendar('renderEvent', booking, true);
+                    }
+                );
+            }
+        );
+    };
 
 
-  // alert on Resize
-  $scope.alertOnResize = (event, revertFunc, jsEvent, ui, view ) =>
-    $scope.$apply(() => {
-      return $scope.alertMessage = ('Event Resized ');
-    }
-    )
-  ;
+    $scope.dayClick = (date, allDay, jsEvent, view) =>
+        $scope.$apply(() => {
+                return $scope.alertMessage = (`Day Clicked ${date}`);
+            }
+        )
+    ;
 
-  // add and removes an event source of choice
-  $scope.addRemoveEventSource = function(sources,source) {
-    let canAdd = 0;
-    angular.forEach(sources, (value, key) => {
-      if (sources[key] === source) {
-        sources.splice(key,1);
-        return canAdd = 1;
-      }
-    }
-    );
-    if (canAdd === 0) {
-      return sources.push(source);
-    }
-  };
+    // alert on Drop
+    $scope.alertOnDrop = (event, revertFunc, jsEvent, ui, view) =>
+        $scope.$apply(() => {
+                return $scope.popupTimeAction({action: "move", booking: event, newdate: event.start, onCancel: revertFunc});
+            }
+        )
+    ;
 
-  // add custom event
-  $scope.addEvent = function() {
-    let y = '';
-    let m = '';
-    return $scope.events.push({
-      title: 'Open Sesame',
-      start: new Date(y, m, 28),
-      end: new Date(y, m, 29),
-      className: ['openSesame']
-    });
-  };
 
-  // remove event
-  $scope.remove = index => $scope.events.splice(index,1);
+    // alert on Resize
+    $scope.alertOnResize = (event, revertFunc, jsEvent, ui, view) =>
+        $scope.$apply(() => {
+                return $scope.alertMessage = ('Event Resized ');
+            }
+        )
+    ;
 
-  // Change View
-  $scope.changeView = view => $scope.myCalendar.fullCalendar('changeView',view);
+    // add and removes an event source of choice
+    $scope.addRemoveEventSource = function (sources, source) {
+        let canAdd = 0;
+        angular.forEach(sources, (value, key) => {
+                if (sources[key] === source) {
+                    sources.splice(key, 1);
+                    return canAdd = 1;
+                }
+            }
+        );
+        if (canAdd === 0) {
+            return sources.push(source);
+        }
+    };
 
-  $scope.eventClick = ( event, jsEvent, view) =>
-    $scope.$apply(() => {
-      return $scope.selectBooking(event);
-    }
-    )
-  ;
+    // add custom event
+    $scope.addEvent = function () {
+        let y = '';
+        let m = '';
+        return $scope.events.push({
+            title: 'Open Sesame',
+            start: new Date(y, m, 28),
+            end: new Date(y, m, 29),
+            className: ['openSesame']
+        });
+    };
 
-  $scope.selectTime = (start, end, allDay) =>
-    $scope.$apply(() => {
-      $scope.popupTimeAction({start_time: moment(start), end_time: moment(end), allDay});
-      return $scope.myCalendar.fullCalendar('unselect');
-    }
-    )
-  ;
+    // remove event
+    $scope.remove = index => $scope.events.splice(index, 1);
 
-  // config object
-  $scope.uiConfig = {
-    calendar:{
-      height: 450,
-      editable: true,
-      header:{
-        left: 'month agendaWeek agendaDay',
-        center: 'title',
-        right: 'today prev,next'
-      },
-      dayClick: $scope.dayClick,
-      eventClick: $scope.eventClick,
-      eventDrop: $scope.alertOnDrop,
-      eventResize: $scope.alertOnResize,
-      selectable: true,
-      selectHelper: true,
-      select: $scope.selectTime,
+    // Change View
+    $scope.changeView = view => $scope.myCalendar.fullCalendar('changeView', view);
 
-    }
-  };
-  // event sources array*
-  return $scope.eventSources = [$scope.eventsF];});
+    $scope.eventClick = (event, jsEvent, view) =>
+        $scope.$apply(() => {
+                return $scope.selectBooking(event);
+            }
+        )
+    ;
+
+    $scope.selectTime = (start, end, allDay) =>
+        $scope.$apply(() => {
+                $scope.popupTimeAction({start_time: moment(start), end_time: moment(end), allDay});
+                return $scope.myCalendar.fullCalendar('unselect');
+            }
+        )
+    ;
+
+    // config object
+    $scope.uiConfig = {
+        calendar: {
+            height: 450,
+            editable: true,
+            header: {
+                left: 'month agendaWeek agendaDay',
+                center: 'title',
+                right: 'today prev,next'
+            },
+            dayClick: $scope.dayClick,
+            eventClick: $scope.eventClick,
+            eventDrop: $scope.alertOnDrop,
+            eventResize: $scope.alertOnResize,
+            selectable: true,
+            selectHelper: true,
+            select: $scope.selectTime,
+
+        }
+    };
+    // event sources array*
+    return $scope.eventSources = [$scope.eventsF];
+});
 

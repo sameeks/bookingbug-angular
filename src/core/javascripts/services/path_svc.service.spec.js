@@ -1,85 +1,85 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-describe('BB.Services, PathSvc service', function() {
-  let $sce = null;
-  let AppConfig = null;
+describe('BB.Services, PathSvc service', function () {
+    let $sce = null;
+    let AppConfig = null;
 
-  let $http = null;
-  let $httpBackend = null;
+    let $http = null;
+    let $httpBackend = null;
 
-  let PathSvc = null;
+    let PathSvc = null;
 
-  let appConfigMock = {
-    partial_url: 'some-partial'
-  };
+    let appConfigMock = {
+        partial_url: 'some-partial'
+    };
 
-  let sampleFileName = 'some-filename';
+    let sampleFileName = 'some-filename';
 
-  let beforeEachFn = function() {
-    module('BB');
-  };
+    let beforeEachFn = function () {
+        module('BB');
+    };
 
-  beforeEach(beforeEachFn);
+    beforeEach(beforeEachFn);
 
-  let injectDependencies = function() {
-    inject(function($injector) {
-      $sce = $injector.get('$sce');
-      AppConfig = $injector.get('AppConfig');
-      $http = $injector.get('$http');
-      $httpBackend = $injector.get('$httpBackend');
-      PathSvc = $injector.get('PathSvc');
-    });
+    let injectDependencies = function () {
+        inject(function ($injector) {
+            $sce = $injector.get('$sce');
+            AppConfig = $injector.get('AppConfig');
+            $http = $injector.get('$http');
+            $httpBackend = $injector.get('$httpBackend');
+            PathSvc = $injector.get('PathSvc');
+        });
 
-    spyOn($sce, 'trustAsResourceUrl').and.callThrough();
-
-  };
-
-  describe('when "partial_url" is not defined in AppConfig', function(){
-    let beforeEach2LvlFn = function(){
-      module(function($provide) {
-        $provide.value('AppConfig', {});
-      });
-
-      injectDependencies();
+        spyOn($sce, 'trustAsResourceUrl').and.callThrough();
 
     };
 
-    beforeEach(beforeEach2LvlFn);
+    describe('when "partial_url" is not defined in AppConfig', function () {
+        let beforeEach2LvlFn = function () {
+            module(function ($provide) {
+                $provide.value('AppConfig', {});
+            });
 
-    it('proper url is used', function() {
-      let result = PathSvc.directivePartial(sampleFileName);
+            injectDependencies();
 
-      expect($sce.trustAsResourceUrl)
-      .toHaveBeenCalledWith(sampleFileName + '.html');
+        };
 
-      expect(result)
-      .toBeDefined();
+        beforeEach(beforeEach2LvlFn);
 
+        it('proper url is used', function () {
+            let result = PathSvc.directivePartial(sampleFileName);
+
+            expect($sce.trustAsResourceUrl)
+                .toHaveBeenCalledWith(sampleFileName + '.html');
+
+            expect(result)
+                .toBeDefined();
+
+        });
     });
-  });
 
-  describe('when "partial_url" is defined in AppConfig', function(){
-    let beforeEach2LvlFn = function(){
-      module(function($provide) {
-        $provide.value('AppConfig', appConfigMock);
-      });
+    describe('when "partial_url" is defined in AppConfig', function () {
+        let beforeEach2LvlFn = function () {
+            module(function ($provide) {
+                $provide.value('AppConfig', appConfigMock);
+            });
 
-      injectDependencies();
+            injectDependencies();
 
-    };
+        };
 
-    beforeEach(beforeEach2LvlFn);
+        beforeEach(beforeEach2LvlFn);
 
-    it('proper url is used', function() {
-      let result = PathSvc.directivePartial(sampleFileName);
+        it('proper url is used', function () {
+            let result = PathSvc.directivePartial(sampleFileName);
 
-      expect($sce.trustAsResourceUrl)
-      .toHaveBeenCalledWith(appConfigMock['partial_url'] + '/' + sampleFileName + '.html');
+            expect($sce.trustAsResourceUrl)
+                .toHaveBeenCalledWith(appConfigMock['partial_url'] + '/' + sampleFileName + '.html');
 
-      expect(result)
-      .toBeDefined();
+            expect(result)
+                .toBeDefined();
 
+        });
     });
-  });
 
 });

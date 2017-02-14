@@ -1,20 +1,20 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
 /*
-* @ngdoc controller
-* @name BBAdminDashboard.config-iframe.controllers.controller:ConfigSubIframePageCtrl
-*
-* @description
-* Controller for the config sub page
-*/
+ * @ngdoc controller
+ * @name BBAdminDashboard.config-iframe.controllers.controller:ConfigSubIframePageCtrl
+ *
+ * @description
+ * Controller for the config sub page
+ */
 angular.module('BBAdminDashboard.config-iframe.controllers')
-.controller('ConfigSubIframePageCtrl',['$scope', '$state', '$stateParams', function($scope, $state, $stateParams) {
-  $scope.path = $stateParams.path;
-  $scope.pageHeader = null;
+    .controller('ConfigSubIframePageCtrl', ['$scope', '$state', '$stateParams', function ($scope, $state, $stateParams) {
+        $scope.path = $stateParams.path;
+        $scope.pageHeader = null;
 
-  $scope.$emit('iframeLoading',{});
+        $scope.$emit('iframeLoading', {});
 
-  return $scope.onIframeLoad = ()=> $scope.$emit('iframeLoaded',{});
-}
+        return $scope.onIframeLoad = () => $scope.$emit('iframeLoaded', {});
+    }
 
-]);
+    ]);

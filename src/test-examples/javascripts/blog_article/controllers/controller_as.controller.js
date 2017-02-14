@@ -1,27 +1,27 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-let controller = function($scope) {
-  'ngInject';
+let controller = function ($scope) {
+    'ngInject';
 
-  /*jshint validthis: true */
-  let vm = this;
+    /*jshint validthis: true */
+    let vm = this;
 
-  let init = function() {
-    vm.someTextValue = 'random text';
-    vm.someNumber = 7;
-    vm.someData = $scope.someData;
-    vm.prepareMessage = prepareMessage;
+    let init = function () {
+        vm.someTextValue = 'random text';
+        vm.someNumber = 7;
+        vm.someData = $scope.someData;
+        vm.prepareMessage = prepareMessage;
 
-  };
+    };
 
-  var prepareMessage = msg => trimMessage(msg) + '!';
+    var prepareMessage = msg => trimMessage(msg) + '!';
 
-  var trimMessage = msg => msg.trim();
+    var trimMessage = msg => msg.trim();
 
-  init();
+    init();
 
 };
 
 angular
-.module('bbTe.blogArticle')
-.controller('BbTeBaControllerAsController', controller);
+    .module('bbTe.blogArticle')
+    .controller('BbTeBaControllerAsController', controller);

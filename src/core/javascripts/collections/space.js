@@ -2,17 +2,17 @@
 // Sanity-check the conversion and remove this comment.
 window.Collection.Space = class Space extends window.Collection.Base {
 
-  checkItem(item) {
-    return super.checkItem(...arguments);
-  }
+    checkItem(item) {
+        return super.checkItem(...arguments);
+    }
 };
 
 
 angular.module('BB.Services').provider("SpaceCollections", () =>
-  ({
-    $get() {
-      return new  window.BaseCollections();
-    }
-  })
+    ({
+        $get() {
+            return new window.BaseCollections();
+        }
+    })
 );
 

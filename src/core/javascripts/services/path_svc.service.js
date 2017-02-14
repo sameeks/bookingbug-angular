@@ -1,24 +1,24 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-let service = function($sce, AppConfig) {
-  'ngInject';
+let service = function ($sce, AppConfig) {
+    'ngInject';
 
-  /*
-  @param {String} fileName
-  @returns {Object}
-  */
-  let directivePartial = function(fileName) {
-    if (AppConfig.partial_url) {
-      let partialUrl = AppConfig.partial_url;
-      return $sce.trustAsResourceUrl(`${partialUrl}/${fileName}.html`);
-    } else {
-      return $sce.trustAsResourceUrl(`${fileName}.html`);
-    }
-  };
+    /*
+     @param {String} fileName
+     @returns {Object}
+     */
+    let directivePartial = function (fileName) {
+        if (AppConfig.partial_url) {
+            let partialUrl = AppConfig.partial_url;
+            return $sce.trustAsResourceUrl(`${partialUrl}/${fileName}.html`);
+        } else {
+            return $sce.trustAsResourceUrl(`${fileName}.html`);
+        }
+    };
 
-  return {
-    directivePartial
-  };
+    return {
+        directivePartial
+    };
 };
 
 angular.module('BB.Services').service('PathSvc', service);

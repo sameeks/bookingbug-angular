@@ -2,20 +2,20 @@
 // Sanity-check the conversion and remove this comment.
 angular.module('BB.Services').factory('TimeSlotService', ($q, BBModel) =>
 
-  ({
-    query(params) {
-      let defer = $q.defer();
-      let { company } = params;
-      company.$get('slots', params).then(collection =>
-        collection.$get('slots').then(function(slots) {
-          slots = (Array.from(slots).map((s) => new BBModel.TimeSlot(s)));
-          return defer.resolve(slots);
+    ({
+        query(params) {
+            let defer = $q.defer();
+            let {company} = params;
+            company.$get('slots', params).then(collection =>
+                    collection.$get('slots').then(function (slots) {
+                            slots = (Array.from(slots).map((s) => new BBModel.TimeSlot(s)));
+                            return defer.resolve(slots);
+                        }
+                        , err => defer.reject(err))
+
+                , err => defer.reject(err));
+            return defer.promise;
         }
-        , err => defer.reject(err))
-      
-      , err => defer.reject(err));
-      return defer.promise;
-    }
-  })
+    })
 );
 

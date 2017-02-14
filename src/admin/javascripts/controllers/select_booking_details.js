@@ -1,14 +1,13 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BBAdmin.Controllers').controller('SelectedBookingDetails', (
-  $scope, $location, $rootScope, BBModel) =>
+angular.module('BBAdmin.Controllers').controller('SelectedBookingDetails', ($scope, $location, $rootScope, BBModel) =>
 
-  $scope.$watch('selectedBooking', (newValue, oldValue) => {
-    if (newValue) {
-      $scope.booking = newValue;
-      return $scope.showItemView = "/view/dash/booking_details";
-    }
-  }
-  )
+    $scope.$watch('selectedBooking', (newValue, oldValue) => {
+            if (newValue) {
+                $scope.booking = newValue;
+                return $scope.showItemView = "/view/dash/booking_details";
+            }
+        }
+    )
 );
 

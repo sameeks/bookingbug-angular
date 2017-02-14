@@ -8,22 +8,22 @@
  *
  * @description
  * Admin Dashboard ResetPassword journey directive
-*/
+ */
 
-let adminDashboardResetPassword = function() {
+let adminDashboardResetPassword = function () {
 
-  let directive = {
-    restrict: 'AE',
-    replace: true,
-    scope : true,
-    template: '<div ng-include="$resetPasswordCtrl.resetPasswordTemplate"></div>',
-    controller: 'ResetPasswordCtrl',
-    controllerAs: '$resetPasswordCtrl'
-  };
+    let directive = {
+        restrict: 'AE',
+        replace: true,
+        scope: true,
+        template: '<div ng-include="$resetPasswordCtrl.resetPasswordTemplate"></div>',
+        controller: 'ResetPasswordCtrl',
+        controllerAs: '$resetPasswordCtrl'
+    };
 
-  return directive;
+    return directive;
 };
 
 angular
-  .module('BBAdminDashboard.reset-password')
-  .directive('adminDashboardResetPassword', adminDashboardResetPassword);
+    .module('BBAdminDashboard.reset-password')
+    .directive('adminDashboardResetPassword', adminDashboardResetPassword);

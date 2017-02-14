@@ -2,17 +2,17 @@
 // Sanity-check the conversion and remove this comment.
 
 angular.module('BBAdminBooking').directive('bbAdminBookingPopup', AdminBookingPopup =>
-  ({
-    restrict: 'A',
-    link(scope, element, attrs) {
+    ({
+        restrict: 'A',
+        link(scope, element, attrs) {
 
-      return element.bind('click', () => scope.open());
-    },
+            return element.bind('click', () => scope.open());
+        },
 
-    controller($scope) {
+        controller($scope) {
 
-      return $scope.open = () => AdminBookingPopup.open();
-    }
-  })
+            return $scope.open = () => AdminBookingPopup.open();
+        }
+    })
 );
 

@@ -88,16 +88,16 @@
         }
         if ($scope.model.$has('edit')) {
             $scope.model.$get('edit', params).then(schema => {
-                $scope.form = _.reject(schema.form, x => x.type === 'submit');
-            let model_type = functionName(model.constructor);
-            if (FormTransform['edit'][model_type]) {
-                $scope.form = FormTransform['edit'][model_type]($scope.form, schema.schema, $scope.model);
-            }
-            $scope.schema = checkSchema(schema.schema);
-            $scope.form_model = $scope.model;
-            return $scope.loading = false;
-        }
-        );
+                    $scope.form = _.reject(schema.form, x => x.type === 'submit');
+                    let model_type = functionName(model.constructor);
+                    if (FormTransform['edit'][model_type]) {
+                        $scope.form = FormTransform['edit'][model_type]($scope.form, schema.schema, $scope.model);
+                    }
+                    $scope.schema = checkSchema(schema.schema);
+                    $scope.form_model = $scope.model;
+                    return $scope.loading = false;
+                }
+            );
         } else {
             $log.warn("model does not have 'edit' rel");
         }
@@ -196,7 +196,7 @@
                             return successFn(booking);
                         }
                     })
-            );
+                );
             } else {
                 let question = null;
                 question = $translate.instant('CORE.MODAL.CANCEL_BOOKING.QUESTION', {type});

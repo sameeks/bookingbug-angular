@@ -6,8 +6,8 @@ angular.module('BBAdminDashboard.config-iframe.directives', []);
 angular.module('BBAdminDashboard.config-iframe.translations', []);
 
 angular.module('BBAdminDashboard.config-iframe', [
-  'BBAdminDashboard.config-iframe.controllers',
-  'BBAdminDashboard.config-iframe.services',
-  'BBAdminDashboard.config-iframe.directives',
-  'BBAdminDashboard.config-iframe.translations'
+    'BBAdminDashboard.config-iframe.controllers',
+    'BBAdminDashboard.config-iframe.services',
+    'BBAdminDashboard.config-iframe.directives',
+    'BBAdminDashboard.config-iframe.translations'
 ]);

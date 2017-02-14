@@ -1,31 +1,31 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-let service = function($log) {
-  'ngInject';
+let service = function ($log) {
+    'ngInject';
 
-  let currentText = null;
+    let currentText = null;
 
-  let lowercase = () => currentText = currentText.toLowerCase();
+    let lowercase = () => currentText = currentText.toLowerCase();
 
-  let shorten = () => currentText = currentText.substr(0, 10);
+    let shorten = () => currentText = currentText.substr(0, 10);
 
-  let trim = () => currentText = currentText.trim();
+    let trim = () => currentText = currentText.trim();
 
-  let sanitize = function(text){
-    currentText = text;
+    let sanitize = function (text) {
+        currentText = text;
 
-    trim();
-    shorten();
-    lowercase();
+        trim();
+        shorten();
+        lowercase();
 
-    return currentText;
-  };
+        return currentText;
+    };
 
-  return {
-    sanitize
-  };
+    return {
+        sanitize
+    };
 };
 
 angular
-.module('bbTe.blogArticle')
-.service('bbTeBaTextSanitizer', service);
+    .module('bbTe.blogArticle')
+    .service('bbTeBaTextSanitizer', service);

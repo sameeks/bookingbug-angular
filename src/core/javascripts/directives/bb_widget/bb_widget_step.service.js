@@ -66,7 +66,7 @@
             }
             if ($scope.bb.allSteps) {
 
-                $scope.bb.allSteps.map(function(step){
+                $scope.bb.allSteps.map(function (step) {
                     step.active = false;
                     step.passed = step.number < $scope.bb.current_step;
                 });

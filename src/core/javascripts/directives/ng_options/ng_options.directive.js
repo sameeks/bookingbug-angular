@@ -6,18 +6,18 @@
 // at which point all the text is disaplyed. comment out the focus() calls below
 // to see what happens.
 angular.module('BB.Directives').directive('ngOptions', ($sniffer, $rootScope) =>
-  ({
-    restrict : 'A',
-    link(scope, el, attrs) {
-      let size = parseInt(attrs['size'], 10);
+    ({
+        restrict: 'A',
+        link(scope, el, attrs) {
+            let size = parseInt(attrs['size'], 10);
 
-      if (!isNaN(size) && (size > 1) && $sniffer.msie) {
-        return $rootScope.$on('loading:finished', function() {
-          el.focus();
-          return $('body').focus();
-        });
-      }
-    }
-  })
+            if (!isNaN(size) && (size > 1) && $sniffer.msie) {
+                return $rootScope.$on('loading:finished', function () {
+                    el.focus();
+                    return $('body').focus();
+                });
+            }
+        }
+    })
 );
 

@@ -1,14 +1,16 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BBAdminBooking').run(function($rootScope, $log, DebugUtilsService, $bbug, $document,
-  $sessionStorage, FormDataStoreService, AppConfig, BBModel) {
-  'ngInject';
+angular.module('BBAdminBooking').run(function ($rootScope, $log, DebugUtilsService, $bbug, $document,
+                                               $sessionStorage, FormDataStoreService, AppConfig, BBModel) {
+    'ngInject';
 
-  BBModel.Admin.Login.$checkLogin().then(function() {
-    if ($rootScope.user && $rootScope.user.company_id) {
-      if (!$rootScope.bb) { $rootScope.bb = {}; }
-      return $rootScope.bb.company_id = $rootScope.user.company_id;
-    }
-  });
+    BBModel.Admin.Login.$checkLogin().then(function () {
+        if ($rootScope.user && $rootScope.user.company_id) {
+            if (!$rootScope.bb) {
+                $rootScope.bb = {};
+            }
+            return $rootScope.bb.company_id = $rootScope.user.company_id;
+        }
+    });
 
 });
