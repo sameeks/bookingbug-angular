@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file using [CHANG
 ## [Unreleased] 
 
 ### Changed
+
+### Removed
+ 
+### Deprecated
+
+
+## [2.1.8] - 2017-02-14
+
+### Changed
 * GeneralOptions.calendar_min_time, calOptions.min_time replaced with AdminCalendarOptions.minTime
 * GeneralOptions.calendar_max_time, calOptions.max_time replaced with AdminCalendarOptions.maxTime
 
