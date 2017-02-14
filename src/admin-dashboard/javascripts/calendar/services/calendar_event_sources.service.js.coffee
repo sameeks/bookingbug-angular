@@ -8,7 +8,7 @@
 * This services exposes methods to get all event-type information to be shown in the calendar
 ###
 angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSources', (AdminScheduleService, BBModel,
-  $exceptionHandler, $q, TitleAssembler, $translate, AdminCalendarOptions, $rootScope) ->
+  $exceptionHandler, $q, TitleAssembler, $translate, AdminCalendarOptions, $rootScope, GeneralOptions, CompanyStoreService) ->
   'ngInject'
 
   bookingBelongsToSelectedResources = (resources, booking)->
@@ -239,6 +239,11 @@ angular.module('BBAdminDashboard.calendar.services').service 'CalendarEventSourc
     for availability, index in availabilities
       minTime = availability.start if availability.start.isBefore(minTime) or index is 0 
       maxTime = availability.end if availability.end.isAfter(maxTime) or index is 0
+
+    if GeneralOptions.custom_time_zone
+      # Convert minTime, maxTime to company timezone
+      minTime = moment.tz(minTime, CompanyStoreService.time_zone)
+      maxTime = moment.tz(maxTime, CompanyStoreService.time_zone)
 
     # store on AdminCalendarOptions object to read from in resourceCalendar controller prepareUiCalOptions method
     AdminCalendarOptions.minTime = minTime.format('HH:mm') 

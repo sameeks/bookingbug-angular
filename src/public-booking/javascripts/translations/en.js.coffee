@@ -9,7 +9,7 @@ angular.module("BB.Services").config ($translateProvider) ->
         NUM_SLOTS_AVAILABLE : "{SLOTS_NUMBER, plural, =0{0 available} =1{1 available} other{{SLOTS_NUMBER} available}}"
       }
       ITEM_DETAILS: {
-        MOVE_BOOKING_SUCCESS_ALERT : "Your booking has been moved to {{datetime | datetime: 'LLLL'}}"
+        MOVE_BOOKING_SUCCESS_ALERT : "Your booking has been moved to {{datetime | datetime: 'LLLL':true}}"
         MOVE_BOOKING_FAIL_ALERT    : "Failed to move booking. Please try again."
         FIELD_REQUIRED             : "@:COMMON.FORM.FIELD_REQUIRED"
       }

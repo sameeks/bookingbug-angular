@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService) ->
+angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $rootScope, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, $uibModal, $document, $translate, GeneralOptions, PurchaseService, LoadingService) ->
 
   loader = LoadingService.$loader($scope)
 
@@ -243,7 +243,7 @@ angular.module('BB.Controllers').controller 'ItemDetails', ($scope, $attrs, $roo
       datetime = moment.tz(datetime, GeneralOptions.display_time_zone)
 
     AlertService.add("info", {
-      msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', datetime: $filter('datetime')(datetime, 'LLLL', true))
+      msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', datetime: datetime)
     })
 
   ###**
