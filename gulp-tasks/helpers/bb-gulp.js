@@ -18,6 +18,7 @@
     let plumber = require('gulp-plumber');
     let clone = require('gulp-clone');
     let args = require('../helpers/args.js');
+    let babel = require('gulp-babel');
 
     module.exports = {
         javascripts: function (module, srcPath, releasePath) {
@@ -34,6 +35,7 @@
             let stream = gulp.src(files, {allowEmpty: true})
                 .pipe(plumber())
                 //.pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
+                .pipe(gulpif(/.*js$/, babel({presets: ['es2015']}).on('error', gutil.log)))
                 .pipe(concat('bookingbug-angular-' + module + '.js'))
                 .pipe(gulp.dest(releasePath + '/' + module));
 
