@@ -2,50 +2,6 @@ angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q,
 
     let schedule_cache = {};
 
-    ({
-        query(params) {
-            let {company} = params;
-            let defer = $q.defer();
-            company.$get('schedules').then(collection =>
-                    collection.$get('schedules').then(function (schedules) {
-                            let models = (Array.from(schedules).map((s) => new BBModel.Admin.Schedule(s)));
-                            return defer.resolve(models);
-                        }
-                        , err => defer.reject(err))
-
-                , err => defer.reject(err));
-            return defer.promise;
-        },
-
-
-        delete(schedule) {
-            let deferred = $q.defer();
-            schedule.$del('self').then(schedule => {
-                    schedule = new BBModel.Admin.Schedule(schedule);
-                    return deferred.resolve(schedule);
-                }
-                , err => {
-                    return deferred.reject(err);
-                }
-            );
-
-            return deferred.promise;
-        },
-
-        update(schedule) {
-            let deferred = $q.defer();
-            return schedule.$put('self', {}, schedule.getPostData()).then(c => {
-                    schedule = new BBModel.Admin.Schedule(c);
-                    return deferred.resolve(schedule);
-                }
-                , err => {
-                    return deferred.reject(err);
-                }
-            );
-        }
-    });
-
-
     let cacheDates = function (asset, dates) {
         if (!schedule_cache[asset.self]) {
             schedule_cache[asset.self] = {};
@@ -83,7 +39,7 @@ angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q,
         return dates;
     };
 
-    // return a promise to resovle any existing schedule cahcing stuff
+    // return a promise to resolve any existing schedule caching stuff
     let loadScheduleCaches = function (assets) {
         let proms = [];
         for (let asset of Array.from(assets)) {
@@ -107,6 +63,51 @@ angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q,
 
 
     return {
+
+        query(params) {
+            console.log('damn');
+            let {company} = params;
+            let defer = $q.defer();
+            company.$get('schedules').then(collection =>
+                    collection.$get('schedules').then(function (schedules) {
+                            let models = (Array.from(schedules).map((s) => new BBModel.Admin.Schedule(s)));
+                            return defer.resolve(models);
+                        }
+                        , err => defer.reject(err))
+
+                , err => defer.reject(err));
+            return defer.promise;
+        },
+
+
+        delete(schedule) {
+            console.log('damn');
+            let deferred = $q.defer();
+            schedule.$del('self').then(schedule => {
+                    schedule = new BBModel.Admin.Schedule(schedule);
+                    return deferred.resolve(schedule);
+                }
+                , err => {
+                    return deferred.reject(err);
+                }
+            );
+
+            return deferred.promise;
+        },
+
+        update(schedule) {
+            console.log('damn');
+            let deferred = $q.defer();
+            return schedule.$put('self', {}, schedule.getPostData()).then(c => {
+                    schedule = new BBModel.Admin.Schedule(c);
+                    return deferred.resolve(schedule);
+                }
+                , err => {
+                    return deferred.reject(err);
+                }
+            );
+        },
+
         mapAssetsToScheduleEvents(start, end, assets) {
             let assets_with_schedule = _.filter(assets, asset => asset.$has('schedule'));
 
