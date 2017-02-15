@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 // bbLocalNumber
 // Adds a formatter that prepends the model value with an appropriate prefix. This is useful for
 // nicely formatting numbers where the prefix has been stripped, i.e. '7875123456'

@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.Controllers').controller('Total', function ($scope, $rootScope, $q,
                                                                $location, $window, QueryStringService, LoadingService, BBModel) {
 

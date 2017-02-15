@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB').value('AppConfig', {
     appId: 'f6b16c23',
     appKey: 'f0bc4f65f4fbfe7b4b3b7264b655f5eb'

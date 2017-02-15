@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.Controllers').controller('Login', function ($scope, $rootScope, $q, $location, LoginService, ValidatorService, AlertService, LoadingService, BBModel) {
 
     console.warn('Deprecation warning: validator.validateForm() will be removed from bbLogin in an upcoming major release, please update your template to use bbForm and submitForm() instead. See https://github.com/bookingbug/bookingbug-angular/issues/638');

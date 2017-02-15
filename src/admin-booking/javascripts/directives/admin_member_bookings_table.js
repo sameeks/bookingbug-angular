@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BBAdminBooking').directive('bbAdminMemberBookingsTable', function ($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup) {
 
     let controller = function ($document, $scope, $uibModal) {

@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 // Filters
 angular.module('BB.Services').factory('FormDataStoreService', function ($rootScope,
                                                                         $window, $log, $parse) {
@@ -242,9 +240,9 @@ angular.module('BB.Services').factory('FormDataStoreService', function ($rootSco
             // controller which is initalising the form data can call this at any point
             // to clear the data for it's controller .i.e $scope.clearStoredData()
             scope.clearStoredData = (currentPage =>
-                    function () {
-                        clear(currentPage);
-                    })(currentPage);
+                function () {
+                    clear(currentPage);
+                })(currentPage);
 
             if (!currentPage) {
                 throw new Error("Missing current step");

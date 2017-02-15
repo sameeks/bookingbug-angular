@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BBAdminServices').directive('scheduleCalendar', function (uiCalendarConfig, ScheduleRules) {
 
     let controller = function ($scope, $attrs) {

@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 // bbCountTicketTypes
 // returns the number of tickets selected, grouped by name
 angular.module('BB.Directives').directive('bbCountTicketTypes', $rootScope => {

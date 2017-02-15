@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.Controllers').controller('TimeRangeListStackedController', function ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel,
                                                                                         FormDataStoreService, PersonService, PurchaseService, DateTimeUtilitiesService,
                                                                                         LoadingService) {

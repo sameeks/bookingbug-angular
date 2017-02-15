@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.i18n').controller('bbLanguagePickerController', function (bbLocale, $locale, $rootScope, tmhDynamicLocale, $translate,
                                                                              bbi18nOptions, $scope) {
     'ngInject';

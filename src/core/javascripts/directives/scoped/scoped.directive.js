@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 // Adapted from https://github.com/PM5544/scoped-polyfill
 
 angular.module("BB.Directives").directive('scoped', function ($document, $timeout) {

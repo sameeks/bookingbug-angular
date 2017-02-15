@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.Services').factory("BB.Service.login", ($q, BBModel) => {
         return {
             unwrap(resource) {

@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.Models').factory("LoginModel", ($q, LoginService, BBModel, BaseModel) =>
 
     class Login extends BaseModel {

@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 // Min/Max directives for use with number inputs
 // Although angular provides min/max directives when using a HTML number input, the control does not validate if the field is actually a number
 // so we have to use a text input with a ng-pattern that only allows numbers.

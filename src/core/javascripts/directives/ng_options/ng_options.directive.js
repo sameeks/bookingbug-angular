@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 // there is a some sort of 'redraw' bug in IE with select menus which display
 // more than one option and the options are dynamically inserted. So only some of
 // the text is displayed in the option until the select element recieves focus,

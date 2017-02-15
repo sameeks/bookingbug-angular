@@ -1,7 +1,5 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.Directives').directive('bbMinSpend', () => {
-    return {
+        return {
             restrict: 'A',
             scope: true,
             controller($scope, $element, $attrs, AlertService, $translate) {

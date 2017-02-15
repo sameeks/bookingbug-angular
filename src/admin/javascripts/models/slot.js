@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.Models').factory("AdminSlotModel", ($q, BBModel, BaseModel, TimeSlotModel, SlotCollections, $window) =>
 
     class Admin_Slot extends TimeSlotModel {

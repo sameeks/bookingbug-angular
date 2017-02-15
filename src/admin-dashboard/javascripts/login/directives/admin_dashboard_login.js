@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 /*
  * @ngdoc directive
  * @name BBAdminDashboard.login.directives.directive:adminDashboardLogin
@@ -12,7 +10,7 @@
  * @param {object}  field   A field object
  */
 angular.module('BBAdminDashboard.login.directives').directive('adminDashboardLogin', () => {
-    return {
+        return {
             restrict: 'AE',
             replace: true,
             scope: {

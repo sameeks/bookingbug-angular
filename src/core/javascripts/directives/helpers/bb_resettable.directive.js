@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 // bbResettable
 // Registers inputs with the bbFormResettable controller allowing them to be cleared
 angular.module('BB.Directives').directive('bbResettable', () => {

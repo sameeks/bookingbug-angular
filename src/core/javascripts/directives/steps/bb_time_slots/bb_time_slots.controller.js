@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.Controllers').controller('TimeSlots', function ($scope, $rootScope, $q, $attrs, FormDataStoreService, ValidatorService, LoadingService, halClient, BBModel) {
 
     let loader = LoadingService.$loader($scope).notLoaded();

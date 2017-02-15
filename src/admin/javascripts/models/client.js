@@ -1,5 +1,3 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
 angular.module('BB.Models').factory("AdminClientModel", (ClientModel, $q, BBModel, $log, $window, ClientCollections, $rootScope, UriTemplate, halClient) =>
 
     class Admin_Client extends ClientModel {
