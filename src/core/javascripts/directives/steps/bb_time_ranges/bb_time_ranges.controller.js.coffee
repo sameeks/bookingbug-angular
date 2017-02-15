@@ -1,9 +1,7 @@
 'use strict'
 
 
-angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
-  $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
-  FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService) ->
+angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element, $attrs, $rootScope, $q, AlertService, LoadingService, BBModel, FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService) ->
 
   # store the form data for the following scope properties
   currentPostcode = $scope.bb.postcode
@@ -105,6 +103,12 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
     $scope.loadData()
 
 
+  markSelectedSlot = (time_slots) ->
+
+    selected_slot = _.find time_slots, (slot) ->
+      return $scope.bb.current_item.date and $scope.bb.current_item.date.date.isSame(slot.datetime, 'day') and $scope.bb.current_item.time and $scope.bb.current_item.time.time is slot.time
+    selected_slot.selected = true if selected_slot
+
   ###**
   * @ngdoc method
   * @name setTimeRange
@@ -187,10 +191,11 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
         $scope.start_date.add(amount, type)
         setTimeRange($scope.start_date)
       when 'months'
-# TODO make this advance to the next month
+        # TODO make this advance to the next month
         $scope.start_date.add(amount, type).startOf('month')
         setTimeRange($scope.start_date)
     $scope.loadData()
+
 
   ###**
   * @ngdoc method
@@ -351,6 +356,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
       # broadcast message to the accordion range groups
       $scope.$broadcast 'slotChanged', day, slot
 
+
   ###**
   * @ngdoc method
   * @name loadData
@@ -419,10 +425,15 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
 
         # sort time slots to be in chronological order
         for pair in _.sortBy(_.pairs(datetime_arr), (pair) -> pair[0])
-          d = pair[0]
+          
+          d          = pair[0]
           time_slots = pair[1]
-          #day = {date: moment(d), slots: time_slots}
+
+          # make sure the selected slot is marked as selected
+          markSelectedSlot(time_slots)
+
           day = {date: moment(d).add(utcHours, 'hours').add(utcMinutes, 'minutes').add(utcSeconds, 'seconds'), slots: time_slots}
+
           $scope.days.push(day)
 
           if time_slots.length > 0
@@ -452,32 +463,35 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
           else if requested_slot.slot
             $scope.highlightSlot requested_slot.slot, day
 
-
-
         $scope.$broadcast "time_slots:loaded", time_slots
 
       , (err) ->
-        if err.status == 404  && err.data && err.data.error && err.data.error == "No bookable events found"
-          if $scope.data_source && $scope.data_source.person
+
+        if err.status == 404 and err.data and err.data.error and err.data.error == "No bookable events found"
+          if $scope.data_source and $scope.data_source.person
             AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'))
             $scope.setLoaded $scope
-          else if  $scope.data_source && $scope.data_source.resource
+          else if  $scope.data_source and $scope.data_source.resource
             AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'))
             $scope.setLoaded $scope
           else
           $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
         else
           $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+    
     else
       loader.setLoaded()
 
   $scope.showFirstAvailableDay = ->
+
     SlotDates.getFirstDayWithSlots($scope.data_source, $scope.selected_day).then (day)->
       $scope.no_slots_in_week = false
       setTimeRange day
       $scope.loadData()
     , (err)->
       loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
+
+
   ###**
   * @ngdoc method
   * @name padTimes
@@ -506,7 +520,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList', ($scope, $element,
       AlertService.raise('APPT_AT_SAME_TIME')
       return false
     else if $scope.bb.moving_booking
-# set a 'default' person and resource if we need them, but haven't picked any in moving
+      # set a 'default' person and resource if we need them, but haven't picked any in moving
       if $scope.bb.company.$has('resources') and !$scope.bb.current_item.resource
         $scope.bb.current_item.resource = true
       if $scope.bb.company.$has('people') and !$scope.bb.current_item.person

@@ -7,18 +7,6 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', ($scope, $att
   $rootScope.connection_started.then ->
     $scope.init()
 
-  ###**
-  * @ngdoc method
-  * @name selectItem
-  * @methodOf BB.Directives:bbAccordionRangeGroup
-  * @description
-  * Set form data store by id
-  *
-  * @param {object} id Id that sets store form data
-  ###
-  $scope.setFormDataStoreId = (id) ->
-    FormDataStoreService.init ('AccordionRangeGroup'+id), $scope, []
-
 
   ###**
   * @ngdoc method
@@ -58,15 +46,13 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', ($scope, $att
     $scope.has_availability = $scope.has_availability or false
     $scope.is_selected = $scope.is_selected or false
 
-
     if $scope.slots
 
       angular.forEach $scope.slots, (slot) ->
 
-
-        # use display time zone to ensure slots get added to the right range group
+        # use display time zone to ensure slots get added to the correct range group
         if GeneralOptions.display_time_zone? and GeneralOptions.display_time_zone != CompanyStoreService.time_zone
-          datetime = moment(slot.datetime).tz(GeneralOptions.display_time_zone)
+          datetime  = moment(slot.datetime).tz(GeneralOptions.display_time_zone)
           slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime)
         else
           slot_time = slot.time
@@ -107,14 +93,14 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', ($scope, $att
     # if a day and slot has been provided, check if the slot is in range and mark it as selected
     if day and slot
 
-      # use display time zone to ensure slots get added to the right range group
+      # use display time zone to ensure slots get added to the correct range group
       if GeneralOptions.display_time_zone? and GeneralOptions.display_time_zone != CompanyStoreService.time_zone
-        datetime = moment(slot.datetime).tz(GeneralOptions.display_time_zone)
+        datetime  = moment(slot.datetime).tz(GeneralOptions.display_time_zone)
         slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime)
       else
         slot_time = slot.time
 
-      $scope.selected_slot = slot if day.date.isSame($scope.day.date) and slot_time >= $scope.start_time and slot_time < $scope.end_time
+      $scope.selected_slot = slot if day.date.isSame($scope.day.date, 'day') and slot_time >= $scope.start_time and slot_time < $scope.end_time
 
     else
 
@@ -140,7 +126,9 @@ angular.module('BB.Controllers').controller 'AccordionRangeGroup', ($scope, $att
   * Verify if availability of accordion slots have a slot
   ###
   hasAvailability = ->
+
     return false if !$scope.accordion_slots
+
     for slot in $scope.accordion_slots
       return true if slot.availability() > 0
     return false
