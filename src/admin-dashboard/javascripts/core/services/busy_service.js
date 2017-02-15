@@ -6,11 +6,9 @@
  *
  * @description
  */
-angular.module('BBAdminDashboard').factory("BusyService", [
-    '$q', '$log', '$rootScope', 'AlertService', 'ErrorService',
-    ($q, $log, $rootScope, AlertService, ErrorService) =>
+angular.module('BBAdminDashboard').factory("BusyService", ($q, $log, $rootScope, AlertService, ErrorService) => {
 
-        ({
+        return {
             notLoaded(cscope) {
                 cscope.$emit('show:loader', cscope);
                 cscope.isLoaded = false;
@@ -90,6 +88,6 @@ angular.module('BBAdminDashboard').factory("BusyService", [
                     return true;
                 }
             }
-        })
-
-]);
+        };
+    }
+);

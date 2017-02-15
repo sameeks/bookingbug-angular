@@ -22,13 +22,14 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbCustomBookingText', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'CustomBookingText'
-    })
+angular.module('BB.Directives').directive('bbCustomBookingText', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'CustomBookingText'
+        };
+    }
 );
 
 

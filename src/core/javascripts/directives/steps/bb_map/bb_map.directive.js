@@ -33,11 +33,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbMap', () =>
-    ({
-        restrict: 'A',
-        replace: true,
-        scope: true,
-        controller: 'MapCtrl'
-    })
+angular.module('BB.Directives').directive('bbMap', () => {
+        return {
+            restrict: 'A',
+            replace: true,
+            scope: true,
+            controller: 'MapCtrl'
+        };
+    }
 );

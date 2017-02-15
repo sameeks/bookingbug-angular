@@ -35,11 +35,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbCategories', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'CategoryList'
-    })
+angular.module('BB.Directives').directive('bbCategories', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'CategoryList'
+        };
+    }
 );

@@ -26,50 +26,51 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $compile, $timeout, $bbug) =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        priority: 1,
-        transclude: true,
-        controller: 'TimeRangeList',
-        link(scope, element, attrs, controller, transclude) {
-            // focus on continue button after slot selected - for screen readers
-            scope.$on('time:selected', function () {
-                let btn = angular.element('#btn-continue');
-                btn[0].disabled = false;
-                $timeout(() =>
-                        $bbug("html, body").animate(
-                            {scrollTop: btn.offset().top}
-                            , 500)
+angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $compile, $timeout, $bbug) => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            priority: 1,
+            transclude: true,
+            controller: 'TimeRangeList',
+            link(scope, element, attrs, controller, transclude) {
+                // focus on continue button after slot selected - for screen readers
+                scope.$on('time:selected', function () {
+                    let btn = angular.element('#btn-continue');
+                    btn[0].disabled = false;
+                    $timeout(() =>
+                            $bbug("html, body").animate(
+                                {scrollTop: btn.offset().top}
+                                , 500)
 
-                    , 1000);
-                return $timeout(() => btn[0].focus()
-                    , 1500);
-            });
+                        , 1000);
+                    return $timeout(() => btn[0].focus()
+                        , 1500);
+                });
 
-            // date helpers
-            scope.today = moment().toDate();
-            scope.tomorrow = moment().add(1, 'days').toDate();
+                // date helpers
+                scope.today = moment().toDate();
+                scope.tomorrow = moment().add(1, 'days').toDate();
 
-            scope.options = scope.$eval(attrs.bbTimeRanges) || {};
+                scope.options = scope.$eval(attrs.bbTimeRanges) || {};
 
-            return transclude(scope, clone => {
+                return transclude(scope, clone => {
 
-                    // if there's content compile that or grab the week_calendar template
-                    let has_content = (clone.length > 1) || ((clone.length === 1) && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)));
+                        // if there's content compile that or grab the week_calendar template
+                        let has_content = (clone.length > 1) || ((clone.length === 1) && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)));
 
-                    if (has_content) {
-                        return element.html(clone).show();
-                    } else {
-                        return $q.when($templateCache.get('_week_calendar.html')).then(function (template) {
-                            element.html(template).show();
-                            return $compile(element.contents())(scope);
-                        });
+                        if (has_content) {
+                            return element.html(clone).show();
+                        } else {
+                            return $q.when($templateCache.get('_week_calendar.html')).then(function (template) {
+                                element.html(template).show();
+                                return $compile(element.contents())(scope);
+                            });
+                        }
                     }
-                }
-            );
+                );
+            }
         }
-    })
+    }
 );

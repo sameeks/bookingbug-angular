@@ -59,11 +59,12 @@ angular.module('BB.Controllers').controller('AddressList', function ($scope, $ro
                     // create an array of addresses
                     let addressArr;
                     if (angular.isArray(response)) {
-                        addressArr = _.map(response, (item, i) =>
-                            ({
-                                address: item.partialAddress,
-                                moniker: item.moniker
-                            })
+                        addressArr = _.map(response, (item, i) => {
+                                return {
+                                    address: item.partialAddress,
+                                    moniker: item.moniker
+                                };
+                            }
                         );
                     } else {
                         addressArr = [{

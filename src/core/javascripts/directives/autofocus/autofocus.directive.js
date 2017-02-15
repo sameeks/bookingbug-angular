@@ -14,15 +14,17 @@
  *
  */
 angular.module('BB.Directives')
-    .directive('autofocus', $timeout =>
-        ({
-            restrict: 'A',
-            link(scope, element, attr) {
-                return $timeout(function () {
-                    if ((attr.autofocus === '') || scope.$eval(attr.autofocus)) {
-                        return element[0].focus();
-                    }
-                });
-            }
-        }));
+    .directive('autofocus', ($timeout) => {
+            return {
+                restrict: 'A',
+                link(scope, element, attr) {
+                    return $timeout(function () {
+                        if ((attr.autofocus === '') || scope.$eval(attr.autofocus)) {
+                            return element[0].focus();
+                        }
+                    });
+                }
+            };
+        }
+    );
 

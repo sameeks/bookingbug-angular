@@ -21,17 +21,18 @@
  </example>
  */
 
-angular.module('BB.Directives').directive('bbFileUpload', () =>
-    ({
-        restrict: 'A',
-        replace: false,
-        scope: {
-            accept: '@',
-            prettyAccept: '@',
-            maxSize: '@',
-            item: '='
-        },
-        controller: 'FileUpload',
-        templateUrl: 'file_upload.html'
-    })
+angular.module('BB.Directives').directive('bbFileUpload', () => {
+        return {
+            restrict: 'A',
+            replace: false,
+            scope: {
+                accept: '@',
+                prettyAccept: '@',
+                maxSize: '@',
+                item: '='
+            },
+            controller: 'FileUpload',
+            templateUrl: 'file_upload.html'
+        };
+    }
 );

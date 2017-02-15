@@ -102,10 +102,11 @@ let BBBlockTimeCtrl = function ($scope, $element, $attrs, BBModel, BookingCollec
 };
 
 
-angular.module('BBAdminBooking').directive('bbBlockTime', () =>
-    ({
-        scope: true,
-        restrict: 'A',
-        controller: BBBlockTimeCtrl
-    })
+angular.module('BBAdminBooking').directive('bbBlockTime', () => {
+        return {
+            scope: true,
+            restrict: 'A',
+            controller: BBBlockTimeCtrl
+        };
+    }
 );

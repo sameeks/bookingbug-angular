@@ -1,12 +1,13 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BB.Directives').directive('bbAdminCalendar', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'BBAdminCalendarCtrl'
-    })
+angular.module('BB.Directives').directive('bbAdminCalendar', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'BBAdminCalendarCtrl'
+        }
+    }
 );
 
 let BBAdminCalendarCtrl = function ($scope, $element, $controller, $attrs, BBModel, $rootScope) {
@@ -115,13 +116,14 @@ let BBAdminCalendarCtrl = function ($scope, $element, $controller, $attrs, BBMod
 
 angular.module('BB.Controllers').controller('BBAdminCalendarCtrl', BBAdminCalendarCtrl);
 
-angular.module('BB.Directives').directive('bbAdminCalendarConflict', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: BBAdminCalendarConflictCtrl
-    })
+angular.module('BB.Directives').directive('bbAdminCalendarConflict', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: BBAdminCalendarConflictCtrl
+        };
+    }
 );
 
 var BBAdminCalendarConflictCtrl = function ($scope, $element, $controller, $attrs, BBModel) {

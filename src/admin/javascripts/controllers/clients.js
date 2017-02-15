@@ -1,15 +1,16 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BBAdmin.Directives').directive('bbAdminClients', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'AdminClients',
-        link(scope, element, attrs) {
+angular.module('BBAdmin.Directives').directive('bbAdminClients', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'AdminClients',
+            link(scope, element, attrs) {
 
-        }
-    })
+            }
+        };
+    }
 );
 
 

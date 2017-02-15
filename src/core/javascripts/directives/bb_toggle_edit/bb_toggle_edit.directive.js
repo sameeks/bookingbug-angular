@@ -1,24 +1,25 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BB.Directives').directive('bbToggleEdit', ($compile, $window, $document) =>
-    ({
-        restrict: 'AE',
-        link(scope, element, attr) {
-            scope.editing = false;
-            element.on('dblclick', event => {
-                    return scope.$apply(() => scope.editing = true);
-                }
-            );
-
-            $document.on('click', () => {
-                    if (!element.is(':hover')) {
-                        return scope.$apply(() => scope.editing = false);
+angular.module('BB.Directives').directive('bbToggleEdit', ($compile, $window, $document) => {
+        return {
+            restrict: 'AE',
+            link(scope, element, attr) {
+                scope.editing = false;
+                element.on('dblclick', event => {
+                        return scope.$apply(() => scope.editing = true);
                     }
-                }
-            );
+                );
 
-            return true;
-        }
-    })
+                $document.on('click', () => {
+                        if (!element.is(':hover')) {
+                            return scope.$apply(() => scope.editing = false);
+                        }
+                    }
+                );
+
+                return true;
+            }
+        };
+    }
 );
 

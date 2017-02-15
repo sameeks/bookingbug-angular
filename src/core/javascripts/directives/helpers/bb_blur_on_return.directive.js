@@ -11,23 +11,24 @@
  * @example
  * <input type='text' bb-blur-on-return></div>
  *///
-angular.module('BB.Directives').directive('bbBlurOnReturn', $timeout =>
-    ({
-        restrict: 'A',
-        require: 'ngModel',
-        link(scope, el, attrs) {
-            return el.keydown(function (e) {
-                let key = e.which || e.keyCode;
-                if ((key === 13) || (key === '13')) {
-                    return $timeout(function () {
-                            if (e.target) {
-                                return e.target.blur();
+angular.module('BB.Directives').directive('bbBlurOnReturn', $timeout => {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link(scope, el, attrs) {
+                return el.keydown(function (e) {
+                    let key = e.which || e.keyCode;
+                    if ((key === 13) || (key === '13')) {
+                        return $timeout(function () {
+                                if (e.target) {
+                                    return e.target.blur();
+                                }
                             }
-                        }
-                        , 10
-                    );
-                }
-            });
-        }
-    })
+                            , 10
+                        );
+                    }
+                });
+            }
+        };
+    }
 );

@@ -37,11 +37,12 @@
  *
  *///
 
-angular.module('BB.Directives').directive('bbBulkPurchases', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'BulkPurchase'
-    })
+angular.module('BB.Directives').directive('bbBulkPurchases', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'BulkPurchase'
+        };
+    }
 );

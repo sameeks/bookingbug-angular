@@ -1,15 +1,16 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BB.Directives').directive('bbPurchase', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'Purchase',
-        link(scope, element, attrs) {
-            scope.init(scope.$eval(attrs.bbPurchase));
-        }
-    })
+angular.module('BB.Directives').directive('bbPurchase', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'Purchase',
+            link(scope, element, attrs) {
+                scope.init(scope.$eval(attrs.bbPurchase));
+            }
+        };
+    }
 );
 
 angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootScope,

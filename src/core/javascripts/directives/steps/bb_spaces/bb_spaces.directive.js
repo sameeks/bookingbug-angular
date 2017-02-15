@@ -21,11 +21,12 @@
  */
 
 
-angular.module('BB.Directives').directive('bbSpaces', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'SpaceList'
-    })
+angular.module('BB.Directives').directive('bbSpaces', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'SpaceList'
+        };
+    }
 );

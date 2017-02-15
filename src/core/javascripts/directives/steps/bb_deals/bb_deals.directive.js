@@ -22,11 +22,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbDeals', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'DealList'
-    })
+angular.module('BB.Directives').directive('bbDeals', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'DealList'
+        }
+    }
 );

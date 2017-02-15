@@ -69,14 +69,15 @@ angular.module('BBMember').directive('memberBookingsTable', function ($uibModal,
         };
 
         $scope.setRows = () =>
-            $scope.bookings = _.map($scope.booking_models, booking =>
-                ({
-                    id: booking.id,
-                    date: moment(booking.datetime).format('YYYY-MM-DD'),
-                    date_order: moment(booking.datetime).format('x'),
-                    datetime: moment(booking.datetime),
-                    details: booking.full_describe
-                })
+            $scope.bookings = _.map($scope.booking_models, booking => {
+                    return {
+                        id: booking.id,
+                        date: moment(booking.datetime).format('YYYY-MM-DD'),
+                        date_order: moment(booking.datetime).format('x'),
+                        datetime: moment(booking.datetime),
+                        details: booking.full_describe
+                    };
+                }
             )
         ;
 

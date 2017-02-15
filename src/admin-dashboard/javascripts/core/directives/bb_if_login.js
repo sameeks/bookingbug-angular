@@ -4,8 +4,8 @@ angular.module('BBAdminDashboard').directive('bbIfLogin', function ($uibModal, $
                                                                     $rootScope, AdminCompanyService, $compile, $templateCache,
                                                                     ModalForm, BBModel) {
 
-    let compile = () =>
-            ({
+    let compile = () => {
+            return {
                 pre(scope, element, attributes) {
                     scope.notLoaded = sc => null;
                     scope.setLoaded = sc => null;
@@ -28,8 +28,8 @@ angular.module('BBAdminDashboard').directive('bbIfLogin', function ($uibModal, $
                 ,
                 post(scope, element, attributes) {
                 }
-            })
-        ;
+            };
+        };
 
     let link = function (scope, element, attrs) {
     };

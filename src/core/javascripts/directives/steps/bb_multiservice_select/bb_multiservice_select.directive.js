@@ -26,10 +26,11 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbMultiServiceSelect', () =>
-    ({
-        restrict: 'AE',
-        scope: true,
-        controller: 'MultiServiceSelect'
-    })
+angular.module('BB.Directives').directive('bbMultiServiceSelect', () => {
+        return {
+            restrict: 'AE',
+            scope: true,
+            controller: 'MultiServiceSelect'
+        };
+    }
 );

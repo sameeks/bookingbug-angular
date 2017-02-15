@@ -2,21 +2,21 @@
 // Sanity-check the conversion and remove this comment.
 angular.module('BBQueue').directive('bbIfLogin', function ($q, $compile, BBModel) {
 
-    let compile = () =>
-            ({
-                pre(scope, element, attributes) {
-                    this.whenready = $q.defer();
-                    scope.loggedin = this.whenready.promise;
-                    return BBModel.Admin.Company.$query(attributes).then(function (company) {
-                        scope.company = company;
-                        return this.whenready.resolve();
-                    });
-                }
-                ,
-                post(scope, element, attributes) {
-                }
-            })
-        ;
+    let compile = () => {
+        return {
+            pre(scope, element, attributes) {
+                this.whenready = $q.defer();
+                scope.loggedin = this.whenready.promise;
+                return BBModel.Admin.Company.$query(attributes).then(function (company) {
+                    scope.company = company;
+                    return this.whenready.resolve();
+                });
+            }
+            ,
+            post(scope, element, attributes) {
+            }
+        };
+    };
 
     let link = function (scope, element, attrs) {
     };

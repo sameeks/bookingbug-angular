@@ -1,16 +1,17 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BBAdminDashboard.check-in.directives').directive('bbCheckinTable', () =>
-    ({
-        restrict: 'AE',
-        replace: false,
-        scope: true,
-        templateUrl: 'check-in/checkin-table.html',
-        controller: 'CheckinsController',
-        link(scope, element, attrs) {
+angular.module('BBAdminDashboard.check-in.directives').directive('bbCheckinTable', () => {
+        return {
+            restrict: 'AE',
+            replace: false,
+            scope: true,
+            templateUrl: 'check-in/checkin-table.html',
+            controller: 'CheckinsController',
+            link(scope, element, attrs) {
 
-        }
-    })
+            }
+        };
+    }
 );
 
 angular.module('BBAdminDashboard.check-in.directives').controller('CheckinsController', function ($scope, $rootScope, BusyService, $q, $filter, AdminTimeService, ModalForm,

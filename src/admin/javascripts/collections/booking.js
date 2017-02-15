@@ -31,11 +31,12 @@ window.Collection.Booking = class Booking extends window.Collection.Base {
 };
 
 
-angular.module('BB.Services').provider("BookingCollections", () =>
-    ({
-        $get() {
-            return new window.BaseCollections();
-        }
-    })
+angular.module('BB.Services').provider("BookingCollections", () => {
+        return {
+            $get() {
+                return new window.BaseCollections();
+            }
+        };
+    }
 );
 

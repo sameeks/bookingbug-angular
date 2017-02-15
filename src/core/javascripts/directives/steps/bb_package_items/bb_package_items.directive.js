@@ -39,11 +39,12 @@
  *
  *///
 
-angular.module('BB.Directives').directive('bbPackageItems', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'PackageItem'
-    })
+angular.module('BB.Directives').directive('bbPackageItems', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'PackageItem'
+        };
+    }
 );

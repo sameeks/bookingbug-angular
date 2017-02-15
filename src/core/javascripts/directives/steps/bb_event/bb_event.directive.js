@@ -21,11 +21,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbEvent', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'Event'
-    })
+angular.module('BB.Directives').directive('bbEvent', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'Event'
+        }
+    }
 );

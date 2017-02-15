@@ -8,11 +8,12 @@ window.Collection.Space = class Space extends window.Collection.Base {
 };
 
 
-angular.module('BB.Services').provider("SpaceCollections", () =>
-    ({
-        $get() {
-            return new window.BaseCollections();
-        }
-    })
+angular.module('BB.Services').provider("SpaceCollections", () => {
+        return {
+            $get() {
+                return new window.BaseCollections();
+            }
+        };
+    }
 );
 

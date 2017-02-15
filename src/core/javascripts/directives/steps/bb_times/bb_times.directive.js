@@ -26,11 +26,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTimes', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'TimeList'
-    })
+angular.module('BB.Directives').directive('bbTimes', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'TimeList'
+        };
+    }
 );

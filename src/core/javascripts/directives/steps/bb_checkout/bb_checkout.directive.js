@@ -26,11 +26,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbCheckout', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'Checkout'
-    })
+angular.module('BB.Directives').directive('bbCheckout', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'Checkout'
+        }
+    }
 );

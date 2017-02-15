@@ -45,12 +45,13 @@ window.Collection.Clinic = class Clinic extends window.Collection.Base {
 };
 
 
-angular.module('BBAdmin.Services').provider("ClinicCollections", () =>
+angular.module('BBAdmin.Services').provider("ClinicCollections", () => {
 
-    ({
-        $get() {
-            return new window.BaseCollections();
-        }
-    })
+        return {
+            $get() {
+                return new window.BaseCollections();
+            }
+        };
+    }
 );
 

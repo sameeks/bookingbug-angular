@@ -34,12 +34,12 @@ angular.module('BB.i18n').controller('bbLanguagePickerController', function (bbL
     /*
      * @param {String]
      */
-    var createLanguage = languageKey =>
-            ({
-                identifier: languageKey,
-                label: `COMMON.LANGUAGE.${languageKey.toUpperCase()}`
-            })
-        ;
+    var createLanguage = languageKey => {
+        return {
+            identifier: languageKey,
+            label: `COMMON.LANGUAGE.${languageKey.toUpperCase()}`
+        };
+    };
 
     /*
      * @param {String]

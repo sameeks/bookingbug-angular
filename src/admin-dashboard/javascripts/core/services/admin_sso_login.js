@@ -8,10 +8,8 @@
  * Responsible for loging in the admin user via the sso token
  *
  */
-angular.module('BBAdminDashboard').factory('AdminSsoLogin', [
-    'halClient', '$q',
-    (halClient, $q) =>
-        ({
+angular.module('BBAdminDashboard').factory('AdminSsoLogin', (halClient, $q) => {
+        return {
             ssoToken: null,
             companyId: null,
             apiUrl: null,
@@ -44,6 +42,6 @@ angular.module('BBAdminDashboard').factory('AdminSsoLogin', [
                     , err => defer.reject(err));
                 return defer.promise;
             }
-        })
-
-]);
+        };
+    }
+);

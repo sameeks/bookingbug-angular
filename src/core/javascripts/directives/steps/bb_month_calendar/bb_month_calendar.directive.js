@@ -23,11 +23,12 @@
  */
 
 
-angular.module('BB.Directives').directive('bbMonthCalendar', () =>
-    ({
-        restrict: 'A',
-        replace: true,
-        scope: true,
-        controller: 'MonthCalendar'
-    })
+angular.module('BB.Directives').directive('bbMonthCalendar', () => {
+        return {
+            restrict: 'A',
+            replace: true,
+            scope: true,
+            controller: 'MonthCalendar'
+        };
+    }
 );

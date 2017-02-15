@@ -19,11 +19,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbDayList', () =>
-    ({
-        restrict: 'A',
-        replace: true,
-        scope: true,
-        controller: 'DayList'
-    })
+angular.module('BB.Directives').directive('bbDayList', () => {
+        return {
+            restrict: 'A',
+            replace: true,
+            scope: true,
+            controller: 'DayList'
+        }
+    }
 );

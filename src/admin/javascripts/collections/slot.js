@@ -28,11 +28,12 @@ window.Collection.Slot = class Slot extends window.Collection.Base {
 };
 
 
-angular.module('BB.Services').provider("SlotCollections", () =>
-    ({
-        $get() {
-            return new window.BaseCollections();
-        }
-    })
+angular.module('BB.Services').provider("SlotCollections", () => {
+        return {
+            $get() {
+                return new window.BaseCollections();
+            }
+        };
+    }
 );
 

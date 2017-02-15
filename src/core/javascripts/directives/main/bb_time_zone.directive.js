@@ -13,21 +13,22 @@
  * @example_result
  * <span bb-time-zone>All times are shown in British Summer Time.</span>
  *///
-angular.module('BB.Directives').directive('bbTimeZone', (GeneralOptions, CompanyStoreService) =>
-    ({
-        restrict: 'A',
-        controllerAs: '$tzCtrl',
-        templateUrl: '_time_zone_info.html',
-        controller() {
+angular.module('BB.Directives').directive('bbTimeZone', (GeneralOptions, CompanyStoreService) => {
+        return {
+            restrict: 'A',
+            controllerAs: '$tzCtrl',
+            templateUrl: '_time_zone_info.html',
+            controller() {
 
-            let company_time_zone = CompanyStoreService.time_zone;
-            this.time_zone_name = moment().tz(company_time_zone).format('zz');
+                let company_time_zone = CompanyStoreService.time_zone;
+                this.time_zone_name = moment().tz(company_time_zone).format('zz');
 
-            //  if not using local time zone and user time zone is not same as companies
-            if (!GeneralOptions.use_local_time_zone && (GeneralOptions.display_time_zone !== company_time_zone)) {
-                return this.is_time_zone_diff = true;
+                //  if not using local time zone and user time zone is not same as companies
+                if (!GeneralOptions.use_local_time_zone && (GeneralOptions.display_time_zone !== company_time_zone)) {
+                    return this.is_time_zone_diff = true;
+                }
             }
-        }
-    })
+        };
+    }
 );
 

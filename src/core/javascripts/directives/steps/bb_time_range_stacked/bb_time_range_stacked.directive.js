@@ -30,11 +30,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTimeRangeStacked', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'TimeRangeListStackedController'
-    })
+angular.module('BB.Directives').directive('bbTimeRangeStacked', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'TimeRangeListStackedController'
+        };
+    }
 );

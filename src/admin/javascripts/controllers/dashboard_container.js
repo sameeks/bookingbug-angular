@@ -16,7 +16,9 @@ angular.module('BBAdmin.Controllers').controller('DashboardContainer', function 
             scope: $scope,
             backdrop: true,
             resolve: {
-                items: () => ({booking})
+                items: () => {
+                    return {booking};
+                }
             }
         });
 

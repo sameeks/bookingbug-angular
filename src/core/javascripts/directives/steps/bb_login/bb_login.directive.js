@@ -25,11 +25,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbLogin', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'Login'
-    })
+angular.module('BB.Directives').directive('bbLogin', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'Login'
+        };
+    }
 );

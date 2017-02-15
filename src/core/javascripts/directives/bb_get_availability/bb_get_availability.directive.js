@@ -21,16 +21,17 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbGetAvailability', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'GetAvailability',
-        link(scope, element, attrs) {
-            if (attrs.bbGetAvailability) {
-                scope.loadAvailability(scope.$eval(attrs.bbGetAvailability));
+angular.module('BB.Directives').directive('bbGetAvailability', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'GetAvailability',
+            link(scope, element, attrs) {
+                if (attrs.bbGetAvailability) {
+                    scope.loadAvailability(scope.$eval(attrs.bbGetAvailability));
+                }
             }
-        }
-    })
+        };
+    }
 );

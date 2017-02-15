@@ -8,11 +8,12 @@ window.Collection.Client = class Client extends window.Collection.Base {
     }
 };
 
-angular.module('BB.Services').provider("ClientCollections", () =>
-    ({
-        $get() {
-            return new window.BaseCollections();
-        }
-    })
+angular.module('BB.Services').provider("ClientCollections", () => {
+        return {
+            $get() {
+                return new window.BaseCollections();
+            }
+        };
+    }
 );
 

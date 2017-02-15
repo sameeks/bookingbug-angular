@@ -31,22 +31,23 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbAccordionRangeGroup', PathSvc =>
-    ({
-        restrict: 'AE',
-        replace: false,
-        scope: {
-            day: '=',
-            slots: '=',
-            selectSlot: '=',
-            disabled_slot: "=disabledSlot"
-        },
-        controller: 'AccordionRangeGroup',
-        link(scope, element, attrs) {
-            return scope.options = scope.$eval(attrs.bbAccordionRangeGroup) || {};
-        },
-        templateUrl(element, attrs) {
-            return PathSvc.directivePartial("_accordion_range_group");
-        }
-    })
+angular.module('BB.Directives').directive('bbAccordionRangeGroup', PathSvc => {
+        return {
+            restrict: 'AE',
+            replace: false,
+            scope: {
+                day: '=',
+                slots: '=',
+                selectSlot: '=',
+                disabled_slot: "=disabledSlot"
+            },
+            controller: 'AccordionRangeGroup',
+            link(scope, element, attrs) {
+                return scope.options = scope.$eval(attrs.bbAccordionRangeGroup) || {};
+            },
+            templateUrl(element, attrs) {
+                return PathSvc.directivePartial("_accordion_range_group");
+            }
+        };
+    }
 );

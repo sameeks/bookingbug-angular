@@ -1,19 +1,19 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BBAdmin.Directives').directive('bbAdminLogin', () =>
-
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: {
-            onSuccess: '=',
-            onCancel: '=',
-            onError: '=',
-            bb: '='
-        },
-        controller: 'AdminLogin',
-        template: '<div ng-include="login_template"></div>'
-    })
+angular.module('BBAdmin.Directives').directive('bbAdminLogin', () => {
+    return {
+            restrict: 'AE',
+            replace: true,
+            scope: {
+                onSuccess: '=',
+                onCancel: '=',
+                onError: '=',
+                bb: '='
+            },
+            controller: 'AdminLogin',
+            template: '<div ng-include="login_template"></div>'
+        };
+    }
 );
 
 

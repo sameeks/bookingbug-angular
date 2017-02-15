@@ -20,11 +20,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbPurchaseTotal', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'PurchaseTotal'
-    })
+angular.module('BB.Directives').directive('bbPurchaseTotal', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'PurchaseTotal'
+        };
+    }
 );

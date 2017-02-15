@@ -45,11 +45,12 @@
  *  </example>
  *///
 
-angular.module('BB.Directives').directive('bbCompanies', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'CompanyList'
-    })
+angular.module('BB.Directives').directive('bbCompanies', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'CompanyList'
+        }
+    }
 );

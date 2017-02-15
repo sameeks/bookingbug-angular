@@ -31,11 +31,12 @@
  * @property {string} notLoaded Address list not loaded
  *///
 
-angular.module('BB.Directives').directive('bbAddresses', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'AddressList'
-    })
+angular.module('BB.Directives').directive('bbAddresses', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'AddressList'
+        };
+    }
 );

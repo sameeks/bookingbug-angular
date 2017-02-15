@@ -24,11 +24,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbPackagePicker', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'PackagePicker'
-    })
+angular.module('BB.Directives').directive('bbPackagePicker', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'PackagePicker'
+        };
+    }
 );

@@ -22,11 +22,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTotal', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'Total'
-    })
+angular.module('BB.Directives').directive('bbTotal', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'Total'
+        };
+    }
 );

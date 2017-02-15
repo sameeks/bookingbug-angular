@@ -1,13 +1,14 @@
 // TODO: This file was created by bulk-decaffeinate.
 // Sanity-check the conversion and remove this comment.
-angular.module('BBAdminBooking').directive('bbAdminBookingClients', () =>
-    ({
-        restrict: 'AE',
-        replace: false,
-        scope: true,
-        controller: 'adminBookingClients',
-        templateUrl: 'admin_booking_clients.html'
-    })
+angular.module('BBAdminBooking').directive('bbAdminBookingClients', () => {
+        return {
+            restrict: 'AE',
+            replace: false,
+            scope: true,
+            controller: 'adminBookingClients',
+            templateUrl: 'admin_booking_clients.html'
+        };
+    }
 );
 
 

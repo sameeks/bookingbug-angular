@@ -21,46 +21,9 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbPayForm', function ($window, $timeout,
-                                                                 $sce, $http, $compile, $document, $location, GeneralOptions) {
-    let applyCustomStylesheet;
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'PayForm',
-        link(scope, element, attributes) {
-            return $window.addEventListener('message', event => {
-                    let data;
-                    if (angular.isObject(event.data)) {
-                        ({data} = event);
-                    } else if (angular.isString(event.data) && !event.data.match(/iFrameSizer/)) {
-                        data = JSON.parse(event.data);
-                    }
-                    if (data) {
-                        switch (data.type) {
-                            case "load":
-                                return scope.$apply(() => {
-                                        scope.referrer = data.message;
-                                        if (data.custom_partial_url) {
-                                            applyCustomPartials(event.data.custom_partial_url, scope, element);
-                                        }
-                                        if (data.custom_stylesheet) {
-                                            applyCustomStylesheet(data.custom_stylesheet);
-                                        }
-                                        if (data.scroll_offset) {
-                                            return GeneralOptions.scroll_offset = data.scroll_offset;
-                                        }
-                                    }
-                                );
-                        }
-                    }
-                }
-                , false);
-        }
-    });
+angular.module('BB.Directives').directive('bbPayForm', function ($window, $timeout, $sce, $http, $compile, $document, $location, GeneralOptions) {
 
-    /***
+    /**
      * @ngdoc method
      * @name applyCustomPartials
      * @methodOf BB.Directives:bbPayForm
@@ -69,7 +32,7 @@ angular.module('BB.Directives').directive('bbPayForm', function ($window, $timeo
      *
      * @param {string} custom_partial_url The custom partial url
      */
-    var applyCustomPartials = function (custom_partial_url, scope, element) {
+    let applyCustomPartials = function (custom_partial_url, scope, element) {
         if (custom_partial_url != null) {
             $document.domain = "bookingbug.com";
             return $http.get(custom_partial_url).then(custom_templates =>
@@ -110,7 +73,7 @@ angular.module('BB.Directives').directive('bbPayForm', function ($window, $timeo
      *
      * @param {string} href The href of the stylesheet
      */
-    return applyCustomStylesheet = function (href) {
+    let applyCustomStylesheet = function (href) {
         let css_id = 'custom_css';
         if (!document.getElementById(css_id)) {
             let head = document.getElementsByTagName('head')[0];
@@ -130,4 +93,42 @@ angular.module('BB.Directives').directive('bbPayForm', function ($window, $timeo
             };
         }
     };
+
+    return {
+        restrict: 'AE',
+        replace: true,
+        scope: true,
+        controller: 'PayForm',
+        link(scope, element, attributes) {
+            return $window.addEventListener('message', event => {
+                    let data;
+                    if (angular.isObject(event.data)) {
+                        ({data} = event);
+                    } else if (angular.isString(event.data) && !event.data.match(/iFrameSizer/)) {
+                        data = JSON.parse(event.data);
+                    }
+                    if (data) {
+                        switch (data.type) {
+                            case "load":
+                                return scope.$apply(() => {
+                                        scope.referrer = data.message;
+                                        if (data.custom_partial_url) {
+                                            applyCustomPartials(event.data.custom_partial_url, scope, element);
+                                        }
+                                        if (data.custom_stylesheet) {
+                                            applyCustomStylesheet(data.custom_stylesheet);
+                                        }
+                                        if (data.scroll_offset) {
+                                            return GeneralOptions.scroll_offset = data.scroll_offset;
+                                        }
+                                    }
+                                );
+                        }
+                    }
+                }
+                , false);
+        }
+    };
+
+
 });

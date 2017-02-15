@@ -25,19 +25,20 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTimeSlots', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'TimeSlots',
-        link(scope, element, attrs) {
-            if (attrs.bbItem) {
-                scope.booking_item = scope.$eval(attrs.bbItem);
+angular.module('BB.Directives').directive('bbTimeSlots', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'TimeSlots',
+            link(scope, element, attrs) {
+                if (attrs.bbItem) {
+                    scope.booking_item = scope.$eval(attrs.bbItem);
+                }
+                if (attrs.bbShowAll) {
+                    scope.show_all = true;
+                }
             }
-            if (attrs.bbShowAll) {
-                scope.show_all = true;
-            }
-        }
-    })
+        };
+    }
 );

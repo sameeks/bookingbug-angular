@@ -23,19 +23,20 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbEventGroups', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'EventGroupList',
-        link(scope, element, attrs) {
-            if (attrs.bbItem) {
-                scope.booking_item = scope.$eval(attrs.bbItem);
-            }
-            if (attrs.bbShowAll) {
-                scope.show_all = true;
+angular.module('BB.Directives').directive('bbEventGroups', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'EventGroupList',
+            link(scope, element, attrs) {
+                if (attrs.bbItem) {
+                    scope.booking_item = scope.$eval(attrs.bbItem);
+                }
+                if (attrs.bbShowAll) {
+                    scope.show_all = true;
+                }
             }
         }
-    })
+    }
 );

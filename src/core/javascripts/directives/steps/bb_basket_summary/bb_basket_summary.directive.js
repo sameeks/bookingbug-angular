@@ -12,11 +12,12 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbBasketSummary', () =>
-    ({
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'BasketSummary'
-    })
+angular.module('BB.Directives').directive('bbBasketSummary', () => {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'BasketSummary'
+        };
+    }
 );
