@@ -104,6 +104,7 @@
 
 
             return gulp.src(srcpath + '/' + module + '/templates/**/*.html')
+                .pipe(flatten())
                 .pipe(templateCache({module: mod_name}))
                 .pipe(concat('bookingbug-angular-' + module + '-templates.js'))
                 .pipe(gulp.dest(releasepath + '/' + module));
