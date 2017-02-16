@@ -1,6 +1,7 @@
 (function () {
     'use strict';
 
+    let argv = require('yargs').argv;
     let fs = require('fs');
     let gulp = require('gulp');
     let gutil = require('gulp-util');
@@ -62,7 +63,7 @@
             .pipe(concat('bookingbug-angular-' + module + '.js'))
             .pipe(gulp.dest(buildPath + '/' + module));
 
-        if (args.getEnvironment() !== 'local' && args.getEnvironment() !== 'dev') { //TODO could be better to rely on uglify flag
+        if (args.getEnvironment() === 'prod' || argv.uglify === 'true') {
 
             let cloneSink = clone.sink();
             stream.pipe(cloneSink)
