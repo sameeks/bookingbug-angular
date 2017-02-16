@@ -116,6 +116,17 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
         return $scope.loadData();
     };
 
+    var markSelectedSlot = function (time_slots) {
+        var selected_slot = _.find(time_slots, function (slot) {
+            return $scope.bb.current_item.date &&
+                $scope.bb.current_item.date.date.isSame(slot.datetime, 'day') &&
+                $scope.bb.current_item.time &&
+                $scope.bb.current_item.time.time === slot.time;
+        });
+        if (selected_slot) {
+            return selected_slot.selected = true;
+        }
+    };
 
     /***
      * @ngdoc method
@@ -467,7 +478,10 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
                         var slot;
                         let d = pair[0];
                         time_slots = pair[1];
-                        //day = {date: moment(d), slots: time_slots}
+
+                        // make sure the selected slot is marked as selected
+                        markSelectedSlot(time_slots);
+
                         let day = {
                             date: moment(d).add(utcHours, 'hours').add(utcMinutes, 'minutes').add(utcSeconds, 'seconds'),
                             slots: time_slots

@@ -2,20 +2,7 @@ angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($sc
 
     $scope.$watch('slots', () => setData());
 
-
     $rootScope.connection_started.then(() => $scope.init());
-
-    /***
-     * @ngdoc method
-     * @name selectItem
-     * @methodOf BB.Directives:bbAccordionRangeGroup
-     * @description
-     * Set form data store by id
-     *
-     * @param {object} id Id that sets store form data
-     */
-    $scope.setFormDataStoreId = id => FormDataStoreService.init((`AccordionRangeGroup${id}`), $scope, []);
-
 
     /***
      * @ngdoc method
@@ -62,7 +49,7 @@ angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($sc
             angular.forEach($scope.slots, function (slot) {
 
 
-                // use display time zone to ensure slots get added to the right range group
+                // use display time zone to ensure slots get added to the correct range group
                 let slot_time;
                 if ((GeneralOptions.display_time_zone != null) && (GeneralOptions.display_time_zone !== CompanyStoreService.time_zone)) {
                     let datetime = moment(slot.datetime).tz(GeneralOptions.display_time_zone);
@@ -130,7 +117,7 @@ angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($sc
                 slot_time = slot.time;
             }
 
-            if (day.date.isSame($scope.day.date) && (slot_time >= $scope.start_time) && (slot_time < $scope.end_time)) {
+            if (day.date.isSame($scope.day.date, 'day') && (slot_time >= $scope.start_time) && (slot_time < $scope.end_time)) {
                 $scope.selected_slot = slot;
             }
 
