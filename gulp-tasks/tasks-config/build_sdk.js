@@ -1,4 +1,4 @@
-(function () {
+(function (done) {
     'use strict';
 
     const bbGulp = require('../helpers/bb-gulp.js');
@@ -11,24 +11,24 @@
             bbGulp.javascripts(done, 'admin');
         });
 
-        gulp.task('build-sdk:admin:stylesheets', function () {
-            return bbGulp.stylesheets('admin');
+        gulp.task('build-sdk:admin:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'admin');
         });
 
-        gulp.task('build-sdk:admin:images', function () {
-            return bbGulp.images('admin');
+        gulp.task('build-sdk:admin:images', function (done) {
+            bbGulp.images(done, 'admin');
         });
 
-        gulp.task('build-sdk:admin:fonts', function () {
-            return bbGulp.fonts('admin');
+        gulp.task('build-sdk:admin:fonts', function (done) {
+            bbGulp.fonts(done, 'admin');
         });
 
-        gulp.task('build-sdk:admin:templates', function () {
-            return bbGulp.templates('admin');
+        gulp.task('build-sdk:admin:templates', function (done) {
+            bbGulp.templates(done, 'admin');
         });
 
-        gulp.task('build-sdk:admin:bower', function () {
-            return bbGulp.bower('admin');
+        gulp.task('build-sdk:admin:bower', function (done) {
+            bbGulp.bower(done, 'admin');
         });
 
         gulp.task('build-sdk:admin', [
@@ -44,24 +44,24 @@
             bbGulp.javascripts(done, 'admin-booking');
         });
 
-        gulp.task('build-sdk:admin-booking:stylesheets', function () {
-            return bbGulp.stylesheets('admin-booking');
+        gulp.task('build-sdk:admin-booking:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'admin-booking');
         });
 
-        gulp.task('build-sdk:admin-booking:templates', function () {
-            return bbGulp.templates('admin-booking', 'BBAdminBooking');
+        gulp.task('build-sdk:admin-booking:templates', function (done) {
+            bbGulp.templates(done, 'admin-booking', 'BBAdminBooking');
         });
 
-        gulp.task('build-sdk:admin-booking:images', function () {
-            return bbGulp.images('admin-booking');
+        gulp.task('build-sdk:admin-booking:images', function (done) {
+            bbGulp.images(done, 'admin-booking');
         });
 
-        gulp.task('build-sdk:admin-booking:fonts', function () {
-            return bbGulp.fonts('admin-booking');
+        gulp.task('build-sdk:admin-booking:fonts', function (done) {
+            bbGulp.fonts(done, 'admin-booking');
         });
 
-        gulp.task('build-sdk:admin-booking:bower', function () {
-            return bbGulp.bower('admin-booking');
+        gulp.task('build-sdk:admin-booking:bower', function (done) {
+            bbGulp.bower(done, 'admin-booking');
         });
 
         gulp.task('build-sdk:admin-booking', [
@@ -77,24 +77,24 @@
             bbGulp.javascripts(done, 'admin-dashboard');
         });
 
-        gulp.task('build-sdk:admin-dashboard:stylesheets', function () {
-            return bbGulp.stylesheets('admin-dashboard');
+        gulp.task('build-sdk:admin-dashboard:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'admin-dashboard');
         });
 
-        gulp.task('build-sdk:admin-dashboard:images', function () {
-            return bbGulp.images('admin-dashboard');
+        gulp.task('build-sdk:admin-dashboard:images', function (done) {
+            bbGulp.images(done, 'admin-dashboard');
         });
 
-        gulp.task('build-sdk:admin-dashboard:templates', function () {
-            return bbGulp.templates('admin-dashboard');
+        gulp.task('build-sdk:admin-dashboard:templates', function (done) {
+            bbGulp.templates(done, 'admin-dashboard');
         });
 
-        gulp.task('build-sdk:admin-dashboard:fonts', function () {
-            return bbGulp.fonts('admin-dashboard');
+        gulp.task('build-sdk:admin-dashboard:fonts', function (done) {
+            bbGulp.fonts(done, 'admin-dashboard');
         });
 
-        gulp.task('build-sdk:admin-dashboard:bower', function () {
-            return bbGulp.bower('admin-dashboard');
+        gulp.task('build-sdk:admin-dashboard:bower', function (done) {
+            bbGulp.bower(done, 'admin-dashboard');
         });
 
         gulp.task('build-sdk:admin-dashboard', [
@@ -110,24 +110,24 @@
             bbGulp.javascripts(done, 'core');
         });
 
-        gulp.task('build-sdk:core:stylesheets', function () {
-            return bbGulp.stylesheets('core');
+        gulp.task('build-sdk:core:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'core');
         });
 
-        gulp.task('build-sdk:core:templates', function () {
-            return bbGulp.templates('core');
+        gulp.task('build-sdk:core:templates', function (done) {
+            bbGulp.templates(done, 'core');
         });
 
-        gulp.task('build-sdk:core:images', function () {
-            return bbGulp.images('core');
+        gulp.task('build-sdk:core:images', function (done) {
+            bbGulp.images(done, 'core');
         });
 
-        gulp.task('build-sdk:core:fonts', function () {
-            return bbGulp.fonts('core');
+        gulp.task('build-sdk:core:fonts', function (done) {
+            bbGulp.fonts(done, 'core');
         });
 
-        gulp.task('build-sdk:core:bower', function () {
-            return bbGulp.bower('core');
+        gulp.task('build-sdk:core:bower', function (done) {
+            bbGulp.bower(done, 'core');
         });
 
         gulp.task('build-sdk:core', [
@@ -143,24 +143,24 @@
             bbGulp.javascripts(done, 'events');
         });
 
-        gulp.task('build-sdk:events:stylesheets', function () {
-            return bbGulp.stylesheets('events');
+        gulp.task('build-sdk:events:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'events');
         });
 
-        gulp.task('build-sdk:events:templates', function () {
-            return bbGulp.templates('events');
+        gulp.task('build-sdk:events:templates', function (done) {
+            bbGulp.templates(done, 'events');
         });
 
-        gulp.task('build-sdk:events:images', function () {
-            return bbGulp.images('events');
+        gulp.task('build-sdk:events:images', function (done) {
+            bbGulp.images(done, 'events');
         });
 
-        gulp.task('build-sdk:events:fonts', function () {
-            return bbGulp.fonts('events');
+        gulp.task('build-sdk:events:fonts', function (done) {
+            bbGulp.fonts(done, 'events');
         });
 
-        gulp.task('build-sdk:events:bower', function () {
-            return bbGulp.bower('events');
+        gulp.task('build-sdk:events:bower', function (done) {
+            bbGulp.bower(done, 'events');
         });
 
         gulp.task('build-sdk:events', [
@@ -176,24 +176,24 @@
             bbGulp.javascripts(done, 'member');
         });
 
-        gulp.task('build-sdk:member:stylesheets', function () {
-            return bbGulp.stylesheets('member');
+        gulp.task('build-sdk:member:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'member');
         });
 
-        gulp.task('build-sdk:member:templates', function () {
-            return bbGulp.templates('member');
+        gulp.task('build-sdk:member:templates', function (done) {
+            bbGulp.templates(done, 'member');
         });
 
-        gulp.task('build-sdk:member:images', function () {
-            return bbGulp.images('member');
+        gulp.task('build-sdk:member:images', function (done) {
+            bbGulp.images(done, 'member');
         });
 
-        gulp.task('build-sdk:member:fonts', function () {
-            return bbGulp.fonts('member');
+        gulp.task('build-sdk:member:fonts', function (done) {
+            bbGulp.fonts(done, 'member');
         });
 
-        gulp.task('build-sdk:member:bower', function () {
-            return bbGulp.bower('member');
+        gulp.task('build-sdk:member:bower', function (done) {
+            bbGulp.bower(done, 'member');
         });
 
         gulp.task('build-sdk:member', [
@@ -209,24 +209,24 @@
             bbGulp.javascripts(done, 'public-booking');
         });
 
-        gulp.task('build-sdk:public-booking:stylesheets', function () {
-            return bbGulp.stylesheets('public-booking');
+        gulp.task('build-sdk:public-booking:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'public-booking');
         });
 
-        gulp.task('build-sdk:public-booking:fonts', function () {
-            return bbGulp.fonts('public-booking');
+        gulp.task('build-sdk:public-booking:fonts', function (done) {
+            bbGulp.fonts(done, 'public-booking');
         });
 
-        gulp.task('build-sdk:public-booking:images', function () {
-            return bbGulp.images('public-booking');
+        gulp.task('build-sdk:public-booking:images', function (done) {
+            bbGulp.images(done, 'public-booking');
         });
 
-        gulp.task('build-sdk:public-booking:templates', function () {
-            return bbGulp.templates('public-booking');
+        gulp.task('build-sdk:public-booking:templates', function (done) {
+            bbGulp.templates(done, 'public-booking');
         });
 
-        gulp.task('build-sdk:public-booking:bower', function () {
-            return bbGulp.bower('public-booking');
+        gulp.task('build-sdk:public-booking:bower', function (done) {
+            bbGulp.bower(done, 'public-booking');
         });
 
         gulp.task('build-sdk:public-booking', [
@@ -242,24 +242,24 @@
             bbGulp.javascripts(done, 'queue');
         });
 
-        gulp.task('build-sdk:queue:stylesheets', function () {
-            return bbGulp.stylesheets('queue');
+        gulp.task('build-sdk:queue:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'queue');
         });
 
-        gulp.task('build-sdk:queue:templates', function () {
-            return bbGulp.templates('queue');
+        gulp.task('build-sdk:queue:templates', function (done) {
+            bbGulp.templates(done, 'queue');
         });
 
-        gulp.task('build-sdk:queue:images', function () {
-            return bbGulp.images('queue');
+        gulp.task('build-sdk:queue:images', function (done) {
+            bbGulp.images(done, 'queue');
         });
 
-        gulp.task('build-sdk:queue:fonts', function () {
-            return bbGulp.fonts('queue');
+        gulp.task('build-sdk:queue:fonts', function (done) {
+            bbGulp.fonts(done, 'queue');
         });
 
-        gulp.task('build-sdk:queue:bower', function () {
-            return bbGulp.bower('queue');
+        gulp.task('build-sdk:queue:bower', function (done) {
+            bbGulp.bower(done, 'queue');
         });
 
         gulp.task('build-sdk:queue', [
@@ -275,24 +275,24 @@
             bbGulp.javascripts(done, 'services');
         });
 
-        gulp.task('build-sdk:services:stylesheets', function () {
-            return bbGulp.stylesheets('services');
+        gulp.task('build-sdk:services:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'services');
         });
 
-        gulp.task('build-sdk:services:templates', function () {
-            return bbGulp.templates('services');
+        gulp.task('build-sdk:services:templates', function (done) {
+            bbGulp.templates(done, 'services');
         });
 
-        gulp.task('build-sdk:services:images', function () {
-            return bbGulp.images('services');
+        gulp.task('build-sdk:services:images', function (done) {
+            bbGulp.images(done, 'services');
         });
 
-        gulp.task('build-sdk:services:fonts', function () {
-            return bbGulp.fonts('services');
+        gulp.task('build-sdk:services:fonts', function (done) {
+            bbGulp.fonts(done, 'services');
         });
 
-        gulp.task('build-sdk:services:bower', function () {
-            return bbGulp.bower('services');
+        gulp.task('build-sdk:services:bower', function (done) {
+            bbGulp.bower(done, 'services');
         });
 
         gulp.task('build-sdk:services', [
@@ -308,24 +308,24 @@
             bbGulp.javascripts(done, 'settings');
         });
 
-        gulp.task('build-sdk:settings:stylesheets', function () {
-            return bbGulp.stylesheets('settings');
+        gulp.task('build-sdk:settings:stylesheets', function (done) {
+            bbGulp.stylesheets(done, 'settings');
         });
 
-        gulp.task('build-sdk:settings:templates', function () {
-            return bbGulp.templates('settings');
+        gulp.task('build-sdk:settings:templates', function (done) {
+            bbGulp.templates(done, 'settings');
         });
 
-        gulp.task('build-sdk:settings:images', function () {
-            return bbGulp.images('settings');
+        gulp.task('build-sdk:settings:images', function (done) {
+            bbGulp.images(done, 'settings');
         });
 
-        gulp.task('build-sdk:settings:fonts', function () {
-            return bbGulp.fonts('settings');
+        gulp.task('build-sdk:settings:fonts', function (done) {
+            bbGulp.fonts(done, 'settings');
         });
 
-        gulp.task('build-sdk:settings:bower', function () {
-            return bbGulp.bower('settings');
+        gulp.task('build-sdk:settings:bower', function (done) {
+            bbGulp.bower(done, 'settings');
         });
 
         gulp.task('build-sdk:settings', [

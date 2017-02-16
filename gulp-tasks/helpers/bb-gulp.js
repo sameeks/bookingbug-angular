@@ -46,7 +46,11 @@
                     done();
                 }
 
-                if (jsWatchers[module] !== true) { //TODO we need additional flag to enable|disable watchers
+                if (args.getEnvironment() === 'prod'){ //TODO additional config 'watch' boolean flag might be useful
+                    return;
+                }
+
+                if (jsWatchers[module] !== true) {
                     jsWatchers[module] = true;
 
                     gulp.watch(files, function (file) {
@@ -72,7 +76,7 @@
             .pipe(concat('bookingbug-angular-' + module + '.js'))
             .pipe(gulp.dest(buildPath + '/' + module));
 
-        if (args.getEnvironment() === 'prod' || argv.uglify === 'true') {
+        if (args.getEnvironment() === 'prod' || argv.uglify === 'true') { //TODO value should come from args helper
 
             let cloneSink = clone.sink();
             stream.pipe(cloneSink)
@@ -86,7 +90,7 @@
     }
 
     module.exports = {
-        overrideRootPath: function(rootPath){
+        overrideRootPath: function (rootPath) {
             srcPath = path.join(rootPath, 'src');
             buildPath = path.join(rootPath, 'build');
             tmpPath = path.join(rootPath, 'tmp');
@@ -101,35 +105,50 @@
 
             jsTranspilation(done, files, module);
         },
-        stylesheets: function (module) {
+        stylesheets: function (done, module) {
 
-            return gulp.src(srcPath + '/' + module + '/stylesheets/**')
-                .pipe(gulp.dest(buildPath + '/' + module + '/src/stylesheets'));
+            gulp.src(srcPath + '/' + module + '/stylesheets/**')
+                .pipe(gulp.dest(buildPath + '/' + module + '/src/stylesheets'))
+                .on('end', function () {
+                    done();
+                });
         },
-        images: function (module) {
+        images: function (done, module) {
 
-            return gulp.src(srcPath + '/' + module + '/images/*')
+            gulp.src(srcPath + '/' + module + '/images/*')
                 .pipe(imagemin())
                 .pipe(flatten())
-                .pipe(gulp.dest(buildPath + '/' + module));
+                .pipe(gulp.dest(buildPath + '/' + module))
+                .on('end', function () {
+                    done();
+                });
         },
-        fonts: function (module) {
+        fonts: function (done, module) {
 
-            return gulp.src(srcPath + '/' + module + '/fonts/*')
+            gulp.src(srcPath + '/' + module + '/fonts/*')
                 .pipe(flatten())
-                .pipe(gulp.dest(buildPath + '/' + module));
+                .pipe(gulp.dest(buildPath + '/' + module))
+                .on('end', function () {
+                    done();
+                });
         },
-        templates: function (module, modName = 'BB') {
+        templates: function (done, module, modName = 'BB') {
 
-            return gulp.src(srcPath + '/' + module + '/templates/**/*.html')
+            gulp.src(srcPath + '/' + module + '/templates/**/*.html')
                 .pipe(templateCache({module: modName}))
                 .pipe(concat('bookingbug-angular-' + module + '-templates.js'))
-                .pipe(gulp.dest(buildPath + '/' + module));
+                .pipe(gulp.dest(buildPath + '/' + module))
+                .on('end', function () {
+                    done();
+                });
         },
-        bower: function (module) {
+        bower: function (done, module) {
 
-            return gulp.src(path.join(srcPath, module, 'bower.json'))
-                .pipe(gulp.dest(path.join(buildPath, module)));
+            gulp.src(path.join(srcPath, module, 'bower.json'))
+                .pipe(gulp.dest(path.join(buildPath, module)))
+                .on('end', function () {
+                    done();
+                });
         }
     };
 }).call(this);
