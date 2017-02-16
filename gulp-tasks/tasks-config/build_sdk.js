@@ -8,9 +8,11 @@
 
         var srcPath = path.join(configuration.rootPath, 'src');
         var destPath = path.join(configuration.rootPath, 'build');
+        var tmpPath = path.join(configuration.rootPath, 'tmp');
+
 
         gulp.task('build-sdk:admin:javascripts', function () {
-            return bbGulp.javascripts('admin', srcPath, destPath);
+            return bbGulp.javascripts('admin', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:admin:stylesheets', function () {
@@ -43,7 +45,7 @@
         ]);
 
         gulp.task('build-sdk:admin-booking:javascripts', function () {
-            return bbGulp.javascripts('admin-booking', srcPath, destPath);
+            return bbGulp.javascripts('admin-booking', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:admin-booking:stylesheets', function () {
@@ -76,7 +78,7 @@
         ]);
 
         gulp.task('build-sdk:admin-dashboard:javascripts', function () {
-            return bbGulp.javascripts('admin-dashboard', srcPath, destPath);
+            return bbGulp.javascripts('admin-dashboard', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:admin-dashboard:stylesheets', function () {
@@ -109,7 +111,7 @@
         ]);
 
         gulp.task('build-sdk:core:javascripts', function () {
-            return bbGulp.javascripts('core', srcPath, destPath);
+            return bbGulp.javascripts('core', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:core:stylesheets', function () {
@@ -142,7 +144,7 @@
         ]);
 
         gulp.task('build-sdk:events:javascripts', function () {
-            return bbGulp.javascripts('events', srcPath, destPath);
+            return bbGulp.javascripts('events', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:events:stylesheets', function () {
@@ -175,7 +177,7 @@
         ]);
 
         gulp.task('build-sdk:member:javascripts', function () {
-            return bbGulp.javascripts('member', srcPath, destPath);
+            return bbGulp.javascripts('member', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:member:stylesheets', function () {
@@ -208,7 +210,7 @@
         ]);
 
         gulp.task('build-sdk:public-booking:javascripts', function () {
-            return bbGulp.javascripts('public-booking', srcPath, destPath);
+            return bbGulp.javascripts('public-booking', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:public-booking:stylesheets', function () {
@@ -241,7 +243,7 @@
         ]);
 
         gulp.task('build-sdk:queue:javascripts', function () {
-            return bbGulp.javascripts('queue', srcPath, destPath);
+            return bbGulp.javascripts('queue', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:queue:stylesheets', function () {
@@ -274,7 +276,7 @@
         ]);
 
         gulp.task('build-sdk:services:javascripts', function () {
-            return bbGulp.javascripts('services', srcPath, destPath);
+            return bbGulp.javascripts('services', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:services:stylesheets', function () {
@@ -307,7 +309,7 @@
         ]);
 
         gulp.task('build-sdk:settings:javascripts', function () {
-            return bbGulp.javascripts('settings', srcPath, destPath);
+            return bbGulp.javascripts('settings', srcPath, destPath, tmpPath);
         });
 
         gulp.task('build-sdk:settings:stylesheets', function () {
