@@ -8,7 +8,7 @@ angular.module('BB', [
 
     'angular-carousel',
     'angular-hal',
-    'angular-data.DSCacheFactory', // newer version of jmdobry angular cache
+    'angular-data.DSCacheFactory',
     'angular.filter',
     'pascalprecht.translate',
     'schemaForm',

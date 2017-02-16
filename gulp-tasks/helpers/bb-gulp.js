@@ -1,34 +1,38 @@
 (function () {
     'use strict';
 
-    let argv = require('yargs').argv;
-    let fs = require('fs');
-    let gulp = require('gulp');
-    let gutil = require('gulp-util');
-    let gulpif = require('gulp-if');
-    let coffee = require('gulp-coffee');
-    let concat = require('gulp-concat');
-    let uglify = require('gulp-uglify');
-    let sass = require('gulp-sass');
-    let flatten = require('gulp-flatten');
-    let imagemin = require('gulp-imagemin');
-    let filter = require('gulp-filter');
-    let templateCache = require('gulp-angular-templatecache');
-    let path = require('path');
-    let rename = require('gulp-rename');
-    let plumber = require('gulp-plumber');
-    let clone = require('gulp-clone');
-    let args = require('../helpers/args.js');
-    let babel = require('gulp-babel');
+    const argv = require('yargs').argv;
+    const fs = require('fs');
+    const gulp = require('gulp');
+    const gutil = require('gulp-util');
+    const gulpif = require('gulp-if');
+    const coffee = require('gulp-coffee');
+    const concat = require('gulp-concat');
+    const uglify = require('gulp-uglify');
+    const sass = require('gulp-sass');
+    const flatten = require('gulp-flatten');
+    const imagemin = require('gulp-imagemin');
+    const filter = require('gulp-filter');
+    const templateCache = require('gulp-angular-templatecache');
+    const path = require('path');
+    const rename = require('gulp-rename');
+    const plumber = require('gulp-plumber');
+    const clone = require('gulp-clone');
+    const args = require('../helpers/args.js');
+    const babel = require('gulp-babel');
 
     const watchOptions = {
         read: false,
         readDelay: 500
     };
 
+    let srcPath = './src';
+    let buildPath = './build';
+    let tmpPath = './tmp';
+
     let jsWatchers = {};
 
-    function jsTranspilation(files, module, srcPath, buildPath, tmpPath) {
+    function jsTranspilation(done, files, module) {
 
         let stream = gulp.src(files, {allowEmpty: true})
             .pipe(plumber())
@@ -36,14 +40,19 @@
             .pipe(gulp.dest(tmpPath + '/es5/' + module + '/javascripts/'));
 
         stream.on('end', function () {
-            jsConcatenate(module, srcPath, buildPath, tmpPath).on('end', function () {
+            jsConcatenate(module).on('end', function () {
+
+                if (typeof done === 'function') {
+                    done();
+                }
+
                 if (jsWatchers[module] !== true) { //TODO we need additional flag to enable|disable watchers
                     jsWatchers[module] = true;
 
                     gulp.watch(files, function (file) {
                         let fileToRetranspile = [file.path];
-                        console.log('Transpilation', fileToRetranspile);
-                        jsTranspilation(fileToRetranspile, module, srcPath, buildPath, tmpPath);
+                        console.log('SDK change', fileToRetranspile);
+                        jsTranspilation(null, fileToRetranspile, module);
                     }, watchOptions);
                 }
             });
@@ -52,7 +61,7 @@
         return stream;
     }
 
-    function jsConcatenate(module, srcPath, buildPath, tmpPath) {
+    function jsConcatenate(module) {
         let files = [
             tmpPath + '/es5/' + module + '/javascripts/**/*.module.js',
             tmpPath + '/es5/' + module + '/javascripts/**/*.js'
@@ -77,64 +86,48 @@
     }
 
     module.exports = {
-        javascripts: function (module, srcPath, buildPath, tmpPath) {
+        overrideRootPath: function(rootPath){
+            srcPath = path.join(rootPath, 'src');
+            buildPath = path.join(rootPath, 'build');
+            tmpPath = path.join(rootPath, 'tmp');
+        },
+        javascripts: function (done, module) {
 
-            srcPath || (srcPath = './src');
-            buildPath || (buildPath = './build');
-            tmpPath || (tmpPath = './tmp');
-
-            let filesToTranspile = [
+            let files = [
                 srcPath + '/' + module + '/javascripts/**/*.module.js',
                 srcPath + '/' + module + '/javascripts/**/*.js',
                 '!' + srcPath + '/**/*.spec.js'
             ];
 
-            jsTranspilation(filesToTranspile, module, srcPath, buildPath, tmpPath);
+            jsTranspilation(done, files, module);
         },
-        i18n: function (module, srcPath, buildPath) {
-            srcPath || (srcPath = './src');
-            buildPath || (buildPath = './build');
-            return gulp
-                .src(srcPath + '/core/i18n/**/*')
-                .pipe(gulp.dest(buildPath + '/core/i18n'));
-        },
-        stylesheets: function (module, srcPath, buildPath) {
-            srcPath || (srcPath = './src');
-            buildPath || (buildPath = './build');
+        stylesheets: function (module) {
+
             return gulp.src(srcPath + '/' + module + '/stylesheets/**')
-                .pipe(gulp.dest(buildPath + '/' + module + '/src/stylesheets'))
+                .pipe(gulp.dest(buildPath + '/' + module + '/src/stylesheets'));
         },
-        images: function (module, srcPath, buildPath) {
-            srcPath || (srcPath = './src');
-            buildPath || (buildPath = './build');
+        images: function (module) {
+
             return gulp.src(srcPath + '/' + module + '/images/*')
                 .pipe(imagemin())
                 .pipe(flatten())
                 .pipe(gulp.dest(buildPath + '/' + module));
         },
-        fonts: function (module, srcPath, buildPath) {
-            srcPath || (srcPath = './src');
-            buildPath || (buildPath = './build');
+        fonts: function (module) {
+
             return gulp.src(srcPath + '/' + module + '/fonts/*')
                 .pipe(flatten())
                 .pipe(gulp.dest(buildPath + '/' + module));
         },
-        templates: function (module, srcPath, buildPath, modName) {
-            srcPath || (srcPath = './src');
-            buildPath || (buildPath = './build');
-
-            if (modName === undefined || modName == '' || !modName) {
-                modName = 'BB';
-            }
+        templates: function (module, modName = 'BB') {
 
             return gulp.src(srcPath + '/' + module + '/templates/**/*.html')
                 .pipe(templateCache({module: modName}))
                 .pipe(concat('bookingbug-angular-' + module + '-templates.js'))
                 .pipe(gulp.dest(buildPath + '/' + module));
         },
-        bower: function (module, srcPath, buildPath) {
-            srcPath || (srcPath = './src');
-            buildPath || (buildPath = './build');
+        bower: function (module) {
+
             return gulp.src(path.join(srcPath, module, 'bower.json'))
                 .pipe(gulp.dest(path.join(buildPath, module)));
         }
