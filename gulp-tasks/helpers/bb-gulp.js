@@ -132,7 +132,11 @@
                     done();
                 });
         },
-        templates: function (done, module, modName = 'BB') {
+        templates: function (done, module, modName) {
+
+            if(modName == null){
+                modName = 'BB';
+            }
 
             gulp.src(srcPath + '/' + module + '/templates/**/*.html')
                 .pipe(templateCache({module: modName}))
