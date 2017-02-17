@@ -22,8 +22,7 @@ angular.module('BBAdmin.Controllers').controller 'AdminLogin', ($scope,
     password: null
     selected_admin: null
 
-  console.log "test"
-  $scope.login_template = 'login/admin_login.html'
+  $scope.login_template = 'admin_login.html'
 
   $scope.login = () ->
     $scope.alert = ""
