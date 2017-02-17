@@ -15,10 +15,10 @@
         getReleaseLog: getReleaseLog
     };
 
-        // \/\/\/\/\/\/\/
+    // \/\/\/\/\/\/\/\/\/
     // GIT RELEASE LOG
     // \/\/\/\/\/\/\/\/\/
-    
+
     function getReleaseLog() {
 
         var questions = [
@@ -27,16 +27,29 @@
                 name: 'gitFetchConfirm',
                 message: 'Please confirm you have already run git fetch --tags',
                 default: false
+            },
+            {
+                type: 'input',
+                name: 'tag',
+                message: 'Please specify the most recent release tag (For example: v2.1.6)',
+                validate: function (answer) {
+                    if(answer.match(/v\d+\.\d+\.\d+/)) {
+                        return true;
+                    }
+                    return 'Invalid tag!';
+                }
             }
         ];
 
         inquirer.prompt(questions).then(function (answers) {
-            console.log("answers", answers);
+
+            var gitLogString = "log " + answers['tag'] + "..HEAD --oneline";
+
             if(!answers['gitFetchConfirm']) {
                 return false;
             }else {
                 git.exec({
-                    args: 'log v2.1.6..HEAD --oneline'
+                    args: gitLogString
                 }, function(err, stdout) {
                     var commitHistory = stdout.split('\n');
                     var commitsString = "";
@@ -44,10 +57,11 @@
                         var regexp = /^\w{7}\s(merge branch\s(?!master)\'*(IMPL|CORE)|\[*(CORE|IMPL)|merge pull request)(?!.+into\s(CORE|IMPL))/i;
                         if (commit.match(regexp)) {
                             commitsString += commit + "\n";
-                            console.log(commit);
                         }
                     });
-                    require('fs').writeFileSync('release_changelog.log', commitsString);
+                    fs.writeFileSync('release_changelog.log', commitsString);
+                    console.log(commitsString);
+                    console.log("Commit history saved to file: release_changelog.log");
                 });
             }
         });
