@@ -2,6 +2,7 @@
     'use strict';
 
     const argv = require('yargs').argv;
+    const del = require('del');
     const fs = require('fs');
     const gulp = require('gulp');
     const gutil = require('gulp-util');
@@ -54,9 +55,22 @@
                     jsWatchers[module] = true;
 
                     gulp.watch(files, function (file) {
-                        let fileToRetranspile = [file.path];
-                        console.log('SDK change', fileToRetranspile);
-                        jsTranspilation(null, fileToRetranspile, module);
+                        let filePath = file.path;
+                        console.log('SDK change', filePath);
+
+                        if(file.type === 'deleted'){
+
+                            let fileToRemove = filePath.replace('src', path.join('tmp','es5'));
+                            console.log('file to remove: ' + fileToRemove);
+
+                             del([fileToRemove], {force: true}).then( () => {
+                                jsTranspilation(null, [filePath], module);
+                             });
+
+                        }else{
+                            jsTranspilation(null, [filePath], module);    
+                        }
+                        
                     }, watchOptions);
                 }
             });
