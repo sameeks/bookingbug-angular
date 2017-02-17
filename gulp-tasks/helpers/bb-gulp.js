@@ -47,7 +47,7 @@
                     done();
                 }
 
-                if (args.getEnvironment() === 'prod'){ //TODO additional config 'watch' boolean flag might be useful
+                if (args.getEnvironment() === 'prod') { //TODO additional config 'watch' boolean flag might be useful
                     return;
                 }
 
@@ -58,19 +58,15 @@
                         let filePath = file.path;
                         console.log('SDK change', filePath);
 
-                        if(file.type === 'deleted'){
+                        let fileToRemove = filePath.replace('src', path.join('tmp', 'es5'));
 
-                            let fileToRemove = filePath.replace('src', path.join('tmp','es5'));
-                            console.log('file to remove: ' + fileToRemove);
-
-                             del([fileToRemove], {force: true}).then( () => {
+                        del([fileToRemove], {force: true}).then(() => {
+                            console.log('TYPE: ' + file.type);
+                            if (file.type !== 'deleted') {
                                 jsTranspilation(null, [filePath], module);
-                             });
+                            }
+                        });
 
-                        }else{
-                            jsTranspilation(null, [filePath], module);    
-                        }
-                        
                     }, watchOptions);
                 }
             });
@@ -148,7 +144,7 @@
         },
         templates: function (done, module, modName) {
 
-            if(modName == null){
+            if (modName == null) {
                 modName = 'BB';
             }
 
