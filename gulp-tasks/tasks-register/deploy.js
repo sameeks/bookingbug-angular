@@ -6,7 +6,7 @@
         var runSequence = require('run-sequence').use(gulp);
 
         gulp.task('deploy', function (cb) {
-            runSequence('build-widget', 'deploy-aws', cb);
+            runSequence('build-sdk', 'deploy-aws', cb);
         });
 
     };

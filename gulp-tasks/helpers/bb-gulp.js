@@ -94,16 +94,8 @@
                 mod_name = 'BB';
             }
 
-//************************************************************************************************
-            // if(module ==='core')
-            // return gulp.src(srcpath + '/' + module + '/javascripts/directives/**/*.html')
-            //     .pipe(templateCache({module: mod_name}))
-            //     .pipe(concat('bookingbug-angular-' + module + '-templates.js'))
-            //     .pipe(gulp.dest(releasepath + '/' + module));
-//***********************************************************************************************
-
-
             return gulp.src(srcpath + '/' + module + '/templates/**/*.html')
+                .pipe(flatten())
                 .pipe(templateCache({module: mod_name}))
                 .pipe(concat('bookingbug-angular-' + module + '-templates.js'))
                 .pipe(gulp.dest(releasepath + '/' + module));
