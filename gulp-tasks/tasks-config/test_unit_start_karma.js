@@ -17,10 +17,9 @@
                 }
             });
             projectFiles = [
-                'src/*/javascripts/**/*.module.js.coffee',
+                'src/*/javascripts/**/*.module.js',
                 'src/*/templates/**/*.html',
-                'src/core/javascripts/collections/*.coffee',
-                'src/*/javascripts/**/*.coffee',
+                'src/core/javascripts/collections/*.js',
                 'src/*/javascripts/**/*.js'
             ];
             return bowerFiles.concat(projectFiles);

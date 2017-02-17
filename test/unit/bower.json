@@ -1,6 +1,7 @@
 {
   "name": "bb-unit-test",
   "dependencies": {
+    "babel-polyfill": "^0.0.1",
     "jquery": "~1.11.3",
     "jquery-ui": "~1.11.3",
     "angular": "~1.5.10",
