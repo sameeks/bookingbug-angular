@@ -35,22 +35,19 @@
             if(!answers['gitFetchConfirm']) {
                 return false;
             }else {
-                console.log("proceeding...");
                 git.exec({
                     args: 'log v2.1.6..HEAD --oneline'
                 }, function(err, stdout) {
                     var commitHistory = stdout.split('\n');
-                    var relevantCommitsString = "";
                     var commitsString = "";
                     commitHistory.forEach(function(commit){
-                        if (commit.match(/(\[.+\]|Merge branch \'(?!master))/)) {
-                            relevantCommitsString += commit + "\n";
+                        var regexp = /^\w{7}\s(merge branch\s(?!master)\'*(IMPL|CORE)|\[*(CORE|IMPL)|merge pull request)(?!.+into\s(CORE|IMPL))/i;
+                        if (commit.match(regexp)) {
+                            commitsString += commit + "\n";
                             console.log(commit);
                         }
-                        commitsString += commit + "\n";
                     });
-                    require('fs').writeFileSync('release.log', relevantCommitsString);
-                    require('fs').writeFileSync('release_all.log', commitsString);
+                    require('fs').writeFileSync('release_changelog.log', commitsString);
                 });
             }
         });
