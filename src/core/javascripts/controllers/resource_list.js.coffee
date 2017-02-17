@@ -34,31 +34,42 @@ angular.module('BB.Directives').directive 'bbResources', () ->
   controller : 'ResourceList'
   link : (scope, element, attrs) ->
 
-    scope.options = scope.$eval(attrs.bbResources) or {}
-
-    if attrs.bbItems
-      scope.booking_items = scope.$eval(attrs.bbItems) or []
-      scope.booking_item  = scope.booking_items[0]
-    else
-      scope.booking_item = scope.$eval(attrs.bbItem) or scope.bb.current_item
-      scope.booking_items = [scope.booking_item]
-
 
 angular.module('BB.Controllers').controller 'ResourceList',
-($scope,  $rootScope, $attrs, PageControllerService, ResourceService, ItemService, $q, BBModel, ResourceModel) ->
+($scope, $attrs, $rootScope, PageControllerService, ResourceService, ItemService, $q, BBModel, ResourceModel) ->
+
   $scope.controller = "public.controllers.ResourceList"
   $scope.notLoaded $scope
 
   angular.extend(this, new PageControllerService($scope, $q))
 
+  rpromise = null
 
-  $rootScope.connection_started.then () =>
+
+  $rootScope.connection_started.then () ->
+    init()
+    
+
+  init = () ->
+
+    $scope.options = $scope.$eval($attrs.bbResources) or {}
+    $scope.allowSinglePick = if $scope.options.allow_single_pick? then true else false
+
+    if $attrs.bbItems
+      $scope.booking_items = $scope.$eval($attrs.bbItems) or []
+      $scope.booking_item  = $scope.booking_items[0]
+    else
+      $scope.booking_item = $scope.$eval($attrs.bbItem) or $scope.bb.current_item
+      $scope.booking_items = [$scope.booking_item]
+
     loadData()
 
 
   loadData = () =>
+
     # do nothing if nothing has changed
     unless ($scope.bb.steps and $scope.bb.steps[0].page == "resource_list") or $scope.options.resource_first
+
       if !$scope.booking_item.service or $scope.booking_item.service == $scope.change_watch_item
         # if there's no service - we have to wait for one to be set - so we're done loading for now!
         if !$scope.booking_item.service
@@ -69,18 +80,77 @@ angular.module('BB.Controllers').controller 'ResourceList',
     $scope.notLoaded $scope
 
     rpromise = ResourceService.query($scope.bb.company)
-    rpromise.then (resources) =>
+
+    rpromise.then (resources) ->
+
       if $scope.booking_item.group  # check they're part of any currently selected group
         resources = resources.filter (x) -> !x.group_id or x.group_id is $scope.booking_item.group
       $scope.all_resources = resources
+
+      $scope.setLoaded $scope
+
+    filterResources()
+
+  
+  # NOTE this gets called once, but triggers two item updates as $scope.resouce is assigned it triggers an item brodcast which means both items get updated with the result of the first item service query
+
+  # fixing single pick wont fixd this 
+
+  # does this affect gebneral function? i.e. when there's two resources? does the days link get screwed up in this instance? (yes, it does)
+
+  # but the resource has the days link attached to only the first service!
+
+  # do we need to call the item service twice over?!
+
+  # don;t really want to complicate this directief more!
+  
+  # only want to show services that can be performed by both resources, two calls need to be made -
+
+  # NO we don't - filtering list is bad, as to begin with, any resource/person for the two services is good, dont want to only show peiople that offer both services unless excplicity chosden 
+
+  # if user uses filter, then we restruct, we shoouldn't attempt to filter the resource/person lists - always show all when we have two booking items 
+
+
+  # simplify thos diretive to handle one booking item again
+
+  # build extended version that hadnles additioanl items, querying teh item service repeatedly
+
+  # need to wait for results to all come back, reduce list, and render this - however, want to use resource with days link attached to correct service, NOT the first one
+
+
+  # want to avoid complicating this directive mroe, trying to query ItemService multuiple tiomes here will screw up the resource watch as both would try to set it
+
+  # both items need to have the right resource selected, could in theory stop $scope.resource being set when we more than booking item, and simply use the nomrla (non bookableItem) resoure object to set teh current item?
+
+  # again complicating standard directive....
+
+  # want to avoud using the days link returned though as that would conflict with person i think???
+
+  # it does
+
+  # don't call ItemService.query where we have mroe than one booking item!!!  - we don;'t want to filter the list of resources in this instances
+
+  # could build UI that allows person/resource to be selected for both items but complex
+  # 
+
+  filterResources = () =>
+
+    console.log "filterresources", $scope.booking_items.length
+
+    #return if $scope.booking_items.length > 1
+
+    $scope.notLoaded $scope
 
     params =
       company: $scope.bb.company
       cItem: $scope.booking_item
       wait: rpromise
       item: 'resource'
+
     ItemService.query(params).then (items) =>
+
       promises = []
+
       if $scope.booking_item.group # check they're part of any currently selected group
         items = items.filter (x) -> !x.group_id or x.group_id is $scope.booking_item.group
 
@@ -97,16 +167,22 @@ angular.module('BB.Controllers').controller 'ResourceList',
         # if there's only one resource and single pick hasn't been enabled,
         # automatically select the resource.
         # OR if the resource has been passed into item_defaults and single pick hasn't been enabled,, skip to next step
-        if resources.length is 1
+        console.log "$scope.allowSinglePick", $scope.allowSinglePick
+
+        if resources.length is 1 #and !$scope.allowSinglePick # and booking items length < 0
           resource = items[0]
         if $scope.bb.item_defaults.resource
-          resource = $scope.bb.item_defaults.resource
+          resource = $scope.bb.item_defaults.resource # NOTE what happens when default resource can't actually offer the service??????
+        
+        # NOTE selectItem item returns false when under page control
+        # sets $scope.resource 
         if resource and !$scope.selectItem(resource.item, $scope.nextRoute, {skip_step: true})
           $scope.bookable_resources = resources
           $scope.bookable_items = items
         else
           $scope.bookable_resources = resources
           $scope.bookable_items = items
+
         $scope.setLoaded $scope
       , (err) ->
         $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong')
@@ -147,6 +223,7 @@ angular.module('BB.Controllers').controller 'ResourceList',
   * @param {string=} skip_step The skip_step has been set to false
   ###
   $scope.selectItem = (item, route, options={}) =>
+    
     if $scope.$parent.$has_page_control
       $scope.resource = item
       return false
@@ -157,16 +234,26 @@ angular.module('BB.Controllers').controller 'ResourceList',
       $scope.decideNextPage(route)
       return true
 
+
   $scope.$watch 'resource',(newval, oldval) =>
+
+    console.log "resource watch, $scope.booking_items", $scope.booking_items
+
     if $scope.resource and $scope.booking_item
+
       if !$scope.booking_item.resource or $scope.booking_item.resource.self != $scope.resource.self
+
         # only set and broadcast if it's changed
         new_resource = getItemFromResource($scope.resource)
         _.each $scope.booking_items, (item) -> item.setResource(new_resource)
         $scope.broadcastItemUpdate()
+        console.log "resource broadcastItemUpdate 1"
+    
     else if newval != oldval
+
       _.each $scope.booking_items, (item) -> item.setResource(null)
       $scope.broadcastItemUpdate()
+      console.log "resource broadcastItemUpdate 2"
 
 
 
