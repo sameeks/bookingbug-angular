@@ -56,15 +56,11 @@
 
                     gulp.watch(files, function (file) {
                         let filePath = file.path;
-                        console.log('SDK change', filePath);
+                        console.log('SDK (' + file.type +'):', filePath);
 
                         let fileToRemove = filePath.replace('src', path.join('tmp', 'es5'));
-
                         del([fileToRemove], {force: true}).then(() => {
-                            console.log('TYPE: ' + file.type);
-                            if (file.type !== 'deleted') {
-                                jsTranspilation(null, [filePath], module);
-                            }
+                            jsTranspilation(null, [filePath], module);
                         });
 
                     }, watchOptions);
