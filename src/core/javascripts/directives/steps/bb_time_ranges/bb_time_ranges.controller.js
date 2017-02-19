@@ -480,7 +480,10 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
                         time_slots = pair[1];
 
                         // make sure the selected slot is marked as selected
-                        markSelectedSlot(time_slots);
+                        // we dont to mark the slot when we are moving a booking
+                        if(angular.isUndefined($scope.bb.purchase)) {
+                            markSelectedSlot(time_slots);
+                        }
 
                         let day = {
                             date: moment(d).add(utcHours, 'hours').add(utcMinutes, 'minutes').add(utcSeconds, 'seconds'),
@@ -529,6 +532,10 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
                         } else if (requested_slot.slot) {
                             $scope.highlightSlot(requested_slot.slot, day);
                         }
+                    }
+
+                    if(angular.isDefined($scope.bb.purchase)) {
+                        $scope.bb.current_item.clearDateTime();
                     }
 
 
