@@ -4,68 +4,12 @@
     var argv = require('yargs').argv;
     var fs = require('fs');
     var path = require('path');
-    var git = require('gulp-git');
-    var inquirer = require('inquirer');
-    var prompt = inquirer.createPromptModule();
 
     module.exports = {
         getEnvironment: getEnvironment,
         getTestProjectRootPath: getTestProjectRootPath,
-        getTestProjectSpecsRootPath: getTestProjectSpecsRootPath,
-        getReleaseLog: getReleaseLog
+        getTestProjectSpecsRootPath: getTestProjectSpecsRootPath
     };
-
-    // \/\/\/\/\/\/\/\/\/
-    // GIT RELEASE LOG
-    // \/\/\/\/\/\/\/\/\/
-
-    function getReleaseLog() {
-
-        var questions = [
-            {
-                type: 'confirm',
-                name: 'gitFetchConfirm',
-                message: 'Please confirm you have already run git fetch --tags',
-                default: false
-            },
-            {
-                type: 'input',
-                name: 'tag',
-                message: 'Please specify the most recent release tag (For example: v2.1.6)',
-                validate: function (answer) {
-                    if(answer.match(/v\d+\.\d+\.\d+/)) {
-                        return true;
-                    }
-                    return 'Invalid tag!';
-                }
-            }
-        ];
-
-        inquirer.prompt(questions).then(function (answers) {
-
-            var gitLogString = "log " + answers['tag'] + "..HEAD --oneline";
-
-            if(!answers['gitFetchConfirm']) {
-                return false;
-            }else {
-                git.exec({
-                    args: gitLogString
-                }, function(err, stdout) {
-                    var commitHistory = stdout.split('\n');
-                    var commitsString = "";
-                    commitHistory.forEach(function(commit){
-                        var regexp = /^\w{7}\s(merge branch\s(?!master)\'*(IMPL|CORE)|\[*(CORE|IMPL)|merge pull request)(?!.+into\s(CORE|IMPL))/i;
-                        if (commit.match(regexp)) {
-                            commitsString += commit + "\n";
-                        }
-                    });
-                    fs.writeFileSync('release_changelog.log', commitsString);
-                    console.log(commitsString);
-                    console.log("Commit history saved to file: release_changelog.log");
-                });
-            }
-        });
-    }
 
     /*
      * @returns {String} ['local'|'dev'|'staging'|'prod']
