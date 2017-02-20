@@ -180,7 +180,8 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
                     return $scope.waiting_for_conn_started.then(() => {
                             let company_id = getCompanyID();
                             if (company_id) {
-                                BBModel.Company.$query(company_id, {}).then(company => setPurchaseCompany(company));
+                                let options = {root: $scope.bb.api_url};
+                                BBModel.Company.$query(company_id, options).then(company => setPurchaseCompany(company));
                             }
                             let params = {purchase_id: id, url_root: $scope.bb.api_url};
                             let auth_token = $sessionStorage.getItem('auth_token');
