@@ -38,6 +38,7 @@
     "gulp-filelog": "^0.4.1",
     "gulp-filter": "^4.0.0",
     "gulp-flatten": "0.0.4",
+    "gulp-git": "^2.0.0",
     "gulp-if": "^2.0.0",
     "gulp-imagemin": "^2.4.0",
     "gulp-livereload": "^3.8.1",
