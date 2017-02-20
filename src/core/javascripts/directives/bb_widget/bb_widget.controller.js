@@ -5,7 +5,7 @@
     angular.module('BB.Controllers').controller('BBCtrl', BBCtrl);
 
     function BBCtrl(routeStates, $scope, $rootScope, QueryStringService, LoadingService, viewportSize, bbWidgetBasket,
-                    bbWidgetPage, bbWidgetStep, bbWidgetInit, bbWidgetUtilities) {
+                    bbWidgetPage, bbWidgetStep, bbWidgetInit, bbWidgetUtilities, $localStorage) {
 
         bbWidgetBasket.setScope($scope);
         bbWidgetPage.setScope($scope);
@@ -90,6 +90,9 @@
             $rootScope.$on('show:loader', bbWidgetUtilities.showLoaderHandler);
             $rootScope.$on('hide:loader', bbWidgetUtilities.hideLoaderHandler);
             $scope.$on('$locationChangeStart', bbWidgetUtilities.locationChangeStartHandler);
+
+            window.bbScope = $scope;
+            window.$localStorage = $localStorage;
         };
 
         this.$postLink = function () {
