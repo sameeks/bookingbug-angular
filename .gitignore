@@ -8,6 +8,9 @@ docs/*
 **/*.js.map
 .DS_Store
 
+*.sln
+.vs
+
 .awspublish-angular.bookingbug.com
 
 test/unit/reports
