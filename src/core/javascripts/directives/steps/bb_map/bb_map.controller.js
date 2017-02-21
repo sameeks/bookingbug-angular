@@ -13,7 +13,7 @@
             'search_prms'
         ]);
 
-        store = $localStorage.getObject('bb');
+        let store = $localStorage.getObject('bb');
 
         // init vars
         $scope.options = $scope.$eval($attrs.bbMap) || {};
