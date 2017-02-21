@@ -13,7 +13,6 @@
         }
 
         function attemptRestore() {
-            debugger
             var state = $localStorage.getObject('bb');
 
             if(state != null){

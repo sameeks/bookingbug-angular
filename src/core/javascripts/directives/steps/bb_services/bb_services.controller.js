@@ -46,11 +46,22 @@
             , err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
 
 
+        let restoreService = () => {
+            if ($scope.bb.current_item.service != null) {
+                $scope.selectItem($scope.bb.current_item.service);
+                return true;
+            }
+            return false;
+        };
+
         $scope.init = function (comp) {
             let item;
             if (!$scope.booking_item) {
                 $scope.booking_item = $scope.bb.current_item;
             }
+
+            if (restoreService()) return;
+
 
             if ($scope.bb.company.$has('named_categories')) {
                 BBModel.Category.$query($scope.bb.company).then(items => {
@@ -224,7 +235,7 @@
                 options = {};
             }
 
-            if(store.serviceId = item.id) {
+            if (store.serviceId = item.id) {
                 $localStorage.setObject('bb', store);
             }
 
