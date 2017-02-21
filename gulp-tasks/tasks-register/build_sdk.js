@@ -3,7 +3,7 @@
 
     module.exports = function (gulp, configuration) {
 
-        var runSequence = require('run-sequence').use(gulp);
+        const runSequence = require('run-sequence').use(gulp);
 
         gulp.task('build-sdk', buildSdkTask);
 
