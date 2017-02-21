@@ -10,8 +10,6 @@
 
         this.$scope = $scope;
 
-        let store = $localStorage.getObject('bb');
-
         FormDataStoreService.init('ServiceList', $scope, [
             'service'
         ]);
@@ -52,6 +50,13 @@
                 return true;
             }
             return false;
+        };
+
+        let storeService = (service) => {
+            let store = $localStorage.getObject('bb');
+            if (store.serviceId = service.id) {
+                $localStorage.setObject('bb', store);
+            }
         };
 
         $scope.init = function (comp) {
@@ -235,9 +240,7 @@
                 options = {};
             }
 
-            if (store.serviceId = item.id) {
-                $localStorage.setObject('bb', store);
-            }
+            storeService(item);
 
             if ($scope.routed) {
                 return true;
