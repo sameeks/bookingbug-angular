@@ -1,4 +1,4 @@
-angular.module('BB').run(function ($bbug, DebugUtilsService, FormDataStoreService, $log, $rootScope, $sessionStorage, GeneralOptions, CompanyStoreService) {
+angular.module('BB').run(function ($bbug, DebugUtilsService, FormDataStoreService, $log, $rootScope, $localStorage, $sessionStorage, GeneralOptions, CompanyStoreService) {
     'ngInject';
 
     $rootScope.$log = $log;
@@ -7,7 +7,7 @@ angular.module('BB').run(function ($bbug, DebugUtilsService, FormDataStoreServic
     if (!$rootScope.bb) {
         $rootScope.bb = {};
     }
-    $rootScope.bb.api_url = $sessionStorage.getItem("host");
+    $rootScope.bb.api_url = $sessionStorage.getItem('host');
 
     if ($bbug.support.opacity === false) {
         document.createElement('header');
@@ -20,8 +20,8 @@ angular.module('BB').run(function ($bbug, DebugUtilsService, FormDataStoreServic
         GeneralOptions.display_time_zone = moment.tz.guess();
     }
 
-    if (localStorage.selectedTimezone) {
-        GeneralOptions.display_time_zone = localStorage.selectedTimezone;
+    if ($localStorage.getItem('selectedTimezone')) {
+        GeneralOptions.display_time_zone = localStorage.getItem('selectedTimezone');
     }
 
     if (GeneralOptions.display_time_zone && GeneralOptions.display_time_zone !== CompanyStoreService.time_zone) {

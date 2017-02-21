@@ -4,15 +4,15 @@
  * @description
  * Controller for the layout (root state)
  */
-let controller = function ($scope, $state, company, $uibModalStack, $rootScope, GeneralOptions, CompanyStoreService) {
+let controller = function ($scope, $state, company, $uibModalStack, $rootScope, $localStorage, GeneralOptions, CompanyStoreService) {
     'ngInject';
 
     $scope.company = company;
     $scope.bb.company = company;
     $scope.user = $rootScope.user;
 
-    if (localStorage.selectedTimezone) {
-        moment.tz.setDefault(localStorage.selectedTimezone);
+    if ($localStorage.getItem('selectedTimezone')) {
+        moment.tz.setDefault($localStorage.getItem('selectedTimezone'));
     } else {
         // Set timezone globally per company basis (company contains timezone info)
         moment.tz.setDefault(company.timezone);

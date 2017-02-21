@@ -27,7 +27,7 @@
              controllerAs: '$bbTimezoneOptionsCtrl'
          });
 
-    function TimezoneOptionsCtrl ($scope, $rootScope, TimezoneOptions, GeneralOptions, CompanyStoreService) {
+    function TimezoneOptionsCtrl ($scope, $rootScope, $localStorage, TimezoneOptions, GeneralOptions, CompanyStoreService) {
         'ngInject';
 
         const ctrl = this;
@@ -63,7 +63,8 @@
         }
 
         function setNewTimezone (timezone, setTzAutomatically) {
-            localStorage.selectedTimezone = GeneralOptions.display_time_zone = timezone;
+            $localStorage.setItem('selectedTimezone', timezone);
+            GeneralOptions.display_time_zone = timezone;
             GeneralOptions.custom_time_zone = CompanyStoreService.time_zone !== timezone ? true : false;
             GeneralOptions.set_time_zone_automatically = setTzAutomatically ? setTzAutomatically : false;
             moment.tz.setDefault(timezone);
@@ -71,7 +72,7 @@
         }
 
         function resetTimezone (timezone) {
-            localStorage.removeItem('selectedTimezone');
+            $localStorage.removeItem('selectedTimezone');
             GeneralOptions.display_time_zone = null;
             GeneralOptions.custom_time_zone = GeneralOptions.set_time_zone_automatically = false;
             moment.tz.setDefault(timezone);
@@ -79,9 +80,10 @@
         }
 
         function setDefaults () {
-            if (localStorage.selectedTimezone) {
-                ctrl.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(localStorage.selectedTimezone);
-                ctrl.automaticTimezone = moment.tz.guess() === localStorage.selectedTimezone ? true : false;
+            const timezone = $localStorage.getItem('selectedTimezone');
+            if (timezone) {
+                ctrl.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(timezone);
+                ctrl.automaticTimezone = moment.tz.guess() === timezone ? true : false;
             } else {
                 ctrl.selectedTimezone = TimezoneOptions.mapTimezoneForDisplay(CompanyStoreService.time_zone);
             }
