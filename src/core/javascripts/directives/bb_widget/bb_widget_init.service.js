@@ -27,6 +27,7 @@
             }
         };
         var initWidget = function (prms) {
+            console.log('initWidget', prms);
             guardScope();
             var url;
             prms = prms == null ? {} : prms;

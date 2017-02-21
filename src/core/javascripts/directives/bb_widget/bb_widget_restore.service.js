@@ -23,26 +23,10 @@
         }
 
         function restore(state) {
-            if(state.companyId != null && state.companyId != $scope.bb.company.id){
-                restoreCompany(state.companyId);
-                return;
-            }
 
             if(state.serviceId != null){
                 restoreService(state.serviceId);
             }
-        }
-
-        function restoreCompany(companyId) {
-
-            var prms = {
-                company_id: companyId,
-                item_defaults: $scope.bb.item_defaults
-            };
-
-            console.log('restoreCompany', companyId);
-
-            $scope.initWidget(prms);
         }
 
         function restoreService(serviceId) {
@@ -59,7 +43,6 @@
                 $scope.bb.current_item.service = new BBModel.Service(service);
 
             });
-
 
         }
 

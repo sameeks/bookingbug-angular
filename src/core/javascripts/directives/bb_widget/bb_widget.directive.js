@@ -30,7 +30,7 @@
      */
     angular.module('BB.Directives').directive('bbWidget', BBWidget);
 
-    function BBWidget($http, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, AppService) {
+    function BBWidget($http, $templateCache, $compile, $q, AppConfig, $timeout, $bbug, $rootScope, AppService, $localStorage) {
 
         /**
          * @ngdoc method
@@ -154,6 +154,14 @@
                 return $compile(element.contents())(scope);
             });
         };
+
+        let restoreCompanyId = (initParams) => {
+            let store = $localStorage.getObject('bb');
+            if(store.companyId != null && store.companyId != initParams.company_id){
+                initParams.company_id = store.companyId;
+            }
+        };
+
         var link = function (scope, element, attrs, controller, transclude) {
             var evaluator, init_params, notInModal;
             if (attrs.member != null) {
@@ -163,8 +171,11 @@
             if (scope.useParent && (scope.$parent != null)) {
                 evaluator = scope.$parent;
             }
+
             init_params = evaluator.$eval(attrs.bbWidget);
+            restoreCompanyId(init_params);
             scope.initWidget(init_params);
+
             $rootScope.widget_started.then((function (_this) {
                 return function () {
                     var prms;
