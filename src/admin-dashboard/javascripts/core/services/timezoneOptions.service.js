@@ -20,53 +20,39 @@
         };
 
         function cleanUpLocations () {
-            var locationNames = moment.tz.names();
+            let locationNames = moment.tz.names();
             locationNames = _.chain(locationNames)
-                .filter(function (tz) {
-                    return tz.indexOf('GMT') === -1;
-                })
-                .filter(function (tz) {
-                    return tz.indexOf('Etc') === -1;
-                })
-                .filter(function (tz) {
-                    return tz.match(/[^/]*$/)[0] !== tz.match(/[^/]*$/)[0].toUpperCase();
-                })
+                .filter((tz) => tz.indexOf('GMT') === -1)
+                .filter((tz) => tz.indexOf('Etc') === -1)
+                .filter((tz) => tz.match(/[^/]*$/)[0] !== tz.match(/[^/]*$/)[0].toUpperCase())
                 .value();
             return locationNames;
         }
 
         function mapTimezones (locationNames) {
             var timezones = [];
-            locationNames.forEach(function (location, index) {
-                timezones.push(mapTimezoneForDisplay(location, index));
-            });
-            timezones = _.uniq(timezones, function (timezone) {
-                return timezone.display;
-            });
+            for (let [index, value] of locationNames.entries()) {
+                timezones.push(mapTimezoneForDisplay(value, index));
+            }
+            timezones = _.uniq(timezones, (timezone) => timezone.display);
             timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false);
             return timezones;
         }
 
         function restrictToRegion (locationNames, restrictRegion) {
 
-            function filterLocations (filterBy) {
-                _.filter(locationNames, function (tz) {
-                    return tz.indexOf(filterBy) !== -1;
-                });
-            }
-
             if (angular.isString(restrictRegion)) {
-                locationNames = filterLocations(restrictRegion);
-                return locationNames;
+                return filterLocations(restrictRegion);
             }
 
             if (angular.isArray(restrictRegion)) {
                 var locations = [];
-                _.each(restrictRegion, function (region) {
-                    locations.push(filterLocations(region));
-                });
-                locationNames = _.flatten(locations);
-                return locationNames;
+                _.each(restrictRegion, (region) => locations.push(filterLocations(region)));
+                return _.flatten(locations);
+            }
+
+            function filterLocations (filterBy) {
+                _.filter(locationNames, (tz) => tz.indexOf(filterBy) !== -1);
             }
         }
 
@@ -80,10 +66,10 @@
         * @returns {Object}
         */
         function mapTimezoneForDisplay (location, index) {
-            var timezone = {};
-            var city = location.match(/[^/]*$/)[0].replace(/-/g, '_').toUpperCase();
-            var tz = moment.tz(location);
-            timezone.display = '(UTC ' + tz.format("Z") + ') ' + $translate.instant("LOCATIONS." + city) + ' (' + tz.format("zz") + ')';
+            const timezone = {};
+            const city = location.match(/[^/]*$/)[0].replace(/-/g, '_').toUpperCase();
+            const tz = moment.tz(location);
+            timezone.display = `(UTC ${tz.format('Z')}) ${$translate.instant('LOCATIONS.' + city)} (${tz.format('zz')})`;
             timezone.value = location;
             if (index) {
                 timezone.id = index;
@@ -101,8 +87,8 @@
         * @returns {Array} A list of timezones
         */
         function generateTimezoneList (restrictRegion) {
-            var timezones = [];
-            var locationNames = cleanUpLocations();
+            let timezones = [];
+            let locationNames = cleanUpLocations();
             if (restrictRegion) {
                 locationNames = restrictToRegion(locationNames, restrictRegion);
             }

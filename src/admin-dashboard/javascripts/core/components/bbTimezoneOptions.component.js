@@ -16,19 +16,21 @@
      * </example>
      */
 
-    var timezoneOptionsComponent = {
-        templateUrl: 'core/_bb-timezone-options.html',
-        bindings: {
-            restrictRegion: '<'
-        },
-        controller: TimezoneOptionsCtrl,
-        controllerAs: '$bbTimezoneOptionsCtrl'
-    };
+     angular
+         .module('BBAdminDashboard')
+         .component('bbTimezoneOptions', {
+             templateUrl: 'core/_bb-timezone-options.html',
+             bindings: {
+                 restrictRegion: '<'
+             },
+             controller: TimezoneOptionsCtrl,
+             controllerAs: '$bbTimezoneOptionsCtrl'
+         });
 
     function TimezoneOptionsCtrl ($scope, $rootScope, TimezoneOptions, GeneralOptions, CompanyStoreService) {
         'ngInject';
 
-        var ctrl = this;
+        const ctrl = this;
 
         ctrl.timezones = [];
         ctrl.automaticTimezone = false;
@@ -42,7 +44,7 @@
         };
 
         function automaticTimezoneToggle () {
-            var tz;
+            let tz;
 
             if (ctrl.automaticTimezone) {
                 tz = moment.tz.guess();
@@ -68,11 +70,11 @@
             $rootScope.$emit('BBTimezoneOptions:timezoneChanged', timezone);
         }
 
-        function resetTimezone (tz) {
+        function resetTimezone (timezone) {
             localStorage.removeItem('selectedTimezone');
             GeneralOptions.display_time_zone = null;
             GeneralOptions.custom_time_zone = GeneralOptions.set_time_zone_automatically = false;
-            moment.tz.setDefault(tz);
+            moment.tz.setDefault(timezone);
             $rootScope.$emit('BBTimezoneOptions:timezoneChanged', null);
         }
 
@@ -85,9 +87,5 @@
             }
         }
     }
-
-    angular
-        .module('BBAdminDashboard')
-        .component('bbTimezoneOptions', timezoneOptionsComponent);
 
 })();
