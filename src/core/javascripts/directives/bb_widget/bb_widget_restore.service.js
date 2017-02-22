@@ -39,6 +39,7 @@
             personPromise.then(function (person) {
                 console.info('person restored:', person.id);
                 $scope.bb.current_item.person = new BBModel.Person(person);
+                $scope.bb.current_item.setPerson($scope.bb.current_item.person);
             });
 
         }
@@ -56,6 +57,9 @@
             servicePromise.then(function (service) {
                 console.info('service restored:', service.id);
                 $scope.bb.current_item.service = new BBModel.Service(service);
+
+                $scope.bb.current_item.setPrice($scope.bb.current_item.service.price);
+                $scope.bb.current_item.setDuration($scope.bb.current_item.service.duration);
             });
 
         }

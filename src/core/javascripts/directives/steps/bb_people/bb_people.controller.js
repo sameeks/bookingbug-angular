@@ -9,11 +9,9 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
     let loader = null;
 
     let restorePerson = () => {
-        if ($scope.bb.current_item.person != null) {
-            $scope.selectItem($scope.bb.current_item.person);
-            return true;
+        if ($scope.bb.current_item.person != true && $scope.bb.current_item.person != null){
+            $scope.decideNextPage();
         }
-        return false;
     };
 
     let storePerson = (person) => {
@@ -113,7 +111,9 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
                             $scope.selected_bookable_items = items;
                         }
                     }
-                    return loader.setLoaded();
+                    loader.setLoaded();
+
+                    restorePerson();
                 }
                 , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
 
