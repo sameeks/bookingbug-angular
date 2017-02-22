@@ -7,7 +7,7 @@ docs/*
 **/*.js.js
 **/*.js.map
 .DS_Store
-
+.tern-project
 .awspublish-angular.bookingbug.com
 
 test/unit/reports
