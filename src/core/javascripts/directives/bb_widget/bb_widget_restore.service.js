@@ -1,21 +1,21 @@
-(function(){
+(function () {
     'use strict';
 
     angular.module('BB').service('bbWidgetRestore', BBWidgetRestore);
 
-    function BBWidgetRestore($localStorage, halClient, $q, BBModel){
+    function BBWidgetRestore($localStorage, halClient, $q, BBModel) {
 
-        var $scope = null;
-        var restorePromises = [];
+        let $scope = null;
+        let restorePromises = [];
 
-        function setScope($s){
+        function setScope($s) {
             $scope = $s;
         }
 
         function attemptRestore() {
             var state = $localStorage.getObject('bb');
 
-            if(state != null){
+            if (state != null) {
                 restore(state);
             }
 
@@ -23,25 +23,39 @@
         }
 
         function restore(state) {
+            restoreService(state.serviceId);
+            restorePerson(state.personId);
+        }
 
-            if(state.serviceId != null){
-                restoreService(state.serviceId);
-            }
+        function restorePerson(personId){
+            if(personId == null) return;
+
+            let personPromise = halClient.$get(
+                `${$scope.bb.api_url}/api/v1/${$scope.bb.company.id}/people/${personId}`
+            );
+
+            restorePromises.push(personPromise);
+
+            personPromise.then(function (person) {
+                console.info('person restored:', person.id);
+                $scope.bb.current_item.person = new BBModel.Person(person);
+            });
+
         }
 
         function restoreService(serviceId) {
 
-            var servicePromise = halClient.$get(
-                $scope.bb.api_url + '/api/v1/' + $scope.bb.company.id + '/services/' + serviceId
-            ); //TODO 1) admin ?? 2) item_defaults ??
+            if (serviceId == null) return;
 
-            console.log('restoreService', serviceId);
+            let servicePromise = halClient.$get(
+                `${$scope.bb.api_url}/api/v1/${$scope.bb.company.id}/services/${serviceId}`
+            );
 
             restorePromises.push(servicePromise);
 
-            servicePromise.then(function(service){
+            servicePromise.then(function (service) {
+                console.info('service restored:', service.id);
                 $scope.bb.current_item.service = new BBModel.Service(service);
-
             });
 
         }
