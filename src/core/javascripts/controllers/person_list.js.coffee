@@ -33,12 +33,7 @@ angular.module('BB.Directives').directive 'bbPeople', () ->
   controller : 'PersonList'
   link : (scope, element, attrs) ->
 
-    if attrs.bbItems
-      scope.booking_items = scope.$eval(attrs.bbItems) or []
-      scope.booking_item  = scope.booking_items[0]
-    else
-      scope.booking_item = scope.$eval(attrs.bbItem) or scope.bb.current_item
-      scope.booking_items = [scope.booking_item]
+    scope.booking_item = scope.$eval(attrs.bbItem) or scope.bb.current_item
 
 
 angular.module('BB.Controllers').controller 'PersonList',
@@ -169,7 +164,7 @@ angular.module('BB.Controllers').controller 'PersonList',
       return false
     else
       new_person = getItemFromPerson(item)
-      _.each $scope.booking_items, (bi) -> bi.setPerson(new_person)
+      $scope.booking_item.setPerson(new_person)
       if options.skip_step
         $scope.skipThisStep()
       $scope.decideNextPage(route)
@@ -188,7 +183,7 @@ angular.module('BB.Controllers').controller 'PersonList',
   ###
   $scope.selectAndRoute = (item, route) =>
     new_person = getItemFromPerson(item)
-    _.each $scope.booking_items, (bi) -> bi.setPerson(new_person)
+    $scope.booking_item.setPerson(new_person)
     $scope.decideNextPage(route)
     return true
 
@@ -198,10 +193,10 @@ angular.module('BB.Controllers').controller 'PersonList',
       if !$scope.booking_item.person or $scope.booking_item.person.self != $scope.person.self
         # only set and broadcast if it's changed
         new_person = getItemFromPerson($scope.person)
-        _.each $scope.booking_items, (item) -> item.setPerson(new_person)
+        $scope.booking_item.setPerson(new_person)
         $scope.broadcastItemUpdate()
     else if newval != oldval
-      _.each $scope.booking_items, (item) -> item.setPerson(null)
+      $scope.booking_item.setPerson(null)
       $scope.broadcastItemUpdate()
 
 
@@ -219,9 +214,9 @@ angular.module('BB.Controllers').controller 'PersonList',
   $scope.setReady = () =>
     if $scope.person
       new_person = getItemFromPerson($scope.person)
-      _.each $scope.booking_items, (item) -> item.setPerson(new_person)
+      $scope.booking_item.setPerson(new_person)
       return true
     else
-      _.each $scope.booking_items, (item) -> item.setPerson(null)
+      $scope.booking_item.setPerson(null)
       return true
 

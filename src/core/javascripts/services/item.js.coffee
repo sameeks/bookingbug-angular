@@ -9,9 +9,9 @@ angular.module('BB.Services').factory "ItemService", ($q, BBModel, $rootScope) -
 
       if !prms.cItem.service.$has('items')
         prms.cItem.service.$get('item').then (base_item) =>
-          @buildItems(base_item.$get('items', extra), prms, deferred)
+          @buildItems(base_item.$get('items'), prms, deferred)
       else
-        @buildItems(prms.cItem.service.$get('items', extra), prms, deferred)
+        @buildItems(prms.cItem.service.$get('items'), prms, deferred)
 
     else if prms.cItem.resource && !prms.cItem.anyResource() && prms.item != 'resource'
       if !prms.cItem.resource.$has('items')
@@ -21,7 +21,7 @@ angular.module('BB.Services').factory "ItemService", ($q, BBModel, $rootScope) -
         @buildItems(prms.cItem.resource.$get('items'), prms, deferred)
     
     else if prms.cItem.person && !prms.cItem.anyPerson() && prms.item != 'person'
-      
+
       if !prms.cItem.person.$has('items')
         prms.cItem.person.$get('item').then (base_item) =>
           @buildItems(base_item.$get('items'), prms, deferred)
