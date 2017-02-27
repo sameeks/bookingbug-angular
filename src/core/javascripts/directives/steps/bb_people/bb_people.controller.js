@@ -9,16 +9,15 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
     let loader = null;
 
     let restorePerson = () => {
-        if ($scope.bb.current_item.person != true && $scope.bb.current_item.person != null){
+        if ($scope.bb.current_item.person != true && $scope.bb.current_item.person != null) {
             $scope.decideNextPage();
         }
     };
 
     let storePerson = (person) => {
         let store = $localStorage.getObject('bb');
-        if (store.personId = person.id) {
-            $localStorage.setObject('bb', store);
-        }
+        store.personId = person.id;
+        $localStorage.setObject('bb', store);
     };
 
     let init = function () {
@@ -159,11 +158,12 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
      * @param {string=} route A specific route to load
      */
     var selectItem = (item, route, options) => {
+
+        storePerson(item);
+
         if (options == null) {
             options = {};
         }
-
-        storePerson(item);
 
         if ($scope.$parent.$has_page_control) {
             $scope.person = item;

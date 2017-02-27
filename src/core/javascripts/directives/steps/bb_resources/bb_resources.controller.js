@@ -1,10 +1,26 @@
-let BBResourcesCtrl = function ($scope, $rootScope, $attrs, $q, BBModel, ResourceModel, ValidatorService, LoadingService) {
+angular.module('BB.Controllers').controller('BBResourcesCtrl', BBResourcesCtrl);
+
+function BBResourcesCtrl($scope, $rootScope, $attrs, $q, BBModel, ResourceModel, ValidatorService, LoadingService,
+                         $localStorage) {
     'ngInject';
 
     let new_resource, resource;
     this.$scope = $scope;
 
     let loader = null;
+
+    let restoreResource = () => {
+        if ($scope.bb.current_item.resource != true && $scope.bb.current_item.resource != null) {
+            $scope.decideNextPage();
+        }
+    };
+
+    let storeResource = (resource) => {
+        let store = $localStorage.getObject('bb');
+        store.resourceId = resource.id;
+        $localStorage.setObject('bb', store);
+    };
+
 
     let init = function () {
         $scope.setReady = setReady.bind(this);
@@ -94,15 +110,18 @@ let BBResourcesCtrl = function ($scope, $rootScope, $attrs, $q, BBModel, Resourc
                             $scope.bookable_resources = resources;
                             $scope.bookable_items = items;
                         }
-                        return loader.setLoaded();
+
+                        loader.setLoaded();
+
+                        restoreResource();
                     }
                     , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
             }
             , function (err) {
                 if ((err !== "No service link found") || ((!$scope.bb.steps || ($scope.bb.steps[0].page !== 'resource_list')) && !$scope.options.resource_first)) {
-                    return loader.setLoadedAndShowError(err, 'Sorry, something went wrong');
+                    loader.setLoadedAndShowError(err, 'Sorry, something went wrong');
                 } else {
-                    return loader.setLoaded();
+                    loader.setLoaded();
                 }
             });
     };
@@ -141,9 +160,13 @@ let BBResourcesCtrl = function ($scope, $rootScope, $attrs, $q, BBModel, Resourc
      * @param {string=} skip_step The skip_step has been set to false
      */
     var selectItem = (item, route, options) => {
+
+        storeResource(item);
+
         if (options == null) {
             options = {};
         }
+
         if ($scope.$parent.$has_page_control) {
             $scope.resource = item;
             return false;
@@ -192,6 +215,4 @@ let BBResourcesCtrl = function ($scope, $rootScope, $attrs, $q, BBModel, Resourc
 
     init();
 
-};
-
-angular.module('BB.Controllers').controller('BBResourcesCtrl', BBResourcesCtrl);
+}

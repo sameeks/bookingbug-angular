@@ -25,10 +25,11 @@
         function restore(state) {
             restoreService(state.serviceId);
             restorePerson(state.personId);
+            restoreResource(state.resourceId);
         }
 
-        function restorePerson(personId){
-            if(personId == null) return;
+        function restorePerson(personId) {
+            if (personId == null) return;
 
             let personPromise = halClient.$get(
                 `${$scope.bb.api_url}/api/v1/${$scope.bb.company.id}/people/${personId}`
@@ -36,12 +37,11 @@
 
             restorePromises.push(personPromise);
 
-            personPromise.then(function (person) {
+            personPromise.then((person) => {
                 console.info('person restored:', person.id);
                 $scope.bb.current_item.person = new BBModel.Person(person);
                 $scope.bb.current_item.setPerson($scope.bb.current_item.person);
             });
-
         }
 
         function restoreService(serviceId) {
@@ -54,14 +54,29 @@
 
             restorePromises.push(servicePromise);
 
-            servicePromise.then(function (service) {
+            servicePromise.then((service) => {
                 console.info('service restored:', service.id);
                 $scope.bb.current_item.service = new BBModel.Service(service);
 
                 $scope.bb.current_item.setPrice($scope.bb.current_item.service.price);
                 $scope.bb.current_item.setDuration($scope.bb.current_item.service.duration);
             });
+        }
 
+        function restoreResource(resourceId) {
+
+            if (resourceId == null) return;
+
+            let resourcePromise = halClient.$get(
+                `${$scope.bb.api_url}/api/v1/${$scope.bb.company.id}/resources/${resourceId}`
+            );
+
+            restorePromises.push(resourcePromise);
+
+            resourcePromise.then((resource) => {
+                console.info('resource restored:', resource.id);
+                $scope.bb.current_item.resource = new BBModel.Resource(resource);
+            });
         }
 
         return {
