@@ -47,7 +47,7 @@
                     done();
                 }
 
-                if (args.getEnvironment() === 'prod') { //TODO additional config 'watch' boolean flag might be useful
+                if (argv._.indexOf('deploy') !== -1 || argv.skipWatch === true) {
                     return;
                 }
 
