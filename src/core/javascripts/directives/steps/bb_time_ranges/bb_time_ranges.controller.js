@@ -1,4 +1,4 @@
-angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $element,
+angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $element, $localStorage,
                                                                        $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
                                                                        FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService) {
 
@@ -11,6 +11,21 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
         'original_start_date',
         'start_at_week_start'
     ]);
+
+    let restoreCalendar = () => {
+        if ($scope.bb.current_item.date != null && $scope.bb.current_item.time != null) {
+            $scope.decideNextPage();
+        }
+    };
+
+    let storeCalendar = (dateTime) => {
+
+        if(dateTime == null) return;
+
+        let store = $localStorage.getObject('bb');
+        store.dateTime = dateTime;
+        $localStorage.setObject('bb', store);
+    };
 
     // check to see if the user has changed the postcode and remove data if they have
     if (currentPostcode !== $scope.postcode) {
@@ -371,6 +386,8 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
      */
     $scope.highlightSlot = function (slot, day) {
 
+        storeCalendar(slot._data.datetime);
+
         let {current_item} = $scope.bb;
 
         if (slot && (slot.availability() > 0) && !slot.disabled) {
@@ -531,6 +548,8 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
                         }
                     }
 
+
+                    restoreCalendar();
 
                     return $scope.$broadcast("time_slots:loaded", time_slots);
                 }

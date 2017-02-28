@@ -26,6 +26,7 @@
             restoreService(state.serviceId);
             restorePerson(state.personId);
             restoreResource(state.resourceId);
+            restoreCalendar(state.dateTime);
         }
 
         function restorePerson(personId) {
@@ -76,6 +77,15 @@
             resourcePromise.then((resource) => {
                 console.info('resource restored:', resource.id);
                 $scope.bb.current_item.resource = new BBModel.Resource(resource);
+            });
+        }
+
+        function restoreCalendar(dateTime) {
+
+            if(dateTime == null) return;
+
+            $scope.bb.current_item.setSlot({
+                datetime: moment(dateTime)
             });
         }
 
