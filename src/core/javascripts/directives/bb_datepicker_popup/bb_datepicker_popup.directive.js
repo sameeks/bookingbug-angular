@@ -106,9 +106,14 @@ angular.module('BB.Directives').directive('bbDatepickerPopup', function ($parse,
                 // and then remove watcher after the digest has finished
                 $timeout(watch, 0);
 
-                let isDate = _.isDate(date);
+                // US date format needed
+                let selectedMoment = new moment(date, dateFormat);
+                let selectedDate = new Date(selectedMoment.format('MM/DD/YYYY'));
+
+                let isDate = _.isDate(selectedDate);
+
                 if (isDate) {
-                    getter.assign(timeRangeScope, date);
+                    getter.assign(timeRangeScope, selectedDate);
                     ngModel.$setValidity('date', true);
                     scope.$eval(attrs.onDateChange);
                 }
@@ -117,7 +122,7 @@ angular.module('BB.Directives').directive('bbDatepickerPopup', function ($parse,
             };
 
 
-            return replacementDateParser = function (viewValue, returnKey) {
+            replacementDateParser = function (viewValue, returnKey) {
                 // if date user has selected a date from popup then update the picker
                 if (callDateHandler(viewValue)) {
                     return viewValue;
@@ -162,17 +167,18 @@ angular.module('BB.Directives').directive('bbDatepickerPopup', function ($parse,
                     return origDateParser.call(this, viewValue);
                 }
             };
+            // wait until the data object for the popup element has been initialised by
+            // angular-ui and then override the $parser with our parse function
+            let f = function() {
+                if(_.isFunction(data.$parsers[0])) {
+                    origDateParser = data.$parsers[0];
+                    data.$parsers[0] = replacementDateParser;
+                    return;
+                } else {
+                    setTimeout(f, 10);
+                }
+            }
+            f();
         }
     };
 });
-
-// wait until the data object for the popup element has been initialised by
-// angular-ui and then override the $parser with our parse function
-// f = ->
-//   if _.isFunction data.$parsers[0]
-//     origDateParser = data.$parsers[0]
-//     data.$parsers[0] = replacementDateParser
-//     return
-//   else
-//     setTimeout f, 10
-// f()
