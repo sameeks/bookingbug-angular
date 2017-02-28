@@ -87,6 +87,11 @@
             $scope.bb.current_item.setSlot({
                 datetime: moment(dateTime)
             });
+
+            //$scope.bb.current_item.id = valueFromstore //TODO
+
+            $scope.bb.basket.addItem($scope.bb.current_item);
+
         }
 
         return {
