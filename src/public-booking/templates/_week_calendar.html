@@ -272,3 +272,36 @@
     </ul>
   </div>
 </div>
+
+<div class="bb-step-navigation">
+  <div class="row">
+    <div class="col-sm-offset-7 col-sm-3 col-sm-push-2 text-right">
+      <button
+        id="btn-continue"
+        type="button"
+        class="btn btn-primary btn-block"
+        ng-click="continue()"
+        bb-debounce
+        ng-disabled="!bb.current_item.time">
+          <span
+            ng-show="!bb.moving_booking"
+            translate="PUBLIC_BOOKING.CALENDAR.NEXT_BTN">
+          </span>
+        <span
+          ng-show="bb.moving_booking"
+          translate="PUBLIC_BOOKING.CALENDAR.MOVE_BOOKING_BTN">
+          </span>
+      </button>
+    </div>
+    <div class="col-sm-2 col-sm-pull-10 text-left">
+      <button
+        type="button"
+        class="btn btn-default btn-block"
+        bb-debounce
+        ng-click="loadPreviousStep()"
+        ng-show="!bb.moving_booking"
+        translate="PUBLIC_BOOKING.CALENDAR.BACK_BTN">
+      </button>
+    </div>
+  </div>
+</div>

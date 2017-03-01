@@ -386,8 +386,6 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
      */
     $scope.highlightSlot = function (slot, day) {
 
-        storeCalendar(slot._data.datetime);
-
         let {current_item} = $scope.bb;
 
         if (slot && (slot.availability() > 0) && !slot.disabled) {
@@ -414,6 +412,16 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
             // broadcast message to the accordion range groups
             return $scope.$broadcast('slotChanged', day, slot);
         }
+    };
+
+    $scope.continue = () => {
+
+        if(!$scope.bb.current_item.time) return;
+        if(!$scope.selected_slot) return;
+
+        storeCalendar($scope.selected_slot._data.datetime);
+
+        if($scope.checkReady()) $scope.routeReady();
     };
 
     /***
