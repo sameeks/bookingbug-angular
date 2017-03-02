@@ -301,8 +301,7 @@ angular.module('BB.Controllers').controller('ItemDetails', function ($scope, $at
      * Display terms and conditions view
      */
     $scope.openTermsAndConditions = function () {
-        let modalInstance;
-        return modalInstance = $uibModal.open({
+        return $uibModal.open({
             templateUrl: $scope.getPartial("terms_and_conditions"),
             scope: $scope
         });

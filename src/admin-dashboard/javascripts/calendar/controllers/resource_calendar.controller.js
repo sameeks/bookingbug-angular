@@ -217,14 +217,14 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
             };
 
             if (event.resourceId) {
-                let orginal_resource;
+                //let orginal_resource;
                 let newAssetId = event.resourceId.substring(0, event.resourceId.indexOf('_'));
                 if (event.resourceId.indexOf('_p') > -1) {
                     item_defaults.person = newAssetId;
-                    orginal_resource = `${event.person_id}_p`;
+                    //orginal_resource = `${event.person_id}_p`;
                 } else if (event.resourceId.indexOf('_r') > -1) {
                     item_defaults.resource = newAssetId;
-                    orginal_resource = `${event.resource_id}_r`;
+                    //orginal_resource = `${event.resource_id}_r`;
                 }
             }
 
@@ -366,7 +366,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
             'month': parseInt(date.get('month')),
             'date': parseInt(date.get('date')),
             'hour': 0,
-            'minute': 0,
             'minute': 0,
             'second': 0
         });

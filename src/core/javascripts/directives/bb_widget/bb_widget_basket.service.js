@@ -118,11 +118,7 @@
                             return $scope.$eval($scope.bb.on_conflict);
                         } else {
                             if ($scope.bb.nextSteps) {
-                                if (bbWidgetPage.setPageRoute($rootScope.Route.Date)) {
-
-                                } else if (bbWidgetPage.setPageRoute($rootScope.Route.Event)) {
-
-                                } else {
+                                if (!bbWidgetPage.setPageRoute($rootScope.Route.Date) && !bbWidgetPage.setPageRoute($rootScope.Route.Event)) {
                                     return bbWidgetStep.loadPreviousStep();
                                 }
                             } else {

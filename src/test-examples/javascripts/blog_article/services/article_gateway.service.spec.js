@@ -3,7 +3,6 @@ describe('bbTe.blogArticle, bbTeBaArticleGateway service', function () {
 
     let articleGateway = null;
     let textSanitizer = null;
-    let $http = null;
     let $httpBackend = null;
     let $log = null;
 
@@ -19,7 +18,6 @@ describe('bbTe.blogArticle, bbTeBaArticleGateway service', function () {
         inject(function ($injector) {
             articleGateway = $injector.get('bbTeBaArticleGateway');
             textSanitizer = $injector.get('bbTeBaTextSanitizer');
-            $http = $injector.get('$http');
             $httpBackend = $injector.get('$httpBackend');
             $log = $injector.get('$log');
         });

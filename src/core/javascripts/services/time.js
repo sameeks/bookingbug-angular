@@ -244,7 +244,6 @@ angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, Ge
                 }
 
                 let times = [];
-                let date_times = {};
 
                 for (i of Array.from(sorted_times)) {
                     if (i) {

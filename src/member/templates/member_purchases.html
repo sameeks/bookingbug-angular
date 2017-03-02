@@ -36,7 +36,8 @@
 
     <ul class="bb-list bb-list-bordered">
 
-      <li ng-repeat="purchase in purchases | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
+      <li
+        ng-repeat="purchase in purchases | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size">
 
         <div class="row">
 

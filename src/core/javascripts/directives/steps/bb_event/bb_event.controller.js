@@ -53,7 +53,7 @@ angular.module('BB.Controllers').controller('Event', function ($scope, $attrs, $
                 }
                 let event = result[1];
                 if (result[2] && (result[2].length > 0)) {
-                    let prepaids = result[2];
+                    //let prepaids = result[2];
                 }
 
                 $scope.event = event;

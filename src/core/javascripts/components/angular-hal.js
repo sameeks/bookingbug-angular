@@ -253,8 +253,7 @@ angular
                         } else {
                             return embedded.set(linkHref, callService(method, linkHref, options, data));
                         }
-                    }
-                    else {
+                    } else {
                         return callService(method, linkHref, options, data);
                     }
 
@@ -292,8 +291,7 @@ angular
                 if (link) {
                     if (typeof link === 'string') link = {href: link};
                     link.href = resolveUrl(baseHref, link.href);
-                }
-                else {
+                } else {
                     link = {href: baseHref};
                 }
 

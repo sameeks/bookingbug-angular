@@ -143,7 +143,7 @@
                     {{ticket.price | pretty_price}}
                   </span>
                   <small ng-show="ticket.counts_as">
-                      <i
+                    <i
                       translate="PUBLIC_BOOKING.EVENT.FOR_NUM_TICKETS" translate-values="{count_as: ticket.counts_as}">
                     </i>
                   </small>
@@ -207,7 +207,8 @@
                 <div class="col-sm-6 col-xs-6 text-right">
                   <span translate="PUBLIC_BOOKING.EVENT.DISCOUNT_LBL"></span>
                 </div>
-                <div class="col-sm-3 col-xs-6">-{{bb.basket.totalCoupons() | pretty_price}} <!-- <span>(10%)</span></div> -->
+                <div class="col-sm-3 col-xs-6">-{{bb.basket.totalCoupons() | pretty_price}}
+                  <!-- <span>(10%)</span></div> -->
                 </div>
               </div>
             </li>
@@ -397,7 +398,7 @@
                           name="attendee_last_name"
                           class="form-control"
                           required
-                          />
+                        />
                       </div>
                       <div class="col-sm-3">
                         <div ng-messages="client_ticket_form.attendee_last_name.$error" role="alert">

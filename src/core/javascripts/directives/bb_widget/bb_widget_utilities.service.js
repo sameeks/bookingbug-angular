@@ -10,11 +10,7 @@
         var setScope = function ($s) {
             $scope = $s;
         };
-        var guardScope = function () {
-            if ($scope === null) {
-                throw new Error('please provide scope');
-            }
-        };
+
         var isAdmin = function () {
             return $scope.bb.isAdmin;
         };
@@ -72,7 +68,7 @@
             return $scope.$broadcast("currentItemUpdate", $scope.bb.current_item);
         };
         var isAdminIFrame = function () {
-            var err, location;
+            var location;
             if (!$scope.bb.isAdmin) {
                 return false;
             }
@@ -84,7 +80,6 @@
                     return false;
                 }
             } catch (_error) {
-                err = _error;
                 return false;
             }
         };

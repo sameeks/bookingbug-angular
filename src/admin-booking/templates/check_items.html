@@ -8,27 +8,27 @@
     role="form"
     bb-form>
 
+    <div
+      bb-custom-booking-text
+      class="bb-message-node">
       <div
-        bb-custom-booking-text
-        class="bb-message-node">
-        <div
-          ng-repeat="msg in messages"
-          ng-bind-html="msg">
-        </div>
+        ng-repeat="msg in messages"
+        ng-bind-html="msg">
       </div>
+    </div>
 
-      <h2
-        class="booking-form-header"
-        translate="PUBLIC_BOOKING.CHECK_ITEMS.BOOKING_QUESTIONS_HEADING">
-      </h2>
+    <h2
+      class="booking-form-header"
+      translate="PUBLIC_BOOKING.CHECK_ITEMS.BOOKING_QUESTIONS_HEADING">
+    </h2>
 
-      <div bb-item-details></div>
+    <div bb-item-details></div>
 
-      <div class="question-node">
-        <label for="notes">
-          <span translate="ADMIN_BOOKING.CHECK_ITEMS.PRIVATE_BOOKING_NOTES_HEADING"></span>:
-        </label>
-        <span>
+    <div class="question-node">
+      <label for="notes">
+        <span translate="ADMIN_BOOKING.CHECK_ITEMS.PRIVATE_BOOKING_NOTES_HEADING"></span>:
+      </label>
+      <span>
           <textarea
             ng-model="item.private_note"
             name="note"
@@ -36,14 +36,14 @@
             rows="3"
             class="form-question form-control">
           </textarea>
-          <br>
-         </span>
-      </div>
-      
+          <br/>
+        </span>
+    </div>
+
     <div class="bb-step-navigation">
       <div class="row">
         <div class="col-sm-9 col-sm-push-3 text-right">
-        
+
           <button
             type="submit"
             class="btn btn-primary pull-right"
