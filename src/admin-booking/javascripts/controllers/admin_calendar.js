@@ -58,7 +58,6 @@ let BBAdminCalendarCtrl = function ($scope, $element, $controller, $attrs, BBMod
 
         // reset views
         for (let key in $scope.calendar_view) {
-            let value = $scope.calendar_view[key];
             $scope.calendar_view[key] = false;
         }
 
@@ -129,7 +128,6 @@ var BBAdminCalendarConflictCtrl = function ($scope, $element, $controller, $attr
 
     let {time} = $scope.bb.current_item.defaults;
     let {duration} = $scope.bb.current_item;
-    let end_time = time + $scope.bb.current_item.duration;
 
     let start_datetime = $scope.bb.current_item.defaults.datetime;
 

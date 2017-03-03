@@ -340,16 +340,12 @@ angular.module('BB.Controllers').controller('TimeRangeListStackedController', fu
 
                 if ($scope.data_valid) {
                     for (let k in res[0]) {
-                        let v = res[0][k];
                         $scope.days[k] = ({date: moment(k)});
                     }
                     setEnabledSlots();
                     updateHideStatus();
                     $rootScope.$broadcast("TimeRangeListStacked:loadFinished");
                 }
-                else {
-                }
-                // raise error
 
                 return loader.setLoaded();
             }
@@ -415,7 +411,6 @@ angular.module('BB.Controllers').controller('TimeRangeListStackedController', fu
                                 slot = angular.copy(slot);
 
                                 let isSlotValid = function (slot) {
-                                    let valid = false;
                                     ({time} = slot);
                                     let {duration}   = $scope.bb.stacked_items[0].service;
                                     let next = time + duration;

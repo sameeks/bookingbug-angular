@@ -1,9 +1,5 @@
 describe('BB.Services, PathSvc service', function () {
     let $sce = null;
-    let AppConfig = null;
-
-    let $http = null;
-    let $httpBackend = null;
 
     let PathSvc = null;
 
@@ -22,9 +18,6 @@ describe('BB.Services, PathSvc service', function () {
     let injectDependencies = function () {
         inject(function ($injector) {
             $sce = $injector.get('$sce');
-            AppConfig = $injector.get('AppConfig');
-            $http = $injector.get('$http');
-            $httpBackend = $injector.get('$httpBackend');
             PathSvc = $injector.get('PathSvc');
         });
 

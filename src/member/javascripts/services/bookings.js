@@ -48,7 +48,7 @@ angular.module('BBMember.Services').factory("MemberBookingService", ($q, SpaceCo
                         booking.deleted = true;
                         b = new BBModel.Member.Booking(b);
                         BBModel.Member.Member.$refresh(member).then(member => {
-                                return member = member;
+                                return member;
                             }
                             , err => {
                             });

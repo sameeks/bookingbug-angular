@@ -29,8 +29,6 @@ angular.module('BBAdminDashboard').directive('bbIfLogin', function ($uibModal, $
         };
     };
 
-    let link = function (scope, element, attrs) {
-    };
     return {
         compile
 //    controller: 'bbQueuers'

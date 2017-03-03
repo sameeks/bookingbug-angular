@@ -1,7 +1,7 @@
 <!-- label -->
 <label for="file_upload" class="control-label col-sm-4">
-    File upload:
-    <p ng-show="maxSize">should be smaller then {{maxSize}}</p>
+  File upload:
+  <p ng-show="maxSize">should be smaller then {{maxSize}}</p>
 </label>
 
 <div class="col-sm-5">
@@ -14,12 +14,12 @@
     ngf-accept="{{accept}}"
     ngf-model-invalid="errorFile"
     ngf-select="uploadFile(item, $file, $invalidFiles, item.attachment_id)">
-      Select File
+    Select File
   </button>
 
   <!-- progress -->
   <div class="progress"
-    ng-show="my_file.progress >= 0 && my_file.progress < 100">
+       ng-show="my_file.progress >= 0 && my_file.progress < 100">
     <div
       class="progress-bar"
       role="progressbar"

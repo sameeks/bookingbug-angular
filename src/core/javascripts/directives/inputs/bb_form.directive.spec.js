@@ -1,8 +1,6 @@
 describe('bbForm directive', function () {
     let $compile = null;
     let $scope = null;
-    let $timeout = null;
-    let validatorService = null;
 
     let element = null;
 
@@ -12,8 +10,6 @@ describe('bbForm directive', function () {
         inject(function ($injector) {
             $compile = $injector.get('$compile');
             $scope = $injector.get('$rootScope');
-            $timeout = $injector.get('$timeout');
-            return validatorService = $injector.get('ValidatorService');
         });
 
     });

@@ -47,7 +47,6 @@ angular.module('BBAdmin.Services').factory("AdminLoginService", ($q, halClient, 
                 let url = $rootScope.bb.api_url + "/api/v1/login/sso/" + options['company_id'];
 
                 halClient.$post(url, {}, data).then(login => {
-                        let params = {auth_token: login.auth_token};
                         return login.$get('user').then(user => {
                                 user = this.setLogin(user);
                                 return deferred.resolve(user);

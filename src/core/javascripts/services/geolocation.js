@@ -4,7 +4,6 @@ angular.module('BB.Services').factory('GeolocationService', $q => {
             haversine(position1, position2) {
                 let pi = Math.PI;
                 let R = 6371;  //equatorial radius
-                let distances = [];
 
                 let lat1 = position1.lat;
                 let lon1 = position1.long;

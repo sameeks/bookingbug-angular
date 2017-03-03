@@ -21,8 +21,7 @@ angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q,
         if (!schedule_cache[asset.self]) {
             return false;
         }
-        let st = moment(start);
-        let en = moment(end);
+
         let curr = moment(start);
         let dates = [];
 
@@ -65,7 +64,6 @@ angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q,
     return {
 
         query(params) {
-            console.log('damn');
             let {company} = params;
             let defer = $q.defer();
             company.$get('schedules').then(collection =>
@@ -81,7 +79,6 @@ angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q,
 
 
         delete(schedule) {
-            console.log('damn');
             let deferred = $q.defer();
             schedule.$del('self').then(schedule => {
                     schedule = new BBModel.Admin.Schedule(schedule);
@@ -96,7 +93,6 @@ angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q,
         },
 
         update(schedule) {
-            console.log('damn');
             let deferred = $q.defer();
             return schedule.$put('self', {}, schedule.getPostData()).then(c => {
                     schedule = new BBModel.Admin.Schedule(c);

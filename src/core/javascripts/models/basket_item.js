@@ -273,7 +273,6 @@ angular.module('BB.Models').factory("BasketItemModel", ($q, $window, BBModel, Bo
             }
             if (defaults.time) {
                 // NOTE: time is not set as it might not be available
-                let date = defaults.date ? defaults.date : moment();
                 let time = defaults.time ? parseInt(defaults.time) : 0;
                 defaults.datetime = DateTimeUtilitiesService.convertTimeToMoment(defaults.date, time);
             }

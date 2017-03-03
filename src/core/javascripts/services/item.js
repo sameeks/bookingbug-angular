@@ -46,7 +46,6 @@ angular.module('BB.Services').factory("ItemService", ($q, BBModel) => {
                         let resource = resources[0];  // the first one was my own data
                         return resource.$get('items').then(found => {
                                 let matching = [];
-                                let wlist = [];
                                 for (let v of Array.from(found)) {
                                     if (v.type === prms.item) {
                                         matching.push(new BBModel.BookableItem(v));

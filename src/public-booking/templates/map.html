@@ -70,7 +70,8 @@
     <h2
       class="company-map-header"
       translate="PUBLIC_BOOKING.MAP.SEARCH_RESULT_SUMMARY"
-      translate-values="{results: shownMarkers.length, address: formatted_address}" translate-interpolation="messageformat">
+      translate-values="{results: shownMarkers.length, address: formatted_address}"
+      translate-interpolation="messageformat">
     </h2>
 
     <div class="row filter-by-service" ng-show="can_filter_by_service">
@@ -83,7 +84,7 @@
             type="checkbox"
             ng-model="filter_by_service"
             ng-change="filterByService()"
-            />
+          />
         </label>
       </div>
 
@@ -132,7 +133,7 @@
                 <i
                   class="fa fa-location-arrow"
                   aria-hidden="true"></i>
-                  <span class="distance">
+                <span class="distance">
                     {{currentMarker.distance | distance:1}}
                   </span>
               </li>
@@ -146,7 +147,7 @@
             translate-values="{name: marker.company.service.name}">
           </div>
 
-          <br />
+          <br/>
 
           <button
             type="button"

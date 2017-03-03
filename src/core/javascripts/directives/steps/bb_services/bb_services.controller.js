@@ -280,8 +280,7 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
      * Display error message in modal
      */
     $scope.errorModal = function () {
-        let error_modal;
-        return error_modal = $uibModal.open({
+        return  $uibModal.open({
             templateUrl: $scope.getPartial('_error_modal'),
             controller($scope, $uibModalInstance) {
                 $scope.message = ErrorService.getError('GENERIC').msg;

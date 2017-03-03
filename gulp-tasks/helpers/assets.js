@@ -3,17 +3,13 @@
 
     const argv = require('yargs').argv;
     const del = require('del');
-    const fs = require('fs');
     const gulp = require('gulp');
     const gutil = require('gulp-util');
     const gulpif = require('gulp-if');
-    const coffee = require('gulp-coffee');
     const concat = require('gulp-concat');
     const uglify = require('gulp-uglify');
-    const sass = require('gulp-sass');
     const flatten = require('gulp-flatten');
     const imagemin = require('gulp-imagemin');
-    const filter = require('gulp-filter');
     const templateCache = require('gulp-angular-templatecache');
     const path = require('path');
     const rename = require('gulp-rename');
@@ -47,7 +43,7 @@
                     done();
                 }
 
-                if (args.getEnvironment() === 'prod') { //TODO additional config 'watch' boolean flag might be useful
+                if (argv._.indexOf('deploy') !== -1 || argv.skipWatch === true) {
                     return;
                 }
 

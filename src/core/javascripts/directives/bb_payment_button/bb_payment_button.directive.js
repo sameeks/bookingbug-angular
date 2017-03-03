@@ -32,17 +32,19 @@ angular.module('BB.Directives').directive('bbPaymentButton', ($compile, $sce, $h
                 let setClassAndValue = function (scope, element, attributes) {
                     let main_tag;
                     switch (scope.link_type) {
-                        case 'button_form':
+                        case 'button_form': {
                             let inputs = element.find("input");
                             main_tag = (Array.from(inputs).filter((i) => $(i).attr('type') === 'submit').map((i) => i))[0];
                             if (attributes.value) {
                                 $(main_tag).attr('value', $translate.instant(attributes.value));
                             }
                             break;
+                        }
                         case 'page':
-                        case 'location':
+                        case 'location': {
                             main_tag = element.find("a")[0];
                             break;
+                        }
                     }
                     if (attributes.class) {
                         return Array.from(attributes.class.split(" ")).map((c) =>
@@ -59,7 +61,7 @@ angular.module('BB.Directives').directive('bbPaymentButton', ($compile, $sce, $h
                         scope.link_type = scope.total.$link('new_payment').type;
                         scope.label = attributes.value || "Make Payment";
                         scope.payment_link = scope.total.$href('new_payment');
-                        let url = scope.total.$href('new_payment');
+                        scope.total.$href('new_payment');
                         return $q.when(getTemplate(scope.link_type, scope)).then(function (template) {
                                 element.html(template).show();
                                 $compile(element.contents())(scope);
