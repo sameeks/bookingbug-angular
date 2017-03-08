@@ -48,7 +48,7 @@
         };
         var showPage = function (route, dont_record_page) {
             guardScope();
-            $scope.bb.updateRoute(route);
+            /*$scope.bb.updateRoute(route);
             $scope.jumped = false;
             if (isLoadingPage()) {
                 return;
@@ -69,13 +69,14 @@
                 LoadingService.notLoaded($scope);
                 $scope.bb_main = $sce.trustAsResourceUrl($scope.bb.pageURL(route));
             }
-            return $rootScope.$broadcast("page:loaded");
+            return $rootScope.$broadcast("page:loaded");*/
         };
         var setPageLoaded = function () {
             return LoadingService.setLoaded($scope);
         };
         var decideNextPage = function (route) {
-            guardScope();
+            return;
+            /*guardScope();
             if (route) {
                 if (route === 'none') {
                     return;
@@ -186,7 +187,7 @@
                     return;
                 }
                 return showPage('confirmation');
-            }
+            }*/
         };
         return {
             clearPage: clearPage,
