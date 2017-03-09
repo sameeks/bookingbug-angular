@@ -29,15 +29,17 @@
                   ng-model="current_date_js"
                   class="form-control"
                   bb-datepicker-popup="DD/MM/YYYY"
-                  on-date-change="currentDateChanged()"
-                  datepicker-popup="dd/MM/yyyy"
+                  uib-datepicker-popup="dd/MM/yyyy"
                   is-open="opened"
+                  ng-focus="opened=true"
                   min-date="today"
-                  datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
-                  show-weeks="false"
-                  date-disabled="isDateDisabled(date, mode)"
+                  on-date-change="currentDateChanged()"
+                  datepicker-options="{'starting-day': 1, 'show-button-bar': false, 'showWeeks': false}"
                   show-button-bar="false"
-                  ng-readonly="false"/>
+                  ng-readonly="false"
+                  name="date"
+                  id="date"
+                  date-disabled="isDateDisabled(date, mode)"/>
                 <span
                   class="input-group-btn"
                   ng-click="$event.preventDefault();$event.stopPropagation();opened=true">

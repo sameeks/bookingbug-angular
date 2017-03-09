@@ -426,7 +426,7 @@ angular.module("BB.Services").config(function ($translateProvider) {
                 NEXT_5_WEEKS_BTN: "Next 5 Weeks",
                 LEGEND: {
                     HEADING: "Key",
-                    AVAILABLE_KEY: "{number, plural, =0{No availability} other{# available}}",
+                    AVAILABLE_KEY: "@:COMMON.TERMINOLOGY.AVAILABLE",
                     UNAVAILABLE_KEY: "@:COMMON.TERMINOLOGY.UNAVAILABLE"
                 },
                 BACK_BTN: "@:COMMON.BTN.BACK"
