@@ -1,4 +1,4 @@
-let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService, ErrorService, $filter, LoadingService) {
+let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService, ErrorService, $filter, LoadingService) {
     'ngInject';
 
     this.$scope = $scope;
@@ -9,7 +9,15 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
 
     let loader = LoadingService.$loader($scope).notLoaded();
 
-    $scope.filters = {category_name: null, service_name: null, price: {min: 0, max: 100}, custom_array_value: null};
+    $scope.filters = {
+        category_name: null,
+        service_name: null,
+        price: {
+            min: 0,
+            max: 100
+        },
+        custom_array_value: null
+    };
     $scope.show_custom_array = false;
 
     $scope.options = $scope.$eval($attrs.bbServices) || {};
@@ -27,17 +35,19 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
         $scope.hide_disabled = true;
     }
 
-    $scope.price_options = {min: 0, max: 100};
+    $scope.price_options = {
+        min: 0,
+        max: 100
+    };
 
     $rootScope.connection_started.then(() => {
-            if ($scope.bb.company) {
-                return $scope.init($scope.bb.company);
-            }
+        if ($scope.bb.company) {
+            return $scope.init($scope.bb.company);
         }
-        , err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
+    }, err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
 
 
-    $scope.init = function (comp) {
+    $scope.init = function(comp) {
         let item;
         if (!$scope.booking_item) {
             $scope.booking_item = $scope.bb.current_item;
@@ -45,9 +55,8 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
 
         if ($scope.bb.company.$has('named_categories')) {
             BBModel.Category.$query($scope.bb.company).then(items => {
-                    return $scope.all_categories = items;
-                }
-                , err => $scope.all_categories = []);
+                return $scope.all_categories = items;
+            }, err => $scope.all_categories = []);
         } else {
             $scope.all_categories = [];
         }
@@ -62,67 +71,70 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
         let all_loaded = [ppromise];
 
         ppromise.then(items => {
-                if ($scope.options.hide_disabled) {
-                    // this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
-                    items = items.filter(x => !x.disabled && !x.deleted);
-                }
+            if ($scope.options.hide_disabled) {
+                // this might happen to ahve been an admin api call which would include disabled services - and we migth to hide them
+                items = items.filter(x => !x.disabled && !x.deleted);
+            }
 
-                // not all service lists need filtering. check for attribute first
-                let filterItems = $attrs.filterServices === 'false' ? false : true;
+            // not all service lists need filtering. check for attribute first
+            let filterItems = $attrs.filterServices === 'false' ? false : true;
 
-                if (filterItems) {
-                    if ($scope.booking_item.service_ref && !$scope.options.show_all) {
-                        items = items.filter(x => x.api_ref === $scope.booking_item.service_ref);
-                    } else if ($scope.booking_item.category && !$scope.options.show_all) {
-                        // if we've selected a category for the current item - limit the list
-                        // of services to ones that are relevant
-                        items = items.filter(x => x.$has('category') && (x.$href('category') === $scope.booking_item.category.self));
-                    }
-                }
-
-                // filter out event groups unless explicity requested
-                if (!$scope.options.show_event_groups) {
-                    items = items.filter(x => !x.is_event_group);
-                }
-
-                // if there's only one service and single pick hasn't been enabled,
-                // automatically select the service.
-                if ((items.length === 1) && !$scope.options.allow_single_pick) {
-                    if (!$scope.selectItem(items[0], $scope.nextRoute, {skip_step: true})) {
-                        setServiceItem(items);
-                    }
-                } else {
-                    setServiceItem(items);
-                }
-
-                // if there's a default - pick it and move on
-                if ($scope.booking_item.defaultService()) {
-                    for (item of Array.from(items)) {
-                        if ((item.self === $scope.booking_item.defaultService().self) || ((item.name === $scope.booking_item.defaultService().name) && !item.deleted)) {
-                            $scope.selectItem(item, $scope.nextRoute, {skip_step: true});
-                        }
-                    }
-                }
-
-                // if there's one selected - just select it
-                if ($scope.booking_item.service) {
-                    for (item of Array.from(items)) {
-                        item.selected = false;
-                        if (item.self === $scope.booking_item.service.self) {
-                            $scope.service = item;
-                            item.selected = true;
-                            $scope.booking_item.setService($scope.service);
-                        }
-                    }
-                }
-
-                if ($scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))) {
-                    // the "bookable services" are the service unless we've pre-selected something!
-                    items = setServicesDisplayName(items);
-                    return $scope.bookable_services = items;
+            if (filterItems) {
+                if ($scope.booking_item.service_ref && !$scope.options.show_all) {
+                    items = items.filter(x => x.api_ref === $scope.booking_item.service_ref);
+                } else if ($scope.booking_item.category && !$scope.options.show_all) {
+                    // if we've selected a category for the current item - limit the list
+                    // of services to ones that are relevant
+                    items = items.filter(x => x.$has('category') && (x.$href('category') === $scope.booking_item.category.self));
                 }
             }
-            , err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
+
+            // filter out event groups unless explicity requested
+            if (!$scope.options.show_event_groups) {
+                items = items.filter(x => !x.is_event_group);
+            }
+
+            // if there's only one service and single pick hasn't been enabled,
+            // automatically select the service.
+            if ((items.length === 1) && !$scope.options.allow_single_pick) {
+                if (!$scope.selectItem(items[0], $scope.nextRoute, {
+                        skip_step: true
+                    })) {
+                    setServiceItem(items);
+                }
+            } else {
+                setServiceItem(items);
+            }
+
+            // if there's a default - pick it and move on
+            if ($scope.booking_item.defaultService()) {
+                for (item of Array.from(items)) {
+                    if ((item.self === $scope.booking_item.defaultService().self) || ((item.name === $scope.booking_item.defaultService().name) && !item.deleted)) {
+                        $scope.selectItem(item, $scope.nextRoute, {
+                            skip_step: true
+                        });
+                    }
+                }
+            }
+
+            // if there's one selected - just select it
+            if ($scope.booking_item.service) {
+                for (item of Array.from(items)) {
+                    item.selected = false;
+                    if (item.self === $scope.booking_item.service.self) {
+                        $scope.service = item;
+                        item.selected = true;
+                        $scope.booking_item.setService($scope.service);
+                    }
+                }
+            }
+
+            if ($scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))) {
+                // the "bookable services" are the service unless we've pre-selected something!
+                items = setServicesDisplayName(items);
+                return $scope.bookable_services = items;
+            }
+        }, err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
 
         if (($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource())) {
             // if we've already picked a service or a resource - get a more limited service selection
@@ -155,7 +167,9 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
                     $scope.bookable_items = items;
 
                     if ((services.length === 1) && !$scope.options.allow_single_pick) {
-                        if (!$scope.selectItem(services[0], $scope.nextRoute, {skip_step: true})) {
+                        if (!$scope.selectItem(services[0], $scope.nextRoute, {
+                                skip_step: true
+                            })) {
                             return setServiceItem(services);
                         }
                     } else {
@@ -171,7 +185,7 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
     };
 
 
-    var setServicesDisplayName = function (items) {
+    var setServicesDisplayName = function(items) {
         for (let item of Array.from(items)) {
             if (item.listed_durations && (item.listed_durations.length === 1)) {
                 item.display_name = item.name + ' - ' + $filter('time_period')(item.duration);
@@ -186,11 +200,11 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
 
     // set the service item so the correct item is displayed in the dropdown menu.
     // without doing this the menu will default to 'please select'
-    var setServiceItem = function (items) {
+    var setServiceItem = function(items) {
         $scope.items = items;
         $scope.filtered_items = $scope.items;
         if ($scope.service) {
-            return _.each(items, function (item) {
+            return _.each(items, function(item) {
                 if (item.id === $scope.service.id) {
                     return $scope.service = item;
                 }
@@ -231,7 +245,8 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
         } else {
             $scope.booking_item.setService(item);
             // -----------------------------------------------------------
-            $scope.bb.selected_service = $scope.booking_item.service;
+            // Only set bb.selected_service if the service is a parent service
+            if (!$scope.booking_item.service.child_level_service) $scope.bb.selected_service = $scope.booking_item.service;
             // -----------------------------------------------------------
             if (options.skip_step) {
                 $scope.skipThisStep();
@@ -243,16 +258,19 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
     };
 
     $scope.$watch('service', (newval, oldval) => {
-            if ($scope.service && $scope.booking_item) {
-                if (!$scope.booking_item.service || ($scope.booking_item.service.self !== $scope.service.self)) {
-                    // only set and broadcast if it's changed
-                    $scope.booking_item.setService($scope.service);
-                    $scope.broadcastItemUpdate();
-                    return $scope.bb.selected_service = $scope.service;
-                }
+        if ($scope.service && $scope.booking_item) {
+            if (!$scope.booking_item.service || ($scope.booking_item.service.self !== $scope.service.self)) {
+                // only set and broadcast if it's changed
+                $scope.booking_item.setService($scope.service);
+                $scope.broadcastItemUpdate();
+                // -----------------------------------------------------------
+                // Only set bb.selected_service if the service is a parent service
+                if (!$scope.service.child_level_service) $scope.bb.selected_service = $scope.service;
+                // -----------------------------------------------------------
+                return
             }
         }
-    );
+    });
 
     /***
      * @ngdoc method
@@ -279,8 +297,8 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
      * @description
      * Display error message in modal
      */
-    $scope.errorModal = function () {
-        return  $uibModal.open({
+    $scope.errorModal = function() {
+        return $uibModal.open({
             templateUrl: $scope.getPartial('_error_modal'),
             controller($scope, $uibModalInstance) {
                 $scope.message = ErrorService.getError('GENERIC').msg;
@@ -296,12 +314,12 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
      * @description
      * Filter service
      */
-    $scope.filterFunction = function (service) {
+    $scope.filterFunction = function(service) {
         if (!service) {
             return false;
         }
         $scope.service_array = [];
-        $scope.custom_array = function (match) {
+        $scope.custom_array = function(match) {
             if (!match) {
                 return false;
             }
@@ -317,7 +335,7 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
                 return false;
             }
         };
-        $scope.service_name_include = function (match) {
+        $scope.service_name_include = function(match) {
             if (!match) {
                 return false;
             }
@@ -334,7 +352,7 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
         return (!$scope.filters.category_name || (service.category_id === $scope.filters.category_name.id)) &&
             (!$scope.filters.service_name || $scope.service_name_include($scope.filters.service_name)) &&
             (!$scope.filters.custom_array_value || $scope.custom_array($scope.filters.custom_array_value)) &&
-            (!service.price || ((service.price >= ($scope.filters.price.min * 100)) && (service.price <= ($scope.filters.price.max * 100)) ));
+            (!service.price || ((service.price >= ($scope.filters.price.min * 100)) && (service.price <= ($scope.filters.price.max * 100))));
     };
 
     /***
@@ -344,7 +362,7 @@ let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $docum
      * @description
      * Clear the filters
      */
-    $scope.resetFilters = function () {
+    $scope.resetFilters = function() {
         if ($scope.options.clear_results) {
             $scope.show_custom_array = false;
         }
