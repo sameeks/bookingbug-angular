@@ -34,7 +34,7 @@ module.exports = {
 
         "comma-spacing": ["error", {"before": false, "after": true}], // warn if no space after comma [thing1,thing2,...]
 
-        "indent": ["off", 4, {"SwitchCase": 1, "VariableDeclarator": 1}],
+        "indent": ["error", 4, {"SwitchCase": 1, "VariableDeclarator": 1}],
 
         "key-spacing": ["error", {"beforeColon": false, "afterColon": true}], // warn if space before colon & not after colon in object literals like { key : val } or { key:val }
 
