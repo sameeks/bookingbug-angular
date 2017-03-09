@@ -28,7 +28,8 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTimeRangeStacked', () => {
+angular.module('BB.Directives').directive('bbTimeRangeStacked',
+    () => {
         return {
             restrict: 'AE',
             replace: true,

@@ -24,7 +24,8 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $compile, $timeout, $bbug, scrollIntercepter) => {
+angular.module('BB.Directives').directive('bbTimeRanges',
+    ($q, $templateCache, $compile, $timeout, $bbug, scrollIntercepter) => {
         return {
             restrict: 'AE',
             replace: true,
@@ -34,16 +35,18 @@ angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $
             controller: 'TimeRangeList',
             link(scope, element, attrs, controller, transclude) {
                 // focus on continue button after slot selected - for screen readers
-                scope.$on('time:selected', function () {
-                    let btn = angular.element('#btn-continue');
-                    btn[0].disabled = false;
-                    $timeout(() =>
-                            scrollIntercepter.scrollToElement(btn, 500, 'time:selected')
+                scope.$on('time:selected',
+                    function () {
+                        let btn = angular.element('#btn-continue');
+                        btn[0].disabled = false;
+                        $timeout(() =>
+                                scrollIntercepter.scrollToElement(btn, 500, 'time:selected')
 
-                        , 1000);
-                    return $timeout(() => btn[0].focus()
-                        , 1500);
-                });
+                            , 1000);
+                        return $timeout(() => btn[0].focus()
+                            , 1500);
+                    }
+                );
 
                 // date helpers
                 scope.today = moment().toDate();
@@ -51,7 +54,8 @@ angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $
 
                 scope.options = scope.$eval(attrs.bbTimeRanges) || {};
 
-                return transclude(scope, clone => {
+                return transclude(scope,
+                    clone => {
 
                         // if there's content compile that or grab the week_calendar template
                         let has_content = (clone.length > 1) || ((clone.length === 1) && (!clone[0].wholeText || /\S/.test(clone[0].wholeText)));
@@ -59,10 +63,12 @@ angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $
                         if (has_content) {
                             return element.html(clone).show();
                         } else {
-                            return $q.when($templateCache.get('_week_calendar.html')).then(function (template) {
-                                element.html(template).show();
-                                return $compile(element.contents())(scope);
-                            });
+                            return $q.when($templateCache.get('_week_calendar.html')).then(
+                                function (template) {
+                                    element.html(template).show();
+                                    return $compile(element.contents())(scope);
+                                }
+                            );
                         }
                     }
                 );

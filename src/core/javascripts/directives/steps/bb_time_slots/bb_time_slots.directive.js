@@ -23,7 +23,8 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTimeSlots', () => {
+angular.module('BB.Directives').directive('bbTimeSlots',
+    () => {
         return {
             restrict: 'AE',
             replace: true,

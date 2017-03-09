@@ -20,7 +20,8 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTotal', () => {
+angular.module('BB.Directives').directive('bbTotal',
+    () => {
         return {
             restrict: 'AE',
             replace: true,

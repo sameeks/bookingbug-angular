@@ -24,7 +24,8 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTimes', () => {
+angular.module('BB.Directives').directive('bbTimes',
+    () => {
         return {
             restrict: 'AE',
             replace: true,

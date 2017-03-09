@@ -21,7 +21,8 @@
  * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
  *///
 
-angular.module('BB.Directives').directive('bbSurveyQuestions', () => {
+angular.module('BB.Directives').directive('bbSurveyQuestions',
+    () => {
         return {
             restrict: 'AE',
             replace: true,
