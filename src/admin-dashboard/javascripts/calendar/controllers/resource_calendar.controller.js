@@ -206,13 +206,12 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
     let fcEventDrop = function (event, delta, revertFunc) { // we need a full move cal if either it has a person and resource, or they've dragged over multiple days
         let adminBooking = new BBModel.Admin.Booking(event);
 
-// not blocked and is a change in person/resource, or over multiple days
+        // not blocked and is a change in person/resource, or over multiple days
         if ((adminBooking.status !== 3) && ((adminBooking.person_id && adminBooking.resource_id) || (delta.days() > 0))) {
-            let {start} = adminBooking;
-            let {end} = adminBooking;
+
             let item_defaults = {
-                date: start.format('YYYY-MM-DD'),
-                time: ((start.hour() * 60) + start.minute())
+                date: adminBooking._start.format('YYYY-MM-DD'),
+                time: ((adminBooking._start.hour() * 60) + adminBooking._start.minute())
             };
 
             if (adminBooking.resourceId) {
@@ -227,25 +226,24 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                 }
             }
 
-            getCompanyPromise().then(company =>
-                AdminMoveBookingPopup.open({
-                    min_date: setTimeToMoment(start, AdminCalendarOptions.minTime),
-                    max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime),
-                    from_datetime: moment(start.toISOString()),
-                    to_datetime: moment(end.toISOString()),
-                    item_defaults,
-                    company_id: company.id,
-                    booking_id: adminBooking.id,
-                    success: model => {
-                        let adminBooking = new BBModel.Admin.Booking(adminBooking);
-                        return refreshBooking(adminBooking);
-                    },
-                    fail() {
-                        let adminBooking = new BBModel.Admin.Booking(adminBooking);
-                        refreshBooking(adminBooking);
-                        return revertFunc();
-                    }
-                })
+            getCompanyPromise().then(company => {
+                    AdminMoveBookingPopup.open({
+                        min_date: setTimeToMoment(adminBooking._start, AdminCalendarOptions.minTime),
+                        max_date: setTimeToMoment(adminBooking._end, AdminCalendarOptions.maxTime),
+                        from_datetime: moment(adminBooking._start.toISOString()),
+                        to_datetime: moment(adminBooking._end.toISOString()),
+                        item_defaults,
+                        company_id: company.id,
+                        booking_id: adminBooking.id,
+                        success: model => {
+                            refreshBooking(adminBooking);
+                        },
+                        fail() {
+                            refreshBooking(adminBooking);
+                            revertFunc();
+                        }
+                    });
+                }
             );
             return;
         }
@@ -348,17 +346,18 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                 item_defaults.resource = resource.id.substring(0, resource.id.indexOf('_'));
             }
 
-            return getCompanyPromise().then(company =>
-                AdminBookingPopup.open({
-                    min_date: setTimeToMoment(start, AdminCalendarOptions.minTime),
-                    max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime),
-                    from_datetime: moment(start.toISOString()),
-                    to_datetime: moment(end.toISOString()),
-                    item_defaults,
-                    first_page: "quick_pick",
-                    on_conflict: "cancel()",
-                    company_id: company.id
-                })
+            return getCompanyPromise().then(company => {
+                    AdminBookingPopup.open({
+                        min_date: setTimeToMoment(start, AdminCalendarOptions.minTime),
+                        max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime),
+                        from_datetime: moment(start.toISOString()),
+                        to_datetime: moment(end.toISOString()),
+                        item_defaults,
+                        first_page: "quick_pick",
+                        on_conflict: "cancel()",
+                        company_id: company.id
+                    });
+                }
             );
         }
     };
