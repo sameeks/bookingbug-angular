@@ -17,10 +17,9 @@ angular.module('BB.Directives').directive('bbQuestionLine', $compile => {
                 // are we using a completely custom question
                 if (scope.idmaps && ((scope.idmaps[scope.question.detail_type] && scope.idmaps[scope.question.detail_type].block) ||
                     (scope.idmaps[scope.question.id] && scope.idmaps[scope.question.id].block))) {
-                    let e;
                     let index = scope.idmaps[scope.question.id] ? scope.question.id : scope.question.detail_type;
                     let {html} = scope.$parent.idmaps[index];
-                    return e = $compile(html)(scope, (cloned, scope) => {
+                    return $compile(html)(scope, (cloned, scope) => {
                             return element.replaceWith(cloned);
                         }
                     );

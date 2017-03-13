@@ -24,7 +24,7 @@
  *///
 
 
-angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $compile, $timeout, $bbug) => {
+angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $compile, $timeout, $bbug, scrollIntercepter) => {
         return {
             restrict: 'AE',
             replace: true,
@@ -38,9 +38,7 @@ angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $
                     let btn = angular.element('#btn-continue');
                     btn[0].disabled = false;
                     $timeout(() =>
-                            $bbug("html, body").animate(
-                                {scrollTop: btn.offset().top}
-                                , 500)
+                            scrollIntercepter.scrollToElement(btn, 500, 'time:selected')
 
                         , 1000);
                     return $timeout(() => btn[0].focus()

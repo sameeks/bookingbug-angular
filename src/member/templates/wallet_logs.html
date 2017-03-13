@@ -2,34 +2,34 @@
   <h4 translate="MEMBER.WALLET_LOGS.HEADING"></h4>
   <table class="table table-bordered">
     <thead>
-      <tr>
-        <th translate="MEMBER.WALLET_LOGS.ACTION_COL_HEADING"></th>
-        <th translate="MEMBER.WALLET_LOGS.AMOUNT_COL_HEADING"></th>
-        <th translate="MEMBER.WALLET_LOGS.BALANCE_COL_HEADING"></th>
-        <th translate="MEMBER.WALLET_LOGS.CHANGED_BY_COL_HEADING"></th>
-        <th translate="MEMBER.WALLET_LOGS.DATE_TIME_COL_HEADING"></th>
-      </tr>
+    <tr>
+      <th translate="MEMBER.WALLET_LOGS.ACTION_COL_HEADING"></th>
+      <th translate="MEMBER.WALLET_LOGS.AMOUNT_COL_HEADING"></th>
+      <th translate="MEMBER.WALLET_LOGS.BALANCE_COL_HEADING"></th>
+      <th translate="MEMBER.WALLET_LOGS.CHANGED_BY_COL_HEADING"></th>
+      <th translate="MEMBER.WALLET_LOGS.DATE_TIME_COL_HEADING"></th>
+    </tr>
     </thead>
     <tbody>
-      <tr
-        ng-repeat="log in logs | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size"
-        ng-class="{'last-item': $last}">
-        <td>
-          {{log.action}}
-        </td>
-        <td class="text-right">
-          {{log.payment_amount | currency}}
-        </td>
-        <td class="text-right">
-          {{log.new_wallet_amount | currency}}
-        </td>
-        <td class="text-center">
-          {{log.who_made_the_change}}
-        </td>
-        <td class="text-center">
-          {{log.created_at | datetime: 'L LT'}}
-        </td>
-      </tr>
+    <tr
+      ng-repeat="log in logs | startFrom: (pagination.current_page - 1) * pagination.page_size | limitTo: pagination.page_size"
+      ng-class="{'last-item': $last}">
+      <td>
+        {{log.action}}
+      </td>
+      <td class="text-right">
+        {{log.payment_amount | currency}}
+      </td>
+      <td class="text-right">
+        {{log.new_wallet_amount | currency}}
+      </td>
+      <td class="text-center">
+        {{log.who_made_the_change}}
+      </td>
+      <td class="text-center">
+        {{log.created_at | datetime: 'L LT'}}
+      </td>
+    </tr>
     </tbody>
   </table>
 

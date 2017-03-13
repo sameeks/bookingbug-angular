@@ -12,8 +12,8 @@ angular.module('BBAdminServices').directive('scheduleCalendar', function (uiCale
         ];
 
         $scope.getCalendarEvents = function (start, end) {
-            let events;
-            return events = uiCalendarConfig.calendars.scheduleCal.fullCalendar('clientEvents',
+
+            return uiCalendarConfig.calendars.scheduleCal.fullCalendar('clientEvents',
                 e =>
                 (start.isAfter(e.start) || start.isSame(e.start)) &&
                 (end.isBefore(e.end) || end.isSame(e.end)));

@@ -1,6 +1,7 @@
 <section class="content-header">
   <h3>
-      <a ui-sref="clients.all" translate="ADMIN_DASHBOARD.CLIENTS_PAGE.CLIENTS"></a> <i class="fa fa-chevron-right"></i> {{client.name}}
+    <a ui-sref="clients.all" translate="ADMIN_DASHBOARD.CLIENTS_PAGE.CLIENTS"></a> <i class="fa fa-chevron-right"></i>
+    {{client.name}}
   </h3>
 </section>
 <section class="content">
@@ -23,7 +24,7 @@
             </tr>
             <tr ng-if="client.phone">
               <td><b translate="ADMIN_DASHBOARD.CLIENTS_PAGE.PHONE"></b></td>
-              <td><a class="pull-right"  ng-href="tel:{{client.phone}}" target=_blank>{{client.phone}}</a></td>
+              <td><a class="pull-right" ng-href="tel:{{client.phone}}" target=_blank>{{client.phone}}</a></td>
             </tr>
           </table>
 
@@ -54,18 +55,18 @@
 
         </uib-tab>
 
-        <uib-tab  id="client-past-booking-tab">
+        <uib-tab id="client-past-booking-tab">
           <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.PAST_BOOKINGS">
 
           </uib-tab-heading>
 
           <div bb-admin-member-bookings-table member="client" period="past"
-            start-date="historicalStartDate"
-            end-date="historicalEndDate"></div>
+               start-date="historicalStartDate"
+               end-date="historicalEndDate"></div>
 
         </uib-tab>
 
-        <uib-tab id="client-details-tab" >
+        <uib-tab id="client-details-tab">
           <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.CUSTOMER_DETAILS">
 
           </uib-tab-heading>

@@ -114,8 +114,7 @@ ng-focus='opened=true' /> \
                                 }
 
                                 if (html) {
-                                    let e;
-                                    return e = $compile(html)(scope, (cloned, scope) => {
+                                    return $compile(html)(scope, (cloned, scope) => {
                                             return element.replaceWith(cloned);
                                         }
                                     );

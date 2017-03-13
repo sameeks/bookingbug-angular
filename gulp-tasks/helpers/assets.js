@@ -47,7 +47,7 @@
                     done();
                 }
 
-                if (args.getEnvironment() === 'prod') { //TODO additional config 'watch' boolean flag might be useful
+                if (argv._.indexOf('deploy') !== -1 || argv.skipWatch === true) {
                     return;
                 }
 
@@ -56,15 +56,11 @@
 
                     gulp.watch(files, function (file) {
                         let filePath = file.path;
-                        console.log('SDK change', filePath);
+                        console.log('SDK (' + file.type +'):', filePath);
 
                         let fileToRemove = filePath.replace('src', path.join('tmp', 'es5'));
-
                         del([fileToRemove], {force: true}).then(() => {
-                            console.log('TYPE: ' + file.type);
-                            if (file.type !== 'deleted') {
-                                jsTranspilation(null, [filePath], module);
-                            }
+                            jsTranspilation(null, [filePath], module);
                         });
 
                     }, watchOptions);

@@ -29,8 +29,7 @@ angular.module('BB.Directives').directive('bbBasket', PathSvc => {
                     if (($scope.bb.current_page === "basket") || ($scope.bb.current_page === "checkout")) {
                         return false;
                     } else {
-                        let modalInstance;
-                        return modalInstance = $uibModal.open({
+                        return $uibModal.open({
                             templateUrl: $scope.getPartial("_basket_details"),
                             scope: $scope,
                             controller: BasketInstanceCtrl,

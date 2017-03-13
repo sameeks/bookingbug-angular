@@ -6,7 +6,6 @@ angular.module('BB.Directives').directive('bbQuestionSetup', () => {
 
             link(scope, element, attrs) {
                 let idmaps = {};
-                let def = null;
                 let iterable = element.children();
                 for (let index = 0; index < iterable.length; index++) {
                     let child = iterable[index];

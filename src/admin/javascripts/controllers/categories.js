@@ -10,10 +10,10 @@ angular.module('BBAdmin.Controllers').controller('CategoryList', function ($scop
     );
 
     $scope.$watch('selectedCategory', (newValue, oldValue) => {
-            let items;
+
             $rootScope.category = newValue;
 
-            return items = $('.inline_time').each((idx, e) => angular.element(e).scope().clear());
+            return $('.inline_time').each((idx, e) => angular.element(e).scope().clear());
         }
     );
 

@@ -28,7 +28,6 @@ angular.module('BB.Services').factory("LoginService", ($q, halClient, $rootScope
                 }
                 let url = options['root'] + "/api/v1/login";
                 halClient.$post(url, options, form).then(login => {
-                        let params = {auth_token: login.auth_token};
                         return login.$get('member').then(member => {
                                 this.setLogin(member);
                                 return deferred.resolve(member);
@@ -94,7 +93,6 @@ angular.module('BB.Services').factory("LoginService", ($q, halClient, $rootScope
                 }
                 let url = options['root'] + "/api/v1/login/sso/" + options['company_id'];
                 halClient.$post(url, {}, data).then(login => {
-                        let params = {auth_token: login.auth_token};
                         return login.$get('member').then(member => {
                                 member = new BBModel.Member.Member(member);
                                 this.setLogin(member, true);

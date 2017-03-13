@@ -10,7 +10,6 @@ angular.module('BB.Controllers').controller('DurationList', function ($scope, $a
 
 
     $scope.loadData = () => {
-        let id = $scope.bb.company_id;
         let {service} = $scope.bb.current_item;
         if (service) {
             $scope.durations =
