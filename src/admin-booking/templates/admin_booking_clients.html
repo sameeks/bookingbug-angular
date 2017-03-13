@@ -80,7 +80,7 @@
 
             <div class="form-group">
               <label
-                class="bb-label
+                class="bb-label"
                 for="sort_by">
                 <span translate="ADMIN_BOOKING.CUSTOMER.SORT_BY_LBL"></span>:
               </label>
@@ -120,7 +120,8 @@
 
     <ul class="bb-list bb-list-bordered bb-list-fade-in">
 
-      <li ng-repeat="client in clients.items | startFrom: (clients.current_page - 1) * clients.page_size | limitTo: clients.page_size track by $index">
+      <li
+        ng-repeat="client in clients.items | startFrom: (clients.current_page - 1) * clients.page_size | limitTo: clients.page_size track by $index">
 
         <div class="typehead-item-wrapper">
 
@@ -186,7 +187,7 @@
     ng-hide="search_complete"
     class="admin-create-client">
 
-    <hr />
+    <hr/>
 
     <div class="panel panel-default">
 
@@ -208,7 +209,7 @@
               for="first_name"
               class="control-label">
               <span translate="ADMIN_BOOKING.CUSTOMER.FIRST_NAME_LBL"></span>
-            </label><br />
+            </label><br/>
             <input
               type="text"
               name="first_name"
@@ -226,7 +227,7 @@
               for="last_name"
               class="control-label">
               <span translate="ADMIN_BOOKING.CUSTOMER.LAST_NAME_LBL"></span>
-            </label><br />
+            </label><br/>
             <input
               type="text"
               name="last_name"

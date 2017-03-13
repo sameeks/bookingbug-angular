@@ -1,7 +1,6 @@
 describe('cardSecurityCode', function () {
     let $compile = null;
     let $rootScope = null;
-    let $scope = null;
 
     let setup = function () {
         module('BB');
@@ -9,7 +8,6 @@ describe('cardSecurityCode', function () {
         inject(function ($injector) {
             $compile = $injector.get('$compile');
             $rootScope = $injector.get('$rootScope');
-            $scope = $rootScope.$new();
         });
 
     };

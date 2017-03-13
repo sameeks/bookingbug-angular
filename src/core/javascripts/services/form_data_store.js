@@ -211,8 +211,7 @@ angular.module('BB.Services').factory('FormDataStoreService', function ($rootSco
                     // runs after the digest loop has finished. so we mark it as destroyed
                     try {
                         return cpage[2][item[0]] = 'data:destroyed';
-                    }
-                    catch (e) {
+                    } catch (e) {
                         return log(e);
                     }
                 });

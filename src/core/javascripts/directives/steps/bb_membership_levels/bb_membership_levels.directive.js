@@ -33,7 +33,7 @@ angular.module('BB.Directives').directive('bbMembershipLevels', ($rootScope, BBM
                     }
                 };
 
-                let checkClientDefaults = function () {
+                /*let checkClientDefaults = function () {
                     if (!$scope.bb.client_defaults.membership_ref) {
                         return;
                     }
@@ -48,7 +48,7 @@ angular.module('BB.Directives').directive('bbMembershipLevels', ($rootScope, BBM
                         }
                         return result;
                     })();
-                };
+                };*/
 
                 $scope.setReady = function () {
                     if (!$scope.client.member_level_id) {

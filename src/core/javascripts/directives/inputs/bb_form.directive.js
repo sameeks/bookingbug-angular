@@ -12,7 +12,7 @@
  * <div ng-form name="example_form" bb-form></div>
  * <form name="example_form" bb-form></form>
  */
-let bbFormDirective = function ($bbug, $window, ValidatorService, $timeout, GeneralOptions) {
+let bbFormDirective = function ($bbug, $window, ValidatorService, $timeout, GeneralOptions, scrollIntercepter) {
     'ngInject';
 
     let link = function (scope, elem, attrs, ctrls) {
@@ -79,13 +79,7 @@ let bbFormDirective = function ($bbug, $window, ValidatorService, $timeout, Gene
 
             if (invalidFormGroup && (invalidFormGroup.length > 0) && !$formCtrl.raise_alerts) {
 
-                if ('parentIFrame' in $window) {
-                    parentIFrame.scrollToOffset(0, invalidFormGroup.offset().top - GeneralOptions.scroll_offset);
-                } else {
-                    $bbug("html, body").animate(
-                        {scrollTop: invalidFormGroup.offset().top - GeneralOptions.scroll_offset}
-                        , 1000);
-                }
+                scrollIntercepter.scrollToElement(invalidFormGroup, 1000, 'form:invalid');
 
                 let invalidInput = invalidFormGroup.find('.ng-invalid');
                 invalidInput.focus();

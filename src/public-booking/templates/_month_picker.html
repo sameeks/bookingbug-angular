@@ -20,42 +20,42 @@
           ng-class="{'hidden-xs': month.selected}">
           <table>
             <thead>
-              <tr>
-                <div class="row">
-                  <div class="months text-center col-xs-12 col-sm-4 visible-xs">
-                    <b>
+            <tr>
+              <div class="row">
+                <div class="months text-center col-xs-12 col-sm-4 visible-xs">
+                  <b>
                     {{month.start_date | datetime: 'MMMM'}} {{month.start_date | datetime: 'YYYY'}}</b>
-                  </div>
-                  <div class="months text-center hidden-xs">
-                    <b>
-                    {{month.start_date | datetime: 'MMMM'}} {{month.start_date | datetime: 'YYYY'}}</b>
-                  </div>
                 </div>
-              </tr>
-              <tr>
-                <th
-                  ng-repeat="day in month.weeks[0].days"
-                  class="days">
-                  {{day.date | datetime: 'ddd'}}
-                </th>
-              </tr>
+                <div class="months text-center hidden-xs">
+                  <b>
+                    {{month.start_date | datetime: 'MMMM'}} {{month.start_date | datetime: 'YYYY'}}</b>
+                </div>
+              </div>
+            </tr>
+            <tr>
+              <th
+                ng-repeat="day in month.weeks[0].days"
+                class="days">
+                {{day.date | datetime: 'ddd'}}
+              </th>
+            </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="week in month.weeks">
-                <td
-                  ng-repeat="day in week.days"
-                  ng-class="{
+            <tr ng-repeat="week in month.weeks">
+              <td
+                ng-repeat="day in week.days"
+                ng-class="{
                     'available': day.available,
                     'selected': day.selected,
                     'today': day.today,
                     'past': day.past,
                     'disabled': day.disabled
                   }"
-                  ng-click="toggleDay(day)"
-                  ng-disabled="day.disabled || day.past">
-                  <div class="circle">{{day.date.date()}}</div>
-                </td>
-              </tr>
+                ng-click="toggleDay(day)"
+                ng-disabled="day.disabled || day.past">
+                <div class="circle">{{day.date.date()}}</div>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>

@@ -544,8 +544,7 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
                             AlertService.warning(ErrorService.getError('NOT_BOOKABLE_RESOURCE'));
                             $scope.setLoaded($scope);
                         }
-                        else {
-                        }
+
                         return $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong');
                     } else {
                         return $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong');

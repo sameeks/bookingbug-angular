@@ -1,5 +1,4 @@
-angular.module('schemaForm').config(function (schemaFormProvider,
-                                              schemaFormDecoratorsProvider, sfPathProvider) {
+angular.module('schemaForm').config(function (schemaFormProvider, schemaFormDecoratorsProvider, sfPathProvider) {
 
     let timepicker = function (name, schema, options) {
         if ((schema.type === 'string') && (schema.format === 'time')) {
