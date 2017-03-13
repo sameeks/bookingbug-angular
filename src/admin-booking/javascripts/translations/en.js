@@ -47,9 +47,9 @@ angular.module("BBAdminBooking").config(function ($translateProvider) {
                 CLOSEST_TIME_NO_OVERBOOKING: "Looks like that time wasn\'t available. This could just be because it would be outside of their normal schedule. This was the closest time I found. You can select an alternative time, or you can try booking the requested time anyway, however double bookings aren\'t allowed by your company configuration settings",
                 CLOSEST_TIME_ALLOW_OVERBOOKING: "Looks like that time wasn\'t available. This could just be because it would be outside of their normal schedule. This was the closest time I found. You can select an alternative time, or you can try booking the requested time anyway",
 
-                CLOSEST_EARLIER_TIME_BTN: "Closest Earlier: {{closest_earlier | datetime: 'LT'}:true}",
-                CLOSEST_LATER_TIME_BTN: "Closest Later: {{closest_later | datetime: 'LT'}:true}",
-                REQUESTED_TIME_BTN: "Requested Time: {{requested_time | datetime: 'LT'}:true}",
+                CLOSEST_EARLIER_TIME_BTN: "Closest Earlier: {{closest_earlier | datetime: 'LT':true}}",
+                CLOSEST_LATER_TIME_BTN: "Closest Later: {{closest_later | datetime: 'LT':true}}",
+                REQUESTED_TIME_BTN: "Requested Time: {{requested_time | datetime: 'LT':true}}",
                 FIND_ANOTHER_TIME_BTN: "Find another time",
                 MORNING_HEADER: "@:COMMON.TERMINOLOGY.MORNING",
                 AFTERNOON_HEADER: "@:COMMON.TERMINOLOGY.AFTERNOON",
