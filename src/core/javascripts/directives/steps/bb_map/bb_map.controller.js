@@ -9,6 +9,8 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
     // init vars
     $scope.options = $scope.$eval($attrs.bbMap) || {};
 
+    $scope.no_route = $scope.options.no_route || false;
+
     $scope.num_search_results = $scope.options.num_search_results || 6;
     $scope.range_limit = $scope.options.range_limit || Infinity;
     $scope.hide_not_live_stores = $scope.options.hide_not_live_stores || false;
@@ -39,71 +41,81 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
     webshim.setOptions({'waitReady': false, 'loadStyles': false});
     webshim.polyfill("geolocation");
 
-    $rootScope.connection_started.then(function () {
+    $rootScope.connection_started.then(() =>
+        $scope.initialise()
+    , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
 
-            if (!$scope.selectedStore) {
+    /***
+     * @ngdoc method
+     * @name initialise
+     * @methodOf BB.Directives:bbMap
+     * @description
+     * Initialise the google map
+     *
+     */
+    $scope.initialise = function () {
+
+        if (!$scope.selectedStore) {
                 loader.setLoaded();
             }
 
-            if ($scope.bb.company.companies) {
-                $rootScope.parent_id = $scope.bb.company.id;
-            } else if ($rootScope.parent_id) {
-                $scope.initWidget({
-                    company_id: $rootScope.parent_id,
-                    first_page: $scope.bb.current_page,
-                    keep_basket: true,
-                    item_defaults: $scope.bb.item_defaults ? $scope.bb.item_defaults : {}
-                });
-                return;
-            } else {
-                $scope.initWidget({company_id: $scope.bb.company.id, first_page: null});
-                return;
-            }
-
-            $scope.companies = $scope.bb.company.companies;
-            if (!$scope.companies || ($scope.companies.length === 0)) {
-                $scope.companies = [$scope.bb.company];
-            }
-
-            if ($scope.bb.current_item.service && $scope.options && $scope.options.filter_by_service) {
-                $scope.notLoaded($scope);
-
-                filterByService().then(() =>
-                    $scope.map_init.then(() => mapInit())
-                );
-            } else {
-                $scope.map_init.then(() => mapInit());
-            }
-
-            $scope.mapBounds = new google.maps.LatLngBounds();
-            for (let comp of Array.from($scope.companies)) {
-                if (comp.address && comp.address.lat && comp.address.long) {
-                    let latlong = new google.maps.LatLng(comp.address.lat, comp.address.long);
-                    $scope.mapBounds.extend(latlong);
-                }
-            }
-
-            $scope.mapOptions = {
-                center: $scope.mapBounds.getCenter(),
-                zoom: $scope.default_zoom,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControl: true,
-                mapTypeControlOptions: {
-                    style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU
-                }
-            };
-
-            if ($scope.options && $scope.options.map_options) {
-                for (let key in $scope.options.map_options) {
-                    let value = $scope.options.map_options[key];
-                    $scope.mapOptions[key] = value;
-                }
-            }
-
-            return map_ready_def.resolve(true);
+        if ($scope.bb.company.companies) {
+            $rootScope.parent_id = $scope.bb.company.id;
+        } else if ($rootScope.parent_id) {
+            $scope.initWidget({
+                company_id: $rootScope.parent_id,
+                first_page: $scope.bb.current_page,
+                keep_basket: true,
+                item_defaults: $scope.bb.item_defaults ? $scope.bb.item_defaults : {}
+            });
+            return;
+        } else {
+            $scope.initWidget({company_id: $scope.bb.company.id, first_page: null});
+            return;
         }
 
-        , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+        $scope.companies = $scope.bb.company.companies;
+        if (!$scope.companies || ($scope.companies.length === 0)) {
+            $scope.companies = [$scope.bb.company];
+        }
+
+        if ($scope.bb.current_item.service && $scope.options && $scope.options.filter_by_service) {
+            $scope.notLoaded($scope);
+
+            filterByService().then(() =>
+                $scope.map_init.then(() => mapInit())
+            );
+        } else {
+            $scope.map_init.then(() => mapInit());
+        }
+
+        $scope.mapBounds = new google.maps.LatLngBounds();
+        for (let comp of Array.from($scope.companies)) {
+            if (comp.address && comp.address.lat && comp.address.long) {
+                let latlong = new google.maps.LatLng(comp.address.lat, comp.address.long);
+                $scope.mapBounds.extend(latlong);
+            }
+        }
+
+        $scope.mapOptions = {
+            center: $scope.mapBounds.getCenter(),
+            zoom: $scope.default_zoom,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: window.google.maps.MapTypeControlStyle.DROPDOWN_MENU
+            }
+        };
+
+        if ($scope.options && $scope.options.map_options) {
+            for (let key in $scope.options.map_options) {
+                let value = $scope.options.map_options[key];
+                $scope.mapOptions[key] = value;
+            }
+        }
+
+        return map_ready_def.resolve(true);
+        };
 
 
     /***
@@ -443,7 +455,7 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
         $scope.shown_markers = distances.slice(0, $scope.num_search_results);
         $scope.shown_markers_with_services = distances_with_services.slice(0, $scope.num_search_results);
 
-        if ($scope.options && $scope.filter_by_service) {
+        if ($scope.options && $scope.filter_by_service && $scope.shown_markers_with_services.length != 0) {
             $scope.shownMarkers = $scope.shown_markers_with_services;
         } else {
             $scope.shownMarkers = $scope.shown_markers;
@@ -575,11 +587,14 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
 
         let init_obj = {
             company_id: company.id,
-            item_defaults: $scope.bb.item_defaults
+            item_defaults: $scope.bb.item_defaults,
+            no_route: $scope.options.no_route
         };
         if (route) {
             init_obj.first_page = route;
         }
+
+        loader.setLoaded();
 
         return $scope.initWidget(init_obj);
     };

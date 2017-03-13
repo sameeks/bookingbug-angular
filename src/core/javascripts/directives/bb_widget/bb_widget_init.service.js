@@ -415,6 +415,7 @@
                                 return bbWidgetPage.decideNextPage(page);
                             }
                         }
+                        $scope.isLoaded = true;
                     });
                 }, function (err) {
                     connectionStarted.reject("Failed to start widget");
