@@ -17,10 +17,6 @@ angular.module('BBAdminDashboard.calendar.controllers').service('BbFullCalendar'
 
         class BbFullCalendar {
             constructor() {
-                this.setOptions();
-            }
-
-            setOptions() {
                 this.name = 'calendar';
                 this.type = null;
                 this.slotDuration = GeneralOptions.calendar_slot_duration;
@@ -105,11 +101,7 @@ angular.module('BBAdminDashboard.calendar.controllers').service('BbFullCalendar'
 
                 this.updateCalendarLanguage();
                 this.updateCalendarTimeRange();
-                this.getCompanyPromise().then(
-                    () => {
-                        this.companyListener();
-                    }
-                );
+                this.getCompanyPromise().then(this.companyListener.bind(this));
             }
 
             updateCalendarLanguage() {
@@ -394,6 +386,7 @@ angular.module('BBAdminDashboard.calendar.controllers').service('BbFullCalendar'
 
             fcEventDrop(event, delta, revertFunc) { // we need a full move cal if either it has a person and resource, or they've dragged over multiple days
                 let adminBooking = new BBModel.Admin.Booking(event);
+                debugger;
 
                 // not blocked and is a change in person/resource, or over multiple days
                 if ((adminBooking.status !== 3) && ((adminBooking.person_id && adminBooking.resource_id) || (delta.days() > 0))) {
@@ -723,6 +716,10 @@ angular.module('BBAdminDashboard.calendar.controllers').service('BbFullCalendar'
 
             fcLoading(isLoading, view) {
                 this.calendarLoading = isLoading;
+            }
+
+            refetchBooking() {
+                uiCalendarConfig.calendars[this.name].fullCalendar('refetchEvents');
             }
 
 
