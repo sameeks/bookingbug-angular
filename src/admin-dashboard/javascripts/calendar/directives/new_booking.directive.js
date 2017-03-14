@@ -3,10 +3,10 @@ angular.module('BBAdminDashboard.calendar.directives').directive('bbNewBooking',
             restrict: 'AE',
             replace: true,
             scope: true,
-            controller($scope, AdminBookingPopup, $uibModal, $timeout, $rootScope, AdminBookingOptions) {
+            controller($scope, $uibModal, $timeout, $rootScope, AdminBookingOptions, WidgetModalService) {
 
                 return $scope.newBooking = () =>
-                    AdminBookingPopup.open({
+                    WidgetModalService.open({
                         item_defaults: {
                             day_view: AdminBookingOptions.day_view,
                             merge_people: true,

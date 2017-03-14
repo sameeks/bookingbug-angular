@@ -1,4 +1,4 @@
-angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCalendarController', function (AdminBookingPopup,
+angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCalendarController', function (WidgetModalService,
                                                                                                              AdminCalendarOptions, AdminCompanyService, AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources,
                                                                                                              ColorPalette, Dialog, $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope,
                                                                                                              $state, TitleAssembler, $translate, $window, uiCalendarConfig) {
@@ -227,26 +227,23 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                 }
             }
 
-            getCompanyPromise().then(company =>
-                AdminMoveBookingPopup.open({
+            getCompanyPromise().then(company => {
+                let config = {
                     min_date: setTimeToMoment(start, AdminCalendarOptions.minTime),
                     max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime),
                     from_datetime: moment(start.toISOString()),
                     to_datetime: moment(end.toISOString()),
-                    item_defaults,
+                    item_defaults: item_defaults,
                     company_id: company.id,
-                    booking_id: adminBooking.id,
-                    success: model => {
-                        let adminBooking = new BBModel.Admin.Booking(adminBooking);
-                        return refreshBooking(adminBooking);
-                    },
-                    fail() {
-                        let adminBooking = new BBModel.Admin.Booking(adminBooking);
-                        refreshBooking(adminBooking);
-                        return revertFunc();
-                    }
-                })
-            );
+                    booking_id: event.id,
+                    success: (model) =>
+                        refreshBooking(event),
+                    fail: () =>
+                        refreshBooking(event),
+                    revertFunc: revertFunc
+                }
+                WidgetModalService.open(config)
+            });
             return;
         }
 
@@ -329,6 +326,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
             return;
         }
 
+
         view.calendar.unselect();
 
         if (!calOptions.enforce_schedules || (isTimeRangeAvailable(start, end, resource) || ((Math.abs(start.diff(end, 'days')) === 1) && dayHasAvailability(start)))) {
@@ -348,8 +346,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                 item_defaults.resource = resource.id.substring(0, resource.id.indexOf('_'));
             }
 
-            return getCompanyPromise().then(company =>
-                AdminBookingPopup.open({
+            return getCompanyPromise().then(company => {
+                WidgetModalService.open({
                     min_date: setTimeToMoment(start, AdminCalendarOptions.minTime),
                     max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime),
                     from_datetime: moment(start.toISOString()),
@@ -359,7 +357,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                     on_conflict: "cancel()",
                     company_id: company.id
                 })
-            );
+            });
         }
     };
 
@@ -518,12 +516,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                     if (response === "move") {
                         let item_defaults = {person: booking.person_id, resource: booking.resource_id};
                         getCompanyPromise().then(company =>
-                            AdminMoveBookingPopup.open({
+                            WidgetModalService.open({
                                 item_defaults,
                                 company_id: company.id,
                                 booking_id: booking.id,
+                                total_id: booking.purchase_ref,
+                                first_page: 'calendar',
                                 success: model => {
-
                                     return refreshBooking(booking);
                                 },
                                 fail() {

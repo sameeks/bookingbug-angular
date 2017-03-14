@@ -6,15 +6,14 @@
  * Controller for the dashboard page
  */
 angular.module('BBAdminDashboard.dashboard-iframe.controllers')
-    .controller('DashboardIframePageCtrl', ['$scope', '$state', '$window', 'AdminBookingPopup', function ($scope, $state, $window, AdminBookingPopup) {
+    .controller('DashboardIframePageCtrl', ['$scope', '$state', '$window', 'WidgetModalService', function ($scope, $state, $window, WidgetModalService) {
         $scope.parent_state = $state.is("view");
         $scope.bb.side_menu = "dashboard_menu";
         $scope.path = "view/dashboard/index";
         return $window.addEventListener('message', event => {
                 if (event && event.data) {
                     if (event.data.type && (event.data.type === "booking")) {
-                        return AdminBookingPopup.open({
-                            size: 'lg',
+                        return WidgetModalService.open({
                             company_id: $scope.bb.company.id,
                             on_conflict: "cancel()",
                             item_defaults: {

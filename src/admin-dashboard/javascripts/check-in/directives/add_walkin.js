@@ -6,11 +6,11 @@ angular.module('BBAdminDashboard.check-in.directives').directive('bbAddWalkin', 
             link(scope, element, attrs) {
 
             },
-            controller($scope, AdminBookingPopup, $timeout) {
+            controller($scope, WidgetModalService, $timeout) {
 
                 return $scope.walkIn = () =>
 
-                    AdminBookingPopup.open({
+                    WidgetModalService.open({
                         item_defaults: {
                             pick_first_time: true,
                             merge_people: true,

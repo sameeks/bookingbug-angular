@@ -39,7 +39,7 @@
         };
         var setPageRoute = function (route) {
             guardScope();
-            $scope.bb.current_page_route = route;
+            $scope.bb.current_page = route;
             if ($scope.bb.routeSteps && $scope.bb.routeSteps[route]) {
                 showPage($scope.bb.routeSteps[route]);
                 return true;

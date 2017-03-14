@@ -1,4 +1,4 @@
-angular.module('BBAdminBooking').directive('bbAdminMemberBookingsTable', function ($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup) {
+angular.module('BBAdminBooking').directive('bbAdminMemberBookingsTable', function ($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, WidgetModalService) {
 
     let controller = function ($document, $scope, $uibModal) {
 
@@ -28,7 +28,7 @@ angular.module('BBAdminBooking').directive('bbAdminMemberBookingsTable', functio
                         if (typeof response === 'string') {
                             if (response === "move") {
                                 let item_defaults = {person: booking.person_id, resource: booking.resource_id};
-                                return AdminMoveBookingPopup.open({
+                                return WidgetModalService.open({
                                     item_defaults,
                                     company_id: booking.company_id,
                                     booking_id: booking.id,
