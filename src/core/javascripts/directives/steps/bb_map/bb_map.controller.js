@@ -55,6 +55,9 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
      */
     $scope.initialise = function () {
 
+        $scope.mapMarkers = [];
+        $scope.shownMarkers = $scope.shownMarkers || [];
+
         if (!$scope.selectedStore) {
                 loader.setLoaded();
             }
