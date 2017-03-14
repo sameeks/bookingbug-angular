@@ -136,6 +136,7 @@ angular.module("BB.Services").config(function ($translateProvider) {
             },
             WEEK_CALENDAR: {
                 NO_AVAILABILITY: "It looks like there's no availability for the next {time_range_length, plural, one{day} other{# days}}",
+                MAX_DATE_POPOVER: "It's not possible to make a booking more than {{maxDateDuration}} in advance",
                 NEXT_AVAIL_BTN: "Jump to Next Available Day",
                 DATE_LBL: "@:COMMON.TERMINOLOGY.DATE",
                 DATE_BTN_TITLE: "Pick date",
