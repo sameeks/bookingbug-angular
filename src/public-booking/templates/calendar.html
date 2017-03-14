@@ -16,6 +16,7 @@
     <div class="row">
       <div class="col-sm-offset-7 col-sm-3 col-sm-push-2 text-right">
         <button
+          ng-show="!bb.movingBooking"
           id="btn-continue"
           type="button"
           class="btn btn-primary btn-block"
@@ -26,12 +27,20 @@
             ng-show="!bb.moving_booking"
             translate="PUBLIC_BOOKING.CALENDAR.NEXT_BTN">
           </span>
-          <span
-            ng-show="bb.moving_booking"
-            translate="PUBLIC_BOOKING.CALENDAR.MOVE_BOOKING_BTN">
-          </span>
         </button>
+
+        <div bb-move-booking ng-if="bb.movingBooking">
+          <button
+            type="button"
+            id="btn-continue"
+            class="btn btn-primary btn-block"
+            ng-click="$bbMoveBookingCtrl.initMove(bb.current_item)"
+            bb-debounce
+            translate="PUBLIC_BOOKING.CALENDAR.MOVE_BOOKING_BTN">  
+          </button>
+        </div>
       </div>
+
       <div class="col-sm-2 col-sm-pull-10 text-left">
         <button
           type="button"

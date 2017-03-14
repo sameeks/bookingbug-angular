@@ -21,6 +21,10 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
     $scope.make_payment = false;
     let loader = LoadingService.$loader($scope);
 
+    $scope.$on('booking:moved', (event, purchase) => {
+        $scope.purchase = purchase;
+    });
+
     let setPurchaseCompany = function (company) {
 
         $scope.bb.company_id = company.id;
