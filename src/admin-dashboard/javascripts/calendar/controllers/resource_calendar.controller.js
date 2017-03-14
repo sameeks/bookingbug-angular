@@ -123,7 +123,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         if (calOptions.name) {
             vm.calendar_name = calOptions.name;
         } else {
-            vm.calendar_name = "resourceCalendar";
+            vm.calendar_name = 'resourceCalendar';
         }
 
         if (calOptions.cal_slot_duration == null) {
@@ -256,7 +256,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                     },
                     fail() {
                         refreshBooking(booking);
-                        // return revertFunc();
+                        return revertFunc();
                     }
                 })
             );
@@ -294,33 +294,33 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         let service = _.findWhere(companyServices, {id: booking.service_id});
         if (!$scope.model) {  // if not a single item view
             let a, link;
-            if (type === "listDay") {
+            if (type === 'listDay') {
                 link = $bbug(element.children()[2]);
                 if (link) {
                     a = link.children()[0];
                     if (a) {
-                        if (booking.person_name && (!calOptions.type || (calOptions.type === "person"))) {
-                            a.innerHTML = booking.person_name + " - " + a.innerHTML;
-                        } else if (booking.resource_name && (calOptions.type === "resource")) {
-                            a.innerHTML = booking.resource_name + " - " + a.innerHTML;
+                        if (booking.person_name && (!calOptions.type || (calOptions.type === 'person'))) {
+                            a.innerHTML = booking.person_name + ' - ' + a.innerHTML;
+                        } else if (booking.resource_name && (calOptions.type === 'resource')) {
+                            a.innerHTML = booking.resource_name + ' - ' + a.innerHTML;
                         }
                     }
                 }
-            } else if ((type === "agendaWeek") || (type === "month")) {
+            } else if ((type === 'agendaWeek') || (type === 'month')) {
                 link = $bbug(element.children()[0]);
                 if (link) {
                     a = link.children()[1];
                     if (a) {
-                        if (booking.person_name && (!calOptions.type || (calOptions.type === "person"))) {
-                            a.innerHTML = booking.person_name + "<br/>" + a.innerHTML;
-                        } else if (booking.resource_name && (calOptions.type === "resource")) {
-                            a.innerHTML = booking.resource_name + "<br/>" + a.innerHTML;
+                        if (booking.person_name && (!calOptions.type || (calOptions.type === 'person'))) {
+                            a.innerHTML = booking.person_name + '<br/>' + a.innerHTML;
+                        } else if (booking.resource_name && (calOptions.type === 'resource')) {
+                            a.innerHTML = booking.resource_name + '<br/>' + a.innerHTML;
                         }
                     }
                 }
             }
         }
-        if (service && (type !== "listDay")) {
+        if (service && (type !== 'listDay')) {
             element.css('background-color', service.color);
             element.css('color', service.textColor);
             element.css('border-color', service.textColor);
@@ -375,8 +375,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                     from_datetime: moment(start.toISOString()),
                     to_datetime: moment(end.toISOString()),
                     item_defaults,
-                    first_page: "quick_pick",
-                    on_conflict: "cancel()",
+                    first_page: 'quick_pick',
+                    on_conflict: 'cancel()',
                     company_id: company.id
                 })
             );
@@ -537,7 +537,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
             },
             success: response => {
                 if (typeof response === 'string') {
-                    if (response === "move") {
+                    if (response === 'move') {
                         let item_defaults = {person: booking.person_id, resource: booking.resource_id};
                         getCompanyPromise().then(company =>
                             AdminMoveBookingPopup.open({

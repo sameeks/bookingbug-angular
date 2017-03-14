@@ -30,14 +30,14 @@ angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, Ge
                 if ((display_time_zone != null) && (display_time_zone !== company_time_zone)) {
 
                     // TODO: Unsure what this is doing / Causing issues with timezone toggle
-                    // let display_utc_offset = moment().tz(display_time_zone).utcOffset();
-                    // let company_utc_offset = moment().tz(company_time_zone).utcOffset();
-                    //
-                    // if (company_utc_offset < display_utc_offset) {
-                    //     start_date = prms.start_date.clone().subtract(1, 'day');
-                    // } else if ((company_utc_offset > display_utc_offset) && prms.end_date) {
-                    //     end_date = prms.end_date.clone().add(1, 'day');
-                    // }
+                    let display_utc_offset = moment().tz(display_time_zone).utcOffset();
+                    let company_utc_offset = moment().tz(company_time_zone).utcOffset();
+
+                    if (company_utc_offset < display_utc_offset) {
+                        start_date = prms.start_date.clone().subtract(1, 'day');
+                    } else if ((company_utc_offset > display_utc_offset) && prms.end_date) {
+                        end_date = prms.end_date.clone().add(1, 'day');
+                    }
 
                     prms.time_zone = display_time_zone;
                 }
