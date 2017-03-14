@@ -361,6 +361,23 @@
                 } else {
                     total_id = QueryStringService('total_id');
                 }
+                if (prms.total_id) {
+                    let params = {
+                        url_root: $scope.bb.api_url,
+                        purchase_id: prms.total_id
+                    }
+                    let totalDefer = $q.defer();
+                    let getPurchaseTotal = PurchaseService.query(params).then((total) => {
+                        $scope.bb.purchase = total;
+                        return total.$getBookings().then((bookings) => {
+                            bbWidgetBasket.createBasketFromBookings(bookings, totalDefer)
+                        }, (err) => {
+                            totalDefer.reject(err);
+                        });
+                    }, (err) => {
+                        totalDefer.reject(err);
+                    });
+                }
                 if (total_id) {
                     params = {
                         purchase_id: total_id,

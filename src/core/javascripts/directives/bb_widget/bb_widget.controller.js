@@ -58,6 +58,7 @@
             $scope.setBasketItem = bbWidgetBasket.setBasketItem;
             $scope.updateBasket = bbWidgetBasket.updateBasket;
             $scope.setUsingBasket = bbWidgetBasket.setUsingBasket;
+            $scope.createBasketFromBookings = bbWidgetBasket.createBasketFromBookings;
 
             $scope.setClient = bbWidgetInit.setClient;
             $scope.clearClient = bbWidgetInit.clearClient;

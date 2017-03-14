@@ -495,13 +495,25 @@
         </div>
 
         <button
+          ng-show="!bb.movingBooking"
           type="button"
           class="btn btn-primary pull-right"
           ng-click="checkReady() && routeReady()"
           bb-debounce
-          ng-disabled="!bb.current_item.time"
-          translate="ADMIN_BOOKING.CALENDAR.SELECT_BTN">
+          ng-disabled="!bb.current_item.time" 
+          translate="ADMIN_BOOKING.CALENDAR.SELECT_BTN"> 
         </button>
+
+        <div bb-move-booking ng-if="bb.movingBooking">
+          <button
+            ng-click="$bbMoveBookingCtrl.initMove(bb.current_item)"
+            type="button"
+            id="btn-continue"
+            class="btn btn-primary pull-right"
+            bb-debounce
+            translate="ADMIN_BOOKING.ADMIN_MOVE_BOOKING.MOVE_BOOKING_BTN">
+          </button>
+        </div>
 
       </div>
 

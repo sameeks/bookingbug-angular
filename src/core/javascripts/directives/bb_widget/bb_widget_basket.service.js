@@ -312,6 +312,36 @@
             return $scope.bb.confirmCheckout = ready;
         };
 
+        let createBasketFromBookings = function (bookings, totalDefer) {
+            let booking, i, len, newItem;
+            let promises = [];
+
+            for (i = 0, len = bookings.length; i < len; i++) {
+                booking = bookings[i];
+                newItem = new BBModel.BasketItem(booking, $scope.bb);
+                newItem.setSrcBooking(booking, $scope.bb);
+                Array.prototype.push.apply(promises, newItem.promises);
+                $scope.bb.basket.addItem(newItem);
+            }
+
+            if (bookings.length === 1) {
+                $scope.bb.current_item = $scope.bb.basket.items[0];
+                $scope.bb.current_item.setDefaults({});
+            } else {
+                if (bookings.length > 1) {
+                    $scope.bb.setStackedItems($scope.bb.basket.items);
+                }
+            }
+
+            $scope.bb.movingBooking = bookings;
+
+            return $q.all(promises).then(() => {
+                return totalDefer.resolve();
+            }, (err) =>  {
+                return totalDefer.reject(err);
+            });
+        }
+
         return {
             setScope: setScope,
             deleteBasketItems: deleteBasketItems,
@@ -327,7 +357,8 @@
             restoreBasket: restoreBasket,
             setUsingBasket: setUsingBasket,
             showCheckout: showCheckout,
-            setReadyToCheckout: setReadyToCheckout
+            setReadyToCheckout: setReadyToCheckout,
+            createBasketFromBookings: createBasketFromBookings
         };
     }
 

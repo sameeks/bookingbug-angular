@@ -240,7 +240,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                         let adminBooking = new BBModel.Admin.Booking(adminBooking);
                         refreshBooking(adminBooking);
                     },
-                    fail() => {
+                    fail() {
                         let adminBooking = new BBModel.Admin.Booking(adminBooking);
                         refreshBooking(adminBooking);
                         return revertFunc();
