@@ -38,14 +38,13 @@ angular.module("BB.Directives").directive('scoped', function ($document, $timeou
 
     let scopeIt = element => {
         let styleNode = element[0];
-        let idCounter = 0;
         let sheet = styleNode[this.compat.sheet];
         if (!sheet) {
             return;
         }
         let allRules = sheet[this.compat.rules];
         let par = styleNode.parentNode;
-        let id = par.id || (par.id = `scopedByScopedPolyfill_${++idCounter}`);
+        //let id = par.id || (par.id = `scopedByScopedPolyfill_${++idCounter}`);
         let glue = '';
         let index = allRules.length || 0;
         while (par) {

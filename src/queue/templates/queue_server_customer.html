@@ -14,7 +14,7 @@
   <div ng-if="!server.serving">
     <h3>Idle</h3>
     <div class="well well-lg" jqyoui-droppable="{onDrop:'serveCustomer'}"
-      data-drop="true" ng-model="selected_queuers">
+         data-drop="true" ng-model="selected_queuers">
       Drag customer here to serve or click 'Serve next customer'
     </div>
     <button ng-click="serveNext()" class="btn btn-default">

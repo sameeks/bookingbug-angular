@@ -54,9 +54,8 @@ let CompanyListBase = function ($scope, $rootScope, $q, $attrs, LoadingService) 
 
     // TODO move this into a mothercare js file
     return $scope.splitString = function (company) {
-        let result;
         let arr = company.name.split(' ');
-        return result = arr[2] ? arr[2] : "";
+        return arr[2] ? arr[2] : "";
     };
 };
 

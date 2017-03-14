@@ -31,7 +31,6 @@ angular.module('BB.Models').factory("AdminBookingModel", ($q, BBModel,
                 }
                 if (this.multi_status) {
                     for (let k in this.multi_status) {
-                        let v = this.multi_status[k];
                         this.className += ` status_${k}`;
                     }
                 }

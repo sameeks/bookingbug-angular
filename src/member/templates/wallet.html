@@ -46,10 +46,10 @@
     </button>
   </div>
 
-  <br>
+  <br/>
 
   <div ng-show="wallet.$has('logs')">
-     <div ng-show="show_wallet_logs">
+    <div ng-show="show_wallet_logs">
       <div bb-wallet-logs></div>
     </div>
   </div>
@@ -85,7 +85,7 @@
               </button>
             </span>
           </div>
-          <br>
+          <br/>
           <small
             translate="MEMBER.WALLET.MIN_TOP_UP"
             translate-values="{min_amount: wallet.min_amount}">
@@ -103,7 +103,7 @@
           <p
             translate="MEMBER.WALLET.TOP_UP_WALLET_BY"
             translate-values="{amount: amount}"
-            >
+          >
           </p>
         </div>
 
@@ -112,10 +112,10 @@
           ng-src="{{wallet_payment_url}}"
           width="100%"
           scrolling="no"
-          frameborder="0"> 
+          frameborder="0">
         </iframe>
         <script type="text/javascript">
-          iFrameResize({log:false, checkOrigin:false, enablePublicMethods:true}, '#bb-payment');
+          iFrameResize({log: false, checkOrigin: false, enablePublicMethods: true}, '#bb-payment');
         </script>
 
       </div>

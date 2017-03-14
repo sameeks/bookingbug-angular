@@ -43,8 +43,7 @@ angular.module('BBAdmin.Controllers').controller('DashboardContainer', function 
     // a popup performing an action on a time, possible blocking, or mkaing a new booking
     return $scope.popupTimeAction = function (prms) {
 
-        let modalInstance;
-        return modalInstance = $uibModal.open({
+        return $uibModal.open({
             templateUrl: $scope.partial_url + 'time_popup',
             controller: ModalInstanceCtrl,
             scope: $scope,

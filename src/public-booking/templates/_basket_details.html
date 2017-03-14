@@ -25,29 +25,29 @@
       class="table table-bordered"
       ng-show="bb.basket.items">
       <thead>
-        <tr>
-          <th translate="PUBLIC_BOOKING.BASKET_DETAILS.ITEM_COL_HEADING"></th>
-          <th translate="PUBLIC_BOOKING.BASKET_DETAILS.TIME_DURATION_COL_HEADING"></th>
-          <th>&nbsp;</th>
-        </tr>
+      <tr>
+        <th translate="PUBLIC_BOOKING.BASKET_DETAILS.ITEM_COL_HEADING"></th>
+        <th translate="PUBLIC_BOOKING.BASKET_DETAILS.TIME_DURATION_COL_HEADING"></th>
+        <th>&nbsp;</th>
+      </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="item in bb.basket.items">
-          <td>
-            {{item.service_name}}
-          </td>
-          <td
-            translate="PUBLIC_BOOKING.BASKET_DETAILS.ITEM_TIME_AND_DURATION"
-            translate-values="{time: item.date.date, duration: item.duration}">
-          </td>
-          <td class="text-center">
+      <tr ng-repeat="item in bb.basket.items">
+        <td>
+          {{item.service_name}}
+        </td>
+        <td
+          translate="PUBLIC_BOOKING.BASKET_DETAILS.ITEM_TIME_AND_DURATION"
+          translate-values="{time: item.date.date, duration: item.duration}">
+        </td>
+        <td class="text-center">
             <span
               class="fa fa-trash-o"
               aria-hidden="true"
               ng-click="deleteBasketItem(item)">
             </span>
-          </td>
-        </tr>
+        </td>
+      </tr>
       </tbody>
     </table>
 

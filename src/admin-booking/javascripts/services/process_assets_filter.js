@@ -14,7 +14,5 @@ angular.module('BBAdminBooking').factory('ProcessAssetsFilter', function () {
 
         return angular.forEach(string.split(','), value => assets.push(parseInt(decodeURIComponent(value))));
     };
-
-    return assets;
 });
 

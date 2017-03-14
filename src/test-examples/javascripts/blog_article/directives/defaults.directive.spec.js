@@ -111,9 +111,6 @@ describe('bbTe.blogArticle, bbTeBaDefaults directive', function () {
                 .toBe(false);
 
         });
-        return;
-
-        return describe('');
     });
 
 });

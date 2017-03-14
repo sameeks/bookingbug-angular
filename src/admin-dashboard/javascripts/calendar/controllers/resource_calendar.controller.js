@@ -42,16 +42,12 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         vm.updateDateHandler = updateDateHandler;
     };
 
-    var applyFilters = function () {
+    let applyFilters = function () {
         filters = {
             requestedAssets: ProcessAssetsFilter($state.params.assets)
         };
 
-        vm.showAll = true;
-        if (filters.requestedAssets.length > 0) {
-            vm.showAll = false;
-        }
-
+        vm.showAll = filters.requestedAssets.length <= 0;
     };
 
     let setTimeToMoment = function (date, time) {
@@ -65,13 +61,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         return newDate;
     };
 
-    var prepareEventSources = function () {
+    let prepareEventSources = function () {
         vm.eventSources = [
             {events: getEvents}
         ];
     };
 
-    var getEvents = function (start, end, timezone, callback) {
+    let getEvents = function (start, end, timezone, callback) {
         vm.loading = true;
         getCompanyPromise().then(function (company) {
             let options = {
@@ -97,7 +93,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         });
     };
 
-    var prepareCalOptions = function () {
+    let prepareCalOptions = function () {
         calOptions = $scope.$eval($attrs.bbResourceCalendar);
         if (!calOptions) {
             calOptions = {};
@@ -136,8 +132,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
 
     };
 
-    var prepareUiCalOptions = function () {
-        vm.uiCalOptions = { // @todo REPLACE ALL THIS WITH VAIABLES FROM THE GeneralOptions Service
+    let prepareUiCalOptions = function () {
+        vm.uiCalOptions = { // @todo REPLACE ALL THIS WITH VARIABLES FROM THE GeneralOptions Service
             calendar: {
                 editable: true,
                 schedulerLicenseKey: '0598149132-fcs-1443104297',
@@ -192,7 +188,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         updateCalendarTimeRange();
     };
 
-    var updateCalendarLanguage = function () {
+    let updateCalendarLanguage = function () {
         vm.uiCalOptions.calendar.locale = $translate.use();
         vm.uiCalOptions.calendar.buttonText.today = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY');
         vm.uiCalOptions.calendar.views.listDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.TODAY');
@@ -201,45 +197,48 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         vm.uiCalOptions.calendar.views.timelineDay.buttonText = $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.DAY', {minutes: calOptions.cal_slot_duration});
     };
 
-    var updateCalendarTimeRange = function () {
+    let updateCalendarTimeRange = function () {
         vm.uiCalOptions.calendar.minTime = AdminCalendarOptions.minTime;
         vm.uiCalOptions.calendar.maxTime = AdminCalendarOptions.maxTime;
     };
 
-    var fcResources = callback => getCalendarAssets(callback);
+    let fcResources = callback => getCalendarAssets(callback);
 
-    var fcEventDragStop = (event, jsEvent, ui, view) => event.oldResourceIds = event.resourceIds;
+    let fcEventDragStop = function (event, jsEvent, ui, view) {
+        event.oldResourceIds = event.resourceIds;
+    };
 
-    var fcEventDrop = function (event, delta, revertFunc) { // we need a full move cal if either it has a person and resource, or they've dragged over multiple days
+    let fcEventDrop = function (booking, delta, revertFunc) { // we need a full move cal if either it has a person and resource, or they've dragged over multiple days
 
         if (GeneralOptions.custom_time_zone) {
             let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
-            event.start = calendar.moment(moment.tz(event.start.toISOString(), GeneralOptions.display_time_zone));
-            event.end = calendar.moment(moment.tz(event.end.toISOString(), GeneralOptions.display_time_zone));
+            booking.start = calendar.moment(moment.tz(booking.start.toISOString(), GeneralOptions.display_time_zone));
+            booking.end = calendar.moment(moment.tz(booking.end.toISOString(), GeneralOptions.display_time_zone));
         }
 
         // not blocked and is a change in person/resource, or over multiple days
-        if ((event.status !== 3) && ((event.person_id && event.resource_id) || (delta.days() > 0))) {
-            let {start} = event;
-            let {end} = event;
+        if ((booking.status !== 3) && ((booking.person_id && booking.resource_id) || (delta.days() > 0))) {
+            let {start} = booking;
+            let {end} = booking;
             if (GeneralOptions.custom_time_zone) {
                 start = moment.tz(start, CompanyStoreService.time_zone);
                 end = moment.tz(end, CompanyStoreService.time_zone);
             }
+
             let item_defaults = {
                 date: start.format('YYYY-MM-DD'),
                 time: ((start.hour() * 60) + start.minute())
             };
 
-            if (event.resourceId) {
-                let orginal_resource;
-                let newAssetId = event.resourceId.substring(0, event.resourceId.indexOf('_'));
-                if (event.resourceId.indexOf('_p') > -1) {
+            if (booking.resourceId) {
+                //let orginal_resource;
+                let newAssetId = booking.resourceId.substring(0, booking.resourceId.indexOf('_'));
+                if (booking.resourceId.indexOf('_p') > -1) {
                     item_defaults.person = newAssetId;
-                    orginal_resource = `${event.person_id}_p`;
-                } else if (event.resourceId.indexOf('_r') > -1) {
+                    //orginal_resource = `${event.person_id}_p`;
+                } else if (booking.resourceId.indexOf('_r') > -1) {
                     item_defaults.resource = newAssetId;
-                    orginal_resource = `${event.resource_id}_r`;
+                    //orginal_resource = `${event.resource_id}_r`;
                 }
             }
 
@@ -251,14 +250,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                     to_datetime: moment(end.toISOString()),
                     item_defaults,
                     company_id: company.id,
-                    booking_id: event.id,
+                    booking_id: booking.id,
                     success: model => {
-                        let adminBooking = new BBModel.Admin.Booking(event);
-                        refreshBooking(adminBooking);
+                        return refreshBooking(booking);
                     },
                     fail() {
-                        let adminBooking = new BBModel.Admin.Booking(event);
-                        refreshBooking(adminBooking);
+                        refreshBooking(booking);
+                        // return revertFunc();
                     }
                 })
             );
@@ -268,14 +266,14 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         // if it's got a person and resource - then it
         return Dialog.confirm({
             title: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_HEADING'),
-            model: event,
+            model: booking,
             body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY'),
             success: model => {
                 if (GeneralOptions.custom_time_zone) {
-                    event.start = moment.tz(event.start, CompanyStoreService.time_zone);
-                    event.end = moment.tz(event.end, CompanyStoreService.time_zone);
+                    booking.start = moment.tz(booking.start, CompanyStoreService.time_zone);
+                    booking.end = moment.tz(booking.end, CompanyStoreService.time_zone);
                 }
-                updateBooking(event);
+                return updateBooking(booking);
             },
             fail() {
                 revertFunc();
@@ -283,16 +281,17 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         });
     };
 
-    var fcEventClick = function (event, jsEvent, view) {
-        let adminBooking = new BBModel.Admin.Booking(event);
-        if (adminBooking.$has('edit')) {
-            return editBooking(adminBooking);
+    let fcEventClick = function (booking, jsEvent, view) {
+        if (booking.type === 'external') return;
+
+        if (booking.$has('edit')) {
+            return editBooking(booking);
         }
     };
 
-    var fcEventRender = function (event, element) {
+    let fcEventRender = function (booking, element) {
         let {type} = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getView');
-        let service = _.findWhere(companyServices, {id: event.service_id});
+        let service = _.findWhere(companyServices, {id: booking.service_id});
         if (!$scope.model) {  // if not a single item view
             let a, link;
             if (type === "listDay") {
@@ -300,10 +299,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                 if (link) {
                     a = link.children()[0];
                     if (a) {
-                        if (event.person_name && (!calOptions.type || (calOptions.type === "person"))) {
-                            a.innerHTML = event.person_name + " - " + a.innerHTML;
-                        } else if (event.resource_name && (calOptions.type === "resource")) {
-                            a.innerHTML = event.resource_name + " - " + a.innerHTML;
+                        if (booking.person_name && (!calOptions.type || (calOptions.type === "person"))) {
+                            a.innerHTML = booking.person_name + " - " + a.innerHTML;
+                        } else if (booking.resource_name && (calOptions.type === "resource")) {
+                            a.innerHTML = booking.resource_name + " - " + a.innerHTML;
                         }
                     }
                 }
@@ -312,10 +311,10 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
                 if (link) {
                     a = link.children()[1];
                     if (a) {
-                        if (event.person_name && (!calOptions.type || (calOptions.type === "person"))) {
-                            a.innerHTML = event.person_name + "<br/>" + a.innerHTML;
-                        } else if (event.resource_name && (calOptions.type === "resource")) {
-                            a.innerHTML = event.resource_name + "<br/>" + a.innerHTML;
+                        if (booking.person_name && (!calOptions.type || (calOptions.type === "person"))) {
+                            a.innerHTML = booking.person_name + "<br/>" + a.innerHTML;
+                        } else if (booking.resource_name && (calOptions.type === "resource")) {
+                            a.innerHTML = booking.resource_name + "<br/>" + a.innerHTML;
                         }
                     }
                 }
@@ -329,15 +328,17 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         return element;
     };
 
-    var fcEventAfterRender = function (event, elements, view) {
+    let fcEventAfterRender = function (event, elements, view) {
         if ((event.rendering == null) || (event.rendering !== 'background')) {
             return PrePostTime.apply(event, elements, view, $scope);
         }
     };
 
-    var fcEventAfterAllRender = () => $scope.$emit('UICalendar:EventAfterAllRender');
+    let fcEventAfterAllRender = function () {
+        $scope.$emit('UICalendar:EventAfterAllRender');
+    };
 
-    var fcSelect = function (start, end, jsEvent, view, resource) { // For some reason clicking on the scrollbars triggers this event therefore we filter based on the jsEvent target
+    let fcSelect = function (start, end, jsEvent, view, resource) { // For some reason clicking on the scrollbars triggers this event therefore we filter based on the jsEvent target
         if (jsEvent && (jsEvent.target.className === 'fc-scroller')) {
             return;
         }
@@ -382,7 +383,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         }
     };
 
-    var fcViewRender = function (view, element) {
+    let fcViewRender = function (view, element) {
         let date = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getDate');
         let newDate = moment().tz(moment.tz.guess());
         newDate.set({
@@ -391,33 +392,34 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
             'date': parseInt(date.get('date')),
             'hour': 0,
             'minute': 0,
-            'minute': 0,
             'second': 0
         });
         return vm.currentDate = newDate.toDate();
     };
 
-    var fcEventResize = function (event, delta, revertFunc, jsEvent, ui, view) {
-        event.duration = event.end.diff(event.start, 'minutes');
-        return updateBooking(event);
+    let fcEventResize = function (booking, delta, revertFunc, jsEvent, ui, view) {
+        booking.duration = booking.end.diff(booking.start, 'minutes');
+        return updateBooking(booking);
     };
 
-    var fcLoading = (isLoading, view) => vm.calendarLoading = isLoading;
+    let fcLoading = function (isLoading, view) {
+        vm.calendarLoading = isLoading;
+    };
 
-    var isTimeRangeAvailable = function (start, end, resource) {
+    let isTimeRangeAvailable = function (start, end, resource) {
         let st = moment(start.toISOString()).unix();
         let en = moment(end.toISOString()).unix();
         let events = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', event => (event.rendering === 'background') && (st >= event.start.unix()) && event.end && (en <= event.end.unix()) && ((resource && (parseInt(event.resourceId) === parseInt(resource.id))) || !resource));
         return events.length > 0;
     };
 
-    var dayHasAvailability = function (start) {
+    let dayHasAvailability = function (start) {
         let events = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('clientEvents', event => (event.rendering === 'background') && (event.start.year() === start.year()) && (event.start.month() === start.month()) && (event.start.date() === start.date()));
 
         return events.length > 0;
     };
 
-    var selectedResourcesListener = function (newValue, oldValue) {
+    let selectedResourcesListener = function (newValue, oldValue) {
         if (newValue !== oldValue) {
             let assets = [];
             angular.forEach(newValue, asset => assets.push(asset.id));
@@ -428,7 +430,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         }
     };
 
-    var getCalendarAssets = function (callback) {
+    let getCalendarAssets = function (callback) {
         if ($scope.model) {
             callback([$scope.model]);
             return;
@@ -458,7 +460,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
 
     };
 
-
     let getBookingTitle = function (booking) {
         let labelAssembler = $scope.labelAssembler ? $scope.labelAssembler : AdminCalendarOptions.bookings_label_assembler;
         let blockLabelAssembler = $scope.blockLabelAssembler ? $scope.blockLabelAssembler : AdminCalendarOptions.block_label_assembler;
@@ -472,7 +473,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         return booking.title;
     };
 
-    var refreshBooking = function (booking) {
+    let refreshBooking = function (booking) {
         booking.$refetch().then(function (response) {
             booking.resourceIds = [];
             booking.resourceId = null;
@@ -489,7 +490,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         });
     };
 
-    var updateBooking = function (booking) {
+    let updateBooking = function (booking) {
         if (booking.resourceId) {
             let newAssetId = booking.resourceId.substring(0, booking.resourceId.indexOf('_'));
             if (booking.resourceId.indexOf('_p') > -1) {
@@ -515,7 +516,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         });
     };
 
-    var editBooking = function (booking) {
+    let editBooking = function (booking) {
         let templateUrl, title;
         if (GeneralOptions.custom_time_zone) {
             booking.datetime = moment.tz(moment(booking.datetime.toISOString()), CompanyStoreService.time_zone);
@@ -588,7 +589,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         }
     };
 
-    var updateDateHandler = function (data) {
+    let updateDateHandler = function (data) {
         if (uiCalendarConfig.calendars[vm.calendar_name]) {
             let assembledDate = moment.utc();
             assembledDate.set({
@@ -603,11 +604,11 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         }
     };
 
-    var refetchBookingsHandler = function () {
+    let refetchBookingsHandler = function () {
         uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents');
     };
 
-    var newCheckoutHandler = function () {
+    let newCheckoutHandler = function () {
         uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents');
     };
 
@@ -619,11 +620,11 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         updateCalendarLanguage();
     };
 
-    var timeRangeChangedHandler = function () {
+    let timeRangeChangedHandler = function () {
         updateCalendarTimeRange();
     };
 
-    var getCompanyPromise = function () {
+    let getCompanyPromise = function () {
         let defer = $q.defer();
         if (company) {
             defer.resolve(company);
@@ -636,7 +637,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
         return defer.promise;
     };
 
-    var changeSelectedResources = function () {
+    let changeSelectedResources = function () {
         if (vm.showAll) {
             vm.selectedResources.selected = [];
         }
@@ -673,7 +674,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
     /**
      * {Object} company
      */
-    var companyListener = function (company) {
+    let companyListener = function (company) {
         vm.loading = true;
 
         BBAssets.getAssets(company).then(assetsListener);
@@ -686,14 +687,14 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
     /**
      * {Object} baseResourceCollection
      */
-    var collectionListener = function (collection) {
+    let collectionListener = function (collection) {
         collection.$get('services').then(servicesListener);
     };
 
     /**
      * {Array.<Object>} services
      */
-    var servicesListener = function (services) {
+    let servicesListener = function (services) {
         companyServices = (Array.from(services).map((service) => new BBModel.Admin.Service(service)));
         ColorPalette.setColors(companyServices);
     };

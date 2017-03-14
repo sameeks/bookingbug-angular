@@ -6,6 +6,6 @@
  */
 if (!moment.fn.toISODate) {
     moment.fn.toISODate = function () {
-        return this.locale('en').format('YYYY-MM-DD');
+        return this.clone().locale('en').format('YYYY-MM-DD');
     };
 }

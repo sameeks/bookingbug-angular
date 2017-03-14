@@ -133,8 +133,6 @@ angular.module('BBAdminBooking').controller('adminBookingClients', function ($sc
     $scope.typeHeadResults = function ($item, $model, $label) {
 
         let item = $item;
-        let model = $model;
-        let label = $label;
         $scope.client = item;
 
         return $scope.selectClient($item);

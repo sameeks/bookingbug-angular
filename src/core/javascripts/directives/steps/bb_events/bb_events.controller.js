@@ -117,8 +117,8 @@ angular.module('BB.Controllers').controller('EventList', function ($scope, $root
         return $q.all(promises).then(function (result) {
                 let company_questions = result[0];
                 let event_groups = result[1];
-                let event_summary = result[2];
-                let event_data = result[3];
+                //let event_summary = result[2];
+                //let event_data = result[3];
 
                 $scope.has_company_questions = (company_questions != null) && (company_questions.length > 0);
                 if (company_questions) {
@@ -152,7 +152,7 @@ angular.module('BB.Controllers').controller('EventList', function ($scope, $root
     $scope.loadEventSummary = function () {
 
         let deferred = $q.defer();
-        let current_event = $scope.bb.current_item.event;
+        //let current_event = $scope.bb.current_item.event;
 
         // de-select the event chain if there's one already picked - as it's hiding other events in the same group
         if ($scope.bb.current_item && ($scope.bb.current_item.event_chain_id || $scope.bb.current_item.event_chain)) {
@@ -716,8 +716,6 @@ angular.module('BB.Controllers').controller('EventList', function ($scope, $root
     //   for item in items
 
 
-    let sort = function () {
-    };
     // TODO allow sorting by price/date (default)
 
 

@@ -2,14 +2,14 @@
   <div ng-class="{'col-xs-7': !dateOnly, 'col-xs-12': dateOnly}">
     <div class="input-group">
       <input type="text" ng-model="datetimeWithNoTz" class="form-control"
-        uib-datepicker-popup="{{format}}"
-        is-open="opened"
-        datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'showWeeks': false, 'maxDate': maxDateClean, 'minDate': minDateClean}"
-        show-button-bar="false"
-        ng-class="{'datepicker-show-focus': opened}"
-        ng-disabled="bbDisabled"
-        ng-readonly="true"
-        ng-focus="opened=true"
+             uib-datepicker-popup="{{format}}"
+             is-open="opened"
+             datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'showWeeks': false, 'maxDate': maxDateClean, 'minDate': minDateClean}"
+             show-button-bar="false"
+             ng-class="{'datepicker-show-focus': opened}"
+             ng-disabled="bbDisabled"
+             ng-readonly="true"
+             ng-focus="opened=true"
       />
       <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
         <button class="btn btn-default" title="Select date"><span class="fa fa-calendar"></span></button>
@@ -18,6 +18,6 @@
   </div>
   <div class="col-xs-5" ng-show="!dateOnly">
     <div uib-timepicker ng-model="datetimeWithNoTz" show-meridian="showMeridian"
-      minute-step="minuteStep" max="maxDateClean" min="minDateClean" readonly-input="true"></div>
+         minute-step="minuteStep" max="maxDateClean" min="minDateClean" readonly-input="true"></div>
   </div>
 </div>

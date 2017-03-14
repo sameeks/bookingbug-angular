@@ -51,7 +51,7 @@ angular.module('BB.Controllers').controller('FileUpload', ($scope, Upload) =>
 
             let onProgress = evt => file.progress = Math.min(100, parseInt((99.0 * evt.loaded) / evt.total));
 
-            Upload.rename(file, file.name.replace(/[^\x00-\x7F]/g, ''));
+            Upload.rename(file, file.name.replace(/[^\x00-\x7F]/g, '')); //eslint-disable-line no-control-regex
 
             file.upload = Upload.upload({
                 url,

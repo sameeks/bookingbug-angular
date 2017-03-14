@@ -1,8 +1,6 @@
 angular.module('BBMember').run(function ($q, $injector, BBModel) {
     'ngInject';
 
-    TrNgGrid.defaultColumnOptions.enableFiltering = false;
-
     let models = ['Member', 'Booking', 'Wallet', 'WalletLog', 'Purchase', 'PurchaseItem', 'WalletPurchaseBand', 'PaymentItem'];
     let mfuncs = {};
     for (let model of Array.from(models)) {

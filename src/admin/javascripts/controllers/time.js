@@ -1,7 +1,6 @@
 angular.module('BBAdmin.Controllers').controller('DashTimeList', function ($scope, $rootScope, $location, $q, $element, AdminTimeService) {
 
     let k, slots;
-    let $loaded = null; // has somethign been loaded
 
     // Add a method that will be available in all retrieved CreditCard objects :
     $scope.init = day => {
@@ -83,8 +82,7 @@ angular.module('BBAdmin.Controllers').controller('DashTimeList', function ($scop
         let wHeight = $(window).height();
         let dHeight = wHeight * 0.8;
         let dlg = $("#dialog-modal");
-        let src =
-            dlg.html(`<iframe frameborder=0 id='mod_dlg' onload='nowait();setTimeout(set_iframe_focus, 100);' width=100% height=99% src='${url}'></iframe>`);
+        dlg.html(`<iframe frameborder=0 id='mod_dlg' onload='nowait();setTimeout(set_iframe_focus, 100);' width=100% height=99% src='${url}'></iframe>`);
         dlg.attr("title", "Checkout");
         return dlg.dialog({
             my: "top", at: "top",
