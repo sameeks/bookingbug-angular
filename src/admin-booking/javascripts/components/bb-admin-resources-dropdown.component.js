@@ -5,7 +5,7 @@ angular.module('BBAdminBooking').component('bbAdminResourcesDropdown', {
     controller: 'BBAdminResourcesDropdownCtrl',
     controllerAs: '$bbAdminResourcesDropdownCtrl',
     require: {
-        $bbCtrl: '^^bbAdminBooking'
+        $bbCtrl: '^^bbModalWidget'
     },
     templateUrl: 'admin-booking/admin_resources_dropdown.html'
 });
