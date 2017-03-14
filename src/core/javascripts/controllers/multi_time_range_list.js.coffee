@@ -41,7 +41,7 @@ angular.module('BB.Directives').directive 'bbTimeRangeStacked', () ->
 angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($scope, $element, $attrs, $rootScope, $q, TimeService, AlertService, BBModel, FormDataStoreService, PersonService, PurchaseService, DateTimeUtilitiesService) ->
 
   $scope.controller = "public.controllers.TimeRangeListStacked"
- 
+
   FormDataStoreService.init 'TimeRangeListStacked', $scope, [
     'selected_slot'
     'original_start_date'
@@ -67,18 +67,22 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
 
     if $attrs.bbDayOfWeek? or ($scope.options and $scope.options.day_of_week)
       $scope.day_of_week = if $attrs.bbDayOfWeek? then $scope.$eval($attrs.bbDayOfWeek) else $scope.options.day_of_week
- 
+
     if $attrs.bbSelectedDay? or ($scope.options and $scope.options.selected_day)
       selected_day        = if $attrs.bbSelectedDay? then moment($scope.$eval($attrs.bbSelectedDay)) else moment($scope.options.selected_day)
       $scope.selected_day = selected_day if moment.isMoment(selected_day)
 
+    $scope.options.ignore_min_advance_datetime = if $scope.options.ignore_min_advance_datetime then true else false
+
+    setMinMaxDate()
+
     # initialise the time range
     # last selected day is set (i.e, a user has already selected a date)
     if !$scope.start_date && $scope.last_selected_date
-      if $scope.original_start_date 
+      if $scope.original_start_date
         diff = $scope.last_selected_date.diff($scope.original_start_date, 'days')
         diff = diff % $scope.time_range_length
-        diff = if diff is 0 then diff else diff + 1 
+        diff = if diff is 0 then diff else diff + 1
         start_date = $scope.last_selected_date.clone().subtract(diff, 'days')
         setTimeRange($scope.last_selected_date, start_date)
       else
@@ -104,7 +108,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   * @name setTimeRange
   * @methodOf BB.Directives:bbTimeRangeStacked
   * @description
-  * Set time range in according of selected_date 
+  * Set time range in according of selected_date
   *
   * @param {date} selected_date The selected date from multi time range list
   * @param {date} start_date The start date of range list
@@ -124,8 +128,42 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
     # to be saved as a variable as functions cannot be passed into the
     # AngluarUI date picker
     $scope.selected_date = $scope.selected_day.toDate()
-    
+
     isSubtractValid()
+
+    isAddValid()
+
+  ###**
+  * @ngdoc method
+  * @name setMinMaxDate
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Set min, max date and time range based on min/max advance datetime of the selected service
+  *
+  ###
+  setMinMaxDate = () ->
+
+    current_item = $scope.bb.current_item
+    # has a service been selected?
+    if current_item.service and !$scope.options.ignore_min_advance_datetime
+
+      $scope.min_date = current_item.service.min_advance_datetime
+      $scope.max_date = current_item.service.max_advance_datetime
+
+      # date helpers for use by datepicker-popup
+      $scope.minDateJs = $scope.min_date.toDate()
+      $scope.maxDateJs = $scope.max_date.toDate()
+
+      # calculate duration of max date from today
+      if !$scope.maxDateDuration
+        maxDate = $scope.max_date.clone()
+        today = moment().clone()
+        difference = maxDate.startOf('day').diff(today.startOf('day'), 'days', true)
+        $scope.maxDateDuration = moment.duration(difference, 'days').humanize()
+
+      # if the selected day is before the services min_advance_datetime, adjust the time range
+      if $scope.selected_day and $scope.selected_day.isBefore(current_item.service.min_advance_datetime, 'day') and !$scope.isAdmin()
+        setTimeRange(current_item.service.min_advance_datetime)
 
   ###**
   * @ngdoc method
@@ -180,7 +218,24 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       $scope.subtract_string = "Prev day"
     else
       $scope.subtract_string = "Prev"
- 
+
+  ###**
+  * @ngdoc method
+  * @name isAddValid
+  * @methodOf BB.Directives:bbTimeRangeStacked
+  * @description
+  * Use to determine if addition of the time range is valid (i.e. it's not more than the max days in advance)
+  *
+  ###
+  isAddValid = () ->
+    $scope.is_add_valid = true
+
+    if !$scope.isAdmin() and !$scope.options.ignore_max_advance_datetime and $scope.max_date
+      max_date = $scope.max_date.clone()
+      selected_day = $scope.selected_day.clone()
+      difference = max_date.startOf('day').diff(selected_day.startOf('day'), 'day', true)
+      $scope.is_add_valid = false if (difference - $scope.time_range_length) < 0
+
   ###**
   * @ngdoc method
   * @name selectedDateChanged
@@ -269,7 +324,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
             item.setTime(slot)
             slot = slot.next
             break
-   
+
       updateHideStatus()
       $rootScope.$broadcast "time:selected"
 
@@ -282,6 +337,8 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   ###
   # load the time data
   $scope.loadData = ->
+
+    setMinMaxDate()
 
     $scope.notLoaded $scope
 
@@ -355,7 +412,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
   ###
   spliceExistingDateTimes = (stacked_item, slots) ->
 
-    return if !stacked_item.datetime and !stacked_item.date 
+    return if !stacked_item.datetime and !stacked_item.date
     datetime = stacked_item.datetime or DateTimeUtilitiesService.convertTimeSlotToMoment(stacked_item.date.date, stacked_item.time)
     if $scope.start_date <= datetime && $scope.end_date >= datetime
       time = DateTimeUtilitiesService.convertMomentToTime(datetime)
@@ -382,7 +439,7 @@ angular.module('BB.Controllers').controller 'TimeRangeListStackedController', ($
       day_data.slots = {}
 
       if $scope.bb.stacked_items.length > 1
-          
+
           for time, slot of $scope.bb.stacked_items[0].slots[day]
 
             slot = angular.copy(slot)

@@ -131,6 +131,8 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     $scope.options.ignore_min_advance_datetime = if $scope.options.ignore_min_advance_datetime then true else false
 
+    setMinMaxDate()
+
     # initialise the time range
     # last selected day is set (i.e, a user has already selected a date)
     if !$scope.start_date and $scope.last_selected_date
@@ -188,7 +190,42 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
 
     isSubtractValid()
 
+    isAddValid()
+
     return
+
+
+  ###**
+  * @ngdoc method
+  * @name setMinMaxDate
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Set min, max date and time range based on min/max advance datetime of the selected service
+  *
+  ###
+  setMinMaxDate = () ->
+
+    current_item = $scope.bb.current_item
+    # has a service been selected?
+    if current_item.service and !$scope.options.ignore_min_advance_datetime
+
+      $scope.min_date = current_item.service.min_advance_datetime
+      $scope.max_date = current_item.service.max_advance_datetime
+
+      # date helpers for use by datepicker-popup
+      $scope.minDateJs = $scope.min_date.toDate()
+      $scope.maxDateJs = $scope.max_date.toDate()
+
+      # calculate duration of max date from today
+      if !$scope.maxDateDuration
+        maxDate = $scope.max_date.clone()
+        today = moment().clone()
+        difference = maxDate.startOf('day').diff(today.startOf('day'), 'days', true)
+        $scope.maxDateDuration = moment.duration(difference, 'days').humanize()
+
+      # if the selected day is before the services min_advance_datetime, adjust the time range
+      if $scope.selected_day and $scope.selected_day.isBefore(current_item.service.min_advance_datetime, 'day') and !$scope.isAdmin()
+        setTimeRange(current_item.service.min_advance_datetime)
 
 
   ###**
@@ -284,6 +321,23 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
       $scope.subtract_string = "Prev day"
     else
       $scope.subtract_string = "Prev"
+
+  ###**
+  * @ngdoc method
+  * @name isAddValid
+  * @methodOf BB.Directives:bbTimeRanges
+  * @description
+  * Use to determine if addition of the time range is valid (i.e. it's not more than the max days in advance)
+  *
+  ###
+  isAddValid = () ->
+    $scope.is_add_valid = true
+
+    if !$scope.isAdmin() and !$scope.options.ignore_max_advance_datetime and $scope.max_date
+      max_date = $scope.max_date.clone()
+      selected_day = $scope.selected_day.clone()
+      difference = max_date.startOf('day').diff(selected_day.startOf('day'), 'day', true)
+      $scope.is_add_valid = false if (difference - $scope.time_range_length) < 0
 
   ###**
   * @ngdoc method
@@ -416,16 +470,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
   ###
   $scope.loadData = ->
 
-    current_item = $scope.bb.current_item
-
-    # has a service been selected?
-    if current_item.service and !$scope.options.ignore_min_advance_datetime
-
-      $scope.min_date = current_item.service.min_advance_datetime
-      $scope.max_date = current_item.service.max_advance_datetime
-      # if the selected day is before the services min_advance_datetime, adjust the time range
-      setTimeRange(current_item.service.min_advance_datetime) if $scope.selected_day and $scope.selected_day.isBefore(current_item.service.min_advance_datetime, 'day') and !$scope.isAdmin()
-
+    setMinMaxDate()
 
     date = $scope.start_date
     edate = moment(date).add($scope.time_range_length, 'days')
@@ -476,10 +521,10 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
           $scope.days.push(day)
 
           if time_slots.length > 0
-            if !current_item.earliest_time || current_item.earliest_time.isAfter(d)
-              current_item.earliest_time = moment(d).add(time_slots[0].time, 'minutes')
-            if !current_item.earliest_time_slot || current_item.earliest_time_slot.date.isAfter(d)
-              current_item.earliest_time_slot = {date: moment(d).add(time_slots[0].time, 'minutes'), time: time_slots[0].time}
+            if !$scope.bb.current_item.earliest_time || $scope.bb.current_item.earliest_time.isAfter(d)
+              $scope.bb.current_item.earliest_time = moment(d).add(time_slots[0].time, 'minutes')
+            if !$scope.bb.current_item.earliest_time_slot || $scope.bb.current_item.earliest_time_slot.date.isAfter(d)
+              $scope.bb.current_item.earliest_time_slot = {date: moment(d).add(time_slots[0].time, 'minutes'), time: time_slots[0].time}
 
           # padding is used to ensure that a list of time slots is always padded
           # out with a certain of values if it's a partial set of results
@@ -494,7 +539,7 @@ angular.module('BB.Controllers').controller 'TimeRangeList',
               if (!dtimes[pad])
                 time_slots.splice(v, 0, new BBModel.TimeSlot({time: pad, avail: 0}, time_slots[0].service))
 
-          requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item, $scope.bb.item_defaults)
+          requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, $scope.bb.current_item, $scope.bb.item_defaults)
 
           if requested_slot.slot and requested_slot.match == "full"
             $scope.skipThisStep()

@@ -5,7 +5,7 @@
   </div>
 
   <div class="alert alert-info" ng-show="no_slots_in_week"><i class="fa fa-info-circle" aria-hidden="true"></i> Looks like there's no availability for the next {{time_range_length}} day<span ng-show="time_range_length > 1">s</span>.
-  <button type="button" class="btn btn-default" ng-click="showFirstAvailableDay()">Jump to Next Available Day</button>
+  <button type="button" class="btn btn-default" ng-show="is_add_valid" ng-click="showFirstAvailableDay()">Jump to Next Available Day</button>
   </div>
 
   <div class="month-header hidden-xs">
@@ -29,7 +29,8 @@
         on-date-change="selectedDateChanged()"
         datepicker-popup="dd/MM/yyyy"
         is-open="opened"
-        min-date="today"
+        min-date="minDateJs || today"
+        max-date="maxDateJs"
         datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
         show-weeks="false"
         show-button-bar="false"
@@ -53,7 +54,8 @@
           bb-datepicker-popup="DD/MM/YYYY"
           datepicker-popup="dd/MM/yyyy"
           is-open="opened"
-          min-date="today"
+          min-date="minDateJs || today"
+          max-date="maxDateJs"
           on-date-change="selectedDateChanged()"
           datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
           show-weeks="false"
@@ -82,7 +84,8 @@
           bb-datepicker-popup="DD/MM/YYYY"
           datepicker-popup="dd/MM/yyyy"
           is-open="opened"
-          min-date="today"
+          min-date="minDateJs || today"
+          max-date="maxDateJs"
           on-date-change="filterDateChanged()"
           datepicker-options="{'starting-day': 1, 'show-button-bar': false}"
           show-weeks="false"
@@ -131,7 +134,10 @@
             <span class="hidden-xs">{{day.date | datetime: "ddd"}} <strong>{{day.date | datetime: "D"}} </strong></span>
           </h3>
           <span class="col-xs-2 next visible-xs">
-            <button type="button" class="btn btn-icon visible-xs pull-right" ng-click="add('days', 1)" ng-disabled="!isLoaded">
+            <button ng-show="is_add_valid" type="button" class="btn btn-icon hidden-sm hidden-md hidden-lg pull-right" ng-click="add('days', 1)" ng-disabled="!is_add_valid || !isLoaded">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+            <button ng-show="!is_add_valid" popover-placement="left" popover="It's not possible to make a booking more than {{maxDateDuration}} in advance" popover-trigger="focus" type="button" class="btn btn-icon appear-disabled hidden-sm hidden-md hidden-lg pull-right">
               <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
           </span>
@@ -158,13 +164,16 @@
       </li>
 
       <li class="day navigation hidden-xs">
-        <button type="button" class="btn btn-icon visible-sm" ng-click="add('days', 3)" ng-disabled="!isLoaded">
+        <button ng-show="is_add_valid" type="button" class="btn btn-icon hidden-xs hidden-md hidden-lg" ng-click="add('days', 3)" ng-disabled="!is_add_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
-        <button type="button" class="btn btn-icon visible-md" ng-click="add('days', 5)" ng-disabled="!isLoaded">
+        <button ng-show="is_add_valid" type="button" class="btn btn-icon hidden-xs hidden-sm hidden-lg" ng-click="add('days', 5)" ng-disabled="!is_add_valid || !isLoaded">
           <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
-        <button type="button" class="btn btn-icon visible-lg" ng-click="add('days', 7)" ng-disabled="!isLoaded">
+        <button ng-show="is_add_valid" type="button" class="btn btn-icon hidden-xs hidden-sm hidden-md" ng-click="add('days', 7)" ng-disabled="!is_add_valid || !isLoaded">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button><!-- </div> -->
+        <button ng-show="!is_add_valid" popover-placement="left" popover="It's not possible to make a booking more than {{maxDateDuration}} in advance" popover-trigger="focus" type="button" class="btn btn-icon appear-disabled">
           <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
       </li>
