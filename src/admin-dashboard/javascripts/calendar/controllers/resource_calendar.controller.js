@@ -20,6 +20,8 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
             this.updateDateHandler = this.bbFullCalendar.updateDateHandler;
 
 
+           // $scope.$watch(() => this.bbFullCalendar.showAll, () => this.assets = this.bbFullCalendar.showAll);
+
             this.showAll = this.bbFullCalendar.showAll; //TODO
             this.calendar_name = this.bbFullCalendar.name; //TODO
             this.loading = this.bbFullCalendar.loading; //TODO
@@ -36,8 +38,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
 
         const selectedResourcesListener = (newValue, oldValue) => {
             if (newValue === oldValue) return;
-
-            debugger;
 
             let assets = [];
 
@@ -88,8 +88,6 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
 
             this.bbFullCalendar.setScope($scope);//TODO
             this.bbFullCalendar.setAttrs($attrs);//TODO
-
-
         };
     }
 );
