@@ -4,7 +4,7 @@
         .module('BB.Controllers')
         .controller('bbMoveBookingController', MoveBooking);
 
-        function MoveBooking($scope, $attrs, LoadingService, PurchaseBookingService, BBModel, WidgetModalService, $rootScope, AlertService, $translate) {
+        function MoveBooking($scope, $attrs, LoadingService, PurchaseBookingService, BBModel, WidgetModalService, $rootScope, AlertService, $translate, $timeout) {
             this.init = () => {
                 this.loader = LoadingService.$loader($scope);
                 this.options = $scope.$eval($attrs.bbMoveBooking) || {};
@@ -33,14 +33,27 @@
 
             let updateSingleBooking = (booking) => {
                 this.loader.notLoaded();
-                PurchaseBookingService.update(booking).then((purchaseBooking) => {
-                    let booking = new BBModel.Purchase.Booking(purchaseBooking);
-                    this.loader.setLoaded()
 
-                    // update the $scope purchase to the newly updated purchaseBooking
-                    $scope.bb.purchase = PurchaseBookingService.updatePurchaseBookingRef($scope.bb.purchase, booking);
-                    resolveMove();
-                });
+                if(!PurchaseBookingService.purchaseBookingIsMovable(booking)) {
+                    this.loader.setLoaded();
+                    AlertService.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
+
+                    $timeout(() => {
+                        AlertService.clear();
+                    }, 5000);
+                }
+
+                else {
+
+                    PurchaseBookingService.update(booking).then((purchaseBooking) => {
+                        let booking = new BBModel.Purchase.Booking(purchaseBooking);
+                        this.loader.setLoaded()
+
+                        // update the $scope purchase to the newly updated purchaseBooking
+                        $scope.bb.purchase = PurchaseBookingService.updatePurchaseBookingRef($scope.bb.purchase, booking);
+                        resolveMove();
+                    });
+                }
             }
 
             let resolveMove = function() {

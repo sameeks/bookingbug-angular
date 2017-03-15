@@ -1,4 +1,10 @@
-angular.module('BB.Services').factory("PurchaseBookingService", ($q, halClient, BBModel) => {
+(() => {
+
+    angular
+        .module('BB.Services')
+        .factory("PurchaseBookingService", PurchaseBookingService);
+
+    function PurchaseBookingService($q, halClient, BBModel) {
 
         return {
             update(booking) {
@@ -47,8 +53,15 @@ angular.module('BB.Services').factory("PurchaseBookingService", ($q, halClient, 
                 else {
                     return;
                 }
+            },
+
+            purchaseBookingIsMovable(booking) {
+                if (booking.min_cancellation_time.isBefore(moment()) || booking.time.datetime.isSame(booking.srcBooking.datetime)) {
+                    return false;
+                }
+                return true;
             }
         };
     }
-);
+})();
 

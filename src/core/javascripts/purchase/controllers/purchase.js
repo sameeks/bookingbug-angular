@@ -148,7 +148,6 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
                 }
 
                 loader.setLoaded();
-                checkIfMoveBooking(bookings);
                 checkIfWaitlistBookings(bookings);
 
                 return Array.from($scope.bookings).map((booking) =>
@@ -207,21 +206,6 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
     };
 
 
-    var checkIfMoveBooking = function (bookings) {
-
-        let id;
-        let matches = /^.*(?:\?|&)move_booking=(.*?)(?:&|$)/.exec($location.absUrl());
-        if (matches) {
-            id = parseInt(matches[1]);
-        }
-        if (id) {
-            let move_booking = (Array.from(bookings).filter((b) => b.id === id).map((b) => b));
-            if ((move_booking.length > 0) && $scope.isMovable(bookings[0])) {
-                return $scope.move(move_booking[0]);
-            }
-        }
-    };
-
     var checkIfWaitlistBookings = bookings => $scope.waitlist_bookings = (Array.from(bookings).filter((booking) => (booking.on_waitlist && (booking.settings.sent_waitlist === 1))).map((booking) => booking));
 
 
@@ -266,48 +250,6 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
             id = QueryStringService('booking_id');
         }
         return id;
-    };
-
-
-    $scope.move = function (booking, route, options) {
-
-        if (options == null) {
-            options = {};
-        }
-        if (!route) {
-            route = $scope.move_route;
-        }
-        if ($scope.move_all) {
-            return $scope.moveAll(route, options);
-        }
-
-        loader.notLoaded();
-        $scope.initWidget({company_id: booking.company_id, no_route: true});
-        return $timeout(() => {
-                return $rootScope.connection_started.then(() => {
-                        let proms = [];
-                        $scope.bb.moving_booking = booking;
-                        $scope.quickEmptybasket();
-                        let new_item = new BBModel.BasketItem(booking, $scope.bb);
-                        new_item.setSrcBooking(booking, $scope.bb);
-                        new_item.ready = false;
-                        Array.prototype.push.apply(proms, new_item.promises);
-                        $scope.bb.basket.addItem(new_item);
-                        $scope.setBasketItem(new_item);
-
-                        return $q.all(proms).then(function () {
-                                loader.setLoaded();
-                                $rootScope.$broadcast("booking:move");
-                                return $scope.decideNextPage(route);
-                            }
-                            , function (err) {
-                                loader.setLoaded();
-                                return failMsg();
-                            });
-                    }
-                    , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
-            }
-        );
     };
 
 
@@ -454,15 +396,6 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
                 return $rootScope.$broadcast("booking:cancelled");
             })
         );
-    };
-
-
-    $scope.isMovable = function (booking) {
-
-        if (booking.min_cancellation_time) {
-            return moment().isBefore(booking.min_cancellation_time);
-        }
-        return booking.datetime.isAfter(moment());
     };
 
     $scope.createBasketItem = function (booking) {
