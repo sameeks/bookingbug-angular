@@ -1,4 +1,4 @@
-angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, GeolocationService) {
+angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $element, $attrs, $rootScope, AlertService, FormDataStoreService, LoadingService, $q, $window, $timeout, ErrorService, $log, GeolocationService, GeneralOptions) {
 
     FormDataStoreService.init('MapCtrl', $scope, [
         'address',
@@ -18,6 +18,8 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
     $scope.filter_by_service = $scope.options.filter_by_service || false; // The aforementioned checkbox is bound to this value which can be true or false depending on checked state, hence why we cannot use filter_by_service to show/hide the checkbox
     $scope.default_zoom = $scope.options.default_zoom || 6;
 
+    let defaultPin = GeneralOptions.map_marker_icon
+
     let map_ready_def = $q.defer();
     $scope.mapLoaded = $q.defer();
     $scope.mapReady = map_ready_def.promise;
@@ -27,9 +29,6 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
     $scope.shownMarkers = $scope.shownMarkers || [];
     if (!$scope.numberedPin) {
         $scope.numberedPin = null;
-    }
-    if (!$scope.defaultPin) {
-        $scope.defaultPin = null;
     }
     if (!$scope.address && $attrs.bbAddress) {
         $scope.address = $scope.$eval($attrs.bbAddress);
@@ -184,7 +183,7 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
                     map: $scope.myMap,
                     position: latlong,
                     visible: $scope.showAllMarkers,
-                    icon: $scope.defaultPin
+                    icon: defaultPin
                 });
                 marker.company = comp;
                 if (!$scope.hide_not_live_stores || !!comp.live) {
