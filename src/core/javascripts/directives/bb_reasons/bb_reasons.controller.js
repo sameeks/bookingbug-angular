@@ -17,11 +17,12 @@
         let initReasons = (companyId) => {
             let options = {root: $scope.bb.api_url};
 
-            getReasons(company).then((reasons) => {
-                setCancelReasons();
-                setMoveReasons();
+            BBModel.Company.$query(companyId, options).then((company) => {
+                getReasons(company).then((reasons) => {
+                    setCancelReasons();
+                    setMoveReasons();
+                });
             });
-        }
 
             this.cancelReasons = _.filter(this.companyReasons, r => r.reasonType === 3);
         }
@@ -45,5 +46,5 @@
         }
 
         init();
-    }
-})();
+    }}
+)();
