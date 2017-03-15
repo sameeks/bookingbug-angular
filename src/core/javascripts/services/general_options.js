@@ -28,12 +28,11 @@ angular.module('BB.Services').provider('GeneralOptions', function () {
         twelve_hour_format: false,
         calendar_minute_step: 5,
         calendar_slot_duration: 5,
-        custom_time_zone: false,
-        // set_time_zone_automatically: false,
-        // use_local_time_zone: false,
-        // display_time_zone: null,
         update_document_title: false,
-        scroll_offset: 0
+        scroll_offset: 0,
+
+        custom_time_zone: false,
+        display_time_zone: null
     };
 
 

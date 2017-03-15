@@ -27,17 +27,17 @@
              controllerAs: '$bbTimeZoneOptionsCtrl'
          });
 
-    function TimeZoneOptionsCtrl ($scope, $rootScope, $localStorage, bbTimeZone, GeneralOptions, CompanyStoreService, bbi18nOptions) {
+    function TimeZoneOptionsCtrl ($scope, $rootScope, $localStorage, bbTimeZone, CompanyStoreService) {
         'ngInject';
 
         const ctrl = this;
 
-        ctrl.timezones = [];
+        ctrl.timeZones = [];
         ctrl.automaticTimeZone = false;
         ctrl.selectedTimeZone = null;
 
         ctrl.$onInit = function() {
-            ctrl.timezones = bbTimeZone.generateTimeZoneList(ctrl.restrictRegion);
+            ctrl.timeZones = bbTimeZone.generateTimeZoneList(ctrl.restrictRegion);
             ctrl.setNewTimeZone = setNewTimeZone;
             ctrl.automaticTimeZoneToggle = automaticTimeZoneToggle;
             setDefaults();
@@ -49,7 +49,7 @@
             if (ctrl.automaticTimeZone) {
                 tz = moment.tz.guess();
                 ctrl.selectedTimeZone = bbTimeZone.mapTimeZoneForDisplay(tz);
-                ctrl.setNewTimeZone(tz, true);
+                setNewTimeZone(tz);
             }
 
             if (!ctrl.automaticTimeZone) {
@@ -62,28 +62,21 @@
 
         }
 
-        function setNewTimeZone (timezone, setTzAutomatically) {
-            $localStorage.setItem('selectedTimeZone', timezone);
-            bbTimeZone.updateDisplayTimeZone(timezone);
-            GeneralOptions.custom_time_zone = CompanyStoreService.time_zone !== timezone ? true : false;
-            bbi18nOptions.use_browser_time_zone = setTzAutomatically ? setTzAutomatically : false;
-            moment.tz.setDefault(timezone);
-            $rootScope.$emit('BBTimeZoneOptions:timeZoneChanged', timezone);
+        function setNewTimeZone (timeZone) {
+            bbTimeZone.updateDefaultTimeZone(timeZone, 'setItem');
+            $rootScope.$emit('BBTimeZoneOptions:timeZoneChanged', timeZone);
         }
 
-        function resetTimeZone (timezone) {
-            $localStorage.removeItem('selectedTimeZone');
-            bbTimeZone.updateDisplayTimeZone();
-            GeneralOptions.custom_time_zone = bbi18nOptions.use_browser_time_zone = false;
-            moment.tz.setDefault(timezone);
+        function resetTimeZone (timeZone) {
+            bbTimeZone.updateDefaultTimeZone(timeZone, 'removeItem');
             $rootScope.$emit('BBTimeZoneOptions:timeZoneChanged', null);
         }
 
         function setDefaults () {
-            const timezone = $localStorage.getItem('selectedTimeZone');
-            if (timezone) {
-                ctrl.selectedTimeZone = bbTimeZone.mapTimeZoneForDisplay(timezone);
-                ctrl.automaticTimeZone = moment.tz.guess() === timezone ? true : false;
+            const timeZone = $localStorage.getItem('selectedTimeZone');
+            if (timeZone) {
+                ctrl.selectedTimeZone = bbTimeZone.mapTimeZoneForDisplay(timeZone);
+                ctrl.automaticTimeZone = moment.tz.guess() === timeZone ? true : false;
             } else {
                 ctrl.selectedTimeZone = bbTimeZone.mapTimeZoneForDisplay(CompanyStoreService.time_zone);
             }

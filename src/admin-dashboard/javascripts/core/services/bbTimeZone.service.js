@@ -10,21 +10,49 @@
         .module('BBAdminDashboard')
         .factory('bbTimeZone', timeZoneFactory);
 
-    function timeZoneFactory ($translate, orderByFilter) {
-
-        let displayTimeZone = null;
+    function timeZoneFactory ($translate, $localStorage, orderByFilter, bbi18nOptions, GeneralOptions, CompanyStoreService) {
 
         return {
-            displayTimeZone: displayTimeZone,
-            updateDisplayTimeZone: updateDisplayTimeZone,
+            determineTimeZone: determineTimeZone,
+            updateDefaultTimeZone: updateDefaultTimeZone,
             mapTimeZoneForDisplay: mapTimeZoneForDisplay,
-            generateTimeZoneList: generateTimeZoneList
+            generateTimeZoneList: generateTimeZoneList,
         };
 
-        function updateDisplayTimeZone (tz) {
-            displayTimeZone = tz ? tz : null;
-            return displayTimeZone;
+
+        function determineTimeZone () {
+
+            if ($localStorage.getItem('selectedTimeZone')) {
+                updateDefaultTimeZone($localStorage.getItem('selectedTimeZone'));
+                return;
+            }
+
+            if (bbi18nOptions.use_browser_time_zone) {
+                updateDefaultTimeZone(moment.tz.guess());
+                return;
+            }
+
+            if (CompanyStoreService.time_zone) {
+                updateDefaultTimeZone(CompanyStoreService.time_zone);
+                return;
+            }
         }
+
+        function updateDefaultTimeZone (timeZone, localStorage) {
+
+            if (localStorage === 'setItem') {
+                $localStorage.setItem('selectedTimeZone', timeZone);
+            }
+
+            if (localStorage === 'removeItem') {
+                $localStorage.removeItem('selectedTimeZone');
+            }
+
+            moment.tz.setDefault(timeZone);
+            GeneralOptions.display_time_zone = timeZone;
+            GeneralOptions.custom_time_zone = timeZone !== CompanyStoreService.time_zone;
+        }
+
 
         function cleanUpLocations () {
             let locationNames = moment.tz.names();
