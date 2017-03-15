@@ -529,7 +529,7 @@ angular.module('BB.Filters').filter('local_phone_number', (CompanyStoreService, 
  </file>
  </example>
  */
-angular.module('BB.Filters').filter('datetime', GeneralOptions =>
+angular.module('BB.Filters').filter('datetime', bbTimeZone =>
     function (date, format, show_time_zone) {
 
         if (format == null) {
@@ -543,7 +543,7 @@ angular.module('BB.Filters').filter('datetime', GeneralOptions =>
         }
 
         let new_date = moment(date);
-        new_date.tz(GeneralOptions.display_time_zone);
+        new_date.tz(bbTimeZone.displayTimeZone);
         if (show_time_zone) {
             format += ' zz';
         }

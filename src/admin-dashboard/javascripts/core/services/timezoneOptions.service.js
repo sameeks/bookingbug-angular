@@ -1,23 +1,30 @@
 (function() {
 
-    'use strict';
-
     /*
     * @ngdoc service
-    * @name BBAdminDashboard.TimezoneOptions
+    * @name BBAdminDashboard.TimeZoneOptions
     * @description
     * Factory for retrieving a list of timezones
     */
     angular
         .module('BBAdminDashboard')
-        .factory('TimezoneOptions', timezoneOptionsFactory);
+        .factory('bbTimeZone', timeZoneFactory);
 
-    function timezoneOptionsFactory ($translate, orderByFilter) {
+    function timeZoneFactory ($translate, orderByFilter) {
+
+        let displayTimeZone = null;
 
         return {
-            mapTimezoneForDisplay: mapTimezoneForDisplay,
-            generateTimezoneList: generateTimezoneList
+            displayTimeZone: displayTimeZone,
+            updateDisplayTimeZone: updateDisplayTimeZone,
+            mapTimeZoneForDisplay: mapTimeZoneForDisplay,
+            generateTimeZoneList: generateTimeZoneList
         };
+
+        function updateDisplayTimeZone (tz) {
+            displayTimeZone = tz ? tz : null;
+            return displayTimeZone;
+        }
 
         function cleanUpLocations () {
             let locationNames = moment.tz.names();
@@ -29,10 +36,10 @@
             return locationNames;
         }
 
-        function mapTimezones (locationNames) {
+        function mapTimeZones (locationNames) {
             var timezones = [];
             for (let [index, value] of locationNames.entries()) {
-                timezones.push(mapTimezoneForDisplay(value, index));
+                timezones.push(mapTimeZoneForDisplay(value, index));
             }
             timezones = _.uniq(timezones, (timezone) => timezone.display);
             timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false);
@@ -59,13 +66,13 @@
         /*
         * @ngdoc function
         * @name mapTzForDisplay
-        * @methodOf BBAdminDashboard.Services:TimezoneOptions
+        * @methodOf BBAdminDashboard.Services:TimeZoneOptions
         * @description Prepares a timezone string for display on FE
         * @param {String} Location
         * @param {Integer} Index
         * @returns {Object}
         */
-        function mapTimezoneForDisplay (location, index) {
+        function mapTimeZoneForDisplay (location, index) {
             const timezone = {};
             const city = location.match(/[^/]*$/)[0].replace(/-/g, '_').toUpperCase();
             const tz = moment.tz(location);
@@ -81,18 +88,18 @@
         /*
         * @ngdoc function
         * @name generateTzList
-        * @methodOf BBAdminDashboard.Services:TimezoneOptions
+        * @methodOf BBAdminDashboard.Services:TimeZoneOptions
         * @description Generates list of timezones for display on FE, removing duplicates and ordering by distance from UTC time
         * @param {String, Array} Restrict the timezones to one region (String) or multiple regions (Array)
         * @returns {Array} A list of timezones
         */
-        function generateTimezoneList (restrictRegion) {
+        function generateTimeZoneList (restrictRegion) {
             let timezones = [];
             let locationNames = cleanUpLocations();
             if (restrictRegion) {
                 locationNames = restrictToRegion(locationNames, restrictRegion);
             }
-            timezones = mapTimezones(locationNames);
+            timezones = mapTimeZones(locationNames);
             return timezones;
         }
     }

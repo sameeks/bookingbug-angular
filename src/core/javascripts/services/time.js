@@ -29,7 +29,6 @@ angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, Ge
                 // Adjust time range based on UTC offset between company time zone and display time zone
                 if ((display_time_zone != null) && (display_time_zone !== company_time_zone)) {
 
-                    // TODO: Unsure what this is doing / Causing issues with timezone toggle
                     let display_utc_offset = moment().tz(display_time_zone).utcOffset();
                     let company_utc_offset = moment().tz(company_time_zone).utcOffset();
 

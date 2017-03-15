@@ -3,8 +3,8 @@
     <span translate="ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_LABEL"></span>
   </label>
   <toggle-switch
-    ng-change="$bbTimezoneOptionsCtrl.automaticTimezoneToggle()"
-    ng-model="$bbTimezoneOptionsCtrl.automaticTimezone"
+    ng-change="$bbTimeZoneOptionsCtrl.automaticTimeZoneToggle()"
+    ng-model="$bbTimeZoneOptionsCtrl.automaticTimeZone"
     on-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_ON_LABEL' | translate}}"
     off-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_OFF_LABEL' | translate}}"
     class="switch-primary">
@@ -17,18 +17,18 @@
   </label>
   <!-- Using ui-select-choices-lazyload due to perfomance issues -->
   <ui-select
-    ng-model="$bbTimezoneOptionsCtrl.selectedTimezone"
+    ng-model="$bbTimeZoneOptionsCtrl.selectedTimeZone"
     theme="bootstrap"
-    ng-disabled="$bbTimezoneOptionsCtrl.automaticTimezone"
-    ng-change="$bbTimezoneOptionsCtrl.setNewTimezone($bbTimezoneOptionsCtrl.selectedTimezone.value);">
+    ng-disabled="$bbTimeZoneOptionsCtrl.automaticTimeZone"
+    ng-change="$bbTimeZoneOptionsCtrl.setNewTimeZone($bbTimeZoneOptionsCtrl.selectedTimeZone.value);">
 
     <ui-select-match placeholder="Select timezone">
-     {{$select.selected.display}}
+      {{$select.selected.display}}
     </ui-select-match>
 
     <ui-select-choices
       ui-select-choices-lazyload
-      all-choices="$bbTimezoneOptionsCtrl.timezones"
+      all-choices="$bbTimeZoneOptionsCtrl.timezones"
       refresh-delay="0"
       repeat="
         timezone as timezone in $select.pagingOptions.items |
@@ -42,9 +42,9 @@
 
   <!-- Standard ui-select -->
   <!-- <ui-select
-    ng-model="$bbTimezoneOptionsCtrl.selectedTimezone"
+    ng-model="$bbTimeZoneOptionsCtrl.selectedTimeZone"
     theme="bootstrap"
-    ng-change="$bbTimezoneOptionsCtrl.setNewTimezone($bbTimezoneOptionsCtrl.selectedTimezone.value);">
+    ng-change="$bbTimeZoneOptionsCtrl.setNewTimeZone($bbTimeZoneOptionsCtrl.selectedTimeZone.value);">
 
     <ui-select-match placeholder="Select timezone">
      {{$select.selected.display}}
@@ -53,7 +53,7 @@
     <ui-select-choices
       refresh-delay="0"
       repeat="
-        timezone as timezone in $bbTimezoneOptionsCtrl.timezones |
+        timezone as timezone in $bbTimeZoneOptionsCtrl.timezones |
         props: { display: $select.search}
         track by timezone.id">
       <div ng-bind-html="timezone.display | highlight: $select.search"></div>

@@ -1,4 +1,4 @@
-angular.module('BB').run(function ($bbug, DebugUtilsService, FormDataStoreService, $log, $rootScope, $localStorage, $sessionStorage, GeneralOptions, CompanyStoreService) {
+angular.module('BB').run(function ($bbug, DebugUtilsService, FormDataStoreService, $log, $rootScope, $localStorage, $sessionStorage, GeneralOptions, CompanyStoreService, bbi18nOptions, bbTimeZone) {
     'ngInject';
 
     $rootScope.$log = $log;
@@ -16,15 +16,15 @@ angular.module('BB').run(function ($bbug, DebugUtilsService, FormDataStoreServic
         document.createElement('footer');
     }
 
-    if (GeneralOptions.set_time_zone_automatically) {
-        GeneralOptions.display_time_zone = moment.tz.guess();
+    if (bbi18nOptions.use_browser_time_zone) {
+        bbTimeZone.updateDisplayTimeZone(moment.tz.guess());
     }
 
-    if ($localStorage.getItem('selectedTimezone')) {
-        GeneralOptions.display_time_zone = localStorage.getItem('selectedTimezone');
+    if ($localStorage.getItem('selectedTimeZone')) {
+        bbTimeZone.updateDisplayTimeZone(localStorage.getItem('selectedTimeZone'));
     }
 
-    if (GeneralOptions.display_time_zone && GeneralOptions.display_time_zone !== CompanyStoreService.time_zone) {
+    if (bbTimeZone.displayTimeZone && bbTimeZone.displayTimeZone !== CompanyStoreService.time_zone) {
         GeneralOptions.custom_time_zone = true;
     }
 

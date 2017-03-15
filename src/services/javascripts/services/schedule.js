@@ -1,4 +1,4 @@
-angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q, BBModel, ScheduleRules, BBAssets, GeneralOptions, CompanyStoreService) {
+angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q, BBModel, ScheduleRules, BBAssets, GeneralOptions, bbTimeZone, CompanyStoreService) {
 
     let schedule_cache = {};
 
@@ -114,8 +114,8 @@ angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q,
                 e.start = moment.tz(e.start, CompanyStoreService.time_zone);
                 e.end = moment.tz(e.end, CompanyStoreService.time_zone);
                 if (GeneralOptions.custom_time_zone) {
-                    e.start = moment.tz(e.start, GeneralOptions.display_time_zone);
-                    e.end = moment.tz(e.end, GeneralOptions.display_time_zone);
+                    e.start = moment.tz(e.start, bbTimeZone.displayTimeZone);
+                    e.end = moment.tz(e.end, bbTimeZone.displayTimeZone);
                 }
                 return e;
             };
