@@ -85,6 +85,8 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
 
         $scope.options.ignore_min_advance_datetime = $scope.options.ignore_min_advance_datetime ? true : false;
 
+        setMinMaxDate();
+
         // initialise the time range
         // last selected day is set (i.e, a user has already selected a date)
         if (!$scope.start_date && $scope.last_selected_date) {
@@ -128,6 +130,7 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
         }
     };
 
+
     /***
      * @ngdoc method
      * @name setTimeRange
@@ -156,6 +159,48 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
         $scope.selected_date = $scope.selected_day.toDate();
 
         isSubtractValid();
+
+        isAddValid();
+
+    };
+
+
+    /***
+     * @ngdoc method
+     * @name setMinMaxDate
+     * @methodOf BB.Directives:bbTimeRanges
+     * @description
+     * Set min, max date and time range based on min/max advance datetime of the selected service
+     *
+     */
+    var setMinMaxDate = function () {
+
+        let current_item = $scope.bb.current_item;
+        // has a service been selected?
+        if (current_item.service && !$scope.options.ignore_min_advance_datetime) {
+
+            $scope.min_date = current_item.service.min_advance_datetime;
+            $scope.max_date = current_item.service.max_advance_datetime;
+
+            // date helpers for use by datepicker-popup
+            $scope.minDateJs = $scope.min_date.toDate();
+            $scope.maxDateJs = $scope.max_date.toDate();
+
+            //calculate duration of max date from today
+            if (!$scope.maxDateDuration) {
+                let maxDate = $scope.max_date.clone();
+                let today = moment().clone();
+                let difference = maxDate.startOf('day').diff(today.startOf('day'), 'days', true);
+                let maxDateDuration = moment.duration(difference, 'days').humanize();
+                // store it on scope in a form to support translations
+                $scope.maxDateDurationObj = {maxDateDuration: maxDateDuration};
+            }
+
+            // if the selected day is before the services min_advance_datetime, adjust the time range
+            if ($scope.selected_day && $scope.selected_day.isBefore(current_item.service.min_advance_datetime, 'day') && !$scope.isAdmin()) {
+                setTimeRange(current_item.service.min_advance_datetime);
+            }
+        }
 
     };
 
@@ -259,6 +304,27 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
             return $scope.subtract_string = "Prev day";
         } else {
             return $scope.subtract_string = "Prev";
+        }
+    };
+
+    /***
+     * @ngdoc method
+     * @name isAddValid
+     * @methodOf BB.Directives:bbTimeRanges
+     * @description
+     * Use to determine if addition of the time range is valid (i.e. it's not more than the max days in advance)
+     *
+     */
+    var isAddValid = function () {
+        $scope.is_add_valid = true;
+
+        if (!$scope.isAdmin() && !$scope.options.ignore_max_advance_datetime && $scope.max_date) {
+            let max_date = $scope.max_date.clone()
+            let selected_day = $scope.selected_day.clone()
+            let difference = max_date.startOf('day').diff(selected_day.startOf('day'), 'days', true);
+            if (difference - $scope.time_range_length < 0) {
+                return $scope.is_add_valid = false;
+            }
         }
     };
 
@@ -409,19 +475,7 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
      */
     $scope.loadData = function () {
 
-        let {current_item} = $scope.bb;
-
-        // has a service been selected?
-        if (current_item.service && !$scope.options.ignore_min_advance_datetime) {
-
-            $scope.min_date = current_item.service.min_advance_datetime;
-            $scope.max_date = current_item.service.max_advance_datetime;
-            // if the selected day is before the services min_advance_datetime, adjust the time range
-            if ($scope.selected_day && $scope.selected_day.isBefore(current_item.service.min_advance_datetime, 'day') && !$scope.isAdmin()) {
-                setTimeRange(current_item.service.min_advance_datetime);
-            }
-        }
-
+        setMinMaxDate();
 
         let date = $scope.start_date;
         let edate = moment(date).add($scope.time_range_length, 'days');
@@ -489,11 +543,11 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
                         $scope.days.push(day);
 
                         if (time_slots.length > 0) {
-                            if (!current_item.earliest_time || current_item.earliest_time.isAfter(d)) {
-                                current_item.earliest_time = moment(d).add(time_slots[0].time, 'minutes');
+                            if (!$scope.bb.current_item.earliest_time || $scope.bb.current_item.earliest_time.isAfter(d)) {
+                                $scope.bb.current_item.earliest_time = moment(d).add(time_slots[0].time, 'minutes');
                             }
-                            if (!current_item.earliest_time_slot || current_item.earliest_time_slot.date.isAfter(d)) {
-                                current_item.earliest_time_slot = {
+                            if (!$scope.bb.current_item.earliest_time_slot || $scope.bb.current_item.earliest_time_slot.date.isAfter(d)) {
+                                $scope.bb.current_item.earliest_time_slot = {
                                     date: moment(d).add(time_slots[0].time, 'minutes'),
                                     time: time_slots[0].time
                                 };
@@ -521,7 +575,7 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
                             }
                         }
 
-                        let requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, current_item, $scope.bb.item_defaults);
+                        let requested_slot = DateTimeUtilitiesService.checkDefaultTime(day.date, day.slots, $scope.bb.current_item, $scope.bb.item_defaults);
 
                         if (requested_slot.slot && (requested_slot.match === "full")) {
                             $scope.skipThisStep();
