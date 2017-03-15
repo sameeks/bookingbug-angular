@@ -20,7 +20,7 @@
       </div>
       <div class="col-xs-9">{{booking.service_name}}</div>
     </li>
-    <li class="row confirmation-summary-item">
+    <li class="row confirmation-summary-item"> 
       <div class="col-xs-3">
         <span translate="PUBLIC_BOOKING.CANCEL_MODAL.WHEN_LBL"></span>:
       </div>
@@ -28,6 +28,16 @@
     </li>
   </ul>
 
+  <div ng-show="cancelReasons">
+    <span translate="PUBLIC_BOOKING.PURCHASE.CANCEL_BOOKING_REASON"></span> 
+    <select 
+      ng-model="booking.cancelReason" 
+      id="cancel_reason" 
+      class="form-control" 
+      required 
+      ng-options="option.id as option.text for option in cancelReason">
+    </select>
+  </div>
 </div>
 
 <div class="modal-footer">

@@ -399,6 +399,7 @@ angular.module("BB.Services").config(function ($translateProvider) {
                 WHEN_LBL: "@:COMMON.TERMINOLOGY.WHEN",
                 PRICE_LBL: "@:COMMON.TERMINOLOGY.PRICE",
                 CANCEL_BOOKING_BTN: "@:COMMON.BTN.CANCEL_BOOKING",
+                CANCEL_BOOKING_REASON: 'Please select a cancellation Reason',
                 MOVE_BOOKING_BTN: "Move booking",
                 BOOK_WAITLIST_ITEMS_BTN: "Book Waitlist Items"
             },
