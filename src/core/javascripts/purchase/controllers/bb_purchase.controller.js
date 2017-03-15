@@ -8,7 +8,6 @@
         $q, QueryStringService, SSOService, AlertService, LoginService, $window, $sessionStorage,
         LoadingService, $translate, ReasonService, $document) {
 
-        let setCancelReasonsToBB;
         $scope.is_waitlist = false;
         $scope.make_payment = false;
         let loader = LoadingService.$loader($scope);
@@ -16,6 +15,24 @@
         $scope.$on('booking:moved', (event, purchase) => {
             $scope.purchase = purchase;
         });
+
+        $scope.$on('booking:cancelReasonsLoaded', (event, cancelReasons) => {
+            $scope.cancelReasons = cancelReasons;
+        });
+
+        $scope.$on('booking:moveReasonsLoaded', (event, moveReasons) => {
+            $scope.moveReasons = moveReasons;
+        });
+
+        let checkCompanyForReasons = (companyId) => {
+            let options = {root: $scope.bb.api_url};
+
+            BBModel.Company.$query(companyId, options).then((company) => {
+                if(company.$has("reasons")) {
+                    $scope.companyHasReasons = true;
+                }
+            });
+        }
 
         let setPurchaseCompany = function (company) {
 
@@ -69,12 +86,6 @@
                 $scope.bookings = $scope.bb.purchase.bookings;
                 if ($scope.purchase.confirm_messages) {
                     $scope.messages = $scope.purchase.confirm_messages;
-                }
-                if (!$scope.cancelReasons) {
-                    $scope.cancelReasons = $scope.bb.cancelReasons;
-                }
-                if (!$scope.moveReasons) {
-                    $scope.moveReasons = $scope.bb.moveReasons;
                 }
                 return loader.setLoaded();
             } else {
@@ -396,20 +407,6 @@
 
         $scope.changeAttendees = route => $scope.moveAll(route);
 
-
-        var setMoveReasonsToBB = function () {
-
-            if ($scope.moveReasons) {
-                return $scope.bb.moveReasons = $scope.moveReasons;
-            }
-        };
-
-        return setCancelReasonsToBB = function () {
-
-            if ($scope.cancelReasons) {
-                return $scope.bb.cancelReasons = $scope.cancelReasons;
-            }
-        };
     };
 
 
