@@ -19,6 +19,7 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
     $scope.default_zoom = $scope.options.default_zoom || 6;
 
     let defaultPin = GeneralOptions.map_marker_icon
+    $scope.loadMapOnGeolocate = true;
 
     let map_ready_def = $q.defer();
     $scope.mapLoaded = $q.defer();
@@ -34,7 +35,7 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
         $scope.address = $scope.$eval($attrs.bbAddress);
     }
 
-    let loader = LoadingService.$loader($scope).notLoaded();
+    let loader = LoadingService.$loader($scope);
 
     // setup geolocation shim
     webshim.setOptions({'waitReady': false, 'loadStyles': false});
@@ -207,6 +208,24 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
 
     /***
      * @ngdoc method
+     * @name loadMap
+     * @methodOf BB.Directives:bbMap
+     * @description
+     * Set the center, zoom and show the closest markers on the Map
+     *
+     */
+    var loadMap = function () {
+        $scope.myMap.setCenter($scope.loc);
+        if ($scope.options.default_zoom) {
+            $scope.myMap.setZoom($scope.default_zoom);
+        }
+        $scope.showClosestMarkers($scope.loc);
+        return;
+    };
+
+
+    /***
+     * @ngdoc method
      * @name checkDataStore
      * @methodOf BB.Directives:bbMap
      * @description
@@ -262,10 +281,14 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
     $scope.searchAddress = function (prms) {
 
         // if a reverse geocode has been performed and the address
-        // is no  different to one the entered, abort the search
-        if ($scope.reverse_geocode_address && ($scope.reverse_geocode_address === $scope.address)) {
+        // is no different to one the entered, abort the search
+        if ($scope.loadMapOnGeolocate && $scope.reverse_geocode_address && ($scope.reverse_geocode_address === $scope.address)) {
             return false;
         }
+
+        loader.notLoaded();
+
+        $scope.loadMapOnGeolocate = true;
 
         delete $scope.geocoder_result;
         if (!prms) {
@@ -301,18 +324,16 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
 
                     if (!$scope.geocoder_result || ($scope.geocoder_result && $scope.geocoder_result.partial_match)) {
                         searchPlaces(req);
-                        return;
                     } else if ($scope.geocoder_result) {
                         searchSuccess($scope.geocoder_result);
                     } else {
                         searchFailed();
                     }
-                    return loader.setLoaded();
                 });
             }
         });
 
-        return loader.setLoaded();
+        return;
     };
 
 
@@ -339,12 +360,13 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
         let service = new google.maps.places.PlacesService($scope.myMap);
         return service.textSearch(req, function (results, status) {
             if ((results.length > 0) && (status === 'OK')) {
-                return searchSuccess(results[0]);
+                searchSuccess(results[0]);
             } else if ($scope.geocoder_result) {
-                return searchSuccess($scope.geocoder_result);
+                searchSuccess($scope.geocoder_result);
             } else {
-                return searchFailed();
+                searchFailed();
             }
+            return $timeout(() => loader.setLoaded());
         });
     };
 
@@ -363,11 +385,9 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
         $scope.search_failed = false;
         $scope.loc = result.geometry.location;
         $scope.formatted_address = result.formatted_address;
-        $scope.myMap.setCenter($scope.loc);
-        if ($scope.options.default_zoom) {
-            $scope.myMap.setZoom($scope.default_zoom);
+        if ($scope.loadMapOnGeolocate) {
+            loadMap();
         }
-        $scope.showClosestMarkers($scope.loc);
         return $rootScope.$broadcast("map:search_success");
     };
 
@@ -632,12 +652,14 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
      * @description
      * Get geolocation information
      */
-    $scope.geolocate = function () {
+    $scope.geolocate = function (loadMapOnGeolocate = true) {
         if (!navigator.geolocation || ($scope.reverse_geocode_address && ($scope.reverse_geocode_address === $scope.address))) {
             return false;
         }
 
-        loader.notLoaded();
+        $scope.loadMapOnGeolocate = loadMapOnGeolocate;
+
+        $timeout(() => loader.notLoaded());
 
         return webshim.ready('geolocation', function () {
             // set timeout as 5 seconds and max age as 1 hour
@@ -700,7 +722,7 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
                 }
                 searchSuccess($scope.geocoder_result);
             }
-            return loader.setLoaded();
+            return $timeout(() => loader.setLoaded());
         });
     };
 
@@ -722,11 +744,8 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
     $scope.$watch('display.xs', (new_value, old_value) => {
             if ((new_value !== old_value) && $scope.loc) {
                 $scope.myInfoWindow.close();
-                $scope.myMap.setCenter($scope.loc);
-                if ($scope.options.default_zoom) {
-                    $scope.myMap.setZoom($scope.default_zoom);
-                }
-                return $scope.showClosestMarkers($scope.loc);
+                loadMap();
+                return;
             }
         }
     );
