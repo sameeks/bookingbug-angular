@@ -31,6 +31,18 @@
                 });
             }
 
+            let updateSingleBooking = (booking) => {
+                this.loader.notLoaded();
+                PurchaseBookingService.update(booking).then((purchaseBooking) => {
+                    let booking = new BBModel.Purchase.Booking(purchaseBooking);
+                    this.loader.setLoaded()
+
+                    // update the $scope purchase to the newly updated purchaseBooking
+                    $scope.bb.purchase = PurchaseBookingService.updatePurchaseBookingRef($scope.bb.purchase, booking);
+                    resolveMove();
+                });
+            }
+
             let resolveMove = function() {
                 $rootScope.$broadcast("booking:moved", $scope.bb.purchase);
 
@@ -44,19 +56,6 @@
                 else  {
                     WidgetModalService.close();
                 }
-            }
-
-
-            let updateSingleBooking = (booking) => {
-                this.loader.notLoaded();
-                PurchaseBookingService.update(booking).then((purchaseBooking) => {
-                    let booking = new BBModel.Purchase.Booking(purchaseBooking);
-                    this.loader.setLoaded()
-
-                    // update the $scope purchase to the newly updated purchaseBooking
-                    $scope.bb.purchase = PurchaseBookingService.updatePurchaseBookingRef($scope.bb.purchase, booking);
-                    resolveMove();
-                });
             }
 
             this.init();
