@@ -199,6 +199,23 @@ angular.module('BB.Services').factory('AlertService', function ($rootScope, Erro
             if (alert) {
                 return this.add(alert.type, {title: alert.title, msg: alert.msg, persist: alert.persist});
             }
+        },
+
+        /***
+         * @ngdoc method
+         * @name showMoveMessage
+         * @methodOf BB.Services:Alert
+         * @description
+         * Show datetime of moved booking
+         *
+         * @returns {array} Newly clear array of the alert messages
+         */
+        showMoveMessage(datetime) {
+            this.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', {datetime: datetime})});
+
+            return $timeout(() => {
+                this.clear();
+            }, 3000);
         }
     };
 });

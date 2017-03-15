@@ -1,8 +1,12 @@
 angular.module('BBMember').controller('MemberBookings', function ($scope, $uibModal,
                                                                   $document, $log, $q, ModalForm, $rootScope, AlertService, PurchaseService,
-                                                                  LoadingService, BBModel) {
+                                                                  LoadingService, BBModel, WidgetModalService) {
 
     let loader = LoadingService.$loader($scope);
+
+    $scope.$on('booking:moved', () => {
+        updateBookings();
+    });
 
     $scope.getUpcomingBookings = function () {
         let defer = $q.defer();
@@ -105,6 +109,18 @@ angular.module('BBMember').controller('MemberBookings', function ($scope, $uibMo
         return updateBookings();
     };
 
+    let openCalendarModal = function(booking, total) {
+        WidgetModalService.isMemberDashboard = true;
+
+        WidgetModalService.open({
+            booking: booking,
+            company_id: booking.company_id,
+            template: 'main_view_booking',
+            total_id: total.long_id,
+            first_page: 'calendar'
+        })
+    }
+
 
     let openPaymentModal = function (booking, total) {
         let modalInstance = $uibModal.open({
@@ -204,6 +220,17 @@ by online payment not being configured correctly`
                 purchase_id: booking.purchase_ref
             };
             return PurchaseService.query(params).then(total => openPaymentModal(booking, total));
+        },
+
+        move(booking) {
+            let params = {
+                url_root: $scope.$root.bb.api_url,
+                purchase_id: booking.purchase_ref
+            }
+
+            PurchaseService.query(params).then((total) => {
+                openCalendarModal(booking, total);
+            });
         }
     };
 });

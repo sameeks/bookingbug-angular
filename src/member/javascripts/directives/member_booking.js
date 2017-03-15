@@ -25,11 +25,19 @@ angular.module('BBMember').directive('bbMemberBooking', () => {
                     scope.actions.push({action: member_booking_controller.pay, label: 'Pay'});
                 }
 
+                if(scope.booking.min_cancellation_time.isAfter(time_now)) {
+                    scope.actions.push({
+                        action: member_booking_controller.edit,
+                        label: 'Details',
+                        translation_key: 'MEMBER_BOOKING_EDIT'
+                    });
+                }
+
                 scope.actions.push({
-                    action: member_booking_controller.edit,
-                    label: 'Details',
-                    translation_key: 'MEMBER_BOOKING_EDIT'
-                });
+                    action: member_booking_controller.move,
+                    label: 'Move',
+                    translation_key: 'MEMBER_BOOKING_MOVE'
+                })
 
                 if (!scope.booking.datetime.isBefore(time_now, 'day')) {
                     return scope.actions.push({

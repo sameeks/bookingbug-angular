@@ -27,6 +27,26 @@ angular.module('BB.Services').factory("PurchaseBookingService", ($q, halClient, 
                     }
                 );
                 return deferred.promise;
+            },
+
+            updatePurchaseBookingRef(purchase, booking) {
+                let i, len, oldb, ref;
+
+                if (purchase) {
+                    ref = purchase.bookings;
+                    for (i = 0, len = ref.length; i < len; i++) {
+                        oldb = ref[i];
+                        if (oldb.id === booking.id) {
+                            booking.moved = true;
+                            purchase.bookings[i] = booking;
+                        }
+                    }
+
+                    return purchase;
+                }
+                else {
+                    return;
+                }
             }
         };
     }

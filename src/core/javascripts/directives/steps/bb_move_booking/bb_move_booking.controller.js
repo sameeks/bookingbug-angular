@@ -4,7 +4,7 @@
         .module('BB.Controllers')
         .controller('bbMoveBookingController', MoveBooking);
 
-        function MoveBooking($scope, $attrs, LoadingService, PurchaseBookingService, BBModel, WidgetModalService, $rootScope) {
+        function MoveBooking($scope, $attrs, LoadingService, PurchaseBookingService, BBModel, WidgetModalService, $rootScope, AlertService, $translate) {
             this.init = () => {
                 this.loader = LoadingService.$loader($scope);
                 this.options = $scope.$eval($attrs.bbMoveBooking) || {};
@@ -33,8 +33,19 @@
 
             let resolveMove = function() {
                 $rootScope.$broadcast("booking:moved", $scope.bb.purchase);
-                WidgetModalService.close()
+
+                // isMemberDashboard property is defined when openCalendarModal method is called from memberBookings controller
+                WidgetModalService.bookings = $scope.bb.purchase.bookings;
+
+                // we dont want to close the modal when on the member or admin dashboard
+                if(WidgetModalService.isMemberDashboard || $rootScope.user) {
+                    $scope.decideNextPage('purchase');
+                }
+                else  {
+                    WidgetModalService.close();
+                }
             }
+
 
             let updateSingleBooking = (booking) => {
                 this.loader.notLoaded();
@@ -42,17 +53,8 @@
                     let booking = new BBModel.Purchase.Booking(purchaseBooking);
                     this.loader.setLoaded()
 
-                    let i, len, oldb, ref;
-
-                    if ($scope.bb.purchase) {
-                        ref = $scope.bb.purchase.bookings;
-                        for (i = 0, len = ref.length; i < len; i++) {
-                            oldb = ref[i];
-                            if (oldb.id === booking.id) {
-                                $scope.bb.purchase.bookings[i] = booking;
-                            }
-                        }
-                    }
+                    // update the $scope purchase to the newly updated purchaseBooking
+                    $scope.bb.purchase = PurchaseBookingService.updatePurchaseBookingRef($scope.bb.purchase, booking);
                     resolveMove();
                 });
             }

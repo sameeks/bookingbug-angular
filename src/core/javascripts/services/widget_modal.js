@@ -38,10 +38,16 @@
         }
 
         function close() {
-            let openModal = $uibModalStack.getTop()
+            let openModal = $uibModalStack.getTop();
 
-            AlertService.clear()
-            $uibModalStack.close(openModal.key)
+            AlertService.clear();
+            $uibModalStack.close(openModal.key);
+
+            if(this.bookings) {
+                if(this.bookings[0].moved) {
+                    AlertService.showMoveMessage(this.bookings[0].datetime);
+                }
+            }
         }
     }
 })();
