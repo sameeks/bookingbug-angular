@@ -129,20 +129,13 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
 
     let getBookings = function (purchase) {
 
-        $scope.purchase.$getBookings().then(function (bookings) {
+        $scope.purchase.$getBookings().then((bookings) => {
                 $scope.bookings = bookings;
 
                 if (bookings[0]) {
-                    bookings[0].$getCompany().then(function (company) {
+                    bookings[0].$getCompany().then((company) => {
                         $scope.purchase.bookings[0].company = company;
-                        if (company.$has("reasons")) {
-                            getReasons(company).then(function (reasons) {
-                                setCancelReasons();
-                                setMoveReasons();
-                                setMoveReasonsToBB();
-                                return setCancelReasonsToBB();
-                            });
-                        }
+                        $rootScope.$broadcast("purchase:loaded", company.id);
                         return company.$getAddress().then(address => $scope.purchase.bookings[0].company.address = address);
                     });
                 }
@@ -411,26 +404,6 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
 
     $scope.changeAttendees = route => $scope.moveAll(route);
 
-    var getReasons = company =>
-
-            ReasonService.query(company).then(function (reasons) {
-                    $scope.company_reasons = reasons;
-                    return $scope.company_reasons;
-                }
-                , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong retrieving reasons'))
-        ;
-
-    var setCancelReasons = function () {
-
-        $scope.cancel_reasons = _.filter($scope.company_reasons, r => r.reason_type === 3);
-        return $scope.cancel_reasons;
-    };
-
-    var setMoveReasons = function () {
-
-        $scope.move_reasons = _.filter($scope.company_reasons, r => r.reason_type === 5);
-        return $scope.move_reasons;
-    };
 
     var setMoveReasonsToBB = function () {
 

@@ -4,8 +4,14 @@
         .module('BB.Controllers')
         .controller('bbMoveBookingController', MoveBooking);
 
-        function MoveBooking($scope, $attrs, LoadingService, PurchaseBookingService, BBModel, WidgetModalService, $rootScope, AlertService, $translate, $timeout) {
-            this.init = () => {
+        function MoveBooking($scope, $attrs, LoadingService, PurchaseBookingService, BBModel, WidgetModalService,
+            $rootScope, AlertService, $translate, $timeout, ReasonService) {
+
+            $rootScope.$on("purchase:loaded", (event, companyId) => {
+                initReasons(companyId);
+            });
+
+            let init = () => {
                 this.loader = LoadingService.$loader($scope);
                 this.options = $scope.$eval($attrs.bbMoveBooking) || {};
             }
@@ -22,7 +28,7 @@
                 // call different method when moving multiple bookings which POSTS to PurchaseService
             }
 
-            let openCalendarModal = function(booking) {
+            let openCalendarModal = (booking) => {
                 WidgetModalService.open({
                     company_id: booking.company_id,
                     template: 'main_view_booking',
@@ -56,7 +62,7 @@
                 }
             }
 
-            let resolveMove = function() {
+            let resolveMove = () => {
                 $rootScope.$broadcast("booking:moved", $scope.bb.purchase);
 
                 // isMemberDashboard property is defined when openCalendarModal method is called from memberBookings controller
@@ -71,7 +77,40 @@
                 }
             }
 
-            this.init();
+            let initReasons = (companyId) => {
+                let options = {root: $scope.bb.api_url};
+
+                BBModel.Company.$query(companyId, options).then((company) => {
+                    if(company.$has("reasons")) {
+                        getReasons(company).then((reasons) => {
+                            setCancelReasons();
+                            setMoveReasons();
+                        });
+                    }
+                });
+
+                this.cancelReasons = _.filter(this.companyReasons, r => r.reasonType === 3);
+            }
+
+            let getReasons = (company) => {
+                ReasonService.query(company).then((reasons) => {
+                    this.companyReasons = reasons;
+                }, (err) => {
+                    this.loader.setLoadedAndShowError(err, 'Sorry, something went wrong retrieving reasons');
+                });
+            }
+
+            let setCancelReasons = () => {
+                this.cancelReasons = _.filter(this.companyReasons, r => r.reason_type === 3);
+                return this.cancelReasons;
+            }
+
+            let setMoveReasons = () => {
+                this.moveReasons = _.filter(this.companyReasons, r => r.reason_type === 5);
+                return this.moveReasons;
+            }
+
+            init();
         }
 })();
 
