@@ -20,11 +20,11 @@ angular
             templateUrl: '_time_zone_name.html',
             controller() {
 
-                let company_time_zone = CompanyStoreService.time_zone;
+                const company_time_zone = CompanyStoreService.time_zone;
 
-                this.time_zone_name = moment().tz(company_time_zone).format('zz');
+                this.time_zone_name = bbi18nOptions.display_time_zone;
 
-                if (!bbi18nOptions.use_browser_time_zone && bbi18nOptions.display_time_zone !== company_time_zone) {
+                if (this.time_zone_name !== company_time_zone) {
                     this.is_time_zone_diff = true;
                 }
             }
