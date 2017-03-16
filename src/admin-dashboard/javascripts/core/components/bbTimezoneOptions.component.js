@@ -11,8 +11,8 @@
      *
      * @example
      * <example>
-     *   <time-zone-options restrict-region="'Europe'"></time-zone-options>
-     *   <time-zone-options restrict-region="['Asia', 'America']"></time-zone-options>
+     *   <bb-time-zone-options restrict-region="'Europe'"></bb-time-zone-options>
+     *   <bb-time-zone-options restrict-region="['Asia', 'America']"></bb-time-zone-options>
      * </example>
      */
 

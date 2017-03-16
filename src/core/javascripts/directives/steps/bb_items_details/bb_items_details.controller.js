@@ -292,7 +292,7 @@ angular.module('BB.Controllers').controller('ItemDetails', function ($scope, $at
 
     $scope.showMoveMessage = (datetime) => {
         if (GeneralOptions.custom_time_zone) {
-            datetime = moment.tz(datetime, bbTimeZone.displayTimeZone);
+            datetime = moment.tz(datetime, GeneralOptions.display_time_zone);
         }
         AlertService.add("info", {
             msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', {datetime})

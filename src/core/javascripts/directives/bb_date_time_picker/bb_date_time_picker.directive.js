@@ -68,7 +68,7 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
 
                 let clearTimezone = function (date) {
                     if (GeneralOptions.custom_time_zone) {
-                        date = moment.tz(date, bbTimeZone.displayTimeZone);
+                        date = moment.tz(date, GeneralOptions.display_time_zone);
                     }
                     if ((date != null) && moment(date).isValid()) {
                         date = moment(date);

@@ -13,7 +13,7 @@
  *///
 angular
     .module('BB.Directives')
-    .directive('bbTimeZoneName', (bbTimeZone, CompanyStoreService) => {
+    .directive('bbTimeZoneName', (CompanyStoreService) => {
         return {
             restrict: 'A',
             controllerAs: '$tzCtrl',
@@ -24,7 +24,7 @@ angular
 
                 this.time_zone_name = moment().tz(company_time_zone).format('zz');
 
-                if (!bbi18nOptions.use_browser_time_zone && bbTimeZone.displayTimeZone !== company_time_zone) {
+                if (!bbi18nOptions.use_browser_time_zone && GeneralOptions.display_time_zone !== company_time_zone) {
                     this.is_time_zone_diff = true;
                 }
             }

@@ -184,7 +184,7 @@ angular
                     eventResize: fcEventResize,
                     loading: fcLoading,
                     ignoreTimezone: false,
-                    timezone: bbTimeZone.displayTimeZone
+                    timezone: GeneralOptions.display_time_zone
                 }
             };
             updateCalendarLanguage();
@@ -215,8 +215,8 @@ angular
 
             if (GeneralOptions.custom_time_zone) {
                 let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
-                booking.start = calendar.moment(moment.tz(booking.start.toISOString(), bbTimeZone.displayTimeZone));
-                booking.end = calendar.moment(moment.tz(booking.end.toISOString(), bbTimeZone.displayTimeZone));
+                booking.start = calendar.moment(moment.tz(booking.start.toISOString(), GeneralOptions.display_time_zone));
+                booking.end = calendar.moment(moment.tz(booking.end.toISOString(), GeneralOptions.display_time_zone));
             }
 
             // not blocked and is a change in person/resource, or over multiple days
