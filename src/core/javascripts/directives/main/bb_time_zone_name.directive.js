@@ -17,7 +17,7 @@ angular
         return {
             restrict: 'A',
             controllerAs: '$tzCtrl',
-            templateUrl: '_time_zone_info.html',
+            templateUrl: '_time_zone_name.html',
             controller() {
 
                 let company_time_zone = CompanyStoreService.time_zone;
