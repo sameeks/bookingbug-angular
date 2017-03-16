@@ -39,7 +39,7 @@
             let updateSingleBooking = (booking) => {
                 this.loader.notLoaded();
 
-                if(!PurchaseBookingService.purchaseBookingIsMovable(booking)) {
+                if(PurchaseBookingService.purchaseBookingNotMovable(booking)) {
                     this.loader.setLoaded();
                     AlertService.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
 
