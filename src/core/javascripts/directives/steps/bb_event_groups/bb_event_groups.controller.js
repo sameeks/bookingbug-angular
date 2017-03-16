@@ -17,7 +17,7 @@ angular.module('BB.Controllers').controller('EventGroupList', function ($scope, 
         if (!$scope.booking_item) {
             $scope.booking_item = $scope.bb.current_item;
         }
-        let ppromise = comp.$getEventGroups();
+        let ppromise = comp.getEventGroups();
 
         return ppromise.then(function (items) {
                 // not all service lists need filtering. check for attribute first

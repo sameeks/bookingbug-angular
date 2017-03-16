@@ -1,0 +1,182 @@
+## rules: https://github.com/sasstools/sass-lint/tree/master/docs/rules
+## 0 means disabled, 1 is warning, 2 is error.
+rules:
+  attribute-quotes:
+    - 0
+    - include: true
+  bem-depth:
+    - 0
+    - max-depth: 1
+  border-zero:
+    - 0
+    - convention: zero
+  brace-style:
+    - 0
+    - allow-single-line: true
+  class-name-format:
+    - 0
+    - convention: hyphenatedlowercase
+  clean-import-paths:
+    - 0
+    - filename-extension: false
+      leading-underscore: false
+  declarations-before-nesting:
+    - 0
+  empty-args:
+    - 0
+  empty-line-between-blocks:
+    - 0
+    - ignore-single-line-rulesets: true
+  extends-before-declarations: 0
+  extends-before-mixins: 0
+  final-newline:
+    - 0
+    - include: true
+  force-attribute-nesting: 0
+  force-element-nesting: 0
+  force-pseudo-nesting: 0
+  function-name-format:
+    - 0
+    - allow-leading-underscore: true
+      convention: hyphenatedlowercase
+  hex-length:
+    - 0
+    - style: short
+  hex-notation:
+    - 0
+    - style: lowercase
+  id-name-format:
+    - 0
+    - convention: hyphenatedlowercase
+  indentation:
+    - 0
+    - size: 2
+  leading-zero:
+    - 0
+    - include: false
+  max-file-line-count:
+    - 0
+  max-line-length:
+    - 0
+  mixin-name-format:
+    - 0
+    - allow-leading-underscore: true
+      convention: hyphenatedlowercase
+  mixins-before-declarations: 0
+  nesting-depth:
+    - 0
+    - max-depth: 3
+  no-color-hex: 0
+  no-color-keywords: 0
+  no-color-literals: 0
+  no-combinators: 0
+  no-css-comments: 0
+  no-debug: 0
+  no-disallowed-properties:
+    - 0
+  no-duplicate-properties: 0
+  no-empty-rulesets: 0
+  no-extends: 0
+  no-ids: 0
+  no-important: 0
+  no-invalid-hex: 0
+  no-mergeable-selectors: 0
+  no-misspelled-properties:
+    - 0
+    - extra-properties: []
+  no-qualifying-elements:
+    - 0
+    - allow-element-with-attribute: false
+      allow-element-with-class: false
+      allow-element-with-id: false
+  no-trailing-zero: 0
+  no-transition-all: 0
+  no-universal-selectors: 0
+  no-url-domains: 0
+  no-url-protocols: 0
+  no-vendor-prefixes:
+    - 0
+    - additional-identifiers: []
+      excluded-identifiers: []
+  no-warn: 0
+  no-trailing-whitespace: 0
+  one-declaration-per-line: 0
+  placeholder-in-extend: 0
+  placeholder-name-format:
+    - 0
+    - convention: hyphenatedlowercase
+  property-sort-order:
+    - 0
+    - ignore-custom-properties: false
+  property-units:
+    - 0
+    - global:
+        - ch
+        - em
+        - ex
+        - rem
+        - cm
+        - in
+        - mm
+        - pc
+        - pt
+        - px
+        - q
+        - vh
+        - vw
+        - vmin
+        - vmax
+        - deg
+        - grad
+        - rad
+        - turn
+        - ms
+        - s
+        - Hz
+        - kHz
+        - dpi
+        - dpcm
+        - dppx
+        - '%'
+      per-property: {}
+  pseudo-element: 0
+  quotes:
+    - 0
+  shorthand-values:
+    - 0
+    - allowed-shorthands:
+        - 1
+        - 2
+        - 3
+  single-line-per-selector: 0
+  space-after-bang:
+    - 0
+    - include: false
+  space-after-colon:
+    - 0
+    - include: true
+  space-after-comma:
+    - 0
+    - include: true
+  space-around-operator:
+    - 0
+  space-before-bang:
+    - 0
+    - include: true
+  space-before-brace:
+    - 0
+    - include: true
+  space-before-colon: 0
+  space-between-parens:
+    - 0
+    - include: false
+  trailing-semicolon: 0
+  url-quotes: 0
+  variable-for-property:
+    - 0
+    - properties: []
+  variable-name-format:
+    - 0
+    - allow-leading-underscore: true
+      convention: hyphenatedlowercase
+  zero-unit: 0

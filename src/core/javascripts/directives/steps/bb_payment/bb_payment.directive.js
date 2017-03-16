@@ -27,8 +27,6 @@ angular.module('BB.Directives').directive('bbPayment', ($window, $location, $sce
             controller: 'Payment',
             link(scope, element, attributes) {
 
-                let error = (scope, message) => scope.error(message);
-
                 let getHost = function (url) {
                     let a = document.createElement('a');
                     a.href = url;

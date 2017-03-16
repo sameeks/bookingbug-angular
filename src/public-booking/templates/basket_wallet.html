@@ -3,14 +3,14 @@
     <img src="/BB_wait.gif" class="loader">
   </div>
   <div ng-hide="loading">
-  <div class="bb-head">
-    <h3>
+    <div class="bb-head">
+      <h3>
       <span
         class="text-capitalize"
         translate="PUBLIC_BOOKING.BASKET_WALLET.STEP_HEADING">
       </span>
-    </h3>
-  </div>
+      </h3>
+    </div>
     <div class="bb-content">
       <div
         ng-if="error_message"
@@ -43,8 +43,7 @@
               id="amount"
               name="amount"
               ng-model="amount"
-              translate-attr="{placeholder: 'PUBLIC_BOOKING.BASKET_WALLET.TOPUP_AMOUNT_PLACEHOLDER'}">
-            />
+              translate-attr="{placeholder: 'PUBLIC_BOOKING.BASKET_WALLET.TOPUP_AMOUNT_PLACEHOLDER'}" />
             <span class="input-group-btn">
               <button
                 type="submit"
@@ -77,8 +76,8 @@
           </iframe>
         </div>
         <script type="text/javascript">
-          iFrameResize([{log:true, checkOrigin:false}],['#bb-widget']);
-       </script>
+          iFrameResize([{log: true, checkOrigin: false}], ['#bb-widget']);
+        </script>
       </div>
 
     </div>

@@ -1,4 +1,4 @@
-angular.module('BBQueue').run(function () {
+angular.module('BBQueue').run(function (BBModel, $injector) {
     'ngInject';
 
     let models = ['Queuer', 'ClientQueue'];

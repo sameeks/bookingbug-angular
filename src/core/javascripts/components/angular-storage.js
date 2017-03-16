@@ -37,8 +37,7 @@ angular.module('ngStorage', [])
                     storage.setItem(testKey, '1');
                     storage.removeItem(testKey);
                     return true;
-                }
-                catch (error) {
+                } catch (error) {
                     return false;
                 }
             }
@@ -79,8 +78,7 @@ angular.module('ngStorage', [])
                     storage.setItem(testKey, '1');
                     storage.removeItem(testKey);
                     return true;
-                }
-                catch (error) {
+                } catch (error) {
                     return false;
                 }
             }

@@ -1,7 +1,7 @@
 <button
   class="btn btn-default"
   ng-click="newBooking()"
-  translate="ADMIN.BOOKING_TABLE.NEW_BOOKING_BTN">   
+  translate="ADMIN.BOOKING_TABLE.NEW_BOOKING_BTN">
 </button>
 <table
   tr-ng-grid=""
@@ -9,14 +9,14 @@
   fields="fields"
   ng-if="bookings">
   <tbody>
-    <tr>
-      <td>
-        <button
-          class="btn btn-default btn-sm"
-          ng-click="edit(gridItem)"
-          translate="ADMIN.BOOKING_TABLE.EDIT_BTN">    
-        </button>
-      </td>
-    </tr>
+  <tr>
+    <td>
+      <button
+        class="btn btn-default btn-sm"
+        ng-click="edit(gridItem)"
+        translate="ADMIN.BOOKING_TABLE.EDIT_BTN">
+      </button>
+    </td>
+  </tr>
   </tbody>
 </table>

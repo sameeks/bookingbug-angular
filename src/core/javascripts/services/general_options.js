@@ -33,7 +33,8 @@ angular.module('BB.Services').provider('GeneralOptions', function () {
         use_local_time_zone: false,
         display_time_zone: null,
         update_document_title: false,
-        scroll_offset: 0
+        scroll_offset: 0,
+        map_marker_icon: null
     };
 
 

@@ -2,8 +2,6 @@ describe('BBAdminDashboard, CorePageController', function () {
     let $controller = null;
     let $state = null;
     let company = null;
-
-    let controllerInstance = null;
     let $scope = null;
 
     let companyMock = {
@@ -28,7 +26,7 @@ describe('BBAdminDashboard, CorePageController', function () {
         spyOn(moment.tz, 'setDefault');
         spyOn($state, 'includes');
 
-        controllerInstance = $controller(
+        $controller(
             'CorePageController', {
                 '$scope': $scope,
                 '$state': $state,

@@ -266,21 +266,6 @@ angular.module('BB.Controllers').controller('SurveyQuestions', function ($scope,
 
     /***
      * @ngdoc method
-     * @name getMember
-     * @methodOf BB.Directives:bbSurveyQuestions
-     * @description
-     * Get member
-     */
-    let getMember = () => {
-        params = {member_id: $scope.member_id, company_id: $scope.company_id};
-        return BBModel.Login.$memberQuery(params).then(member => {
-                return $scope.member = member;
-            }
-        );
-    };
-
-    /***
-     * @ngdoc method
      * @name setPurchaseCompany
      * @methodOf BB.Directives:bbSurveyQuestions
      * @description

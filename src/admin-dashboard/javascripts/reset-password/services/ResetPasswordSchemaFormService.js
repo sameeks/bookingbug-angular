@@ -12,8 +12,7 @@ let ResetPasswordSchemaFormService = function ($q, $http, QueryStringService) {
     let passwordPattern = '';
 
     let setPasswordPattern = function (pattern) {
-        let password_pattern;
-        return password_pattern = pattern;
+        return pattern;
     };
 
     let getPasswordPattern = () => passwordPattern;

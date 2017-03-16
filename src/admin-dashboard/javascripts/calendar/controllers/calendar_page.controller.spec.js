@@ -1,12 +1,8 @@
 describe('BBAdminDashboard.calendar.controllers, CalendarPageCtrl', function () {
-    let $compile = null;
     let $controller = null;
-    let $httpBackend = null;
     let $rootScope = null;
     let $state = null;
     let $log = null;
-
-    let controllerInstance = null;
     let $scope = null;
 
     let pusherChannelMock = {
@@ -49,9 +45,7 @@ describe('BBAdminDashboard.calendar.controllers, CalendarPageCtrl', function () 
         module('BB');
 
         inject(function ($injector) {
-            $compile = $injector.get('$compile');
             $controller = $injector.get('$controller');
-            $httpBackend = $injector.get('$httpBackend');
             $rootScope = $injector.get('$rootScope');
             $scope = $rootScope.$new();
             $state = $injector.get('$state');
@@ -80,7 +74,7 @@ describe('BBAdminDashboard.calendar.controllers, CalendarPageCtrl', function () 
         ;
 
     it('bind proper events on company "bookings" pusher channel', function () {
-        controllerInstance = getControllerInstance();
+        getControllerInstance();
 
         expect(pusherChannelMock.bind.calls.argsFor(0)[0])
             .toEqual('create');
@@ -105,7 +99,7 @@ describe('BBAdminDashboard.calendar.controllers, CalendarPageCtrl', function () 
 
         it('redirects to people', function () {
             $scope.bb = bbMockCompanyHasPeople;
-            controllerInstance = getControllerInstance();
+            getControllerInstance();
 
             expect($state.go)
                 .toHaveBeenCalledWith('calendar.people');
@@ -113,7 +107,7 @@ describe('BBAdminDashboard.calendar.controllers, CalendarPageCtrl', function () 
 
         it('redirects to resources', function () {
             $scope.bb = bbMockCompanyHasResources;
-            controllerInstance = getControllerInstance();
+            getControllerInstance();
 
             expect($state.go)
                 .toHaveBeenCalledWith('calendar.resources');

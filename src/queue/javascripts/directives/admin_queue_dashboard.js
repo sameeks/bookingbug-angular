@@ -16,10 +16,8 @@ angular.module('BBQueue').directive('bbIfLogin', function ($q, $compile, BBModel
         };
     };
 
-    let link = function (scope, element, attrs) {
-    };
     return {
-        compile: $compile
+        compile: compile
     };
 });
 

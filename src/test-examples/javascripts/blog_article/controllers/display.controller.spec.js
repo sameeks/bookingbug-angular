@@ -2,7 +2,6 @@ describe('bbTe.blogArticle, BbTeBaDisplayController', function () {
     let $controller = null;
     let $rootScope = null;
 
-    let controllerInstance = null;
     let $scope = null;
 
     let setup = function () {
@@ -19,7 +18,7 @@ describe('bbTe.blogArticle, BbTeBaDisplayController', function () {
     beforeEach(setup);
 
     return it('initialise controller', function () {
-        controllerInstance = $controller(
+        $controller(
             'BbTeBaDisplayController',
             {'$scope': $scope}
         );

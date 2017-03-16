@@ -12,6 +12,11 @@
   &[disabled] {
     color: #CCC;
   }
+  &.appear-disabled {
+    color: $bb-gray;
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
 }
 
 .btn-xl {

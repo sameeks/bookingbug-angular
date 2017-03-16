@@ -9,6 +9,32 @@ All notable changes to this project will be documented in this file using [CHANG
  
 ### Deprecated
 
+## [2.2.0] 
+
+### Changed
+* CoffeeScript code replaced with ES6. Bulk conversion tool used: bulk-decaffeinate  - https://github.com/decaffeinate/bulk-decaffeinate.
+
+* Tip for client projects created with yo generator: generator-bookingbug@<=0.4.20
+
+  Function 'scripts' within gulp-tasks/tasks-config/watch_sdk.js file needs to be replaced with the following:  
+  ```
+      function scripts() {
+          configuration.bbDependencies.forEach(function (dirName) {
+              gulp.watch(
+                  [configuration.sdkRootPath + '/src/' + dirName + '/javascripts/**/*'],
+                  function () {setTimeout(function () {runSequence(['scripts:client']);}, 1000)},
+                  watchOptions
+              );
+          });
+      }
+  ```      
+  Yo generator: generator-bookingbug@>=0.5.0 goes by default with Babel transpiler (preset: es2015).
+
+### Removed
+* CoffeeScript transpiler
+
+### Added
+* Babel transpiler (preset: es2015) 
 
 ## [2.1.8] - 2017-02-14
 

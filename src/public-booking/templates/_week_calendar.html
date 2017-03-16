@@ -17,6 +17,7 @@
     <button
       type="button"
       class="btn btn-default"
+      ng-show="is_add_valid"
       ng-click="showFirstAvailableDay()"
       translate="PUBLIC_BOOKING.WEEK_CALENDAR.NEXT_AVAIL_BTN">
     </button>
@@ -43,8 +44,7 @@
         uib-datepicker-popup="dd/MM/yyyy"
         is-open="opened"
         ng-focus="opened=true"
-        min-date="today"
-        datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
+        datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': minDateJs || today, 'maxDate': maxDateJs, 'showWeeks': false}"
         show-button-bar="false"
         ng-readonly="false"/>
       <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
@@ -53,12 +53,12 @@
     </div>
   </div> -->
 
-   <!-- =============================== -->
-   <!-- DATEPICKER TYPE [2]             -->
-   <!-- function: selectedDateChanged() -->
-   <!-- accepts user input?: NO         -->
-   <!-- =============================== -->
-   <div class="form-group visible-xs">
+  <!-- =============================== -->
+  <!-- DATEPICKER TYPE [2]             -->
+  <!-- function: selectedDateChanged() -->
+  <!-- accepts user input?: NO         -->
+  <!-- =============================== -->
+  <div class="form-group visible-xs">
       <label
         class="sr-only"
         for="date"
@@ -74,9 +74,8 @@
           uib-datepicker-popup="dd/MM/yyyy"
           is-open="opened"
           ng-focus="opened=true"
-          min-date="today"
           on-date-change="selectedDateChanged()"
-          datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
+          datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': minDateJs || today, 'maxDate': maxDateJs, 'showWeeks': false}"
           show-button-bar="false"
           ng-readonly="true"
           name="date"
@@ -93,15 +92,15 @@
             <span class="fa fa-calendar-o"></span>
           </button>
         </span>
-      </div>
     </div>
+  </div>
 
-   <!-- ============================= -->
-   <!-- DATEPICKER TYPE [3]           -->
-   <!-- function: filterDateChanged() -->
-   <!-- accepts user input?: NO       -->
-   <!-- ============================= -->
-   <!--  <div class="form-group">
+  <!-- ============================= -->
+  <!-- DATEPICKER TYPE [3]           -->
+  <!-- function: filterDateChanged() -->
+  <!-- accepts user input?: NO       -->
+  <!-- ============================= -->
+  <!--  <div class="form-group">
       <label class="sr-only" for="date" translate="PUBLIC_BOOKING.WEEK_CALENDAR.DATE_LBL"></label>
       <div class="input-group date-picker">
         <input type="text" ng-model="filters.date" class="form-control"
@@ -109,9 +108,8 @@
           uib-datepicker-popup="dd/MM/yyyy"
           is-open="opened"
           ng-focus="opened=true"
-          min-date="today"
           on-date-change="filterDateChanged()"
-          datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': today, 'showWeeks': false}"
+          datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': minDateJs || today, 'maxDate': maxDateJs, 'showWeeks': false}"
           show-button-bar="false"
           ng-readonly="true"
           name="date"
@@ -188,9 +186,19 @@
           <span class="col-xs-2 next visible-xs">
             <button
               type="button"
-              class="btn btn-icon visible-xs pull-right"
+              class="btn btn-icon hidden-sm hidden-md hidden-lg pull-right"
+              ng-show="is_add_valid"
               ng-click="add('days', 1)"
-              ng-disabled="!isLoaded">
+              ng-disabled="!is_add_valid || !isLoaded">
+              <span class="fa fa-chevron-right"></span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-icon appear-disabled hidden-sm hidden-md hidden-lg pull-right"
+              ng-show="!is_add_valid"
+              uib-popover="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MAX_DATE_POPOVER' | translate: maxDateDurationObj}}"
+              popover-placement="left"
+              popover-trigger="'focus'">
               <span class="fa fa-chevron-right"></span>
             </button>
           </span>
@@ -248,23 +256,35 @@
       <li class="day navigation hidden-xs">
         <button
           type="button"
-          class="btn btn-icon visible-sm"
+          class="btn btn-icon hidden-xs hidden-md hidden-lg"
+          ng-show="is_add_valid"
           ng-click="add('days', 3)"
-          ng-disabled="!isLoaded">
+          ng-disabled="!is_add_valid || !isLoaded">
           <span class="fa fa-chevron-right"></span>
         </button>
         <button
           type="button"
-          class="btn btn-icon visible-md"
+          class="btn btn-icon hidden-xs hidden-sm hidden-lg"
+          ng-show="is_add_valid"
           ng-click="add('days', 5)"
-          ng-disabled="!isLoaded">
+          ng-disabled="!is_add_valid || !isLoaded">
           <span class="fa fa-chevron-right"></span>
         </button>
         <button
           type="button"
-          class="btn btn-icon visible-lg"
+          class="btn btn-icon hidden-xs hidden-sm hidden-md"
+          ng-show="is_add_valid"
           ng-click="add('days', 7)"
-          ng-disabled="!isLoaded">
+          ng-disabled="!is_add_valid || !isLoaded">
+          <span class="fa fa-chevron-right"></span>
+        </button>
+        <button
+          type="button"
+          class="btn btn-icon appear-disabled"
+          ng-show="!is_add_valid"
+          uib-popover="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MAX_DATE_POPOVER' | translate: maxDateDurationObj}}"
+          popover-placement="left"
+          popover-trigger="'focus'">
           <span class="fa fa-chevron-right"></span>
         </button>
       </li>
