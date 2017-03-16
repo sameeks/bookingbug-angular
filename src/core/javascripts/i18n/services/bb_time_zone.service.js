@@ -7,7 +7,7 @@
     * Factory for retrieving a list of timezones
     */
     angular
-        .module('BBAdminDashboard')
+        .module('BB.i18n')
         .factory('bbTimeZone', timeZoneFactory);
 
     function timeZoneFactory ($translate, $localStorage, orderByFilter, bbi18nOptions, GeneralOptions, CompanyStoreService) {
@@ -21,8 +21,7 @@
         };
 
         function getTimeZoneLs () {
-            let timeZone = $localStorage.getItem('bbTimeZone');
-            return timeZone;
+            return $localStorage.getItem('bbTimeZone');
         }
 
         function determineTimeZone () {
@@ -43,17 +42,17 @@
             }
         }
 
-        function updateDefaultTimeZone (timeZone, localStorage) {
-            if (localStorage === 'setItem') {
+        function updateDefaultTimeZone (timeZone, localStorageAction) {
+            if (localStorageAction === 'setItem') {
                 $localStorage.setItem('bbTimeZone', timeZone);
             }
 
-            if (localStorage === 'removeItem') {
+            if (localStorageAction === 'removeItem') {
                 $localStorage.removeItem('bbTimeZone');
             }
 
             moment.tz.setDefault(timeZone);
-            GeneralOptions.display_time_zone = timeZone;
+            bbi18nOptions.display_time_zone = timeZone;
             GeneralOptions.custom_time_zone = timeZone !== CompanyStoreService.time_zone;
         }
 
@@ -69,7 +68,7 @@
         }
 
         function mapTimeZones (locationNames) {
-            var timezones = [];
+            let timezones = [];
             for (let [index, value] of locationNames.entries()) {
                 timezones.push(mapTimeZoneForDisplay(value, index));
             }
@@ -85,7 +84,7 @@
             }
 
             if (angular.isArray(restrictRegion)) {
-                var locations = [];
+                let locations = [];
                 _.each(restrictRegion, (region) => locations.push(filterLocations(region)));
                 return _.flatten(locations);
             }
@@ -108,7 +107,7 @@
             const timezone = {};
             const city = location.match(/[^/]*$/)[0].replace(/-/g, '_').toUpperCase();
             const tz = moment.tz(location);
-            timezone.display = `(UTC ${tz.format('Z')}) ${$translate.instant('LOCATIONS.' + city)} (${tz.format('zz')})`;
+            timezone.display = `(UTC ${tz.format('Z')}) ${$translate.instant('COMMON.LOCATIONS.' + city)} (${tz.format('zz')})`;
             timezone.value = location;
             if (index) {
                 timezone.id = index;

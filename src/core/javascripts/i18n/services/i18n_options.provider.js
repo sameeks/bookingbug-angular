@@ -9,6 +9,7 @@ angular.module('BB.i18n').provider('bbi18nOptions', function () {
             'en_*': 'en'
         },
         use_browser_time_zone: false,
+        display_time_zone: null
     };
 
     this.setOption = function (option, value) {

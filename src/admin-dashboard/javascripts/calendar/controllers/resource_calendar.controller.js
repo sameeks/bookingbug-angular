@@ -3,7 +3,7 @@ angular
     .controller('bbResourceCalendarController', function (AdminBookingPopup, AdminCalendarOptions, AdminCompanyService,
         AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources, ColorPalette, Dialog,
         $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope, $state,
-        TitleAssembler, $translate, $window, uiCalendarConfig, CompanyStoreService, bbTimeZone) {
+        TitleAssembler, $translate, $window, uiCalendarConfig, CompanyStoreService, bbTimeZone, bbi18nOptions) {
 
         'ngInject';
 
@@ -184,7 +184,7 @@ angular
                     eventResize: fcEventResize,
                     loading: fcLoading,
                     ignoreTimezone: false,
-                    timezone: GeneralOptions.display_time_zone
+                    timezone: bbi18nOptions.display_time_zone
                 }
             };
             updateCalendarLanguage();
@@ -215,8 +215,8 @@ angular
 
             if (GeneralOptions.custom_time_zone) {
                 let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
-                booking.start = calendar.moment(moment.tz(booking.start.toISOString(), GeneralOptions.display_time_zone));
-                booking.end = calendar.moment(moment.tz(booking.end.toISOString(), GeneralOptions.display_time_zone));
+                booking.start = calendar.moment(moment.tz(booking.start.toISOString(), bbi18nOptions.display_time_zone));
+                booking.end = calendar.moment(moment.tz(booking.end.toISOString(), bbi18nOptions.display_time_zone));
             }
 
             // not blocked and is a change in person/resource, or over multiple days

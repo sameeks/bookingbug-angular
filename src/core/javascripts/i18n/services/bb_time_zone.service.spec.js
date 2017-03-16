@@ -1,11 +1,12 @@
 'use strict';
 
-describe('BBAdminDashboard, bbTimeZone', function () {
+describe('BB.i18n, bbTimeZone', function () {
 
     let bbTimeZone = null;
 
     let beforeEachFn = function () {
-        module('BBAdminDashboard');
+        module('BB');
+        module('BB.i18n');
     };
 
     beforeEach(beforeEachFn);
@@ -16,7 +17,7 @@ describe('BBAdminDashboard, bbTimeZone', function () {
         });
     };
 
-    describe('mapTimezoneForDisplay method', function () {
+    describe('mapTimeZoneForDisplay method', function () {
 
         let beforeEach2LvlFn = function () {
             injectDependencies();
@@ -25,11 +26,12 @@ describe('BBAdminDashboard, bbTimeZone', function () {
         beforeEach(beforeEach2LvlFn);
 
         it('should return timezone object with display and value properties', function () {
+
             let timezone = {
                 display: '(UTC +00:00) London (GMT)',
                 value: 'Europe/London'
             };
-            expect(bbTimeZone.mapTimezoneForDisplay('Europe/London')).toEqual(timezone);
+            expect(bbTimeZone.mapTimeZoneForDisplay('Europe/London')).toEqual(timezone);
         });
 
         it('should return timezone object with id and order properties', function () {
@@ -39,7 +41,7 @@ describe('BBAdminDashboard, bbTimeZone', function () {
                 id: 1,
                 order: [7, '+07', 'KRASNOYARSK']
             };
-            expect(bbTimeZone.mapTimezoneForDisplay('Asia/Krasnoyarsk', 1)).toEqual(timezone);
+            expect(bbTimeZone.mapTimeZoneForDisplay('Asia/Krasnoyarsk', 1)).toEqual(timezone);
         });
 
     });

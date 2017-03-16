@@ -1,4 +1,4 @@
-angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($scope, $attrs, $rootScope, $q, FormDataStoreService, bbTimeZone, DateTimeUtilitiesService, $translate, CompanyStoreService) {
+angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($scope, $attrs, $rootScope, $q, FormDataStoreService, bbi18nOptions, DateTimeUtilitiesService, $translate, CompanyStoreService) {
 
     $scope.$watch('slots', () => setData());
 
@@ -51,8 +51,8 @@ angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($sc
 
                 // use display time zone to ensure slots get added to the correct range group
                 let slot_time;
-                if ((GeneralOptions.display_time_zone != null) && (GeneralOptions.display_time_zone !== CompanyStoreService.time_zone)) {
-                    let datetime = moment(slot.datetime).tz(GeneralOptions.display_time_zone);
+                if ((bbi18nOptions.display_time_zone != null) && (bbi18nOptions.display_time_zone !== CompanyStoreService.time_zone)) {
+                    let datetime = moment(slot.datetime).tz(bbi18nOptions.display_time_zone);
                     slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime);
                 } else {
                     slot_time = slot.time;
@@ -110,8 +110,8 @@ angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($sc
 
             // use display time zone to ensure slots get added to the right range group
             let slot_time;
-            if ((GeneralOptions.display_time_zone != null) && (GeneralOptions.display_time_zone !== CompanyStoreService.time_zone)) {
-                let datetime = moment(slot.datetime).tz(GeneralOptions.display_time_zone);
+            if ((bbi18nOptions.display_time_zone != null) && (bbi18nOptions.display_time_zone !== CompanyStoreService.time_zone)) {
+                let datetime = moment(slot.datetime).tz(bbi18nOptions.display_time_zone);
                 slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime);
             } else {
                 slot_time = slot.time;

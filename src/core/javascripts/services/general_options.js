@@ -31,8 +31,7 @@ angular.module('BB.Services').provider('GeneralOptions', function () {
         update_document_title: false,
         scroll_offset: 0,
 
-        custom_time_zone: false,
-        display_time_zone: null
+        custom_time_zone: false
     };
 
 

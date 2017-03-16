@@ -18,7 +18,7 @@
     angular
         .module('BBAdminDashboard')
         .component('bbUserPreferences', {
-            templateUrl: 'core/_bb-user-preferences.html',
+            templateUrl: 'core/_bb_user_preferences.html',
             controller: UserPreferencesCtrl,
             controllerAs: '$bbUserPreferencesCtrl'
         });
