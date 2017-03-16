@@ -13,17 +13,22 @@
     function timeZoneFactory ($translate, $localStorage, orderByFilter, bbi18nOptions, GeneralOptions, CompanyStoreService) {
 
         return {
+            getTimeZoneLs: getTimeZoneLs,
             determineTimeZone: determineTimeZone,
             updateDefaultTimeZone: updateDefaultTimeZone,
             mapTimeZoneForDisplay: mapTimeZoneForDisplay,
-            generateTimeZoneList: generateTimeZoneList,
+            generateTimeZoneList: generateTimeZoneList
         };
 
+        function getTimeZoneLs () {
+            let timeZone = $localStorage.getItem('bbTimeZone');
+            return timeZone;
+        }
 
         function determineTimeZone () {
 
-            if ($localStorage.getItem('selectedTimeZone')) {
-                updateDefaultTimeZone($localStorage.getItem('selectedTimeZone'));
+            if (getTimeZoneLs()) {
+                updateDefaultTimeZone(getTimeZoneLs());
                 return;
             }
 
@@ -39,13 +44,12 @@
         }
 
         function updateDefaultTimeZone (timeZone, localStorage) {
-
             if (localStorage === 'setItem') {
-                $localStorage.setItem('selectedTimeZone', timeZone);
+                $localStorage.setItem('bbTimeZone', timeZone);
             }
 
             if (localStorage === 'removeItem') {
-                $localStorage.removeItem('selectedTimeZone');
+                $localStorage.removeItem('bbTimeZone');
             }
 
             moment.tz.setDefault(timeZone);

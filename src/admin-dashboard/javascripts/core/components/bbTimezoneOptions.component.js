@@ -27,7 +27,7 @@
              controllerAs: '$bbTimeZoneOptionsCtrl'
          });
 
-    function TimeZoneOptionsCtrl ($scope, $rootScope, $localStorage, bbTimeZone, CompanyStoreService) {
+    function TimeZoneOptionsCtrl ($scope, $rootScope, bbTimeZone, CompanyStoreService) {
         'ngInject';
 
         const ctrl = this;
@@ -73,7 +73,7 @@
         }
 
         function setDefaults () {
-            const timeZone = $localStorage.getItem('selectedTimeZone');
+            const timeZone = bbTimeZone.getTimeZoneLs();
             if (timeZone) {
                 ctrl.selectedTimeZone = bbTimeZone.mapTimeZoneForDisplay(timeZone);
                 ctrl.automaticTimeZone = moment.tz.guess() === timeZone ? true : false;
