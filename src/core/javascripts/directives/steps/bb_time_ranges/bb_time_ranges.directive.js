@@ -38,9 +38,10 @@ angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $
                     let btn = angular.element('#btn-continue');
                     btn[0].disabled = false;
                     $timeout(() =>
-                        scrollIntercepter.scrollToElement(btn, 500, 'time:selected')
+                            scrollIntercepter.scrollToElement(btn, 500, 'time:selected')
                         , 1000);
-                    return $timeout(() => btn[0].focus(), 1500);
+                    return $timeout(() => btn[0].focus()
+                        , 1500);
                 });
 
                 // date helpers

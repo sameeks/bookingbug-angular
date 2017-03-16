@@ -279,7 +279,7 @@ angular
                     return updateBooking(booking);
                 },
                 fail() {
-                    revertFunc();
+                    return revertFunc();
                 }
             });
         };
@@ -615,11 +615,11 @@ angular
             uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents');
         };
 
-        var timeZoneChangedHandler = function(event, tz) {
+        let timeZoneChangedHandler = function(event, tz) {
             uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('option', 'timezone', tz);
         };
 
-        var languageChangedHandler = function () {
+        let languageChangedHandler = function () {
             updateCalendarLanguage();
         };
 
