@@ -3,17 +3,13 @@
 
     const argv = require('yargs').argv;
     const del = require('del');
-    const fs = require('fs');
     const gulp = require('gulp');
     const gutil = require('gulp-util');
     const gulpif = require('gulp-if');
-    const coffee = require('gulp-coffee');
     const concat = require('gulp-concat');
     const uglify = require('gulp-uglify');
-    const sass = require('gulp-sass');
     const flatten = require('gulp-flatten');
     const imagemin = require('gulp-imagemin');
-    const filter = require('gulp-filter');
     const templateCache = require('gulp-angular-templatecache');
     const path = require('path');
     const rename = require('gulp-rename');
@@ -37,7 +33,12 @@
 
         let stream = gulp.src(files, {allowEmpty: true})
             .pipe(plumber())
-            .pipe(gulpif(/.*js$/, babel({presets: ['es2015']}).on('error', gutil.log)))
+            .pipe(gulpif(/.*js$/, babel({
+                presets: ['es2015'],
+                plugins: [
+                    ["transform-es2015-classes", {"loose": true}]
+                ]
+            }).on('error', gutil.log)))
             .pipe(gulp.dest(tmpPath + '/es5/' + module + '/javascripts/'));
 
         stream.on('end', function () {
@@ -56,7 +57,7 @@
 
                     gulp.watch(files, function (file) {
                         let filePath = file.path;
-                        console.log('SDK (' + file.type +'):', filePath);
+                        console.log('SDK (' + file.type + '):', filePath);
 
                         let fileToRemove = filePath.replace('src', path.join('tmp', 'es5'));
                         del([fileToRemove], {force: true}).then(() => {
