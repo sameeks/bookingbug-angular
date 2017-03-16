@@ -6,7 +6,7 @@
 
     function Purchase($scope, $rootScope, PurchaseService, $uibModal, $location, $timeout, BBModel,
         $q, QueryStringService, SSOService, AlertService, LoginService, $window, $sessionStorage,
-        LoadingService, $translate, ReasonService, $document) {
+        LoadingService, $translate, ReasonService, $document, GeneralOptions) {
 
         $scope.is_waitlist = false;
         $scope.make_payment = false;
@@ -107,7 +107,11 @@
             PurchaseService.query(params).then(function (purchase) {
                     deferred.resolve(purchase);
                     purchase.$get('company').then(company => {
-                            return setPurchaseCompany(company);
+                        // using general options provider here to reduce api calls unless company reasons actually needed
+                        if(GeneralOptions.useMoveCancelReasons) {
+                            checkCompanyForReasons(company.id)
+                        }
+                        return setPurchaseCompany(company);
                         }
                     );
                     $scope.purchase = purchase;
