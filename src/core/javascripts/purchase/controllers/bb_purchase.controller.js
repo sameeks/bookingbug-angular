@@ -8,37 +8,34 @@
         $q, QueryStringService, SSOService, AlertService, LoginService, $window, $sessionStorage,
         LoadingService, $translate, ReasonService, $document, GeneralOptions) {
 
-        $scope.is_waitlist = false;
-        $scope.make_payment = false;
+        this.is_waitlist = false;
+        this.make_payment = false;
         let loader = LoadingService.$loader($scope);
 
         $scope.$on('booking:moved', (event, purchase) => {
-            $scope.purchase = purchase;
+            this.purchase = purchase;
         });
 
         $scope.$on('booking:cancelReasonsLoaded', (event, cancelReasons) => {
-            $scope.cancelReasons = cancelReasons;
+            this.cancelReasons = cancelReasons;
         });
 
         $scope.$on('booking:moveReasonsLoaded', (event, moveReasons) => {
-            $scope.moveReasons = moveReasons;
+            this.moveReasons = moveReasons;
         });
 
         let checkCompanyForReasons = (companyId) => {
             let options = {root: $scope.bb.api_url};
-
-            BBModel.Company.$query(companyId, options).then((company) => {
-                if(company.$has("reasons")) {
-                    $scope.companyHasReasons = true;
-                }
-            });
+            if($scope.bb.company.$has("reasons")) {
+                this.companyHasReasons = true;
+            }
         }
 
-        let setPurchaseCompany = function (company) {
+        let setPurchaseCompany = (company) => {
 
             $scope.bb.company_id = company.id;
             $scope.bb.company = new BBModel.Company(company);
-            $scope.company = $scope.bb.company;
+            this.company = $scope.bb.company;
             $scope.bb.item_defaults.company = $scope.bb.company;
             if (company.settings) {
                 if (company.settings.merge_resources) {
@@ -53,8 +50,8 @@
 
         let failMsg = function () {
 
-            if ($scope.fail_msg) {
-                return AlertService.danger({msg: $scope.fail_msg});
+            if (this.fail_msg) {
+                return AlertService.danger({msg: this.fail_msg});
             } else {
                 return AlertService.add("danger", {msg: $translate.instant('CORE.ALERTS.GENERIC')});
             }
@@ -69,42 +66,43 @@
 
             loader.notLoaded();
             if (options.move_route) {
-                $scope.move_route = options.move_route;
+                this.move_route = options.move_route;
             }
             if (options.move_all) {
-                $scope.move_all = options.move_all;
+                this.move_all = options.move_all;
             }
             if (options.fail_msg) {
-                $scope.fail_msg = options.fail_msg;
+                this.fail_msg = options.fail_msg;
             }
+
 
             // is there a purchase total already in scope?
             if ($scope.bb.total) {
-                return $scope.load($scope.bb.total.long_id);
+                return load($scope.bb.total.long_id);
             } else if ($scope.bb.purchase) {
-                $scope.purchase = $scope.bb.purchase;
-                $scope.bookings = $scope.bb.purchase.bookings;
-                if ($scope.purchase.confirm_messages) {
-                    $scope.messages = $scope.purchase.confirm_messages;
+                this.purchase = $scope.bb.purchase;
+                this.bookings = $scope.bb.purchase.bookings;
+                if (this.purchase.confirm_messages) {
+                    this.messages = this.purchase.confirm_messages;
                 }
                 return loader.setLoaded();
             } else {
                 if (options.member_sso) {
-                    return SSOService.memberLogin(options).then(login => $scope.load()
-                        , function (err) {
+                    return SSOService.memberLogin(options).then(login => load()
+                        , (err) => {
                             loader.setLoaded();
                             return failMsg();
                         });
                 } else {
-                    return $scope.load();
+                    return load();
                 }
             }
-        };
+        }.bind(this);
 
-        let getPurchase = function (params) {
+        let getPurchase = (params) => {
 
             let deferred = $q.defer();
-            PurchaseService.query(params).then(function (purchase) {
+            PurchaseService.query(params).then((purchase) => {
                     deferred.resolve(purchase);
                     purchase.$get('company').then(company => {
                         // using general options provider here to reduce api calls unless company reasons actually needed
@@ -114,11 +112,11 @@
                         return setPurchaseCompany(company);
                         }
                     );
-                    $scope.purchase = purchase;
+                    this.purchase = purchase;
                     $scope.bb.purchase = purchase;
-                    return $scope.price = !($scope.purchase.price === 0);
+                    return this.price = !(this.purchase.price === 0);
                 }
-                , function (err) { //get purchase
+                , (err) => { //get purchase
                     loader.setLoaded();
                     if (err && (err.status === 401)) {
                         if (LoginService.isLoggedIn()) {
@@ -134,26 +132,26 @@
             return deferred.promise;
         };
 
-        let getBookings = function (purchase) {
+        let getBookings = (purchase) => {
 
-            $scope.purchase.$getBookings().then((bookings) => {
-                    $scope.bookings = bookings;
+            this.purchase.$getBookings().then((bookings) => {
+                    this.bookings = bookings;
 
                     if (bookings[0]) {
                         bookings[0].$getCompany().then((company) => {
-                            $scope.purchase.bookings[0].company = company;
+                            this.purchase.bookings[0].company = company;
                             $rootScope.$broadcast("purchase:loaded", company.id);
-                            return company.$getAddress().then(address => $scope.purchase.bookings[0].company.address = address);
+                            return company.$getAddress().then(address => this.purchase.bookings[0].company.address = address);
                         });
                     }
 
                     loader.setLoaded();
                     checkIfWaitlistBookings(bookings);
 
-                    return Array.from($scope.bookings).map((booking) =>
+                    return Array.from(this.bookings).map((booking) =>
                         booking.$getAnswers().then(answers => booking.answers = answers));
                 }
-                , function (err) { //get booking
+                , (err) => { //get booking
                     loader.setLoaded();
                     return failMsg();
                 });
@@ -164,13 +162,13 @@
                     }
                 );
             }
-            return $scope.purchase.getConfirmMessages().then(function (messages) {
-                $scope.purchase.confirm_messages = messages;
-                return $scope.messages = messages;
+            return this.purchase.getConfirmMessages().then((messages) => {
+                this.purchase.confirm_messages = messages;
+                return this.messages = messages;
             });
         };
 
-        $scope.load = function (id) {
+        let load = (id) => {
 
             loader.notLoaded();
 
@@ -178,7 +176,7 @@
                 id = getPurchaseID();
             }
 
-            if (!$scope.loaded && !!id) {
+            if (!this.loaded && !!id) {
                 $rootScope.widget_started.then(() => {
                         return $scope.waiting_for_conn_started.then(() => {
                                 let company_id = getCompanyID();
@@ -202,11 +200,11 @@
                 loader.setLoaded();
             }
 
-            return $scope.loaded = true;
+            return this.loaded = true;
         };
 
 
-        var checkIfWaitlistBookings = bookings => $scope.waitlist_bookings = (Array.from(bookings).filter((booking) => (booking.on_waitlist && (booking.settings.sent_waitlist === 1))).map((booking) => booking));
+        var checkIfWaitlistBookings = bookings => this.waitlist_bookings = (Array.from(bookings).filter((booking) => (booking.on_waitlist && (booking.settings.sent_waitlist === 1))).map((booking) => booking));
 
 
         var loginRequired = () => {
@@ -217,7 +215,7 @@
         };
 
 
-        var getCompanyID = function () {
+        var getCompanyID = () => {
 
             let company_id;
             let matches = /^.*(?:\?|&)company_id=(.*?)(?:&|$)/.exec($location.absUrl());
@@ -228,7 +226,7 @@
         };
 
 
-        var getPurchaseID = function () {
+        var getPurchaseID = () => {
 
             let id;
             let matches = /^.*(?:\?|&)id=(.*?)(?:&|$)/.exec($location.absUrl());
@@ -254,32 +252,32 @@
 
 
         // potentially move all of the items in booking - move the whole lot to a basket
-        $scope.moveAll = function (route, options) {
+        this.moveAll = function (route, options) {
 
             if (options == null) {
                 options = {};
             }
             if (!route) {
-                route = $scope.move_route;
+                route = this.move_route;
             }
             loader.notLoaded();
-            $scope.initWidget({company_id: $scope.bookings[0].company_id, no_route: true});
+            $scope.initWidget({company_id: this.bookings[0].company_id, no_route: true});
             return $timeout(() => {
                     return $rootScope.connection_started.then(() => {
                             let proms = [];
-                            if ($scope.bookings.length === 1) {
-                                $scope.bb.moving_booking = $scope.bookings[0];
+                            if (this.bookings.length === 1) {
+                                $scope.bb.moving_booking = this.bookings[0];
                             } else {
-                                $scope.bb.moving_booking = $scope.purchase;
+                                $scope.bb.moving_booking = this.purchase;
                             }
 
-                            if (_.every(_.map($scope.bookings, b => b.event_id),
-                                    event_id => event_id === $scope.bookings[0].event_id)) {
-                                $scope.bb.moving_purchase = $scope.purchase;
+                            if (_.every(_.map(this.bookings, b => b.event_id),
+                                    event_id => event_id === this.bookings[0].event_id)) {
+                                $scope.bb.moving_purchase = this.purchase;
                             }
 
-                            $scope.quickEmptybasket();
-                            for (let booking of Array.from($scope.bookings)) {
+                            this.quickEmptybasket();
+                            for (let booking of Array.from(this.bookings)) {
                                 let new_item = new BBModel.BasketItem(booking, $scope.bb);
                                 new_item.setSrcBooking(booking);
                                 new_item.ready = false;
@@ -289,12 +287,12 @@
                             }
                             $scope.bb.sortStackedItems();
 
-                            $scope.setBasketItem($scope.bb.basket.items[0]);
-                            return $q.all(proms).then(function () {
+                            this.setBasketItem($scope.bb.basket.items[0]);
+                            return $q.all(proms).then(() => {
                                     loader.setLoaded();
                                     return $scope.decideNextPage(route);
                                 }
-                                , function (err) {
+                                , (err) => {
                                     loader.setLoaded();
                                     return failMsg();
                                 });
@@ -305,35 +303,35 @@
         };
 
 
-        $scope.bookWaitlistItem = function (booking) {
+        this.bookWaitlistItem = function (booking) {
 
             loader.notLoaded();
 
             let params = {
-                purchase: $scope.purchase,
+                purchase: this.purchase,
                 booking
             };
-            return PurchaseService.bookWaitlistItem(params).then(function (purchase) {
-                    $scope.purchase = purchase;
-                    $scope.total = $scope.purchase;
+            return PurchaseService.bookWaitlistItem(params).then((purchase) => {
+                    this.purchase = purchase;
+                    this.total = this.purchase;
                     $scope.bb.purchase = purchase;
-                    return $scope.purchase.$getBookings().then(function (bookings) {
-                            $scope.bookings = bookings;
-                            $scope.waitlist_bookings = ((() => {
+                    return this.purchase.$getBookings().then((bookings) => {
+                            this.bookings = bookings;
+                            this.waitlist_bookings = ((() => {
                                 let result = [];
-                                for (booking of Array.from($scope.bookings)) {
+                                for (booking of Array.from(this.bookings)) {
                                     if (booking.on_waitlist && (booking.settings.sent_waitlist === 1)) {
                                         result.push(booking);
                                     }
                                 }
                                 return result;
                             })());
-                            if ($scope.purchase.$has('new_payment') && ($scope.purchase.due_now > 0)) {
-                                $scope.make_payment = true;
+                            if (this.purchase.$has('new_payment') && (this.purchase.due_now > 0)) {
+                                this.make_payment = true;
                             }
                             return loader.setLoaded();
                         }
-                        , function (err) {
+                        , (err) => {
                             loader.setLoaded();
                             return failMsg();
                         });
@@ -347,29 +345,29 @@
 
 
         // delete a single booking
-        $scope.delete = function (booking) {
+        this.delete = (booking, cancelReasons) => {
 
             let modalInstance = $uibModal.open({
                 templateUrl: $scope.getPartial("_cancel_modal"),
-                controller: ModalDelete,
+                controller: this.ModalDelete,
                 resolve: {
                     booking() {
                         return booking;
                     },
                     cancelReasons() {
-                        return $scope.cancelReasons
+                        return cancelReasons
                     }
                 }
             });
 
-            return modalInstance.result.then(function (booking) {
+            return modalInstance.result.then((booking) => {
                 let cancelReason = null;
                 if (booking.cancelReason) {
                     ({cancelReason} = booking);
                 }
                 let data = {cancelReason};
                 return booking.$del('self', {}, data).then(service => {
-                        $scope.bookings = _.without($scope.bookings, booking);
+                        this.bookings = _.without(this.bookings, booking);
                         return $rootScope.$broadcast("booking:cancelled");
                     }
                 );
@@ -378,27 +376,27 @@
 
 
         // delete all bookings assoicated to the purchase
-        $scope.deleteAll = function () {
+        this.deleteAll = function () {
 
             let modalInstance = $uibModal.open({
                 templateUrl: $scope.getPartial("_cancel_modal"),
                 controller: ModalDeleteAll,
                 resolve: {
                     purchase() {
-                        return $scope.purchase;
+                        return this.purchase;
                     }
                 }
             });
             return modalInstance.result.then(purchase =>
-                PurchaseService.deleteAll(purchase).then(function (purchase) {
-                    $scope.purchase = purchase;
-                    $scope.bookings = [];
+                PurchaseService.deleteAll(purchase).then((purchase) => {
+                    this.purchase = purchase;
+                    this.bookings = [];
                     return $rootScope.$broadcast("booking:cancelled");
                 })
             );
         };
 
-        $scope.createBasketItem = function (booking) {
+        this.createBasketItem = function (booking) {
 
             let item = new BBModel.BasketItem(booking, $scope.bb);
             item.setSrcBooking(booking);
@@ -406,34 +404,33 @@
         };
 
 
-        $scope.checkAnswer = answer => (typeof answer.value === 'boolean') || (typeof answer.value === 'string') || (typeof answer.value === "number");
+        this.checkAnswer = answer => (typeof answer.value === 'boolean') || (typeof answer.value === 'string') || (typeof answer.value === "number");
 
 
-        $scope.changeAttendees = route => $scope.moveAll(route);
-
-    };
+        this.changeAttendees = route => this.moveAll(route);
 
 
-    // Simple modal controller for handling the 'delete' modal
-    var ModalDelete = function ($scope, $rootScope, $uibModalInstance, booking, AlertService, cancelReasons) {
-        $scope.booking = booking;
-        $scope.cancelReasons = cancelReasons;
+        // Simple modal controller for handling the 'delete' modal
+        this.ModalDelete = ($scope, $rootScope, $uibModalInstance, booking, AlertService, cancelReasons) => {
+            $scope.booking = booking;
+            $scope.cancelReasons = cancelReasons;
 
-        $scope.confirmDelete = function () {
-            AlertService.clear();
-            return $uibModalInstance.close(booking);
+            $scope.confirmDelete = () => {
+                AlertService.clear();
+                return $uibModalInstance.close(booking);
+            };
+            return $scope.cancel = () => $uibModalInstance.dismiss("cancel");
         };
 
-        return $scope.cancel = () => $uibModalInstance.dismiss("cancel");
-    };
+        // Simple modal controller for handling the 'delete all' modal
+       this.ModalDeleteAll = ($scope, $rootScope, $uibModalInstance, purchase) => {
+            $scope.purchase = purchase;
 
-    // Simple modal controller for handling the 'delete all' modal
-    var ModalDeleteAll = function ($scope, $rootScope, $uibModalInstance, purchase) {
-        $scope.purchase = purchase;
+            $scope.confirmDelete = () => $uibModalInstance.close(purchase);
 
-        $scope.confirmDelete = () => $uibModalInstance.close(purchase);
+            return $scope.cancel = () => $uibModalInstance.dismiss("cancel");
+        };
 
-        return $scope.cancel = () => $uibModalInstance.dismiss("cancel");
     };
 
 })();

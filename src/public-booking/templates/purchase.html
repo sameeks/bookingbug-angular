@@ -1,13 +1,13 @@
 <div bb-purchase="{move_route: 'calendar'}">
 
-  <div ng-if="companyHasReasons" bb-reasons></div>
+  <div ng-if="$bbPurchaseController.companyHasReasons" bb-reasons></div>
   <div class="bb-checkout">
 
     <div class="row">
 
       <div class="col-xs-offset-1 col-xs-10">
 
-        <div ng-show="purchase && bookings.length == 0">
+        <div ng-show="$bbPurchaseController.purchase && $bbPurchaseController.bookings.length == 0">
           <div class="confirmation-header">
             <h2
               class="confirmation-heading"
@@ -16,18 +16,18 @@
           </div>
         </div>
 
-        <div ng-show="bookings && bookings.length != 0">
-          <div ng-if="is_waitlist">
+        <div ng-show="$bbPurchaseController.bookings && $bbPurchaseController.bookings.length != 0">
+          <div ng-if="$bbPurchaseController.is_waitlist">
             <div bb-include="book_waitlist"></div>
           </div>
 
-          <div ng-hide="is_waitlist">
+          <div ng-hide="$bbPurchaseController.is_waitlist">
 
             <div class="confirmation-header">
               <h3
                 class="confirmation-heading"
                 translate="PUBLIC_BOOKING.PURCHASE.HEADING"
-                translate-values="{service_name: purchase.bookings[0].service_name}">
+                translate-values="{service_name: $bbPurchaseController.purchase.bookings[0].service_name}">
               </h3>
               <div class="row hidden-print text-right">
                 <button
@@ -38,7 +38,7 @@
                   <span translate="PUBLIC_BOOKING.PURCHASE.PRINT_BTN"></span>
                 </button>
                 <div
-                  bb-booking-export="purchase"
+                  bb-booking-export="$bbPurchaseController.purchase"
                   class="bb-booking-export">
                 </div>
               </div>
@@ -52,41 +52,41 @@
                   <div class="bb-summary-label">
                     <span translate="PUBLIC_BOOKING.PURCHASE.CUSTOMER_NAME_LBL"></span>
                   </div>
-                  <div class="bb-summary-value">{{purchase.client.name}}</div>
+                  <div class="bb-summary-value">{{$bbPurchaseController.purchase.client.name}}</div>
                 </li>
 
                 <li class="row confirmation-summary-item">
                   <div class="bb-summary-label">
                     <span translate="PUBLIC_BOOKING.PURCHASE.EMAIL_LBL"></span>
                   </div>
-                  <div class="bb-summary-value">{{purchase.client.email}}</div>
+                  <div class="bb-summary-value">{{$bbPurchaseController.purchase.client.email}}</div>
                 </li>
 
                 <li class="row confirmation-summary-item">
                   <div class="bb-summary-label">
                     <span translate="PUBLIC_BOOKING.PURCHASE.SERVICE_LBL"></span>
                   </div>
-                  <div class="bb-summary-value">{{purchase.bookings[0].service_name}}</div>
+                  <div class="bb-summary-value">{{$bbPurchaseController.purchase.bookings[0].service_name}}</div>
                 </li>
 
                 <li class="row confirmation-summary-item">
                   <div class="bb-summary-label">
                     <span translate="PUBLIC_BOOKING.PURCHASE.WHEN_LBL"></span>
                   </div>
-                  <div class="bb-summary-value">{{purchase.bookings[0].datetime | datetime: 'LLLL'}}</div>
+                  <div class="bb-summary-value">{{$bbPurchaseController.purchase.bookings[0].datetime | datetime: 'LLLL'}}</div>
                 </li>
 
-                <li class="row confirmation-summary-item" ng-show="purchase.total_price > 0">
+                <li class="row confirmation-summary-item" ng-show="$bbPurchaseController.purchase.total_price > 0">
                   <div class="bb-summary-label">
                     <span translate="PUBLIC_BOOKING.PURCHASE.PRICE_LBL"></span>
                   </div>
-                  <div class="bb-summary-value">{{purchase.total_price | currency }}</div>
+                  <div class="bb-summary-value">{{$bbPurchaseController.purchase.total_price | currency }}</div>
                 </li>
 
               </ul>
 
               <div
-                bb-address-map="purchase.bookings[0].company.address"
+                bb-address-map="$bbPurchaseController.purchase.bookings[0].company.address"
                 class="view-booking-map">
                 <ui-gmap-google-map
                   ng-if="map.center"
@@ -102,14 +102,14 @@
 
               <div class="confirmation-summary-address">
 
-                <div ng-show="purchase.bookings[0].company.address">
+                <div ng-show="$bbPurchaseController.purchase.bookings[0].company.address">
                   <span class="fa fa-map-marker"></span>
-                  {{purchase.bookings[0].company.address | address_single_line}}
+                  {{$bbPurchaseController.purchase.bookings[0].company.address | address_single_line}}
                 </div>
 
-                <div ng-show="purchase.bookings[0].company.address.phone">
+                <div ng-show="$bbPurchaseController.purchase.bookings[0].company.address.phone">
                   <span class="fa fa-phone"></span>
-                  {{purchase.bookings[0].company.address.phone | local_phone_number}}
+                  {{$bbPurchaseController.purchase.bookings[0].company.address.phone | local_phone_number}}
                 </div>
 
               </div>
@@ -136,10 +136,10 @@
                 <div class="row">
 
                   <div class="col-sm-4">
-                    <button
+                    <button 
                       type="button"
                       class="btn btn-secondary btn-block"
-                      ng-click="delete(bookings[0])"
+                      ng-click="$bbPurchaseController.delete($bbPurchaseController.bookings[0], $bbPurchaseController.cancelReasons)"
                       translate="PUBLIC_BOOKING.PURCHASE.CANCEL_BOOKING_BTN">
                     </button>
                   </div>
@@ -149,19 +149,19 @@
                       type="button"
                       id="btn-continue"
                       class="btn btn-primary btn-block"
-                      ng-click="$bbMoveBookingCtrl.initMove(bookings[0], true)"
+                      ng-click="$bbMoveBookingCtrl.initMove($bbPurchaseController.bookings[0], true)"
                       bb-debounce
                       translate="PUBLIC_BOOKING.PURCHASE.MOVE_BOOKING_BTN">  
                     </button>
                   </div>
 
                   <div
-                    ng-show="waitlist_bookings && waitlist_bookings.length > 0"
+                    ng-show="$bbPurchaseController.waitlist_bookings && $bbPurchaseController.waitlist_bookings.length > 0"
                     class="col-sm-4">
                     <button
                       type="button"
                       class="btn btn-primary btn-block"
-                      ng-click="is_waitlist = true"
+                      ng-click="$bbPurchaseController.is_waitlist = true"
                       translate="PUBLIC_BOOKING.PURCHASE.BOOK_WAITLIST_ITEMS_BTN">
                     </button>
                   </div>

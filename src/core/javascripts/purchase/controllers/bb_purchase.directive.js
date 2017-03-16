@@ -11,6 +11,7 @@
             replace: true,
             scope: true,
             controller: 'Purchase',
+            controllerAs: '$bbPurchaseController',
             link
         }
 

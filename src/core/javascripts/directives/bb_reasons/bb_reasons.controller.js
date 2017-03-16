@@ -8,7 +8,7 @@
 
         let init = () => {
             this.loader = LoadingService.$loader($scope);
-            initReasons($scope.company.id);
+            initReasons($scope.bb.company.id);
         }
 
         let initReasons = (companyId) => {
@@ -21,7 +21,7 @@
 
         let getReasons = (company) => {
             ReasonService.query(company).then((reasons) => {
-                $scope.companyReasons = reasons;
+                this.companyReasons = reasons;
                 setCancelReasons();
                 setMoveReasons();
             }, (err) => {
@@ -31,14 +31,15 @@
 
         let setCancelReasons = () => {
             // reason_type 3 === cancel reasons
-            $scope.cancelReasons = _.filter($scope.companyReasons, r => r.reason_type === 3);
-            $rootScope.$broadcast("booking:cancelReasonsLoaded", $scope.cancelReasons);
+            this.cancelReasons = _.filter(this.companyReasons, r => r.reason_type === 3);
+            $scope.cancelReasons = this.cancelReasons;
+            $rootScope.$broadcast("booking:cancelReasonsLoaded", this.cancelReasons);
         }
 
         let setMoveReasons = () => {
              // reason_type 5 === move reasons
-            $scope.moveReasons = _.filter($scope.companyReasons, r => r.reason_type === 5);
-            $rootScope.$broadcast("booking:moveReasonsLoaded", $scope.moveReasons);
+            this.moveReasons = _.filter(this.companyReasons, r => r.reason_type === 5);
+            $rootScope.$broadcast("booking:moveReasonsLoaded", this.moveReasons);
         }
 
         init();
