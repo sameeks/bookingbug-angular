@@ -3,7 +3,7 @@ angular
     .controller('bbResourceCalendarController', function (AdminBookingPopup, AdminCalendarOptions, AdminCompanyService,
         AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources, ColorPalette, Dialog,
         $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope, $state,
-        TitleAssembler, $translate, $window, uiCalendarConfig, CompanyStoreService, bbTimeZone, bbi18nOptions) {
+        TitleAssembler, $translate, $window, uiCalendarConfig, CompanyStoreService, bbi18nOptions) {
 
         'ngInject';
 

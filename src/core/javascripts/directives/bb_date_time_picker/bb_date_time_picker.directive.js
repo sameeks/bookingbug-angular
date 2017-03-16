@@ -28,7 +28,7 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
             },
             restrict: 'A',
             templateUrl: 'bb_date_time_picker.html',
-            controller($scope, $filter, $timeout, GeneralOptions, bbi18nOptions, bbTimeZone) {
+            controller($scope, $filter, $timeout, GeneralOptions, bbi18nOptions) {
                 if ($scope.format == null) {
                     $scope.format = 'dd/MM/yyyy';
                 }

@@ -4,7 +4,7 @@
  * @description
  * Controller for the layout (root state)
  */
-let controller = function ($scope, $state, company, $uibModalStack, $rootScope, $localStorage, GeneralOptions, CompanyStoreService, bbTimeZone) {
+let controller = function ($scope, $state, company, $uibModalStack, $rootScope, $localStorage, GeneralOptions, CompanyStoreService, bbTimeZoneOptions) {
     'ngInject';
 
     $scope.company = company;
@@ -15,7 +15,7 @@ let controller = function ($scope, $state, company, $uibModalStack, $rootScope, 
     CompanyStoreService.currency_code = company.currency_code;
     CompanyStoreService.time_zone = company.timezone;
 
-    bbTimeZone.determineTimeZone();
+    bbTimeZoneOptions.determineTimeZone();
 
     // checks to see if passed in state is part of the active chain
     $scope.isState = states => $state.includes(states);

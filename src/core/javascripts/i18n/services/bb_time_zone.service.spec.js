@@ -1,8 +1,8 @@
 'use strict';
 
-describe('BB.i18n, bbTimeZone', function () {
+describe('BB.i18n, bbTimeZoneOptions', function () {
 
-    let bbTimeZone = null;
+    let bbTimeZoneOptions = null;
 
     let beforeEachFn = function () {
         module('BB');
@@ -13,7 +13,7 @@ describe('BB.i18n, bbTimeZone', function () {
 
     let injectDependencies = function () {
         inject(function ($injector) {
-            bbTimeZone = $injector.get('bbTimeZone');
+            bbTimeZoneOptions = $injector.get('bbTimeZoneOptions');
         });
     };
 
@@ -31,7 +31,7 @@ describe('BB.i18n, bbTimeZone', function () {
                 display: '(UTC +00:00) London (GMT)',
                 value: 'Europe/London'
             };
-            expect(bbTimeZone.mapTimeZoneForDisplay('Europe/London')).toEqual(timezone);
+            expect(bbTimeZoneOptions.mapTimeZoneForDisplay('Europe/London')).toEqual(timezone);
         });
 
         it('should return timezone object with id and order properties', function () {
@@ -41,7 +41,7 @@ describe('BB.i18n, bbTimeZone', function () {
                 id: 1,
                 order: [7, '+07', 'KRASNOYARSK']
             };
-            expect(bbTimeZone.mapTimeZoneForDisplay('Asia/Krasnoyarsk', 1)).toEqual(timezone);
+            expect(bbTimeZoneOptions.mapTimeZoneForDisplay('Asia/Krasnoyarsk', 1)).toEqual(timezone);
         });
 
     });

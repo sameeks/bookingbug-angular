@@ -2,15 +2,15 @@
 
     /*
     * @ngdoc service
-    * @name BBAdminDashboard.TimeZoneOptions
+    * @name BBAdminDashboard.bbTimeZoneOptions
     * @description
-    * Factory for retrieving a list of timezones
+    * TimeZone options factory
     */
     angular
         .module('BB.i18n')
-        .factory('bbTimeZone', timeZoneFactory);
+        .factory('bbTimeZoneOptions', timeZoneFactoryOptions);
 
-    function timeZoneFactory ($translate, $localStorage, orderByFilter, bbi18nOptions, GeneralOptions, CompanyStoreService) {
+    function timeZoneFactoryOptions ($translate, $localStorage, orderByFilter, bbi18nOptions, GeneralOptions, CompanyStoreService) {
 
         return {
             getTimeZoneLs: getTimeZoneLs,

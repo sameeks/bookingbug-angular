@@ -27,7 +27,7 @@
              controllerAs: '$bbTimeZoneOptionsCtrl'
          });
 
-    function TimeZoneOptionsCtrl ($scope, $rootScope, bbTimeZone, CompanyStoreService, bbi18nOptions) {
+    function TimeZoneOptionsCtrl ($scope, $rootScope, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions) {
         'ngInject';
 
         const ctrl = this;
@@ -37,7 +37,7 @@
         ctrl.selectedTimeZone = null;
 
         ctrl.$onInit = function() {
-            ctrl.timeZones = bbTimeZone.generateTimeZoneList(ctrl.restrictRegion);
+            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.restrictRegion);
             ctrl.updateTimeZone = updateTimeZone;
             ctrl.automaticTimeZoneToggle = automaticTimeZoneToggle;
             setDefaults();
@@ -61,27 +61,27 @@
         }
 
         function updateTimeZone (timeZone, localStorageAction) {
-            ctrl.selectedTimeZone = bbTimeZone.mapTimeZoneForDisplay(timeZone);
-            bbTimeZone.updateDefaultTimeZone(timeZone, localStorageAction);
+            ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(timeZone);
+            bbTimeZoneOptions.updateDefaultTimeZone(timeZone, localStorageAction);
             $rootScope.$emit('BBTimeZoneOptions:timeZoneChanged', timeZone);
         }
 
         function setDefaults () {
-            const timeZone = bbTimeZone.getTimeZoneLs();
+            const timeZone = bbTimeZoneOptions.getTimeZoneLs();
             const browserTimeZone = bbi18nOptions.use_browser_time_zone;
 
             if (timeZone) {
-                ctrl.selectedTimeZone = bbTimeZone.mapTimeZoneForDisplay(timeZone);
+                ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(timeZone);
                 return;
             }
 
             if (browserTimeZone) {
                 ctrl.automaticTimeZone = true;
-                ctrl.selectedTimeZone = bbTimeZone.mapTimeZoneForDisplay(moment.tz.guess());
+                ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(moment.tz.guess());
                 return;
             }
 
-            ctrl.selectedTimeZone = bbTimeZone.mapTimeZoneForDisplay(CompanyStoreService.time_zone);
+            ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(CompanyStoreService.time_zone);
         }
     }
 
