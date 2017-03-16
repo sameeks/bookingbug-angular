@@ -9,6 +9,7 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
     // init vars
     $scope.options = $scope.$eval($attrs.bbMap) || {};
 
+    // when set to true, selectItem() does not call decideNextPage() when calling $scope.initWidget()
     $scope.no_route = $scope.options.no_route || false;
 
     $scope.num_search_results = $scope.options.num_search_results || 6;
@@ -18,7 +19,10 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
     $scope.filter_by_service = $scope.options.filter_by_service || false; // The aforementioned checkbox is bound to this value which can be true or false depending on checked state, hence why we cannot use filter_by_service to show/hide the checkbox
     $scope.default_zoom = $scope.options.default_zoom || 6;
 
+    // custom map marker icon can be set using GeneralOptions
     let defaultPin = GeneralOptions.map_marker_icon
+
+    // when set to false, geolocate() only fills the input with the returned address and does not load the map
     $scope.loadMapOnGeolocate = true;
 
     let map_ready_def = $q.defer();
@@ -329,6 +333,7 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
                     } else {
                         searchFailed();
                     }
+                    loader.setLoaded();
                 });
             }
         });
@@ -366,7 +371,7 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
             } else {
                 searchFailed();
             }
-            return $timeout(() => loader.setLoaded());
+            return;
         });
     };
 
@@ -659,7 +664,7 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
 
         $scope.loadMapOnGeolocate = loadMapOnGeolocate;
 
-        $timeout(() => loader.notLoaded());
+        loader.notLoaded();
 
         return webshim.ready('geolocation', function () {
             // set timeout as 5 seconds and max age as 1 hour
