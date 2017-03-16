@@ -35,7 +35,7 @@
                 return deferred.promise;
             },
 
-            updatePurchaseBookingRef(purchase, booking) {
+            updatePurchaseBookingData(purchase, booking) {
                 let i, len, oldb, ref;
 
                 if (purchase) {

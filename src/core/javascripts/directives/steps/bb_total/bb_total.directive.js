@@ -19,13 +19,21 @@
  * @property {array} total The total
  *///
 
+(() => {
 
-angular.module('BB.Directives').directive('bbTotal', () => {
-        return {
+    angular
+        .module('BB.Directives')
+        .directive('bbTotal', bbTotal);
+
+    function bbTotal() {
+        let directive = {
             restrict: 'AE',
             replace: true,
             scope: true,
             controller: 'Total'
-        };
+        }
+
+        return directive;
     }
-);
+
+})();

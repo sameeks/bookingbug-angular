@@ -24,12 +24,6 @@
             this.moveReasons = moveReasons;
         });
 
-        let checkCompanyForReasons = (companyId) => {
-            let options = {root: $scope.bb.api_url};
-            if($scope.bb.company.$has("reasons")) {
-                this.companyHasReasons = true;
-            }
-        }
 
         let setPurchaseCompany = (company) => {
 
@@ -373,6 +367,13 @@
                 );
             });
         };
+
+        let checkCompanyForReasons = (companyId) => {
+            let options = {root: $scope.bb.api_url};
+            if($scope.bb.company.$has("reasons")) {
+                this.companyHasReasons = true;
+            }
+        }
 
 
         // delete all bookings assoicated to the purchase
