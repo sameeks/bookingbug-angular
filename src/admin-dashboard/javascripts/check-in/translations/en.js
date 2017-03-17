@@ -25,7 +25,7 @@ angular.module('BBAdminDashboard.check-in.translations')
                     'STAFF_MEMBER': 'Staff Member',
                     'DUE': 'Due',
                     'ARRIVED': 'Arrived',
-                    'BEEING_SEEN': 'Being Seen',
+                    'BEING_SEEN': 'Being Seen',
                     'COMPLETED': 'Completed',
                     'NO_SHOW_BUTTON': 'Mark No Show',
                     'CHECK_IN_BUTTON': 'Check in',
