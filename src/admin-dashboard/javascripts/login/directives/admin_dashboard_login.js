@@ -52,82 +52,21 @@
             $scope.formErrors = [];
 
             let formErrorExists = function (message) {
-                for (let obj of Array.from($scope.formErrors)) {
-                    if (obj.message.match(message))  return true;
+                for (let formError of Array.from($scope.formErrors)) {
+                    if (formError.message.match(message)) return true;
                 }
                 return false;
             };
 
             let companySelection = function (user) {
                 if (user.$has('administrators')) {
-                    user.$getAdministrators().then(
-                        (administrators) => {
-                            $scope.administrators = administrators;
+                    user.$getAdministrators().then(administratorsSuccessHandler);
 
-                            // if user is admin in more than one company show select company
-                            if (administrators.length > 1) {
-                                $scope.template_vars.show_loading = false;
-                                $scope.template_vars.show_login = false;
-                                return $scope.template_vars.show_pick_company = true;
-                            } else if (administrators.length === 1) {
-                                // else automatically select the first admin
-                                let params = {
-                                    email: $scope.login_data.email,
-                                    password: $scope.login_data.password
-                                };
-
-                                $scope.login_data.selected_admin = _.first(administrators);
-                                $scope.login_data.selected_admin.$post('login', {}, params).then(
-                                    (login) => {
-                                        $scope.login_data.selected_admin.$getCompany().then(
-                                            (company) => {
-                                                $scope.template_vars.show_loading = false;
-                                                // if there are departments show department selector
-                                                if (company.companies && (company.companies.length > 0)) {
-                                                    $scope.template_vars.show_pick_department = true;
-                                                    $scope.departments = company.companies;
-                                                } else {
-                                                    // else select that company directly and move on
-                                                    $scope.login_data.selected_company = company;
-                                                    BBModel.Admin.Login.$setLogin($scope.login_data.selected_admin);
-                                                    BBModel.Admin.Login.$setCompany($scope.login_data.selected_company.id).then(
-                                                        (user) => $scope.onSuccess($scope.login_data.selected_company)
-                                                    );
-                                                }
-                                            })
-                                    }
-                                );
-                            } else {
-                                $scope.template_vars.show_loading = false;
-                                let message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_INCORRECT_CREDS";
-                                if (!formErrorExists(message)) {
-                                    return $scope.formErrors.push({message});
-                                }
-                            }
-                        }
-                    );
-
-                    // else if there is an associated company
                 } else if (user.$has('company')) {
                     $scope.login_data.selected_admin = user;
 
-                    return user.$getCompany().then(
-                        (company) => {
-                            // if departments are available show departments selector
-                            if (company.companies && (company.companies.length > 0)) {
-                                $scope.template_vars.show_loading = false;
-                                $scope.template_vars.show_pick_department = true;
-                                $scope.template_vars.show_login = false;
-                                $scope.departments = company.companies;
-                            } else {
-                                // else select that company directly and move on
-                                $scope.login_data.selected_company = company;
-                                BBModel.Admin.Login.$setLogin($scope.login_data.selected_admin);
-                                BBModel.Admin.Login.$setCompany($scope.login_data.selected_company.id).then(
-                                    (user) => $scope.onSuccess($scope.login_data.selected_company)
-                                );
-                            }
-                        },
+                    user.$getCompany().then(
+                        companySuccessHandler,
                         (err) => {
                             $scope.template_vars.show_loading = false;
                             let message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_ISSUE_WITH_COMPANY";
@@ -143,6 +82,68 @@
                     if (!formErrorExists(message)) {
                         $scope.formErrors.push({message});
                     }
+                }
+            };
+
+            let administratorsSuccessHandler = (administrators) => {
+                $scope.administrators = administrators;
+
+                // if user is admin in more than one company show select company
+                if (administrators.length > 1) {
+                    $scope.template_vars.show_loading = false;
+                    $scope.template_vars.show_login = false;
+                    return $scope.template_vars.show_pick_company = true;
+                } else if (administrators.length === 1) {
+                    // else automatically select the first admin
+                    let params = {
+                        email: $scope.login_data.email,
+                        password: $scope.login_data.password
+                    };
+
+                    $scope.login_data.selected_admin = _.first(administrators);
+                    $scope.login_data.selected_admin.$post('login', {}, params).then(
+                        (login) => {
+                            $scope.login_data.selected_admin.$getCompany().then(
+                                (company) => {
+                                    $scope.template_vars.show_loading = false;
+                                    // if there are departments show department selector
+                                    if (company.companies && (company.companies.length > 0)) {
+                                        $scope.template_vars.show_pick_department = true;
+                                        $scope.departments = company.companies;
+                                    } else {
+                                        // else select that company directly and move on
+                                        $scope.login_data.selected_company = company;
+                                        BBModel.Admin.Login.$setLogin($scope.login_data.selected_admin);
+                                        BBModel.Admin.Login.$setCompany($scope.login_data.selected_company.id).then(
+                                            (user) => $scope.onSuccess($scope.login_data.selected_company)
+                                        );
+                                    }
+                                })
+                        }
+                    );
+                } else {
+                    $scope.template_vars.show_loading = false;
+                    let message = "ADMIN_DASHBOARD.LOGIN_PAGE.ERROR_INCORRECT_CREDS";
+                    if (!formErrorExists(message)) {
+                        return $scope.formErrors.push({message});
+                    }
+                }
+            };
+
+            let companySuccessHandler = (company) => {
+                // if departments are available show departments selector
+                if (company.companies && (company.companies.length > 0)) {
+                    $scope.template_vars.show_loading = false;
+                    $scope.template_vars.show_pick_department = true;
+                    $scope.template_vars.show_login = false;
+                    $scope.departments = company.companies;
+                } else {
+                    // else select that company directly and move on
+                    $scope.login_data.selected_company = company;
+                    BBModel.Admin.Login.$setLogin($scope.login_data.selected_admin);
+                    BBModel.Admin.Login.$setCompany($scope.login_data.selected_company.id).then(
+                        (user) => $scope.onSuccess($scope.login_data.selected_company)
+                    );
                 }
             };
 
