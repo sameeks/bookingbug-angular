@@ -10,18 +10,17 @@
 
             let init = () => {
                 this.loader = LoadingService.$loader($scope);
-                this.options = $scope.$eval($attrs.bbMoveBooking) || {};
-
-
             }
 
-            this.initMove = function(booking, openInModal) {
+            this.initMove = (booking, openInModal) => {
                 if(openInModal) {
                     openCalendarModal(booking);
-                } else {
-                    // check if booking is ready to be moved (datetime has been changed) - add method to basketItem model?
-                    // update purchaseBooking
-                    updateSingleBooking(booking);
+                }
+                else if($rootScope.user){
+                    return this.updateSingleBooking(booking);
+                }
+                else {
+                    this.checkBookingReadyToMove(booking);
                 }
 
                 // call different method when moving multiple bookings which POSTS to PurchaseService
@@ -36,10 +35,10 @@
                 });
             }
 
-            let updateSingleBooking = (booking) => {
+            this.checkBookingReadyToMove = (booking) => {
                 this.loader.notLoaded();
 
-                if(!PurchaseBookingService.purchaseBookingIsMovable(booking)) {
+                if(PurchaseBookingService.purchaseBookingNotMovable(booking)) {
                     this.loader.setLoaded();
                     AlertService.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
 
@@ -49,27 +48,32 @@
                 }
 
                 else {
+                    if(CompanyStoreService.hasMoveReasons) {
+                        return $scope.decideNextPage('reschedule_reasons');
+                    }
 
-                    PurchaseBookingService.update(booking).then((purchaseBooking) => {
-                        let booking = new BBModel.Purchase.Booking(purchaseBooking);
-                        this.loader.setLoaded()
-
-                        // update the $scope purchase to the newly updated purchaseBooking
-                        $scope.bb.purchase = PurchaseBookingService.updatePurchaseBookingRef($scope.bb.purchase, booking);
-                        resolveMove();
-                    });
+                    else return this.updateSingleBooking(booking);
                 }
+            }
+
+            this.updateSingleBooking = (booking) => {
+                PurchaseBookingService.update(booking).then((purchaseBooking) => {
+                    let booking = new BBModel.Purchase.Booking(purchaseBooking);
+                    this.loader.setLoaded()
+
+                    // update the $scope purchase to the newly updated purchaseBooking
+                    $scope.bb.purchase = PurchaseBookingService.updatePurchaseBookingRef($scope.bb.purchase, booking);
+                    resolveMove();
+                });
             }
 
             let resolveMove = () => {
                 $rootScope.$broadcast("booking:moved", $scope.bb.purchase);
 
                 // isMemberDashboard property is defined when openCalendarModal method is called from memberBookings controller
-                WidgetModalService.bookings = $scope.bb.purchase.bookings;
-
                 // we dont want to close the modal when on the member or admin dashboard
                 if(WidgetModalService.isMemberDashboard || $rootScope.user) {
-                    $scope.decideNextPage('purchase');
+                    $scope.decideNextPage('confirmation');
                 }
                 else  {
                     WidgetModalService.close();

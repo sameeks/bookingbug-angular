@@ -4,10 +4,10 @@
     <h1 translate="PUBLIC_BOOKING.RESCHEDULE_REASONS.MOVE_HEADING"></h1>
   </div>
 
-  <div bb-include="_basket_item_summary_var"></div>
+  <div bb-include="_basket_item_summary"></div>
 
-  <div>
-    <p ng-show="bb.move_reasons.length > 0">
+  <div bb-reasons>
+    <p ng-show="$bbReasonsCtrl.moveReasons.length > 0">
       <span class="bb-summary-label3">
         <span translate="PUBLIC_BOOKING.RESCHEDULE_REASONS.MOVE_REASON"></span>
       </span>
@@ -15,7 +15,7 @@
         ng-model="bb.current_item.moveReason"
         id="cancel_reason"
         class="form-control"
-        ng-options="option.id as option.text for option in moveReasons">
+        ng-options="option.id as option.text for option in $bbReasonsCtrl.moveReasons">
       </select>
     </p>
   </div>
@@ -27,7 +27,7 @@
           type="button"
           aria-label="continue button"
           class="btn btn-primary btn-block"
-          ng-click="checkReady() && routeReady()"
+          ng-click="$bbMoveBookingCtrl.updateSingleBooking(bb.current_item)""
           bb-debounce
           translate="PUBLIC_BOOKING.RESCHEDULE_REASONS.MOVE_BTN">
         </button>

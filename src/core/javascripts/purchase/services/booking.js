@@ -55,8 +55,9 @@
                 }
             },
 
-            purchaseBookingIsMovable(booking) {
-                return !(booking.min_cancellation_time.isBefore(moment()) || booking.time.datetime.isSame(booking.srcBooking.datetime))
+            purchaseBookingNotMovable(booking) {
+                let timeNow = moment();
+                return (booking.min_cancellation_time.isBefore(timeNow) || booking.time.datetime.isSame(booking.srcBooking.datetime));
             }
         };
     }

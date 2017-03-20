@@ -1199,8 +1199,8 @@ angular.module('BB.Models').factory("BasketItemModel", ($q, $window, BBModel, Bo
                 data.product_id = this.product.id;
             }
             data.ref = this.ref;
-            if (this.move_reason) {
-                data.move_reason = this.move_reason;
+            if (this.moveReason) {
+                data.moveReason = this.moveReason;
             }
 
             if (this.email) {

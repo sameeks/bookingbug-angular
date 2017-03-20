@@ -8,7 +8,7 @@
     function BBReasons() {
         let directive = {
             controller: 'bbReasonsController',
-            controllerAs: '$bbReasonsController'
+            controllerAs: '$bbReasonsCtrl'
         }
 
         return directive;

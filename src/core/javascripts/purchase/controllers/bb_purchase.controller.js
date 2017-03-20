@@ -24,15 +24,6 @@
             $scope.moveReasons = moveReasons;
         });
 
-        let checkCompanyForReasons = (companyId) => {
-            let options = {root: $scope.bb.api_url};
-
-            BBModel.Company.$query(companyId, options).then((company) => {
-                if(company.$has("reasons")) {
-                    $scope.companyHasReasons = true;
-                }
-            });
-        }
 
         let setPurchaseCompany = function (company) {
 
@@ -251,6 +242,16 @@
             }
             return id;
         };
+
+        let checkCompanyForReasons = (companyId) => {
+            let options = {root: $scope.bb.api_url};
+
+            BBModel.Company.$query(companyId, options).then((company) => {
+                if(company.$has("reasons")) {
+                    $scope.companyHasReasons = true;
+                }
+            });
+        }
 
 
         // potentially move all of the items in booking - move the whole lot to a basket
