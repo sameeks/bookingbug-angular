@@ -30,8 +30,10 @@ angular.module('BB.Services').provider('GeneralOptions', function () {
         calendar_slot_duration: 5,
         update_document_title: false,
         scroll_offset: 0,
+        map_marker_icon: null,
 
         custom_time_zone: false
+
     };
 
 
