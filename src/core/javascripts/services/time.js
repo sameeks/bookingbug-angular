@@ -1,4 +1,4 @@
-angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, bbi18nOptions, CompanyStoreService, DateTimeUtilitiesService) => {
+angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, bbi18nOptions, CompanyStoreService, DateTimeUtilitiesService, bbTimeZone) => {
 
     return {
         query(prms) {
@@ -23,14 +23,14 @@ angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, bb
                 ({end_date} = prms);
             }
 
-            let {display_time_zone} = bbi18nOptions;
+
             let company_time_zone = CompanyStoreService.time_zone;
 
             // Adjust time range based on UTC offset between company time zone and display time zone
-            if ((display_time_zone != null) && (display_time_zone !== company_time_zone)) {
+            if ((bbTimeZone.getDisplayTimeZone() != null) && (bbTimeZone.getDisplayTimeZone() !== company_time_zone)) {
 
-                let display_utc_offset = moment().tz(display_time_zone).utcOffset();
-                let company_utc_offset = moment().tz(company_time_zone).utcOffset();
+                let display_utc_offset = moment().tz(bbTimeZone.getDisplayTimeZone()).utcOffset();
+                let company_utc_offset = moment().tz(bbTimeZone.getDisplayTimeZone()).utcOffset();
 
                 if (company_utc_offset < display_utc_offset) {
                     start_date = prms.start_date.clone().subtract(1, 'day');
@@ -38,7 +38,7 @@ angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, bb
                     end_date = prms.end_date.clone().add(1, 'day');
                 }
 
-                prms.time_zone = display_time_zone;
+                prms.time_zone = bbTimeZone.getDisplayTimeZone();
             }
 
             // If there was no duration passed in get the default duration off the

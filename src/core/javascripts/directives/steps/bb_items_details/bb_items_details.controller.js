@@ -1,4 +1,4 @@
-angular.module('BB.Controllers').controller('ItemDetails', function ($scope, $attrs, $rootScope, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService, bbi18nOptions, bbTimeZone) {
+angular.module('BB.Controllers').controller('ItemDetails', function ($scope, $attrs, $rootScope, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService, bbTimeZone) {
 
     let loader = LoadingService.$loader($scope);
 
@@ -292,7 +292,7 @@ angular.module('BB.Controllers').controller('ItemDetails', function ($scope, $at
 
     $scope.showMoveMessage = (datetime) => {
         if (bbTimeZone.isCustomTimeZone()) {
-            datetime = moment.tz(datetime, bbi18nOptions.display_time_zone);
+            datetime = moment.tz(datetime, bbTimeZone.getDisplayTimeZone());
         }
         AlertService.add("info", {
             msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', {datetime})

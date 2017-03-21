@@ -28,7 +28,7 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
             },
             restrict: 'A',
             templateUrl: 'bb_date_time_picker.html',
-            controller($scope, GeneralOptions, bbi18nOptions, bbTimeZone) {
+            controller($scope, GeneralOptions, bbTimeZone) {
                 if ($scope.format == null) {
                     $scope.format = 'dd/MM/yyyy';
                 }
@@ -48,7 +48,7 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
                 }
 
                 if (bbTimeZone.isCustomTimeZone() && $scope.date) {
-                    $scope.date = moment.tz($scope.date, bbi18nOptions.display_time_zone);
+                    $scope.date = moment.tz($scope.date, bbTimeZone.getDisplayTimeZone());
                 }
 
                 // Watch for changes in the timepicker and reassemble the new datetime

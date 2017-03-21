@@ -12,18 +12,23 @@
 
     function bbTimeZoneService($localStorage, bbi18nOptions, CompanyStoreService) {
 
-        //let displayTimeZone = null;
+        let displayTimeZone = null;
         let customTimeZone = false;
 
         return {
             determineTimeZone: determineTimeZone,
             getTimeZoneLs: getTimeZoneLs,
+            getDisplayTimeZone: getDisplayTimeZone,
             isCustomTimeZone: isCustomTimeZone,
             updateDefaultTimeZone: updateDefaultTimeZone
         };
 
         function getTimeZoneLs() {
             return $localStorage.getItem('bbTimeZone');
+        }
+
+        function getDisplayTimeZone() {
+            return displayTimeZone;
         }
 
         function isCustomTimeZone() {
@@ -58,7 +63,7 @@
             }
 
             moment.tz.setDefault(timeZone);
-            bbi18nOptions.display_time_zone = timeZone;
+            displayTimeZone = timeZone;
             customTimeZone = timeZone !== CompanyStoreService.time_zone;
         }
     }

@@ -13,18 +13,18 @@
  *///
 angular
     .module('BB.Directives')
-    .directive('bbTimeZone', (CompanyStoreService, bbi18nOptions) => {
+    .directive('bbTimeZone', () => {
         return {
             restrict: 'A',
             controllerAs: '$tzCtrl',
             templateUrl: '_time_zone.html',
-            controller() {
+            controller(CompanyStoreService, bbTimeZone, bbi18nOptions) {
 
                 let company_time_zone = CompanyStoreService.time_zone;
                 this.time_zone_name = moment().tz(company_time_zone).format('zz');
 
                 //  if not using local time zone and user time zone is not same as companies
-                if (!bbi18nOptions.use_browser_time_zone && (bbi18nOptions.display_time_zone !== company_time_zone)) {
+                if (!bbi18nOptions.use_browser_time_zone && (bbTimeZone.getDisplayTimeZone() !== company_time_zone)) {
                     return this.is_time_zone_diff = true;
                 }
             }

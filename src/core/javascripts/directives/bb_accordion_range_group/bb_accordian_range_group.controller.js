@@ -1,4 +1,4 @@
-angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($scope, $attrs, $rootScope, $q, FormDataStoreService, bbi18nOptions, DateTimeUtilitiesService, $translate, CompanyStoreService) {
+angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($scope, $attrs, $rootScope, $q, FormDataStoreService, DateTimeUtilitiesService, $translate, CompanyStoreService, bbTimeZone) {
 
     $scope.$watch('slots', () => setData());
 
@@ -51,8 +51,9 @@ angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($sc
 
                 // use display time zone to ensure slots get added to the correct range group
                 let slot_time;
-                if ((bbi18nOptions.display_time_zone != null) && (bbi18nOptions.display_time_zone !== CompanyStoreService.time_zone)) {
-                    let datetime = moment(slot.datetime).tz(bbi18nOptions.display_time_zone);
+                const displayTimeZone = bbTimeZone.getDisplayTimeZone();
+                if ((displayTimeZone != null) && (displayTimeZone !== CompanyStoreService.time_zone)) {
+                    let datetime = moment(slot.datetime).tz(displayTimeZone);
                     slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime);
                 } else {
                     slot_time = slot.time;
@@ -110,8 +111,9 @@ angular.module('BB.Controllers').controller('AccordionRangeGroup', function ($sc
 
             // use display time zone to ensure slots get added to the right range group
             let slot_time;
-            if ((bbi18nOptions.display_time_zone != null) && (bbi18nOptions.display_time_zone !== CompanyStoreService.time_zone)) {
-                let datetime = moment(slot.datetime).tz(bbi18nOptions.display_time_zone);
+            const displayTimeZone = bbTimeZone.getDisplayTimeZone();
+            if ((displayTimeZone != null) && (displayTimeZone !== CompanyStoreService.time_zone)) {
+                let datetime = moment(slot.datetime).tz(displayTimeZone);
                 slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime);
             } else {
                 slot_time = slot.time;
