@@ -27,7 +27,7 @@
              controllerAs: '$bbTimeZoneOptionsCtrl'
          });
 
-    function TimeZoneOptionsCtrl ($scope, $rootScope, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions) {
+    function TimeZoneOptionsCtrl ($scope, $rootScope, bbTimeZone, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions) {
         'ngInject';
 
         const ctrl = this;
@@ -62,12 +62,12 @@
 
         function updateTimeZone (timeZone, localStorageAction) {
             ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(timeZone);
-            bbTimeZoneOptions.updateDefaultTimeZone(timeZone, localStorageAction);
+            bbTimeZone.updateDefaultTimeZone(timeZone, localStorageAction);
             $rootScope.$emit('BBTimeZoneOptions:timeZoneChanged', timeZone);
         }
 
         function setDefaults () {
-            const timeZone = bbTimeZoneOptions.getTimeZoneLs();
+            const timeZone = bbTimeZone.getTimeZoneLs();
             const browserTimeZone = bbi18nOptions.use_browser_time_zone;
 
             if (timeZone) {

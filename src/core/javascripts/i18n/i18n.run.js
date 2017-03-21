@@ -1,4 +1,4 @@
-angular.module('BB.i18n').run(function ($localStorage, bbi18nOptions, bbLocale, RuntimeTranslate, bbTimeZoneOptions) {
+angular.module('BB.i18n').run(function ($localStorage, bbi18nOptions, bbLocale, RuntimeTranslate, bbTimeZone, bbTimeZoneOptions) {
     'ngInject';
 
     RuntimeTranslate.registerAvailableLanguageKeys(
@@ -7,6 +7,6 @@ angular.module('BB.i18n').run(function ($localStorage, bbi18nOptions, bbLocale, 
     );
 
     bbLocale.determineLocale();
-    bbTimeZoneOptions.determineTimeZone();
+    bbTimeZone.determineTimeZone();
 
 });

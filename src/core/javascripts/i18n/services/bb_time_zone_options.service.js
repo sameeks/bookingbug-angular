@@ -10,52 +10,12 @@
         .module('BB.i18n')
         .factory('bbTimeZoneOptions', timeZoneFactoryOptions);
 
-    function timeZoneFactoryOptions ($translate, $localStorage, orderByFilter, bbi18nOptions, GeneralOptions, CompanyStoreService) {
+    function timeZoneFactoryOptions ($translate, orderByFilter) {
 
         return {
-            getTimeZoneLs: getTimeZoneLs,
-            determineTimeZone: determineTimeZone,
-            updateDefaultTimeZone: updateDefaultTimeZone,
             mapTimeZoneForDisplay: mapTimeZoneForDisplay,
             generateTimeZoneList: generateTimeZoneList
         };
-
-        function getTimeZoneLs () {
-            return $localStorage.getItem('bbTimeZone');
-        }
-
-        function determineTimeZone () {
-
-            if (getTimeZoneLs()) {
-                updateDefaultTimeZone(getTimeZoneLs());
-                return;
-            }
-
-            if (bbi18nOptions.use_browser_time_zone) {
-                updateDefaultTimeZone(moment.tz.guess());
-                return;
-            }
-
-            if (CompanyStoreService.time_zone) {
-                updateDefaultTimeZone(CompanyStoreService.time_zone);
-                return;
-            }
-        }
-
-        function updateDefaultTimeZone (timeZone, localStorageAction) {
-            if (localStorageAction === 'setItem') {
-                $localStorage.setItem('bbTimeZone', timeZone);
-            }
-
-            if (localStorageAction === 'removeItem') {
-                $localStorage.removeItem('bbTimeZone');
-            }
-
-            moment.tz.setDefault(timeZone);
-            bbi18nOptions.display_time_zone = timeZone;
-            GeneralOptions.custom_time_zone = timeZone !== CompanyStoreService.time_zone;
-        }
-
 
         function cleanUpLocations () {
             let locationNames = moment.tz.names();
@@ -125,13 +85,12 @@
         * @returns {Array} A list of timezones
         */
         function generateTimeZoneList (restrictRegion) {
-            let timezones = [];
+
             let locationNames = cleanUpLocations();
             if (restrictRegion) {
                 locationNames = restrictToRegion(locationNames, restrictRegion);
             }
-            timezones = mapTimeZones(locationNames);
-            return timezones;
+            return mapTimeZones(locationNames);
         }
     }
 
