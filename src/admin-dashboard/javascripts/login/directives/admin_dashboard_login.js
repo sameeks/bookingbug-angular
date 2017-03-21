@@ -51,7 +51,20 @@
 
             $scope.formErrors = [];
 
-            let formErrorExists = function (message) {
+            this.$onInit = () => {
+                checkSso();
+            };
+
+            const checkSso = () => {
+                // If a User is available at this stages SSO login is implied
+                if ($scope.user) {
+                    $scope.template_vars.show_pick_department = true;
+                    $scope.template_vars.show_login = false;
+                    companySelection($scope.user);
+                }
+            };
+
+            const formErrorExists = function (message) {
                 for (let formError of Array.from($scope.formErrors)) {
                     if (formError.message.match(message)) return true;
                 }
@@ -130,7 +143,7 @@
                 }
             };
 
-            let companySuccessHandler = (company) => {
+            const companySuccessHandler = (company) => {
                 // if departments are available show departments selector
                 if (company.companies && (company.companies.length > 0)) {
                     $scope.template_vars.show_loading = false;
@@ -147,12 +160,6 @@
                 }
             };
 
-            // If a User is available at this stages SSO login is implied
-            if ($scope.user) {
-                $scope.template_vars.show_pick_department = true;
-                $scope.template_vars.show_login = false;
-                companySelection($scope.user);
-            }
 
             $scope.login = function (isValid) {
                 if (isValid) {
