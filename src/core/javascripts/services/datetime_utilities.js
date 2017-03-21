@@ -7,7 +7,7 @@
  *
  *///
 
-angular.module('BB.Services').factory("DateTimeUtilitiesService", function (GeneralOptions, CompanyStoreService) {
+angular.module('BB.Services').factory("DateTimeUtilitiesService", function (GeneralOptions, CompanyStoreService, bbTimeZone) {
 
 
     /***
@@ -55,7 +55,7 @@ angular.module('BB.Services').factory("DateTimeUtilitiesService", function (Gene
             }
             let datetime = moment();
             // if user timezone different than company timezone
-            if (GeneralOptions.custom_time_zone) {
+            if (bbTimeZone.isCustomTimeZone()) {
                 datetime = datetime.tz(CompanyStoreService.time_zone);
             }
             let val = parseInt(time);

@@ -1,9 +1,9 @@
 angular
     .module('BBAdminDashboard.calendar.controllers')
     .controller('bbResourceCalendarController', function (AdminBookingPopup, AdminCalendarOptions, AdminCompanyService,
-        AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources, ColorPalette, Dialog,
-        $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope, $state,
-        TitleAssembler, $translate, $window, uiCalendarConfig, CompanyStoreService, bbi18nOptions) {
+                                                          AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources, ColorPalette, Dialog,
+                                                          $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope, $state,
+                                                          TitleAssembler, $translate, $window, uiCalendarConfig, CompanyStoreService, bbi18nOptions, bbTimeZone) {
 
         'ngInject';
 
@@ -213,7 +213,7 @@ angular
 
         let fcEventDrop = function (booking, delta, revertFunc) { // we need a full move cal if either it has a person and resource, or they've dragged over multiple days
 
-            if (GeneralOptions.custom_time_zone) {
+            if (bbTimeZone.isCustomTimeZone()) {
                 let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
                 booking.start = calendar.moment(moment.tz(booking.start.toISOString(), bbi18nOptions.display_time_zone));
                 booking.end = calendar.moment(moment.tz(booking.end.toISOString(), bbi18nOptions.display_time_zone));
@@ -223,7 +223,7 @@ angular
             if ((booking.status !== 3) && ((booking.person_id && booking.resource_id) || (delta.days() > 0))) {
                 let {start} = booking;
                 let {end} = booking;
-                if (GeneralOptions.custom_time_zone) {
+                if (bbTimeZone.isCustomTimeZone()) {
                     start = moment.tz(start, CompanyStoreService.time_zone);
                     end = moment.tz(end, CompanyStoreService.time_zone);
                 }
@@ -272,7 +272,7 @@ angular
                 model: booking,
                 body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY'),
                 success: model => {
-                    if (GeneralOptions.custom_time_zone) {
+                    if (bbTimeZone.isCustomTimeZone()) {
                         booking.start = moment.tz(booking.start, CompanyStoreService.time_zone);
                         booking.end = moment.tz(booking.end, CompanyStoreService.time_zone);
                     }
@@ -346,7 +346,7 @@ angular
                 return;
             }
 
-            if (GeneralOptions.custom_time_zone) {
+            if (bbTimeZone.isCustomTimeZone()) {
                 let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
                 start = calendar.moment(moment.tz(moment(start.toISOString()), CompanyStoreService.time_zone));
                 end = calendar.moment(moment.tz(moment(end.toISOString()), CompanyStoreService.time_zone));
@@ -521,7 +521,7 @@ angular
 
         let editBooking = function (booking) {
             let templateUrl, title;
-            if (GeneralOptions.custom_time_zone) {
+            if (bbTimeZone.isCustomTimeZone()) {
                 booking.datetime = moment.tz(booking.datetime, CompanyStoreService.time_zone);
             }
             if (booking.status === 3) {
@@ -556,8 +556,7 @@ angular
                                 })
                             );
                         }
-                    }
-                    else if (response.is_cancelled) {
+                    } else if (response.is_cancelled) {
                         return uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('removeEvents', [response.id]);
                     } else {
                         booking.title = getBookingTitle(booking);
@@ -601,7 +600,7 @@ angular
                     'date': parseInt(data.date.getDate()),
                     'hour': 0,
                     'minute': 0,
-                    'second': 0,
+                    'second': 0
                 });
                 uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('gotoDate', assembledDate);
             }
@@ -615,7 +614,7 @@ angular
             uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('refetchEvents');
         };
 
-        let timeZoneChangedHandler = function(event, tz) {
+        let timeZoneChangedHandler = function (event, tz) {
             uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('option', 'timezone', tz);
         };
 

@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     /*
      * @ngdoc service
@@ -10,19 +10,27 @@
         .module('BB.i18n')
         .service('bbTimeZone', bbTimeZoneService);
 
-    function bbTimeZoneService ($localStorage, bbi18nOptions, GeneralOptions, CompanyStoreService) {
+    function bbTimeZoneService($localStorage, bbi18nOptions, CompanyStoreService) {
+
+        //let displayTimeZone = null;
+        let customTimeZone = false;
 
         return {
-            getTimeZoneLs: getTimeZoneLs,
             determineTimeZone: determineTimeZone,
+            getTimeZoneLs: getTimeZoneLs,
+            isCustomTimeZone: isCustomTimeZone,
             updateDefaultTimeZone: updateDefaultTimeZone
         };
 
-        function getTimeZoneLs () {
+        function getTimeZoneLs() {
             return $localStorage.getItem('bbTimeZone');
         }
 
-        function determineTimeZone () {
+        function isCustomTimeZone() {
+            return customTimeZone;
+        }
+
+        function determineTimeZone() {
 
             if (getTimeZoneLs()) {
                 updateDefaultTimeZone(getTimeZoneLs());
@@ -40,7 +48,7 @@
             }
         }
 
-        function updateDefaultTimeZone (timeZone, localStorageAction) {
+        function updateDefaultTimeZone(timeZone, localStorageAction) {
             if (localStorageAction === 'setItem') {
                 $localStorage.setItem('bbTimeZone', timeZone);
             }
@@ -51,7 +59,7 @@
 
             moment.tz.setDefault(timeZone);
             bbi18nOptions.display_time_zone = timeZone;
-            GeneralOptions.custom_time_zone = timeZone !== CompanyStoreService.time_zone;
+            customTimeZone = timeZone !== CompanyStoreService.time_zone;
         }
     }
 

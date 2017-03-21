@@ -6,7 +6,7 @@
  * This services exposes methods to get all event-type information to be shown in the calendar
  */
 angular.module('BBAdminDashboard.calendar.services').service('CalendarEventSources', function (AdminScheduleService, BBModel,
-                                                                                               $exceptionHandler, $q, TitleAssembler, $translate, AdminCalendarOptions, $rootScope, GeneralOptions, CompanyStoreService) {
+                                                                                               $exceptionHandler, $q, TitleAssembler, $translate, AdminCalendarOptions, $rootScope, GeneralOptions, CompanyStoreService, bbTimeZone) {
     'ngInject';
 
     let bookingBelongsToSelectedResources = function (resources, booking) {
@@ -291,7 +291,7 @@ angular.module('BBAdminDashboard.calendar.services').service('CalendarEventSourc
             }
         }
 
-        if (GeneralOptions.custom_time_zone) {
+        if (bbTimeZone.isCustomTimeZone()) {
             //  Convert minTime, maxTime to company timezone
             minTime = moment.tz(minTime, CompanyStoreService.time_zone)
             maxTime = moment.tz(maxTime, CompanyStoreService.time_zone)
