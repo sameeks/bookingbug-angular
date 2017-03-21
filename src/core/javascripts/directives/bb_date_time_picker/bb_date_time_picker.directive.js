@@ -47,6 +47,10 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
                     $scope.showMeridian = GeneralOptions.twelve_hour_format;
                 }
 
+                if (GeneralOptions.custom_time_zone && $scope.date) {
+                    $scope.date = moment.tz($scope.date, bbi18nOptions.display_time_zone);
+                }
+
                 // Watch for changes in the timepicker and reassemble the new datetime
                 $scope.$watch('datetimeWithNoTz', function (newValue, oldValue) {
 
@@ -67,9 +71,7 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
                 });
 
                 let clearTimezone = function (date) {
-                    if (GeneralOptions.custom_time_zone) {
-                        date = moment.tz(date, bbi18nOptions.display_time_zone);
-                    }
+
                     if ((date != null) && moment(date).isValid()) {
                         date = moment(date);
                         let newDate = new Date();

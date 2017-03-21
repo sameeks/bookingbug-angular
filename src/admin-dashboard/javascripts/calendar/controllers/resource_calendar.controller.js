@@ -522,7 +522,7 @@ angular
         let editBooking = function (booking) {
             let templateUrl, title;
             if (GeneralOptions.custom_time_zone) {
-                booking.datetime = moment.tz(moment(booking.datetime.toISOString()), CompanyStoreService.time_zone);
+                booking.datetime = moment.tz(booking.datetime, CompanyStoreService.time_zone);
             }
             if (booking.status === 3) {
                 templateUrl = 'edit_block_modal_form.html';
