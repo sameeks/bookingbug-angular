@@ -13,13 +13,9 @@
                 if(openInModal) {
                     openCalendarModal(booking);
                 }
-                else if($rootScope.user){
+                else {
                     $scope.decideNextPage('basket_summary');
                 }
-                else {
-                    this.checkBookingReadyToMove(booking);
-                }
-
                 // call different method when moving multiple bookings which POSTS to PurchaseService
             }
 
@@ -43,11 +39,7 @@
                 }
 
                 else {
-                    if(CompanyStoreService.hasMoveReasons) {
-                        return $scope.decideNextPage('basket_summary');
-                    }
-
-                    else return this.updateSingleBooking(booking);
+                    return this.updateSingleBooking(booking);
                 }
             }
 

@@ -36,6 +36,7 @@
             class="btn btn-primary btn-block"
             ng-click="$bbMoveBookingCtrl.initMove(bb.current_item)"
             bb-debounce
+            ng-disabled="!bb.current_item.time"
             translate="PUBLIC_BOOKING.CALENDAR.MOVE_BOOKING_BTN">  
           </button>
         </div>
@@ -44,7 +45,7 @@
       <div class="col-sm-2 col-sm-pull-10 text-left">
         <button
           type="button"
-          class="btn btn-default btn-block"
+          class="btn btn-default btn-block" 
           bb-debounce
           ng-click="loadPreviousStep()"
           ng-show="!bb.movingBooking"
