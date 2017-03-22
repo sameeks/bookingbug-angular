@@ -17,7 +17,7 @@
         return directive;
 
         function link(scope, element, attrs) {
-            scope.init(scope.$eval(attrs.bbPurchase));
+            scope.initPurchase(scope.$eval(attrs.bbPurchase));
         }
     }
 

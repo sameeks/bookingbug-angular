@@ -3,36 +3,53 @@ angular.module('BB.Controllers').controller('Total', function ($scope, $rootScop
 
     let loader = LoadingService.$loader($scope).notLoaded();
 
+
     $rootScope.connection_started.then(() => {
-            $scope.bb.payment_status = null;
+        $scope.bb.payment_status = null;
 
-            let id = QueryStringService('purchase_id');
+        let id = QueryStringService('purchase_id');
 
-            if (id && !$scope.bb.total) {
-                BBModel.PurchaseTotal.$query({url_root: $scope.bb.api_url, purchase_id: id}).then(function (total) {
-                    $scope.total = total;
-                    loader.setLoaded();
-
-                    // emit checkout:success event if the amount paid matches the total price
-                    if (total.paid === total.total_price) {
-                        return $scope.$emit("checkout:success", total);
-                    }
-                });
-            } else {
-                $scope.total = $scope.bb.total;
-                loader.setLoaded();
-
-                // emit checkout:success event if the amount paid matches the total price
-                if ($scope.total.paid === $scope.total.total_price) {
-                    $scope.$emit("checkout:success", $scope.total);
-                }
-            }
-
-            // Reset ready for another booking
-            return $scope.reset();
+        if($scope.bb.purchase) {
+            getTotalFromBBPurchase($scope.bb.purchase);
+        }
+        else if (id && !$scope.bb.total) {
+            getTotal(id);
+        } else {
+            getTotalFromBBTotal();
         }
 
-        , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+        // Reset ready for another booking
+        return $scope.reset();
+    }
+
+    , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+
+    let getTotal = (id) => {
+        BBModel.PurchaseTotal.$query({url_root: $scope.bb.api_url, purchase_id: id}).then(function (total) {
+            $scope.total = total;
+            loader.setLoaded();
+
+            // emit checkout:success event if the amount paid matches the total price
+            if (total.paid === total.total_price) {
+                return $scope.$emit("checkout:success", total);
+            }
+        });
+    }
+
+    let getTotalFromBBTotal = () => {
+        $scope.total = $scope.bb.total;
+        loader.setLoaded();
+
+        // emit checkout:success event if the amount paid matches the total price
+        if ($scope.total.paid === $scope.total.total_price) {
+            $scope.$emit("checkout:success", $scope.total);
+        }
+    }
+
+    let getTotalFromBBPurchase = (purchase) => {
+        $scope.total = purchase;
+        loader.setLoaded();
+    }
 
     /***
      * @ngdoc method

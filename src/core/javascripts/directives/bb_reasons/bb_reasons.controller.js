@@ -27,15 +27,15 @@
 
         this.setCancelReasons = () => {
             // reason_type 3 === cancel reasons
-            let cancelReasons = _.filter(this.companyReasons, r => r.reason_type === 3);
-            $rootScope.$broadcast('booking:cancelReasonsLoaded', cancelReasons);
+            this.cancelReasons = _.filter(this.companyReasons, r => r.reason_type === 3);
+            $rootScope.$broadcast('booking:cancelReasonsLoaded', this.cancelReasons);
         }
 
         this.setMoveReasons = () => {
              // reason_type 5 === move reasons
-            let moveReasons = _.filter(this.companyReasons, r => r.reason_type === 5);
+            this.moveReasons = _.filter(this.companyReasons, r => r.reason_type === 5);
             CompanyStoreService.hasMoveReasons = true;
-            $rootScope.$broadcast('booking:moveReasonsLoaded', moveReasons);
+            $rootScope.$broadcast('booking:moveReasonsLoaded', this.moveReasons);
         }
 
         this.init();

@@ -5,7 +5,7 @@
         .controller('bbMoveBookingController', MoveBooking);
 
         function MoveBooking($scope, $attrs, LoadingService, PurchaseBookingService, BBModel, WidgetModalService,
-            $rootScope, AlertService, $translate, $timeout) {
+            $rootScope, AlertService, $translate, $timeout, CompanyStoreService) {
 
 
             let init = () => {

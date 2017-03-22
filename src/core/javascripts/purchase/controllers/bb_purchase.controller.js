@@ -52,7 +52,7 @@
         };
 
 
-        $scope.init = function (options) {
+        $scope.initPurchase = function (options) {
 
             if (!options) {
                 options = {};
