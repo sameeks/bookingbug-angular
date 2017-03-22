@@ -44,25 +44,13 @@
         };
 
         function automaticTimeZoneToggle () {
-            let tz;
-
-            if (ctrl.automaticTimeZone) {
-                tz = moment.tz.guess();
-                updateTimeZone(tz, 'setItem');
-            }
-
-            if (!ctrl.automaticTimeZone) {
-                tz = CompanyStoreService.time_zone;
-                updateTimeZone(tz, 'removeItem');
-            }
-
+            updateTimeZone(ctrl.automaticTimeZone ? moment.tz.guess() : CompanyStoreService.time_zone);
             $scope.$broadcast('UISelect:closeSelect');
-
         }
 
-        function updateTimeZone (timeZone, localStorageAction) {
+        function updateTimeZone (timeZone) {
             ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(timeZone);
-            bbTimeZone.updateDefaultTimeZone(timeZone, localStorageAction);
+            bbTimeZone.updateTimeZone(timeZone, true);
             $rootScope.$emit('BBTimeZoneOptions:timeZoneChanged', timeZone);
         }
 

@@ -28,7 +28,7 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
             },
             restrict: 'A',
             templateUrl: 'bb_date_time_picker.html',
-            controller($scope, GeneralOptions, bbTimeZone) {
+            controller($scope, GeneralOptions, bbTimeZone, CompanyStoreService) {
                 if ($scope.format == null) {
                     $scope.format = 'dd/MM/yyyy';
                 }
@@ -45,10 +45,6 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
                 // Default showMeridian value
                 if (!$scope.showMeridian || (typeof $scope.showMeridian === 'undefined')) {
                     $scope.showMeridian = GeneralOptions.twelve_hour_format;
-                }
-
-                if (bbTimeZone.isCustomTimeZone() && $scope.date) {
-                    $scope.date = moment.tz($scope.date, bbTimeZone.getDisplayTimeZone());
                 }
 
                 // Watch for changes in the timepicker and reassemble the new datetime

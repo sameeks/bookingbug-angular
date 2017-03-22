@@ -20,7 +20,7 @@
             getTimeZoneLs: getTimeZoneLs,
             getDisplayTimeZone: getDisplayTimeZone,
             isCustomTimeZone: isCustomTimeZone,
-            updateDefaultTimeZone: updateDefaultTimeZone
+            updateTimeZone: updateTimeZone
         };
 
         function getTimeZoneLs() {
@@ -38,33 +38,39 @@
         function determineTimeZone() {
 
             if (getTimeZoneLs()) {
-                updateDefaultTimeZone(getTimeZoneLs());
+                updateTimeZone(getTimeZoneLs());
                 return;
             }
 
             if (bbi18nOptions.use_browser_time_zone) {
-                updateDefaultTimeZone(moment.tz.guess());
+                updateTimeZone(moment.tz.guess());
                 return;
             }
 
             if (CompanyStoreService.time_zone) {
-                updateDefaultTimeZone(CompanyStoreService.time_zone);
+                updateTimeZone(CompanyStoreService.time_zone);
                 return;
             }
         }
 
-        function updateDefaultTimeZone(timeZone, localStorageAction) {
-            if (localStorageAction === 'setItem') {
-                $localStorage.setItem('bbTimeZone', timeZone);
-            }
-
-            if (localStorageAction === 'removeItem') {
-                $localStorage.removeItem('bbTimeZone');
-            }
+        function updateTimeZone(timeZone, updateLocalStorage) {
 
             moment.tz.setDefault(timeZone);
             displayTimeZone = timeZone;
             customTimeZone = timeZone !== CompanyStoreService.time_zone;
+
+            if (updateLocalStorage) {
+                updateLs(timeZone, customTimeZone);
+            }
+
+        }
+
+        function updateLs(timeZone, customTimeZone) {
+            if (customTimeZone) {
+                $localStorage.setItem('bbTimeZone', timeZone);
+            } else {
+                $localStorage.removeItem('bbTimeZone');
+            }
         }
     }
 
