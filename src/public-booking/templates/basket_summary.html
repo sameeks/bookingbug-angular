@@ -96,17 +96,40 @@
               </div>
             </li>
           </ul>
-        </div>
+        </div> 
       </uib-accordion>
-
+ 
     </div>
+  </div>
+
+  <div bb-reasons>
+    <p ng-show="$bbReasonsCtrl.moveReasons.length > 0">
+      <span class="bb-summary-label3">
+        <span translate="PUBLIC_BOOKING.RESCHEDULE_REASONS.MOVE_REASON"></span>
+      </span>
+      <select
+        ng-model="bb.current_item.moveReason"
+        id="cancel_reason"
+        class="form-control"
+        ng-options="option.id as option.text for option in $bbReasonsCtrl.moveReasons">
+      </select>
+    </p>
   </div>
 
   <hr/>
 
   <div class="row">
     <div class="col-md-12">
+      <div bb-move-booking ng-if="bb.movingBooking">
+        <button
+          type="button"
+          class="btn btn-primary pull-right"
+          ng-click="$bbMoveBookingCtrl.updateSingleBooking(bb.current_item)"
+          translate="PUBLIC_BOOKING.BASKET_SUMMARY.CONFIRM_BTN">
+        </button>
+      </div>
       <button
+        ng-hide="bb.movingBooking"
         type="button"
         class="btn btn-primary pull-right"
         ng-click="confirm()"

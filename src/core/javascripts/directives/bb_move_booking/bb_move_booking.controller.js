@@ -7,17 +7,14 @@
         function MoveBooking($scope, $attrs, LoadingService, PurchaseBookingService, BBModel, WidgetModalService,
             $rootScope, AlertService, $translate, $timeout, CompanyStoreService) {
 
-
-            let init = () => {
-                this.loader = LoadingService.$loader($scope);
-            }
+            this.loader = LoadingService.$loader($scope);
 
             this.initMove = (booking, openInModal) => {
                 if(openInModal) {
                     openCalendarModal(booking);
                 }
                 else if($rootScope.user){
-                    return this.updateSingleBooking(booking);
+                    $scope.decideNextPage('basket_summary');
                 }
                 else {
                     this.checkBookingReadyToMove(booking);
@@ -36,8 +33,6 @@
             }
 
             this.checkBookingReadyToMove = (booking) => {
-                this.loader.notLoaded();
-
                 if(PurchaseBookingService.purchaseBookingNotMovable(booking)) {
                     this.loader.setLoaded();
                     AlertService.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
@@ -49,7 +44,7 @@
 
                 else {
                     if(CompanyStoreService.hasMoveReasons) {
-                        return $scope.decideNextPage('reschedule_reasons');
+                        return $scope.decideNextPage('basket_summary');
                     }
 
                     else return this.updateSingleBooking(booking);
@@ -57,6 +52,7 @@
             }
 
             this.updateSingleBooking = (booking) => {
+                this.loader.notLoaded();
                 PurchaseBookingService.update(booking).then((purchaseBooking) => {
                     let booking = new BBModel.Purchase.Booking(purchaseBooking);
                     this.loader.setLoaded()
@@ -69,7 +65,6 @@
 
             let resolveMove = () => {
                 $rootScope.$broadcast("booking:moved", $scope.bb.purchase);
-
                 // isMemberDashboard property is defined when openCalendarModal method is called from memberBookings controller
                 // we dont want to close the modal when on the member or admin dashboard
                 if(WidgetModalService.isMemberDashboard || $rootScope.user) {
@@ -79,8 +74,6 @@
                     WidgetModalService.close();
                 }
             }
-
-            init();
         }
 })();
 

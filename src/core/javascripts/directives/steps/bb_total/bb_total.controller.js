@@ -3,13 +3,15 @@ angular.module('BB.Controllers').controller('Total', function ($scope, $rootScop
 
     let loader = LoadingService.$loader($scope).notLoaded();
 
-
     $rootScope.connection_started.then(() => {
         $scope.bb.payment_status = null;
 
         let id = QueryStringService('purchase_id');
 
         if($scope.bb.purchase) {
+            if($rootScope.user) {
+                $scope.showAdminMoveBookingMessage = true;
+            }
             getTotalFromBBPurchase($scope.bb.purchase);
         }
         else if (id && !$scope.bb.total) {

@@ -18,6 +18,9 @@
                 templateUrl: 'widget_modal.html',
                 controller($scope, WidgetModalService, config) {
                     $scope.config = config;
+                    if ($scope.bb && $scope.bb.current_item) {
+                        delete $scope.bb.current_item;
+                    }
                     WidgetModalService.config = config;
                     if ($scope.company) {
                         if (!$scope.config.company_id) {

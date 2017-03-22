@@ -314,13 +314,13 @@
 
         let createBasketFromBookings = function (bookings, totalDefer) {
             let booking, i, len, newItem;
-            let promises = [];
+            let proms = [];
 
             for (i = 0, len = bookings.length; i < len; i++) {
                 booking = bookings[i];
                 newItem = new BBModel.BasketItem(booking, $scope.bb);
                 newItem.setSrcBooking(booking, $scope.bb);
-                Array.prototype.push.apply(promises, newItem.promises);
+                Array.prototype.push.apply(proms, newItem.promises);
                 $scope.bb.basket.addItem(newItem);
             }
 
@@ -335,7 +335,7 @@
 
             $scope.bb.movingBooking = bookings;
 
-            return $q.all(promises).then(() => {
+            $q.all(proms).then(() => {
                 return totalDefer.resolve();
             }, (err) =>  {
                 return totalDefer.reject(err);

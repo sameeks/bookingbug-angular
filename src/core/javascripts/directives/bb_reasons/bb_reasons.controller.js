@@ -20,7 +20,8 @@
                     this.setCancelReasons();
                     this.setMoveReasons();
                 }, (err) => {
-                    this.loader.setLoadedAndShowError(err, 'Sorry, something went wrong retrieving reasons');
+                    console.log('Reasons are not configured for this company')
+                    this.loader.setLoaded();
                 });
             });
         }

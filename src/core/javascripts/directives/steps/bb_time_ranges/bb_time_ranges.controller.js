@@ -434,7 +434,6 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
         if ($scope.bb.current_item.min_duration) {
             duration = $scope.bb.current_item.min_duration;
         }
-
         if ($scope.data_source && $scope.data_source.days_link) {
             $scope.notLoaded($scope);
             let loc = null;

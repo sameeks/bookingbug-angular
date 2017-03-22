@@ -24,7 +24,7 @@
           bb-debounce
           ng-disabled="!bb.current_item.time">
           <span
-            ng-show="!bb.moving_booking"
+            ng-show="!bb.movingBooking"
             translate="PUBLIC_BOOKING.CALENDAR.NEXT_BTN">
           </span>
         </button>
@@ -47,7 +47,7 @@
           class="btn btn-default btn-block"
           bb-debounce
           ng-click="loadPreviousStep()"
-          ng-show="!bb.moving_booking"
+          ng-show="!bb.movingBooking"
           translate="PUBLIC_BOOKING.CALENDAR.BACK_BTN">
         </button>
       </div>

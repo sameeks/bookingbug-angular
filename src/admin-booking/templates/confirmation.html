@@ -18,7 +18,12 @@
             <p
               id="bb-confirmation-summary-subtitle"
               class="bb-confirmation-p-alignment">
-              <span translate="ADMIN_BOOKING.CONFIRMATION.BOOKING_CONFIRMATION"></span>
+              <span 
+                ng-hide="showAdminMoveBookingMessage" 
+                translate="ADMIN_BOOKING.CONFIRMATION.BOOKING_CONFIRMATION"></span>
+              <span 
+                ng-show="showAdminMoveBookingMessage">Booking has been moved to {{total.items[0].datetime | datetime: 'LLLL'}}</span>
+              <span>
               <span
                 translate="ADMIN_BOOKING.CONFIRMATION.EMAIL_CONFIRMATION"
                 translate-values="{customer_name: total.client.getName()}"

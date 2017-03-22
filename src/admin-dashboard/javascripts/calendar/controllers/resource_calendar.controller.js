@@ -1,5 +1,5 @@
 angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCalendarController', function (WidgetModalService,
-                                                                                                             AdminCalendarOptions, AdminCompanyService, AdminMoveBookingPopup, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources,
+                                                                                                             AdminCalendarOptions, AdminCompanyService, $attrs, BBAssets, BBModel, $bbug, CalendarEventSources,
                                                                                                              ColorPalette, Dialog, $filter, GeneralOptions, ModalForm, PrePostTime, ProcessAssetsFilter, $q, $rootScope, $scope,
                                                                                                              $state, TitleAssembler, $translate, $window, uiCalendarConfig) {
     'ngInject';
