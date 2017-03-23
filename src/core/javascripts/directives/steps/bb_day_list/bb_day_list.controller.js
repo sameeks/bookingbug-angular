@@ -12,6 +12,11 @@ angular.module('BB.Controllers').controller('DayList', function ($scope, $rootSc
         }
         , err => $scope.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
 
+    $scope.$on('BBTimeZoneOptions:timeZoneChanged', () => {
+        if (!$scope.bb.current_item.date) return;
+        $scope.selectDay($scope.bb.current_item.date);
+    });
+
 
     $scope.selectDay = day => {
         if (!day.spaces || (day.spaces && (day.spaces === 0))) {

@@ -51,7 +51,7 @@
         function updateTimeZone (timeZone) {
             ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(timeZone);
             bbTimeZone.updateTimeZone(timeZone, true);
-            $rootScope.$emit('BBTimeZoneOptions:timeZoneChanged', timeZone);
+            $rootScope.$broadcast('BBTimeZoneOptions:timeZoneChanged', timeZone);
         }
 
         function setDefaults () {
