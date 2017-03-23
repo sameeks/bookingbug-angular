@@ -34,7 +34,7 @@
             type="button"
             id="btn-continue"
             class="btn btn-primary btn-block"
-            ng-click="$bbMoveBookingCtrl.initMove(bb.current_item)"
+            ng-click="$bbMoveBookingCtrl.checkBookingReadyToMove(bb.current_item)"
             bb-debounce
             ng-disabled="!bb.current_item.time"
             translate="PUBLIC_BOOKING.CALENDAR.MOVE_BOOKING_BTN">  
