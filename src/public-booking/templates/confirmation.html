@@ -13,9 +13,16 @@
 
           <div ng-show="!total.containsWaitlistItems()">
             <p
+              ng-hide="bb.movingBooking"
               class="bb-confirmation-p-alignment"
-              translate="PUBLIC_BOOKING.CONFIRMATION.BOOKING_CONFIRMATION"
+              translate="PUBLIC_BOOKING.CONFIRMATION.BOOKING_CONFIRMATION" 
               translate-values="{member_name: total.client.first_name}">
+            </p>
+            <p
+              ng-show="bb.movingBooking"
+              class="bb-confirmation-p-alignment"
+              translate="PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT"
+              translate-values="{datetime: total.bookings[0].datetime}">
             </p>
           </div>
 

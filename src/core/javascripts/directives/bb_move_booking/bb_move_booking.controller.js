@@ -9,14 +9,18 @@
 
             this.loader = LoadingService.$loader($scope);
 
-            this.initMove = (booking, openInModal) => {
-                if(openInModal) {
-                    openCalendarModal(booking);
+            this.initMove = (booking) => {
+                if(WidgetModalService.isStudioModal) {
+                    // if we are on the studio dashboard than we can move bookings without checking they are movable
+                    this.updateSingleBooking(booking);
+                }
+                else if(WidgetModalService.isMemberModal) {
+                    this.checkBookingReadyToMove(booking);
                 }
                 else {
-                    $scope.decideNextPage('basket_summary');
+                    // open modal as were are on public purchase template
+                    openCalendarModal(booking);
                 }
-                // call different method when moving multiple bookings which POSTS to PurchaseService
             }
 
             let openCalendarModal = (booking) => {
@@ -31,7 +35,8 @@
             this.checkBookingReadyToMove = (booking) => {
                 if(PurchaseBookingService.purchaseBookingNotMovable(booking)) {
                     this.loader.setLoaded();
-                    AlertService.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
+                    AlertService.add('info', {msg: "it's after the min_cancellation_time, but now we have the basket summary after the calendar so the check should me moved back a step"});
+                    // AlertService.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
 
                     $timeout(() => {
                         AlertService.clear();
@@ -39,7 +44,7 @@
                 }
 
                 else {
-                    return this.updateSingleBooking(booking);
+                    return $scope.decideNextPage('basket_summary');
                 }
             }
 
@@ -51,19 +56,20 @@
 
                     // update the $scope purchase to the newly updated purchaseBooking
                     $scope.bb.purchase = PurchaseBookingService.updatePurchaseBookingRef($scope.bb.purchase, booking);
-                    resolveMove();
+                    resolveMove(booking);
                 });
             }
 
-            let resolveMove = () => {
+            let resolveMove = (booking) => {
                 $rootScope.$broadcast("booking:moved", $scope.bb.purchase);
-                // isMemberDashboard property is defined when openCalendarModal method is called from memberBookings controller
+                // isMemberModal property is defined when openCalendarModal method is called from memberBookings controller
                 // we dont want to close the modal when on the member or admin dashboard
-                if(WidgetModalService.isMemberDashboard || $rootScope.user) {
+                if(WidgetModalService.isMemberModal || WidgetModalService.isStudioModal) {
                     $scope.decideNextPage('confirmation');
                 }
                 else  {
                     WidgetModalService.close();
+                    AlertService.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', {datetime: booking.datetime})});
                 }
             }
         }

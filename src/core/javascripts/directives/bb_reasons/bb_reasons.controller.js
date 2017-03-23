@@ -4,9 +4,10 @@
         .module('BB.Controllers')
         .controller('bbReasonsController', BBReasonsController);
 
-    function BBReasonsController($scope, $rootScope, BBModel, ReasonService, LoadingService, CompanyStoreService) {
+    function BBReasonsController($scope, $rootScope, BBModel, ReasonService, LoadingService, CompanyStoreService, GeneralOptions) {
 
         this.init = () => {
+            if(!GeneralOptions.useMoveCancelReasons) return;
             this.loader = LoadingService.$loader($scope);
             this.initReasons($scope.bb.company_id);
         }

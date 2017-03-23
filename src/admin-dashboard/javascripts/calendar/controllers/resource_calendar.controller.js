@@ -517,22 +517,7 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
             success: response => {
                 if (typeof response === 'string') {
                     if (response === "move") {
-                        let item_defaults = {person: booking.person_id, resource: booking.resource_id};
-                        getCompanyPromise().then(company =>
-                            WidgetModalService.open({
-                                item_defaults,
-                                company_id: company.id,
-                                booking_id: booking.id,
-                                total_id: booking.purchase_ref,
-                                first_page: 'calendar',
-                                success: model => {
-                                    return refreshBooking(booking);
-                                },
-                                fail() {
-                                    return refreshBooking(booking);
-                                }
-                            })
-                        );
+                        openMoveModal(booking)
                     }
                 }
                 if (response.is_cancelled) {
@@ -544,6 +529,26 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
             }
         });
     };
+
+    let openMoveModal = (booking) => {
+        let item_defaults = {person: booking.person_id, resource: booking.resource_id};
+        getCompanyPromise().then(company => {
+            WidgetModalService.isStudioModal = true;
+            WidgetModalService.open({
+                item_defaults,
+                company_id: company.id,
+                booking_id: booking.id,
+                total_id: booking.purchase_ref,
+                first_page: 'calendar',
+                success: model => {
+                    return refreshBooking(booking);
+                },
+                fail() {
+                    return refreshBooking(booking);
+                }
+            })
+        });
+    }
 
     let pusherBooking = function (res) {
         if (res.id != null) {

@@ -110,7 +110,7 @@ angular.module('BBMember').controller('MemberBookings', function ($scope, $uibMo
     };
 
     let openCalendarModal = function(booking, total) {
-        WidgetModalService.isMemberDashboard = true;
+        WidgetModalService.isMemberModal = true;
 
         WidgetModalService.open({
             booking: booking,
