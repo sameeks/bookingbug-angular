@@ -24,17 +24,16 @@ angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, bb
             }
 
 
-            let company_time_zone = CompanyStoreService.time_zone;
 
             // Adjust time range based on UTC offset between company time zone and display time zone
-            if ((bbTimeZone.getDisplayTimeZone() != null) && (bbTimeZone.getDisplayTimeZone() !== company_time_zone)) {
+            if ((bbTimeZone.getDisplayTimeZone() != null) && (bbTimeZone.getDisplayTimeZone() !== CompanyStoreService.time_zone)) {
 
                 let display_utc_offset = moment().tz(bbTimeZone.getDisplayTimeZone()).utcOffset();
-                let company_utc_offset = moment().tz(bbTimeZone.getDisplayTimeZone()).utcOffset();
+                let company_utc_offset = moment().tz(CompanyStoreService.time_zone).utcOffset();
 
                 if (company_utc_offset < display_utc_offset) {
                     start_date = prms.start_date.clone().subtract(1, 'day');
-                } else if ((company_utc_offset > display_utc_offset) && prms.end_date) {
+                } else if ((company_utc_offset > display_utc_offset) && end_date) {
                     end_date = prms.end_date.clone().add(1, 'day');
                 }
 
