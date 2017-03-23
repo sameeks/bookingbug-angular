@@ -479,6 +479,23 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
 
         distances_with_services.sort((a, b) => a.distance - b.distance);
 
+        $scope.setShownMarkers(distances, distances_with_services);
+
+        return $timeout(() => setMarkers());
+    };
+
+
+    /***
+     * @ngdoc method
+     * @name setShownMarkers
+     * @methodOf BB.Directives:bbMap
+     * @description
+     * Set the shownMarkers on scope
+     *
+     * @param {array} distances Markers with property distance
+     * @param {array} distances_with_services Markers with property distance and support the pre-selected service
+     */
+    $scope.setShownMarkers = function (distances, distances_with_services) {
         $scope.shown_markers = distances.slice(0, $scope.num_search_results);
         $scope.shown_markers_with_services = distances_with_services.slice(0, $scope.num_search_results);
 
@@ -487,8 +504,6 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
         } else {
             $scope.shownMarkers = $scope.shown_markers;
         }
-
-        return $timeout(() => setMarkers());
     };
 
 
