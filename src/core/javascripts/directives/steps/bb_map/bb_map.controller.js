@@ -481,7 +481,10 @@ angular.module('BB.Controllers').controller('MapCtrl', function ($scope, $elemen
 
         $scope.setShownMarkers(distances, distances_with_services);
 
-        return $timeout(() => setMarkers());
+        if ($scope.shownMarkers.length != 0) {
+            $timeout(() => setMarkers());
+        }
+        return;
     };
 
 
