@@ -33,7 +33,7 @@ angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, bb
 
                 if (company_utc_offset < display_utc_offset) {
                     start_date = prms.start_date.clone().subtract(1, 'day');
-                } else if ((company_utc_offset > display_utc_offset) && end_date) {
+                } else if ((company_utc_offset > display_utc_offset) && prms.end_date) {
                     end_date = prms.end_date.clone().add(1, 'day');
                 }
 
@@ -145,15 +145,16 @@ angular.module('BB.Services').factory("TimeService", ($q, BBModel, halClient, bb
                                     .value();
 
                                 // add days back that don't have any availabiity and return originally requested range only
-                                let new_date_times = {};
-                                let d = prms.start_date.clone();
-                                while (d <= prms.end_date) {
-                                    d = d.clone().add(1, 'day');
-                                    let key = d.toISODate();
-                                    new_date_times[key] = date_times[key] ? date_times[key] : [];
+                                let newDateTimes = {};
+
+                                let startDateClone = prms.start_date.clone();
+                                while (startDateClone <= prms.end_date) {
+                                    let dateISO = startDateClone.toISODate();
+                                    newDateTimes[dateISO] = date_times[dateISO] ? date_times[dateISO] : [];
+                                    startDateClone = startDateClone.clone().add(1, 'day');
                                 }
 
-                                return deferred.resolve(new_date_times);
+                                return deferred.resolve(newDateTimes);
                             });
                         });
 
