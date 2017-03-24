@@ -12,6 +12,10 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
         'start_at_week_start'
     ]);
 
+    $scope.$on('BBTimeZoneOptions:timeZoneChanged', () => {
+        $scope.initialise();
+    });
+
     // check to see if the user has changed the postcode and remove data if they have
     if (currentPostcode !== $scope.postcode) {
         $scope.selected_slot = null;
@@ -68,7 +72,7 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
 
             $scope.$on('viewportSize:changed', function () {
                 $scope.time_range_length = null;
-                return $scope.initialise();
+                $scope.initialise();
             });
         }
 
@@ -414,13 +418,17 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
 
             if ($scope.bb.current_item.reserve_ready) {
                 loader.notLoaded();
-                return $scope.addItemToBasket().then(function () {
+                $scope.addItemToBasket().then(
+                    () => {
                         loader.setLoaded();
-                        return $scope.decideNextPage(route);
+                        $scope.decideNextPage(route);
+                    },
+                    (err) => {
+                        loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
                     }
-                    , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+                );
             } else {
-                return $scope.decideNextPage(route);
+                $scope.decideNextPage(route);
             }
         }
     };
