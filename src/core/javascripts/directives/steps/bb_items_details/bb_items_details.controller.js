@@ -291,13 +291,13 @@ angular.module('BB.Controllers').controller('ItemDetails', function ($scope, $at
     };
 
     $scope.showMoveMessage = (datetime) => {
-        if (bbTimeZone.isCustomTimeZone()) {
-            datetime = moment.tz(datetime, bbTimeZone.getDisplayTimeZone());
-        }
+
+        datetime = bbTimeZone.convertToDisplayTz(datetime);
+
         AlertService.add("info", {
             msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', {datetime})
         });
-    }
+    };
 
     /***
      * @ngdoc method

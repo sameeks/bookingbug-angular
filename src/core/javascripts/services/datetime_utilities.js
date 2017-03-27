@@ -55,9 +55,12 @@ angular.module('BB.Services').factory("DateTimeUtilitiesService", function (Gene
             }
             let datetime = moment();
             // if user timezone different than company timezone
-            if (bbTimeZone.isCustomTimeZone()) {
+            /*if (bbTimeZone.isCustomTimeZone()) {
                 datetime = datetime.tz(CompanyStoreService.time_zone);
-            }
+            }*////TODO dobule check
+
+            datetime = bbTimeZone.convertToCompanyTz(datetime);
+
             let val = parseInt(time);
             let hours = parseInt(val / 60);
             let mins = val % 60;

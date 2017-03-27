@@ -115,9 +115,12 @@
 
             if ($scope.model.$update) {
 
-                if(bbTimeZone.isCustomTimeZone()){
+                /*if(bbTimeZone.isCustomTimeZone()){
                     $scope.form_model.datetime = moment($scope.form_model.datetime).tz(CompanyStoreService.time_zone);
-                }
+                }*///TODO double check
+
+                $scope.form_model.datetime = bbTimeZone.convertToCompanyTz($scope.form_model.datetime);
+
 
                 $scope.model.$update($scope.form_model).then(function () {
 

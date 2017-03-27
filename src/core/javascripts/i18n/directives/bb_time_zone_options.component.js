@@ -16,60 +16,57 @@
      * </example>
      */
 
-     angular
-         .module('BB.i18n')
-         .component('bbTimeZoneOptions', {
-             templateUrl: 'i18n/_bb_timezone_options.html',
-             bindings: {
-                 restrictRegion: '<'
-             },
-             controller: TimeZoneOptionsCtrl,
-             controllerAs: '$bbTimeZoneOptionsCtrl'
-         });
+    angular
+        .module('BB.i18n')
+        .component('bbTimeZoneOptions', {
+            templateUrl: 'i18n/_bb_timezone_options.html',
+            bindings: {
+                restrictRegion: '<'
+            },
+            controller: TimeZoneOptionsCtrl,
+            controllerAs: '$bbTimeZoneOptionsCtrl'
+        });
 
-    function TimeZoneOptionsCtrl ($scope, $rootScope, bbTimeZone, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions) {
+    function TimeZoneOptionsCtrl($scope, $rootScope, bbTimeZone, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions) {
         'ngInject';
 
         const ctrl = this;
 
         ctrl.timeZones = [];
-        ctrl.automaticTimeZone = false;
+        ctrl.isAutomaticTimeZone = false;
         ctrl.selectedTimeZone = null;
 
-        ctrl.$onInit = function() {
-            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.restrictRegion);
+        ctrl.$onInit = function () {
+
+            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.restrictRegion);//TODO should be more customisable
+
+            if ($rootScope.connection_started) $rootScope.connection_started.then(widgetStartedHandler);
+
             ctrl.updateTimeZone = updateTimeZone;
             ctrl.automaticTimeZoneToggle = automaticTimeZoneToggle;
-            setDefaults();
         };
 
-        function automaticTimeZoneToggle () {
-            updateTimeZone(ctrl.automaticTimeZone ? moment.tz.guess() : CompanyStoreService.time_zone);
+        function widgetStartedHandler() {
+            bbTimeZone.determineTimeZone();
+
+            ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(bbTimeZone.getDisplayTimeZone());
+            if (bbi18nOptions.use_browser_time_zone) {
+                ctrl.isAutomaticTimeZone = true;
+            }
+        }
+
+        function automaticTimeZoneToggle() {
+            updateTimeZone(ctrl.isAutomaticTimeZone ? moment.tz.guess() : CompanyStoreService.time_zone);
             $scope.$broadcast('UISelect:closeSelect');
         }
 
-        function updateTimeZone (timeZone) {
+        function updateTimeZone(timeZone) {
+
+            if (timeZone === undefined) timeZone = ctrl.selectedTimeZone.value;
+
             ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(timeZone);
-            bbTimeZone.updateTimeZone(timeZone, true);
+            bbTimeZone.setDisplayTimeZone(timeZone, true);
             $rootScope.$broadcast('BBTimeZoneOptions:timeZoneChanged', timeZone);
-        }
-
-        function setDefaults () {
-            const timeZone = bbTimeZone.getTimeZoneLs();
-            const browserTimeZone = bbi18nOptions.use_browser_time_zone;
-
-            if (timeZone) {
-                ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(timeZone);
-                return;
-            }
-
-            if (browserTimeZone) {
-                ctrl.automaticTimeZone = true;
-                ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(moment.tz.guess());
-                return;
-            }
-
-            ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(CompanyStoreService.time_zone);
         }
     }
 

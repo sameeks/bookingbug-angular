@@ -213,20 +213,17 @@ angular
 
         let fcEventDrop = function (booking, delta, revertFunc) { // we need a full move cal if either it has a person and resource, or they've dragged over multiple days
 
-            if (bbTimeZone.isCustomTimeZone()) {
-                let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
-                booking.start = calendar.moment(moment.tz(booking.start.toISOString(), bbTimeZone.getDisplayTimeZone()));
-                booking.end = calendar.moment(moment.tz(booking.end.toISOString(), bbTimeZone.getDisplayTimeZone()));
-            }
+            let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
+            booking.start = calendar.moment(bbTimeZone.convertToDisplayTz(booking.start.toISOString()));
+            booking.end = calendar.moment(bbTimeZone.convertToDisplayTz(booking.end.toISOString()));
 
             // not blocked and is a change in person/resource, or over multiple days
             if ((booking.status !== 3) && ((booking.person_id && booking.resource_id) || (delta.days() > 0))) {
                 let {start} = booking;
                 let {end} = booking;
-                if (bbTimeZone.isCustomTimeZone()) {
-                    start = moment.tz(start, CompanyStoreService.time_zone);
-                    end = moment.tz(end, CompanyStoreService.time_zone);
-                }
+
+                start = bbTimeZone.convertToCompanyTz(start);
+                end = bbTimeZone.convertToCompanyTz(end);
 
                 let item_defaults = {
                     date: start.format('YYYY-MM-DD'),
@@ -272,10 +269,10 @@ angular
                 model: booking,
                 body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY'),
                 success: model => {
-                    if (bbTimeZone.isCustomTimeZone()) {
-                        booking.start = moment.tz(booking.start, CompanyStoreService.time_zone);
-                        booking.end = moment.tz(booking.end, CompanyStoreService.time_zone);
-                    }
+
+                    booking.start = bbTimeZone.convertToCompanyTz(booking.start);
+                    booking.end = bbTimeZone.convertToCompanyTz(booking.end);
+
                     return updateBooking(booking);
                 },
                 fail() {
@@ -346,11 +343,9 @@ angular
                 return;
             }
 
-            if (bbTimeZone.isCustomTimeZone()) {
-                let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
-                start = calendar.moment(moment.tz(moment(start.toISOString()), CompanyStoreService.time_zone));
-                end = calendar.moment(moment.tz(moment(end.toISOString()), CompanyStoreService.time_zone));
-            }
+            let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
+            start = calendar.moment(bbTimeZone.convertToCompanyTz(start.toISOString()));
+            end = calendar.moment(bbTimeZone.convertToCompanyTz(end.toISOString()));
 
             view.calendar.unselect();
 

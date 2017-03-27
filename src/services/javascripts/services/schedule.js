@@ -111,12 +111,13 @@ angular.module('BBAdmin.Services').factory('AdminScheduleService', function ($q,
                 e.resourceId = parseInt(asset.id) + "_" + asset.type[0];
                 e.title = asset.name;
                 e.rendering = "background";
-                e.start = moment.tz(e.start, CompanyStoreService.time_zone);
-                e.end = moment.tz(e.end, CompanyStoreService.time_zone);
-                if (bbTimeZone.isCustomTimeZone()) {
-                    e.start = moment.tz(e.start, bbTimeZone.getDisplayTimeZone());
-                    e.end = moment.tz(e.end, bbTimeZone.getDisplayTimeZone());
-                }
+
+                e.start = bbTimeZone.convertToCompanyTz(e.start, true);
+                e.end = bbTimeZone.convertToCompanyTz(e.end, true);
+
+                e.start = bbTimeZone.convertToDisplayTz(e.start);
+                e.end = bbTimeZone.convertToDisplayTz(e.end);
+
                 return e;
             };
 

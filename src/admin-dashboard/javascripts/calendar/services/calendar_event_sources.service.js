@@ -291,11 +291,8 @@ angular.module('BBAdminDashboard.calendar.services').service('CalendarEventSourc
             }
         }
 
-        if (bbTimeZone.isCustomTimeZone()) {
-            //  Convert minTime, maxTime to company timezone
-            minTime = moment.tz(minTime, CompanyStoreService.time_zone)
-            maxTime = moment.tz(maxTime, CompanyStoreService.time_zone)
-        }
+        minTime = bbTimeZone.convertToCompanyTz(minTime);
+        maxTime = bbTimeZone.convertToCompanyTz(maxTime);
 
         // store on AdminCalendarOptions object to read from in resourceCalendar controller prepareUiCalOptions method
         AdminCalendarOptions.minTime = minTime.format('HH:mm');

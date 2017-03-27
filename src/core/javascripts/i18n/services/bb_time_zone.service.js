@@ -10,66 +10,83 @@
         .module('BB.i18n')
         .service('bbTimeZone', bbTimeZoneService);
 
-    function bbTimeZoneService($localStorage, bbi18nOptions, CompanyStoreService) {
+    function bbTimeZoneService(bbi18nOptions, CompanyStoreService, $localStorage, $log, $window) {
 
-        let displayTimeZone = null;
-        let customTimeZone = false;
+        let displayTimeZone = bbi18nOptions.default_time_zone;
 
-        return {
-            determineTimeZone: determineTimeZone,
-            getTimeZoneLs: getTimeZoneLs,
-            getDisplayTimeZone: getDisplayTimeZone,
-            isCustomTimeZone: isCustomTimeZone,
-            updateTimeZone: updateTimeZone
+        return $window.tz = {
+            convertToCompanyTz,
+            convertToDisplayTz,
+            determineTimeZone,
+            getDisplayTimeZone,
+            isCompanyTimeZone,
+            setDisplayTimeZone
         };
 
-        function getTimeZoneLs() {
-            return $localStorage.getItem('bbTimeZone');
+        /**
+         * @param {moment|String} dateTime If string must be valid ISO string
+         * @param {boolean} enforce
+         * @returns {moment}
+         */
+        function convertToCompanyTz(dateTime, enforce = false) {
+            return convertDateTime(dateTime, CompanyStoreService.time_zone, enforce);
+        }
+
+        /**
+         * @param {moment|String} dateTime If string must be valid ISO string
+         * @param {boolean} enforce
+         * @returns {moment}
+         */
+        function convertToDisplayTz(dateTime, enforce = false) {
+            return convertDateTime(dateTime, displayTimeZone, enforce);
+        }
+
+        function convertDateTime(dateTime, timeZone, enforce) {
+            if (!moment(dateTime).isValid()) $log.error('not valid dateTime', dateTime);
+
+            if (!isCompanyTimeZone() && enforce === false) return dateTime; //TODO consider removing this line and make always conversion
+
+            return moment.tz(dateTime, timeZone);
         }
 
         function getDisplayTimeZone() {
             return displayTimeZone;
         }
 
-        function isCustomTimeZone() {
-            return customTimeZone;
-        }
-
         function determineTimeZone() {
-
-            if (getTimeZoneLs()) {
-                updateTimeZone(getTimeZoneLs());
+            const lsTimeZone = $localStorage.getItem('bbTimeZone');
+            if (lsTimeZone) {
+                setDisplayTimeZone(lsTimeZone);
                 return;
             }
 
             if (bbi18nOptions.use_browser_time_zone) {
-                updateTimeZone(moment.tz.guess());
+                setDisplayTimeZone(moment.tz.guess());
                 return;
             }
 
-            if (CompanyStoreService.time_zone) {
-                updateTimeZone(CompanyStoreService.time_zone);
-                return;
+            if (bbi18nOptions.use_company_time_zone && CompanyStoreService.time_zone) {
+                setDisplayTimeZone(CompanyStoreService.time_zone);
             }
         }
 
-        function updateTimeZone(timeZone, updateLocalStorage) {
+        function isCompanyTimeZone() {
+            return displayTimeZone === CompanyStoreService.time_zone;
+        }
 
+        function setDisplayTimeZone(timeZone, shouldUpdateLocalStorage = false) {
             moment.tz.setDefault(timeZone);
+
             displayTimeZone = timeZone;
-            customTimeZone = timeZone !== CompanyStoreService.time_zone;
 
-            if (updateLocalStorage) {
-                updateLs(timeZone, customTimeZone);
-            }
-
+            if (shouldUpdateLocalStorage) updateLocalStorage(timeZone);
         }
 
-        function updateLs(timeZone, customTimeZone) {
-            if (customTimeZone) {
-                $localStorage.setItem('bbTimeZone', timeZone);
-            } else {
+        function updateLocalStorage(timeZone) {
+            if (isCompanyTimeZone()) {
                 $localStorage.removeItem('bbTimeZone');
+            } else {
+                $localStorage.setItem('bbTimeZone', timeZone);
             }
         }
     }

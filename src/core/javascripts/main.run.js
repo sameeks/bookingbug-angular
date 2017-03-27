@@ -1,7 +1,6 @@
 angular.module('BB').run(function ($bbug, FormDataStoreService, $log, $rootScope, $sessionStorage) {
     'ngInject';
 
-    $rootScope.$log = $log;
     $rootScope.$setIfUndefined = FormDataStoreService.setIfUndefined;
 
     if (!$rootScope.bb) {
