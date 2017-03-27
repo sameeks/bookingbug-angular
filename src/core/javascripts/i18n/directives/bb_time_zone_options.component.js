@@ -27,7 +27,7 @@
             controllerAs: '$bbTimeZoneOptionsCtrl'
         });
 
-    function TimeZoneOptionsCtrl($scope, $rootScope, bbTimeZone, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions) {
+    function TimeZoneOptionsCtrl($scope, $rootScope, bbTimeZone, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions, $localStorage) {
         'ngInject';
 
         const ctrl = this;
@@ -39,20 +39,18 @@
         ctrl.$onInit = function () {
 
             ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.restrictRegion);//TODO should be more customisable
-
-            if ($rootScope.connection_started) $rootScope.connection_started.then(widgetStartedHandler);
-
             ctrl.updateTimeZone = updateTimeZone;
             ctrl.automaticTimeZoneToggle = automaticTimeZoneToggle;
+
+            if (bbi18nOptions.use_browser_time_zone && $localStorage.getItem('bbTimeZone') === undefined) ctrl.isAutomaticTimeZone = true;
+
+            $rootScope.connection_started ? $rootScope.connection_started.then(determineTimeZone) : determineTimeZone();
         };
 
-        function widgetStartedHandler() {
+        function determineTimeZone() {
             bbTimeZone.determineTimeZone();
 
             ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(bbTimeZone.getDisplayTimeZone());
-            if (bbi18nOptions.use_browser_time_zone) {
-                ctrl.isAutomaticTimeZone = true;
-            }
         }
 
         function automaticTimeZoneToggle() {
