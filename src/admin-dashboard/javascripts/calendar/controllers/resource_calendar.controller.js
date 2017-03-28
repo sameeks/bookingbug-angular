@@ -289,7 +289,7 @@ angular
             if (booking.type === 'external') return;
 
             if (booking.$has('edit')) {
-                return editBooking(booking);
+                return editBooking(new BBModel.Admin.Booking(booking));
             }
         };
 
