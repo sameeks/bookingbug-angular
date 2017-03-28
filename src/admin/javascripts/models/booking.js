@@ -13,8 +13,6 @@ angular.module('BB.Models').factory("AdminBookingModel", ($q, BBModel,
                 }
                 this.title = this.full_describe;
                 this.time = (this.start.hour() * 60) + this.start.minute();
-//      @startEditable  = false
-//      @durationEditable  = false
                 // set to all day if it's a 24 hours span
                 this.allDay = false;
                 if (this.duration_span && (this.duration_span === 86400)) {
@@ -143,12 +141,12 @@ angular.module('BB.Models').factory("AdminBookingModel", ($q, BBModel,
                     data = this.getPostData();
                 }
                 this.$put('self', {}, data).then(res => {
-                        this.constructor(res);
-                        if (this.using_full_time) {
-                            this.useFullTime();
+                        let booking = new BBModel.Admin.Booking(res);
+                        if (booking.using_full_time) {
+                            booking.useFullTime();
                         }
-                        BookingCollections.checkItems(this);
-                        return defer.resolve(this);
+                        BookingCollections.checkItems(booking);
+                        return defer.resolve(booking);
                     }
                     , err => defer.reject(err));
                 return defer.promise;
@@ -158,12 +156,12 @@ angular.module('BB.Models').factory("AdminBookingModel", ($q, BBModel,
                 let defer = $q.defer();
                 this.$flush('self');
                 this.$get('self').then(res => {
-                        this.constructor(res);
-                        if (this.using_full_time) {
-                            this.useFullTime();
+                        let booking = new BBModel.Admin.Booking(res);
+                        if (booking.using_full_time) {
+                            booking.useFullTime();
                         }
-                        BookingCollections.checkItems(this);
-                        return defer.resolve(this);
+                        BookingCollections.checkItems(booking);
+                        return defer.resolve(booking);
                     }
                     , err => defer.reject(err));
                 return defer.promise;
