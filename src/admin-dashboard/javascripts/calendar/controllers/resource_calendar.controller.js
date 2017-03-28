@@ -348,8 +348,8 @@ angular
             }
 
             let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
-            start = calendar.moment(bbTimeZone.convertToCompanyTz(start.toISOString()));
-            end = calendar.moment(bbTimeZone.convertToCompanyTz(end.toISOString()));
+            start = calendar.moment(bbTimeZone.convertToCompanyTz(moment(start.toISOString())));
+            end = calendar.moment(bbTimeZone.convertToCompanyTz(moment(end.toISOString())));
 
             view.calendar.unselect();
 
