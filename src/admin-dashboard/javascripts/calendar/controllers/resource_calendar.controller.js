@@ -73,6 +73,7 @@ angular
         let getEvents = function (start, end, timezone, callback) {
 
             if (bbTimeZone.getDisplayUTCOffset() > bbTimeZone.getCompanyUTCOffset()) start = start.clone().subtract(1, 'day');
+            if (bbTimeZone.getDisplayUTCOffset() < bbTimeZone.getCompanyUTCOffset()) end = end.clone().add(1, 'day');
 
             vm.loading = true;
             getCompanyPromise().then(function (company) {

@@ -32,7 +32,7 @@
          */
         function convertToCompanyTz(dateTime, enforce = false) {
 
-            console.info('convertToCompanyTz');
+            //console.info('convertToCompanyTz');
 
             return convertDateTime(dateTime, CompanyStoreService.time_zone, enforce);
         }
@@ -44,14 +44,14 @@
          */
         function convertToDisplayTz(dateTime, enforce = false) {
 
-            console.info('convertToDisplayTz');
+            //console.info('convertToDisplayTz');
 
             return convertDateTime(dateTime, displayTimeZone, enforce);
         }
 
         function convertDateTime(dateTime, timeZone, enforce) {
 
-            console.log(moment(dateTime).format('llll Z'), 'enforce:' + enforce);
+            //console.log(moment(dateTime).format('llll Z'), 'enforce:' + enforce);
 
 
             if (!moment(dateTime).isValid()) $log.error('not valid dateTime', dateTime);
@@ -59,7 +59,7 @@
             //if (!isCompanyTimeZone() && enforce === false) return dateTime; //TODO consider removing this line and make always conversion
 
             let converted = moment.tz(dateTime, timeZone);
-            console.log(converted.format('llll Z'), 'converted to ' + timeZone);
+            //console.log(converted.format('llll Z'), 'converted to ' + timeZone);
             return converted;
         }
 

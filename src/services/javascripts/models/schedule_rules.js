@@ -285,7 +285,19 @@ angular.module('BB.Models').factory("ScheduleRules", () =>
          * @returns {date} Returns the formated time
          */
         formatTime(time) {
-            return [time.slice(0, 2), time.slice(2, 4)].join(':');
+
+            if (time.length === 5) {
+                let hours = time.slice(0, 2);
+                let minutes = time.slice(3, 5) !== '00' ? '59' : '00';
+                let seconds = minutes;
+
+                return [hours, minutes, seconds].join(':');
+            }
+
+            let hours = time.slice(0, 2);
+            let minutes = time.slice(2, 4);
+
+            return [hours, minutes].join(':');
         }
 
         /***
