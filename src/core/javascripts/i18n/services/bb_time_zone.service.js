@@ -18,7 +18,9 @@
             convertToCompanyTz,
             convertToDisplayTz,
             determineTimeZone,
+            getCompanyUTCOffset,
             getDisplayTimeZone,
+            getDisplayUTCOffset,
             isCompanyTimeZone,
             setDisplayTimeZone
         };
@@ -29,6 +31,9 @@
          * @returns {moment}
          */
         function convertToCompanyTz(dateTime, enforce = false) {
+
+            console.info('convertToCompanyTz');
+
             return convertDateTime(dateTime, CompanyStoreService.time_zone, enforce);
         }
 
@@ -38,15 +43,24 @@
          * @returns {moment}
          */
         function convertToDisplayTz(dateTime, enforce = false) {
+
+            console.info('convertToDisplayTz');
+
             return convertDateTime(dateTime, displayTimeZone, enforce);
         }
 
         function convertDateTime(dateTime, timeZone, enforce) {
+
+            console.log(moment(dateTime).format('llll Z'), 'enforce:' + enforce);
+
+
             if (!moment(dateTime).isValid()) $log.error('not valid dateTime', dateTime);
 
-            if (!isCompanyTimeZone() && enforce === false) return dateTime; //TODO consider removing this line and make always conversion
+            //if (!isCompanyTimeZone() && enforce === false) return dateTime; //TODO consider removing this line and make always conversion
 
-            return moment.tz(dateTime, timeZone);
+            let converted = moment.tz(dateTime, timeZone);
+            console.log(converted.format('llll Z'), 'converted to ' + timeZone);
+            return converted;
         }
 
         function getDisplayTimeZone() {
@@ -68,6 +82,14 @@
             if (bbi18nOptions.use_company_time_zone && CompanyStoreService.time_zone) {
                 setDisplayTimeZone(CompanyStoreService.time_zone);
             }
+        }
+
+        function getDisplayUTCOffset() {
+            return moment().tz(displayTimeZone).utcOffset();
+        }
+
+        function getCompanyUTCOffset() {
+            return moment().tz(CompanyStoreService.time_zone).utcOffset();
         }
 
         function isCompanyTimeZone() {
