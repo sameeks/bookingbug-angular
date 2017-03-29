@@ -20,8 +20,8 @@ angular
             templateUrl: '_time_zone.html',
             controller(CompanyStoreService, bbTimeZone, bbi18nOptions) {
 
-                let company_time_zone = CompanyStoreService.time_zone;
-                this.time_zone_name = moment().tz(company_time_zone).format('zz');
+                const company_time_zone = CompanyStoreService.time_zone;
+                this.time_zone_name = moment().tz(bbTimeZone.getDisplayTimeZone()).format('zz');
 
                 //  if not using local time zone and user time zone is not same as companies
                 if (!bbi18nOptions.use_browser_time_zone && (bbTimeZone.getDisplayTimeZone() !== company_time_zone)) {
