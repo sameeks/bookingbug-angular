@@ -18,7 +18,7 @@ angular.module('BB.Directives').directive('bbAttendees', () => {
                     let deferred = $q.defer();
 
                     let params = {
-                        purchase: $scope.bb.moving_purchase,
+                        purchase: $scope.bb.purchase,
                         bookings: $scope.bb.basket.items,
                         notify: true
                     };
@@ -54,7 +54,7 @@ angular.module('BB.Directives').directive('bbAttendees', () => {
                  */
                 $scope.changeAttendees = function () {
 
-                    if (!$scope.bb.current_item.ready || !$scope.bb.moving_purchase) {
+                    if (!$scope.bb.current_item.ready || !$scope.bb.movingBooking) {
                         return false;
                     }
 

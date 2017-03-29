@@ -13,7 +13,7 @@
             translate="ADMIN_BOOKING.CONFIRMATION.TITLE">
           </h2>
 
-          <div ng-if="!total.containsWaitlistItems()">
+          <div ng-if="!total.containsWaitlistItems()"> 
 
             <p
               id="bb-confirmation-summary-subtitle"
@@ -79,44 +79,44 @@
 
           <ul
             class="confirmation-summary"
-            ng-repeat="i in total.items">
+            ng-repeat="booking in total.bookings">
 
             <li
               id="bb-confirmation-summary-service"
-              ng-if="i.full_describe"
+              ng-if="booking.full_describe"
               class="row confirmation-summary-item">
               <div
                 class="col-sm-3 bb-summary-label"
                 translate="ADMIN_BOOKING.CONFIRMATION.SERVICE_LBL">
               </div>
               <div class="col-sm-9 bb-summary-value">
-                {{i.full_describe}}
+                {{booking.full_describe}}
               </div>
             </li>
 
             <li
               id="bb-confirmation-summary-datetime"
-              ng-if="i.describe"
+              ng-if="booking.describe"
               class="row confirmation-summary-item">
               <div
                 class="col-sm-3 bb-summary-label"
                 translate="ADMIN_BOOKING.CONFIRMATION.DATE_TIME_LBL">
               </div>
               <div class="col-sm-9 bb-summary-value">
-                {{i.describe}}
+                {{booking.datetime | datetime}}
               </div>
             </li>
 
             <li
               id="bb-confirmation-summary-price"
-              ng-if="i.price"
+              ng-if="booking.price"
               class="row confirmation-summary-item">
               <div
                 class="col-sm-3 bb-summary-label"
                 translate="ADMIN_BOOKING.CONFIRMATION.PRICE_LBL">
               </div>
               <div class="col-sm-9 bb-summary-value">
-                {{i.price | currency}}
+                {{booking.price | currency}}
               </div>
             </li>
 

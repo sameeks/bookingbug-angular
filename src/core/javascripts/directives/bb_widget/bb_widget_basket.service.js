@@ -161,7 +161,7 @@
             guardScope();
             var add_defer;
             add_defer = $q.defer();
-            if (!$scope.bb.current_item.submitted && !$scope.bb.moving_booking) {
+            if (!$scope.bb.current_item.submitted && !$scope.bb.movingBooking) {
                 moveToBasket();
                 $scope.bb.current_item.submitted = updateBasket();
                 $scope.bb.current_item.submitted.then(function (basket) {

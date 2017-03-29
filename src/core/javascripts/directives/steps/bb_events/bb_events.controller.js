@@ -544,7 +544,7 @@ angular.module('BB.Controllers').controller('EventList', function ($scope, $root
 
         } else {
 
-            if ($scope.bb.moving_purchase) {
+            if ($scope.bb.movingBooking) {
 
                 for (i of Array.from($scope.bb.basket.items)) {
                     i.setEvent(item);

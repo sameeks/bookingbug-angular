@@ -229,13 +229,13 @@ angular.module('BBAdminDashboard.calendar.controllers').controller('bbResourceCa
 
             getCompanyPromise().then(company => {
                 WidgetModalService.open({
+                    item_defaults,
                     min_date: setTimeToMoment(start, AdminCalendarOptions.minTime),
                     max_date: setTimeToMoment(end, AdminCalendarOptions.maxTime),
                     from_datetime: moment(start.toISOString()),
                     to_datetime: moment(end.toISOString()),
-                    item_defaults: item_defaults,
                     company_id: company.id,
-                    booking_id: event.id,
+                    booking_id: adminBooking.id,
                     success: (model) => {
                         let adminBooking = new BBModel.Admin.Booking(adminBooking);
                         refreshBooking(adminBooking);

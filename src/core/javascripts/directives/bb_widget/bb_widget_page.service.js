@@ -152,8 +152,6 @@
                     return;
                 }
                 return showPage('time');
-            } else if ($scope.bb.moving_booking && (!$scope.bb.current_item.ready || !$scope.bb.current_item.move_done)) {
-                return showPage('check_move');
             } else if (!$scope.client.valid()) {
                 if (setPageRoute($rootScope.Route.Client)) {
                     return;
@@ -164,7 +162,7 @@
                     return;
                 }
                 return showPage('check_items');
-            } else if ($scope.bb.moving_booking && $scope.bb.basket.itemsReady()) {
+            } else if ($scope.bb.movingBooking && $scope.bb.basket.itemsReady()) {
                 return showPage('purchase');
             } else if (!$scope.bb.basket.readyToCheckout()) {
                 if (setPageRoute($rootScope.Route.Summary)) {

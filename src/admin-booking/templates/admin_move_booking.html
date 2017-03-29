@@ -12,7 +12,7 @@
               class="confirmation-heading"
               translate="PUBLIC_BOOKING.PURCHASE.CANCEL_CONFIRMATION_HEADING">
             </h2>
-          </div>
+          </div> 
         </div>
 
         <div ng-show="bookings">
@@ -102,12 +102,15 @@
                     </button>
                   </div>
 
-                  <div class="col-sm-4">
+
+                  <div bb-move-booking class="col-sm-4">
                     <button
                       type="button"
+                      id="btn-continue"
                       class="btn btn-primary btn-block"
-                      ng-click="move(bookings[0], '', {use_resource: true})"
-                      translate="PUBLIC_BOOKING.PURCHASE.MOVE_BOOKING_BTN">
+                      ng-click="$bbMoveBookingCtrl.initMove(bookings[0])"
+                      bb-debounce
+                      translate="PUBLIC_BOOKING.PURCHASE.MOVE_BOOKING_BTN">  
                     </button>
                   </div>
 
@@ -127,7 +130,7 @@
 
             </div>
 
-          </div>
+          </div> 
 
         </div>
 
