@@ -89,7 +89,12 @@
                 if (!current_item) {
                     current_item = _.last(basket.items);
                 }
+
+                // Re-assign the selected timeslot to basket object since it has been rebuilt
+                if (current_item.time !== undefined) current_item.time.datetime = current_item.startDatetime();
+
                 $scope.bb.current_item = current_item;
+
                 if (!$scope.bb.current_item) {
                     return clearBasketItem().then(function () {
                         return add_defer.resolve(basket);
