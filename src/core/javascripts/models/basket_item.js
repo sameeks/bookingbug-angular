@@ -1528,6 +1528,16 @@ angular.module('BB.Models').factory("BasketItemModel", ($q, $window, BBModel, Bo
         }
 
 
+        canCancel() {
+            return moment(this.min_cancellation_time).isAfter(moment());
+        }
+
+
+        canMove() {
+            return this.canCancel();
+        }
+
+
         /***
          * @ngdoc method
          * @name setCloneAnswers

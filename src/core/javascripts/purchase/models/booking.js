@@ -203,6 +203,26 @@ angular.module('BB.Models').factory("Purchase.BookingModel", ($q, $window, BBMod
             return data;
         }
 
+        updatePurchaseBookingData(purchase) {
+            let i, len, oldb, ref;
+
+            if (purchase) {
+                ref = purchase.bookings;
+                for (i = 0, len = ref.length; i < len; i++) {
+                    oldb = ref[i];
+                    if (oldb.id === this.id) {
+                        this.moved = true;
+                        purchase.bookings[i] = this;
+                    }
+                }
+
+                return purchase;
+            }
+            else {
+                return;
+            }
+        }
+
         checkReady() {
             if (this.datetime && this.id && this.purchase_ref) {
                 return this.ready = true;

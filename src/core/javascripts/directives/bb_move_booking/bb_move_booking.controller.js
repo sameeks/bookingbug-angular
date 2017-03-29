@@ -23,6 +23,27 @@
                 }
             }
 
+            this.checkBookingReadyToMove = (booking) => {
+                if(booking.canMove()) {
+                    return $scope.decideNextPage('basket_summary');
+                }
+                else {
+                    this.loader.setLoaded();
+                    AlertService.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
+                }
+            }
+
+            this.updateSingleBooking = (booking) => {
+                this.loader.notLoaded();
+                PurchaseBookingService.update(booking).then((purchaseBooking) => {
+                    let booking = new BBModel.Purchase.Booking(purchaseBooking);
+                    this.loader.setLoaded()
+                    $scope.bb.purchase = booking.updatePurchaseBookingData($scope.bb.purchase);
+                    resolveMove(booking);
+                });
+            }
+
+
             let openCalendarModal = (booking) => {
                 WidgetModalService.open({
                     company_id: booking.company_id,
@@ -32,33 +53,6 @@
                 });
             }
 
-            this.checkBookingReadyToMove = (booking) => {
-                if(PurchaseBookingService.purchaseBookingNotMovable(booking)) {
-                    this.loader.setLoaded();
-                    AlertService.add('info', {msg: "it's after the min_cancellation_time, but now we have the basket summary after the calendar so the check should me moved back a step"});
-                    // AlertService.add('info', { msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
-
-                    $timeout(() => {
-                        AlertService.clear();
-                    }, 5000);
-                }
-
-                else {
-                    return $scope.decideNextPage('basket_summary');
-                }
-            }
-
-            this.updateSingleBooking = (booking) => {
-                this.loader.notLoaded();
-                PurchaseBookingService.update(booking).then((purchaseBooking) => {
-                    let booking = new BBModel.Purchase.Booking(purchaseBooking);
-                    this.loader.setLoaded()
-
-                    // update the $scope purchase to the newly updated purchaseBooking
-                    $scope.bb.purchase = PurchaseBookingService.updatePurchaseBookingRef($scope.bb.purchase, booking);
-                    resolveMove(booking);
-                });
-            }
 
             let resolveMove = (booking) => {
                 $rootScope.$broadcast("booking:moved", $scope.bb.purchase);

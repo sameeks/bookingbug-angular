@@ -33,31 +33,6 @@
                     }
                 );
                 return deferred.promise;
-            },
-
-            updatePurchaseBookingRef(purchase, booking) {
-                let i, len, oldb, ref;
-
-                if (purchase) {
-                    ref = purchase.bookings;
-                    for (i = 0, len = ref.length; i < len; i++) {
-                        oldb = ref[i];
-                        if (oldb.id === booking.id) {
-                            booking.moved = true;
-                            purchase.bookings[i] = booking;
-                        }
-                    }
-
-                    return purchase;
-                }
-                else {
-                    return;
-                }
-            },
-
-            purchaseBookingNotMovable(booking) {
-                let timeNow = moment();
-                return (booking.min_cancellation_time.isBefore(timeNow) || booking.time.datetime.isSame(booking.srcBooking.datetime));
             }
         };
     }
