@@ -57,7 +57,7 @@ angular.module('BB.Services').factory("DateTimeUtilitiesService", function (Gene
             // if user timezone different than company timezone
             /*if (bbTimeZone.isCustomTimeZone()) {
                 datetime = datetime.tz(CompanyStoreService.time_zone);
-            }*////TODO dobule check
+            }*////TODO double check
 
             datetime = bbTimeZone.convertToCompanyTz(datetime);
 

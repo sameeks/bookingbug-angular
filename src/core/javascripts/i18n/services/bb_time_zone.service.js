@@ -57,7 +57,7 @@
 
             //if(!moment.isMoment(dateTime)) dateTime = moment(dateTime);
 
-           // if (!isCompanyTimeZone() && enforce === false) return dateTime; //TODO consider removing this line and make always conversion
+            // if (!isCompanyTimeZone() && enforce === false) return dateTime; //TODO consider removing this line and make always conversion
 
             let converted = moment.tz(dateTime, timeZone);
             //console.log(converted.format('llll Z'), 'converted to ' + timeZone);
