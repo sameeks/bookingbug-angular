@@ -92,6 +92,8 @@ angular.module('BB.Controllers').controller('DayList', function ($scope, $rootSc
                 $scope.weeks = _.groupBy($scope.day_data, day => day.date.week());
                 $scope.weeks = _.toArray($scope.weeks);
 
+                $scope.$emit('bbDayList:loaded');
+
                 return $scope.setLoaded($scope);
             }
 
