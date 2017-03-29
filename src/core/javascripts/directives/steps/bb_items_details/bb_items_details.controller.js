@@ -168,10 +168,6 @@ angular.module('BB.Controllers').controller('ItemDetails', function ($scope, $at
         if (!ValidatorService.validateForm(form)) {
             return;
         }
-        // we need to validate the question information has been correctly entered here
-        if ($scope.bb.moving_booking) {
-            return $scope.confirm_move(form, route);
-        }
 
         $scope.item.setAskedQuestions();
 
@@ -209,88 +205,6 @@ angular.module('BB.Controllers').controller('ItemDetails', function ($scope, $at
             return true;
         }
     };
-
-    /***
-     * @ngdoc method
-     * @name confirm_move
-     * @methodOf BB.Directives:bbItemDetails
-     * @description
-     * Confirm move question information has been correctly entered here
-     *
-     * @param {string=} route A specific route to load
-     */
-    $scope.confirm_move = function (route) {
-
-        confirming = true;
-        if (!$scope.item) {
-            $scope.item = $scope.bb.current_item;
-        }
-        $scope.item.moved_booking = false;
-        // we need to validate the question information has been correctly entered here
-        $scope.item.setAskedQuestions();
-        if ($scope.item.ready) {
-            loader.notLoaded();
-            if ($scope.bb.moving_purchase) {
-                let params = {
-                    purchase: $scope.bb.moving_purchase,
-                    bookings: $scope.bb.basket.items
-                };
-                if ($scope.bb.current_item.move_reason) {
-                    params.move_reason = $scope.bb.current_item.move_reason;
-                }
-                return PurchaseService.update(params).then(function (purchase) {
-                        $scope.bb.purchase = purchase;
-                        return $scope.bb.purchase.$getBookings().then(function (bookings) {
-                            $scope.purchase = purchase;
-                            loader.setLoaded();
-                            $scope.item.move_done = true;
-                            $scope.item.moved_booking = true;
-                            $rootScope.$broadcast("booking:moved");
-                            $scope.decideNextPage(route);
-                            return $scope.showMoveMessage(bookings[0].datetime);
-                        });
-                    }
-
-
-                    , function (err) {
-                        loader.setLoaded();
-                        return AlertService.add("danger", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
-                    });
-            } else {
-                if ($scope.bb.current_item.move_reason) {
-                    $scope.item.move_reason = $scope.bb.current_item.move_reason;
-                }
-                return PurchaseBookingService.update($scope.item).then(function (booking) {
-                        let b = new BBModel.Purchase.Booking(booking);
-
-                        if ($scope.bb.purchase) {
-                            for (let _i = 0; _i < $scope.bb.purchase.bookings.length; _i++) {
-                                let oldb = $scope.bb.purchase.bookings[_i];
-                                if (oldb.id === b.id) {
-                                    $scope.bb.purchase.bookings[_i] = b;
-                                }
-                            }
-                        }
-
-                        loader.setLoaded();
-                        $scope.bb.moved_booking = booking;
-                        $scope.item.move_done = true;
-                        $rootScope.$broadcast("booking:moved");
-                        $scope.decideNextPage(route);
-                        return $scope.showMoveMessage(b.datetime);
-                    }
-                    , err => {
-                        loader.setLoaded();
-                        return AlertService.add("danger", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_FAIL_ALERT')});
-                    }
-                );
-            }
-        } else {
-            return $scope.decideNextPage(route);
-        }
-    };
-
-    $scope.showMoveMessage = datetime => AlertService.add("info", {msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', {datetime})});
 
 
     /***
