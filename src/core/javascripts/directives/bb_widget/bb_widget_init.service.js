@@ -377,8 +377,8 @@
                     }, (err) => {
                         totalDefer.reject(err);
                     });
-                    totalDefer.promise;
-                    setup_promises.push(getPurchaseTotal);
+
+                    setup_promises.push(totalDefer.promise);
 
                 }
                 if (total_id) {

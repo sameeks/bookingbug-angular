@@ -320,7 +320,7 @@
                 booking = bookings[i];
                 newItem = new BBModel.BasketItem(booking, $scope.bb);
                 newItem.setSrcBooking(booking, $scope.bb);
-                Array.prototype.push.apply(proms, newItem.promises);
+                proms.push(...newItem.promises);
                 $scope.bb.basket.addItem(newItem);
             }
 
@@ -336,10 +336,13 @@
             $scope.bb.movingBooking = bookings;
 
             $q.all(proms).then(() => {
-                return totalDefer.resolve();
+                totalDefer.resolve();
             }, (err) =>  {
-                return totalDefer.reject(err);
+                totalDefer.reject(err);
             });
+
+            return
+
         }
 
         return {
