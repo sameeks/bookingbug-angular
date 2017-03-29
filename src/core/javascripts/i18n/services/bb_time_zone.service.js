@@ -99,9 +99,7 @@
 
         function setDisplayTimeZone(timeZone, shouldUpdateLocalStorage = false) {
             moment.tz.setDefault(timeZone);
-
             displayTimeZone = timeZone;
-
             if (shouldUpdateLocalStorage) updateLocalStorage(timeZone);
         }
 
