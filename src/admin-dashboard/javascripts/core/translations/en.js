@@ -16,13 +16,7 @@ angular.module('BBAdminDashboard').config(function($translateProvider) {
                 LOGOUT: 'Logout',
                 VERSION: 'Version',
                 COPYRIGHT: 'Copyright',
-                SWITCH_TO_CLASSIC: 'Switch to Classic',
-                PREFERENCES: {
-                    SET_TIMEZONE_LABEL: 'Set timezone automatically',
-                    SET_TIMEZONE_ON_LABEL: 'On',
-                    SET_TIMEZONE_OFF_LABEL: 'Off',
-                    TIMEZONE_LABEL: 'Timezone'
-                }
+                SWITCH_TO_CLASSIC: 'Switch to Classic'
             }
         }
     };

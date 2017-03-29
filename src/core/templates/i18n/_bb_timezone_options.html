@@ -1,19 +1,19 @@
 <div class="form-group">
   <label>
-    <span translate="ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_LABEL"></span>
+    <span translate="CORE.TIMEZONE.SET_TIMEZONE_AUTOMATICALLY_LABEL"></span>
   </label>
   <toggle-switch
     ng-change="$bbTimeZoneOptionsCtrl.automaticTimeZoneToggle()"
     ng-model="$bbTimeZoneOptionsCtrl.isAutomaticTimeZone"
-    on-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_ON_LABEL' | translate}}"
-    off-label="{{'ADMIN_DASHBOARD.CORE.PREFERENCES.SET_TIMEZONE_OFF_LABEL' | translate}}"
+    on-label="{{'CORE.TIMEZONE.SET_TIMEZONE_AUTOMATICALLY_ON_LABEL' | translate}}"
+    off-label="{{'CORE.TIMEZONE.SET_TIMEZONE_AUTOMATICALLY_OFF_LABEL' | translate}}"
     class="switch-primary">
   </toggle-switch>
 </div>
 
 <div class="form-group">
   <label>
-    <span translate="ADMIN_DASHBOARD.CORE.PREFERENCES.TIMEZONE_LABEL"></span>
+    <span translate="CORE.TIMEZONE.TIMEZONE_LABEL"></span>
   </label>
   <!-- Using ui-select-choices-lazyload due to perfomance issues -->
   <ui-select

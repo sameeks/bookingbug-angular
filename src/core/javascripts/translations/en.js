@@ -62,7 +62,13 @@ angular.module('BB.Services').config(function ($translateProvider) {
                     CANCEL_BTN: "@:COMMON.BTN.CANCEL"
                 }
             },
-            TIMEZONE_INFO: "All times are shown in {{time_zone_name}}.",
+            TIMEZONE: {
+                TIMEZONE_INFO: "All times are shown in {{time_zone_name}}.",
+                SET_TIMEZONE_AUTOMATICALLY_LABEL: 'Set timezone automatically',
+                SET_TIMEZONE_AUTOMATICALLY_ON_LABEL: 'On',
+                SET_TIMEZONE_AUTOMATICALLY_OFF_LABEL: 'Off',
+                TIMEZONE_LABEL: 'Timezone',
+            },
             FILTERS: {
                 DISTANCE: {
                     MILES: "miles",
