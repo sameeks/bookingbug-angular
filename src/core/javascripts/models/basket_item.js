@@ -1513,6 +1513,15 @@ angular.module('BB.Models').factory("BasketItemModel", ($q, $window, BBModel, Bo
             return this.resource && (typeof this.resource === 'boolean');
         }
 
+        canCancel() {
+            return moment(this.min_cancellation_time).isAfter(moment());
+        }
+
+
+        canMove() {
+            return this.canCancel();
+        }
+
 
         /***
          * @ngdoc method
@@ -1525,16 +1534,6 @@ angular.module('BB.Models').factory("BasketItemModel", ($q, $window, BBModel, Bo
          */
         isMovingBooking() {
             return (this.srcBooking || this.move_item_id);
-        }
-
-
-        canCancel() {
-            return moment(this.min_cancellation_time).isAfter(moment());
-        }
-
-
-        canMove() {
-            return this.canCancel();
         }
 
 

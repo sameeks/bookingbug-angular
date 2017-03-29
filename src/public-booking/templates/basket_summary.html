@@ -102,19 +102,7 @@
     </div>
   </div>
 
-  <div bb-reasons>
-    <p ng-show="$bbReasonsCtrl.moveReasons.length > 0">
-      <span class="bb-summary-label3">
-        <span translate="PUBLIC_BOOKING.RESCHEDULE_REASONS.MOVE_REASON"></span>
-      </span>
-      <select
-        ng-model="bb.current_item.moveReason"
-        id="cancel_reason"
-        class="form-control"
-        ng-options="option.id as option.text for option in $bbReasonsCtrl.moveReasons">
-      </select>
-    </p>
-  </div>
+  <div ng-if="bb.movingBooking" bb-include="_reschedule_reasons"></div>
 
   <hr/>
 

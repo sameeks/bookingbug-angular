@@ -37,7 +37,6 @@
                 this.loader.notLoaded();
                 PurchaseBookingService.update(booking).then((purchaseBooking) => {
                     let booking = new BBModel.Purchase.Booking(purchaseBooking);
-                    this.loader.setLoaded()
                     $scope.bb.purchase = booking.updatePurchaseBookingData($scope.bb.purchase);
                     resolveMove(booking);
                 });
@@ -55,6 +54,7 @@
 
 
             let resolveMove = (booking) => {
+                this.loader.setLoaded()
                 $rootScope.$broadcast("booking:moved", $scope.bb.purchase);
                 // isMemberModal property is defined when openCalendarModal method is called from memberBookings controller
                 // we dont want to close the modal when on the member or admin dashboard
