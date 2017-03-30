@@ -95,7 +95,12 @@ angular.module('BB.Controllers').controller('TimeRangeList', function ($scope, $
             if ($scope.original_start_date) {
                 let diff = $scope.last_selected_date.diff($scope.original_start_date, 'days');
                 diff = diff % $scope.time_range_length;
-                diff = diff === 0 ? diff : diff + 1;
+                 if($scope.last_selected_date.hour() <= moment().hour()){
+                    //if the selected time is less than time now, difference will be
+                    diff += 1; 
+                } 
+                diff = diff === $scope.time_range_length? 0: diff;//compensate for $scope.time_range_length long differences
+                //diff = diff === 0 ? diff : diff + 1;
                 let start_date = $scope.last_selected_date.clone().subtract(diff, 'days');
                 setTimeRange($scope.last_selected_date, start_date);
             } else {
