@@ -20,7 +20,7 @@
               <span class="hidden-xs"><i class="fa fa-building-o fa-fw"
                                          aria-hidden="true"></i> {{bb.company.name}}</span>
             </a>
-            <ul class="dropdown-menu user-dropdown" uib-dropdown-menu role="menu">
+            <ul ng-if="company.getParent()" class="dropdown-menu user-dropdown" uib-dropdown-menu role="menu">
               <li><a bb-child-company-switch ng-click="logoutChildCompany()" class="btn btn-default btn-sm btn-block"><i
                 class="fa fa-exchange"></i> <span>Switch Department</span></a></li>
             </ul>
