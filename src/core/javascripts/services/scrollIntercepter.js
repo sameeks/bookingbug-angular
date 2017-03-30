@@ -7,7 +7,7 @@
  *
  */
 
-angular.module('BB.Services').factory('scrollIntercepter', ($bbug, $window, GeneralOptions, $timeout) => {
+angular.module('BB.Services').factory('scrollIntercepter', ($bbug, $window, GeneralOptions, AppService, $timeout) => {
 
     var currentlyScrolling = false;
 
@@ -23,6 +23,11 @@ angular.module('BB.Services').factory('scrollIntercepter', ($bbug, $window, Gene
 
             if ('parentIFrame' in $window) {
                 parentIFrame.scrollToOffset(0, element.offset().top - GeneralOptions.scroll_offset);
+            }
+            else if (AppService.isModalOpen()) {
+                $bbug('[uib-modal-window]').animate({
+                    scrollTop: element.offset().top - GeneralOptions.scroll_offset
+                }, transitionTime);
             } else {
                 $bbug("html, body").animate({
                     scrollTop: element.offset().top - GeneralOptions.scroll_offset
