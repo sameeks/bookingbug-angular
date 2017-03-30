@@ -21,7 +21,9 @@
         .component('bbTimeZoneOptions', {
             templateUrl: 'i18n/_bb_timezone_options.html',
             bindings: {
-                restrictRegion: '<'
+                restrictRegion: '<',
+                format: '<',
+                translate: '<'
             },
             controller: TimeZoneOptionsCtrl,
             controllerAs: '$bbTimeZoneOptionsCtrl'
@@ -37,7 +39,7 @@
         ctrl.selectedTimeZone = null;
 
         ctrl.$onInit = function () {
-            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.restrictRegion);//TODO should be more customisable
+            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.restrictRegion, ctrl.format, ctrl.translate); //TODO should be more customisable
             ctrl.updateTimeZone = updateTimeZone;
             ctrl.automaticTimeZoneToggle = automaticTimeZoneToggle;
             if (bbi18nOptions.use_browser_time_zone && $localStorage.getItem('bbTimeZone') === undefined) ctrl.isAutomaticTimeZone = true;
@@ -60,6 +62,13 @@
             bbTimeZone.setDisplayTimeZone(timeZone, true);
             $rootScope.$broadcast('BBTimeZoneOptions:timeZoneChanged', timeZone);
         }
+
+        $scope.$on('BBLanguagePicker:languageChanged', languageChangedHandler);
+
+        function languageChangedHandler() {
+            ctrl.$onInit();
+        }
+
     }
 
 })();

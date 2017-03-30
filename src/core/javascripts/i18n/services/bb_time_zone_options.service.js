@@ -27,10 +27,10 @@
             return locationNames;
         }
 
-        function mapTimeZones (locationNames) {
+        function mapTimeZones (locationNames, format, translate) {
             let timezones = [];
             for (let [index, value] of locationNames.entries()) {
-                timezones.push(mapTimeZoneForDisplay(value, index));
+                timezones.push(mapTimeZoneForDisplay(value, index, format, translate));
             }
             timezones = _.uniq(timezones, (timezone) => timezone.display);
             timezones = orderByFilter(timezones, ['order[0]', 'order[1]', 'order[2]'], false);
@@ -50,8 +50,31 @@
             }
 
             function filterLocations (filterBy) {
-                _.filter(locationNames, (tz) => tz.indexOf(filterBy) !== -1);
+                return _.filter(locationNames, (tz) => tz.indexOf(filterBy) !== -1);
             }
+        }
+
+        function formatDisplayValue (format, translate = true, city, tz) {
+
+            const translateMap = {
+                tzCode: $translate.instant('COMMON.TIME_ZONE_CODES.' + tz.format('zz')),
+                location: $translate.instant('COMMON.LOCATIONS.' + city),
+            };
+
+            const sampleFormat = {
+                'utc-code': 'UTC',
+                'tz-code': translate ? translateMap.tzCode : tz.format('zz'),
+                'offset-hours': tz.format('Z'),
+                'location': translate ? translateMap.location : city
+            };
+
+            if (format) {
+                let display = format.replace(/'?\w[\w']*(?:-\w+)*'?/gi, (match) => sampleFormat[match] ? sampleFormat[match] : match);
+                return display;
+            }
+
+            let display = `(UTC ${tz.format('Z')}) ${translate ? translateMap.location : city } (${translate ? translateMap.location : tz.format('zz')})`;
+            return display;
         }
 
         /*
@@ -63,11 +86,12 @@
         * @param {Integer} Index
         * @returns {Object}
         */
-        function mapTimeZoneForDisplay (location, index) {
+        function mapTimeZoneForDisplay (location, index, format, translate) {
+
             const timezone = {};
             const city = location.match(/[^/]*$/)[0].replace(/-/g, '_').toUpperCase();
             const tz = moment.tz(location);
-            timezone.display = `(UTC ${tz.format('Z')}) ${$translate.instant('COMMON.LOCATIONS.' + city)} (${tz.format('zz')})`;
+            timezone.display = formatDisplayValue(format, translate, city, tz);
             timezone.value = location;
             if (index) {
                 timezone.id = index;
@@ -84,13 +108,13 @@
         * @param {String, Array} Restrict the timezones to one region (String) or multiple regions (Array)
         * @returns {Array} A list of timezones
         */
-        function generateTimeZoneList (restrictRegion) {
+        function generateTimeZoneList (restrictRegion, format, translate) {
 
             let locationNames = cleanUpLocations();
             if (restrictRegion) {
                 locationNames = restrictToRegion(locationNames, restrictRegion);
             }
-            return mapTimeZones(locationNames);
+            return mapTimeZones(locationNames, format, translate);
         }
     }
 
