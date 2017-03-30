@@ -136,6 +136,12 @@ angular.module("BBAdminBooking").config(function ($translateProvider) {
                 TIME_LBL: "@:COMMON.TERMINOLOGY.TIME",
                 PRICE_LBL: "@:COMMON.TERMINOLOGY.PRICE",
                 CLOSE_BTN: "@:COMMON.BTN.CLOSE"
+            },
+            SCREEN_READER: {
+                CALENDAR: {
+                    NEXT_DAY: "Select next day",
+                    PREVIOUS_DAY: "Select previous day"
+                }
             }
         }
     };

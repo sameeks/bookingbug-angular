@@ -9,7 +9,7 @@
         <span translate="ADMIN_BOOKING.CALENDAR.STEP_HEADING"></span>
       </h1>
       <h1 ng-show="!availability_conflict">
-        <span translate="ADMIN_BOOKING.CALENDAR.TIME_NOT_AVAILABLE_STEP_HEADING"></span>
+        <span tabindex="0" translate="ADMIN_BOOKING.CALENDAR.TIME_NOT_AVAILABLE_STEP_HEADING"></span>
       </h1>
     </div>
 
@@ -402,11 +402,12 @@
         <div ng-if="calendar_view.day">
 
           <div class="bb-day-nav">
-
+ 
             <button
               type="button"
               class="btn btn-icon btn-lg"
-              ng-click="subtract('days', 1)">
+              ng-click="subtract('days', 1)"
+              aria-label="{{'ADMIN_BOOKING.SCREEN_READER.CALENDAR.PREVIOUS' | translate}}">
               <span class="fa fa-chevron-left"></span>
               <!-- <span class="hidden-xs">Previous</span> -->
             </button>
@@ -421,7 +422,8 @@
             <button
               type="button"
               class="btn btn-icon btn-lg"
-              ng-click="add('days', 1)">
+              ng-click="add('days', 1)"
+              aria-label="{{'ADMIN_BOOKING.SCREEN_READER.CALENDAR.NEXT_DAY' | translate}}">
               <span class="fa fa-chevron-right"></span>
               <!-- <span class="hidden-xs">Next</span> -->
             </button>

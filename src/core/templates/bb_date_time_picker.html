@@ -9,7 +9,8 @@
              ng-class="{'datepicker-show-focus': opened}"
              ng-disabled="bbDisabled"
              ng-readonly="true"
-             ng-focus="opened=true"
+             ng-click="opened=true"
+             tabindex="-1"
       />
       <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
         <button class="btn btn-default" title="Select date"><span class="fa fa-calendar"></span></button>
@@ -17,7 +18,14 @@
     </div>
   </div>
   <div class="col-xs-5" ng-show="!dateOnly">
-    <div uib-timepicker ng-model="datetimeWithNoTz" show-meridian="showMeridian"
-         minute-step="minuteStep" max="maxDateClean" min="minDateClean" readonly-input="true"></div>
+    <div 
+      uib-timepicker 
+      ng-model="datetimeWithNoTz" 
+      show-meridian="showMeridian"
+      minute-step="minuteStep" 
+      max="maxDateClean" 
+      min="minDateClean" 
+      readonly-input="true"> 
+    </div>
   </div>
 </div>

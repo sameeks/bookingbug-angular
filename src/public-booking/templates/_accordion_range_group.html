@@ -13,7 +13,7 @@
 
     <div
       ng-class="{'available-slot': has_availability, 'unavailable-slot': !has_availability}"
-      ng-attr-tabindex="{{has_availability ? true : -1}}"
+      tabindex="0"
       class="accordion-header">
       <div ng-hide="options.hide_availability_summary && is_selected">
         <span class="period-label">
