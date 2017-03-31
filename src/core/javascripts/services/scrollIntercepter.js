@@ -21,12 +21,13 @@ angular.module('BB.Services').factory('scrollIntercepter', ($bbug, $window, Gene
         if (!currentlyScrolling) {
             currentlyScrolling = true;
 
-            if ('parentIFrame' in $window) {
-                parentIFrame.scrollToOffset(0, element.offset().top - GeneralOptions.scroll_offset);
-            } else if (AppService.isModalOpen()) {
+            // if theres a modal open, scrolling to it takes the higest precedence
+            if (AppService.isModalOpen()) {
                 $bbug('[uib-modal-window]').animate({
                     scrollTop: element.offset().top - GeneralOptions.scroll_offset
                 }, transitionTime);
+            } else if ('parentIFrame' in $window) {
+                parentIFrame.scrollToOffset(0, element.offset().top - GeneralOptions.scroll_offset);
             } else {
                 $bbug("html, body").animate({
                     scrollTop: element.offset().top - GeneralOptions.scroll_offset
