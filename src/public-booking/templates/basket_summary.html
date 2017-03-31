@@ -1,10 +1,10 @@
 <div bb-basket-summary>
 
-  <h2 translate="PUBLIC_BOOKING.BASKET_SUMMARY.STEP_HEADING"></h2>
+  <h2 tabindex="0" translate="PUBLIC_BOOKING.BASKET_SUMMARY.STEP_HEADING"></h2>
 
   <hr/>
 
-  <p translate="PUBLIC_BOOKING.BASKET_SUMMARY.STEP_DESCRIPTION"></p>
+  <p tabindex="0" translate="PUBLIC_BOOKING.BASKET_SUMMARY.STEP_DESCRIPTION"></p>
 
   <div class="row">
     <div class="col-md-12">
@@ -20,23 +20,26 @@
           </uib-accordion-heading>
 
           <ul class="bb-list bb-list-bordered-in">
-            <li id="bb-basket-summary-datetime">
+            <li tabindex="0" aria-label="{{PUBLIC_BOOKING.BASKET_SUMMARY.DATE_TIME_LBL | translate}}" id="bb-basket-summary-datetime">
               <div class="row">
                 <div class="col-sm-4">
                   <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.DATE_TIME_LBL">:</b></span>
                 </div>
-                <div class="col-sm-8">{{item.startDatetime() | datetime: 'llll'}}</div>
+                
+                <div class="col-sm-8">
+                 {{item.startDatetime() | datetime: 'llll'}}
+                  </div>
               </div>
             </li>
-            <li id="bb-basket-summary-duration">
+            <li tabindex="0" aria-label="{{PUBLIC_BOOKING.BASKET_SUMMARY.DURATION_LBL | translate}}" id="bb-basket-summary-duration">
               <div class="row">
                 <div class="col-sm-4">
-                  <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.DURATION_LBL">:</b></span>
+                  <span><b  translate="PUBLIC_BOOKING.BASKET_SUMMARY.DURATION_LBL">:</b></span>
                 </div>
                 <div class="col-sm-8">{{item.duration | time_period}}</div>
               </div>
             </li>
-            <li id="bb-basket-summary-fullname">
+            <li tabindex="0" aria-label="{{PUBLIC_BOOKING.BASKET_SUMMARY.NAME_LBL | translate}}" id="bb-basket-summary-fullname">
               <div class="row">
                 <div class="col-sm-4">
                   <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.NAME_LBL">:</b></span>
@@ -44,7 +47,7 @@
                 <div class="col-sm-8">{{client.first_name + ' ' + client.last_name}}</div>
               </div>
             </li>
-            <li id="bb-basket-summary-email">
+            <li aria-label="{{PUBLIC_BOOKING.BASKET_SUMMARY.EMAIL_LBL | translate}}" tabindex="0" id="bb-basket-summary-email">
               <div
                 class="row"
                 ng-show="client.email">
@@ -54,7 +57,7 @@
                 <div class="col-sm-8">{{client.email}}</div>
               </div>
             </li>
-            <li
+            <li tabindex="0" aria-label="{{PUBLIC_BOOKING.BASKET_SUMMARY.MOBILE_LBL | translate}}"
               id="bb-basket-summary-mobile"
               ng-show="item.mobile">
               <div class="row">
@@ -64,7 +67,7 @@
                 <div class="col-sm-8">{{item.mobile}}</div>
               </div>
             </li>
-            <li
+            <li tabindex="0" aria-label="{{PUBLIC_BOOKING.BASKET_SUMMARY.ADDRESS_LBL | translate}}"
               id="bb-basket-summary-address"
               ng-show="bb.company_settings.ask_address && (client.address1 || client.address2 || client.address3 || client.address4 || client.postcode)">
               <div class="row">
@@ -74,7 +77,7 @@
                 <div class="col-sm-8">{{client.addressSingleLine()}}</div>
               </div>
             </li>
-            <li
+            <li tabindex="0" 
               id="bb-basket-summary-questions"
               ng-repeat="question in item.item_details.questions"
               ng-show="item.has_questions && question.answer && !question.important">
@@ -85,7 +88,7 @@
                 <div class="col-sm-8">{{question.answer | format_answer}}</div>
               </div>
             </li>
-            <li
+            <li tabindex="0" aria-label="{{PUBLIC_BOOKING.BASKET_SUMMARY.PRICE_LBL | translate}}"
               id="bb-basket-summary-price"
               ng-show="item.price">
               <div class="row">
