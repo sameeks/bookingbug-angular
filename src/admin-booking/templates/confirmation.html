@@ -8,18 +8,19 @@
       <div class="bb-subcontent">
         <div class="confirmation-header bb-confirmation-border-margin">
 
-          <h2
+          <h2  tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.TITLE|translate}}"
             id="bb-confirmation-summary-title"
             translate="ADMIN_BOOKING.CONFIRMATION.TITLE">
           </h2>
 
           <div ng-if="!total.containsWaitlistItems()">
 
-            <p
+            <p 
               id="bb-confirmation-summary-subtitle"
               class="bb-confirmation-p-alignment">
-              <span translate="ADMIN_BOOKING.CONFIRMATION.BOOKING_CONFIRMATION"></span>
-              <span
+              <span tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.BOOKING_CONFIRMATION |translate}}"
+                    translate="ADMIN_BOOKING.CONFIRMATION.BOOKING_CONFIRMATION"></span>
+              <span tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.EMAIL_CONFIRMATION |translate}}"
                 translate="ADMIN_BOOKING.CONFIRMATION.EMAIL_CONFIRMATION"
                 translate-values="{customer_name: total.client.getName()}"
                 ng-show="total.client.email">
@@ -32,8 +33,9 @@
             <p
               id="bb-confirmation-summary-title"
               class="bb-confirmation-p-alignment">
-              <span translate="ADMIN_BOOKING.CONFIRMATION.WAITLIST_CONFIRMATION"></span>
-              <span
+              <span tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.WAITLIST_CONFIRMATION |translate}}"
+              translate="ADMIN_BOOKING.CONFIRMATION.WAITLIST_CONFIRMATION"></span>
+              <span tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.EMAIL_CONFIRMATION |translate}}"
                 translate="ADMIN_BOOKING.CONFIRMATION.EMAIL_CONFIRMATION"
                 translate-values="{customer_name: total.client.getName()}"
                 ng-show="total.client.email">
@@ -46,7 +48,7 @@
         <div>
           <ul class="confirmation-summary">
 
-            <li
+            <li tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.PURCHASE_REF_LBL |translate}}"
               id="bb-confirmation-summary-reference"
               class="row confirmation-summary-item">
               <div
@@ -58,7 +60,7 @@
               </div>
             </li>
 
-            <li
+            <li tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.CUSTOMER_LBL |translate}}"
               id="bb-confirmation-summary-customer"
               class="row confirmation-summary-item">
               <div
@@ -76,7 +78,7 @@
             class="confirmation-summary"
             ng-repeat="i in total.items">
 
-            <li
+            <li tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.SERVICE_LBL |translate}}"
               id="bb-confirmation-summary-service"
               ng-if="i.full_describe"
               class="row confirmation-summary-item">
@@ -89,7 +91,7 @@
               </div>
             </li>
 
-            <li
+            <li tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.DATE_TIME_LBL |translate}}"
               id="bb-confirmation-summary-datetime"
               ng-if="i.describe"
               class="row confirmation-summary-item">
@@ -102,7 +104,7 @@
               </div>
             </li>
 
-            <li
+            <li tabindex="0" aria-label="{{ADMIN_BOOKING.CONFIRMATION.PRICE_LBL |translate}}"
               id="bb-confirmation-summary-price"
               ng-if="i.price"
               class="row confirmation-summary-item">

@@ -9,10 +9,10 @@
 
         <div class="confirmation-header bb-confirmation-border-margin">
 
-          <h2 translate="PUBLIC_BOOKING.CONFIRMATION.TITLE"></h2>
+          <h2  tabindex="0" aria-label="{{PUBLIC_BOOKING.CONFIRMATION.TITLE|translate}}" translate="PUBLIC_BOOKING.CONFIRMATION.TITLE"></h2>
 
           <div ng-show="!total.containsWaitlistItems()">
-            <p
+            <p tabindex="0" aria-label="{{PUBLIC_BOOKING.CONFIRMATION.TITLE|translate}}"
               class="bb-confirmation-p-alignment"
               translate="PUBLIC_BOOKING.CONFIRMATION.BOOKING_CONFIRMATION"
               translate-values="{member_name: total.client.first_name}">
@@ -20,14 +20,14 @@
           </div>
 
           <div ng-show="total.containsWaitlistItems()">
-            <p
+            <p tabindex="0" aria-label="{{PPUBLIC_BOOKING.CONFIRMATION.WAITLIST_CONFIRMATION|translate}}"
               class="bb-confirmation-p-alignment"
               translate="PUBLIC_BOOKING.CONFIRMATION.WAITLIST_CONFIRMATION"
               translate-values="{member_name: total.client.first_name}">
             </p>
           </div>
 
-          <div class="row hidden-print text-right print-row">
+          <div class="row hidden-print text-right print-row">  
             <button
               type="button"
               class="btn btn-link"
@@ -48,8 +48,8 @@
             ng-show="total.items.length > 1"
             class="confirmation-summary">
 
-            <li class="row confirmation-summary-item">
-              <div
+            <li class="row confirmation-summary-item" tabindex="0" aria-label="{{PUBLIC_BOOKING.CONFIRMATION.PURCHASE_REF_LBL|translate}}">
+              <div 
                 class="bb-summary-label"
                 translate="PUBLIC_BOOKING.CONFIRMATION.PURCHASE_REF_LBL">
               </div>
@@ -61,15 +61,15 @@
             class="confirmation-summary"
             ng-repeat="booking in total.bookings">
 
-            <li class="row confirmation-summary-item">
-              <div
+            <li class="row confirmation-summary-item" aria-label="{{PUBLIC_BOOKING.CONFIRMATION.PURCHASE_REF_LBL|translate}}" tabindex="0">
+              <div 
                 class="bb-summary-label"
                 translate="PUBLIC_BOOKING.CONFIRMATION.BOOKING_REF_LBL">
               </div>
               <div class="bb-summary-value">{{booking.id}}</div>
             </li>
 
-            <li
+            <li aria-label="{{PUBLIC_BOOKING.CONFIRMATION.SERVICE_LBL|translate}}" tabindex="0"
               ng-show="booking.full_describe"
               class="row confirmation-summary-item">
               <div
@@ -79,7 +79,7 @@
               <div class="bb-summary-value">{{booking.full_describe}}</div>
             </li>
 
-            <li
+            <li aria-label="{{PUBLIC_BOOKING.CONFIRMATION.DATE_TIME_LBL|translate}}" tabindex="0"
               ng-show="booking.describe"
               class="row confirmation-summary-item">
               <div class="bb-summary-label">
@@ -88,7 +88,7 @@
               <div class="bb-summary-value">{{booking.describe}}</div>
             </li>
 
-            <li
+            <li aria-label="{{PUBLIC_BOOKING.CONFIRMATION.PRICE_LBL|translate}}" tabindex="0"
               ng-show="booking.price"
               class="row confirmation-summary-item">
               <div class="bb-summary-label">
