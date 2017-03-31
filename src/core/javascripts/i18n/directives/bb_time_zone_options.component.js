@@ -22,8 +22,7 @@
             templateUrl: 'i18n/_bb_timezone_options.html',
             bindings: {
                 restrictRegion: '<',
-                format: '<',
-                translate: '<'
+                options: '<'
             },
             controller: TimeZoneOptionsCtrl,
             controllerAs: '$bbTimeZoneOptionsCtrl'
@@ -39,7 +38,7 @@
         ctrl.selectedTimeZone = null;
 
         ctrl.$onInit = function () {
-            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.restrictRegion, ctrl.format, ctrl.translate); //TODO should be more customisable
+            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.restrictRegion, ctrl.options); //TODO should be more customisable
             ctrl.updateTimeZone = updateTimeZone;
             ctrl.automaticTimeZoneToggle = automaticTimeZoneToggle;
             if (bbi18nOptions.use_browser_time_zone && $localStorage.getItem('bbTimeZone') === undefined) ctrl.isAutomaticTimeZone = true;
@@ -48,7 +47,7 @@
 
         function determineTimeZone() {
             bbTimeZone.determineTimeZone();
-            ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(bbTimeZone.getDisplayTimeZone());
+            ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneItem(bbTimeZone.getDisplayTimeZone());
         }
 
         function automaticTimeZoneToggle() {
@@ -58,7 +57,7 @@
 
         function updateTimeZone(timeZone) {
             if (timeZone === undefined) timeZone = ctrl.selectedTimeZone.value;
-            ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneForDisplay(timeZone);
+            ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneItem(timeZone);
             bbTimeZone.setDisplayTimeZone(timeZone, true);
             $rootScope.$broadcast('BBTimeZoneOptions:timeZoneChanged', timeZone);
         }
