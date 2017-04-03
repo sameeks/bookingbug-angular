@@ -3,7 +3,13 @@
 </section>
 <section class="content">
   <div class="box">
+
     <div bb-clients-table class="tablet-search">
+      <div ui-grid="gridOptions" ui-grid-pagination class="bb-grid">
+      </div>
+    </div>
+
+<!--     <div bb-clients-table class="tablet-search">
       <table class="table table-bordered table-hover dataTable" tr-ng-grid=""
              filter-by="clientsOptions.search" items="clients" page-items="per_page" total-items="total_entries"
              on-data-required="getClients(currentPage, filterBy, filterByFields, orderBy, orderByReverse)" role="grid">
@@ -42,6 +48,6 @@
         </tr>
         </tfoot>
       </table>
-    </div>
+    </div> -->
   </div>
   </div>

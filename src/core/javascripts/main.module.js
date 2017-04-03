@@ -13,6 +13,8 @@ angular.module('BB', [
     'pascalprecht.translate',
     'schemaForm',
     'ui.bootstrap',
+    'ui.grid',
+    'ui.grid.pagination',
     'ui.map',
     'ui.router.util',
     'ui.select',

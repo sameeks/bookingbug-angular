@@ -5,9 +5,8 @@ angular.module('BBAdmin.Directives').directive('bbAdminClients', () => {
             scope: true,
             controller: 'AdminClients',
             link(scope, element, attrs) {
-
             }
-        };
+        }
     }
 );
 
