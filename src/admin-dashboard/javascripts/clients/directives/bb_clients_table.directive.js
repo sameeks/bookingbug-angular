@@ -16,6 +16,8 @@
         return directive;
 
         function link(scope, element, attrs) {
+            let formattedFields = '';
+            let searchFields = [];
 
             scope.actionButton = `<a class="btn btn-xs btn-default" ui-sref="clients.edit({id: row.entity.id})"><i class="fa fa-pencil"></i>
               <span translate="ADMIN_DASHBOARD.CLIENTS_PAGE.EDIT"></span></a>`;
@@ -26,8 +28,29 @@
                 sort: null
             }
 
-            scope.$on('bbGridFilter:changed', (event, field) => {
-                scope.getClients(scope.paginationOptions.pageNumber + 1, field);
+            let createFilterString = (field, term) => {
+                searchFields.push(term);
+                let allFields = '';
+
+                for(let field of searchFields) {
+                    let formatted = field.field + ',' + field.term;
+                    if(allFields === '') {
+                        allFields = allFields + formatted;
+                    } else {
+                        allFields = allFields + ',' + formatted;
+                    }
+                }
+
+                scope.getClients(scope.paginationOptions.pageNumber, allFields);
+            }
+
+
+            scope.$on('bbGridFilter:changed', (event, fieldName, term) => {
+                if(_.contains(searchFields, term)) {
+                    return;
+                } else {
+                    createFilterString(fieldName, term)
+                }
             });
 
 
@@ -38,10 +61,6 @@
                     {name: 'Mobile', field: 'mobile', filterHeaderTemplate: 'ui_grid_filter_template.html', headerCellTemplate: 'ui_grid_header_template.html'},
                     {name: 'Actions', field: 'action', enableFiltering: false, enableHiding: false, enableSorting: false, enableColumnMenus: false, cellTemplate: scope.actionButton}
                 ]
-
-            scope.$on('gridFilter:changed', (event, field) => {
-                scope.getClients(scope.paginationOptions + 1, field);
-            });
 
             scope.gridOptions = {
                 enableSorting: true,

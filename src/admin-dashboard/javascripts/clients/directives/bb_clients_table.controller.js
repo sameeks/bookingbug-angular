@@ -11,17 +11,15 @@
         $scope.total_entries = 0;
         $scope.clients = [];
 
-        return $scope.getClients = function (pageNumber, searchField) {
+        return $scope.getClients = function (pageNumber, searchFields) {
             let clientDef = $q.defer();
 
             let params = {
                 company: $scope.bb.company,
                 per_page: perPage,
                 page: $scope.paginationOptions.pageNumber,
-                // filter_by_fields = 'name,h'
-                // if user type 'h' into name input
-                // filter_by: $scope.clientsOptions.search,
-                filter_by_fields: searchField
+                filter_by: $scope.clientsOptions.search,
+                filter_by_fields: searchFields
             };
 
             return BBModel.Admin.Client.$query(params).then(clients => {
