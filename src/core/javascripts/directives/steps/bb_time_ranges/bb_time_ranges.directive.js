@@ -1,30 +1,34 @@
-/***
- * @ngdoc directive
- * @name BB.Directives:bbTimeRanges
- * @restrict AE
- * @scope true
- *
- * @description
- *
- * Loads a list of time rangers for the currently in scope company
- *
- * <pre>
- * restrict: 'AE'
- * replace: true
- * scope: true
- * </pre>
- *
- * @param {hash}  bbTimeRanges A hash of options
- * @property {string} selected_slot The selected slot
- * @property {date} selected_date The selected date
- * @property {string} postcode The postcode
- * @property {date} original_start_date The original start date
- * @property {date} start_at_week_start The start at week start
- * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
- *///
+(function () {
+    /***
+     * @ngdoc directive
+     * @name BB.Directives:bbTimeRanges
+     * @restrict AE
+     * @scope true
+     *
+     * @description
+     *
+     * Loads a list of time rangers for the currently in scope company
+     *
+     * <pre>
+     * restrict: 'AE'
+     * replace: true
+     * scope: true
+     * </pre>
+     *
+     * @param {hash}  bbTimeRanges A hash of options
+     * @property {string} selected_slot The selected slot
+     * @property {date} selected_date The selected date
+     * @property {string} postcode The postcode
+     * @property {date} original_start_date The original start date
+     * @property {date} start_at_week_start The start at week start
+     * @property {object} alert The alert service - see {@link BB.Services:Alert Alert Service}
+     *///
 
+    angular
+        .module('BB.Directives')
+        .directive('bbTimeRanges', bbTimeRangesDirective);
 
-angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $compile, $timeout, $bbug, scrollIntercepter) => {
+    function bbTimeRangesDirective ($q, $templateCache, $compile, $timeout, scrollIntercepter) {
         return {
             restrict: 'AE',
             replace: true,
@@ -68,4 +72,5 @@ angular.module('BB.Directives').directive('bbTimeRanges', ($q, $templateCache, $
             }
         }
     }
-);
+
+})();

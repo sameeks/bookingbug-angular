@@ -1,27 +1,34 @@
-/**
- * @ngdoc controller
- * @name BBAdminDashboard.controller:CorePageController
- * @description
- * Controller for the layout (root state)
- */
-let controller = function ($scope, $state, company, $uibModalStack, $rootScope, $localStorage, GeneralOptions, CompanyStoreService, bbTimeZone) {
-    'ngInject';
+(function () {
 
-    $scope.company = company;
-    $scope.bb.company = company;
-    $scope.user = $rootScope.user;
+    /**
+     * @ngdoc controller
+     * @name BBAdminDashboard.controller:CorePageController
+     * @description
+     * Controller for the layout (root state)
+     */
 
-    CompanyStoreService.country_code = company.country_code;
-    CompanyStoreService.currency_code = company.currency_code;
-    CompanyStoreService.time_zone = company.timezone;
+     angular
+        .module('BBAdminDashboard')
+        .controller('CorePageController', corePageController);
 
-    bbTimeZone.determineTimeZone();
+    function corePageController ($scope, $state, company, $uibModalStack, $rootScope, CompanyStoreService, bbTimeZone) {
+        'ngInject';
 
-    // checks to see if passed in state is part of the active chain
-    $scope.isState = states => $state.includes(states);
+        $scope.company = company;
+        $scope.bb.company = company;
+        $scope.user = $rootScope.user;
 
-    $rootScope.$on('$stateChangeStart', () => $uibModalStack.dismissAll());
+        CompanyStoreService.country_code = company.country_code;
+        CompanyStoreService.currency_code = company.currency_code;
+        CompanyStoreService.time_zone = company.timezone;
 
-};
+        bbTimeZone.determineTimeZone();
 
-angular.module('BBAdminDashboard').controller('CorePageController', controller);
+        // checks to see if passed in state is part of the active chain
+        $scope.isState = states => $state.includes(states);
+
+        $rootScope.$on('$stateChangeStart', () => $uibModalStack.dismissAll());
+
+    }
+
+})();

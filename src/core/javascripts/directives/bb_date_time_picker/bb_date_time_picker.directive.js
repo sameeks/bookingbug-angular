@@ -1,20 +1,26 @@
-/***
- * @ngdoc directive
- * @name BB.Directives.directive:bbDateTimePicker
- * @scope
- * @restrict A
- *
- * @description
- * DateTime picker that combines date & timepicker and consolidates
- * the Use of Moment.js in the App and Date in the pickers
- *
- * @param {object}  date   A moment.js date object
- * @param {boolean}  showMeridian   Switch to show/hide meridian (optional, default:false)
- * @param {number}  minuteStep Step for the timepicker (optional, default:10)
- * @param {object}  minDate Min date value for datetimepicker
- * @param {object}  maxDate Max date value for datetimepicker
- */
-angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
+(function () {
+
+    /***
+     * @ngdoc directive
+     * @name BB.Directives.directive:bbDateTimePicker
+     * @scope
+     * @restrict A
+     *
+     * @description
+     * DateTime picker that combines date & timepicker and consolidates
+     * the Use of Moment.js in the App and Date in the pickers
+     *
+     * @param {object}  date   A moment.js date object
+     * @param {boolean}  showMeridian   Switch to show/hide meridian (optional, default:false)
+     * @param {number}  minuteStep Step for the timepicker (optional, default:10)
+     * @param {object}  minDate Min date value for datetimepicker
+     * @param {object}  maxDate Max date value for datetimepicker
+     */
+    angular
+        .module('BB.Directives')
+        .directive('bbDateTimePicker', bbDateTimePickerDirective);
+
+    function bbDateTimePickerDirective () {
         return {
             scope: {
                 date: '=',
@@ -28,7 +34,7 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
             },
             restrict: 'A',
             templateUrl: 'bb_date_time_picker.html',
-            controller($scope, GeneralOptions, bbTimeZone, CompanyStoreService) {
+            controller($scope, GeneralOptions) {
                 if ($scope.format == null) {
                     $scope.format = 'dd/MM/yyyy';
                 }
@@ -110,4 +116,5 @@ angular.module('BB.Directives').directive('bbDateTimePicker', PathSvc => {
             }
         };
     }
-);
+
+})();

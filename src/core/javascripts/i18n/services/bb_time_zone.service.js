@@ -11,6 +11,7 @@
         .service('bbTimeZone', bbTimeZoneService);
 
     function bbTimeZoneService(bbi18nOptions, CompanyStoreService, $localStorage, $log, $window) {
+        'ngInject';
 
         let displayTimeZone = bbi18nOptions.default_time_zone;
 
