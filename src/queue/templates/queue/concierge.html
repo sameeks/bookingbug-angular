@@ -1,0 +1,14 @@
+<section class="content">
+  <div bb-queue-dashboard class="queue_admin">
+    <div  class="row">
+      <div bb-queue-servers class="col-md-5 server_column"></div>
+
+      <div class="col-md-7" ng-include="'queue/add_customer.html'"></div>
+
+      <div ng-show="selected_queuer" class="col-md-7 pull-right"
+        ng-include="'queue/selected_queuer.html'"></div>
+
+      <div ng-show="!selected_queuer" bb-queuers class="col-md-7 queue_column pull-right"></div>
+    </div>
+  </div>
+</section>

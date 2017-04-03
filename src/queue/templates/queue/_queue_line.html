@@ -1,0 +1,26 @@
+
+  <ul id="people-queuing-list">
+    <li ng-repeat="queuer in q_upcoming track by $index" class="row">
+      <div class="list-row" ng-class="{serving: queuer.being_served}">
+        <div class="col-sm-2">
+          {{queuer.ticket_number}}
+          <span ng-show="!queuer.ticket_number">NaN</span>
+        </div>
+        <div class="col-sm-3">
+          {{queuer.first_name}}
+          <span ng-show="!queuer.first_name">No Name</span>
+        </div>
+        <div class="col-sm-4">
+          {{queuer.service_name}}
+          <span ng-show="!queuer.service_name">No Service</span>
+        </div>
+        <div class="col-sm-3">
+          <span ng-show="queuer.position > 0" countdown ng-model="queuer.remaining_signed"></span>
+          <span ng-show="queuer.end && queuer.position == 0" style="font-size:1.2;">
+            Now Helping
+          </span>
+        </div>
+      </div>
+    </li>
+  </ul>
+  </ul>

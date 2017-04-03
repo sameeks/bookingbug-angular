@@ -1,19 +1,13 @@
-angular.module('BBQueue.Services').factory('AdminQueueService', ($q, BBModel) => {
-
-        return {
-            query(prms) {
-                let deferred = $q.defer();
-                prms.company.$get('client_queues').then(collection =>
-                        collection.$get('client_queues').then(function (client_queues) {
-                                let models = (Array.from(client_queues).map((q) => new BBModel.Admin.ClientQueue(q)));
-                                return deferred.resolve(models);
-                            }
-                            , err => deferred.reject(err))
-
-                    , err => deferred.reject(err));
-                return deferred.promise;
-            }
-        };
+angular.module('BBQueue.services').factory('AdminQueueService', ($q, BBModel) =>
+({
+    query(params) {
+        let defer = $q.defer();
+        params.company.$get('client_queues').then(collection =>
+            collection.$get('client_queues').then(function(client_queues) {
+                let models = (Array.from(client_queues).map((q) => new BBModel.Admin.ClientQueue(q)));
+                return defer.resolve(models);
+            }, err => defer.reject(err))
+        , err => defer.reject(err));
+        return defer.promise;
     }
-);
-
+}));
