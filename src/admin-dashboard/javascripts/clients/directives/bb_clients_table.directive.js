@@ -46,8 +46,14 @@
 
 
             scope.$on('bbGridFilter:changed', (event, fieldName, term) => {
+                let formattedFields = fieldName + ',' + term.term;
                 if(_.contains(searchFields, term)) {
-                    return;
+                    if(term.term === '') {
+                        return;
+                    }
+                    else {
+                        scope.getClients(scope.paginationOptions.pageNumber, formattedFields);
+                    }
                 } else {
                     createFilterString(fieldName, term)
                 }
@@ -73,7 +79,6 @@
                     scope.gridApi = gridApi;
                     scope.gridData = scope.getClients();
                     gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {
-                        let filteredRows = gridApi.core.getVisibleRows(scope.gridApi.grid);
                         scope.paginationOptions.pageNumber = newPage;
                         scope.paginationOptions.pageSize = pageSize;
                         scope.getClients(scope.paginationOptions.pageNumber + 1, null);
