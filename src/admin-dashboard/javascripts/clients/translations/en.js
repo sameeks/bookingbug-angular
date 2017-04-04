@@ -27,7 +27,8 @@ angular.module('BBAdminDashboard.clients.translations')
                     'ADDRESS': 'Address',
                     'UPCOMING_BOOKINGS': 'Upcoming Bookings',
                     'PAST_BOOKINGS': 'Past Bookings',
-                    'CUSTOMER_DETAILS': 'Customer Details'
+                    'CUSTOMER_DETAILS': 'Customer Details',
+                    'ACTIONS': 'Actions'
                 }
             }
         })
