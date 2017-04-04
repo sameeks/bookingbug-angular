@@ -133,13 +133,13 @@
             }
         }
 
-        function formatDisplayValue (format, city, momentTz) {
+        function formatDisplayValue (city, momentTz, format, momentNames) {
             let display = '';
 
             const formatMap = {
                 'tz-code': $translate.instant(`COMMON.TIME_ZONE_CODES.${momentTz.format('zz')}`),
                 'offset-hours': momentTz.format('Z'),
-                'location': $translate.instant(`COMMON.LOCATIONS.${city}`)
+                'location': $translate.instant(`COMMON.LOCATIONS.${momentNames ? 'MOMENT' : 'CUSTOM'}.${city}`)
             };
 
             if (format && angular.isString(format)) {
@@ -159,11 +159,11 @@
         * @param {Integer} Index
         * @returns {Object} A time zone oject
         */
-        function mapTimeZoneItem (location, index, format) {
+        function mapTimeZoneItem (location, index, format, momentNames) {
             const timeZone = {};
             const city = location.match(/[^/]*$/)[0].replace(/-/g, '_').toUpperCase();
             const momentTz = moment.tz(location);
-            timeZone.display = formatDisplayValue(format, city, momentTz);
+            timeZone.display = formatDisplayValue(city, momentTz, format, momentNames);
             timeZone.value = location;
             if (angular.isNumber(index)) {
                 timeZone.id = index;
@@ -193,7 +193,7 @@
             }
 
             for (let [index, value] of timeZoneNames.entries()) {
-                timeZones.push(mapTimeZoneItem(value, index, format));
+                timeZones.push(mapTimeZoneItem(value, index, format, momentNames));
             }
 
             timeZones = _.uniq(timeZones, (timeZone) => timeZone.display);
