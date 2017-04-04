@@ -10,7 +10,9 @@
     ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-user"> </i></span>
   </a>
 
-  <div class="btn-group pull-right" uib-dropdown ng-hide="person.serving">
+  <div class="loader pull-right" ng-show="loadingServer > 0"></div>
+
+  <div class="btn-group pull-right" uib-dropdown ng-hide="person.serving || loadingServer > 0">
     <button type="button" class="btn btn-info" uib-dropdown-toggle>Actions</button>
     <button type="button" class="btn btn-info dropdown-toggle" uib-dropdown-toggle aria-expanded="false">
       <span class="caret"></span>
@@ -37,7 +39,7 @@
     </ul>
   </div>
 
-  <div class="btn-group pull-right">
+  <div class="btn-group pull-right" ng-hide="loadingServer > 0">
     <button type="button" class="btn btn-success"
       ng-click="finishServingQueuer({person: person, outcomes: true})"
       ng-if="person && person.$has('finish_serving') && person.serving">
