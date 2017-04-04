@@ -1,21 +1,21 @@
+ 
 <div
+  class="accordion-grouper"
   uib-accordion-group
   is-open="is_open"
   ng-disabled="!has_availability && !is_selected"
   ng-class="{'expanded': is_open, 'selected': is_selected, 'unavailable': !has_availability}"
   template-url="accordion-group.html"
-  ng-attr-tabindex="{{has_availability ? true : -1}}"
+  style="z-index:1;"
   close-others="true">
-
-  <div
+  <div 
     uib-accordion-heading
     close-others="true">
 
-    <div
-      ng-class="{'available-slot': has_availability, 'unavailable-slot': !has_availability}"
-      ng-attr-tabindex="{{has_availability ? true : -1}}"
-      class="accordion-header">
-      <div ng-hide="options.hide_availability_summary && is_selected">
+    <div  ng-class="{'available-slot': has_availability, 'unavailable-slot': !has_availability}"
+          role="heading"
+          class="accordion-header">
+      <div role="button" ng-hide="options.hide_availability_summary && is_selected">
         <span class="period-label">
           <span ng-show="has_availability && !is_open" class="period-label-icon">+</span>
           <span ng-show="has_availability && is_open" class="period-label-icon">-</span>
@@ -32,23 +32,24 @@
       <span
         class="period-detail selected-time"
         ng-show="is_selected && !is_open">
-        {{selected_slot.datetime | datetime: 'LT'}}
+        {{selected_slot.datetime | datetime: 'LT'}}  
       </span>
     </div>
-
   </div>
 
-  <ul
+  <ul role="region" 
+    id="time-slots"
     class="time-slots"
     ng-show="has_availability">
-    <li
+    <li tabindex="-1"
+      aria-label="{{slot.datetime | datetime: 'LT'}}"
       class="time-slot"
       ng-class="{'selected': slot.selected, 'disabled': slot.disabled}"
       ng-disabled="slot.disabled"
       ng-keypress="selectSlot(slot, day)"
       ng-click="selectSlot(slot, day)"
       ng-repeat="slot in accordion_slots"
-      tabindex="0">
+      >
       <span>{{slot.datetime | datetime: 'LT'}}</span>
     </li>
   </ul>

@@ -1,30 +1,19 @@
-<div>
+<div class="calendar-grid">
 
   <div bb-time-zone></div>
 
-  <div
-    class="alert alert-info"
-    ng-show="no_slots_in_week">
-    <i
-      class="fa fa-info-circle"
-      aria-hidden="true">
+  <div class="alert alert-info" ng-show="no_slots_in_week">
+    <i class="fa fa-info-circle" aria-hidden="true">
     </i>
-    <span
-      translate="PUBLIC_BOOKING.WEEK_CALENDAR.NO_AVAILABILITY"
-      translate-values="{time_range_length: time_range_length}"
+    <span translate="PUBLIC_BOOKING.WEEK_CALENDAR.NO_AVAILABILITY" translate-values="{time_range_length: time_range_length}"
       translate-interpolation="messageformat">
     </span>
-    <button
-      type="button"
-      class="btn btn-default"
-      ng-show="is_add_valid"
-      ng-click="showFirstAvailableDay()"
-      translate="PUBLIC_BOOKING.WEEK_CALENDAR.NEXT_AVAIL_BTN">
+    <button type="button" class="btn btn-default" ng-show="is_add_valid" ng-click="showFirstAvailableDay()" translate="PUBLIC_BOOKING.WEEK_CALENDAR.NEXT_AVAIL_BTN">
     </button>
   </div>
 
   <div class="month-header hidden-xs">
-    <h2 class="month-heading">{{pretty_month_title('MMMM', 'YYYY')}}</h2>
+    <h2 tabindex="0" aria-label="{{pretty_month_title('MMMM', 'YYYY')}}" class="month-heading">{{pretty_month_title('MMMM', 'YYYY')}}</h2>
   </div>
 
   <!-- /\/\/\/\/\/\/\/\/\/\/\/ -->
@@ -59,39 +48,22 @@
   <!-- accepts user input?: NO         -->
   <!-- =============================== -->
   <div class="form-group visible-xs">
-      <label
-        class="sr-only"
-        for="date"
-        translate="PUBLIC_BOOKING.WEEK_CALENDAR.DATE_LBL">
+    <label class="sr-only" for="date" translate="PUBLIC_BOOKING.WEEK_CALENDAR.DATE_LBL">
       </label>
-      <div class="input-group date-picker">
-        <!-- date format: http://docs.angularjs.org/api/ng.filter:date" -->
-        <input
-          type="text"
-          ng-model="selected_date"
-          class="form-control"
-          bb-datepicker-popup="DD/MM/YYYY"
-          uib-datepicker-popup="dd/MM/yyyy"
-          is-open="opened"
-          ng-focus="opened=true"
-          on-date-change="selectedDateChanged()"
-          datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': minDateJs || today, 'maxDate': maxDateJs, 'showWeeks': false}"
-          show-button-bar="false"
-          ng-readonly="true"
-          name="date"
-          id="date"
-          translate-attr="{placeholder: 'PUBLIC_BOOKING.WEEK_CALENDAR.ANY_DATE'}"
-        />
-        <span
-          class="input-group-btn"
-          ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
+    <div class="input-group date-picker">
+      <!-- date format: http://docs.angularjs.org/api/ng.filter:date" -->
+      <input type="text" ng-model="selected_date" class="form-control" bb-datepicker-popup="DD/MM/YYYY" uib-datepicker-popup="dd/MM/yyyy"
+        is-open="opened" ng-focus="opened=true" on-date-change="selectedDateChanged()" datepicker-options="{'startingDay': 1, 'showButtonBar': false, 'minDate': minDateJs || today, 'maxDate': maxDateJs, 'showWeeks': false}"
+        show-button-bar="false" ng-readonly="true" name="date" id="date" translate-attr="{placeholder: 'PUBLIC_BOOKING.WEEK_CALENDAR.ANY_DATE'}"
+      />
+      <span class="input-group-btn" ng-click="$event.preventDefault(); $event.stopPropagation(); opened=!opened;">
           <button
             class="btn btn-default"
             type="submit"
             translate-attr="{title: 'PUBLIC_BOOKING.WEEK_CALENDAR.DATE_BTN_TITLE'}">
             <span class="fa fa-calendar-o"></span>
-          </button>
-        </span>
+      </button>
+      </span>
     </div>
   </div>
 
@@ -128,40 +100,141 @@
   <!-- end ANGULAR-UI DATEPICKERS  -->
   <!-- /\/\/\/\/\/\/\/\/\/\/\/\/\/ -->
 
-  <div class="cal-custom">
-    <ul
-      class="week row"
-      ng-show="days">
+
+ <!-- NEW TABLE CALENDAR -->
+  <div class="row">
+    <div class="col-md-1 col-xs-2">
+      <div class="day navigation hidden-xs">
+        <button tabindex="0" type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 3)" ng-disabled="!is_subtract_valid || !isLoaded">
+                  <span class="fa fa-chevron-left"></span>
+                </button>
+        <button tabindex="0" type="button" class="btn btn-icon visible-md" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
+                  <span class="fa fa-chevron-left"></span>
+                </button>
+        <button tabindex="0" type="button" class="btn btn-icon visible-lg" ng-click="subtract('days', 7)" ng-disabled="!is_subtract_valid || !isLoaded">
+                  <span class="fa fa-chevron-left"></span>
+                </button>
+        <span ng-show="!is_subtract_valid || !isLoaded">&nbsp;</span>
+      </div>
+    </div>
+    <div class="col-md-10 col-xs-8">
+     
+      <table bb-accessible-grid id="cal-grid" role='grid' class="calendar-table" width="100%" tabindex="0">
+        <thead>
+          <tr>
+            <th ng-repeat="day in days">
+              <span class="col-xs-2 previous visible-xs">
+                  <button tabindex="0"
+                    type="button"
+                    class="btn btn-icon"
+                    ng-click="subtract('days', 1)"
+                    ng-disabled="day.date.isSame(moment(),'day') || !isLoaded">
+                      <span class="fa fa-chevron-left"></span>
+                    </button>
+              </span>
+              <h3 tabindex="-1" class="day-heading col-xs-8 col-sm-12">
+                <span class="visible-xs">
+                            {{day.date | datetime: 'ddd'}}
+                            <strong>{{day.date | datetime: 'D'}} </strong>
+                            {{day.date | datetime: 'MMM'}}
+                            </span>
+                <span class="hidden-xs">
+                            {{day.date | datetime: 'ddd'}}
+                            <strong>{{day.date | datetime: 'D'}}</strong>
+                            </span>
+              </h3>
+              <span class="col-xs-2 next visible-xs">
+                <button
+                  type="button"
+                  class="btn btn-icon hidden-sm hidden-md hidden-lg pull-right"
+                  ng-show="is_add_valid"
+                  ng-click="add('days', 1)"
+                  ng-disabled="!is_add_valid || !isLoaded">
+                    <span class="fa fa-chevron-right"></span>
+                  </button>
+                  <button tabindex="0" type="button" class="btn btn-icon appear-disabled hidden-sm hidden-md hidden-lg pull-right" ng-show="!is_add_valid"
+                    uib-popover="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MAX_DATE_POPOVER' | translate: maxDateDurationObj}}" popover-placement="left"
+                    popover-trigger="'focus'">
+                    <span class="fa fa-chevron-right"></span>
+                </button>
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td tab-index='-1' class="grid-data" ng-repeat="day in days">
+              <div class="times">
+                <!-- if time list has slots -->
+                <div uib-accordion close-others="false">
+                  <div aria-label="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MORNING_HEADER' | translate}}" bb-accordion-range-group="{
+                heading: 'PUBLIC_BOOKING.WEEK_CALENDAR.MORNING_HEADER',
+                range: [0, 720],
+                collapse_when_time_selected: true
+              }" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
+                  </div>
+                  <div aria-label="{{'PUBLIC_BOOKING.WEEK_CALENDAR.AFTERNOON_HEADER' | translate}}" bb-accordion-range-group="{
+                heading: 'PUBLIC_BOOKING.WEEK_CALENDAR.AFTERNOON_HEADER',
+                range: [720, 1020],
+                collapse_when_time_selected: true
+              }" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
+                  </div>
+                  <div aria-label="{{'PUBLIC_BOOKING.WEEK_CALENDAR.EVENING_HEADER' | translate}}" bb-accordion-range-group="{
+                heading: 'PUBLIC_BOOKING.WEEK_CALENDAR.EVENING_HEADER',
+                range: [1020, 1440],
+                collapse_when_time_selected: true
+              }" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+    </div>
+    <div class="col-md-1 col-xs-2">
+      <div class="day navigation hidden-xs">
+        <button type="button" class="btn btn-icon hidden-xs hidden-md hidden-lg" ng-show="is_add_valid" ng-click="add('days', 3)"
+          ng-disabled="!is_add_valid || !isLoaded">
+                    <span class="fa fa-chevron-right"></span>
+              </button>
+        <button type="button" class="btn btn-icon hidden-xs hidden-sm hidden-lg" ng-show="is_add_valid" ng-click="add('days', 5)"
+          ng-disabled="!is_add_valid || !isLoaded">
+                    <span class="fa fa-chevron-right"></span>
+            </button>
+        <button type="button" class="btn btn-icon hidden-xs hidden-sm hidden-md" ng-show="is_add_valid" ng-click="add('days', 7)"
+          ng-disabled="!is_add_valid || !isLoaded">
+                    <span class="fa fa-chevron-right"></span>
+            </button>
+        <button type="button" class="btn btn-icon appear-disabled" ng-show="!is_add_valid" uib-popover="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MAX_DATE_POPOVER' | translate: maxDateDurationObj}}"
+          popover-placement="left" popover-trigger="'focus'">
+                    <span class="fa fa-chevron-right"></span>
+            </button>
+      </div>
+    </div>
+  </div>
+<!-- END NEW TABLE CALENDAR -->
+
+
+
+
+  <!--<ul role="row" class="week row" ng-show="days">
 
       <li class="day navigation hidden-xs">
-        <button
-          type="button"
-          class="btn btn-icon visible-sm"
-          ng-click="subtract('days', 3)"
-          ng-disabled="!is_subtract_valid || !isLoaded">
+        <button type="button" class="btn btn-icon visible-sm" ng-click="subtract('days', 3)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="fa fa-chevron-left"></span>
         </button>
-        <button
-          type="button"
-          class="btn btn-icon visible-md"
-          ng-click="subtract('days', 5)"
-          ng-disabled="!is_subtract_valid || !isLoaded">
+        <button type="button" class="btn btn-icon visible-md" ng-click="subtract('days', 5)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="fa fa-chevron-left"></span>
         </button>
-        <button
-          type="button"
-          class="btn btn-icon visible-lg"
-          ng-click="subtract('days', 7)"
-          ng-disabled="!is_subtract_valid || !isLoaded">
+        <button type="button" class="btn btn-icon visible-lg" ng-click="subtract('days', 7)" ng-disabled="!is_subtract_valid || !isLoaded">
           <span class="fa fa-chevron-left"></span>
         </button>
         <span ng-show="!is_subtract_valid || !isLoaded">&nbsp;</span>
       </li>
 
-      <li
-        class="day cal-col-{{$index + 1}}"
-        ng-repeat="day in days"
-        ng-class="{'past': day.date.isBefore(moment(),'day')}">
+      <li role="gridcell" class="day cal-col-{{$index + 1}}" ng-repeat="day in days" ng-class="{'past': day.date.isBefore(moment(),'day')}">
         <div class="day-header row">
           <span class="col-xs-2 previous visible-xs">
             <button
@@ -170,9 +243,9 @@
               ng-click="subtract('days', 1)"
               ng-disabled="day.date.isSame(moment(),'day') || !isLoaded">
               <span class="fa fa-chevron-left"></span>
-            </button>
+          </button>
           </span>
-          <h3 class="day-heading col-xs-8 col-sm-12">
+          <h3 tabindex="0" class="day-heading col-xs-8 col-sm-12">
             <span class="visible-xs">
               {{day.date | datetime: 'ddd'}}
               <strong>{{day.date | datetime: 'D'}} </strong>
@@ -191,14 +264,10 @@
               ng-click="add('days', 1)"
               ng-disabled="!is_add_valid || !isLoaded">
               <span class="fa fa-chevron-right"></span>
-            </button>
-            <button
-              type="button"
-              class="btn btn-icon appear-disabled hidden-sm hidden-md hidden-lg pull-right"
-              ng-show="!is_add_valid"
-              uib-popover="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MAX_DATE_POPOVER' | translate: maxDateDurationObj}}"
-              popover-placement="left"
-              popover-trigger="'focus'">
+          </button>
+          <button type="button" class="btn btn-icon appear-disabled hidden-sm hidden-md hidden-lg pull-right" ng-show="!is_add_valid"
+            uib-popover="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MAX_DATE_POPOVER' | translate: maxDateDurationObj}}" popover-placement="left"
+            popover-trigger="'focus'">
               <span class="fa fa-chevron-right"></span>
             </button>
           </span>
@@ -206,45 +275,27 @@
 
         <div class="times">
 
-          <!-- if time list has slots -->
           <div uib-accordion close-others="false">
 
-            <div
-              bb-accordion-range-group="{
+            <div tabindex="0" aria-label="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MORNING_HEADER' | translate}}" bb-accordion-range-group="{
                 heading: 'PUBLIC_BOOKING.WEEK_CALENDAR.MORNING_HEADER',
                 range: [0, 720],
                 collapse_when_time_selected: true
-              }"
-              day="day"
-              slots="day.slots"
-              select-slot="highlightSlot"
-              ng-init="setFormDataStoreId($index)"
-              class="accordion-group">
+              }" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
             </div>
 
-            <div
-              bb-accordion-range-group="{
+            <div tabindex="0" aria-label="{{'PUBLIC_BOOKING.WEEK_CALENDAR.AFTERNOON_HEADER' | translate}}" bb-accordion-range-group="{
                 heading: 'PUBLIC_BOOKING.WEEK_CALENDAR.AFTERNOON_HEADER',
                 range: [720, 1020],
                 collapse_when_time_selected: true
-              }"
-              day="day"
-              slots="day.slots"
-              select-slot="highlightSlot"
-              ng-init="setFormDataStoreId($index)"
-              class="accordion-group">
+              }" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
             </div>
 
-            <div
-              bb-accordion-range-group="{
+            <div tabindex="0" aria-label="{{'PUBLIC_BOOKING.WEEK_CALENDAR.EVENING_HEADER' | translate}}" bb-accordion-range-group="{
                 heading: 'PUBLIC_BOOKING.WEEK_CALENDAR.EVENING_HEADER',
                 range: [1020, 1440],
                 collapse_when_time_selected: true
-              }"
-              day="day" slots="day.slots"
-              select-slot="highlightSlot"
-              ng-init="setFormDataStoreId($index)"
-              class="accordion-group">
+              }" day="day" slots="day.slots" select-slot="highlightSlot" ng-init="setFormDataStoreId($index)" class="accordion-group">
             </div>
 
           </div>
@@ -254,41 +305,23 @@
       </li>
 
       <li class="day navigation hidden-xs">
-        <button
-          type="button"
-          class="btn btn-icon hidden-xs hidden-md hidden-lg"
-          ng-show="is_add_valid"
-          ng-click="add('days', 3)"
+        <button type="button" class="btn btn-icon hidden-xs hidden-md hidden-lg" ng-show="is_add_valid" ng-click="add('days', 3)"
           ng-disabled="!is_add_valid || !isLoaded">
           <span class="fa fa-chevron-right"></span>
         </button>
-        <button
-          type="button"
-          class="btn btn-icon hidden-xs hidden-sm hidden-lg"
-          ng-show="is_add_valid"
-          ng-click="add('days', 5)"
+        <button type="button" class="btn btn-icon hidden-xs hidden-sm hidden-lg" ng-show="is_add_valid" ng-click="add('days', 5)"
           ng-disabled="!is_add_valid || !isLoaded">
           <span class="fa fa-chevron-right"></span>
         </button>
-        <button
-          type="button"
-          class="btn btn-icon hidden-xs hidden-sm hidden-md"
-          ng-show="is_add_valid"
-          ng-click="add('days', 7)"
+        <button type="button" class="btn btn-icon hidden-xs hidden-sm hidden-md" ng-show="is_add_valid" ng-click="add('days', 7)"
           ng-disabled="!is_add_valid || !isLoaded">
           <span class="fa fa-chevron-right"></span>
         </button>
-        <button
-          type="button"
-          class="btn btn-icon appear-disabled"
-          ng-show="!is_add_valid"
-          uib-popover="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MAX_DATE_POPOVER' | translate: maxDateDurationObj}}"
-          popover-placement="left"
-          popover-trigger="'focus'">
+        <button type="button" class="btn btn-icon appear-disabled" ng-show="!is_add_valid" uib-popover="{{'PUBLIC_BOOKING.WEEK_CALENDAR.MAX_DATE_POPOVER' | translate: maxDateDurationObj}}"
+          popover-placement="left" popover-trigger="'focus'">
           <span class="fa fa-chevron-right"></span>
         </button>
       </li>
 
-    </ul>
-  </div>
+    </ul>-->
 </div>
