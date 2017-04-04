@@ -2,7 +2,7 @@ angular
     .module('BBAdminDashboard.clients.directives')
     .directive('bbClientsTable', BBClientsTable);
 
-function BBClientsTable() {
+function BBClientsTable(bbGridService) {
     let directive = {
         link,
         restrict: 'AE',
@@ -16,10 +16,6 @@ function BBClientsTable() {
     function link(scope, element, attrs) {
         let formattedFields = '';
         let searchFields = [];
-        let actionButton = `<a class="btn btn-xs btn-default" ui-sref="clients.edit({id: row.entity.id})"><i class="fa fa-pencil"></i>
-          <span translate="ADMIN_DASHBOARD.CLIENTS_PAGE.EDIT"></span></a>`;
-
-
         let customTemplates = {filterHeaderTemplate: 'ui_grid_filter_template.html', headerCellTemplate: 'ui_grid_header_template.html'}
 
         let prepareColumnDefs = () => {
@@ -34,26 +30,13 @@ function BBClientsTable() {
                     enableHiding: false,
                     enableSorting: false,
                     enableColumnMenus: false,
-                    cellTemplate: actionButton
+                    cellTemplate: 'clients/action.html'
                 }
             ]
         }
 
 
-        let prepareCustomGridOptions = () => {
-            let columnDefs = prepareColumnDefs();
-             // make header cells translatable
-             // push custom templates
-            for(let col of columnDefs) {
-                col.headerCellFilter = 'translate';
-                if(col.field !== 'action') {
-                    Object.assign(col, customTemplates);
-                }
-            }
-
-            return columnDefs;
-        }
-
+        let columnDefs = prepareColumnDefs();
 
 
         scope.gridOptions = {
@@ -62,8 +45,8 @@ function BBClientsTable() {
             paginationPageSizes: [15],
             paginationPageSize: 15,
             useExternalPagination: true,
-            columnDefs: prepareCustomGridOptions(),
-            onRegisterApi: function(gridApi) {
+            columnDefs: bbGridService.readyColumns(columnDefs, customTemplates),
+            onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
                 scope.gridData = scope.getClients();
                 gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {

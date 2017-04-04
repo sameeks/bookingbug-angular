@@ -7,6 +7,9 @@ function bbCheckInController($scope, $rootScope, BusyService, $q, $filter, Admin
 
     let setCheckInGridData = (bookings) => {
         $scope.gridOptions.data = bookings;
+        $scope.gridOptions.data.formatDate = () => {
+            console.log('format')
+        }
     }
 
     $scope.getAppointments = (currentPage, filterBy, filterByFields, orderBy, orderByReverse, skipCache) => {

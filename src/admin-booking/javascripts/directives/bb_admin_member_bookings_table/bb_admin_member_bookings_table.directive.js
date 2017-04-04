@@ -2,7 +2,7 @@ angular
     .module('BBAdminBooking')
     .directive('bbAdminMemberBookingsTable', bbAdminMemberBookingsTable);
 
-function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup) {
+function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup, bbGridService) {
     let directive = {
         controller: 'bbAdminMemberBookingsTableCtrl',
         link,
@@ -26,23 +26,15 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
         let prepareColumnDefs = () => {
             return [
                 { displayName: 'Data/Time', field: 'client_name'},
-                { displayName: 'Desctription', field: 'person_name'}
+                { displayName: 'Description', field: 'person_name'}
             ]
         }
 
-        let prepareCustomGridOptions = () => {
-            let columnDefs = prepareColumnDefs();
-             // make header cells translatable
-            for(let col of columnDefs) {
-                col.headerCellFilter = 'translate';
-            }
-
-            return columnDefs;
-        }
+        let columnDefs = prepareColumnDefs();
 
         scope.gridOptions = {
             enableSorting: true,
-            columnDefs: prepareCustomGridOptions(),
+            columnDefs: bbGridService.readyColumns(columnDefs),
             onRegisterApi: function(gridApi) {
                 scope.gridApi = gridApi;
             }

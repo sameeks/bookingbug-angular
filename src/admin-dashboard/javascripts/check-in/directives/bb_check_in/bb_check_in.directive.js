@@ -2,7 +2,7 @@ angular
     .module('BBAdminDashboard.check-in.directives')
     .directive('bbCheckIn', bbCheckIn);
 
-function bbCheckIn() {
+function bbCheckIn(bbGridService) {
     let directive = {
         restrict: 'AE',
         replace: false,
@@ -20,27 +20,19 @@ function bbCheckIn() {
             return [
                 { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.CUSTOMER', field: 'client_name'},
                 { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.STAFF_MEMBER', field: 'person_name'},
-                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.DUE', field: 'datetime'},
+                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.DUE', field: 'formatDate(datetime)'},
                 { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.NO_SHOW', field: 'multi_status.no_show'},
                 { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.ARRIVED', field: 'multi_status.arrived'},
-                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.BEING_SEEN', field: 'multi_status.beeing_seen'}
+                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.BEING_SEEN', field: 'multi_status.being_seen'}
             ]
         }
 
-        let prepareCustomGridOptions = () => {
-            let columnDefs = prepareColumnDefs();
-             // make header cells translatable
-            for(let col of columnDefs) {
-                col.headerCellFilter = 'translate';
-            }
-
-            return columnDefs;
-        }
+        let columnDefs = prepareColumnDefs();
 
         scope.gridOptions = {
             enableSorting: true,
-            columnDefs: prepareCustomGridOptions(),
-            onRegisterApi: function(gridApi) {
+            columnDefs: bbGridService.readyColumns(columnDefs),
+            onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
                 scope.getAppointments(null, null, null, null, null, true);
             }
