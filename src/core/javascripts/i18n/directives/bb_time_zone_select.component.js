@@ -4,15 +4,16 @@
 
     /**
      * @ngdoc component
-     * @name BBAdminDashboard.bbTimeZoneOptions
+     * @name BBAdminDashboard.bbTimeZoneSelect
      *
      * @description
      * TimeZone Select
      *
      * @example
      * <example>
-     *   <bb-time-zone-select restrict-region="'Europe'"></bb-time-zone-select>
-     *   <bb-time-zone-select restrict-region="['Asia', 'America']"></bb-time-zone-select>
+     *   <bb-time-zone-select moment-names="true" limit-to="'Europe'" exclude="'Berlin'"></bb-time-zone-select>
+     *   <bb-time-zone-select moment=names="true" limit-to="['Asia', 'America']"></bb-time-zone-select>
+     *   <bb-time-zone-select moment-names="true" format="'(GMT offset-hours) location (tz-code)'"
      * </example>
      */
 
@@ -30,7 +31,7 @@
             controllerAs: '$bbTimeZoneSelectCtrl'
         });
 
-    function TimeZoneSelectCtrl($scope, $rootScope, bbTimeZone, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions, $localStorage) {
+    function TimeZoneSelectCtrl($rootScope, $scope, $localStorage, bbTimeZone, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions) {
         'ngInject';
 
         const ctrl = this;
@@ -59,7 +60,7 @@
 
         function updateTimeZone(timeZone) {
             if (timeZone === undefined) timeZone = ctrl.selectedTimeZone.value;
-            ctrl.selectedTimeZone = bbTimeZoneOptions.mapTimeZoneItem(timeZone);
+            ctrl.selectedTimeZone = _.find(ctrl.timeZones, (tz) => tz.value === timeZone);
             bbTimeZone.setDisplayTimeZone(timeZone, true);
             $rootScope.$broadcast('BBTimeZoneOptions:timeZoneChanged', timeZone);
         }
