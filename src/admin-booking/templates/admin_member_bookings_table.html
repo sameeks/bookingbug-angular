@@ -1,12 +1,10 @@
 <table
-  tr-ng-grid=""
+  ui-grid="gridOptions" 
+  class="bb-grid"
   items="bookings"
-  enable-filtering="false"
-  ng-hide="loading"
-  fields="fields"
-  order-by="orderBy">
-  <thead>
-  <tr role="row">
+  ng-hide="loading">
+<!--   <thead>
+  <tr role="row"> 
     <th
       field-name="date_order"
       display-name="Date/Time">
@@ -39,5 +37,5 @@
       </button>
     </td>
   </tr>
-  </tbody>
+  </tbody> -->
 </table>
