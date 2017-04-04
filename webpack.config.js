@@ -39,7 +39,7 @@ let bbModules = ['admin', 'admin-booking', 'admin-dashboard', 'core', 'events', 
         (bbModule) => {
             return webpackMerge(baseConfig, {
                 entry: {
-                    entry: path.resolve(__dirname, 'src/' + bbModule + '/javascripts/main.module.js')
+                    entry: path.resolve(__dirname, 'src/' + bbModule + '/javascripts/main.js')
                 },
                 output: {
                     path: path.resolve(__dirname, 'build-new/' + bbModule),
