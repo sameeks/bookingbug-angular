@@ -1,0 +1,11 @@
+import './main.module'
+import './main.config'
+import './main.run'
+
+import './collections/**/*.js'
+import './controllers/**/*.js'
+import './directives/**/*.js'
+import './filters/**/*.js'
+import './models/**/*.js'
+import './services/**/*.js'
+import './translations/**/*.js'

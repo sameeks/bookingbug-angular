@@ -4,10 +4,9 @@ const webpack = require('webpack');
 const config = [
     {
         entry: {
-            core: path.resolve(__dirname, 'src/admin/javascripts/main.js'),
-            admin: path.resolve(__dirname, 'src/admin/javascripts/main.js'),
-            member: path.resolve(__dirname, 'src/admin/javascripts/main.js'),
-            'public-booking': path.resolve(__dirname, 'src/admin/javascripts/main.js')
+            'admin-booking': path.resolve(__dirname, 'src/admin-dashboard/javascripts/main.js'),
+            'member-booking': path.resolve(__dirname, 'src/member/javascripts/main.js'),
+            'public-booking': path.resolve(__dirname, 'src/public-booking/javascripts/main.js')
         },
         output: {
             path: path.resolve(__dirname, 'build-new'),
@@ -30,15 +29,21 @@ const config = [
                 {
                     test: /\.js$/,
                     exclude: /(node_modules|bower_components)/,
-                    use: {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: ['es2015'],
-                            plugins: [
-                                ["transform-es2015-classes", {"loose": true}]
-                            ]
+                    use: [
+
+                        {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: ['es2015'],
+                                plugins: [
+                                    ["transform-es2015-classes", {"loose": true}]
+                                ]
+                            }
+                        },
+                        {
+                            loader: 'import-glob'
                         }
-                    }
+                    ]
                 }
             ]
         }
