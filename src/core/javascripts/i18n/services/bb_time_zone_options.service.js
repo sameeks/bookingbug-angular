@@ -1,6 +1,6 @@
 (function() {
 
-    /*
+    /**
     * @ngdoc service
     * @name BBAdminDashboard.bbTimeZoneOptions
     * @description
@@ -16,7 +16,7 @@
             generateTimeZoneList: generateTimeZoneList
         };
 
-        /*
+        /**
         * @ngdoc function
         * @name generateTimeZoneList
         * @methodOf BBAdminDashboard.Services:TimeZoneOptions
