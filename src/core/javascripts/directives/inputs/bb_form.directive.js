@@ -25,7 +25,9 @@ let bbFormDirective = function ($bbug, $window, ValidatorService, $timeout, Gene
             $formCtrl = ctrls[0];
             $bbPageCtrl = ctrls[1];
             scope.submitForm = submitForm;
-            elem.on("submit", submitForm); // doesn't work with ng-form just regular form
+            if (attrs.disableAutoSubmit == null) {
+                elem.on("submit", submitForm); // doesn't work with ng-form just regular form
+            }
         };
 
         // marks child forms as submitted
@@ -63,6 +65,10 @@ let bbFormDirective = function ($bbug, $window, ValidatorService, $timeout, Gene
 
                 let route = attrs.bbFormRoute;
                 $bbPageCtrl.$scope.checkReady();
+
+                if (attrs.noRoute != null) {
+                    return;
+                }
 
                 if ((route != null) && (route.length > 0)) {
                     $bbPageCtrl.$scope.routeReady(route);
