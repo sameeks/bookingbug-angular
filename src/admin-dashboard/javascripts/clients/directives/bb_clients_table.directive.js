@@ -57,7 +57,7 @@ function BBClientsTable(bbGridService) {
                 gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {
                     scope.paginationOptions.pageNumber = newPage;
                     scope.paginationOptions.pageSize = pageSize;
-                    scope.getClients(scope.paginationOptions.pageNumber + 1, null);
+                    scope.getClients(scope.paginationOptions.pageNumber + 1, this.filterString);
                 });
             }
         }
@@ -75,8 +75,8 @@ function BBClientsTable(bbGridService) {
 
         let buildFilterString = (filters) => {
             // we need to build a string in format "field,value,field,value,field,value"
-            let filterString = bbGridService.formatFilterString(filters);
-            scope.getClients(scope.paginationOptions.pageNumber, filterString);
+            this.filterString = bbGridService.formatFilterString(filters);
+            scope.getClients(scope.paginationOptions.pageNumber, this.filterString);
         }
 
 
