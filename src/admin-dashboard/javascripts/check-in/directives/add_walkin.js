@@ -18,9 +18,9 @@ angular.module('BBAdminDashboard.check-in.directives').directive('bbAddWalkin', 
                             date: moment().format('YYYY-MM-DD')
                         },
                         on_conflict: "cancel()",
-                        company_id: $scope.bb.company.id
-                    })
-                    ;
+                        company_id: $scope.bb.company.id,
+                        first_page: 'quick_pick'
+                    });
             }
         };
     }

@@ -16,10 +16,14 @@ angular.module('BBAdminDashboard').directive('adminSideNav', () => {
             restrict: 'A',
             scope: false,
             templateUrl: 'core/admin-side-nav.html',
-            controller: ['$scope', 'SideNavigationPartials', ($scope, SideNavigationPartials) => $scope.navigation = SideNavigationPartials.getOrderedPartialTemplates()
-            ],
-            link(scope, element, attrs) {
-            }
+            controller: ['$scope', 'SideNavigationPartials', ($scope, SideNavigationPartials) => {
+
+                $scope.$watch(() => {
+                    return SideNavigationPartials.getOrderedPartialTemplates()
+                }, () => {
+                    $scope.navigation = SideNavigationPartials.getOrderedPartialTemplates()
+                }, true);
+            }],
 
         };
     }
