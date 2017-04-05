@@ -1,3 +1,4 @@
+
 angular
     .module('BBAdminDashboard.clients.directives')
     .directive('bbClientsTable', BBClientsTable);
@@ -14,8 +15,7 @@ function BBClientsTable(bbGridService) {
     return directive;
 
     function link(scope, element, attrs) {
-        let formattedFields = '';
-        let searchFields = [];
+        let filters = [];
         let customTemplates = {filterHeaderTemplate: 'ui_grid_filter_template.html', headerCellTemplate: 'ui_grid_header_template.html'}
 
         let prepareColumnDefs = () => {
@@ -38,6 +38,11 @@ function BBClientsTable(bbGridService) {
 
         let columnDefs = prepareColumnDefs();
 
+        scope.paginationOptions = {
+            pageNumber: 1,
+            pageSize: 15,
+            sort: null
+        }
 
         scope.gridOptions = {
             enableSorting: true,
@@ -53,46 +58,59 @@ function BBClientsTable(bbGridService) {
                     scope.paginationOptions.pageNumber = newPage;
                     scope.paginationOptions.pageSize = pageSize;
                     scope.getClients(scope.paginationOptions.pageNumber + 1, null);
-                })
+                });
             }
         }
 
-        scope.paginationOptions = {
-            pageNumber: 1,
-            pageSize: 15,
-            sort: null
-        }
-
-        let createFilterString = (field, term) => {
-            searchFields.push(term);
-            let allFields = '';
-
-            for(let field of searchFields) {
-                let formatted = field.field + ',' + field.term;
-                if(allFields === '') {
-                    allFields = allFields + formatted;
-                } else {
-                    allFields = allFields + ',' + formatted;
-                }
-            }
-
-            scope.getClients(scope.paginationOptions.pageNumber, allFields);
-        }
-
-
-        scope.$on('bbGridFilter:changed', (event, fieldName, term) => {
-            let formattedFields = fieldName + ',' + term.term;
-            if(_.contains(searchFields, term)) {
-                if(term.term === '') {
-                    return;
-                }
-                else {
-                    scope.getClients(scope.paginationOptions.pageNumber, formattedFields);
-                }
+        // fire a custom event when filter changes
+        // ui-grid doesnt pass the filtered data through to the event it broadcasts
+        scope.$on('bbGridFilter:changed', (event, filterObject) => {
+            if(filters.length === 0) {
+                filters.push(filterObject);
+                buildFilterString(filters);
             } else {
-                createFilterString(fieldName, term)
+               handleFilterChange(filterObject);
             }
         });
+
+        let buildFilterString = (filters) => {
+            let filterItems = [];
+            let filterString = '';
+            // we need to build a string in format "field,value,field,value,field,value"
+            for(let filter of filters) {
+                filter.string = filter.fieldName + ',' + filter.value;
+            }
+
+            for(let filter of filters) {
+                if(filters.length === 1) {
+                    filterString = filter.string;
+                } else {
+                    filterString = filterString + ',' + filter.string;
+                }
+            }
+
+            if(filterString.charAt(0) === ',')  {
+                filterString = filterString.substr(1);
+            }
+
+            scope.getClients(scope.paginationOptions.pageNumber, filterString);
+        }
+
+
+        let handleFilterChange = (filterObject) => {
+            // we need to build an array of filtered fields
+            // replace current object with updated filter value if that filter is already in array
+            _.filter(filters, (fil) => {
+                if(fil.id === filterObject.id) {
+                    filters = _.without(filters, fil)
+                }
+            });
+            if(filterObject.value !== '') {
+                filters.push(filterObject);
+            }
+
+            buildFilterString(filters);
+        }
     }
 };
 

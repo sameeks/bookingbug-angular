@@ -19,10 +19,12 @@
                         };
 
                         scope.initFilter = (col) => {
-                            let filteredField = col.field;
-                            let filteredTerm = col.filters[0]
-                            filteredTerm.field = filteredField;
-                            $rootScope.$broadcast('bbGridFilter:changed', filteredField, filteredTerm)
+                            let filteredField = {
+                                fieldName: col.field,
+                                value: col.filters[0].term,
+                                id: col.uid
+                            }
+                            $rootScope.$broadcast('bbGridFilter:changed', filteredField)
                         }
 
                         scope.$on( '$destroy', function() {
