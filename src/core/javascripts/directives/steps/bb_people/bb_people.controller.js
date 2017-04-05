@@ -42,7 +42,9 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
                 people = people.filter(x => !x.group_id || (x.group_id === bi.group));
             }
             return $scope.all_people = people;
-        }, function (err) {console.log('Error: ',err);});
+        }, function (err) { 
+            console.log('Error: ', err); 
+        });
 
         return BBModel.BookableItem.$query({
             company: $scope.bb.company,
@@ -98,7 +100,9 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
                 , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
 
             return ppromise['finally'](() => loader.setLoaded());
-        }, function (err) {console.log('Error: ',err);});
+        }, function (err) {
+            console.log('Error: ',err);
+        });
     };
 
     // we're storing the person property in the form store but the angular select
