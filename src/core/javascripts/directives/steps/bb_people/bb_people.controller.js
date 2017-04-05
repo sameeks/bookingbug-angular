@@ -101,7 +101,7 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
 
             return ppromise['finally'](() => loader.setLoaded());
         }, function (err) {
-            console.log('Error: ',err);
+            console.log('Error: ', err);
         });
     };
 
