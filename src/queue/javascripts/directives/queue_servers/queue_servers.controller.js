@@ -135,16 +135,6 @@ let QueueServersController = ($scope, $log, AdminQueueService, ModalForm, AdminP
         });
     }
 
-    $scope.serveNow = function() {
-        return $uibModal.open({
-            templateUrl: 'queue/pick_a_service_now.html',
-            scope: $scope,
-            controller: ($scope, $uibModalInstance) => {
-                return $scope.close = () => $uibModalInstance.close();
-            }
-        });
-    };
-
     $scope.dropCallback = function(event, ui, queuer, $index) {
         $scope.$apply(() => $scope.selectQueuer(null));
         return false;

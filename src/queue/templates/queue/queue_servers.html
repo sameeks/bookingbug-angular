@@ -55,12 +55,6 @@
     </button>
   </div>
   <div class="btn-group pull-right"
-    ng-if="!selected_queuer && !person.serving && person.attendance_status == 1">
-    <button type="button" class="btn btn-warning" ng-click="serveNow()">
-      Serve Now
-    </button>
-  </div>
-  <div class="btn-group pull-right"
     ng-if="person && person.$has('finish_serving') && person.serving">
     <button type="button" class="btn btn-warning"
       ng-click="finishServingQueuer({person: person, status: 'absent', outcomes: false})">

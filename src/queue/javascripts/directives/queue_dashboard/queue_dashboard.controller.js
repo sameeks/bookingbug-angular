@@ -1,5 +1,5 @@
 let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerService, ModalForm,
-    BBModel, $interval, $sessionStorage, $uibModal) => {
+    BBModel, $interval, $sessionStorage, $uibModal, $q) => {
 
     $scope.loading = true;
     $scope.waiting_for_queuers = false;
@@ -13,16 +13,6 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
             queuer.remaining());
         }
     }, 5000);
-
-    $scope.addToQueue = function() {
-        return $uibModal.open({
-            templateUrl: 'queue/pick_a_service.html',
-            scope: $scope,
-            controller: ($scope, $uibModalInstance) => {
-                return $scope.close = () => $uibModalInstance.close();
-            }
-        });
-    };
 
     $scope.getSetup = function() {
         let params =
@@ -95,11 +85,6 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
     };
 
     $scope.selectDragQueuer = queuer => $scope.drag_queuer = queuer;
-
-    $scope.addQueuer = function(service) {
-        $scope.new_queuer.service_id = service.id;
-        return service.$post('queuers', {}, $scope.new_queuer).then(queuer => $scope.new_queuer = {});
-    };
 
 }
 

@@ -1,4 +1,4 @@
-<div class="box box-success">
+<div class="box box-success add-customer">
   <div class="box-header with-border">
     <h3 class="box-title">Add Customer</h3>
     <div class="box-tools pull-right">
@@ -7,27 +7,27 @@
       </button>
     </div>
   </div>
-  <form name="qForm" class="box-body padding" style="display: block;">
+  <form name="qForm" class="box-body padding">
     <div class="row">
       <div class="col-md-4 col-sm-6">
         <div class="form-group">
           <label for="first_name">First Name *</label>
-          <input required ng-model="new_queuer.first_name" name="first_name" class="form-control"
-          type="text" ng-focus="highlighted = true" placeholder="First Name">
+          <input id="first_name" required ng-model="new_queuer.first_name" name="first_name"
+          class="form-control" type="text" ng-focus="highlighted = true" placeholder="First Name">
         </div>
       </div>
       <div class="col-md-4 col-sm-6">
         <div class="form-group">
           <label for="last_name">Last Name</label>
-          <input ng-model="new_queuer.last_name"  name="last_name" class="form-control" type="text"
-          placeholder="Last Name">
+          <input id="last_name" ng-model="new_queuer.last_name"  name="last_name"
+          class="form-control" type="text" placeholder="Last Name">
         </div>
       </div>
       <div class="col-md-4 col-sm-6">
         <div class="form-group">
           <label for="mobile">Phone</label>
-          <input ng-model="new_queuer.mobile" name="mobile"  class="form-control" type="phone"
-          placeholder="Phone">
+          <input id="mobile" ng-model="new_queuer.mobile" name="mobile"  class="form-control"
+          type="phone" placeholder="Phone">
         </div>
       </div>
     </div>
@@ -35,16 +35,16 @@
       <div class="col-md-8 col-sm-8">
         <div class="form-group">
           <label for="notes">Notes</label>
-          <textarea ng-model="new_queuer.notes" name="notes" rows="1" class="form-control"
-            placeholder="Notes"></textarea>
+          <textarea id="notes" ng-model="new_queuer.notes" name="notes" rows="1"
+            class="form-control" placeholder="Notes"></textarea>
         </div>
       </div>
-
-      <div class="col-md-4">
-          <input ng-disabled="qForm.$invalid" type="submit" value="Add to Queue"
-          ng-click="addToQueue()" class="btn  btn-success pull-right"
-          style="margin-top:24px;"></input>
-      </div>
+    </div>
+    <div class="box-footer">
+      <input ng-disabled="qForm.$invalid" type="submit" value="Add to Queue"
+      ng-click="addToQueue()" class="btn btn-primary pull-right"></input>
+      <input ng-disabled="qForm.$invalid" type="submit" value="Serve Now"
+      ng-click="serveCustomerNow()" class="btn pull-right"></input>
     </div>
   </form>
 </div>

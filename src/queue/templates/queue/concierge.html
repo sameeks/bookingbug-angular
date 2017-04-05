@@ -1,9 +1,9 @@
 <section class="content">
   <div bb-queue-dashboard class="queue_admin">
-    <div  class="row">
+    <div class="row">
       <div bb-queue-servers class="col-md-5 server_column"></div>
 
-      <div class="col-md-7" ng-include="'queue/add_customer.html'"></div>
+      <div bb-queue-add-customer services="services" servers="servers" class="col-md-7"></div>
 
       <div ng-show="selected_queuer" class="col-md-7 pull-right"
         ng-include="'queue/selected_queuer.html'"></div>

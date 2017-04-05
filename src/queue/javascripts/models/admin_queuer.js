@@ -51,6 +51,7 @@ angular.module('BB.Models').factory("AdminQueuerModel", function($q, BBModel, Ba
         startServing(person) {
             let defer = $q.defer();
             if (this.$has('start_serving')) {
+                console.log('start serving url ', this.$href('start_serving'));
                 person.$flush('self');
                 this.$post('start_serving', {person_id: person.id}).then(q => {
                     person.$get('self').then(p => person.updateModel(p));

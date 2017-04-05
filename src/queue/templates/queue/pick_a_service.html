@@ -3,8 +3,8 @@
 </div>
 <div class="modal-body">
   <input type="submit" ng-repeat="service in services" value="{{service.name}}"
-  ng-click="addQueuer(service); close()" data-dismiss="modal" class="btn btn-success btn-block">
+  ng-click="submit({service: service})" data-dismiss="modal" class="btn btn-success btn-block">
 </div>
 <div class="modal-footer">
-  <button class="btn btn-warning" ng-click="close()">Cancel</button>
+  <button class="btn btn-warning" ng-click="dismiss()">Cancel</button>
 </div>
