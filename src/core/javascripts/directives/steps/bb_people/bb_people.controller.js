@@ -4,7 +4,6 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
     let new_person;
     this.$scope = $scope;
 
-    let chosenService = null;
     let loader = null;
 
     let init = function () {
@@ -29,16 +28,13 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
     var loadData = function () {
         let bi = $scope.booking_item;
 
-        if (!bi.service || (bi.service === chosenService)) {
-            if (!bi.service) {
-                loader.setLoaded();
-            }
+        if (!angular.isObject(bi.service) && !angular.isObject(bi.resource)) {
+            loader.setLoaded();
+            $scope.bb.company.$getPeople().then(people=>$scope.bookable_items = people);
             return;
         }
 
         loader.notLoaded();
-
-        chosenService = bi.service;
 
         let ppromise = BBModel.Person.$query($scope.bb.company);
         ppromise.then(function (people) {
@@ -123,7 +119,7 @@ let BBPeopleCtrl = function ($scope, $rootScope, $q, BBModel, PersonModel, FormD
         if (person instanceof PersonModel) {
             if ($scope.bookable_items) {
                 for (let item of Array.from($scope.bookable_items)) {
-                    if (item.item.self === person.self) {
+                    if (item.self === person.self) {
                         return item;
                     }
                 }

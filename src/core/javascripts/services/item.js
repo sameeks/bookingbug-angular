@@ -3,7 +3,7 @@ angular.module('BB.Services').factory("ItemService", ($q, BBModel, $rootScope, h
             query(prms) {
                 let deferred = $q.defer();
               
-                var extra = {};
+                let extra = {};
                 extra.company_id  = prms.company.id;
                 if (angular.isObject(prms.cItem.resource))
                     extra.resource_id = prms.cItem.resource.id ;
@@ -12,37 +12,14 @@ angular.module('BB.Services').factory("ItemService", ($q, BBModel, $rootScope, h
                 if (angular.isObject(prms.cItem.service))     
                     extra.service_id  = prms.cItem.service.id ;
 
-                var href = $rootScope.bb.api_url + "/api/v1/";
-                href += "{company_id}/items{?service_id,resource_id,person_id}";
-                var uri = new UriTemplate(href).fillFromObject(extra || {});
-
-                if (prms.cItem.person && !prms.cItem.anyPerson() && (prms.item !== 'person')) {                   
-                    if (!prms.cItem.person.$has('items')) {                                       
-                        halClient.$get(uri, extra).then(base_item => {
-                             return this.build_items(base_item, prms, deferred);
-                        });                                                    
-                    } else {
-                        this.build_items(prms.cItem.person.$get('items'), prms, deferred);
-                    }
-                } 
-                 else if (prms.cItem.resource && !prms.cItem.anyResource() && (prms.item !== 'resource')) {
-                    if (!prms.cItem.resource.$has('items')) {
-                        halClient.$get(uri, extra).then(base_item => {
-                             return this.build_items(base_item, prms, deferred);
-                        });  
-                    } else {
-                        this.build_items(prms.cItem.resource.$get('items'), prms, deferred);
-                    }
-
-                } else if (prms.cItem.service && (prms.item !== 'service')) {
-                    if (!prms.cItem.service.$has('items')) {
-                        prms.cItem.service.$get('item').then(base_item => {
-                                return this.build_items(base_item.$get('items'), prms, deferred);
-                            }
-                        );
-                    } else {
-                        this.build_items(prms.cItem.service.$get('items'), prms, deferred);
-                    }
+                let href = $rootScope.bb.api_url + "/api/v1/" +"{company_id}/items{?service_id,resource_id,person_id}";
+                let uri = new UriTemplate(href).fillFromObject(extra || {});
+                
+                if (angular.isObject(prms.cItem.service) || angular.isObject(prms.cItem.person) || angular.isObject(prms.cItem.resource)) {
+                    halClient.$get(uri, extra).then(base_item => {
+                        this.build_items(base_item, prms, deferred);
+                    }); 
+    
                 } else {
                     deferred.reject("No service link found");
                 }

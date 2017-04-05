@@ -30,11 +30,11 @@ let BBResourcesCtrl = function ($scope, $rootScope, $attrs, $q, BBModel, Resourc
         }
         // do nothing if nothing has changed
         if ((!$scope.bb.steps || ($scope.bb.steps[0].page !== "resource_list")) && !$scope.options.resource_first) {
-            if (!$scope.booking_item.service || ($scope.booking_item.service === $scope.change_watch_item)) {
+            //if (!$scope.booking_item.service || ($scope.booking_item.service === $scope.change_watch_item)) {
                 // if there's no service - we have to wait for one to be set - so we're done loading for now!
-                if (!$scope.booking_item.service) {
-                    loader.setLoaded();
-                }
+            if (!angular.isObject($scope.booking_item.service) && !angular.isObject($scope.booking_item.person)) {            
+                loader.setLoaded();
+                $scope.bb.company.$getResources().then(resources=>$scope.bookable_items = resources);          
                 return;
             }
         }
@@ -120,7 +120,7 @@ let BBResourcesCtrl = function ($scope, $rootScope, $attrs, $q, BBModel, Resourc
         if (resource instanceof ResourceModel) {
             if ($scope.bookable_items) {
                 for (let item of Array.from($scope.bookable_items)) {
-                    if (item.item.self === resource.self) {
+                    if (item.self === resource.self) {
                         return item;
                     }
                 }
