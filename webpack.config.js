@@ -27,7 +27,7 @@ const config = [
         module: {
             rules: [
                 {
-                    test: /\.js$/,
+                    test: /\.js$/, //(?<!\.spec)\.js$ negative look behind doesn't work with js
                     exclude: /(node_modules|bower_components)/,
                     use: [
 
