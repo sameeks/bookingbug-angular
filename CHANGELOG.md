@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file using [CHANG
 ## [Unreleased] 
 
 ### Changed
+* BREAKING: bbAdminBookingClients directive is not exposing ValidatorService anymore to the view: $scope.validator. For any bespoke project which overrides template - `admin_booking_clients.html`, replace `validator.getEmailPattern()` with `emailPattern`. 
 
 ### Removed
  
@@ -21,8 +22,8 @@ All notable changes to this project will be documented in this file using [CHANG
       function scripts() {
           configuration.bbDependencies.forEach(function (dirName) {
               gulp.watch(
-                  [configuration.sdkRootPath + '/src/' + dirName + '/javascripts/**/*'],
-                  function () {setTimeout(function () {runSequence(['scripts:client']);}, 1000)},
+                  [configuration.sdkRootPath + '/build/' + dirName + '/*.js'],
+                  function () { runSequence(['scripts:client']); },
                   watchOptions
               );
           });
