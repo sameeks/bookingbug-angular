@@ -1,5 +1,5 @@
 let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuerService, ModalForm,
-    BBModel, $interval, $sessionStorage, $uibModal, $q) => {
+    BBModel, $interval, $sessionStorage, $uibModal, $q, AdminBookingPopup) => {
 
     let addQueuer = function(form) {
         let defer = $q.defer()
@@ -65,6 +65,25 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
         });
 
         modalInstance.result.then(addQueuer).finally(() => $scope.new_queuer = {});
+    };
+
+    $scope.makeAppointment = function(options) {
+        let defaultOptions = {
+            item_defaults: {
+                pick_first_time: true,
+                merge_people: true,
+                merge_resources: true,
+                date: moment().format('YYYY-MM-DD')
+            },
+            on_conflict: "cancel()",
+            company_id: $scope.company.id
+        }
+
+        options = _.extend(defaultOptions, options);
+
+        let popup = AdminBookingPopup.open(options);
+
+        popup.result.finally(() => $scope.new_queuer = {});
     };
 
 }

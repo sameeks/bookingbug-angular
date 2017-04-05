@@ -2,9 +2,6 @@
   <div class="box-header with-border">
     <h3 class="box-title">Add Customer</h3>
     <div class="box-tools pull-right">
-      <button bb-add-walkin="" class="breadcrumb btn btn-primary ng-scope" ng-click="walkIn()">
-        Make Appointment
-      </button>
     </div>
   </div>
   <form name="qForm" class="box-body padding">
@@ -45,6 +42,10 @@
       ng-click="addToQueue()" class="btn btn-primary pull-right"></input>
       <input ng-disabled="qForm.$invalid" type="submit" value="Serve Now"
       ng-click="serveCustomerNow()" class="btn pull-right"></input>
+      <button ng-disabled="qForm.$invalid" class="btn pull-right"
+        ng-click="makeAppointment({client: new_queuer})">
+        Make Appointment
+      </button>
     </div>
   </form>
 </div>
