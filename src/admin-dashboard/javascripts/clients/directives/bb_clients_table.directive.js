@@ -3,7 +3,7 @@ angular
     .module('BBAdminDashboard.clients.directives')
     .directive('bbClientsTable', BBClientsTable);
 
-function BBClientsTable(bbGridService) {
+function BBClientsTable(bbGridService, uiGridConstants) {
     let directive = {
         link,
         restrict: 'AE',
@@ -20,14 +20,16 @@ function BBClientsTable(bbGridService) {
 
         let prepareColumnDefs = () => {
             return [
-                { field: 'name', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME' },
-                { field: 'email', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL' },
-                { field: 'mobile', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE' },
+                { field: 'name', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME', width: '35%' },
+                { field: 'email', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL', width: '35%' },
+                { field: 'mobile', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE', width: '25%' },
                 {  // ACTION BUTTON COLUMN
                     field: 'action',
                     displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',
                     enableFiltering: false,
                     enableHiding: false,
+                    width: '5%',
+                    headerCellClass: 'action-column-header',
                     enableSorting: false,
                     enableColumnMenus: false,
                     cellTemplate: 'clients/action.html'
@@ -50,6 +52,7 @@ function BBClientsTable(bbGridService) {
             paginationPageSizes: [15],
             paginationPageSize: 15,
             useExternalPagination: true,
+            rowHeight: 40,
             enableColumnMenus: false,
             columnDefs: bbGridService.readyColumns(columnDefs, customTemplates),
             onRegisterApi: (gridApi) => {

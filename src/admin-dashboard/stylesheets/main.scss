@@ -59,8 +59,36 @@ html,body {
 
 .bb-grid {
   width: 100%;
-  height: 100%;
+  min-height: 800px;
+  height: auto;
   .ui-grid-column-menu-button-last-col {
     display: none;
   }
+  .ui-grid-cell {
+    line-height: 30px;
+    background-color: #fdfdfd;
+  }
+  .ui-grid-header-cell-primary-focus {
+    text-align: center;
+  }
+  .ui-grid-header-cell {
+    background-color: #fdfdfd;
+    .ui-grid-icon-cancel {
+      display: none;
+    }
+  }
+  .ui-grid-header-cell-primary-focus {
+    margin: 5px;
+  }
+
+  .action-column-header {
+    padding-top: 40px;
+  }
+}
+.ui-grid-row:nth-child(even) .ui-grid-cell {
+  background-color: white;
+}
+
+input[type="text"].ui-grid-filter-input {
+  padding: 5px;
 }

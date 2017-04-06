@@ -33,6 +33,7 @@ function bbCheckIn(bbGridService) {
 
         scope.gridOptions = {
             enableSorting: true,
+            rowHeight: 40,
             columnDefs: bbGridService.readyColumns(columnDefs),
             onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
