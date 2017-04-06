@@ -1,0 +1,17 @@
+<span ng-if="row.entity.hasStatus('completed')">
+  <i class="fa fa-check-square"></i> {{row.entity.statusTime("completed").format("LT")}}
+</span>
+
+<span ng-if="!row.entity.hasStatus('completed') && row.entity.hasStatus('being_seen')">
+  <span ng-class="row.entity.sinceStatus('being_seen') | gar:100:10"> 
+  <span 
+    translate
+    translate-values="{period: '{{row.entity.sinceStatus('being_seen') | time_period}}'}">ADMIN_DASHBOARD.CHECK_IN_PAGE.BEING_SEEN_FOR
+  </span> 
+</span>
+<br/>
+
+<button ng-click="grid.appScope.setStatus(row.entity, 'completed')" class="btn btn-default">
+  <span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.COMPLETED_BUTTON"></span>
+</button>
+</span>

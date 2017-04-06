@@ -1,0 +1,15 @@
+<span
+  ng-if="!row.entity.hasStatus('being_seen') && !row.entity.hasStatus('checked_in') && row.entity.sinceStart() > 0"
+  ng-class="row.entity.sinceStart() | gar:1000:10000">
+    <span translate translate-values="{period: '{{ row.entity.sinceStart() | time_period }}'}">ADMIN_DASHBOARD.CHECK_IN_PAGE.WAS_DUE</span>
+  </span>
+<span ng-if="!row.entity.hasStatus('being_seen') && row.entity.hasStatus('checked_in')">
+    <button ng-click="grid.appScope.setStatus(bmap[gridItem], 'being_seen')" class="btn btn-default btn-xs pull-right">
+      <i class="fa fa-square"></i>
+      <span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.SERVE"></span>
+    </button>
+    <span ng-class="row.entity.sinceStatus('checked_in') | gar:1000:10000"> 
+      <i class="fa fa-check-square"></i> 
+      <span translate translate-values="{period: '{{bmap[gridItem].sinceStatus('checked_in') | time_period}}'}">ADMIN_DASHBOARD.CHECK_IN_PAGE.WAITING_FOR</span>
+    </span>
+</span>
