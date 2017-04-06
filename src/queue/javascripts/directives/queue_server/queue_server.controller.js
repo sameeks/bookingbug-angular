@@ -1,60 +1,35 @@
-let QueueServerController = ($scope) => {
+let QueueServerController = ($scope, BBModel, CheckSchema) => {
 
     $scope.getQueuers = function() {
         $scope.booking = null;
-        return $scope.person.getQueuers().then(function(queuers) {
-            $scope.queuers = queuers;
-            return (() => {
-                let result = [];
-                for (let queuer of Array.from(queuers)) {
-                    let item;
-                    if ((queuer.person_id === $scope.person.id) && (queuer.position === 0)) {
-                        $scope.person.serving = queuer;
-                        item = queuer.$get("booking").then(function(booking) {
-                            $scope.booking = new BBModel.Admin.Booking(booking);
-                            if ($scope.booking.$has('edit')) {
-                                return $scope.booking.$get('edit').then(function(schema) {
-                                    $scope.form = _.reject(schema.form, x => x.type === 'submit');
-                                    $scope.schema = checkSchema(schema.schema);
-                                    $scope.form_model = $scope.booking;
-                                    return $scope.loading = false;
-                                });
-                            }
-                        });
+        return $scope.person.$get('queuers').then(function(response) {
+            response.$get('queuers').then(function(collection) {
+                let queuers = _.map(collection, (queuer) => new BBModel.Admin.Queuer(queuer));
+                $scope.queuers = queuers;
+                return (() => {
+                    let result = [];
+                    for (let queuer of Array.from(queuers)) {
+                        let item;
+                        if ((queuer.person_id === $scope.person.id) && (queuer.position === 0)) {
+                            $scope.person.serving = queuer;
+                            item = queuer.$get("booking").then(function(booking) {
+                                $scope.booking = new BBModel.Admin.Booking(booking);
+                                if ($scope.booking.$has('edit')) {
+                                    return $scope.booking.$get('edit').then(function(schema) {
+                                        $scope.form = _.reject(schema.form, x => x.type === 'submit');
+                                        $scope.schema = CheckSchema(schema.schema);
+                                        $scope.form_model = $scope.booking;
+                                        return $scope.loading = false;
+                                    });
+                                }
+                            });
+                        }
+                        result.push(item);
                     }
-                    result.push(item);
-                }
-                return result;
-            })();
+                    return queuers;
+                })();
+            });
         });
-    };
-
-    // THIS IS CRUFTY AND SHOULD BE REMOVE WITH AN API UPDATE THAT TIDIES UP THE SCEMA RESPONE
-    // fix the issues we have with the the sub client and question blocks being in doted notation, and not in child objects
-    var checkSchema = function(schema) {
-        for (let k in schema.properties) {
-            let v = schema.properties[k];
-            let vals = k.split(".");
-            if ((vals[0] === "questions") && (vals.length > 1)) {
-                if (!schema.properties.questions) {
-                    schema.properties.questions = {type: "object", properties: {} };
-                }
-                if (!schema.properties.questions.properties[vals[1]]) {
-                    schema.properties.questions.properties[vals[1]] = {type: "object", properties: {answer: v} };
-                }
-            }
-            if ((vals[0] === "client") && (vals.length > 2)) {
-                if (!schema.properties.client) {
-                    schema.properties.client = {type: "object", properties: {q: {type: "object", properties: {}}} };
-                }
-                if  (schema.properties.client.properties) {
-                    if (!schema.properties.client.properties.q.properties[vals[2]]) {
-                        schema.properties.client.properties.q.properties[vals[2]] = {type: "object", properties: {answer: v} };
-                    }
-                }
-            }
-        }
-        return schema;
     };
 
     $scope.getQueuers = _.throttle($scope.getQueuers, 10000);

@@ -1,92 +1,69 @@
-<section class="content">
-
 <div ng-hide="loading" bb-queue-server>
-
 <section class="content-header">
-  <h1>
-    {{server.name}}
-    <small ui-sref="queue.server({id: server.id})"> <i class="fa fa-users"></i>Queue</small>
-    <small ui-sref="queue.calendar({id: server.id})" ><i class="fa fa-calendar"></i> Calendar</small>
-  </h1>
+  <h1>{{person.name}}</h1>
 </section>
-
-<div class="row">
-  <div class="col-md-3">
-    <div class="box box-success">
-      <div class="box-header with-border">
-        <h3 class="box-title">Serving</h3>
-      </div>
-      <div class="box-body padding" style="display: block;">
-        <div ng-if="server.serving" bb-queues>
-          <h3>{{server.serving.first_name}}</h3>
-          <p>Appointment started at {{server.serving.start | datetime: "h:mma":false}}</p>
-          <p>Appointment due to finish at {{server.serving.end | datetime: "h:mma":false}}</p>
-          <button ng-click="extendAppointment(5)" class="btn btn-danger">
-            Extend
-          </button>
-
-<!--          <div  ng-repeat="queue in queues">
-            <button class="btn btn-warning" ng-click="returnToQueue(queue, 1)"> Move to front of  {{queue.name}} </button>
-            <button class="btn btn-warning" ng-click="returnToQueue(queue, -1)"> Move to back of  {{queue.name}} </button>
-          </div>
--->
-          <button ng-click="finishServing()" class="btn btn-success pull-right">
-            Finish
-          </button>
+<section class="content">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">Serving</h3>
         </div>
-        <div ng-if="!server.serving">
-          <h3>Idle</h3>
-          <div class="well well-lg" jqyoui-droppable="{onDrop:'serveCustomer'}"
-            data-drop="true" ng-model="selected_queuers">
-            Drag customer here to serve or click 'Serve next customer'
+        <div class="box-body padding" style="display: block;">
+          <div ng-if="server.serving" bb-queues>
+            <h3>{{server.serving.first_name}}</h3>
+            <p>Appointment started at {{server.serving.start | datetime: "h:mma":false}}</p>
+            <p>Appointment due to finish at {{server.serving.end | datetime: "h:mma":false}}</p>
+            <button ng-click="extendAppointment(5)" class="btn btn-danger">
+              Extend
+            </button>
+            <button ng-click="finishServing()" class="btn btn-success pull-right">
+              Finish
+            </button>
           </div>
-          <button ng-click="serveNext()" class="btn btn-default">
-            Serve next customer
-          </button>
+          <div ng-if="!server.serving">
+            <h3>Idle</h3>
+            <div class="well well-lg" jqyoui-droppable="{onDrop:'serveCustomer'}"
+              data-drop="true" ng-model="selected_queuers">
+              Drag customer here to serve or click 'Serve next customer'
+            </div>
+            <button ng-click="serveNext()" class="btn btn-default">
+              Serve next customer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7" ng-if="booking">
+      <div class="box box-success">
+        <div class="box-body padding" style="display: block;">
+          <form name="modal_form" ng-submit="submit(modal_form)">
+            <div ng-show="loading" class="loader"></div>
+            <div class="modal-body" sf-schema="schema" sf-form="form"
+              sf-model="form_model" sf-options="{formDefaults: {feedback: false}}"
+              ng-hide="loading">
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-success" ng-disabled="loading"
+              value="Save and Finish Serving">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 pull-right">
+      <div class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">Queue</h3>
+          <div class="info-box info-box-small" ng-repeat="queuer in queuers" ng-if="queuer.position != 0">
+            <span class="info-box-icon"><i class="fa fa-user"></i></span>
+            <div class="info-box-content">
+              <b>{{queuer.position}}</b> {{queuer.first_name}} {{queuer.last_name}}<br/>
+              {{queuer.service_name}}<br/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="col-md-7" ng-if="booking">
-    <div class="box box-success">
-      <div class="box-body padding" style="display: block;">
-        <form name="modal_form" ng-submit="submit(modal_form)">
-          <div ng-show="loading" class="loader"></div>
-          <div class="modal-body" sf-schema="schema" sf-form="form"
-            sf-model="form_model" sf-options="{formDefaults: {feedback: false}}"
-            ng-hide="loading">
-          </div>
-          <div class="modal-footer">
-            <input type="submit" class="btn btn-success" ng-disabled="loading"
-            value="Save and Finish Serving">
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="col-md-2 pull-right" >
-    <div class="box box-success">
-      <div class="box-header with-border">
-        <h3 class="box-title">Queue</h3>
-
-        <div class="info-box info-box-small" ng-repeat="queuer in queuers" ng-if="queuer.position != 0" >
-          <span class="info-box-icon"><i class="fa fa-user"></i></span>
-
-          <div class="info-box-content">
-            <b>{{queuer.position}}</b> {{queuer.first_name}} {{queuer.last_name}}<br/>
-            {{queuer.service_name}}<br/>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
 </section>

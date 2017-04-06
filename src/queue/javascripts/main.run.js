@@ -35,9 +35,17 @@ angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNav
             }).state('queue.server', {
                 parent: 'queue',
                 url: "/server/:id",
+                resolve: {
+                    person(people, $stateParams) {
+                        return _.findWhere(people, {
+                            id: parseInt($stateParams.id),
+                            queuing_disabled: false
+                        });
+                    }
+                },
                 templateUrl: "queue/server.html",
-                controller($scope, $stateParams ) {
-                    return $scope.server_id = $stateParams.id;
+                controller($scope, $stateParams, person) {
+                    $scope.person = person;
                 }
             }).state('queue.calendar', {
                 parent: 'queue',
