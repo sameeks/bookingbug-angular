@@ -23,20 +23,47 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
     return directive;
 
     function link(scope, elem, attrs) {
+
+        scope.detailsButton = `<button class="btn btn-default btn-sm ng-scope" ng-click="grid.appScope.edit(row.entity.id)" translate="ADMIN_BOOKING.BOOKINGS_TABLE.DETAILS_BTN">Details</button>`
+
+
         let prepareColumnDefs = () => {
             return [
-                { displayName: 'Data/Time', field: 'client_name'},
-                { displayName: 'Description', field: 'person_name'}
+                { displayName: 'Data/Time', field: 'datetime', cellFilter: 'datetime: "ddd DD MMM YY h.mma"'},
+                { displayName: 'Description', field: 'details'},
+                {  // DETAILS BUTTON COLUMN
+                    field: 'detailsCell',
+                    displayName: '',
+                    width: 80,
+                    cellTemplate: scope.detailsButton
+                }
             ]
+        }
+
+        scope.$watch('bookings', () => {
+            if(scope.bookings && scope.bookings.length > 0) {
+               renderBookings(scope.bookings);
+            }
+        });
+
+        let renderBookings = (bookings) => {
+           setGridOptions(bookings);
         }
 
         let columnDefs = prepareColumnDefs();
 
         scope.gridOptions = {
-            enableSorting: true,
-            columnDefs: bbGridService.readyColumns(columnDefs),
-            onRegisterApi: function(gridApi) {
-                scope.gridApi = gridApi;
+            columnDefs: bbGridService.readyColumns(columnDefs)
+        }
+
+        let setGridOptions = (bookings) => {
+            scope.gridOptions = {
+                data: bookings,
+                enableSorting: true,
+                columnDefs: bbGridService.readyColumns(columnDefs),
+                onRegisterApi: (gridApi) => {
+                    scope.gridApi = gridApi;
+                }
             }
         }
     }

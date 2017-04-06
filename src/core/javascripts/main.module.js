@@ -15,6 +15,7 @@ angular.module('BB', [
     'ui.bootstrap',
     'ui.grid',
     'ui.grid.pagination',
+    'ui.grid.autoResize',
     'ui.map',
     'ui.router.util',
     'ui.select',

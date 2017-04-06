@@ -2,7 +2,7 @@ angular
     .module('BBAdminBooking')
     .controller('bbAdminMemberBookingsTableCtrl', bbAdminMemberBookingsTableCtrl);
 
-function bbAdminMemberBookingsTableCtrl($document, $scope, $uibModal,$rootScope, BBModel) {
+function bbAdminMemberBookingsTableCtrl($document, $scope, $uibModal,$rootScope, BBModel, ModalForm) {
     $scope.loading = true;
 
     if (!$scope.fields) {

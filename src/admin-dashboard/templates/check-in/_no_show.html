@@ -1,0 +1,10 @@
+<span ng-if="row.entity.hasStatus('no_show')">
+  <i class="fa fa-check-square"></i> {{row.entity.statusTime("no_show").format("LT")}}
+</span>
+
+<span ng-if="!row.entity.hasStatus('no_show') && !row.entity.hasStatus('checked_in')">
+  <button ng-click="grid.appScope.setStatus(row.entity, 'no_show')" class="btn btn-default btn-xs btn-block">
+    <i class="fa fa-square-o"></i>
+    <span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.NO_SHOW_BUTTON"></span>
+  </button>
+</span>

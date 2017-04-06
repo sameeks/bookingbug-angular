@@ -50,6 +50,7 @@ function BBClientsTable(bbGridService) {
             paginationPageSizes: [15],
             paginationPageSize: 15,
             useExternalPagination: true,
+            enableColumnMenus: false,
             columnDefs: bbGridService.readyColumns(columnDefs, customTemplates),
             onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
