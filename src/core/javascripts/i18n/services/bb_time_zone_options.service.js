@@ -40,6 +40,12 @@
             return timeZones;
         }
 
+        /**
+        * @ngdoc function
+        * @name mapSelectedTimeZone
+        * @methodOf BBAdminDashboard.Services:TimeZoneOptions
+        * @returns {String} Time zone identifier
+        */
         function mapSelectedTimeZone () {
             let selectedTimeZone;
 
