@@ -8,12 +8,13 @@
     */
     angular
         .module('BB.i18n')
-        .factory('bbTimeZoneOptions', timeZoneFactoryOptions);
+        .factory('bbTimeZoneOptions', timeZoneOptionsService);
 
-    function timeZoneFactoryOptions ($translate, orderByFilter, bbCustomTimeZones) {
+    function timeZoneOptionsService ($translate, orderByFilter, bbCustomTimeZones, bbTimeZone) {
 
         return {
-            generateTimeZoneList: generateTimeZoneList
+            generateTimeZoneList,
+            mapSelectedTimeZone
         };
 
         /**
@@ -26,12 +27,12 @@
         * @param {String} format
         * @returns {Array} A list of time zones
         */
-        function generateTimeZoneList (isMomentNames, limitToTimeZones, excludeTimeZones, format) {
+        function generateTimeZoneList (useMomentNames, limitToTimeZones, excludeTimeZones, format) {
             let timeZones = [];
 
-            let timeZoneNames = loadTimeZones(isMomentNames, limitToTimeZones, excludeTimeZones);
+            let timeZoneNames = loadTimeZones(useMomentNames, limitToTimeZones, excludeTimeZones);
             for (let [index, value] of timeZoneNames.entries()) {
-                timeZones.push(mapTimeZoneItem(value, index, format, isMomentNames));
+                timeZones.push(mapTimeZoneItem(value, index, format, useMomentNames));
             }
 
             timeZones = _.uniq(timeZones, (timeZone) => timeZone.display);
@@ -39,10 +40,22 @@
             return timeZones;
         }
 
-        function loadTimeZones (isMomentNames, limitToTimeZones, excludeTimeZones) {
+        function mapSelectedTimeZone () {
+            let selectedTimeZone;
+
+            const city = bbTimeZone.getDisplayTimeZone().match(/[^/]*$/)[0];
+            for (let [key, value] of Object.entries(bbCustomTimeZones.CUSTOM)) {
+                value = value.split(/\s*,\s*/).map((tz) => tz.replace(/ /g, "_")).join(', ').split(/\s*,\s*/);
+                _.each(value, (tz) => tz === city ? selectedTimeZone = key : null);
+            }
+
+            return selectedTimeZone || bbTimeZone.getDisplayTimeZone();
+        }
+
+        function loadTimeZones (useMomentNames, limitToTimeZones, excludeTimeZones) {
             let timeZoneNames = [];
 
-            if (isMomentNames) {
+            if (useMomentNames) {
                 timeZoneNames = moment.tz.names();
                 timeZoneNames = _.chain(timeZoneNames)
                     .filter((tz) => tz.indexOf('GMT') === -1)
@@ -50,7 +63,7 @@
                     .filter((tz) => tz.match(/[^/]*$/)[0] !== tz.match(/[^/]*$/)[0].toUpperCase())
                     .value();
             } else {
-                timeZoneNames = bbCustomTimeZones.NAMES;
+                timeZoneNames = Object.keys(bbCustomTimeZones.CUSTOM);
             }
 
             if (limitToTimeZones) timeZoneNames = updateTimeZoneNames(timeZoneNames, limitToTimeZones);

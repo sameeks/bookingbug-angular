@@ -28,6 +28,8 @@ module.exports = {
 
     "rules": {
 
+        "semi": "error",
+
         "block-spacing": "error", // warn if no space in braces like {key: val}
 
         "brace-style": ["error", "1tbs"], // warn for not using "one true brace style"

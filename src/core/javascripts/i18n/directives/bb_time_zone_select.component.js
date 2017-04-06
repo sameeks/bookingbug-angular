@@ -49,17 +49,18 @@
             $rootScope.connection_started ? $rootScope.connection_started.then(determineTimeZone) : determineTimeZone();
         };
 
-        function determineTimeZone() {
+        function determineTimeZone () {
             bbTimeZone.determineTimeZone();
-            ctrl.selectedTimeZone = _.find(ctrl.timeZones, (timeZone) => timeZone.value === bbTimeZone.getDisplayTimeZone());
+            const timeZone = ctrl.useMomentNames ? bbTimeZone.getDisplayTimeZone() : bbTimeZoneOptions.mapSelectedTimeZone();
+            ctrl.selectedTimeZone = _.find(ctrl.timeZones, (tz) => tz.value === timeZone);
         }
 
-        function automaticTimeZoneToggle() {
+        function automaticTimeZoneToggle () {
             updateTimeZone(ctrl.isAutomaticTimeZone ? moment.tz.guess() : CompanyStoreService.time_zone);
             $scope.$broadcast('UISelect:closeSelect');
         }
 
-        function updateTimeZone(timeZone) {
+        function updateTimeZone (timeZone) {
             if (timeZone === undefined) timeZone = ctrl.selectedTimeZone.value;
             ctrl.selectedTimeZone = _.find(ctrl.timeZones, (tz) => tz.value === timeZone);
             bbTimeZone.setDisplayTimeZone(timeZone, true);
@@ -68,7 +69,7 @@
 
         $scope.$on('BBLanguagePicker:languageChanged', languageChangedHandler);
 
-        function languageChangedHandler() {
+        function languageChangedHandler () {
             ctrl.$onInit();
         }
 

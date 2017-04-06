@@ -17,7 +17,7 @@
   </label>
   <!-- Standard ui-select -->
   <ui-select
-    ng-if="!$bbTimeZoneSelectCtrl.momentNames"
+    ng-if="!$bbTimeZoneSelectCtrl.useMomentNames"
     ng-model="$bbTimeZoneSelectCtrl.selectedTimeZone"
     theme="bootstrap"
     ng-disabled="$bbTimeZoneSelectCtrl.isAutomaticTimeZone"
@@ -40,7 +40,7 @@
   
   <!-- Using ui-select-choices-lazyload due to perfomance issues with big lists -->
   <ui-select
-    ng-if="$bbTimeZoneSelectCtrl.momentNames"
+    ng-if="$bbTimeZoneSelectCtrl.useMomentNames"
     ng-model="$bbTimeZoneSelectCtrl.selectedTimeZone"
     theme="bootstrap"
     ng-disabled="$bbTimeZoneSelectCtrl.isAutomaticTimeZone"
