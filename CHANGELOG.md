@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file using [CHANG
 
 ### Changed
   use_local_time_zone changed to set_time_zone_automatically - if set to true display_time_zone will be set using moment.guess()
+* BREAKING: bbAdminBookingClients directive is not exposing ValidatorService anymore to the view: $scope.validator. For any bespoke project which overrides template - `admin_booking_clients.html`, replace `validator.getEmailPattern()` with `emailPattern`. 
 
 ### Removed
  
