@@ -55,7 +55,9 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
         scope.gridOptions = {
             columnDefs: bbGridService.readyColumns(columnDefs),
             enableColumnMenus: false,
-            enableSorting: true
+            enableSorting: true,
+            paginationPageSizes: [15],
+            paginationPageSize: 15,
         }
 
         let setGridOptions = (bookings) => {
