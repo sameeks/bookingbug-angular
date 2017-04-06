@@ -24,9 +24,6 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
 
     function link(scope, elem, attrs) {
 
-        scope.detailsButton = `<button class="btn btn-default btn-sm ng-scope" ng-click="grid.appScope.edit(row.entity.id)" translate="ADMIN_BOOKING.BOOKINGS_TABLE.DETAILS_BTN">Details</button>`
-
-
         let prepareColumnDefs = () => {
             return [
                 { displayName: 'Data/Time', field: 'datetime', cellFilter: 'datetime: "ddd DD MMM YY h.mma"'},
@@ -35,7 +32,7 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
                     field: 'detailsCell',
                     displayName: '',
                     width: 80,
-                    cellTemplate: scope.detailsButton
+                    cellTemplate: 'bookings_table_action_button.html'
                 }
             ]
         }
