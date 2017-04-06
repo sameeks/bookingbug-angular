@@ -1,141 +1,22 @@
-@import "bootstrap-variables";
+@import "queue-servers";
+@import "queue-add-customer";
 
 .info-box.info-box-sm {
-    min-height: 45px;
-    small {
-        font-size: 12px;
-    }
-    margin-bottom: 8px;
-    .info-box-icon {
-        height: 45px;
-        width: 45px;
-        font-size: 24px;
-        line-height: 45px;
-    }
-    .info-box-content {
-        margin-left: 45px;
-    }
-}
-
-#bb {
-
- .loginWrapper {
-    background-image: none;
-    background-color: #FFF;
+  min-height: 45px;
+  small {
+      font-size: 12px;
   }
-
-
-  &.skin-default
-  {
-    .main-header .navbar {
-      background-color: #0065A4;
-    }
-    .main-header .navbar .sidebar-toggle {
-      background-color: #0065A4;
-
-      &:hover {background-color:#00578F;}
-    }.sidebar-menu > li.active {
-        border-left: 3px solid #0065A4;
-    }
-
-    .main-header .logo
-    {
-      background: url("images/bb-logo.svg") no-repeat center center
-    }
+  margin-bottom: 8px;
+  .info-box-icon {
+      height: 45px;
+      width: 45px;
+      font-size: 24px;
+      line-height: 45px;
+  }
+  .info-box-content {
+      margin-left: 45px;
   }
 }
-
-
-
-.jvectormap-marker {
-    -webkit-animation: pulsate 1s ease-in;
-    -webkit-animation-iteration-count: 5;
-    opacity: 1.0
-}
-@-webkit-keyframes pulsate {
-    0% { opacity: 1.0;}
-    50% {opacity: 0.3;}
-    100% { opacity: 1.0;}
-}
-
-
-
-.blank_row {
-   margin:5px 0px;
-   width:100%;
-   border:3px solid #CCC;
-   border-radius: 5px;
-   padding:20px 7px;
-   text-align: center;
-   i {
-    font-size:30px;
-    color:#444;
-    font-weight: bold;
-    color:#CCC;
-    margin:4px;
-   }
-   &:hover {
-      cursor: pointer;
-      border:3px solid #999;
-      background-color: #BBB;
-      i {
-        color:#FFF;
-      }
-   }
-}
-
-
-.blank_panel {
-   margin:5px 0px;
-   width:100%;
-   border:3px solid #CCC;
-   border-radius: 5px;
-   padding:50px 7px;
-   text-align: center;
-   i {
-    font-size:30px;
-    color:#444;
-    font-weight: bold;
-    width:30px;
-    color: #CCC;
-    margin:4px;
-   }
-   &:hover {
-      cursor: pointer;
-      border:3px solid #999;
-      background-color: #BBB;
-      i {
-        color:#FFF;
-      }
-   }
-}
-
-.treeview {
-  li {
-    padding-left:10px;
-  }
-  li.leaf {
-    cursor: pointer;
-    &:hover {color:#008;}
-    line-height:20px;
-  }
-  li span {
-    cursor: pointer;
-    &:hover {color:#008;}
-    line-height:20px;
-    i {margin-right:4px; width:20px;height:20px;}
-  }
-}
-
-.hold_page {
-  border:1px solid #CCC;
-  border-radius:10px;
-  padding:120px 10px;
-  color:#CCC;
-  font-size:20px;
-  text-align:center;
-}
-
 
 .qline_due {
   float:right;
@@ -158,147 +39,8 @@
   float:left;
 }
 
-.header-q{
-  text-align: center;
-}
-.list_body{
-  background: url(images/homepage_winter.jpg) no-repeat fixed center top;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  padding-left: 40px;
-  padding-right: 40px;
-  .header-q{
-    margin-left: -30px;
-    margin-right: -30px;
-  }
-  .grey_box{
-    position: fixed;
-    top: 0;
-    right: 45%;
-    height: 1000px;
-    width: 2000px;
-    background-color: #323232;
-    transform: rotate(105deg);
-  }
-  .tex-header-q{
-    color: white;
-  }
-}
-.tex-header-q{
-  padding-top: 30px;
-}
-.title-block{
-  background-color: black;
-  text-align: center;
-  padding: 8px 15px 0 15px;
-  color: white;
-}
-.list-row{
-  font-size: 1.5vw;
-  &:nth-child(even){
-    background-color: #b5b5b5;
-  }
-  &:nth-child(odd){
-    background-color: #CCC;
-  }
-  div{
-    text-align: center;
-    color: black;
-    border: 1px solid black;
-    background-color: white;
-    padding: 10px 20px 10px 20px;
-  }
-}
-.fullscreen-toolbox{
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px;
-  a{
-    color: black;
-    padding: 5px;
-    &:hover{
-      .fa{
-        transform: scale(1.25);
-        transition: 0.2s;
-      }
-      transition: 1s;
-      color: blue;
-    }
-  }
-  z-index: 999;
-}
-.list-block{
-  margin-bottom: 20px;
-}
-.img-q{
-  float: right;
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-#listBody{
-  z-index: 999;
-}
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
-}
-.serving{
-  div{
-    border-color: green !important;
-  }
-}
-#loading-bar{
-  position: relative;
-  width: 100%;
-  height: 5px;
-}
-#loading-progress{
-  position: absolute;
-  height: 100%;
-  background-color: #3982f0;
-  background: red; /* For browsers that do not support gradients */
-  background: -webkit-linear-gradient(left, #E28D33 , #00B0F4); /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(right, #E28D33, #00B0F4); /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(right, #E28D33, #00B0F4); /* For Firefox 3.6 to 15 */
-  background: linear-gradient(to right, #E28D33 , #00B0F4); /* Standard syntax */
-}
-.bar{
-  background-color: black;
-}
-.loading-pecent{
-  text-align: center
-}
-
 .waiting-queuer .ticket-number {
   float: left;
   font-size: 20pt;
   padding-right: 7px;
-}
-
-[bb-queue-servers] {
-  .btn {
-    margin-top: 12px;
-  }
-  .btn-group {
-    margin-right: 6px;
-  }
-
-  .info-box-content {
-    .server-info {
-      min-height: 50px;
-    }
-  }
-}
-
-.add-customer {
-  .box-footer {
-    input.btn {
-      margin-left: 6px;
-    }
-  }
 }

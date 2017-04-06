@@ -1,5 +1,5 @@
-<div ng-repeat="queuer in queues[0].waiting_queuers" >
-  <div class="col-md-12 waiting-queuer", ng-if="queuer.type == 'Q'">
+<div ng-repeat="queuer in queues[0].waiting_queuers">
+  <div class="col-md-12 waiting-queuer" ng-if="queuer.type == 'Q'">
     <div ng-click="selectQueuer(queuer.data)" class="info-box info-box-sm bg-green"
       ng-class="{selected: (selected_queuer == queuer.data)}" >
       <span class="info-box-icon"><i class="fa fa-user"></i></span>
@@ -17,7 +17,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-12", ng-if="queuer.type == 'B'">
+  <div class="col-md-12" ng-if="queuer.type == 'B'">
     <div  class="info-box info-box-sm bg-yellow" >
       <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
       <div class="info-box-content">
