@@ -1,4 +1,4 @@
-[bb-queue-servers] {
+[bb-server-list-item] {
   .btn {
     margin-top: 12px;
   }
@@ -10,6 +10,12 @@
     .server-info {
       min-height: 50px;
     }
+  }
+
+  .loader {
+    height: 60px;
+    width: 60px;
+    background-size: 60px 60px;
   }
 }
 

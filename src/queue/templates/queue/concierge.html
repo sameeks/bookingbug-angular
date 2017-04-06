@@ -1,7 +1,14 @@
 <section class="content">
   <div bb-queue-dashboard class="queue_admin">
     <div class="row">
-      <div bb-queue-servers class="col-md-5 server_column"></div>
+      <div class="col-md-5 server_column">
+        <div class="info-box info-box-sm"  ng-repeat="person in servers" ng-class="{serve: (selected_queuer
+          && !person.serving && person.attendance_status == 1), no_serve: (selected_queuer &&
+          person.serving), over: person.hover }"  jqyoui-droppable="{onDrop:'dropQueuer(person, false)',
+          onOver:'hoverOver(person, true)', onOut:'hoverOver(person, false)'}" data-drop="true"
+          bb-server-list-item>
+        </div>
+      </div>
 
       <div bb-queue-add-customer services="services" servers="servers" company="company"
         class="col-md-7"></div>

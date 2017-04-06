@@ -1,0 +1,94 @@
+<a ui-sref="queue.server({id: person.id})">
+  <span class="info-box-icon" ng-class="{
+  'bg-light-blue':person.attendance_status == 3,
+  'bg-orange':person.attendance_status == 4 && person.serving.end.isAfter(),
+  'bg-red':person.attendance_status == 4 && person.serving.end.isBefore(),
+  'bg-gray': (person.attendance_status == 2 || person.attendance_status == 2  || !person.attendance_status) ,
+  'bg-green': person.attendance_status == 1,
+    }"
+  ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-user"> </i></span>
+</a>
+
+<div class="loader pull-right" ng-show="loadingServer"></div>
+
+<div class="btn-group pull-right" uib-dropdown ng-hide="person.serving || loadingServer">
+  <button type="button" class="btn btn-info" uib-dropdown-toggle>Actions</button>
+  <button type="button" class="btn btn-info dropdown-toggle" uib-dropdown-toggle aria-expanded="false">
+    <span class="caret"></span>
+    <span class="sr-only">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+    <li><a ng-click="setAttendance(person, 1)" ng-if="person.attendance_status == 4 && !person.serving">Set Free</a></li>
+    <li><a ng-click="setAttendance(person, 1)" ng-if="person.attendance_status == 0 || !person.attendance_status">Set as Available</a></li>
+    <li><a ng-click="setAttendance(person, 1)" ng-if="person.attendance_status == 2">Available / End Break</a></li>
+    <li><a ng-click="setAttendance(person, 0)" ng-if="person.attendance_status == 1">End Shift</a></li>
+
+    <li class="divider" ng-if="person.attendance_status == 1"></li>
+    <li><a ng-click="setAttendance(person, 2, 15)" ng-if="person.attendance_status == 1">On Break for {{15 | time_period}}</a></li>
+    <li><a ng-click="setAttendance(person, 2, 30)" ng-if="person.attendance_status == 1">On Break for {{30 | time_period}}</a></li>
+    <li><a ng-click="setAttendance(person, 2, 45)" ng-if="person.attendance_status == 1">On Break for {{45 | time_period}}</a></li>
+    <li><a ng-click="setAttendance(person, 2, 45)" ng-if="person.attendance_status == 1">On Break for {{60 | time_period}}</a></li>
+
+    <li class="divider" ng-if="person.attendance_status == 1"></li>
+    <li><a ng-click="setAttendance(person, 4, 15)" ng-if="person.attendance_status == 1">Mark as busy for {{15 | time_period}}</a></li>
+    <li><a ng-click="setAttendance(person, 4, 30)" ng-if="person.attendance_status == 1">Mark as busy for {{30 | time_period}}</a></li>
+    <li><a ng-click="setAttendance(person, 4, 45)" ng-if="person.attendance_status == 1">Mark as busy for {{45 | time_period}}</a></li>
+    <li><a ng-click="setAttendance(person, 4, 45)" ng-if="person.attendance_status == 1">Mark as busy for {{60 | time_period}}</a></li>
+
+  </ul>
+</div>
+
+<div class="btn-group pull-right" ng-hide="loadingServer">
+  <button type="button" class="btn btn-success"
+    ng-click="finishServingQueuer({person: person, outcomes: true})"
+    ng-if="person && person.$has('finish_serving') && person.serving">
+    Finish Serving
+  </button>
+  <button type="button" class="btn btn-success"
+    ng-click="startServingQueuer(person, selected_queuer)"
+    ng-if="selected_queuer && !person.serving && person.attendance_status == 1">
+    Serve {{selected_queuer.first_name}}
+  </button>
+  <button type="button" class="btn btn-success" ng-click="startServingQueuer(person, nil)"
+    ng-if="!selected_queuer && !person.serving && person.attendance_status == 1"
+    ng-disabled="waiting_queuers.length == 0">
+    Serve Next
+  </button>
+</div>
+<div class="btn-group pull-right" ng-hide="loadingServer"
+  ng-if="person && person.$has('finish_serving') && person.serving">
+  <button type="button" class="btn btn-warning"
+    ng-click="finishServingQueuer({person: person, status: 'absent', outcomes: false})">
+    Mark Absent
+  </button>
+</div>
+
+<div class="info-box-content">
+  <div class="server-info">
+    <span class="info-box-text">
+      <b>{{person.name}}</b>
+    </span>
+    <span class="info-box-number"></span>
+    <div ng-if="person.attendance_status == 1">
+       <div class="">Available</div>
+    </div>
+    <div ng-if="person.attendance_status == 2 && person.estimated_return">
+      <div class="">On break until {{person.estimated_return}}. <small>(estimated)</small></div>
+    </div>
+    <div ng-if="person.attendance_status == 4 && !person.serving && person.estimated_return">
+      <div class="">Busy until {{person.estimated_return}}. <small>(estimated)</small></div>
+    </div>
+
+    <div ng-if="person.serving">
+       <div class="">
+         Serving: <small>{{person.serving.first_name}} ({{person.serving.service_name}})</small>
+       </div>
+       <div class="">
+         Since: <small>{{person.serving.start.format("LT")}}</small>
+       </div>
+       <div ng-class="{red: person.serving.end.isBefore()}">
+         Finish Estimate: <small>{{person.serving.end.format("LT")}}</small>
+       </div>
+    </div>
+  </div>
+</div>
