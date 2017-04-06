@@ -7,6 +7,7 @@ angular.module('BB.Models').factory("AdminQueuerModel", function($q, BBModel, Ba
             this.start = moment.parseZone(this.start);
             this.due = moment.parseZone(this.due);
             this.end = moment(this.start).add(this.duration, 'minutes');
+            this.created_at = moment.parseZone(this.created_at);
         }
 
         remaining() {
