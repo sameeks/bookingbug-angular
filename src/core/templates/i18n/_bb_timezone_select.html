@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" ng-if="!$bbTimeZoneSelectCtrl.hideToggle">
   <label>
     <span translate="CORE.TIMEZONE.SET_TIMEZONE_AUTOMATICALLY_LABEL"></span>
   </label>
@@ -28,6 +28,7 @@
     </ui-select-match>
 
     <ui-select-choices
+      ui-select-choices-listener
       refresh-delay="0"
       repeat="
         timezone as timezone in $bbTimeZoneSelectCtrl.timeZones |

@@ -22,9 +22,10 @@
         .component('bbTimeZoneSelect', {
             templateUrl: 'i18n/_bb_timezone_select.html',
             bindings: {
-                momentNames: '<',
-                limitTo: '<',
-                exclude: '<',
+                hideToggle: '<',
+                useMomentNames: '<',
+                limitToTimeZones: '<',
+                excludeTimeZones: '<',
                 format: '<'
             },
             controller: TimeZoneSelectCtrl,
@@ -41,7 +42,7 @@
         ctrl.selectedTimeZone = null;
 
         ctrl.$onInit = function () {
-            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.momentNames, ctrl.limitTo, ctrl.exclude, ctrl.format); //TODO should be more customisable
+            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.useMomentNames, ctrl.limitToTimeZones, ctrl.excludeTimeZones, ctrl.format); //TODO should be more customisable
             ctrl.updateTimeZone = updateTimeZone;
             ctrl.automaticTimeZoneToggle = automaticTimeZoneToggle;
             if (bbi18nOptions.use_browser_time_zone && $localStorage.getItem('bbTimeZone') === undefined) ctrl.isAutomaticTimeZone = true;

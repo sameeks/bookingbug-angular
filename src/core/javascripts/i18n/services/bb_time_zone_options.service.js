@@ -26,12 +26,12 @@
         * @param {String} format
         * @returns {Array} A list of time zones
         */
-        function generateTimeZoneList (momentNames, limitTo, exclude, format) {
+        function generateTimeZoneList (isMomentNames, limitToTimeZones, excludeTimeZones, format) {
             let timeZones = [];
 
-            let timeZoneNames = loadTimeZones(momentNames, limitTo, exclude);
+            let timeZoneNames = loadTimeZones(isMomentNames, limitToTimeZones, excludeTimeZones);
             for (let [index, value] of timeZoneNames.entries()) {
-                timeZones.push(mapTimeZoneItem(value, index, format, momentNames));
+                timeZones.push(mapTimeZoneItem(value, index, format, isMomentNames));
             }
 
             timeZones = _.uniq(timeZones, (timeZone) => timeZone.display);
@@ -39,10 +39,10 @@
             return timeZones;
         }
 
-        function loadTimeZones (momentNames, limitTo, exclude) {
+        function loadTimeZones (isMomentNames, limitToTimeZones, excludeTimeZones) {
             let timeZoneNames = [];
 
-            if (momentNames) {
+            if (isMomentNames) {
                 timeZoneNames = moment.tz.names();
                 timeZoneNames = _.chain(timeZoneNames)
                     .filter((tz) => tz.indexOf('GMT') === -1)
@@ -53,8 +53,8 @@
                 timeZoneNames = bbCustomTimeZones.NAMES;
             }
 
-            if (limitTo) timeZoneNames = updateTimeZoneNames(timeZoneNames, limitTo);
-            if (exclude) timeZoneNames = updateTimeZoneNames(timeZoneNames, exclude, true);
+            if (limitToTimeZones) timeZoneNames = updateTimeZoneNames(timeZoneNames, limitToTimeZones);
+            if (excludeTimeZones) timeZoneNames = updateTimeZoneNames(timeZoneNames, excludeTimeZones, true);
 
             return timeZoneNames;
         }
