@@ -53,14 +53,14 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
         let columnDefs = prepareColumnDefs();
 
         scope.gridOptions = {
-            columnDefs: bbGridService.readyColumns(columnDefs)
+            columnDefs: bbGridService.readyColumns(columnDefs),
+            enableColumnMenus: false,
+            enableSorting: true
         }
 
         let setGridOptions = (bookings) => {
             scope.gridOptions = {
                 data: bookings,
-                enableSorting: true,
-                columnDefs: bbGridService.readyColumns(columnDefs),
                 onRegisterApi: (gridApi) => {
                     scope.gridApi = gridApi;
                 }
