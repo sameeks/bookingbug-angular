@@ -1,5 +1,5 @@
 angular
-    .module('BBAdminBooking')
+    .module('BBAdminDashboard.clients.directives')
     .directive('bbAdminMemberBookingsTable', bbAdminMemberBookingsTable);
 
 function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup, bbGridService) {

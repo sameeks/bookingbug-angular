@@ -1,5 +1,5 @@
 angular
-    .module('BBAdminBooking')
+    .module('BBAdminDashboard.clients.controllers')
     .controller('bbAdminMemberBookingsTableCtrl', bbAdminMemberBookingsTableCtrl);
 
 function bbAdminMemberBookingsTableCtrl($document, $scope, $uibModal,$rootScope, BBModel, ModalForm) {
