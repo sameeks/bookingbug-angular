@@ -8,14 +8,11 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $timeout, $comp
         link,
         templateUrl: 'admin_member_bookings_table.html',
         scope: {
-            apiUrl: '@',
-            fields: '=?',
             member: '=',
             startDate: '=?',
             startTime: '=?',
             endDate: '=?',
             endTime: '=?',
-            defaultOrder: '=?',
             period: '@',
             options: '='
         }
