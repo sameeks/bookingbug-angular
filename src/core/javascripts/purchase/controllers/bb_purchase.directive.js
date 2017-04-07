@@ -1,24 +1,21 @@
-(() => {
-
-    angular
-        .module('BB.Directives')
-        .directive('bbPurchase', BBPurchase)
+angular
+    .module('BB.Directives')
+    .directive('bbPurchase', BBPurchase)
 
 
-    function BBPurchase() {
-        let directive = {
-            restrict: 'AE',
-            replace: true,
-            scope: true,
-            controller: 'Purchase',
-            link
-        }
-
-        return directive;
-
-        function link(scope, element, attrs) {
-            scope.initPurchase(scope.$eval(attrs.bbPurchase));
-        }
+function BBPurchase() {
+    let directive = {
+        restrict: 'AE',
+        replace: true,
+        scope: true,
+        controller: 'Purchase',
+        link
     }
 
-})();
+    return directive;
+
+    function link(scope, element, attrs) {
+        scope.initPurchase(scope.$eval(attrs.bbPurchase));
+    }
+}
+

@@ -1,18 +1,15 @@
-(() => {
+angular
+    .module('BB.Directives')
+    .directive('bbMoveBooking', MoveBooking);
 
-    angular
-        .module('BB.Directives')
-        .directive('bbMoveBooking', MoveBooking);
+function MoveBooking() {
+    let directive = {
+        scope: true,
+        controller: 'bbMoveBookingController',
+        controllerAs: '$bbMoveBookingCtrl'
+    }
 
-        function MoveBooking() {
-            let directive = {
-                scope: true,
-                controller: 'bbMoveBookingController',
-                controllerAs: '$bbMoveBookingCtrl'
-            }
-
-            return directive;
-        }
+    return directive;
+}
 
 
-})();

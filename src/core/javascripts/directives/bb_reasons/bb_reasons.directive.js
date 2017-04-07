@@ -1,18 +1,16 @@
-(() => {
-
-    angular
-        .module('BB.Directives')
-        .directive('bbReasons', BBReasons);
+angular
+    .module('BB.Directives')
+    .directive('bbReasons', BBReasons);
 
 
-    function BBReasons() {
-        let directive = {
-            controller: 'bbReasonsController',
-            controllerAs: '$bbReasonsCtrl'
-        }
-
-        return directive;
+function BBReasons() {
+    let directive = {
+        controller: 'bbReasonsController',
+        controllerAs: '$bbReasonsCtrl'
     }
 
+    return directive;
+}
 
-})();
+
+
