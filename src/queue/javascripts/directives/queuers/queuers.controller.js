@@ -18,23 +18,14 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
         , function(err) {
             $scope.waiting_for_queuers = false;
             $log.error(err.data);
-            return $scope.loading = false;
+            $scope.loading = false;
         });
 
         let queue_prom = AdminQueueService.query(params);
         proms.push(queue_prom);
         queue_prom.then(queues => $scope.new_queues = queues);
 
-        let queuingAndAppointments = true;
-        if (queuingAndAppointments) { // we should add a flag it to see fi the are doing queueing and booking together so this can be optimised
-            let bookings_prom = $scope.getAppointments(null, null, null, null, null, true);
-            proms.push(bookings_prom);
-            bookings_prom.then(bookings => $scope.bookings = bookings);
-        } else {
-            $scope.bookings = [];
-        }
-
-        return $q.all(proms).then(function() {
+        $q.all(proms).then(function() {
             $scope.queuers = $scope.new_queuers;
             $scope.queues = $scope.new_queues;
             $scope.waiting_queuers = [];
@@ -42,16 +33,6 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
                 queuer.remaining();
                 if (queuer.position > 0) {
                     $scope.waiting_queuers.push({type: "Q", data: queuer, position: queuer.position});
-                }
-            }
-
-            for (let booking of Array.from($scope.bookings)) {
-                if ((booking.status === 4) && !booking.hasStatus('being_seen') && !booking.hasStatus('no_show')) {
-                    if (booking.settings.queue_position) {
-                        $scope.waiting_queuers.push({type: "B", data: booking, position: booking.settings.queue_position});
-                    } else {
-                        $scope.waiting_queuers.push({type: "B", data: booking, position: 100});
-                    }
                 }
             }
 
@@ -68,11 +49,11 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
                 q.waiting_queuers = _.sortBy(q.waiting_queuers, x => x.position);
             }
 
-            return $scope.loading = false;
+            $scope.loading = false;
         }, function(err) {
             $scope.waiting_for_queuers = false;
             $log.error(err.data);
-            return $scope.loading = false;
+            $scope.loading = false;
         });
     };
 
@@ -122,7 +103,7 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
                     bookings.push(item);
                 }
             }
-            return defer.resolve((bookings));
+            defer.resolve((bookings));
         }, err => defer.reject(err));
         return defer.promise;
     };
@@ -130,8 +111,8 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
     $scope.setStatus = (booking, status) => {
         let clone = _.clone(booking);
         clone.current_multi_status = status;
-        return booking.$update(clone).then(res => {
-            $scope.getQueuers()
+        booking.$update(clone).then(res => {
+            $scope.getQueuers();
         }, (err) => {
             AlertService.danger({msg: 'Something went wrong'});
         });
@@ -144,19 +125,19 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
             new_rel: 'new_queuer',
             post_rel: 'queuers',
             success(queuer) {
-                return $scope.queuers.push(queuer);
+                $scope.queuers.push(queuer);
             }
         });
-    }
+    };
 
     $scope.getQueuers();
 
     // this is used to retrigger a scope check that will update service time
-    return $interval(function() {
+    $interval(function() {
         if ($scope.queuers) {
-            return Array.from($scope.queuers).map((queuer) => queuer.remaining());
+            Array.from($scope.queuers).map((queuer) => queuer.remaining());
         }
     }, 5000);
-}
+};
 
 angular.module('BBQueue.controllers').controller('bbQueuers', QueuersController);
