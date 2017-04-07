@@ -26,15 +26,17 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
 
         let prepareColumnDefs = () => {
             return [
-                { displayName: 'Data/Time', field: 'datetime', cellFilter: 'datetime: "ddd DD MMM YY h.mma"'},
-                { displayName: 'Description', field: 'details'},
+                { displayName: 'Data/Time', field: 'datetime', cellFilter: 'datetime: "ddd DD MMM YY h.mma"', width: '25%'},
+                { displayName: 'Description', field: 'details', width: '65%'},
                 {  // DETAILS BUTTON COLUMN
                     field: 'detailsCell',
                     displayName: '',
-                    width: 80,
+                    width: '10%',
                     cellTemplate: 'bookings_table_action_button.html'
                 }
             ]
+
+            scope.gridApi.core.handleWindowResize();
         }
 
         scope.$watch('bookings', () => {
@@ -55,6 +57,7 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
             enableSorting: true,
             paginationPageSizes: [15],
             paginationPageSize: 15,
+            rowHeight: 50
         }
 
         let setGridOptions = (bookings) => {
