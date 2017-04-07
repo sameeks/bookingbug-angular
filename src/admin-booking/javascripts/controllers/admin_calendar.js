@@ -4,7 +4,7 @@ angular.module('BB.Directives').directive('bbAdminCalendar', () => {
             replace: true,
             scope: true,
             controller: 'BBAdminCalendarCtrl'
-        }
+        };
     }
 );
 

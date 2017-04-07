@@ -47,7 +47,7 @@ angular.module('BBAdminBooking').factory('AdminMoveBookingPopup', ($uibModal, $t
                         return err;
                     });
             }
-        }
+        };
 
     }
 );
