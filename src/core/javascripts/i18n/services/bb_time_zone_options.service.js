@@ -13,8 +13,7 @@
     function timeZoneOptionsService ($translate, orderByFilter, bbCustomTimeZones, bbTimeZone) {
 
         return {
-            generateTimeZoneList,
-            mapSelectedTimeZone
+            generateTimeZoneList
         };
 
         /**
@@ -27,10 +26,10 @@
         * @param {String} format
         * @returns {Array} A list of time zones
         */
-        function generateTimeZoneList (useMomentNames, limitToTimeZones, excludeTimeZones, format) {
+        function generateTimeZoneList (useMomentNames, limitTimeZones, excludeTimeZones, format) {
             let timeZones = [];
 
-            let timeZoneNames = loadTimeZones(useMomentNames, limitToTimeZones, excludeTimeZones);
+            let timeZoneNames = loadTimeZones(useMomentNames, limitTimeZones, excludeTimeZones);
             for (let [index, value] of timeZoneNames.entries()) {
                 timeZones.push(mapTimeZoneItem(value, index, format, useMomentNames));
             }
@@ -40,25 +39,7 @@
             return timeZones;
         }
 
-        /**
-        * @ngdoc function
-        * @name mapSelectedTimeZone
-        * @methodOf BBAdminDashboard.Services:TimeZoneOptions
-        * @returns {String} Time zone identifier
-        */
-        function mapSelectedTimeZone () {
-            let selectedTimeZone;
-
-            const city = bbTimeZone.getDisplayTimeZone().match(/[^/]*$/)[0];
-            for (let [key, value] of Object.entries(bbCustomTimeZones.CUSTOM)) {
-                value = value.split(/\s*,\s*/).map((tz) => tz.replace(/ /g, "_")).join(', ').split(/\s*,\s*/);
-                _.each(value, (tz) => tz === city ? selectedTimeZone = key : null);
-            }
-
-            return selectedTimeZone || bbTimeZone.getDisplayTimeZone();
-        }
-
-        function loadTimeZones (useMomentNames, limitToTimeZones, excludeTimeZones) {
+        function loadTimeZones (useMomentNames, limitTimeZones, excludeTimeZones) {
             let timeZoneNames = [];
 
             if (useMomentNames) {
@@ -69,10 +50,10 @@
                     .filter((tz) => tz.match(/[^/]*$/)[0] !== tz.match(/[^/]*$/)[0].toUpperCase())
                     .value();
             } else {
-                timeZoneNames = Object.keys(bbCustomTimeZones.CUSTOM);
+                timeZoneNames = Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES);
             }
 
-            if (limitToTimeZones) timeZoneNames = updateTimeZoneNames(timeZoneNames, limitToTimeZones);
+            if (limitTimeZones) timeZoneNames = updateTimeZoneNames(timeZoneNames, limitTimeZones);
             if (excludeTimeZones) timeZoneNames = updateTimeZoneNames(timeZoneNames, excludeTimeZones, true);
 
             return timeZoneNames;

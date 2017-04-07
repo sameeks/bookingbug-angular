@@ -21,7 +21,7 @@
     ng-model="$bbTimeZoneSelectCtrl.selectedTimeZone"
     theme="bootstrap"
     ng-disabled="$bbTimeZoneSelectCtrl.isAutomaticTimeZone"
-    ng-change="$bbTimeZoneSelectCtrl.updateTimeZone();">
+    ng-change="$bbTimeZoneSelectCtrl.updateTimeZone($bbTimeZoneSelectCtrl.selectedTimeZone.value, true);">
 
     <ui-select-match placeholder="Select timezone">
       {{$select.selected.display}}
@@ -44,7 +44,7 @@
     ng-model="$bbTimeZoneSelectCtrl.selectedTimeZone"
     theme="bootstrap"
     ng-disabled="$bbTimeZoneSelectCtrl.isAutomaticTimeZone"
-    ng-change="$bbTimeZoneSelectCtrl.updateTimeZone();">
+    ng-change="$bbTimeZoneSelectCtrl.updateTimeZone($bbTimeZoneSelectCtrl.selectedTimeZone.value, true);">
 
     <ui-select-match placeholder="Select timezone">
       {{$select.selected.display}}

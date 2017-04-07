@@ -11,8 +11,8 @@
      *
      * @example
      * <example>
-     *   <bb-time-zone-select moment-names="true" limit-to="'Europe'" exclude="'Berlin'"></bb-time-zone-select>
-     *   <bb-time-zone-select moment=names="true" limit-to="['Asia', 'America']"></bb-time-zone-select>
+     *   <bb-time-zone-select moment-names="true" limit-time-zones="'Europe'" exclude="'Berlin'"></bb-time-zone-select>
+     *   <bb-time-zone-select moment=names="true" limit-time-zones="['Asia', 'America']"></bb-time-zone-select>
      *   <bb-time-zone-select moment-names="true" format="'(GMT offset-hours) location (tz-code)'"
      * </example>
      */
@@ -24,7 +24,7 @@
             bindings: {
                 hideToggle: '<',
                 useMomentNames: '<',
-                limitToTimeZones: '<',
+                limitTimeZones: '<',
                 excludeTimeZones: '<',
                 format: '<'
             },
@@ -42,7 +42,7 @@
         ctrl.selectedTimeZone = null;
 
         ctrl.$onInit = function () {
-            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.useMomentNames, ctrl.limitToTimeZones, ctrl.excludeTimeZones, ctrl.format); //TODO should be more customisable
+            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.useMomentNames, ctrl.limitTimeZones, ctrl.excludeTimeZones, ctrl.format); //TODO should be more customisable
             ctrl.updateTimeZone = updateTimeZone;
             ctrl.automaticTimeZoneToggle = automaticTimeZoneToggle;
             if (bbi18nOptions.use_browser_time_zone && $localStorage.getItem('bbTimeZone') === undefined) ctrl.isAutomaticTimeZone = true;
@@ -51,19 +51,18 @@
 
         function determineTimeZone () {
             bbTimeZone.determineTimeZone();
-            const timeZone = ctrl.useMomentNames ? bbTimeZone.getDisplayTimeZone() : bbTimeZoneOptions.mapSelectedTimeZone();
-            ctrl.selectedTimeZone = _.find(ctrl.timeZones, (tz) => tz.value === timeZone);
+            ctrl.selectedTimeZone = _.find(ctrl.timeZones, (tz) => tz.value === bbTimeZone.getDisplayTimeZone());
         }
 
         function automaticTimeZoneToggle () {
-            updateTimeZone(ctrl.isAutomaticTimeZone ? moment.tz.guess() : CompanyStoreService.time_zone);
+            const timeZone = ctrl.isAutomaticTimeZone ? moment.tz.guess() : bbTimeZone.findTimeZoneKey(CompanyStoreService.time_zone);
+            updateTimeZone(timeZone, false);
             $scope.$broadcast('UISelect:closeSelect');
         }
 
-        function updateTimeZone (timeZone) {
-            if (timeZone === undefined) timeZone = ctrl.selectedTimeZone.value;
+        function updateTimeZone (timeZone, updateLocalStorage) {
             ctrl.selectedTimeZone = _.find(ctrl.timeZones, (tz) => tz.value === timeZone);
-            bbTimeZone.setDisplayTimeZone(timeZone, true);
+            bbTimeZone.setDisplayTimeZone(timeZone, ctrl.useMomentNames, updateLocalStorage);
             $rootScope.$broadcast('BBTimeZoneOptions:timeZoneChanged', timeZone);
         }
 

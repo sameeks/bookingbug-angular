@@ -3,7 +3,7 @@
     angular
         .module('BB.i18n')
         .constant('bbCustomTimeZones', {
-            CUSTOM: {
+            GROUPED_TIME_ZONES: {
                 'Africa/Cairo': 'Cairo',
                 'Africa/Casablanca': 'Monrovia',
                 'Africa/Harare': 'Harare, Pretoria',
