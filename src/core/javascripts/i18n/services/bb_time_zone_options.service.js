@@ -99,9 +99,9 @@
         function formatDisplayValue(city, momentTz, format, isMomentNames) {
 
             const formatMap = {
-                'tz-code': $translate.instant(`COMMON.TIMEZONE_LOCATIONS.CODES.${momentTz.format('zz')}`),
+                'tz-code': $translate.instant(`I18N.TIMEZONE_LOCATIONS.CODES.${momentTz.format('zz')}`),
                 'offset-hours': momentTz.format('Z'),
-                'location': $translate.instant(`COMMON.TIMEZONE_LOCATIONS.${isMomentNames ? 'MOMENT' : 'CUSTOM'}.${city}`)
+                'location': $translate.instant(`I18N.TIMEZONE_LOCATIONS.${isMomentNames ? 'MOMENT' : 'CUSTOM'}.${city}`)
             };
 
             if (!format) return `(GMT ${formatMap['offset-hours']}) ${formatMap.location}`;
