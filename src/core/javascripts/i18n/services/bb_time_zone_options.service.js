@@ -1,32 +1,32 @@
-(function() {
+(function () {
 
     /**
-    * @ngdoc service
-    * @name BBAdminDashboard.bbTimeZoneOptions
-    * @description
-    * TimeZone options factory
-    */
+     * @ngdoc service
+     * @name BBAdminDashboard.bbTimeZoneOptions
+     * @description
+     * TimeZone options factory
+     */
     angular
         .module('BB.i18n')
         .factory('bbTimeZoneOptions', timeZoneOptionsService);
 
-    function timeZoneOptionsService ($translate, orderByFilter, bbCustomTimeZones, bbTimeZone) {
+    function timeZoneOptionsService($translate, orderByFilter, bbCustomTimeZones, bbTimeZone) {
 
         return {
             generateTimeZoneList
         };
 
         /**
-        * @ngdoc function
-        * @name generateTimeZoneList
-        * @methodOf BBAdminDashboard.Services:TimeZoneOptions
-        * @param {Boolean} momentNames
-        * @param {String, Array} limitTo - limit time zones to a specific region (String) or multiple regions (Array)
-        * @param {String, Array} exclude - exclude time zones from generated list
-        * @param {String} format
-        * @returns {Array} A list of time zones
-        */
-        function generateTimeZoneList (useMomentNames, limitTimeZones, excludeTimeZones, format) {
+         * @ngdoc function
+         * @name generateTimeZoneList
+         * @methodOf BBAdminDashboard.Services:TimeZoneOptions
+         * @param {Boolean} momentNames
+         * @param {String, Array} limitTo - limit time zones to a specific region (String) or multiple regions (Array)
+         * @param {String, Array} exclude - exclude time zones from generated list
+         * @param {String} format
+         * @returns {Array} A list of time zones
+         */
+        function generateTimeZoneList(useMomentNames, limitTimeZones, excludeTimeZones, format) {
             let timeZones = [];
 
             let timeZoneNames = loadTimeZones(useMomentNames, limitTimeZones, excludeTimeZones);
@@ -39,7 +39,7 @@
             return timeZones;
         }
 
-        function loadTimeZones (useMomentNames, limitTimeZones, excludeTimeZones) {
+        function loadTimeZones(useMomentNames, limitTimeZones, excludeTimeZones) {
             let timeZoneNames = [];
 
             if (useMomentNames) {
@@ -59,7 +59,7 @@
             return timeZoneNames;
         }
 
-        function updateTimeZoneNames (timeZones, timeZone, exclude) {
+        function updateTimeZoneNames(timeZones, timeZone, exclude) {
 
             if (angular.isString(timeZone)) {
                 return timeZoneFilter(timeZone);
@@ -71,7 +71,7 @@
                 return _.flatten(locations);
             }
 
-            function timeZoneFilter (filterBy) {
+            function timeZoneFilter(filterBy) {
                 if (exclude) {
                     return _.reject(timeZones, (tz) => tz.indexOf(filterBy) !== -1);
                 } else {
@@ -80,7 +80,7 @@
             }
         }
 
-        function mapTimeZoneItem (location, index, format, momentNames) {
+        function mapTimeZoneItem(location, index, format, momentNames) {
             const timeZone = {};
 
             const city = location.match(/[^/]*$/)[0].replace(/-/g, '_').toUpperCase();
@@ -96,22 +96,21 @@
             return timeZone;
         }
 
-        function formatDisplayValue (city, momentTz, format, momentNames) {
-            let display = '';
+        function formatDisplayValue(city, momentTz, format, isMomentNames) {
 
             const formatMap = {
                 'tz-code': $translate.instant(`COMMON.TIMEZONE_LOCATIONS.CODES.${momentTz.format('zz')}`),
                 'offset-hours': momentTz.format('Z'),
-                'location': $translate.instant(`COMMON.TIMEZONE_LOCATIONS.${momentNames ? 'MOMENT' : 'CUSTOM'}.${city}`)
+                'location': $translate.instant(`COMMON.TIMEZONE_LOCATIONS.${isMomentNames ? 'MOMENT' : 'CUSTOM'}.${city}`)
             };
 
-            if (format && angular.isString(format)) {
-                display = format.replace(/'?\w[\w']*(?:-\w+)*'?/gi, (match) => formatMap[match] ? formatMap[match] : match);
-                return display;
+            if (!format) return `(GMT ${formatMap['offset-hours']}) ${formatMap.location}`;
+
+            for (let formatKey in formatMap) {
+                format = format.replace(formatKey, formatMap[formatKey]);
             }
 
-            display = `(GMT ${formatMap['offset-hours']}) ${formatMap.location}`;
-            return display;
+            return format;
         }
 
     }
