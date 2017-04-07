@@ -6,7 +6,12 @@ function bbCheckIn(bbGridService) {
     let directive = {
         restrict: 'AE',
         replace: false,
-        scope: true,
+        scope: {
+            options: '=',
+            bb: '=',
+            api_url: '=',
+            company: '='
+        },
         templateUrl: 'check-in/checkin-table.html',
         controller: 'bbCheckInController',
         link
@@ -15,6 +20,7 @@ function bbCheckIn(bbGridService) {
     return directive;
 
     function link(scope, element, attrs) {
+        let columnDefs;
 
         let prepareColumnDefs = () => {
             return [
@@ -29,7 +35,11 @@ function bbCheckIn(bbGridService) {
             ]
         }
 
-        let columnDefs = prepareColumnDefs();
+        if(scope.options) {
+            columnDefs = scope.options;
+        } else {
+            columnDefs = prepareColumnDefs();
+        }
 
         scope.gridOptions = {
             enableSorting: true,

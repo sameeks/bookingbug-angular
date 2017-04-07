@@ -16,13 +16,15 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $timeout, $comp
             endDate: '=?',
             endTime: '=?',
             defaultOrder: '=?',
-            period: '@'
+            period: '@',
+            options: '='
         }
     }
 
     return directive;
 
     function link(scope, elem, attrs) {
+        let columnDefs;
 
         let prepareColumnDefs = () => {
             return [
@@ -35,6 +37,13 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $timeout, $comp
                     cellTemplate: 'bookings_table_action_button.html'
                 }
             ]
+        }
+
+
+        if(scope.options) {
+            columnDefs = scope.options;
+        } else {
+            columnDefs = prepareColumnDefs();
         }
 
         scope.$watch('bookings', () => {
@@ -51,7 +60,6 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $timeout, $comp
             }, 100);
         }
 
-        let columnDefs = prepareColumnDefs();
 
         scope.gridOptions = {
             columnDefs: bbGridService.readyColumns(columnDefs),

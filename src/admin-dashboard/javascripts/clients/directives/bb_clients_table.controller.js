@@ -13,10 +13,10 @@ function bbTabletClients($scope, $rootScope, $q, BBModel, AlertService, uiGridCo
         let clientDef = $q.defer();
 
         let params = {
-            company: $scope.bb.company,
+            company: $scope.company,
             per_page: perPage,
             page: $scope.paginationOptions.pageNumber,
-            filter_by: $scope.clientsOptions.search,
+            // filter_by: $scope.clientsOptions.search,
             filter_by_fields: searchFields
         };
 

@@ -26,7 +26,7 @@ function bbCheckInController($scope, $rootScope, BusyService, $q, $filter, Admin
         let params = {
             company: $scope.company,
             date: moment().format('YYYY-MM-DD'),
-            url: $scope.bb.api_url
+            url: $scope.api_url
         };
 
         if (skipCache) {

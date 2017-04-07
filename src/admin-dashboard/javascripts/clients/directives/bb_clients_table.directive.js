@@ -8,13 +8,18 @@ function BBClientsTable(bbGridService, uiGridConstants) {
         link,
         restrict: 'AE',
         replace: true,
-        scope: true,
-        controller: 'TabletClients'
+        scope: {
+            company: '=',
+            options: '='
+        },
+        controller: 'TabletClients',
+        templateUrl: 'clients/client_grid.html'
     }
 
     return directive;
 
     function link(scope, element, attrs) {
+        let columnDefs;
         let filters = [];
         let customTemplates = {filterHeaderTemplate: 'ui_grid_filter_template.html', headerCellTemplate: 'ui_grid_header_template.html'}
 
@@ -37,8 +42,11 @@ function BBClientsTable(bbGridService, uiGridConstants) {
             ]
         }
 
-
-        let columnDefs = prepareColumnDefs();
+        if(scope.options) {
+            columnDefs = scope.options;
+        } else {
+            columnDefs = prepareColumnDefs();
+        }
 
         scope.paginationOptions = {
             pageNumber: 1,
