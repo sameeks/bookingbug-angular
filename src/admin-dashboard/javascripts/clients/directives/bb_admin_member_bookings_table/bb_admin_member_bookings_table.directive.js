@@ -2,7 +2,7 @@ angular
     .module('BBAdminDashboard.clients.directives')
     .directive('bbAdminMemberBookingsTable', bbAdminMemberBookingsTable);
 
-function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup, bbGridService) {
+function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $timeout, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup, bbGridService) {
     let directive = {
         controller: 'bbAdminMemberBookingsTableCtrl',
         link,
@@ -30,13 +30,11 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
                 { displayName: 'Description', field: 'details', width: '65%'},
                 {  // DETAILS BUTTON COLUMN
                     field: 'detailsCell',
-                    displayName: '',
+                    displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',
                     width: '10%',
                     cellTemplate: 'bookings_table_action_button.html'
                 }
             ]
-
-            scope.gridApi.core.handleWindowResize();
         }
 
         scope.$watch('bookings', () => {
@@ -45,8 +43,12 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
             }
         });
 
+
         let renderBookings = (bookings) => {
-           setGridOptions(bookings);
+            setGridOptions(bookings);
+            $timeout(() => {
+                scope.gridApi.core.handleWindowResize();
+            }, 100);
         }
 
         let columnDefs = prepareColumnDefs();
@@ -57,16 +59,15 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $compile, $temp
             enableSorting: true,
             paginationPageSizes: [15],
             paginationPageSize: 15,
-            rowHeight: 50
+            rowHeight: 50,
+            onRegisterApi: (gridApi) => {
+                scope.gridApi = gridApi;
+                scope.gridApi.core.handleWindowResize();
+            }
         }
 
         let setGridOptions = (bookings) => {
-            scope.gridOptions = {
-                data: bookings,
-                onRegisterApi: (gridApi) => {
-                    scope.gridApi = gridApi;
-                }
-            }
+            scope.gridOptions.data = bookings;
         }
     }
 }
