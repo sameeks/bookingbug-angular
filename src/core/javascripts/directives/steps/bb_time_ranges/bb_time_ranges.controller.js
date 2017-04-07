@@ -328,8 +328,8 @@
             $scope.is_add_valid = true;
 
             if (!$scope.isAdmin() && !$scope.options.ignore_max_advance_datetime && $scope.max_date) {
-                let max_date = $scope.max_date.clone()
-                let selected_day = $scope.selected_day.clone()
+                let max_date = $scope.max_date.clone();
+                let selected_day = $scope.selected_day.clone();
                 let difference = max_date.startOf('day').diff(selected_day.startOf('day'), 'days', true);
                 if (difference - $scope.time_range_length < 0) {
                     return $scope.is_add_valid = false;
@@ -429,7 +429,7 @@
                             $scope.decideNextPage(route);
                         },
                         (err) => {
-                            loader.setLoadedAndShowError(err, 'Sorry, something went wrong')
+                            loader.setLoadedAndShowError(err, 'Sorry, something went wrong');
                         }
                     );
                 } else {

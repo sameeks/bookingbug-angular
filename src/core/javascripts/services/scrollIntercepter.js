@@ -39,7 +39,7 @@ angular.module('BB.Services').factory('scrollIntercepter', ($bbug, $window, Gene
         } else {
             return;
         }
-    }
+    };
     return {
         scrollToElement
     };

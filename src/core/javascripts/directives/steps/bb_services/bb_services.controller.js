@@ -267,7 +267,7 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
                 // Only set bb.selected_service if the service is a parent service
                 if (!$scope.service.child_level_service) $scope.bb.selected_service = $scope.service;
                 // -----------------------------------------------------------
-                return
+                return;
             }
         }
     });

@@ -81,7 +81,7 @@ angular.module('BBAdminServices').factory("BB.Service.service", ($q, BBModel) =>
             unwrap(resource) {
                 return new BBModel.Admin.Service(resource);
             }
-        }
+        };
     }
 );
 
@@ -108,4 +108,3 @@ angular.module('BBAdminServices').factory("BB.Service.services", ($q, BBModel) =
         };
     }
 );
-

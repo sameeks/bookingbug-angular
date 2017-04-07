@@ -59,6 +59,6 @@ angular.module('BB.Directives').directive('bbClientDetails', ($q, $templateCache
                     }
                 );
             }
-        }
+        };
     }
 );
