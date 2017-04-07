@@ -15,16 +15,15 @@
 
         let displayTimeZone = bbi18nOptions.default_time_zone;
 
-        return $window.tz = {
+        return {
             convertToCompanyTz,
             convertToDisplayTz,
             determineTimeZone,
             getCompanyUTCOffset,
             getDisplayTimeZone,
             getDisplayUTCOffset,
-            isCompanyTimeZone,
             setDisplayTimeZone,
-            findTimeZoneKey
+            getTimeZoneKey
         };
 
         /**
@@ -56,9 +55,9 @@
         }
 
         function determineTimeZone() {
-            const lsTimeZone = $localStorage.getItem('bbTimeZone');
-            if (lsTimeZone) {
-                setDisplayTimeZone(lsTimeZone);
+            const timeZone = $localStorage.getObject('bbTimeZone').displayTimeZone;
+            if (timeZone) {
+                setDisplayTimeZone(timeZone);
                 return;
             }
 
@@ -80,43 +79,40 @@
             return moment().tz(CompanyStoreService.time_zone).utcOffset();
         }
 
-        function isCompanyTimeZone() {
-            return displayTimeZone === CompanyStoreService.time_zone;
-        }
-
-        function setDisplayTimeZone(timeZone, isMomentNames = false, shouldUpdateLocalStorage = false) {
+        function setDisplayTimeZone(timeZone, isMomentNames = false, useBrowserTimeZone = false, updateLocalStorage = false) {
             if (bbCustomTimeZones.GROUPED_TIME_ZONES[timeZone] || isMomentNames) {
                 moment.tz.setDefault(timeZone);
                 displayTimeZone = timeZone;
-                if (shouldUpdateLocalStorage) updateLocalStorage(timeZone);
             } else {
-                timeZone = findTimeZoneKey(timeZone);
+                timeZone = getTimeZoneKey(timeZone);
                 moment.tz.setDefault(timeZone);
                 displayTimeZone = timeZone;
             }
+            if (updateLocalStorage) setLocalStorage(useBrowserTimeZone);
         }
 
-        function findTimeZoneKey(timeZone) {
+        function getTimeZoneKey(timeZone) {
             let selectedTimeZone;
 
             const city = timeZone.match(/[^/]*$/)[0];
             for (let [groupName, groupCities] of Object.entries(bbCustomTimeZones.GROUPED_TIME_ZONES)) {
                 groupCities = groupCities.split(/\s*,\s*/).map((tz) => tz.replace(/ /g, "_")).join(', ').split(/\s*,\s*/);
-                let cityGroupIndex =  groupCities.findIndex((groupCity) => groupCity === city);
+                const cityGroupIndex =  groupCities.findIndex((groupCity) => groupCity === city);
                 if (cityGroupIndex !== -1){
                     selectedTimeZone = groupName;
                     break;
                 }
             }
 
-            return selectedTimeZone || CompanyStoreService.time_zone;
+            return selectedTimeZone || $localStorage.getObject('bbTimeZone').displayTimeZone || CompanyStoreService.time_zone;
         }
 
-        function updateLocalStorage(timeZone) {
-            if (isCompanyTimeZone()) {
-                $localStorage.removeItem('bbTimeZone');
-            } else {
-                $localStorage.setItem('bbTimeZone', timeZone);
+        function setLocalStorage(useBrowserTimeZone) {
+
+            $localStorage.setObject('bbTimeZone', { useBrowserTimeZone });
+
+            if (!useBrowserTimeZone && (getCompanyUTCOffset() !== getDisplayUTCOffset())) {
+                $localStorage.setObject('bbTimeZone', { useBrowserTimeZone, displayTimeZone });
             }
         }
     }

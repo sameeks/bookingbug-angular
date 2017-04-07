@@ -35,42 +35,42 @@
     function TimeZoneSelectCtrl($rootScope, $scope, $localStorage, bbTimeZone, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions) {
         'ngInject';
 
-        const ctrl = this;
+        this.timeZones = [];
+        this.isAutomaticTimeZone = false;
+        this.selectedTimeZone = null;
 
-        ctrl.timeZones = [];
-        ctrl.isAutomaticTimeZone = false;
-        ctrl.selectedTimeZone = null;
+        this.$onInit = () => {
+            this.timeZones = bbTimeZoneOptions.generateTimeZoneList(this.useMomentNames, this.limitTimeZones, this.excludeTimeZones, this.format); //TODO should be more customisable
+            this.updateTimeZone = updateTimeZone;
+            this.automaticTimeZoneToggle = automaticTimeZoneToggle;
 
-        ctrl.$onInit = function () {
-            ctrl.timeZones = bbTimeZoneOptions.generateTimeZoneList(ctrl.useMomentNames, ctrl.limitTimeZones, ctrl.excludeTimeZones, ctrl.format); //TODO should be more customisable
-            ctrl.updateTimeZone = updateTimeZone;
-            ctrl.automaticTimeZoneToggle = automaticTimeZoneToggle;
-            if (bbi18nOptions.use_browser_time_zone && $localStorage.getItem('bbTimeZone') === undefined) ctrl.isAutomaticTimeZone = true;
+            if (bbi18nOptions.use_browser_time_zone && ($localStorage.getObject('bbTimeZone').displayTimeZone === undefined)) this.isAutomaticTimeZone = true;
+            if ($localStorage.getObject('bbTimeZone').useBrowserTimeZone) this.isAutomaticTimeZone = true;
             $rootScope.connection_started ? $rootScope.connection_started.then(determineTimeZone) : determineTimeZone();
         };
 
-        function determineTimeZone () {
+        const determineTimeZone = () => {
             bbTimeZone.determineTimeZone();
-            ctrl.selectedTimeZone = _.find(ctrl.timeZones, (tz) => tz.value === bbTimeZone.getDisplayTimeZone());
-        }
+            this.selectedTimeZone = _.find(this.timeZones, (tz) => tz.value === bbTimeZone.getDisplayTimeZone());
+        };
 
-        function automaticTimeZoneToggle () {
-            const timeZone = ctrl.isAutomaticTimeZone ? moment.tz.guess() : bbTimeZone.findTimeZoneKey(CompanyStoreService.time_zone);
-            updateTimeZone(timeZone, false);
+        const automaticTimeZoneToggle = () => {
+            const timeZone = this.isAutomaticTimeZone ? moment.tz.guess() : bbTimeZone.getTimeZoneKey(CompanyStoreService.time_zone);
+            updateTimeZone(timeZone, this.isAutomaticTimeZone);
             $scope.$broadcast('UISelect:closeSelect');
-        }
+        };
 
-        function updateTimeZone (timeZone, updateLocalStorage) {
-            ctrl.selectedTimeZone = _.find(ctrl.timeZones, (tz) => tz.value === timeZone);
-            bbTimeZone.setDisplayTimeZone(timeZone, ctrl.useMomentNames, updateLocalStorage);
+        const updateTimeZone = (timeZone, isAutomaticTimeZone = false, updateLocalStorage = true) => {
+            this.selectedTimeZone = _.find(this.timeZones, (tz) => tz.value === timeZone);
+            bbTimeZone.setDisplayTimeZone(timeZone, this.useMomentNames, isAutomaticTimeZone, updateLocalStorage);
             $rootScope.$broadcast('BBTimeZoneOptions:timeZoneChanged', timeZone);
-        }
+        };
 
         $scope.$on('BBLanguagePicker:languageChanged', languageChangedHandler);
 
-        function languageChangedHandler () {
-            ctrl.$onInit();
-        }
+        const languageChangedHandler = () => {
+            this.$onInit();
+        };
 
     }
 
