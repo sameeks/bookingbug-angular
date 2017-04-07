@@ -96,13 +96,17 @@
             }
         }
 
-        function findTimeZoneKey (timeZone) {
+        function findTimeZoneKey(timeZone) {
             let selectedTimeZone;
 
             const city = timeZone.match(/[^/]*$/)[0];
-            for (let [key, value] of Object.entries(bbCustomTimeZones.GROUPED_TIME_ZONES)) {
-                value = value.split(/\s*,\s*/).map((tz) => tz.replace(/ /g, "_")).join(', ').split(/\s*,\s*/);
-                _.each(value, (tz) => tz === city ? selectedTimeZone = key : null);
+            for (let [groupName, groupCities] of Object.entries(bbCustomTimeZones.GROUPED_TIME_ZONES)) {
+                groupCities = groupCities.split(/\s*,\s*/).map((tz) => tz.replace(/ /g, "_")).join(', ').split(/\s*,\s*/);
+                let cityGroupIndex =  groupCities.findIndex((groupCity) => groupCity === city);
+                if (cityGroupIndex !== -1){
+                    selectedTimeZone = groupName;
+                    break;
+                }
             }
 
             return selectedTimeZone || CompanyStoreService.time_zone;
