@@ -2,9 +2,9 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
     BBModel, $interval, $sessionStorage, $uibModal, $q, AdminBookingPopup) => {
 
     let addQueuer = function(form) {
-        let defer = $q.defer()
+        let defer = $q.defer();
         let service = form.service;
-        let person = form.server
+        let person = form.server;
         $scope.new_queuer.service_id = service.id;
         service.$post('queuers', {}, $scope.new_queuer).then((response) => {
             let queuer = new BBModel.Admin.Queuer(response);
@@ -19,28 +19,32 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
             }
         });
         return defer.promise;
-    }
+    };
+
+    let resetQueuer = function() {
+        $scope.new_queuer = {};
+        $scope.loading = false;
+    };
 
     $scope.addToQueue = function() {
+        $scope.loading = true;
         let modalInstance = $uibModal.open({
             templateUrl: 'queue/pick_a_service.html',
             scope: $scope,
             controller: ($scope, $uibModalInstance) => {
 
-                $scope.dismiss = () => {
-                    console.log('dismiss modal');
-                    $uibModalInstance.dismiss('cancel');
-                }
+                $scope.dismiss = () => $uibModalInstance.dismiss('cancel');
 
-                $scope.submit = (form) => $uibModalInstance.close(form)
+                $scope.submit = (form) => $uibModalInstance.close(form);
 
             }
         });
 
-        modalInstance.result.then(addQueuer).finally(() => $scope.new_queuer = {});
+        modalInstance.result.then(addQueuer).finally(resetQueuer);
     };
 
     $scope.serveCustomerNow = function() {
+        $scope.loading = true;
         let modalInstance = $uibModal.open({
             templateUrl: 'queue/serve_now.html',
             resolve: {
@@ -59,12 +63,12 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
 
                 $scope.dismiss = () => $uibModalInstance.dismiss('cancel');
 
-                $scope.submit = (form) => $uibModalInstance.close(form)
+                $scope.submit = (form) => $uibModalInstance.close(form);
 
             }
         });
 
-        modalInstance.result.then(addQueuer).finally(() => $scope.new_queuer = {});
+        modalInstance.result.then(addQueuer).finally(resetQueuer);
     };
 
     $scope.makeAppointment = function(options) {
@@ -77,15 +81,15 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
             },
             on_conflict: "cancel()",
             company_id: $scope.company.id
-        }
+        };
 
         options = _.extend(defaultOptions, options);
 
         let popup = AdminBookingPopup.open(options);
 
-        popup.result.finally(() => $scope.new_queuer = {});
+        popup.result.finally(resetQueuer);
     };
 
-}
+};
 
 angular.module('BBQueue.controllers').controller('bbQueueAddCustomer', AddQueueCustomerController);
