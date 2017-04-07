@@ -36,7 +36,6 @@ function bbCheckInController($scope, $q, ModalForm, AlertService, BBModel) {
         }
 
         BBModel.Admin.Booking.$query(params).then(res => {
-            setCheckInGridData(res);
             $scope.booking_collection = res;
             $scope.bookings = [];
             $scope.bmap = {};

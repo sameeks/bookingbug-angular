@@ -24,13 +24,13 @@ function bbCheckIn(bbGridService) {
 
         let prepareColumnDefs = () => {
             return [
-                { displayName: '-', field: 'test', cellTemplate: 'check-in/_edit_cell.html'},
+                { displayName: '-', field: 'test', cellTemplate: 'check-in/_edit_cell.html', width: '5%'},
                 { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.CUSTOMER', field: 'client_name'},
                 { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.STAFF_MEMBER', field: 'person_name'},
-                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.DUE', field: 'datetime', cellFilter: 'datetime:"LT"'},
-                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.NO_SHOW', field: 'multi_status.no_show', cellFilter: 'datetime:"LT"', cellTemplate: 'check-in/_no_show.html'},
-                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.ARRIVED', field: 'multi_status.arrived', cellFilter: 'datetime:"LT"', cellTemplate: 'check-in/_arrival_cell.html'},
-                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.BEING_SEEN', field: 'multi_status.being_seen', cellTemplate: 'check-in/_being_seen_cell.html'},
+                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.DUE', field: 'datetime', cellFilter: 'datetime:"LT"', width: '10%'},
+                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.NO_SHOW', field: 'multi_status.no_show', cellFilter: 'datetime:"LT"', cellTemplate: 'check-in/_no_show.html', width: '15%'},
+                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.ARRIVED', field: 'multi_status.arrived', cellFilter: 'datetime:"LT"', cellTemplate: 'check-in/_arrival_cell.html', width: '15%'},
+                { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.BEING_SEEN', field: 'multi_status.being_seen', cellTemplate: 'check-in/_being_seen_cell.html', width: '20%'},
                 { displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.COMPLETED', field: 'multi_status.being_seen', cellTemplate: 'check-in/_completed_cell.html'}
             ]
         }

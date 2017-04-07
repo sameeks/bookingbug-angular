@@ -2,7 +2,7 @@
   <i class="fa fa-check-square"></i> {{row.entity.statusTime("checked_in").format("LT")}}
 </span>
 <span ng-if="!row.entity.hasStatus('checked_in')">
-  <button ng-click="grid.appScope.setStatus(row.entity, 'checked_in')" class="btn btn-default btn-xs btn-block">
+  <button ng-click="grid.appScope.setStatus(row.entity, 'checked_in')" class="grid-action-btn btn btn-default btn-xs btn-block">
     <i class="fa fa-square-o"></i>
     <span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.CHECK_IN_BUTTON"></span>
   </button>
