@@ -2,8 +2,7 @@ angular
     .module('BBAdminDashboard.check-in.directives')
     .controller('bbCheckInController', bbCheckInController);
 
-function bbCheckInController($scope, $rootScope, BusyService, $q, $filter, AdminTimeService, ModalForm,
-    AdminSlotService, $timeout, AlertService, BBModel) {
+function bbCheckInController($scope, $q, ModalForm, AlertService, BBModel) {
 
     let setCheckInGridData = (bookings) => {
         $scope.gridOptions.data = bookings;
@@ -12,15 +11,6 @@ function bbCheckInController($scope, $rootScope, BusyService, $q, $filter, Admin
     $scope.getAppointments = (currentPage, filterBy, filterByFields, orderBy, orderByReverse, skipCache) => {
         if (skipCache == null) {
             skipCache = true;
-        }
-        if (filterByFields && (filterByFields.name != null)) {
-            filterByFields.name = filterByFields.name.replace(/\s/g, '');
-        }
-        if (filterByFields && (filterByFields.mobile != null)) {
-            let {mobile} = filterByFields;
-            if (mobile.indexOf('0') === 0) {
-                filterByFields.mobile = mobile.substring(1);
-            }
         }
         let defer = $q.defer();
         let params = {
@@ -46,41 +36,45 @@ function bbCheckInController($scope, $rootScope, BusyService, $q, $filter, Admin
         }
 
         BBModel.Admin.Booking.$query(params).then(res => {
-                setCheckInGridData(res);
-                $scope.booking_collection = res;
-                $scope.bookings = [];
-                $scope.bmap = {};
-                for (var item of Array.from(res.items)) {
-                    if (item.status !== 3) { // not blocked
-                        $scope.bookings.push(item.id);
-                        $scope.bmap[item.id] = item;
-                    }
+            setCheckInGridData(res);
+            $scope.booking_collection = res;
+            $scope.bookings = [];
+            $scope.bmap = {};
+            for (var item of Array.from(res.items)) {
+                if (item.status !== 3) { // not blocked
+                    $scope.bookings.push(item.id);
+                    $scope.bmap[item.id] = item;
                 }
-                setCheckInGridData(Array.from(res.items));
-
-                // update the items if they've changed
-                $scope.booking_collection.addCallback($scope, (booking, status) => {
-                        $scope.bookings = [];
-                        $scope.bmap = {};
-                        return (() => {
-                            let result = [];
-                            for (item of Array.from($scope.booking_collection.items)) {
-                                let item1;
-                                if (item.status !== 3) { // not blocked
-                                    $scope.bookings.push(item.id);
-                                    item1 = $scope.bmap[item.id] = item;
-                                }
-                                result.push(item1);
-                            }
-                            return result;
-                        })();
-                    }
-                );
-                return defer.resolve($scope.bookings);
             }
-            , err => defer.reject(err));
+            setCheckInGridData(Array.from(res.items));
+
+            // update the items if they've changed
+            $scope.booking_collection.addCallback($scope, (booking, status) => {
+                handleBookingChanges(booking, status);
+            });
+
+            return defer.resolve($scope.bookings);
+        }
+        , err => defer.reject(err));
         return defer.promise;
     };
+
+    let handleBookingChanges = (booking, status) => {
+        $scope.bookings = [];
+        $scope.bmap = {};
+        return (() => {
+            let result = [];
+            for (item of Array.from($scope.booking_collection.items)) {
+                let item1;
+                if (item.status !== 3) { // not blocked
+                    $scope.bookings.push(item.id);
+                    item1 = $scope.bmap[item.id] = item;
+                }
+                result.push(item1);
+            }
+            return result;
+        })();
+    }
 
     $scope.setStatus = (booking, status) => {
         let clone = _.clone(booking);
@@ -90,7 +84,7 @@ function bbCheckInController($scope, $rootScope, BusyService, $q, $filter, Admin
     };
 
     $scope.edit = booking => {
-        booking.$getAnswers().then(function (answers) {
+        booking.$getAnswers().then((answers) => {
             for (let answer of Array.from(answers.answers)) {
                 booking[`question${answer.question_id}`] = answer.value;
             }
@@ -105,11 +99,6 @@ function bbCheckInController($scope, $rootScope, BusyService, $q, $filter, Admin
             });
         });
     }
-
-    // // Make sure everytime we enter this view we skip the
-    // // cache to get the latest state of appointments
-    // return $scope.getAppointments(null, null, null, null, null, true);
-
 };
 
 

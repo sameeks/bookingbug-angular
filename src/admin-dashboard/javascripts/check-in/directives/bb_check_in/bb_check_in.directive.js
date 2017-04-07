@@ -41,13 +41,27 @@ function bbCheckIn(bbGridService) {
             columnDefs = prepareColumnDefs();
         }
 
+        scope.paginationOptions = {
+            pageNumber: 1,
+            pageSize: 15,
+            sort: null
+        }
+
         scope.gridOptions = {
             enableSorting: true,
             rowHeight: 40,
+            paginationPageSizes: [15],
+            paginationPageSize: 15,
+            useExternalPagination: true,
             columnDefs: bbGridService.readyColumns(columnDefs),
             onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
-                scope.getAppointments(null, null, null, null, null, true);
+                scope.gridData = scope.getAppointments();
+                gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {
+                    scope.paginationOptions.pageNumber = newPage;
+                    scope.paginationOptions.pageSize = pageSize;
+                    scope.getAppointments(scope.paginationOptions.pageNumber + 1, null, null, null, null, true);
+                });
             }
         }
     }
