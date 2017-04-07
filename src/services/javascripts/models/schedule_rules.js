@@ -279,25 +279,22 @@ angular.module('BB.Models').factory("ScheduleRules", () =>
          * @name formatTime
          * @methodOf BB.Models:ScheduleRules
          * @param {date=} time The time
+         * @param roundUp set maximum minutes & seconds
          * @description
          * Format the time in according of the time parameter
          *
          * @returns {date} Returns the formated time
          */
-        formatTime(time) {
-
-            if (time.length === 5) {
-                let hours = time.slice(0, 2);
-                let minutes = time.slice(3, 5) !== '00' ? '59' : '00';
-                let seconds = minutes;
-
-                return [hours, minutes, seconds].join(':');
-            }
+        formatTime(time, roundUp = false) {
 
             let hours = time.slice(0, 2);
             let minutes = time.slice(2, 4);
+            let seconds = '00';
 
-            return [hours, minutes].join(':');
+            if (time.length === 5) minutes = time.slice(3, 5); // fix for known issue with api returning 0000-23d55
+            if (roundUp) minutes = seconds = '59';
+
+            return [hours, minutes, seconds].join(':');
         }
 
         /***
@@ -315,7 +312,7 @@ angular.module('BB.Models').factory("ScheduleRules", () =>
                 return _.map(this.rules[d], range => {
                         return {
                             start: [d, this.formatTime(range.split('-')[0])].join('T'),
-                            end: [d, this.formatTime(range.split('-')[1])].join('T')
+                            end: [d, this.formatTime(range.split('-')[1], true)].join('T')
                         };
                     }
                 );
@@ -324,7 +321,7 @@ angular.module('BB.Models').factory("ScheduleRules", () =>
                         return memo.concat(_.map(ranges, range => {
                                 return {
                                     start: [date, this.formatTime(range.split('-')[0])].join('T'),
-                                    end: [date, this.formatTime(range.split('-')[1])].join('T')
+                                    end: [date, this.formatTime(range.split('-')[1], true)].join('T')
                                 };
                             }
                         ));
@@ -348,7 +345,7 @@ angular.module('BB.Models').factory("ScheduleRules", () =>
                     return memo.concat(_.map(ranges, range => {
                             return {
                                 start: [date, this.formatTime(range.split('-')[0])].join('T'),
-                                end: [date, this.formatTime(range.split('-')[1])].join('T')
+                                end: [date, this.formatTime(range.split('-')[1], true)].join('T')
                             };
                         }
                     ));
