@@ -159,7 +159,7 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
 
                         $scope.bookable_services = bookable_items;
                         $scope.filtered_items = bookable_items;
-                    }, err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));;
+                    }, err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
 
                 }
             }
