@@ -11,9 +11,9 @@
      *
      * @example
      * <example>
-     *   <bb-time-zone-select moment-names="true" limit-time-zones="'Europe'" exclude="['Berlin', 'Zagreb']"></bb-time-zone-select>
-     *   <bb-time-zone-select moment=names="true" limit-time-zones="['Asia', 'America']"></bb-time-zone-select>
-     *   <bb-time-zone-select moment-names="true" format="'(GMT offset-hours) location (tz-code)'"
+     *   <bb-time-zone-select limit-time-zones="'Europe'" exclude="['Berlin', 'Zagreb']"></bb-time-zone-select>
+     *   <bb-time-zone-select limit-time-zones="['Asia', 'America']"></bb-time-zone-select>
+     *   <bb-time-zone-select format="'(GMT offset-hours) location (tz-code)'"
      * </example>
      */
 
@@ -23,9 +23,10 @@
             templateUrl: 'i18n/_bb_timezone_select.html',
             bindings: {
                 hideToggle: '<',
-                useMomentNames: '<',
                 limitTimeZones: '<',
                 excludeTimeZones: '<',
+                daylightTimeZones: '<',
+                standardTimeZones: '<',
                 format: '<'
             },
             controller: TimeZoneSelectCtrl,
@@ -40,7 +41,8 @@
         this.selectedTimeZone = null;
 
         this.$onInit = () => {
-            this.timeZones = bbTimeZoneOptions.generateTimeZoneList(this.useMomentNames, this.limitTimeZones, this.excludeTimeZones, this.format);
+            this.useMomentNames = bbi18nOptions.use_moment_names;
+            this.timeZones = bbTimeZoneOptions.generateTimeZoneList(this.useMomentNames, this.limitTimeZones, this.excludeTimeZones, this.daylightTimeZones, this.standardTimeZones, this.format);
             this.setTimeZone = setTimeZone;
             this.automaticTimeZoneToggle = automaticTimeZoneToggle;
             $rootScope.connection_started ? $rootScope.connection_started.then(determineDefaults) : determineDefaults();

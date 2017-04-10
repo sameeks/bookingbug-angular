@@ -10,7 +10,7 @@
         .module('BB.i18n')
         .factory('bbTimeZoneOptions', timeZoneOptionsService);
 
-    function timeZoneOptionsService($translate, orderByFilter, bbCustomTimeZones) {
+    function timeZoneOptionsService($translate, orderByFilter, bbCustomTimeZones, bbi18nOptions) {
 
         return {
             generateTimeZoneList,
@@ -27,10 +27,11 @@
          * @param {String} format
          * @returns {Array} A list of time zones
          */
-        function generateTimeZoneList(useMomentNames, limitTimeZones, excludeTimeZones, format) {
+        function generateTimeZoneList(useMomentNames, limitTimeZones, excludeTimeZones, daylightTimeZones, standardTimeZones, format) {
             let timeZones = [];
 
-            let timeZoneNames = loadTimeZones(useMomentNames, limitTimeZones, excludeTimeZones);
+            let timeZoneNames = loadTimeZones(useMomentNames, limitTimeZones, excludeTimeZones, daylightTimeZones, standardTimeZones);
+
             for (let [index, timeZone] of timeZoneNames.entries()) {
                 timeZones.push(mapTimeZoneItem(timeZone, index, format, useMomentNames));
             }
@@ -40,12 +41,14 @@
             return timeZones;
         }
 
-        function loadTimeZones(useMomentNames, limitTimeZones, excludeTimeZones) {
+        function loadTimeZones(useMomentNames, limitTimeZones, excludeTimeZones, daylightTimeZones, standardTimeZones) {
             let timeZoneNames = [];
 
             timeZoneNames = useMomentNames ? loadMomentNames() : Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES);
             if (limitTimeZones) timeZoneNames = filterTimeZoneList(timeZoneNames, limitTimeZones);
             if (excludeTimeZones) timeZoneNames = filterTimeZoneList(timeZoneNames, excludeTimeZones, true);
+            if (daylightTimeZones || standardTimeZones) timeZoneNames = filterDaylightOrStandard(timeZoneNames, daylightTimeZones, standardTimeZones);
+            if (bbi18nOptions.use_browser_time_zone && useMomentNames) timeZoneNames = checkLocalTimeZone(timeZoneNames);
 
             return timeZoneNames;
 
@@ -56,6 +59,20 @@
                     .reject((tz) => tz.indexOf('Etc') !== -1)
                     .reject((tz) => tz.match(/[^/]*$/)[0] === tz.match(/[^/]*$/)[0].toUpperCase())
                     .value();
+            }
+
+            function checkLocalTimeZone(timeZones) {
+                const localTimeZone = moment.tz.guess();
+                if (!timeZones.find((tz) => tz === localTimeZone)) {
+                    timeZones.push(localTimeZone);
+                }
+                return timeZones;
+            }
+
+            function filterDaylightOrStandard(timeZones, daylightTimeZones, standardTimeZones) {
+                const isDayLightTime = moment().isDST();
+                timeZones = filterTimeZoneList(timeZoneNames, isDayLightTime ? daylightTimeZones : standardTimeZones);
+                return timeZones;
             }
         }
 
@@ -111,6 +128,7 @@
         function getTimeZoneKey(timeZone) {
             let selectedTimeZone;
 
+            if (bbi18nOptions.use_moment_names) return timeZone;
             if (bbCustomTimeZones.GROUPED_TIME_ZONES[timeZone]) return timeZone;
 
             const city = timeZone.match(/[^/]*$/)[0];
