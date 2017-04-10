@@ -1,12 +1,14 @@
 angular
     .module('BBAdminDashboard.check-in.directives')
-    .directive('bbAddWalking', bbAddWalking);
+    .directive('bbAddWalkin', bbAddWalkin);
 
 function bbAddWalkin() {
     let directive = {
         restrict: 'AE',
         replace: true,
         scope: true,
-        controller: 'bbAddWalkingCtrl'
+        controller: 'bbAddWalkinCtrl'
     }
+
+    return directive;
 }
