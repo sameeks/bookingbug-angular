@@ -2,7 +2,7 @@ angular
     .module('BBAdminDashboard.clients.controllers')
     .controller('bbAdminMemberBookingsTableCtrl', bbAdminMemberBookingsTableCtrl);
 
-function bbAdminMemberBookingsTableCtrl($document, $scope, $uibModal,$rootScope, BBModel, ModalForm, $log) {
+function bbAdminMemberBookingsTableCtrl($document, $scope, $uibModal,$rootScope, BBModel, ModalForm, $log, AdminMoveBookingPopup) {
 
 
     $scope.$watch('member', (member) => {

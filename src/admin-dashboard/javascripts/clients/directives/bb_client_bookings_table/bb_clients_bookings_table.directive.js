@@ -55,7 +55,7 @@ function bbClientBookingsTable($uibModal, $log, $rootScope, $timeout, $compile,
 
         let renderBookings = (bookings) => {
             scope.gridOptions.data = bookings;
-            if(scope.gridOptions.data.length <= 15) {
+            if(scope.gridOptions.data.length <= 10) {
                 scope.gridOptions.enablePaginationControls = false;
             }
         }
@@ -72,8 +72,8 @@ function bbClientBookingsTable($uibModal, $log, $rootScope, $timeout, $compile,
             columnDefs: bbGridService.readyColumns(columnDefs),
             enableColumnMenus: false,
             enableSorting: true,
-            paginationPageSizes: [15],
-            paginationPageSize: 15,
+            paginationPageSizes: [10],
+            paginationPageSize: 10,
             rowHeight: 50,
             onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
