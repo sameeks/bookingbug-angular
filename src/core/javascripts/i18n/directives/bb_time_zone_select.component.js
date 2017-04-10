@@ -67,11 +67,11 @@
             if (!isAutomaticTimeZone) bbTimeZone.setLocalStorage({displayTimeZone: timeZone});
         };
 
-        $scope.$on('BBLanguagePicker:languageChanged', languageChangedHandler);
-
         const languageChangedHandler = () => {
             this.$onInit();
         };
+
+        $scope.$on('BBLanguagePicker:languageChanged', languageChangedHandler);
 
     }
 
