@@ -25,7 +25,7 @@ let bbFormDirective = function ($bbug, $window, ValidatorService, $timeout, Gene
             $formCtrl = ctrls[0];
             $bbPageCtrl = ctrls[1];
             scope.submitForm = submitForm;
-            elem.on("submit", submitForm); // doesn't work with ng-form just regular form
+            if (attrs.disableAutoSubmit == null) elem.on("submit", submitForm); // doesn't work with ng-form just regular form
         };
 
         // marks child forms as submitted
@@ -34,10 +34,8 @@ let bbFormDirective = function ($bbug, $window, ValidatorService, $timeout, Gene
 
             form.$setSubmitted();
             form.submitted = true; // DEPRECATED - $submitted should be used in favour
-            return angular.forEach(form, function (item) {
-                if (item && (item.$$parentForm === form) && item.$setSubmitted) {
-                    return setSubmitted(item);
-                }
+            angular.forEach(form, function (item) {
+                if (item && (item.$$parentForm === form) && item.$setSubmitted) setSubmitted(item);
             });
         };
 
@@ -50,27 +48,21 @@ let bbFormDirective = function ($bbug, $window, ValidatorService, $timeout, Gene
 
             let isValid = ValidatorService.validateForm($formCtrl);
 
-            if (isValid) {
-                serveBBPage();
-            }
+            if (isValid && $bbPageCtrl != null && attrs.noRoute == null) serveBBPage();
 
             return isValid;
         };
 
         var serveBBPage = function () {
 
-            if ($bbPageCtrl != null) {
+            let route = attrs.bbFormRoute;
+            $bbPageCtrl.$scope.checkReady();
 
-                let route = attrs.bbFormRoute;
-                $bbPageCtrl.$scope.checkReady();
-
-                if ((route != null) && (route.length > 0)) {
-                    $bbPageCtrl.$scope.routeReady(route);
-                } else {
-                    $bbPageCtrl.$scope.routeReady();
-                }
+            if ((route != null) && (route.length > 0)) {
+                $bbPageCtrl.$scope.routeReady(route);
+            } else {
+                $bbPageCtrl.$scope.routeReady();
             }
-
         };
 
         var scrollAndFocusOnInvalid = function () {
@@ -83,7 +75,6 @@ let bbFormDirective = function ($bbug, $window, ValidatorService, $timeout, Gene
 
                 let invalidInput = invalidFormGroup.find('.ng-invalid');
                 invalidInput.focus();
-                return;
             }
         };
 
