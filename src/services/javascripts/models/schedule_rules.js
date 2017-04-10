@@ -291,8 +291,9 @@ angular.module('BB.Models').factory("ScheduleRules", () =>
             let minutes = time.slice(2, 4);
             let seconds = '00';
 
-            if (time.length === 5) minutes = time.slice(3, 5); // fix for known issue with api returning 0000-23d55
-            if (roundUp) minutes = seconds = '59';
+            // fix for known issue with api returning 0000-23d55
+            if (time.length === 5) minutes = time.slice(3, 5);
+            if (roundUp && hours !== '24') minutes = seconds = '59';
 
             return [hours, minutes, seconds].join(':');
         }
