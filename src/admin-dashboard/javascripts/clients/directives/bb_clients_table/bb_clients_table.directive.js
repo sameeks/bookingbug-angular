@@ -3,7 +3,7 @@ angular
     .module('BBAdminDashboard.clients.directives')
     .directive('bbClientsTable', BBClientsTable);
 
-function BBClientsTable(bbGridService, uiGridConstants, $state) {
+function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
     let directive = {
         link,
         restrict: 'AE',
@@ -94,25 +94,14 @@ function BBClientsTable(bbGridService, uiGridConstants, $state) {
         });
 
         let buildFilterString = (filters) => {
-            // we need to build a string in format "field,value,field,value,field,value"
-            this.filterString = bbGridService.formatFilterString(filters);
-            scope.getClients(scope.paginationOptions.pageNumber, this.filterString);
+            let filterString = $filter('buildClientString')(filters);
+            scope.getClients(scope.paginationOptions.pageNumber, filterString);
         }
 
 
         let handleFilterChange = (filterObject) => {
-            // we need to build an array of filtered fields
-            // replace current object with updated filter value if that filter is already in array
-            _.filter(filters, (fil) => {
-                if(fil.id === filterObject.id) {
-                    filters = _.without(filters, fil)
-                }
-            });
-            if(filterObject.value !== '') {
-                filters.push(filterObject);
-            }
-
-            buildFilterString(filters);
+            let builtFilters = $filter('buildClientFieldsArray')(filters, filterObject);
+            buildFilterString(builtFilters);
         }
     }
 };
