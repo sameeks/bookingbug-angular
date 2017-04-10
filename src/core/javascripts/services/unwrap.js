@@ -511,3 +511,13 @@ angular.module('BB.Services').factory("BB.Service.child_services", ($q, BBModel,
         };
     }
 );
+
+angular.module('BB.Services').factory("BB.Service.items", ($q, BBModel, UnwrapService) => {
+        return {
+            promise: true,
+            unwrap(resource) {
+                return UnwrapService.unwrapCollection(BBModel.Items, 'items', resource);
+            }
+        };
+    }
+);
