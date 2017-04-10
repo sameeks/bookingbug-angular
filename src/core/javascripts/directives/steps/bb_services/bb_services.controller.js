@@ -34,6 +34,11 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
     if ($scope.options.hide_disabled) {
         $scope.hide_disabled = true;
     }
+    if ($scope.options.include_non_bookable === undefined || $scope.options.include_non_bookable) {
+        $scope.include_non_bookable = true;
+    } else {
+        $scope.include_non_bookable = false;
+    }
 
     $scope.price_options = {
         min: 0,
@@ -132,7 +137,31 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
             if ($scope.booking_item.service || !(($scope.booking_item.person && !$scope.booking_item.anyPerson()) || ($scope.booking_item.resource && !$scope.booking_item.anyResource()))) {
                 // the "bookable services" are the service unless we've pre-selected something!
                 items = setServicesDisplayName(items);
-                return $scope.bookable_services = items;
+
+                if ($scope.include_non_bookable) {
+
+                    $scope.bookable_services = items;
+
+                } else {
+
+                    // Query each service to check for associated items (person or resource)
+                    let itemsPromises = [];
+                    items.forEach(item => itemsPromises.push(item.$getItems()));
+
+                    // Items endpoint will return empty array if no person or resource is associated with service. Consider this non-bookable.
+                    let bookable_items = [];
+                    $q.all(itemsPromises).then(services => {
+                        items.forEach((item, index) => {
+                            if (services[index].length) {
+                                bookable_items.push(item);
+                            }
+                        });
+
+                        $scope.bookable_services = bookable_items;
+                        $scope.filtered_items = bookable_items;
+                    }, err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));;
+
+                }
             }
         }, err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
 

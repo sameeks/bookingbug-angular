@@ -23,7 +23,7 @@
         name="appointmentBookingForm">
 
         <div
-          bb-services="{allow_single_pick: true}"
+          bb-services="{allow_single_pick: true, include_non_bookable: false}"
           class="form-group"
           ng-class="{
             'has-error': appointmentBookingForm.service.$invalid &&
