@@ -63,7 +63,7 @@ function bbCheckInController($scope, $q, ModalForm, AlertService, BBModel) {
         $scope.bmap = {};
         return (() => {
             let result = [];
-            for (item of Array.from($scope.booking_collection.items)) {
+            for (let item of Array.from($scope.booking_collection.items)) {
                 let item1;
                 if (item.status !== 3) { // not blocked
                     $scope.bookings.push(item.id);
