@@ -1,4 +1,4 @@
-fdescribe('bbTimeZone service,', () => {
+describe('bbTimeZone service,', () => {
 
     let bbTimeZone = null;
     let moment = null;
@@ -24,29 +24,35 @@ fdescribe('bbTimeZone service,', () => {
         module('BB.i18n');
     });
 
-    it('can set default timezone', () => {
-        setBbi18nOptions({
-            available_languages: ['en'],
-            default_time_zone: 'Europe/London',
-            use_browser_time_zone: false,
-            use_company_time_zone: false
-        });
-        expect(bbTimeZone.getDisplayTimeZone()).toBe('Europe/London');
-    });
 
-    it('can set rely on browser timezone, using moment.tz.guess', () => {
-        setBbi18nOptions({
-            available_languages: ['en'],
-            default_time_zone: 'Europe/London',
-            use_browser_time_zone: true,
-            use_company_time_zone: false
+    describe('by calling "determine" method', () => {
+
+        it('service will use default timezone', () => {
+            setBbi18nOptions({
+                available_languages: ['en'],
+                default_time_zone: 'Europe/London',
+                use_browser_time_zone: false,
+                use_company_time_zone: false
+            });
+
+            bbTimeZone.determineTimeZone();
+
+            expect(bbTimeZone.getDisplayTimeZone()).toBe('Europe/London');
         });
 
-        spyOn(moment.tz, 'guess').and.returnValue('Europe/Berlin');
-        bbTimeZone.determineTimeZone();
+        it('service will use browser timezone', () => {
+            setBbi18nOptions({
+                available_languages: ['en'],
+                default_time_zone: 'Europe/London',
+                use_browser_time_zone: true,
+                use_company_time_zone: false
+            });
 
-        expect(moment.tz.guess).toHaveBeenCalled();
-        expect(bbTimeZone.getDisplayTimeZone()).toBe('Europe/Berlin');
+            spyOn(moment.tz, 'guess').and.returnValue('Europe/Berlin');
+            bbTimeZone.determineTimeZone();
+
+            expect(moment.tz.guess).toHaveBeenCalled();
+            expect(bbTimeZone.getDisplayTimeZone()).toBe('Europe/Berlin');
+        });
     });
-
 });
