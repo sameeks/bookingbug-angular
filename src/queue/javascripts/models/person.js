@@ -57,6 +57,7 @@ angular.module('BB.Models').factory("AdminQueuerPersonModel", ($q, AdminPersonSe
             if (this.$has('finish_serving')) {
                 this.$post('finish_serving').then(q => {
                     this.updateModel(q);
+                    if (!this.$has('queuer')) this.serving = null;
                     return defer.resolve(this);
                 }, err => {
                     return defer.reject(err);
@@ -68,13 +69,13 @@ angular.module('BB.Models').factory("AdminQueuerPersonModel", ($q, AdminPersonSe
         }
 
         setAttendance(status, duration) {
-            console.log(status);
             let defer = $q.defer();
             this.$put('attendance', {}, {status, estimated_duration: duration}).then(response => {
                 this.updateModel(response);
                 if (status === 2) {
                     this.updateEstimatedReturn(duration);
                 }
+                if (!this.$has('queuer')) this.serving = null;
                 defer.resolve(this);
             }, err => {
                 defer.reject(err);
@@ -92,3 +93,6 @@ angular.module('BB.Models').factory("AdminQueuerPersonModel", ($q, AdminPersonSe
     }
 );
 
+// angular.module('BBQueue').run(function($injector, BBModel) {
+//     BBModel['Admin']['Person'] = $injector.get("AdminQueuerPersonModel");
+// });

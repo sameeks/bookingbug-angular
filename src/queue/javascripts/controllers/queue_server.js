@@ -1,5 +1,5 @@
 let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBModel, CheckSchema,
-    $uibModal, AdminPersonService, $q) => {
+    $uibModal, AdminPersonService, $q, AdminQueuerService) => {
 
     $scope.setAttendance = function(person, status, duration) {
         $scope.loadingServer = true;
@@ -14,7 +14,7 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
     $scope.startServingQueuer = function(person, queuer) {
         $scope.loadingServer = true;
         person.startServing(queuer).then(function() {
-            $scope.selectQueuer(null);
+            if ($scope.selectQueuer) $scope.selectQueuer(null);
             $scope.getQueuers();
             $scope.loadingServer = false;
         });
@@ -95,7 +95,27 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
         }, function() {
             $scope.loadingServer = false;
         });
-    }
+    };
+
+    $scope.updateQueuer = function() {
+        $scope.person.$get('queuers').then((collection) => {
+            collection.$get('queuers').then((queuers) => {
+                queuers = _.map(queuers, (q) => new BBModel.Admin.Queuer(q));
+                $scope.person.serving = null;
+                let queuer = _.find(queuers, (queuer) => {
+                    return queuer.$has('person') && queuer.$href('person') == $scope.person.$href('self');
+                });
+                $scope.person.serving = queuer;
+            });
+        });
+    };
+
+    $scope.extendAppointment = function(mins) {
+        $scope.loadingServer = true;
+        $scope.person.serving.extendAppointment(mins).then(function() {
+            $scope.loadingServer = false;
+        });
+    };
 
     $scope.loadingServer = false;
 };

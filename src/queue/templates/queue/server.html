@@ -4,66 +4,43 @@
 </section>
 <section class="content">
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-5">
       <div class="box box-success">
         <div class="box-header with-border">
           <h3 class="box-title">Serving</h3>
         </div>
-        <div class="box-body padding" style="display: block;">
-          <div ng-if="server.serving" bb-queues>
-            <h3>{{server.serving.first_name}}</h3>
-            <p>Appointment started at {{server.serving.start | datetime: "h:mma":false}}</p>
-            <p>Appointment due to finish at {{server.serving.end | datetime: "h:mma":false}}</p>
-            <button ng-click="extendAppointment(5)" class="btn btn-danger">
-              Extend
-            </button>
-            <button ng-click="finishServing()" class="btn btn-success pull-right">
-              Finish
-            </button>
+        <div class="loader" ng-show="loadingServer"></div>
+        <div class="box-body padding" ng-class="{invisible: loadingServer}">
+          <div ng-if="person.serving">
+            <h3>{{person.serving.first_name}} {{person.serving.last_name}}</h3>
+            <p>Appointment started at {{person.serving.start | datetime: "h:mma":false}}</p>
+            <p>Appointment due to finish at {{person.serving.end | datetime: "h:mma":false}}</p>
+            <div class="btn-group" uib-dropdown >
+              <button type="button" class="btn btn-danger" uib-dropdown-toggle>Extend Appointment</button>
+              <button type="button" class="btn btn-danger dropdown-toggle" uib-dropdown-toggle aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                <li><a ng-click="extendAppointment(1)">{{1 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(2)">{{2 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(5)">{{5 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(10)">{{10 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(15)">{{15 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(20)">{{20 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(25)">{{25 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(30)">{{30 | time_period}}</a></li>
+              </ul>
+            </div>
+
           </div>
-          <div ng-if="!server.serving">
+          <div ng-if="!person.serving">
             <h3>Idle</h3>
-            <div class="well well-lg" jqyoui-droppable="{onDrop:'serveCustomer'}"
-              data-drop="true" ng-model="selected_queuers">
-              Drag customer here to serve or click 'Serve next customer'
-            </div>
-            <button ng-click="serveNext()" class="btn btn-default">
-              Serve next customer
-            </button>
           </div>
+          <div ng-include="'queue/queue_server_actions.html'"></div>
         </div>
       </div>
     </div>
-    <div class="col-md-7" ng-if="booking">
-      <div class="box box-success">
-        <div class="box-body padding" style="display: block;">
-          <form name="modal_form" ng-submit="submit(modal_form)">
-            <div ng-show="loading" class="loader"></div>
-            <div class="modal-body" sf-schema="schema" sf-form="form"
-              sf-model="form_model" sf-options="{formDefaults: {feedback: false}}"
-              ng-hide="loading">
-            </div>
-            <div class="modal-footer">
-              <input type="submit" class="btn btn-success" ng-disabled="loading"
-              value="Save and Finish Serving">
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2 pull-right">
-      <div class="box box-success">
-        <div class="box-header with-border">
-          <h3 class="box-title">Queue</h3>
-          <div class="info-box info-box-small" ng-repeat="queuer in queuers" ng-if="queuer.position != 0">
-            <span class="info-box-icon"><i class="fa fa-user"></i></span>
-            <div class="info-box-content">
-              <b>{{queuer.position}}</b> {{queuer.first_name}} {{queuer.last_name}}<br/>
-              {{queuer.service_name}}<br/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="col-md-7 pull-right" bb-queuers></div>
   </div>
 </section>

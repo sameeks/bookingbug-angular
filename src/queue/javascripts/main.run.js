@@ -71,7 +71,6 @@ angular.module('BBQueue').run(function($injector, BBModel, $translate) {
     for (let model of Array.from(models)) {
         BBModel['Admin'][model] = $injector.get(`Admin${model}Model`);
     }
-    return BBModel['Admin']['Person'] = $injector.get("AdminQueuerPersonModel");
 });
 
 
