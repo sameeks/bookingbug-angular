@@ -1,6 +1,11 @@
 [bb-server-list-item],
 [bb-queue-server] {
 
+  a {
+    display: inline-block;
+    float: left;
+  }
+
   .btn {
     margin-top: 12px;
   }
