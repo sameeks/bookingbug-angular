@@ -47,18 +47,28 @@ function bbClientBookingsTable($uibModal, $log, $rootScope, $timeout, $compile,
         scope.$watch('bookings', () => {
             if(scope.bookings && scope.bookings.length > 0) {
                renderBookings(scope.bookings);
+            } else {
+                scope.gridOptions.enablePaginationControls = false;
             }
         });
 
 
         let renderBookings = (bookings) => {
             scope.gridOptions.data = bookings;
+            if(scope.gridOptions.data.length <= 15) {
+                scope.gridOptions.enablePaginationControls = false;
+            }
         }
+
+
 
 
         scope.gridOptions = {
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
             enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
+            enableRowSelection: true,
+            enableFullRowSelection: true,
+            enableRowHeaderSelection: false,
             columnDefs: bbGridService.readyColumns(columnDefs),
             enableColumnMenus: false,
             enableSorting: true,
@@ -67,6 +77,9 @@ function bbClientBookingsTable($uibModal, $log, $rootScope, $timeout, $compile,
             rowHeight: 50,
             onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
+                gridApi.selection.on.rowSelectionChanged(scope, (row) => {
+                    scope.edit(row.entity.id);
+                });
             }
         }
     }

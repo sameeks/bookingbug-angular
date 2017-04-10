@@ -3,7 +3,7 @@ angular
     .module('BBAdminDashboard.clients.directives')
     .directive('bbClientsTable', BBClientsTable);
 
-function BBClientsTable(bbGridService, uiGridConstants) {
+function BBClientsTable(bbGridService, uiGridConstants, $state) {
     let directive = {
         link,
         restrict: 'AE',
@@ -27,7 +27,7 @@ function BBClientsTable(bbGridService, uiGridConstants) {
             return [
                 { field: 'name', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME', width: '35%' },
                 { field: 'email', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL', width: '35%' },
-                { field: 'mobile', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE', width: '25%' },
+                { field: 'mobile', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE', width: '25%', cellFilter: 'local_phone_number: mobile' },
                 {  // ACTION BUTTON COLUMN
                     field: 'action',
                     displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',
@@ -62,6 +62,9 @@ function BBClientsTable(bbGridService, uiGridConstants) {
             paginationPageSizes: [15],
             paginationPageSize: 15,
             useExternalPagination: true,
+            enableRowSelection: true,
+            enableFullRowSelection: true,
+            enableRowHeaderSelection: false,
             rowHeight: 40,
             enableColumnMenus: false,
             columnDefs: bbGridService.readyColumns(columnDefs, customTemplates),
@@ -72,6 +75,9 @@ function BBClientsTable(bbGridService, uiGridConstants) {
                     scope.paginationOptions.pageNumber = newPage;
                     scope.paginationOptions.pageSize = pageSize;
                     scope.getClients(scope.paginationOptions.pageNumber + 1, this.filterString);
+                });
+                gridApi.selection.on.rowSelectionChanged(scope, (row) => {
+                    $state.go('clients.edit', {id: row.entity.id});
                 });
             }
         }
