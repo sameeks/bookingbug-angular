@@ -19,6 +19,7 @@ html,body {
   @import "general";
   @import "login";
   @import "form";
+  @import "grid";
 
   @import "default-theme";
   @import "resource-calendar";
@@ -55,55 +56,4 @@ html,body {
     }
   }
 
-}
-
-.bb-grid {
-  width: 100%;
-  min-height: 800px;
-  height: auto;
-  border: 1px solid #f4f4f4;
-  .ui-grid-column-menu-button-last-col {
-    display: none;
-  }
-  .ui-grid-cell {
-    line-height: 30px;
-    border: 1px solid #f4f4f4;
-    background-color: #fdfdfd;
-  }
-  .ui-grid-header-cell-primary-focus {
-    text-align: center;
-  }
-  .ui-grid-header, .ui-grid-header-cell-wrapper {
-    border: 1px solid #f4f4f4;
-  }
-  .ui-grid-header-cell {
-    background-color: #fdfdfd;
-    border: 1px solid #f4f4f4;
-    .ui-grid-icon-cancel {
-      display: none;
-    }
-  }
-  .grid-action-btn {
-    margin-top: 7px;
-    width: 90%;
-    margin-left: 5%;
-  }
-  .member-table-action {
-    margin-top: 7px;
-    margin-left: 20px;
-  }
-  .ui-grid-header-cell-primary-focus {
-    margin: 5px;
-  }
-
-  .action-column-header {
-    padding-top: 40px;
-  }
-}
-.ui-grid-row:nth-child(even) .ui-grid-cell {
-  background-color: white;
-}
-
-input[type="text"].ui-grid-filter-input {
-  padding: 5px;
 }

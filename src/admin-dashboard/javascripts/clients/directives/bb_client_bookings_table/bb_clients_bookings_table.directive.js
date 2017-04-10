@@ -1,8 +1,9 @@
 angular
     .module('BBAdminDashboard.clients.directives')
-    .directive('bbAdminMemberBookingsTable', bbAdminMemberBookingsTable);
+    .directive('bbClientBookingsTable', bbClientBookingsTable);
 
-function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $timeout, $compile, $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup, bbGridService) {
+function bbClientBookingsTable($uibModal, $log, $rootScope, $timeout, $compile,
+    $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup, bbGridService, uiGridConstants) {
     let directive = {
         controller: 'bbAdminMemberBookingsTableCtrl',
         link,
@@ -51,14 +52,13 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $timeout, $comp
 
 
         let renderBookings = (bookings) => {
-            setGridOptions(bookings);
-            $timeout(() => {
-                scope.gridApi.core.handleWindowResize();
-            }, 100);
+            scope.gridOptions.data = bookings;
         }
 
 
         scope.gridOptions = {
+            enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+            enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             columnDefs: bbGridService.readyColumns(columnDefs),
             enableColumnMenus: false,
             enableSorting: true,
@@ -67,12 +67,7 @@ function bbAdminMemberBookingsTable($uibModal, $log, $rootScope, $timeout, $comp
             rowHeight: 50,
             onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
-                scope.gridApi.core.handleWindowResize();
             }
-        }
-
-        let setGridOptions = (bookings) => {
-            scope.gridOptions.data = bookings;
         }
     }
 }

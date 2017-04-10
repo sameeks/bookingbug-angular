@@ -29,7 +29,11 @@
           </table>
 
           <div ng-if="client.addressMultiLine()">
-            <strong><i class="fa fa-map-marker margin-r-5"></i> <b translate="ADMIN_DASHBOARD.CLIENTS_PAGE.ADDRESS"></b></strong>
+            <strong>
+              <i class="fa fa-map-marker margin-r-5"></i> 
+              <b translate="ADMIN_DASHBOARD.CLIENTS_PAGE.ADDRESS"></b>
+            </strong>
+
             <p class="text-muted">
               <span ng-bind-html="client.addressMultiLine()">
               <br clear='all'/>
@@ -51,7 +55,11 @@
 
           </uib-tab-heading>
 
-          <div bb-admin-member-bookings-table period="future" member="client"></div>
+          <div 
+            bb-client-bookings-table 
+            period="future" 
+            member="client">
+          </div>
 
         </uib-tab>
 
@@ -60,9 +68,13 @@
 
           </uib-tab-heading>
 
-          <div bb-admin-member-bookings-table member="client" period="past"
-               start-date="historicalStartDate"
-               end-date="historicalEndDate"></div>
+          <div 
+            bb-client-bookings-table 
+            member="client" 
+            period="past"
+            start-date="historicalStartDate"
+            end-date="historicalEndDate">
+          </div>
 
         </uib-tab>
 

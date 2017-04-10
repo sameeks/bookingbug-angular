@@ -55,6 +55,8 @@ function BBClientsTable(bbGridService, uiGridConstants) {
         }
 
         scope.gridOptions = {
+            enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+            enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             enableSorting: true,
             enableFiltering: true,
             paginationPageSizes: [15],

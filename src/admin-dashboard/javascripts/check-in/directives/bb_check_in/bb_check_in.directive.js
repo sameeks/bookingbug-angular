@@ -2,7 +2,7 @@ angular
     .module('BBAdminDashboard.check-in.directives')
     .directive('bbCheckIn', bbCheckIn);
 
-function bbCheckIn(bbGridService) {
+function bbCheckIn(bbGridService, uiGridConstants) {
     let directive = {
         restrict: 'AE',
         replace: false,
@@ -48,8 +48,11 @@ function bbCheckIn(bbGridService) {
         }
 
         scope.gridOptions = {
+            enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+            enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             enableSorting: true,
             rowHeight: 40,
+            enableColumnMenus: false,
             paginationPageSizes: [15],
             paginationPageSize: 15,
             useExternalPagination: true,
