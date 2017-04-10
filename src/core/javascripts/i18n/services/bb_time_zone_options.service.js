@@ -10,7 +10,7 @@
         .module('BB.i18n')
         .factory('bbTimeZoneOptions', timeZoneOptionsService);
 
-    function timeZoneOptionsService($translate, orderByFilter, bbCustomTimeZones, bbTimeZone) {
+    function timeZoneOptionsService($translate, orderByFilter, bbCustomTimeZones) {
 
         return {
             generateTimeZoneList,

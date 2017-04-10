@@ -2,15 +2,15 @@
 
     /*
      * @ngdoc service
-     * @name BBAdminDashboard.bbTimeZoneOptions
+     * @name BBAdminDashboard.bbTimeZone
      * @description
-     * TimeZone options factory
+     * TimeZone factory
      */
     angular
         .module('BB.i18n')
         .service('bbTimeZone', bbTimeZoneService);
 
-    function bbTimeZoneService(bbi18nOptions, CompanyStoreService, $localStorage, $log, $window, bbTimeZoneOptions) {
+    function bbTimeZoneService($localStorage, $log, bbi18nOptions, CompanyStoreService, bbTimeZoneOptions) {
         'ngInject';
 
         let displayTimeZone = bbi18nOptions.default_time_zone;

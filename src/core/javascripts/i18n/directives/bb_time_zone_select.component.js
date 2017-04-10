@@ -54,7 +54,7 @@
 
         const automaticTimeZoneToggle = () => {
             let timeZone = this.isAutomaticTimeZone ? moment.tz.guess() : CompanyStoreService.time_zone;
-            timeZone = this.useMomentNames ? timeZone : bbTimeZone.getTimeZoneKey(timeZone);
+            timeZone = this.useMomentNames ? timeZone : bbTimeZoneOptions.getTimeZoneKey(timeZone);
             setTimeZone(timeZone, this.isAutomaticTimeZone);
             $scope.$broadcast('UISelect:closeSelect');
             bbTimeZone.setLocalStorage({useBrowserTimeZone: this.isAutomaticTimeZone});
