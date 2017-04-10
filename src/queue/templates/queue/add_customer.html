@@ -5,7 +5,7 @@
     </div>
   </div>
   <div class="loader" ng-show="loading"></div>
-  <form name="qForm" class="box-body padding" ng-hide="loading">
+  <form name="qForm" class="box-body padding" ng-class="{invisible: loading}">
     <div class="row">
       <div class="col-md-4 col-sm-6">
         <div class="form-group">
