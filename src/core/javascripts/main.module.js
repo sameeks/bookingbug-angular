@@ -5,7 +5,7 @@ angular.module('BB', [
     'ngFileUpload',
     'ngCookies',
     'ngAnimate',
-
+    'angularMoment',
     'angular-carousel',
     'angular-hal',
     'angular-data.DSCacheFactory',
