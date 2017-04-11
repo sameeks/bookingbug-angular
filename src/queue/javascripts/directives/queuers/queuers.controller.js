@@ -3,6 +3,18 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
 
     $scope.loading = true;
 
+    let getServerQueuers = function() {
+        let defer = $q.defer();
+        $scope.person.$flush('queuers');
+        $scope.person.$get('queuers').then((collection) => {
+            collection.$get('queuers').then((queuers) => {
+                queuers = _.map(queuers, (q) => new BBModel.Admin.Queuer(q));
+                defer.resolve(queuers);
+            });
+        });
+        return defer.promise;
+    };
+
     $scope.getQueuers = function() {
         if ($scope.waiting_for_queuers) {
             return;
@@ -11,7 +23,12 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
         let params = {company: $scope.company};
 
         let proms = [];
-        let queuer_prom = AdminQueuerService.query(params);
+        let queuer_prom;
+        if ($scope.person) {
+            queuer_prom = getServerQueuers();
+        } else {
+            queuer_prom = AdminQueuerService.query(params);
+        }
         proms.push(queuer_prom);
         queuer_prom.then(queuers =>
             $scope.new_queuers = queuers
