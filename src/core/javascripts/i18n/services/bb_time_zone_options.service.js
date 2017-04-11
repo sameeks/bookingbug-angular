@@ -27,8 +27,14 @@
          * @param {String} format
          * @returns {Array} A list of time zones
          */
-        function generateTimeZoneList(useMomentNames, limitTimeZones, excludeTimeZones, daylightTimeZones, standardTimeZones, format) {
+        function generateTimeZoneList(format) {
             let timeZones = [];
+
+            let { use_moment_names: useMomentNames,
+                limit_time_zones: limitTimeZones,
+                exclude_time_zones: excludeTimeZones,
+                daylight_time_zones: daylightTimeZones,
+                standard_time_zones: standardTimeZones } = bbi18nOptions;
 
             let timeZoneNames = loadTimeZones(useMomentNames, limitTimeZones, excludeTimeZones, daylightTimeZones, standardTimeZones);
 

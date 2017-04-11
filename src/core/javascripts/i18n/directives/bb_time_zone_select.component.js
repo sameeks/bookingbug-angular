@@ -23,10 +23,6 @@
             templateUrl: 'i18n/_bb_timezone_select.html',
             bindings: {
                 hideToggle: '<',
-                limitTimeZones: '<',
-                excludeTimeZones: '<',
-                daylightTimeZones: '<',
-                standardTimeZones: '<',
                 format: '<'
             },
             controller: TimeZoneSelectCtrl,
@@ -42,7 +38,7 @@
 
         this.$onInit = () => {
             this.useMomentNames = bbi18nOptions.use_moment_names;
-            this.timeZones = bbTimeZoneOptions.generateTimeZoneList(this.useMomentNames, this.limitTimeZones, this.excludeTimeZones, this.daylightTimeZones, this.standardTimeZones, this.format);
+            this.timeZones = bbTimeZoneOptions.generateTimeZoneList(this.format);
             this.setTimeZone = setTimeZone;
             this.automaticTimeZoneToggle = automaticTimeZoneToggle;
             $rootScope.connection_started ? $rootScope.connection_started.then(determineDefaults) : determineDefaults();
