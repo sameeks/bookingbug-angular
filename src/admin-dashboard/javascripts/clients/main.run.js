@@ -12,7 +12,7 @@ angular.module('BBAdminDashboard.clients').run(function (RuntimeStates, AdminCli
                 controller: 'ClientsPageCtrl'
             }).state('clients.new', {
             url: "/new",
-            templateUrl: "client_new.html",
+            templateUrl: "clients/new.html",
             controller: 'ClientsNewPageCtrl'
         }).state('clients.all', {
             url: "/all",
