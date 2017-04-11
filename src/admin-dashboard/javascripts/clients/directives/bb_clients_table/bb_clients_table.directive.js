@@ -21,7 +21,6 @@ function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
     function link(scope, element, attrs) {
         let columnDefs;
         let filters = [];
-        let customTemplates = {filterHeaderTemplate: 'ui_grid_filter_template.html', headerCellTemplate: 'ui_grid_header_template.html'}
 
         let prepareColumnDefs = () => {
             return [
@@ -67,7 +66,7 @@ function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
             enableRowHeaderSelection: false,
             rowHeight: 40,
             enableColumnMenus: false,
-            columnDefs: bbGridService.readyColumns(columnDefs, customTemplates),
+            columnDefs: bbGridService.readyColumns(columnDefs),
             onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
                 scope.gridData = scope.getClients();

@@ -36,8 +36,8 @@
     "angular-touch": "~1.5.10",
     "angular-bootstrap": "~2.0.0",
     "angular-carousel": "~0.3.13",
-    "angular-ui-grid": "~4.0.3",
-
+    "angular-ui-grid": "git://github.com/BookingBug/ui-grid.git#master",
+ 
     "moment": "~2.14.0",
     "moment-timezone": "~0.5.4",
 
