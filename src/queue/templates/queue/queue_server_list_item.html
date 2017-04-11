@@ -31,7 +31,7 @@
 
     <div ng-if="person.serving">
       <div class="">
-        Serving: <small>{{person.serving.first_name}} ({{person.serving.service_name}})</small>
+        Serving: <small>{{person.serving.first_name}} {{person.serving.last_name}} ({{person.serving.service_name}})</small>
       </div>
       <div class="">
         Since: <small>{{person.serving.start.format("LT")}}</small>
