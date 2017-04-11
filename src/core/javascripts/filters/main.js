@@ -379,7 +379,7 @@ angular.module('BB.Filters').filter('time_period_from_seconds', ($translate, $fi
         if (seconds >= 60) {
             time_period += $filter('time_period')(seconds / 60);
             if ((seconds % 60) > 0) {
-                time_period += $translate.instant('CORE.FILTERS.TIME_PERIOD.TIME_SEPARATOR');
+                time_period += $translate.instant('CORE.FILTERS.TIME_PERIOD.TIME_PERIOD');
             }
         }
         if ((seconds % 60) > 0) {
