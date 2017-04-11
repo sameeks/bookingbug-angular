@@ -65,19 +65,3 @@ angular.module('BBQueue').run(function($injector, BBModel, $translate) {
         BBModel['Admin'][model] = $injector.get(`Admin${model}Model`);
     }
 });
-
-
-angular.module('BBQueue').run(function(AdminCoreOptions, SideNavigationPartials) {
-    let side_nav = AdminCoreOptions.side_navigation;
-    side_nav.unshift({
-        group_name: 'SIDE_NAV_QUEUING',
-        items: [
-            'queue'
-        ]
-    });
-    let booking_items = _.findWhere(side_nav, {group_name: 'SIDE_NAV_BOOKINGS'}).items;
-    let check_in_index = booking_items.indexOf('check-in');
-    booking_items.splice(check_in_index, 1);
-    SideNavigationPartials.removePartialTemplate('check-in');
-    AdminCoreOptions.side_navigation = side_nav;
-});
