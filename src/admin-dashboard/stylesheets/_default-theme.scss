@@ -1,5 +1,6 @@
 //Default bookingbug admin theme
 $theme-color                       : #81bc00 !default;
+$brand-logo-url-path               : "images/bb-logo.svg" !default;
 $screen-header-collapse            : $screen-xs-max;
 
 &.skin-default {
@@ -51,7 +52,7 @@ $screen-header-collapse            : $screen-xs-max;
     }
     //Logo
     .logo {
-      background: url("images/bb-logo.svg") no-repeat center center;
+      background: url($brand-logo-url-path) no-repeat center center;
       background-size: contain;
 
       @include logo-variant(#ffffff);
@@ -154,7 +155,7 @@ $screen-header-collapse            : $screen-xs-max;
       text-align: center;
 
       .login-logo {
-        background: url("/images/bb-logo.svg") no-repeat center center;
+        background: url($brand-logo-url-path) no-repeat center center;
         width: 250px;
         height: 50px;
         margin-bottom: 0;
