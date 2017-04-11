@@ -52,7 +52,9 @@ $screen-header-collapse            : $screen-xs-max;
     }
     //Logo
     .logo {
-      background: url($brand-logo-url-path) no-repeat center center;
+      background-image: url($brand-logo-url-path);
+      background-repeat: no-repeat;
+      background-position: center center;
       background-size: contain;
 
       @include logo-variant(#ffffff);
@@ -155,7 +157,10 @@ $screen-header-collapse            : $screen-xs-max;
       text-align: center;
 
       .login-logo {
-        background: url($brand-logo-url-path) no-repeat center center;
+        background-image: url($brand-logo-url-path);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
         width: 250px;
         height: 50px;
         margin-bottom: 0;
