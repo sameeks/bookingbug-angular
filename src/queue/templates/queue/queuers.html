@@ -1,23 +1,25 @@
-<div ng-repeat="queuer in queues[0].waiting_queuers">
-  <div class="col-md-12 waiting-queuer" ng-if="queuer.type == 'Q'">
-    <div ng-click="selectQueuer(queuer.data)" class="info-box info-box-sm bg-green"
-      ng-class="{selected: (selected_queuer == queuer.data)}" >
-      <span class="info-box-icon"><i class="fa fa-user"></i></span>
-      <div class="info-box-content">
-        <div class="ticket-number">
-          {{queuer.data.ticket_number}}
+<ul ng-repeat="queuer in queues[0].waiting_queuers">
+  <li class="col-md-12 waiting-queuer" ng-if="queuer.type == 'Q'">
+    <a href="#" ng-click="selectQueuer(queuer.data)">
+      <div class="info-box info-box-sm bg-green"
+        ng-class="{selected: (selected_queuer == queuer.data)}" >
+        <span class="info-box-icon"><i class="fa fa-user"></i></span>
+        <div class="info-box-content">
+          <div class="ticket-number">
+            {{queuer.data.ticket_number}}
+          </div>
+          <div  class="qline_info">
+            {{queuer.data.first_name}} {{queuer.data.last_name}} Arrived at : {{queuer.data.created_at.format("LT")}} <br/>
+            Service: {{queuer.data.service_name}}
+          </div>
+          <span class="qline_due" ng-class="{qline_invalid: queuer.data.remaining_signed <= 0}">
+            <span countdown ng-model="queuer.data.remaining_signed"></span>
+          </span>
         </div>
-        <div  class="qline_info">
-          {{queuer.data.first_name}} {{queuer.data.last_name}} Arrived at : {{queuer.data.created_at.format("LT")}} <br/>
-          Service: {{queuer.data.service_name}}
-        </div>
-        <span class="qline_due" ng-class="{qline_invalid: queuer.data.remaining_signed <= 0}">
-          <span countdown ng-model="queuer.data.remaining_signed"></span>
-        </span>
       </div>
-    </div>
-  </div>
-  <div class="col-md-12" ng-if="queuer.type == 'B'">
+    </a>
+  </li>
+  <li class="col-md-12" ng-if="queuer.type == 'B'">
     <div  class="info-box info-box-sm bg-yellow" >
       <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
       <div class="info-box-content">
@@ -36,8 +38,5 @@
           ng-if="queuer.data.hasStatus('checked_in')">Walked out</span>
       </div>
     </div>
-  </div>
-</div>
-<div ng-if="queuer">
-  <h4>Current Selected Queuer: {{queuer.first_name}} {{queuer.last_name}}</h4>
-</div>
+  </li>
+</ul>

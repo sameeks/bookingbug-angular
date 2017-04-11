@@ -1,12 +1,13 @@
 @import "queue-server";
 @import "queue-add-customer";
+@import "queuers";
 
 .info-box.info-box-sm {
   min-height: 45px;
   small {
       font-size: 12px;
   }
-  margin-bottom: 8px;
+  margin-bottom: 0px;
   .info-box-icon {
       height: 45px;
       width: 45px;
@@ -16,6 +17,9 @@
   .info-box-content {
       margin-left: 45px;
   }
+}
+li.info-box.info-box-sm {
+  margin-bottom: 8px;
 }
 
 .qline_due {
