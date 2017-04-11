@@ -24,5 +24,8 @@
     display: inline-block;
     vertical-align: middle;
   }
+  .panel-danger > .panel-heading {
+    background-color: white;
+  }
 
 }

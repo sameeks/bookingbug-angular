@@ -37,6 +37,7 @@
         <span class="input-group-btn">
           <button
             type="button"
+            aria-label="{{'ADMIN_BOOKING.CUSTOMER.SEARCH_BY_PLACEHOLDER' | translate}}"
             class="btn btn-primary btn-lg"
             ng-click="submitForm(); getClients({filter_by: typeahead_result})">
             <i class="fa fa-search"></i>
@@ -271,7 +272,7 @@
               name="mobile"
               id="mobile"
               ng-model="client.mobile"
-              class="form-control"
+              class="form-control" 
               ng-required="!client.email || bb.company.settings.ask_mobile_phone"
               ng-pattern="admin_options.MOBILE_INVALID"
             />

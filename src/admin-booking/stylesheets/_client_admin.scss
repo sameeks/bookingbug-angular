@@ -67,4 +67,9 @@
     display: inline-block;
   }
 
+  .pagination > .active a {
+      background-color: #00884B;
+      border-color: #00884B;
+  }
+
 }
