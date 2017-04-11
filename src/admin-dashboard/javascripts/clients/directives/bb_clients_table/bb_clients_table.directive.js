@@ -19,10 +19,9 @@ function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
     return directive;
 
     function link(scope, element, attrs) {
-        let columnDefs;
         let filters = [];
 
-        let prepareColumnDefs = () => {
+        let buildColumnsDisplay = () => {
             return [
                 { field: 'name', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME', width: '35%' },
                 { field: 'email', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL', width: '35%' },
@@ -31,7 +30,6 @@ function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
                     field: 'action',
                     displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',
                     enableFiltering: false,
-                    enableHiding: false,
                     width: '5%',
                     headerCellClass: 'action-column-header',
                     enableSorting: false,
@@ -41,10 +39,20 @@ function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
             ]
         }
 
-        if(scope.options) {
-            columnDefs = scope.options;
-        } else {
-            columnDefs = prepareColumnDefs();
+
+        // you can optionally pass in some column display options to the directive scope
+        let columnDefs = scope.options ? scope.options : buildColumnsDisplay();
+
+
+        let buildFilterString = (filters) => {
+            let filterString = $filter('buildClientString')(filters);
+            scope.getClients(scope.paginationOptions.pageNumber, filterString);
+        }
+
+
+        let handleFilterChange = (filterObject) => {
+            let builtFilters = $filter('buildClientFieldsArray')(filters, filterObject);
+            buildFilterString(builtFilters);
         }
 
         scope.paginationOptions = {
@@ -54,27 +62,28 @@ function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
         }
 
         scope.gridOptions = {
-            enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-            enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
-            enableSorting: true,
-            enableFiltering: true,
-            paginationPageSizes: [15],
-            paginationPageSize: 15,
-            useExternalPagination: true,
-            enableRowSelection: true,
-            enableFullRowSelection: true,
-            enableRowHeaderSelection: false,
-            rowHeight: 40,
-            enableColumnMenus: false,
             columnDefs: bbGridService.readyColumns(columnDefs),
+            enableColumnMenus: false,
+            enableFiltering: true,
+            enableFullRowSelection: true,
+            enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+            enableRowSelection: true,
+            enableRowHeaderSelection: false,
+            enableSorting: true,
+            enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
+            paginationPageSize: 15,
+            paginationPageSizes: [15],
+            rowHeight: 40,
+            useExternalPagination: true,
             onRegisterApi: (gridApi) => {
                 scope.gridApi = gridApi;
                 scope.gridData = scope.getClients();
                 gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {
                     scope.paginationOptions.pageNumber = newPage;
                     scope.paginationOptions.pageSize = pageSize;
-                    scope.getClients(scope.paginationOptions.pageNumber + 1, this.filterString);
+                    scope.getClients(scope.paginationOptions.pageNumber + 1, filterString);
                 });
+                // adds ability to edit a client by clicking on their row rather than just the action button
                 gridApi.selection.on.rowSelectionChanged(scope, (row) => {
                     $state.go('clients.edit', {id: row.entity.id});
                 });
@@ -91,17 +100,6 @@ function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
                handleFilterChange(filterObject);
             }
         });
-
-        let buildFilterString = (filters) => {
-            let filterString = $filter('buildClientString')(filters);
-            scope.getClients(scope.paginationOptions.pageNumber, filterString);
-        }
-
-
-        let handleFilterChange = (filterObject) => {
-            let builtFilters = $filter('buildClientFieldsArray')(filters, filterObject);
-            buildFilterString(builtFilters);
-        }
     }
 };
 

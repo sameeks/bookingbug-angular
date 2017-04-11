@@ -2,12 +2,11 @@ angular
     .module('BBAdminDashboard.clients.directives')
     .directive('bbClientBookingsTable', bbClientBookingsTable);
 
-function bbClientBookingsTable($uibModal, $log, $rootScope, $timeout, $compile,
-    $templateCache, ModalForm, BBModel, Dialog, AdminMoveBookingPopup, bbGridService, uiGridConstants) {
+function bbClientBookingsTable(bbGridService, uiGridConstants) {
     let directive = {
-        controller: 'bbAdminMemberBookingsTableCtrl',
+        controller: 'bbClientBookingsTableCtrl',
         link,
-        templateUrl: 'admin_member_bookings_table.html',
+        templateUrl: 'clients/client_booking_table.html',
         scope: {
             member: '=',
             startDate: '=?',
@@ -22,9 +21,8 @@ function bbClientBookingsTable($uibModal, $log, $rootScope, $timeout, $compile,
     return directive;
 
     function link(scope, elem, attrs) {
-        let columnDefs;
 
-        let prepareColumnDefs = () => {
+        let buildColumnsDisplay = () => {
             return [
                 { displayName: 'Data/Time', field: 'datetime', cellFilter: 'datetime: "ddd DD MMM YY h.mma"', width: '25%'},
                 { displayName: 'Description', field: 'details', width: '65%'},
@@ -37,18 +35,14 @@ function bbClientBookingsTable($uibModal, $log, $rootScope, $timeout, $compile,
             ]
         }
 
+        // you can optionally pass in some column display options to the directive scope
+        let columnDefs = scope.options ? scope.options : buildColumnsDisplay();
 
-        if(scope.options) {
-            columnDefs = scope.options;
-        } else {
-            columnDefs = prepareColumnDefs();
-        }
 
         scope.$watch('bookings', () => {
             if(scope.bookings && scope.bookings.length > 0) {
                renderBookings(scope.bookings);
-            } else {
-                scope.gridOptions.enablePaginationControls = false;
+               scope.gridOptions.enablePaginationControls = true;
             }
         });
 
@@ -59,8 +53,6 @@ function bbClientBookingsTable($uibModal, $log, $rootScope, $timeout, $compile,
                 scope.gridOptions.enablePaginationControls = false;
             }
         }
-
-
 
 
         scope.gridOptions = {

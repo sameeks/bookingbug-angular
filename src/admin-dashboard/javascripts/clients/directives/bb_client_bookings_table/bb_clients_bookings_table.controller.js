@@ -1,14 +1,12 @@
 angular
     .module('BBAdminDashboard.clients.controllers')
-    .controller('bbAdminMemberBookingsTableCtrl', bbAdminMemberBookingsTableCtrl);
+    .controller('bbClientBookingsTableCtrl', bbClientBookingsTableCtrl);
 
-function bbAdminMemberBookingsTableCtrl($document, $scope, $uibModal,$rootScope, BBModel, ModalForm, $log, AdminMoveBookingPopup) {
+function bbClientBookingsTableCtrl($document, $scope, $uibModal,$rootScope, BBModel, ModalForm, $log, AdminMoveBookingPopup) {
 
 
     $scope.$watch('member', (member) => {
-        if (member != null) {
-            return getBookings($scope, member);
-        }
+        return getBookings($scope, member);
     });
 
     let init = () => {
@@ -31,10 +29,11 @@ function bbAdminMemberBookingsTableCtrl($document, $scope, $uibModal,$rootScope,
                 model: booking,
                 title: 'Booking Details',
                 templateUrl: 'edit_booking_modal_form.html',
-                success(response) {
-                    handleModalSuccess(response, booking);
+                    success(response) {
+                        handleModal(response, booking);
+                    }
                 }
-            });
+            );
         });
     };
 
@@ -64,26 +63,22 @@ function bbAdminMemberBookingsTableCtrl($document, $scope, $uibModal,$rootScope,
     };
 
 
-    let openMoveModal = (booking) => {
-        let item_defaults = {person: booking.person_id, resource: booking.resource_id};
-        AdminMoveBookingPopup.open({
-            item_defaults,
-            company_id: booking.company_id,
-            booking_id: booking.id,
-            success: model => {
-                return updateBooking(booking);
-            },
-            fail: model => {
-                return updateBooking(booking);
-            }
-        });
-    }
+    let handleModal = (response, booking) => {
+        // if we are moving the booking
+        if (typeof response === 'string' && response === "move") {
+            let item_defaults = {person: booking.person_id, resource: booking.resource_id};
+            return AdminMoveBookingPopup.open({
+                item_defaults,
+                company_id: booking.company_id,
+                booking_id: booking.id,
+                success: model => {
+                    return updateBooking(booking);
+                },
+                fail: model => {
+                    return updateBooking(booking);
+                }
+            });
 
-    let handleModalSuccess = (response, booking) => {
-        if (typeof response === 'string') {
-            if (response === "move") {
-                openMoveModal(booking);
-            }
         } else {
             return updateBooking(booking);
         }

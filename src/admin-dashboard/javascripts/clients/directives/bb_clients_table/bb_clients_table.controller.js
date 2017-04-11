@@ -2,22 +2,19 @@ angular
     .module('BBAdminDashboard.clients.directives')
     .controller('TabletClients', bbTabletClients);
 
-function bbTabletClients($scope, $rootScope, $q, BBModel, AlertService, uiGridConstants) {
-    $scope.clientDef = $q.defer();
-    $scope.clientPromise = $scope.clientDef.promise;
-    let perPage = 15;
-    $scope.total_entries = 0;
+function bbTabletClients($scope, $rootScope, $q, BBModel) {
     $scope.clients = [];
+    let perPage = 15;
 
-    return $scope.getClients = function (pageNumber, searchFields) {
+    $scope.getClients = (pageNumber, searchFields) => {
         let clientDef = $q.defer();
 
         let params = {
             company: $scope.company,
             per_page: perPage,
             page: $scope.paginationOptions.pageNumber,
-            // filter_by: $scope.clientsOptions.search,
             filter_by_fields: searchFields
+            // filter_by: $scope.clientsOptions.search
         };
 
         return BBModel.Admin.Client.$query(params).then(clients => {
@@ -30,8 +27,8 @@ function bbTabletClients($scope, $rootScope, $q, BBModel, AlertService, uiGridCo
                 $scope.gridOptions.data = $scope.clients;
                 return clientDef.resolve(clients.items);
             }
-            , function (err) {
-                console.log(err);
+            , (err) => {
+                console.log('Error getting clients', err);
                 return clientDef.reject(err);
             });
     };
