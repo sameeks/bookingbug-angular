@@ -20,7 +20,7 @@
     </span>
     <span class="info-box-number"></span>
     <div ng-if="person.attendance_status == 1">
-       <div class="">Available</div>
+      <div class="">Available</div>
     </div>
     <div ng-if="person.attendance_status == 2 && person.estimated_return">
       <div class="">On break until {{person.estimated_return}}. <small>(estimated)</small></div>
@@ -30,15 +30,15 @@
     </div>
 
     <div ng-if="person.serving">
-       <div class="">
-         Serving: <small>{{person.serving.first_name}} ({{person.serving.service_name}})</small>
-       </div>
-       <div class="">
-         Since: <small>{{person.serving.start.format("LT")}}</small>
-       </div>
-       <div ng-class="{red: person.serving.end.isBefore()}">
-         Finish Estimate: <small>{{person.serving.end.format("LT")}}</small>
-       </div>
+      <div class="">
+        Serving: <small>{{person.serving.first_name}} ({{person.serving.service_name}})</small>
+      </div>
+      <div class="">
+        Since: <small>{{person.serving.start.format("LT")}}</small>
+      </div>
+      <div ng-class="{red: person.serving.end.isBefore()}">
+        Finish Estimate: <small>{{person.serving.end.format("LT")}}</small>
+      </div>
     </div>
   </div>
 </div>
