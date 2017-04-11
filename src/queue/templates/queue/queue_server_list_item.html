@@ -1,0 +1,44 @@
+<a ui-sref="queue.server({id: person.id})">
+  <span class="info-box-icon" ng-class="{
+  'bg-light-blue':person.attendance_status == 3,
+  'bg-orange':person.attendance_status == 4 && person.serving.end.isAfter(),
+  'bg-red':person.attendance_status == 4 && person.serving.end.isBefore(),
+  'bg-gray': (person.attendance_status == 2 || person.attendance_status == 2  || !person.attendance_status) ,
+  'bg-green': person.attendance_status == 1,
+    }"
+  ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-user"> </i></span>
+</a>
+
+<div class="loader pull-right small-loader" ng-show="loadingServer"></div>
+
+<div ng-include="'queue/queue_server_actions.html'"></div>
+
+<div class="info-box-content">
+  <div class="server-info">
+    <span class="info-box-text">
+      <b>{{person.name}}</b>
+    </span>
+    <span class="info-box-number"></span>
+    <div ng-if="person.attendance_status == 1">
+      <div class="">Available</div>
+    </div>
+    <div ng-if="person.attendance_status == 2 && person.estimated_return">
+      <div class="">On break until {{person.estimated_return}}. <small>(estimated)</small></div>
+    </div>
+    <div ng-if="person.attendance_status == 4 && !person.serving && person.estimated_return">
+      <div class="">Busy until {{person.estimated_return}}. <small>(estimated)</small></div>
+    </div>
+
+    <div ng-if="person.serving">
+      <div class="">
+        Serving: <small>{{person.serving.first_name}} ({{person.serving.service_name}})</small>
+      </div>
+      <div class="">
+        Since: <small>{{person.serving.start.format("LT")}}</small>
+      </div>
+      <div ng-class="{red: person.serving.end.isBefore()}">
+        Finish Estimate: <small>{{person.serving.end.format("LT")}}</small>
+      </div>
+    </div>
+  </div>
+</div>

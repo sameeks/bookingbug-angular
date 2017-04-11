@@ -1,0 +1,46 @@
+<div ng-hide="loading" bb-queue-server>
+<section class="content-header">
+  <h1>{{person.name}}</h1>
+</section>
+<section class="content">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">Serving</h3>
+        </div>
+        <div class="loader" ng-show="loadingServer"></div>
+        <div class="box-body padding" ng-class="{invisible: loadingServer}">
+          <div ng-if="person.serving">
+            <h3>{{person.serving.first_name}} {{person.serving.last_name}}</h3>
+            <p>Appointment started at {{person.serving.start | datetime: "h:mma":false}}</p>
+            <p>Appointment due to finish at {{person.serving.end | datetime: "h:mma":false}}</p>
+            <div class="btn-group" uib-dropdown >
+              <button type="button" class="btn btn-danger" uib-dropdown-toggle>Extend Appointment</button>
+              <button type="button" class="btn btn-danger dropdown-toggle" uib-dropdown-toggle aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                <li><a ng-click="extendAppointment(1)">{{1 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(2)">{{2 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(5)">{{5 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(10)">{{10 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(15)">{{15 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(20)">{{20 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(25)">{{25 | time_period}}</a></li>
+                <li><a ng-click="extendAppointment(30)">{{30 | time_period}}</a></li>
+              </ul>
+            </div>
+
+          </div>
+          <div ng-if="!person.serving">
+            <h3>Idle</h3>
+          </div>
+          <div ng-include="'queue/queue_server_actions.html'"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 pull-right" bb-queuers></div>
+  </div>
+</section>

@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h3 class="modal-title">Serve Now</h3>
+</div>
+<form class="form-horizontal" ng-submit="submit(form)">
+  <div class="modal-body row">
+    <div class="col-md-6 col-sm-6">
+      <p>Pick a service</p>
+      <div class="radio" ng-repeat="service in services">
+        <label>
+          <input type="radio" name="service" ng-value="service" ng-model="form.service">
+          {{service.name}}
+        </label>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-6">
+      <p>Pick a server</p>
+      <div class="radio" ng-repeat="server in servers">
+        <label>
+          <input type="radio" name="server" ng-value="server" ng-model="form.server">
+          {{server.name}}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" ng-click="dismiss()">Dismiss</button>
+    <input type="submit" class="btn btn-primary" value="Serve Now">
+  </div>
+</form>

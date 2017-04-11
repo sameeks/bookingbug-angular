@@ -363,7 +363,7 @@ angular.module('BB.Filters').filter('time_period', $translate =>
  </example>
  */
 angular.module('BB.Filters').filter('time_period_from_seconds', ($translate, $filter) =>
-    function (v) {
+    function(v, precision) {
 
         if (!angular.isNumber(v)) {
             return;
@@ -371,6 +371,10 @@ angular.module('BB.Filters').filter('time_period_from_seconds', ($translate, $fi
 
         let seconds = parseInt(v);
         let time_period = '';
+
+        if (precision == 'minutes') {
+            return moment.duration(seconds / 60, 'minutes').humanize();
+        }
 
         if (seconds >= 60) {
             time_period += $filter('time_period')(seconds / 60);
