@@ -145,16 +145,13 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
                 } else {
 
                     // Query each service to check for associated items (person or resource)
-                    let itemsPromises = [];
-                    items.forEach(item => itemsPromises.push(item.$getItems()));
+                    let itemsPromises = items.map(item => item.$getItems());
 
                     // Items endpoint will return empty array if no person or resource is associated with service. Consider this non-bookable.
-                    let bookable_items = [];
                     $q.all(itemsPromises).then(services => {
-                        items.forEach((item, index) => {
-                            if (services[index].length) {
-                                bookable_items.push(item);
-                            }
+
+                        let bookable_items = items.filter((item, index) => {
+                            if (services[index].length) return item
                         });
 
                         $scope.bookable_services = bookable_items;
