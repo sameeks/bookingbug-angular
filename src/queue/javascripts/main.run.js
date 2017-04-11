@@ -47,13 +47,6 @@ angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNav
                 controller($scope, $stateParams, person) {
                     $scope.person = person;
                 }
-            }).state('queue.calendar', {
-                parent: 'queue',
-                url: "/calendar/:id",
-                templateUrl: "queue/server_calendar.html",
-                controller($scope, $stateParams ) {
-                    return $scope.person_id = $stateParams.id;
-                }
             }
         );
     }
