@@ -30,7 +30,8 @@ function bbTabletClients($scope, $rootScope, $q, BBModel) {
             , (err) => {
                 console.log('Error getting clients', err);
                 return clientDef.reject(err);
-            });
+            }
+        );
     };
 }
 

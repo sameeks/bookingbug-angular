@@ -13,8 +13,12 @@ angular.module('BBAdminDashboard', [
     'BBAdmin.Directives',
     'BBMember',
 
-    'ui.calendar',
     'ui.bootstrap',
+    'ui.calendar',
+    'ui.grid',
+    'ui.grid.pagination',
+    'ui.grid.selection',
+    'ui.map',
     'ui.router',
     'ct.ui.router.extras',
     'trNgGrid',
