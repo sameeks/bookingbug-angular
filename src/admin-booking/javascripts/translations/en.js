@@ -67,7 +67,7 @@ angular.module("BBAdminBooking").config(function ($translateProvider) {
                 MOBILE_LBL: "@:COMMON.TERMINOLOGY.MOBILE",
                 NO_RESULTS_FOUND: "No results found",
                 NUM_CUSTOMERS: "{CUSTOMERS_NUMBER, plural, =0{no customers} =1{one customer} other{{CUSTOMERS_NUMBER} customers}} found",
-                SEARCH_BY_PLACEHOLDER: "Search by email or name",
+                SEARCH_BY_PLACEHOLDER: "Search by email or name",
                 STEP_HEADING: "Select a customer",
                 SELECT_BTN: "@:COMMON.BTN.SELECT",
                 SORT_BY_LBL: "Sort by",

@@ -1,27 +1,13 @@
-angular.module('BBQueue', [
-    'BB',
-    'BBAdmin.Services',
-    'BBAdmin.Directives',
-    'BBQueue.Services',
-    'BBQueue.Directives',
-    'BBQueue.Controllers',
-    'trNgGrid',
-    'ngDragDrop',
-    'pusher-angular'
-]);
+angular.module('BBQueue.controllers', []);
+angular.module('BBQueue.services', []);
+angular.module('BBQueue.directives', []);
+angular.module('BBQueue.translations', []);
 
-angular.module('BBQueue.Directives', [
+angular.module('BBQueue', [
+    'BBQueue.controllers',
+    'BBQueue.services',
+    'BBQueue.directives',
+    'BBQueue.translations',
+    'ngDragDrop',
     'timer'
 ]);
-
-angular.module('BBQueue.Controllers', []);
-
-angular.module('BBQueue.Services', [
-    'ngResource',
-    'ngSanitize'
-]);
-
-angular.module('BBQueueMockE2E', ['BBQueue', 'BBAdminMockE2E']);
-
-
-
