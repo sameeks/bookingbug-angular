@@ -2,7 +2,7 @@ angular
     .module('BBAdminDashboard.clients.directives')
     .directive('bbClientBookingsTable', bbClientBookingsTable);
 
-function bbClientBookingsTable(bbGridService, uiGridConstants) {
+function bbClientBookingsTable($timeout, bbGridService, uiGridConstants) {
     let directive = {
         controller: 'bbClientBookingsTableCtrl',
         link,
@@ -14,13 +14,24 @@ function bbClientBookingsTable(bbGridService, uiGridConstants) {
             endDate: '=?',
             endTime: '=?',
             period: '@',
-            options: '='
+            options: '=',
+            tabset: '='
         }
     }
 
     return directive;
 
     function link(scope, elem, attrs) {
+
+        scope.$watch('tabset.active', () => {
+            let gridElements = document.getElementsByClassName('bb-client-bookings-table');
+            if(gridElements.length > 0) {
+                $timeout(() => {
+                    let activeGrid = angular.element(gridElements[scope.tabset.active]);
+                    activeGrid.addClass('fade-in');
+                });
+            }
+        });
 
         let buildColumnsDisplay = () => {
             return [
