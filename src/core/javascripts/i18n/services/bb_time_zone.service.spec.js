@@ -53,7 +53,8 @@ describe('bbTimeZone service,', () => {
 
         it('should use browser timezone', () => {
             setBbi18nOptions({
-                use_browser_time_zone: true
+                use_browser_time_zone: true,
+                use_moment_names: true
             });
 
             spyOn(moment.tz, 'guess').and.returnValue('Europe/Berlin');
