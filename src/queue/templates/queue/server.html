@@ -37,6 +37,9 @@
           <div ng-if="!person.serving">
             <h3>Idle</h3>
           </div>
+          <div ng-if="person.next_booking">
+            Next appointment: {{person.next_booking.client_name}} {{person.next_booking.start.format('HH:mm')}}
+          </div>
           <div ng-include="'queue/queue_server_actions.html'"></div>
         </div>
       </div>

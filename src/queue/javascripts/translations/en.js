@@ -35,7 +35,9 @@ angular.module('BBQueue.translations')
                 'ABOUT': 'About',
                 'ADDRESS': 'Address',
                 'UPCOMING_BOOKINGS': 'Upcoming Bookings',
-                'PAST_BOOKINGS': 'Past Bookings'
+                'PAST_BOOKINGS': 'Past Bookings',
+                'NEXT_BOOKING_DIALOG_HEADING': 'Upcoming Appointment',
+                'NEXT_BOOKING_DIALOG_BODY': '{{name}} has an appointment at {{time}}. Are you sure they want to serve another customer beforehand?'
             }
         }
     })

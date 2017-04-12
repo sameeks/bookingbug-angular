@@ -1,5 +1,15 @@
 let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBModel, CheckSchema,
-    $uibModal, AdminPersonService, $q, AdminQueuerService) => {
+    $uibModal, AdminPersonService, $q, AdminQueuerService, Dialog, $translate) => {
+
+    let init = function() {
+        $scope.loadingServer = false;
+        let bookings = _.filter($scope.bookings.items, booking => {
+            return booking.person_id == $scope.person.id;
+        });
+        if (bookings && bookings.length > 0) {
+            $scope.person.next_booking = bookings[0];
+        }
+    };
 
     $scope.setAttendance = function(person, status, duration) {
         $scope.loadingServer = true;
@@ -11,13 +21,36 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
         });
     };
 
+    let upcomingBookingCheck = function(person) {
+        return person.next_booking && person.next_booking.start.isBefore(moment().add(1, 'hour'));
+    };
+
     $scope.startServingQueuer = function(person, queuer) {
         $scope.loadingServer = true;
-        person.startServing(queuer).then(function() {
-            if ($scope.selectQueuer) $scope.selectQueuer(null);
-            $scope.getQueuers();
-            $scope.loadingServer = false;
-        });
+        if (upcomingBookingCheck(person)) {
+            Dialog.confirm({
+                title: $translate.instant('ADMIN_DASHBOARD.QUEUE_PAGE.NEXT_BOOKING_DIALOG_HEADING'),
+                body: $translate.instant('ADMIN_DASHBOARD.QUEUE_PAGE.NEXT_BOOKING_DIALOG_BODY', {
+                    name: person.name, time: person.next_booking.start.format('HH:mm')
+                }),
+                success: () => {
+                    person.startServing(queuer).then(function() {
+                        if ($scope.selectQueuer) $scope.selectQueuer(null);
+                        $scope.getQueuers();
+                        $scope.loadingServer = false;
+                    });
+                },
+                fail: () => {
+                    $scope.loadingServer = false;
+                }
+            });
+        } else {
+            person.startServing(queuer).then(function() {
+                if ($scope.selectQueuer) $scope.selectQueuer(null);
+                $scope.getQueuers();
+                $scope.loadingServer = false;
+            });
+        }
     };
 
     $scope.finishServingQueuer = function(options) {
@@ -117,7 +150,7 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
         });
     };
 
-    $scope.loadingServer = false;
+    init();
 };
 
 angular.module('BBQueue.controllers').controller('bbQueueServerController', QueueServerController);
