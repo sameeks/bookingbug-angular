@@ -25,7 +25,7 @@ angular.module('BBAdminDashboard').factory('SideNavigationPartials', [
             removePartialTemplate(identifier) {
                 let partial = _.findWhere(templatesArray, {module: identifier});
                 let index = _.indexOf(templatesArray, partial);
-                templatesArray.shift(index, 1);
+                templatesArray.splice(index, 1);
             },
 
             getPartialTemplates(){
