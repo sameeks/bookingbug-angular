@@ -20,6 +20,7 @@ function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
 
     function link(scope, element, attrs) {
         let filters = [];
+        let filterString;
 
         let buildColumnsDisplay = () => {
             return [
@@ -45,7 +46,7 @@ function BBClientsTable(bbGridService, uiGridConstants, $state, $filter) {
 
 
         let buildFilterString = (filters) => {
-            let filterString = $filter('buildClientString')(filters);
+            filterString = $filter('buildClientString')(filters);
             scope.getClients(scope.paginationOptions.pageNumber, filterString);
         }
 

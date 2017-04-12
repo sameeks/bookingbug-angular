@@ -2,7 +2,6 @@ describe('BBAdminDashboard.clients.controllers bbClientBookingsTableCtrl', funct
     let $controller = null;
     let $rootScope = null;
     let $scope = null;
-    let ClientBookingsCtrl;
 
 
     let beforeEachFn = function() {
@@ -13,10 +12,6 @@ describe('BBAdminDashboard.clients.controllers bbClientBookingsTableCtrl', funct
             $controller = $injector.get('$controller');
             $rootScope = $injector.get('$rootScope');
             $scope = $rootScope.$new();
-
-            ClientBookingsCtrl = $controller('bbClientBookingsTableCtrl as $bbClientBookingsTableCtrl', {
-                '$scope': $scope
-            });
         });
 
 
@@ -25,10 +20,6 @@ describe('BBAdminDashboard.clients.controllers bbClientBookingsTableCtrl', funct
 
 
     beforeEach(beforeEachFn)
-
-    it('stores startDate to scope as current time if not already present', function() {
-
-    });
 
 });
 
