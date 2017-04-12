@@ -26,7 +26,7 @@ angular.module('BBAdminDashboard', [
     'pascalprecht.translate',
     'angular-loading-bar',
     'ngScrollable',
-    'toastr'
+    'toastr',
 
     'BBAdminDashboard.check-in',
     'BBAdminDashboard.clients',
