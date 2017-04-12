@@ -8,7 +8,7 @@
      */
     angular
         .module('BB.i18n')
-        .factory('bbTimeZoneOptions', timeZoneOptionsService);
+        .factory('bbTimeZoneOptionsFunc', timeZoneOptionsService);
 
     function timeZoneOptionsService($translate, orderByFilter, bbCustomTimeZones, bbi18nOptions) {
 
