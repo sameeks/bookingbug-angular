@@ -8,6 +8,8 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
         });
         if (bookings && bookings.length > 0) {
             $scope.person.next_booking = bookings[0];
+        } else {
+            $scope.person.next_booking = null;
         }
     };
 
@@ -149,6 +151,8 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
             $scope.loadingServer = false;
         });
     };
+
+    $scope.$on('updateBookings', () => init());
 
     init();
 };
