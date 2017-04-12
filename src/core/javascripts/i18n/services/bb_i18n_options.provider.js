@@ -1,30 +1,5 @@
-angular.module('BB.i18n').provider('bbi18nOptions', function () {
+angular.module('BB.i18n').provider('bbi18nOptions', function (bbOptionsProvider) {
     'ngInject';
-
-    function isObjectProperty(prop) {
-        return typeof prop === 'object' && !Array.isArray(prop) && prop !== null;
-    }
-
-    function setValue(options, option, value) {
-        if (!options.hasOwnProperty(option))throw new Error('no option named:' + option);
-
-        if (value === undefined) return Object.assign({}, options);
-
-        if (!isObjectProperty(options[option])) {
-            if (typeof  options[option] !== typeof value || Array.isArray(options[option]) !== Array.isArray(value)) {
-                throw new Error(`option "${option}" required type is "${ Array.isArray(options[option]) ? 'array' : typeof options[option]}"`);
-            }
-            return Object.assign({}, options, {[option]: value});
-        }
-
-        let guardedVal = Object.assign({}, options[option]);
-
-        if (!isObjectProperty(value)) throw new Error(`option "${option}" must be an object`);
-
-        for (let [key] of Object.entries(value)) guardedVal = setValue(guardedVal, key, value[key]);
-
-        return Object.assign({}, options, {[option]: guardedVal});
-    }
 
     let options = {
         default_language: 'en',
@@ -46,7 +21,7 @@ angular.module('BB.i18n').provider('bbi18nOptions', function () {
     };
 
     this.setOption = function (option, value) {
-        options = setValue(options, option, value);
+        options = bbOptionsProvider.setOption(options, option, value);
     };
 
     this.getOption = function (option) {
