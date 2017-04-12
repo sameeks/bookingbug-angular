@@ -35,6 +35,7 @@
         this.timeZones = [];
         this.isAutomaticTimeZone = false;
         this.selectedTimeZone = null;
+        // console.log(bbTimeZoneOptionsFunc);
 
         this.$onInit = () => {
             this.useMomentNames = bbi18nOptions.use_moment_names;

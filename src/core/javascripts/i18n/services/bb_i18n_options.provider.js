@@ -12,7 +12,7 @@ angular.module('BB.i18n').provider('bbi18nOptions', function () {
         use_browser_time_zone: false,
         use_company_time_zone: true,
 
-        use_moment_names: true,
+        use_moment_names: false,
         limit_time_zones: null,
         exclude_time_zones: null,
         daylight_time_zones: null,
