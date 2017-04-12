@@ -11,8 +11,7 @@ describe('bbTimeZone service,', () => {
                         available_languages: ['en'],
                         default_time_zone: 'Europe/London',
                         use_browser_time_zone: false,
-                        use_company_time_zone: false,
-                        use_moment_names: true
+                        use_company_time_zone: false
                     }, options);
                 };
             });
@@ -53,7 +52,8 @@ describe('bbTimeZone service,', () => {
 
         it('should use browser timezone', () => {
             setBbi18nOptions({
-                use_browser_time_zone: true
+                use_browser_time_zone: true,
+                use_moment_names: true
             });
 
             spyOn(moment.tz, 'guess').and.returnValue('Europe/Berlin');
