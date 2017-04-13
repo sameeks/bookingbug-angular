@@ -8,9 +8,6 @@ angular.module('BB.i18n').provider('bbi18nOptions', function (bbOptionsProvider)
         available_language_associations: {
             'en_*': 'en'
         },
-
-        use_company_time_zone: true,
-
         timeZone: {
             default: 'Europe/London',
             options: {
@@ -20,7 +17,8 @@ angular.module('BB.i18n').provider('bbi18nOptions', function (bbOptionsProvider)
                 daylightTimeZones: null,
                 standardTimeZones: null
             },
-            useBrowser: false
+            useBrowser: false,
+            useCompany: true
         }
     };
 

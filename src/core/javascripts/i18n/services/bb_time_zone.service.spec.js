@@ -12,13 +12,13 @@ describe('bbTimeZone service,', () => {
 
                     return Immutable.fromJS({
                         available_languages: ['en'],
-                        use_company_time_zone: false,
                         timeZone: {
                             default: 'Europe/London',
                             options: {
                                 useMomentNames: true
                             },
-                            useBrowser: false
+                            useBrowser: false,
+                            useCompany: false
                         }
                     }).mergeDeep(options).toJS();
                 };
@@ -75,7 +75,9 @@ describe('bbTimeZone service,', () => {
 
         it('should use company timezone', () => {
             setBbi18nOptions({
-                use_company_time_zone: true
+                timeZone: {
+                    useCompany: true
+                }
             });
             bbTimeZone.determineTimeZone();
             expect(bbTimeZone.getDisplayTimeZone()).toBe('America/New_York');
@@ -85,9 +87,9 @@ describe('bbTimeZone service,', () => {
 
             setBbi18nOptions({
                 timeZone: {
-                    useBrowser: true
-                },
-                use_company_time_zone: true
+                    useBrowser: true,
+                    useCompany: true
+                }
             });
 
             spyOn(moment.tz, 'guess').and.returnValue('Europe/Paris');
@@ -100,9 +102,9 @@ describe('bbTimeZone service,', () => {
         it('should use time zone stored in browser local storage', () => {
             setBbi18nOptions({
                 timeZone: {
-                    useBrowser: true
-                },
-                use_company_time_zone: true
+                    useBrowser: true,
+                    useCompany: true
+                }
             });
 
             bbTimeZone.setLocalStorage({displayTimeZone: 'Canada/Mountain'});
@@ -115,9 +117,9 @@ describe('bbTimeZone service,', () => {
 
             setBbi18nOptions({
                 timeZone: {
-                    useBrowser: false
-                },
-                use_company_time_zone: false
+                    useBrowser: false,
+                    useCompany: false
+                }
             });
 
             spyOn(moment.tz, 'guess').and.returnValue('Europe/Paris');

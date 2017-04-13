@@ -74,7 +74,7 @@
                 return;
             }
 
-            if (bbi18nOptions.use_company_time_zone && CompanyStoreService.time_zone) {
+            if (bbi18nOptions.timeZone.useCompany && CompanyStoreService.time_zone) {
                 let timeZone = getTimeZoneKey(CompanyStoreService.time_zone);
                 setDisplayTimeZone(timeZone);
             }
