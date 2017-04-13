@@ -9,10 +9,10 @@ describe('bbTimeZone service,', () => {
                 this.$get = () => {
                     return Object.assign({
                         available_languages: ['en'],
-                        default_time_zone: 'Europe/London',
                         use_browser_time_zone: false,
                         use_company_time_zone: false,
                         timeZone: {
+                            default: 'Europe/London',
                             options: {
                                 useMomentNames: true
                             }

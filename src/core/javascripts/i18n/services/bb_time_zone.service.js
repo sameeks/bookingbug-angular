@@ -13,7 +13,7 @@
     function bbTimeZoneService($localStorage, $log, moment, bbi18nOptions, CompanyStoreService, bbCustomTimeZones) {
         'ngInject';
 
-        let displayTimeZone = bbi18nOptions.default_time_zone;
+        let displayTimeZone = bbi18nOptions.timeZone.default;
 
         return {
             getDisplayTimeZone,
