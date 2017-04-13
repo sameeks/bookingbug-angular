@@ -17,7 +17,7 @@
         .module('BB.Directives')
         .directive('bbTimeZone', bbTimeZoneDirective);
 
-    function bbTimeZoneDirective () {
+    function bbTimeZoneDirective() {
         return {
             restrict: 'A',
             controllerAs: '$tzCtrl',
@@ -28,7 +28,7 @@
                 this.time_zone_name = moment().tz(bbTimeZone.getDisplayTimeZone()).format('zz');
 
                 //  if not using local time zone and user time zone is not same as companies
-                if (!bbi18nOptions.use_browser_time_zone && (bbTimeZone.getDisplayTimeZone() !== company_time_zone)) {
+                if (!bbi18nOptions.timeZone.useBrowser && (bbTimeZone.getDisplayTimeZone() !== company_time_zone)) {
                     return this.is_time_zone_diff = true;
                 }
             }

@@ -54,7 +54,7 @@
             if (limitTimeZones) timeZoneNames = filterTimeZoneList(timeZoneNames, limitTimeZones);
             if (excludeTimeZones) timeZoneNames = filterTimeZoneList(timeZoneNames, excludeTimeZones, true);
             if (daylightTimeZones || standardTimeZones) timeZoneNames = filterDaylightOrStandard(timeZoneNames, daylightTimeZones, standardTimeZones);
-            if (bbi18nOptions.use_browser_time_zone && useMomentNames) timeZoneNames = checkLocalTimeZone(timeZoneNames);
+            if (bbi18nOptions.timeZone.useBrowser && useMomentNames) timeZoneNames = checkLocalTimeZone(timeZoneNames);
 
             return timeZoneNames;
 

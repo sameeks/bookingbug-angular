@@ -31,7 +31,9 @@ describe('bbOptionsProvider.setValue method', function () {
 
     it('allows to override testBoolean', function () {
         let testBoolean = false;
+
         let newOptions = _bbOptionsProvider.setOption(testOptions, 'testBoolean', testBoolean);
+
         expect(newOptions.testBoolean).toBe(testBoolean);
     });
 
@@ -44,7 +46,7 @@ describe('bbOptionsProvider.setValue method', function () {
     it('allows to override testArray', function () {
         let testArray = [1, 2, 3];
         let newOptions = _bbOptionsProvider.setOption(testOptions, 'testArray', testArray);
-        expect(newOptions.testArray).toBe(testArray);
+        expect(newOptions.testArray).toEqual(testArray);
     });
 
     it('allows to override testObject.internalObject.someArray', function () {
@@ -54,7 +56,7 @@ describe('bbOptionsProvider.setValue method', function () {
                 someArray: testArray
             }
         });
-        expect(newOptions.testObject.internalObject.someArray).toBe(testArray);
+        expect(newOptions.testObject.internalObject.someArray).toEqual(testArray);
     });
 
     it('allows to override testObject.internalString', function () {

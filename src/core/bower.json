@@ -36,15 +36,13 @@
     "angular-touch": "~1.5.10",
     "angular-bootstrap": "~2.0.0",
     "angular-carousel": "~0.3.13",
-
     "moment": "~2.14.0",
     "moment-timezone": "~0.5.4",
     "angular-moment": "~1.0.1",
-
+    "immutable": "~3.8.1",
     "fullcalendar": "~3.0.0",
     "fontawesome": "~4.6.3",
     "angular-ui-router": "~0.2.18",
-
     "accounting": "~0.3.2",
     "angular-mocks": "~1.5.10",
     "trNgGrid": "~3.1.7",

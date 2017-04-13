@@ -68,7 +68,7 @@
                 return;
             }
 
-            if (bbi18nOptions.use_browser_time_zone || localStorage.useBrowserTimeZone) {
+            if (bbi18nOptions.timeZone.useBrowser || localStorage.useBrowserTimeZone) {
                 let timeZone = getTimeZoneKey(moment.tz.guess());
                 setDisplayTimeZone(timeZone);
                 return;

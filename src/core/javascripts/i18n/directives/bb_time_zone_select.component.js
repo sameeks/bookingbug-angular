@@ -46,7 +46,7 @@
 
         const determineDefaults = () => {
             const localStorage = $localStorage.getObject('bbTimeZone');
-            this.isAutomaticTimeZone = (localStorage.useBrowserTimeZone || bbi18nOptions.use_browser_time_zone);
+            this.isAutomaticTimeZone = (localStorage.useBrowserTimeZone || bbi18nOptions.timeZone.useBrowser);
             this.selectedTimeZone = this.timeZones.find((tz) => tz.value === bbTimeZone.getDisplayTimeZone());
         };
 

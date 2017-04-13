@@ -4,20 +4,23 @@ describe('bbTimeZone service,', () => {
     let moment = null;
 
     const setBbi18nOptions = (options = {}) => {
+
         module(function ($provide) {
+
             $provide.provider('bbi18nOptions', function () {
                 this.$get = () => {
-                    return Object.assign({
+
+                    return Immutable.fromJS({
                         available_languages: ['en'],
-                        use_browser_time_zone: false,
                         use_company_time_zone: false,
                         timeZone: {
                             default: 'Europe/London',
                             options: {
                                 useMomentNames: true
-                            }
+                            },
+                            useBrowser: false
                         }
-                    }, options);
+                    }).mergeDeep(options).toJS();
                 };
             });
 
@@ -57,7 +60,9 @@ describe('bbTimeZone service,', () => {
 
         it('should use browser timezone', () => {
             setBbi18nOptions({
-                use_browser_time_zone: true,
+                timeZone: {
+                    useBrowser: true
+                },
                 use_moment_names: true
             });
 
@@ -76,10 +81,12 @@ describe('bbTimeZone service,', () => {
             expect(bbTimeZone.getDisplayTimeZone()).toBe('America/New_York');
         });
 
-        it('should use browser timezone (use_browser_time_zone has precedence over use_company_time_zone)', () => {
+        it('should use browser timezone (timeZone.useBrowser has precedence over timeZone.useCompany)', () => {
 
             setBbi18nOptions({
-                use_browser_time_zone: true,
+                timeZone: {
+                    useBrowser: true
+                },
                 use_company_time_zone: true
             });
 
@@ -92,7 +99,9 @@ describe('bbTimeZone service,', () => {
 
         it('should use time zone stored in browser local storage', () => {
             setBbi18nOptions({
-                use_browser_time_zone: true,
+                timeZone: {
+                    useBrowser: true
+                },
                 use_company_time_zone: true
             });
 
@@ -105,7 +114,9 @@ describe('bbTimeZone service,', () => {
         it('should use browser timezone (enforced by value in browser local storage)', () => {
 
             setBbi18nOptions({
-                use_browser_time_zone: false,
+                timeZone: {
+                    useBrowser: false
+                },
                 use_company_time_zone: false
             });
 
