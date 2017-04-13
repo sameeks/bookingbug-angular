@@ -12,12 +12,15 @@ angular.module('BB.i18n').provider('bbi18nOptions', function (bbOptionsProvider)
         use_browser_time_zone: false,
         use_company_time_zone: true,
 
-        use_moment_names: false,
-        limit_time_zones: null,
-        exclude_time_zones: null,
-        daylight_time_zones: null,
-        standard_time_zones: null
-
+        timeZone: {
+            options: {
+                useMomentNames: false,
+                limitTimeZonesBy: null,
+                excludeTimeZonesBy: null,
+                daylightTimeZones: null,
+                standardTimeZones: null
+            }
+        }
     };
 
     this.setOption = function (option, value) {

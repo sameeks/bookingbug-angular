@@ -10,16 +10,18 @@
         .module('BB.i18n')
         .factory('bbTimeZoneOptions', timeZoneOptionsService);
 
-    function timeZoneOptionsService ($translate, $localStorage, moment, orderByFilter, bbCustomTimeZones, bbi18nOptions, CompanyStoreService, bbTimeZone) {
+    function timeZoneOptionsService($translate, $localStorage, moment, orderByFilter, bbCustomTimeZones, bbi18nOptions, CompanyStoreService, bbTimeZone) {
         'ngInject';
 
         const compose = (...funcs) => (value) => funcs.reduce((v, fn) => fn(v), value);
 
-        const { use_moment_names: useMomentNames,
-            limit_time_zones: limitTimeZonesBy,
-            exclude_time_zones: excludeTimeZonesBy,
-            daylight_time_zones: daylightTimeZones,
-            standard_time_zones: standardTimeZones } = bbi18nOptions;
+        const {
+            useMomentNames,
+            limitTimeZonesBy,
+            excludeTimeZonesBy,
+            daylightTimeZones,
+            standardTimeZones
+        } = bbi18nOptions.timeZone.options;
 
         let format;
 
@@ -77,11 +79,11 @@
             return timeZones;
         }
 
-        function loadTimeZoneList () {
+        function loadTimeZoneList() {
             return useMomentNames ? loadMomentNames() : Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES);
         }
 
-        function loadMomentNames () {
+        function loadMomentNames() {
             const timeZones = moment.tz.names();
             return _.chain(timeZones)
                 .reject((tz) => tz.indexOf('GMT') !== -1)
@@ -90,30 +92,30 @@
                 .value();
         }
 
-        function filterTimeZones (timeZones) {
+        function filterTimeZones(timeZones) {
             if (limitTimeZonesBy) return filterTimeZoneList(timeZones, limitTimeZonesBy);
             return timeZones;
         }
 
-        function rejectTimeZones (timeZones) {
+        function rejectTimeZones(timeZones) {
             if (excludeTimeZonesBy) return filterTimeZoneList(timeZones, excludeTimeZonesBy, true);
             return timeZones;
         }
 
-        function dayLightOrStandardTimeZones (timeZones) {
+        function dayLightOrStandardTimeZones(timeZones) {
             const isDayLightTime = moment().isDST();
             if (daylightTimeZones || standardTimeZones) return filterTimeZoneList(timeZones, isDayLightTime ? daylightTimeZones : standardTimeZones);
             return timeZones;
         }
 
-        function checkCompanyTimeZone (timeZones) {
+        function checkCompanyTimeZone(timeZones) {
             if (timeZones.find((tz) => tz !== CompanyStoreService.time_zone)) {
                 timeZones.push(CompanyStoreService.time_zone);
             }
             return timeZones;
         }
 
-        function checkDisplayTimeZone (timeZones) {
+        function checkDisplayTimeZone(timeZones) {
             const timeZone = bbTimeZone.getDisplayTimeZone();
             if (timeZones.find((tz) => tz !== timeZone)) {
                 timeZones.push(timeZone);
@@ -121,7 +123,7 @@
             return timeZones;
         }
 
-        function filterTimeZoneList (timeZones, timeZoneToFilter, exclude = false) {
+        function filterTimeZoneList(timeZones, timeZoneToFilter, exclude = false) {
 
             if (angular.isString(timeZoneToFilter)) {
                 return filterOrReject(timeZoneToFilter);
@@ -142,7 +144,7 @@
             }
         }
 
-        function mapTimeZonesModel (timeZoneNames) {
+        function mapTimeZonesModel(timeZoneNames) {
             const timeZones = [];
             for (let [index, timeZone] of timeZoneNames.entries()) {
                 timeZones.push(mapTimeZoneItem(timeZone, index));
@@ -150,7 +152,7 @@
             return timeZones;
         }
 
-        function mapTimeZoneItem (timeZoneKey, index) {
+        function mapTimeZoneItem(timeZoneKey, index) {
             const city = timeZoneKey.match(/[^/]*$/)[0].replace(/-/g, '_');
             const momentTz = moment.tz(timeZoneKey);
             return {
@@ -161,7 +163,7 @@
             };
         }
 
-        function formatDisplayValue (city, momentTz, format) {
+        function formatDisplayValue(city, momentTz, format) {
 
             const formatMap = {
                 'tz-code': $translate.instant(`I18N.TIMEZONE_LOCATIONS.CODES.${momentTz.format('zz')}`),
@@ -178,11 +180,11 @@
             return format;
         }
 
-        function removeDuplicates (timeZones) {
+        function removeDuplicates(timeZones) {
             return _.uniq(timeZones, (timeZone) => timeZone.display);
         }
 
-        function orderTimeZones (timeZones) {
+        function orderTimeZones(timeZones) {
             return orderByFilter(timeZones, ['order[0]', 'order[1]', 'order[2]'], false);
         }
 

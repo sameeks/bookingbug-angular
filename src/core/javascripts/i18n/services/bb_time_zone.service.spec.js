@@ -12,7 +12,11 @@ describe('bbTimeZone service,', () => {
                         default_time_zone: 'Europe/London',
                         use_browser_time_zone: false,
                         use_company_time_zone: false,
-                        use_moment_names: true
+                        timeZone: {
+                            options: {
+                                useMomentNames: true
+                            }
+                        }
                     }, options);
                 };
             });
