@@ -2,7 +2,7 @@ angular
     .module('BBAdminDashboard.check-in.directives')
     .controller('bbAddWalkinCtrl', bbAddWalkinCtrl);
 
-function bbAddWalkinCtrl($scope, AdminBookingPopup, $timeout) {
+function bbAddWalkinCtrl($scope, AdminBookingPopup) {
     $scope.walkIn = () => {
         AdminBookingPopup.open({
             item_defaults: {

@@ -170,6 +170,8 @@ angular.module('BB.Models').factory("AdminBookingModel", ($q, BBModel,
             }
 
             static $query(params) {
+                // remove any undefined params
+                Object.keys(params).forEach((key) => (params[key] == null) && delete params[key]);
                 let company;
                 if (params.slot) {
                     params.slot_id = params.slot.id;

@@ -4,37 +4,33 @@ angular
 
 function bbCheckInController($scope, $q, ModalForm, AlertService, BBModel) {
 
-    let setCheckInGridData = (bookings) => {
-        $scope.gridOptions.data = bookings;
-    }
-
     $scope.getAppointments = (currentPage, filterBy, filterByFields, orderBy, orderByReverse, skipCache) => {
-        if (skipCache == null) {
-            skipCache = true;
-        }
-        let defer = $q.defer();
+        buildParams(currentPage, filterBy, filterByFields, orderBy, orderByReverse, skipCache);
+    };
+
+
+    let buildParams = (current_page, filter_by, filter_by_fields, order_by, order_by_reverse, skip_cache) => {
+        let date = moment().format('YYYY-MM-DD');
+        let company = $scope.bb.company;
+        let url = $scope.bb.api_url;
+
         let params = {
-            company: $scope.company,
-            date: moment().format('YYYY-MM-DD'),
-            url: $scope.api_url
+            company,
+            date,
+            url,
+            current_page,
+            filter_by,
+            filter_by_fields,
+            order_by,
+            order_by_reverse,
+            skip_cache
         };
 
-        if (skipCache) {
-            params.skip_cache = true;
-        }
-        if (filterBy) {
-            params.filter_by = filterBy;
-        }
-        if (filterByFields) {
-            params.filter_by_fields = filterByFields;
-        }
-        if (orderBy) {
-            params.order_by = orderBy;
-        }
-        if (orderByReverse) {
-            params.order_by_reverse = orderByReverse;
-        }
+        queryAdminBookings(params);
+    }
 
+    let queryAdminBookings = (params) => {
+        let defer = $q.defer()
         BBModel.Admin.Booking.$query(params).then(res => {
             $scope.booking_collection = res;
             $scope.bookings = [];
@@ -56,7 +52,12 @@ function bbCheckInController($scope, $q, ModalForm, AlertService, BBModel) {
         }
         , err => defer.reject(err));
         return defer.promise;
-    };
+    }
+
+    let setCheckInGridData = (bookings) => {
+        $scope.gridOptions.data = bookings;
+    }
+
 
     let handleBookingChanges = (booking, status) => {
         $scope.bookings = [];

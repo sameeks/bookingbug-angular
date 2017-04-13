@@ -8,8 +8,7 @@ function bbCheckIn(bbGridService, uiGridConstants) {
         replace: false,
         scope: {
             options: '=',
-            api_url: '=',
-            company: '='
+            bb: '=',
         },
         templateUrl: 'check-in/checkin-table.html',
         controller: 'bbCheckInController',
