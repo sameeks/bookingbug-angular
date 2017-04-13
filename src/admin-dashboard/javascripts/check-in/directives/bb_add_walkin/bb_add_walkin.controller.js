@@ -3,7 +3,7 @@ angular
     .controller('bbAddWalkinCtrl', bbAddWalkinCtrl);
 
 function bbAddWalkinCtrl($scope, AdminBookingPopup) {
-    $scope.walkIn = () => {
+    this.walkIn = () => {
         AdminBookingPopup.open({
             item_defaults: {
                 pick_first_time: true,

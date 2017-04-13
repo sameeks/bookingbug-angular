@@ -76,14 +76,14 @@ function bbCheckInController($scope, $q, ModalForm, AlertService, BBModel) {
         })();
     }
 
-    $scope.setStatus = (booking, status) => {
+    this.setStatus = (booking, status) => {
         let clone = _.clone(booking);
         clone.current_multi_status = status;
         return booking.$update(clone).then(res => $scope.booking_collection.checkItem(res)
             , err => AlertService.danger({msg: 'Something went wrong'}));
     };
 
-    $scope.edit = booking => {
+    this.edit = booking => {
         booking.$getAnswers().then((answers) => {
             for (let answer of Array.from(answers.answers)) {
                 booking[`question${answer.question_id}`] = answer.value;

@@ -7,7 +7,8 @@ function bbAddWalkin() {
         restrict: 'AE',
         replace: true,
         scope: true,
-        controller: 'bbAddWalkinCtrl'
+        controller: 'bbAddWalkinCtrl',
+        controllerAs: '$bbAddWalkinCtrl'
     }
 
     return directive;

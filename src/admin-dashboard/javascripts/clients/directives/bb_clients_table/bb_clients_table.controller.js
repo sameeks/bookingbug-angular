@@ -4,16 +4,16 @@ angular
 
 function bbTabletClients($scope, $rootScope, $q, BBModel) {
     $scope.clients = [];
-    let perPage = 15;
+    let per_page = 15;
 
-    $scope.getClients = (pageNumber, searchFields) => {
+    $scope.getClients = (pageNumber, filter_by_fields) => {
         let clientDef = $q.defer();
 
         let params = {
             company: $scope.company,
-            per_page: perPage,
             page: $scope.paginationOptions.pageNumber,
-            filter_by_fields: searchFields
+            filter_by_fields,
+            per_page
             // filter_by: $scope.clientsOptions.search
         };
 

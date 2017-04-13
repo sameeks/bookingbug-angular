@@ -12,6 +12,7 @@ function bbCheckIn(bbGridService, uiGridConstants) {
         },
         templateUrl: 'check-in/checkin-table.html',
         controller: 'bbCheckInController',
+        controllerAs: '$bbCheckInController',
         link
     }
 
