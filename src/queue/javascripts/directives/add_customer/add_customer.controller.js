@@ -40,7 +40,7 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
             }
         });
 
-        modalInstance.result.then(addQueuer).finally(resetQueuer);
+        modalInstance.result.then(addQueuer).then(resetQueuer).finally(() => $scope.loading = false);
     };
 
     $scope.availableServers = function () {
@@ -72,7 +72,7 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
             }
         });
 
-        modalInstance.result.then(addQueuer).finally(resetQueuer);
+        modalInstance.result.then(addQueuer).then(resetQueuer).finally(() => $scope.loading = false);
     };
 
     $scope.makeAppointment = function (options) {
