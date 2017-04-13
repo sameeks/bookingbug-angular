@@ -1,5 +1,5 @@
 let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerService, ModalForm,
-    BBModel, $interval, $sessionStorage, $uibModal, $q, AdminPersonService) => {
+                                BBModel, $interval, $sessionStorage, $uibModal, $q, AdminPersonService) => {
 
     $scope.loading = true;
     $scope.waiting_for_queuers = false;
@@ -7,39 +7,39 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
     $scope.new_queuer = {};
 
     // this is used to retrigger a scope check that will update service time
-    $interval(function() {
+    $interval(function () {
         if ($scope.queuers) {
             return Array.from($scope.queuers).map((queuer) =>
-            queuer.remaining());
+                queuer.remaining());
         }
     }, 5000);
 
-    $scope.getSetup = function() {
+    $scope.getSetup = function () {
         let params =
-          {company: $scope.company};
-        AdminServiceService.query(params).then(function(services) {
-            $scope.services = [];
-            for (let service of Array.from(services)) {
-                if (!service.queuing_disabled) {
-                    $scope.services.push(service);
+            {company: $scope.company};
+        AdminServiceService.query(params).then(function (services) {
+                $scope.services = [];
+                for (let service of Array.from(services)) {
+                    if (!service.queuing_disabled) {
+                        $scope.services.push(service);
+                    }
                 }
+                return $scope.loading = false;
             }
-            return $scope.loading = false;
-        }
-        , function(err) {
-            $log.error(err.data);
-            return $scope.loading = false;
-        });
+            , function (err) {
+                $log.error(err.data);
+                return $scope.loading = false;
+            });
     };
 
-    $scope.getQueuers = function() {
+    $scope.getQueuers = function () {
         if ($scope.waiting_for_queuers) {
             return;
         }
         $scope.waiting_for_queuers = true;
         let params =
-          {company: $scope.company};
-        return AdminQueuerService.query(params).then(function(queuers) {
+            {company: $scope.company};
+        return AdminQueuerService.query(params).then(function (queuers) {
             $scope.queuers = queuers;
             $scope.waiting_queuers = [];
             for (let queuer of Array.from(queuers)) {
@@ -53,22 +53,24 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
 
             $scope.loading = false;
             return $scope.waiting_for_queuers = false;
-        }, function(err) {
+        }, function (err) {
             $log.error(err.data);
             $scope.loading = false;
             return $scope.waiting_for_queuers = false;
         });
     };
 
-    $scope.dropQueuer = function(event, ui, server, trash) {
+    $scope.dropQueuer = function (event, ui, server, trash) {
         if ($scope.drag_queuer) {
             if (trash) {
                 $scope.trash_hover = false;
-                $scope.drag_queuer.$del('self').then(function(queuer) {});
+                $scope.drag_queuer.$del('self').then(function (queuer) {
+                });
             }
 
             if (server) {
-                return $scope.drag_queuer.startServing(server).then(function() {});
+                return $scope.drag_queuer.startServing(server).then(function () {
+                });
             }
         }
     };
@@ -76,7 +78,7 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
     $scope.walkedOut = queuer =>
         queuer.$delete().then(() => $scope.selected_queuer = null);
 
-    $scope.selectQueuer = function(queuer) {
+    $scope.selectQueuer = function (queuer) {
         if ($scope.selected_queuer && ($scope.selected_queuer === queuer)) {
             return $scope.selected_queuer = null;
         } else {
@@ -86,13 +88,13 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
 
     $scope.selectDragQueuer = queuer => $scope.drag_queuer = queuer;
 
-    $scope.getServers = function() {
+    $scope.getServers = function () {
         if ($scope.getting_people) {
             return;
         }
         $scope.company.$flush('people');
         $scope.getting_people = true;
-        return AdminPersonService.query({company: $scope.company}).then(function(people) {
+        return AdminPersonService.query({company: $scope.company}).then(function (people) {
             $scope.getting_people = false;
             $scope.all_people = people;
             $scope.servers = [];
@@ -102,7 +104,7 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
                 }
             }
 
-            $scope.servers = _.sortBy($scope.servers, function(server) {
+            $scope.servers = _.sortBy($scope.servers, function (server) {
                 if (server.attendance_status === 1) { // available
                     return 0;
                 }
@@ -122,18 +124,18 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
 
             $scope.loading = false;
             return $scope.updateQueuers();
-        }, function(err) {
+        }, function (err) {
             $scope.getting_people = false;
             $log.error(err.data);
             return $scope.loading = false;
         });
     };
 
-    $scope.setAttendance = function(person, status, duration) {
+    $scope.setAttendance = function (person, status, duration) {
         $scope.loading = true;
-        return person.setAttendance(status, duration).then(function(person) {
+        return person.setAttendance(status, duration).then(function (person) {
             $scope.loading = false;
-        }, function(err) {
+        }, function (err) {
             $log.error(err.data);
             return $scope.loading = false;
         });
@@ -143,7 +145,7 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
         return $scope.getServers();
     });
 
-    $scope.updateQueuers = function() {
+    $scope.updateQueuers = function () {
         if ($scope.queuers && $scope.servers) {
             let shash = {};
             for (let server of Array.from($scope.servers)) {
@@ -164,20 +166,20 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
         }
     };
 
-    $scope.dropCallback = function(event, ui, queuer, $index) {
+    $scope.dropCallback = function (event, ui, queuer, $index) {
         $scope.$apply(() => $scope.selectQueuer(null));
         return false;
     };
 
-    $scope.dragStart = function(event, ui, queuer) {
-        $scope.$apply(function() {
+    $scope.dragStart = function (event, ui, queuer) {
+        $scope.$apply(function () {
             $scope.selectDragQueuer(queuer);
             return $scope.selectQueuer(queuer);
         });
         return false;
     };
 
-    return $scope.dragStop = function(event, ui) {
+    return $scope.dragStop = function (event, ui) {
         $scope.$apply(() => $scope.selectQueuer(null));
         return false;
     };

@@ -1,4 +1,4 @@
-angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNavigationPartials) {
+angular.module('BBQueue').run(function (RuntimeStates, AdminQueueOptions, SideNavigationPartials) {
     if (AdminQueueOptions.use_default_states) {
         RuntimeStates
             .state('queue', {
@@ -21,7 +21,7 @@ angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNav
                             end_date: moment().format('YYYY-MM-DD'),
                             start_time: moment().format('HH:mm'),
                             skip_cache: false
-                        }
+                        };
                         return BBModel.Admin.Booking.$query(params)
                     }
                 },
@@ -30,21 +30,21 @@ angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNav
                     $scope.services = services;
                     $scope.people = people;
 
-                    let refreshBookings = function() {
+                    let refreshBookings = function () {
                         let params = {
                             company,
                             start_date: moment().format('YYYY-MM-DD'),
                             end_date: moment().format('YYYY-MM-DD'),
                             start_time: moment().format('HH:mm'),
                             skip_cache: false
-                        }
+                        };
                         BBModel.Admin.Booking.$query(params).then((bookings) => {
                             $scope.bookings = bookings;
                             $scope.$broadcast('updateBookings', bookings);
                         });
                     };
 
-                    let pusherSubscribe = function() {
+                    let pusherSubscribe = function () {
                         let pusher_channel = company.getPusherChannel('bookings');
                         if (pusher_channel) {
                             pusher_channel.bind('create', refreshBookings);
@@ -58,11 +58,11 @@ angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNav
                 },
                 templateUrl: "queue/index.html"
             }).state('queue.concierge', {
-                parent: 'queue',
-                url: "/concierge",
-                templateUrl: "queue/concierge.html",
-                controller: 'QueueConciergePageCtrl'
-            }).state('queue.server', {
+            parent: 'queue',
+            url: "/concierge",
+            templateUrl: "queue/concierge.html",
+            controller: 'QueueConciergePageCtrl'
+        }).state('queue.server', {
                 parent: 'queue',
                 url: "/server/:id",
                 resolve: {
@@ -88,7 +88,7 @@ angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNav
 });
 
 
-angular.module('BBQueue').run(function($injector, BBModel, $translate) {
+angular.module('BBQueue').run(function ($injector, BBModel, $translate) {
     let models = ['Queuer', 'ClientQueue'];
 
     for (let model of Array.from(models)) {

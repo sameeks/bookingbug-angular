@@ -1,7 +1,7 @@
-let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBModel, CheckSchema,
-    $uibModal, AdminPersonService, $q, AdminQueuerService, Dialog, $translate) => {
+let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel, CheckSchema,
+                             $uibModal, AdminPersonService, $q, AdminQueuerService, Dialog, $translate) => {
 
-    let init = function() {
+    let init = function () {
         $scope.loadingServer = false;
         let bookings = _.filter($scope.bookings.items, booking => {
             return booking.person_id == $scope.person.id;
@@ -13,21 +13,21 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
         }
     };
 
-    $scope.setAttendance = function(person, status, duration) {
+    $scope.setAttendance = function (person, status, duration) {
         $scope.loadingServer = true;
-        person.setAttendance(status, duration).then(function(person) {
+        person.setAttendance(status, duration).then(function (person) {
             $scope.loadingServer = false;
-        }, function(err) {
+        }, function (err) {
             $log.error(err.data);
             $scope.loadingServer = false;
         });
     };
 
-    let upcomingBookingCheck = function(person) {
+    let upcomingBookingCheck = function (person) {
         return person.next_booking && person.next_booking.start.isBefore(moment().add(1, 'hour'));
     };
 
-    $scope.startServingQueuer = function(person, queuer) {
+    $scope.startServingQueuer = function (person, queuer) {
         $scope.loadingServer = true;
         if (upcomingBookingCheck(person)) {
             Dialog.confirm({
@@ -36,7 +36,7 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
                     name: person.name, time: person.next_booking.start.format('HH:mm')
                 }),
                 success: () => {
-                    person.startServing(queuer).then(function() {
+                    person.startServing(queuer).then(function () {
                         if ($scope.selectQueuer) $scope.selectQueuer(null);
                         $scope.getQueuers();
                         $scope.loadingServer = false;
@@ -47,7 +47,7 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
                 }
             });
         } else {
-            person.startServing(queuer).then(function() {
+            person.startServing(queuer).then(function () {
                 if ($scope.selectQueuer) $scope.selectQueuer(null);
                 $scope.getQueuers();
                 $scope.loadingServer = false;
@@ -55,12 +55,12 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
         }
     };
 
-    $scope.finishServingQueuer = function(options) {
-        let { person } = options;
-        let { serving } = person;
+    $scope.finishServingQueuer = function (options) {
+        let {person} = options;
+        let {serving} = person;
         $scope.loadingServer = true;
         if (options.outcomes) {
-            serving.$get('booking').then(function(booking) {
+            serving.$get('booking').then(function (booking) {
                 booking = new BBModel.Admin.Booking(booking);
                 booking.current_multi_status = options.status;
                 if (booking.$has('edit')) {
@@ -70,8 +70,8 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
                 }
             });
         } else if (options.status) {
-            person.finishServing().then(function() {
-                serving.$get('booking').then(function(booking) {
+            person.finishServing().then(function () {
+                serving.$get('booking').then(function (booking) {
                     booking = new BBModel.Admin.Booking(booking);
                     booking.current_multi_status = options.status;
                     booking.$update(booking).then(res => {
@@ -84,26 +84,26 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
         }
     };
 
-    let finishServingOutcome = function(person, booking) {
+    let finishServingOutcome = function (person, booking) {
         let modalInstance = $uibModal.open({
             templateUrl: 'queue/finish_serving_outcome.html',
             resolve: {
                 person: person,
                 booking: booking,
-                schema: function() {
+                schema: function () {
                     let defer = $q.defer();
-                    booking.$get('edit').then(function(schema) {
+                    booking.$get('edit').then(function (schema) {
                         let form = _.reject(schema.form, x => x.type === 'submit');
-                        form[0].tabs = [form[0].tabs[form[0].tabs.length-1]];
+                        form[0].tabs = [form[0].tabs[form[0].tabs.length - 1]];
                         schema.schem = CheckSchema(schema.schema);
                         defer.resolve(schema);
-                    }, function() {
+                    }, function () {
                         defer.reject();
                     });
                     return defer.promise;
                 }
             },
-            controller: function($scope, $uibModalInstance, schema, booking, person) {
+            controller: function ($scope, $uibModalInstance, schema, booking, person) {
 
                 $scope.person = person;
 
@@ -120,19 +120,19 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
             }
         });
 
-        modalInstance.result.then(function() {
-            booking.$update(booking).then(function() {
-                person.finishServing().finally(function() {
+        modalInstance.result.then(function () {
+            booking.$update(booking).then(function () {
+                person.finishServing().finally(function () {
                     person.attendance_status = 1;
                     $scope.loadingServer = false;
                 });
             });
-        }, function() {
+        }, function () {
             $scope.loadingServer = false;
         });
     };
 
-    $scope.updateQueuer = function() {
+    $scope.updateQueuer = function () {
         $scope.person.$get('queuers').then((collection) => {
             collection.$get('queuers').then((queuers) => {
                 queuers = _.map(queuers, (q) => new BBModel.Admin.Queuer(q));
@@ -145,9 +145,9 @@ let QueueServerController =  ($scope, $log, AdminQueueService, ModalForm, BBMode
         });
     };
 
-    $scope.extendAppointment = function(mins) {
+    $scope.extendAppointment = function (mins) {
         $scope.loadingServer = true;
-        $scope.person.serving.extendAppointment(mins).then(function() {
+        $scope.person.serving.extendAppointment(mins).then(function () {
             $scope.loadingServer = false;
         });
     };
