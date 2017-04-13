@@ -38,11 +38,12 @@
         </div>
       </div>
     </div>
+    <p>{{availableServers().length}}</p>
     <div class="box-footer">
       <input ng-disabled="qForm.$invalid" type="submit" value="Add to Queue"
       ng-click="addToQueue()" class="btn btn-primary pull-right"></input>
-      <input ng-disabled="qForm.$invalid" type="submit" value="Serve Now"
-      ng-click="serveCustomerNow()" class="btn pull-right"></input>
+      <input ng-disabled="qForm.$invalid || availableServers().length == 0" type="submit"
+      value="Serve Now" ng-click="serveCustomerNow()" class="btn pull-right"></input>
       <button ng-disabled="qForm.$invalid" class="btn pull-right"
         ng-click="makeAppointment({client: new_queuer})">
         Make Appointment

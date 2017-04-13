@@ -43,6 +43,10 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
         modalInstance.result.then(addQueuer).finally(resetQueuer);
     };
 
+    $scope.availableServers = function () {
+        return _.filter($scope.servers, (server) => server.attendance_status == 1);
+    };
+
     $scope.serveCustomerNow = function () {
         $scope.loading = true;
         let modalInstance = $uibModal.open({
@@ -50,7 +54,7 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
             resolve: {
                 services: () => $scope.services,
                 servers: () => {
-                    return _.filter($scope.servers, (server) => server.attendance_status == 1);
+                    return $scope.availableServers();
                 }
             },
             controller: ($scope, $uibModalInstance, services, servers) => {
