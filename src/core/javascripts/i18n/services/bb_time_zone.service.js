@@ -10,7 +10,7 @@
         .module('BB.i18n')
         .service('bbTimeZone', bbTimeZoneService);
 
-    function bbTimeZoneService($localStorage, $log, bbi18nOptions, CompanyStoreService, bbTimeZoneOptions, moment) {
+    function bbTimeZoneService($localStorage, $log, moment, bbi18nOptions, CompanyStoreService) {
         'ngInject';
 
         let displayTimeZone = bbi18nOptions.default_time_zone;
@@ -21,6 +21,7 @@
             convertToDisplayTz,
             getCompanyUTCOffset,
             getDisplayUTCOffset,
+            getTimeZoneKey,
             determineTimeZone,
             setDisplayTimeZone,
             setLocalStorage
@@ -68,13 +69,13 @@
             }
 
             if (bbi18nOptions.use_browser_time_zone || localStorage.useBrowserTimeZone) {
-                let timeZone = bbTimeZoneOptions.getTimeZoneKey(moment.tz.guess());
+                let timeZone = getTimeZoneKey(moment.tz.guess());
                 setDisplayTimeZone(timeZone);
                 return;
             }
 
             if (bbi18nOptions.use_company_time_zone && CompanyStoreService.time_zone) {
-                let timeZone = bbTimeZoneOptions.getTimeZoneKey(CompanyStoreService.time_zone);
+                let timeZone = getTimeZoneKey(CompanyStoreService.time_zone);
                 setDisplayTimeZone(timeZone);
             }
         }
@@ -86,6 +87,25 @@
 
         function setLocalStorage(localStorageObj) {
             $localStorage.setObject('bbTimeZone', localStorageObj);
+        }
+
+        function getTimeZoneKey(timeZone) {
+            let selectedTimeZone;
+
+            if (bbi18nOptions.use_moment_names) return timeZone;
+            if (bbCustomTimeZones.GROUPED_TIME_ZONES[timeZone]) return timeZone;
+
+            const city = timeZone.match(/[^/]*$/)[0];
+            for (let [groupName, groupCities] of Object.entries(bbCustomTimeZones.GROUPED_TIME_ZONES)) {
+                groupCities = groupCities.split(/\s*,\s*/).map((tz) => tz.replace(/ /g, "_")).join(', ').split(/\s*,\s*/);
+                const cityGroupIndex = groupCities.findIndex((groupCity) => groupCity === city);
+                if (cityGroupIndex !== -1){
+                    selectedTimeZone = groupName;
+                    break;
+                }
+            }
+
+            return selectedTimeZone || timeZone;
         }
 
     }

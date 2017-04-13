@@ -29,7 +29,7 @@
             controllerAs: '$bbTimeZoneSelectCtrl'
         });
 
-    function TimeZoneSelectCtrl($rootScope, $scope, $localStorage, bbTimeZone, bbTimeZoneOptions, CompanyStoreService, bbi18nOptions) {
+    function TimeZoneSelectCtrl($rootScope, $scope, $localStorage, bbi18nOptions, CompanyStoreService, bbTimeZone, bbTimeZoneOptions) {
         'ngInject';
 
         this.timeZones = [];
@@ -52,7 +52,8 @@
 
         const automaticTimeZoneToggle = () => {
             let timeZone = this.isAutomaticTimeZone ? moment.tz.guess() : CompanyStoreService.time_zone;
-            timeZone = this.useMomentNames ? timeZone : bbTimeZoneOptions.getTimeZoneKey(timeZone);
+            timeZone = this.useMomentNames ? timeZone : bbTimeZone.getTimeZoneKey(timeZone);
+            this.timeZones = bbTimeZoneOptions.addBrowserTimeZone(this.timeZones, this.format);
             setTimeZone(timeZone, this.isAutomaticTimeZone);
             $scope.$broadcast('UISelect:closeSelect');
             bbTimeZone.setLocalStorage({useBrowserTimeZone: this.isAutomaticTimeZone});
