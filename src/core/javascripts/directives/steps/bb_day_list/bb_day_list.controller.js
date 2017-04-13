@@ -4,7 +4,7 @@
         .module('BB.Controllers')
         .controller('DayList', dayListController);
 
-    function dayListController ($scope, $rootScope, DayService) {
+    function dayListController($scope, $rootScope, DayService, bbAnalyticsPiwik) {
         'ngInject';
         // Load up some day based data
         $rootScope.connection_started.then(function () {
@@ -40,8 +40,18 @@
             return $scope.current_date_js = $scope.current_date.toDate();
         };
 
+        function setPiwik(amount) {
+            let category = "Calendar";
+            let title = "Load Next Week";
+            if (amount < 0) {
+                title = "Load Previous Week";
+            }
+            bbAnalyticsPiwik.push(['trackEvent', [category], title]);
+        }
+
 
         $scope.add = (type, amount) => {
+            if (bbAnalyticsPiwik.isEnabled()) setPiwik(amount);
             setCurrentDate($scope.current_date.add(amount, type));
             return $scope.loadData();
         };

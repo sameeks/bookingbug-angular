@@ -1,7 +1,7 @@
 let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuerService, ModalForm,
-    BBModel, $interval, $sessionStorage, $uibModal, $q, AdminBookingPopup) => {
+                                  BBModel, $interval, $sessionStorage, $uibModal, $q, AdminBookingPopup) => {
 
-    let addQueuer = function(form) {
+    let addQueuer = function (form) {
         let defer = $q.defer();
         let service = form.service;
         let person = form.server;
@@ -21,12 +21,12 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
         return defer.promise;
     };
 
-    let resetQueuer = function() {
+    let resetQueuer = function () {
         $scope.new_queuer = {};
         $scope.loading = false;
     };
 
-    $scope.addToQueue = function() {
+    $scope.addToQueue = function () {
         $scope.loading = true;
         let modalInstance = $uibModal.open({
             templateUrl: 'queue/pick_a_service.html',
@@ -43,7 +43,7 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
         modalInstance.result.then(addQueuer).finally(resetQueuer);
     };
 
-    $scope.serveCustomerNow = function() {
+    $scope.serveCustomerNow = function () {
         $scope.loading = true;
         let modalInstance = $uibModal.open({
             templateUrl: 'queue/serve_now.html',
@@ -71,7 +71,7 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
         modalInstance.result.then(addQueuer).finally(resetQueuer);
     };
 
-    $scope.makeAppointment = function(options) {
+    $scope.makeAppointment = function (options) {
         let defaultOptions = {
             item_defaults: {
                 pick_first_time: true,

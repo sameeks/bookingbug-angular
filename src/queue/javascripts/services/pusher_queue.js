@@ -1,4 +1,4 @@
-angular.module('BBQueue.services').factory('PusherQueue', function($sessionStorage, AppConfig) {
+angular.module('BBQueue.services').factory('PusherQueue', function ($sessionStorage, AppConfig) {
     return class PusherQueue {
         static subscribe(company) {
             if ((company != null) && (typeof Pusher !== 'undefined' && Pusher !== null)) {
@@ -17,5 +17,5 @@ angular.module('BBQueue.services').factory('PusherQueue', function($sessionStora
                 }
             }
         }
-  };
+    };
 });

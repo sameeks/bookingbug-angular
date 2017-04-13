@@ -46,6 +46,12 @@ module.exports = {
 
         "no-undef": ["off", {}], // TODO
 
-        "no-unused-vars": ["error", {"vars": "all", "args": "none", "ignoreRestSiblings": false}]
+        "no-unused-vars": ["error", {"vars": "all", "args": "none", "ignoreRestSiblings": false}],
+
+        "space-before-function-paren": ["error", {
+            "anonymous": "always",
+            "named": "never",
+            "asyncArrow": "always"
+        }],
     }
 };

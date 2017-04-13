@@ -1,10 +1,11 @@
 (function () {
-
     angular
         .module('BB.Controllers')
-        .controller('TimeRangeList', timeRangeListController);
+        .controller('TimeRangeList', TimeRangeListController);
 
-    function timeRangeListController ($scope, $element, $attrs, $rootScope, AlertService, LoadingService, BBModel, FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService) {
+    function TimeRangeListController($scope, $element, $attrs, $rootScope, AlertService, LoadingService, BBModel,
+                                     FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService,
+                                     bbAnalyticsPiwik) {
         'ngInject';
 
         // store the form data for the following scope properties
@@ -19,9 +20,7 @@
 
         $scope.$on('BBTimeZoneOptions:timeZoneChanged', () => {
             $scope.initialise();
-        });
-
-        // check to see if the user has changed the postcode and remove data if they have
+        });// check to see if the user has changed the postcode and remove data if they have
         if (currentPostcode !== $scope.postcode) {
             $scope.selected_slot = null;
             $scope.selected_date = null;
@@ -59,7 +58,12 @@
                 $scope.time_range_length = $scope.options.time_range_length;
             } else {
                 let calculateDayNum = function () {
-                    let cal_days = {lg: 7, md: 5, sm: 3, xs: 1};
+                    let cal_days = {
+                        lg: 7,
+                        md: 5,
+                        sm: 3,
+                        xs: 1
+                    };
 
                     let timeRange = 7;
 
@@ -202,7 +206,9 @@
                     let difference = maxDate.startOf('day').diff(today.startOf('day'), 'days', true);
                     let maxDateDuration = moment.duration(difference, 'days').humanize();
                     // store it on scope in a form to support translations
-                    $scope.maxDateDurationObj = {maxDateDuration: maxDateDuration};
+                    $scope.maxDateDurationObj = {
+                        maxDateDuration: maxDateDuration
+                    };
                 }
 
                 // if the selected day is before the services min_advance_datetime, adjust the time range
@@ -241,6 +247,15 @@
         $scope.$on("currentItemUpdate", event => $scope.loadData());
 
 
+        function setPiwik(amount) {
+            let category = "Calendar";
+            let title = "Load Next Week";
+            if (amount < 0) {
+                title = "Load Previous Week";
+            }
+            bbAnalyticsPiwik.push(['trackEvent', [category], title]);
+        }
+
         /***
          * @ngdoc method
          * @name add
@@ -252,6 +267,7 @@
          * @param {object} amount The amount of the days
          */
         $scope.add = function (type, amount) {
+            if (bbAnalyticsPiwik.isEnabled()) setPiwik(amount);
             if (amount > 0) {
                 $element.removeClass('subtract');
                 $element.addClass('add');
@@ -265,7 +281,7 @@
                     setTimeRange($scope.start_date);
                     break;
                 case 'months':
-        // TODO make this advance to the next month
+// TODO make this advance to the next month
                     $scope.start_date.add(amount, type).startOf('month');
                     setTimeRange($scope.start_date);
                     break;
@@ -415,7 +431,9 @@
 
                 if (slot.datetime) {
                     $scope.setLastSelectedDate(slot.datetime);
-                    $scope.bb.current_item.setDate({date: slot.datetime});
+                    $scope.bb.current_item.setDate({
+                        date: slot.datetime
+                    });
                 } else if (day) {
                     $scope.setLastSelectedDate(day.date);
                     $scope.bb.current_item.setDate(day);
@@ -423,15 +441,14 @@
 
                 if ($scope.bb.current_item.reserve_ready) {
                     loader.notLoaded();
-                    $scope.addItemToBasket().then(
-                        () => {
+                    $scope.addItemToBasket().then(() => {
                             loader.setLoaded();
                             $scope.decideNextPage(route);
-                        },
+                        }
+                        ,
                         (err) => {
                             loader.setLoadedAndShowError(err, 'Sorry, something went wrong');
-                        }
-                    );
+                        });
                 } else {
                     $scope.decideNextPage(route);
                 }
@@ -450,13 +467,17 @@
          */
         $scope.highlightSlot = function (slot, day) {
 
-            let {current_item} = $scope.bb;
+            let {
+                current_item
+            } = $scope.bb;
 
             if (slot && (slot.availability() > 0) && !slot.disabled) {
 
                 if (slot.datetime) {
                     $scope.setLastSelectedDate(slot.datetime);
-                    current_item.setDate({date: slot.datetime.clone().tz($scope.bb.company.timezone)});
+                    current_item.setDate({
+                        date: slot.datetime.clone().tz($scope.bb.company.timezone)
+                    });
                 } else if (day) {
                     $scope.setLastSelectedDate(day.date);
                     current_item.setDate(day);
@@ -497,7 +518,9 @@
             AlertService.clear();
             // We may not want the current item duration to be the duration we query by
             // If min_duration is set, pass that into the api, else pass in the duration
-            let {duration} = $scope.bb.current_item;
+            let {
+                duration
+            } = $scope.bb.current_item;
             if ($scope.bb.current_item.min_duration) {
                 duration = $scope.bb.current_item.min_duration;
             }
@@ -602,7 +625,8 @@
                         return $scope.$broadcast("time_slots:loaded", time_slots);
                     }
 
-                    , function (err) {
+                    ,
+                    function (err) {
                         if ((err.status === 404) && err.data && err.data.error && (err.data.error === "No bookable events found")) {
                             if ($scope.data_source && $scope.data_source.person) {
                                 AlertService.warning(ErrorService.getError('NOT_BOOKABLE_PERSON'));
@@ -657,7 +681,7 @@
                 AlertService.raise('APPT_AT_SAME_TIME');
                 return false;
             } else if ($scope.bb.moving_booking) {
-        // set a 'default' person and resource if we need them, but haven't picked any in moving
+// set a 'default' person and resource if we need them, but haven't picked any in moving
                 if ($scope.bb.company.$has('resources') && !$scope.bb.current_item.resource) {
                     $scope.bb.current_item.resource = true;
                 }
@@ -723,7 +747,5 @@
                 return $scope.highlightSlot(day, slot);
             }
         };
-
     }
-
 })();

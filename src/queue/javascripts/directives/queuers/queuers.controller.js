@@ -1,9 +1,9 @@
 let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, ModalForm, $interval,
-    $q, BBModel) => {
+                         $q, BBModel) => {
 
     $scope.loading = true;
 
-    let getServerQueuers = function() {
+    let getServerQueuers = function () {
         let defer = $q.defer();
         $scope.person.$flush('queuers');
         $scope.person.$get('queuers').then((collection) => {
@@ -15,7 +15,7 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
         return defer.promise;
     };
 
-    $scope.getQueuers = function() {
+    $scope.getQueuers = function () {
         if ($scope.waiting_for_queuers) {
             return;
         }
@@ -31,18 +31,18 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
         }
         proms.push(queuer_prom);
         queuer_prom.then(queuers =>
-            $scope.new_queuers = queuers
-        , function(err) {
-            $scope.waiting_for_queuers = false;
-            $log.error(err.data);
-            $scope.loading = false;
-        });
+                $scope.new_queuers = queuers
+            , function (err) {
+                $scope.waiting_for_queuers = false;
+                $log.error(err.data);
+                $scope.loading = false;
+            });
 
         let queue_prom = AdminQueueService.query(params);
         proms.push(queue_prom);
         queue_prom.then(queues => $scope.new_queues = queues);
 
-        $q.all(proms).then(function() {
+        $q.all(proms).then(function () {
             $scope.queuers = $scope.new_queuers;
             $scope.queues = $scope.new_queues;
             $scope.waiting_queuers = [];
@@ -67,7 +67,7 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
             }
 
             $scope.loading = false;
-        }, function(err) {
+        }, function (err) {
             $scope.waiting_for_queuers = false;
             $log.error(err.data);
             $scope.loading = false;
@@ -75,8 +75,8 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
     };
 
 
-    $scope.getAppointments = function(currentPage, filterBy, filterByFields, orderBy,
-        orderByReverse, skipCache) {
+    $scope.getAppointments = function (currentPage, filterBy, filterByFields, orderBy,
+                                       orderByReverse, skipCache) {
 
         if (skipCache == null) {
             skipCache = true;
@@ -85,7 +85,7 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
             filterByFields.name = filterByFields.name.replace(/\s/g, '');
         }
         if (filterByFields && (filterByFields.mobile != null)) {
-            let { mobile } = filterByFields;
+            let {mobile} = filterByFields;
             if (mobile.indexOf('0') === 0) {
                 filterByFields.mobile = mobile.substring(1);
             }
@@ -150,7 +150,7 @@ let QueuersController = ($scope, $log, AdminQueuerService, AdminQueueService, Mo
     $scope.getQueuers();
 
     // this is used to retrigger a scope check that will update service time
-    $interval(function() {
+    $interval(function () {
         if ($scope.queuers) {
             Array.from($scope.queuers).map((queuer) => queuer.remaining());
         }

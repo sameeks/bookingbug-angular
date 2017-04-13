@@ -2,13 +2,13 @@
 // fix the issues we have with the the sub client and question blocks being in doted notation, and
 // not in child objects
 angular.module('BBQueue.services').service('CheckSchema', ($q, BBModel) => {
-    return function(schema) {
+    return function (schema) {
         for (let k in schema.properties) {
             let v = schema.properties[k];
             let vals = k.split(".");
             if ((vals[0] === "questions") && (vals.length > 1)) {
                 if (!schema.properties.questions) {
-                    schema.properties.questions = {type: "object", properties: {} };
+                    schema.properties.questions = {type: "object", properties: {}};
                 }
                 if (!schema.properties.questions.properties[vals[1]]) {
                     schema.properties.questions.properties[vals[1]] = {
@@ -24,7 +24,7 @@ angular.module('BBQueue.services').service('CheckSchema', ($q, BBModel) => {
                         properties: {q: {type: "object", properties: {}}}
                     };
                 }
-                if  (schema.properties.client.properties) {
+                if (schema.properties.client.properties) {
                     if (!schema.properties.client.properties.q.properties[vals[2]]) {
                         schema.properties.client.properties.q.properties[vals[2]] = {
                             type: "object",
@@ -35,5 +35,5 @@ angular.module('BBQueue.services').service('CheckSchema', ($q, BBModel) => {
             }
         }
         return schema;
-    }
+    };
 });

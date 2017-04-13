@@ -1,4 +1,4 @@
-angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNavigationPartials) {
+angular.module('BBQueue').run(function (RuntimeStates, AdminQueueOptions, SideNavigationPartials) {
     if (AdminQueueOptions.use_default_states) {
         RuntimeStates
             .state('queue', {
@@ -11,14 +11,8 @@ angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNav
                     services(company) {
                         return company.$getServices();
                     },
-                    resources(company) {
-                        return [];
-                    },
                     people(company) {
                         return company.$getPeople();
-                    },
-                    addresses(company, AdminAddressService) {
-                        return [];
                     },
                     bookings(company, BBModel) {
                         let params = {
@@ -27,31 +21,57 @@ angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNav
                             end_date: moment().format('YYYY-MM-DD'),
                             start_time: moment().format('HH:mm'),
                             skip_cache: false
-                        }
-                        return BBModel.Admin.Booking.$query(params)
+                        };
+                        return BBModel.Admin.Booking.$query(params);
                     }
                 },
-                controller($scope, services, resources, people, bookings) {
+                controller($scope, company, services, people, bookings, BBModel) {
                     $scope.bookings = bookings;
                     $scope.services = services;
                     $scope.people = people;
-                    return $scope.resources = resources;
+
+                    let refreshBookings = function () {
+                        let params = {
+                            company,
+                            start_date: moment().format('YYYY-MM-DD'),
+                            end_date: moment().format('YYYY-MM-DD'),
+                            start_time: moment().format('HH:mm'),
+                            skip_cache: false
+                        };
+                        BBModel.Admin.Booking.$query(params).then((bookings) => {
+                            $scope.bookings = bookings;
+                            $scope.$broadcast('updateBookings', bookings);
+                        });
+                    };
+
+                    let pusherSubscribe = function () {
+                        let pusher_channel = company.getPusherChannel('bookings');
+                        if (pusher_channel) {
+                            pusher_channel.bind('create', refreshBookings);
+                            pusher_channel.bind('update', refreshBookings);
+                            pusher_channel.bind('destroy', refreshBookings);
+                        }
+                    };
+
+                    pusherSubscribe();
+
                 },
                 templateUrl: "queue/index.html"
             }).state('queue.concierge', {
-                parent: 'queue',
-                url: "/concierge",
-                templateUrl: "queue/concierge.html",
-                controller: 'QueueConciergePageCtrl'
-            }).state('queue.server', {
+            parent: 'queue',
+            url: "/concierge",
+            templateUrl: "queue/concierge.html",
+            controller: 'QueueConciergePageCtrl'
+        }).state('queue.server', {
                 parent: 'queue',
                 url: "/server/:id",
                 resolve: {
                     person(people, $stateParams) {
-                        return _.findWhere(people, {
+                        let person = _.findWhere(people, {
                             id: parseInt($stateParams.id),
                             queuing_disabled: false
                         });
+                        return person.$refetch();
                     }
                 },
                 templateUrl: "queue/server.html",
@@ -69,7 +89,7 @@ angular.module('BBQueue').run(function(RuntimeStates, AdminQueueOptions, SideNav
 });
 
 
-angular.module('BBQueue').run(function($injector, BBModel, $translate) {
+angular.module('BBQueue').run(function ($injector, BBModel, $translate) {
     let models = ['Queuer', 'ClientQueue'];
 
     for (let model of Array.from(models)) {

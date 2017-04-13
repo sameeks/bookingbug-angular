@@ -11,7 +11,7 @@ angular.module('BB.Services').factory('scrollIntercepter', ($bbug, $window, Gene
 
     var currentlyScrolling = false;
 
-    var scrollToElement = function(element, transitionTime, type) {
+    var scrollToElement = function (element, transitionTime, type) {
 
         if (type === "alert:raised") {
             //Alerts have precedence over other scroll events and can intercept

@@ -1,4 +1,4 @@
-angular.module('BB.Models').factory("AdminQueuerModel", function($q, BBModel, BaseModel) {
+angular.module('BB.Models').factory("AdminQueuerModel", function ($q, BBModel, BaseModel) {
 
     return class Admin_Queuer extends BaseModel {
 
@@ -31,14 +31,14 @@ angular.module('BB.Models').factory("AdminQueuerModel", function($q, BBModel, Ba
         }
 
         /***
-        * @ngdoc method
-        * @name fullMobile
-        * @methodOf BB.Models:Address
-        * @description
-        * Full mobile phone number of the client
-        *
-        * @returns {object} The returned full mobile number
-        */
+         * @ngdoc method
+         * @name fullMobile
+         * @methodOf BB.Models:Address
+         * @description
+         * Full mobile phone number of the client
+         *
+         * @returns {object} The returned full mobile number
+         */
         fullMobile() {
             if (!this.mobile) {
                 return;

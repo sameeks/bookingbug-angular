@@ -4,7 +4,7 @@
 
     angular.module('BB').service('bbWidgetStep', BBWidgetStep);
 
-    function BBWidgetStep(BBModel, LoginService, $rootScope, bbWidgetPage) {
+    function BBWidgetStep(BBModel, LoginService, $rootScope, bbWidgetPage, $window, bbAnalyticsPiwik) {
 
         var $scope = null;
 
@@ -77,6 +77,12 @@
             }
         };
 
+        function setPiwik() {
+            let category = $scope.bb.current_page;
+            let title = "Load Previous Step";
+            bbAnalyticsPiwik.push(['trackEvent', [category], title]);
+        }
+
         /**
          * @ngdoc method
          * @name loadPreviousStep
@@ -88,6 +94,9 @@
          * @param {string} caller: The method that called this function
          */
         var loadPreviousStep = function (caller) {
+
+            if (bbAnalyticsPiwik.isEnabled()) setPiwik();
+
             var last_step, pages_to_remove_from_history, past_steps, step_to_load;
             guardScope();
             past_steps = _.reject($scope.bb.steps, function (s) {

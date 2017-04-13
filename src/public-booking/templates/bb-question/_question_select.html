@@ -1,0 +1,8 @@
+<select 
+  ng-model='$bbQuestionCtrl.question.answer'
+  name='q{{$bbQuestionCtrl.question.id}}'
+  id='{{$bbQuestionCtrl.question.id}}'
+  ng-change='$bbQuestionCtrl.recalc()'
+  ng-required='$bbQuestionCtrl.question.currentlyShown && (($bbQuestionCtrl.adminRequired && $bbQuestionCtrl.question.required) || ($bbQuestionCtrl.question.required && !bb.isAdmin))' class='form-question form-control'>
+  <option ng-repeat="itemx in $bbQuestionCtrl.question.options" data_id='{{itemx.id}}' value="{{itemx.name}}">{{itemx.display_name}}</option>
+</select>

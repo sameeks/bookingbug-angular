@@ -1,24 +1,24 @@
-angular.module('BBQueue.directives').directive('countdown', function() {
+angular.module('BBQueue.directives').directive('countdown', function () {
 
     let controller = $scope => {
 
-        $scope.$watch('$$value$$', function(value) {
+        $scope.$watch('$$value$$', function (value) {
             if (value != null) {
                 return $scope.updateModel(value);
             }
         });
 
-    }
+    };
 
-    let link = function(scope, element, attrs, ngModel) {
+    let link = function (scope, element, attrs, ngModel) {
 
-        ngModel.$render = function() {
+        ngModel.$render = function () {
             if (ngModel.$viewValue) {
                 return scope.$$value$$ = ngModel.$viewValue;
             }
         };
 
-        scope.updateModel = function(value) {
+        scope.updateModel = function (value) {
             ngModel.$setViewValue(value);
 
             let secs = parseInt((value % 60).toFixed(0));

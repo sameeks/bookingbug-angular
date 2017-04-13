@@ -21,7 +21,7 @@ angular.module('BB.Directives').directive('bbScrollTo', ($rootScope, AppConfig, 
 
             let isElementInView = el => (el.offset().top > $bbug('body').scrollTop()) && (el.offset().top < ($bbug('body').scrollTop() + $bbug(window).height()));
 
-            return scrollToCallback = function(evnt) {
+            return scrollToCallback = function (evnt) {
                 let scroll_to_element;
                 if ((evnt === "page:loaded") && viewportSize.isXS() && $bbug(`[data-scroll-id="${AppConfig.uid}"]`).length) {
                     scroll_to_element = $bbug(`[data-scroll-id="${AppConfig.uid}"]`);
