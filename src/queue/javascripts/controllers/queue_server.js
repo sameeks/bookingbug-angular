@@ -147,7 +147,8 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
 
     $scope.extendAppointment = function (mins) {
         $scope.loadingServer = true;
-        $scope.person.serving.extendAppointment(mins).then(function () {
+        $scope.person.serving.extendAppointment(mins).then(function (queuer) {
+            $scope.person.serving = queuer;
             $scope.loadingServer = false;
         });
     };
