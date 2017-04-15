@@ -26,7 +26,7 @@
 </div>
 <div class="btn-group pull-right" ng-hide="loadingServer">
   <button type="button" class="btn btn-success"
-    ng-click="finishServingQueuer({person: person, outcomes: true})"
+    ng-click="finishServingQueuer({person: person})"
     ng-if="person && person.$has('finish_serving') && person.serving">
     Finish Serving
   </button>

@@ -59,29 +59,15 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
         let {person} = options;
         let {serving} = person;
         $scope.loadingServer = true;
-        if (options.outcomes) {
-            serving.$get('booking').then(function (booking) {
-                booking = new BBModel.Admin.Booking(booking);
-                booking.current_multi_status = options.status;
-                if (booking.$has('edit')) {
-                    finishServingOutcome(person, booking);
-                } else {
-                    $scope.loadingServer = false;
-                }
-            });
-        } else if (options.status) {
-            person.finishServing().then(function () {
-                serving.$get('booking').then(function (booking) {
-                    booking = new BBModel.Admin.Booking(booking);
-                    booking.current_multi_status = options.status;
-                    booking.$update(booking).then(res => {
-                        $scope.loadingServer = false;
-                    });
-                });
-            });
-        } else {
-            $scope.loadingServer = false;
-        }
+        serving.$get('booking').then(function (booking) {
+            booking = new BBModel.Admin.Booking(booking);
+            booking.current_multi_status = options.status;
+            if (booking.$has('edit')) {
+                finishServingOutcome(person, booking);
+            } else {
+                $scope.loadingServer = false;
+            }
+        });
     };
 
     let finishServingOutcome = function (person, booking) {
@@ -95,8 +81,14 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                     booking.$get('edit').then(function (schema) {
                         let form = _.reject(schema.form, x => x.type === 'submit');
                         form[0].tabs = [form[0].tabs[form[0].tabs.length - 1]];
-                        schema.schem = CheckSchema(schema.schema);
-                        defer.resolve(schema);
+                        let showModalPopUp = false;
+                        for (let tab of form[0].tabs) {
+                            if (tab.title === 'Outcomes') showModalPopUp = true;
+                        }
+                        if (showModalPopUp === true) {
+                            schema.schema = CheckSchema(schema.schema);
+                            defer.resolve(schema);
+                        } else defer.reject('No outcomes');
                     }, function () {
                         defer.reject();
                     });
@@ -127,8 +119,13 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                     $scope.loadingServer = false;
                 });
             });
-        }, function () {
-            $scope.loadingServer = false;
+        }, function (err) {
+            if (err === 'No outcomes') {
+                person.finishServing().then(function () {
+                    person.attendance_status = 1;
+                    $scope.loadingServer = false;
+                });
+            }
         });
     };
 
