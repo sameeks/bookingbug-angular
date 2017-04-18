@@ -36,13 +36,13 @@
             mapTimeZonesModel,
             removeDuplicates,
             orderTimeZones
-        }
+        };
 
         return {
             composeTimeZoneList,
             addMissingTimeZones,
             fn
-        };
+        }
 
         function composeTimeZoneList(displayFormat) {
             const options = initOptions(undefined, displayFormat);
