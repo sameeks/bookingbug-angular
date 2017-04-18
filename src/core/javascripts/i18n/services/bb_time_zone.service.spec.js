@@ -10,7 +10,7 @@ describe('bbTimeZone service,', () => {
             $provide.provider('bbi18nOptions', function () {
                 this.$get = () => {
 
-                    return Immutable.fromJS({
+                    return angular.merge({
                         available_languages: ['en'],
                         timeZone: {
                             default: 'Europe/London',
@@ -18,7 +18,7 @@ describe('bbTimeZone service,', () => {
                             useBrowser: false,
                             useCompany: false
                         }
-                    }).mergeDeep(options).toJS();
+                    }, options);
                 };
             });
 
