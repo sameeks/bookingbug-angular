@@ -1,12 +1,11 @@
 angular.module('BB.Directives').directive('bbAdminCalendar', () => {
-        return {
-            restrict: 'AE',
-            replace: true,
-            scope: true,
-            controller: 'BBAdminCalendarCtrl'
-        }
+    return {
+        restrict: 'AE',
+        replace: true,
+        scope: true,
+        controller: 'BBAdminCalendarCtrl'
     }
-);
+});
 
 let BBAdminCalendarCtrl = function ($scope, $element, $controller, $attrs, BBModel, $rootScope) {
 
@@ -67,16 +66,17 @@ let BBAdminCalendarCtrl = function ($scope, $element, $controller, $attrs, BBMod
 
 
     $scope.pickTime = function (slot) {
-        $scope.bb.current_item.setDate({date: slot.datetime});
+        $scope.bb.current_item.setDate({
+            date: slot.datetime
+        });
         $scope.bb.current_item.setTime(slot);
 
         $scope.setLastSelectedDate(slot.datetime);
 
         if ($scope.bb.current_item.reserve_ready) {
             return $scope.addItemToBasket().then(() => {
-                    return $scope.decideNextPage();
-                }
-            );
+                return $scope.decideNextPage();
+            });
         } else {
             return $scope.decideNextPage();
         }
@@ -89,8 +89,14 @@ let BBAdminCalendarCtrl = function ($scope, $element, $controller, $attrs, BBMod
 
     return $scope.overBook = function () {
 
-        let new_timeslot = new BBModel.TimeSlot({time: $scope.bb.current_item.defaults.time, avail: 1});
-        let new_day = new BBModel.Day({date: $scope.bb.current_item.defaults.datetime, spaces: 1});
+        let new_timeslot = new BBModel.TimeSlot({
+            time: $scope.bb.current_item.defaults.time,
+            avail: 1
+        });
+        let new_day = new BBModel.Day({
+            date: $scope.bb.current_item.defaults.datetime,
+            spaces: 1
+        });
 
         $scope.setLastSelectedDate(new_day.date);
         $scope.bb.current_item.setDate(new_day);
@@ -102,9 +108,8 @@ let BBAdminCalendarCtrl = function ($scope, $element, $controller, $attrs, BBMod
 
         if ($scope.bb.current_item.reserve_ready) {
             return $scope.addItemToBasket().then(() => {
-                    return $scope.decideNextPage();
-                }
-            );
+                return $scope.decideNextPage();
+            });
         } else {
             return $scope.decideNextPage();
         }
@@ -114,17 +119,24 @@ let BBAdminCalendarCtrl = function ($scope, $element, $controller, $attrs, BBMod
 angular.module('BB.Controllers').controller('BBAdminCalendarCtrl', BBAdminCalendarCtrl);
 
 angular.module('BB.Directives').directive('bbAdminCalendarConflict', () => {
-        return {
-            restrict: 'AE',
-            replace: true,
-            scope: true,
-            controller: BBAdminCalendarConflictCtrl
-        };
-    }
-);
+    return {
+        restrict: 'AE',
+        replace: true,
+        scope: true,
+        controller: BBAdminCalendarConflictCtrl
+    };
+});
 
-var BBAdminCalendarConflictCtrl = function ($scope, $element, $controller, $attrs, BBModel) {
+var BBAdminCalendarConflictCtrl = function ($scope, $element, $controller, $attrs, BBModel, bbAnalyticsPiwik, $window) {
     'ngInject';
+
+    if (bbAnalyticsPiwik.isEnabled()) setPiwik();
+
+    function setPiwik() {
+        let category = "Availability Conflict";
+        let title = "Pop Up";
+        bbAnalyticsPiwik.push(['trackEvent', [category], title]);
+    }
 
     let {time} = $scope.bb.current_item.defaults;
     let {duration} = $scope.bb.current_item;
@@ -186,45 +198,44 @@ var BBAdminCalendarConflictCtrl = function ($scope, $element, $controller, $attr
     };
 
     BBModel.Admin.Booking.$query(params).then(function (bookings) {
-            if (bookings.items.length > 0) {
-                $scope.nearby_bookings = _.filter(bookings.items, x => ($scope.bb.current_item.defaults.person && (x.person_id === $scope.bb.current_item.defaults.person.id)) || ($scope.bb.current_item.defaults.resources && (x.resources_id === $scope.bb.current_item.defaults.resources.id)));
-                $scope.overlapping_bookings = _.filter($scope.nearby_bookings, function (x) {
-                    let b_st = moment(x.datetime).subtract(-(x.pre_time || 0), "minutes");
-                    let b_en = moment(x.end_datetime).subtract((x.post_time || 0), "minutes");
-                    return (b_st.isBefore(max_time)) && (b_en.isAfter(min_time));
-                });
-                if ($scope.nearby_bookings.length === 0) {
-                    $scope.nearby_bookings = false;
-                }
-                if ($scope.overlapping_bookings.length === 0) {
-                    $scope.overlapping_bookings = false;
-                }
+        if (bookings.items.length > 0) {
+            $scope.nearby_bookings = _.filter(bookings.items, x => ($scope.bb.current_item.defaults.person && (x.person_id === $scope.bb.current_item.defaults.person.id)) || ($scope.bb.current_item.defaults.resources && (x.resources_id === $scope.bb.current_item.defaults.resources.id)));
+            $scope.overlapping_bookings = _.filter($scope.nearby_bookings, function (x) {
+                let b_st = moment(x.datetime).subtract(-(x.pre_time || 0), "minutes");
+                let b_en = moment(x.end_datetime).subtract((x.post_time || 0), "minutes");
+                return (b_st.isBefore(max_time)) && (b_en.isAfter(min_time));
+            });
+            if ($scope.nearby_bookings.length === 0) {
+                $scope.nearby_bookings = false;
             }
-
-            if (!$scope.overlapping_bookings && $scope.bb.company.$has('external_bookings')) { // no overlappying bookings - try external bookings
-                params = {
-                    start: $scope.bb.current_item.defaults.datetime.format('YYYY-MM-DD'),
-                    end: $scope.bb.current_item.defaults.datetime.clone().add(1, 'day').format('YYYY-MM-DD'),
-                    person_id: $scope.bb.current_item.defaults.person ? $scope.bb.current_item.defaults.person.id : undefined,
-                    resource_id: $scope.bb.current_item.defaults.resource ? $scope.bb.current_item.defaults.resource_id : undefined
-                };
-                $scope.bb.company.$get('external_bookings', params).then(function (collection) {
-                    bookings = collection.external_bookings;
-                    if (bookings && (bookings.length > 0)) {
-                        return $scope.external_bookings = _.filter(bookings, function (x) {
-                            x.start_time = moment(x.start);
-                            x.end_time = moment(x.end);
-                            if (!x.title) {
-                                x.title = "Blocked";
-                            }
-                            return (x.start_time.isBefore(max_time)) && (x.end_time.isAfter(min_time));
-                        });
-                    }
-                });
+            if ($scope.overlapping_bookings.length === 0) {
+                $scope.overlapping_bookings = false;
             }
-
-            return $scope.checking_conflicts = false;
         }
-        , err => $scope.checking_conflicts = false);
+
+        if (!$scope.overlapping_bookings && $scope.bb.company.$has('external_bookings')) { // no overlappying bookings - try external bookings
+            params = {
+                start: $scope.bb.current_item.defaults.datetime.format('YYYY-MM-DD'),
+                end: $scope.bb.current_item.defaults.datetime.clone().add(1, 'day').format('YYYY-MM-DD'),
+                person_id: $scope.bb.current_item.defaults.person ? $scope.bb.current_item.defaults.person.id : undefined,
+                resource_id: $scope.bb.current_item.defaults.resource ? $scope.bb.current_item.defaults.resource_id : undefined
+            };
+            $scope.bb.company.$get('external_bookings', params).then(function (collection) {
+                bookings = collection.external_bookings;
+                if (bookings && (bookings.length > 0)) {
+                    return $scope.external_bookings = _.filter(bookings, function (x) {
+                        x.start_time = moment(x.start);
+                        x.end_time = moment(x.end);
+                        if (!x.title) {
+                            x.title = "Blocked";
+                        }
+                        return (x.start_time.isBefore(max_time)) && (x.end_time.isAfter(min_time));
+                    });
+                }
+            });
+        }
+
+        return $scope.checking_conflicts = false;
+    }, err => $scope.checking_conflicts = false);
 
 };

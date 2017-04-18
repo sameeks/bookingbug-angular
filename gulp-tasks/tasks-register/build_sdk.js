@@ -19,6 +19,7 @@
                 'build-sdk:events',
                 'build-sdk:services',
                 'build-sdk:settings',
+                'build-sdk:queue',
                 cb
             );
         }

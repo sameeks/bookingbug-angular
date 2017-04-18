@@ -7,6 +7,11 @@
  */
 angular.module('BBAdminDashboard.clients.controllers')
     .controller('ClientsNewPageCtrl', ['$scope', '$state', function ($scope, $state) {
+
+        $scope.onSuccess = function () {
+          $state.go('clients.all');
+        };
+
     }
 
     ]);
