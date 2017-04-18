@@ -72,6 +72,7 @@
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
+    "guppy-pre-commit": "^0.4.0",
     "htmlhint-stylish": "^1.0.3",
     "include-all": "^0.1.6",
     "inquirer": "^3.0.1",
