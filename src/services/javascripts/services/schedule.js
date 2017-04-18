@@ -4,7 +4,7 @@
         .module('BBAdmin.Services')
         .factory('AdminScheduleService', adminScheduleService);
 
-    function adminScheduleService ($q, BBModel, ScheduleRules, BBAssets, bbTimeZone) {
+    function adminScheduleService($q, BBModel, ScheduleRules, BBAssets, bbTimeZone) {
         'ngInject';
 
         let schedule_cache = {};
@@ -114,7 +114,7 @@
             mapAssetsToScheduleEvents(start, end, assets) {
                 let assets_with_schedule = _.filter(assets, asset => asset.$has('schedule'));
 
-                const mapEvents = function(asset, e) {
+                const mapEvents = function (asset, e) {
                     e.resourceId = parseInt(asset.id) + "_" + asset.type[0];
                     e.title = asset.name;
                     e.rendering = "background";

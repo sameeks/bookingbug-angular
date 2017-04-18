@@ -4,7 +4,7 @@
         .module('BB.Controllers')
         .controller('AccordionRangeGroup', accordionRangeGroupController);
 
-    function accordionRangeGroupController ($scope, $rootScope, DateTimeUtilitiesService, $translate, CompanyStoreService, bbTimeZone) {
+    function accordionRangeGroupController($scope, $rootScope, DateTimeUtilitiesService, $translate, CompanyStoreService, bbTimeZone) {
         'ngInject';
 
         $scope.$watch('slots', () => setData());

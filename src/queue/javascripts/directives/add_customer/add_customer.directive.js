@@ -7,5 +7,5 @@ angular.module('BBQueue.directives').directive('bbQueueAddCustomer', () => {
             servers: '=',
             company: '='
         }
-    }
+    };
 });

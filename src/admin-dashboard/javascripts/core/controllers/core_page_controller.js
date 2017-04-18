@@ -11,7 +11,7 @@
         .module('BBAdminDashboard')
         .controller('CorePageController', corePageController);
 
-    function corePageController ($scope, $state, company, $uibModalStack, $rootScope, CompanyStoreService, bbTimeZone) {
+    function corePageController($scope, $state, company, $uibModalStack, $rootScope, CompanyStoreService, bbTimeZone) {
         'ngInject';
 
         $scope.company = company;

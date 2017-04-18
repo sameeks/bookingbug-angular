@@ -28,7 +28,7 @@
         .module('BB.Directives')
         .directive('bbTimeRanges', bbTimeRangesDirective);
 
-    function bbTimeRangesDirective ($q, $templateCache, $compile, $timeout, scrollIntercepter) {
+    function bbTimeRangesDirective($q, $templateCache, $compile, $timeout, scrollIntercepter) {
         return {
             restrict: 'AE',
             replace: true,

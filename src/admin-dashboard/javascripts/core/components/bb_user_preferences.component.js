@@ -23,7 +23,7 @@
             controllerAs: '$bbUserPreferencesCtrl'
         });
 
-    function UserPreferencesCtrl () {
+    function UserPreferencesCtrl() {
         this.preventClose = (event) => event.stopPropagation();
     }
 

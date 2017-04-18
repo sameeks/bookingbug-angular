@@ -8,5 +8,5 @@ angular.module('BBQueue.directives').directive('bbQueuers', (PusherQueue) => {
             });
         },
         templateUrl: 'queue/queuers.html'
-    }
+    };
 });

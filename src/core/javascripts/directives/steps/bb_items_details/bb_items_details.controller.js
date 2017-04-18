@@ -4,7 +4,7 @@
         .module('BB.Controllers')
         .controller('ItemDetails', itemDetailsController);
 
-    function itemDetailsController ($scope, $attrs, $rootScope, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService, bbTimeZone) {
+    function itemDetailsController($scope, $attrs, $rootScope, PurchaseBookingService, AlertService, BBModel, FormDataStoreService, ValidatorService, $uibModal, $document, $translate, $filter, GeneralOptions, PurchaseService, LoadingService, bbTimeZone) {
         'ngInject';
 
         let loader = LoadingService.$loader($scope);

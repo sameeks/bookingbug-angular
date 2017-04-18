@@ -20,7 +20,7 @@
         .module('BB.Directives')
         .directive('bbDateTimePicker', bbDateTimePickerDirective);
 
-    function bbDateTimePickerDirective () {
+    function bbDateTimePickerDirective() {
         return {
             scope: {
                 date: '=',

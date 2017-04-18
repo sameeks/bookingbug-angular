@@ -10,7 +10,7 @@
         .module('BBAdminDashboard')
         .config(translationsConfig);
 
-    function translationsConfig ($translateProvider) {
+    function translationsConfig($translateProvider) {
         'ngInject';
 
         const translations = {
