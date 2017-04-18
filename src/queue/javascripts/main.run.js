@@ -67,10 +67,11 @@ angular.module('BBQueue').run(function (RuntimeStates, AdminQueueOptions, SideNa
                 url: "/server/:id",
                 resolve: {
                     person(people, $stateParams) {
-                        return _.findWhere(people, {
+                        let person = _.findWhere(people, {
                             id: parseInt($stateParams.id),
                             queuing_disabled: false
                         });
+                        return person.$refetch();
                     }
                 },
                 templateUrl: "queue/server.html",

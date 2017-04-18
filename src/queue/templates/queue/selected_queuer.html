@@ -9,35 +9,36 @@
     <div class="row">
       <dl class="col-sm-6 dl-horizontal">
 
-        <dt>Due</td>
-        <dd>{{selected_queuer.due | datetime:"LLLL"}}
+        <dt>Due</dt>
+        <dd>{{selected_queuer.due | datetime:"LLLL"}}</dd>
 
-        <dt>Position</td>
-        <dd>{{selected_queuer.position}}
+        <dt>Position</dt>
+        <dd>{{selected_queuer.position}}</dd>
 
-        <dt>Arrived</td>
-        <dd>{{selected_queuer.created_at  | datetime:"LLLL"}}
+        <dt>Arrived</dt>
+        <dd>{{selected_queuer.created_at | datetime:"LLLL"}}</dd>
 
 
-        <dt>Estimated Wait Time </td>
-        <dd ng-if="selected_queuer.remaining_signed > 0">{{selected_queuer.remaining_signed | time_period_from_seconds: 'minutes'}}
+        <dt>Estimated Wait Time </dt>
+        <dd ng-show="selected_queuer.remaining_signed > 0">{{selected_queuer.remaining_signed | time_period_from_seconds: 'minutes'}}</dd>
+        <dd ng-show="selected_queuer.remaining_signed <= 0">< 1 minute.</dd>
       </dl>
       <dl class="col-sm-6 dl-horizontal">
 
-        <dt>Service</td>
-        <dd>{{selected_queuer.service_name}}
+        <dt>Service</dt>
+        <dd>{{selected_queuer.service_name}}</dd>
 
-        <dt>Name</td>
-        <dd>{{selected_queuer.getName()}}
+        <dt>Name</dt>
+        <dd>{{selected_queuer.getName()}}</dd>
 
-        <dt>Phone</td>
-        <dd>{{selected_queuer.fullMobile()}}
+        <dt>Phone</dt>
+        <dd>{{selected_queuer.fullMobile()}}</dd>
 
-        <dt>Email</td>
-        <dd>{{selected_queuer.email}}
+        <dt>Email</dt>
+        <dd>{{selected_queuer.email}}</dd>
 
-        <dt>Notes</td>
-        <dd>{{selected_queuer.notes}}
+        <dt>Notes</dt>
+        <dd>{{selected_queuer.notes}}</dd>
       </dl>
     </div>
     <div class="row">
