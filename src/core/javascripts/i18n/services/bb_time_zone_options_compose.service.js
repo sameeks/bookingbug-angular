@@ -76,7 +76,9 @@
         }
 
         function loadTimeZoneKeys(options) {
-            return {...options, timeZones: options.useMomentNames ? loadMomentNames() : Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES) };
+            return Object.assign({}, options, {
+                timeZones: options.useMomentNames ? loadMomentNames() : Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES)
+            });
         }
 
         function loadMomentNames() {
@@ -91,17 +93,23 @@
 
         function ensureBrowserTimeZoneExists(options) {
             const browserTimeZone = bbTimeZone.getTimeZoneKey(moment.tz.guess(), options.useMomentNames);
-            return {...options, timeZones: ensureTimeZoneExists(options.timeZones, browserTimeZone)};
+            return Object.assign({}, options, {
+                timeZones: ensureTimeZoneExists(options.timeZones, browserTimeZone)
+            });
         }
 
         function ensureCompanyTimeZoneExists(options) {
             const companyTimeZone = bbTimeZone.getTimeZoneKey(bbTimeZone.getCompanyTimeZone(), options.useMomentNames);
-            return {...options, timeZones: ensureTimeZoneExists(options.timeZones, companyTimeZone)};
+            return Object.assign({}, options, {
+                timeZones: ensureTimeZoneExists(options.timeZones, companyTimeZone)
+            });
         }
 
         function ensureDisplayTimeZoneExists(options) {
             const displayTimeZone = bbTimeZone.getTimeZoneKey(bbTimeZone.getDisplayTimeZone(), options.useMomentNames);
-            return {...options, timeZones: ensureTimeZoneExists(options.timeZones, displayTimeZone)};
+            return Object.assign({}, options, {
+                timeZones: ensureTimeZoneExists(options.timeZones, displayTimeZone)
+            });
         }
 
         function ensureTimeZoneExists(timeZones, timeZone) {
@@ -115,20 +123,28 @@
         function findFilterKeysInCustomList(options) {
             const getKey = (timeZoneKey) => bbTimeZone.getTimeZoneKey(timeZoneKey, options.useMomentNames);
             const mapFilters = (listOfFilters, typeOfFilter, filters) => filters[typeOfFilter] = _.map(listOfFilters, getKey);
-            return {...options, filters: _.mapObject(options.filters, mapFilters)};
+            return Object.assign({}, options, {
+                filters: _.mapObject(options.filters, mapFilters)
+            });
         }
 
         function filterTimeZones(options) {
-            return {...options, timeZones: filterTimeZoneList(options.timeZones, options.filters.limitTimeZonesBy)};
+            return Object.assign({}, options, {
+                timeZones: filterTimeZoneList(options.timeZones, options.filters.limitTimeZonesBy)
+            });
         }
 
         function rejectTimeZones(options) {
-            return {...options, timeZones: filterTimeZoneList(options.timeZones, options.filters.excludeTimeZonesBy, true)};
+            return Object.assign({}, options, {
+                timeZones: filterTimeZoneList(options.timeZones, options.filters.excludeTimeZonesBy, true)
+            });
         }
 
         function filterDayLightOrStandardTimeZones(options) {
             const { daylightTimeZones, standardTimeZones } = options.filters;
-            return {...options, timeZones: filterTimeZoneList(options.timeZones, options.isDST ? daylightTimeZones : standardTimeZones)};
+            return Object.assign({}, options, {
+                timeZones: filterTimeZoneList(options.timeZones, options.isDST ? daylightTimeZones : standardTimeZones)
+            });
         }
 
         function filterTimeZoneList(timeZones, timeZonesToFilter, exclude = false) {
@@ -153,7 +169,9 @@
 
         function mapTimeZonesModel(options) {
             const mapTimeZone = (timeZone, index) => timeZone.value ? timeZone : mapTimeZoneItem(options, timeZone, index);
-            return {...options, timeZones: _.map(options.timeZones, mapTimeZone)};
+            return Object.assign({}, options, {
+                timeZones: _.map(options.timeZones, mapTimeZone)
+            });
         }
 
         function mapTimeZoneItem(options, timeZoneKey, index) {
@@ -186,11 +204,15 @@
         }
 
         function removeDuplicates(options) {
-            return {...options, timeZones: _.uniq(options.timeZones, (timeZone) => timeZone.display)};
+            return Object.assign({}, options, {
+                timeZones: _.uniq(options.timeZones, (timeZone) => timeZone.display)
+            });
         }
 
         function orderTimeZones(options) {
-            return {...options, timeZones: orderByFilter(options.timeZones, ['order[0]', 'order[1]', 'order[2]'], false)};
+            return Object.assign({}, options, {
+                timeZones: orderByFilter(options.timeZones, ['order[0]', 'order[1]', 'order[2]'], false)
+            });
         }
 
     }
