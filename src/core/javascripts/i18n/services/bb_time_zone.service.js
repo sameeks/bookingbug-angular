@@ -17,11 +17,14 @@
 
         return {
             getDisplayTimeZone,
+            getDisplayUTCOffset,
+            getCompanyTimeZone,
+            getCompanyUTCOffset,
+            getTimeZoneKey,
+
             convertToCompanyTz,
             convertToDisplayTz,
-            getCompanyUTCOffset,
-            getDisplayUTCOffset,
-            getTimeZoneKey,
+
             determineTimeZone,
             setDisplayTimeZone,
             setLocalStorage
@@ -57,6 +60,10 @@
             return moment().tz(displayTimeZone).utcOffset();
         }
 
+        function getCompanyTimeZone() {
+            return CompanyStoreService.time_zone;
+        }
+
         function getCompanyUTCOffset() {
             return moment().tz(CompanyStoreService.time_zone).utcOffset();
         }
@@ -69,13 +76,13 @@
             }
 
             if (bbi18nOptions.timeZone.useBrowser || localStorage.useBrowserTimeZone) {
-                let timeZone = getTimeZoneKey(moment.tz.guess());
+                let timeZone = getTimeZoneKey(moment.tz.guess(), bbi18nOptions.timeZone.useMomentNames);
                 setDisplayTimeZone(timeZone);
                 return;
             }
 
             if (bbi18nOptions.timeZone.useCompany && CompanyStoreService.time_zone) {
-                let timeZone = getTimeZoneKey(CompanyStoreService.time_zone);
+                let timeZone = getTimeZoneKey(CompanyStoreService.time_zone, bbi18nOptions.timeZone.useMomentNames);
                 setDisplayTimeZone(timeZone);
             }
         }
@@ -89,14 +96,21 @@
             $localStorage.setObject('bbTimeZone', localStorageObj);
         }
 
-        function getTimeZoneKey(timeZone) {
+        function getTimeZoneKey(timeZone, useMomentNames = false) {
             let selectedTimeZone;
 
-            if (bbi18nOptions.use_moment_names) return timeZone;
+            if (useMomentNames) return timeZone;
             if (bbCustomTimeZones.GROUPED_TIME_ZONES[timeZone]) return timeZone;
 
-            const city = timeZone.match(/[^/]*$/)[0];
+            const city = timeZone.match(/[^/]*$/)[0].replace(/ /g, "_");
+
             for (let [groupName, groupCities] of Object.entries(bbCustomTimeZones.GROUPED_TIME_ZONES)) {
+
+                if (groupName.match(/[^/]*$/)[0] === city) {
+                    selectedTimeZone = groupName;
+                    break;
+                }
+
                 groupCities = groupCities.split(/\s*,\s*/).map((tz) => tz.replace(/ /g, "_")).join(', ').split(/\s*,\s*/);
                 const cityGroupIndex = groupCities.findIndex((groupCity) => groupCity === city);
                 if (cityGroupIndex !== -1){

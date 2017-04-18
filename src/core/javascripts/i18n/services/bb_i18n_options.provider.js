@@ -6,19 +6,20 @@ angular.module('BB.i18n').provider('bbi18nOptions', function (bbOptionsProvider)
         use_browser_language: true,
         available_languages: ['en'],
         available_language_associations: {
-            'en_*': 'en'
+            'en_*': 'en',
+            'fr_*': 'fr'
         },
         timeZone: {
             default: 'Europe/London',
-            options: {
-                useMomentNames: false,
-                limitTimeZonesBy: null,
-                excludeTimeZonesBy: null,
-                daylightTimeZones: null,
-                standardTimeZones: null
-            },
             useBrowser: false,
-            useCompany: true
+            useCompany: true,
+            useMomentNames: true,
+            filters: {
+                limitTimeZonesBy: ['Canada'],
+                excludeTimeZonesBy: [],
+                daylightTimeZones: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
+                standardTimeZones: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
+            }
         }
     };
 

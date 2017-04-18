@@ -4,7 +4,7 @@
         .module('BB.uiSelect')
         .directive('uiSelectChoicesLazyload', uiSelectChoicesLazyLoadDirective);
 
-    function uiSelectChoicesLazyLoadDirective ($timeout, $parse, $compile, $document, $filter) {
+    function uiSelectChoicesLazyLoadDirective($timeout, $parse, $compile, $document, $filter) {
 
         return function (scope, elm, attr) {
             var raw, refreshCallBack, scrollCompleted;
@@ -14,11 +14,12 @@
             raw = elm[0];
             scrollCompleted = true;
             if (!attr.allChoices) {
-                throw new Error('ief:ui-select: Attribute all-choices is required in  ui-select-choices so that we can handle  pagination.');
+                throw new Error('ief:ui-select: Attribute all-choices is required in ui-select-choices so that we can handle pagination.');
             }
             scope.pagingOptions = {
                 allOptions: scope.$eval(attr.allChoices)
             };
+
             attr.refresh = 'addMoreItems()';
             refreshCallBack = $parse(attr.refresh);
             elm.bind('scroll', function (event) {
@@ -103,6 +104,11 @@
             };
             scope.$on('$destroy', function () {
                 elm.off('scroll');
+            });
+
+            scope.$watch(attr.allChoices, (newValue) => {
+                scope.pagingOptions.allOptions = newValue;
+                scope.addMoreItems();
             });
         };
     }

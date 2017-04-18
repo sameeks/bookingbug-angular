@@ -641,6 +641,7 @@ angular.module('BB.i18n').config(function ($translateProvider) {
                     PORT_OF_SPAIN: "Port of Spain",
                     PRAGUE: "Prague",
                     PUERTO_RICO: "Puerto Rico",
+                    PUNTA_ARENAS: "Punta Arenas",
                     PYONGYANG: "Pyongyang",
                     QATAR: "Qatar",
                     QUEENSLAND: "Queensland",

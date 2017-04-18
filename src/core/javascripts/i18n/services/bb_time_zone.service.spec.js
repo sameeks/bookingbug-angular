@@ -14,9 +14,7 @@ describe('bbTimeZone service,', () => {
                         available_languages: ['en'],
                         timeZone: {
                             default: 'Europe/London',
-                            options: {
-                                useMomentNames: true
-                            },
+                            useMomentNames: true,
                             useBrowser: false,
                             useCompany: false
                         }
@@ -61,9 +59,9 @@ describe('bbTimeZone service,', () => {
         it('should use browser timezone', () => {
             setBbi18nOptions({
                 timeZone: {
-                    useBrowser: true
-                },
-                use_moment_names: true
+                    useBrowser: true,
+                    useMomentNames: true
+                }
             });
 
             spyOn(moment.tz, 'guess').and.returnValue('Europe/Berlin');

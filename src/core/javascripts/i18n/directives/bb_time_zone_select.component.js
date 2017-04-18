@@ -11,8 +11,7 @@
      *
      * @example
      * <example>
-     *   <bb-time-zone-select limit-time-zones="'Europe'" exclude="['Berlin', 'Zagreb']"></bb-time-zone-select>
-     *   <bb-time-zone-select limit-time-zones="['Asia', 'America']"></bb-time-zone-select>
+     *   <bb-time-zone-select></bb-time-zone-select>
      *   <bb-time-zone-select format="'(GMT offset-hours) location (tz-code)'"
      * </example>
      */
@@ -29,15 +28,16 @@
             controllerAs: '$bbTimeZoneSelectCtrl'
         });
 
-    function TimeZoneSelectCtrl($rootScope, $scope, $localStorage, bbi18nOptions, CompanyStoreService, bbTimeZone, bbTimeZoneOptions) {
+    function TimeZoneSelectCtrl($rootScope, $scope, $localStorage, bbi18nOptions, bbTimeZone, bbTimeZoneOptions) {
         'ngInject';
 
         this.timeZones = [];
+        this.useMomentNames = false;
         this.isAutomaticTimeZone = false;
         this.selectedTimeZone = null;
 
         this.$onInit = () => {
-            this.useMomentNames = bbi18nOptions.use_moment_names;
+            this.useMomentNames = bbi18nOptions.timeZone.useMomentNames;
             this.timeZones = bbTimeZoneOptions.composeTimeZoneList(this.format);
             this.setTimeZone = setTimeZone;
             this.automaticTimeZoneToggle = automaticTimeZoneToggle;
@@ -46,14 +46,15 @@
 
         const determineDefaults = () => {
             const localStorage = $localStorage.getObject('bbTimeZone');
-            this.isAutomaticTimeZone = (localStorage.useBrowserTimeZone || bbi18nOptions.timeZone.useBrowser);
-            this.selectedTimeZone = this.timeZones.find((tz) => tz.value === bbTimeZone.getDisplayTimeZone());
+            const displayTimeZone = bbTimeZone.getTimeZoneKey(bbTimeZone.getDisplayTimeZone(), this.useMomentNames);
+            this.isAutomaticTimeZone = (localStorage.useBrowserTimeZone || (bbi18nOptions.timeZone.useBrowser && !localStorage.displayTimeZone));
+            this.selectedTimeZone = this.timeZones.find((tz) => tz.value === displayTimeZone);
         };
 
         const automaticTimeZoneToggle = () => {
-            let timeZone = this.isAutomaticTimeZone ? moment.tz.guess() : CompanyStoreService.time_zone;
-            timeZone = this.useMomentNames ? timeZone : bbTimeZone.getTimeZoneKey(timeZone);
-            this.timeZones = bbTimeZoneOptions.addBrowserTimeZone(this.timeZones, this.format);
+            const timeZoneKey = this.isAutomaticTimeZone ? moment.tz.guess() : bbTimeZone.getCompanyTimeZone();
+            const timeZone = bbTimeZone.getTimeZoneKey(timeZoneKey, this.useMomentNames);
+            this.timeZones = bbTimeZoneOptions.addMissingTimeZones(this.timeZones, this.format);
             setTimeZone(timeZone, this.isAutomaticTimeZone);
             $scope.$broadcast('UISelect:closeSelect');
             bbTimeZone.setLocalStorage({useBrowserTimeZone: this.isAutomaticTimeZone});
