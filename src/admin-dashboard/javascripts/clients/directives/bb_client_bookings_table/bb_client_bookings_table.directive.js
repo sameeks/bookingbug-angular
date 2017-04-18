@@ -26,23 +26,20 @@
         function link(scope, elem, attrs) {
 
             scope.$watch('tabset.active', () => {
-                let gridElements = document.getElementsByClassName('bb-client-bookings-table');
-                if(gridElements.length > 0) {
-                    $timeout(() => {
-                        let activeGrid = angular.element(gridElements[scope.tabset.active]);
-                        activeGrid.addClass('fade-in');
-                    });
-                }
+                $timeout(() => {
+                    scope.activeGrid = scope.tabset.active;
+                });
             });
+
+            // mobile date format 'datetime: "l h.mma"'
 
             let buildColumnsDisplay = () => {
                 return [
-                    { displayName: 'Data/Time', field: 'datetime', cellFilter: 'datetime: "ddd DD MMM YY h.mma"', width: '25%'},
-                    { displayName: 'Description', field: 'details', width: '65%'},
+                    { displayName: 'Data/Time', field: 'datetime', cellFilter: 'datetime: "ddd DD MMM YY h.mma"'},
+                    { displayName: 'Description', field: 'details'},
                     {  // DETAILS BUTTON COLUMN
                         field: 'detailsCell',
                         displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',
-                        width: '10%',
                         cellTemplate: 'bookings_table_action_button.html'
                     }
                 ]

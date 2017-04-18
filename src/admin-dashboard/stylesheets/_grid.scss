@@ -73,13 +73,9 @@ $grid-white: #fdfdfd;
   }
 }
 
-.bb-client-bookings-table {
-  opacity: 0;
+// grids in tab panels need to have fixed width to render smoothly
+.bb-client-bookings-grid-container {
+  .bb-grid {
+    width: 1200px;
+  }
 }
-
-.fade-in {
-  transition: all linear 1s;  
-  opacity: 1;
-}
-
-
