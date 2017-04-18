@@ -73,5 +73,10 @@
     "jquery": "~1.11.3",
     "moment": "~2.14.0",
     "fullcalendar": ">=2.9.1"
-  }
+  },
+  "overrides": {
+    "lodash": {
+      "ignore": true
+    }
+  }  
 }

@@ -82,10 +82,5 @@
     "fullcalendar": ">=3.0.0",
     "moment": "~2.14.0",
     "angular-ui-router": "^0.2.8"
-  },
-  "overrides": {
-    "lodash": {
-      "ignore": true
-    }
-  }  
+  }
 }
