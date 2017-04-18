@@ -11,16 +11,16 @@
             return getBookings($scope, member);
         });
 
-        let init = () => {
-            if (!$scope.startDate) {
-                $scope.startDate = moment();
-            }
 
-            if ($scope.member) {
-                return getBookings($scope, $scope.member);
-            }
-        }
-
+        /***
+         * @ngdoc method
+         * @name edit
+         * @methodOf BBAdminDashboard.clients.directives:bbClientBookingsTable
+         * @description
+         * Edit client's booking details
+         *
+         * @param {integer} id The id of the booking to be edited
+        */
         $scope.edit = (id) => {
             let booking = _.find($scope.booking_models, b => b.id === id);
             booking.$getAnswers().then((answers) => {
@@ -31,7 +31,7 @@
                     model: booking,
                     title: 'Booking Details',
                     templateUrl: 'edit_booking_modal_form.html',
-                        success(response) {
+rt                        success(response) {
                             handleModal(response, booking);
                         }
                     }
@@ -40,6 +40,15 @@
         };
 
 
+        /***
+         * @ngdoc method
+         * @name edit
+         * @methodOf BBAdminDashboard.clients.directives:bbClientBookingsTable
+         * @description
+         * Cancel client's booking
+         *
+         * @param {integer} id The id of the booking to be cancelled
+         */
         $scope.cancel = (id) => {
             let booking = _.find($scope.booking_models, b => b.id === id);
 
@@ -63,6 +72,17 @@
                 cancelBooking(booking);
             });
         };
+
+
+        let init = () => {
+            if (!$scope.startDate) {
+                $scope.startDate = moment();
+            }
+
+            if ($scope.member) {
+                return getBookings($scope, $scope.member);
+            }
+        }
 
 
         let handleModal = (response, booking) => {

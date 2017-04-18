@@ -1,3 +1,19 @@
+/***
+ * @ngdoc directive
+ * @name BBAdminDashboard.clients.directives:bbClientsTable
+ * @scope true
+ *
+ * @description
+ *
+ * Intitialises and handles a table for client data
+ *
+ * <pre>
+ * restrict: 'AE'
+ * replace: true
+ * scope: true
+ * </pre>
+ */
+
 (() => {
 
     angular
@@ -13,7 +29,7 @@
                 company: '=',
                 options: '='
             },
-            controller: 'TabletClients',
+            controller: 'bbClientsTableCtrl',
             templateUrl: 'clients/client_grid.html'
         }
 
@@ -27,12 +43,12 @@
                 return [
                     { field: 'name', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME', width: '35%' },
                     { field: 'email', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL', width: '35%' },
-                    { field: 'mobile', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE', width: '25%', cellFilter: 'local_phone_number: mobile' },
+                    { field: 'mobile', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE', width: '22.5%', cellFilter: 'local_phone_number: mobile' },
                     {  // ACTION BUTTON COLUMN
                         field: 'action',
                         displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',
                         enableFiltering: false,
-                        width: '5%',
+                        width: '7.5%',
                         headerCellClass: 'action-column-header',
                         enableSorting: false,
                         enableColumnMenus: false,
@@ -83,7 +99,7 @@
                     gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {
                         scope.paginationOptions.pageNumber = newPage;
                         scope.paginationOptions.pageSize = pageSize;
-                        scope.getClients(scope.paginationOptions.pageNumber + 1, filterString);
+                        scope.getClients(scope.paginationOptions.pageNumber, filterString);
                     });
                     // adds ability to edit a client by clicking on their row rather than just the action button
                     gridApi.selection.on.rowSelectionChanged(scope, (row) => {

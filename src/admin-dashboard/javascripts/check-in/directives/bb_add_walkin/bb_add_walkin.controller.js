@@ -1,10 +1,18 @@
 (() => {
 
     angular
-        .module('BBAdminDashboard.check-in.directives')
+        .module('BBAdminDashboard.check-in.controllers')
         .controller('bbAddWalkinCtrl', bbAddWalkinCtrl);
 
     function bbAddWalkinCtrl($scope, AdminBookingPopup) {
+        /***
+         * @ngdoc method
+         * @name walkIn
+         * @methodOf BBAdminDashboard.check-in.directives:bbAddWalkin
+         * @description
+         * Intitialises modal to create a walk in appointment
+         *
+        */
         this.walkIn = () => {
             AdminBookingPopup.open({
                 item_defaults: {

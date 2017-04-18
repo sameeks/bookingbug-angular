@@ -1,3 +1,17 @@
+/***
+ * @ngdoc directive
+ * @name BBAdminDashboard.clients.directives:bbClientBookingsTable
+ * @scope true
+ *
+ * @description
+ *
+ * Intitialises and handles a table for a specific client's booking data
+ *
+ * <pre>
+ * scope: true
+ * </pre>
+ */
+
 (() => {
 
     angular

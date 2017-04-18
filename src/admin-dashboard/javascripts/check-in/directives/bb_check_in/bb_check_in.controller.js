@@ -1,11 +1,21 @@
 (() => {
 
     angular
-        .module('BBAdminDashboard.check-in.directives')
+        .module('BBAdminDashboard.check-in.controllers')
         .controller('bbCheckInController', bbCheckInController);
 
     function bbCheckInController($scope, $q, ModalForm, AlertService, BBModel) {
 
+        /***
+         * @ngdoc method
+         * @name getAppointments
+         * @methodOf BBAdminDashboard.clients.directives:bbClientBookingsTable
+         * @description
+         * Gets the current dates appointments to be displayed in the check in table
+         *
+         * @param {integer} currentPage The pagination page number of the appointments to get
+         * @param {boolean} skipCache Option to flush current bookings
+        */
         $scope.getAppointments = (currentPage, filterBy, filterByFields, orderBy, orderByReverse, skipCache) => {
             buildParams(currentPage, filterBy, filterByFields, orderBy, orderByReverse, skipCache);
         };

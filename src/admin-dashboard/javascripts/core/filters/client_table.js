@@ -1,10 +1,11 @@
 /**
  * @ngdoc filter
- * @name BBAdminDashboard.filters.filter:ClientTable
+ * @name BBAdminDashboard.filters.filter:buildClientString
  * @description
  * Converts table fields into client search endpoint format
- */
-
+ * @param {array} filters The array of objects to filter
+ * @returns {string} filterString the filters value string
+*/
 angular
     .module('BBAdminDashboard')
     .filter('buildClientString', () =>
@@ -24,6 +25,16 @@ angular
         }
     );
 
+/**
+ * @ngdoc filter
+ * @name BBAdminDashboard.filters.filter:buildClientFieldsArray
+ * @description
+ * Converts array of fields to be filtered by
+ * Updates filter value if that filter is already in array
+ * @param {array} filters The filter fields currently being filtered
+ * @param {object} filterObject The filter most recently added to the filters
+ * @returns {array} filters the filtered fields
+*/
 angular
     .module('BBAdminDashboard')
     .filter('buildClientFieldsArray', () =>

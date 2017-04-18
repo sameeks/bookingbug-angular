@@ -5,7 +5,14 @@
         .controller('bbNewBookingCtrl', bbNewBookingCtrl);
 
     function bbNewBookingCtrl($scope, AdminBookingPopup, $uibModal, $timeout, $rootScope, AdminBookingOptions) {
-        return $scope.newBooking = () => {
+        /***
+         * @ngdoc method
+         * @name newBooking
+         * @methodOf BBAdminDashboard.calendar.directives:bbNewBooking
+         * @description
+         * Open admin booking modal to create new appointment booking
+         */
+        $scope.newBooking = () => {
             AdminBookingPopup.open({
                 item_defaults: {
                     day_view: AdminBookingOptions.day_view,
@@ -21,4 +28,5 @@
     }
 
 })();
+
 

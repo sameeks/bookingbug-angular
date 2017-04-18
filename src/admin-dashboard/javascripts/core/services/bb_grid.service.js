@@ -1,3 +1,12 @@
+/**
+ * @ngdoc service
+ * @name BBAdminDashboard.bbGridService
+ *
+ * @description
+ * Responsible for setting grip settings
+ *
+*/
+
 (() => {
 
     angular
@@ -6,7 +15,17 @@
 
     function bbGridService() {
         return {
-            // column settings used across all grids should be set here to reduce duplicate code between directives
+            /***
+             * @ngdoc method
+             * @name readyColumns
+             * @methodOf BBAdminDashboard.bbGridService
+             * @description
+             * Checks if basket_item has default person
+             * @param {array} columns The columns to be changed
+             * @param {string} customTemplates The template to use in the the column
+             *
+             * @returns {boolean}
+            */
             readyColumns(columns, customTemplates) {
                 for(let col of columns) {
                     col.headerCellFilter = 'translate';

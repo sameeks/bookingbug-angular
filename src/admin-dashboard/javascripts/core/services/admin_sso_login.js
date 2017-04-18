@@ -3,7 +3,7 @@
  * @name BBAdminDashboard.AdminSsoLogin
  *
  * @description
- * Responsible for loging in the admin user via the sso token
+ * Responsible for logging in the admin user via the sso token
  *
  */
 angular.module('BBAdminDashboard').factory('AdminSsoLogin', (halClient, $q) => {

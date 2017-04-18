@@ -1,3 +1,21 @@
+/***
+ * @ngdoc directive
+ * @name BBAdminDashboard.check-in.directives:bbCheckIn
+ * @restrict AE
+ * @replace false
+ * @scope true
+ *
+ * @description
+ *
+ * Intitialises and handles a table for appointment check-ins
+ *
+ * <pre>
+ * restrict: 'AE'
+ * replace: false
+ * scope: true
+ * </pre>
+ */
+
 (() => {
 
     angular
