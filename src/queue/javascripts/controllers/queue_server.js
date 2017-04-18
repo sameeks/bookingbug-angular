@@ -59,15 +59,27 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
         let {person} = options;
         let {serving} = person;
         $scope.loadingServer = true;
-        serving.$get('booking').then(function (booking) {
-            booking = new BBModel.Admin.Booking(booking);
-            booking.current_multi_status = options.status;
-            if (booking.$has('edit')) {
-                finishServingOutcome(person, booking);
-            } else {
-                $scope.loadingServer = false;
-            }
-        });
+        if (options.status) {
+            person.finishServing().then(function () {
+                serving.$get('booking').then(function (booking) {
+                    booking = new BBModel.Admin.Booking(booking);
+                    booking.current_multi_status = options.status;
+                    booking.$update(booking).then(res => {
+                        $scope.loadingServer = false;
+                    });
+                });
+            });
+        } else {
+            serving.$get('booking').then(function (booking) {
+                booking = new BBModel.Admin.Booking(booking);
+                booking.current_multi_status = options.status;
+                if (booking.$has('edit')) {
+                    finishServingOutcome(person, booking);
+                } else {
+                    $scope.loadingServer = false;
+                }
+            });
+        }
     };
 
     let finishServingOutcome = function (person, booking) {
