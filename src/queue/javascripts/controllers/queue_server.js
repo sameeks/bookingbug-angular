@@ -125,7 +125,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                     person.attendance_status = 1;
                     $scope.loadingServer = false;
                 });
-            }
+            } else $scope.loadingServer = false;
         });
     };
 
