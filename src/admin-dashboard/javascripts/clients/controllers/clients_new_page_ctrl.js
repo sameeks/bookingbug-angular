@@ -5,8 +5,13 @@
  * @description
  * Controller for the clients new page
  */
-angular.module('BBAdminDashboard.clients.controllers')
-    .controller('ClientsNewPageCtrl', ['$scope', '$state', function ($scope, $state) {
-    }
 
-    ]);
+(() => {
+
+    angular.module('BBAdminDashboard.clients.controllers')
+        .controller('ClientsNewPageCtrl', ['$scope', '$state', function ($scope, $state) {
+        }
+
+        ]);
+
+})();
