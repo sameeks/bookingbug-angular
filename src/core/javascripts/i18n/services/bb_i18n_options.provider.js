@@ -17,8 +17,8 @@ angular.module('BB.i18n').provider('bbi18nOptions', function (bbOptionsProvider)
             filters: {
                 limitTimeZonesBy: ['Canada'],
                 excludeTimeZonesBy: [],
-                daylightTimeZones: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
-                standardTimeZones: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
+                daylightTimeZones: [],
+                standardTimeZones: []
             }
         }
     };
