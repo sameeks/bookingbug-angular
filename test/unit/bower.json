@@ -19,7 +19,6 @@
     "moment": "~2.14.0",
     "moment-timezone": "~0.5.4",
     "angular-moment": "~1.0.1",
-    "immutable": "~3.8.1",
     "fullcalendar": "~3.0.0",
     "fontawesome": "~4.6.3",
     "angular-ui-router": "~0.2.18",
