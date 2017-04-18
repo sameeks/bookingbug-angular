@@ -36,7 +36,7 @@
             mapTimeZonesModel,
             removeDuplicates,
             orderTimeZones
-        };
+        }
 
         return {
             composeTimeZoneList,
