@@ -1,7 +1,9 @@
 let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel, CheckSchema,
-                             $uibModal, AdminPersonService, $q, AdminQueuerService, AdminQueueLoading, Dialog, $translate) => {
+                             $uibModal, AdminPersonService, $q, AdminQueuerService, adminQueueLoading, Dialog, $translate) => {
 
-    $scope.AdminQueueLoading = AdminQueueLoading;
+    $scope.adminQueueLoading = {
+        isLoadingServerInProgress: adminQueueLoading.isLoadingServerInProgress
+    }
 
     $scope.loadingServer = false;
 
@@ -32,7 +34,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
 
     $scope.startServingQueuer = function (person, queuer) {
         $scope.loadingServer = true;
-        AdminQueueLoading.setLoadingServerInProgress(true);
+        adminQueueLoading.setLoadingServerInProgress(true);
         if (upcomingBookingCheck(person)) {
             Dialog.confirm({
                 title: $translate.instant('ADMIN_DASHBOARD.QUEUE_PAGE.NEXT_BOOKING_DIALOG_HEADING'),
@@ -44,12 +46,12 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                         if ($scope.selectQueuer) $scope.selectQueuer(null);
                         $scope.getQueuers();
                         $scope.loadingServer = false;
-                        AdminQueueLoading.setLoadingServerInProgress(false);
+                        adminQueueLoading.setLoadingServerInProgress(false);
                     });
                 },
                 fail: () => {
                     $scope.loadingServer = false;
-                    AdminQueueLoading.setLoadingServerInProgress(false);
+                    adminQueueLoading.setLoadingServerInProgress(false);
                 }
             });
         } else {
@@ -57,7 +59,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                 if ($scope.selectQueuer) $scope.selectQueuer(null);
                 $scope.getQueuers();
                 $scope.loadingServer = false;
-                AdminQueueLoading.setLoadingServerInProgress(false);
+                adminQueueLoading.setLoadingServerInProgress(false);
             });
         }
     };
@@ -66,7 +68,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
         let {person} = options;
         let {serving} = person;
         $scope.loadingServer = true;
-        AdminQueueLoading.setLoadingServerInProgress(true);
+        adminQueueLoading.setLoadingServerInProgress(true);
         if (options.status) {
             person.finishServing().then(function () {
                 serving.$get('booking').then(function (booking) {
@@ -74,7 +76,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                     booking.current_multi_status = options.status;
                     booking.$update(booking).then(res => {
                         $scope.loadingServer = false;
-                        AdminQueueLoading.setLoadingServerInProgress(false);
+                        adminQueueLoading.setLoadingServerInProgress(false);
                     });
                 });
             });
@@ -86,7 +88,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                     finishServingOutcome(person, booking);
                 } else {
                     $scope.loadingServer = false;
-                    AdminQueueLoading.setLoadingServerInProgress(false);
+                    adminQueueLoading.setLoadingServerInProgress(false);
                 }
             });
         }

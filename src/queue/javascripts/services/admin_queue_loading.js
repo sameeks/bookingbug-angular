@@ -1,7 +1,7 @@
-angular.module('BBQueue.services').factory('AdminQueueLoading', () => {
+angular.module('BBQueue.services').factory('adminQueueLoading', () => {
     let loadingServerInProgress = false;
     return {
-        getLoadingServerInProgress: function () {
+        isLoadingServerInProgress: function () {
             return loadingServerInProgress;
         },
         setLoadingServerInProgress: function (bool) {
