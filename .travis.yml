@@ -23,13 +23,8 @@ env:
 
 deploy:
   - provider: script
-    script: ./travis/deploy.sh
+    script: ./travis/release.sh
     on:
       tags: true
-    skip_cleanup: true
-  - provider: script
-    script: ./travis/deploy.sh
-    on:
-      branch: master
     skip_cleanup: true
 
