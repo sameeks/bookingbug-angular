@@ -26,6 +26,7 @@ angular.module('BB', [
     'BB.Services',
     'BB.Directives',
 
+    'BB.analytics',
     'BB.i18n',
     'BB.uib'
 ]);

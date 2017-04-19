@@ -24,6 +24,18 @@ angular.module('schemaForm').config(function (schemaFormProvider, schemaFormDeco
 
     schemaFormProvider.defaults.string.unshift(datetimepicker);
 
+    let phonenumber = function (name, schema, options) {
+        if ((schema.type === 'string') && (schema.format === 'tel')) {
+            let f = schemaFormProvider.stdFormObj(name, schema, options);
+            f.key = options.path;
+            f.type = 'phonenumber';
+            options.lookup[sfPathProvider.stringify(options.path)] = f;
+            return f;
+        }
+    };
+
+    schemaFormProvider.defaults.string.unshift(phonenumber);
+
     schemaFormDecoratorsProvider.addMapping(
         'bootstrapDecorator',
         'time',
@@ -44,6 +56,17 @@ angular.module('schemaForm').config(function (schemaFormProvider, schemaFormDeco
     schemaFormDecoratorsProvider.createDirective(
         'datetime',
         'bootstrap_ui_datetime_form.html'
+    );
+
+    schemaFormDecoratorsProvider.addMapping(
+        'bootstrapDecorator',
+        'phonenumber',
+        'bootstrap_ui_phonenumber_form.html'
+    );
+
+    schemaFormDecoratorsProvider.createDirective(
+        'phonenumber',
+        'bootstrap_ui_phonenumber.html'
     );
 
     schemaFormDecoratorsProvider.addMapping(

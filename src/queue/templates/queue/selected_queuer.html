@@ -1,0 +1,88 @@
+<div class="box box-success">
+  <div class="box-header with-border">
+    <h3 class="box-title">Queuer: {{selected_queuer.getName()}}</h3>
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="remove" ng-click="selectQueuer(null)"><i class="fa fa-times"></i></button>
+    </div>
+  </div>
+  <div class="box-body">
+    <div class="row">
+      <dl class="col-sm-6 dl-horizontal">
+
+        <dt>Due</dt>
+        <dd>{{selected_queuer.due | datetime:"LLLL"}}</dd>
+
+        <dt>Position</dt>
+        <dd>{{selected_queuer.position}}</dd>
+
+        <dt>Arrived</dt>
+        <dd>{{selected_queuer.created_at | datetime:"LLLL"}}</dd>
+
+
+        <dt>Estimated Wait Time </dt>
+        <dd ng-show="selected_queuer.remaining_signed > 0">{{selected_queuer.remaining_signed | time_period_from_seconds: 'minutes'}}</dd>
+        <dd ng-show="selected_queuer.remaining_signed <= 0">< 1 minute.</dd>
+      </dl>
+      <dl class="col-sm-6 dl-horizontal">
+
+        <dt>Service</dt>
+        <dd>{{selected_queuer.service_name}}</dd>
+
+        <dt>Name</dt>
+        <dd>{{selected_queuer.getName()}}</dd>
+
+        <dt>Phone</dt>
+        <dd>{{selected_queuer.fullMobile()}}</dd>
+
+        <dt>Email</dt>
+        <dd>{{selected_queuer.email}}</dd>
+
+        <dt>Notes</dt>
+        <dd>{{selected_queuer.notes}}</dd>
+      </dl>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div ng-if="false">
+        <div class="btn-group" uib-dropdown>
+          <button type="button" class="btn btn-info dropdown-toggle" uib-dropdown-toggle aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <button type="button" class="btn btn-info" uib-dropdown-toggle>Back</button>
+          <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+            <li><a ng-click="moveTo(1)">9</a></li>
+            <li><a ng-click="moveTo(1)">10</a></li>
+            <li><a ng-click="moveTo(1)">11</a></li>
+          </ul>
+        </div>
+        <button type="button" class="btn btn-success">8</button>
+        <button type="button" class="btn btn-success">7</button>
+        <button type="button" class="btn btn-lg">6</button>
+        <button type="button" class="btn btn-success">5</button>
+        <button type="button" class="btn btn-success">4</button>
+        <div class="btn-group" uib-dropdown>
+          <button type="button" class="btn btn-info" uib-dropdown-toggle>Forward</button>
+          <button type="button" class="btn btn-info dropdown-toggle" uib-dropdown-toggle aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+            <li><a ng-click="moveTo(1)">1</a></li>
+            <li><a ng-click="moveTo(1)">2</a></li>
+            <li><a ng-click="moveTo(1)">3</a></li>
+          </ul>
+        </div>
+      </div>
+        <button type="button" class="btn btn-warning" ng-click="walkedOut(selected_queuer)">Leave Queue</button>
+      </div>
+      <div class="col-sm-6">
+        <div class="pull-right">
+          <button type="button" class="btn btn-success" ui-sref="clients.edit({id: selected_queuer.client_id})">Edit Customer</button>
+          <button type="button" class="btn btn-info" ng-click="selectQueuer(null)">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br clear='all'/>
+</div>

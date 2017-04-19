@@ -1,0 +1,14 @@
+<div class='checkbox' ng-class='{"selected": $bbQuestionCtrl.question.answer}'>
+  <label>
+    <input 
+      name='q{{$bbQuestionCtrl.question.id}}'
+      id='{{$bbQuestionCtrl.question.id}}' 
+      ng-model='$bbQuestionCtrl.question.answer' 
+      ng-checked='$bbQuestionCtrl.question.answer == "1"'
+      ng-change='$bbQuestionCtrl.recalc()'
+      ng-required='$bbQuestionCtrl.question.currentlyShown && (($bbQuestionCtrl.adminRequired && $bbQuestionCtrl.question.required) || ($bbQuestionCtrl.question.required && !bb.isAdmin))'
+      type='checkbox'
+      value=1>
+    {{$bbQuestionCtrl.name}}
+  </label>
+</div>

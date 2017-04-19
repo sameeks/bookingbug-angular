@@ -1,0 +1,42 @@
+<section class="content-header">
+  <h1 translate>BOOKINGS_PAGE.BOOKINGS</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div bb-bookings-table class="tablet-search">
+      <table class="table table-bordered table-hover dataTable" tr-ng-grid=""
+         filter-by="bookingsOptions.search" items="bookings" page-items="per_page" total-items="total_entries" on-data-required="getBookings(currentPage, filterBy, filterByFields, orderBy, orderByReverse)" role="grid">
+        <thead>
+          <tr role="row">
+            <th field-name="datetime" display-name="{{'BOOKINGS_PAGE.DATETIME' | translate}}"></th>
+            <th field-name="details" display-name="{{'BOOKINGS_PAGE.DETAILS' | translate}}"></th>
+            <th field-name="client" display-name="{{'BOOKINGS_PAGE.CLIENT' | translate}}"></th>
+            <th width="60" display-align="center"><div class="tr-ng-title">{{'BOOKINGS_PAGE.ACTIONS' | translate}}</div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr role="row">
+            <td field-name="datetime" ng-bind-html="gridItem.datetime | datetime: 'h:mma dddd Do MMMM':false"></td>
+            <td field-name="details">
+              <a ui-sref="bookings.edit({id: gridItem.id})">{{gridItem.full_describe}}</a>
+            </td>
+            <td field-name="client">
+              <a ui-sref="clients.edit({id: gridItem.client_id})" ng-bind-html="gridItem.client_name" /></a>
+            </td>
+            <td display-align="center">
+              <a class="btn btn-xs btn-default" ui-sref="bookings.edit({id: gridItem.id})"><i class="fa fa-pencil"></i> <span translate>BOOKINGS_PAGE.EDIT</span></a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+              <td>
+                  <span tr-ng-grid-global-filter=""></span>
+                  <span tr-ng-grid-pager=""></span>
+              </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

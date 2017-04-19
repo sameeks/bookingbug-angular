@@ -1,113 +1,114 @@
 angular.module('BB.Directives').directive('bbPurchase', () => {
-        return {
-            restrict: 'AE',
-            replace: true,
-            scope: true,
-            controller: 'Purchase',
-            link(scope, element, attrs) {
-                scope.init(scope.$eval(attrs.bbPurchase));
+    return {
+        restrict: 'AE',
+        replace: true,
+        scope: true,
+        controller: 'Purchase',
+        link(scope, element, attrs) {
+            scope.init(scope.$eval(attrs.bbPurchase));
+        }
+    };
+});
+
+angular.module('BB.Controllers').controller('Purchase',
+    function ($scope, $rootScope,
+              PurchaseService, $uibModal, $location, $timeout, BBModel, $q, QueryStringService,
+              SSOService, AlertService, LoginService, $window, $sessionStorage, LoadingService,
+              $translate, ReasonService, $document, bbAnalyticsPiwik) {
+
+        let setCancelReasonsToBB;
+        $scope.is_waitlist = false;
+        $scope.make_payment = false;
+        let loader = LoadingService.$loader($scope);
+
+        let setPurchaseCompany = function (company) {
+
+            $scope.bb.company_id = company.id;
+            $scope.bb.company = new BBModel.Company(company);
+            $scope.company = $scope.bb.company;
+            $scope.bb.item_defaults.company = $scope.bb.company;
+            if (company.settings) {
+                if (company.settings.merge_resources) {
+                    $scope.bb.item_defaults.merge_resources = true;
+                }
+                if (company.settings.merge_people) {
+                    return $scope.bb.item_defaults.merge_people = true;
+                }
             }
         };
-    }
-);
 
-angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootScope,
-                                                                  PurchaseService, $uibModal, $location, $timeout, BBModel, $q, QueryStringService,
-                                                                  SSOService, AlertService, LoginService, $window, $sessionStorage, LoadingService,
-                                                                  $translate, ReasonService, $document) {
 
-    let setCancelReasonsToBB;
-    $scope.is_waitlist = false;
-    $scope.make_payment = false;
-    let loader = LoadingService.$loader($scope);
+        let failMsg = function () {
 
-    let setPurchaseCompany = function (company) {
-
-        $scope.bb.company_id = company.id;
-        $scope.bb.company = new BBModel.Company(company);
-        $scope.company = $scope.bb.company;
-        $scope.bb.item_defaults.company = $scope.bb.company;
-        if (company.settings) {
-            if (company.settings.merge_resources) {
-                $scope.bb.item_defaults.merge_resources = true;
+            if ($scope.fail_msg) {
+                return AlertService.danger({
+                    msg: $scope.fail_msg
+                });
+            } else {
+                return AlertService.add("danger", {
+                    msg: $translate.instant('CORE.ALERTS.GENERIC')
+                });
             }
-            if (company.settings.merge_people) {
-                return $scope.bb.item_defaults.merge_people = true;
+        };
+
+
+        $scope.init = function (options) {
+
+            if (!options) {
+                options = {};
             }
-        }
-    };
 
-
-    let failMsg = function () {
-
-        if ($scope.fail_msg) {
-            return AlertService.danger({msg: $scope.fail_msg});
-        } else {
-            return AlertService.add("danger", {msg: $translate.instant('CORE.ALERTS.GENERIC')});
-        }
-    };
-
-
-    $scope.init = function (options) {
-
-        if (!options) {
-            options = {};
-        }
-
-        loader.notLoaded();
-        if (options.move_route) {
-            $scope.move_route = options.move_route;
-        }
-        if (options.move_all) {
-            $scope.move_all = options.move_all;
-        }
-        if (options.fail_msg) {
-            $scope.fail_msg = options.fail_msg;
-        }
-
-        // is there a purchase total already in scope?
-        if ($scope.bb.total) {
-            return $scope.load($scope.bb.total.long_id);
-        } else if ($scope.bb.purchase) {
-            $scope.purchase = $scope.bb.purchase;
-            $scope.bookings = $scope.bb.purchase.bookings;
-            if ($scope.purchase.confirm_messages) {
-                $scope.messages = $scope.purchase.confirm_messages;
+            loader.notLoaded();
+            if (options.move_route) {
+                $scope.move_route = options.move_route;
             }
-            if (!$scope.cancel_reasons) {
-                $scope.cancel_reasons = $scope.bb.cancel_reasons;
+            if (options.move_all) {
+                $scope.move_all = options.move_all;
             }
-            if (!$scope.move_reasons) {
-                $scope.move_reasons = $scope.bb.move_reasons;
+            if (options.fail_msg) {
+                $scope.fail_msg = options.fail_msg;
             }
-            return loader.setLoaded();
-        } else {
-            if (options.member_sso) {
-                return SSOService.memberLogin(options).then(login => $scope.load()
-                    , function (err) {
+
+            // is there a purchase total already in scope?
+            if ($scope.bb.total) {
+                return $scope.load($scope.bb.total.long_id);
+            } else if ($scope.bb.purchase) {
+                $scope.purchase = $scope.bb.purchase;
+                $scope.bookings = $scope.bb.purchase.bookings;
+                if ($scope.purchase.confirm_messages) {
+                    $scope.messages = $scope.purchase.confirm_messages;
+                }
+                if (!$scope.cancel_reasons) {
+                    $scope.cancel_reasons = $scope.bb.cancel_reasons;
+                }
+                if (!$scope.move_reasons) {
+                    $scope.move_reasons = $scope.bb.move_reasons;
+                }
+                return loader.setLoaded();
+            } else {
+                if (options.member_sso) {
+                    return SSOService.memberLogin(options).then(login => $scope.load(), function (err) {
                         loader.setLoaded();
                         return failMsg();
                     });
-            } else {
-                return $scope.load();
+                } else {
+                    return $scope.load();
+                }
             }
-        }
-    };
+        };
 
-    let getPurchase = function (params) {
+        let getPurchase = function (params) {
 
-        let deferred = $q.defer();
-        PurchaseService.query(params).then(function (purchase) {
+            let deferred = $q.defer();
+            PurchaseService.query(params).then(function (purchase) {
                 deferred.resolve(purchase);
                 purchase.$get('company').then(company => {
-                        return setPurchaseCompany(company);
-                    }
-                );
+                    return setPurchaseCompany(company);
+                });
                 $scope.purchase = purchase;
                 $scope.bb.purchase = purchase;
                 return $scope.price = !($scope.purchase.price === 0);
-            }
-            , function (err) { //get purchase
+            }, function (err) { //get purchase
                 loader.setLoaded();
                 if (err && (err.status === 401)) {
                     if (LoginService.isLoggedIn()) {
@@ -120,12 +121,12 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
                     return failMsg();
                 }
             });
-        return deferred.promise;
-    };
+            return deferred.promise;
+        };
 
-    let getBookings = function (purchase) {
+        let getBookings = function (purchase) {
 
-        $scope.purchase.$getBookings().then(function (bookings) {
+            $scope.purchase.$getBookings().then(function (bookings) {
                 $scope.bookings = bookings;
 
                 if (bookings[0]) {
@@ -149,41 +150,44 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
 
                 return Array.from($scope.bookings).map((booking) =>
                     booking.$getAnswers().then(answers => booking.answers = answers));
-            }
-            , function (err) { //get booking
+            }, function (err) { //get booking
                 loader.setLoaded();
                 return failMsg();
             });
 
-        if (purchase.$has('client')) {
-            purchase.$get('client').then(client => {
+            if (purchase.$has('client')) {
+                purchase.$get('client').then(client => {
                     return $scope.setClient(new BBModel.Client(client));
-                }
-            );
-        }
-        return $scope.purchase.getConfirmMessages().then(function (messages) {
-            $scope.purchase.confirm_messages = messages;
-            return $scope.messages = messages;
-        });
-    };
+                });
+            }
+            return $scope.purchase.getConfirmMessages().then(function (messages) {
+                $scope.purchase.confirm_messages = messages;
+                return $scope.messages = messages;
+            });
+        };
 
-    $scope.load = function (id) {
+        $scope.load = function (id) {
 
-        loader.notLoaded();
+            loader.notLoaded();
 
-        if (!id) {
-            id = getPurchaseID();
-        }
+            if (!id) {
+                id = getPurchaseID();
+            }
 
-        if (!$scope.loaded && !!id) {
-            $rootScope.widget_started.then(() => {
+            if (!$scope.loaded && !!id) {
+                $rootScope.widget_started.then(() => {
                     return $scope.waiting_for_conn_started.then(() => {
                             let company_id = getCompanyID();
                             if (company_id) {
-                                let options = {root: $scope.bb.api_url};
+                                let options = {
+                                    root: $scope.bb.api_url
+                                };
                                 BBModel.Company.$query(company_id, options).then(company => setPurchaseCompany(company));
                             }
-                            let params = {purchase_id: id, url_root: $scope.bb.api_url};
+                            let params = {
+                                purchase_id: id,
+                                url_root: $scope.bb.api_url
+                            };
                             let auth_token = $sessionStorage.getItem('auth_token');
                             if (auth_token) {
                                 params.auth_token = auth_token;
@@ -193,185 +197,191 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
                         }
 
                         , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+                }, err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+            } else {
+                loader.setLoaded();
+            }
+
+            return $scope.loaded = true;
+        };
+
+
+        var checkIfMoveBooking = function (bookings) {
+
+            let id;
+            let matches = /^.*(?:\?|&)move_booking=(.*?)(?:&|$)/.exec($location.absUrl());
+            if (matches) {
+                id = parseInt(matches[1]);
+            }
+            if (id) {
+                let move_booking = (Array.from(bookings).filter((b) => b.id === id).map((b) => b));
+                if ((move_booking.length > 0) && $scope.isMovable(bookings[0])) {
+                    return $scope.move(move_booking[0]);
                 }
-                , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
-        } else {
-            loader.setLoaded();
-        }
-
-        return $scope.loaded = true;
-    };
-
-
-    var checkIfMoveBooking = function (bookings) {
-
-        let id;
-        let matches = /^.*(?:\?|&)move_booking=(.*?)(?:&|$)/.exec($location.absUrl());
-        if (matches) {
-            id = parseInt(matches[1]);
-        }
-        if (id) {
-            let move_booking = (Array.from(bookings).filter((b) => b.id === id).map((b) => b));
-            if ((move_booking.length > 0) && $scope.isMovable(bookings[0])) {
-                return $scope.move(move_booking[0]);
             }
-        }
-    };
+        };
 
-    var checkIfWaitlistBookings = bookings => $scope.waitlist_bookings = (Array.from(bookings).filter((booking) => (booking.on_waitlist && (booking.settings.sent_waitlist === 1))).map((booking) => booking));
-
-
-    var loginRequired = () => {
-
-        if (!$scope.bb.login_required) {
-            return window.location = window.location.href + "&login=true";
-        }
-    };
+        var checkIfWaitlistBookings = bookings => $scope.waitlist_bookings = (Array.from(bookings).filter((booking) => (booking.on_waitlist && (booking.settings.sent_waitlist === 1))).map((booking) => booking));
 
 
-    var getCompanyID = function () {
+        var loginRequired = () => {
 
-        let company_id;
-        let matches = /^.*(?:\?|&)company_id=(.*?)(?:&|$)/.exec($location.absUrl());
-        if (matches) {
-            company_id = matches[1];
-        }
-        return company_id;
-    };
-
-
-    var getPurchaseID = function () {
-
-        let id;
-        let matches = /^.*(?:\?|&)id=(.*?)(?:&|$)/.exec($location.absUrl());
-        if (!matches) {
-            matches = /^.*print_purchase\/(.*?)(?:\?|$)/.exec($location.absUrl());
-        }
-        if (!matches) {
-            matches = /^.*print_purchase_jl\/(.*?)(?:\?|$)/.exec($location.absUrl());
-        }
-
-        if (matches) {
-            id = matches[1];
-        } else {
-            if (QueryStringService('ref')) {
-                id = QueryStringService('ref');
+            if (!$scope.bb.login_required) {
+                return window.location = window.location.href + "&login=true";
             }
-        }
-        if (QueryStringService('booking_id')) {
-            id = QueryStringService('booking_id');
-        }
-        return id;
-    };
+        };
 
 
-    $scope.move = function (booking, route, options) {
+        var getCompanyID = function () {
 
-        if (options == null) {
-            options = {};
-        }
-        if (!route) {
-            route = $scope.move_route;
-        }
-        if ($scope.move_all) {
-            return $scope.moveAll(route, options);
+            let company_id;
+            let matches = /^.*(?:\?|&)company_id=(.*?)(?:&|$)/.exec($location.absUrl());
+            if (matches) {
+                company_id = matches[1];
+            }
+            return company_id;
+        };
+
+
+        var getPurchaseID = function () {
+
+            let id;
+            let matches = /^.*(?:\?|&)id=(.*?)(?:&|$)/.exec($location.absUrl());
+            if (!matches) {
+                matches = /^.*print_purchase\/(.*?)(?:\?|$)/.exec($location.absUrl());
+            }
+            if (!matches) {
+                matches = /^.*print_purchase_jl\/(.*?)(?:\?|$)/.exec($location.absUrl());
+            }
+
+            if (matches) {
+                id = matches[1];
+            } else {
+                if (QueryStringService('ref')) {
+                    id = QueryStringService('ref');
+                }
+            }
+            if (QueryStringService('booking_id')) {
+                id = QueryStringService('booking_id');
+            }
+            return id;
+        };
+
+        function setPiwik() {
+            let category = "View Booking";
+            let title = "Move Booking";
+            bbAnalyticsPiwik.push(['trackEvent', [category], title]);
         }
 
-        loader.notLoaded();
-        $scope.initWidget({company_id: booking.company_id, no_route: true});
-        return $timeout(() => {
+        $scope.move = function (booking, route, options) {
+
+            if (bbAnalyticsPiwik.isEnabled()) setPiwik();
+
+            if (options == null) {
+                options = {};
+            }
+            if (!route) {
+                route = $scope.move_route;
+            }
+            if ($scope.move_all) {
+                return $scope.moveAll(route, options);
+            }
+
+            loader.notLoaded();
+            $scope.initWidget({
+                company_id: booking.company_id,
+                no_route: true
+            });
+            return $timeout(() => {
                 return $rootScope.connection_started.then(() => {
-                        let proms = [];
-                        $scope.bb.moving_booking = booking;
-                        $scope.quickEmptybasket();
+                    let proms = [];
+                    $scope.bb.moving_booking = booking;
+                    $scope.quickEmptybasket();
+                    let new_item = new BBModel.BasketItem(booking, $scope.bb);
+                    new_item.setSrcBooking(booking, $scope.bb);
+                    new_item.ready = false;
+                    Array.prototype.push.apply(proms, new_item.promises);
+                    $scope.bb.basket.addItem(new_item);
+                    $scope.setBasketItem(new_item);
+
+                    return $q.all(proms).then(function () {
+                        loader.setLoaded();
+                        $rootScope.$broadcast("booking:move");
+                        return $scope.decideNextPage(route);
+                    }, function (err) {
+                        loader.setLoaded();
+                        return failMsg();
+                    });
+                }, err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+            });
+        };
+
+
+        // potentially move all of the items in booking - move the whole lot to a basket
+        $scope.moveAll = function (route, options) {
+
+            if (options == null) {
+                options = {};
+            }
+            if (!route) {
+                route = $scope.move_route;
+            }
+            loader.notLoaded();
+            $scope.initWidget({
+                company_id: $scope.bookings[0].company_id,
+                no_route: true
+            });
+            return $timeout(() => {
+                return $rootScope.connection_started.then(() => {
+                    let proms = [];
+                    if ($scope.bookings.length === 1) {
+                        $scope.bb.moving_booking = $scope.bookings[0];
+                    } else {
+                        $scope.bb.moving_booking = $scope.purchase;
+                    }
+
+                    if (_.every(_.map($scope.bookings, b => b.event_id),
+                            event_id => event_id === $scope.bookings[0].event_id)) {
+                        $scope.bb.moving_purchase = $scope.purchase;
+                    }
+
+                    $scope.quickEmptybasket();
+                    for (let booking of Array.from($scope.bookings)) {
                         let new_item = new BBModel.BasketItem(booking, $scope.bb);
-                        new_item.setSrcBooking(booking, $scope.bb);
+                        new_item.setSrcBooking(booking);
                         new_item.ready = false;
+                        new_item.move_done = false;
                         Array.prototype.push.apply(proms, new_item.promises);
                         $scope.bb.basket.addItem(new_item);
-                        $scope.setBasketItem(new_item);
-
-                        return $q.all(proms).then(function () {
-                                loader.setLoaded();
-                                $rootScope.$broadcast("booking:move");
-                                return $scope.decideNextPage(route);
-                            }
-                            , function (err) {
-                                loader.setLoaded();
-                                return failMsg();
-                            });
                     }
-                    , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
-            }
-        );
-    };
+                    $scope.bb.sortStackedItems();
 
-
-    // potentially move all of the items in booking - move the whole lot to a basket
-    $scope.moveAll = function (route, options) {
-
-        if (options == null) {
-            options = {};
-        }
-        if (!route) {
-            route = $scope.move_route;
-        }
-        loader.notLoaded();
-        $scope.initWidget({company_id: $scope.bookings[0].company_id, no_route: true});
-        return $timeout(() => {
-                return $rootScope.connection_started.then(() => {
-                        let proms = [];
-                        if ($scope.bookings.length === 1) {
-                            $scope.bb.moving_booking = $scope.bookings[0];
-                        } else {
-                            $scope.bb.moving_booking = $scope.purchase;
-                        }
-
-                        if (_.every(_.map($scope.bookings, b => b.event_id),
-                                event_id => event_id === $scope.bookings[0].event_id)) {
-                            $scope.bb.moving_purchase = $scope.purchase;
-                        }
-
-                        $scope.quickEmptybasket();
-                        for (let booking of Array.from($scope.bookings)) {
-                            let new_item = new BBModel.BasketItem(booking, $scope.bb);
-                            new_item.setSrcBooking(booking);
-                            new_item.ready = false;
-                            new_item.move_done = false;
-                            Array.prototype.push.apply(proms, new_item.promises);
-                            $scope.bb.basket.addItem(new_item);
-                        }
-                        $scope.bb.sortStackedItems();
-
-                        $scope.setBasketItem($scope.bb.basket.items[0]);
-                        return $q.all(proms).then(function () {
-                                loader.setLoaded();
-                                return $scope.decideNextPage(route);
-                            }
-                            , function (err) {
-                                loader.setLoaded();
-                                return failMsg();
-                            });
-                    }
-                    , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
-            }
-        );
-    };
-
-
-    $scope.bookWaitlistItem = function (booking) {
-
-        loader.notLoaded();
-
-        let params = {
-            purchase: $scope.purchase,
-            booking
+                    $scope.setBasketItem($scope.bb.basket.items[0]);
+                    return $q.all(proms).then(function () {
+                        loader.setLoaded();
+                        return $scope.decideNextPage(route);
+                    }, function (err) {
+                        loader.setLoaded();
+                        return failMsg();
+                    });
+                }, err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+            });
         };
-        return PurchaseService.bookWaitlistItem(params).then(function (purchase) {
-                $scope.purchase = purchase;
-                $scope.total = $scope.purchase;
-                $scope.bb.purchase = purchase;
-                return $scope.purchase.$getBookings().then(function (bookings) {
+
+
+        $scope.bookWaitlistItem = function (booking) {
+
+            loader.notLoaded();
+
+            let params = {
+                purchase: $scope.purchase,
+                booking
+            };
+            return PurchaseService.bookWaitlistItem(params).then(function (purchase) {
+                    $scope.purchase = purchase;
+                    $scope.total = $scope.purchase;
+                    $scope.bb.purchase = purchase;
+                    return $scope.purchase.$getBookings().then(function (bookings) {
                         $scope.bookings = bookings;
                         $scope.waitlist_bookings = ((() => {
                             let result = [];
@@ -386,129 +396,132 @@ angular.module('BB.Controllers').controller('Purchase', function ($scope, $rootS
                             $scope.make_payment = true;
                         }
                         return loader.setLoaded();
-                    }
-                    , function (err) {
+                    }, function (err) {
                         loader.setLoaded();
                         return failMsg();
                     });
-            }
-
-            , err => {
-                return loader.setLoadedAndShowError(err, 'Sorry, something went wrong');
-            }
-        );
-    };
-
-
-    // delete a single booking
-    $scope.delete = function (booking) {
-
-        let modalInstance = $uibModal.open({
-            templateUrl: $scope.getPartial("_cancel_modal"),
-            controller: ModalDelete,
-            resolve: {
-                booking() {
-                    return booking;
-                },
-                cancel_reasons() {
-                    return $scope.cancel_reasons;
                 }
-            }
-        });
 
-        return modalInstance.result.then(function (booking) {
-            let cancel_reason = null;
-            if (booking.cancel_reason) {
-                ({cancel_reason} = booking);
-            }
-            let data = {cancel_reason};
-            return booking.$del('self', {}, data).then(service => {
-                    $scope.bookings = _.without($scope.bookings, booking);
-                    return $rootScope.$broadcast("booking:cancelled");
+                , err => {
+                    return loader.setLoadedAndShowError(err, 'Sorry, something went wrong');
                 }
             );
-        });
-    };
+        };
 
 
-    // delete all bookings assoicated to the purchase
-    $scope.deleteAll = function () {
-
-        let modalInstance = $uibModal.open({
-            templateUrl: $scope.getPartial("_cancel_modal"),
-            controller: ModalDeleteAll,
-            resolve: {
-                purchase() {
-                    return $scope.purchase;
+        // delete a single booking
+        $scope.delete = function (booking) {
+            // BB analytics Event
+            $analytics.eventTrack('Cancel Booking', {
+                category: 'View Booking'
+            });
+            let modalInstance = $uibModal.open({
+                templateUrl: $scope.getPartial("_cancel_modal"),
+                controller: ModalDelete,
+                resolve: {
+                    booking() {
+                        return booking;
+                    },
+                    cancel_reasons() {
+                        return $scope.cancel_reasons;
+                    }
                 }
+            });
+
+            return modalInstance.result.then(function (booking) {
+                let cancel_reason = null;
+                if (booking.cancel_reason) {
+                    ({
+                        cancel_reason
+                    } = booking);
+                }
+                let data = {
+                    cancel_reason
+                };
+                return booking.$del('self', {}, data).then(service => {
+                    $scope.bookings = _.without($scope.bookings, booking);
+                    return $rootScope.$broadcast("booking:cancelled");
+                });
+            });
+        };
+
+
+        // delete all bookings assoicated to the purchase
+        $scope.deleteAll = function () {
+
+            let modalInstance = $uibModal.open({
+                templateUrl: $scope.getPartial("_cancel_modal"),
+                controller: ModalDeleteAll,
+                resolve: {
+                    purchase() {
+                        return $scope.purchase;
+                    }
+                }
+            });
+            return modalInstance.result.then(purchase =>
+                PurchaseService.deleteAll(purchase).then(function (purchase) {
+                    $scope.purchase = purchase;
+                    $scope.bookings = [];
+                    return $rootScope.$broadcast("booking:cancelled");
+                })
+            );
+        };
+
+
+        $scope.isMovable = function (booking) {
+
+            if (booking.min_cancellation_time) {
+                return moment().isBefore(booking.min_cancellation_time);
             }
-        });
-        return modalInstance.result.then(purchase =>
-            PurchaseService.deleteAll(purchase).then(function (purchase) {
-                $scope.purchase = purchase;
-                $scope.bookings = [];
-                return $rootScope.$broadcast("booking:cancelled");
-            })
-        );
-    };
+            return booking.datetime.isAfter(moment());
+        };
+
+        $scope.createBasketItem = function (booking) {
+
+            let item = new BBModel.BasketItem(booking, $scope.bb);
+            item.setSrcBooking(booking);
+            return item;
+        };
 
 
-    $scope.isMovable = function (booking) {
-
-        if (booking.min_cancellation_time) {
-            return moment().isBefore(booking.min_cancellation_time);
-        }
-        return booking.datetime.isAfter(moment());
-    };
-
-    $scope.createBasketItem = function (booking) {
-
-        let item = new BBModel.BasketItem(booking, $scope.bb);
-        item.setSrcBooking(booking);
-        return item;
-    };
+        $scope.checkAnswer = answer => (typeof answer.value === 'boolean') || (typeof answer.value === 'string') || (typeof answer.value === "number");
 
 
-    $scope.checkAnswer = answer => (typeof answer.value === 'boolean') || (typeof answer.value === 'string') || (typeof answer.value === "number");
+        $scope.changeAttendees = route => $scope.moveAll(route);
 
-
-    $scope.changeAttendees = route => $scope.moveAll(route);
-
-    var getReasons = company =>
+        var getReasons = company =>
 
             ReasonService.query(company).then(function (reasons) {
-                    $scope.company_reasons = reasons;
-                    return $scope.company_reasons;
-                }
-                , err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong retrieving reasons'))
-        ;
+                $scope.company_reasons = reasons;
+                return $scope.company_reasons;
+            }, err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong retrieving reasons'));
 
-    var setCancelReasons = function () {
+        var setCancelReasons = function () {
 
-        $scope.cancel_reasons = _.filter($scope.company_reasons, r => r.reason_type === 3);
-        return $scope.cancel_reasons;
-    };
+            $scope.cancel_reasons = _.filter($scope.company_reasons, r => r.reason_type === 3);
+            return $scope.cancel_reasons;
+        };
 
-    var setMoveReasons = function () {
+        var setMoveReasons = function () {
 
-        $scope.move_reasons = _.filter($scope.company_reasons, r => r.reason_type === 5);
-        return $scope.move_reasons;
-    };
+            $scope.move_reasons = _.filter($scope.company_reasons, r => r.reason_type === 5);
+            return $scope.move_reasons;
+        };
 
-    var setMoveReasonsToBB = function () {
+        var setMoveReasonsToBB = function () {
 
-        if ($scope.move_reasons) {
-            return $scope.bb.move_reasons = $scope.move_reasons;
-        }
-    };
+            if ($scope.move_reasons) {
+                return $scope.bb.move_reasons = $scope.move_reasons;
+            }
+        };
 
-    return setCancelReasonsToBB = function () {
+        return setCancelReasonsToBB = function () {
 
-        if ($scope.cancel_reasons) {
-            return $scope.bb.cancel_reasons = $scope.cancel_reasons;
-        }
-    };
-});
+            if ($scope.cancel_reasons) {
+                return $scope.bb.cancel_reasons = $scope.cancel_reasons;
+            }
+        };
+    });
 
 
 // Simple modal controller for handling the 'delete' modal
