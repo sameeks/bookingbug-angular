@@ -13,20 +13,21 @@
     function bbTimeZoneService($localStorage, $log, moment, bbi18nOptions, CompanyStoreService, bbCustomTimeZones) {
         'ngInject';
 
-        let displayTimeZone = bbi18nOptions.timeZone.default;
+        let displayTimeZone = getKeyInCustomList(bbi18nOptions.timeZone.default, bbi18nOptions.timeZone.useMomentNames);
 
         return {
-            getDisplayTimeZone,
+            getDisplay,
             getDisplayUTCOffset,
-            getCompanyTimeZone,
+            getCompany,
             getCompanyUTCOffset,
-            getTimeZoneKey,
+            getKeyInCustomList,
+            getActual,
 
-            convertToCompanyTz,
-            convertToDisplayTz,
+            convertToCompany,
+            convertToDisplay,
 
-            determineTimeZone,
-            setDisplayTimeZone,
+            determine,
+            setDisplay,
             setLocalStorage
         };
 
@@ -34,7 +35,7 @@
          * @param {moment|String} dateTime If string must be valid ISO string
          * @returns {moment}
          */
-        function convertToCompanyTz(dateTime) {
+        function convertToCompany(dateTime) {
             return convertDateTime(dateTime, CompanyStoreService.time_zone);
         }
 
@@ -42,7 +43,7 @@
          * @param {moment|String} dateTime If string must be valid ISO string
          * @returns {moment}
          */
-        function convertToDisplayTz(dateTime) {
+        function convertToDisplay(dateTime) {
             return convertDateTime(dateTime, displayTimeZone);
         }
 
@@ -52,7 +53,7 @@
             return converted;
         }
 
-        function getDisplayTimeZone() {
+        function getDisplay() {
             return displayTimeZone;
         }
 
@@ -60,7 +61,7 @@
             return moment().tz(displayTimeZone).utcOffset();
         }
 
-        function getCompanyTimeZone() {
+        function getCompany() {
             return CompanyStoreService.time_zone;
         }
 
@@ -68,26 +69,27 @@
             return moment().tz(CompanyStoreService.time_zone).utcOffset();
         }
 
-        function determineTimeZone() {
+        function determine() {
+            const { useBrowser, useMomentNames, useCompany } = bbi18nOptions.timeZone;
             const localStorage = $localStorage.getObject('bbTimeZone');
             if (localStorage.displayTimeZone) {
-                setDisplayTimeZone(localStorage.displayTimeZone);
+                setDisplay(localStorage.displayTimeZone);
                 return;
             }
 
-            if (bbi18nOptions.timeZone.useBrowser || localStorage.useBrowserTimeZone) {
-                let timeZone = getTimeZoneKey(moment.tz.guess(), bbi18nOptions.timeZone.useMomentNames);
-                setDisplayTimeZone(timeZone);
+            if (useBrowser || localStorage.useBrowserTimeZone) {
+                let timeZone = getKeyInCustomList(moment.tz.guess(), useMomentNames);
+                setDisplay(timeZone);
                 return;
             }
 
-            if (bbi18nOptions.timeZone.useCompany && CompanyStoreService.time_zone) {
-                let timeZone = getTimeZoneKey(CompanyStoreService.time_zone, bbi18nOptions.timeZone.useMomentNames);
-                setDisplayTimeZone(timeZone);
+            if (useCompany && CompanyStoreService.time_zone) {
+                let timeZone = getKeyInCustomList(CompanyStoreService.time_zone, useMomentNames);
+                setDisplay(timeZone);
             }
         }
 
-        function setDisplayTimeZone(timeZone) {
+        function setDisplay(timeZone) {
             moment.tz.setDefault(timeZone);
             displayTimeZone = timeZone;
         }
@@ -96,14 +98,13 @@
             $localStorage.setObject('bbTimeZone', localStorageObj);
         }
 
-        function getTimeZoneKey(timeZone, useMomentNames = false) {
+        function getKeyInCustomList(timeZone, useMomentNames = false) {
             let selectedTimeZone;
 
             if (useMomentNames) return timeZone;
             if (bbCustomTimeZones.GROUPED_TIME_ZONES[timeZone]) return timeZone;
 
             const city = timeZone.match(/[^/]*$/)[0].replace(/ /g, "_");
-
             for (let [groupName, groupCities] of Object.entries(bbCustomTimeZones.GROUPED_TIME_ZONES)) {
 
                 if (groupName.match(/[^/]*$/)[0] === city) {
@@ -115,6 +116,29 @@
                 const cityGroupIndex = groupCities.findIndex((groupCity) => groupCity === city);
                 if (cityGroupIndex !== -1){
                     selectedTimeZone = groupName;
+                    break;
+                }
+            }
+
+            return selectedTimeZone || timeZone;
+        }
+
+        function getActual(timeZone, timeZones) {
+            let selectedTimeZone;
+
+            const overWrite = bbi18nOptions.timeZone.overwriteBrowser;
+            if (overWrite.browser && overWrite.replaceWith) {
+                if (overWrite.browser === timeZone) {
+                    selectedTimeZone = overWrite.replaceWith;
+                    return selectedTimeZone;
+                }
+            }
+
+            const formatTz = (timeZone, format) => moment.tz(timeZone).format(format);
+            for (let tz of timeZones) {
+                if (formatTz(tz.value || tz, 'zz') === formatTz(timeZone, 'zz') &&
+                    formatTz(tz.value || tz, 'ZZ') === formatTz(timeZone, 'ZZ')) {
+                    selectedTimeZone = tz.value || tz;
                     break;
                 }
             }

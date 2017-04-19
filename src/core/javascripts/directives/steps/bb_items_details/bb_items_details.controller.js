@@ -299,7 +299,7 @@
 
         $scope.showMoveMessage = (datetime) => {
 
-            datetime = bbTimeZone.convertToDisplayTz(datetime);
+            datetime = bbTimeZone.convertToDisplay(datetime);
 
             AlertService.add("info", {
                 msg: $translate.instant('PUBLIC_BOOKING.ITEM_DETAILS.MOVE_BOOKING_SUCCESS_ALERT', {datetime})

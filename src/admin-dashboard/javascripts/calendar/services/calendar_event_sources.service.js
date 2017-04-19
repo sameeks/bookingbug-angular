@@ -293,8 +293,8 @@ angular
                 }
             }
 
-            minTime = bbTimeZone.convertToCompanyTz(minTime);
-            maxTime = bbTimeZone.convertToCompanyTz(maxTime);
+            minTime = bbTimeZone.convertToCompany(minTime);
+            maxTime = bbTimeZone.convertToCompany(maxTime);
 
             // store on AdminCalendarOptions object to read from in resourceCalendar controller prepareUiCalOptions method
             AdminCalendarOptions.minTime = minTime.format('HH:mm');

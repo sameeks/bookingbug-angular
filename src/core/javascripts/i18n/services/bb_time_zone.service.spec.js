@@ -51,9 +51,9 @@ describe('bbTimeZone service,', () => {
         it('should use default timezone', () => {
             setBbi18nOptions();
 
-            bbTimeZone.determineTimeZone();
+            bbTimeZone.determine();
 
-            expect(bbTimeZone.getDisplayTimeZone()).toBe('Europe/London');
+            expect(bbTimeZone.getDisplay()).toBe('Europe/London');
         });
 
         it('should use browser timezone', () => {
@@ -65,10 +65,10 @@ describe('bbTimeZone service,', () => {
             });
 
             spyOn(moment.tz, 'guess').and.returnValue('Europe/Berlin');
-            bbTimeZone.determineTimeZone();
+            bbTimeZone.determine();
 
             expect(moment.tz.guess).toHaveBeenCalled();
-            expect(bbTimeZone.getDisplayTimeZone()).toBe('Europe/Berlin');
+            expect(bbTimeZone.getDisplay()).toBe('Europe/Berlin');
         });
 
         it('should use company timezone', () => {
@@ -77,8 +77,8 @@ describe('bbTimeZone service,', () => {
                     useCompany: true
                 }
             });
-            bbTimeZone.determineTimeZone();
-            expect(bbTimeZone.getDisplayTimeZone()).toBe('America/New_York');
+            bbTimeZone.determine();
+            expect(bbTimeZone.getDisplay()).toBe('America/New_York');
         });
 
         it('should use browser timezone (timeZone.useBrowser has precedence over timeZone.useCompany)', () => {
@@ -92,9 +92,9 @@ describe('bbTimeZone service,', () => {
 
             spyOn(moment.tz, 'guess').and.returnValue('Europe/Paris');
 
-            bbTimeZone.determineTimeZone();
+            bbTimeZone.determine();
 
-            expect(bbTimeZone.getDisplayTimeZone()).toBe('Europe/Paris');
+            expect(bbTimeZone.getDisplay()).toBe('Europe/Paris');
         });
 
         it('should use time zone stored in browser local storage', () => {
@@ -106,9 +106,9 @@ describe('bbTimeZone service,', () => {
             });
 
             bbTimeZone.setLocalStorage({displayTimeZone: 'Canada/Mountain'});
-            bbTimeZone.determineTimeZone();
+            bbTimeZone.determine();
 
-            expect(bbTimeZone.getDisplayTimeZone()).toBe('Canada/Mountain');
+            expect(bbTimeZone.getDisplay()).toBe('Canada/Mountain');
         });
 
         it('should use browser timezone (enforced by value in browser local storage)', () => {
@@ -123,9 +123,9 @@ describe('bbTimeZone service,', () => {
             spyOn(moment.tz, 'guess').and.returnValue('Europe/Paris');
 
             bbTimeZone.setLocalStorage({useBrowserTimeZone: true});
-            bbTimeZone.determineTimeZone();
+            bbTimeZone.determine();
 
-            expect(bbTimeZone.getDisplayTimeZone()).toBe('Europe/Paris');
+            expect(bbTimeZone.getDisplay()).toBe('Europe/Paris');
         });
 
 

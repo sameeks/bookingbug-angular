@@ -59,7 +59,7 @@ angular.module('BB.Services').factory("DateTimeUtilitiesService", function (Gene
                 datetime = datetime.tz(CompanyStoreService.time_zone);
             }*////TODO double check
 
-            datetime = bbTimeZone.convertToCompanyTz(datetime);
+            datetime = bbTimeZone.convertToCompany(datetime);
 
             let val = parseInt(time);
             let hours = parseInt(val / 60);

@@ -1,6 +1,6 @@
-describe('bbTimeZoneOptions service', () => {
+describe('bbTimeZoneUtils service', () => {
 
-    let bbTimeZoneOptions = null;
+    let bbTimeZoneUtils = null;
     let bbCustomTimeZones = null;
     let bbTimeZone = null;
     let options = null;
@@ -13,7 +13,7 @@ describe('bbTimeZoneOptions service', () => {
 
     beforeEach(() => {
         inject(($injector) => {
-            bbTimeZoneOptions = $injector.get('bbTimeZoneOptions');
+            bbTimeZoneUtils = $injector.get('bbTimeZoneUtils');
             bbTimeZone = $injector.get('bbTimeZone');
             bbCustomTimeZones = $injector.get('bbCustomTimeZones');
             $log = $injector.get('$log');
@@ -42,7 +42,7 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: false
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.loadTimeZoneKeys(options).timeZones;
+                const timeZones = bbTimeZoneUtils.loadKeys(options).timeZones;
                 expect(timeZones).toEqual(Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES));
 
             });
@@ -56,7 +56,7 @@ describe('bbTimeZoneOptions service', () => {
                 const momentTimeZones = ['Africa/Abidjan', 'Africa/Accra', 'Africa/Addis_Ababa', 'Africa/Algiers', 'Africa/Asmara'];
                 spyOn(moment.tz, 'names').and.returnValue(momentTimeZones);
 
-                const timeZones = bbTimeZoneOptions.fn.loadTimeZoneKeys(options).timeZones;
+                const timeZones = bbTimeZoneUtils.loadKeys(options).timeZones;
 
                 expect(moment.tz.names).toHaveBeenCalled();
                 expect(timeZones).toEqual(momentTimeZones);
@@ -72,7 +72,7 @@ describe('bbTimeZoneOptions service', () => {
                 const momentTimeZones = ['PST8PDT', 'NZ-CHAT', 'Asia/Tokyo', 'Etc/GMT', 'Etc/GMT+2', 'CET', 'Africa/Asmara'];
                 spyOn(moment.tz, 'names').and.returnValue(momentTimeZones);
 
-                const timeZones = bbTimeZoneOptions.fn.loadTimeZoneKeys(options).timeZones;
+                const timeZones = bbTimeZoneUtils.loadKeys(options).timeZones;
 
                 expect(moment.tz.names).toHaveBeenCalled();
                 expect(timeZones).toContain('Asia/Tokyo');
@@ -87,32 +87,29 @@ describe('bbTimeZoneOptions service', () => {
                     timeZones: Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES),
                     useMomentNames: false,
                     filters: {
-                        limitTimeZonesBy: ['Osaka', 'Berlin', 'New York'],
-                        excludeTimeZonesBy: ['Sydney', 'Sofia']
+                        limitTo: ['Osaka', 'Berlin', 'New York'],
+                        exclude: ['Sydney', 'Sofia']
                     }
                 });
 
-                const findFilters = bbTimeZoneOptions.fn.findFilterKeysInCustomList(options);
-                const limitTimeZonesBy = findFilters.filters.limitTimeZonesBy;
-                const excludeTimeZonesBy = findFilters.filters.excludeTimeZonesBy;
+                const findFilters = bbTimeZoneUtils.findFilterKeysInCustomList(options);
+                const limitTo = findFilters.filters.limitTo;
+                const exclude = findFilters.filters.exclude;
 
-                expect(limitTimeZonesBy).toEqual(['Asia/Tokyo', 'Europe/Amsterdam', 'America/New_York']);
-                expect(excludeTimeZonesBy).toEqual(['Australia/Canberra', 'Europe/Helsinki']);
+                expect(limitTo).toEqual(['Asia/Tokyo', 'Europe/Amsterdam', 'America/New_York']);
+                expect(exclude).toEqual(['Australia/Canberra', 'Europe/Helsinki']);
 
             });
 
             it('should add browserTimeZone if missing from timezone list', function () {
 
                 options = setCustomTzOptions({
+                    timeZone: 'Europe/Berlin',
                     timeZones: ['Australia/Canberra', 'Europe/Helsinki'],
                     useMomentNames: true
                 });
 
-                spyOn(moment.tz, 'guess').and.returnValue('Europe/Berlin');
-
-                const timeZones = bbTimeZoneOptions.fn.ensureBrowserTimeZoneExists(options).timeZones;
-
-                expect(moment.tz.guess).toHaveBeenCalled();
+                const timeZones = bbTimeZoneUtils.ensureExists(options).timeZones;
                 expect(timeZones).toContain('Europe/Berlin');
 
             });
@@ -120,15 +117,12 @@ describe('bbTimeZoneOptions service', () => {
             it('should add company timezone if missing from timezone list', function () {
 
                 options = setCustomTzOptions({
+                    timeZone: 'Europe/Berlin',
                     timeZones: ['Australia/Canberra', 'Europe/Helsinki'],
                     useMomentNames: true
                 });
 
-                spyOn(bbTimeZone, 'getCompanyTimeZone').and.returnValue('Europe/Berlin');
-
-                const timeZones = bbTimeZoneOptions.fn.ensureCompanyTimeZoneExists(options).timeZones;
-
-                expect(bbTimeZone.getCompanyTimeZone).toHaveBeenCalled();
+                const timeZones = bbTimeZoneUtils.ensureExists(options).timeZones;
                 expect(timeZones).toContain('Europe/Berlin');
 
             });
@@ -140,11 +134,11 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: true
                 });
 
-                spyOn(bbTimeZone, 'getDisplayTimeZone').and.returnValue('Europe/Berlin');
+                spyOn(bbTimeZone, 'getDisplay').and.returnValue('Europe/Berlin');
 
-                const timeZones = bbTimeZoneOptions.fn.ensureDisplayTimeZoneExists(options).timeZones;
+                const timeZones = bbTimeZoneUtils.ensureExists(options).timeZones;
 
-                expect(bbTimeZone.getDisplayTimeZone).toHaveBeenCalled();
+                expect(bbTimeZone.getDisplay).toHaveBeenCalled();
                 expect(timeZones).toContain('Europe/Berlin');
 
             });
@@ -159,11 +153,11 @@ describe('bbTimeZoneOptions service', () => {
                     timeZones: moment.tz.names(),
                     useMomentNames: true,
                     filters: {
-                        limitTimeZonesBy: 'Barbados'
+                        limitTo: 'Barbados'
                     }
                 });
 
-                bbTimeZoneOptions.fn.filterTimeZones(options);
+                bbTimeZoneUtils.filter(options);
 
                 expect($log.error.logs[0]).toEqual([ 'must be an Array:', 'Barbados:string' ]);
 
@@ -175,11 +169,11 @@ describe('bbTimeZoneOptions service', () => {
                     timeZones: moment.tz.names(),
                     useMomentNames: true,
                     filters: {
-                        limitTimeZonesBy: ['Barbados']
+                        limitTo: ['Barbados']
                     }
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.filterTimeZones(options).timeZones;
+                const timeZones = bbTimeZoneUtils.filter(options).timeZones;
                 expect(timeZones.length).toEqual(1);
                 expect(timeZones[0]).toEqual('America/Barbados');
 
@@ -191,11 +185,11 @@ describe('bbTimeZoneOptions service', () => {
                     timeZones: Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES),
                     useMomentNames: false,
                     filters: {
-                        limitTimeZonesBy: ['New_York', 'Dubai', 'Amsterdam']
+                        limitTo: ['New_York', 'Dubai', 'Amsterdam']
                     }
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.filterTimeZones(options).timeZones;
+                const timeZones = bbTimeZoneUtils.filter(options).timeZones;
                 expect(timeZones.length).toEqual(3);
                 expect(timeZones).toEqual(['America/New_York', 'Asia/Dubai', 'Europe/Amsterdam']);
 
@@ -207,11 +201,11 @@ describe('bbTimeZoneOptions service', () => {
                     timeZones: moment.tz.names(),
                     useMomentNames: true,
                     filters: {
-                        excludeTimeZonesBy: ['Canada', 'London', 'Berlin', 'New York']
+                        exclude: ['Canada', 'London', 'Berlin', 'New York']
                     }
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.rejectTimeZones(options).timeZones;
+                const timeZones = bbTimeZoneUtils.reject(options).timeZones;
 
                 expect(timeZones).not.toContain('Canada/Atlantic');
                 expect(timeZones).not.toContain('Canada/East-Saskatchewan');
@@ -227,13 +221,13 @@ describe('bbTimeZoneOptions service', () => {
                     timeZones: Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES),
                     useMomentNames: false,
                     filters: {
-                        excludeTimeZonesBy: ['Tokyo', 'Athens', 'Istanbul']
+                        exclude: ['Tokyo', 'Athens', 'Istanbul']
                     }
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.rejectTimeZones(options).timeZones;
+                const timeZones = bbTimeZoneUtils.reject(options).timeZones;
 
-                expect(timeZones.length).toEqual(Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES).length - options.filters.excludeTimeZonesBy.length);
+                expect(timeZones.length).toEqual(Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES).length - options.filters.exclude.length);
                 expect(timeZones).not.toContain('Asia/Tokyo');
                 expect(timeZones).not.toContain('Europe/Athens');
                 expect(timeZones).not.toContain('Europe/Istanbul');
@@ -247,14 +241,14 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: true,
                     isDST: false,
                     filters: {
-                        limitTimeZonesBy: ['Canada'],
-                        daylightTimeZones: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
-                        standardTimeZones: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
+                        limitTo: ['Canada'],
+                        daylightSaving: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
+                        standard: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
                     }
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.filterDayLightOrStandardTimeZones(options).timeZones;
-                expect(timeZones.length).toEqual(options.filters.standardTimeZones.length);
+                const timeZones = bbTimeZoneUtils.filterDayLightOrStandard(options).timeZones;
+                expect(timeZones.length).toEqual(options.filters.standard.length);
                 expect(timeZones).not.toContain('Canada/Yukon');
 
             });
@@ -266,14 +260,14 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: true,
                     isDST: true,
                     filters: {
-                        limitTimeZonesBy: ['Canada'],
-                        daylightTimeZones: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
-                        standardTimeZones: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
+                        limitTo: ['Canada'],
+                        daylightSaving: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
+                        standard: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
                     }
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.filterDayLightOrStandardTimeZones(options).timeZones;
-                expect(timeZones.length).toEqual(options.filters.daylightTimeZones.length);
+                const timeZones = bbTimeZoneUtils.filterDayLightOrStandard(options).timeZones;
+                expect(timeZones.length).toEqual(options.filters.daylightSaving.length);
                 expect(timeZones).not.toContain('Canada/East-Saskatchewan');
                 expect(timeZones).not.toContain('Canada/Saskatchewan');
 
@@ -294,7 +288,7 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: true
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.mapTimeZonesModel(options).timeZones;
+                const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
 
                 expect(timeZones[0]).toEqual(options.timeZones[0]);
                 expect(timeZones[1]).toEqual(options.timeZones[1]);
@@ -308,7 +302,7 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: true
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.mapTimeZonesModel(options).timeZones;
+                const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
 
                 expect(timeZones[0].id).toBeDefined();
                 expect(timeZones[1].value).toBeDefined();
@@ -325,7 +319,7 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: true
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.mapTimeZonesModel(options).timeZones;
+                const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
 
                 expect(timeZones[0].display).toEqual('(GMT +08:00) Chongqing (CST)');
 
@@ -339,7 +333,7 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: true
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.mapTimeZonesModel(options).timeZones;
+                const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
 
                 expect(timeZones[0].display).toEqual('(GMT+08:00) Chongqing');
 
@@ -353,7 +347,7 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: false
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.mapTimeZonesModel(options).timeZones;
+                const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
 
                 expect(timeZones[0].display).toEqual('(GMT-04:00) Eastern Time (US and Canada)');
 
@@ -366,7 +360,7 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: true
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.mapTimeZonesModel(options).timeZones;
+                const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
 
                 expect(timeZones[0].display).toEqual(`(GMT${moment.tz('America/New_York').format('Z')}) New York`);
 
@@ -380,7 +374,7 @@ describe('bbTimeZoneOptions service', () => {
                     useMomentNames: true
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.mapTimeZonesModel(options).timeZones;
+                const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
 
                 expect(timeZones[0].display).toEqual(`(${moment.tz('Brazil/DeNoronha').format('zz')}) DeNoronha`);
 
@@ -400,7 +394,7 @@ describe('bbTimeZoneOptions service', () => {
                     ]
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.removeDuplicates(options).timeZones;
+                const timeZones = bbTimeZoneUtils.removeDuplicates(options).timeZones;
 
                 expect(timeZones.length).toEqual(2);
 
@@ -419,7 +413,7 @@ describe('bbTimeZoneOptions service', () => {
                     ]
                 });
 
-                const timeZones = bbTimeZoneOptions.fn.orderTimeZones(options).timeZones;
+                const timeZones = bbTimeZoneUtils.order(options).timeZones;
 
                 expect(timeZones[0].value).toEqual('Pacific/Honolulu');
                 expect(timeZones[5].value).toEqual('Pacific/Kiritimati');

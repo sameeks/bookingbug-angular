@@ -547,7 +547,7 @@ angular.module('BB.Filters').filter('datetime', (bbTimeZone) =>
         }
 
         let new_date = moment(date);
-        new_date.tz(bbTimeZone.getDisplayTimeZone());
+        new_date.tz(bbTimeZone.getDisplay());
         if (show_time_zone) {
             format += ' zz';
         }

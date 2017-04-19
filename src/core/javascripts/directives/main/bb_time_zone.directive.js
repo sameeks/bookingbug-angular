@@ -25,10 +25,10 @@
             controller(CompanyStoreService, bbTimeZone, bbi18nOptions) {
 
                 const company_time_zone = CompanyStoreService.time_zone;
-                this.time_zone_name = moment().tz(bbTimeZone.getDisplayTimeZone()).format('zz');
+                this.time_zone_name = moment().tz(bbTimeZone.getDisplay()).format('zz');
 
                 //  if not using local time zone and user time zone is not same as companies
-                if (!bbi18nOptions.timeZone.useBrowser && (bbTimeZone.getDisplayTimeZone() !== company_time_zone)) {
+                if (!bbi18nOptions.timeZone.useBrowser && (bbTimeZone.getDisplay() !== company_time_zone)) {
                     return this.is_time_zone_diff = true;
                 }
             }

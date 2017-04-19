@@ -188,7 +188,7 @@ angular
                     eventResize: fcEventResize,
                     loading: fcLoading,
                     ignoreTimezone: false,
-                    timezone: bbTimeZone.getDisplayTimeZone()
+                    timezone: bbTimeZone.getDisplay()
                 }
             };
             updateCalendarLanguage();
@@ -218,16 +218,16 @@ angular
         let fcEventDrop = function (booking, delta, revertFunc) { // we need a full move cal if either it has a person and resource, or they've dragged over multiple days
 
             let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
-            booking.start = calendar.moment(bbTimeZone.convertToDisplayTz(booking.start.toISOString()));
-            booking.end = calendar.moment(bbTimeZone.convertToDisplayTz(booking.end.toISOString()));
+            booking.start = calendar.moment(bbTimeZone.convertToDisplay(booking.start.toISOString()));
+            booking.end = calendar.moment(bbTimeZone.convertToDisplay(booking.end.toISOString()));
 
             // not blocked and is a change in person/resource, or over multiple days
             if ((booking.status !== 3) && ((booking.person_id && booking.resource_id) || (delta.days() > 0))) {
                 let {start} = booking;
                 let {end} = booking;
 
-                start = bbTimeZone.convertToCompanyTz(start);
-                end = bbTimeZone.convertToCompanyTz(end);
+                start = bbTimeZone.convertToCompany(start);
+                end = bbTimeZone.convertToCompany(end);
 
                 let item_defaults = {
                     date: start.format('YYYY-MM-DD'),
@@ -274,8 +274,8 @@ angular
                 body: $translate.instant('ADMIN_DASHBOARD.CALENDAR_PAGE.MOVE_MODAL_BODY'),
                 success: model => {
 
-                    booking.start = bbTimeZone.convertToCompanyTz(booking.start);
-                    booking.end = bbTimeZone.convertToCompanyTz(booking.end);
+                    booking.start = bbTimeZone.convertToCompany(booking.start);
+                    booking.end = bbTimeZone.convertToCompany(booking.end);
 
                     return updateBooking(booking);
                 },
@@ -348,8 +348,8 @@ angular
             }
 
             let calendar = uiCalendarConfig.calendars[vm.calendar_name].fullCalendar('getCalendar');
-            start = calendar.moment(bbTimeZone.convertToCompanyTz(moment(start.toISOString())));
-            end = calendar.moment(bbTimeZone.convertToCompanyTz(moment(end.toISOString())));
+            start = calendar.moment(bbTimeZone.convertToCompany(moment(start.toISOString())));
+            end = calendar.moment(bbTimeZone.convertToCompany(moment(end.toISOString())));
 
             view.calendar.unselect();
 

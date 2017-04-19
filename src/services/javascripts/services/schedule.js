@@ -119,11 +119,11 @@
                     e.title = asset.name;
                     e.rendering = "background";
 
-                    e.start = bbTimeZone.convertToCompanyTz(e.start, true);
-                    e.end = bbTimeZone.convertToCompanyTz(e.end, true);
+                    e.start = bbTimeZone.convertToCompany(e.start, true);
+                    e.end = bbTimeZone.convertToCompany(e.end, true);
 
-                    e.start = bbTimeZone.convertToDisplayTz(e.start);
-                    e.end = bbTimeZone.convertToDisplayTz(e.end);
+                    e.start = bbTimeZone.convertToDisplay(e.start);
+                    e.end = bbTimeZone.convertToDisplay(e.end);
 
                     return e;
                 };

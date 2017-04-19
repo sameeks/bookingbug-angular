@@ -22,7 +22,7 @@
         CompanyStoreService.currency_code = company.currency_code;
         CompanyStoreService.time_zone = company.timezone;
 
-        bbTimeZone.determineTimeZone();
+        bbTimeZone.determine();
 
         // checks to see if passed in state is part of the active chain
         $scope.isState = states => $state.includes(states);

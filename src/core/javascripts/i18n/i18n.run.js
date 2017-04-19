@@ -7,6 +7,6 @@ angular.module('BB.i18n').run(function ($localStorage, bbi18nOptions, bbLocale, 
     );
 
     bbLocale.determineLocale();
-    bbTimeZone.determineTimeZone();
+    bbTimeZone.determine();
 
 });

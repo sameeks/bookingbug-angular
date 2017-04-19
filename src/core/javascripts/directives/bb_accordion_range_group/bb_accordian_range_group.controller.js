@@ -58,7 +58,7 @@
 
                     // use display time zone to ensure slots get added to the correct range group
                     let slot_time;
-                    const displayTimeZone = bbTimeZone.getDisplayTimeZone();
+                    const displayTimeZone = bbTimeZone.getDisplay();
                     if ((displayTimeZone != null) && (displayTimeZone !== CompanyStoreService.time_zone)) {
                         let datetime = moment(slot.datetime).tz(displayTimeZone);
                         slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime);
@@ -118,7 +118,7 @@
 
                 // use display time zone to ensure slots get added to the right range group
                 let slot_time;
-                const displayTimeZone = bbTimeZone.getDisplayTimeZone();
+                const displayTimeZone = bbTimeZone.getDisplay();
                 if ((displayTimeZone != null) && (displayTimeZone !== CompanyStoreService.time_zone)) {
                     let datetime = moment(slot.datetime).tz(displayTimeZone);
                     slot_time = DateTimeUtilitiesService.convertMomentToTime(datetime);
