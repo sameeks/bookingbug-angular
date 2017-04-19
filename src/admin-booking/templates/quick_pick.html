@@ -38,7 +38,7 @@
             ng-model="$bbServicesCtrl.$scope.service"
             ng-options="s.name for s in (filtered_items | orderBy:'name' ) track by s.id"
             required="true">
-            <option
+            <option aria-label="{{'ADMIN_BOOKING.QUICK_PICK.SERVICE_LABEL' | translate}}"
               translate="ADMIN_BOOKING.QUICK_PICK.SERVICE_DEFAULT_OPTION"
               value="">
             </option>
