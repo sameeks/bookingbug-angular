@@ -41,7 +41,7 @@
 
     let copyAndCommit = function (done, version, branchName, gitDir, buildDir) {
         gulp.src(buildDir+'/*')
-            .pipe(gulpIf(/bower.json/, replace(/master/, version)))
+            .pipe(gulpIf(/bower.json/, replace(/master/g, version.substr(1))))
             .pipe(gulp.dest(gitDir))
             .on('error', function (err) {
                 gutil.log(err);
