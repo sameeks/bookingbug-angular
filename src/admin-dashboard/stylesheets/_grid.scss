@@ -39,8 +39,14 @@ $grid-white: #fdfdfd;
       display: none;
     }
   }
+  .btn {
+    margin-left: 15%;
+  }
   .action-column-header {
     padding-top: 40px;
+    .ui-grid-cell-contents {
+      text-align: center;
+    }
   }
   // column styles
   .ui-grid-column-menu-button-last-col {
@@ -73,9 +79,25 @@ $grid-white: #fdfdfd;
   }
 }
 
-// grids in tab panels need to have fixed width to render smoothly
 .bb-client-bookings-grid-container {
   .bb-grid {
-    width: 1200px;
+      width: 1200px;
+      @media (max-width: $screen-sm-max) {
+        width: 710px;
+        div[role="row"] {
+          width: 100%;
+        }
+        .ui-grid-cell {
+          min-width: 45%;
+          max-width: 45%;
+          .ui-grid-cell-contents  {
+            width: 100%;
+          }
+        }
+        .action-cell {
+          min-width: 10%;
+          max-width: 10%;
+        }
+      }
   }
 }

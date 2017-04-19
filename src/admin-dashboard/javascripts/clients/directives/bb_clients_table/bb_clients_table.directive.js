@@ -41,17 +41,17 @@
 
             let buildColumnsDisplay = () => {
                 return [
-                    { field: 'name', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME', width: '35%' },
-                    { field: 'email', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL', width: '35%' },
-                    { field: 'mobile', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE', width: '22.5%', cellFilter: 'local_phone_number: mobile' },
+                    { field: 'name', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME'},
+                    { field: 'email', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL', width: '40%'},
+                    { field: 'mobile', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE', cellFilter: 'local_phone_number: mobile' },
                     {  // ACTION BUTTON COLUMN
                         field: 'action',
                         displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',
                         enableFiltering: false,
-                        width: '7.5%',
                         headerCellClass: 'action-column-header',
                         enableSorting: false,
                         enableColumnMenus: false,
+                        width: '10%',
                         cellTemplate: 'clients/action.html'
                     }
                 ]

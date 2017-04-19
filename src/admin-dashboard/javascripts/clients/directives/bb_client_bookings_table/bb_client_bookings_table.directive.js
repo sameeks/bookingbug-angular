@@ -45,14 +45,15 @@
                 });
             });
 
-            // mobile date format 'datetime: "l h.mma"'
 
             let buildColumnsDisplay = () => {
                 return [
-                    { displayName: 'Data/Time', field: 'datetime', cellFilter: 'datetime: "ddd DD MMM YY h.mma"'},
-                    { displayName: 'Description', field: 'details'},
+                    { displayName: 'Data/Time', field: 'datetime', cellFilter: 'datetime: "ddd DD MMM YY h.mma"', width: '45%'},
+                    { displayName: 'Description', field: 'details', width: '45%'},
                     {  // DETAILS BUTTON COLUMN
                         field: 'detailsCell',
+                        width: '10%',
+                        cellClass: 'action-cell',
                         displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',
                         cellTemplate: 'bookings_table_action_button.html'
                     }
@@ -63,7 +64,7 @@
             let columnDefs = scope.options ? scope.options : buildColumnsDisplay();
 
 
-            scope.$watch('bookings', () => {
+            let killWatch = scope.$watch('bookings', () => {
                 if(scope.bookings && scope.bookings.length > 0) {
                    renderBookings(scope.bookings);
                    scope.gridOptions.enablePaginationControls = true;
@@ -88,8 +89,8 @@
                 columnDefs: bbGridService.readyColumns(columnDefs),
                 enableColumnMenus: false,
                 enableSorting: true,
-                paginationPageSizes: [10],
-                paginationPageSize: 10,
+                paginationPageSizes: [15],
+                paginationPageSize: 15,
                 rowHeight: 50,
                 onRegisterApi: (gridApi) => {
                     scope.gridApi = gridApi;
