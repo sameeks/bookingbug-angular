@@ -14,7 +14,7 @@
                 gutil.log(err);
                 return done();
             } else {
-                git.push('origin', branchName, {args: '--tags'}, function (err) {
+                git.push('origin', branchName, {args: '--tags', cwd: gitDir}, function (err) {
                     if (err) {
                         gutil.log(err);
                         return done();
