@@ -1,12 +1,11 @@
-describe('BBAdminDashboard.check-in.directives bbAddWalkinCtrl', function () {
+describe('BBAdminDashboard.check-in.controllers bbAddWalkinCtrl', function () {
     let $controller = null;
     let $rootScope = null;
     let $scope = null;
-    let ctrl = null;
-    let AdminBookingPopup;
+    let AdminBookingPopup, bbAddWalkinCtrl;
 
     let beforeEachFn = function() {
-        module('BBAdminDashboard.check-in.directives');
+        module('BBAdminDashboard.check-in.controllers');
         module('BBAdminBooking');
 
         inject(function($injector, $controller, _AdminBookingPopup_) {
@@ -16,7 +15,7 @@ describe('BBAdminDashboard.check-in.directives bbAddWalkinCtrl', function () {
             $rootScope = $injector.get('$rootScope');
             $scope = $rootScope.$new();
 
-            ctrl = $controller('bbAddWalkinCtrl', {
+            bbAddWalkinCtrl = $controller('bbAddWalkinCtrl', {
                 '$scope': $scope,
                 'AdminBookingPopup': AdminBookingPopup
             });
@@ -26,17 +25,6 @@ describe('BBAdminDashboard.check-in.directives bbAddWalkinCtrl', function () {
                     id: 37000
                 }
             }
-
-            $scope.configMock = {
-                item_defaults: {
-                    pick_first_time: true,
-                    merge_people: true,
-                    merge_resources: true,
-                    date: moment().format('YYYY-MM-DD')
-                },
-                on_conflict: "cancel()",
-                company_id: $scope.bb.company.id
-            }
         });
 
 
@@ -45,8 +33,8 @@ describe('BBAdminDashboard.check-in.directives bbAddWalkinCtrl', function () {
 
     it('calls AdminBookingPopup open function passing in config object', () => {
         spyOn(AdminBookingPopup, 'open');
-        $scope.walkIn();
-        expect(AdminBookingPopup.open).toHaveBeenCalledWith($scope.configMock);
+        bbAddWalkinCtrl.walkIn();
+        expect(AdminBookingPopup.open).toHaveBeenCalledWith(jasmine.any(Object));
     });
 
 

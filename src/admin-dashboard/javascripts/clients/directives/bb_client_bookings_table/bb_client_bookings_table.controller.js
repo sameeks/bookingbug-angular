@@ -31,7 +31,7 @@
                     model: booking,
                     title: 'Booking Details',
                     templateUrl: 'edit_booking_modal_form.html',
-rt                        success(response) {
+                        success(response) {
                             handleModal(response, booking);
                         }
                     }
