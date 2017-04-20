@@ -1,8 +1,7 @@
-describe('bbTimeZoneUtils service', () => {
+describe('bbTimeZoneUtils service yoo', () => {
 
     let bbTimeZoneUtils = null;
     let bbCustomTimeZones = null;
-    let bbTimeZone = null;
     let options = null;
     let $log = null;
 
@@ -14,7 +13,6 @@ describe('bbTimeZoneUtils service', () => {
     beforeEach(() => {
         inject(($injector) => {
             bbTimeZoneUtils = $injector.get('bbTimeZoneUtils');
-            bbTimeZone = $injector.get('bbTimeZone');
             bbCustomTimeZones = $injector.get('bbCustomTimeZones');
             $log = $injector.get('$log');
         });
@@ -101,7 +99,7 @@ describe('bbTimeZoneUtils service', () => {
 
             });
 
-            it('should add browserTimeZone if missing from timezone list', function () {
+            it('should add timezone if missing from timezone list', function () {
 
                 options = setCustomTzOptions({
                     timeZone: 'Europe/Berlin',
@@ -110,35 +108,6 @@ describe('bbTimeZoneUtils service', () => {
                 });
 
                 const timeZones = bbTimeZoneUtils.ensureExists(options).timeZones;
-                expect(timeZones).toContain('Europe/Berlin');
-
-            });
-
-            it('should add company timezone if missing from timezone list', function () {
-
-                options = setCustomTzOptions({
-                    timeZone: 'Europe/Berlin',
-                    timeZones: ['Australia/Canberra', 'Europe/Helsinki'],
-                    useMomentNames: true
-                });
-
-                const timeZones = bbTimeZoneUtils.ensureExists(options).timeZones;
-                expect(timeZones).toContain('Europe/Berlin');
-
-            });
-
-            it('should add display timezone if missing from timezone list', function () {
-
-                options = setCustomTzOptions({
-                    timeZones: ['Australia/Canberra', 'Europe/Helsinki'],
-                    useMomentNames: true
-                });
-
-                spyOn(bbTimeZone, 'getDisplay').and.returnValue('Europe/Berlin');
-
-                const timeZones = bbTimeZoneUtils.ensureExists(options).timeZones;
-
-                expect(bbTimeZone.getDisplay).toHaveBeenCalled();
                 expect(timeZones).toContain('Europe/Berlin');
 
             });
@@ -242,13 +211,13 @@ describe('bbTimeZoneUtils service', () => {
                     isDST: false,
                     filters: {
                         limitTo: ['Canada'],
-                        daylightSaving: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
-                        standard: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
+                        limitDaylightSaving: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
+                        limitStandard: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
                     }
                 });
 
                 const timeZones = bbTimeZoneUtils.filterDayLightOrStandard(options).timeZones;
-                expect(timeZones.length).toEqual(options.filters.standard.length);
+                expect(timeZones.length).toEqual(options.filters.limitStandard.length);
                 expect(timeZones).not.toContain('Canada/Yukon');
 
             });
@@ -261,13 +230,13 @@ describe('bbTimeZoneUtils service', () => {
                     isDST: true,
                     filters: {
                         limitTo: ['Canada'],
-                        daylightSaving: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
-                        standard: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
+                        limitDaylightSaving: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/Mountain', 'Canada/Pacific', 'Canada/Yukon'],
+                        limitStandard: ['Canada/Newfoundland', 'Canada/Atlantic', 'Canada/Eastern', 'Canada/Central', 'Canada/East-Saskatchewan', 'Canada/Saskatchewan', 'Canada/Mountain', 'Canada/Pacific']
                     }
                 });
 
                 const timeZones = bbTimeZoneUtils.filterDayLightOrStandard(options).timeZones;
-                expect(timeZones.length).toEqual(options.filters.daylightSaving.length);
+                expect(timeZones.length).toEqual(options.filters.limitDaylightSaving.length);
                 expect(timeZones).not.toContain('Canada/East-Saskatchewan');
                 expect(timeZones).not.toContain('Canada/Saskatchewan');
 

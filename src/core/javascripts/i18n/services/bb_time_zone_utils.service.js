@@ -154,10 +154,10 @@
             });
         }
 
-        function getKeyInCustomList(timeZone, isCustomList = true) {
+        function getKeyInCustomList(timeZone, isMomentNames = false) {
             let selectedTimeZone;
 
-            if (!isCustomList) return timeZone;
+            if (isMomentNames) return timeZone;
             if (bbCustomTimeZones.GROUPED_TIME_ZONES[timeZone]) return timeZone;
 
             const city = timeZone.match(/[^/]*$/)[0].replace(/ /g, "_");
@@ -184,9 +184,9 @@
             let selectedTimeZone;
 
             const overwrite = bbi18nOptions.timeZone.replaceBrowser;
-            if (overwrite.browser && overwrite.replaceWith) {
-                if (overwrite.browser === timeZone) {
-                    selectedTimeZone = overwrite.replace;
+            if (overwrite.replace && overwrite.replaceWith) {
+                if (overwrite.replace === timeZone) {
+                    selectedTimeZone = overwrite.replaceWith;
                     return selectedTimeZone;
                 }
             }
