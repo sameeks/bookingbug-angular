@@ -29,24 +29,24 @@
 
             let defer = $q.defer();
 
+            const ssoLoginSuccessListener = (admin) => {
+                BBModel.Admin.Login.$setLogin(admin);
+                BBModel.Admin.Login.$user().then(
+                    (user) => defer.resolve(user),
+                    (err) => defer.reject({reason: 'GET_USER_ERROR', error: err})
+                );
+            };
+
             BBModel.Admin.Login.$user().then(
                 (user) => {
                     if (user) {
                         defer.resolve(user);
                         return;
                     }
-
                     AdminSsoLogin.ssoLoginPromise().then(
-                        (admin) => {
-                            BBModel.Admin.Login.$setLogin(admin);
-                            BBModel.Admin.Login.$user().then(
-                                (user) => defer.resolve(user),
-                                (err) => defer.reject({reason: 'GET_USER_ERROR', error: err})
-                            );
-                        },
+                        ssoLoginSuccessListener,
                         (err) => defer.resolve()
                     );
-
                 },
                 (err) => defer.reject({reason: 'LOGIN_SERVICE_ERROR', error: err})
             );
