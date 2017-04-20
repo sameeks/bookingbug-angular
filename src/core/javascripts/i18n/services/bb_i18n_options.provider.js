@@ -11,16 +11,15 @@ angular.module('BB.i18n').provider('bbi18nOptions', function (bbOptionsProvider)
         },
         timeZone: {
             default: 'Europe/London',
-            useBrowser: false,
+            useBrowser: true,
             useCompany: true,
-            useMomentNames: false,
+            useCustomList: true,
             replaceBrowser: {replace: '', replaceWith: ''},
             filters: {
                 limitTo: [],
                 limitDaylightSaving: [],
                 limitStandard: [],
                 exclude: [],
-                // replace: [{ replace: 'America/Whitehorse', replaceWith: 'Canada/Yukon' }]
             }
         }
     };

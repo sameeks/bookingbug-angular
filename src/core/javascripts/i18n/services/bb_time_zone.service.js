@@ -13,7 +13,7 @@
     function bbTimeZoneService($localStorage, $log, moment, bbi18nOptions, CompanyStoreService, bbCustomTimeZones, bbTimeZoneUtils) {
         'ngInject';
 
-        let displayTimeZone = bbTimeZoneUtils.getKeyInCustomList(bbi18nOptions.timeZone.default, bbi18nOptions.timeZone.useMomentNames);
+        let displayTimeZone = bbTimeZoneUtils.getKeyInCustomList(bbi18nOptions.timeZone.default, bbi18nOptions.timeZone.useCustomList);
 
         return {
             getDisplay,
@@ -68,7 +68,7 @@
         }
 
         function determine() {
-            const { useBrowser, useMomentNames, useCompany } = bbi18nOptions.timeZone;
+            const { useBrowser, useCustomList, useCompany } = bbi18nOptions.timeZone;
             const localStorage = $localStorage.getObject('bbTimeZone');
 
             if (localStorage.displayTimeZone) {
@@ -77,13 +77,13 @@
             }
 
             if (useBrowser || localStorage.useBrowserTimeZone) {
-                let timeZone = bbTimeZoneUtils.getKeyInCustomList(moment.tz.guess(), useMomentNames);
+                let timeZone = bbTimeZoneUtils.getKeyInCustomList(moment.tz.guess(), useCustomList);
                 setDisplay(timeZone);
                 return;
             }
 
             if (useCompany && CompanyStoreService.time_zone) {
-                let timeZone = bbTimeZoneUtils.getKeyInCustomList(CompanyStoreService.time_zone, useMomentNames);
+                let timeZone = bbTimeZoneUtils.getKeyInCustomList(CompanyStoreService.time_zone, useCustomList);
                 setDisplay(timeZone);
             }
         }

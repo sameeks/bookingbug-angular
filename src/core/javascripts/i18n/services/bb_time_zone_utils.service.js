@@ -30,7 +30,7 @@
 
         function loadKeys(options) {
             return Object.assign({}, options, {
-                timeZones: options.useMomentNames ? loadMomentNames() : Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES)
+                timeZones: options.useCustomList ? Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES) : loadMomentNames()
             });
         }
 
@@ -45,7 +45,7 @@
         }
 
         function findFilterKeysInCustomList(options) {
-            const getKey = (timeZoneKey) => getKeyInCustomList(timeZoneKey, options.useMomentNames);
+            const getKey = (timeZoneKey) => getKeyInCustomList(timeZoneKey, options.useCustomList);
             const mapFilters = (listOfFilters, typeOfFilter, filters) => filters[typeOfFilter] = _.map(listOfFilters, getKey);
             return Object.assign({}, options, {
                 filters: _.mapObject(options.filters, mapFilters)
@@ -131,7 +131,7 @@
             const formatMap = {
                 'tz-code': $translate.instant(`I18N.TIMEZONE_LOCATIONS.CODES.${momentTz.format('zz')}`),
                 'offset-hours': momentTz.format('Z'),
-                'location': $translate.instant(`I18N.TIMEZONE_LOCATIONS.${options.useMomentNames ? 'MOMENT' : 'CUSTOM'}.${city.toUpperCase()}`)
+                'location': $translate.instant(`I18N.TIMEZONE_LOCATIONS.${options.useCustomList ? 'CUSTOM' : 'MOMENT' }.${city.toUpperCase()}`)
             };
 
             if (!format) return `(GMT${formatMap['offset-hours']}) ${formatMap.location}`;
@@ -154,10 +154,10 @@
             });
         }
 
-        function getKeyInCustomList(timeZone, isMomentNames = false) {
+        function getKeyInCustomList(timeZone, useCustomList = true) {
             let selectedTimeZone;
 
-            if (isMomentNames) return timeZone;
+            if (!useCustomList) return timeZone;
             if (bbCustomTimeZones.GROUPED_TIME_ZONES[timeZone]) return timeZone;
 
             const city = timeZone.match(/[^/]*$/)[0].replace(/ /g, "_");

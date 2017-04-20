@@ -14,7 +14,7 @@ describe('bbTimeZone service,', () => {
                         available_languages: ['en'],
                         timeZone: {
                             default: 'Europe/London',
-                            useMomentNames: true,
+                            useCustomList: false,
                             useBrowser: false,
                             useCompany: false
                         }
@@ -60,7 +60,7 @@ describe('bbTimeZone service,', () => {
             setBbi18nOptions({
                 timeZone: {
                     useBrowser: true,
-                    useMomentNames: true
+                    useCustomList: false
                 }
             });
 

@@ -19,7 +19,7 @@
                 timeZone,
                 timeZones,
                 displayFormat,
-                useMomentNames: bbi18nOptions.timeZone.useMomentNames,
+                useCustomList: bbi18nOptions.timeZone.useCustomList,
                 filters: bbi18nOptions.timeZone.filters,
                 isDST: moment().isDST(),
             };

@@ -23,7 +23,7 @@ describe('bbTimeZoneUtils service yoo', () => {
         options = {
             timeZones: [],
             displayFormat: null,
-            useMomentNames: false,
+            useCustomList: true,
             filters: {}
         };
 
@@ -37,7 +37,7 @@ describe('bbTimeZoneUtils service yoo', () => {
             it('should load custom timezone keys', function () {
 
                 options = setCustomTzOptions({
-                    useMomentNames: false
+                    useCustomList: true
                 });
 
                 const timeZones = bbTimeZoneUtils.loadKeys(options).timeZones;
@@ -48,7 +48,7 @@ describe('bbTimeZoneUtils service yoo', () => {
             it('should load moment timezone keys', function () {
 
                 options = setCustomTzOptions({
-                    useMomentNames: true
+                    useCustomList: false
                 });
 
                 const momentTimeZones = ['Africa/Abidjan', 'Africa/Accra', 'Africa/Addis_Ababa', 'Africa/Algiers', 'Africa/Asmara'];
@@ -64,7 +64,7 @@ describe('bbTimeZoneUtils service yoo', () => {
             it('should clean moment timezone keys', function () {
 
                 options = setCustomTzOptions({
-                    useMomentNames: true
+                    useCustomList: false
                 });
 
                 const momentTimeZones = ['PST8PDT', 'NZ-CHAT', 'Asia/Tokyo', 'Etc/GMT', 'Etc/GMT+2', 'CET', 'Africa/Asmara'];
@@ -83,7 +83,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES),
-                    useMomentNames: false,
+                    useCustomList: true,
                     filters: {
                         limitTo: ['Osaka', 'Berlin', 'New York'],
                         exclude: ['Sydney', 'Sofia']
@@ -104,7 +104,7 @@ describe('bbTimeZoneUtils service yoo', () => {
                 options = setCustomTzOptions({
                     timeZone: 'Europe/Berlin',
                     timeZones: ['Australia/Canberra', 'Europe/Helsinki'],
-                    useMomentNames: true
+                    useCustomList: false
                 });
 
                 const timeZones = bbTimeZoneUtils.ensureExists(options).timeZones;
@@ -120,7 +120,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: moment.tz.names(),
-                    useMomentNames: true,
+                    useCustomList: false,
                     filters: {
                         limitTo: 'Barbados'
                     }
@@ -136,7 +136,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: moment.tz.names(),
-                    useMomentNames: true,
+                    useCustomList: false,
                     filters: {
                         limitTo: ['Barbados']
                     }
@@ -152,7 +152,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES),
-                    useMomentNames: false,
+                    useCustomList: true,
                     filters: {
                         limitTo: ['New_York', 'Dubai', 'Amsterdam']
                     }
@@ -168,7 +168,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: moment.tz.names(),
-                    useMomentNames: true,
+                    useCustomList: false,
                     filters: {
                         exclude: ['Canada', 'London', 'Berlin', 'New York']
                     }
@@ -188,7 +188,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: Object.keys(bbCustomTimeZones.GROUPED_TIME_ZONES),
-                    useMomentNames: false,
+                    useCustomList: true,
                     filters: {
                         exclude: ['Tokyo', 'Athens', 'Istanbul']
                     }
@@ -207,7 +207,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: moment.tz.names(),
-                    useMomentNames: true,
+                    useCustomList: false,
                     isDST: false,
                     filters: {
                         limitTo: ['Canada'],
@@ -226,7 +226,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: moment.tz.names(),
-                    useMomentNames: true,
+                    useCustomList: false,
                     isDST: true,
                     filters: {
                         limitTo: ['Canada'],
@@ -254,7 +254,7 @@ describe('bbTimeZoneUtils service yoo', () => {
                         { id: 0, display: '(GMT+09:00) Choibalsan', value: 'Asia/Choibalsan', order: [9, 'CHOST', 'Choibalsan'] },
                         'Asia/Colombo'
                     ],
-                    useMomentNames: true
+                    useCustomList: false
                 });
 
                 const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
@@ -268,7 +268,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: ['Asia/Choibalsan', 'Asia/Chongqing', 'Asia/Chungking', 'Asia/Colombo'],
-                    useMomentNames: true
+                    useCustomList: false
                 });
 
                 const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
@@ -285,7 +285,7 @@ describe('bbTimeZoneUtils service yoo', () => {
                 options = setCustomTzOptions({
                     timeZones: [ 'Asia/Chongqing' ],
                     displayFormat: '(GMT offset-hours) location (tz-code)',
-                    useMomentNames: true
+                    useCustomList: false
                 });
 
                 const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
@@ -299,7 +299,7 @@ describe('bbTimeZoneUtils service yoo', () => {
                 options = setCustomTzOptions({
                     timeZones: [ 'Asia/Chongqing' ],
                     displayFormat: undefined,
-                    useMomentNames: true
+                    useCustomList: false
                 });
 
                 const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
@@ -313,7 +313,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: [ 'America/New_York' ],
-                    useMomentNames: false
+                    useCustomList: true
                 });
 
                 const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
@@ -326,7 +326,7 @@ describe('bbTimeZoneUtils service yoo', () => {
 
                 options = setCustomTzOptions({
                     timeZones: [ 'America/New_York' ],
-                    useMomentNames: true
+                    useCustomList: false
                 });
 
                 const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;
@@ -340,7 +340,7 @@ describe('bbTimeZoneUtils service yoo', () => {
                 options = setCustomTzOptions({
                     timeZones: [ 'Brazil/DeNoronha' ],
                     displayFormat: '(tz-code) location',
-                    useMomentNames: true
+                    useCustomList: false
                 });
 
                 const timeZones = bbTimeZoneUtils.mapModel(options).timeZones;

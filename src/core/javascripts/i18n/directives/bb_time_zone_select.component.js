@@ -36,12 +36,12 @@
         let browserTimeZone;
 
         this.timeZones = [];
-        this.useMomentNames = false;
+        this.useCustomList = true;
         this.isAutomaticTimeZone = false;
         this.selectedTimeZone = null;
 
         this.$onInit = () => {
-            this.useMomentNames = bbi18nOptions.timeZone.useMomentNames;
+            this.useCustomList = bbi18nOptions.timeZone.useCustomList;
             this.timeZones = bbTimeZoneOptions.composeTimeZoneList(this.format, bbTimeZone.getDisplay());
             this.setTimeZone = setTimeZone;
             this.automaticTimeZoneToggle = automaticTimeZoneToggle;

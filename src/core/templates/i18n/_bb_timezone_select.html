@@ -16,51 +16,52 @@
     <span translate="I18N.TIMEZONE.TIMEZONE_LABEL"></span>
   </label>
   <!-- Standard ui-select -->
-  <ui-select
-    ng-if="!$bbTimeZoneSelectCtrl.useMomentNames"
-    ng-model="$bbTimeZoneSelectCtrl.selectedTimeZone"
-    theme="bootstrap"
-    ng-disabled="$bbTimeZoneSelectCtrl.isAutomaticTimeZone"
-    ng-change="$bbTimeZoneSelectCtrl.setTimeZone($bbTimeZoneSelectCtrl.selectedTimeZone.value);">
+  <div ng-if="$bbTimeZoneSelectCtrl.useCustomList">
+    <ui-select
+      ng-model="$bbTimeZoneSelectCtrl.selectedTimeZone"
+      theme="bootstrap"
+      ng-disabled="$bbTimeZoneSelectCtrl.isAutomaticTimeZone"
+      ng-change="$bbTimeZoneSelectCtrl.setTimeZone($bbTimeZoneSelectCtrl.selectedTimeZone.value);">
 
-    <ui-select-match placeholder="Select timezone">
-      {{$select.selected.display}}
-    </ui-select-match>
+      <ui-select-match placeholder="Select timezone">
+        {{$select.selected.display}}
+      </ui-select-match>
 
-    <ui-select-choices
-      ui-select-choices-listener
-      refresh-delay="0"
-      repeat="
-        timezone as timezone in $bbTimeZoneSelectCtrl.timeZones |
-        props: { display: $select.search}
-        track by timezone.id">
-      <div ng-bind-html="timezone.display | highlight: $select.search"></div>
-    </ui-select-choices>
-  </ui-select>  
+      <ui-select-choices
+        ui-select-choices-listener
+        refresh-delay="0"
+        repeat="
+          timezone as timezone in $bbTimeZoneSelectCtrl.timeZones |
+          props: { display: $select.search}
+          track by timezone.id">
+        <div ng-bind-html="timezone.display | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>      
+  </div>
   
   <!-- Using ui-select-choices-lazyload due to perfomance issues with big lists -->
-  <ui-select
-    ng-if="$bbTimeZoneSelectCtrl.useMomentNames"
-    ng-model="$bbTimeZoneSelectCtrl.selectedTimeZone"
-    theme="bootstrap"
-    ng-disabled="$bbTimeZoneSelectCtrl.isAutomaticTimeZone"
-    ng-change="$bbTimeZoneSelectCtrl.setTimeZone($bbTimeZoneSelectCtrl.selectedTimeZone.value);">
+  <div ng-if="!$bbTimeZoneSelectCtrl.useCustomList">
+    <ui-select
+      ng-model="$bbTimeZoneSelectCtrl.selectedTimeZone"
+      theme="bootstrap"
+      ng-disabled="$bbTimeZoneSelectCtrl.isAutomaticTimeZone"
+      ng-change="$bbTimeZoneSelectCtrl.setTimeZone($bbTimeZoneSelectCtrl.selectedTimeZone.value);">
 
-    <ui-select-match placeholder="Select timezone">
-      {{$select.selected.display}}
-    </ui-select-match>
+      <ui-select-match placeholder="Select timezone">
+        {{$select.selected.display}}
+      </ui-select-match>
 
-    <ui-select-choices
-      ui-select-choices-lazyload
-      all-choices="$bbTimeZoneSelectCtrl.timeZones"
-      refresh-delay="0"
-      repeat="
-        timezone as timezone in $select.pagingOptions.items |
-        props: { display: $select.search}
-        track by timezone.id
-      ">
-      <div ng-bind-html="timezone.display | highlight: $select.search"></div>
-    </ui-select-choices>
-  </ui-select>
-
+      <ui-select-choices
+        ui-select-choices-lazyload
+        all-choices="$bbTimeZoneSelectCtrl.timeZones"
+        refresh-delay="0"
+        repeat="
+          timezone as timezone in $select.pagingOptions.items |
+          props: { display: $select.search}
+          track by timezone.id
+        ">
+        <div ng-bind-html="timezone.display | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>    
+  </div>
 </div>
