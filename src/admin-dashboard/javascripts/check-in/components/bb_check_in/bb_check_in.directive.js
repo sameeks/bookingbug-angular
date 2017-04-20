@@ -42,7 +42,7 @@
 
             let initGrid = () => {
 
-                let gridDisplayOptions = {columnDefs: bbGridService.readyColumns(ClientCheckInOptions.displayOptions)};
+                let gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientCheckInOptions.displayOptions)};
 
                 scope.paginationOptions = {
                     pageNumber: 1,
@@ -62,10 +62,7 @@
                     }
                 }
 
-                if(ClientCheckInOptions.basicOptions.disableScrollBars) {
-                    ClientCheckInOptions.basicOptions.enableHorizontalScrollbar = uiGridConstants.scrollbars.NEVER;
-                    ClientCheckInOptions.basicOptions.enableVerticalScrollbar = uiGridConstants.scrollbars.NEVER;
-                }
+                bbGridService.setScrollBars(ClientCheckInOptions);
 
                 scope.gridOptions = Object.assign(
                     {},

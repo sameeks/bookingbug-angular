@@ -22,21 +22,34 @@
  */
 angular.module('BBAdminDashboard.clients.services').provider('ClientTableOptions', [function () {
     let options = {
+        disableScrollBars: true,
         basicOptions: {
-            disableScrollBars: true,
-            enableRowSelection: true,
+            enableColumnMenus: false,
+            enableFiltering: true,
             enableFullRowSelection: true,
             enableRowHeaderSelection: false,
-            enableColumnMenus: false,
+            enableRowSelection: true,
             enableSorting: true,
             paginationPageSizes: [15],
             paginationPageSize: 15,
-            rowHeight: 40
+            rowHeight: 40,
+            useExternalPagination: true
         },
         displayOptions: [
-            { field: 'name', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME'},
-            { field: 'email', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL', width: '40%'},
-            { field: 'mobile', displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE', cellFilter: 'local_phone_number: mobile' },
+            {
+                field: 'name',
+                displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.NAME'
+            },
+            {
+                field: 'email',
+                displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.EMAIL',
+                width: '40%'
+            },
+            {
+                field: 'mobile',
+                displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE',
+                cellFilter: 'local_phone_number: mobile'
+            },
             {  // ACTION BUTTON COLUMN
                 field: 'action',
                 displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',

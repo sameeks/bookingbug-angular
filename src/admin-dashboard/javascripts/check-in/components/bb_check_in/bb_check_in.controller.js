@@ -9,7 +9,7 @@
         /***
          * @ngdoc method
          * @name getAppointments
-         * @methodOf BBAdminDashboard.clients.directives:bbClientBookingsTable
+         * @methodOf BBAdminDashboard.check-in.directives:bbCheckIn
          * @description
          * Gets the current dates appointments to be displayed in the check in table
          *

@@ -17,7 +17,7 @@
          * @name edit
          * @methodOf BBAdminDashboard.clients.directives:bbClientBookingsTable
          * @description
-         * Edit client's booking details
+         * Opens modal to edit client's booking details
          *
          * @param {integer} id The id of the booking to be edited
         */
@@ -45,7 +45,7 @@
          * @name edit
          * @methodOf BBAdminDashboard.clients.directives:bbClientBookingsTable
          * @description
-         * Cancel client's booking
+         * Opens modal to cancel client's booking
          *
          * @param {integer} id The id of the booking to be cancelled
          */
@@ -161,6 +161,10 @@
                 $scope.booking_models = bookings.items;
             }
             setRows();
+
+            if($scope.bookings.length > 0) {
+               $rootScope.$broadcast('bookings:loaded', $scope.bookings)
+            }
         }
 
 

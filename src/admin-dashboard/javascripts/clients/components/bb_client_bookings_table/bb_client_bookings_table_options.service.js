@@ -22,6 +22,8 @@
  */
 angular.module('BBAdminDashboard.clients.services').provider('ClientBookingsTableOptions', function (bbOptionsProvider) {
     let options = {
+        paginationPageSize: 15,
+        disableScrollBars: true,
         basicOptions: {
             disableScrollBars: true,
             enableRowSelection: true,
@@ -41,10 +43,9 @@ angular.module('BBAdminDashboard.clients.services').provider('ClientBookingsTabl
                 width: '10%',
                 cellClass: 'action-cell',
                 displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.ACTIONS',
-                cellTemplate: 'bookings_table_action_button.html'
+                cellTemplate: 'clients/action.html'
             }
         ]
-
     };
 
     this.setOption = function (option, value) {

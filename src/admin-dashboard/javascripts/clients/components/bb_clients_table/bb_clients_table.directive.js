@@ -41,8 +41,6 @@
 
             let initGrid = () => {
 
-                let columnDefs = ClientTableOptions.displayOptions;
-
                 scope.paginationOptions = {
                     pageNumber: 1,
                     pageSize: ClientTableOptions.basicOptions.paginationPageSize,
@@ -65,12 +63,9 @@
                     }
                 }
 
-                let gridDisplayOptions = {columnDefs: bbGridService.readyColumns(ClientTableOptions.displayOptions)};
+                let gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientTableOptions.displayOptions)};
 
-                if(ClientTableOptions.basicOptions.disableScrollBars) {
-                    ClientTableOptions.basicOptions.enableHorizontalScrollbar = uiGridConstants.scrollbars.NEVER;
-                    ClientTableOptions.basicOptions.enableVerticalScrollbar = uiGridConstants.scrollbars.NEVER;
-                }
+                bbGridService.setScrollBars(ClientTableOptions);
 
                 scope.gridOptions = Object.assign(
                     {},
@@ -79,7 +74,6 @@
                     gridDisplayOptions
                 )
             }
-
 
             let buildFilterString = (filters) => {
                 filterString = $filter('buildClientString')(filters);
@@ -92,8 +86,6 @@
                 buildFilterString(builtFilters);
             }
 
-            // fire a custom event when filter changes
-            // ui-grid doesnt pass the filtered data through to the event it broadcasts
             scope.$on('bbGridFilter:changed', (event, filterObject) => {
                 if(filters.length === 0) {
                     filters.push(filterObject);

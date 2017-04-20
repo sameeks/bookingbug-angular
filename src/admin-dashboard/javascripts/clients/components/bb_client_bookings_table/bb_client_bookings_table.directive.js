@@ -41,36 +41,22 @@
 
             scope.$watch('tabset.active', () => {
                 $timeout(() => {
+                    // we need to only show a grid if its tab is active
+                    // otherwise ui-grid will not know what size it should be and would display incorrectly
                     scope.activeGrid = scope.tabset.active;
                 });
             });
 
             let killWatch = scope.$watch('bookings', () => {
-                if(scope.bookings && scope.bookings.length > 0) {
-                   renderBookings(scope.bookings);
-                   scope.gridOptions.enablePaginationControls = true;
-                }
+                scope.gridOptions.data = scope.bookings;
             });
-
-
-            let renderBookings = (bookings) => {
-                scope.gridOptions.data = bookings;
-                if(scope.gridOptions.data.length <= 10) {
-                    scope.gridOptions.enablePaginationControls = false;
-                }
-            }
 
 
             let initGrid = () => {
 
-                let columnDefs = ClientBookingsTableOptions.displayOptions;
+                let gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientBookingsTableOptions.displayOptions)};
 
-                let gridDisplayOptions = {columnDefs: bbGridService.readyColumns(ClientBookingsTableOptions.displayOptions)};
-
-                if(ClientBookingsTableOptions.basicOptions.disableScrollBars) {
-                    ClientBookingsTableOptions.basicOptions.enableHorizontalScrollbar = uiGridConstants.scrollbars.NEVER;
-                    ClientBookingsTableOptions.basicOptions.enableVerticalScrollbar = uiGridConstants.scrollbars.NEVER;
-                }
+                bbGridService.setScrollBars(ClientBookingsTableOptions);
 
                 let gridApiOptions = {
                     onRegisterApi: (gridApi) => {
