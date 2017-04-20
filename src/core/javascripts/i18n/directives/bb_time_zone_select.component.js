@@ -31,23 +31,23 @@
     function TimeZoneSelectCtrl($rootScope, $scope, $localStorage, bbi18nOptions, bbTimeZone, bbTimeZoneOptions, bbTimeZoneUtils) {
         'ngInject';
 
+        const LIST_CAPACITY = 100;
         let companyTimeZone;
         let displayTimeZone;
         let browserTimeZone;
 
         this.timeZones = [];
-        this.useCustomList = true;
         this.isAutomaticTimeZone = false;
         this.selectedTimeZone = null;
+        this.isLongList = false;
 
         this.$onInit = () => {
-            this.useCustomList = bbi18nOptions.timeZone.useCustomList;
             this.timeZones = bbTimeZoneOptions.composeTimeZoneList(this.format, bbTimeZone.getDisplay());
+            this.isLongList = this.timeZones.length > LIST_CAPACITY;
             this.setTimeZone = setTimeZone;
             this.automaticTimeZoneToggle = automaticTimeZoneToggle;
             $rootScope.connection_started ? $rootScope.connection_started.then(determineDefaults) : determineDefaults();
         };
-
 
         const determineDefaults = () => {
             const localStorage = $localStorage.getObject('bbTimeZone');

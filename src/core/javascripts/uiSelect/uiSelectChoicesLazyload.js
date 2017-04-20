@@ -106,9 +106,11 @@
                 elm.off('scroll');
             });
 
-            scope.$watch(attr.allChoices, (newValue) => {
-                scope.pagingOptions.allOptions = newValue;
-                scope.addMoreItems();
+            scope.$watch(attr.allChoices, (newValue, oldValue) => {
+                if (newValue.length !== oldValue.length) {
+                    scope.pagingOptions.allOptions = newValue;
+                    scope.addMoreItems();
+                }
             });
         };
     }

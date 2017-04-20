@@ -11,7 +11,7 @@ angular.module('BB.i18n').provider('bbi18nOptions', function (bbOptionsProvider)
         },
         timeZone: {
             default: 'Europe/London',
-            useBrowser: true,
+            useBrowser: false,
             useCompany: true,
             useCustomList: true,
             replaceBrowser: {replace: '', replaceWith: ''},
