@@ -18,9 +18,16 @@
             $scope.company = company;
             $scope.bb.company = company;
 
-            console.log('!!', $rootScope.user);
-            $state.go(AdminCoreOptions.default_state);
+            redirectUser();
         };
+
+        const redirectUser = () => {
+            if ($rootScope.user.role === 'callcenter') {
+                $state.go('callCenter'); //TODO config options ?
+                return;
+            }
+            $state.go(AdminCoreOptions.default_state);
+        }
     }
 
 })(angular);

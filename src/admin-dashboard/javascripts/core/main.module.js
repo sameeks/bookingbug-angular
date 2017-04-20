@@ -24,6 +24,7 @@ angular.module('BBAdminDashboard', [
     'ngScrollable',
     'toastr',
 
+    'BBAdminDashboard.callCenter',
     'BBAdminDashboard.check-in',
     'BBAdminDashboard.clients',
     'BBAdminDashboard.login',
