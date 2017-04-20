@@ -45,53 +45,8 @@
         <!-- /.box-body -->
       </div>
       <!-- /.box -->
-    </div>
-    <div class="col-md-9">
-
-      <uib-tabset class="bb-tabs nav-tabs-custom">
-
-        <uib-tab id="client-upcoming-booking-tab">
-          <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.UPCOMING_BOOKINGS">
-
-          </uib-tab-heading>
-
-          <div 
-            bb-client-bookings-table 
-            tabset="$parent.tabset"
-            period="future" 
-            member="client">
-          </div>
-
-        </uib-tab>
-
-        <uib-tab id="client-past-booking-tab">
-          <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.PAST_BOOKINGS">
-
-          </uib-tab-heading>
-
-          <div 
-            bb-client-bookings-table 
-            tabset="$parent.tabset"
-            member="client" 
-            period="past"
-            start-date="historicalStartDate"
-            end-date="historicalEndDate">
-          </div>
-
-        </uib-tab>
-
-        <uib-tab id="client-details-tab">
-          <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.CUSTOMER_DETAILS">
-
-          </uib-tab-heading>
-
-          <div member-form member="client" on-success-save="memberSaveCallback"></div>
-
-        </uib-tab>
-
-
-      </uib-tabset>
-
-    </div>
+    </div> 
+    
+  <div bb-client-tab-set></div>
   </div>
 </section>
