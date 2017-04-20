@@ -12,7 +12,9 @@
             'release-git:member',
             'release-git:public-booking',
             'release-git:queue'
-        ]);
+        ], function () {
+            process.exit();
+        });
 
     };
 

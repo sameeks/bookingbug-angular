@@ -32,4 +32,9 @@ deploy:
     on:
       branch: master
     skip_cleanup: true
+  - provider: script
+    script: ./travis/release.sh
+    on:
+      tags: true
+    skip_cleanup: true
 
