@@ -14,12 +14,13 @@ angular.module('BB.i18n').provider('bbi18nOptions', function (bbOptionsProvider)
             useBrowser: true,
             useCompany: true,
             useMomentNames: false,
-            overwriteBrowser: { browser: '', replaceWith: ''},
+            replaceBrowser: {replace: '', replaceWith: ''},
             filters: {
                 limitTo: [],
+                limitDaylightSaving: [],
+                limitStandard: [],
                 exclude: [],
-                daylightSaving: [],
-                standard: []
+                // replace: [{ replace: 'America/Whitehorse', replaceWith: 'Canada/Yukon' }]
             }
         }
     };

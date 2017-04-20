@@ -10,18 +10,16 @@
         .module('BB.i18n')
         .service('bbTimeZone', bbTimeZoneService);
 
-    function bbTimeZoneService($localStorage, $log, moment, bbi18nOptions, CompanyStoreService, bbCustomTimeZones) {
+    function bbTimeZoneService($localStorage, $log, moment, bbi18nOptions, CompanyStoreService, bbCustomTimeZones, bbTimeZoneUtils) {
         'ngInject';
 
-        let displayTimeZone = getKeyInCustomList(bbi18nOptions.timeZone.default, bbi18nOptions.timeZone.useMomentNames);
+        let displayTimeZone = bbTimeZoneUtils.getKeyInCustomList(bbi18nOptions.timeZone.default, bbi18nOptions.timeZone.useMomentNames);
 
         return {
             getDisplay,
             getDisplayUTCOffset,
             getCompany,
             getCompanyUTCOffset,
-            getKeyInCustomList,
-            getActual,
 
             convertToCompany,
             convertToDisplay,
@@ -72,19 +70,20 @@
         function determine() {
             const { useBrowser, useMomentNames, useCompany } = bbi18nOptions.timeZone;
             const localStorage = $localStorage.getObject('bbTimeZone');
+
             if (localStorage.displayTimeZone) {
                 setDisplay(localStorage.displayTimeZone);
                 return;
             }
 
             if (useBrowser || localStorage.useBrowserTimeZone) {
-                let timeZone = getKeyInCustomList(moment.tz.guess(), useMomentNames);
+                let timeZone = bbTimeZoneUtils.getKeyInCustomList(moment.tz.guess(), useMomentNames);
                 setDisplay(timeZone);
                 return;
             }
 
             if (useCompany && CompanyStoreService.time_zone) {
-                let timeZone = getKeyInCustomList(CompanyStoreService.time_zone, useMomentNames);
+                let timeZone = bbTimeZoneUtils.getKeyInCustomList(CompanyStoreService.time_zone, useMomentNames);
                 setDisplay(timeZone);
             }
         }
@@ -96,54 +95,6 @@
 
         function setLocalStorage(localStorageObj) {
             $localStorage.setObject('bbTimeZone', localStorageObj);
-        }
-
-        function getKeyInCustomList(timeZone, useMomentNames = false) {
-            let selectedTimeZone;
-
-            if (useMomentNames) return timeZone;
-            if (bbCustomTimeZones.GROUPED_TIME_ZONES[timeZone]) return timeZone;
-
-            const city = timeZone.match(/[^/]*$/)[0].replace(/ /g, "_");
-            for (let [groupName, groupCities] of Object.entries(bbCustomTimeZones.GROUPED_TIME_ZONES)) {
-
-                if (groupName.match(/[^/]*$/)[0] === city) {
-                    selectedTimeZone = groupName;
-                    break;
-                }
-
-                groupCities = groupCities.split(/\s*,\s*/).map((tz) => tz.replace(/ /g, "_")).join(', ').split(/\s*,\s*/);
-                const cityGroupIndex = groupCities.findIndex((groupCity) => groupCity === city);
-                if (cityGroupIndex !== -1){
-                    selectedTimeZone = groupName;
-                    break;
-                }
-            }
-
-            return selectedTimeZone || timeZone;
-        }
-
-        function getActual(timeZone, timeZones) {
-            let selectedTimeZone;
-
-            const overWrite = bbi18nOptions.timeZone.overwriteBrowser;
-            if (overWrite.browser && overWrite.replaceWith) {
-                if (overWrite.browser === timeZone) {
-                    selectedTimeZone = overWrite.replaceWith;
-                    return selectedTimeZone;
-                }
-            }
-
-            const formatTz = (timeZone, format) => moment.tz(timeZone).format(format);
-            for (let tz of timeZones) {
-                if (formatTz(tz.value || tz, 'zz') === formatTz(timeZone, 'zz') &&
-                    formatTz(tz.value || tz, 'ZZ') === formatTz(timeZone, 'ZZ')) {
-                    selectedTimeZone = tz.value || tz;
-                    break;
-                }
-            }
-
-            return selectedTimeZone || timeZone;
         }
 
     }

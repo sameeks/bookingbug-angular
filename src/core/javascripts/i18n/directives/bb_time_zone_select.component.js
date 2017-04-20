@@ -28,7 +28,7 @@
             controllerAs: '$bbTimeZoneSelectCtrl'
         });
 
-    function TimeZoneSelectCtrl($rootScope, $scope, $localStorage, bbi18nOptions, bbTimeZone, bbTimeZoneOptions) {
+    function TimeZoneSelectCtrl($rootScope, $scope, $localStorage, bbi18nOptions, bbTimeZone, bbTimeZoneOptions, bbTimeZoneUtils) {
         'ngInject';
 
         let companyTimeZone;
@@ -42,19 +42,19 @@
 
         this.$onInit = () => {
             this.useMomentNames = bbi18nOptions.timeZone.useMomentNames;
-            this.timeZones = bbTimeZoneOptions.composeTimeZoneList(this.format);
+            this.timeZones = bbTimeZoneOptions.composeTimeZoneList(this.format, bbTimeZone.getDisplay());
             this.setTimeZone = setTimeZone;
             this.automaticTimeZoneToggle = automaticTimeZoneToggle;
             $rootScope.connection_started ? $rootScope.connection_started.then(determineDefaults) : determineDefaults();
         };
 
-        const getActualTimeZone = (timeZone) => bbTimeZone.getActual(timeZone, this.timeZones);
 
         const determineDefaults = () => {
             const localStorage = $localStorage.getObject('bbTimeZone');
-            companyTimeZone = getActualTimeZone(bbTimeZone.getCompany());
-            displayTimeZone = getActualTimeZone(bbTimeZone.getDisplay());
-            browserTimeZone = getActualTimeZone(moment.tz.guess());
+            const getEqualTzInList = (timeZone) => bbTimeZoneUtils.getEqualInList(timeZone, this.timeZones);
+            companyTimeZone = getEqualTzInList(bbTimeZone.getCompany());
+            displayTimeZone = getEqualTzInList(bbTimeZone.getDisplay());
+            browserTimeZone = getEqualTzInList(moment.tz.guess());
             this.isAutomaticTimeZone = (localStorage.useBrowserTimeZone || (bbi18nOptions.timeZone.useBrowser && !localStorage.displayTimeZone));
             this.selectedTimeZone = this.timeZones.find((tz) => tz.value === displayTimeZone);
         };

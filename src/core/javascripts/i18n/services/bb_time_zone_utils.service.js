@@ -10,7 +10,7 @@
         .module('BB.i18n')
         .factory('bbTimeZoneUtils', bbTimeZoneUtils);
 
-    function bbTimeZoneUtils($translate, $log, moment, orderByFilter, bbi18nOptions, bbCustomTimeZones, bbTimeZone) {
+    function bbTimeZoneUtils($translate, $log, moment, orderByFilter, bbi18nOptions, bbCustomTimeZones) {
         'ngInject';
 
         return {
@@ -22,7 +22,10 @@
             ensureExists,
             mapModel,
             removeDuplicates,
-            order
+            order,
+
+            getKeyInCustomList,
+            getEqualInList
         };
 
         function loadKeys(options) {
@@ -42,7 +45,7 @@
         }
 
         function findFilterKeysInCustomList(options) {
-            const getKey = (timeZoneKey) => bbTimeZone.getKeyInCustomList(timeZoneKey, options.useMomentNames);
+            const getKey = (timeZoneKey) => getKeyInCustomList(timeZoneKey, options.useMomentNames);
             const mapFilters = (listOfFilters, typeOfFilter, filters) => filters[typeOfFilter] = _.map(listOfFilters, getKey);
             return Object.assign({}, options, {
                 filters: _.mapObject(options.filters, mapFilters)
@@ -62,9 +65,9 @@
         }
 
         function filterDayLightOrStandard(options) {
-            const { daylightSaving, standard } = options.filters;
+            const { limitDaylightSaving, limitStandard } = options.filters;
             return Object.assign({}, options, {
-                timeZones: filterTimeZoneList(options.timeZones, options.isDST ? daylightSaving : standard)
+                timeZones: filterTimeZoneList(options.timeZones, options.isDST ? limitDaylightSaving : limitStandard)
             });
         }
 
@@ -85,18 +88,17 @@
             } else {
                 return _.filter(timeZones, contains(timeZonesToFilter));
             }
-
         }
 
         function ensureExists(options) {
-            const timeZone = options.timeZone || bbTimeZone.getDisplay();
+            const timeZone = options.timeZone;
             return Object.assign({}, options, {
                 timeZones: addMissingTimeZone(options.timeZones, timeZone)
             });
         }
 
         function addMissingTimeZone(timeZones, timeZone) {
-            const mappedTimeZone = bbTimeZone.getActual(timeZone, timeZones);
+            const mappedTimeZone = getEqualInList(timeZone, timeZones);
             const allTimeZones = [...timeZones];
             if (!allTimeZones.find((tz) => (tz.value || tz) === mappedTimeZone)) {
                 allTimeZones.push(mappedTimeZone);
@@ -150,6 +152,55 @@
             return Object.assign({}, options, {
                 timeZones: orderByFilter(options.timeZones, ['order[0]', 'order[1]', 'order[2]'], false)
             });
+        }
+
+        function getKeyInCustomList(timeZone, isCustomList = true) {
+            let selectedTimeZone;
+
+            if (!isCustomList) return timeZone;
+            if (bbCustomTimeZones.GROUPED_TIME_ZONES[timeZone]) return timeZone;
+
+            const city = timeZone.match(/[^/]*$/)[0].replace(/ /g, "_");
+
+            for (let [groupName, groupCities] of Object.entries(bbCustomTimeZones.GROUPED_TIME_ZONES)) {
+
+                if (groupName.match(/[^/]*$/)[0] === city) {
+                    selectedTimeZone = groupName;
+                    break;
+                }
+
+                groupCities = groupCities.split(/\s*,\s*/).map((tz) => tz.replace(/ /g, "_")).join(', ').split(/\s*,\s*/);
+                const cityGroupIndex = groupCities.findIndex((groupCity) => groupCity === city);
+                if (cityGroupIndex !== -1){
+                    selectedTimeZone = groupName;
+                    break;
+                }
+            }
+
+            return selectedTimeZone || timeZone;
+        }
+
+        function getEqualInList(timeZone, timeZones) {
+            let selectedTimeZone;
+
+            const overwrite = bbi18nOptions.timeZone.replaceBrowser;
+            if (overwrite.browser && overwrite.replaceWith) {
+                if (overwrite.browser === timeZone) {
+                    selectedTimeZone = overwrite.replace;
+                    return selectedTimeZone;
+                }
+            }
+
+            const formatTz = (timeZone, format) => moment.tz(timeZone).format(format);
+            for (let tz of timeZones) {
+                if (formatTz(tz.value || tz, 'zz') === formatTz(timeZone, 'zz') &&
+                    formatTz(tz.value || tz, 'ZZ') === formatTz(timeZone, 'ZZ')) {
+                    selectedTimeZone = tz.value || tz;
+                    break;
+                }
+            }
+
+            return selectedTimeZone || timeZone;
         }
 
     }
