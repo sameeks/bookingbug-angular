@@ -21,7 +21,7 @@
 
         <dt>Estimated Wait Time </dt>
         <dd ng-show="selected_queuer.remaining_signed > 0">{{selected_queuer.remaining_signed | time_period_from_seconds: 'minutes'}}</dd>
-        <dd ng-show="selected_queuer.remaining_signed <= 0">< 1 minute.</dd>
+        <dd ng-show="selected_queuer.remaining_signed <= 0">&lt; 1 minute.</dd>
       </dl>
       <dl class="col-sm-6 dl-horizontal">
 
