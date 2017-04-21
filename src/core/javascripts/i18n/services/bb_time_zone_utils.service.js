@@ -91,9 +91,8 @@
         }
 
         function ensureExists(options) {
-            const timeZone = options.timeZone;
             return Object.assign({}, options, {
-                timeZones: addMissingTimeZone(options.timeZones, timeZone)
+                timeZones: addMissingTimeZone(options.timeZones, options.timeZone)
             });
         }
 

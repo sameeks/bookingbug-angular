@@ -1,4 +1,4 @@
-describe('bbTimeZoneUtils service yoo', () => {
+describe('bbTimeZoneUtils service', () => {
 
     let bbTimeZoneUtils = null;
     let bbCustomTimeZones = null;

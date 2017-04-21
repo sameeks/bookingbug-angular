@@ -60,14 +60,15 @@
         };
 
         const automaticTimeZoneToggle = () => {
-            const timeZone = this.isAutomaticTimeZone ? browserTimeZone : companyTimeZone;
-            this.timeZones = bbTimeZoneOptions.addMissingTimeZones(this.timeZones, this.format, timeZone);
-            setTimeZone(timeZone, this.isAutomaticTimeZone);
+            displayTimeZone = this.isAutomaticTimeZone ? browserTimeZone : companyTimeZone;
+            this.timeZones = bbTimeZoneOptions.addMissingTimeZones(this.timeZones, this.format, displayTimeZone);
+            setTimeZone(displayTimeZone, this.isAutomaticTimeZone);
             $scope.$broadcast('UISelect:closeSelect');
             bbTimeZone.setLocalStorage({useBrowserTimeZone: this.isAutomaticTimeZone});
         };
 
         const setTimeZone = (timeZone, isAutomaticTimeZone = false) => {
+            displayTimeZone = timeZone;
             bbTimeZone.setDisplay(timeZone);
             this.selectedTimeZone = this.timeZones.find((tz) => tz.value === timeZone);
             $rootScope.$broadcast('BBTimeZoneOptions:timeZoneChanged', timeZone);
@@ -75,7 +76,8 @@
         };
 
         const languageChangedHandler = () => {
-            this.$onInit();
+            this.timeZones = bbTimeZoneOptions.composeTimeZoneList(this.format, displayTimeZone);
+            this.selectedTimeZone = this.timeZones.find((tz) => tz.value === displayTimeZone);
         };
 
         $scope.$on('BBLanguagePicker:languageChanged', languageChangedHandler);
