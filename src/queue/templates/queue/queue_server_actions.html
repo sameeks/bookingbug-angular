@@ -38,7 +38,7 @@
   </button>
   <button type="button" class="btn btn-success" ng-click="startServingQueuer(person, nil)"
     ng-if="!selected_queuer && !person.serving && person.attendance_status == 1"
-    ng-disabled="waiting_queuers.length == 0 || adminQueueLoading.isLoadingServerInProgress()">
+    ng-disabled="queues[0].waiting_queuers.length == 0 || adminQueueLoading.isLoadingServerInProgress()">
     Serve Next
   </button>
 </div>
