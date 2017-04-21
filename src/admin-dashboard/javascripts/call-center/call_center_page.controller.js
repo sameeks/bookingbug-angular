@@ -1,6 +1,10 @@
-angular
-    .module('BBAdminDashboard.callCenter')
-    .controller('CallCenterPageCtrl', function ($log, $scope, $state) {
+(function (angular) {
+
+    angular
+        .module('BBAdminDashboard.callCenter')
+        .controller('CallCenterPageCtrl', CallCenterPageCtrl);
+
+    function CallCenterPageCtrl() {
         'ngInject';
 
         let init = function () {
@@ -8,4 +12,6 @@ angular
         };
 
         init();
-    });
+    }
+
+})(angular);

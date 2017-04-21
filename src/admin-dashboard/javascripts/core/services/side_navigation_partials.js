@@ -1,14 +1,13 @@
-/**
- * @ngdoc service
- * @name BBAdminDashboard.SideNavigationPartials
- *
- * @description
- * This service assembles the navigation partials for the side-navigation
- *
- */
-angular.module('BBAdminDashboard').factory('SideNavigationPartials', [
-    'AdminCoreOptions',
-    function (AdminCoreOptions) {
+(function () {
+    /**
+     * @ngdoc service
+     * @name BBAdminDashboard.SideNavigationPartials
+     * @description
+     * This service assembles the navigation partials for the side-navigation
+     */
+    angular.module('BBAdminDashboard').factory('SideNavigationPartials', SideNavigationPartials);
+
+    function SideNavigationPartials(AdminCoreOptions) {
         let templatesArray = [];
 
         return {
@@ -64,4 +63,4 @@ angular.module('BBAdminDashboard').factory('SideNavigationPartials', [
             }
         };
     }
-]);
+})();

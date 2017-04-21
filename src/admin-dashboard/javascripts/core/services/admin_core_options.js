@@ -1,76 +1,81 @@
-/**
- * @ngdoc service
- * @name BBAdminDashboard.AdminCoreOptions
- *
- * @description
- * Returns a set of General configuration options
- */
+(function (angular) {
 
-/**
- * @ngdoc service
- * @name BBAdminDashboard.AdminCoreOptionsProvider
- *
- * @description
- *
- * @example
- <pre>
+    /**
+     * @ngdoc service
+     * @name BBAdminDashboard.AdminCoreOptions
+     *
+     * @description
+     * Returns a set of General configuration options
+     */
 
- config = (AdminCoreOptionsProvider) ->
- 'ngInject'
+    /**
+     * @ngdoc service
+     * @name BBAdminDashboard.AdminCoreOptionsProvider
+     *
+     * @description
+     *
+     * @example
+     <pre>
 
- AdminCoreOptionsProvider.setOption('option', 'value')
+     config = (AdminCoreOptionsProvider) ->
+     'ngInject'
 
- return
+     AdminCoreOptionsProvider.setOption('option', 'value')
 
- angular.module('ExampleModule').config config
- </pre>
- */
+     return
 
-angular.module('BBAdminDashboard').provider('AdminCoreOptions', function () {
-    'ngInject';
+     angular.module('ExampleModule').config config
+     </pre>
+     */
 
-    let options = {
-        default_state: 'calendar',
-        deactivate_sidenav: false,
-        deactivate_boxed_layout: false,
-        sidenav_start_open: true,
-        boxed_layout_start: false,
-        side_navigation: [
-            {
-                group_name: 'SIDE_NAV_BOOKINGS',
-                items: [
-                    'calendar',
-                    'clients',
-                    'check-in',
-                    'dashboard-iframe',
-                    'members-iframe',
-                ]
-            },
-            {
-                group_name: 'SIDE_NAV_CONFIG',
-                items: [
-                    'config-iframe',
-                    'publish-iframe',
-                    'settings-iframe'
-                ]
+    angular.module('BBAdminDashboard').provider('AdminCoreOptions', AdminCoreOptions);
+
+    function AdminCoreOptions() {
+        'ngInject';
+
+        let options = {
+            default_state: 'calendar',
+            deactivate_sidenav: false,
+            deactivate_boxed_layout: false,
+            sidenav_start_open: true,
+            boxed_layout_start: false,
+            side_navigation: [
+                {
+                    group_name: 'SIDE_NAV_BOOKINGS',
+                    items: [
+                        'calendar',
+                        'call-center', //TODO users with role 'callcenter' should be able to see only call-center - side nav should be hidden by default
+                        'clients',
+                        'check-in',
+                        'dashboard-iframe',
+                        'members-iframe',
+                    ]
+                },
+                {
+                    group_name: 'SIDE_NAV_CONFIG',
+                    items: [
+                        'config-iframe',
+                        'publish-iframe',
+                        'settings-iframe'
+                    ]
+                }
+            ]
+        };
+
+        this.setOption = function (option, value) {
+            if (options.hasOwnProperty(option)) {
+                options[option] = value;
             }
-        ]
-    };
+        };
 
-    this.setOption = function (option, value) {
-        if (options.hasOwnProperty(option)) {
-            options[option] = value;
-        }
-    };
+        this.getOption = function (option) {
+            if (options.hasOwnProperty(option)) {
+                return options[option];
+            }
+        };
 
-    this.getOption = function (option) {
-        if (options.hasOwnProperty(option)) {
-            return options[option];
-        }
-    };
+        this.$get = () => options;
 
-    this.$get = () => options;
+    }
 
-});
-
-
+})(angular);

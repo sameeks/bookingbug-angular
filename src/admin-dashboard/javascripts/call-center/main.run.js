@@ -1,26 +1,34 @@
 (function (angular) {
 
-    angular.module('BBAdminDashboard.callCenter').run(
-        function (RuntimeStates, adminCallCenterOptions, SideNavigationPartials) {
-            'ngInject';
+    angular.module('BBAdminDashboard.callCenter').run(callCenterRun);
 
-            if (adminCallCenterOptions.useDefaultStates) {
+    function callCenterRun(RuntimeStates, adminCallCenterOptions, SideNavigationPartials) {
+        'ngInject';
 
-                RuntimeStates
-                    .state('callCenter', {
-                            parent: adminCallCenterOptions.parentState,
-                            url: "call-center",
-                            templateUrl: "call-center/index.html",
-                            controller: 'CallCenterPageCtrl'
-                        }
-                    );
-            }
-
-            if (adminCallCenterOptions.showInNavigation) {
-                SideNavigationPartials.addPartialTemplate('call-center', 'call-center/nav.html');
-            }
-
+        function init() {
+            setStates();
+            setSideNav();
         }
-    );
+
+        function setStates() {
+            if (!adminCallCenterOptions.useDefaultStates) return;
+
+            RuntimeStates
+                .state('callCenter', {
+                        parent: adminCallCenterOptions.parentState,
+                        url: "call-center",
+                        templateUrl: "call-center/index.html",
+                        controller: 'CallCenterPageCtrl'
+                    }
+                );
+        }
+
+        function setSideNav() {
+            if (!adminCallCenterOptions.showInNavigation) return;
+            SideNavigationPartials.addPartialTemplate('call-center', 'call-center/nav.html');
+        }
+
+        init();
+    }
 
 })(angular);
