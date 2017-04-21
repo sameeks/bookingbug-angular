@@ -13,7 +13,7 @@ angular.module('BB.Models').run(function ($q, $injector, BBModel) {
     let models = ['Address', 'Answer', 'Affiliate', 'Basket', 'BasketItem',
         'BookableItem', 'Category', 'Client', 'ClientDetails', 'Company',
         'CompanySettings', 'Day', 'Event', 'EventChain', 'EventGroup',
-        'EventTicket', 'EventSequence', 'Items', 'ItemDetails', 'PaymentCallbacks', 'Person', 'PurchaseItem',
+        'EventTicket', 'EventSequence', 'Item', 'Items', 'ItemDetails', 'PaymentCallbacks', 'Person', 'PurchaseItem',
         'PurchaseTotal', 'Question', 'Resource', 'Service', 'Slot', 'Space',
         'Clinic', 'SurveyQuestion', 'TimeSlot', 'BusinessQuestion', 'Image', 'Deal',
         'PrePaidBooking', 'MembershipLevel', 'Product', 'BBCollection',

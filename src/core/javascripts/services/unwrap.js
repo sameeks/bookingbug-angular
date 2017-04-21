@@ -521,3 +521,12 @@ angular.module('BB.Services').factory("BB.Service.items", ($q, BBModel, UnwrapSe
         };
     }
 );
+
+angular.module('BB.Services').factory("BB.Service.item", ($q, BBModel, UnwrapService) => {
+        return {
+            unwrap(resource) {
+                return UnwrapService.unwrapResource(BBModel.Item, resource);
+            }
+        };
+    }
+);
