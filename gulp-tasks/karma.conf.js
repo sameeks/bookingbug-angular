@@ -10,8 +10,7 @@
                 options: {
                     presets: ['es2015', 'es2016'],
                     plugins: [
-                        ["transform-es2015-classes", {"loose": true}],
-                        ["transform-object-rest-spread", {"useBuiltIns": false}]
+                        ["transform-es2015-classes", {"loose": true}]
                     ]
                 },
                 filename: function (file) {

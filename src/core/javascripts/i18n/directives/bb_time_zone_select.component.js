@@ -7,7 +7,8 @@
      * @name BBAdminDashboard.bbTimeZoneSelect
      *
      * @description
-     * TimeZone Select
+     * TimeZone Select component changes the time zone in which times are displayed in Studio
+     * Configured using bbi18nOptionsProvider
      *
      * @example
      * <example>
