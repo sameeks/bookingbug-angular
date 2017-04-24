@@ -1,0 +1,21 @@
+<div class='input-group date-picker'>
+  <input 
+    type='text' 
+    class='form-question form-control' 
+    name='q{{$bbQuestionCtrl.question.id}}'
+    id='{{$bbQuestionCtrl.question.id}}'
+    bb-datepicker-popup='{{$bbQuestionCtrl.date_format}}' 
+    uib-datepicker-popup='{{$bbQuestionCtrl.date_format_2}}'
+    ng-change='$bbQuestionCtrl.recalc()'
+    ng-model='$bbQuestionCtrl.question.answer'
+    ng-required='$bbQuestionCtrl.question.currentlyShown && (($bbQuestionCtrl.adminRequired && $bbQuestionCtrl.question.required) || ($bbQuestionCtrl.question.required && !bb.isAdmin))' 
+    datepicker-options='{"starting-day": 1, "showButtonBar": false, "showWeeks": false}' 
+    show-button-bar='false'
+    is-open='opened'
+    ng-focus='opened=true'/>
+    <span class='input-group-btn' ng-click='$event.preventDefault(); $event.stopPropagation(); opened=true'>
+    <button class='btn btn-default' type='submit'>
+      <span class='fa fa-calendar'></span>
+    </button>
+  </span>
+</div>
