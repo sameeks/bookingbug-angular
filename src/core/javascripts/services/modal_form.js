@@ -87,6 +87,9 @@
             $scope.model.$get('edit', params).then(schema => {
                     $scope.form = _.reject(schema.form, x => x.type === 'submit');
                     let model_type = functionName(model.constructor);
+                    if (model_type === 'Object' && model.type) {
+                        model_type = model.type;
+                    }
                     if (FormTransform['edit'][model_type]) {
                         $scope.form = FormTransform['edit'][model_type]($scope.form, schema.schema, $scope.model);
                     }

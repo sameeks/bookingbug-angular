@@ -5,6 +5,7 @@ angular.module('BB.Models').factory("AdminBookingModel", ($q, BBModel,
 
             constructor(data) {
                 super(...arguments);
+                this.type = 'Admin_Booking';
                 this.datetime = moment(this.datetime);
                 this.start = this.datetime;
                 this.end = moment(this.end_datetime);

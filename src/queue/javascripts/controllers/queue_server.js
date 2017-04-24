@@ -1,8 +1,13 @@
 let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel, CheckSchema,
-                             $uibModal, AdminPersonService, $q, AdminQueuerService, Dialog, $translate) => {
+                             $uibModal, AdminPersonService, $q, AdminQueuerService, adminQueueLoading, Dialog, $translate) => {
+
+    $scope.adminQueueLoading = {
+        isLoadingServerInProgress: adminQueueLoading.isLoadingServerInProgress
+    };
+
+    $scope.loadingServer = false;
 
     let init = function () {
-        $scope.loadingServer = false;
         let bookings = _.filter($scope.bookings.items, booking => {
             return booking.person_id == $scope.person.id;
         });
@@ -29,6 +34,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
 
     $scope.startServingQueuer = function (person, queuer) {
         $scope.loadingServer = true;
+        adminQueueLoading.setLoadingServerInProgress(true);
         if (upcomingBookingCheck(person)) {
             Dialog.confirm({
                 title: $translate.instant('ADMIN_DASHBOARD.QUEUE_PAGE.NEXT_BOOKING_DIALOG_HEADING'),
@@ -40,10 +46,12 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                         if ($scope.selectQueuer) $scope.selectQueuer(null);
                         $scope.getQueuers();
                         $scope.loadingServer = false;
+                        adminQueueLoading.setLoadingServerInProgress(false);
                     });
                 },
                 fail: () => {
                     $scope.loadingServer = false;
+                    adminQueueLoading.setLoadingServerInProgress(false);
                 }
             });
         } else {
@@ -51,6 +59,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                 if ($scope.selectQueuer) $scope.selectQueuer(null);
                 $scope.getQueuers();
                 $scope.loadingServer = false;
+                adminQueueLoading.setLoadingServerInProgress(false);
             });
         }
     };
@@ -59,7 +68,22 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
         let {person} = options;
         let {serving} = person;
         $scope.loadingServer = true;
-        if (options.outcomes) {
+        adminQueueLoading.setLoadingServerInProgress(true);
+        if (options.status) {
+            person.finishServing().then(function () {
+                serving.$get('booking').then(function (booking) {
+                    booking = new BBModel.Admin.Booking(booking);
+                    booking.current_multi_status = options.status;
+                    booking.$update(booking).then(res => {
+                        $scope.loadingServer = false;
+                        adminQueueLoading.setLoadingServerInProgress(false);
+                    }, err => {
+                        $scope.loadingServer = false;
+                        adminQueueLoading.setLoadingServerInProgress(false);
+                    });
+                });
+            });
+        } else {
             serving.$get('booking').then(function (booking) {
                 booking = new BBModel.Admin.Booking(booking);
                 booking.current_multi_status = options.status;
@@ -67,20 +91,9 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                     finishServingOutcome(person, booking);
                 } else {
                     $scope.loadingServer = false;
+                    adminQueueLoading.setLoadingServerInProgress(false);
                 }
             });
-        } else if (options.status) {
-            person.finishServing().then(function () {
-                serving.$get('booking').then(function (booking) {
-                    booking = new BBModel.Admin.Booking(booking);
-                    booking.current_multi_status = options.status;
-                    booking.$update(booking).then(res => {
-                        $scope.loadingServer = false;
-                    });
-                });
-            });
-        } else {
-            $scope.loadingServer = false;
         }
     };
 
@@ -95,8 +108,14 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                     booking.$get('edit').then(function (schema) {
                         let form = _.reject(schema.form, x => x.type === 'submit');
                         form[0].tabs = [form[0].tabs[form[0].tabs.length - 1]];
-                        schema.schem = CheckSchema(schema.schema);
-                        defer.resolve(schema);
+                        let showModalPopUp = false;
+                        for (let tab of form[0].tabs) {
+                            if (tab.title === 'Outcomes') showModalPopUp = true;
+                        }
+                        if (showModalPopUp === true) {
+                            schema.schema = CheckSchema(schema.schema);
+                            defer.resolve(schema);
+                        } else defer.reject('No outcomes');
                     }, function () {
                         defer.reject();
                     });
@@ -125,10 +144,20 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                 person.finishServing().finally(function () {
                     person.attendance_status = 1;
                     $scope.loadingServer = false;
+                    adminQueueLoading.setLoadingServerInProgress(false);
                 });
             });
-        }, function () {
-            $scope.loadingServer = false;
+        }, function (err) {
+            if (err === 'No outcomes') {
+                person.finishServing().then(function () {
+                    person.attendance_status = 1;
+                    $scope.loadingServer = false;
+                    adminQueueLoading.setLoadingServerInProgress(false);
+                });
+            } else {
+                $scope.loadingServer = false;
+                adminQueueLoading.setLoadingServerInProgress(false);
+            }
         });
     };
 
@@ -147,7 +176,8 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
 
     $scope.extendAppointment = function (mins) {
         $scope.loadingServer = true;
-        $scope.person.serving.extendAppointment(mins).then(function () {
+        $scope.person.serving.extendAppointment(mins).then(function (queuer) {
+            $scope.person.serving = queuer;
             $scope.loadingServer = false;
         });
     };

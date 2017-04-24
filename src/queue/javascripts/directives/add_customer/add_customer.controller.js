@@ -40,7 +40,11 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
             }
         });
 
-        modalInstance.result.then(addQueuer).finally(resetQueuer);
+        modalInstance.result.then(addQueuer).then(resetQueuer).finally(() => $scope.loading = false);
+    };
+
+    $scope.availableServers = function () {
+        return _.filter($scope.servers, (server) => server.attendance_status == 1);
     };
 
     $scope.serveCustomerNow = function () {
@@ -50,7 +54,7 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
             resolve: {
                 services: () => $scope.services,
                 servers: () => {
-                    return _.filter($scope.servers, (server) => server.attendance_status == 1);
+                    return $scope.availableServers();
                 }
             },
             controller: ($scope, $uibModalInstance, services, servers) => {
@@ -68,7 +72,7 @@ let AddQueueCustomerController = ($scope, $log, AdminServiceService, AdminQueuer
             }
         });
 
-        modalInstance.result.then(addQueuer).finally(resetQueuer);
+        modalInstance.result.then(addQueuer).then(resetQueuer).finally(() => $scope.loading = false);
     };
 
     $scope.makeAppointment = function (options) {

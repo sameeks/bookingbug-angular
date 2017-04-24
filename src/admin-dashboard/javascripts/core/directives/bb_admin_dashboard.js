@@ -12,6 +12,8 @@ angular.module('BBAdminDashboard').directive('bbAdminDashboard', PageLayout => {
 
                     $rootScope.bb = $scope.bb;
 
+                    $scope.currentYear = moment().local().format('YYYY');
+
                     let api_url = $localStorage.getItem("api_url");
                     if (!$scope.bb.api_url && api_url) {
                         $scope.bb.api_url = api_url;
