@@ -17,7 +17,6 @@ angular.module('BB.Directives').directive('bbTimeZone', (GeneralOptions, Company
             controllerAs: '$tzCtrl',
             templateUrl: '_time_zone_info.html',
             controller() {
-
                 let company_time_zone = CompanyStoreService.time_zone;
                 this.time_zone_name = moment().tz(company_time_zone).format('zz');
 
