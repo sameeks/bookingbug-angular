@@ -1,11 +1,14 @@
-angular.module('BB.Directives').directive('bbAdminCalendar', () => {
-    return {
-        restrict: 'AE',
-        replace: true,
-        scope: true,
-        controller: 'BBAdminCalendarCtrl'
-    }
-});
+angular
+    .module('BB.Directives')
+    .directive('bbAdminCalendar', () => {
+        
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: true,
+            controller: 'BBAdminCalendarCtrl'
+        };
+    });
 
 let BBAdminCalendarCtrl = function ($scope, $element, $controller, $attrs, BBModel, $rootScope) {
 

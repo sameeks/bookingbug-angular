@@ -25,6 +25,6 @@ angular.module('BB.Directives').directive('bbEvent', () => {
             replace: true,
             scope: true,
             controller: 'Event'
-        }
+        };
     }
 );

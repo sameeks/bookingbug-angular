@@ -26,6 +26,6 @@ angular.module('BB.Directives').directive('bbDeals', () => {
             replace: true,
             scope: true,
             controller: 'DealList'
-        }
+        };
     }
 );

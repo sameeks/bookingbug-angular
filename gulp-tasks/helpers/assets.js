@@ -34,9 +34,10 @@
         let stream = gulp.src(files, {allowEmpty: true})
             .pipe(plumber())
             .pipe(gulpif(/.*js$/, babel({
-                presets: ['es2015'],
+                presets: ['es2015', 'es2016'],
                 plugins: [
-                    ["transform-es2015-classes", {"loose": true}]
+                    ["transform-es2015-classes", {"loose": true}],
+                    ["transform-object-rest-spread", {"useBuiltIns": false}]
                 ]
             }).on('error', gutil.log)))
             .pipe(gulp.dest(tmpPath + '/es5/' + module + '/javascripts/'));

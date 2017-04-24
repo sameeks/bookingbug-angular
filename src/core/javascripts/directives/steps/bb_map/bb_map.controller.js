@@ -26,7 +26,7 @@
         $scope.default_zoom = $scope.options.default_zoom || 6;
 
         // custom map marker icon can be set using GeneralOptions
-        let defaultPin = GeneralOptions.map_marker_icon
+        let defaultPin = GeneralOptions.map_marker_icon;
 
         // when set to false, geolocate() only fills the input with the returned address and does not load the map
         $scope.loadMapOnGeolocate = true;

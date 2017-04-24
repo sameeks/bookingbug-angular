@@ -533,8 +533,10 @@ angular.module('BB.Filters').filter('local_phone_number', (CompanyStoreService, 
  </file>
  </example>
  */
-angular.module('BB.Filters').filter('datetime', GeneralOptions =>
+angular.module('BB.Filters').filter('datetime', ($translate, bbTimeZone) =>
     function (date, format, show_time_zone) {
+
+        let timeZone = '';
 
         if (format == null) {
             format = "LLL";
@@ -547,12 +549,13 @@ angular.module('BB.Filters').filter('datetime', GeneralOptions =>
         }
 
         let new_date = moment(date);
-        new_date.tz(GeneralOptions.display_time_zone);
+        new_date.tz(bbTimeZone.getDisplay());
+
         if (show_time_zone) {
-            format += ' zz';
+            timeZone = `(${$translate.instant(`I18N.TIMEZONE_LOCATIONS.CODES.${new_date.format('zz')}`)})`;
         }
 
-        return new_date.format(format);
+        return `${new_date.format(format)} ${timeZone}`;
     }
 );
 

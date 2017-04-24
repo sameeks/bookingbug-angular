@@ -177,7 +177,7 @@ angular.module('BB.Directives').directive('bbDatepickerPopup', function ($parse,
                 } else {
                     setTimeout(f, 10);
                 }
-            }
+            };
             f();
         }
     };

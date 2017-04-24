@@ -27,6 +27,7 @@
             </p>
 
           </div>
+
           <div ng-if="total.containsWaitlistItems()">
 
             <p
@@ -98,7 +99,7 @@
                 translate="ADMIN_BOOKING.CONFIRMATION.DATE_TIME_LBL">
               </div>
               <div class="col-sm-9 bb-summary-value">
-                {{i.describe}}
+                {{i.datetime | datetime: 'llll':true}}
               </div>
             </li>
 
@@ -123,11 +124,11 @@
 
             <div class="confirmation-summary-address">
               <div>
-                <span class='fa fa-map-marker'></span>
+                <span class="fa fa-map-marker"></span>
                 {{total.bookings[0].address | address_single_line}}
               </div>
               <div>
-                <span class='fa fa-phone'></span>
+                <span class="fa fa-phone"></span>
                 {{total.bookings[0].address.phone | local_phone_number}}
               </div>
             </div>

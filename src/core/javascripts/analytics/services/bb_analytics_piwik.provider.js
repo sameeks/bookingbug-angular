@@ -19,7 +19,7 @@
         let enabled = false;
 
         this.isEnabled = function () {
-            return enabled
+            return enabled;
         };
         this.push = function (data) {
             if (!this.isEnabled()) return;
@@ -75,7 +75,7 @@
                 getOption: this.getOption,
                 isEnabled: this.isEnabled,
                 push: this.push
-            }
+            };
         };
     }
 

@@ -22,7 +22,7 @@ angular.module('BBQueue').run(function (RuntimeStates, AdminQueueOptions, SideNa
                             start_time: moment().format('HH:mm'),
                             skip_cache: false
                         };
-                        return BBModel.Admin.Booking.$query(params)
+                        return BBModel.Admin.Booking.$query(params);
                     }
                 },
                 controller($scope, company, services, people, bookings, BBModel) {

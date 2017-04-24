@@ -1,7 +1,7 @@
 (function () {
 
 
-    let newForm = function ($scope, $uibModalInstance, company, title, new_rel, post_rel, successFn, failFn, $document, $log) {
+    let newFormCtrl = function ($scope, $uibModalInstance, company, title, new_rel, post_rel, successFn, failFn, $document, $log) {
         $scope.loading = true;
         $scope.title = title;
         $scope.company = company;
@@ -76,7 +76,7 @@
     };
 
 
-    let editForm = function ($scope, $uibModal, $uibModalInstance, model, title, successFn, failFn, params, $document, $log, Dialog, FormTransform, $translate) {
+    let editFormCtrl = function ($scope, $uibModal, $uibModalInstance, model, title, successFn, failFn, params, $document, $log, Dialog, FormTransform, $translate, bbTimeZone, CompanyStoreService) {
         $scope.loading = true;
         $scope.title = title;
         $scope.model = model;
@@ -115,8 +115,18 @@
         $scope.submit = function (form) {
             $scope.$broadcast('schemaFormValidate');
             $scope.loading = true;
+
             if ($scope.model.$update) {
-                return $scope.model.$update($scope.form_model).then(function () {
+
+                /*if(bbTimeZone.isCustomTimeZone()){
+                    $scope.form_model.datetime = moment($scope.form_model.datetime).tz(CompanyStoreService.time_zone);
+                }*///TODO double check
+
+                $scope.form_model.datetime = bbTimeZone.convertToCompany($scope.form_model.datetime);
+
+
+                $scope.model.$update($scope.form_model).then(function () {
+
                         $scope.loading = false;
                         $uibModalInstance.close($scope.model);
                         if (successFn) {
@@ -217,7 +227,7 @@
         };
     };
 
-    let bookForm = function ($scope, $uibModalInstance, model, company, title, successFn, $document, $log) {
+    let bookFormCtrl = function ($scope, $uibModalInstance, model, company, title, successFn, $document, $log) {
         $scope.loading = true;
         $scope.title = title;
         $scope.model = model;
@@ -277,7 +287,7 @@
                 }
                 return $uibModal.open({
                     templateUrl,
-                    controller: newForm,
+                    controller: newFormCtrl,
                     size: config.size,
                     resolve: {
                         company() {
@@ -312,7 +322,7 @@
                 }
                 return $uibModal.open({
                     templateUrl,
-                    controller: editForm,
+                    controller: editFormCtrl,
                     size: config.size,
                     resolve: {
                         model() {
@@ -344,7 +354,7 @@
                 }
                 return $uibModal.open({
                     templateUrl,
-                    controller: bookForm,
+                    controller: bookFormCtrl,
                     size: config.size,
                     resolve: {
                         model() {

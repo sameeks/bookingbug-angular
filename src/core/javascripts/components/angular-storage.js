@@ -65,7 +65,7 @@ angular.module('ngStorage', [])
                 key: function (index) {
                     storage.key(index);
                 }
-            }
+            };
         }
     ])
     .factory('$sessionStorage', [
@@ -106,6 +106,6 @@ angular.module('ngStorage', [])
                 key: function (index) {
                     storage.key(index);
                 }
-            }
+            };
         }
     ]);
