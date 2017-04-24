@@ -29,7 +29,7 @@ angular.module("BBAdminBooking").config(function ($translateProvider) {
                 DAY_5_VIEW_BTN: "5 day",
                 DAY_7_VIEW_BTN: "7 day",
                 FIRST_FOUND_VIEW_BTN: "First available",
-                TIME_SLOT_WITH_COUNTDOWN: "{{datetime | 'LT':true}} (in {{time | tod_from_now}})",
+                TIME_SLOT_WITH_COUNTDOWN: "{{datetime | datetime: 'LT':true}} (in {{time | tod_from_now}})",
                 NOT_FOUND: "No availability found",
                 NOT_FOUND_TRY_DIFFERENT_TIME_RANGE: "No availability found, try a different time-range",
                 OVERBOOK_WARNING: "Overbooking ignores booking time step and availability constraints to make a booking.",
