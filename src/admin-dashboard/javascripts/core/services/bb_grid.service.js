@@ -29,6 +29,8 @@
             setColumns(columns, customTemplates) {
                 for(let col of columns) {
                     col.headerCellFilter = 'translate';
+                    col.enableHiding = false;
+                    col.sortDirectionCycle = [uiGridConstants.ASC, uiGridConstants.DESC];
                     if(customTemplates) {
                         Object.assign(col, customTemplates);
                     }

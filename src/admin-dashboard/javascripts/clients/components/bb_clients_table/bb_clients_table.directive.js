@@ -20,7 +20,7 @@
         .module('BBAdminDashboard.clients.directives')
         .directive('bbClientsTable', BBClientsTable);
 
-    function BBClientsTable(bbGridService, uiGridConstants, $state, $filter, ClientTableOptions) {
+    function BBClientsTable(bbGridService, uiGridConstants, $state, $filter, ClientTableOptions, $rootScope) {
         let directive = {
             link,
             restrict: 'AE',
@@ -35,7 +35,7 @@
 
         return directive;
 
-        function link(scope, element, attrs) {
+        function link(scope, elem, attrs) {
             let filters = [];
             let filterString;
 

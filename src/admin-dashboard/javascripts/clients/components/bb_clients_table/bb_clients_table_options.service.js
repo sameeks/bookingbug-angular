@@ -22,9 +22,8 @@
  */
 angular.module('BBAdminDashboard.clients.services').provider('ClientTableOptions', [function () {
     let options = {
-        disableScrollBars: true,
         basicOptions: {
-            enableColumnMenus: false,
+            enableColumnMenus: true,
             enableFiltering: true,
             enableFullRowSelection: true,
             enableRowHeaderSelection: false,
@@ -48,7 +47,9 @@ angular.module('BBAdminDashboard.clients.services').provider('ClientTableOptions
             {
                 field: 'mobile',
                 displayName: 'ADMIN_DASHBOARD.CLIENTS_PAGE.MOBILE',
-                cellFilter: 'local_phone_number: mobile'
+                cellFilter: 'local_phone_number: mobile',
+                enableSorting: false,
+                enableColumnMenu: false
             },
             {  // ACTION BUTTON COLUMN
                 field: 'action',
@@ -56,7 +57,7 @@ angular.module('BBAdminDashboard.clients.services').provider('ClientTableOptions
                 enableFiltering: false,
                 headerCellClass: 'action-column-header',
                 enableSorting: false,
-                enableColumnMenus: false,
+                enableColumnMenu: false,
                 width: '10%',
                 cellTemplate: 'clients/action.html'
             }

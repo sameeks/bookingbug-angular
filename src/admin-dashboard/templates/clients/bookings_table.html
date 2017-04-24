@@ -1,21 +1,25 @@
 <div ng-if="bookings">
   <div ng-show="activeGrid == 0" class="bb-client-bookings-grid-container">
     <div
+      ui-grid-cellnav
+      bb-grid-resizer
       ui-grid="gridOptions" 
       ui-grid-pagination
       ui-grid-selection
       ng-cloak
-      class="bb-grid bb-client-bookings-table">
+      class="bb-grid bb-client-bookings-table sidebar-open">
     </div>
   </div>
 
   <div ng-show="activeGrid == 1" class="bb-client-bookings-grid-container"> 
     <div
+      ui-grid-cellnav
+      bb-grid-resizer
       ui-grid="gridOptions" 
       ui-grid-pagination
       ui-grid-selection
       ng-cloak
-      class="bb-grid bb-client-bookings-table">
+      class="bb-grid bb-client-bookings-table sidebar-open">
     </div>
   </div>
 </div>

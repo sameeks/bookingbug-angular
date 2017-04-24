@@ -2,6 +2,11 @@ $grid-gray: #f5f5f5;
 $grid-white: #fdfdfd; 
 
 .bb-grid {
+  div {
+    &:focus {
+      outline: -webkit-focus-ring-color auto 5px;
+    }
+  }
   width: 100%;
   min-height: 800px;
   height: auto;
@@ -16,6 +21,10 @@ $grid-white: #fdfdfd;
     :nth-child(even) .ui-grid-cell {
       background-color: $grid-white;
     }
+    &:focus {
+      outline: -webkit-focus-ring-color auto 5px;
+      border: none;
+    }
   }
   // cell styles
   .ui-grid-cell {
@@ -28,6 +37,13 @@ $grid-white: #fdfdfd;
   .ui-grid-header-cell-primary-focus {
     text-align: center;
     margin: 5px;
+  }
+  // .ui-grid-column-menu {
+  //   top: 40px;
+  // }
+  .ui-grid-column-menu-button {
+    top: 10px;
+    right: 30px;
   }
   .ui-grid-header, .ui-grid-header-cell-wrapper {
     border: 1px solid $grid-gray;
@@ -47,6 +63,20 @@ $grid-white: #fdfdfd;
     .ui-grid-cell-contents {
       text-align: center;
     }
+  }
+  .ui-grid-menu-items {
+    margin-top: -40px;
+  }
+  .ui-grid-menu-item {
+    background-color: white;
+    border: 1px solid #d4d4d4;
+    text-align: center;
+    i {
+      display: none;
+    }
+  }
+  .ui-grid-sort-priority-number {
+    display: none;
   }
   // column styles
   .ui-grid-column-menu-button-last-col {
@@ -79,25 +109,26 @@ $grid-white: #fdfdfd;
   }
 }
 
+
 .bb-client-bookings-grid-container {
   .bb-grid {
-      width: 1200px;
-      @media (max-width: $screen-sm-max) {
-        width: 710px;
-        div[role="row"] {
+    width: 1200px;
+    @media (max-width: $screen-sm-max) {
+      width: 710px;
+      div[role="row"] {
+        width: 100%;
+      }
+      .ui-grid-cell {
+        min-width: 45%;
+        max-width: 45%;
+        .ui-grid-cell-contents  {
           width: 100%;
         }
-        .ui-grid-cell {
-          min-width: 45%;
-          max-width: 45%;
-          .ui-grid-cell-contents  {
-            width: 100%;
-          }
-        }
-        .action-cell {
-          min-width: 10%;
-          max-width: 10%;
-        }
       }
+      .action-cell {
+        min-width: 10%;
+        max-width: 10%;
+      }
+    }
   }
 }

@@ -27,16 +27,17 @@ angular.module('BBAdminDashboard.clients.services').provider('ClientCheckInOptio
         basicOptions: {
             enableSorting: true,
             rowHeight: 40,
-            enableColumnMenus: false,
+            enableColumnMenus: true,
             paginationPageSizes: [15],
             useExternalPagination: true
         },
         displayOptions: [
             {
-                displayName: '-',
+                displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.EDIT',
                 field: 'test',
                 cellTemplate: 'check-in/_edit_cell.html',
-                width: '5%'
+                width: '5%',
+                enableColumnMenu: false
             },
             {
                 displayName: 'ADMIN_DASHBOARD.CHECK_IN_PAGE.CUSTOMER',

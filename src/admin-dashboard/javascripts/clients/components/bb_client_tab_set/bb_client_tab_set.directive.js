@@ -6,15 +6,10 @@
 
     function bbClientTabSet() {
         let directive = {
-            templateUrl: 'clients/tabset.html',
-            link
+            templateUrl: 'clients/tabset.html'
         }
 
         return directive;
-
-        function link(scope, elem, attrs) {
-            console.log(scope)
-        }
     }
 
 })();

@@ -6,7 +6,6 @@
 
     function bbClientBookingsTableCtrl($rootScope, $scope, $log, $uibModal, BBModel, ModalForm, AdminMoveBookingPopup) {
 
-
         $scope.$watch('member', (member) => {
             return getBookings($scope, member);
         });

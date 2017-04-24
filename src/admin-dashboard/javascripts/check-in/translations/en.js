@@ -33,7 +33,8 @@ angular.module('BBAdminDashboard.check-in.translations')
                     'WAITING_FOR': 'Waiting for {{period}}',
                     'BEING_SEEN_FOR': 'Being seen for {{period}}',
                     'WAS_DUE': 'Was due {{period}}',
-                    'COMPLETED_BUTTON': 'Completed'
+                    'COMPLETED_BUTTON': 'Completed',
+                    'EDIT': 'Edit'
                 }
 
             }

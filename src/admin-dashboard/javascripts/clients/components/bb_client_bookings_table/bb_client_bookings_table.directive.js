@@ -18,7 +18,7 @@
         .module('BBAdminDashboard.clients.directives')
         .directive('bbClientBookingsTable', bbClientBookingsTable);
 
-    function bbClientBookingsTable($timeout, bbGridService, uiGridConstants, ClientBookingsTableOptions) {
+    function bbClientBookingsTable($timeout, bbGridService, uiGridConstants, ClientBookingsTableOptions, $rootScope) {
         let directive = {
             controller: 'bbClientBookingsTableCtrl',
             link,
@@ -30,7 +30,6 @@
                 endDate: '=?',
                 endTime: '=?',
                 period: '@',
-                options: '=',
                 tabset: '='
             }
         }
@@ -43,6 +42,7 @@
                 $timeout(() => {
                     // we need to only show a grid if its tab is active
                     // otherwise ui-grid will not know what size it should be and would display incorrectly
+                    // http://ui-grid.info/docs/#/tutorial/108_hidden_grids
                     scope.activeGrid = scope.tabset.active;
                 });
             });
