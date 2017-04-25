@@ -5,16 +5,17 @@
     class="bb-admin-calendar">
 
     <div class="page-header">
-      <h1 ng-show="availability_conflict">
+
+      <h1 ng-show="!availability_conflict">
         <span translate="ADMIN_BOOKING.CALENDAR.STEP_HEADING"></span>
       </h1>
-      <h1 ng-show="!availability_conflict">
+      <h1 ng-show="availability_conflict">
         <span translate="ADMIN_BOOKING.CALENDAR.TIME_NOT_AVAILABLE_STEP_HEADING"></span>
       </h1>
     </div>
 
     <div
-      class="page-summary"
+      class="page-summary availability_conflict"
       ng-if="availability_conflict"
       bb-admin-calendar-conflict>
 
@@ -38,39 +39,45 @@
 
             <div ng-if="overlapping_bookings">
               <p translate="ADMIN_BOOKING.CALENDAR.OVERLAPPING_BOOKINGS"></p>
-              <div
-                class="row"
-                ng-repeat="booking in overlapping_bookings">
-                <div class="col-sm-12">
-                  <i class="fa fa-clock-o" aria-hidden="true"></i>
-                  <strong>{{booking.full_describe}}</strong>
+              <div class="bookings-container">
+                <div
+                  class="row"
+                  ng-repeat="booking in overlapping_bookings">
+                  <div class="col-sm-12">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    <strong>{{booking.full_describe}}</strong>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div ng-if="nearby_bookings && !overlapping_bookings">
               <p translate="ADMIN_BOOKING.CALENDAR.NEARBY_BOOKINGS"></p>
-              <div
-                class="row"
-                ng-repeat="booking in nearby_bookings">
-                <div class="col-sm-12">
-                  <i class="fa fa-clock-o" aria-hidden="true"></i>
-                  <strong>{{booking.full_describe}}</strong>
+              <div class="bookings-container">
+                <div
+                  class="row"
+                  ng-repeat="booking in nearby_bookings">
+                  <div class="col-sm-12">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    <strong>{{booking.full_describe}}</strong>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div ng-if="external_bookings">
               <p translate="ADMIN_BOOKING.CALENDAR.EXTERNAL_BOOKINGS"></p>
-              <div
-                class="row"
-                ng-repeat="booking in external_bookings">
-                <div class="col-sm-12">
-                  <i class="fa fa-clock-o" aria-hidden="true"></i>
-                  <strong
-                    translate="ADMIN_BOOKING.CALENDAR.EXTERNAL_BOOKING_DESCRIPTION"
-                    translate-values="{title: booking.title, from: booking.start_time, to: booking.end_time}">
-                  </strong>
+              <div class="bookings-container">
+                <div
+                  class="row"
+                  ng-repeat="booking in external_bookings">
+                  <div class="col-sm-12">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    <strong
+                      translate="ADMIN_BOOKING.CALENDAR.EXTERNAL_BOOKING_DESCRIPTION"
+                      translate-values="{title: booking.title, from: booking.start_time, to: booking.end_time}">
+                    </strong>
+                  </div>
                 </div>
               </div>
             </div>
@@ -224,7 +231,6 @@
                   <i class="fa fa-calendar-o"></i>
                   <span translate="ADMIN_BOOKING.CALENDAR.FIND_ANOTHER_TIME_BTN"></span>
                 </button>
-
               </div>
 
             </div>
@@ -249,7 +255,7 @@
 
       <div class="panel-body">
 
-        <div class="row">
+        <div class="row calendar-controls">
 
           <div class="col-sm-8">
 
@@ -352,10 +358,10 @@
           <div class="bb-day-nav">
 
             <h2 class="hidden-xs bb-day-nav-heading">
-              {{selected_date | datetime: 'LL'}}
+              {{selected_date | datetime: 'LL':true }}
             </h2>
             <h2 class="hidden-sm hidden-md hidden-lg bb-day-nav-heading">
-              {{selected_date | datetime: 'll'}}
+              {{selected_date | datetime: 'll':true }}
             </h2>
 
           </div>
@@ -376,6 +382,7 @@
                       ng-disabled="slot.disabled"
                       ng-click="highlightSlot(slot, selected_day)"
                       ng-repeat="slot in slots | in_the_future | limitTo: 10">
+
                       <span
                         translate="ADMIN_BOOKING.CALENDAR.TIME_SLOT_WITH_COUNTDOWN"
                         translate-values="{datetime: slot.datetime, time: slot.time}">
@@ -392,7 +399,6 @@
 
                 </div>
               </div>
-
             </div>
 
           </div>
@@ -412,10 +418,10 @@
             </button>
 
             <h2 class="hidden-xs bb-day-nav-heading">
-              {{selected_date | datetime: 'Do MMMM YYYY'}}
+              {{selected_date | datetime: 'Do MMMM YYYY':true}}
             </h2>
             <h2 class="hidden-sm hidden-md hidden-lg bb-day-nav-heading">
-              {{selected_date | datetime: 'Do MMMM'}}
+              {{selected_date | datetime: 'Do MMMM':true}}
             </h2>
 
             <button

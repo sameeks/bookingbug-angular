@@ -39,10 +39,10 @@
             };
 
             queryAdminBookings(params);
-        }
+        };
 
         let queryAdminBookings = (params) => {
-            let defer = $q.defer()
+            let defer = $q.defer();
             BBModel.Admin.Booking.$query(params).then(res => {
                 $scope.booking_collection = res;
                 $scope.bookings = [];
@@ -64,11 +64,11 @@
             }
             , err => defer.reject(err));
             return defer.promise;
-        }
+        };
 
         let setCheckInGridData = (bookings) => {
             $scope.gridOptions.data = bookings;
-        }
+        };
 
 
         let handleBookingChanges = (booking, status) => {
@@ -86,7 +86,7 @@
                 }
                 return result;
             })();
-        }
+        };
 
         this.setStatus = (booking, status) => {
             let clone = _.clone(booking);
@@ -110,8 +110,8 @@
                     }
                 });
             });
-        }
-    };
+        };
+    }
 
 
 })();

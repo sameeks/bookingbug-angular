@@ -43,7 +43,7 @@ angular
             // replace current object with updated filter value if that filter is already in array
             _.filter(filters, (fil) => {
                 if(fil.id === filterObject.id) {
-                    filters = _.without(filters, fil)
+                    filters = _.without(filters, fil);
                 }
             });
             if(filterObject.value !== '') {

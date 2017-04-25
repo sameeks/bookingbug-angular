@@ -115,7 +115,7 @@ $grid-white: #fdfdfd;
 
 .bb-client-bookings-grid-container {
   .bb-grid {
-    // width: 1200px;
+    width: 1200px;
     @media (max-width: $screen-sm-max) {
       width: 710px;
       div[role="row"] {

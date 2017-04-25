@@ -5,16 +5,17 @@ angular.module('BB.Models').factory("AdminBookingModel", ($q, BBModel,
 
             constructor(data) {
                 super(...arguments);
+                this.type = 'Admin_Booking';
                 this.datetime = moment(this.datetime);
                 this.start = this.datetime;
-                this.end = this.end_datetime;
+                this.end = moment(this.end_datetime);
                 if (!this.end) {
                     this.end = this.datetime.clone().add(this.duration, 'minutes');
                 }
                 this.title = this.full_describe;
                 this.time = (this.start.hour() * 60) + this.start.minute();
-//      @startEditable  = false
-//      @durationEditable  = false
+                // this.startEditable  = false
+                // this.durationEditable  = false
                 // set to all day if it's a 24 hours span
                 this.allDay = false;
                 if (this.duration_span && (this.duration_span === 86400)) {
@@ -231,4 +232,3 @@ angular.module('BB.Models').factory("AdminBookingModel", ($q, BBModel,
             }
         }
 );
-

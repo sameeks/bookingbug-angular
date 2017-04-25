@@ -31,7 +31,7 @@
             },
             controller: 'bbClientsTableCtrl',
             templateUrl: 'clients/clients_table.html'
-        }
+        };
 
         return directive;
 
@@ -45,7 +45,7 @@
                     pageNumber: 1,
                     pageSize: ClientTableOptions.basicOptions.paginationPageSize,
                     sort: null
-                }
+                };
 
                 let gridApiOptions = {
                     onRegisterApi: (gridApi) => {
@@ -63,7 +63,7 @@
 
                         initWatchGridResize();
                     }
-                }
+                };
 
                 let gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientTableOptions.displayOptions)};
 
@@ -74,25 +74,25 @@
                     ClientTableOptions.basicOptions,
                     gridApiOptions,
                     gridDisplayOptions
-                )
-            }
+                );
+            };
 
             let initWatchGridResize = () => {
                 scope.gridApi.core.on.gridDimensionChanged(scope, () => {
                     scope.gridApi.core.handleWindowResize();
                 });
-            }
+            };
 
             let buildFilterString = (filters) => {
                 filterString = $filter('buildClientString')(filters);
                 scope.getClients(scope.paginationOptions.pageNumber, filterString);
-            }
+            };
 
 
             let handleFilterChange = (filterObject) => {
                 let builtFilters = $filter('buildClientFieldsArray')(filters, filterObject);
                 buildFilterString(builtFilters);
-            }
+            };
 
             scope.$on('bbGridFilter:changed', (event, filterObject) => {
                 if(filters.length === 0) {
@@ -103,8 +103,8 @@
                 }
             });
 
-            initGrid()
+            initGrid();
         }
-    };
+    }
 })();
 

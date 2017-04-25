@@ -7,7 +7,7 @@
     function bbClientTabSet() {
         let directive = {
             templateUrl: 'clients/tabset.html'
-        }
+        };
 
         return directive;
     }

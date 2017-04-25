@@ -1,17 +1,15 @@
 describe('BBAdminDashboard.check-in.controllers bbAddWalkinCtrl', function () {
-    let $controller = null;
     let $rootScope = null;
     let $scope = null;
     let AdminBookingPopup, bbAddWalkinCtrl;
 
-    let beforeEachFn = function() {
+    let beforeEachFn = function () {
         module('BBAdminDashboard.check-in.controllers');
         module('BBAdminBooking');
 
-        inject(function($injector, $controller, _AdminBookingPopup_) {
+        inject(($injector, $controller, _AdminBookingPopup_) => {
             AdminBookingPopup = _AdminBookingPopup_;
 
-            $controller = $injector.get('$controller');
             $rootScope = $injector.get('$rootScope');
             $scope = $rootScope.$new();
 
@@ -24,7 +22,7 @@ describe('BBAdminDashboard.check-in.controllers bbAddWalkinCtrl', function () {
                 company: {
                     id: 37000
                 }
-            }
+            };
         });
 
 
@@ -38,7 +36,7 @@ describe('BBAdminDashboard.check-in.controllers bbAddWalkinCtrl', function () {
     });
 
 
-    beforeEach(beforeEachFn)
+    beforeEach(beforeEachFn);
 
 });
 

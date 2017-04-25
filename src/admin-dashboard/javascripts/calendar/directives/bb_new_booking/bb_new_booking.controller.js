@@ -24,7 +24,7 @@
                 on_conflict: "cancel()",
                 template: 'main'
             });
-        }
+        };
     }
 
 })();

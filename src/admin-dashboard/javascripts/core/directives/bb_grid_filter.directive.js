@@ -23,25 +23,26 @@
                                 fieldName: col.field,
                                 value: col.filters[0].term,
                                 id: col.uid
-                            }
-                            $rootScope.$broadcast('bbGridFilter:changed', filteredField)
-                        }
+                            };
 
-                        scope.$on( '$destroy', function() {
+                            $rootScope.$broadcast('bbGridFilter:changed', filteredField);
+                        };
+
+                        scope.$on( '$destroy', () => {
                             delete scope.col.updateFilters;
                         });
                     },
 
                     post: (scope, elem, attrs, controllers) => {
                         scope.aria = i18nService.getSafeText('headerCell.aria');
-                        scope.removeFilter = function(colFilter, index){
+                        scope.removeFilter = (colFilter, index) => {
                             colFilter.term = null;
                             //Set the focus to the filter input after the action disables the button
                             gridUtil.focus.bySelector($elm, '.ui-grid-filter-input-' + index);
                         };
                     }
-                }
+                };
             }
-        }
+        };
     }
 })();

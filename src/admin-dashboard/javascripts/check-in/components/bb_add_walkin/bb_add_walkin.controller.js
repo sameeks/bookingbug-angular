@@ -24,7 +24,7 @@
                 on_conflict: "cancel()",
                 company_id: $scope.bb.company.id
             });
-        }
+        };
     }
 
 })();

@@ -19,13 +19,14 @@
             {{item.getName()}}
           </uib-accordion-heading>
 
+
           <ul class="bb-list bb-list-bordered-in">
             <li id="bb-basket-summary-datetime">
               <div class="row">
                 <div class="col-sm-4">
                   <span><b translate="PUBLIC_BOOKING.BASKET_SUMMARY.DATE_TIME_LBL">:</b></span>
                 </div>
-                <div class="col-sm-8">{{item.startDatetime() | datetime: 'llll'}}</div>
+                <div class="col-sm-8">{{item.startDatetime() | datetime: 'llll':true }}</div>
               </div>
             </li>
             <li id="bb-basket-summary-duration">

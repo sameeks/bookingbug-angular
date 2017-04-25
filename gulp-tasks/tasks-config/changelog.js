@@ -1,15 +1,12 @@
 (function () {
     'use strict';
 
-    var args = require('../helpers/args.js');
     var fs = require('fs');
     var git = require('gulp-git');
     var inquirer = require('inquirer');
     var gulpUtil = require('gulp-util');
 
     module.exports = function (gulp, configuration) {
-
-        var runSequence = require('run-sequence').use(gulp);
 
         function getReleaseLog() {
 
@@ -54,11 +51,11 @@
                 }else {
                     git.exec({
                         args: gitLogString
-                    }, function(err, stdout) {
+                    }, function (err, stdout) {
                         var commitHistory = stdout.split('\n');
                         var commitsString = "\n";
                         var allCommitsString = "\n";
-                        commitHistory.forEach(function(commit){
+                        commitHistory.forEach(function (commit){
                             // filter relevant commits
                             var regexp = /^\w{7}\s(merge branch\s(?!master)\'*(IMPL|CORE)|\[*(CORE|IMPL)|merge pull request)(?!.+into\s(CORE|IMPL))/i;
                             if (commit.match(regexp)) {

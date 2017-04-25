@@ -18,7 +18,7 @@ if (window.use_no_conflict) {
 
 angular.module('BB').constant('UriTemplate', window.UriTemplate);
 
-angular.module('BB').config(function ($locationProvider, $httpProvider, $provide, uiGmapGoogleMapApiProvider) {
+angular.module('BB').config(function ($locationProvider, $httpProvider, $provide, uiGmapGoogleMapApiProvider, $analyticsProvider) {
     'ngInject';
 
     uiGmapGoogleMapApiProvider.configure({

@@ -30,6 +30,6 @@ angular.module('BB.Directives').directive('bbCheckout', () => {
             replace: true,
             scope: true,
             controller: 'Checkout'
-        }
+        };
     }
 );

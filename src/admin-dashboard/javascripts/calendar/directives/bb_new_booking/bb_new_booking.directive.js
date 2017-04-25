@@ -28,7 +28,7 @@
             replace: true,
             scope: true,
             controller: 'bbNewBookingCtrl'
-        }
+        };
 
         return directive;
     }

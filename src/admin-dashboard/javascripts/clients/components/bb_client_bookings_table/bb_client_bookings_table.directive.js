@@ -32,7 +32,7 @@
                 period: '@',
                 tabset: '='
             }
-        }
+        };
 
         return directive;
 
@@ -49,6 +49,7 @@
 
             let killWatch = scope.$watch('bookings', () => {
                 scope.gridOptions.data = scope.bookings;
+                killWatch();
             });
 
 
@@ -65,25 +66,23 @@
                             scope.edit(row.entity.id);
                         });
 
-                        initWatchGridResize()
+                        initWatchGridResize();
                     }
-                }
+                };
 
                 scope.gridOptions = Object.assign(
                     {},
                     ClientBookingsTableOptions.basicOptions,
                     gridApiOptions,
                     gridDisplayOptions
-                )
-            }
+                );
+            };
 
             let initWatchGridResize = () => {
-                console.log("initWatchGridResize")
                 scope.gridApi.core.on.gridDimensionChanged(scope, () => {
-                    console.log("dimensinos changed")
                     scope.gridApi.core.handleWindowResize();
                 });
-            }
+            };
 
             initGrid();
         }

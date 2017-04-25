@@ -52,7 +52,7 @@
                 option.basicOptions.enableHorizontalScrollbar = value;
                 option.basicOptions.enableVerticalScrollbar = value;
             }
-        }
+        };
     }
 
 })();

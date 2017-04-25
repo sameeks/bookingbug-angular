@@ -5,7 +5,7 @@ angular.module('BB', [
     'ngFileUpload',
     'ngCookies',
     'ngAnimate',
-
+    'angularMoment',
     'angular-carousel',
     'angular-hal',
     'angular-data.DSCacheFactory',
@@ -25,8 +25,10 @@ angular.module('BB', [
     'BB.Services',
     'BB.Directives',
 
+    'BB.analytics',
     'BB.i18n',
-    'BB.uib'
+    'BB.uib',
+    'BB.uiSelect'
 ]);
 
 angular.module('BB.Services', [

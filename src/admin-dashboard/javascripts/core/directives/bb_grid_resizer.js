@@ -1,4 +1,4 @@
-(function() {
+(function () {
     /***
      * @ngdoc directive
      * @name BBAdminDashboard:bbGridResizer
@@ -23,14 +23,13 @@
                 scope: false,
 
                 link: function (scope, elem, attrs, uiGridCtrl) {
-                    const options = scope.$eval(attrs.bbGridResizer) || {};
                     let prevGridHeight, prevGridWidth;
 
                     scope.page = PageLayout;
 
                     scope.$watch('page.sideMenuOn', () => {
                         startGridResize();
-                    })
+                    });
 
                     function getDimensions() {
                       prevGridHeight = gridUtil.elementHeight(elem);
@@ -54,12 +53,8 @@
 
                         }, 250);
 
-                    }
-
-                    if(options.resizeOnLoad) {
-                       startGridResize();
-                    }
+                    };
                 }
             };
-        };
+        }
 })();

@@ -81,7 +81,7 @@
             if ($scope.member) {
                 return getBookings($scope, $scope.member);
             }
-        }
+        };
 
 
         let handleModal = (response, booking) => {
@@ -103,7 +103,7 @@
             } else {
                 return updateBooking(booking);
             }
-        }
+        };
 
 
         let updateBooking = b => {
@@ -113,7 +113,7 @@
                 $scope.booking_models[i] = b;
                 setRows();
             });
-        }
+        };
 
         let cancelBooking = (booking) => {
             let params =
@@ -125,7 +125,7 @@
                 $scope.booking_models.splice(i, 1);
                 setRows();
             });
-        }
+        };
 
 
         let getBookings = ($scope, member) => {
@@ -142,7 +142,7 @@
 
 
             BBModel.Admin.Booking.$query(params).then((bookings) => {
-                handleCustomerBookings(bookings)
+                handleCustomerBookings(bookings);
             }
             , (err) => {
                 $log.error(err.data);
@@ -162,9 +162,9 @@
             setRows();
 
             if($scope.bookings.length > 0) {
-               $rootScope.$broadcast('bookings:loaded', $scope.bookings)
+               $rootScope.$broadcast('bookings:loaded', $scope.bookings);
             }
-        }
+        };
 
 
         let setRows = () =>

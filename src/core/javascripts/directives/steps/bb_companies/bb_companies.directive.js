@@ -49,6 +49,6 @@ angular.module('BB.Directives').directive('bbCompanies', () => {
             replace: true,
             scope: true,
             controller: 'CompanyList'
-        }
+        };
     }
 );

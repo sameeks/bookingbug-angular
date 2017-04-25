@@ -34,7 +34,7 @@
             controller: 'bbCheckInController',
             controllerAs: '$bbCheckInController',
             link
-        }
+        };
 
         return directive;
 
@@ -48,7 +48,7 @@
                     pageNumber: 1,
                     pageSize: ClientCheckInOptions.paginationPageSize,
                     sort: null
-                }
+                };
 
                 let gridApiOptions = {
                     onRegisterApi: (gridApi) => {
@@ -60,9 +60,9 @@
                             scope.getAppointments(scope.paginationOptions.pageNumber + 1, null, null, null, null, true);
                         });
 
-                        initWatchGridResize()
+                        initWatchGridResize();
                     }
-                }
+                };
 
                 bbGridService.setScrollBars(ClientCheckInOptions);
 
@@ -72,14 +72,14 @@
                     ClientCheckInOptions.basicOptions,
                     gridApiOptions,
                     gridDisplayOptions
-                )
-            }
+                );
+            };
 
             let initWatchGridResize = () => {
                 scope.gridApi.core.on.gridDimensionChanged(scope, () => {
                     scope.gridApi.core.handleWindowResize();
                 });
-            }
+            };
 
             initGrid();
         }

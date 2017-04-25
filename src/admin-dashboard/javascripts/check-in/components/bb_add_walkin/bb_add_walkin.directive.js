@@ -29,7 +29,7 @@
             scope: true,
             controller: 'bbAddWalkinCtrl',
             controllerAs: '$bbAddWalkinCtrl'
-        }
+        };
 
         return directive;
     }

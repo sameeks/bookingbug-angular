@@ -169,15 +169,15 @@ angular.module('BB.Directives').directive('bbDatepickerPopup', function ($parse,
             };
             // wait until the data object for the popup element has been initialised by
             // angular-ui and then override the $parser with our parse function
-            let f = function() {
-                if(_.isFunction(data.$parsers[0])) {
+            let f = function () {
+                if (_.isFunction(data.$parsers[0])) {
                     origDateParser = data.$parsers[0];
                     data.$parsers[0] = replacementDateParser;
                     return;
                 } else {
                     setTimeout(f, 10);
                 }
-            }
+            };
             f();
         }
     };
