@@ -12,12 +12,12 @@ All notable changes to this project will be documented in this file using [CHANG
     * timeZone.default \<string> (takes effect if timeZone.useBrowser and timeZone.useCompany are set to false)
   * bbTimeZoneSelect component:
     * allows the user to override company timezone
-    * customizable time zone options:        
-       * grouped timezones (default) or full list of moment time zones
+    * customisable time zone options:        
+       * grouped time zones (default) or full list of moment time zones
        * overwrite browser time zone
        * limit time zones
        * limit daylight saving time, time zones
-       * limit standard time time, time zones
+       * limit standard time, time zones
        * exclude time zones 
        * custom display format
        * translatable                   
