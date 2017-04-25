@@ -4,7 +4,7 @@
     <span translate translate-values="{period: '{{ row.entity.sinceStart() | time_period }}'}">ADMIN_DASHBOARD.CHECK_IN_PAGE.WAS_DUE</span>
   </span>
 <span ng-if="!row.entity.hasStatus('being_seen') && row.entity.hasStatus('checked_in')">
-    <button ng-click="grid.appScope.$bbCheckInController.setStatus(row.entity, 'being_seen')" class="grid-action-btn btn btn-default btn-xs pull-right">
+    <button ng-click="grid.appScope.$bbCheckInCtrl.setStatus(row.entity, 'being_seen')" class="grid-action-btn btn btn-default btn-xs pull-right">
       <i class="fa fa-square"></i>
       <span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.SERVE"></span>
     </button>

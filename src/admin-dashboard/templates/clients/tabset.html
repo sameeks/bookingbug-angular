@@ -5,26 +5,24 @@
     <uib-tab id="client-upcoming-booking-tab">
       <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.UPCOMING_BOOKINGS"></uib-tab-heading>
 
-      <div 
-        bb-client-bookings-table 
+      <bb-client-bookings-table 
         tabset="$parent.tabset"
         period="future" 
         member="client">
-      </div>
+      </bb-client-bookings-table>
 
     </uib-tab>
 
     <uib-tab id="client-past-booking-tab">
       <uib-tab-heading translate="ADMIN_DASHBOARD.CLIENTS_PAGE.PAST_BOOKINGS"></uib-tab-heading>
 
-      <div 
-        bb-client-bookings-table 
+      <bb-client-bookings-table 
         tabset="$parent.tabset"
         member="client" 
         period="past"
         start-date="historicalStartDate"
         end-date="historicalEndDate">
-      </div>
+      </bb-client-bookings-table>
 
     </uib-tab>
 
