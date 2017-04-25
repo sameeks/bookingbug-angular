@@ -184,7 +184,7 @@
 
             const overwrite = bbi18nOptions.timeZone.replaceBrowser;
             if (overwrite.replace && overwrite.replaceWith) {
-                if (overwrite.replace === timeZone) {
+                if (moment.tz.guess() === timeZone && overwrite.replace === timeZone) {
                     selectedTimeZone = overwrite.replaceWith;
                     return selectedTimeZone;
                 }
