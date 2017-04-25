@@ -36,8 +36,7 @@
             .pipe(gulpif(/.*js$/, babel({
                 presets: ['es2015', 'es2016'],
                 plugins: [
-                    ["transform-es2015-classes", {"loose": true}],
-                    ["transform-object-rest-spread", {"useBuiltIns": false}]
+                    ["transform-es2015-classes", {"loose": true}]
                 ]
             }).on('error', gutil.log)))
             .pipe(gulp.dest(tmpPath + '/es5/' + module + '/javascripts/'));
