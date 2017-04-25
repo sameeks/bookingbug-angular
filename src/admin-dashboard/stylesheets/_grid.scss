@@ -3,6 +3,12 @@ $grid-white: #fdfdfd;
 
 .bb-grid {
   div {
+    -webkit-transition:all .3s ease-in-out;
+    -moz-transition:all .3s ease-in-out;
+    -o-transition:all .3s ease-in-out;
+    transition:all .3s ease-in-out;
+  }
+  div {
     &:focus {
       outline: -webkit-focus-ring-color auto 5px;
     }
@@ -38,9 +44,7 @@ $grid-white: #fdfdfd;
     text-align: center;
     margin: 5px;
   }
-  // .ui-grid-column-menu {
-  //   top: 40px;
-  // }
+
   .ui-grid-column-menu-button {
     top: 10px;
     right: 30px;
@@ -84,8 +88,7 @@ $grid-white: #fdfdfd;
   }
 
 
-  // general styles
-  // do we want to show the ui-grid sorting arrow on grid headers 
+  // general styles 
   .ui-grid-icon-up-dir, .ui-grid-icon-down-dir, .ui-grid-invisible {
     position: absolute;
     display: none;
@@ -112,7 +115,7 @@ $grid-white: #fdfdfd;
 
 .bb-client-bookings-grid-container {
   .bb-grid {
-    width: 1200px;
+    // width: 1200px;
     @media (max-width: $screen-sm-max) {
       width: 710px;
       div[role="row"] {

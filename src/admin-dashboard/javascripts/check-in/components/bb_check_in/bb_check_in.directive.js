@@ -59,10 +59,13 @@
                             scope.paginationOptions.pageSize = pageSize;
                             scope.getAppointments(scope.paginationOptions.pageNumber + 1, null, null, null, null, true);
                         });
+
+                        initWatchGridResize()
                     }
                 }
 
                 bbGridService.setScrollBars(ClientCheckInOptions);
+
 
                 scope.gridOptions = Object.assign(
                     {},
@@ -70,6 +73,12 @@
                     gridApiOptions,
                     gridDisplayOptions
                 )
+            }
+
+            let initWatchGridResize = () => {
+                scope.gridApi.core.on.gridDimensionChanged(scope, () => {
+                    scope.gridApi.core.handleWindowResize();
+                });
             }
 
             initGrid();

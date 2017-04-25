@@ -64,6 +64,8 @@
                         gridApi.selection.on.rowSelectionChanged(scope, (row) => {
                             scope.edit(row.entity.id);
                         });
+
+                        initWatchGridResize()
                     }
                 }
 
@@ -73,6 +75,14 @@
                     gridApiOptions,
                     gridDisplayOptions
                 )
+            }
+
+            let initWatchGridResize = () => {
+                console.log("initWatchGridResize")
+                scope.gridApi.core.on.gridDimensionChanged(scope, () => {
+                    console.log("dimensinos changed")
+                    scope.gridApi.core.handleWindowResize();
+                });
             }
 
             initGrid();

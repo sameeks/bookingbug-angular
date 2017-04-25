@@ -60,6 +60,8 @@
                         gridApi.selection.on.rowSelectionChanged(scope, (row) => {
                             $state.go('clients.edit', {id: row.entity.id});
                         });
+
+                        initWatchGridResize();
                     }
                 }
 
@@ -73,6 +75,12 @@
                     gridApiOptions,
                     gridDisplayOptions
                 )
+            }
+
+            let initWatchGridResize = () => {
+                scope.gridApi.core.on.gridDimensionChanged(scope, () => {
+                    scope.gridApi.core.handleWindowResize();
+                });
             }
 
             let buildFilterString = (filters) => {

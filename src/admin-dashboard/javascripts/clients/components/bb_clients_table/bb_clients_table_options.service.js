@@ -22,6 +22,7 @@
  */
 angular.module('BBAdminDashboard.clients.services').provider('ClientTableOptions', [function () {
     let options = {
+        disableScrollBars: true,
         basicOptions: {
             enableColumnMenus: true,
             enableFiltering: true,

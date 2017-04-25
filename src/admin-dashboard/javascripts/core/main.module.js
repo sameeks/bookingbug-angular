@@ -18,6 +18,7 @@ angular.module('BBAdminDashboard', [
     'ui.grid',
     'ui.grid.pagination',
     'ui.grid.selection',
+    'ui.grid.autoResize',
     'ui.map',
     'ui.router',
     'ct.ui.router.extras',

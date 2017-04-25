@@ -25,7 +25,6 @@ angular.module('BBAdminDashboard.clients.services').provider('ClientBookingsTabl
         paginationPageSize: 15,
         disableScrollBars: true,
         basicOptions: {
-            disableScrollBars: true,
             enableRowSelection: true,
             enableFullRowSelection: true,
             enableRowHeaderSelection: false,
