@@ -4,7 +4,7 @@
 
     angular.module('BB').service('bbWidgetPage', BBWidgetPage);
 
-    function BBWidgetPage(AlertService, BBModel, LoadingService, LoginService, $rootScope, $sce) {
+    function BBWidgetPage(AlertService, BBModel, LoadingService, LoginService, $rootScope, $sce, $analytics) {
 
         var $scope = null;
         var setScope = function ($s) {
@@ -69,6 +69,7 @@
                 LoadingService.notLoaded($scope);
                 $scope.bb_main = $sce.trustAsResourceUrl($scope.bb.pageURL(route));
             }
+            $analytics.pageTrack($scope.bb.current_page);
             return $rootScope.$broadcast("page:loaded");
         };
         var setPageLoaded = function () {

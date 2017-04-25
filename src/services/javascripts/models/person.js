@@ -19,6 +19,34 @@ angular.module('BB.Models').factory("AdminPersonModel", ($q,
 
         constructor(data) {
             super(data);
+            if (!this.queuing_disabled) {
+                this.setCurrentCustomer();
+                if (this.attendance_status === 2 || this.attendance_status === 4) {
+                    this.updateEstimatedReturn();
+                }
+            }
+        }
+
+        /***
+         * @ngdoc method
+         * @name setCurrentCustomer
+         * @methodOf BB.Models:AdminPerson
+         * @description
+         * Set current customer
+         *
+         * @returns {Promise} Returns a promise that rezolve the current customer
+         */
+        setCurrentCustomer() {
+            let defer = $q.defer();
+            if (this.$has('queuer')) {
+                this.$get('queuer').then(queuer => {
+                    this.serving = new BBModel.Admin.Queuer(queuer);
+                    defer.resolve(this.serving);
+                }, err => defer.reject(err));
+            } else {
+                defer.resolve();
+            }
+            return defer.promise;
         }
 
         /***
@@ -35,13 +63,15 @@ angular.module('BB.Models').factory("AdminPersonModel", ($q,
         setAttendance(status, duration) {
             let defer = $q.defer();
             this.$put('attendance', {}, {status, estimated_duration: duration}).then(p => {
-                    this.updateModel(p);
-                    return defer.resolve(this);
+                this.updateModel(p);
+                if (status === 2) {
+                    this.updateEstimatedReturn(duration);
                 }
-                , err => {
-                    return defer.reject(err);
-                }
-            );
+                if (!this.$has('queuer')) this.serving = null;
+                defer.resolve(this);
+            }, err => {
+                defer.reject(err);
+            });
             return defer.promise;
         }
 
@@ -59,14 +89,17 @@ angular.module('BB.Models').factory("AdminPersonModel", ($q,
             if (this.$has('finish_serving')) {
                 this.$flush('self');
                 this.$post('finish_serving').then(q => {
-                        this.$get('self').then(p => this.updateModel(p));
-                        this.serving = null;
-                        return defer.resolve(q);
-                    }
-                    , err => {
-                        return defer.reject(err);
-                    }
-                );
+                    this.$get('self').then(p => {
+                        this.updateModel(p);
+                        if (!this.$has('queuer')) this.serving = null;
+                        defer.resolve(q);
+                    }, err => {
+                        defer.reject(err);
+                    });
+                }
+                , err => {
+                    defer.reject(err);
+                });
             } else {
                 defer.reject('finish_serving link not available');
             }
@@ -129,17 +162,18 @@ angular.module('BB.Models').factory("AdminPersonModel", ($q,
             let defer = $q.defer();
             if (this.$has('start_serving')) {
                 this.$flush('self');
-                let params =
-                    {queuer_id: queuer ? queuer.id : null};
+                let params = {queuer_id: queuer ? queuer.id : null, person_id: this.id};
                 this.$post('start_serving', params).then(q => {
-                        this.$get('self').then(p => this.updateModel(p));
+                    this.$get('self').then(p => {
+                        this.updateModel(p);
                         this.serving = q;
-                        return defer.resolve(q);
-                    }
-                    , err => {
+                        defer.resolve(q);
+                    }, err => {
                         return defer.reject(err);
-                    }
-                );
+                    });
+                }, err => {
+                    return defer.reject(err);
+                });
             } else {
                 defer.reject('start_serving link not available');
             }
@@ -160,24 +194,28 @@ angular.module('BB.Models').factory("AdminPersonModel", ($q,
             if (this.$has('queuers')) {
                 this.$flush('queuers');
                 this.$get('queuers').then(collection => {
-                        return collection.$get('queuers').then(queuers => {
-                                let models = (Array.from(queuers).map((q) => new BBModel.Admin.Queuer(q)));
-                                this.queuers = models;
-                                return defer.resolve(models);
-                            }
-                            , err => {
-                                return defer.reject(err);
-                            }
-                        );
-                    }
-                    , err => {
-                        return defer.reject(err);
-                    }
-                );
+                    collection.$get('queuers').then(queuers => {
+                        let models = (Array.from(queuers).map((q) => new BBModel.Admin.Queuer(q)));
+                        this.queuers = models;
+                        defer.resolve(models);
+                    }, err => {
+                        defer.reject(err);
+                    });
+                }, err => {
+                    return defer.reject(err);
+                });
             } else {
                 defer.reject('queuers link not available');
             }
             return defer.promise;
+        }
+
+        updateEstimatedReturn(estimate) {
+            let start = this.attendance_started;
+            if (!estimate) estimate = this.attendance_estimate;
+            if (start && estimate) {
+                this.estimated_return = moment(start).add(estimate, 'minutes').format('LT');
+            }
         }
 
         /***

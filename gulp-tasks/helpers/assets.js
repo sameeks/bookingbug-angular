@@ -34,7 +34,7 @@
         let stream = gulp.src(files, {allowEmpty: true})
             .pipe(plumber())
             .pipe(gulpif(/.*js$/, babel({
-                presets: ['es2015'],
+                presets: ['es2015', 'es2016'],
                 plugins: [
                     ["transform-es2015-classes", {"loose": true}]
                 ]

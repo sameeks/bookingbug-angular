@@ -3,7 +3,29 @@ All notable changes to this project will be documented in this file using [CHANG
 
 ## [Unreleased] 
 
+### New features
+* Time zone support:   
+  * bbTimeZone service respecting bbi18Options time zone options and current company time zone
+  * new bbi18nOptions provider options:         
+    * timeZone.useCompany \<boolean>
+    * timeZone.useBrowser \<boolean> (has priority over timeZone.useBrowser)
+    * timeZone.default \<string> (takes effect if timeZone.useBrowser and timeZone.useCompany are set to false)
+  * bbTimeZoneSelect component:
+    * allows the user to override company timezone
+    * customizable time zone options:        
+       * grouped timezones (default) or full list of moment time zones
+       * overwrite browser time zone
+       * limit time zones
+       * limit daylight saving time, time zones
+       * limit standard time time, time zones
+       * exclude time zones 
+       * custom display format
+       * translatable                   
+
 ### Changed
+* GeneralOptions.use_local_time_zone changed to bbi18nOptions.timeZone.useBrowser
+* GeneralOptions.display_time_zone changed to bbTimeZone.getDisplay()
+  
 * BREAKING: bbAdminBookingClients directive is not exposing ValidatorService anymore to the view: $scope.validator. For any bespoke project which overrides template - `admin_booking_clients.html`, replace `validator.getEmailPattern()` with `emailPattern`. 
 
 ### Removed

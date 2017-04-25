@@ -1,0 +1,16 @@
+<div class="radio-group">
+  <div ng-repeat="itemx in $bbQuestionCtrl.question.options" class='radio'>
+    <label class='radio-label'>
+      <input 
+        ng-model='$bbQuestionCtrl.question.answer' 
+        name='q{{$bbQuestionCtrl.question.id}}' 
+        id='{{$bbQuestionCtrl.question.id}}' 
+        ng-change='$bbQuestionCtrl.recalc()'
+        ng-required='$bbQuestionCtrl.question.currentlyShown && (($bbQuestionCtrl.adminRequired && $bbQuestionCtrl.question.required) || ($bbQuestionCtrl.question.required && !bb.isAdmin))' 
+        type='radio' 
+        value="{{itemx.name}}"/>
+      {{itemx.name}}
+      <span class='input-icon'></span>
+    </label>
+  </div>
+</div>

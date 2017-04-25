@@ -99,6 +99,7 @@ angular.module('BBAdmin.Controllers').controller('CalendarCtrl', function ($scop
                 center: 'title',
                 right: 'today prev,next'
             },
+            ignoreTimezone: false,
             dayClick: $scope.dayClick,
             eventClick: $scope.eventClick,
             eventDrop: $scope.alertOnDrop,
@@ -112,4 +113,3 @@ angular.module('BBAdmin.Controllers').controller('CalendarCtrl', function ($scop
     // event sources array*
     return $scope.eventSources = [$scope.eventsF];
 });
-
