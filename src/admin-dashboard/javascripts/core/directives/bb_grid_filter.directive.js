@@ -1,4 +1,4 @@
-(() => {
+(function () {
 
     angular
         .module('BBAdminDashboard')
@@ -19,7 +19,7 @@
                         };
 
                         scope.initFilter = (col) => {
-                            let filteredField = {
+                            const filteredField = {
                                 fieldName: col.field,
                                 value: col.filters[0].term,
                                 id: col.uid

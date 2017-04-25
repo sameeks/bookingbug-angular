@@ -1,25 +1,25 @@
-/***
- * @ngdoc directive
- * @name BBAdminDashboard.clients.directives:bbClientBookingsTable
- * @scope true
- *
- * @description
- *
- * Intitialises and handles a table for a specific client's booking data
- *
- * <pre>
- * scope: true
- * </pre>
- */
+(function () {
 
-(() => {
+    /***
+     * @ngdoc directive
+     * @name BBAdminDashboard.clients.directives:bbClientBookingsTable
+     * @scope true
+     *
+     * @description
+     *
+     * Intitialises and handles a table for a specific client's booking data
+     *
+     * <pre>
+     * scope: true
+     * </pre>
+     */
 
     angular
         .module('BBAdminDashboard.clients.directives')
         .directive('bbClientBookingsTable', bbClientBookingsTable);
 
     function bbClientBookingsTable($timeout, bbGridService, uiGridConstants, ClientBookingsTableOptions, $rootScope) {
-        let directive = {
+        const directive = {
             controller: 'bbClientBookingsTableCtrl',
             link,
             templateUrl: 'clients/bookings_table.html',
@@ -47,19 +47,24 @@
                 });
             });
 
-            let killWatch = scope.$watch('bookings', () => {
+            scope.$on('bookings:loaded', (event, data) => {
                 scope.gridOptions.data = scope.bookings;
-                killWatch();
             });
 
+            const initGrid = () => {
+                setGridApiOptions();
+                setDisplayOptions();
 
-            let initGrid = () => {
+                scope.gridOptions = Object.assign(
+                    {},
+                    ClientBookingsTableOptions.basicOptions,
+                    this.gridApiOptions,
+                    this.gridDisplayOptions
+                );
+            };
 
-                let gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientBookingsTableOptions.displayOptions)};
-
-                bbGridService.setScrollBars(ClientBookingsTableOptions);
-
-                let gridApiOptions = {
+            const setGridApiOptions = () => {
+                this.gridApiOptions = {
                     onRegisterApi: (gridApi) => {
                         scope.gridApi = gridApi;
                         gridApi.selection.on.rowSelectionChanged(scope, (row) => {
@@ -69,16 +74,14 @@
                         initWatchGridResize();
                     }
                 };
-
-                scope.gridOptions = Object.assign(
-                    {},
-                    ClientBookingsTableOptions.basicOptions,
-                    gridApiOptions,
-                    gridDisplayOptions
-                );
             };
 
-            let initWatchGridResize = () => {
+            const setDisplayOptions = () => {
+                this.gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientBookingsTableOptions.displayOptions)};
+                bbGridService.setScrollBars(ClientBookingsTableOptions);
+            };
+
+            const initWatchGridResize = () => {
                 scope.gridApi.core.on.gridDimensionChanged(scope, () => {
                     scope.gridApi.core.handleWindowResize();
                 });

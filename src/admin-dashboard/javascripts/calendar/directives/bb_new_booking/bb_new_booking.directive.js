@@ -16,14 +16,14 @@
  * </pre>
  */
 
-(() => {
+(function () {
 
     angular
         .module('BBAdminDashboard.calendar.directives')
         .directive('bbNewBooking', bbNewBooking);
 
     function bbNewBooking() {
-        let directive = {
+        const directive = {
             restrict: 'AE',
             replace: true,
             scope: true,

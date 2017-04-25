@@ -1,27 +1,26 @@
-/***
- * @ngdoc directive
- * @name BBAdminDashboard.clients.directives:bbClientsTable
- * @scope true
- *
- * @description
- *
- * Intitialises and handles a table for client data
- *
- * <pre>
- * restrict: 'AE'
- * replace: true
- * scope: true
- * </pre>
- */
-
-(() => {
+(function () {
+    /***
+     * @ngdoc directive
+     * @name BBAdminDashboard.clients.directives:bbClientsTable
+     * @scope true
+     *
+     * @description
+     *
+     * Intitialises and handles a table for client data
+     *
+     * <pre>
+     * restrict: 'AE'
+     * replace: true
+     * scope: true
+     * </pre>
+     */
 
     angular
         .module('BBAdminDashboard.clients.directives')
         .directive('bbClientsTable', BBClientsTable);
 
     function BBClientsTable(bbGridService, uiGridConstants, $state, $filter, ClientTableOptions, $rootScope) {
-        let directive = {
+        const directive = {
             link,
             restrict: 'AE',
             replace: true,
@@ -39,15 +38,29 @@
             let filters = [];
             let filterString;
 
-            let initGrid = () => {
+            const initGrid = () => {
+                setPaginationOptions();
+                setGridApiOptions();
+                setDisplayOptions();
 
+                scope.gridOptions = Object.assign(
+                    {},
+                    ClientTableOptions.basicOptions,
+                    this.gridApiOptions,
+                    this.gridDisplayOptions
+                );
+            };
+
+            const setPaginationOptions = () => {
                 scope.paginationOptions = {
                     pageNumber: 1,
                     pageSize: ClientTableOptions.basicOptions.paginationPageSize,
                     sort: null
                 };
+            };
 
-                let gridApiOptions = {
+            const setGridApiOptions = () => {
+                this.gridApiOptions = {
                     onRegisterApi: (gridApi) => {
                         scope.gridApi = gridApi;
                         scope.gridData = scope.getClients();
@@ -64,43 +77,42 @@
                         initWatchGridResize();
                     }
                 };
-
-                let gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientTableOptions.displayOptions)};
-
-                bbGridService.setScrollBars(ClientTableOptions);
-
-                scope.gridOptions = Object.assign(
-                    {},
-                    ClientTableOptions.basicOptions,
-                    gridApiOptions,
-                    gridDisplayOptions
-                );
             };
 
-            let initWatchGridResize = () => {
+            const setDisplayOptions = () => {
+                this.gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientTableOptions.displayOptions)};
+                bbGridService.setScrollBars(ClientTableOptions);
+            };
+
+
+            const initWatchGridResize = () => {
                 scope.gridApi.core.on.gridDimensionChanged(scope, () => {
                     scope.gridApi.core.handleWindowResize();
                 });
             };
 
-            let buildFilterString = (filters) => {
+            const buildFilterString = (filters) => {
                 filterString = $filter('buildClientString')(filters);
                 scope.getClients(scope.paginationOptions.pageNumber, filterString);
             };
 
 
-            let handleFilterChange = (filterObject) => {
-                let builtFilters = $filter('buildClientFieldsArray')(filters, filterObject);
-                buildFilterString(builtFilters);
+            const buildFiltersArray = (filterObject) => {
+                let filtersArray = $filter('buildClientFieldsArray')(filters, filterObject);
+                buildFilterString(filtersArray);
             };
 
-            scope.$on('bbGridFilter:changed', (event, filterObject) => {
+            const handleFilterChange = (filterObject) => {
                 if(filters.length === 0) {
                     filters.push(filterObject);
                     buildFilterString(filters);
                 } else {
-                   handleFilterChange(filterObject);
+                   buildFiltersArray(filterObject);
                 }
+            };
+
+            scope.$on('bbGridFilter:changed', (event, filterObject) => {
+                handleFilterChange(filterObject);
             });
 
             initGrid();

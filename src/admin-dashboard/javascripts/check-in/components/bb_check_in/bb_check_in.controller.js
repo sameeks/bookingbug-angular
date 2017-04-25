@@ -1,4 +1,4 @@
-(() => {
+(function () {
 
     angular
         .module('BBAdminDashboard.check-in.controllers')
@@ -21,12 +21,12 @@
         };
 
 
-        let buildParams = (current_page, filter_by, filter_by_fields, order_by, order_by_reverse, skip_cache) => {
-            let date = moment().format('YYYY-MM-DD');
-            let company = $scope.bb.company;
-            let url = $scope.bb.api_url;
+        const buildParams = (current_page, filter_by, filter_by_fields, order_by, order_by_reverse, skip_cache) => {
+            const date = moment().format('YYYY-MM-DD');
+            const company = $scope.bb.company;
+            const url = $scope.bb.api_url;
 
-            let params = {
+            const params = {
                 company,
                 date,
                 url,
@@ -41,7 +41,7 @@
             queryAdminBookings(params);
         };
 
-        let queryAdminBookings = (params) => {
+        const queryAdminBookings = (params) => {
             let defer = $q.defer();
             BBModel.Admin.Booking.$query(params).then(res => {
                 $scope.booking_collection = res;
@@ -66,12 +66,12 @@
             return defer.promise;
         };
 
-        let setCheckInGridData = (bookings) => {
+        const setCheckInGridData = (bookings) => {
             $scope.gridOptions.data = bookings;
         };
 
 
-        let handleBookingChanges = (booking, status) => {
+        const handleBookingChanges = (booking, status) => {
             $scope.bookings = [];
             $scope.bmap = {};
             return (() => {

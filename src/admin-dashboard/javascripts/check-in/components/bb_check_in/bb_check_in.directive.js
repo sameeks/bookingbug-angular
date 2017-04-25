@@ -16,14 +16,14 @@
  * </pre>
  */
 
-(() => {
+(function () {
 
     angular
         .module('BBAdminDashboard.check-in.directives')
         .directive('bbCheckIn', bbCheckIn);
 
     function bbCheckIn(bbGridService, uiGridConstants, ClientCheckInOptions) {
-        let directive = {
+        const directive = {
             restrict: 'AE',
             replace: false,
             scope: {
@@ -40,17 +40,30 @@
 
         function link(scope, element, attrs) {
 
-            let initGrid = () => {
 
-                let gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientCheckInOptions.displayOptions)};
+            const initGrid = () => {
+                setPaginationOptions();
+                setGridApiOptions();
+                setDisplayOptions();
 
+                scope.gridOptions = Object.assign(
+                    {},
+                    ClientCheckInOptions.basicOptions,
+                    this.gridApiOptions,
+                    this.gridDisplayOptions
+                );
+            };
+
+            const setPaginationOptions = () => {
                 scope.paginationOptions = {
                     pageNumber: 1,
                     pageSize: ClientCheckInOptions.paginationPageSize,
                     sort: null
                 };
+            };
 
-                let gridApiOptions = {
+            const setGridApiOptions = () => {
+                this.gridApiOptions = {
                     onRegisterApi: (gridApi) => {
                         scope.gridApi = gridApi;
                         scope.gridData = scope.getAppointments();
@@ -63,19 +76,16 @@
                         initWatchGridResize();
                     }
                 };
-
-                bbGridService.setScrollBars(ClientCheckInOptions);
-
-
-                scope.gridOptions = Object.assign(
-                    {},
-                    ClientCheckInOptions.basicOptions,
-                    gridApiOptions,
-                    gridDisplayOptions
-                );
             };
 
-            let initWatchGridResize = () => {
+            const setDisplayOptions = () => {
+                this.gridDisplayOptions = {columnDefs: bbGridService.setColumns(ClientCheckInOptions.displayOptions)};
+                bbGridService.setScrollBars(ClientCheckInOptions);
+
+            };
+
+
+            const initWatchGridResize = () => {
                 scope.gridApi.core.on.gridDimensionChanged(scope, () => {
                     scope.gridApi.core.handleWindowResize();
                 });

@@ -1,4 +1,4 @@
-(() => {
+(function () {
 
     angular
         .module('BBAdminDashboard.clients.controllers')
@@ -19,9 +19,9 @@
          * @param {string} filter_by_fields The string of fields and values to search by. e.g "name,v,email,o"
         */
         $scope.getClients = (pageNumber, filter_by_fields) => {
-            let clientDef = $q.defer();
+            const clientDef = $q.defer();
 
-            let params = {
+            const params = {
                 company: $scope.company,
                 page: pageNumber,
                 filter_by_fields,
@@ -33,7 +33,7 @@
                     $scope.gridOptions.totalItems = clients.total_entries;
                     clientData = clients.items;
 
-                    let firstRow = ($scope.paginationOptions.pageNumber - 1) * $scope.paginationOptions.pageSize;
+                    const firstRow = ($scope.paginationOptions.pageNumber - 1) * $scope.paginationOptions.pageSize;
                     $scope.gridOptions.data = clientData.slice(firstRow, firstRow + $scope.paginationOptions.pageSize);
 
                     $scope.gridOptions.data = clientData;

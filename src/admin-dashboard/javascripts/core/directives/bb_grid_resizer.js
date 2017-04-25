@@ -42,8 +42,8 @@
                     let startGridResize = () => {
 
                         $timeout(() => {
-                            let newGridHeight = gridUtil.elementHeight(elem);
-                            let newGridWidth = gridUtil.elementWidth(elem);
+                            const newGridHeight = gridUtil.elementHeight(elem);
+                            const newGridWidth = gridUtil.elementWidth(elem);
 
                             if (newGridHeight !== prevGridHeight || newGridWidth !== prevGridWidth) {
                                 uiGridCtrl.grid.gridHeight = newGridHeight;

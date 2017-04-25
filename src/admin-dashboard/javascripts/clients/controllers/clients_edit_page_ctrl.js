@@ -1,12 +1,12 @@
-/*
- * @ngdoc controller
- * @name BBAdminDashboard.clients.controllers.controller:ClientsEditPageCtrl
- *
- * @description
- * Controller for the clients edit page
- */
+(function () {
 
-(() => {
+    /*
+     * @ngdoc controller
+     * @name BBAdminDashboard.clients.controllers.controller:ClientsEditPageCtrl
+     *
+     * @description
+     * Controller for the clients edit page
+     */
 
     angular
         .module('BBAdminDashboard.clients.controllers')

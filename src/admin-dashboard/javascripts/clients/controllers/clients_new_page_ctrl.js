@@ -1,15 +1,19 @@
-/*
- * @ngdoc controller
- * @name BBAdminDashboard.clients.controllers.controller:ClientsNewPageCtrl
- *
- * @description
- * Controller for the clients new page
- */
-angular.module('BBAdminDashboard.clients.controllers')
-    .controller('ClientsNewPageCtrl', ['$scope', '$state', function ($scope, $state) {
+(function () {
 
-        $scope.onSuccess = function () {
-          $state.go('clients.all');
-        };
+    /*
+     * @ngdoc controller
+     * @name BBAdminDashboard.clients.controllers.controller:ClientsNewPageCtrl
+     *
+     * @description
+     * Controller for the clients new page
+     */
+    angular.module('BBAdminDashboard.clients.controllers')
+        .controller('ClientsNewPageCtrl', ['$scope', '$state', function ($scope, $state) {
 
-    }]);
+            $scope.onSuccess = function () {
+              $state.go('clients.all');
+            };
+
+        }]);
+
+})();

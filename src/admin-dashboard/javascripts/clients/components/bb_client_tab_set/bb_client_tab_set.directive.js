@@ -1,11 +1,11 @@
-(() => {
+(function () {
 
     angular
         .module('BBAdminDashboard.clients.directives')
         .directive('bbClientTabSet', bbClientTabSet);
 
     function bbClientTabSet() {
-        let directive = {
+        const directive = {
             templateUrl: 'clients/tabset.html'
         };
 

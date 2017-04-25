@@ -1,4 +1,4 @@
-(() => {
+(function () {
 
     angular
         .module('BBAdminDashboard.clients.controllers')
@@ -49,9 +49,9 @@
          * @param {integer} id The id of the booking to be cancelled
          */
         $scope.cancel = (id) => {
-            let booking = _.find($scope.booking_models, b => b.id === id);
+            const booking = _.find($scope.booking_models, b => b.id === id);
 
-            let modalInstance = $uibModal.open({
+            const modalInstance = $uibModal.open({
                 templateUrl: 'member_bookings_table_cancel_booking.html',
                 controller($scope, $uibModalInstance, booking) {
                     $scope.booking = booking;
@@ -73,7 +73,7 @@
         };
 
 
-        let init = () => {
+        const init = () => {
             if (!$scope.startDate) {
                 $scope.startDate = moment();
             }
@@ -84,7 +84,7 @@
         };
 
 
-        let handleModal = (response, booking) => {
+        const handleModal = (response, booking) => {
             // if we are moving the booking
             if (typeof response === 'string' && response === "move") {
                 let item_defaults = {person: booking.person_id, resource: booking.resource_id};
@@ -106,7 +106,7 @@
         };
 
 
-        let updateBooking = b => {
+        const updateBooking = b => {
             b.$refetch().then((b) => {
                 b = new BBModel.Admin.Booking(b);
                 let i = _.indexOf($scope.booking_models, b => b.id === id);
@@ -115,21 +115,20 @@
             });
         };
 
-        let cancelBooking = (booking) => {
-            let params =
-                {notify: booking.notify};
+        const cancelBooking = (booking) => {
+            const params = {notify: booking.notify};
             return booking.$post('cancel', params).then(() => {
-                let i = _.findIndex($scope.booking_models, (b) => {
+                const bookingIndex = _.findIndex($scope.booking_models, (b) => {
                     return b.id === booking.id;
                 });
-                $scope.booking_models.splice(i, 1);
+                $scope.booking_models.splice(bookingIndex, 1);
                 setRows();
             });
         };
 
 
-        let getBookings = ($scope, member) => {
-            let params = {
+        const getBookings = ($scope, member) => {
+            const params = {
                 start_date: $scope.startDate.format('YYYY-MM-DD'),
                 start_time: $scope.startTime ? $scope.startTime.format('HH:mm') : undefined,
                 end_date: $scope.endDate ? $scope.endDate.format('YYYY-MM-DD') : undefined,
@@ -150,12 +149,12 @@
         };
 
 
-        let handleCustomerBookings = (bookings) => {
-            let now = moment().unix();
+        const handleCustomerBookings = (bookings) => {
+            const timeNow = moment().unix();
             if ($scope.period && ($scope.period === "past")) {
-                $scope.booking_models = _.filter(bookings.items, x => x.datetime.unix() < now);
+                $scope.booking_models = _.filter(bookings.items, x => x.datetime.unix() < timeNow);
             } else if ($scope.period && ($scope.period === "future")) {
-                $scope.booking_models = _.filter(bookings.items, x => x.datetime.unix() > now);
+                $scope.booking_models = _.filter(bookings.items, x => x.datetime.unix() > timeNow);
             } else {
                 $scope.booking_models = bookings.items;
             }
@@ -167,7 +166,7 @@
         };
 
 
-        let setRows = () =>
+        const setRows = () =>
             $scope.bookings = _.map($scope.booking_models, booking => {
                 return {
                     id: booking.id,
