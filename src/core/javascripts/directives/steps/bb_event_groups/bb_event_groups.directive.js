@@ -35,6 +35,6 @@ angular.module('BB.Directives').directive('bbEventGroups', () => {
                     scope.show_all = true;
                 }
             }
-        }
+        };
     }
 );

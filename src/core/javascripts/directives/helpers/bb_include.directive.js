@@ -1,4 +1,4 @@
-angular.module('BB.Directives').directive('bbInclude', ($compile, $rootScope) => {
+angular.module('BB.Directives').directive('bbInclude', ($compile, $rootScope, $analytics) => {
         return {
             link(scope, element, attr) {
                 let track_page = (attr.bbTrackPage != null) ? true : false;
@@ -8,7 +8,7 @@ angular.module('BB.Directives').directive('bbInclude', ($compile, $rootScope) =>
                             element.attr('bb-include', null);
                             $compile(element)(scope);
                             if (track_page) {
-                                return $rootScope.$broadcast("page:loaded", attr.bbInclude);
+                                $analytics.pageTrack(attr.bbInclude);
                             }
                         }
                     }

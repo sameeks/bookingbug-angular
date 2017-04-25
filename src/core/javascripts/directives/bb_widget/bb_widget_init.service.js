@@ -12,7 +12,7 @@
         var $scope = null;
         var setScope = function ($s) {
             $scope = $s;
-            reinitialise()
+            reinitialise();
         };
         var reinitialise = function () {
             isFirstCall = true;

@@ -25,6 +25,6 @@ angular.module('BB.Directives').directive('bbDurations', () => {
             replace: true,
             scope: true,
             controller: 'DurationList'
-        }
+        };
     }
 );
