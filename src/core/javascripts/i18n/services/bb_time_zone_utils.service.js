@@ -190,6 +190,11 @@
                 }
             }
 
+            if (_.find(timeZones, (tz) => (tz.value || tz) === timeZone)) {
+                selectedTimeZone = timeZone;
+                return selectedTimeZone;
+            }
+
             const formatTz = (timeZone, format) => moment.tz(timeZone).format(format);
             for (let tz of timeZones) {
                 if (formatTz(tz.value || tz, 'zz') === formatTz(timeZone, 'zz') &&
