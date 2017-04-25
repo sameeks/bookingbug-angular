@@ -1,4 +1,4 @@
-let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService, ErrorService, $filter, LoadingService) {
+let BBServicesCtrl = function ($scope, $rootScope, $q, $attrs, $uibModal, $document, BBModel, FormDataStoreService, ValidatorService, ErrorService, $filter, LoadingService) {
     'ngInject';
 
     this.$scope = $scope;
@@ -47,7 +47,7 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
     }, err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
 
 
-    $scope.init = function(comp) {
+    $scope.init = function (comp) {
         let item;
         if (!$scope.booking_item) {
             $scope.booking_item = $scope.bb.current_item;
@@ -185,7 +185,7 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
     };
 
 
-    var setServicesDisplayName = function(items) {
+    var setServicesDisplayName = function (items) {
         for (let item of Array.from(items)) {
             if (item.listed_durations && (item.listed_durations.length === 1)) {
                 item.display_name = item.name + ' - ' + $filter('time_period')(item.duration);
@@ -200,11 +200,11 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
 
     // set the service item so the correct item is displayed in the dropdown menu.
     // without doing this the menu will default to 'please select'
-    var setServiceItem = function(items) {
+    var setServiceItem = function (items) {
         $scope.items = items;
         $scope.filtered_items = $scope.items;
         if ($scope.service) {
-            return _.each(items, function(item) {
+            return _.each(items, function (item) {
                 if (item.id === $scope.service.id) {
                     return $scope.service = item;
                 }
@@ -267,7 +267,7 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
                 // Only set bb.selected_service if the service is a parent service
                 if (!$scope.service.child_level_service) $scope.bb.selected_service = $scope.service;
                 // -----------------------------------------------------------
-                return
+                return;
             }
         }
     });
@@ -297,7 +297,7 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
      * @description
      * Display error message in modal
      */
-    $scope.errorModal = function() {
+    $scope.errorModal = function () {
         return $uibModal.open({
             templateUrl: $scope.getPartial('_error_modal'),
             controller($scope, $uibModalInstance) {
@@ -314,12 +314,12 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
      * @description
      * Filter service
      */
-    $scope.filterFunction = function(service) {
+    $scope.filterFunction = function (service) {
         if (!service) {
             return false;
         }
         $scope.service_array = [];
-        $scope.custom_array = function(match) {
+        $scope.custom_array = function (match) {
             if (!match) {
                 return false;
             }
@@ -335,7 +335,7 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
                 return false;
             }
         };
-        $scope.service_name_include = function(match) {
+        $scope.service_name_include = function (match) {
             if (!match) {
                 return false;
             }
@@ -362,7 +362,7 @@ let BBServicesCtrl = function($scope, $rootScope, $q, $attrs, $uibModal, $docume
      * @description
      * Clear the filters
      */
-    $scope.resetFilters = function() {
+    $scope.resetFilters = function () {
         if ($scope.options.clear_results) {
             $scope.show_custom_array = false;
         }

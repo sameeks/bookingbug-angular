@@ -12,7 +12,7 @@
         var $scope = null;
         var setScope = function ($s) {
             $scope = $s;
-            reinitialise()
+            reinitialise();
         };
         var reinitialise = function () {
             isFirstCall = true;
@@ -415,6 +415,7 @@
                                 return bbWidgetPage.decideNextPage(page);
                             }
                         }
+                        $scope.isLoaded = true;
                     });
                 }, function (err) {
                     connectionStarted.reject("Failed to start widget");

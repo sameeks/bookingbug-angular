@@ -19,7 +19,7 @@
         <div class="tr-ng-title"><span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.ARRIVED"></span></div>
       </th>
       <th>
-        <div class="tr-ng-title"><span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.BEEING_SEEN"></span></div>
+        <div class="tr-ng-title"><span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.BEING_SEEN"></span></div>
       </th>
       <th>
         <div class="tr-ng-title"><span translate="ADMIN_DASHBOARD.CHECK_IN_PAGE.COMPLETED"></span></div>
@@ -38,7 +38,7 @@
         <span>{{bmap[gridItem].person_name}}</span>
       </td>
       <td field-name="datetime">
-        <span>{{bmap[gridItem].datetime.format("LT")}}</span>
+        <span>{{bmap[gridItem].datetime | datetime:'LT':true}}</span>
       </td>
       <td>
             <span ng-if="bmap[gridItem].hasStatus('no_show')">

@@ -22,14 +22,17 @@ angular.module('BBAdminDashboard').factory('SideNavigationPartials', [
 
             },
 
+            removePartialTemplate(identifier) {
+                let partial = _.findWhere(templatesArray, {module: identifier});
+                let index = _.indexOf(templatesArray, partial);
+                templatesArray.splice(index, 1);
+            },
+
             getPartialTemplates(){
                 return templatesArray;
             },
 
-            getOrderedPartialTemplates(flat){
-                if (flat == null) {
-                    flat = false;
-                }
+            getOrderedPartialTemplates(flat = false){
                 let orderedList = [];
                 let flatOrderedList = [];
 
@@ -52,24 +55,6 @@ angular.module('BBAdminDashboard').factory('SideNavigationPartials', [
                         return orderedList.push(newGroup);
                     }
                 });
-
-                let orphanItems = [];
-
-                angular.forEach(templatesArray, function (partial, index) {
-                    let existing = _.find(flatOrderedList, item => item.module === partial.module);
-
-                    if (!existing) {
-                        flatOrderedList.push(partial);
-                        return orphanItems.push(partial);
-                    }
-                });
-
-                if (orphanItems.length) {
-                    orderedList.push({
-                        group_name: '&nbsp;',
-                        items: orphanItems
-                    });
-                }
 
                 if (flat) {
                     return flatOrderedList;

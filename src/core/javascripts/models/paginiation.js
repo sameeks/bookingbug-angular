@@ -69,7 +69,7 @@
  *  </example>
  *
  */
-angular.module('BB.Models').factory("PaginationModel", () =>
+angular.module('BB.Models').factory("PaginationModel", ($translate) =>
 
     class Pagination {
 

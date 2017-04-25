@@ -36,6 +36,16 @@
   .month-title {
     text-transform: uppercase;
     font-weight: bold;
+
+    @media (max-width: $screen-sm-max) {
+
+      width: 50px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+    }
+
   }
 
   .day-nav {

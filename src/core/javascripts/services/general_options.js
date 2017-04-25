@@ -27,13 +27,10 @@ angular.module('BB.Services').provider('GeneralOptions', function () {
     let options = {
         twelve_hour_format: false,
         calendar_minute_step: 5,
-        calendar_min_time: "09:00",
-        calendar_max_time: "18:00",
         calendar_slot_duration: 5,
-        use_local_time_zone: false,
-        display_time_zone: null,
         update_document_title: false,
-        scroll_offset: 0
+        scroll_offset: 0,
+        map_marker_icon: null
     };
 
 
@@ -46,4 +43,3 @@ angular.module('BB.Services').provider('GeneralOptions', function () {
     this.$get = () => options;
 
 });
-

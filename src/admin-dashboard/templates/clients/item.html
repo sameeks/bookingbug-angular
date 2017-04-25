@@ -71,7 +71,9 @@
 
           </uib-tab-heading>
 
-          <div member-form member="client" on-success-save="memberSaveCallback"></div>
+          <div bb-schema-form-edit model="client" options="{pristine: {errors: true, success:
+            false}, itemDefaults: {feedback: false}, validateOnRender: true}"
+            on-success-save="memberSaveCallback"></div>
 
         </uib-tab>
 

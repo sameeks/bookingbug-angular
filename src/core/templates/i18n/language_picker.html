@@ -11,4 +11,5 @@
   <ui-select-choices repeat="lang in vm.availableLanguages | props: { label: $select.search}">
     <div ng-bind-html="lang.label | translate | highlight: $select.search"></div>
   </ui-select-choices>
+  <ui-select-no-choice></ui-select-no-choice>
 </ui-select>

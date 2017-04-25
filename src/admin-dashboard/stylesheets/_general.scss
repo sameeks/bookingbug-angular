@@ -100,15 +100,29 @@
 
 .navbar-custom-menu {
   .user-dropdown.dropdown-menu {
-    padding: 10px;
-    width: 180px;
+    padding: 10px 0;
+    width: 280px;
 
     li {
       &:last-of-type {
         margin-bottom: 0px !important;
       }
 
+      a {
+        padding: 7px 20px;
+      }
+
+      i.fa {
+        height: auto;
+        margin-right: 5px;
+      }
+
+      padding: 0 10px;
       margin-bottom: 10px;
+    }
+
+    li.divider {
+      padding: 0;
     }
   }
 

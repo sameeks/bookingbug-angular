@@ -5,10 +5,12 @@
 
   <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-      <li ng-repeat="tab in tabs" ui-sref-active="active" class="active"><a ui-sref="{{tab.path}}" data-toggle="tab"
-                                                                            aria-expanded="true"><i ng-if="tab.icon"
-                                                                                                    ng-class="[tab.icon]"></i>
-        <span translate="{{tab.name}}"></span></a></li>
+      <li ng-repeat="tab in tabs" ui-sref-active="active" class="active">
+        <a ui-sref="{{tab.path}}" data-toggle="tab" aria-expanded="true">
+          <i ng-if="tab.icon" ng-class="[tab.icon]"></i>
+          <span translate="{{tab.name}}"></span>
+        </a>
+      </li>
       <li ng-show="contentsLoading" class="pull-right"><a><i class="fa fa-refresh fa-spin"></i></a></li>
     </ul>
     <div class="tab-content">
