@@ -7,10 +7,10 @@ angular.module('ngLocalData', ['angular-hal']).factory('$localCache', ['halClien
     };
 
     storage = function () {
-        return $sessionStorage
+        return $sessionStorage;
     };
     localSave = function (key, item) {
-        storage().setItem(key, item.$toStore())
+        storage().setItem(key, item.$toStore());
     };
     localLoad = function (key) {
         res = jsonData(storage().getItem(key));
@@ -18,12 +18,12 @@ angular.module('ngLocalData', ['angular-hal']).factory('$localCache', ['halClien
             r = halClient.createResource(res);
             def = $q.defer();
             def.resolve(r);
-            return def.promise
+            return def.promise;
         }
-        return null
+        return null;
     };
     localDelete = function (key) {
-        storage().removeItem(key)
+        storage().removeItem(key);
     };
 
     return {
@@ -31,29 +31,29 @@ angular.module('ngLocalData', ['angular-hal']).factory('$localCache', ['halClien
         set: function (key, val) {
             data[key] = val;
             val.then(function (item) {
-                localSave(key, item)
+                localSave(key, item);
             });
-            return val
+            return val;
         },
         get: function (key) {
             localLoad(key);
             if (!data[key])
                 data[key] = localLoad(key);
-            return data[key]
+            return data[key];
         },
         del: function (key) {
             localDelete(key);
-            delete data[key]
+            delete data[key];
         },
         has: function (key) {
             if (!data[key]) {
                 res = localLoad(key);
                 if (res)
-                    data[key] = res
+                    data[key] = res;
             }
-            return (key in data)
+            return (key in data);
         }
-    }
+    };
 
 }]).factory('$localData', ['$http', '$rootScope', '$sessionStorage', function ($http, $rootScope, $sessionStorage) {
     function LocalDataFactory(name) {
@@ -66,31 +66,31 @@ angular.module('ngLocalData', ['angular-hal']).factory('$localCache', ['halClien
         };
 
         LocalData.prototype.storage = function () {
-            return $sessionStorage
+            return $sessionStorage;
         };
 
         LocalData.prototype.localSave = function (item) {
-            this.storage().setItem(this.store_name + item.id, JSON.stringify(item))
+            this.storage().setItem(this.store_name + item.id, JSON.stringify(item));
         };
 
 
         LocalData.prototype.localSaveIndex = function (ids) {
-            this.storage().setItem(this.store_name, ids.join(","))
+            this.storage().setItem(this.store_name, ids.join(","));
             this.ids = ids;
         };
 
         LocalData.prototype.localLoadIndex = function () {
             store = this.storage().getItem(this.store_name);
             records = (store && store.split(",")) || [];
-            return records
+            return records;
         };
 
         LocalData.prototype.localLoad = function (id) {
-            return this.jsonData(this.storage().getItem(this.store_name + id))
+            return this.jsonData(this.storage().getItem(this.store_name + id));
         };
 
         LocalData.prototype.count = function () {
-            return this.ids.length
+            return this.ids.length;
         };
 
         LocalData.prototype.setStore = function (name) {
@@ -118,13 +118,13 @@ angular.module('ngLocalData', ['angular-hal']).factory('$localCache', ['halClien
                     this.localSave(data[x]);
                 }
             }
-            this.localSaveIndex(ids)
+            this.localSaveIndex(ids);
         };
 
-        return new LocalData(name)
+        return new LocalData(name);
 
     }
 
 
-    return LocalDataFactory
+    return LocalDataFactory;
 }]);

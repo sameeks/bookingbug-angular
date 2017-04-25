@@ -3,7 +3,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
 
     $scope.adminQueueLoading = {
         isLoadingServerInProgress: adminQueueLoading.isLoadingServerInProgress
-    }
+    };
 
     $scope.loadingServer = false;
 
@@ -77,6 +77,9 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                     booking.$update(booking).then(res => {
                         $scope.loadingServer = false;
                         adminQueueLoading.setLoadingServerInProgress(false);
+                    }, err => {
+                        $scope.loadingServer = false;
+                        adminQueueLoading.setLoadingServerInProgress(false);
                     });
                 });
             });
@@ -141,6 +144,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                 person.finishServing().finally(function () {
                     person.attendance_status = 1;
                     $scope.loadingServer = false;
+                    adminQueueLoading.setLoadingServerInProgress(false);
                 });
             });
         }, function (err) {
@@ -148,8 +152,12 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
                 person.finishServing().then(function () {
                     person.attendance_status = 1;
                     $scope.loadingServer = false;
+                    adminQueueLoading.setLoadingServerInProgress(false);
                 });
-            } else $scope.loadingServer = false;
+            } else {
+                $scope.loadingServer = false;
+                adminQueueLoading.setLoadingServerInProgress(false);
+            }
         });
     };
 

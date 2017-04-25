@@ -1,5 +1,3 @@
-'use strict'
-
 // This is a customisation of the accordion-group directive in ui bootstrap
 // v0.12.0 to fix an issue in ie8. Replace has been changed from true to false
 
@@ -83,4 +81,3 @@ angular.module('BB.Directives')
             }
         };
     });
-

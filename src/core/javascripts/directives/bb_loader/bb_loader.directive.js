@@ -95,7 +95,7 @@ angular.module('BB.Directives').directive('bbLoader', ($rootScope, $compile, Pat
                     $compile(html)(scope);
                 });
             }
-        }
+        };
     }
 );
 
@@ -123,12 +123,11 @@ angular.module('BB.Directives').directive('bbLoadingSpinner', ($compile) => {
             },
 
             template: `\
-<div ng-show="isLoading" class="loader-wrapper">
-    <div class="loader"></div>
-  </div>
-  <div ng-transclude></div>\
-`
+            <div ng-show="isLoading" class="loader-wrapper">
+                <div class="loader"></div>
+            </div>
+            <div ng-transclude></div>\
+            `
         };
     }
 );
-

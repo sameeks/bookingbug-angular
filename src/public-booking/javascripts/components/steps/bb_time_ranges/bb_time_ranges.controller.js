@@ -1,7 +1,12 @@
-angular.module('BB.Controllers').controller('TimeRangeList',
-    function ($scope, $element,
-              $attrs, $rootScope, $q, AlertService, LoadingService, BBModel,
-              FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService, $window, bbAnalyticsPiwik) {
+(function () {
+    angular
+        .module('BB.Controllers')
+        .controller('TimeRangeList', TimeRangeListController);
+
+    function TimeRangeListController($scope, $element, $attrs, $rootScope, AlertService, LoadingService, BBModel,
+                                     FormDataStoreService, DateTimeUtilitiesService, SlotDates, viewportSize, ErrorService,
+                                     bbAnalyticsPiwik) {
+        'ngInject';
 
         // store the form data for the following scope properties
         let currentPostcode = $scope.bb.postcode;
@@ -13,7 +18,9 @@ angular.module('BB.Controllers').controller('TimeRangeList',
             'start_at_week_start'
         ]);
 
-        // check to see if the user has changed the postcode and remove data if they have
+        $scope.$on('BBTimeZoneOptions:timeZoneChanged', () => {
+            $scope.initialise();
+        });// check to see if the user has changed the postcode and remove data if they have
         if (currentPostcode !== $scope.postcode) {
             $scope.selected_slot = null;
             $scope.selected_date = null;
@@ -74,7 +81,7 @@ angular.module('BB.Controllers').controller('TimeRangeList',
 
                 $scope.$on('viewportSize:changed', function () {
                     $scope.time_range_length = null;
-                    return $scope.initialise();
+                    $scope.initialise();
                 });
             }
 
@@ -240,7 +247,7 @@ angular.module('BB.Controllers').controller('TimeRangeList',
         $scope.$on("currentItemUpdate", event => $scope.loadData());
 
 
-        function setPiwik(amount){
+        function setPiwik(amount) {
             let category = "Calendar";
             let title = "Load Next Week";
             if (amount < 0) {
@@ -248,6 +255,7 @@ angular.module('BB.Controllers').controller('TimeRangeList',
             }
             bbAnalyticsPiwik.push(['trackEvent', [category], title]);
         }
+
         /***
          * @ngdoc method
          * @name add
@@ -259,9 +267,7 @@ angular.module('BB.Controllers').controller('TimeRangeList',
          * @param {object} amount The amount of the days
          */
         $scope.add = function (type, amount) {
-
             if (bbAnalyticsPiwik.isEnabled()) setPiwik(amount);
-
             if (amount > 0) {
                 $element.removeClass('subtract');
                 $element.addClass('add');
@@ -275,7 +281,7 @@ angular.module('BB.Controllers').controller('TimeRangeList',
                     setTimeRange($scope.start_date);
                     break;
                 case 'months':
-                    // TODO make this advance to the next month
+// TODO make this advance to the next month
                     $scope.start_date.add(amount, type).startOf('month');
                     setTimeRange($scope.start_date);
                     break;
@@ -338,8 +344,8 @@ angular.module('BB.Controllers').controller('TimeRangeList',
             $scope.is_add_valid = true;
 
             if (!$scope.isAdmin() && !$scope.options.ignore_max_advance_datetime && $scope.max_date) {
-                let max_date = $scope.max_date.clone()
-                let selected_day = $scope.selected_day.clone()
+                let max_date = $scope.max_date.clone();
+                let selected_day = $scope.selected_day.clone();
                 let difference = max_date.startOf('day').diff(selected_day.startOf('day'), 'days', true);
                 if (difference - $scope.time_range_length < 0) {
                     return $scope.is_add_valid = false;
@@ -435,12 +441,16 @@ angular.module('BB.Controllers').controller('TimeRangeList',
 
                 if ($scope.bb.current_item.reserve_ready) {
                     loader.notLoaded();
-                    return $scope.addItemToBasket().then(function () {
-                        loader.setLoaded();
-                        return $scope.decideNextPage(route);
-                    }, err => loader.setLoadedAndShowError(err, 'Sorry, something went wrong'));
+                    $scope.addItemToBasket().then(() => {
+                            loader.setLoaded();
+                            $scope.decideNextPage(route);
+                        }
+                        ,
+                        (err) => {
+                            loader.setLoadedAndShowError(err, 'Sorry, something went wrong');
+                        });
                 } else {
-                    return $scope.decideNextPage(route);
+                    $scope.decideNextPage(route);
                 }
             }
         };
@@ -638,10 +648,12 @@ angular.module('BB.Controllers').controller('TimeRangeList',
 
         $scope.showFirstAvailableDay = () =>
             SlotDates.getFirstDayWithSlots($scope.data_source, $scope.selected_day).then(function (day) {
-                $scope.no_slots_in_week = false;
-                setTimeRange(day);
-                return $scope.loadData();
-            }, err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'));
+                    $scope.no_slots_in_week = false;
+                    setTimeRange(day);
+                    return $scope.loadData();
+                }
+                , err => loader.setLoadedAndShowError($scope, err, 'Sorry, something went wrong'))
+        ;
         /***
          * @ngdoc method
          * @name padTimes
@@ -669,7 +681,7 @@ angular.module('BB.Controllers').controller('TimeRangeList',
                 AlertService.raise('APPT_AT_SAME_TIME');
                 return false;
             } else if ($scope.bb.moving_booking) {
-                // set a 'default' person and resource if we need them, but haven't picked any in moving
+// set a 'default' person and resource if we need them, but haven't picked any in moving
                 if ($scope.bb.company.$has('resources') && !$scope.bb.current_item.resource) {
                     $scope.bb.current_item.resource = true;
                 }
@@ -735,4 +747,5 @@ angular.module('BB.Controllers').controller('TimeRangeList',
                 return $scope.highlightSlot(day, slot);
             }
         };
-    });
+    }
+})();

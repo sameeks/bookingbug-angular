@@ -9,7 +9,7 @@ angular.module('BB').config(function (FormTransformProvider) {
 
     FormTransformProvider.setTransform('edit', 'Admin_Booking', function (form, schema, model) {
         let disable_list;
-        if (model && (model.status === 3)) { // blocked - don't disable the datetime
+        if (model && (model.status === 3 || model.status === 4)) { // blocked - don't disable the datetime
             disable_list = ['service', 'person_id', 'resource_id'];
         } else {
             disable_list = ['datetime', 'service', 'person_id', 'resource_id'];

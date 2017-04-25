@@ -8,25 +8,25 @@ angular
 
             set: function (key, val) {
                 data[key] = val;
-                return val
+                return val;
             },
             get: function (key) {
-                return data[key]
+                return data[key];
             },
             del: function (key) {
-                delete data[key]
+                delete data[key];
             },
             has: function (key) {
-                return (key in data)
+                return (key in data);
             },
             delMatching: function (str) {
                 for (var k in data) {
                     if (k.indexOf(str) != -1)
-                        delete data[k]
+                        delete data[k];
                 }
             }
 
-        }
+        };
     };
 
 })
@@ -40,18 +40,18 @@ angular
                     // also store this in the session store
                     store.setItem(key, val);
                     data[key] = val;
-                    return val
+                    return val;
                 },
                 get: function (key) {
-                    return data[key]
+                    return data[key];
                 },
                 del: function (key) {
-                    delete data[key]
+                    delete data[key];
                 },
                 has: function (key) {
-                    return (key in data)
+                    return (key in data);
                 }
-            }
+            };
         };
 
     })
@@ -61,25 +61,25 @@ angular
             if ($sessionStorage.getItem('auth_token'))
                 shared_header.set('auth_token', $sessionStorage.getItem('auth_token'), $sessionStorage);
             else if ($cookies.get('Auth-Token') && !shared_header.has('auth_token')) {
-                shared_header.set('auth_token', $cookies.get('Auth-Token'), $sessionStorage)
+                shared_header.set('auth_token', $cookies.get('Auth-Token'), $sessionStorage);
             }
 
             return {
                 setCache: function (cache) {
-                    data_cache = cache
+                    data_cache = cache;
                 },
                 clearCache: function (str) {
-                    data_cache.delMatching(str)
+                    data_cache.delMatching(str);
                 },
                 createResource: function (store) {
                     if (typeof store === 'string') {
-                        store = JSON.parse(store)
+                        store = JSON.parse(store);
                     }
                     var resource = store.data;
                     resource._links = store.links;
                     var key = store.links.self.href;
                     var options = store.options;
-                    return new BaseResource(key, options, resource)
+                    return new BaseResource(key, options, resource);
                 },
                 $get: function (href, options) {
                     if (data_cache.has(href) && (!options || !options.no_cache)) return data_cache.get(href);
@@ -99,7 +99,7 @@ angular
                     return callService('DELETE', href, options, data);
                 }//del
                 , $parse: function (data) {
-                    return parseHal(data)
+                    return parseHal(data);
                 }//parse
             };
 
@@ -108,7 +108,7 @@ angular
                 if (!options) options = {};
                 if (!extra) extra = {};
                 var links = {};
-                var embedded = data_cache
+                var embedded = data_cache;
                 if (data.hasOwnProperty('auth_token')) {
                     options['auth_token'] = data['auth_token'];
                 }
@@ -148,19 +148,19 @@ angular
                     return callLink('DELETE', link, params, data);
                 });
                 defineHiddenProperty(this, '$links', function () {
-                    return links
+                    return links;
                 });
                 defineHiddenProperty(this, '$toStore', function () {
-                    return JSON.stringify({data: this, links: links, options: options})
+                    return JSON.stringify({data: this, links: links, options: options});
                 });
                 defineHiddenProperty(this, 'setOption', function (key, value) {
-                    options[key] = value
+                    options[key] = value;
                 });
                 defineHiddenProperty(this, 'getOption', function (key) {
-                    return options[key]
+                    return options[key];
                 });
                 defineHiddenProperty(this, '$link', function (rel) {
-                    return links[rel]
+                    return links[rel];
                 });
 
                 Object.keys(data)
@@ -207,12 +207,12 @@ angular
                 if (extra.is_new) this.is_new = true;
 
                 function defineHiddenProperty(target, name, value) {
-                    target[name] = value
-//        Object.defineProperty(target, name, {
-//          configurable: false
-                    //         , enumerable: false
-                    //        , value: value
-                    //     });
+                    target[name] = value;
+                    // Object.defineProperty(target, name, {
+                    // configurable: false
+                    //     , enumerable: false
+                    //    , value: value
+                    // });
                 }//defineHiddenProperty
 
 
@@ -340,11 +340,11 @@ angular
                             // copy out the auth token from the header if the response is new resource
                             // Note: we only take the auth token from created responses as at the app layer, success responses might be cached results, thus we don't want to use the auth token from these
                             if (res.headers('auth-token') && res.status == 201) {
-                                options.auth_token = res.headers('Auth-Token')
-                                shared_header.set('auth_token', res.headers('Auth-Token'), $sessionStorage)
+                                options.auth_token = res.headers('Auth-Token');
+                                shared_header.set('auth_token', res.headers('Auth-Token'), $sessionStorage);
                                 // if auth token is present in local storage, set it there too
                                 if ($localStorage.getItem('auth_token'))
-                                    $localStorage.setItem('auth_token', res.headers('Auth-Token'))
+                                    $localStorage.setItem('auth_token', res.headers('Auth-Token'));
                             }
                             switch (res.status) {
                                 case 200:
@@ -359,7 +359,7 @@ angular
                                     return null;
 
                                 case 204:
-                                    return null
+                                    return null;
 
                                 default:
                                     return $q.reject(res);
@@ -386,7 +386,7 @@ angular
 
                 for (var partIndex = 1; partIndex < 5; partIndex++) {
                     if (hrefMatch[partIndex]) resultHref += hrefMatch[partIndex];
-                    else resultHref += baseHrefMatch[partIndex]
+                    else resultHref += baseHrefMatch[partIndex];
                 }
 
                 return resultHref;
