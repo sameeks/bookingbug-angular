@@ -1,15 +1,12 @@
 (function () {
     'use strict';
 
-    var args = require('../helpers/args.js');
     var fs = require('fs');
     var git = require('gulp-git');
     var inquirer = require('inquirer');
     var gulpUtil = require('gulp-util');
 
     module.exports = function (gulp, configuration) {
-
-        var runSequence = require('run-sequence').use(gulp);
 
         function getReleaseLog() {
 

@@ -108,6 +108,3 @@ describe('ValidatorService', function () {
         });
     });
 });
-
-
-

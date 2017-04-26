@@ -1,0 +1,8 @@
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': !hasError()}">
+  <label class="control-label">{{form.title}}</label>
+  <input bb-int-tel-number="form.options" ng-model="$$value$$"
+  prefix="model['{{form.key[0]}}_prefix']" bb-disabled="form.readonly" class="form-control"
+  type="tel" schema-validate="form"></input>
+
+  <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
+</div>

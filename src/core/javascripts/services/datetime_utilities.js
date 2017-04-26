@@ -7,7 +7,7 @@
  *
  *///
 
-angular.module('BB.Services').factory("DateTimeUtilitiesService", function (GeneralOptions, CompanyStoreService) {
+angular.module('BB.Services').factory("DateTimeUtilitiesService", function (GeneralOptions, CompanyStoreService, bbTimeZone) {
 
 
     /***
@@ -55,9 +55,12 @@ angular.module('BB.Services').factory("DateTimeUtilitiesService", function (Gene
             }
             let datetime = moment();
             // if user timezone different than company timezone
-            if (GeneralOptions.display_time_zone !== CompanyStoreService.time_zone) {
+            /*if (bbTimeZone.isCustomTimeZone()) {
                 datetime = datetime.tz(CompanyStoreService.time_zone);
-            }
+            }*////TODO double check
+
+            datetime = bbTimeZone.convertToCompany(datetime);
+
             let val = parseInt(time);
             let hours = parseInt(val / 60);
             let mins = val % 60;

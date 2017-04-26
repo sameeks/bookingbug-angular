@@ -1,0 +1,6 @@
+<div class="info-box info-box-sm"  ng-repeat="person in servers" ng-class="{serve: (selected_queuer
+  && !person.serving && person.attendance_status == 1), no_serve: (selected_queuer &&
+  person.serving), over: person.hover }"  jqyoui-droppable="{onDrop:'dropQueuer(person, false)',
+  onOver:'hoverOver(person, true)', onOut:'hoverOver(person, false)'}" data-drop="true"
+  bb-server-list-item>
+</div>

@@ -12,8 +12,8 @@ angular.module('BB.Directives').directive('selectFirstSlot', () => {
                     if (slots[0]) {
                         scope.bb.selected_slot = slots[0];
                         scope.bb.selected_date = scope.selected_date;
-                        let hours = slots[0].datetime.format('HH');
-                        let minutes = slots[0].datetime.format('mm');
+                        let hours = slots[0].datetime.hours();
+                        let minutes = slots[0].datetime.minutes();
                         scope.bb.selected_date.hour(hours).minutes(minutes).seconds(0);
                         scope.highlightSlot(slots[0], scope.selected_day);
                     }

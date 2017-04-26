@@ -141,7 +141,7 @@ angular.module('BBMember').directive('memberForm', ($rootScope, AlertService, Pa
                         // --------------------------------------------------------------------
                         if (!$scope.custom_member_form) {
                             for (let item of Array.from(data.questions)) {
-                                item.answer = data.q[item.id].answer;
+                                if (data.q[item.id]) item.answer = data.q[item.id].answer;
                             }
                         }
 
