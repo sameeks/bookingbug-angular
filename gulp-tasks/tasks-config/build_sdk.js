@@ -336,6 +336,26 @@
             'build-sdk:settings:fonts',
             'build-sdk:settings:bower'
         ]);
+
+        gulp.task('build-sdk:queue:javascripts', function (done) {
+            assets.javascripts(done, 'queue');
+        });
+
+        gulp.task('build-sdk:queue:templates', function (done) {
+            assets.templates(done, 'queue');
+        });
+
+        gulp.task('build-sdk:queue:stylesheets', function (done) {
+            assets.stylesheets(done, 'queue');
+        });
+
+        gulp.task('build-sdk:queue', [
+            'build-sdk:queue:javascripts',
+            'build-sdk:queue:templates',
+            'build-sdk:queue:stylesheets',
+            'build-sdk:queue:bower'
+        ]);
+
     };
 
 })();

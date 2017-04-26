@@ -17,7 +17,8 @@
     "tests"
   ],
   "resolutions": {
-    "angular": "~1.5.8",
+    "angular": "~1.5.11",
+    "angulartics": "~1.4.0",
     "moment": "~2.14.0",
     "bookingbug-angular-core": "*",
     "angular-animate": "~1.5.8",
@@ -31,7 +32,9 @@
     "angular-schema-form": "~0.8.13",
     "trNgGrid": "~3.1.7",
     "jquery": "~1.11.3",
-    "fullcalendar": "~3.0.0"
+    "fullcalendar": "~3.0.0",
+    "angular-ui-select": "0.18.1",
+    "underscore": "~1.8.3"
   },
   "dependencies": {
     "bookingbug-angular-core": "../core",

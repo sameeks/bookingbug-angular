@@ -8,8 +8,10 @@
 
             babelPreprocessor: {
                 options: {
-                    presets: ['es2015'],
-                    sourceMap: 'inline'
+                    presets: ['es2015', 'es2016'],
+                    plugins: [
+                        ["transform-es2015-classes", {"loose": true}]
+                    ]
                 },
                 filename: function (file) {
                     return file.originalPath.replace(/\.js$/, '.es5.js');
