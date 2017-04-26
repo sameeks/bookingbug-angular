@@ -23,6 +23,6 @@ angular.module('BB.Directives').directive('bbDayList', () => {
             replace: true,
             scope: true,
             controller: 'DayList'
-        }
+        };
     }
 );

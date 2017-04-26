@@ -7,5 +7,5 @@ angular.module('BBQueue.services').factory('adminQueueLoading', () => {
         setLoadingServerInProgress: function (bool) {
             loadingServerInProgress = bool;
         }
-    }
+    };
 });

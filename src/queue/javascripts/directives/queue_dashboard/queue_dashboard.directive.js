@@ -4,5 +4,5 @@ angular.module('BBQueue.directives').directive('bbQueueDashboard', () => {
         link: (scope, element, attrs) => {
             return scope.getSetup();
         }
-    }
+    };
 });

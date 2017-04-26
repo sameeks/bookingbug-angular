@@ -66,7 +66,7 @@
             } else if (this.question.detail_type === "date") {
                 this.templateUrl = "bb-question/_question_date.html";
             } else {
-                this.templateUrl = "bb-question/_question_default.html"
+                this.templateUrl = "bb-question/_question_default.html";
             }
 
             compileTemplate(html);

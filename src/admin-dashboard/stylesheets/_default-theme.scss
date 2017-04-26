@@ -21,6 +21,15 @@ $screen-header-collapse            : $screen-xs-max;
         }
       }
 
+      // Prevent double vertical scrollbar when <a>
+      // elements in the nav are focused.
+      a {
+        &:focus {
+          border: 0;
+          outline: 1px $input-border-focus solid;
+        }
+      }
+
       .navbar-custom-menu {
         .language-picker {
           .btn-default {

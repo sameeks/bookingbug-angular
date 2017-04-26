@@ -3,7 +3,7 @@ let QueueServerController = ($scope, $log, AdminQueueService, ModalForm, BBModel
 
     $scope.adminQueueLoading = {
         isLoadingServerInProgress: adminQueueLoading.isLoadingServerInProgress
-    }
+    };
 
     $scope.loadingServer = false;
 

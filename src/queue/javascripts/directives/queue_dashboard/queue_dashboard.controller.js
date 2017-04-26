@@ -184,6 +184,6 @@ let QueueDashboardController = ($scope, $log, AdminServiceService, AdminQueuerSe
         return false;
     };
 
-}
+};
 
 angular.module('BBQueue.controllers').controller('bbQueueDashboard', QueueDashboardController);

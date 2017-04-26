@@ -35,5 +35,5 @@ angular.module('BBQueue.services').service('CheckSchema', ($q, BBModel) => {
             }
         }
         return schema;
-    }
+    };
 });

@@ -24,7 +24,7 @@
                 });
             }
         });
-    }
+    };
 
     let gitCommit = function (done, version, branchName, gitDir) {
         gulp.src('./*', {cwd: gitDir})
@@ -37,7 +37,7 @@
           .on('end', function () {
               return gitTagAndPush(done, version, branchName, gitDir);
           });
-    }
+    };
 
     let copyAndCommit = function (done, version, branchName, gitDir, buildDir) {
         gulp.src(buildDir+'/*')
@@ -50,14 +50,14 @@
             .on('end', function () {
                 return gitCommit(done, version, branchName, gitDir);
             });
-    }
+    };
 
     module.exports = {
         git: function (done, module) {
             let version = process.env.TRAVIS_TAG;
-            let gitUrl = `https://github.com/BookingBug/bookingbug-angular-${module}-bower`
+            let gitUrl = `https://github.com/BookingBug/bookingbug-angular-${module}-bower`;
             let gitDir = `bookingbug-angular-${module}-bower`;
-            let buildDir = `build/${module}`
+            let buildDir = `build/${module}`;
             let branchName = 'version' + version.match(/v(\d+.\d+).\d+/)[1];
             del.sync(gitDir);
             gutil.log(module + ' cloning ' + gitUrl);
@@ -73,7 +73,7 @@
                 });
             });
         }
-    }
+    };
 
 
 }).call(this);
